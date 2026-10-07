@@ -1,0 +1,23 @@
+\begin{theorem}[Determination by the seven native transports]
+    \label{thm:peps_two_plaquette_transport_table}
+    \lean{TNLean.PEPS.twoPlaquette_internal_eq_of_edgeTransports,TNLean.PEPS.verticalTwoPlaquette_internal_eq_of_transports,TNLean.PEPS.translatedTwoPlaquette_internal_eq_of_transports,TNLean.PEPS.torusVerticalFluxAssignment_up_transport,TNLean.PEPS.torusVerticalFluxAssignment_right_transport_of_ne}
+    \leanok
+    Suppose an induced region is isomorphic to the six-vertex two-plaquette
+    graph. Equality of the directed transports on its seven mapped edges
+    implies equality of every internal ordered bond coefficient. On a native
+    torus this applies to a translated horizontal tile when its periods satisfy
+    $w\ge4$ and $H\ge3$, and to a vertical tile when $w\ge3$ and $H\ge4$.
+    For the vertical movement assignment, every upward transport is the
+    identity, as is every rightward transport outside its two selected rows.
+    These finite-block statements are auxiliary to
+    \cite[Theorem~6.16]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_two_plaquette_graph,thm:peps_translated_two_plaquette_geometry,thm:peps_vertical_two_plaquette_geometry,thm:peps_internal_gauge_transport}
+    The graph isomorphism accounts for every internal edge. Each directed
+    equality determines the corresponding ordered coefficient. The native
+    forms follow by evaluating the vertex coordinates and reversing the two
+    necessary traversals. The movement assignment is supported on two
+    horizontal bonds, which proves the remaining transport statements.
+\end{proof}

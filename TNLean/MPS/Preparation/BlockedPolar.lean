@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Core.PhysicalRotation
+import TNLean.MPS.Core.PhysicalMatrix
 import TNLean.MPS.Preparation.MatrixPolar
 
 /-!
@@ -56,30 +56,6 @@ variable {n m D : ℕ}
 
 /-! ### A tensor as a map from the virtual pair space to the physical space -/
 
-/-- The tensor `B` read as the matrix of the linear map `ℂ^{D²} → ℂ^n`, `(i, (α, β)) ↦ B^i_{αβ}`.
-
-arXiv:2307.01696, paragraph "Approximation through the fixed-point state": the blocked tensor
-is interpreted "as a map from the `D²`-dimensional virtual space to the `d^q`-dimensional
-physical space". -/
-def physicalMatrix (A : MPSTensor n D) : Matrix (Fin n) (Fin D × Fin D) ℂ :=
-  fun i p => A i p.1 p.2
-
-/-- The tensor whose physical matrix is `R`. -/
-def ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) : MPSTensor n D :=
-  fun i α β => R i (α, β)
-
-/-- Reading the physical matrix of a tensor back as a tensor returns the tensor. -/
-@[simp] lemma ofPhysicalMatrix_physicalMatrix (A : MPSTensor n D) :
-    ofPhysicalMatrix (physicalMatrix A) = A := rfl
-
-/-- The physical matrix of the tensor built from a matrix `R` is `R`. -/
-@[simp] lemma physicalMatrix_ofPhysicalMatrix (R : Matrix (Fin n) (Fin D × Fin D) ℂ) :
-    physicalMatrix (ofPhysicalMatrix R) = R := rfl
-
-/-- A tensor is determined by its physical matrix. -/
-lemma physicalMatrix_injective : Function.Injective (physicalMatrix (n := n) (D := D)) :=
-  fun A B h => by rw [← ofPhysicalMatrix_physicalMatrix A, h, ofPhysicalMatrix_physicalMatrix]
-
 /-- An injective tensor (its matrices span the full matrix algebra) has an injective physical
 matrix.
 
@@ -106,12 +82,6 @@ theorem injective_physicalMatrix_mulVec_of_isInjective {A : MPSTensor n D}
   simpa [f, Matrix.single_apply, ← Prod.ext_iff, Finset.sum_ite_eq] using this
 
 /-! ### Matrices acting on the physical leg -/
-
-/-- The physical matrix of `W · A` is `W` times the physical matrix of `A`. -/
-lemma physicalMatrix_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D) :
-    physicalMatrix (rotatePhysical W A) = W * physicalMatrix A := by
-  ext i p
-  simp [physicalMatrix, rotatePhysical, Matrix.mul_apply, Matrix.sum_apply]
 
 /-- The transfer operator of `W · A` in terms of the Gram matrix `Wᴴ W`. -/
 theorem transferMap_rotatePhysical_apply (W : Matrix (Fin m) (Fin n) ℂ) (A : MPSTensor n D)

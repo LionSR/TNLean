@@ -1,0 +1,53 @@
+\begin{definition}[The coefficient isometry on a bond]%
+    \label{def:peps_multiplicity_bond_coefficients}
+    \lean{TNLean.PEPS.multiplicityBondCoefficientMatrix,
+        TNLean.PEPS.multiplicityBondCoefficientMatrix_mulVec,
+        TNLean.PEPS.multiplicityBondCoefficientMatrix_mulVec_sqrt}
+    \leanok
+    \uses{def:peps_multiplicity_bond_map}
+    Let $I$ be a finite set of bond labels, and let $M_i$ be a nonempty
+    finite multiplicity set of cardinality $m_i$. Define
+    \begin{align}
+        J\ket{i}=\frac{1}{\sqrt{m_i}}
+        \sum_{a\in M_i}\ket{i,a,a}.
+    \end{align}
+    Consequently, $J(\sum_i\sqrt{m_i}x_i\ket{i})
+        =\sum_{i,a}x_i\ket{i,a,a}$. The label $i$ may include an irreducible
+    representation and both matrix indices, as in the bond sums of
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Coherent bond states under restoration of multiplicities]%
+    \label{thm:peps_multiplicity_bond_coherent_states}
+    \lean{TNLean.PEPS.multiplicityBondCoefficientMatrix_isIsometry,
+        TNLean.PEPS.regionPhysicalProductMatrix_multiplicityBond_isIsometry,
+        TNLean.PEPS.regionPhysicalMap_multiplicityBond_dotProduct,
+        TNLean.PEPS.regionPhysicalMap_multiplicityBond_superposition}
+    \leanok
+    \uses{def:peps_multiplicity_bond_coefficients}
+    On any finite set $E$ of bonds, $J_E=\bigotimes_{e\in E}J$ is an
+    isometry. For any finite family of coefficients $w_q$ and bond
+    amplitudes $x_e(q,i)$, it carries
+    \begin{align}
+        \psi(\sigma) & =\sum_q w_q\prod_{e\in E}
+        \sqrt{m_{\sigma_e}}\,x_e(q,\sigma_e)
+    \end{align}
+    to the vector with coefficients
+    \begin{align}
+        (J_E\psi)((i_e,a_e,b_e)_e)
+         & =\sum_q w_q\prod_{e\in E}
+        \mathbf{1}_{a_e=b_e}x_e(q,i_e).
+    \end{align}
+    Thus it preserves the overlaps and norms of all such coherent states.
+    This proves the transformation of the displayed bond-vector sums in
+    \cite[Section~7]{Schuch2010PEPS}; the identification with site tensors
+    carrying the fourth-root weights is a separate assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Distinct original labels have disjoint images, and the image of
+    $\ket{i}$ has squared norm $m_i/m_i=1$. The tensor product is
+    therefore an isometry. Apply its one-bond action to each factor and
+    distribute over the finite coherent sum. Each square-root weight
+    cancels the normalization of its bond map.
+\end{proof}

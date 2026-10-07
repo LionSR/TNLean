@@ -78,10 +78,32 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
     calculation reduces to (\ref{eq:pgvwc07_empty_boundary_decomposition}).
 \end{proof}
 
-% Scope restriction (normalized orientation): this is the IsPeriodic surface,
-% not yet a theorem from PGVWC07's one-block unital hypotheses. Issue #6232.
+\begin{theorem}[Component-chain sum and non-closing sectors]
+    \label{thm:pgvwc07_component_sum_and_vanishing}
+    \lean{MPSTensor.mpv_eq_sum_projectorComponentChain_coeff,
+        MPSTensor.projectorComponentChain_coeff_eq_zero_of_not_dvd}
+    \leanok
+    \uses{def:pgvwc07_projector_component_chain}
+    Let $p>0$ and let the orthogonal projections $Q_u$ satisfy
+    $\sum_uQ_u=\Id$ and $Q_uA^i=A^iQ_{u+1}$. At every positive length $N$,
+    the coefficient of $A$ is the sum of the coefficients of its component
+    chains $B_u$. If $p\nmid N$, every component-chain coefficient vanishes.
+    These are the coefficient identities in the proof of
+    \cite[Theorem~5]{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Evaluating the component product inserts $Q_u$ before the original
+    word. Summing over $u$ and using $\sum_uQ_u=\Id$ gives the coefficient
+    sum. If $p\nmid N$, the component starts in sector $u$ and ends in
+    sector $u+N\ne u$. Cyclicity of the trace places these two orthogonal
+    projections next to each other, so each coefficient is zero.
+\end{proof}
+
+% The normalized companion is retained for the periodic-form consumers below.
 \begin{theorem}[Normalized periodic state-vector decomposition]
-    \label{thm:pgvwc07_periodic_state_vector_decomposition}
+    \label{thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     \lean{MPSTensor.pgvwc07_periodic_stateVector_boundary_decomposition_of_dvd,
         MPSTensor.pgvwc07_periodic_stateVector_decomposition_of_dvd,
         MPSTensor.pgvwc07_stateVector_eq_zero_of_not_dvd}
@@ -128,6 +150,8 @@ for $p\mid N$ as a sum of $p$ cyclic component chains, and gives zero when $p\nm
     $Q_{u+N}\ne Q_u$; cyclicity of the trace and orthogonality give
     $\tr F_u(\sigma)=0$ for every $u$ and $\sigma$.
 \end{proof}
+
+\input{chapter/ch09_canonical_unital_periodic}
 
 Two normalizations appear. The unital orientation
 $\sum_i A_k^i(A_k^i)^\dagger=\Id$ is used in

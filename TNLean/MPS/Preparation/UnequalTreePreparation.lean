@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.UnequalRegisterTreeState
+import TNLean.MPS.Preparation.IsometryTreePreparation
+import TNLean.MPS.Preparation.PolarMerge
 
 /-!
 # The state of blocks of unequal lengths with measurements in depth `O(log q)`
@@ -213,15 +214,8 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
   have hd : 0 < d := NeZero.pos d
   have : NeZero s := ⟨by omega⟩
   obtain ⟨K, hK⟩ := exists_isPairProduct (n := s + s) hd (by omega)
-  -- the unitaries of the leaves, on at most `c + 3` sites
-  have hleaf : ∀ n : Fin (c + 4), ∃ K' : ℕ, 2 ≤ n.val →
-      ∀ X ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ), IsPairProduct d n K' X := fun n => by
-    by_cases hn : 2 ≤ n.val
-    · obtain ⟨K', hK'⟩ := exists_isPairProduct hd hn
-      exact ⟨K', fun _ => hK'⟩
-    · exact ⟨0, fun h' => absurd h' hn⟩
-  choose Kl hKl using hleaf
-  refine ⟨2 * K + 4 * s + ∑ n, Kl n + 6, fun {D} A hinj ω hω h M _ ℓ N _ hN hℓ₁ hℓ₂ => ?_⟩
+  obtain ⟨C, hC⟩ := exists_rounds_blockLayerOp_treeBlockOp d s (c + 3)
+  refine ⟨K + C + 2, fun {D} A hinj ω hω h M _ ℓ N _ hN hℓ₁ hℓ₂ => ?_⟩
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · exact absurd hω (by simp)
   -- the legs on the first `s - 1` sites of a register, and `ℂ^{D²}` on a register
@@ -258,24 +252,13 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
     have := blockInputCfg_injective hd (hr b) hdig (l := l) (r := r) (l' := l') (r' := r')
       (by rw [hroot b l r, hroot b l' r', he])
     rw [this.1, this.2]
-  set X : Fin M → ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ := fun b =>
-    treeNodeGate (h := h) (n := ℓ b) (w := balancedWidths (2 ^ (h + 1)) (ℓ b)) A (ι₀ b) enc
-  set U := fun b => treeLeafGate (hT b) A (ι₀ b) enc
   -- the pairs
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd hdig ω hω
   obtain ⟨Ls, hLs, -, hLsW⟩ := isCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
-  -- the depths `0, …, h` of the trees
-  obtain ⟨Rs, hRs, hRsE⟩ := exists_rounds_blockLayerOp_treeLevelsOp (hN := hN) (hT := hT)
-    (X := X) (K := K)
-    fun b j p => hK _ (treeNodeGate_mem_unitary A (ι₀ b) enc j p)
-  -- the leaves
-  obtain ⟨Ll, hLl, -, hLlU⟩ := isCircuitOn_blockLayerOp_treeLeafOp (hN := hN) (hT := hT) U
-    (K := ∑ n, Kl n) fun b p => by
-      have h1 := two_mul_le_leafLen (hT b) p.isLt
-      have h2 := leafLen_balancedWidths_le (hℓ₂ b) p.val
-      exact (hKl ⟨_, (by omega : leafLen h (ℓ b) _ p < c + 4)⟩ (by simp only; omega) _
-        (treeLeafGate_mem_unitary (hT b) A (ι₀ b) enc p)).mono
-        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ _))
+  -- The same coherent tree implementation is used for all root inputs.
+  obtain ⟨Rs, hRs, hRsE, -⟩ := hC (cfgPolarIso A) (mergeIso A) h ℓ hN
+    (fun b => balancedWidths (2 ^ (h + 1)) (ℓ b)) hT
+    (fun b p => leafLen_balancedWidths_le (hℓ₂ b) p.val) ι₀ enc
   set v₀ : Fin N → Fin d → ℂ := fun _ => Pi.single ⟨0, hd⟩ 1
   have hv₀ : productVector v₀ ≠ 0 := fun h0 => by
     have := congrFun h0 fun _ => ⟨0, hd⟩
@@ -286,33 +269,29 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
     have := (isImplementationOn_round (d := d) Ls (valid_nil (N := N))).isRoundsImplementationOn
     rw [chainPerm_nil, Matrix.one_mul, ← hLsW] at this
     exact this.mono fun v _ => fun _ _ _ h => h.elim
-  have hleafR : MeasurementRound.IsRoundsImplementationOn [round Ll [] valid_nil] Set.univ
-      (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
-    have := (isImplementationOn_round (d := d) Ll (valid_nil (N := N))).isRoundsImplementationOn
-    rw [chainPerm_nil, Matrix.one_mul, ← hLlU] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
   have hall := (h₀.append hRsE fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst hv
     refine (isZeroOn_pairLayerOp_mulVec_productVector hN hr _).mono ?_
     rintro x ⟨b, y, hy1, hy2, rfl⟩
-    exact ⟨b, y, hy1, by have := (hT b).le; simp only at hy2; omega, rfl⟩).append hleafR
-      fun _ _ => trivial
+    exact ⟨b, y, hy1, by have := (hT b).le; simp only at hy2; omega, rfl⟩)
   have hprep := hall.isPreparedWithMeasurementRoundsInDepth hv₀ rfl
-  have hdepth : ((([round Ls [] valid_nil] ++ Rs) ++ [round Ll [] valid_nil]).map
-      MeasurementRound.depth).sum ≤ (2 * K + 4 * s + ∑ n, Kl n + 6) * (h + 1) := by
-    simp only [List.map_append, List.sum_append, hRs, List.map_cons, List.map_nil,
-      List.sum_cons, List.sum_nil, depth_round, hLs, hLl]
+  have hdepth : (([round Ls [] valid_nil] ++ Rs).map MeasurementRound.depth).sum ≤
+      (K + C + 2) * (h + 1) := by
+    simp only [List.map_append, List.sum_append, List.map_cons, List.map_nil,
+      List.sum_cons, List.sum_nil, depth_round, hLs]
     nlinarith
   have hψ : (fun x => blockIsometryState A ω hN x) =
-      ((blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) *
-        ((blockLayerOp hN fun b => treeLevelsOp (hT b) (X b) 0 (h + 1)) *
-          pairLayerOp hN hr fun _ => W)) *ᵥ productVector v₀ := by
+      ((blockLayerOp hN fun b =>
+        treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) *
+        pairLayerOp hN hr fun _ => W) *ᵥ productVector v₀ := by
     funext x
-    rw [← Matrix.mul_assoc, ← blockLayerOp_mul]
-    exact blockIsometryState_eq_mulVec hd hN hr hdig A ω (U := fun b => treeBlockOp (hT b) A (ι₀ b)
-      enc) (fun b l r τ => by
-        rw [hroot, treeBlockOp_apply (hT b) hinj (hι₀ b) enc.injective]
+    exact blockIsometryState_eq_mulVec hd hN hr hdig A ω
+      (U := fun b => treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) (fun b l r τ => by
+        rw [hroot, treeBlockOp_apply (hT b)
+          (fun m hm => isIsometry_cfgPolarIso A (hinj m hm))
+          (fun m₁ m₂ hm₁ _ => isIsometry_mergeIso A (hinj _ (by omega)))
+          (fun _ _ hn τ x => cfgPolarIso_split A hn τ x) (hι₀ b) enc.injective]
         rfl) hW x
   rw [hψ]
   exact hprep.mono hdepth

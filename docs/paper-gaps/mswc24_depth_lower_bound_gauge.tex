@@ -38,9 +38,11 @@ a length $L\ge1$ at which the products of $L$ matrices of $A$ span the full
 matrix algebra, and an eigenvalue $\lambda_2\ne1$ of $\mathcal E_A$ whose
 modulus bounds those of all other eigenvalues different from $1$, with
 $-1/\ln\lvert\lambda_2\rvert>0$. Under these hypotheses it proves the source's
-conclusion, and the quantitative form: there are $B,C,b>0$ such that
+conclusion, and the quantitative form: there are $B\ge0$ and $C>0$ such that
 $\lvert\braket{\phi_N}{\psi}\rvert\ge1/2$ for a unit vector $\psi$ prepared in
-depth $T$ and $N\ge B(T+1)$ forces $N\le C(T+1)e^{b(T+1)}$.\footnote{Formal
+depth $T$ and $N\ge B(T+1)$ forces $N\le C(T+1)e^{4T/\xi}$; the exponent is
+discussed in
+\path{docs/paper-gaps/mswc24_depth_lower_bound_constant.tex}.\footnote{Formal
     declarations:
     \leanid{MPSTensor.eventually_one_half_lt_infidelity_of_isLittleO_log}
     and \leanid{MPSTensor.exists_depth_lower_bound} in

@@ -1,0 +1,187 @@
+% SCP10, source lines 1818--1915. Untwisted tori with coarse periods at least three.
+% This is a scope-restricted physical fixed-point theorem, not the unrestricted source label.
+
+\begin{theorem}[Isometric equivalence with the canonical physical support]%
+    \label{thm:peps_g_isometric_canonical_support}
+    \lean{TNLean.PEPS.IsGIsometric.exists_canonicalSupportEquiv}
+    \leanok
+    \uses{thm:peps_g_isometric_support_coordinates}
+    Let $T$ be $G$-isometric for a unitary representation $\rho$ of a finite
+    group, and put $P_\rho=|G|^{-1}\sum_g\rho(g)$. For some $c>0$, the map
+    $J=c^{-1/2}T^*$ is an isometric equivalence
+    $\operatorname{ran}T\cong\operatorname{ran}P_\rho$, with
+    $JT=\sqrt c\,P_\rho$. No surjectivity onto either ambient coordinate
+    space is required. This is the support identification used in
+    \cite[Observations~6.4 and~6.6]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The normalized adjoint is already isometric on $\operatorname{ran}T$.
+    Its image is contained in $\operatorname{ran}P_\rho$ because
+    $JTu=\sqrt c\,P_\rho u$. Conversely, $P_\rho u=JT(c^{-1/2}u)$,
+    so it maps onto the canonical support.
+\end{proof}
+
+\begin{definition}[Paired boundary labels as regular bundles]%
+    \label{def:peps_two_by_two_bundle_coordinates}
+    \lean{TNLean.PEPS.pairUnitBundleEquiv,
+        TNLean.PEPS.twoByTwoBundledGraphSite,
+        TNLean.PEPS.twoByTwoIncidentBoundaryEquiv}
+    \leanok
+    \uses{def:peps_two_by_two_graph_site}
+    Identify $G\times G$ with $G\times G^{\{*\}}$ by
+    $(a,b)\mapsto(a,(*\mapsto b))$. Express the actual paired coarse tensor
+    in these incident bundle coordinates, without changing its coefficients
+    or physical alphabet $P^4$. Reading the four incident edges and the two
+    labels on each edge identifies this boundary with all eight separate
+    fine boundary legs.
+\end{definition}
+
+\begin{theorem}[Exact state and symmetry in bundle coordinates]%
+    \label{thm:peps_two_by_two_bundle_coordinates}
+    \lean{TNLean.PEPS.graphBondNetwork_twoByTwoBundledGraphSite,
+        TNLean.PEPS.torusBondNetwork_eq_twoByTwoBundledGraphSite,
+        TNLean.PEPS.regularSiteMap_twoByTwoBundledGraphSite,
+        TNLean.PEPS.twoByTwoIncidentBoundaryEquiv_smul,
+        TNLean.PEPS.twoByTwoIncidentBoundaryEquiv_rep}
+    \leanok
+    \uses{def:peps_two_by_two_bundle_coordinates,
+        thm:peps_two_by_two_graph_contraction}
+    Suppose both coarse periods are at least three. The fine state after
+    physical grouping is exactly the actual bundled graph state.
+    The eight-label boundary bijection intertwines simultaneous left
+    translation and leaves the physical block map unchanged. Thus the
+    bundled incident representation is precisely the eight-leg regular
+    representation in different coordinates.
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex every edge label by the displayed two-label bijection.
+    Each boundary coordinate still has the same group value, so translation
+    commutes with the bijection. Reindexing the local virtual sum gives the
+    equality of physical maps.
+\end{proof}
+
+\begin{theorem}[Identification of the original coarse tensor]%
+    \label{thm:peps_two_by_two_original_canonical}
+    \lean{TNLean.PEPS.graphIncidentRepresentation_leftRegularMatrix,
+        TNLean.PEPS.IsGIsometric.isGIsometric_torusIncidentFamily,
+        TNLean.PEPS.IsGIsometric.exists_torusCanonicalSupportEquiv}
+    \leanok
+    \uses{thm:peps_g_isometry_coordinate_equiv,
+        thm:peps_g_isometric_canonical_support}
+    On any finite simple graph, the oriented incident action of the
+    left-regular matrices equals simultaneous left translation on incident
+    labels. On a square torus of periods at least three, let $A$ be any
+    four-leg regular $G$-isometric tensor. Its incident-coordinate physical
+    map $T_A$ is $G$-isometric. At each coarse vertex there are $c>0$ and an
+    isometric equivalence between its physical support and the support of
+    the canonical regular averaging tensor $T_0$, acting by
+    $J=c^{-1/2}T_A^*$ and satisfying $JT_A=\sqrt c\,T_0$.
+    This identifies the coarse tensor with the original tensor on physical
+    support, with its scalar normalization retained.
+\end{theorem}
+
+\begin{proof}\leanok
+    The transposed inverse regular matrix on an outgoing leg has the same
+    entries $\delta_{a,gb}$ as the incoming matrix. The four-leg incident
+    bijection therefore intertwines both representations and preserves
+    their coordinate inner products. Apply the canonical support
+    equivalence to the transported original tensor.
+\end{proof}
+
+\begin{theorem}[G-isometry of actual bundled coarse sites]%
+    \label{thm:peps_two_by_two_bundled_isometry}
+    \lean{TNLean.PEPS.isGIsometric_twoByTwoBundledGraphSite}
+    \leanok
+    \uses{thm:peps_two_by_two_isometry,
+        thm:peps_two_by_two_bundle_coordinates,
+        thm:peps_g_isometry_coordinate_equiv}
+    If every fine site is regular $G$-isometric, then every actual bundled
+    coarse site is $G$-isometric for its bundled incident representation.
+    There is no independent hypothesis about the blocked Gram matrix.
+\end{theorem}
+
+\begin{proof}\leanok
+    The explicit four-site Gram calculation gives G-isometry on all eight
+    separate boundary labels. Transport it through the actual boundary
+    coordinate equivalence.
+\end{proof}
+
+\begin{definition}[The physical support of the fine state]%
+    \label{def:peps_two_by_two_fine_support}
+    \lean{TNLean.PEPS.twoByTwoPhysicalRegroupingIsometry,
+        TNLean.PEPS.twoByTwoPhysicalRegroupingIsometry_apply,
+        TNLean.PEPS.twoByTwoFineState,
+        TNLean.PEPS.twoByTwoFinePhysicalSupport,
+        TNLean.PEPS.twoByTwoPhysicalSupportRegrouping}
+    \leanok
+    \uses{def:peps_two_by_two_physical_grouping,
+        def:peps_two_by_two_bundle_coordinates}
+    Let $\Psi_a$ be the original fine bond-indexed torus state. Let $W$
+    be its full physical regrouping unitary, and let $T_B=\bigotimes_vB_v$
+    be the product map of the actual bundled coarse tensors. Define
+    $S_a=W^{-1}(\operatorname{ran}T_B)$. Restricting $W$ gives an isometric
+    equivalence $S_a\cong\operatorname{ran}T_B$. All physical coordinates
+    remain in their original ambient spaces.
+\end{definition}
+
+\begin{theorem}[Derived support membership of the actual fine state]%
+    \label{thm:peps_two_by_two_fine_support}
+    \lean{TNLean.PEPS.twoByTwoPhysicalRegroupingIsometry_fineState,
+        TNLean.PEPS.twoByTwoFineState_mem_physicalSupport}
+    \leanok
+    \uses{def:peps_two_by_two_fine_support,
+        thm:peps_two_by_two_bundle_coordinates,
+        thm:peps_graph_physical_support_transport}
+    The physical regrouping satisfies $W\Psi_a=\Psi_B$, and the actual
+    fine state belongs to $S_a$. These statements require no symmetry or
+    supplied support hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+    The geometric bond bijection gives $W\Psi_a=\Psi_B$.
+    The graph contraction is the product of the local block maps applied
+    to its virtual bond vector, hence $\Psi_B\in\operatorname{ran}T_B$.
+\end{proof}
+
+\begin{theorem}[Physical four-site renormalization on a regular torus]%
+    \label{thm:peps_two_by_two_physical_renormalization}
+    \lean{TNLean.PEPS.exists_regularTwoByTwoPhysicalSupportIsometry}
+    \leanok
+    \uses{thm:peps_two_by_two_bundled_isometry,
+        thm:peps_two_by_two_fine_support,
+        thm:peps_regular_graph_physical_blocking}
+    Let $G$ be any finite group, and let the two coarse periods be at least
+    three. Place arbitrary regular $G$-isometric fine tensors $a_z$ on the
+    doubled torus, with any common finite physical alphabet. There are
+    positive block factors $c_v$ and a Hilbert-space isometry $I$ on the
+    derived support $S_a$ such that
+    \begin{align}
+        I\Psi_a=
+        \left(\prod_v\sqrt{c_v}\right)
+        (\sqrt{|G|})^{|E|}\,\Psi_0\otimes\Omega,
+        \qquad \|\Omega\|^2=1.
+    \end{align}
+    Here $\Psi_0$ is the actual canonical regular PEPS on the coarse
+    graph, and $\Omega$ is one normalized maximally entangled group-label
+    pair on each coarse edge. Explicitly,
+    $I=U(\bigotimes_vc_v^{-1/2}B_v^*)W$ on $S_a$, where $U$ takes the
+    relative group coordinate on every paired physical half-edge.
+    The four-site Gram calculation derives block factors
+    $|G|\prod_{i=0}^3c_{v,i}$ from positive fine-site factors.
+    For a common original tensor $A$, the coarse canonical tensor is
+    identified with $A$ by the preceding physical-support equivalence.
+    This is the untwisted periodic specialization of
+    \cite[Observations~6.5--6.6]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply physical support accessibility and regular bundle separation to
+    the actual coarse graph tensors, whose G-isometry has been derived
+    from the fine tensors. Compose its support isometry with the restricted
+    physical regrouping $W$. The exact state equality supplies the required
+    state argument, and its support membership was derived separately.
+    Each unnormalized surplus equality vector is $\sqrt{|G|}$ times its
+    normalized Bell vector, producing the displayed factor on all edges.
+\end{proof}

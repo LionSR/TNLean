@@ -418,17 +418,6 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
 
 /-! ### The approximation error -/
 
-/-- The normalized periodic state `|φ_N⟩ = c_N⁻¹ |φ_N(A)⟩` with `c_N = ‖φ_N(A)‖`
-(arXiv:2307.01696, Supplemental Material, eq. `eq:TI-MPS2`); it is `0` when `c_N = 0`. -/
-noncomputable def normalizedMPVState (A : MPSTensor d D) (N : ℕ) : MPVSpace d N :=
-  ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
-
-/-- The normalized periodic state is a unit vector when the periodic state does not vanish. -/
-theorem norm_normalizedMPVState {A : MPSTensor d D} {N : ℕ} (h : mpvState A N ≠ 0) :
-    ‖normalizedMPVState A N‖ = 1 := by
-  rw [normalizedMPVState, norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
-    inv_mul_cancel₀ (norm_ne_zero_iff.mpr h)]
-
 /-- The periodic state of `B' = V P_∞` on `M` blocks of `q` sites, read on the `Mq` sites
 through the regrouping of sites into blocks (arXiv:2307.01696, eqs. (9) and (10)). -/
 noncomputable def approximatingMPVStateRaw (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)

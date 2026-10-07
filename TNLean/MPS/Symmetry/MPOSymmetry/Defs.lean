@@ -84,6 +84,14 @@ Source: arXiv:2203.12563, line 660: an inverse `g⁻¹` of `g` with
 def IsInvertibleLabel [DecidableEq ι] (N : ι → ι → ι → ℕ) (e a : ι) : Prop :=
   ∃ b : ι, ∀ c : ι, N a b c = (if c = e then 1 else 0) ∧ N b a c = (if c = e then 1 else 0)
 
+/-- Every label of the group fusion ring is invertible, with inverse `a⁻¹` and unit `1`.
+
+Source: arXiv:2203.12563, line 660. -/
+theorem GroupFamily.isInvertibleLabel_groupFusion {G : Type*} [Group G] [DecidableEq G]
+    (a : G) :
+    IsInvertibleLabel (fun a b c : G ↦ if c = a * b then 1 else 0) 1 a :=
+  ⟨a⁻¹, fun c ↦ by simp⟩
+
 /-- **A family of matrix product states symmetric under a matrix product operator algebra.**
 
 Source: arXiv:2203.12563, lines 567–568 (restated at line 1801): evaluating the invariance

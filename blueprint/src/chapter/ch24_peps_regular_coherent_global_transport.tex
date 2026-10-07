@@ -1,0 +1,35 @@
+\begin{theorem}[Coherent local operations through an actual cut]%
+    \label{thm:peps_regular_coherent_global_transport}
+    \lean{TNLean.PEPS.openRegionWeight_groupBondTensor_congr_on,
+        TNLean.PEPS.regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns,
+        TNLean.PEPS.regionLocalTerm_mulVec_stateCoeff_of_openColumns}
+    \leanok
+    \uses{thm:peps_open_region_cut}
+    Let $\Gamma$ be a finite simple graph, let its virtual alphabet be finite
+    and nonempty, and let $R$ be a set of vertices. Let $A$ and a finite family
+    $(B_i)_{i\in I}$ be site tensors with the same physical alphabet and with
+    $A_v=(B_i)_v$ for every $v\notin R$. Suppose a physical matrix $W$ on $R$
+    satisfies, for every native boundary configuration $\mu$,
+    \begin{align}
+        W A_R(\mu)=\sum_{i\in I}c_i(B_i)_R(\mu).
+    \end{align}
+    Then its complementary identity extension satisfies
+    \begin{align}
+        \widehat W\Psi(A)=\sum_{i\in I}c_i\Psi(B_i),
+    \end{align}
+    where every vector is the actual finite tensor contraction.
+    Equal site tensors on a region also give equal open-region vectors there.
+    These are auxiliary consequences of the cut expansion in
+    \cite[Section~6.4]{Schuch2010PEPS}, used for the coherent creation operation
+    of \cite[Theorem~6.17]{Schuch2010PEPS}. Unitarity is unnecessary for these
+    linear identities. The singleton family gives the corresponding identity
+    $\widehat W\Psi(A)=\Psi(B)$ from $WA_R(\mu)=B_R(\mu)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the actual global contraction into its open-region and complementary
+    factors, summed over the native boundary configuration. Insert the local
+    column identity, interchange the two finite sums, and use the common
+    complementary site tensors in each summand. Equality of open-region
+    vectors follows directly from equality of their site factors.
+\end{proof}

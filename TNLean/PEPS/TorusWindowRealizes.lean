@@ -127,7 +127,7 @@ theorem windowRegionInsertedCoeff_injective
     rwa [regionInjectivityDataOf_isInjective] at hi
   exact regionInsertedCoeff_injective (G := torusGraph width height) B
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
-    hRB (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _) hposB
+    hRB (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _) hposB
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge B (by omega) (by omega)
       ha0 haw hbh⟩ M M' hMM'
 
@@ -213,7 +213,7 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_realizes
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
         ha0 haw hbh⟩ hvA hvB hAB hRB
-      (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
+      (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
       hposA hposB hDim hrealAB hrealBA)
 
 end PEPS

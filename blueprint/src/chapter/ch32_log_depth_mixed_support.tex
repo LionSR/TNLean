@@ -1,0 +1,99 @@
+\begin{theorem}[Central input coordinates and polar support]
+    \label{thm:ldp_mixed_support_coordinates}
+    \lean{MPSPreparation.centralInputMatrix_mul,
+        MPSPreparation.mixedProductMap_mul,
+        MPSPreparation.exists_mixedPolarIsoMatrix_eq_mixedProductMap,
+        MPSPreparation.conjTranspose_mixedPolarIsoMatrix_mul}
+    \leanok
+    \uses{def:ldp_central_input, def:ldpolar_tensor}
+    Right multiplication by an input coordinate map $J$ commutes with
+    attaching the input to the central tensor. For any blocked map $B$,
+    including a non-injective one, its polar partial isometry $V$ has such
+    a central input factor and satisfies $V^\dagger V=\Pi$, where $\Pi$
+    is the polar support projector. Splitting the physical configurations
+    into left, central, and reversed-right parts preserves this identity.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_left_product, thm:ldp_central_coefficients, thm:ldpolar_support}
+    Interchange finite sums to commute the input change with the central
+    contraction. The existing polar factorization gives $V=BG$ for a
+    virtual-pair matrix $G$, and splitting the chain at the chosen site
+    gives exactly the central product. Reindexing physical configurations
+    preserves column inner products.
+\end{proof}
+
+\begin{definition}[A normal rank-deficient polar input]
+    \label{def:ldp_full_input_counterexample}
+    \lean{MPSPreparation.mixedPolarFullInputCounterexample}
+    \leanok
+    With physical dimension four and bond dimension two, set
+    $B=(\Id,E_{01},E_{10},0)/\sqrt2$, where $E_{ij}$ are matrix units.
+    A single physical site already satisfies the capacity condition
+    $d^q=D^2=4$.
+\end{definition}
+\begin{theorem}[Failure of the full-input pseudoinverse isometry]
+    \label{thm:ldp_full_input_counterexample}
+    \lean{MPSPreparation.mixedPolarFullInputCounterexample_spec}
+    \leanok
+    \uses{def:ldp_full_input_counterexample, def:normal, def:ldpolar_tensor}
+    The tensor $B$ is nonzero, unital and trace preserving, and is normal
+    with blocking length two. Nevertheless, its canonical polar factor
+    $V=BP^+$ does not satisfy $V^\dagger V=\Id_4$.
+    Thus the literal full-input pseudoinverse extension in
+    \cite[footnote~3 to equations~(13)--(15)]{Malz2024Preparation} fails
+    even for a normal tensor with sufficient physical dimension.
+    The support-domain correction is recorded in
+    \cite{gap:mswc24_mixed_polar_injectivity_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_left_product}
+    Direct multiplication gives both normalization identities. The products
+    $B^1B^2,B^0B^1,B^0B^2,B^2B^1$ are respectively one half of the four
+    matrix units, proving two-site injectivity. Since $B^3=0$ and $V=BG$,
+    the final physical row of $V$ is zero. If the square matrix $V$ were
+    an isometry, it would also satisfy $VV^\dagger=\Id_4$, contradicting
+    its final diagonal entry.
+\end{proof}
+
+\begin{theorem}[Mixed sequential preparation on the actual polar support]
+    \label{thm:ldp_mixed_polar_support}
+    \lean{MPSPreparation.exists_mixed_sequential_polarIsoMatrix_on_support,
+        MPSPreparation.exists_mixed_sequential_polar_support_of_split,
+        MPSPreparation.exists_mixed_sequential_polar_support}
+    \leanok
+    \uses{def:ldp_mixed_sequential, def:ldpolar_tensor}
+    For every site-dependent chain of positive bond dimension $D$ with
+    at least one physical site, choose any central site. Let $B=VP$ be
+    its blocked polar decomposition, without an injectivity assumption.
+    There exist $s\le D^2$ and an isometry
+    $J\colon\C^s\to\C^{D^2}$ with $JJ^\dagger=\Pi$ such that $VJ$ has
+    a mixed sequential factorization. In particular,
+    \begin{align}
+        VJ & =(E_L\otimes\Id_d\otimes E_R)C,
+           & C^\dagger C                     & =\Id_s,
+           & (VJ)J^\dagger                   & =V.
+        \label{eq:ldp_mixed_support_factorization}
+    \end{align}
+    Both outer bonds have dimension one, every side bond is at most
+    $D^2$, and every inward site map is isometric on its bond space.
+    Either endpoint may be the centre, and zero support is allowed.
+    This is the support-domain correction of footnotes~3 and~4 to
+    equations~(13)--(15) of~\cite{Malz2024Preparation}. For a non-injective
+    block, the printed full-input identity fails because
+    $V^\dagger V=\Pi\ne\Id_{D^2}$; a normal counterexample is proved in
+    Theorem~\ref{thm:ldp_full_input_counterexample}; the witnesses and
+    correction are recorded in~\cite{gap:mswc24_mixed_polar_injectivity_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_mixed_support_coordinates, thm:ldp_mixed_sequential_general}
+    Parametrize the range of the Hermitian idempotent $\Pi$ by orthonormal
+    coordinates $J$, so $J^\dagger J=\Id_s$ and $JJ^\dagger=\Pi$.
+    Then $(VJ)^\dagger(VJ)=J^\dagger\Pi J=\Id_s$.
+    Apply the existing two inward sweeps to the central factor $GJ$.
+    Their isometric evaluations force the central map to be an isometry
+    on the support input. Finally $V\Pi=V$ gives the reconstruction
+    identity in (\ref{eq:ldp_mixed_support_factorization}).
+\end{proof}

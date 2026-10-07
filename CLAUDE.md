@@ -54,11 +54,14 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 #   pip install leanblueprint 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
 # Run after lake build succeeds.
 python3 scripts/fetch_tenkz.py
-cd blueprint && leanblueprint checkdecls
+(cd blueprint && leanblueprint checkdecls)
 
 # Blueprint web/PDF generation
-cd blueprint && leanblueprint web
-cd blueprint && leanblueprint pdf
+(cd blueprint && leanblueprint web)
+# Add client-side search to the web pages (run from repo root after the web build)
+python3 -m pip install 'pagefind[extended]==1.5.2'
+python3 scripts/add_blueprint_search.py --web-root blueprint/web
+(cd blueprint && leanblueprint pdf)
 ```
 
 ## Lean Toolchain & Dependencies
@@ -450,7 +453,7 @@ follow-up, not against the temporary `sorry` count.
 | `MPSTensor.transferMap_smul_eq_of_norm_eq_one` | helper theorem | Replacing the transfer map of a tensor scaled by a unit-norm complex scalar with the original transfer map | `TNLean/MPS/SharedInfra/Scaling.lean` |
 | `Matrix.IsIsometry.kronecker` | helper theorem | Preserving matrix isometries under the Kronecker product | `QICLean/Algebra/MatrixIsometryKronecker.lean` (QICLean dependency) |
 | `Matrix.reindexLinearEquiv_mul` | helper theorem | Multiplying matrices transported along compatible row, middle, and column equivalences; instantiate all three equivalences explicitly | `Mathlib/LinearAlgebra/Matrix/Reindex.lean` |
-| `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `TNLean/MPS/MPDO/PhysicalSectorFactorization.lean` |
+| `Matrix.entry_eq_of_heq` | helper theorem | Equating entries of a dependent family of matrices from the index equation and two heterogeneous coordinate identifications | `QICLean/Algebra/MatrixDependentEntries.lean` (QICLean dependency) |
 | `MPSTensor.cyclic_projection_mul_left` | helper theorem | Multiplying out the adjoint transfer map applied to a cyclic-sector projection times an arbitrary matrix, instead of rebuilding the Kadison–Schwarz multiplicative-domain argument | `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 | `MPSTensor.cyclic_projection_mul_right` | helper theorem | The same on the other side: the adjoint transfer map applied to an arbitrary matrix times a cyclic-sector projection | `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
 | `Fin.cyclic_induction` | helper theorem | Proving a predicate on a finite cyclic index from the zero case and one step of adding one, instead of re-running the induction on the underlying natural number | `TNLean/Algebra/FinCyclicInduction.lean` |

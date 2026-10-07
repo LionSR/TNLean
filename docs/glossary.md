@@ -571,6 +571,59 @@ normalizations.
   Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### Actual CZX rectangle boundary coordinates
+
+- **Declarations:** `TNLean.PEPS.czxRectangleCoordinatesEquiv`,
+  `czxRectangleEffectiveBoundaryConfig`, and `czxRectangleBoundaryMatrix`.
+- **Defined in:** `TNLean/PEPS/Examples/CZXRectangleMap.lean`, using the explicit
+  clockwise `torusRectanglePerimeterEquiv` in `CZXRectangleBoundary.lean`.
+- **Meaning:** clockwise crossing-bond coordinates reverse the native
+  bottom/left pairs. Effective bits `c` impose the adjacent-pair constraint
+  `(c_i,c_(i+1))`; the matrix column is the actual incident-only open-region
+  contraction at that native boundary assignment, without an extra scalar.
+- **Source:** Chen, Liu and Wen, arXiv:1106.4752, Section IV, boundary discussion
+  lines 330–345 and 377–385; arXiv:2011.12127, Appendix A, printed CZX tensors.
+- **Sanctioned bridges:** `range_openRegionMap_czxRectangle` identifies the
+  exact span of the effective columns, and
+  `regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review` identifies
+  the physical symmetry with the printed boundary operator. The actual
+  reduced-density support equals this image by
+  `range_regionReducedDensity_czxRectangle`; its rank and the rank after
+  trace normalization are `2^(2*w+2*h)`.
+- **Caveats:** torus periods are at least three; both rectangle sides are
+  positive, strictly shorter than the periods and bounded within the chosen
+  coordinates. Seam endpoints and crossing bonds through a seam are allowed;
+  a coordinate interval that wraps around the torus is not covered. The
+  effective dimension is
+  `2^(2*w+2*h)`, not the full unconstrained virtual dimension `4^(2*w+2*h)`.
+  No flat nonzero spectrum, entropy, isometric normalization, nonrectangular
+  extension or parent-kernel spanning statement follows merely from these
+  support theorems. The printed operator's ordering sign disappears because
+  the rectangle perimeter is even; normalized bra-ket factors are not silently
+  substituted. See `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
+
+#### `TNLean.PEPS.IsToricCodeBondCompatible`
+
+- **Declaration:** `IsToricCodeBondCompatible σ`.
+- **Defined in:** `TNLean/PEPS/Examples/ToricCodeTorusAmplitudes.lean`.
+- **Meaning:** the virtual labels determined by the physical spins match on
+  every oriented horizontal and vertical bond: the left label of the right
+  neighbor equals the current right label, and the bottom label of the upper
+  neighbor equals the current top label.
+- **Source:** the literal primal toric-code tensor in the review,
+  `Papers/2011.12127/TN-Review-main.tex`, lines 2451–2465,
+  equation `eq:app:tcode-rep-primal`, and the torus closure construction of
+  Schuch, Cirac and Pérez-García, arXiv:1001.3807, Theorem 5.9.
+- **Sanctioned bridges:** `toricCodeTorusState_apply` gives the exact support
+  indicator times the seam phases; `toricCodeTorusState_one_one_apply` is
+  the identity-closure indicator; `toricCodeTorusState_ne_zero_iff` identifies
+  this predicate with nonvanishing for each of the four closures.
+- **Caveats:** this is a physical-configuration support condition for the
+  oriented-bond contraction. Its native simple-graph interpretation uses
+  both torus periods at least three; smaller positive periods are algebraic
+  extensions. It does not assert parent-Hamiltonian kernel membership or
+  kernel spanning, and it imposes no additional normalization factor.
+
 #### `TNLean.PEPS.PairConjugacyClass.IsCommuting`
 
 - **Declaration:**
@@ -622,6 +675,95 @@ normalizations.
 - **Caveat:** these are the local equations of the closure overlap calculation,
   not a statement about ground spaces. They hold for every circumference,
   including one.
+
+#### `TNLean.PEPS.IsRegionLabelCompatible` and `TNLean.PEPS.IsTwistedRegionLabelCompatible`
+
+- **Declarations:**
+  `TNLean.PEPS.IsRegionLabelCompatible (R : Finset V) (q : {v // v ∈ R} → G) (η θ) : Prop`
+  and
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G) (q) (η θ) : Prop`.
+- **Defined in:** `TNLean/PEPS/RegularRegionConnectivity.lean` and
+  `TNLean/PEPS/RegularTwistedRegion.lean`.
+- **Meaning:** in the regular-basis expansion of the Gram matrix of an open
+  region, `η` (bra) and `θ` (ket) are group labels on the bonds incident to `R`. The
+  untwisted predicate says that at every vertex `v ∈ R` each incident label of
+  `η` is `q v` times the corresponding label of `θ`. The twisted predicate says
+  the same after the bond operators `u` (bra) and `w` (ket) are inserted at the
+  head of each oriented bond.
+- **Source:** arXiv:1001.3807, regular-basis contraction in the proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:** `TNLean.PEPS.IsRegionLabelCompatible.exists_common_label`
+  and `TNLean.PEPS.isRegionLabelCompatible_iff_exists_translation` (on a
+  connected region the labels are one simultaneous translation);
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible.internalEdge_intertwining` and
+  `TNLean.PEPS.IsTwistedRegionLabelCompatible.exists_common_label` (a connected
+  subgraph of untwisted bonds forces one common translation).
+- **Caveat:** both are local equations of a proof calculation and carry no
+  connectivity; every bridge to a common translation assumes a connected
+  induced region or a connected untwisted subgraph.
+
+#### `TNLean.PEPS.IsTorusRegionIntegerLift`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusRegionIntegerLift (R : Finset (TorusVertex width height)) (L : {v // v ∈ R} → ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusRegionLiftGauge.lean`.
+- **Meaning:** `L` assigns to every site of the torus region `R` a point of the
+  square lattice `ℤ × ℤ` projecting to that site, such that every rightward and
+  upward native bond inside `R` is a unit step of the lift. It is a supplied
+  combinatorial lift, independent of any group or closure operator.
+- **Source:** no source predicate. It is a locally introduced device for the
+  contiguous-block arguments of arXiv:1001.3807, Theorems 6.7-6.9,
+  `Papers/1001.3807/paper_v3.tex:1931-2072`, used to gauge the native closure
+  operators away inside the region.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_isSimplyConnected` (a lift
+  exists when the closed-cell realization of `R` is simply connected),
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_continuousLift`,
+  `TNLean.PEPS.IsTorusRegionIntegerLift.injective`, and the gauge and
+  coordinate theorems `TNLean.PEPS.torusRegionLiftGauge_gradient` and
+  `TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLift`.
+- **Caveat:** the predicate does not assert that `R` is a disk or simply
+  connected; it is weaker, and only the first bridge derives it from simple
+  connectedness. The lift statements are stated on tori with both periods at
+  least three.
+
+#### `TNLean.PEPS.IsIntegerCellNear`
+
+- **Declaration:** `TNLean.PEPS.IsIntegerCellNear (q a : ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/IntegerCellExteriorCollar.lean`.
+- **Meaning:** the two integer centers differ by at most one in each
+  coordinate, so their closed unit cells meet, possibly only at a corner.
+- **Source:** no source predicate. It is locally introduced plane geometry for
+  the exterior collar of a contiguous block in arXiv:1001.3807, proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.isIntegerCellNear_of_integerClosedCell_inter_nonempty`
+  (intersecting closed cells have near centers); the predicate defines the
+  exterior band and collar graph used by
+  `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
+- **Caveat:** nearness includes diagonal contact, so it is not the
+  four-neighbor adjacency of the square lattice.
+
+#### `TNLean.PEPS.IsRegionParentInteraction`
+
+- **Declaration:**
+  `TNLean.PEPS.IsRegionParentInteraction (A : Tensor Γ d) (R : Finset V) (h : Matrix _ _ ℂ) : Prop`.
+- **Defined in:** `TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean`.
+- **Meaning:** the operator `h` on the physical space of the region `R` is
+  positive semidefinite and its kernel is exactly the regional PEPS space
+  `TNLean.PEPS.regionGroundSpace A R`, spanned by the contractions of `R` with
+  arbitrary boundary conditions. It need not be a projector.
+- **Source:** arXiv:2011.12127, Section IV.C.1,
+  `Papers/2011.12127/TN-Review-main.tex:2003-2011` (the terms of a parent
+  Hamiltonian are positive semidefinite operators with kernel `𝒢_R`).
+- **Sanctioned bridges:** `TNLean.PEPS.isRegionParentInteraction_canonical`
+  (the orthogonal projector onto the complement of the regional space);
+  `TNLean.PEPS.ker_regionParentHamiltonian` (for any such family of terms the
+  ground space of their sum is the intersection of the regional conditions);
+  `TNLean.PEPS.IsRegionParentInteraction.mul_regionReducedDensity_eq_zero`.
+- **Caveat:** the predicate fixes only the kernel of each term. The resulting
+  ground space is independent of the chosen terms, but spectral gaps and other
+  spectral data are not.
 
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
@@ -1067,6 +1209,30 @@ The following notions use different transfer objects and are not interchangeable
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
 
+## States of the quasi-local algebra
+
+### `SpinChain.IsPureQuasiLocalState`
+
+- **Declaration:** `SpinChain.IsPureQuasiLocalState d ω : Prop`, for a continuous
+  complex-linear functional `ω` on `SpinChain.QuasiLocalAlgebra d` with `d > 0`.
+- **Defined in:** `TNLean/QCA/StateSpace.lean`.
+- **Meaning:** `ω` is an extreme point, over the real numbers, of
+  `SpinChain.quasiLocalStateSpace d`: the functionals of norm one with
+  $\omega(I)=1$ and $\omega(X^*X)\geq0$ for every quasi-local observable $X$.
+- **Source:** Nachtergaele, Commun. Math. Phys. 175 (1996),
+  arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
+- **Sanctioned bridges:**
+  `SpinChain.isPureQuasiLocalState_of_unique_supported_state` proves purity from
+  unique determination by expectation-one projections;
+  `SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition` reads off
+  a constituent of a finite convex decomposition; and
+  `SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff` and
+  `SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff` transport
+  purity along star-algebra isomorphisms and site grouping.
+- **Caveat:** purity is extremality among all states, not among
+  translation-invariant states; a state that is extremal only among
+  translation-invariant states need not satisfy this predicate.
+
 ## Gauge relations between blocks
 
 ### `MPSTensor.IsGaugeRelated`
@@ -1280,6 +1446,31 @@ The following notions use different transfer objects and are not interchangeable
   bridge to the translation-invariant left-canonical or trace-preservation
   predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
   `OBCChainTensor.ofSupported`.
+
+### `MPSPreparation.HasMixedSequentialFactorization`
+
+- **Declaration:** `MPSPreparation.HasMixedSequentialFactorization hD V : Prop`,
+  for a positive bond dimension and a matrix from a finite input space to
+  the physical configurations of a left chain, a central site, and a right chain.
+- **Defined in:** `TNLean/MPS/Preparation/MixedSequentialFactorization.lean`.
+- **Meaning:** $V=(E_L\otimes I_d\otimes E_R)C$, where each side is evaluated
+  from its outer boundary inward using isometric site maps, both outer bonds
+  have dimension one, every bond has dimension at most $D^2$, and $C$ is an
+  isometry from the input to the two inward bonds and the central physical site.
+- **Source:** arXiv:2307.01696, page 3, footnotes 3 and 4 to equations (13)--(15).
+- **Sanctioned bridges:** `MPSPreparation.exists_mixed_isometric_factorization`
+  for an isometric matrix product map;
+  `MPSPreparation.exists_mixed_sequential_polarIsoMatrix` for an injective
+  blocked chain on its full virtual-pair input; and
+  `MPSPreparation.exists_mixed_sequential_polar_support` for every blocked
+  chain on its actual polar support, with any chosen central site.
+- **Caveat:** no monotonicity of bond dimensions is asserted. For a non-injective
+  block, only the support-restricted polar map is an isometry; its extension
+  to the full virtual-pair space remains a partial isometry. The original
+  map is recovered by the adjoint of the support embedding. This is a local
+  correction to the printed full-input pseudoinverse claim, whose nonzero
+  rank-deficient witness remains in
+  `docs/paper-gaps/mswc24_mixed_polar_injectivity_scope.tex`.
 
 ## Quantum circuits
 
@@ -1581,6 +1772,33 @@ in `MPS/Preparation/` uses it.
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
 
+#### `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
+- **Meaning:** there are unit vectors `ψ_N`, each prepared for all large `N`
+  with `IsPreparedWithMeasurementsAndCircuitInDepth T (ψ_N)` for some
+  `T ≤ f N`, with `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
+- **Source:** arXiv:2103.13367, paragraph "Phases of matter": `Ψ ↦ Φ` when
+  compositions of `k` channels of `QCcc` of depth `f(M)` map `|ψ_M⟩` to states
+  `σ_M` with `‖σ_M - |φ_M⟩⟨φ_M|‖₁ → 0`.
+- **Sanctioned bridges:**
+  `QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le`
+  (overlap errors `1 - |⟨ψ_N|φ_N⟩|` tending to zero give trace-norm
+  convergence, via `Matrix.traceNormPureSub_le`) and
+  `MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`
+  (the normalized periodic states of a translation-invariant MPS in depth
+  `C log N`).
+- **Caveat:** the predicate is the relation `Ψ ↦ Φ` of the source only for
+  `Ψ` the trivial sequence of product states, `k = 2` (a preparation with
+  measurements, then a circuit), and `σ_M = |ψ_M⟩⟨ψ_M|` pure and prepared
+  deterministically. The depth `f` is arbitrary; agreement with the source's
+  relation requires `f` polylogarithmic. It is one direction only: the
+  source's equivalence of phases asks for `Ψ ↦ Φ` and `Φ ↦ Ψ`, and the
+  converse direction, with channels acting on arbitrary input states, is not
+  covered (`docs/paper-gaps/psc21_mps_classification_scope.tex`).
+
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
@@ -1677,8 +1895,61 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
   Heisenberg dual).
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
-  are free. There are no measurements or classical communication, so this is
-  not the LOCC class of the source.
+  are free. Onsite channels may enlarge the dimension, and a layer on the
+  enlarged sites still costs one depth unit. No uniform intermediate-dimension
+  bound is imposed. There is no classical feedforward. The source's intersite
+  gates act only on fixed-dimensional physical qudits; no uniform-depth
+  simulation or inclusion in its LOCC relation is proved. See
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+#### `QuantumCircuit.IsAdaptiveChannelProtocol`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelProtocol T Ψ : Prop`,
+  for `[NeZero N]`, a depth bound `T : ℕ`, and a linear map between chain
+  operators with possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** a finite tree of onsite channels, nearest-neighbor channel
+  layers, and onsite instruments with outcome-dependent continuations.
+  Each branch has at most `T` nearest-neighbor layers; onsite operations
+  and communication of the complete outcome tuple cost zero depth.
+  `OnsiteChannel.feedforwardMap` sums unnormalized outcome operations,
+  including zero-probability outcomes, and never divides by probabilities.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", motivates finite adaptive operations. The formal predicate uses
+  enlarged-site gate costs rather than the source's fixed physical-qudit costs.
+- **Sanctioned bridges:** `IsAdaptiveChannelProtocol.isKrausCPTP`,
+  `IsAdaptiveChannelProtocol.comp` (additive depth bounds),
+  `IsAdaptiveChannelProtocol.onsite_comp`, and
+  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included),
+  and `MeasurementRound.adaptive` (the existing measurement round's average
+  channel has the same quantum-depth bound).
+- **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
+  gate on the enlarged spaces still costs one layer. No uniform-depth
+  simulation into the source physical-qudit model is established. Also,
+  this is an upper bound on quantum depth. The source fixes the number of
+  composed `QCcc` blocks independently of system size; a block can already
+  contain sequential measurements/corrections at many sites. The tree does
+  not record a fixed-number source-block decomposition with the required
+  internal measurement/control order and one-measurement-per-site rule. See
+  `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
+
+#### `QuantumCircuit.IsAdaptiveChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsAdaptiveChannelConversion T ρ σ : Prop`,
+  for `[NeZero N]` and operators on `N`-site chains.
+- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
+- **Meaning:** there is a map `Ψ` with `IsAdaptiveChannelProtocol T Ψ`
+  and `Ψ ρ = σ`.
+- **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
+  LOCC", with the enlarged-site and finite-round scope of
+  `IsAdaptiveChannelProtocol`.
+- **Sanctioned bridges:** `IsAdaptiveChannelConversion.refl`,
+  `IsAdaptiveChannelConversion.mono`, `IsAdaptiveChannelConversion.trans`,
+  `IsAdaptiveChannelConversion.density`, and
+  `IsLocalChannelConversion.adaptive`.
+- **Caveat:** exact, directed conversion on arbitrary input operators;
+  positivity and unit trace of the output follow from those of the input.
+  No symmetry or asymptotic phase classification is asserted.
 
 #### `QuantumCircuit.IsLocalChannelConversion`
 
@@ -1703,9 +1974,130 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
   matrix; positivity and unit trace of `σ` follow from those of `ρ` by
-  `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
-  polylogarithmic-depth conversions of the phase equivalence in
-  arXiv:2103.13367 are not formalized, nor is blocking of sites.
+  `IsLocalChannelConversion.density`. Conversions are exact; the approximate
+  and asymptotic local-channel relations below extend this relation without
+  classical feedforward. The full phase equivalence in arXiv:2103.13367 and
+  blocking of sites are not formalized here.
+
+#### `QuantumCircuit.IsApproxLocalChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsApproxLocalChannelConversion T ε ρ σ : Prop`,
+  for `T : ℕ`, `ε : ℝ`, `[NeZero N]`, and operators on `N`-site chains whose
+  fixed local dimensions may differ.
+- **Defined in:** `TNLean/Circuit/Channel/ApproximateConversion.lean`.
+- **Meaning:** there are `S ≤ T` and a map `Ψ` with
+  `IsLocalChannelProtocol S Ψ` such that $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$.
+  The trace norm is `QuantumCircuit.chainTraceNorm`, the sum of singular
+  values after enumerating the chain configurations.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
+- **Sanctioned bridges:** `IsApproxLocalChannelConversion.refl`,
+  `IsApproxLocalChannelConversion.mono` (both bounds may increase),
+  `IsApproxLocalChannelConversion.trans` (depths and errors add for Hermitian
+  source and intermediate operators), and
+  `QuantumCircuit.isApproxLocalChannelConversion_zero_iff` (zero error is exact
+  local channel conversion).
+- **Caveat:** the definition does not require density matrices or Hermiticity;
+  the composition theorem requires the stated Hermiticity hypotheses.
+  Intermediate dimensions are unrestricted and two-site layers on enlarged
+  sites have unit depth. Classical feedforward is excluded, but no uniform
+  simulation or inclusion in the source relation is established; see
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+#### `QuantumCircuit.IsAsymptoticLocalChannelConversion`
+
+- **Declaration:** `QuantumCircuit.IsAsymptoticLocalChannelConversion ρ σ : Prop`,
+  for operator families on `N`-site chains with fixed, possibly different,
+  local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
+- **Meaning:** there are $k\in\mathbb N$, $C\ge0$, and errors
+  $\varepsilon_N\to0$ such that, for all sufficiently large positive `N`, an
+  approximate local channel conversion from $\rho_N$ to $\sigma_N$ has depth
+  $T_N\le C(1+\log(N+1))^k$ and trace-norm error at most $\varepsilon_N$.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
+- **Sanctioned bridges:** `IsAsymptoticLocalChannelConversion.refl` and
+  `IsAsymptoticLocalChannelConversion.trans`, the latter for eventually
+  Hermitian source and intermediate families.
+- **Caveat:** only the tails of the families matter; the logarithmic shift
+  fixes small sizes. The relation is directed, and its definition does not
+  assume density matrices. Intermediate local dimensions may grow with `N`
+  without changing the unit cost per two-site layer. No uniform-depth
+  inclusion in the source `QCcc` relation is established; see
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+#### `QuantumCircuit.IsLocalChannelPhaseEquivalent`
+
+- **Declaration:** `QuantumCircuit.IsLocalChannelPhaseEquivalent ρ σ : Prop`,
+  for operator families on `N`-site chains with fixed, possibly different,
+  local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
+- **Meaning:** asymptotic local channel conversion holds in both directions.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
+  "Phases of matter", for the trace-norm criterion. The protocol class here
+  uses enlarged-site channels without classical feedforward.
+- **Sanctioned bridges:** `IsLocalChannelPhaseEquivalent.refl`,
+  `IsLocalChannelPhaseEquivalent.symm`, and
+  `IsLocalChannelPhaseEquivalent.trans` (for three eventually Hermitian
+  families). `IsLocalChannelPhaseEquivalent.equivalence` gives an equivalence
+  relation on eventually Hermitian families of one fixed local dimension.
+- **Caveat:** density-matrix families satisfy the Hermiticity condition, but
+  arbitrary operator families are not asserted to form an equivalence
+  relation. The enlarged-site gate convention and absence of classical
+  feedforward differ from the source model; no inclusion in its phase
+  relation or source `QCcc` classification is asserted. See
+  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+### Lieb–Robinson propagation on finite graphs
+
+#### `QuantumCircuit.heisenbergCommutatorNorm`
+
+- **Declaration:**
+  `QuantumCircuit.heisenbergCommutatorNorm (H B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (X : Set ι) (t : ℝ) : ℝ`,
+  with `QuantumCircuit.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
+- **Defined in:** `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Meaning:** the operator norm of `A ↦ [τ_t(A), B]` restricted to
+  `supportedOperators q X`, for any finite type of sites `ι`.
+- **Source:** Hastings–Koma, arXiv:math-ph/0507008, Appendix A, (A.13); the
+  function `F(X, t)` of OpenAI, *A two-dimensional area law from a global
+  spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 70–74).
+- **Sanctioned bridges:**
+  `QuantumCircuit.heisenbergCommutatorNorm_le_integral` (the local commutator
+  recursion for an arbitrary finite interaction family),
+  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance` and
+  `QuantumCircuit.exists_graph_lieb_robinson` (graph-distance propagation with
+  constants depending only on the support diameter, support size and per-site
+  interaction budget), and
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
+  vanishing between connected components). The finite-ring estimate
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
+  nearest-neighbor ring consumer of the same recursion.
+- **Caveat:** the graph theorems take the per-support size bound and the
+  per-site norm budget as hypotheses; deriving them from the one-term-per-support
+  convention on an induced square-lattice domain is a separate step.
+
+#### `QuantumCircuit.siteExpectation`
+
+- **Declaration:**
+  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
+  with the linear map `QuantumCircuit.siteExpectationLM`.
+- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+- **Meaning:** the normalized partial trace
+  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  original sites.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
+- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
+  average over products of on-site Weyl operators outside `K`),
+  `siteExpectation_mem_supportedOperators`,
+  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
+  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
+  `norm_sub_siteExpectation_le` (error through on-site commutators), and
+  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
+  dynamics onto graph balls under a sphere-growth hypothesis).
+- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
 
 ## Inhomogeneous short-range correlated chains
 
@@ -2151,6 +2543,23 @@ involve no boundary.
 
 ## Symmetries of matrix product density operators
 
+### `MPOTensor.IsMPDOWithBoundary` and `MPOTensor.commutingBoundaryAlgebra`
+
+- **Declarations:** `MPOTensor.IsMPDOWithBoundary M X : Prop` and
+  `MPOTensor.commutingBoundaryAlgebra M`.
+- **Defined in:** `TNLean/MPS/MPDO/Boundary.lean`.
+- **Meaning:** the operator with entries
+  $\operatorname{tr}(X M^{i_1j_1}\cdots M^{i_Lj_L})$ is positive semidefinite
+  at every positive length. The commuting boundaries form the complex
+  subalgebra centralizing every tensor letter.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:175–182`.
+- **Sanctioned bridges:** `MPOTensor.mem_commutingBoundaryAlgebra_iff`,
+  `MPOTensor.commute_evalWord_of_mem_commutingBoundaryAlgebra`, and
+  `MPOTensor.isMPDOWithBoundary_one_iff`.
+- **Caveat:** positivity and membership of the commuting-boundary algebra
+  are stated separately. At identity boundary the positivity predicate
+  is the ordinary MPDO predicate.
+
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
 
 - **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
@@ -2169,27 +2578,31 @@ involve no boundary.
 
 ### `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry`
 
-- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M c : Prop` and
-  `MPOTensor.IsWeakMPOSymmetry O M : Prop`.
+- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M X c : Prop` and
+  `MPOTensor.IsWeakMPOSymmetry O M X : Prop`.
 - **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
 - **Meaning:** the periodic operators $O_a^{(L)}$ of a family of matrix
   product operators satisfy $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$
   (strong) or $[O_a^{(L)},\rho^{(L)}]=0$ (weak) for every label and every
-  positive length, where $\rho^{(L)}$ is the periodic operator of `M`.
+  positive length, where $\rho^{(L)}=\rho^{(L)}(X,M)$ is the
+  boundary-weighted periodic operator. Source-admissible `X` belongs to
+  `MPOTensor.commutingBoundaryAlgebra M`, the centralizer of the letters.
 - **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
 - **Sanctioned bridges:** `MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry`,
   `MPOTensor.IsStrongMPOSymmetry.isFusionCharacter`, and
   `MPOTensor.isStrongMPOSymmetry_iff_purification`.
 - **Caveat:** more general than the source, where the $O_a$ are normal matrix
   product operators forming a fusion algebra (lines 125–137) and $\rho$ is
-  positive; results add these hypotheses where they use them. Boundary
-  conditions other than the identity are out of scope, recorded in
-  `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+  positive; results add these hypotheses where they use them. Commutation
+  of `X` with the letters does not imply positivity; this is the separate
+  predicate `MPOTensor.IsMPDOWithBoundary M X`. The arbitrary-boundary
+  purification theorem uses an actual global purification, rather than
+  assuming that `X` factors on a doubled virtual space.
 
 ### `MPOTensor.IsStrongOnSiteSymmetry` and `MPOTensor.IsWeakOnSiteSymmetry`
 
-- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M U c : Prop` and
-  `MPOTensor.IsWeakOnSiteSymmetry M U : Prop`, for a monoid homomorphism
+- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M X U c : Prop` and
+  `MPOTensor.IsWeakOnSiteSymmetry M X U : Prop`, for a monoid homomorphism
   `U : G →* Matrix (Fin d) (Fin d) ℂ`.
 - **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
 - **Meaning:** the MPO-family predicates above for the on-site family
@@ -2198,11 +2611,13 @@ involve no boundary.
   eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
   arXiv:2603.28349, line 362.
 - **Sanctioned bridges:**
-  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` (weak
-  symmetry as on-site symmetry of the vectorized state under $U\otimes\bar U$,
-  for unitary $U$), `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`,
-  and `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor` (normal
-  purifications).
+  `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor`
+  characterize the boundary-weighted vectorized state. At identity boundary,
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor` give ordinary periodic
+  vector identities; `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor`
+  characterizes normal periodic local purifications, also at identity boundary.
 - **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the
   definition; they are phases, multiplicative in `g`, and equal to $1$ at the
   identity only under unitarity and $\rho^{(L)}\neq 0$
@@ -2219,10 +2634,401 @@ involve no boundary.
   least two. The ground energy may vary, and ground-state degeneracy is allowed.
 - **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
 - **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
-  `SymmetricGappedInteractionPath.trans`, and
+  `SymmetricGappedInteractionPath.trans`,
   `normalizedBondFixedPointGappedPath` (the path between the direct-sum
-  fixed points built from the normalized interpolating bond).
+  fixed points built from the normalized interpolating bond),
+  `MPSTensor.canonicalInjectiveGappedPath`, and
+  `MPSTensor.polarGappedInteractionPath`.
+  `exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint`
+  supplies a path on a common physical space after rephasing unitary
+  virtual actions with cohomologous factor systems. The first fixed-point
+  physical action is preserved. The canonical construction uses a
+  continuous one-site injective tensor path with fixed unitary symmetry up to
+  virtual gauge. The polar construction starts from an injective tensor whose
+  covariance is expressed by unitary bond conjugation; it joins its canonical
+  parent to the parent of its isometric form on the original physical space.
+  `MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric`
+  derives these data from an on-site symmetric injective tensor: nonzero
+  rescaling and gauge give a unital representative with identical canonical
+  parent interactions, and the unitary virtual covariance is then obtained
+  from the symmetry.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
   spaces, which is required for the source's converse classification argument.
+
+- **Virtual class of the prepared path:**
+  `MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class`
+  retains the original cohomology class and supplies one unitary projective
+  representation implementing symmetry throughout the polar deformation.
+- **Ordered comparison:** `MPSTensor.orderedGappedInteractionPath` constructs
+  affine interpolation of positive interactions of norm at most one when
+  the smaller interaction has a uniform gap and the periodic zero modes
+  are common. Endpoint commutation with the fixed on-site representation
+  suffices for symmetry of the entire path.
+
+- **Weighted canonical endpoints:** `weightedMatrixUnitParentComparisonPath`
+  compares each fixed normalized-bond interaction with the canonical parent
+  of its weighted matrix-unit tensor. The local operator inequality and the
+  shared nonzero periodic ground line hold even when coefficients vanish.
+  `weightedCanonicalFixedPointGappedPath` concatenates the two endpoint
+  comparisons with the continuous bond path. It concerns unitary virtual
+  summands with a common factor system on the common direct-sum physical
+  space; arbitrary isometric tensors still require a separate endpoint
+  identification. Neither construction assumes continuity of the canonical
+  projections as the interpolation parameter varies.
+
+### Independent symmetric phases within exact MPS families
+
+- **Declarations:** `MPSTensor.ExactMPSGroundPath`,
+  `MPSTensor.IsSameExactMPSGappedPhase`, and `MPSTensor.SamePositiveMpvRay`.
+- **Defined in:** `TNLean/MPS/Symmetry/ExactMPSGappedPhase.lean`.
+- **Meaning:** the endpoint tensors are blocked by one common positive length
+  and included isometrically, with their whole physical spaces as orthogonal
+  summands, into a common unitary representation. Each blocked endpoint
+  action may be multiplied by a
+  unit-modulus character. An independent symmetric gapped interaction path
+  joins their canonical two-site parents. A continuous finite-dimensional
+  tensor family represents the unique periodic ground lines for every
+  $N\ge2$, and has a positive-dimensional one-site injective representative
+  of its positive-length vector rays at every parameter. The representative's
+  bond dimension may vary; the ambient tensor dimension stays fixed.
+- **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453, and
+  Section II.F.2, lines 930–954. This is the continuous exact MPS regime;
+  it does not describe every symmetric gapped Hamiltonian path.
+- **Sanctioned bridges:** parameter reversal proves symmetry of the phase
+  condition. `MPSTensor.isSameExactMPSGappedPhase_of_isInjective_cohomologous`
+  constructs the phase condition for one-site injective tensors with exact
+  physical symmetries and cohomologous actual invertible virtual factors.
+  It derives orthogonal physical inclusions and an exact MPS ground
+  realization of the full polar and fixed-point path. Unitary virtual
+  actions are obtained by preparation rather than assumed.
+  `MPSTensor.IsSameExactMPSGappedPhase.of_smul_gaugeEquiv` preserves the
+  condition under nonzero scalar rescaling and invertible bond conjugation.
+  `MPSTensor.cohomologousTo_of_continuous_isOnSiteSymmetric_tensorPath`
+  derives endpoint cohomology for a continuous one-site injective tensor path
+  of fixed positive bond dimension and exact symmetry, without a supplied
+  virtual path or a finiteness assumption on the group.
+  `TNLean.Algebra.ProjectiveRepresentation.exists_unitary_compression`
+  preserves the factor system on a supplied invariant nonzero bond subspace.
+  `MPSTensor.ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective`
+  proves the physical converse when the continuous ambient tensors are all
+  one-site injective: it derives a common scalar character from the ground
+  lines, removes it from the physical action, and compares arbitrary endpoint
+  projective representatives. Exact tensor symmetry is a conclusion here.
+  `MPSTensor.ExactMPSGroundPath.exists_exact_symmetry` derives the common
+  physical character and exact rephased symmetry without fixing the minimal
+  bond dimension. This removes scalar rephasing from the remaining
+  varying-dimension problem.
+  `MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family`
+  proves local cohomology invariance for a supplied continuous unital ambient
+  tensor family with one-dimensional adjoint fixed space at the base parameter.
+  Its pointwise normalized stationary densities need no continuity assumption:
+  `MPSTensor.exists_open_continuousOn_stationaryDensity_of_unital` derives local
+  continuity and uniqueness. Actual virtual actions commute with the compressed
+  stationary density by uniqueness. Minimal support dimensions may vary;
+  support frames and virtual actions need no continuity, and no projective
+  action on the complementary bond space is required. Injectivity is required
+  only at the base parameter. The more general
+  `MPSTensor.eventually_cohomologousTo_of_continuousOn_unique_stationary_density`
+  uses supplied continuous locally unique stationary data without unitality.
+  `MPSTensor.cohomologousTo_of_continuous_unital_supported_family` gives endpoint
+  cohomology equivalence when the fixed-space and injectivity assumptions hold
+  at every parameter; preconnectedness extends the local conclusion.
+- **Caveat:** the relation contains no virtual representation, factor system,
+  or continuous canonical bond data. Its general converse remains open:
+  continuous balanced canonical data and the surviving invariant bond subspace
+  must be derived from the physical gap when minimal bond dimensions change.
+  The obstruction to using raw tensor continuity alone is documented in
+  `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
+
+## Exact circuits with initialized auxiliaries
+
+### `QuantumCircuit.IsPhysicalPortUnitary`
+
+- **Declaration:** `QuantumCircuit.IsPhysicalPortUnitary P T U : Prop`,
+  for a fixed qudit dimension `d`, a finite `PhysicalPortLayout N W`,
+  and a unitary operator on the `W` qudit wires.
+- **Defined in:** `TNLean/Circuit/Channel/PhysicalPort.lean`.
+- **Meaning:** a circuit generated by free one-site unitaries, free wire
+  permutations preserving every spatial site, and counted nearest-neighbor
+  layers acting only on the one designated physical port per site.
+  Multiplication adds upper bounds, and the bound can be enlarged.
+- **Source:** the physical-qudit/onsite-ancilla distinction in
+  arXiv:2103.13367, Supplement pp. 7–8. The routing estimates are derived
+  comparisons, not claims that the paper states the same formal predicate.
+- **Sanctioned bridges:** `.mem_unitary`, `.conjTranspose`, `.selected_layer`,
+  `.register_matching`, `.appendEnvironment_comp`,
+  `PhysicalPortEmbedding.unitary`, and `IsPhysicalPortProtocol.unitary`.
+- **Caveat:** the physical dimension is fixed throughout the circuit. The
+  layout may include separate local memory; a counted gate cannot act
+  directly on all of an enlarged site's wires. This predicate alone does
+  not impose source preparation ancilla initialization or cleanup conditions.
+
+### `QuantumCircuit.PhysicalPortEmbedding`
+
+- **Declaration:** `PhysicalPortEmbedding P Q`, for two wire layouts on the
+  same spatial sites.
+- **Defined in:** `TNLean/Circuit/Channel/PhysicalPortEmbedding.lean`.
+- **Meaning:** an injection of wires preserving each wire's spatial owner
+  and carrying every designated physical port to the corresponding port.
+  Additional wires are local memories, not new communication ports.
+- **Source:** the physical-qudit/onsite-ancilla distinction in
+  arXiv:2103.13367, Supplement pp. 7–8; this embedding is the finite spatial
+  construction used to retain that distinction when adding environments.
+- **Sanctioned bridges:** `.unitary` lifts an actual physical-port unitary
+  circuit at unchanged intersite depth. `PhysicalPortLayout.append` assigns
+  owners to fresh wires; `.appendEmbedding`, `.appendLeftEmbedding`, and
+  `.appendRightEmbedding` preserve the original ports. The maps
+  `appendEnvironmentInput` and `discardAppendedEnvironment` prepare literal
+  product-zero environment wires and discard precisely those wires.
+- **Caveat:** this embedding does not permit a free site-changing permutation.
+  A coordinate regrouping used to prove a matrix identity supplies no physical
+  gate by itself. The final discard does not assert that the environment resets.
+
+### `QuantumCircuit.IsPhysicalPortProtocol`
+
+- **Declaration:** `QuantumCircuit.IsPhysicalPortProtocol P T Φ : Prop`,
+  for a fixed qudit dimension and an endomorphism of the full wire operator
+  space of `PhysicalPortLayout N W`.
+- **Defined in:** `TNLean/Circuit/Channel/PhysicalPort.lean`.
+- **Meaning:** a finite composition of certified physical-port unitaries
+  and normalized Kraus channels supported within one spatial site.
+  Local channels cost zero; only physical-port intersite layers contribute
+  to the depth upper bound. The statement acts on arbitrary input operators.
+- **Source:** the reduced-channel resource convention motivated by
+  arXiv:2103.13367, Supplement pp. 7–8, with the scope recorded in
+  `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
+- **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
+  `.of_routed_family`, `.list_prod_uniform`,
+  `PortRegisters.matchingChannel_isPhysicalPortProtocol`,
+  `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
+  `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
+  `.exists_appended_unitary_dilation`, and
+  `.exists_appended_unitary_dilation_reference`. The last two construct an
+  actual same-depth unitary on a port-preserving extension, with fresh local
+  product-zero environments initialized once and discarded only at the end.
+- **Caveat:** source pure-state conditions and the fixed number of composed
+  `QCcc` blocks with their internal measurement/control rules remain separate.
+  The appended environments need not reset, and their total number is only
+  asserted finite for each protocol. The uniform `2 * Nat.clog d B` matching
+  bound requires a fixed `d ≥ 2` and one dimension bound `B` chosen independently of chain
+  length. It does not apply with the same constant to unrestricted
+  intermediate dimensions depending on `N`.
+
+
+### `QuantumCircuit.IsDimensionBoundedLocalChannelProtocol`
+
+- **Declaration:** `IsDimensionBoundedLocalChannelProtocol B T Ψ : Prop`,
+  for a native chain channel between possibly different local dimensions.
+- **Defined in:** `TNLean/Circuit/Channel/DimensionBoundedConversion.lean`.
+- **Meaning:** the native onsite/layer protocol constructors carry explicit
+  positivity and upper bounds by the same `B` for every intermediate local
+  dimension. Depth counts native pair-channel layers.
+- **Source:** a resource-refined abstraction for comparing the enlarged-site
+  channel model with the physical-qudit convention in arXiv:2103.13367,
+  Supplement pp. 7–8. The paper does not state this predicate.
+- **Sanctioned bridges:** `.toIsLocalChannelProtocol`, `.dimension_bounds`,
+  `.mono_bound`, `.comp`, `.exists_fixedRegisterWord`,
+  `.exists_physicalPortSimulation`, `.exists_physicalPortIO`, and
+  `.exists_physicalPortUnitaryIO`. A finite positive-input native protocol
+  admits some finite bound via `IsLocalChannelProtocol.exists_dimension_bound`.
+- **Caveat:** an existential bound separately for each chain length is not a
+  uniform family bound. For fixed physical `d ≥ 2` and `N ≥ 2`, the encoded
+  simulation has physical depth at most `2 * Nat.clog d B * T`; a uniform
+  constant requires `B` and `d` chosen independently of `N`. The exact channel
+  identity retains arbitrary port/scratch-reference correlations. When the
+  native input/output dimension is exactly the physical `d`, the port-I/O
+  theorem supplies product-zero designated memory, output on the original
+  ports, and exact data/scratch reset at the same intersite depth. The unitary
+  theorem additionally supplies fresh local product-zero environments and one
+  final trace; it does not assert reset of these discarded environments.
+  A full source QCcc witness and its pure-output system--ancilla conditions
+  remain separate. The bound does not count onsite operations as extra layers.
+
+### `QuantumCircuit.IsCleanImplementation`
+
+- **Declaration:** `IsCleanImplementation J C Z`.
+- **Defined in:** `TNLean/Circuit/CleanUnitaryImplementation.lean`.
+- **Meaning:** the matrix identity $CJ=JZ$. When $J$ includes a logical
+  register with its workspace initialized, this identity says that the
+  workspace returns to its initialized state on every logical input.
+- **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
+- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+  implementations using the same workspace; `IsCleanImplementation.embedOp`
+  places one in a larger register; `exists_isPairProduct_isCleanImplementation`
+  constructs a neighboring-pair circuit for an included logical unitary.
+- **Caveat:** the identity alone does not assert unitarity. It specifies the
+  initialized subspace, rather than the action on arbitrary workspace inputs.
+
+### `MPUCircuit.IsIntervalInteriorInitialized`
+
+- **Declaration:** `IsIntervalInteriorInitialized j k x z`.
+- **Defined in:** `TNLean/MPS/MPU/IntervalRegisterLayout.lean`.
+- **Meaning:** each auxiliary site strictly inside the interval from cut $j$
+  to cut $k$ has computational label $z$. Physical and outside sites remain
+  unrestricted.
+- **Source:** the interval registers in Section 5 of the same circuit note.
+- **Sanctioned bridge:** `isIntervalInteriorInitialized_split` separates the
+  two child conditions and the initialization of the joining auxiliaries.
+
+### `MPUCircuit.IsIntervalPartition`
+
+- **Declaration:** `IsIntervalPartition start length tree`.
+- **Defined in:** `TNLean/MPS/MPU/BalancedIntervalTree.lean`.
+- **Meaning:** an ordered binary subdivision of a positive-length interval
+  into single-site leaves, with each internal node labelled by its actual
+  joining cut.
+- **Source:** the balanced interval recursion in Section 5 of the circuit note.
+- **Sanctioned construction:** the midpoint tree provides this partition
+  without a supplied tree or joining-cut witness.
+
+### `MPUCircuit.IsMinimalIntervalColumnImplementation`
+
+- **Declaration:** `IsMinimalIntervalColumnImplementation ... j k ... Z`.
+- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalColumns.lean`.
+- **Meaning:** on the prescribed initialized interval input, $Z$ gives the
+  weighted minimal interval isometry, with its two outer bond encodings,
+  and the identity on every outside logical configuration.
+- **Source:** the weighted interval columns in Section 5 of the circuit note.
+- **Sanctioned bridges:** exact supported child columns determine the joint
+  columns; the actual joining contraction determines the parent columns.
+- **Caveat:** this is an initialized-column identity, not a circuit-existence
+  or resource assertion by itself.
+
+### `MPUCircuit.IsMinimalIntervalCircuitImplementation`
+
+- **Declaration:** `IsMinimalIntervalCircuitImplementation ... j k ... K Z C`.
+- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalCircuit.lean`.
+- **Meaning:** $Z$ is a logical unitary supported on the interval and has the
+  preceding initialized-column identity. A neighboring-pair circuit $C$ has
+  at most $K$ gates and implements $Z$ with the shared workspace returned to
+  zero on every logical input.
+- **Source:** the full interval circuit conditions in Section 5 of the note.
+- **Sanctioned constructions:** the actual leaf construction and
+  `exists_minimalInterval_merging_circuit` supply this predicate. The final
+  bounded-cut-rank theorem constructs every intermediate datum from $U$.
+- **Caveat:** minimal bases, metrics, and child implementations occur only
+  in intermediate statements; the final existence theorem does not assume
+  them as additional witnesses.
+
+## Arbitrary-boundary MPO algebras and actions
+
+### `MPOTensor.IsBoundaryClosed`
+
+- **Declaration:** `MPOTensor.IsBoundaryClosed T`.
+- **Defined in:** `TNLean/MPS/MPDO/BoundaryClosedness.lean`.
+- **Meaning:** for every pair of boundary matrices `X,Y`, there is one
+  boundary matrix `Z` such that the product of the corresponding closed
+  operators equals the operator with boundary `Z` at every positive length.
+  The order is `∀ X Y, ∃ Z, ∀ L > 0`; `Z` cannot depend on `L`.
+- **Source:** arXiv:2203.12563v3, `algcond`,
+  `Papers/2203.12563/REsubmission.tex:321-330`, and Appendix A, lines 2307-2309.
+- **Sanctioned bridges:** `isBoundaryClosed_iff_exists_linearMap` derives
+  one linear boundary map on the full stacked matrix space, valid at all
+  positive lengths; `mpoWithBoundary_eq_physCloseN` identifies the existing
+  physical closure; `IsBoundaryClosed.mul_mem_range` gives closure of its
+  range at each positive length. Exact biorthogonal data imply the predicate
+  through `isBoundaryClosed_of_biorthogonalDecomposition`.
+- **Caveat:** closure at each length alone does not supply a common boundary
+  choice. No converse from independent lengthwise range closure is asserted.
+  `IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective` now
+  constructs exact fusion decompositions from an unweighted block presentation
+  with positive-dimensional, individually injective, gauge-scalar-separated
+  blocks. The common positive spanning length is derived, not assumed.
+
+### `MPOTensor.IsBoundaryCompatible`
+
+- **Declaration:** `MPOTensor.IsBoundaryCompatible T A`.
+- **Defined in:** `TNLean/MPS/MPDO/BoundaryClosedness.lean`.
+- **Meaning:** every operator boundary and state boundary admit one output
+  state boundary realizing their action at all positive chain lengths.
+  Again the existential boundary precedes the universal positive length.
+- **Source:** arXiv:2203.12563v3, `eq:compatible`,
+  `Papers/2203.12563/REsubmission.tex:431-469`, and Appendix A.
+- **Sanctioned bridges:** `isBoundaryCompatible_iff_exists_linearMap`
+  supplies a length-independent linear map on the complete product boundary
+  matrix space. `MPSTensor.mpvWithBoundary_eq_groundSpaceMap` and
+  `IsBoundaryCompatible.mulVec_mem_groundSpace` identify the boundary state
+  map and prove ground-space invariance. Exact action data give compatibility
+  through `isBoundaryCompatible_of_biorthogonalDecomposition`.
+- **Caveat:** separate ground-space invariance at each length does not assert
+  a common boundary transport.
+  `IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective`
+  constructs exact action tensors from unweighted operator/state block
+  presentations and positive-dimensional, individually injective,
+  gauge-scalar-separated target state blocks. Operator-block injectivity is
+  unnecessary. The predicate itself does not assume those data or their laws.
+
+### `MPSTensor.IsBiorthogonalDecomposition`
+
+- **Declaration:** `MPSTensor.IsBiorthogonalDecomposition B A V W`.
+- **Defined in:** `TNLean/MPS/MPDO/BoundaryTransport.lean`.
+- **Meaning:** each letter satisfies `B i = ∑ c, W c * A c i * V c`,
+  with `V c * W c = 1` and `V c * W e = 0` for distinct labels.
+  The rectangular synthesis maps `W` and analysis maps `V` need not be
+  adjoints; ambient completeness `∑ c, W c * V c = 1` is not a field.
+- **Source:** the exact fusion/action and orthogonality equations
+  `fusiontensors`, `eq:orthoW`, `fusiontensors2`, `eq:orthoV` in
+  arXiv:2203.12563v3, and its Appendix A.
+- **Sanctioned bridges:** the predicate's `evalWord`,
+  `trace_mul_evalWord`, and `mpvWithBoundary` theorems transport every
+  nonempty word and its arbitrary boundary exactly. `evalWord_of_complete`
+  extends this to the empty word under the explicit ambient-completeness
+  identity. The MPO product/action constructors in `BoundaryClosedness.lean`
+  turn suitable data into arbitrary-boundary closedness/compatibility.
+- **Caveat:** this is exact local reconstruction, stronger than a periodic
+  trace reduction with a nilpotent remainder. Neither periodic equality nor
+  nilpotent-remainder reduction supplies this predicate automatically.
+  Empty-word transport without ambient completeness is not claimed, nor is
+  reconstruction from closedness/compatibility without further block hypotheses.
+  The source-block construction is in `BoundarySourceDecomposition.lean`;
+  `BoundaryZipperBlocked.lean` retains its exact unblocked maps and packages
+  the same maps into a complete zipper family after a derived common blocking.
+  `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
+  of multiplicities under positive dimensions and injective block separation.
+
+
+## Nested regional cylinders
+
+### `TNLean.PEPS.dependentRegionCylinder`
+
+- **Declaration:** `dependentRegionCylinder R S`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Cylinder.lean`.
+- **Meaning:** the global vectors all of whose complementary coordinate slices
+  lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
+- **Source:** the September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
+- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+  the range of an identity extension with a cylinder;
+  `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
+  projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,
+  containing-region, and image identities in the existing physical coordinates.
+- **Caveat:** inside rank means `dim S`, not the global dimension of the
+  cylinder. No cancellation of a possibly zero-dimensional outside factor
+  is used. The empty region still has inside Hilbert space `ℂ`.
+
+### `TNLean.PEPS.nestedCylinderInnovation`
+
+- **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
+  that the finite family of regions is monotone.
+- **Defined in:** `TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean`.
+- **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
+  `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
+  inside projectors into the current region and taking the sum of their ranges.
+- **Source:** the variable-radius orthogonalization at the manuscript passage
+  linked above.
+- **Sanctioned consequences:** `nestedCylinderInnovation_prefix_span` and
+  `nestedCylinderInnovation_span` identify all prefix and total spans;
+  `nestedCylinderInnovation_pairwise_orthogonal` proves orthogonality in the
+  actual global Hilbert space; `nestedCylinderInnovation_projector_sum` gives
+  the sum of the lifted inside projectors. The individual and summed
+  `finrank` bounds compare inside dimensions directly, in natural and integer
+  form. `nestedCylinder_projector_supported` gives support on any containing
+  region, and that support result does not require nesting.
+- **Caveat:** the image need not equal `Sⱼ ∩ Wⱼ⊥`; the sandwich
+  `(I − P_(Wⱼ)) P_(Sⱼ) (I − P_(Wⱼ))` need not be a projector. Neither
+  commutation of the original projectors nor a spectral rank estimate is
+  assumed. This is the orthogonalization step, not the approximation-error
+  or full adaptive-patch theorem. See
+  [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).

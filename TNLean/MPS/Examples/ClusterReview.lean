@@ -468,8 +468,10 @@ private theorem clusterBlockedRMP_adjoint_fixes_maximallyMixed :
     hadamard_inv_conjTranspose]
   ext a b; fin_cases a <;> fin_cases b <;> norm_num [Matrix.mul_apply, Fin.sum_univ_two]
 
-/-- The blocked review tensor has string order under every element of its
-`Z₂ × Z₂` symmetry, with the maximally mixed boundary state. -/
+/-- The blocked review tensor has virtual-boundary nondecay under every
+`Z₂ × Z₂` symmetry element, including the identity, with the maximally mixed
+boundary state. Physical endpoint order is proved separately in
+`ClusterPhysicalStringOrder`. -/
 theorem clusterBlockedRMP_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
     HasStringOrder clusterBlockedRMP (clusterZ2Z2Action g)
       ((1 / 2 : ℂ) • (1 : Matrix (Fin 2) (Fin 2) ℂ)) :=

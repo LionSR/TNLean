@@ -1,0 +1,128 @@
+\section{Conversion through compatible coherent seeds}
+
+\begin{theorem}[A coherent circuit for all encoded sectors]
+    \label{thm:ldp_coherent_sector_circuit}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported,
+        MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn,
+        MPSPreparation.mulVec_windowGHZState_of_registerCfg}
+    \leanok
+    Fix $d\geq1$, $D\geq1$, a register length $r\geq2$, and injective
+    encodings of the $D$ bond values and $b$ sector labels in $r$ physical
+    sites. There is a constant $C$ with the following property. Let $A$ be
+    a tensor, let $S$ be a set of bond pairs, and let $\omega_j$ be
+    orthonormal pair vectors. Cut a positive ring into $M\ge1$ blocks with
+    $3r\leq\ell_k\leq L$. Assume the cyclic product of each pair vector
+    is supported on $S^M$ for this $M$, and each blocked tensor is injective on the
+    coordinate subspace spanned by $S$. There is a local circuit $U$ of
+    depth at most $CL$, simultaneously satisfying
+    \begin{align}
+        U|\operatorname{reg}(j)\rangle
+         & =\left(\bigotimes_k V_k\right)
+        \bigotimes_k|\omega_j\rangle_{R_kL_{k+1}},
+        \label{eq:ldp_coherent_sector}
+    \end{align}
+    where $V_k$ is the blocked polar isometry, and
+    $|\operatorname{reg}(j)\rangle$ carries the encoded value $j$ on every
+    designated register and zero on every other physical site.
+    Consequently, the same $U$ implements every linear combination of
+    (\ref{eq:ldp_coherent_sector}), with arbitrary complex coefficients.
+    This is the unitary stage following seed preparation in
+    \cite[Long-range MPS using measurements]{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On each pair window, extend the orthonormal family $\omega_j$ to a
+    unitary mapping the encoded sector basis to that family. On each
+    physical block, extend the polar isometry on $S$ using its sequential
+    factorization. The first layer has constant depth and the second has
+    depth at most a constant times $L$. Their product gives
+    (\ref{eq:ldp_coherent_sector}); linearity gives the superposition identity.
+\end{proof}
+
+\begin{theorem}[Conversion through compatible coherent seeds]
+    \label{thm:ldp_compatible_seed_conversion}
+    \uses{def:qc_local_circuit}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_of_compatible_seeds,
+        MPSPreparation.exists_isLocalCircuitOfDepth_of_common_seed}
+    \leanok
+    Let $a,b,\chi_A,\chi_B$ be unit vectors in the same physical ring
+    space $\mathcal H_N=(\mathbb C^d)^{\otimes N}$. Let $U_A,U_B,R$ be
+    local circuits of depths $T_A,T_B,T_R$ with $R\chi_A=\chi_B$.
+    Put $a'=U_A\chi_A$, $b'=U_B\chi_B$ and assume
+    $\varepsilon(a',a)\leq\varepsilon_A$ and
+    $\varepsilon(b',b)\leq\varepsilon_B$. Then
+    \begin{align}
+        U                 & =U_BRU_A^\dagger,                   & T_U & \leq T_A+T_R+T_B,
+        \label{eq:ldp_seed_composition}                                                   \\
+        \varepsilon(Ua,b) & \leq2(\varepsilon_A+\varepsilon_B).
+        \label{eq:ldp_seed_error}
+    \end{align}
+    For an exactly common seed, take $R=I$ and $T_R=0$.
+    All auxiliary sites, if present, are included in these full vectors
+    with their specified reset states. No measurement is inverted.
+
+    % Formula: U = U_B R U_A^dagger, and U a' = b'.
+    % Source: MSWC24 discussion, with explicit compatible coherent seeds.
+    % Ink-to-index map: each vertical wire is the entire H_N index (dimension d^N),
+    % not a single physical-site gate. Bottom ports are inputs, top ports outputs.
+    % Contractions: the H_N indices between U_A^dagger and R, and R and U_B.
+    % Boundary signature: one H_N input below and one H_N output above.
+    % No trace, state contraction, or normalization scalar is suppressed.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+                \tn[skin=box, ports={90:physical:$\mathcal H_N$,
+                            270:physical:$\mathcal H_N$}]{U}
+            \end{tenkz}
+            =
+            \begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none]
+                \tn[at=(1,1), skin=box, name=ub,
+                    ports={90:physical:$\mathcal H_N$,270:physical}]{U_B}
+                \tn[at=(2,1), skin=box, name=r,
+                    ports={90:physical,270:physical}]{R}
+                \tn[at=(3,1), skin=box, name=ua,
+                    ports={90:physical,270:physical:$\mathcal H_N$}]{U_A^\dagger}
+                \tnwire{ua.90}{r.270}
+                \tnwire{r.90}{ub.270}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+    The boxes in this diagram denote whole circuits on $N$ sites, not
+    free gates on growing physical blocks.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:qc_circuit_inverse_composition, lem:ldp_error_triangle}
+    Circuit inversion and composition give
+    (\ref{eq:ldp_seed_composition}). The seed equation gives $Ua'=b'$.
+    Unitary invariance yields $\varepsilon(Ua,b')=\varepsilon(a,a')$;
+    the error triangle bound gives (\ref{eq:ldp_seed_error}).
+\end{proof}
+
+\begin{theorem}[Uniform logarithmic-depth conversion]
+    \label{thm:ldp_compatible_seed_log_depth}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_compatible_seeds}
+    \leanok
+    Fix normalized target families $a_N,b_N$, constants $c_A,c_B,c_R$,
+    and $N_0$. Suppose that for every $0<\varepsilon\leq1$ and positive
+    $N\geq N_0$ there are compatible coherent seeds and circuits as in
+    Theorem~\ref{thm:ldp_compatible_seed_conversion}, with endpoint errors
+    at most $\varepsilon/4$ and respective depths bounded by
+    $c_A\log(N/\varepsilon)$, $c_B\log(N/\varepsilon)$ and
+    $c_R\log(N/\varepsilon)$. There is a conversion of error at most
+    $\varepsilon$ and depth at most
+    $(c_A+c_B+c_R)\log(N/\varepsilon)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_compatible_seed_conversion}
+    Apply Theorem~\ref{thm:ldp_compatible_seed_conversion} and add the
+    three depth bounds.
+\end{proof}
+
+The explicit compatibility condition is sufficient for the chosen-vector
+interpretation of the discussion remark in~\cite{Malz2024Preparation}.
+Equality of non-normal parent groundspaces alone does not supply it:
+sector amplitudes can obstruct arbitrarily accurate shallow conversion
+\cite{gap:mswc24_same_phase_compatible_seed}.

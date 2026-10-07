@@ -1,0 +1,99 @@
+\begin{definition}[Restoring bond multiplicities]%
+    \label{def:peps_multiplicity_bond_map}
+    \lean{TNLean.PEPS.multiplicityBondMap,
+        TNLean.PEPS.multiplicityBondMap_apply,
+        TNLean.PEPS.multiplicityBondMap_single,
+        TNLean.PEPS.multiplicityBondFamilyMap,
+        TNLean.PEPS.multiplicityBondFamilyMap_apply}
+    \leanok
+    Let $V_i$ and $M_i$, indexed by a finite set, be finite-dimensional
+    coordinate spaces, with
+    $m_i=\dim M_i>0$. On the direct sum of matrix spaces, define
+    \begin{align}
+        J((X_i)_i) & =\bigl(m_i^{-1/2}X_i\otimes I_{M_i}\bigr)_i.
+    \end{align}
+    On each matrix unit this reads
+    \begin{align}
+        \ket{k}\bra{\ell}\longmapsto
+        \frac{1}{\sqrt{m_i}}\sum_{a=0}^{m_i-1}
+        \ket{k,a}\bra{\ell,a}.
+    \end{align}
+    For an irreducible representation of dimension $d_i$, the regular
+    representation has multiplicity $m_i=d_i$. Thus $J$ is precisely the
+    bond transformation used in the semi-regular bond-dimension reduction
+    of \cite[Section~7]{Schuch2010PEPS}.
+    In a fixed block $i$, the four open indices give
+    $J(X_i)_{(k,a),(\ell,b)}=m_i^{-1/2}(X_i)_{k,\ell}\delta_{a,b}$:
+    % Formula: J(X_i)_(k,a),(ell,b)=m_i^(-1/2) (X_i)_(k,ell) delta_(a,b).
+    % Source: Papers/1001.3807/paper_v3.tex:2982--3013, the two bond
+    % transformations figs6/prove-equiv-semireg-reg-left and -right.
+    % Ink-to-index: the upper west/east legs are k,ell in V_i; the lower
+    % west/east legs are a,b in M_i. All four are virtual bond indices.
+    % There is no contraction on either side. The right panel is the tensor
+    % product X_i tensor I_{M_i}, so both signatures are (V,P)=(4,0).
+    % The block label i is fixed, not an additional open leg or a summed index.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+            \tn[name=multiplicityImage, skin=box, label pos=180,
+                ports={135:virtual:$k$, 45:virtual:$\ell$,
+                        225:virtual:$a$, 315:virtual:$b$}]{J(X_i)}
+        \end{tenkz}
+        $=m_i^{-1/2}$
+        \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+            \tn[at=(1,1), skin=box,
+                ports={180:virtual:$k$, 0:virtual:$\ell$}]{X_i}
+            \tn[at=(2,1), skin=box,
+                ports={180:virtual:$a$, 0:virtual:$b$}]{I_{M_i}}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{definition}
+
+\begin{theorem}[The multiplicity-restoring bond isometry]%
+    \label{thm:peps_multiplicity_bond_isometry}
+    \lean{TNLean.PEPS.trace_multiplicityBondMap_conjTranspose_mul,
+        TNLean.PEPS.multiplicityBondMap_injective,
+        TNLean.PEPS.sum_trace_multiplicityBondFamilyMap_conjTranspose_mul,
+        TNLean.PEPS.multiplicityBondFamilyMap_injective}
+    \leanok
+    \uses{def:peps_multiplicity_bond_map}
+    The map $J$ preserves the Hilbert--Schmidt inner product:
+    \begin{align}
+        \sum_i\tr[J(X)_i^\dagger J(Y)_i]
+        =\sum_i\tr[X_i^\dagger Y_i].
+    \end{align}
+    In particular, it is injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each block,
+    \begin{align}
+        \tr\bigl[(m_i^{-1/2}X_i\otimes I)^\dagger
+            (m_i^{-1/2}Y_i\otimes I)\bigr]
+         & =m_i^{-1}\tr[X_i^\dagger Y_i]\tr[I_{M_i}] \\
+         & =\tr[X_i^\dagger Y_i].
+    \end{align}
+    Summing gives the assertion. The Hilbert--Schmidt norm vanishes
+    only on the zero matrix, which proves injectivity.
+\end{proof}
+
+\begin{theorem}[The weighted semi-regular bond becomes a regular bond]%
+    \label{thm:peps_multiplicity_bond_weight}
+    \lean{TNLean.PEPS.multiplicityBondMap_sqrt_smul,
+        TNLean.PEPS.multiplicityBondFamilyMap_sqrt_smul}
+    \leanok
+    \uses{def:peps_multiplicity_bond_map}
+    For any matrices $D_i$, one has
+    \begin{align}
+        J\bigl((\sqrt{m_i}D_i)_i\bigr)
+        =\bigl(D_i\otimes I_{M_i}\bigr)_i.
+    \end{align}
+    Taking $m_i=d_i$ and $D_i=D^i(gh^{-1})$ gives the two bond vectors
+    compared in \cite[Section~7]{Schuch2010PEPS}. This establishes the
+    isometry on the bond matrix spaces; the equality of complete PEPS
+    contractions after its application on all bonds is a further statement.
+\end{theorem}
+
+\begin{proof}\leanok
+    In each block the factors $m_i^{-1/2}$ and $\sqrt{m_i}$ cancel.
+\end{proof}

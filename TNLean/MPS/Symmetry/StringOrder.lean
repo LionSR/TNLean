@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.VirtualRepresentation
@@ -12,9 +11,11 @@ import TNLean.Algebra.CocycleCohomology
 /-!
 # String order parameters and local symmetry equivalence
 
-This file proves the main equivalence theorems relating string order,
-local symmetry, and spectral radius for injective MPS tensors, together
-with the SPT phase labels and the string-order universality results.
+This file proves equivalences between fixed-twist virtual-boundary nondecay,
+local symmetry, and peripheral twisted eigenmatrices for injective MPS tensors.
+It also proves the SPT phase labels and virtual-boundary universality results.
+Physical endpoint string order and projective nontriviality are treated
+separately in `PhysicalStringPhase`.
 
 The core definitions — the twisted transfer map, string order parameter, and
 conditions C1/C2/C3 with their equivalences — are imported from companion
@@ -28,11 +29,11 @@ string-order universality theorems that use them.
 
 ## Main results
 
-* `MPSTensor.twistedTransfer_spectralRadius_le_one` — spectral radius bound
+* `MPSTensor.twistedTransfer_eigenvalue_norm_le_one_of_irreducible` — eigenvalue bound
 * `MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase` — modulus-one
   rigidity bridge
-* `MPSTensor.stringOrder_iff_localSymmetry` — string order ↔ local
-  symmetry (for injective MPS)
+* `MPSTensor.stringOrder_iff_localSymmetry` — fixed-twist virtual-boundary
+  nondecay ↔ local symmetry (for injective MPS)
 * `MPSTensor.localSymmetry_iff_spectralRadius_one` — local symmetry ↔
   ρ(ℰ_u) = 1
 * `MPSTensor.hasStringOrder_of_symmetric_injective` — string order holds
@@ -60,14 +61,10 @@ variable {d D : ℕ}
 
 section MainTheorems
 
-/-- **Spectral radius bound** (Lemma 1 of arXiv:0802.0447):
-for an injective pure FCS, every eigenvalue of the twisted
-transfer map `ℰ_u` has modulus at most `1`.
-
-The proof rewrites `ℰ_u` as a mixed transfer map, passes to a common
-positive-definite fixed point of the adjoint channels, gauges both
-Kraus families to trace-preserving form, and applies the mixed-transfer
-eigenvalue bound `Kraus.eigenvalue_norm_le_one`. -/
+/-- Every eigenvalue of an injective normalized tensor's twisted transfer map has
+modulus at most one. This is the injective specialization of the irreducible
+eigenvalue bound; its conclusion bounds an eigenvalue, not the spectral radius.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_spectralRadius_le_one
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
@@ -77,27 +74,13 @@ theorem twistedTransfer_spectralRadius_le_one
     (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V) :
-    ‖ev‖ ≤ 1 := by
-  have hDpos : 0 < D := by
-    by_contra hD
-    have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
-    subst hD0
-    apply hV
-    ext i j
-    exact Fin.elim0 i
-  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
-  let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
-  have hHas : Module.End.HasEigenvalue
-      (Kraus.mixedMapLM setup.A' setup.B') ev :=
-    twistedTPGaugeSetup_hasEigenvalue
-      (A := A) (u := u) (setup := setup) ev V hV hEig
-  exact Kraus.eigenvalue_norm_le_one
-    (A := setup.A') (B := setup.B') setup.hA'TP setup.hB'TP ev hHas
+    ‖ev‖ ≤ 1 :=
+  twistedTransfer_eigenvalue_norm_le_one_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu hNorm ev V hV hEig
 
-/-- A modulus-one eigenvalue of the twisted transfer map forces the twisted
-companion tensor to be gauge-phase equivalent to the original tensor. The proof
-passes both families to a common trace-preserving gauge and applies the
-irreducible mixed-transfer rigidity theorem. -/
+/-- For an injective normalized tensor, a modulus-one twisted-transfer eigenvalue
+forces gauge-phase equivalence with the twisted companion.
+Source: arXiv:0802.0447, Lemma 1, lines 189–239. -/
 theorem twistedTransfer_modulus_one_implies_gaugePhase
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)
@@ -108,43 +91,9 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
     (hV : V ≠ 0)
     (hEig : twistedTransferMap A u V = ev • V)
     (hev : ‖ev‖ = 1) :
-    GaugePhaseEquiv A (twistedMixedCompanion A u) := by
-  have hDpos : 0 < D := by
-    by_contra hD
-    have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
-    subst hD0
-    apply hV
-    ext i j
-    exact Fin.elim0 i
-  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
-  let setup := twistedTPGaugeSetup (A := A) hA u hu hNorm
-  have hHas : Module.End.HasEigenvalue (Kraus.mixedMapLM setup.A' setup.B') ev :=
-    twistedTPGaugeSetup_hasEigenvalue
-      (A := A) (u := u) (setup := setup) ev V hV hEig
-  let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
-      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
-  have hspec : ev ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B')) := by
-    rw [AlgEquiv.spectrum_eq Φ]
-    exact hHas.mem_spectrum
-  have hRadGe : Kraus.mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
-    rw [Kraus.mixedTransferSpectralRadius_eq]
-    have hnorm_ev_nn : (1 : NNReal) = ‖ev‖₊ := by
-      apply Subtype.ext
-      simpa using hev.symm
-    have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
-      exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
-    rw [ge_iff_le, hnorm_ev, spectralRadius_eq_of_unital]
-    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B'))) _
-      (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
-  have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
-    modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
-      setup.A' setup.B' setup.hIrrA' setup.hIrrB' setup.hA'TP setup.hB'TP hRadGe
-  simpa [setup.hA'_def, setup.hB'_def, setup.hB_def] using
-    gaugePhaseEquiv_of_gaugeEquiv_left_right
-    (gaugeEquiv_tpGauge (A := A) (ρ := setup.σ) setup.hσ_pd)
-    hGauge'
-    (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
+    GaugePhaseEquiv A (twistedMixedCompanion A u) :=
+  twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
+    A (Kraus.injective_implies_irreducibleCP A hA) u hu hNorm ev V hV hEig hev
 
 /-- If string order exists for `u`, then the twisted companion family is gauge-phase
 equivalent to the original tensor.  The proof extracts a modulus-one peripheral
@@ -329,15 +278,14 @@ theorem localSymmetry_iff_spectralRadius_one
     exact localSymmetry_of_twistedTransfer_eigen
       A hA u hu Λ hΛpos hΛtr hΛfix hNorm μ V hV_ne hEig hμ
 
-/-- **Theorem 1** (arXiv:0802.0447, virtual-boundary form): String order
-exists for a pure canonical FCS if and only if `u` is a local symmetry.
+/-- Fixed-twist virtual-boundary nondecay is equivalent to local symmetry for
+an injective tensor with faithful canonical density.
 
-The definition `HasStringOrder A u Λ` encodes the paper's boundary operators
-`x,y` as arbitrary virtual boundary matrices `X,Y`, so the theorem is
-stated directly at the transfer-matrix level; see the scope restriction on
-`HasStringOrder` and
-`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex` for the
-comparison with the paper's physical-endpoint form. -/
+The virtual boundary matrices are arbitrary, and the fixed physical twist may
+be scalar or the identity. This is a consequence of the peripheral rigidity
+argument in arXiv:0802.0447, Lemma 1, rather than the source's physical-endpoint
+Theorem 1. The distinction and projective convention are recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 theorem stringOrder_iff_localSymmetry
     (A : MPSTensor d D)
     (hA : Kraus.IsInjective A)

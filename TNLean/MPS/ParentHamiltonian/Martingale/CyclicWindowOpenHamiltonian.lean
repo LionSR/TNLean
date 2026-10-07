@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.FiniteRangeKnabe
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
+import TNLean.MPS.ParentHamiltonian.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 
@@ -50,20 +51,6 @@ theorem sum_zmodLocalTermES_eq_parentHamiltonianES {N : ℕ} [NeZero N]
       ((ZMod.finEquiv N).toEquiv.sum_comp (zmodLocalTermES A R)).symm
     _ = ∑ i : Fin N, localTermES A R i := by
       simp [zmodLocalTermES]
-
-/-- Addition in \(\mathbb Z/N\mathbb Z\) is cyclic forward motion on the
-corresponding finite site. -/
-theorem finEquiv_symm_add_eq_cyclicForwardSite {N : ℕ} [NeZero N]
-    (s : ZMod N) (q : ℕ) :
-    (ZMod.finEquiv N).symm (s + q) =
-      cyclicForwardSite ((ZMod.finEquiv N).symm s) q := by
-  cases N with
-  | zero => exact (NeZero.ne 0 rfl).elim
-  | succ N =>
-      apply Fin.ext
-      change (s.val + (q : ZMod (N + 1)).val) % (N + 1) =
-        (s.val + q) % (N + 1)
-      rw [ZMod.val_natCast, Nat.add_mod_mod]
 
 /-- Two range-\(R\) cyclic windows are disjoint when their oriented start
 separation \(e\) satisfies \(R \leq e\) and \(e + R \leq N\). -/
@@ -178,7 +165,10 @@ coordinates in cyclic order. -/
   rw [Equiv.piCongrLeft_apply_apply]
   rfl
 
-private theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
+/-- Replacing coordinates inside a subwindow of the active block leaves the spectator
+configuration unchanged. This is the finite-interval geometry in Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12). -/
+theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
     (hWN : W ≤ N) (s : Fin N) (q : Fin W)
     (hqR : q.val + R ≤ W) (ω : Cfg d R) (σ : Cfg d W)
     (τ : Cfg d (N - W)) :
@@ -304,7 +294,10 @@ private theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
     rw [dite_eq_right hnot]
     exact cyclicActiveBlockConfigEquiv_symm_apply_spectator hWN s σ τ r
 
-private theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
+/-- Restricting a joined active-block configuration to a subwindow agrees with
+restriction inside the active block. Source: Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12). -/
+theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
     (hWN : W ≤ N) (s : Fin N) (q : Fin W) (hqR : q.val + R ≤ W)
     (σ : Cfg d W) (τ : Cfg d (N - W)) :
     extractWindow R (cyclicForwardSite s q.val)

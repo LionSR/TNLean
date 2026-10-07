@@ -1,0 +1,80 @@
+\subsection{Gauge uniqueness from injective windows}
+\label{subsec:peps_window_gauge_uniqueness}
+
+\begin{theorem}[Inserted-edge identities from a normalized local gauge relation]%
+    \label{thm:peps_edge_absorbed_from_local}
+    \lean{TNLean.PEPS.edgeAbsorbed_of_perVertex}
+    \leanok
+    Let $w,h>1$, let $A,B$ have matched bond dimensions on the torus,
+    and let $X$ be an invertible edge gauge family. If
+    $A_v=\lambda(X\cdot B)_v$ at every vertex and $\lambda^{wh}=1$, then
+    $C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma)$ for every edge,
+    inserted matrix and global physical configuration, after identifying
+    the equal bond dimensions.
+\end{theorem}
+\begin{proof}\leanok
+    The product of the local tensor weights in an inserted-edge coefficient
+    acquires one factor of $\lambda$ at each vertex. Thus
+    $C_A(e,M;\sigma)=\lambda^{wh}C_{X\cdot B}(e,M;\sigma)$, and the
+    volume-power hypothesis removes this factor.
+\end{proof}
+
+\begin{theorem}[An injective comparison region determines the edge gauge]%
+    \label{thm:peps_absorbed_gauge_unique_region}
+    \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar_of_region}
+    \leanok
+    Let $w,h>1$, and let $A,B$ have matched bond dimensions, positive for $B$.
+    Let $Q$ and $Q^c$ be injective for $B$, and let $e\in\partial Q$.
+    Suppose two invertible edge gauge families $X,X'$ both satisfy
+    $C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma)$ at this edge, with the
+    second family substituted for the first as well, for every $M,\sigma$.
+    Then $X'_e=cX_e$ for some $c\in\mathbb C^\times$.
+\end{theorem}
+\begin{proof}\leanok
+    Each absorbed identity determines a conjugation-form region-insertion
+    identity on $Q$. Injectivity on $Q$ and $Q^c$ identifies the two inner
+    automorphisms. Their conjugating matrices differ by a nonzero scalar,
+    since the commutant of the full matrix algebra consists of scalar matrices.
+    Restoring the stored endpoint convention transposes or inverts both
+    matrices; the resulting proportionality constant is $c$ or $c^{-1}$.
+\end{proof}
+
+\begin{theorem}[Gauge uniqueness at the minimal window sizes]%
+    \label{thm:peps_window_gauge_unique}
+    \lean{TNLean.PEPS.torusGauge_unique_scalar_of_normalArcWindows}
+    \leanok
+    Let $w,h>1$, and let $B$ be translation invariant on the torus, with
+    positive bond dimensions and every cyclic $L\times K$ window injective.
+    Assume $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$.
+    Let $A$ have the same bond dimensions as $B$, and suppose two invertible
+    edge gauge families $X,X'$ satisfy
+    \begin{align}
+        A_v          & =\lambda(X\cdot B)_v,\notag   \\
+        A_v          & =\lambda'(X'\cdot B)_v,\notag \\
+        \lambda^{wh} & =(\lambda')^{wh}=1.
+        \label{eq:peps_window_two_gauges}
+    \end{align}
+    Then for every edge $e$ there is a nonzero scalar $c_e$ such that
+    $X'_e=c_eX_e$.
+    This gives the uniqueness of the two directional matrices in
+    \cite[normal TI PEPS corollary]{Molnar2018NormalPEPS} by taking one
+    horizontal and one vertical reference edge. For covariant families,
+    these reference comparisons determine all translates, with inverse
+    scalar on edges whose stored endpoint order is reversed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
+        thm:peps_window_corner_injectivity, thm:peps_window_corner_geometry,
+        thm:peps_window_corner_boundary, thm:peps_region_injective_identification,
+        thm:peps_edge_absorbed_from_local, thm:peps_absorbed_gauge_unique_region}
+    Use the punctured rectangle $R$ and omitted vertex $v_0=(L,K)$ from
+    (\ref{eq:peps_window_corner_regions}). Both $R$ and $R^c$ are injective.
+    The rightward and upward edges from $v_0$ cross $R$: their other endpoints
+    are $(L+1,K)$ and $(L,K+1)$, respectively, both belonging to $R$.
+    Every horizontal or vertical edge is a translate of the corresponding
+    reference edge. Translate $R$ to place the chosen edge on its boundary;
+    translation invariance of $B$ preserves the two injectivity statements.
+    Formula~(\ref{eq:peps_window_two_gauges}) gives both absorbed insertion
+    identities. The injective-region uniqueness theorem then gives the
+    required scalar $c_e$.
+\end{proof}

@@ -1,0 +1,124 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Full-Input Pseudoinverse Obstruction and Its Support Correction}
+\author{}
+\date{2026-10-04}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{Source and the full-input obstruction}
+For a blocked matrix product map $B=VP$,
+arXiv:2307.01696, page~3, footnotes~3 and~4 to equations~(13)--(15),
+allows $B$ to be non-injective, interprets the inverse of $P$ as its
+pseudoinverse, and permits the input to be placed at any chosen tensor,
+with sequential decompositions from both boundaries toward that site.
+
+If $B$ is injective, then $V^\dagger V=\Id_{D^2}$ and the inward sweeps
+produce a central isometry on the full virtual-pair input.
+For non-injective $B$, its polar support $\Pi$ instead satisfies
+$V^\dagger V=\Pi$. Thus a central map on all $D^2$ input coordinates
+cannot remain an isometry when $\Pi\ne\Id_{D^2}$.
+The assertion that the full-input isometry identity in equation~(15)
+remains valid under footnote~3 is therefore false as printed. Restricting
+the domain to the support corrects the assertion; it does not prove that
+full-input identity.
+
+\section{A nonzero rank-deficient witness}
+Take $d=D=2$ and the two nonzero matrices
+\begin{align}
+    A^0 & =\begin{pmatrix}1&0\\0&0\end{pmatrix}, &
+    A^1 & =\begin{pmatrix}0&0\\0&1\end{pmatrix}.
+    \label{eq:mswc24_ghz_tensor}
+\end{align}
+On a ring these give the nonzero vector $\ket{0}^{\otimes N}+\ket{1}^{\otimes N}$.
+Block two sites, and order both the physical and virtual pairs as
+$00,01,10,11$. Since $B_{ij,ab}=(A^iA^j)_{ab}$, the blocked map and its
+canonical polar factors are
+\begin{align}
+    B & =P=P^+=V=\Pi=\operatorname{diag}(1,0,0,1).
+    \label{eq:mswc24_ghz_polar}
+\end{align}
+Thus $d^2=D^2=4$, both tensor components are nonzero, and
+$V^\dagger V=\Pi\ne\Id_4$. The pseudoinverse construction already fails
+on these nondegenerate data. One may separately complete the partial
+isometry on its kernel, but that completion is not $BP^+$ and is not the
+construction asserted in equation~(13).
+
+\section{A nonzero normal counterexample}
+Take one physical site with $d=4$ and bond dimension $D=2$, so the
+capacity condition $d^q\ge D^2$ in footnote~1 holds with equality. With
+$a=1/\sqrt2$, let
+\begin{align}
+    B^0 & =a\Id, & B^1 & =aE_{01}, & B^2 & =aE_{10}, & B^3 & =0.
+    \label{eq:mswc24_pseudoinverse_witness}
+\end{align}
+This tensor is nonzero, unital and trace preserving. Its length-two
+products include $E_{00}/2,E_{01}/2,E_{10}/2,E_{11}/2$, so it is normal.
+The one-site physical matrix, in virtual-pair order $00,01,10,11$, is
+\begin{align}
+    B      & =\begin{pmatrix}a&0&0&a\\0&a&0&0\\0&0&a&0\\0&0&0&0\end{pmatrix}, &
+    V=BP^+ & =\begin{pmatrix}a&0&0&a\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}.
+    \label{eq:mswc24_pseudoinverse_witness_matrix}
+\end{align}
+For the unit vector $w=(1,0,0,-1)^{\mathsf T}/\sqrt2$, one has $Vw=0$;
+indeed $V^\dagger V=\Id-|w\rangle\langle w|\ne\Id$.
+Thus neither a zero tensor nor an insufficient output dimension accounts
+for the obstruction. The formal witness is
+\leanid{MPSPreparation.mixedPolarFullInputCounterexample_spec}.
+Its proof uses the zero final physical row and the actual polar
+right-factor identity $V=BG$, without assuming a formula for a shadow
+polar map.
+
+An isometric extension on the unused input direction can exist here,
+but it differs from $BP^+$. The counterexample concerns that printed
+pseudoinverse identification, not the existence of an extension or the
+injective-block preparation theorem.
+
+\section{The support construction}
+Choose orthonormal coordinates for the range of $\Pi$: an isometry
+$J\colon\C^s\to\C^{D^2}$ with $JJ^\dagger=\Pi$.
+The bound $s\le D^2$ follows from injectivity of $J$. Then
+\begin{align}
+    (VJ)^\dagger(VJ) & =J^\dagger\Pi J=\Id_s.
+    \label{eq:mswc24_support_isometry}
+\end{align}
+The existing polar right-factor theorem gives $V=BG$ for a virtual-pair
+matrix $G$. Attach $GJ$ at the chosen central site and run the two
+independent inward sweeps. Their outer evaluations are isometries
+$E_L,E_R$, and their remainders give a central map $C$ such that
+\begin{align}
+    VJ & =(E_L\otimes\Id_d\otimes E_R)C, & C^\dagger C & =\Id_s.
+    \label{eq:mswc24_mixed_support}
+\end{align}
+Both outer bonds have dimension one, and every side bond has dimension
+at most $D^2$. The input may be attached at either endpoint or any
+interior site; the argument also allows zero-dimensional support.
+
+The original polar partial isometry is recovered exactly:
+\begin{align}
+    (VJ)J^\dagger & =V\Pi=V.
+    \label{eq:mswc24_support_reconstruction}
+\end{align}
+Consequently the blocked tensor is $B=(VJ)(J^\dagger P)$. The central
+operation is an actual isometry on the compressed input, and no physical
+amplitude is discarded by choosing those input coordinates.
+
+\section{Conclusion}
+The mixed factorization now covers every blocked tensor on its actual
+polar support, with no injectivity assumption. The full-input theorems
+remain useful specializations for injective blocks. The same mixed
+factorization predicate handles arbitrary finite input dimension, so
+no second isometry notion or support representation is introduced.
+The corrected support-domain theorem is proved, so the local repair is
+resolved. The false-source record and the witness in
+(\ref{eq:mswc24_ghz_polar}) remain: the printed full-input pseudoinverse
+claim is not established, and the unreduced polar map is only a partial
+isometry.\footnote{Formal
+    declarations: \leanid{MPSPreparation.exists_mixed_sequential_polar_support_of_split}
+    and \leanid{MPSPreparation.exists_mixed_sequential_polar_support} in
+    \doclink{TNLean/MPS/Preparation/MixedSequentialSupport}.}
+\end{document}

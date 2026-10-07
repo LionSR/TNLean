@@ -1,0 +1,29 @@
+\begin{theorem}[Coherent multiplicity restoration]
+    \label{thm:peps_coherent_multiplicity_transport}
+    \lean{TNLean.PEPS.coherentWeightedBlocks_support_restore,
+        TNLean.PEPS.exists_isometric_coherentWeightedBlocks}
+    \leanok
+    \uses{lem:peps_matching_sector_bond_inclusion,
+        thm:peps_full_multiplicity_bond_map,
+        thm:peps_full_multiplicity_bond_isometry_extension,
+        lem:peps_physical_coherent_transport,lem:peps_bond_coordinate_transport}
+    Let $d_i>0$ and let $M(a)=\bigoplus_i\sqrt{d_i}\,D_i(a)$ be a
+    family of matrices. Every finite coherent sum of products of these
+    matrices belongs to the product of matching-sector bond spaces.
+    The multiplicity-restoring map sends it to the same coherent sum
+    with bond matrices $\bigoplus_i D_i(a)\otimes I_{d_i}$.
+    If an isometric coordinate change identifies these repeated blocks
+    with another matrix family, one fixed full-domain product isometry
+    gives the corresponding identity for every choice of coefficients
+    and bond labels, and preserves all inner products.
+    These are auxiliary matrix statements for the construction in
+    Section~7 of \cite{Schuch2010PEPS}; an actual contraction formula is still
+    required when applying them to a tensor-network state.
+\end{theorem}
+\begin{proof}\leanok
+    Embed the weighted block entries into matching-sector endpoint pairs.
+    The normalized multiplicity map cancels the factor $\sqrt{d_i}$ on
+    each bond. Linearity and the product formula prove the coherent identity.
+    Extend the supported bond maps to full-domain isometries and then apply
+    the isometric coordinate change on every bond.
+\end{proof}

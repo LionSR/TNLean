@@ -109,7 +109,7 @@ theorem windowCoeffTransferAB_of_bondLocal {A B : Tensor (torusGraph width heigh
       (by
         have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
         rwa [regionInjectivityDataOf_isInjective] at hi)
-      (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
+      (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
         ha0 haw hbh⟩) :
     ∀ M : Matrix (Fin (A.bondDim
@@ -143,8 +143,8 @@ theorem windowCoeffTransferAB_of_bondLocal {A B : Tensor (torusGraph width heigh
     rwa [regionInjectivityDataOf_isInjective] at hi
   exact coeffTransfer_of_bondLocal A B
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
-    hRA hRB (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
-    (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
+    hRA hRB (hA.regionBlockedTensorInjective_windowComplement hUA (by omega) (by omega) hxw hyh _)
+    (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
     hAB hposA hposB
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
       ha0 haw hbh⟩ hbondAB
@@ -176,7 +176,7 @@ theorem windowCoeffTransferBA_of_bondLocal {A B : Tensor (torusGraph width heigh
       (by
         have hi := hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
         rwa [regionInjectivityDataOf_isInjective] at hi)
-      (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
+      (hA.regionBlockedTensorInjective_windowComplement hUA (by omega) (by omega) hxw hyh _)
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
         ha0 haw hbh⟩) :
     ∀ N : Matrix (Fin (B.bondDim
@@ -210,8 +210,8 @@ theorem windowCoeffTransferBA_of_bondLocal {A B : Tensor (torusGraph width heigh
     rwa [regionInjectivityDataOf_isInjective] at hi
   exact coeffTransfer_of_bondLocal B A
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
-    hRB hRA (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
-    (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
+    hRB hRA (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
+    (hA.regionBlockedTensorInjective_windowComplement hUA (by omega) (by omega) hxw hyh _)
     hAB.symm hposB hposA
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
       ha0 haw hbh⟩ hbondBA
@@ -267,7 +267,7 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_bondLocal
       (by
         have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
         rwa [regionInjectivityDataOf_isInjective] at hi)
-      (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
+      (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
         ha0 haw hbh⟩)
     (hbondBA : IsBondLocalTransferKernel (G := torusGraph width height) B A
@@ -275,7 +275,7 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_bondLocal
       (by
         have hi := hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
         rwa [regionInjectivityDataOf_isInjective] at hi)
-      (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
+      (hA.regionBlockedTensorInjective_windowComplement hUA (by omega) (by omega) hxw hyh _)
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
         ha0 haw hbh⟩)
     (hmul : ∀ M M' : Matrix (Fin (A.bondDim

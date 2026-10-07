@@ -8,8 +8,11 @@
 # never modified; only the gitignored
 # blueprint/print/print12.pdf artifact is written back.
 #
-# Cross-references from the kept chapters into dropped ones render as "??";
-# these are expected (the full PDF remains the authoritative version).
+# The introduction's forward references to later chapters are guarded by
+# \ifftmpsvolume (see blueprint/src/macros/common.tex), so the focused volume
+# renders no "??" in its prose. Dependency-graph annotations (\uses/\proves)
+# into dropped chapters remain invisible vphantom references; the full PDF
+# stays the authoritative version.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"

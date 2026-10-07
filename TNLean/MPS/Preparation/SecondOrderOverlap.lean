@@ -49,6 +49,17 @@ the residual.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 
+/-- For two unit vectors, the deficit of the real inner product is half their
+squared distance. This project identity underlies the second-order refinement
+of the overlap estimate in arXiv:2307.01696, Supplemental Material, `eq:app_error`. -/
+theorem one_sub_re_inner_eq_norm_sub_sq_div_two
+    {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    {x y : E} (hx : ‖x‖ = 1) (hy : ‖y‖ = 1) :
+    1 - RCLike.re ⟪x, y⟫_𝕜 = ‖x - y‖ ^ 2 / 2 := by
+  have h := @norm_sub_sq 𝕜 E _ _ _ x y
+  rw [hx, hy] at h
+  linarith
+
 /-- A square matrix of trace one has a nonempty index: `Tr σ = 1` forces `D ≠ 0`. -/
 theorem Matrix.neZero_of_trace_eq_one {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ}
     (h : σ.trace = 1) : NeZero D :=
@@ -323,8 +334,8 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
     (inner_sqrtWeightLM hσ.posSemidef Pq (fixedPointTensor σ)).symm
   -- `1 - |α| ≤ ‖ι(P_q) - ι(P_∞)‖² / 2` and `|1 - α| ≤ ‖ι(P_q) - ι(P_∞)‖`.
   have hre : 1 - ‖α‖ ≤ Kι ^ 2 * δ ^ 2 / 2 := by
-    have h := @norm_sub_sq ℂ _ _ _ _ (sqrtWeightLM σ Pq) (sqrtWeightLM σ (fixedPointTensor σ))
-    rw [hιq, hιi, ← inner_conj_symm, RCLike.conj_re, ← hαι] at h
+    have h := one_sub_re_inner_eq_norm_sub_sq_div_two (𝕜 := ℂ) hιi hιq
+    rw [← hαι, norm_sub_rev] at h
     have h1 : α.re ≤ ‖α‖ := Complex.re_le_norm α
     have h2 := pow_le_pow_left₀ (norm_nonneg _) hιd 2
     rw [mul_pow] at h2

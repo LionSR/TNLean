@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.BlockSum
 import TNLean.MPS.Preparation.OverlappingBlockGram
 import TNLean.MPS.Preparation.SupportedPolar
 
@@ -49,18 +50,6 @@ open Matrix
 namespace MPSTensor
 
 variable {d D b : ℕ} {Dj : Fin b → ℕ}
-
-/-! ### The bond pairs of the blocks -/
-
-/-- The bond pairs `(ι_j a, ι_j c)` of the direct sum that lie in one block `j`. -/
-def blockPairs (ι : (j : Fin b) → Fin (Dj j) → Fin D) : Finset (Fin D × Fin D) :=
-  Finset.univ.biUnion fun j =>
-    Finset.univ.image fun ac : Fin (Dj j) × Fin (Dj j) => (ι j ac.1, ι j ac.2)
-
-theorem mem_blockPairs {ι : (j : Fin b) → Fin (Dj j) → Fin D} {p : Fin D × Fin D} :
-    p ∈ blockPairs ι ↔ ∃ j a c, (ι j a, ι j c) = p := by
-  simp only [blockPairs, Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_image,
-    Prod.exists]
 
 /-! ### Injectivity on a set of bond pairs by duality -/
 

@@ -1,0 +1,257 @@
+\subsection{Matching sectors in open weighted regions}
+\label{sec:peps_open_sector_support}
+
+For a finite simple graph with edge set $E$ and ordered endpoints, write
+$E_R$ for edges internal to $R$ and $\partial E_R$ for edges crossing its
+boundary.
+An internal edge $f=(t,h)$ is indexed in head--tail order.
+The open contractions below retain arbitrary virtual boundary labels.
+They give support consequences of the bond transformation in
+\cite[Section~7]{Schuch2010PEPS} for the regional parent spaces.
+
+\begin{definition}[Matching endpoint coordinates]%
+    \label{def:peps_open_sector_embedding}
+    \lean{TNLean.PEPS.matchingEndpointEmbedding}
+    \leanok
+    For finite coordinate sets $X_i$, let $X=\coprod_iX_i$.
+    The matching-sector coordinate inclusion is
+    $j:\coprod_i(X_i\times X_i)\hookrightarrow X\times X$,
+    given by $j(i,a,b)=((i,a),(i,b))$.
+    Its matrix is the matching-sector bond inclusion $E_X$.
+\end{definition}
+
+\begin{theorem}[Coordinate support of inclusion ranges]%
+    \label{thm:peps_open_sector_coordinate_support}
+    \lean{TNLean.PEPS.endpointEmbeddingMatrix_mulVec_image,
+        TNLean.PEPS.endpointEmbeddingMatrix_mulVec_eq_zero_of_notMem_range,
+        TNLean.PEPS.mem_range_endpointEmbeddingMatrix_iff,
+        TNLean.PEPS.physicalProductMatrix_endpointEmbeddingMatrix,
+        TNLean.PEPS.apply_eq_zero_of_mem_product_matchingSectorRange}
+    \leanok
+    Let $j:B\hookrightarrow A$ be an injection with $B$ finite, and
+    let $E_j(a,b)=\delta_{a,j(b)}$.
+    Then $(E_jx)(j(b))=x(b)$ and $(E_jx)(a)=0$ outside $j(B)$.
+    Consequently
+    \begin{align}
+        \psi\in\operatorname{im}E_j
+        \quad\Longleftrightarrow\quad
+        \psi(a)=0\text{ whenever }a\notin j(B).
+        \label{eq:peps_open_sector_inclusion_support}
+    \end{align}
+    For any finite set $E$, the product matrix
+    $\bigotimes_{f\in E}E_j$ is the coordinate inclusion induced
+    by $j^E:B^E\hookrightarrow A^E$.
+    In particular, a vector in
+    $\operatorname{im}\bigotimes_{f\in E}E_X$ vanishes whenever
+    one endpoint pair has different sector labels.
+\end{theorem}
+\begin{proof}\leanok
+    At $a=j(b)$, the sum $\sum_c\delta_{a,j(c)}x(c)$ has only
+    the term $c=b$; outside $j(B)$ every summand is zero.
+    Conversely, if $\psi$ vanishes outside $j(B)$, take
+    $x(b)=\psi(j(b))$ to prove~(\ref{eq:peps_open_sector_inclusion_support}).
+    The product of coordinate indicators is the indicator of
+    equality of the full configurations.
+    For a mismatched bond, each summand in the product inclusion
+    has a zero factor at that bond.
+\end{proof}
+
+\begin{definition}[Internal slices and retained boundary coefficients]%
+    \label{def:peps_open_sector_slice}
+    \lean{TNLean.PEPS.graphOpenAveragingBoundaryCoefficient,
+        TNLean.PEPS.graphRegionInternalBondSlice,
+        TNLean.PEPS.regionInternalBondSlice}
+    \leanok
+    \uses{def:peps_region_half_edge_label_equiv}
+    Let $X$ and $G$ be finite, $G$ a group,
+    $U:G\to\operatorname{Mat}_X(\mathbb C)$ a representation,
+    and $W\in\operatorname{Mat}_X(\mathbb C)$.
+    Fix virtual labels $\theta:\partial E_R\to X$ and physical
+    labels $\sigma:\partial E_R\to X$.
+    For $q:R\to G$, define
+    \begin{align}
+        c_R(\theta,\sigma;q)
+         & =|G|^{-|R|}\prod_{f\in\partial E_R}b_f(\theta,\sigma;q),
+        \label{eq:peps_open_sector_boundary_coefficient}            \\
+        b_f(\theta,\sigma;q)
+         & =\begin{cases}
+                (WU(q_t^{-1}))_{\theta_f,\sigma_f}, & t\in R, \\
+                (U(q_h)W)_{\sigma_f,\theta_f},      & h\in R.
+            \end{cases}
+        \label{eq:peps_open_sector_boundary_factors}
+    \end{align}
+    For a regional physical vector $\psi$, its internal slice
+    $\mathcal S_{R,\sigma}\psi$ fixes these physical crossing labels
+    and regards the remaining indices as
+    $\beta:E_R\to X\times X$, with
+    $\beta_f=(\beta_{h,f},\beta_{t,f})$.
+    If incident endpoint configurations at every vertex are enumerated
+    by bijections $e_v:X^{\operatorname{Inc}(v)}\cong\{0,\ldots,p-1\}$,
+    the same slice in numbered physical coordinates first uses these
+    bijections to assemble each site index.
+\end{definition}
+
+\begin{theorem}[Internal weighted products with arbitrary boundary labels]%
+    \label{thm:peps_open_sector_weighted_slice}
+    \lean{TNLean.PEPS.graphRegionInternalBondSlice_dressedAveragingSite}
+    \leanok
+    Suppose $W$ commutes with $U(g)$ for every $g\in G$.
+    Let $A$ be the weighted averaging-site family and let
+    $\mathcal C_R(A)\ket{\theta}$ denote its actual open contraction
+    with fixed virtual boundary labels $\theta$. Then
+    \begin{align}
+        (\mathcal S_{R,\sigma}\mathcal C_R(A)\ket{\theta})(\beta)
+        =\sum_{q:R\to G}c_R(\theta,\sigma;q)
+        \prod_{f=(t,h)\in E_R}
+        (W^2U(q_hq_t^{-1}))_{\beta_{h,f},\beta_{t,f}}.
+        \label{eq:peps_open_sector_weighted_slice}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_graph_open_averaging_bond_state}
+    Regroup the open contraction into crossing endpoints and
+    internal head--tail pairs. The internal virtual sum gives
+    $(U(q_h)W)(WU(q_t^{-1}))=W^2U(q_hq_t^{-1})$.
+    Each crossing edge contributes only its retained endpoint factor
+    from~(\ref{eq:peps_open_sector_boundary_factors}).
+    Collecting these factors and the site-average normalization yields
+    (\ref{eq:peps_open_sector_weighted_slice}).
+    % Formula: (U(q_h)W)(WU(q_t^{-1})) = W^2 U(q_h q_t^{-1}).
+    % Source: SCP10 Section 7 endpoint-pair contraction; the open-boundary
+    % version keeps the single crossing factors of the preceding definition.
+    % Ink-to-index: left open leg is beta_h; right open leg is beta_t.
+    % The joined virtual leg is summed. Both panels have two open physical
+    % endpoint indices; neither panel includes or sums a crossing label.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+            \tn[at=(1,1), name=openHeadFactor,
+                ports={180:physical:$\beta_h$,0:virtual}]{$U(q_h)W$}
+            \tn[at=(1,3), name=openTailFactor,
+                ports={180:virtual,0:physical:$\beta_t$}]{$WU(q_t^{-1})$}
+            \tnwire{openHeadFactor.0}{openTailFactor.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=openInternalFactor,
+                ports={180:physical:$\beta_h$,0:physical:$\beta_t$}]
+            {$W^2U(q_hq_t^{-1})$}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{proof}
+
+\begin{theorem}[Internal multiplicity restoration]%
+    \label{thm:peps_open_sector_internal_restoration}
+    \lean{TNLean.PEPS.graphRegionInternalBondSlice_blockFourthRootWeight}
+    \leanok
+    \uses{def:peps_open_sector_embedding,thm:peps_full_multiplicity_bond_map}
+    Let $I$ be finite, $d_i>0$, and let
+    $D_i:G\to\operatorname{Mat}_{d_i}(\mathbb C)$ be representations.
+    Put $X=\coprod_i\{0,\ldots,d_i-1\}$,
+    $U(g)=\bigoplus_iD_i(g)$ and $W=\bigoplus_i d_i^{1/4}I_{d_i}$.
+    Let $A$ be the weighted averaging-site family, and set
+    $\psi=\mathcal S_{R,\sigma}\mathcal C_R(A)\ket{\theta}$.
+    For arbitrary $R,\theta,\sigma$,
+    \begin{align}
+        \psi & \in\operatorname{im}\bigotimes_{f\in E_R}E_X, \\
+        \left[\left(\bigotimes_{f\in E_R}F\right)\psi\right](\beta')
+             & =\sum_{q:R\to G}c_R(\theta,\sigma;q)
+        \prod_{f=(t,h)\in E_R}
+        U'(q_hq_t^{-1})_{\beta'_{h,f},\beta'_{t,f}},
+        \label{eq:peps_open_sector_internal_restoration}
+    \end{align}
+    where $F$ is the full endpoint multiplicity-restoring map with
+    multiplicity $d_i$ in sector $i$, and
+    $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$.
+    The coefficients $c_R$ still use the original $U,W,\theta,\sigma$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_open_sector_weighted_slice,
+        thm:peps_coherent_multiplicity_transport}
+    The block-scalar matrix $W$ commutes with $U(g)$, and
+    $W^2U(g)=\bigoplus_i\sqrt{d_i}\,D_i(g)$.
+    Apply coherent multiplicity restoration to
+    (\ref{eq:peps_open_sector_weighted_slice}), with coherent
+    coefficients $c_R(\theta,\sigma;q)$ and bond labels
+    $q_hq_t^{-1}$. It gives both product support and
+    (\ref{eq:peps_open_sector_internal_restoration}).
+    Only internal bonds are acted on, so the crossing factors remain
+    those in~(\ref{eq:peps_open_sector_boundary_factors}).
+\end{proof}
+
+\begin{theorem}[Matching sectors throughout a regional range]%
+    \label{thm:peps_open_sector_regional_support}
+    \lean{TNLean.PEPS.regionInternalBondSlice_mem_matchingSectorRange,
+        TNLean.PEPS.regionGroundSpace_apply_eq_zero_of_internal_sector_ne}
+    \leanok
+    Use the representations and positive dimensions of
+    Theorem~\ref{thm:peps_open_sector_internal_restoration}, and suppose
+    each site's incident endpoint configurations have a bijection
+    $e_v:X^{\operatorname{Inc}(v)}\cong\{0,\ldots,p-1\}$.
+    Let $A$ be the resulting weighted averaging tensor in these
+    numbered physical coordinates. For any region $R$, any crossing
+    physical labels $\sigma$, and every $\psi\in\mathcal G_R(A)$,
+    \begin{align}
+        \mathcal S_{R,\sigma}\psi
+        \in\operatorname{im}\bigotimes_{f\in E_R}E_X.
+    \end{align}
+    Thus $\psi$ vanishes at every physical configuration whose two
+    endpoint labels on some internal edge belong to different sectors.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_open_sector_internal_restoration,
+        thm:peps_open_sector_coordinate_support}
+    The open contractions $\mathcal C_R(A)\ket{\theta}$ span
+    $\mathcal G_R(A)$. Reindexing their virtual and physical labels
+    identifies their slices with those of
+    Theorem~\ref{thm:peps_open_sector_internal_restoration}.
+    The slice is linear and the product inclusion range is a subspace,
+    so support extends to every vector in $\mathcal G_R(A)$.
+    At a given physical configuration, choose its own crossing
+    labels for $\sigma$ and regroup the remaining endpoints.
+    A mismatched internal sector then forces a zero coefficient by
+    Theorem~\ref{thm:peps_open_sector_coordinate_support}.
+\end{proof}
+
+\begin{theorem}[Product bond support of every parent ground vector]%
+    \label{thm:peps_open_sector_parent_support}
+    \lean{TNLean.PEPS.regionParentGroundSpace_apply_eq_zero_of_sector_ne,
+        TNLean.PEPS.regionParentGroundSpace_mem_product_matchingSectorRange}
+    \leanok
+    Let $A$ and the endpoint enumerations be as in
+    Theorem~\ref{thm:peps_open_sector_regional_support}.
+    Suppose that for every edge $f=(t,h)$ there is a parent region
+    $R_i$ containing both $t$ and $h$.
+    If $\psi\in\mathcal P_{\mathcal R}(A)$, then $\psi$ vanishes
+    whenever one physical bond has different endpoint sector labels.
+    Equivalently, regrouping the physical endpoint coordinates by
+    bonds gives a vector $\widetilde\psi$ satisfying
+    \begin{align}
+        \widetilde\psi\in\operatorname{im}
+        \bigotimes_{f\in E}E_X.
+        \label{eq:peps_open_sector_parent_support}
+    \end{align}
+    Neither irreducibility nor completeness of the block
+    representations is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_open_sector_regional_support,
+        thm:peps_open_sector_coordinate_support}
+    Choose a region containing both endpoints of a mismatched bond.
+    Fix the exterior physical configuration. The resulting regional
+    slice belongs to $\mathcal G_{R_i}(A)$ by the parent condition,
+    so Theorem~\ref{thm:peps_open_sector_regional_support} makes its
+    coefficient zero. Reassembling the regional and exterior indices
+    gives the original coefficient of $\psi$.
+    The image of the coordinate inclusion $j^E$ consists exactly of
+    configurations with matching sectors on every bond: for each
+    matched pair, select its shared sector and its two internal labels.
+    Equation~(\ref{eq:peps_open_sector_inclusion_support}) therefore
+    turns the vanishing condition into
+    (\ref{eq:peps_open_sector_parent_support}).
+\end{proof}
+% The product-support conclusion permits the supported multiplicity map to
+% agree with its ambient isometric extension on every source parent vector.
+% It does not compare the source and target regional constraints across a
+% boundary. That comparison must retain the factors in
+% eq:peps_open_sector_boundary_factors and is not claimed here.

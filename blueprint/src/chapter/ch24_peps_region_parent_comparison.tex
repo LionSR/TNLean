@@ -1,0 +1,109 @@
+\section{Comparison of finite PEPS parent Hamiltonians}%
+\label{sec:peps_region_parent_comparison}
+
+The comparison of positive interactions with orthogonal projectors in
+\cite[Section~IV.C.3]{Cirac2021Matrix}, local source line 2170, applies
+to the regional PEPS interactions of Section~IV.C.1. All collections of
+regions below are finite.
+
+\begin{theorem}[Comparison with the regional parent projection]%
+    \label{thm:peps_region_parent_projection_comparison}
+    \lean{TNLean.PEPS.IsRegionParentInteraction.ker_toEuclideanLin,
+        TNLean.PEPS.IsRegionParentInteraction.exists_pos_comparison}
+    \leanok
+    \uses{def:peps_region_parent_interaction,
+        thm:peps_canonical_region_interaction}
+    Let $h_R$ be a positive regional parent interaction, and let $P_R$
+    be the orthogonal projector onto $\mathcal G_R^\perp$. There are
+    strictly positive constants $\kappa_R,C_R$ such that
+    \begin{align}
+        \kappa_R P_R\le h_R\le C_R P_R.
+        \label{eq:peps_region_parent_bounds}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The kernel is $\mathcal G_R$ in the physical Hilbert space.
+    On its orthogonal complement, a positive operator in finite
+    dimension has a positive lower bound. Its operator norm gives
+    an upper bound. On the kernel all three operators vanish.
+\end{proof}
+
+\begin{theorem}[Order-preserving regional extension]%
+    \label{thm:peps_region_extension_order}
+    \lean{TNLean.PEPS.regionLocalTerm_sub,
+        TNLean.PEPS.regionLocalTerm_smul,
+        TNLean.PEPS.regionLocalTerm_mono,
+        TNLean.PEPS.regionParentHamiltonian_comparison}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    Extension by the identity on the complementary physical space
+    is linear and preserves Loewner order. In particular, if two
+    collections $(h_i)_{i\in I}$ and $(k_i)_{i\in I}$ on the same
+    regions satisfy $\kappa k_i\le h_i\le Ck_i$ for every $i$, their
+    sums satisfy $\kappa H_k\le H_h\le CH_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Tensoring a positive semidefinite difference with the identity
+    preserves positivity. Reordering the physical coordinates
+    also preserves positivity. Sum the resulting inequalities.
+\end{proof}
+
+\begin{theorem}[Comparison of finite PEPS parents]%
+    \label{thm:peps_finite_parent_comparison}
+    \lean{TNLean.PEPS.exists_pos_regionParentHamiltonian_comparison,
+        TNLean.PEPS.exists_pos_regionParentHamiltonian_comparison_between}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    For a finite family of regional parent interactions $h_i$, let
+    $H_P=\sum_i\widetilde P_i$ be the sum of the canonical regional
+    projectors extended by the identity. There are $\kappa,C>0$
+    such that $\kappa H_P\le H_h\le CH_P$.
+    Consequently, for any two positive parents $H_h,H_k$ on the
+    same family of regions, there are $a,b>0$ such that
+    $aH_k\le H_h\le bH_k$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_parent_projection_comparison,
+        thm:peps_region_extension_order}
+    For a nonempty family take $\kappa=\min_i\kappa_i$ and
+    $C=\max_i C_i$ in (\ref{eq:peps_region_parent_bounds}).
+    The empty family gives zero Hamiltonians, so any positive
+    constants suffice. If the respective comparisons with $H_P$
+    use constants $\kappa_h,C_h$ and $\kappa_k,C_k$, take
+    $a=\kappa_h/C_k$ and $b=C_h/\kappa_k$.
+\end{proof}
+
+\begin{theorem}[Transfer of the finite-volume gap]%
+    \label{thm:peps_finite_parent_gap_transfer}
+    \lean{TNLean.PEPS.ker_toEuclideanLin_regionParentHamiltonian_eq,
+        TNLean.PEPS.regionParentHamiltonian_norm_gap_of_comparison,
+        TNLean.PEPS.regionParentHamiltonian_has_pos_norm_gap_iff}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    Let $H_h,H_k$ be positive PEPS parents on the same finite family
+    of regions. They have the same kernel $\mathcal K$. Suppose
+    $H_h\ge\kappa H_k$, where $\kappa>0$, and suppose that for
+    every $\phi\in\mathcal K^\perp$,
+    $\gamma\|\phi\|\le\|H_k\phi\|$, where $\gamma\ge0$.
+    Then every $\phi\in\mathcal K^\perp$ satisfies
+    $\kappa\gamma\|\phi\|\le\|H_h\phi\|$.
+    Existence of a strictly positive bound of this form is therefore
+    independent of the choice of positive regional interactions.
+    The comparison constants may depend on the finite collection.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_parent_common_kernel,
+        thm:peps_finite_parent_comparison}
+    The common regional kernels determine $\mathcal K$.
+    Positivity and the spectral theorem convert the norm bound
+    for $H_k$ into
+    $\langle\phi,H_k\phi\rangle\ge\gamma\|\phi\|^2$ on
+    $\mathcal K^\perp$. Loewner comparison gives
+    $\langle\phi,H_h\phi\rangle\ge\kappa\gamma\|\phi\|^2$.
+    Cauchy--Schwarz yields the asserted norm bound. Apply the
+    two-sided comparison to obtain the final equivalence.
+\end{proof}

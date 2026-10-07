@@ -56,6 +56,150 @@ operation `𝒫(A) V 𝒫(A)⁻¹` is unitary only under it. The two directions 
 operation `V = 𝒫(A)⁻¹ U 𝒫(A)` of the second is `G`-invariant on both sides and unitary on the
 invariant subspace, which is where the source says it acts (lines 1722–1728).
 
+The one-dimensional concatenation theorem is `IsGIsometricMPS.concatTensor`, the case in which
+the source writes its proof. In orthonormal bases of arbitrary virtual and physical spaces, the
+same step is proved in `TNLean.PEPS.GIsometricConcatenation`: the contraction of adjoints is
+the adjoint of the contracted map, and `IsGIsometric.linkContraction_fourLeg` joins two
+square-lattice tensors along one regular virtual bond. The more general
+`IsGIsometric.linkContraction_basis` allows unitary actions on the remaining legs. The Gram
+identity for an arbitrary connected untwisted regular-bond region, including its internal
+cycles and normalization factor, is proved in `TNLean.PEPS.RegularRegionGram`. The physical
+entropy of an untwisted finite cut with both sides connected is proved in
+`TNLean.PEPS.RegularRegionEntropy`.
+`TNLean.PEPS.RegularRegionIsometry` derives the block's `G`-isometry from this
+Gram identity and the translation invariance of the actual contraction.
+The actual open tensor and the contraction of canonical averaging-projector sites
+are related in both directions by physical product maps in
+`TNLean.PEPS.RegularProjectorOpenRegion`.
+`TNLean.PEPS.RegularPhysicalUnitaryTransport` derives a unitary implementation
+on the original physical region for every canonical unitary commuting with the
+product of its local regular invariant projectors. The product Gram identity
+is derived from local isometry; unused physical dimensions are allowed.
+`TNLean.PEPS.RegularRegionCoordinates` constructs reversible spanning-tree
+coordinates, and `TNLean.PEPS.RegularRegionProjectorCoordinates` computes the
+canonical tensor in these coordinates: its boundary factor is the regular
+projector, its internal reference and normalized vertex coordinates are uniform,
+and its residual cycle coordinates are fixed to the identity.
+`TNLean.PEPS.RegularRegionInjectivity` uses one row of this coordinate formula
+to prove that an actual connected regular block is `G`-injective from local
+`G`-injectivity alone, allowing internal cycles and empty boundaries.
+For inserted bond operators, `TNLean.PEPS.RegularProjectorTwistedRegion`
+gives both accessibility identities with the same physical maps for every
+choice of operators, including those on crossing bonds.
+`TNLean.PEPS.RegularRegionTreeGauge` removes tree-edge operators and records
+the remaining cycle operators and boundary transport explicitly.
+`TNLean.PEPS.RegularTwistedRegionProjectorCoordinates` computes the actual
+twisted canonical block in these coordinates: one common group translation
+relates the boundary labels and simultaneously conjugates every cycle residual.
+`TNLean.PEPS.RegularRegionGaugeContraction` implements the vertex gauge inside
+the original open-region sum. When its internal residuals are identities,
+`TNLean.PEPS.RegularRegionGaugeGram` derives a positive Gram factor multiplying
+the transported boundary projector of `TNLean.PEPS.RegularRegionGaugeBoundary`.
+`TNLean.PEPS.RegularClosedGauge` proves equality of the actual closed vectors
+under endpoint gauge changes, using local regular invariance alone.
+`TNLean.PEPS.RegularTwistedRegionCrossGramCoordinates` computes the exact
+mixed Gram matrix of two canonical blocks and proves orthogonality when
+their residual cycle tuples are not simultaneously conjugate.
+For commuting native torus closures, `TNLean.PEPS.TorusRegionLiftGauge`
+constructs the gauge from a supplied integer lift preserving internal unit
+steps. `TNLean.PEPS.TorusRegionLiftGram` derives its actual transported Gram
+matrix and rank; `TNLean.PEPS.TorusRegionLiftCoordinates` derives a canonical
+factorization with one normalized internal vector common to all such sectors.
+The supplied arithmetic lift remains distinct from the geometric disk condition.
+`TNLean.PEPS.TorusRegionRealization` constructs the actual closed-cell union,
+proves local path connectedness, and obtains its integer unit-step lift from
+geometric simple connectedness. `TNLean.PEPS.TorusSimplyConnectedRegionRank`
+therefore derives the actual rank for commuting closures on graph-connected
+regions with simply connected cell realizations, without a supplied lift.
+`TNLean.PEPS.RegularWalkHolonomy` supplies the nonabelian transport identities
+along native graph walks, including endpoint-gauge covariance, reversal and
+concatenation. These are the path identities needed to express complement
+boundary transports through its accessible cycle coordinates.
+`TNLean.PEPS.RegularRegionCycleHolonomy` constructs actual free-group words
+from induced-region walks and evaluates them at the native cycle residuals.
+`TNLean.PEPS.RegularBoundaryRoute` identifies the composition of the two
+boundary transports with the endpoint-gauged crossing operator and derives
+its relative multiplier from an actual closed route through the two trees.
+`TNLean.PEPS.TorusWalkWinding` computes the actual commuting closure transport
+from oriented seam crossing numbers. `TNLean.PEPS.TorusRegionWalkWinding`
+identifies these numbers with endpoint deck-coordinate differences inside a
+lifted region and derives path independence from geometric simple connectedness.
+`TNLean.PEPS.TorusRegionLiftRealization` identifies the continuous covering lift
+with the actual planar union of closed unit squares centered at the lifted sites.
+`TNLean.PEPS.TorusRegionPeriodicLift` identifies the full plane preimage with
+all period translates of this union and proves that distinct copies are disjoint,
+including their cell boundaries. `TNLean.PEPS.TorusExteriorPathApproximation`
+turns a supplied continuous exterior plane path into a genuine complementary
+lattice walk with the exact crossing numbers of its lifted endpoints.
+`TNLean.PEPS.TorusRegionExteriorCollar` proves that a collar of radius three
+quarters around the planar lift avoids all foreign period copies, so its exterior
+part projects outside the actual torus region.
+`TNLean.PEPS.TorusIntegerStepWinding` supplies the common seam arithmetic for
+integer unit steps. `TNLean.PEPS.TorusRegionBoundaryLift` constructs actual
+crossing endpoints in that exterior collar and identifies their deck-coordinate
+difference with the winding of the corresponding interior route.
+`TNLean.PEPS.FiniteCellTopology` provides the shared finite-cell local path
+connectedness argument. `TNLean.PEPS.IntegerCellNoHoles` rules out finite
+components of missing integer cells from genuine simple connectedness of the
+closed-cell union, and derives this obstruction for the actual planar torus lift.
+`TNLean.PEPS.IntegerCellBoundaryContour` then connects the exterior collar graph,
+so the exterior boundary endpoints are joined inside the collar.
+`TNLean.PEPS.RegularCycleControlledBoundary` constructs the unitary boundary
+permutation controlled by cycle coordinates and computes its exact action on the
+actual canonical block. Its relative-word consequence remains conditional on
+the complement path identity. `TNLean.PEPS.TorusComplementCycleWords` derives
+that identity for actual closures from fixed complementary loops with the required
+geometric winding. `TNLean.PEPS.TorusComplementDisentangling` obtains one unitary
+before choosing any commuting closure labels, with its exact action on every
+actual canonical complementary block. The required complementary loops are
+constructed from simple connectedness in `TNLean.PEPS.TorusComplementPathReplacement`.
+`TNLean.PEPS.RegularControlledBoundaryFactor` contracts the two actual canonical
+blocks and separates the fixed normalized maximally entangled boundary factor
+and a fixed normalized region ancillary vector from every finite coherent sector
+sum. `TNLean.PEPS.TorusControlledBoundaryFactor` derives its algebraic conditions
+for native torus closures from geometric simple connectedness and fixed winding data.
+`TNLean.PEPS.RegularCycleControlledSupport` proves that actual walk-word controls
+commute with the product local invariant projector, preserve its range, and admit
+unitary implementations on the original physical region.
+`TNLean.PEPS.FixedBoundaryFactorDensity` and
+`TNLean.PEPS.RegularReferenceBoundaryDensity` identify the fixed native reduced
+matrix of the normalized boundary factor. `TNLean.PEPS.TorusControlledBoundaryDensity`
+then derives the same reduced density for all nonzero coherent commuting-closure
+sums under the supplied complementary winding data.
+`TNLean.PEPS.RegularPhysicalCutTransfer` derives the actual physical cut and its
+positive density normalization from the local site maps.
+`TNLean.PEPS.RegularPhysicalDensity` preserves the rank and flat spectrum under
+this supported physical embedding. `TNLean.PEPS.TorusPhysicalCutDensity` consequently
+obtains one density on the original physical region, chosen before all closure
+labels and coefficients, with rank equal to the expected boundary power.
+`TNLean.Algebra.FlatDensityRenyiEntropy` computes all nonnegative finite Rényi
+orders from the genuine spectral trace powers, including rank at order zero
+and von Neumann entropy at order one. `TNLean.PEPS.TorusSimplyConnectedPhysicalDensity`
+combines these steps for contiguous regions with simply connected closed-cell
+realization on tori of periods at least three.
+The overlaps of actual torus contractions with noncontractible regular closure operators
+are computed in `TNLean.PEPS.RegularTorusGram`; the class vectors are nonzero, orthogonal,
+and linearly independent in `TNLean.PEPS.RegularTorusSectors`. The commuting subfamily
+gives the regular isometric independence assertion underlying Theorem 5.9.
+G-injective independence for regular virtual representations is proved in
+`TNLean.PEPS.RegularGInjectiveTorus` by applying the local left inverse at every site.
+The semi-regular case is proved in `TNLean.PEPS.GInjectiveTorusSectors`: the local inverse
+and the explicit weighted trace contraction in `TNLean.PEPS.TorusProjectorExtraction`
+send the actual vectors to independent simultaneous-conjugacy operator sums.
+Parent-Hamiltonian identification remains a separate step.
+The projected mixed Gram operators of actual complementary twists are computed in
+`TNLean.PEPS.RegularTwistedRegionGram`; `TNLean.PEPS.RegularTwistedRegionEntropy` proves
+a common reduced density for their nonzero superpositions.
+`TNLean.PEPS.RegularTorusEntropy` derives the same density and entropy for actual torus
+closure superpositions on strictly interior rectangles, from local isometry and coordinate
+bounds alone. Through the complementary disentangling above,
+`TNLean.PEPS.TorusSimplyConnectedPhysicalDensity` extends the common density, local
+equivalence and entropy to every graph-connected region with simply connected closed-cell
+realization, including cuts meeting the closure seams, for the regular representation on
+tori with both periods at least three; `TNLean.PEPS.TorusStripeLocalEquivalence` applies it
+to the two width-one stripes. Tori with a period below three remain outside this scope; see
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 **Local fix (normalization):** as for `TNLean.PEPS.IsGIsometric`, `𝒫(A†) 𝒫(A)` is required to
 be a positive multiple `c Π` of the projector onto the invariant subspace rather than `Π`
 itself; the concatenation has factor `c_A c_B`. Documented in

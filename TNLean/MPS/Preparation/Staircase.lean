@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.MPS.Preparation.IsometricChain
-import TNLean.Circuit.Gates.TwoSiteUniversality
+import TNLean.Circuit.WindowProduct
 import TNLean.MPS.Overlap.Basic
 
 /-!
@@ -16,15 +16,24 @@ sequential factorization (`MPSPreparation.exists_isometric_chain_polarIsoMatrix`
 bond levels be encoded injectively in the configurations of `r ≥ 2` sites. Then there is a
 unitary `U` on the open chain of `n ≥ r` sites with
 `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}`, where the encoded input occupies
-the last `r` sites, and `U` is a product of at most `K₀ + (n - r) K₁` gates on neighbouring
-sites, with `K₀`, `K₁` depending only on `d` and `r` (`MPSPreparation.exists_staircase`).
+the last `r` sites. For every unitary `Z` acting on the last `r` sites, `U Z` is a product of
+at most `max 1 (n - r)` gates, each acting on at most `r + 1` consecutive sites, and so is `U`
+(`MPSPreparation.exists_staircase_isWindowProduct`). For `r ≥ 2`
+it is therefore a product of at most `K₀ + (n - r) K₁` gates on neighbouring sites, with `K₀`,
+`K₁` depending only on `d` and `r` (`MPSPreparation.exists_staircase`).
 
 The unitary is the staircase of arXiv:2307.01696, paragraph "The sequential-RG circuit" and
 Fig. 1: the bond register moves one site to the left at each step, the unitary extending
 `Q_p` acts on the `r` register sites and one fresh site in `|0⟩` and leaves the physical output
 on the rightmost of them, and the last `r` isometries act on the final position of the
-register. Each step acts on `r + 1` sites, so it is a product of a bounded number of two-site
-gates (`QuantumCircuit.exists_isPairProduct`).
+register. Each step acts on `r + 1` consecutive sites, so it is a product of a bounded number
+of two-site gates (`QuantumCircuit.IsWindowProduct.exists_isPairProduct`).
+
+## References
+
+* Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
+  quantum circuits*, arXiv:2307.01696, eq. (14), the paragraph "The sequential-RG circuit"
+  and Fig. 1.
 -/
 
 open Matrix MPSTensor
@@ -82,27 +91,33 @@ theorem exists_step_unitary (hd : 0 < d) {r D' : ℕ} {enc : Fin D' → Cfg d r}
 
 /-! ### The staircase -/
 
-/-- **The staircase circuit of an isometric chain.** Let `r ≥ 2`, and let `enc` encode the bond
-levels `Fin D'` injectively in the configurations of `r` sites. There are `K₀`, `K₁` such
-that for every `n ≥ r` and every chain `Q₀, …, Q_{n-1}` with bonds `b₀ = 1, b₁, …, b_n`, every
-site vanishing on the rows beyond its left bond and isometric on its right bond, there is a
-unitary `U` on `n` sites, a product of at most `K₀ + (n - r) K₁` gates on neighbouring sites,
-with `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}` for every `x < b_n`.
+/-- **The staircase circuit of an isometric chain, with gates on `r + 1` consecutive sites.**
+Let `enc` encode the bond levels `Fin D'` injectively in the configurations of `r` sites. For
+every `n ≥ r` and every chain `Q₀, …, Q_{n-1}` with bonds `b₀ = 1, b₁, …, b_n`, every site
+vanishing on the rows beyond its left bond and isometric on its right bond, there is a unitary
+`U` on `n` sites with `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}` for every
+`x < b_n`, such that for every unitary `Z` acting on the last `r` sites, `U Z` is a product of
+at most `max 1 (n - r)` gates each acting on at most `r + 1` consecutive sites. The first gate
+applied extends `Q_{n-1}` and absorbs `Z`, each later one extends the next site to the left,
+and the unitary on the first `r` sites extending the remaining chain is absorbed into the
+last one.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the isometries `V_i` of
-eq. (14) applied in sequence, each acting on the bond register and one site. -/
-theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
+eq. (14) applied in sequence, each acting on the bond register and one site; the successive
+isometries of arXiv:quant-ph/0501096, eq. `induction`. -/
+theorem exists_staircase_isWindowProduct (hd : 0 < d) {r D' : ℕ} (hD' : 0 < D')
     {enc : Fin D' → Cfg d r} (henc : Function.Injective enc) :
-    ∃ K₀ K₁ : ℕ, ∀ n, r ≤ n → ∀ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D' n),
+    ∀ n, r ≤ n → ∀ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D' n),
       b 0 = 1 → (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
       (∀ p, IsIsometryOn (b p.succ) (Q p)) →
-      ∃ U : Matrix (Cfg d n) (Cfg d n) ℂ, IsPairProduct d n (K₀ + (n - r) * K₁) U ∧
+      ∃ U : Matrix (Cfg d n) (Cfg d n) ℂ,
+        (∀ Z ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ),
+          Z ∈ supportedOperators d (windowSites n (n - r) r) →
+            IsWindowProduct d n (r + 1) (max 1 (n - r)) (U * Z)) ∧
         ∀ x : Fin D', x.val < b (Fin.last n) → ∀ σ,
           U σ (inputCfg hd n (enc x)) = eval Q σ ⟨0, hD'⟩ x := by
   classical
-  obtain ⟨K₀, hK₀⟩ := exists_isPairProduct (n := r) hd (by omega)
-  obtain ⟨K₁, hK₁⟩ := exists_isPairProduct (n := r + 1) hd (by omega)
-  refine ⟨K₀, K₁, fun n hn => ?_⟩
+  intro n hn
   induction n, hn using Nat.le_induction with
   | base =>
     intro b Q hb0 hrow hiso
@@ -138,7 +153,9 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
     let emb : κ ↪ Cfg d r := ⟨fun x => inputCfg hd r (enc x.1), fun x x' h => Subtype.ext
       (henc (by simpa [inputCfg_self] using h))⟩
     obtain ⟨U, hU, hUV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
-    exact ⟨U, by simpa using hK₀ U hU, fun x hx σ => (hUV σ ⟨x, hx⟩).trans (of_apply _ _ _)⟩
+    refine ⟨U, fun Z hZ _ => ?_, fun x hx σ => (hUV σ ⟨x, hx⟩).trans (of_apply _ _ _)⟩
+    exact (IsWindowProduct.of_isWindowGate
+      (isWindowGate_of_le (by omega) (Submonoid.mul_mem _ hU hZ))).mono (le_max_left _ _)
   | succ n hn ih =>
     intro b Q hb0 hrow hiso
     -- the chain without its last site
@@ -154,11 +171,29 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
       simp only [hwin, Fin.mk.injEq] at h; exact Fin.ext (by omega)
     have hcs : Function.Injective (Fin.castSucc : Fin n → Fin (n + 1)) := Fin.castSucc_injective n
     refine ⟨embedOp Fin.castSucc U' * embedOp win W, ?_, ?_⟩
-    · have h1 := hU'.embedOp (a := 0) hcs (fun i => by simp)
-      have h2 := (hK₁ W hWu).embedOp (a := n - r) hwini (fun i => rfl)
-      refine (h1.mul h2).mono (le_of_eq ?_)
-      rw [show n + 1 - r = (n - r) + 1 by omega]
-      ring
+    · intro Z hZ hZS
+      have hU'1 : IsWindowProduct d n (r + 1) (max 1 (n - r)) U' := by
+        simpa using hU' 1 (one_mem _) (one_mem_supportedOperators _)
+      have hWu' := embedOp_mem_unitary hwini hWu
+      by_cases hnr : n = r
+      · -- the last step and the unitary on the first `r` sites form one gate on all `r + 1` sites
+        refine (IsWindowProduct.of_isWindowGate (isWindowGate_of_le (by omega)
+          (Submonoid.mul_mem _ (Submonoid.mul_mem _ (embedOp_mem_unitary hcs hU'1.mem_unitary)
+            hWu') hZ))).mono (le_max_left _ _)
+      -- the last step and `Z` form one gate on the last `r + 1` sites
+      have hWZ : IsWindowGate (r + 1) (embedOp win W * Z) := by
+        refine ⟨Submonoid.mul_mem _ hWu' hZ, n - r, mul_mem_supportedOperators
+          (supportedOperators_mono ?_ (embedOp_mem_supportedOperators hwini W))
+          (supportedOperators_mono ?_ hZS)⟩
+        · rintro _ ⟨i, rfl⟩
+          simp only [windowSites, Set.mem_ofPred_eq, hwin]
+          omega
+        · intro p hp
+          simp only [windowSites, Set.mem_ofPred_eq] at hp ⊢
+          omega
+      rw [mul_assoc]
+      exact ((hU'1.embedOp (a := 0) hcs (fun i => by simp)).mul
+        (IsWindowProduct.of_isWindowGate hWZ)).mono (by omega)
     · intro x hx σ
       set y := inputCfg hd (n + 1) (enc x) with hy
       have hyw : y ∘ win = Fin.cons ⟨0, hd⟩ (enc x) := by
@@ -227,5 +262,31 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
       by_cases hα : α.val < b (Fin.last n).castSucc
       · rw [hU'Q α (by simpa using hα)]; rfl
       · rw [hrow (Fin.last n) (σ (Fin.last n)) α x (by omega), mul_zero, mul_zero]
+
+/-- **The staircase circuit of an isometric chain.** Let `r ≥ 2`, and let `enc` encode the bond
+levels `Fin D'` injectively in the configurations of `r` sites. There are `K₀`, `K₁` such
+that for every `n ≥ r` and every chain `Q₀, …, Q_{n-1}` with bonds `b₀ = 1, b₁, …, b_n`, every
+site vanishing on the rows beyond its left bond and isometric on its right bond, there is a
+unitary `U` on `n` sites, a product of at most `K₀ + (n - r) K₁` gates on neighbouring sites,
+with `⟨σ| U |0 ⋯ 0, enc(x)⟩ = (Q₀(σ₀) ⋯ Q_{n-1}(σ_{n-1}))_{0x}` for every `x < b_n`.
+
+arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the isometries `V_i` of
+eq. (14) applied in sequence, each acting on the bond register and one site. -/
+theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
+    {enc : Fin D' → Cfg d r} (henc : Function.Injective enc) :
+    ∃ K₀ K₁ : ℕ, ∀ n, r ≤ n → ∀ (b : Fin (n + 1) → ℕ) (Q : MPSChainTensor d D' n),
+      b 0 = 1 → (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) →
+      ∃ U : Matrix (Cfg d n) (Cfg d n) ℂ, IsPairProduct d n (K₀ + (n - r) * K₁) U ∧
+        ∀ x : Fin D', x.val < b (Fin.last n) → ∀ σ,
+          U σ (inputCfg hd n (enc x)) = eval Q σ ⟨0, hD'⟩ x := by
+  obtain ⟨C, hC⟩ := IsWindowProduct.exists_isPairProduct (m := r + 1) hd (by omega)
+  refine ⟨C, C, fun n hn b Q hb0 hrow hiso => ?_⟩
+  obtain ⟨U, hU, hUQ⟩ := exists_staircase_isWindowProduct hd hD' henc n hn b Q hb0 hrow hiso
+  have hU1 : IsWindowProduct d n (r + 1) (max 1 (n - r)) U := by
+    simpa using hU 1 (one_mem _) (one_mem_supportedOperators _)
+  refine ⟨U, (hC n _ (by omega) U hU1).mono ?_, hUQ⟩
+  calc max 1 (n - r) * C ≤ (1 + (n - r)) * C := Nat.mul_le_mul_right _ (by omega)
+    _ = C + (n - r) * C := by rw [Nat.add_mul, one_mul]
 
 end MPSPreparation

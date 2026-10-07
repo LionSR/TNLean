@@ -1,0 +1,230 @@
+\subsection{An exact whole-encoder construction}
+\label{sec:ldp_exact_sector_encoder}
+
+\begin{definition}[Embedded sectors and their bond pairs]
+    \label{def:ldp_embedded_sectors}
+    \lean{MPSTensor.coordEmbedding, MPSTensor.pairEmbedding, MPSTensor.blockSum,
+        MPSTensor.blockPairs, MPSTensor.mem_blockPairs}
+    \leanok
+    For maps $\iota_j:\{1,\ldots,D_j\}\to\{1,\ldots,D\}$, let
+    $E_j|a\rangle=|\iota_j(a)\rangle$ and $K_j=E_j\otimes E_j$.
+    The weighted direct sum has letters
+    $B^i=\sum_j\mu_jE_jA_j^iE_j^\dagger$. Its sector-pair set is
+    $S=\{(\iota_j(a),\iota_j(c)):j,a,c\}$.
+\end{definition}
+
+\begin{theorem}[Coordinate embeddings preserve their sectors]
+    \label{thm:ldp_sector_coordinate_identities}
+    \lean{MPSTensor.conjTranspose_coordEmbedding_mul_apply,
+        MPSTensor.conjTranspose_coordEmbedding_mul_self,
+        MPSTensor.conjTranspose_coordEmbedding_mul_eq_zero,
+        MPSTensor.conjTranspose_coordEmbedding_mul_mul_eq_zero,
+        MPSTensor.conjTranspose_coordEmbedding_mul_mul_self,
+        MPSTensor.pairEmbedding_apply,
+        MPSTensor.conjTranspose_pairEmbedding_mul_self,
+        MPSTensor.conjTranspose_pairEmbedding_mul_eq_zero}
+    \leanok
+    \uses{def:ldp_embedded_sectors}
+    For arbitrary coordinate maps $\iota,\kappa$,
+    $(E_\iota^\dagger E_\kappa)_{a,c}=\mathbf1_{\iota(a)=\kappa(c)}$.
+    In particular, injective maps give $E_j^\dagger E_j=I$, and
+    disjoint ranges give $E_i^\dagger E_j=0$ when $i\ne j$.
+    Hence $E_j^\dagger(E_jX)=X$ and $E_i^\dagger(E_jX)=0$ in those cases.
+    The pair embeddings satisfy
+    $(K_j)_{(x,y),(a,c)}=\mathbf1_{x=\iota_j(a),\,y=\iota_j(c)}$,
+    with the analogous isometry and orthogonality identities.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the matrix entries. The pair identities follow by taking
+    Kronecker products of the single-coordinate identities.
+\end{proof}
+
+\begin{theorem}[Nonempty words of an embedded direct sum]
+    \label{thm:ldp_embedded_sector_words}
+    \lean{MPSTensor.evalWord_blockSum, MPSTensor.mpv_blockSum,
+        MPSTensor.physicalMatrix_blockTensor_blockSum}
+    \leanok
+    \uses{def:ldp_embedded_sectors}
+    Assume the coordinate maps are injective with disjoint ranges.
+    For every nonempty word $w$,
+    $B^w=\sum_j\mu_j^{|w|}E_jA_j^wE_j^\dagger$.
+    Thus, for $N\ge1$, $|\phi_N(B)\rangle=\sum_j\mu_j^N|\phi_N(A_j)\rangle$.
+    If $C_N(B)$ and $C_N(A_j)$ denote their blocked physical matrices,
+    then $C_N(B)=\sum_j\mu_j^NC_N(A_j)K_j^\dagger$.
+    No orthogonality of physical sector states is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sector_coordinate_identities}
+    Induction on a nonempty word eliminates the cross terms using
+    $E_i^\dagger E_j=0$. Taking the trace gives the periodic identity;
+    reading the bond-pair entries gives the physical-matrix identity.
+\end{proof}
+
+\begin{definition}[Fixed-width virtual coefficient matrix]
+    \label{def:ldp_exact_sector_coefficients}
+    \lean{MPSTensor.cfgPhysicalMatrix, MPSTensor.cfgPhysicalMatrix_apply,
+        MPSTensor.sectorTraceSelector, MPSTensor.sectorCoefficientMatrix}
+    \leanok
+    \uses{def:ldp_embedded_sectors, def:ldpolar_matrix}
+    For any tensor $B$, read its blocked physical matrix on configurations:
+    $C_N(B)_{s,(a,c)}=(B^{s_1}\cdots B^{s_N})_{a,c}$.
+    For the unweighted sum $B=\bigoplus_jA_j$, write $C_N=C_N(B)$,
+    $P_N=(C_N^\dagger C_N)^{1/2}$ and let $S_N$ be the polar partial
+    isometry of $C_N$. Define
+    \begin{align}
+        T_{p,j} & =\sum_{a=1}^{D_j}(K_j)_{p,(a,a)}, &
+        R_N     & =P_NT.
+        \label{eq:ldp_virtual_sector_coefficients}
+    \end{align}
+    Both $T$ and $R_N$ map $\C^b$ to the same virtual space $\C^{D^2}$,
+    whose dimension is independent of $N$. Let $Q_N$ be the polar
+    partial isometry of $R_N$.
+\end{definition}
+
+\begin{theorem}[The trace selectors recover actual periodic sectors]
+    \label{thm:ldp_sector_trace_selectors}
+    \lean{MPSTensor.cfgPhysicalMatrix_mul_sectorTraceSelector,
+        MPSTensor.sectorTraceSelector_apply_diagonal,
+        MPSTensor.sectorTraceSelector_eq_zero_of_notMem}
+    \leanok
+    \uses{def:ldp_exact_sector_coefficients, def:ldp_sector_encoder}
+    For injective coordinate maps with disjoint ranges and $N\ge1$,
+    $C_NT=V_{A,N}$. At a diagonal coordinate of sector $j$,
+    $T_{(\iota_j(a),\iota_j(a)),i}=\delta_{ij}$.
+    Every row of $T$ outside the sector-pair set vanishes.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_embedded_sector_words, thm:ldp_sector_coordinate_identities}
+    Multiplying the blocked direct sum by $K_j$ extracts the blocked
+    matrix of $A_j$. Summing its diagonal virtual entries takes its
+    trace, giving the $j$th periodic column. The remaining identities
+    follow directly from the coordinate indicators.
+\end{proof}
+
+\begin{theorem}[Supported injectivity implies independent periodic sectors]
+    \label{thm:ldp_supported_sector_independence}
+    \lean{MPSTensor.injective_sectorColumnMatrix_of_isInjectiveOn}
+    \leanok
+    \uses{def:ldp_embedded_sectors, def:ldp_sector_encoder, def:ldpolar_injective_on}
+    Assume $D_j>0$, the coordinate maps are injective with disjoint ranges,
+    $N\ge1$, and the $N$-site blocked unweighted sum is injective on its
+    sector-pair set $S$. Then $V_{A,N}$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sector_trace_selectors}
+    If $V_{A,N}\beta=C_NT\beta=0$, the vector $T\beta$ is supported on
+    $S$, so supported injectivity gives $T\beta=0$. Choose one diagonal
+    coordinate in each positive-dimensional sector. That coordinate of
+    $T\beta$ is $\beta_j$, proving $\beta=0$.
+\end{proof}
+
+\begin{theorem}[Exact factorization of the complete polar encoder]
+    \label{thm:ldp_exact_encoder_factorization}
+    \lean{MPSTensor.sectorEncoder_eq_polarIso_mul}
+    \leanok
+    \uses{def:ldp_exact_sector_coefficients, def:ldp_sector_encoder}
+    For injective coordinate maps with disjoint ranges and $N\ge1$,
+    the complete canonical encoder satisfies
+    \begin{align}
+        F_{A,N}=S_NQ_N.
+        \label{eq:ldp_exact_encoder_factorization}
+    \end{align}
+
+    % Formula: F_A,N = S_N Q_N, with S_N the partial polar factor of C_N.
+    % Boundary: C^b -> H_N on both sides. The internal index is C^(D^2).
+    % The physical leg is the full ring, not a one-site gate.
+    % No trace, normalization scalar, reference leg, or ancillary output is hidden.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+                \tn[skin=box,
+                    ports={90:physical:$\mathcal H_N$,270:virtual:$\C^b$}]{F_{A,N}}
+            \end{tenkz}
+            =
+            \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+                \tn[at=(1,1), skin=box, name=s,
+                    ports={90:physical:$\mathcal H_N$,270:virtual:$\C^{D^2}$}]{S_N}
+                \tn[at=(2,1), skin=box, name=q,
+                    ports={90:virtual,270:virtual:$\C^b$}]{Q_N}
+                \tnwire{q.90}{s.270}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_sector_trace_selectors, thm:ldpolar_decomposition,
+        thm:ldpolar_support}
+    The polar identities give
+    \begin{align*}
+        S_NR_N                   & =C_NT=V_{A,N},    & S_N^\dagger S_NR_N & =R_N, \\
+        (S_NR_N)^\dagger(S_NR_N) & =R_N^\dagger R_N.
+    \end{align*}
+    Their positive factors are the same function of this Gram matrix,
+    so taking polar partial isometries yields
+    (\ref{eq:ldp_exact_encoder_factorization}).
+\end{proof}
+
+\begin{theorem}[Isometry and support of the virtual encoder]
+    \label{thm:ldp_exact_virtual_encoder}
+    \lean{MPSTensor.isIsometry_polarIso_sectorCoefficientMatrix,
+        MPSTensor.polarIso_sectorCoefficientMatrix_eq_zero_of_notMem}
+    \leanok
+    \uses{def:ldp_exact_sector_coefficients, def:ldpolar_injective_on}
+    If $V_{A,N}$ is injective, then $Q_N^\dagger Q_N=I_b$.
+    If the blocked unweighted sum is injective on a bond-pair set $S$,
+    every row of $Q_N$ outside $S$ vanishes. For the isometry assertion,
+    the coordinate maps are injective with disjoint ranges and $N\ge1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_exact_encoder_factorization, thm:ldpolar_support,
+        thm:ldpolar_injective}
+    The identity $S_NR_N=V_{A,N}$ makes $R_N$ injective whenever
+    $V_{A,N}$ is. Its polar factor is therefore isometric.
+    For support, let $\Pi_S$ be the coordinate support projector.
+    The identities $\Pi_SP_N=P_N$ and $R_N=P_NT$ imply
+    $\Pi_SR_N=R_N$. As $Q_N$ is $R_N$ times a function of its Gram matrix,
+    $\Pi_SQ_N=Q_N$ as well.
+\end{proof}
+
+\begin{theorem}[The one-block pair orientation]
+    \label{thm:ldp_one_block_encoder_orientation}
+    \lean{MPSTensor.blockIsometryState_one_eq_polarIso_mulVec}
+    \leanok
+    For an arbitrary tensor $B$, virtual vector $v\in\C^{D^2}$, and
+    one block of $N$ sites, choose $\omega(l,r)=v(r,l)$.
+    The blocked polar state with pair $\omega$ is exactly $S_Nv$,
+    where $S_N$ is the polar partial isometry of $C_N(B)$.
+\end{theorem}
+\begin{proof}\leanok
+    The cyclic pair on one block contributes $\omega(r,l)=v(l,r)$.
+    The product over one block and the sum over its virtual input reduce
+    to the matrix-vector product $S_Nv$.
+\end{proof}
+
+\begin{theorem}[Exact coherent encoding by a linear-depth local unitary]
+    \label{thm:ldp_exact_whole_encoder_circuit}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_sectorEncoder_exact}
+    \leanok
+    \uses{def:ldp_embedded_sectors, def:ldp_sector_encoder, def:qc_local_circuit}
+    Fix $d,D\ge1$, $r\ge2$, and injective encodings of the $D$ bond
+    values and $b$ sector labels in $r$ sites. There is a constant $C$
+    before the following choices. Let $A_j$ have $D_j>0$ and injective
+    virtual placements with disjoint ranges. For any positive
+    $N\ge3r$, assume its blocked unweighted sum is injective on the
+    sector-pair set. Then a genuine local unitary $U_N$ has depth
+    at most $CN$ and satisfies $U_NJ_N=F_{A,N}$, where $J_N$ is the
+    common register encoder for the single block of length $N$.
+    The same unitary acts on every logical superposition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_supported_sector_independence, thm:ldp_exact_encoder_factorization,
+        thm:ldp_exact_virtual_encoder, thm:ldp_one_block_encoder_orientation,
+        thm:ldp_coherent_sector_circuit}
+    Define $\omega_j(l,r)=(Q_N)_{(r,l),j}$. These pair vectors are
+    orthonormal, and their cyclic products are supported on the actual
+    single block. The simultaneous pair unitary followed by the genuine
+    sequential blocked-polar circuit produces $S_NQ_Ne_j=F_{A,N}e_j$
+    for every $j$, with depth at most $CN$. All normalization is performed
+    in the fixed space $\C^{D^2}$; no arbitrary full-chain synthesis is used.
+\end{proof}

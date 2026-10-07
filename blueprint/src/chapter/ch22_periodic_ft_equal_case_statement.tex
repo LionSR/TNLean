@@ -229,7 +229,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \leanok
     \uses{def:same_mpv2_pos, def:periodic_tensor, lem:paper_decomp_formula,
         thm:periodic_basis_nonzero_subfamily_li,
-        thm:pgvwc07_periodic_state_vector_decomposition}
+        thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     Let
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -267,7 +267,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     $\ket{V^{(N)}(B_{\pi(j)})}$ as $\zeta_j^{-N}\ket{V^{(N)}(A_j)}$. Equality
     of the two vectors makes the combination of the $\ket{V^{(N)}(A_j)}$ with
     coefficients $\tr(R_j^N)-\zeta_j^{-N}\tr(S_{\pi(j)}^N)$ vanish. By
-    Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition} the term
+    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition} the term
     for an index with $m_j\nmid N$ contributes the zero vector, so the
     combination runs over the indices with $m_j\mid N$, and by
     Theorem~\ref{thm:periodic_basis_nonzero_subfamily_li} those vectors are
@@ -369,7 +369,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:pgvwc07_periodic_state_vector_decomposition}
+    \uses{thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     The multiplicity gauge acts by the scalar $z_{j,l}$ on the bond space of
     the copy $(j,l)$, so it commutes with every block-diagonal matrix and its
     $L$-th power is the identity. Multiplying $A^i$ by it rescales the
@@ -387,7 +387,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     matrix-product vectors, a copy whose period divides the length contributes
     the factor $z_{j,l}^N=1$, and a copy whose period does not divide the
     length contributes the zero vector by
-    Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition}.
+    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}.
 \end{proof}
 
 \begin{theorem}[Matched periods for trace-preserving repeated blocks]%

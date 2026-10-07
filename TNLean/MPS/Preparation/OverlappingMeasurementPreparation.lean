@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.GHZSeedCircuit
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.NonNormalMeasurementPreparation
 import TNLean.MPS.Preparation.OverlappingBlockStates
@@ -122,108 +123,19 @@ private theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_encoding_o
         IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
           (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
   classical
-  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
-  have h0 : (⟨0, hd⟩ : Fin d) = 0 := Fin.ext (by simp)
   obtain ⟨CG, hCG⟩ := exists_isPreparedWithMeasurementsInDepth_windowGHZState (d := d) hr₁
-  choose Cπ hCπ using fun π : Fin (D * D) ≃ Fin D × Fin D =>
-    exists_blockUnitary_of_equiv hd (r₁ := r₁) (by omega) hdig hD π
-  set Cb := Finset.univ.sup Cπ
-  obtain ⟨KW, hKW⟩ := exists_isPairProduct (n := r₁ + r₁) hd (by omega)
-  refine ⟨CG + KW + Cb, fun A S ω hω hωS α hα M _ ℓ N _ hN L hℓ hL hinj => ?_⟩
+  obtain ⟨C, hC⟩ := exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn
+    hr₁ hdig hdig₀ hD
+  refine ⟨CG + C, fun A S ω hω hωS α hα M _ ℓ N _ hN L hℓ hL hinj => ?_⟩
   have hr : ∀ k, r₁ + r₁ ≤ ℓ k := fun k => by have := hℓ k; omega
-  have hL1 : 1 ≤ L := by
-    have := hℓ 0
-    have := hL 0
-    omega
-  -- The GHZ-type state.
+  obtain ⟨U, T, hU, hT, hj⟩ := hC A S ω hω hωS ℓ hN L hℓ hL hinj
   set α' : Cfg d r₁ → ℂ := Function.extend dig₀ α 0
   have hα' : ∑ u, star (α' u) * α' u = 1 := by
     rw [sum_extend_zero hdig₀ α (fun _ a => star a * a) (by simp)]
     exact hα
-  have hφ := hCG ℓ hN hr L hℓ hL α' hα'
-  -- The block unitaries, implementing the isometric factors on the pairs of `S`.
-  have hUk : ∀ k, ∃ U : Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ,
-      IsPairProduct d (ℓ k) (Cb * ℓ k) U ∧ ∀ l r τ, (l, r) ∈ S →
-        U τ (blockInputCfg hd (ℓ k) dig l r) =
-          polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
-            (finProdFinEquiv (l, r)) := fun k => by
-    obtain ⟨π, hπ⟩ := exists_pairEquiv_val_lt_card_iff_mem S
-    obtain ⟨bq, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=
-      exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn (fun _ : Fin (ℓ k) => A)
-        (by have := hℓ k; omega) (by rw [MPSChainTensor.blockTensor_const]; exact hinj k) π hπ
-    obtain ⟨U, hUpp, hUQ⟩ := hCπ π (ℓ k) (hℓ k) bq Q hb0 hrow hiso
-    refine ⟨U, hUpp.mono (Nat.mul_le_mul_right _ (Finset.le_sup (Finset.mem_univ π))),
-      fun l r τ hlr => ?_⟩
-    have hx : (π.symm (l, r)).val < S.card :=
-      (hπ (π.symm (l, r))).mpr (by rw [Equiv.apply_symm_apply]; exact hlr)
-    have h1 := hUQ (π.symm (l, r)) (by rw [hbq]; exact hx) τ
-    have h2 := hVQ τ (π.symm (l, r)) hx
-    simp only [Equiv.apply_symm_apply, MPSChainTensor.blockTensor_const] at h1 h2
-    rw [h1, ← h2]
-    rfl
-  choose U hUpp hU using hUk
-  -- The window unitary `W : |dig₀ j, 0⟩ ↦ |ω_j⟩`.
-  have hs : Function.Injective (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) :=
-    fun p p' h => Prod.ext (twoCfg_injective hdig h).1 (twoCfg_injective hdig h).2
-  let enc : Fin b → Cfg d (r₁ + r₁) → ℂ := fun j =>
-    Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω j) 0
-  obtain ⟨W, hWu, hW⟩ : ∃ W ∈ unitary (Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ),
-      ∀ u j, W u (windowInput (dig₀ j)) = enc j u := by
-    let V : Matrix (Cfg d (r₁ + r₁)) (Fin b) ℂ := Matrix.of fun u j => enc j u
-    have hV : V.IsIsometry := by
-      ext j j'
-      rw [Matrix.mul_apply, Matrix.one_apply]
-      simp only [conjTranspose_apply, V, Matrix.of_apply]
-      rw [sum_extend_zero hs (ω j) (fun u a => star a * enc j' u) (by simp)]
-      simp only [enc, hs.extend_apply]
-      exact hω j j'
-    let emb : Fin b ↪ Cfg d (r₁ + r₁) :=
-      ⟨fun j => windowInput (dig₀ j), windowInput_injective.comp hdig₀⟩
-    obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
-    exact ⟨W, hW, fun u j => hWV u j⟩
-  -- The circuit after the measurement.
-  have hcirc : IsCircuitOn Set.univ (KW + Cb * L)
-      (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
-    (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
-      (isCircuitOn_blockLayerOp hN (K := Cb * L) fun k =>
-        (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k)))
-  refine ⟨CG * L, KW + Cb * L, windowGHZState hN hr α',
-    blockLayerOp hN U * pairLayerOp hN hr (fun _ => W),
-    by nlinarith, hφ, hcirc.isBondCircuitOfDepth, ?_⟩
-  -- The circuit takes each configuration of the GHZ-type state to the state of its label.
-  have hj : ∀ j, (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
-      Pi.single (registerCfg hN hr (dig₀ j)) 1 = fun s => blockIsometryState A (ω j) hN s := by
-    intro j
-    obtain ⟨Wj, -, hWj⟩ := exists_pairUnitary hd hdig (ω j) (by simpa using hω j j)
-    funext s
-    rw [blockIsometryState_eq_chainBlockIsometryState,
-      chainBlockIsometryState_eq_mulVec hd hN hr hdig (fun _ => A) (fun _ => ω j) (U := U)
-        (fun c hc k τ => by
-          rw [chainBlockTensor_const]
-          exact hU k _ _ τ (hωS j c (by rwa [pairFamilyState_const] at hc) k))
-        (W := fun _ => Wj) (fun _ => hWj) s,
-      ← mulVec_mulVec, ← mulVec_mulVec]
-    have key : pairLayerOp hN hr (fun _ => W) *ᵥ Pi.single (registerCfg hN hr (dig₀ j)) 1 =
-        pairLayerOp hN hr (fun _ => Wj) *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1 := by
-      funext y
-      rw [pairLayerOp_mulVec_apply hd hN hr (fun _ => Wj) y]
-      simp only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one, mul_zero,
-        Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-      rw [pairLayerOp_apply]
-      simp only [registerCfg_comp_pairSite, hW, h0]
-      refine if_congr ⟨fun h i hi => (h i hi).trans (registerCfg_of_forall_pairSite_ne hN hr _ hi),
-        fun h i hi => (h i hi).trans (registerCfg_of_forall_pairSite_ne hN hr _ hi).symm⟩ ?_ rfl
-      refine Finset.prod_congr rfl fun k _ => ?_
-      rw [← h0, hWj]
-    rw [key]
-  rw [windowGHZState_extend hN hr hdig₀ α]
-  have hsum : (fun x => ∑ j, α j * if x = registerCfg hN hr (dig₀ j) then (1 : ℂ) else 0) =
-      ∑ j, α j • Pi.single (registerCfg hN hr (dig₀ j)) (1 : ℂ) := by
-    funext x
-    simp [Finset.sum_apply, Pi.single_apply]
-  rw [hsum, mulVec_sum]
-  funext s
-  simp only [mulVec_smul, hj, Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+  refine ⟨CG * L, T, windowGHZState hN hr α', U, by nlinarith,
+    hCG ℓ hN hr L hℓ hL α' hα', hU, ?_⟩
+  exact (mulVec_windowGHZState_of_registerCfg hdig₀ hj α).symm
 
 /-- **The state of a tensor injective on a set of bond pairs, with measurements.** For `d ≥ 2`
 and every bond dimension `D` and number of labels `b` there are `C` and `L₀` such that for every
@@ -390,51 +302,6 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
     rw [blockIsometryState_eq_blockIsoVector, hpair, blockIsoVector_smul, ← hφY, hnorm]
 
 /-! ### Error `ε` in depth `O(log(N/ε))` -/
-
-/-- **A common rate for the blocks and their mixed transfer maps.** For finitely many normal
-left-canonical blocks whose mixed transfer maps have all eigenvalues of modulus below one, there
-is `0 < t < 1` bounding the moduli of the eigenvalues other than `1` of every transfer map and of
-all eigenvalues of the mixed transfer maps of distinct blocks (arXiv:2307.01696, eq. (5), and
-the spectral radius `τ < 1` of the mixed transfer matrices used in the Supplemental Material,
-proof of Lemma 1'(ii)). -/
-theorem exists_forall_eigenvalue_norm_le_of_mixed {b : ℕ} [NeZero b] {Dj : Fin b → ℕ}
-    {Aj : (j : Fin b) → MPSTensor d (Dj j)} (hN : ∀ j, Kraus.IsNormal (Aj j))
-    (hA : ∀ j, IsLeftCanonical (Aj j)) (hD : ∀ j, NeZero (Dj j))
-    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ < 1) :
-    ∃ t : ℝ, 0 < t ∧ t < 1 ∧
-      (∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' → μ' ≠ 1 →
-        ‖μ'‖ ≤ ‖(t : ℂ)‖) ∧
-      ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-        ‖μ'‖ ≤ ‖(t : ℂ)‖ := by
-  classical
-  obtain ⟨t₁, ht₁0, ht₁1, hdiag⟩ := exists_forall_eigenvalue_norm_le hN hA hD
-  have hpair : ∀ p : Fin b × Fin b, ∃ s : ℝ, s < 1 ∧ (p.1 ≠ p.2 → ∀ μ',
-      Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj p.1) (Aj p.2)) μ' → ‖μ'‖ ≤ s) := by
-    rintro ⟨j, j'⟩
-    by_cases h : j = j'
-    · exact ⟨0, zero_lt_one, fun h' => absurd h h'⟩
-    · obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
-        (Module.End.finite_hasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')))
-        fun μ' hμ _ => hmix j j' h μ' hμ
-      refine ⟨1 - δ, by linarith, fun _ μ' hμ => ?_⟩
-      by_cases h1 : μ' = 1
-      · have := hmix j j' h μ' hμ
-        rw [h1, norm_one] at this
-        exact absurd this (lt_irrefl _)
-      · exact hgap μ' hμ h1
-  choose s hs1 hs using hpair
-  set t := max t₁ (Finset.univ.sup' Finset.univ_nonempty s)
-  have ht0 : 0 < t := lt_max_of_lt_left ht₁0
-  have ht1 : t < 1 := max_lt ht₁1 ((Finset.sup'_lt_iff _).2 fun p _ => hs1 p)
-  have hnt : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
-  have hn₁ : ‖(t₁ : ℂ)‖ = t₁ := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht₁0]
-  refine ⟨t, ht0, ht1, fun j μ' hμ h1 => ?_, fun j j' h μ' hμ => ?_⟩
-  · rw [hnt]
-    exact (hn₁ ▸ hdiag j μ' hμ h1).trans (le_max_left _ _)
-  · rw [hnt]
-    exact (hs (j, j') h μ' hμ).trans ((Finset.le_sup' s (Finset.mem_univ (j, j'))).trans
-      (le_max_right _ _))
 
 /-- **Every translation-invariant MPS with measurements, in depth `O(log(N/ε))`.** Let
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (arXiv:2307.01696, Supplemental Material,

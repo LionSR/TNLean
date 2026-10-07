@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.DepthUpperBound
+import TNLean.MPS.Preparation.BlockStatePreparation
 import TNLean.MPS.Preparation.VaryingBondBlocks
 
 /-!
@@ -34,8 +34,11 @@ depending only on `d` and `D`, and its error against `|φ_N⟩` is exactly `ε(�
 partial isometry and the block unitaries implement isometric extensions of it; that case, and
 the preparation under the approximation hypothesis, are in
 `TNLean.MPS.Preparation.PartialIsometryPreparation`. The source states a total depth
-`O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. Neither the choice of
-the block lengths nor the asymptotic statement is formalized here.
+`O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. The choice of block
+lengths for a requested accuracy is not formalized.
+`TNLean.MPS.Preparation.InhomogeneousSequence` proves depth `O(L_N)` with errors tending to
+zero for sequences with a positive logarithmic lower bound on block lengths, preparing the
+finitely many short rings exactly.
 
 The error is `ε(φ, ψ) = 1 - |⟨φ|ψ⟩|` of normalized vectors, as displayed in arXiv:2307.01696,
 paragraph "Preliminaries".
@@ -222,9 +225,9 @@ dimensions at most `D`: the state `φ_pos` of the positive parts of the blocked 
 nonzero, and there are unit vectors `ω^k` on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k`
 to block `k + 1`, whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
 `ε(Ω, φ_pos) = 1 - |⟨Ω|φ_pos⟩| ≤ δ` against the normalized state of the positive parts. The
-blocked tensors, their positive parts and the pairs are those of the zero-padded chain; their
-identification with the rectangular objects of the source is not proved (see the paper-gap note
-cited below).
+positive parts are those of the zero-padded chain. Actual rectangular blocked tensors and
+fixed-point pairs are identified with their padding in `RectangularBlocks` and `PaddedBondState`;
+see `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": a sequence of matrix
 product states "with bond dimension at most `D`" has finite correlation length if, after

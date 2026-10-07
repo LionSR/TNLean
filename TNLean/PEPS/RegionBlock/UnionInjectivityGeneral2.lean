@@ -175,7 +175,7 @@ complement physical leg `σcompl` and blue boundary configuration `bβ`, the
 `c`-weighted sum of complement coupling coefficients
 `threeBlockComplCoeff g bdry σcompl bβ` vanishes.
 
-The annihilation, evaluated at the fused leg `threeBlockComplPhysical g σblue σcompl`,
+The annihilation, evaluated at the fused leg `g.complPhysical σblue σcompl`,
 holds for every blue leg `σblue`. Scaling by the nonzero blue interior bond product
 and applying the blue smul-factorization
 (`regionInteriorBondProd_smul_geometryBlueWeight_eq`) rewrites the host weights as

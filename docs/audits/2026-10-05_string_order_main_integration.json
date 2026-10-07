@@ -1,0 +1,20 @@
+{
+  "reviewed_snapshot": "a60357cf654350f9122a3cd4c67430eeb15eb08a",
+  "main_integrated": "b930f781e15ce05294377cf51b9ff52e95e700fb",
+  "reviewed_files_byte_preserved_except": [
+    ".github/workflows/pr-ci.yml",
+    "docs/tactic_patterns.md"
+  ],
+  "main_files_byte_preserved_except": [
+    ".github/workflows/pr-ci.yml",
+    "docs/tactic_patterns.md"
+  ],
+  "merge_conflicts": [
+    "docs/tactic_patterns.md: independent prepended entries retained"
+  ],
+  "QIC_pin_unchanged": true,
+  "rectangular_regression_retained": true,
+  "String_Order_regressions_retained": true,
+  "draft_publication_authorized": true,
+  "validation": "Source/diagram rerun only; analytic, counterexample, regression, reverse-consumer and full build unverified."
+}
