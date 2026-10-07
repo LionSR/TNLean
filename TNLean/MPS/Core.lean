@@ -19,6 +19,7 @@ import TNLean.MPS.Core.CorrelationReduction
 import TNLean.MPS.Core.Correlations
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.CyclicTraceForcedBond
+import TNLean.MPS.Core.InsertedLeftInverse
 import TNLean.MPS.Core.IsometricBondCompression
 import TNLean.MPS.Core.LetterScaledNormality
 import TNLean.MPS.Core.MultiBlock
