@@ -106,6 +106,25 @@ on the source's two separate orders: any interleaving preserves both.
 requirement `p/(p+1) > 1 − 10⁻⁶`. Parameter-dependent initial box exponents are
 not identified with the final choices.
 
+`Geometry.DistanceLayers` proves the endpoint-distance and nonadjacent-layer
+estimates for the actual closed dyadic layers. The product metric on `ℝ × ℝ`
+is the sup metric. For every origin, nonnegative scale `k`, finite endpoint
+set `Z`, and nonnegative integer radius `C`, each point in a layer closure
+has distance at least `C * 2^k` from every endpoint and distance at most
+`2 * (C + 1) * 2^k` from some endpoint. Existence of that endpoint follows
+from layer membership, so no nonemptiness hypothesis is added to the
+distance theorem. This gives the corresponding two bounds for the infimum
+distance to `Z`.
+
+The separation estimate is pointwise for every pair of points in the two
+layer closures. When `h ≥ k + 2`, their distance is at least
+`(C - 1) / 2 * 2^h`. This is positive for the source radius `C ≥ 2`; the
+proved inequality also includes smaller radii, when its lower bound may
+be nonpositive. Empty layers are allowed. These results establish the
+source's `geometry:layer-distance` and `geometry:nonadjacent` estimates;
+contacts, simultaneous repairs, and the two-family construction remain
+separate proof obligations.
+
 ## Mathematical coverage
 
 | Source label | Present status | Remaining mathematical work |
@@ -117,11 +136,14 @@ not identified with the final choices.
 | Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
 | Area-law `geometry:belt-count` | Finite residue selection proved | Fine-cell count, scale divisibility, and dyadic decay. |
-| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, and exhaustion proved | Closure-distance estimates, contacts, simultaneous repairs, separation, and the full partition. |
+| Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
+| Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
+| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, and nonadjacent-layer separation proved | Contacts, simultaneous repairs, and the full partition. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
 
 Defining a target proposition does not prove the corresponding theorem. The
-source-labelled headline theorems have no `\leanok` marks in the blueprint.
+source-labelled area-law and PEPS approximation headline theorems have no
+`\leanok` marks in the blueprint.
 Neither statement assumes an area law, a PEPS approximation, a subregion gap,
 frustration freedom, commutativity, or translation invariance.
 

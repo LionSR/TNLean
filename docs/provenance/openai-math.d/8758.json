@@ -1427,6 +1427,237 @@
         ]
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell_dist_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Bounds the sup distance between points in two closed dyadic cells from the coordinate distance between their cell indices.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell_dist_lower",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_lower",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Derives a lower sup-distance bound between points in two closed dyadic cells when an index coordinate differs by more than the specified radius.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_lower",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_lower",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves the closed layer is at least C times its dyadic scale from every endpoint of the finite set.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_exists_dist_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_exists_dist_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves every point in a closed layer is within twice (C + 1) times its dyadic scale of some actual endpoint.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_infdist_bounds",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Combines the actual endpoint bounds into the two-sided infimum-distance estimate for every point in the closed layer.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_separation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_separation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:nonadjacent"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Derives a lower pointwise distance bound between two closed layers from their endpoint-distance bounds.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_nonadjacent",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:nonadjacent"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves nonadjacent closed layers at scales k + 2 <= h are separated by at least (C - 1) / 2 times the larger dyadic scale.",
+        "Formalizes the actual closed-cell and layer geometry at nonnegative dyadic scales and arbitrary translated origin; no distance or separation estimate is assumed as data.",
+        "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }

@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Geometry
 
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DyadicClosure
 import TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion
 import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
