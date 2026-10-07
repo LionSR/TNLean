@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
+import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
 import TNLean.PEPS.AreaLaw.GraphInteractionCounting
@@ -16,3 +17,4 @@ import TNLean.PEPS.AreaLaw.GraphInteractionSeries
 import TNLean.PEPS.AreaLaw.GraphInteractionTarget
 import TNLean.PEPS.AreaLaw.GraphLatticeCounting
 import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
+import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
