@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8754-tnlean.peps.arealaw.mem_ambientdilation_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.mem_ambientDilation_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -38,14 +38,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.ambientdilation_mono",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_mono",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -69,14 +69,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.ambientdilation_mono_radius",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_mono_radius",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -100,14 +100,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.ambientdilation_biunion_sdiff_subset",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -131,14 +131,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.card_ambientdilation_biunion_sdiff_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -162,14 +162,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.latticerow",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeRow",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -193,14 +193,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mem_latticerow",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -224,14 +224,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.convex_region",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -255,14 +255,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_region",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -286,14 +286,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.horizontal_mem_of_mem_of_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -317,14 +317,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_horizontalsection",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -348,14 +348,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.horizontalsection_eq_icc",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -379,14 +379,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc_ceil_floor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -410,14 +410,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template.mem_sample_of_row_between",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -441,14 +441,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -472,14 +472,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template.sample_subset_box",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -503,14 +503,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template.card_sample_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -534,14 +534,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template_card_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_card_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -565,14 +565,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.ceil_affine_row",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -596,14 +596,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.floor_affine_row",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.floor_affine_row",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -627,14 +627,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mem_latticerow_ambientdilation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -658,14 +658,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.ambientdilation_add",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_add",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -689,14 +689,14 @@
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {

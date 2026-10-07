@@ -14,6 +14,7 @@
         TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row,
         TNLean.PEPS.AreaLaw.Geometry.floor_affine_row
     }
+    \leanok
     \uses{def:area_law_template}
     Let $P$ be one of the real polygons of a template and put
     $S=P\cap\mathbb Z^2$. For $y\in\mathbb Z$, write
@@ -33,6 +34,7 @@
     \]
 \end{lemma}
 \begin{proof}
+    \leanok
     A finite convex hull is compact and convex. Its intersection with a
     horizontal line is compact, and convexity fills the interval between
     its attained extrema. Exact lattice sampling then rounds the endpoints.
@@ -48,10 +50,12 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le,
         TNLean.PEPS.AreaLaw.Geometry.template_card_le
     }
+    \leanok
     \uses{def:area_law_template}
     If $C_{\rm tpl}\ge1$, a template satisfies $|T|\le9ns_0$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Each nonempty sample lies in an integer square of radius $s_0$ about
     any one of its sites, so its cardinality is at most $(2s_0+1)^2$.
     Empty samples contribute zero. Sum over the pieces and use
@@ -70,6 +74,7 @@
         TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation,
         TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff
     }
+    \leanok
     \uses{def:area_law_template,lem:area_law_sample_rows}
     For a finite $S\subset\mathbb Z^2$, let
     $S_r=S+([-r,r]^2\cap\mathbb Z^2)$. Membership in $S_r$ means that
@@ -94,6 +99,7 @@
     The pieces may be empty, overlapping, or disconnected.
 \end{lemma}
 \begin{proof}
+    \leanok
     The coordinate inequalities give the row formula. A point newly present
     in the dilation of a union has a witness in one constituent, and cannot
     belong to the old dilation of that constituent. Counting the union gives
