@@ -280,10 +280,12 @@
     \uses{thm:cyclic_sector_compression_letter_isometry_periodic}
 \end{lemma}
 \begin{proof}\leanok
+    \uses{lem:offdiag_eigenvector_eq_zero_periodic}
     A hypothetical gauge-phase equivalence produces a nonzero peripheral
     eigenvector of the blocked transfer map supported between distinct cyclic
-    corners. Periodicity of the original irreducible tensor forces this vector
-    to vanish. Orthogonality of the corners alone is insufficient.
+    corners. By Lemma~\ref{lem:offdiag_eigenvector_eq_zero_periodic},
+    periodicity of the original irreducible tensor forces this vector to
+    vanish. Orthogonality of the corners alone is insufficient.
 \end{proof}
 
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
