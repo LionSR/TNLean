@@ -54,7 +54,7 @@ Downstream: TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor
 
 Original proofs from the coefficient correspondence. The physical coordinate
 space is the Euclidean space on site configurations, as in both upstream
-presentations and issue #8738. No Hamiltonian or entropy model is introduced.
+presentations. No Hamiltonian or entropy model is introduced.
 The reductions below use the existing native regional configuration equivalence
 and QICLean's partial trace and von Neumann entropy.
 

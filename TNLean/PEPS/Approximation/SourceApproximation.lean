@@ -7,7 +7,7 @@ Adapted predicates from openai/math (Apache-2.0), revision
 adc7f1241b42e322a6451854ab7e4b4c146bf78a, PEPSFilters/Basic.lean and
 TensorNetwork/VectorColumn.lean. The phase and normalization helper definitions
 are unfolded; both original error conventions are retained. The native target
-is the independently written predicate from issue #8738. Transfer proofs are original.
+is the independently written predicate in Approximation/Basic.lean. Transfer proofs are original.
 -/
 import TNLean.PEPS.Approximation.RegionalStates
 
