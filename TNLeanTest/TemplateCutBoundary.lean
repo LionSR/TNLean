@@ -135,24 +135,100 @@ example (Λ : Finset (ℤ × ℤ)) : boundaryEndpoints Λ ∅ = ∅ := by
   simp [boundaryEndpoints]
 
 example (Λ : Finset (ℤ × ℤ)) : boundaryEndpoints Λ Finset.univ = ∅ := by
-  simp [boundaryEndpoints]
+  unfold boundaryEndpoints
+  rw [edgeBoundary_univ]
+  simp
 
 example (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :
     (edgeBoundary Λ (A.filter fun x ↦ x.1 ∈ (∅ : Finset (ℤ × ℤ)))).card = 0 := by
   simp
 
+-- An actual physical edge survives the unordered injection in both orientations.
+private def pairDomain : Finset (ℤ × ℤ) := {(0, 0), (1, 0)}
+private def leftSite : Site pairDomain := ⟨(0, 0), by simp [pairDomain]⟩
+private def rightSite : Site pairDomain := ⟨(1, 0), by simp [pairDomain]⟩
+
+private theorem pair_crossing :
+    s(leftSite, rightSite) ∈ edgeBoundary pairDomain {leftSite} := by
+  classical
+  apply Finset.mem_filter.mpr
+  constructor
+  · apply SimpleGraph.mem_edgeFinset.mpr
+    change (domainGraph pairDomain).Adj leftSite rightSite
+    decide
+  · exact ⟨leftSite, by simp, rightSite, by decide, rfl⟩
+
+example : (0, 0) ∈ boundaryEndpoints pairDomain {leftSite} :=
+  mem_boundaryEndpoints_of_mem_edgeBoundary pair_crossing (by simp)
+
+example : (1, 0) ∈ boundaryEndpoints pairDomain {leftSite} :=
+  mem_boundaryEndpoints_of_mem_edgeBoundary pair_crossing (by simp)
+
+example : ¬ Disjoint {(0, 0)} (boundaryEndpoints pairDomain {leftSite}) := by
+  intro h
+  exact Finset.disjoint_left.mp h (by simp)
+    (mem_boundaryEndpoints_of_mem_edgeBoundary pair_crossing (by simp))
+
+example : s((1, 0), (0, 0)) ∈ ambientBoundary {(0, 0)} := by
+  apply mem_ambientBoundary_iff.mpr
+  exact ⟨(0, 0), by simp, (1, 0), by simp, by decide, Sym2.eq_swap⟩
+
+-- A missing neighbor is ambient but cannot contribute to the physical cut.
+example : (edgeBoundary {(0, 0)} Finset.univ).card = 0 := by
+  simp only [edgeBoundary_univ, Finset.card_empty]
+
+-- Disconnected domains and holes are permitted, including a nonempty ambient
+-- restriction whose physical cut has no edges.
+example : (edgeBoundary {(0, 0), (2, 0)} Finset.univ).card = 0 := by
+  simp only [edgeBoundary_univ, Finset.card_empty]
+
 set_option linter.hashCommand false
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le

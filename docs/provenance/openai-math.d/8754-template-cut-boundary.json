@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.mem_boundaryendpoints_of_mem_edgeboundary",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.edgeboundary_filter_image_subset_ambientboundary",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.card_edgeboundary_filter_le_ambientboundary",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template.isseparated.disjoint_ambientdilation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template_cut_boundary_card_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template_core_boundary_card_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template_shell_cut_boundary_card_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateCutBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:template",
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original physical-to-ambient unordered-edge comparison and template cut-clearance argument from the manuscript; no upstream Lean proof text reused.",
+        "Reuses the actual Template.IsSeparated and Geometry.boundaryEndpoints definitions. Final physical bounds derive avoidance and have no extra clearance premise. The sufficient D\u2080\u22651 follows from the source D\u2080>2R+10 (02-initial.tex:225)."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

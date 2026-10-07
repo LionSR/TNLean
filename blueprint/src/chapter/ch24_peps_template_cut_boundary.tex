@@ -1,0 +1,64 @@
+\subsection{Physical boundaries of separated templates}
+\label{sec:area_law_template_cut_boundary}
+
+Let $\Lambda\subset\mathbb Z^2$ be any finite induced domain, $A\subseteq\Lambda$,
+and $Z$ the endpoints of its unordered crossing edges. No connectedness
+assumption is imposed on $\Lambda$ or $A$.
+
+\begin{theorem}[Comparison with the ambient boundary]
+    \label{thm:area_law_physical_ambient_boundary}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary,
+        TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary,
+        TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary
+    }
+    \uses{def:area_law_ambient_boundary}
+    For any finite ambient set $U$ disjoint from $Z$, inclusion into the
+    lattice sends $\partial_\Lambda(A\cap U)$ injectively into $\partial U$.
+    In particular, $|\partial_\Lambda(A\cap U)|\le|\partial U|$.
+\end{theorem}
+\begin{proof}
+    Orient a physical crossing edge from $p\in A\cap U$ to
+    $q\notin A\cap U$. If $q\notin A$, then $p\in Z$, contrary to
+    $U\cap Z=\varnothing$. Thus $q\in A$ and $q\notin U$, and the edge
+    crosses $U$. Inclusion preserves unordered pairs injectively.
+\end{proof}
+
+\begin{theorem}[Separation of template dilations]
+    \label{thm:area_law_template_dilation_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation}
+    \uses{def:area_law_template}
+    Suppose $D_0\ge1$, $s_0\ge1$, and
+    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$.
+    For $0\le j\le s_0$, the ambient dilation $T_j$ is disjoint from $Z$.
+\end{theorem}
+\begin{proof}
+    A point $z\in T_j\cap Z$ would be within distance $j\le s_0$ of a
+    point of $T$, contradicting $4D_0s_0<\operatorname{dist}_\infty(T,Z)$.
+\end{proof}
+
+\begin{theorem}[Physical template boundary bounds]
+    \label{thm:area_law_template_physical_boundary}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le,
+        TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le,
+        TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le
+    }
+    \uses{thm:area_law_physical_ambient_boundary,
+        thm:area_law_template_dilation_separation,lem:area_law_template_ambient_boundary}
+    Let $T$ be a template separated from the cut, with $C_{\rm tpl}\ge24$
+    and $D_0\ge1$. For every $0\le j\le s_0$,
+    \begin{align}
+        |\partial_\Lambda(A\cap T_j)|&\le4n, &
+        |\partial_\Lambda(A\cap T)|&\le4n, &
+        |\partial_\Lambda(A\cap(T_j\setminus T))|&\le8n.
+    \end{align}
+    These are the physical edge estimates in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    The preceding separation estimate excludes cut endpoints from $T_j$
+    and its shell. Apply the ambient comparison to both sets and use the
+    ambient template bounds. The core is the case $j=0$.
+    The manuscript fixes $D_0>2R+10$, which implies $D_0\ge1$ for $R\ge0$.
+\end{proof}

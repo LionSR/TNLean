@@ -564,14 +564,6 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Test physical template boundaries strictly and audit axioms
-        timeout-minutes: 2
-        run: >
-          lake env lean
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/TemplateCutBoundary.lean
-
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -583,6 +575,14 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test physical template boundaries strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateCutBoundary.lean
 
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
