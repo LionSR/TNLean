@@ -14,7 +14,7 @@ statements of the lemma about parties are discussed in
 
 \begin{lemma}[Elimination of normalized pair effects]
     \label{lem:peps_pair_effects_source}
-    \uses{thm:peps_pair_effects_operator,thm:peps_pair_combine}
+    \uses{def:peps_effect_chain,def:peps_replaced_gate}
     Let $G$ be a contraction with an expansion $G=\sum_\xi c_\xi M_\xi$ into
     $K$ allowed monomials on a fixed set of parties, each with at most $r$
     pair effects. For every integer $m\ge1$ there are a gate $\widetilde G_m$
@@ -29,15 +29,15 @@ statements of the lemma about parties are discussed in
     \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
 \end{lemma}
 
-\begin{proof}
-    \uses{thm:peps_pair_effects_operator,thm:peps_pair_combine}
-    The error bound, the count and the coefficient sum are
-    Theorem~\ref{thm:peps_pair_effects_operator}, and the combination of
-    sources rests on Theorem~\ref{thm:peps_pair_combine}. The remaining clauses
-    require placing the monomials on the parties, so that each piece between
-    two effects is a product of local contractions and the stacks of an
-    effect are held by its two endpoint parties.
-\end{proof}
+The error bound, the count and the coefficient sum are
+Theorem~\ref{thm:peps_pair_effects_operator}, and the norm identity behind
+the combination of sources is Theorem~\ref{thm:peps_pair_combine}. The
+clauses on source-only expansions and on ownership of the additional
+registers require placing the monomials on the parties, so that each piece
+between two effects is a product of local contractions and the stacks of an
+effect are held by its two endpoint parties. These clauses are not proved
+here, and Lemma~\ref{lem:peps_pair_effects_source} is stated without a proof;
+see \cite{gap:polypeps_pair_effects_party_layout}.
 
 Throughout, $\eta$ is a unit vector of a finite-dimensional Hilbert space
 $\mathcal W$, typically a pair space $\mathcal W=\mathcal U\otimes\mathcal V$,
@@ -191,12 +191,19 @@ and $m\ge1$.
 
 \begin{proof}\leanok
     \uses{thm:peps_cyclic_insertion_basic,thm:peps_one_effect_estimate}
-    By induction on $n$. Appending the ideal content of the first stack after
-    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$. The
-    difference therefore splits into the replacement error of the remaining
-    monomial composed with $T_m\otimes\mathbf 1$, and the ideal remainder
-    composed with $(T_m-P_m)\otimes\mathbf 1$. All other factors are
-    contractions, so the two terms contribute $(n-1)/\sqrt m$ and $1/\sqrt m$.
+    By induction on $n$. Write $M=M'\circ E_1\circ F_0$, where $M'$ is the
+    monomial formed by the remaining $n-1$ effects, and let
+    $I_{M'}=M'\otimes|\bigotimes_{i\ge2}\eta_i^{\otimes m}\rangle$ be its
+    ideal replacement. Appending the ideal content of the first stack after
+    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$.
+    Up to rearranging the stacks, the difference therefore splits as
+    \begin{align}
+        \widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle
+        =\bigl(\widetilde{M'}_m-I_{M'}\bigr)\circ(T_m\otimes\mathbf 1)\circ F_0
+        +I_{M'}\circ\bigl((T_m-P_m)\otimes\mathbf 1\bigr)\circ F_0.
+    \end{align}
+    All other factors are contractions, so the two terms contribute
+    $(n-1)/\sqrt m$ and $1/\sqrt m$.
 \end{proof}
 
 \begin{theorem}[Expansion of a replaced monomial]
@@ -252,10 +259,18 @@ and $m\ge1$.
 
 \begin{proof}\leanok
     \uses{thm:peps_replaced_monomial_error,thm:peps_replaced_monomial_expansion}
-    By induction on the list of monomials. The difference splits into $c_\xi$
-    times the error of the first replaced monomial, followed by appending the
-    unit vector of the remaining stacks, plus the error of the remaining gate
-    with the first stacks appended. The first term is bounded by
+    By induction on the list of monomials. Let $M_\xi$ be the first monomial,
+    with ideal stack content $\eta_{(\xi)}$, and let $G_L$ be the gate of the
+    remaining monomials, with replaced gate $\widetilde G_{L,m}$ and garbage
+    vector $\Gamma_{L,m}$. Up to rearranging tensor factors,
+    \begin{align}
+        \widetilde G_m-G\otimes|\Gamma_m\rangle
+        =c_\xi\bigl(\widetilde M_{\xi,m}-M_\xi\otimes|\eta_{(\xi)}\rangle\bigr)
+        \otimes|\Gamma_{L,m}\rangle
+        +\bigl(\widetilde G_{L,m}-G_L\otimes|\Gamma_{L,m}\rangle\bigr)
+        \otimes|\eta_{(\xi)}\rangle.
+    \end{align}
+    The first term is bounded by
     Theorem~\ref{thm:peps_replaced_monomial_error} and the second by induction;
     appending a unit vector and rearranging tensor factors are contractions.
     Expanding each replaced monomial by
