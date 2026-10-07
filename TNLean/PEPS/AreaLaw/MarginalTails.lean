@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Analysis.TypicalSet
+import QICLean.Algebra.TraceReindex
 
 /-!
 # Marginal surprisal tails for finite-range lattice Hamiltonians
@@ -124,5 +126,66 @@ theorem LocalHamiltonian.surprisalTail_reducedState_le (h : LocalHamiltonian Λ 
     (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
     h.hermitian hJ h.norm_le hΩ hΔ heig hgap (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) w
+
+/-- The concentration width `32 √((1 + J/Δ) ℬ_A) (M log (n + 2) + e/2 + log 2)` at which
+the marginal tail of Lemma 3.1 drops to `(n + 2)^{-M}`. -/
+noncomputable def concentrationWidth (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (J Δ : ℝ)
+    (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) : ℝ :=
+  32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A) *
+    (M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2)
+
+/-- **Typical marginal spectrum.** The positive eigenvalues of the regional state whose
+surprisal lies within the concentration width of `S_Ω(A)` carry mass at least
+`1 - (n + 2)^{-M}`.
+Area-law manuscript, `02-initial.tex`, lines 209–219, the concentration statement after
+Lemma 3.1, before the lattice budget `ℬ_A ≤ C (1 + |∂_Λ A|)` is inserted. -/
+theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
+    (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
+    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
+    1 - ((n : ℝ) + 2) ^ (-M) ≤
+      Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
+        (regionalEntropy Λ q Ω A) (concentrationWidth Λ q R J Δ A n M) := by
+  have hpsd := ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
+    (configurationSplit Λ q A).symm).partialTraceRight
+  have hp : ∀ i, 0 ≤ (reducedState_isHermitian Λ q Ω A).eigenvalues i :=
+    hpsd.eigenvalues_nonneg
+  have hs : ∑ i, (reducedState_isHermitian Λ q Ω A).eigenvalues i = 1 := by
+    have htr := (reducedState_isHermitian Λ q Ω A).trace_eq_sum_eigenvalues
+    have h1 : (reducedState Λ q Ω A).trace = 1 := by
+      have hn := hgs.1
+      rw [reducedState, Matrix.trace_partialTraceRight]
+      change (Matrix.reindex (configurationSplit Λ q A) (configurationSplit Λ q A)
+        (Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).trace = 1
+      rw [Matrix.trace_reindex, Matrix.trace_vecMulVec,
+        ← EuclideanSpace.inner_eq_star_dotProduct, inner_self_eq_norm_sq_to_K, hn]
+      simp
+    rw [h1] at htr
+    have h2 := congrArg Complex.re htr
+    simp only [Complex.one_re, Complex.re_sum] at h2
+    rw [h2]
+    exact Finset.sum_congr rfl fun i _ ↦ by simp
+  have htail := h.surprisalTail_reducedState_le hJ hΔ hgs A (concentrationWidth Λ q R J Δ A n M)
+  have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (regionalEntropy Λ q Ω A)
+    (concentrationWidth Λ q R J Δ A n M)
+  set Rr := Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A)
+  have hB : 1 ≤ cutLogBudget Λ q R A := Entropy.one_le_cutLogBudget _ _
+  have hR : 0 < Rr := Real.sqrt_pos.mpr (by
+    have : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
+    positivity)
+  have hexp : 2 * Real.exp (Real.exp 1 / 2) *
+      Real.exp (-(concentrationWidth Λ q R J Δ A n M / (32 * Rr))) = ((n : ℝ) + 2) ^ (-M) := by
+    have hw : concentrationWidth Λ q R J Δ A n M / (32 * Rr) =
+        M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2 := by
+      unfold concentrationWidth
+      change 32 * Rr * _ / (32 * Rr) = _
+      field_simp
+    rw [hw, Real.rpow_def_of_pos (by positivity)]
+    rw [show -(M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2) =
+      Real.log (n + 2) * -M + (-(Real.exp 1 / 2) + -Real.log 2) by ring, Real.exp_add,
+      Real.exp_add, Real.exp_neg, Real.exp_neg, Real.exp_log two_pos]
+    field_simp
+  have h2 := htail.trans (min_le_right _ _)
+  rw [hexp] at h2
+  linarith
 
 end TNLean.PEPS.AreaLaw
