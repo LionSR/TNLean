@@ -1324,6 +1324,73 @@
         ]
       },
       "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.closure_dyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicClosure.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.closure_dyadicCell",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves the closure of a translated half-open dyadic cell is its closed rectangle, using the existing product-closure and real interval-closure theorems.",
+        "Formalizes an auxiliary closure identity in Section 11, lines 151–189, at nonnegative dyadic scales and arbitrary origin.",
+        "Does not prove the labelled layer-distance estimate, clearance estimates, the two-family construction, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.closure_dyadiclayer_eq_iunion",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicClosure.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.closure_dyadicLayer_eq_iUnion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves the closure of an actual dyadic layer is the finite union of its cell closures, using the exact cell-union identity and closure of a finite union.",
+        "Formalizes an auxiliary closure identity in Section 11, lines 151–189, at nonnegative dyadic scales and arbitrary origin.",
+        "Does not prove the labelled layer-distance estimate, clearance estimates, the two-family construction, or a source headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
     }
   ]
 }

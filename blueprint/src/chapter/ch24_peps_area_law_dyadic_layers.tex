@@ -146,3 +146,27 @@
     occupied and $C_0\ge2$, the index $c_k(x)$ belongs to $P_k$. Thus
     $x\in N_k$, as required.
 \end{proof}
+
+
+\begin{theorem}[Closures of cells and layers]
+    \label{thm:area_law_dyadic_closures}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.closure_dyadicCell,
+        TNLean.PEPS.AreaLaw.Geometry.closure_dyadicLayer_eq_iUnion}
+    \leanok
+    \uses{thm:area_law_dyadic_nesting}
+    For every origin, nonnegative scale and cell index, the closure of a
+    half-open dyadic cell is the corresponding closed rectangle. For every
+    finite endpoint set and nonnegative integer radius, the actual layer satisfies
+    \begin{align}
+        \overline{C_{k,z}} & =o+2^k\bigl(z+[0,1]^2\bigr),           \\
+        \overline{D_k}     & =\bigcup_{z\in I_k}\overline{C_{k,z}}.
+    \end{align}
+    These formulas prepare the closure-distance estimates in
+    \cite[Section~11]{OpenAI2026AreaLaw}; they do not assert those estimates.
+\end{theorem}
+\begin{proof}\leanok
+    The side length $2^k$ is positive, so the closure of each half-open coordinate
+    interval is its closed interval. Closure commutes with finite products.
+    The exact layer union is finite, and closure commutes with finite unions,
+    which gives the second formula.
+\end{proof}
