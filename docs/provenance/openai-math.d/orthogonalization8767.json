@@ -1,0 +1,777 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.mem_dependentregioncylinder",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.mem_dependentRegionCylinder",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.range_dependentregionoperatorlift",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.range_dependentRegionOperatorLift",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.coordinaterangeprojector_dependentregioncylinder",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.coordinateRangeProjector_dependentRegionCylinder",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_bot",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_bot",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_sup",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_sup",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_isup",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_iSup",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_subregion",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_subregion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_map",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Cylinder.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_map",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderearlierinside",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderEarlierInside",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_nestedcylinderearlierinside",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_nestedCylinderEarlierInside",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.dependentregioncylinder_nestedcylinderinnovation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.dependentRegionCylinder_nestedCylinderInnovation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.finrank_nestedcylinderinnovation_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.finrank_nestedCylinderInnovation_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_sup",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_sup",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_orthogonalearlier",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_orthogonalEarlier",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_prefix_span",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_prefix_span",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_span",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_span",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_pairwise_orthogonal",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_pairwise_orthogonal",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_projector_sum",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_projector_sum",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.sum_finrank_nestedcylinderinnovation_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.sum_finrank_nestedCylinderInnovation_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.sum_int_finrank_nestedcylinderinnovation_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.sum_int_finrank_nestedCylinderInnovation_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinder_projector_supported",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinder_projector_supported",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "orthogonalization8767-tnlean.peps.nestedcylinderinnovation_eq_bot_of_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean",
+        "declaration": "TNLean.PEPS.nestedCylinderInnovation_eq_bot_of_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-cylinder-projection"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize cylinders in the existing dependent regional coordinates, their actual projected-image orthogonalization for arbitrary nested regions, unchanged prefix spans, containing-region support, and inside-rank bounds. No upstream Lean proof text is reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    }
+  ]
+}

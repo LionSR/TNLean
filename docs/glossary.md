@@ -2899,3 +2899,48 @@ involve no boundary.
   the same maps into a complete zipper family after a derived common blocking.
   `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
   of multiplicities under positive dimensions and injective block separation.
+
+
+## Nested regional cylinders
+
+### `TNLean.PEPS.dependentRegionCylinder`
+
+- **Declaration:** `dependentRegionCylinder R S`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Cylinder.lean`.
+- **Meaning:** the global vectors all of whose complementary coordinate slices
+  lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
+- **Source:** the September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
+- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+  the range of an identity extension with a cylinder;
+  `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
+  projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,
+  containing-region, and image identities in the existing physical coordinates.
+- **Caveat:** inside rank means `dim S`, not the global dimension of the
+  cylinder. No cancellation of a possibly zero-dimensional outside factor
+  is used. The empty region still has inside Hilbert space `ℂ`.
+
+### `TNLean.PEPS.nestedCylinderInnovation`
+
+- **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
+  that the finite family of regions is monotone.
+- **Defined in:** `TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean`.
+- **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
+  `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
+  inside projectors into the current region and taking the sum of their ranges.
+- **Source:** the variable-radius orthogonalization at the manuscript passage
+  linked above.
+- **Sanctioned consequences:** `nestedCylinderInnovation_prefix_span` and
+  `nestedCylinderInnovation_span` identify all prefix and total spans;
+  `nestedCylinderInnovation_pairwise_orthogonal` proves orthogonality in the
+  actual global Hilbert space; `nestedCylinderInnovation_projector_sum` gives
+  the sum of the lifted inside projectors. The individual and summed
+  `finrank` bounds compare inside dimensions directly, in natural and integer
+  form. `nestedCylinder_projector_supported` gives support on any containing
+  region, and that support result does not require nesting.
+- **Caveat:** the image need not equal `Sⱼ ∩ Wⱼ⊥`; the sandwich
+  `(I − P_(Wⱼ)) P_(Sⱼ) (I − P_(Wⱼ))` need not be a projector. Neither
+  commutation of the original projectors nor a spectral rank estimate is
+  assumed. This is the orthogonalization step, not the approximation-error
+  or full adaptive-patch theorem. See
+  [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).

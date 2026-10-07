@@ -554,6 +554,20 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Test nested-cylinder orthogonalization edge cases strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/NestedCylinderOrthogonalization.lean
+
+      - name: Test projected-image cylinder counterexamples strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/NestedCylinderCounterexamples.lean
+
       - name: Test actual rectangular local-window regression strictly
         run: >
           LEAN_NUM_THREADS=1 lake env lean -j1
