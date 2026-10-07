@@ -542,16 +542,6 @@ jobs:
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Build two-family regional entropy consumer
-        run: lake build TNLean.PEPS.AreaLaw.TwoFamilies
-
-      - name: Check two-family entropy integration strictly
-        run: >
-          LEAN_NUM_THREADS=1 lake env lean -j1
-          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/TwoFamilyEntropy.lean
-
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -563,6 +553,16 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build two-family regional entropy consumer
+        run: lake build TNLean.PEPS.AreaLaw.TwoFamilies
+
+      - name: Check two-family entropy integration strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TwoFamilyEntropy.lean
 
       - name: Test actual rectangular local-window regression strictly
         run: >
