@@ -20,9 +20,13 @@ The finite-coordinate identities require only \(L>0\). The quasi-local
 identity also assumes a positive physical dimension. Negative interval starts
 and empty intervals are included.
 
-Source: CPGSV17, arXiv:1703.09188, Appendix, lines 2308 and 2313--2320,
-site grouping and the induced observable-algebra equivalence; Nachtergaele,
-arXiv:cond-mat/9410110, Section 3, the consecutive-interval convention.
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2308 and
+  2313--2320: site grouping and the induced observable-algebra equivalence.
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, Section 3: the consecutive-interval
+  convention.
 -/
 
 namespace SpinChain

@@ -22,9 +22,13 @@ invariance is assumed. These are consequences of the observable-algebra
 identification; they do not identify a particular periodic GVBS presentation
 or its finite-interval support spaces.
 
-Source: the regrouping of sites in Nachtergaele, arXiv:cond-mat/9410110,
-lines 825--836, and the state/purity convention at lines 1469--1482;
-arXiv:1703.09188, Appendix, lines 2308 and 2313--2320, for site grouping.
+## References
+
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, lines 825--836 (regrouping of sites) and
+  1469--1482 (states and purity).
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2308 and
+  2313--2320: site grouping.
 -/
 
 open scoped ComplexOrder

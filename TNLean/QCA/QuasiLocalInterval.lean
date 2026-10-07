@@ -13,8 +13,12 @@ Numbering a consecutive integer interval gives a star-algebra inclusion of
 its ordinary matrix coordinates into the quasi-local algebra. The inclusion
 preserves the matrix operator norm. Empty intervals are included.
 
-Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3, the finite local
-observable convention; arXiv:1703.09188, Appendix, lines 2285--2300.
+## References
+
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, Section 3: the finite local observable
+  convention.
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2285--2300.
 -/
 
 open scoped ComplexOrder

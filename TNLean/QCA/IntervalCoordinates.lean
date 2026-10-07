@@ -15,10 +15,17 @@ and local matrix algebra with the usual length-\(N\) coordinates. Under this
 identification, adjoining sites to an interval is the inclusion that acts as
 the identity on the complementary sites.
 
-These are finite-coordinate consequences of the local observable conventions
-in Nachtergaele, arXiv:cond-mat/9410110, Section 3, and of the identity-tensor
-inclusions in arXiv:1703.09188, Appendix, lines 2285--2295. Empty intervals
-are included. No completion or infinite-volume state is constructed here.
+The same finite chain carries the finite-size operator \(U^{(N)}\) of a
+periodic matrix product unitary in `TNLean.MPS.MPU.FiniteChainConjugation`.
+Empty intervals are included. No completion or infinite-volume state is
+constructed here.
+
+## References
+
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, Section 3: local observable conventions.
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2285--2295
+  (identity-tensor inclusions) and equation `eq:appendix-1`, lines 2300--2306.
 -/
 
 namespace SpinChain
@@ -37,7 +44,8 @@ lemma card_finiteChainRegion (a : ℤ) (N : ℕ) : (finiteChainRegion a N).card 
 
 /-- Numbering the sites of an integer interval from left to right, identifying
 the cyclic site labels `Fin N` with the chosen finite chain.
-Source: arXiv:1703.09188, equation `eq:appendix-1`, lines 2300--2306; Nachtergaele, arXiv:cond-mat/9410110, Section 3, interval convention. -/
+Source: arXiv:1703.09188, equation `eq:appendix-1`, lines 2300--2306;
+Nachtergaele, arXiv:cond-mat/9410110, Section 3, interval convention. -/
 def finiteChainSiteEquiv (a : ℤ) (N : ℕ) : Fin N ≃ finiteChainRegion a N where
   toFun i := ⟨a + i, by simp only [finiteChainRegion, Finset.mem_Ico]; omega⟩
   invFun x := ⟨(x.1 - a).toNat, by

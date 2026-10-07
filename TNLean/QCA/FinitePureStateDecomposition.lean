@@ -13,8 +13,12 @@ numbers. A pure state that is a finite convex combination of states must equal
 one of the constituent states. Purity is taken among all states; translation
 invariance is not assumed.
 
-These are elementary consequences of the state and purity conventions in
-Nachtergaele, arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
+These are elementary consequences of the state and purity conventions.
+
+## References
+
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
 -/
 
 open scoped ComplexOrder

@@ -19,9 +19,12 @@ has norm one and remains positive on adjoint squares.
 This is an extension theorem with an explicit compatibility hypothesis. It
 makes no assertion that a particular tensor supplies such a family.
 
-Source: the inductive limit of finite-region observable algebras and its norm
-completion in arXiv:1703.09188, Appendix, lines 2292--2300, together with the
-state conventions of Nachtergaele, arXiv:cond-mat/9410110, lines 854--887.
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2292--2300: the
+  inductive limit of finite-region observable algebras and its completion.
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, lines 854--887: state conventions.
 -/
 
 open scoped ComplexOrder

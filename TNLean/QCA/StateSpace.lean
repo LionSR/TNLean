@@ -14,9 +14,14 @@ is nonnegative on every adjoint square. A pure state is an extreme point of
 the convex set of all such states. No translation invariance is required of
 a state, or of states appearing in a convex decomposition.
 
-These are the state and purity conventions used in Nachtergaele,
-arXiv:cond-mat/9410110, lines 854--887 and 1469--1482. Positivity is expressed
-on adjoint squares, without choosing an order on the completed algebra.
+Positivity is expressed on adjoint squares, without choosing an order on the
+completed algebra.
+
+## References
+
+* Nachtergaele, *The spectral gap for some spin chains with discrete symmetry breaking*, Commun.
+  Math. Phys. 175 (1996), arXiv:cond-mat/9410110, lines 854--887 and 1469--1482: state and
+  purity conventions.
 -/
 
 open scoped ComplexOrder
