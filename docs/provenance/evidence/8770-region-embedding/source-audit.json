@@ -1,0 +1,20 @@
+{
+  "ledger": "docs/provenance/openai-math.d/region-embedding8770.json",
+  "ledger_sha256": "1b9899d5a8d9f766d7897f083261ceeb468c7557b5b459f5c21248fe6873a1ac",
+  "canonical_validator_sha256": "09d4014860e4e8df855417587404c12e5fff4af318cf933588a1847c43e0773a",
+  "canonical_schema_sha256": "a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459",
+  "entries": 3,
+  "result": "passed",
+  "checked": [
+    "JSON schema",
+    "checked revision source identity",
+    "all three declared names",
+    "all three inline original-provenance notices",
+    "command and log SHA256 values",
+    "all three raw axiom reports contain only the standard axioms"
+  ],
+  "not_checked": [
+    "global repository provenance scan",
+    "pinned manuscript label existence"
+  ]
+}

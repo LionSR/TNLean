@@ -1,0 +1,43 @@
+✖ [2870/2870] Building TNLean.PEPS.Approximation.HoleEncoder (4.0s)
+trace: .> LEAN_PATH=<VALIDATION_WORKTREE>/.lake/packages/Cli/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/batteries/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/Qq/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/aesop/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/proofwidgets/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/importGraph/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/LeanSearchClient/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/plausible/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/checkdecls/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/Gametheory/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/mathlib/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/qiclean/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/build/lib/lean <LEAN_TOOLCHAIN>/bin/lean <VALIDATION_WORKTREE>/TNLean/PEPS/Approximation/HoleEncoder.lean -o <VALIDATION_WORKTREE>/.lake/build/lib/lean/TNLean/PEPS/Approximation/HoleEncoder.olean -i <VALIDATION_WORKTREE>/.lake/build/lib/lean/TNLean/PEPS/Approximation/HoleEncoder.ilean -c <VALIDATION_WORKTREE>/.lake/build/ir/TNLean/PEPS/Approximation/HoleEncoder.c --setup <VALIDATION_WORKTREE>/.lake/build/ir/TNLean/PEPS/Approximation/HoleEncoder.setup.json --json
+error: TNLean/PEPS/Approximation/HoleEncoder.lean:252:6: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Matrix.of fun p q ↦ ?B p.1 p.2 q)ᴴ * Matrix.of fun p q ↦ ?B p.1 p.2 q
+in the target expression
+  ((Matrix.of fun p β ↦
+          dependentRegionOperatorLift (R p.1.fst)
+            (coordinateResetMatrix (fun w ↦ zero ↑w) fun a ↦ (↑((holeEncoderBasis R hR S p.1.fst) p.1.snd)).ofLp a) p.2
+            β)ᴴ *
+      Matrix.of fun p β ↦
+        dependentRegionOperatorLift (R p.1.fst)
+          (coordinateResetMatrix (fun w ↦ zero ↑w) fun a ↦ (↑((holeEncoderBasis R hR S p.1.fst) p.1.snd)).ofLp a) p.2
+          β) =
+    coordinateRangeProjector (⨆ j, dependentRegionCylinder (R j) (S j))
+
+V : Type u_2
+inst✝² : Fintype V
+inst✝¹ : LinearOrder V
+Out : V → Type u_3
+inst✝ : (v : V) → Fintype (Out v)
+n : ℕ
+R : Fin n → Finset V
+hR : Monotone R
+S : (j : Fin n) → Submodule ℂ (((w : ↥(R j)) → Out ↑w) → ℂ)
+zero : (v : V) → Out v
+⊢ ((Matrix.of fun p β ↦
+          dependentRegionOperatorLift (R p.1.fst)
+            (coordinateResetMatrix (fun w ↦ zero ↑w) fun a ↦ (↑((holeEncoderBasis R hR S p.1.fst) p.1.snd)).ofLp a) p.2
+            β)ᴴ *
+      Matrix.of fun p β ↦
+        dependentRegionOperatorLift (R p.1.fst)
+          (coordinateResetMatrix (fun w ↦ zero ↑w) fun a ↦ (↑((holeEncoderBasis R hR S p.1.fst) p.1.snd)).ofLp a) p.2
+          β) =
+    coordinateRangeProjector (⨆ j, dependentRegionCylinder (R j) (S j))
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    dependentRegionOperatorLift (R p.1.fst)
+      (coordinateResetMatrix (fun w ↦ zero ↑w) fun a ↦ (↑((holeEncoderBasis R hR S p.1.fst) p.1.snd)).ofLp a) p.2
+Some required targets logged failures:
+- TNLean.PEPS.Approximation.HoleEncoder
+error: build failed
