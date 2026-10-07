@@ -170,3 +170,14 @@ The earlier primary-region contribution recorded a local whole-library
 `Fibonacci.olean` artifact. That historical failure log remains intact.
 Full-library CI, compiled blueprint declaration checking and rendering
 remain pending. Published pull request and evidence head: **Pending**.
+
+## First canonical check and notice correction
+
+The first canonical check at `89c5cd185dd5b14a3ae9b33c8a1a1cfa6c4f561f`
+passed Geometry compilation in 20.473 seconds and the eighteen imported axiom
+reports in 4.852 seconds. It reported one long-line warning on the shared
+containment lemma's machine-readable provenance identifier. The new identifier
+was shortened before publication; no declaration or proof changed. The original
+successful commands and actual warning remain in `8758-fan-runs-first-build.log`
+and `8758-fan-runs-first-axioms.log`. Fresh exact-source verification is required
+for the corrected comment; no record was promoted at the first revision.

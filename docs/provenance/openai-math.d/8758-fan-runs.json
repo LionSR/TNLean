@@ -424,7 +424,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell_subset_dyadiclayer_of_mem_finelayerindices",
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell_containment",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,

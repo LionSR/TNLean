@@ -48,7 +48,7 @@ Downstream declaration:
   TNLean.PEPS.AreaLaw.Geometry.exists_unique_layer_of_not_mem_dyadicNeighborhood
 Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_union_iunion_layers_eq_univ
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_layers_eq_univ
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccell_subset_dyadiclayer_of_mem_finelayerindices
+Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccell_containment
 Downstream declaration:
   TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
 -/
