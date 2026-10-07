@@ -1,28 +1,28 @@
 \section{Entropy cancellation for ordered labelled regions}
 
 \begin{theorem}[Two-family entropy bound on a finite domain]
-\label{thm:area_law_two_family_entropy}
-\lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum}
-\leanok
-\uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
-Let $\Lambda\subset\mathbb Z^2$ be finite, with local dimension $q$, and let
-$\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector. Suppose
-$A=D\mathbin{\dot\cup}\bigcup_iX_i$ is an ordered two-family partition, with
-family labels $f_i\in\{0,1\}$. Put $B=\Lambda\setminus A$ and
-$P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
-If $I_\Omega(X_i:B\cup P_i)\le\varepsilon_i$ for every index, then
-\begin{align}
- S_\Omega(A)\le S_\Omega(D)+\frac12\sum_i\varepsilon_i.
- \notag
-\end{align}
-This is \cite[Lemma~11.1]{OpenAI2026AreaLaw}, with no Hamiltonian or
-geometric hypothesis. Empty pieces, families, and residual sets are allowed.
+    \label{thm:area_law_two_family_entropy}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum}
+    \leanok
+    \uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, with local dimension $q$, and let
+    $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector. Suppose
+    $A=D\mathbin{\dot\cup}\bigcup_iX_i$ is an ordered two-family partition, with
+    family labels $f_i\in\{0,1\}$. Put $B=\Lambda\setminus A$ and
+    $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
+    If $I_\Omega(X_i:B\cup P_i)\le\varepsilon_i$ for every index, then
+    \begin{align}
+        S_\Omega(A)\le S_\Omega(D)+\frac12\sum_i\varepsilon_i.
+        \notag
+    \end{align}
+    This is \cite[Lemma~11.1]{OpenAI2026AreaLaw}, with no Hamiltonian or
+    geometric hypothesis. Empty pieces, families, and residual sets are allowed.
 \end{theorem}
 \begin{proof}\leanok
-Restrict the common index order to each family label. Its preceding union is
-exactly $P_i$. The finite-domain partial trace agrees with the generic
-finite-product partial trace after identifying the complementary configuration
-bases. The generic two-family entropy cancellation therefore applies.
-The two disjoint family index sets exhaust the common index set, so their
-error sums add to $\sum_i\varepsilon_i$.
+    Restrict the common index order to each family label. Its preceding union is
+    exactly $P_i$. The finite-domain partial trace agrees with the generic
+    finite-product partial trace after identifying the complementary configuration
+    bases. The generic two-family entropy cancellation therefore applies.
+    The two disjoint family index sets exhaust the common index set, so their
+    error sums add to $\sum_i\varepsilon_i$.
 \end{proof}
