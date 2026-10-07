@@ -86,6 +86,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
@@ -184,6 +185,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
@@ -323,6 +325,7 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
@@ -554,6 +557,22 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test exact square-grid PEPS contraction and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/SquareGridContraction.lean
+
+      - name: Audit standalone square-grid bridge provenance declarations
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          docs/provenance/evidence/8740-axioms.lean
 
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
@@ -942,8 +961,10 @@ jobs:
         run: python3 scripts/test_tenkz_inline_web.py
 
       - name: Diagnose full TeX system environment
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
+          cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
       - name: Check layout with TeX system dependencies
         run: |
@@ -1034,8 +1055,10 @@ jobs:
 
       - name: Install blueprint system dependencies
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
+          cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
 
       # Also installed for paper-gap-only changes: the reference check
@@ -1066,6 +1089,10 @@ jobs:
       - name: Check paper-gap references resolve
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         run: texra-blueprint paper-gaps check
+
+      - name: Test blueprint PDF string-pool capacity
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_blueprint_pdf_capacity.py
 
       # Compile-and-cache smoke test of the tenkz picture pipeline
       # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark
