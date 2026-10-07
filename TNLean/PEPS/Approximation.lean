@@ -14,5 +14,6 @@ import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
+import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
