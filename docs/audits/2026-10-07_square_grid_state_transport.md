@@ -21,19 +21,19 @@ Toolchain: Lean `v4.35.0-rc3`; Mathlib `c55e6e786f49471c72fbddbec5415808896aec1e
 
 The following commands completed successfully with `-j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true`; tests additionally use `-DautoImplicit=false`. The axiom test disables only the hash-command style warning so its intentional kernel dependency commands can run.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridSource`: exit 0, 2.18 seconds; source SHA-256 `23c3bb180f87421469dc8c2a69b027ba984bff044093a25ebb72a96d0e4765f8`.
+- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridSource`: exit 0, 2.04 seconds; source SHA-256 `23c3bb180f87421469dc8c2a69b027ba984bff044093a25ebb72a96d0e4765f8`.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridContraction`: exit 0, 2.53 seconds; source SHA-256 `1d4b0812723aac57fcc31dd84c2ae01819c2b7fef93ec7adc771532a09f499e4`.
+- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridContraction`: exit 0, 2.44 seconds; source SHA-256 `1d4b0812723aac57fcc31dd84c2ae01819c2b7fef93ec7adc771532a09f499e4`.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridContraction`: exit 0, 2.26 seconds; source SHA-256 `a8c88a5dd96890606cba6a5e57f272e071494d2cd774989b38fe7f4178bc1739`.
+- `python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridContraction`: exit 0, 2.17 seconds; source SHA-256 `a8c88a5dd96890606cba6a5e57f272e071494d2cd774989b38fe7f4178bc1739`.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds`: exit 0, 3.44 seconds; source SHA-256 `23c2b21d0328a1b340671b1665397b307392fedbaba37d0410a72ac97b24f2a7`.
+- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds`: exit 0, 3.46 seconds; source SHA-256 `23c2b21d0328a1b340671b1665397b307392fedbaba37d0410a72ac97b24f2a7`.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates`: exit 0, 2.35 seconds; source SHA-256 `bb3803ef6fdf127a51aabcf2104aceac014d852be89fd26bad0c949fdcfe4d89`.
+- `python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates`: exit 0, 2.70 seconds; source SHA-256 `bb3803ef6fdf127a51aabcf2104aceac014d852be89fd26bad0c949fdcfe4d89`.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridStateTransport`: exit 0, 3.11 seconds; source SHA-256 `c783e755e0210fada89554bced55e7813b21c2d3ab028b35a0531877ce7d2537`.
+- `python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridStateTransport`: exit 0, 3.03 seconds; source SHA-256 `d19d10585b4febd99d4ffc534f68d893ce4a95e6b54a1114e7891020197938b4`.
 
-- `python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridStateTransportAxioms`: exit 0, 2.11 seconds; source SHA-256 `bf288c7b7cae29432bf12459d02eb9e76b1f19b811425373652c5f2cbb9a42e4`.
+- `python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridStateTransportAxioms`: exit 0, 2.18 seconds; source SHA-256 `99696197f43c2c0dc4deb97487fdc53941dd3ea9f5727d51e09b49b504f8fac7`.
 
 
 The regression covers a bond-one product contraction; arbitrary heterogeneous local tensors with dimensions two and three at one corner; `L=0` including `q=0`; `L=1` maximum zero; `q=0` on a nonempty grid; a zero-dimensional bond forcing zero contraction; unequal source parameter values `q=3,L=2`; and empty/full boundary cardinalities. All 25 new named declarations have guarded kernel-axiom checks, permitting only `propext`, `Classical.choice` and `Quot.sound`.
@@ -47,7 +47,20 @@ The import generator, file-size/numbered-file/forbidden-token guards, YAML parsi
 The repository-wide blueprint source-sync check reports 524 existing unresolved dependency declarations both on the untouched `a1d91d4c` baseline and on the extension. New-section declaration links are checked separately against actual compiled declarations. A full `lake build TNLean` and `leanblueprint checkdecls` have not run locally. The environment has no installed `leanblueprint`, plasTeX or texra-blueprint; no package-install retry was made. These aggregate checks remain CI requirements.
 
 
-Committed-revision build and printed-axiom evidence will be added after the source snapshot is published and its actual remote revision is known. Until then, new ledger rows remain planned.
+The published source revision is `c017a4d93f885684b2b4ae937774f675b22abd05`. Its tree `831801f04060b1871a3537b2a730a07603a8df44` is identical to the locally executed snapshot `e061776db8dd962275284a917664eb469a995fd5`. This was verified with Git object identities and exact per-file bytes. The 25 new ledger rows cite the published source revision. The evidence files in `docs/provenance/evidence/8740-state-transport/` retain the original execution revision and compiler output byte for byte, between explicit transcript delimiters. Each wrapper records byte counts and SHA-256 values for both the captured transcript and the original Lean stdout/stderr log, together with the source-tree identity attestation. The printed dependency report was produced by `python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms` (exit 0, 1.97 seconds); every one of its 25 targets has only standard dependencies.
+
+Both changed blueprint files also pass the pinned `latexindent` check. The exact new-section declaration set equals the 25 checked declarations, and the global source-sync issue sets are identical to the untouched baseline.
+
+## Provenance validation
+
+The unmodified published checker from #8784 at `f920756b82d32cec0b0d0bc4dbb5d516584f01ab` passes all 56 combined
+entries, including all 25 new completed entries, with the actual upstream-root
+contract. The validation root combines the published transport source with the
+checker’s own files; it does not alter the checker or schema. The selected-object
+cache supplies the hash-verified original commit, all 4,535 trees and only selected
+code/license/manuscript blobs. It is intentionally incomplete and is not an
+upstream source build. Its files are not added to this change. The full command
+and output are retained in `docs/provenance/evidence/8740-state-transport/provenance-check.txt`.
 
 ## Assistance
 

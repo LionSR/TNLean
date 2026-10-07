@@ -1,0 +1,53 @@
+Published source revision: c017a4d93f885684b2b4ae937774f675b22abd05
+Executed local source snapshot: e061776db8dd962275284a917664eb469a995fd5
+Published and executed source tree: 831801f04060b1871a3537b2a730a07603a8df44
+Source-tree identity command: git rev-parse c017a4d93f885684b2b4ae937774f675b22abd05^{tree} e061776db8dd962275284a917664eb469a995fd5^{tree}
+Source-tree identity output:
+831801f04060b1871a3537b2a730a07603a8df44
+831801f04060b1871a3537b2a730a07603a8df44
+
+Both trees are identical Git objects. The following original compiler transcript
+is retained unchanged; its local execution revision is not rewritten.
+
+Original transcript bytes: 2357
+Original transcript SHA-256: 3e1ce2b45366a8bbda13b079d3be74435150f491bbcc112f86a4808fec5579f9
+Original Lean stdout/stderr bytes: 0
+Original Lean stdout/stderr SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+Begin original compiler transcript.
+Source revision: e061776db8dd962275284a917664eb469a995fd5
+Command: python3 peps-square-grid-extension-validation/check.py TNLeanTest.SquareGridStateTransport
+{
+  "module": "TNLeanTest.SquareGridStateTransport",
+  "source": "/workspace/scratch/7637e06d0fc2/TNLean-peps-square-grid-extension/TNLeanTest/SquareGridStateTransport.lean",
+  "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-peps-square-grid-extension",
+  "unchanged_dependency": false,
+  "source_sha256": "d19d10585b4febd99d4ffc534f68d893ce4a95e6b54a1114e7891020197938b4",
+  "command": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=5s",
+    "90s",
+    "lean",
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "-DautoImplicit=false",
+    "-o",
+    "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/tmp/105464724190639/TNLeanTest/SquareGridStateTransport.olean",
+    "-i",
+    "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/tmp/105464724190639/TNLeanTest/SquareGridStateTransport.ilean",
+    "/workspace/scratch/7637e06d0fc2/TNLean-peps-square-grid-extension/TNLeanTest/SquareGridStateTransport.lean"
+  ],
+  "lean_path": "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/lib:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+  "start": "2026-10-07T08:18:17.688948+00:00",
+  "elapsed_seconds": 3.028588909000973,
+  "exit_code": 0,
+  "log": "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/logs/TNLeanTest.SquareGridStateTransport.105464724470880.log",
+  "artifact_sha256": "390e66de89e77e2877344c874aec276c2f383e04c845705e4e9dc07105105d0a"
+}
+
+End of original compiler transcript.

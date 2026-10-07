@@ -1,0 +1,52 @@
+Published source revision: c017a4d93f885684b2b4ae937774f675b22abd05
+Executed local source snapshot: e061776db8dd962275284a917664eb469a995fd5
+Published and executed source tree: 831801f04060b1871a3537b2a730a07603a8df44
+Source-tree identity command: git rev-parse c017a4d93f885684b2b4ae937774f675b22abd05^{tree} e061776db8dd962275284a917664eb469a995fd5^{tree}
+Source-tree identity output:
+831801f04060b1871a3537b2a730a07603a8df44
+831801f04060b1871a3537b2a730a07603a8df44
+
+Both trees are identical Git objects. The following original compiler transcript
+is retained unchanged; its local execution revision is not rewritten.
+
+Original transcript bytes: 2378
+Original transcript SHA-256: 9cb408266f7131c3238fac090b8ec35d3ee8d8f6fc9ceaa08736d19dd7b68306
+Original Lean stdout/stderr bytes: 0
+Original Lean stdout/stderr SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+Begin original compiler transcript.
+Source revision: e061776db8dd962275284a917664eb469a995fd5
+Command: python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds
+{
+  "module": "TNLean.PEPS.Approximation.SquareGridBounds",
+  "source": "/workspace/scratch/7637e06d0fc2/TNLean-peps-square-grid-extension/TNLean/PEPS/Approximation/SquareGridBounds.lean",
+  "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-peps-square-grid-extension",
+  "unchanged_dependency": false,
+  "source_sha256": "23c2b21d0328a1b340671b1665397b307392fedbaba37d0410a72ac97b24f2a7",
+  "command": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=5s",
+    "90s",
+    "lean",
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "-o",
+    "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/tmp/105458484130050/TNLean/PEPS/Approximation/SquareGridBounds.olean",
+    "-i",
+    "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/tmp/105458484130050/TNLean/PEPS/Approximation/SquareGridBounds.ilean",
+    "/workspace/scratch/7637e06d0fc2/TNLean-peps-square-grid-extension/TNLean/PEPS/Approximation/SquareGridBounds.lean"
+  ],
+  "lean_path": "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/lib:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+  "start": "2026-10-07T08:18:11.448989+00:00",
+  "elapsed_seconds": 3.461194832008914,
+  "exit_code": 0,
+  "log": "/workspace/scratch/7637e06d0fc2/peps-square-grid-extension-validation/logs/TNLean.PEPS.Approximation.SquareGridBounds.105458484512173.log",
+  "artifact_sha256": "e9f0eafdb6128530be82f3fad851e54bb3e31b3750a404965ab6474230bdd174"
+}
+
+End of original compiler transcript.

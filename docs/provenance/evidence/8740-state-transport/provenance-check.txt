@@ -1,0 +1,15 @@
+Checker revision: LionSR/TNLean@f920756b82d32cec0b0d0bc4dbb5d516584f01ab
+Command: python3 scripts/check_openai_provenance.py --upstream-root /workspace/scratch/7637e06d0fc2/openai-math-selected-objects.git
+Execution root: /workspace/scratch/7637e06d0fc2/TNLean-peps-provenance-validation
+Source revision: c017a4d93f885684b2b4ae937774f675b22abd05
+
+The execution root combines the unchanged published source snapshot and its new
+evidence metadata with the six required checker/schema/license/fixture/audit files
+read unchanged from the published checker revision. No validator code was changed.
+The upstream cache contains the hash-verified original commit, all 4,535 tree
+objects, and only selected source/license/manuscript blobs. It is intentionally
+incomplete; no full upstream source checkout or build is claimed.
+
+Exit code: 0
+Original checker output:
+Provenance valid: 56 entries. Recorded evidence checked; no Lean build performed.

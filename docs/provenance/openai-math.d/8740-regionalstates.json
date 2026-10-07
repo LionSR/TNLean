@@ -7,7 +7,7 @@
   "entries": [
     {
       "id": "8740-state-pinned-regionconfiguration",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -24,7 +24,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.RegionConfiguration",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -41,12 +41,30 @@
         "Changes: rename the regional definitions and use the identical QICLean entropy function."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-pinned-joinconfigurations",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -63,7 +81,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.joinConfigurations",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -80,12 +98,30 @@
         "Changes: rename the regional definitions and use the identical QICLean entropy function."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-pinned-coefficientmatrix",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -102,7 +138,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.coefficientMatrix",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -119,12 +155,30 @@
         "Changes: rename the regional definitions and use the identical QICLean entropy function."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-pinned-reduceddensity",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -141,7 +195,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.reducedDensity",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -158,12 +212,30 @@
         "Changes: rename the regional definitions and use the identical QICLean entropy function."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-pinned-vonneumannentropy",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -180,7 +252,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.vonNeumannEntropy",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -197,12 +269,30 @@
         "Changes: rename the regional definitions and use the identical QICLean entropy function."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-pinned-boundarycard",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -219,7 +309,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.Pinned.boundaryCard",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -236,19 +326,37 @@
         "Changes: rename the regional definitions and use the identical QICLean entropy function."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-joinconfigurations-eq-assembleregion",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.joinConfigurations_eq_assembleRegion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -265,20 +373,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-regionreduceddensity-pinnedtensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -295,20 +421,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-regionreduceddensity-vectortensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -325,20 +469,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-entropy-pinnedtensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -355,20 +517,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-forwardsquareboundaryequiv",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -385,20 +565,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-boundarycard-eq-graph",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/RegionalStates.lean",
         "declaration": "TNLean.PEPS.Approximation.boundaryCard_eq_graph",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -415,7 +613,25 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.RegionalStates",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/regional-build.txt",
+            "sha256": "14a4f96107036597eeda2aecee237af1d932fbe695fad404c08ca80561bbf6cd"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

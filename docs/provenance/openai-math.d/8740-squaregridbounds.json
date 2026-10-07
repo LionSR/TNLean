@@ -7,7 +7,7 @@
   "entries": [
     {
       "id": "8740-state-vector-phaseerroratmost",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -24,7 +24,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -41,12 +41,30 @@
         "Changes: rename the predicates; expand phase and normalization; use exact vector equality."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-vector-tensor-maxbonddim-le-iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -63,7 +81,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim_le_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -80,12 +98,30 @@
         "Changes: rename the predicates; expand phase and normalization; use exact vector equality."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-pinnedtensortographtensor-normalized",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "adapted",
       "upstream": {
         "repository": "openai/math",
@@ -102,7 +138,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_normalized",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -119,19 +155,37 @@
         "Changes: rename the predicates; expand phase and normalization; use exact vector equality."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       }
     },
     {
       "id": "8740-state-statevector-pinnedtensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.stateVector_pinnedTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -148,20 +202,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-statevector-vectortensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.stateVector_vectorTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -178,20 +250,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-isometry-squaregridstate",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.isometry_squareGridState",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -208,20 +298,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-phaseerroratmost-vectortensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -238,20 +346,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-vectortensortographtensor-bonddim",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -268,20 +394,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-maxbonddim-vectortensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.maxBondDim_vectorTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -298,20 +442,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-pinnedtensortographtensor-bond-bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_bond_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -328,20 +490,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-norm-statevector-pinnedtensortographtensor",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.norm_stateVector_pinnedTensorToGraphTensor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -358,20 +538,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-pinnedtensortographtensor-approximation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_approximation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -388,20 +586,38 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8740-state-vectortensortographtensor-approximation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/Approximation/SquareGridBounds.lean",
         "declaration": "TNLean.PEPS.Approximation.vectorTensorToGraphTensor_approximation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -418,7 +634,25 @@
         "Original exact comparison for native square-grid PEPS."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c017a4d93f885684b2b4ae937774f675b22abd05",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 peps-square-grid-extension-validation/check.py TNLean.PEPS.Approximation.SquareGridBounds",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/bounds-build.txt",
+            "sha256": "9c7c0427ef2dc3b50e3e4f667f51b9214c56a7b775ed3e5d5ad3e62f4aca2691"
+          },
+          {
+            "kind": "axioms",
+            "command": "python3 peps-square-grid-extension-validation/check.py scripts.square_grid_state_transport_axioms",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8740-state-transport/axiom-report.txt",
+            "sha256": "fd069a81789f687f61c76dd41197d273dd67a3b7b1c1b344e909137d1c2b1018"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
