@@ -1,10 +1,9 @@
 # Fan contacts and the fine-cell cover of primary regions
 
-These three local geometric prerequisites combine the two publicly claimed
-fan-contact results and the one primary-cover result. They have passed their
-complete direct package-option source checks and independent mathematical
-review. The three original records remain planned until exact-source
-canonical verification. The combined source revision is **UNSET**.
+These three local geometric prerequisites establish contacts within a cell
+fan and the finite closed fine-cell decomposition of a primary birth region.
+The exact source has passed canonical compilation, three kernel reports,
+provenance validation and independent mathematical review.
 
 Completed color parent: draft [#8895](https://github.com/LionSR/TNLean/pull/8895)
 at `4aaa0256f74aa317cb0180856a9e2579c21b341e`, with verified proof
@@ -97,40 +96,48 @@ No future fan-side contact result is included.
 
 Both modules have independent complete mathematical approval, including final
 syntax corrections. The released hashes precede provenance notice insertion;
-the eventual committed source and imported report must be frozen separately.
+the committed source and imported report were subsequently frozen at the exact revision below.
 The direct checks are not canonical builds or imported kernel reports.
 
-## Pending canonical verification
+## Exact-source canonical verification
 
-Frozen combined source: **UNSET**.
+Frozen source: `26dbf77709501643284144f4294c4d768966958b`. Completed parent: draft
+[#8895](https://github.com/LionSR/TNLean/pull/8895), evidence `4aaa0256f74aa317cb0180856a9e2579c21b341e`.
 
 | Check | Command | Outcome | Time | Log SHA-256 |
 | --- | --- | --- | --- | --- |
-| Canonical Geometry build | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending | Pending |
-| Imported three-name report | `lake env lean docs/provenance/evidence/8758-fan-primary-contacts-axioms.lean` | Pending | Pending | Pending |
+| Canonical Geometry build | `lake build TNLean.PEPS.AreaLaw.Geometry` | Passed, exit 0 | 17.560 s | `48f9a1a8777e0e43fd1ea332f0146c3238e61ead13492a38d457f13796697d88` |
+| Imported three-name report | `lake env lean docs/provenance/evidence/8758-fan-primary-contacts-axioms.lean` | Passed, exit 0 | 4.441 s | `491d89e1ada6c03fb20bdb749c9179d5381266199ab32d75dc5c77d8de4a0c6f` |
 
-The imported report imports exactly the two new modules and prints the three
-public names. The intended seven-file frozen manifest includes both production
-modules, the Geometry aggregator, the combined report, both new mathematical
-chapters and their parent chapter. Root will confirm this inventory before
-source binding. The two scoped chapters should contain three theorems and
-three proofs with six completion markers in total; actual counts remain to
-be checked. Source synchronization and import totals must be measured rather
-than inferred from the preceding contribution.
+The complete raw logs retain exact command, revision, elapsed-time and exit-code
+headers. Both commands completed without diagnostics. The imported report has
+exactly three quoted declarations, all satisfying the unchanged standard
+logical-foundation policy. Both modules, the Geometry aggregator, the report,
+the two chapters and their parent retain all seven frozen byte sequences.
 
-The strict helper guards the actual public inventories and notices in both
-modules, the committed planned shard and combined report, all seven frozen
-files, actual revision-bound canonical command logs and the standard
-policy on foundational axioms. Promotion remains disabled while SOURCE_REVISION is
-unset. It writes only a new explicitly named output below /tmp and performs
-no Lean, Lake, cache or Git mutation. The unchanged normal provenance policy
-must pass all 282 records after promoting exactly these three original rows.
+Strict promotion and the unchanged normal policy pass all 282 records. Exactly
+three original rows are added. Every one of the 279 parent records and shards,
+and all 124 tracked historical evidence files, remain unchanged; no old
+declaration is reverified. Only the three newly promoted rows' historical
+preparation descriptions clarify that verification had been pending before
+source freeze. All dependency and toolchain bytes are unchanged.
 
-All 279 parent records and shard bytes and all 124 historical evidence files
-must remain unchanged; no parent declaration is reverified. Formatting,
-reader prose, module guards, patterns, full CI and compiled book checks remain
-pending for the combined source. The historical local declaration-check
-limitation at missing `TNLean/MPS/Examples/Fibonacci.olean` is retained.
-QICLean remains pinned to `8d5389d23c8e675a0117442e1a0d2c683a4bad41`.
+Full source synchronization passes with `total_blueprint_refs = 20230` and
+20,236 lines in `blueprint/lean_decls`, with complete reverse coverage and
+no missing, stale or duplicate references. Imports cover
+2,856 production modules in
+75 files. The two scoped chapters contain
+three theorems and three proofs, with six completion markers in total.
+Independent review, pinned formatter idempotence, reader prose, module guards
+and pattern checks pass. The separately recorded full direct checks remain
+17.06 seconds for FanRunContacts and
+12.32 seconds for PrimaryFineCellCover;
+their user/system timings and released hashes are retained above.
+
+Full CI and compiled book checking remain separate. The historical local
+whole-library declaration check encountered missing
+`TNLean/MPS/Examples/Fibonacci.olean`; its prior evidence and limitation are
+retained. QICLean remains pinned to `8d5389d23c8e675a0117442e1a0d2c683a4bad41`.
+
 Global primary/run interfaces, isolated stars, repairs and both headline
 theorems remain open.

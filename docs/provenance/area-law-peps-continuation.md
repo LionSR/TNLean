@@ -2,11 +2,11 @@
 
 This record supports the [continuing goal](area-law-peps-goal.md).
 The goal remains active. Both source-faithful headline theorems remain unproved.
-The current belt-fan color contribution has completed source-bound local and
-canonical verification. Full CI and PDF/web results are recorded separately
+The combined fan-contact and primary-cover contribution has completed
+source-bound canonical verification and provenance validation. Full CI and PDF/web results are recorded separately
 when available; local source synchronization does not replace book compilation.
 
-## Verified geometric contributions
+## Geometric contributions and exact sources
 
 | Contribution | Publication | Exact verified source | Evidence |
 |---|---|---|---|
@@ -25,31 +25,42 @@ when available; local source synchronization does not replace book compilation.
 | Common side endpoints, actual elementary matching and opponent existence | [#8888](https://github.com/LionSR/TNLean/pull/8888), evidence `eda992e719dd7161906b54b20a057992037b44cb` | `93c807b97f45312bab807ba47abb06f11d686f18` | [matching and opponents](evidence/8758-actual-side-matching.md) |
 | Unique actual opposing region and common elementary-side geometry | [#8892](https://github.com/LionSR/TNLean/pull/8892), evidence `26786e53a29e1804aae6302916b3068ef6cf12e4` | `9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a` | [unique opponents](evidence/8758-unique-side-opponents.md) |
 | Selected opponents, contact characterization and reciprocity | [#8894](https://github.com/LionSR/TNLean/pull/8894), evidence `957de7bed210e037a8a082eae6ad5f9969565fb2` | `b8c1e59e88eadf8694530d1a6fc470d8348c237e` | [reciprocal opponents](evidence/8758-reciprocal-opponents.md) |
-| Actual belt-fan colors and retained opposing primaries | `feat/area-law-belt-fan-colors`, verified contribution | `acff16af5c9f4726de4efbee7eb01f56729e42b1` | [belt-fan colors](evidence/8758-belt-fan-colors.md) |
+| Actual belt-fan colors and retained opposing primaries | [#8895](https://github.com/LionSR/TNLean/pull/8895), evidence `4aaa0256f74aa317cb0180856a9e2579c21b341e` | `acff16af5c9f4726de4efbee7eb01f56729e42b1` | [belt-fan colors](evidence/8758-belt-fan-colors.md) |
+| Within-fan contacts and finite fine-cell cover of primaries | Verified successor to [#8895](https://github.com/LionSR/TNLean/pull/8895), on `feat/area-law-fan-primary-contacts` | `26dbf77709501643284144f4294c4d768966958b` | [combined fan/primary evidence](evidence/8758-fan-primary-contacts.md) |
 
-These sixteen contributions contain 118 distinct verified geometric declarations.
-The unchanged current-policy validator passes all 279 records; the original
-planned root record remains planned. The color contribution adds four verified
-records without reverifying any parent declaration. All 275 parent records and
-shard bytes, and all 120 tracked historical evidence files, remain unchanged.
+These seventeen contributions contain 121 distinct verified original geometric
+declarations. The unchanged current provenance policy passes all 282 records;
+the original planned root record remains planned. The combined contribution
+adds three verified original records without reverifying any parent declaration.
+All 279 parent records and shard bytes, and all 124 tracked historical evidence
+files, remain unchanged.
 
-At exact frozen source `acff16af5c9f4726de4efbee7eb01f56729e42b1`, the
-canonical Geometry build passed in 15.499 seconds and the imported four-name
-kernel report in 4.525 seconds, without diagnostics. Every report uses only
-`propext`, `Classical.choice` and `Quot.sound`. The final direct source check
-with package options passed without diagnostics in 14.91 seconds wall time,
-2.49 seconds user time and 7.22 seconds system time. Strict promotion and the
-post-copy normal policy check both pass all 279 records. The five frozen
-source, audit and blueprint files remain byte-identical. Root's dependency
-review and the independent complete mathematical review approve the source.
+At exact frozen source `26dbf77709501643284144f4294c4d768966958b`, the canonical
+Geometry build passed in 17.560 seconds and the imported three-name report in
+4.441 seconds without diagnostics. Each report uses only `propext`,
+`Classical.choice` and `Quot.sound`. Strict promotion and the unchanged normal
+policy pass all 282 records. The evidence finalizer passes; all seven frozen
+source, audit and chapter files retain their exact bytes. The final promoted
+rows match the raw strict output apart from the three new rows' accurate
+historical preparation descriptions. No old proof or record is reverified.
 
-Complete source synchronization and changed-declaration reverse coverage pass
-with 20,233 distinct references and 20,227 flattened declaration records,
-without missing, stale or duplicate references. Generated imports cover 2,854
-production modules in 75 files. The new chapter contains one definition,
-three theorems and three proofs, with seven completed declaration/proof tags.
-Pinned formatter idempotence, module guards, reader-facing prose and scoped
-pattern checks pass. No repeated current three-line proof pattern was found.
+Both full direct package-option checks and complete independent mathematical
+reviews pass: FanRunContacts in 17.06 seconds wall, 5.24 seconds user and
+6.58 seconds system time; PrimaryFineCellCover in 12.32 seconds wall,
+2.35 seconds user and 5.57 seconds system time. Source and chapter reviews
+approve all three exact statements and proofs, including the final syntax
+corrections and empty, signed and disconnected cases.
+
+Blueprint synchronization passes with `total_blueprint_refs = 20230`; the
+flat `blueprint/lean_decls` file contains 20,236 lines. Reverse coverage is
+complete. Generated imports cover 2,856 production modules in 75 aggregate
+files. The two new chapters contain three theorems, three proofs and three
+declaration tags with six completion markers; all dependency labels resolve.
+Formatting of both chapters and their parent is idempotent. Reader/module
+guards and scoped patterns pass. No repeated three-line proof block was found
+in the two new modules; the short endpoint pattern is recorded for later reuse.
+The tracked-production guard measures 2,930 files and the all-module guard
+3,049. The primary chapter uses floor notation for signed integer division.
 Successful canonical checks need no repetition merely because work resumes.
 
 The reciprocal contribution is published as [#8894](https://github.com/LionSR/TNLean/pull/8894)
@@ -57,6 +68,10 @@ at evidence head `957de7bed210e037a8a082eae6ad5f9969565fb2`, with source
 `b8c1e59e88eadf8694530d1a6fc470d8348c237e`. Its issue handoffs are
 [#8758, comment 6048739648](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6048739648)
 and tracker comment `6048739882`.
+The color contribution is published as draft [#8895](https://github.com/LionSR/TNLean/pull/8895),
+at evidence head `4aaa0256f74aa317cb0180856a9e2579c21b341e`, with the exact
+verified proof source above. The verified combined successor is recorded by its branch, source and evidence
+link, without inventing a new PR number or evidence commit.
 
 Earlier CI observations remain historical: all required #8870 checks passed;
 #8876 full Lean, provenance, imports, module and diagram checks passed while
@@ -129,8 +144,8 @@ different colors. Reversed endpoints, a matching slot and a selected-opponent
 certificate are not hypotheses. The nested lexicographic order of the layer
 and signed cell indices fixes the opposite pair consistently.
 
-Two disjoint successors are complete at the direct-source level and remain
-outside the current color source freeze and imported report:
+The two following modules are now the verified combined successor to the
+color contribution:
 
 - [Within-fan triangle and run contacts](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6048750510)
   are assigned to adjacent_scales in `FanRunContacts.lean`. The two generic
@@ -154,13 +169,50 @@ outside the current color source freeze and imported report:
   Independent mathematical review approves the exact statement and proof,
   including signed quotients and empty or disconnected regions.
 
-No canonical verification of either successor is recorded yet. Preserve their
-released, untracked files while adopting the completed color evidence. Root
-owns subsequent notice installation, imports, blueprint, source freeze and a
-single combined canonical verification. Adjacent_scales is independently
-scouting boundary and base contacts read-only. The prospective FanRunContacts
-provenance artifacts remain below /tmp with their parent baseline unset until
-the completed color publication is supplied and its actual inventory measured.
+The two modules now form one combined seventeenth contribution, under their
+unchanged public claims. Its completed parent is draft #8895 at evidence head
+`4aaa0256f74aa317cb0180856a9e2579c21b341e`. The new immutable baseline measures
+279 parent records and 124 tracked historical evidence files. The combined
+master adds only three verified original rows, for 282 in total; all parent
+records, shards and historical files remain immutable, with no old declaration
+reverified. Earlier standalone preparation artifacts remain unchanged.
+
+The combined source is frozen and verified at
+`26dbf77709501643284144f4294c4d768966958b` on
+`feat/area-law-fan-primary-contacts`. Its canonical build, imported report,
+strict promotion, normal policy and metadata finalizer have passed. Root
+owns publication of the corresponding evidence; this record assigns no
+new PR number or evidence head. All 279 parents and 124 histories and all
+seven frozen files remain preserved.
+
+The next generic fan-side boundary reduction is now
+[publicly claimed](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049135316)
+in `FanSideContacts.lean`. Its two released statements strengthen the earlier
+read-only proposal. A fan triangle meets any whole side of its own square
+exactly where its elementary base meets that side. Its intersection with the
+closure of any distinct actual fine cell is likewise the base's intersection
+with that closure. The proof uses an interior center, convexity and actual
+half-open cell disjointness; it needs no lateness, positive-contact or width
+bound. Both equalities include empty and singleton contacts and arbitrary
+optional midpoint masks.
+
+Released SHA-256:
+`1a818c1ab1d6528e11ff7fd784c4357b4d275d4cb0bd29284f0c1be0256fc402`.
+The final full package-option check passed without diagnostics in 4.68 seconds
+wall, 2.37 seconds user and 2.79 seconds system time. Independent mathematical
+review approves the exact released hash and both stronger signatures. The
+new module remains outside the combined freeze. Its canonical verification
+is pending, and the next two-row provenance preparation leaves its completed
+parent BASE and frozen SOURCE unset until the combined evidence head is
+provided. No new immutable capture is inferred from expected record counts.
+
+For later interfaces between different cells or disconnected primary unions,
+two distinct shared points alone do not certify a positive-length interface.
+An actual nondegenerate segment witness is needed for finite extraction of
+contacting pieces. The within-one-fan run statement is stronger because every
+constituent triangle contains the same center. This distinction remains part
+of the proposed global interface argument. Dummy boundary reduction, global
+primary/run identifiers and the local sector description are still separate.
 
 Global primary and run labels, active interfaces, local sectors, isolated stars,
 recursive repairs and descendant estimates remain further obligations. The
@@ -172,14 +224,14 @@ integration nor a new dependency pin.
 ## Worktrees and verification discipline
 
 - `worktrees/area-law-peps-models` is the sole warm worktree, on
-  `feat/area-law-belt-fan-colors` at frozen source
-  `acff16af5c9f4726de4efbee7eb01f56729e42b1`. Its canonical build and
-  imported report are complete. Preserve all five frozen files and cached
-  dependencies during the metadata publication.
+  `feat/area-law-fan-primary-contacts` at frozen source
+  `26dbf77709501643284144f4294c4d768966958b`. Its canonical build and
+  imported report have passed. Preserve all seven frozen files and cached
+  dependencies during metadata publication; no second verification is needed.
 - `worktrees/area-law-source-preparation` has no `.lake`; its successor branch
-  is `feat/area-law-fan-run-contacts` at completed reciprocal evidence
-  `957de7bed210e037a8a082eae6ad5f9969565fb2`. Root will advance it to the
-  completed color evidence while preserving both released successor files.
+  is `feat/area-law-fan-run-contacts`, observed at completed color evidence
+  `4aaa0256f74aa317cb0180856a9e2579c21b341e`. Both released successor files
+  remain preserved. All future advances and production changes belong to root.
 - Canonical builds and cache mutations use the warm worktree's own locked
   wrapper. The shared lock waits without consuming CPU. Direct source checks
   use the warm environment and package options, with one process at a time.
@@ -230,8 +282,14 @@ projection and entropy-sequence contributions remain with that group.
 The analytic owner has the separate QICLean source integration against main
 `48425ea8` and the assigned #571 source, preserving theorem statements and
 proofs. Neither that integration nor compression's TNLean integration is
-adopted by geometry. No completed comparator, inverse-metric comparison,
-physical tail bound or area-law theorem is claimed.
+adopted by geometry. The newer scalar-count contribution is published as
+[QICLean #636](https://github.com/LionSR/QICLean/pull/636), at confirmed PR head
+`3b78880a454ac12f31df3f2fe7079a1544956487`. Its owner reports verified source
+`40d9ab9e`, four scalar-count results, 9,761 full records and 3,381 native
+records. Root confirmed the PR head; these source and count reports remain
+attributed to their owner rather than independently reverified by geometry.
+They do not establish an inversion bound. No completed comparator,
+inverse-metric comparison, physical tail bound or area-law theorem is claimed.
 
 The [latest ownership reply](https://github.com/LionSR/TNLean/issues/8769#issuecomment-6048944864)
 records the separate analytic QICLean and compression TNLean integration
