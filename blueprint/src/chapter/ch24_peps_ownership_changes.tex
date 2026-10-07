@@ -258,13 +258,19 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameEquiv,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₁_owner_of_mem,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₂_owner_of_mem}
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₂_owner_of_mem,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.outsideRegion,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.ofFrames,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_footprint_perm,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_ofFrames_exchangeEnv}
     \leanok
     \uses{def:peps_frame,def:peps_frame_sheet_swap}
     Consider two encoded frames $\mathcal F_1,\mathcal F_2$ and the physical
     sample of a plane region $Y$, such that every hole's outer square lies on
-    one side of $\partial Y$; the holes of each frame are listed as those
-    outside $Y$ followed by those inside $Y$. The exchanged frames
+    one side of $\partial Y$. After the canonical identification of tag
+    orderings, the holes of each frame are listed as those outside $Y$
+    followed by those inside $Y$, each in its original order. The exchanged
+    frames
     $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the raw ownership
     assignment and the holes, with their tag owners, of the other frame
     (\texttt{05-frames.tex}, lines 461--464). The renaming $\mathcal R$
@@ -407,6 +413,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Two-sheet exchange: canonical map]
     \label{thm:peps_frame_exchange}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_exchange_ofFrames,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.commute_correction,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_exchangeOp_le_one,
@@ -424,9 +431,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
             -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
             \le4L^{-30}.
     \]
-    The encoded reference vectors are not assumed normalized. This is the
-    content of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the
-    implemented map, with its hypotheses.
+    The encoded reference vectors are not assumed normalized, and the holes of
+    the two frames may be listed in any order. This is the content of
+    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the implemented map, with
+    its hypotheses.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -434,7 +442,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     commute with $K_{\rm out}$; with $F_AF_Y=F_T$ and the intertwining of the
     renaming, $CK_{\rm in}=K_{\rm out}D_UF_T$. The encoding $K_{\rm out}$ is a
     contraction, and the exchange error on the reference with
-    $\delta\le L^{-30}$ gives the bound.
+    $\delta\le L^{-30}$ gives the bound. For frames listed in another order,
+    compose with the relabelling of tags that identifies the encodings.
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: bounded change]

@@ -35,7 +35,9 @@ error at most `4 L^{-30}`.
   (`eq:exchange-net-map`).
 * `EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder`: `C K_in = K_out D_U F_T`
   (`eq:exchange-exact-map`).
-* `EncodedFrame.TwoSheetExchange.exchange`: Lemma 6.6 `lem:exchange`.
+* `EncodedFrame.TwoSheetExchange.exchange`,
+  `EncodedFrame.TwoSheetExchange.exists_exchange_ofFrames`: Lemma 6.6 `lem:exchange`, for the
+  grouped hole lists and for hole lists in any order.
 
 ## Scope
 
@@ -48,9 +50,10 @@ an allowed monomial of Theorem 5.2 needs a model of operators placed on parties,
 does not yet have. Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 The source condition that every hole's outer square lies on one side of `∂Y` is recorded through
-the physical samples of the outer squares, which it implies, and the holes of each frame are
-listed as those outside `Y` followed by those inside `Y`, which is the canonical identification of
-tag orderings of Definition 6.1.
+the physical samples of the outer squares, which it implies. `TwoSheetExchange` lists the holes of
+each frame as those outside `Y` followed by those inside `Y`; `exists_exchange_ofFrames` treats
+frames whose holes are listed in any order, through the canonical identification of tag orderings
+of Definition 6.1.
 
 ## References
 
@@ -966,6 +969,108 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
       σ.error h Ω := rfl
   rw [he]
   linarith
+
+/-! ### Frames with holes in any order -/
+
+/-- Whether the outer footprint of a hole fails to lie in `Y`. -/
+def outsideRegion (Y : Finset ι) (h : Hole pos q Party) : Bool := !decide (h.patch.outer ⊆ Y)
+
+/-- **Exchange data of two arbitrary frames.** For encoded frames `F₁`, `F₂` and the physical
+sample `Y` of a region such that every hole's outer footprint lies in `Y` or avoids it, list the
+holes of each frame as those outside `Y` followed by those inside `Y`, keeping their relative
+order. This is a reordering of the tags of each frame.
+
+Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 461–464. -/
+def ofFrames (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
+    (hside : ∀ h ∈ F₁.holes ++ F₂.holes,
+      (h.patch.outer : Set ι) ⊆ Y ∨ Disjoint (h.patch.outer : Set ι) Y) :
+    TwoSheetExchange pos q Party where
+  owner₁ := F₁.owner
+  owner₂ := F₂.owner
+  out₁ := F₁.holes.filter (outsideRegion Y)
+  in₁ := F₁.holes.filter fun h => !outsideRegion Y h
+  out₂ := F₂.holes.filter (outsideRegion Y)
+  in₂ := F₂.holes.filter fun h => !outsideRegion Y h
+  region := Y
+  disjoint₁ := F₁.disjoint.perm ((List.filter_append_perm _ _).symm.map _) fun h => Disjoint.symm h
+  disjoint₂ := F₂.disjoint.perm ((List.filter_append_perm _ _).symm.map _) fun h => Disjoint.symm h
+  inside h hh := by
+    rcases List.mem_append.mp hh with hh | hh <;>
+    · have := (List.mem_filter.mp hh).2
+      simp only [outsideRegion, Bool.not_not, decide_eq_true_eq] at this
+      exact Finset.coe_subset.mpr this
+  outside h hh := by
+    rcases List.mem_append.mp hh with hh | hh
+    · have h₁ := List.mem_filter.mp hh
+      simp only [outsideRegion, Bool.not_eq_eq_eq_not, Bool.not_true, decide_eq_false_iff_not]
+        at h₁
+      exact (hside h (List.mem_append_left _ h₁.1)).resolve_left
+        fun h' => h₁.2 (Finset.coe_subset.mp h')
+    · have h₁ := List.mem_filter.mp hh
+      simp only [outsideRegion, Bool.not_eq_eq_eq_not, Bool.not_true, decide_eq_false_iff_not]
+        at h₁
+      exact (hside h (List.mem_append_right _ h₁.1)).resolve_left
+        fun h' => h₁.2 (Finset.coe_subset.mp h')
+
+theorem mem_footprint_perm {l l' : List (Hole pos q Party)} (hp : l.Perm l') {x : ι} :
+    x ∈ footprint (l.map Hole.patch) ↔ x ∈ footprint (l'.map Hole.patch) :=
+  ⟨fun ⟨p, hp', hx⟩ => ⟨p, (hp.map _).subset hp', hx⟩,
+    fun ⟨p, hp', hx⟩ => ⟨p, (hp.map _).symm.subset hp', hx⟩⟩
+
+/-- For two arbitrary frames, the set `Z` of `eq:exchange-Z` is computed from the frames
+themselves. -/
+theorem mem_ofFrames_exchangeEnv (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
+    (hside : ∀ h ∈ F₁.holes ++ F₂.holes,
+      (h.patch.outer : Set ι) ⊆ Y ∨ Disjoint (h.patch.outer : Set ι) Y) (P : Party) {x : ι} :
+    x ∈ (ofFrames F₁ F₂ Y hside).exchangeEnv P ↔
+      ¬(F₁.owner x = P ∧ F₂.owner x = P) ∨ x ∈ F₁.outerHoles ∨ x ∈ F₂.outerHoles := by
+  rw [mem_exchangeEnv]
+  exact Iff.or Iff.rfl (Iff.or (mem_footprint_perm (List.filter_append_perm _ _))
+    (mem_footprint_perm (List.filter_append_perm _ _)))
+
+/-- **Lemma 6.6 (two-sheet exchange), frames with holes in any order.** Let `F₁`, `F₂` be encoded
+frames and `Y` the physical sample of a region such that every hole's outer footprint lies in `Y`
+or avoids it. With `Z`, `T`, `E` computed from the two frames (`mem_ofFrames_exchangeEnv`), if
+`I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, some contraction `C` from the two-sheet layout of
+`F₁`, `F₂` to that of the exchanged frames satisfies
+`‖C (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`. It is the implemented map `exchangeOp`
+after the canonical identification of tag orderings (`exists_tagEquiv_of_perm`).
+
+Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 74–75 and 460–479;
+proof lines 481–561. -/
+theorem exists_exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
+    (hside : ∀ h ∈ F₁.holes ++ F₂.holes,
+      (h.patch.outer : Set ι) ⊆ Y ∨ Disjoint (h.patch.outer : Set ι) Y) (P : Party)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ} (hL : 0 < L)
+    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
+      ((ofFrames F₁ F₂ Y hside).tSet P) ((ofFrames F₁ F₂ Y hside).eSet P) ≤ L ^ (-60 : ℤ)) :
+    ∃ C : Matrix ((ofFrames F₁ F₂ Y hside).newFrame₁.Layout ×
+        (ofFrames F₁ F₂ Y hside).newFrame₂.Layout) (F₁.Layout × F₂.Layout) ℂ,
+      ‖C‖ ≤ 1 ∧
+      ‖act C (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) -
+        vecKron ((ofFrames F₁ F₂ Y hside).newFrame₁.refVec Ω)
+          ((ofFrames F₁ F₂ Y hside).newFrame₂.refVec Ω)‖ ≤ 4 * L ^ (-30 : ℤ) := by
+  set X := ofFrames F₁ F₂ Y hside
+  obtain ⟨σ, -, hC, -, herr⟩ := X.exchange P hΩ hL hI
+  obtain ⟨e₁, he₁⟩ := exists_tagEquiv_of_perm F₁.disjoint (List.filter_append_perm
+    (outsideRegion Y) F₁.holes).symm
+  obtain ⟨e₂, he₂⟩ := exists_tagEquiv_of_perm F₂.disjoint (List.filter_append_perm
+    (outsideRegion Y) F₂.holes).symm
+  set G : F₁.Layout × F₂.Layout ≃ X.frame₁.Layout × X.frame₂.Layout :=
+    (e₁.prodCongr (Equiv.refl _)).prodCongr (e₂.prodCongr (Equiv.refl _))
+  have hK : F₁.encoder ⊗ₖ F₂.encoder = (X.frame₁.encoder ⊗ₖ X.frame₂.encoder).submatrix G id := by
+    rw [Frame.encoder, Frame.encoder, ← frameEncoder_submatrix_of_rawProd_eq e₁ he₁,
+      ← frameEncoder_submatrix_of_rawProd_eq e₂ he₂]
+    rfl
+  refine ⟨X.exchangeOp P σ * (G.symm.toPEquiv.toMatrix : Matrix _ _ ℂ),
+    l2_opNorm_mul_le_one hC (l2_opNorm_toMatrix_toPEquiv_le _), ?_⟩
+  have hv : act (G.symm.toPEquiv.toMatrix : Matrix _ _ ℂ) (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) =
+      vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω) := by
+    rw [Frame.refVec, Frame.refVec, Frame.refVec, Frame.refVec, ← act_kronecker_vecKron,
+      ← act_kronecker_vecKron, ← act_mul, hK, PEquiv.toMatrix_toPEquiv_mul, submatrix_submatrix]
+    simp
+  rw [act_mul, hv]
+  exact herr
 
 end TwoSheetExchange
 
