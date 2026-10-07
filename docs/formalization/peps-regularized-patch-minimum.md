@@ -94,54 +94,61 @@ bounds, not those subsequent arguments.
 
 The distinct issue-owned ledger
 `docs/provenance/openai-math.d/regularizedPatchMinimum8767.json` records all
-24 public declarations as original proofs. The evidence child records them as
-`ported`/`declared` with passing exact-source verification at immutable native
-source revision `38a4fa419eed06cf19777728f684a9caa69ba925`. The source commit itself retained planned rows until
-that revision existed. Unmodified compiler logs, all 24 public axiom reports,
-source/artifact closure audits and the source-tree attestation are archived in
-`docs/provenance/evidence/regularizedPatchMinimum8767/`. These records cover the
-actual native source and do not substitute evidence from another issue.
+24 public declarations as original proofs. The original evidence child
+activated these rows at immutable native source revision
+`38a4fa419eed06cf19777728f684a9caa69ba925`. Its unmodified compiler logs, all
+24 public axiom reports, source/artifact closure audits and source-tree
+attestation remain archived in
+`docs/provenance/evidence/regularizedPatchMinimum8767/`.
 
-TNLean now pins accepted QICLean revision
+Those original checks used accepted QICLean revision
 `378bef486fc0241dee8ad875ccaf659d51d33ac9`, merged in
 [QICLean #570](https://github.com/LionSR/QICLean/pull/570), with tree
 `cd30ee82f48870554cd3e47ec463b203d9597050`.
-This supplies `QICLean/Analysis/ShiftedDensityPowers.lean` from reviewed source
+This supplied `QICLean/Analysis/ShiftedDensityPowers.lean` from reviewed source
 revision `81ca38e523242fe7d1be1195f3e974c7a5da6134`.
-The source-only dependency checkout was restored to the exact accepted
-revision, and all 983 tracked QICLean files were byte-verified.
-The native minimum module then passed a strict rerun using that actual
-package-source view, package options, Mathlib standard linters, and warnings
-as errors. Its source closure was unchanged during the check.
-The blueprint completion badges refer only to these proved finite-dimensional
-auxiliary statements and their proofs.
+All 983 tracked files of that dependency checkout were byte-verified.
+The core, router, both regression modules and all 24 exported-name axiom
+reports passed strict checks with package options, Mathlib standard linters
+and warnings as errors. Their source closures were unchanged during checking.
+These records retain their original source revision and dependency pin.
 
-The integration branch stacks on corrected published revision
+The original source was checked on published revision
 `c8a2fdfc19895245cc71f6f6c0fdff8f5da32592` of
-[TNLean #8809](https://github.com/LionSR/TNLean/pull/8809).
-That is an unmerged integration base, not an accepted-main claim or a
-mathematical dependency of the minimum argument. Both the cylinder and minimum
-sections remain in the regional blueprint router and glossary.
+[TNLean #8809](https://github.com/LionSR/TNLean/pull/8809), which was an
+unmerged integration base at that time and has since merged into main.
+The minimum does not mathematically depend on cylinder orthogonalization.
+The later integration at `a5ae1ba4f0238984e0e81eb81312ebdf6b6f9d27`
+passed its full build and strict minimum regressions with QICLean 378bef.
 
-Earlier checks used the old manifest revision
-`8d5389d23c8e675a0117442e1a0d2c683a4bad41` for existing blueprint links and a
-separate explicitly prospective source view at `81ca38e523242fe7d1be1195f3e974c7a5da6134`.
-Those source-only checks are superseded for dependency synchronization by the
-accepted pin. A source declaration check alone does not establish elaboration,
-axiom dependencies, or CI success.
+TNLean now pins accepted QICLean revision
+`83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c` in all five dependency fields.
+The independent merge at `9953e6d11dfe9fa1fb68932fd73e3ef5427911f9`
+incorporated main `27f53fdfd2d2582259792075386ef4a96e4cd027` and that pin.
+A source audit found all 75 recorded native source files unchanged before
+the docstring cleanup, with unchanged QICLean build inputs. Removing the
+merge's duplicate canonical conjugator import restores the previously
+checked compatibility source exactly.
 
-The accepted-pin core, router, both minimum regression modules and all 24
-exported-name axiom reports passed exact-source checks. The canonical QIC
-matrix-unit conjugator migration also has a mixed-import regression, 19 clean
-axiom reports and a negative control reproducing the former collision. Its
-41-source production closure matches the integrated repair byte for byte.
-The final cache guard and fixtures pass 36 tests and the parent-executed full
-dependency-free Lake invalidation experiment; all three scripts match that
-execution record. No compatibility or experiment rerun by the minimum author
-is claimed.
+The docstring cleanup changes file hashes while preserving all declaration
+and proof tokens. All noncomment blueprint content is unchanged. Fresh
+strict QICLean 83fdc804 checks passed for the core, both regression modules
+and all 24 axiom reports, with 90-second module limits and unchanged source
+closures. All 1,003 tracked dependency files were byte-verified. The 24
+minimum ledger rows are temporarily planned while this revised source
+receives an immutable revision; a separate evidence child will bind them
+to the new checks. The historical logs and attestations are not relabelled.
 
-Acceptance still requires a full Lake build, aggregate declaration check,
-full blueprint validation and exact-head CI, together with stack-base
-integration. Those gates are distinct from the completed local strict checks,
-immutable source evidence and blueprint source synchronization. Neither these
-checks nor the auxiliary results complete Proposition 4.1.
+The original canonical QIC matrix-unit conjugator migration has a
+mixed-import regression, 19 clean axiom reports and a negative control
+reproducing the former collision. Its 41-source production closure matches
+the restored source byte for byte. The archived cache tests and
+parent-executed Lake invalidation experiment also retain their original
+script hashes and execution records.
+
+Acceptance of the revised head still requires its full Lake build, strict
+regressions, aggregate declaration check, full blueprint validation and CI.
+The earlier successful build and the new local strict checks do not establish
+those integration results. The blueprint badges concern only the proved
+finite-dimensional auxiliary statements; these results do not complete
+Proposition 4.1.
