@@ -96,6 +96,7 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_square_grid_conversion.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -194,6 +195,7 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_square_grid_conversion.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -333,6 +335,7 @@ jobs:
               - 'scripts/test_tenkz_peps_three_block.py'
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
+              - 'scripts/test_tenkz_square_grid_conversion.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -561,6 +564,25 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
+
+      - name: Test square-grid vector, regional, and bond transport
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in SquareGridStateTransport SquareGridStateTransportAxioms; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Report square-grid transport axiom dependencies
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          scripts/square_grid_state_transport_axioms.lean
 
       - name: Test actual rectangular local-window regression strictly
         run: >
@@ -1093,6 +1115,11 @@ jobs:
           python3 scripts/test_tenkz_peps_parent_seams.py
           python3 scripts/test_tenkz_peps_regular_reblocking.py
           python3 scripts/check_peps_three_block_blueprint.py
+
+      - name: Audit exact square-grid contraction diagram
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_square_grid_conversion.py
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'

@@ -389,6 +389,19 @@ normalizations.
 
 ### PEPS predicates
 
+#### `TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost`
+
+- **Meaning:** The normalized contracted vector has a minimizing phase whose
+  Euclidean distance from the reference vector is at most the prescribed error.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid
+  ground states* (September 24, 2026), Theorem 1.1, global vector error;
+  `TensorNetwork/VectorColumn.lean` at the pinned OpenAI source revision.
+- **Sanctioned comparison:** `phaseErrorAtMost_vectorTensorToGraphTensor` preserves
+  the complete minimizing-phase predicate under exact conversion to a native
+  graph tensor. `pinnedTensorToGraphTensor_normalized` supplies unit normalization
+  only after nonzero contraction is proved. The source predicate alone does not
+  assert a nonzero vector, positive bonds, or existence of a PEPS approximation.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.

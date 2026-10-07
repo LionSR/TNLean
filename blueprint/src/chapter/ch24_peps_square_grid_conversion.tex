@@ -1,0 +1,149 @@
+\section{Square-grid norms, regional states and boundaries}%
+\label{sec:peps_square_grid_conversion}
+
+Let $V_L=\{0,\ldots,L-1\}^2$ be an open square grid. Its forward edges are
+$((x,y),(x+1,y))$ and $((x,y),(x,y+1))$ whenever both vertices lie in $V_L$.
+The PEPS definition preceding Theorem~1.1 of
+\emph{Polynomial PEPS approximation of gapped square-grid ground states}
+(OpenAI, September 24, 2026) assigns a dimension $D_e$ to each edge and an
+arbitrary linear map at every vertex. We compare its coefficients with those
+of the same finite simple graph whose edges are oriented lexicographically.
+
+For a $2\times2$ grid, the contraction has four independent virtual bonds
+and four open physical indices. Each bond retains its own dimension.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(2,2), name=squareGridTL, skin=box,
+            ports={0:virtual,270:virtual,135:physical}]{A_{01}}
+        \tn[at=4 e of squareGridTL, name=squareGridTR, skin=box,
+            ports={180:virtual,270:virtual,45:physical}]{A_{11}}
+        \tn[at=4 s of squareGridTL, name=squareGridBL, skin=box,
+            ports={0:virtual,90:virtual,225:physical}]{A_{00}}
+        \tn[at=4 e of squareGridBL, name=squareGridBR, skin=box,
+            ports={180:virtual,90:virtual,315:physical}]{A_{10}}
+        \tnwire[name=squareGridH1]{squareGridTL.0}{squareGridTR.180}
+        \tnmark[form=label, label pos=n]{on squareGridH1 0.5}{$D_{h_1}$}
+        \tnwire[name=squareGridH0]{squareGridBL.0}{squareGridBR.180}
+        \tnmark[form=label, label pos=s]{on squareGridH0 0.5}{$D_{h_0}$}
+        \tnwire[name=squareGridV0]{squareGridTL.270}{squareGridBL.90}
+        \tnmark[form=label, label pos=w]{on squareGridV0 0.5}{$D_{v_0}$}
+        \tnwire[name=squareGridV1]{squareGridTR.270}{squareGridBR.90}
+        \tnmark[form=label, label pos=e]{on squareGridV1 0.5}{$D_{v_1}$}
+        \tnwire[name=squareGridPhysical01, via={1 nw of squareGridTL}]{squareGridTL.135}{open nw}
+        \tnmark[form=label, label pos=w]
+        {on squareGridPhysical01 0.6}{$i_{01}$}
+        \tnwire[name=squareGridPhysical11, via={1 ne of squareGridTR}]{squareGridTR.45}{open ne}
+        \tnmark[form=label, label pos=e]
+        {on squareGridPhysical11 0.6}{$i_{11}$}
+        \tnwire[name=squareGridPhysical00, via={1 sw of squareGridBL}]{squareGridBL.225}{open sw}
+        \tnmark[form=label, label pos=w]
+        {on squareGridPhysical00 0.6}{$i_{00}$}
+        \tnwire[name=squareGridPhysical10, via={1 se of squareGridBR}]{squareGridBR.315}{open se}
+        \tnmark[form=label, label pos=e]
+        {on squareGridPhysical10 0.6}{$i_{10}$}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Exact Euclidean vector equality]%
+    \label{thm:peps_square_vectors_exact}
+    \lean{TNLean.PEPS.Approximation.stateVector_pinnedTensorToGraphTensor,
+        TNLean.PEPS.Approximation.stateVector_vectorTensorToGraphTensor,
+        TNLean.PEPS.Approximation.isometry_squareGridState,
+        TNLean.PEPS.Approximation.norm_stateVector_pinnedTensorToGraphTensor}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    The two coordinate descriptions give the identical vector
+    $\Psi_{\widetilde A}=\Psi_A$ in the physical Hilbert space.
+    Their physical configuration indices coincide, so this identification is an isometry.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_square_grid_contraction}
+    The contracted coefficients agree for every physical configuration.
+\end{proof}
+
+\begin{definition}[Minimizing phase error]%
+    \label{def:peps_square_phase_error}
+    \lean{TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost}
+    \leanok
+    Put $\widehat x=\|x\|^{-1}x$, with inverse zero at zero. A phase-error
+    bound $\varepsilon$ means there is a phase $\theta$ minimizing
+    $\|\widehat x-e^{i\theta}\Omega\|$ over all real phases and attaining
+    a value at most $\varepsilon$. Nonvanishing of $x$ is a separate condition.
+\end{definition}
+
+\begin{theorem}[Unchanged bond bounds and normalized phase error]%
+    \label{thm:peps_square_bounds_exact}
+    \lean{TNLean.PEPS.Approximation.maxBondDim_vectorTensorToGraphTensor,
+        TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim_le_iff,
+        TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim,
+        TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_bond_bounds,
+        TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_normalized,
+        TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_approximation,
+        TNLean.PEPS.Approximation.vectorTensorToGraphTensor_approximation,
+        TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor}
+    \leanok
+    \uses{thm:peps_square_vectors_exact}
+    Every bond dimension, positivity condition and per-edge upper bound
+    is preserved, as is the maximum bond dimension, with maximum zero for
+    an empty edge set. If $\Psi_A\ne0$, its normalized vector has norm one
+    and, for every $\Omega$ and phase $\theta$,
+    \begin{align}
+        \left\|\frac{\Psi_{\widetilde A}}{\|\Psi_{\widetilde A}\|}
+        -e^{i\theta}\Omega\right\|
+         & =\left\|\frac{\Psi_A}{\|\Psi_A\|}-e^{i\theta}\Omega\right\|.
+    \end{align}
+    A minimizing phase and any prescribed error bound are unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_square_edge_correspondence, thm:peps_square_vectors_exact}
+    Dimensions are pulled back along a bijection. The vector equality
+    gives equality of norms, nonvanishing, normalized vectors, and all
+    phase-dependent distances.
+\end{proof}
+
+\begin{definition}[Regional coefficients and crossing edges]%
+    \label{def:peps_square_regional_coefficients}
+    \lean{TNLean.PEPS.Approximation.Pinned.RegionConfiguration,
+        TNLean.PEPS.Approximation.Pinned.joinConfigurations,
+        TNLean.PEPS.Approximation.Pinned.coefficientMatrix,
+        TNLean.PEPS.Approximation.Pinned.reducedDensity,
+        TNLean.PEPS.Approximation.Pinned.vonNeumannEntropy,
+        TNLean.PEPS.Approximation.Pinned.boundaryCard,
+        TNLean.PEPS.Approximation.joinConfigurations_eq_assembleRegion}
+    \leanok
+    A pair of configurations $x,z$ on $R,R^c$ gives one global configuration
+    $x\cup z$. For a vector $\Psi$, let $M_R(x,z)=\Psi(x\cup z)$ and
+    $\rho_R=M_RM_R^\dagger$. The spectral entropy is
+    $\sum_j-\lambda_j\log\lambda_j$, where the $\lambda_j$ are the eigenvalues
+    of $\rho_R$. The boundary consists of edges with exactly one endpoint in $R$.
+\end{definition}
+
+\begin{theorem}[Equal regional densities and crossing boundaries]%
+    \label{thm:peps_square_regions_exact}
+    \lean{TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,
+        TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,
+        TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,
+        TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv,
+        TNLean.PEPS.Approximation.boundaryCard_eq_graph}
+    \leanok
+    \uses{thm:peps_square_vectors_exact, def:peps_region_reduced_density}
+    For every region $R\subseteq V_L$, the two unnormalized reduced
+    matrices agree: $\rho_R(\Psi_{\widetilde A})=\rho_R(\Psi_A)$.
+    Their spectral entropy functions $\sum_j-\lambda_j\log\lambda_j$
+    agree, using natural logarithms and $0\log0=0$. This is the physical
+    entropy when the global vector is a unit vector. The edge bijection
+    also restricts to a bijection of the crossing boundaries, so their
+    cardinalities agree for every cut, including empty and full regions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_square_vectors_exact, def:peps_region_reduced_density,
+        def:peps_square_edge_correspondence}
+    The region/complement coefficient matrices coincide entrywise, hence
+    so do their Gram matrices and spectral entropies. The edge bijection
+    preserves both ordered endpoints and thus preserves whether exactly
+    one endpoint belongs to $R$.
+\end{proof}
