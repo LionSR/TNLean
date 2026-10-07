@@ -16,11 +16,13 @@ additional patches, the canonical rewrite is
 where `K_old` and `K_new` encode only the affected holes.
 
 This file states the data and the four conditions of Lemma 6.3, constructs `M`, and proves that
-it is a contraction and that `‖M Ω_old - Ω_new‖ ≤ (m + r_old) ε`. The rewrite is placed in
-canonical coordinates: the tags of the untouched holes come first in both frames. Since the
-encodings of holes with disjoint footprints commute (`rawProd_commute`), this ordering is the
-canonical identification of tag orderings of Definition 6.1. Only the first condition is used
-for the reference error; the others serve the polynomial expansion
+it is a contraction and that `‖M Ω_old - Ω_new‖ ≤ (m + r_old) ε`. The rewrite is built in
+canonical coordinates, where the tags of the untouched holes come first in both frames. Since the
+encodings of holes with disjoint footprints commute, any other ordering of the tags differs from
+this one by a relabelling of the tag basis (`exists_tagEquiv_of_perm`), and the reference error
+holds for frames with arbitrary tag orderings
+(`exists_norm_le_one_and_refVec_sub_le_of_perm`). Only the first condition is used for the
+reference error; the others serve the polynomial expansion
 (`TNLean.PEPS.EncodedFrame.SmallPatchRewrite.Conditions`).
 
 ## Main definitions
@@ -36,6 +38,8 @@ for the reference error; the others serve the polynomial expansion
 * `EncodedFrame.SmallPatchRewrite.rewrite_mul_encoder`: the exact intertwining identity
   `M K_{F_old} = K_{F_new} P_m ⋯ P_1 ∏_a P_a^{old}`.
 * `EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le`: `eq:rewrite-reference-error`.
+* `EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm`: the same for
+  frames whose tags are listed in any order.
 
 ## References
 
@@ -75,7 +79,7 @@ theorem PairwiseDisjointOuter.right {l₁ l₂ : List (Hole pos q Party)}
 
 /-- **Data of Lemma 6.3.** Old and new one-sheet frames whose hole lists are
 `untouched ++ oldAffected` and `untouched ++ newAffected`: the untouched holes, with their
-encodings and tag owners, agree, and appear first in both tag orderings. The `m` additional
+encodings and tag owners, agree; the old and new frames list them first. The `m` additional
 square patches `(c_i, u_i)` carry the projectors of Proposition 4.1. The finite set `parties` is
 the specified list of parties of condition (iv).
 
