@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicscale_index_gaps",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ScaleSeparation.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicScale_index_gaps",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -31,23 +31,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Proves an explicit domain-independent threshold for every prescribed gap between the fine-cell, layer-cell and belt-pitch indices.",
-        "Source: Section 11, lines 70–78 and 200–207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
+        "Source: Section 11, lines 70\u201378 and 200\u2013207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4be0ad6b5e6bc2d1523ba02b8675377c05549da5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-scale-separation-build.log",
+            "sha256": "b2024a2dff18bf63dfbfbfdda49d303882700e85497fa2469c5fd4844251eb7b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-scale-separation-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-scale-separation-axioms.log",
+            "sha256": "d83490d103b37175e2cee92c82500081a0ee7b8374725e5501cfc10220eba192"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadicscale_side_ratios",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ScaleSeparation.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicScale_side_ratios",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -64,23 +82,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Derives the prescribed dyadic-factor separation of successive cell sides from the uniform index gaps.",
-        "Source: Section 11, lines 70–78 and 200–207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
+        "Source: Section 11, lines 70\u201378 and 200\u2013207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4be0ad6b5e6bc2d1523ba02b8675377c05549da5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-scale-separation-build.log",
+            "sha256": "b2024a2dff18bf63dfbfbfdda49d303882700e85497fa2469c5fd4844251eb7b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-scale-separation-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-scale-separation-axioms.log",
+            "sha256": "d83490d103b37175e2cee92c82500081a0ee7b8374725e5501cfc10220eba192"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_dyadicscale_side_ratios",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/ScaleSeparation.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,10 +133,28 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
         "Proves eventual separation of successive cell sides by every fixed real multiplicative factor, with a threshold independent of the domain and cut.",
-        "Source: Section 11, lines 70–78 and 200–207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
+        "Source: Section 11, lines 70\u201378 and 200\u2013207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4be0ad6b5e6bc2d1523ba02b8675377c05549da5",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-scale-separation-build.log",
+            "sha256": "b2024a2dff18bf63dfbfbfdda49d303882700e85497fa2469c5fd4844251eb7b"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-scale-separation-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-scale-separation-axioms.log",
+            "sha256": "d83490d103b37175e2cee92c82500081a0ee7b8374725e5501cfc10220eba192"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
