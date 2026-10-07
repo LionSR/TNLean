@@ -1,0 +1,62 @@
+[
+  {
+    "file": "TNLeanTest/HoleEncoder.lean",
+    "sha256": "4c23a3d8d7e48599165991c879208fae3bb11042956c28175f17c0d1c899660f",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLeanTest/HoleEncoder.lean"
+    ],
+    "exit_code": 1,
+    "seconds": 4.247859682996932,
+    "log": "<VALIDATION_LOGS>/TNLeanTest_HoleEncoder.lean-hole-encoder-tests-repair.log"
+  },
+  {
+    "file": "TNLeanTest/HoleEncoderAxioms.lean",
+    "sha256": "84150889b6ef2f9642fa141cbd58f53dd9c2fddde925cc607770837e537f7dfb",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLeanTest/HoleEncoderAxioms.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 3.2263079839976854,
+    "log": "<VALIDATION_LOGS>/TNLeanTest_HoleEncoderAxioms.lean-hole-encoder-tests-repair.log"
+  },
+  {
+    "file": "docs/provenance/evidence/8770-hole-encoder/HoleEncoderAxioms.lean",
+    "sha256": "319b2000498f053b6723f1983ae971ddaa327697ea46df08032fe2fe5aef9d98",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "docs/provenance/evidence/8770-hole-encoder/HoleEncoderAxioms.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 3.11660922900046,
+    "log": "<VALIDATION_LOGS>/docs_provenance_evidence_8770-hole-encoder_HoleEncoderAxioms.lean-hole-encoder-tests-repair.log"
+  }
+]

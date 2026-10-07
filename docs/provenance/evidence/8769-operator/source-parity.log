@@ -1,0 +1,17 @@
+Source revision: cb46263506014207a236393c306bf751e2e7500f
+Command: python3 docs/provenance/evidence/8769-operator/check-proof-evidence.py
+Working directory: /workspace/worktrees/tn-compression-layout
+UTC start: 2026-10-07T11:11:06.165959+00:00
+Elapsed seconds: 0.084
+Exit code: 0
+Warning count: 0
+
+PASS: all49 exact source, audit-script and compiled audit names match.
+Axioms: propext, Classical.choice, Quot.sound only.
+Proof revision: a89886d64e31b363c8dde1411410af3cd9b5ef66
+Proof SHA-256: 5fcab299dd3f163a4a1d234a25a51b91ae49bcd6619202731d471a82d2046dab
+Source lines: 731
+Original reviewed mathematical source is unchanged after removing49 notices.
+Original revision: ac065a663f42d97e160a223b868ce162fe0c7d7f
+Original proof SHA-256: ba76d9c18cdbc7ab07303d8a826e4fad0874e472323767e42863fd49f8242fd4
+All recorded final checks and original five log byte streams match their hashes.

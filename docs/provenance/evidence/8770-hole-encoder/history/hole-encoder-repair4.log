@@ -1,0 +1,61 @@
+✖ [2870/2870] Building TNLean.PEPS.Approximation.HoleEncoder (3.8s)
+trace: .> LEAN_PATH=<VALIDATION_WORKTREE>/.lake/packages/Cli/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/batteries/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/Qq/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/aesop/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/proofwidgets/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/importGraph/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/LeanSearchClient/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/plausible/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/checkdecls/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/Gametheory/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/mathlib/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/packages/qiclean/.lake/build/lib/lean:<VALIDATION_WORKTREE>/.lake/build/lib/lean <LEAN_TOOLCHAIN>/bin/lean <VALIDATION_WORKTREE>/TNLean/PEPS/Approximation/HoleEncoder.lean -o <VALIDATION_WORKTREE>/.lake/build/lib/lean/TNLean/PEPS/Approximation/HoleEncoder.olean -i <VALIDATION_WORKTREE>/.lake/build/lib/lean/TNLean/PEPS/Approximation/HoleEncoder.ilean -c <VALIDATION_WORKTREE>/.lake/build/ir/TNLean/PEPS/Approximation/HoleEncoder.c --setup <VALIDATION_WORKTREE>/.lake/build/ir/TNLean/PEPS/Approximation/HoleEncoder.setup.json --json
+error: TNLean/PEPS/Approximation/HoleEncoder.lean:139:4: Unknown constant `Matrix.mul`
+error: TNLean/PEPS/Approximation/HoleEncoder.lean:141:40: unsolved goals
+κ : Type u_2
+μ : Type u_3
+ν : Type u_4
+inst✝¹ : Fintype κ
+inst✝ : Fintype μ
+B : κ → Matrix μ ν ℂ
+a b : ν
+⊢ sorry () a b = ∑ c, ∑ j, (starRingEnd ℂ) (B c j a) * B c j b
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:143:44: This simp argument is unused:
+  Fintype.sum_prod_type
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Matrix.mul_apply, Matrix.sum_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:166:8: declaration uses `sorry`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:245:8: declaration uses `sorry`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:252:2: Unused tactic linter: `rw [stacked_matrix_gram, Fintype.sum_sigma, nestedCylinderInnovation_projector_sum]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:253:2: Unused tactic linter: `apply Finset.sum_congr rfl` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:254:2: Unused tactic linter: `intro j _` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:255:2: Unused tactic linter: `simp_rw [dependentRegionOperatorLift_conjTranspose, ← dependentRegionOperatorLift_mul,
+  coordinateResetMatrix_gram]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:257:2: Unused tactic linter: `rw [← dependentRegionOperatorLift_sum, ←
+  coordinateRangeProjector_eq_sum_basis _ (holeEncoderBasis R hR S j)]` does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:253:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:254:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:255:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:257:2: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+warning: TNLean/PEPS/Approximation/HoleEncoder.lean:360:2: Try this:
+  letI̵
+
+The goal is a proposition, so `let` is preferred over `letI`.
+The difference between `let` and `letI` is that `letI` inlines the value.
+But this is not relevant for proofs because of proof irrelevance.
+
+Note: This linter can be disabled with `set_option linter.style.haveILetI false`
+Some required targets logged failures:
+- TNLean.PEPS.Approximation.HoleEncoder
+error: build failed
