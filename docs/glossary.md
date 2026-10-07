@@ -389,6 +389,33 @@ normalizations.
 
 ### PEPS predicates
 
+#### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
+
+- **Defined in:** `TNLean/PEPS/Approximation/SourcePreparation.lean`.
+- **Meaning:** every recorded pair-source vector has norm one. The list records
+  source occurrences separately, including repeated pairs of parties.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
+  `04-compression.tex`, lines 53–70 and 125–127.
+- **Sanctioned bridges:** `SourceInventory.isAllowed_prepare_iff` and
+  `Word.isNormalized_sources` identify normalization with allowed preparation
+  and derive it from an allowed composition.
+
+#### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
+
+- **Defined in:** `TNLean/PEPS/Approximation/PairSourceGrouping.lean`.
+- **Meaning:** `G.Expands S` means that, beside any spectator registers,
+  allowed local operations and register exchanges containing no pair-source
+  preparations take the preparation of `G` exactly to the preparation of `S`.
+- **Source:** the same Lemma 5.1, lines 125–127; the fresh-register argument
+  in Theorem 5.2, `eq:compression-source-gate`, lines 233–251.
+- **Sanctioned bridges:** `SourceInventory.exists_grouped` constructs a
+  normalized `G` with one source for each unordered pair occurring in `S`.
+  `Word.exists_grouped_source_preparation` gives the resulting exact
+  factorization of an arbitrary allowed composition.
+- **Caveat:** the remaining operations are local contractions and exchanges;
+  collecting them into one tensor product of maps indexed by parties is a
+  separate assertion needed later in Theorem 5.2.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.

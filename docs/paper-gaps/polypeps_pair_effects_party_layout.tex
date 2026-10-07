@@ -19,7 +19,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source lemma}
 
@@ -115,22 +115,39 @@ are read as the endpoint parties of the effects of the monomials. The
 combination of two adjacent sources is
 \leanid{TNLean.PEPS.PairEffect.eval_combineSources}.
 
-\section{Remaining restriction: combining sources}
+\section{Combining arbitrary source occurrences}
 
-Clause (iv) is applied to the expansion of $\widetilde G_m$, whose words
-contain about $m$ sources for every effect occurrence, interleaved with local
-contractions; Theorem~5.2 (lines~132--212) needs the number of pair sources
-per monomial bounded independently of $m$. The source's proof of clause (iv)
-(lines~125--127) is the tensor-product identity above. The formal statement
-covers only two sources prepared one after the other. The step that every
-pair source prepares fresh registers and can therefore be moved past the
-operations on other registers, so that all sources on one pair of parties
-become adjacent, is not formalized.
+The remaining combination clause is now proved for every allowed source-only
+composition. Its finite list $S$ records the actual occurrences of pair
+sources, with their endpoint parties, spaces and vectors. If $P_S$ prepares
+these vectors before the input, there is an allowed composition $B$ with no
+source preparations such that $F=B\circ P_S$. This identity is proved by
+induction on the composition. Moving a preparation before an earlier operation
+amounts to tensoring that operation with identities on the fresh registers.
+No bound on the number of occurrences is assumed.
 
-Elimination: prove that every allowed source-only word has the operator of
-the preparation of all its sources followed by a word without sources, then
-reorder the prepared registers and merge the sources on each pair of parties
-one at a time with the identity above. The inverse merging maps are local
-isometries, so the resulting word stays allowed.
+A second induction combines sources with the same unordered pair of parties.
+When two sources have opposite endpoint order, a tensor exchange first aligns
+them. Their regrouped tensor product is normalized, and inverse local
+regroupings recover the original registers. Thus there is a list $G$ with
+exactly one normalized source per participating unordered pair, and an allowed
+composition $E$ with no sources, such that $P_S=E\circ P_G$. The set of pairs
+is unchanged. In particular $F=(B\circ E)\circ P_G$.
+
+These statements are
+\leanid{TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare},
+\leanid{TNLean.PEPS.PairEffect.SourceInventory.exists_grouped}, and
+\leanid{TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation}.
+Applying them separately to every monomial in the replaced gate proves
+\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources}.
+Every conclusion of Lemma~5.1 is retained, with exactly the same monomials,
+coefficients and common output registers. No adjacency, endpoint-order,
+Schmidt-rank or additional norm hypothesis is introduced.
+
+This resolves the restriction recorded in this note. The later proof of
+Theorem~5.2, in particular the tensor product of one aggregate map per party
+and the common source spaces across different monomials
+(\path{04-compression.tex}, lines~233--270), requires further results; it is
+not a conclusion of the pair-effect lemma.
 
 \end{document}

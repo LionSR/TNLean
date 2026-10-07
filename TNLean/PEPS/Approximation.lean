@@ -9,5 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.PairEffectElimination
+import TNLean.PEPS.Approximation.PairEffectSourcePreparation
+import TNLean.PEPS.Approximation.PairSourceExpansion
+import TNLean.PEPS.Approximation.PairSourceGrouping
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyWord
+import TNLean.PEPS.Approximation.SourcePreparation
+import TNLean.PEPS.Approximation.WordPermutation

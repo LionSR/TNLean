@@ -1,0 +1,190 @@
+\section{Preparing and combining pair sources}
+\label{sec:peps_source_preparation}
+
+\begin{theorem}[Exchanging lists of registers]
+    \label{thm:peps_register_exchange}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_exchangeBlocks_appendIso_symm}
+    \lean{TNLean.PEPS.PairEffect.Word.exchangeBlocks}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_exchangeBlocks}
+    \lean{TNLean.PEPS.PairEffect.Word.moveHead}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_moveHead}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_moveHead_appendIso_symm}
+    \lean{TNLean.PEPS.PairEffect.appendIso_symm_cons_tmul}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_moveHead}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_exchangeBlocks}
+    \leanok
+    \uses{def:peps_party_layout}
+    Let $\mathcal H_A$, $\mathcal H_B$, and $\mathcal H_C$ be the memories
+    of three ordered lists of registers. Adjacent exchanges give an allowed
+    composition that sends $a\otimes(b\otimes c)$ to
+    $b\otimes(a\otimes c)$. The order within each list is preserved.
+    This composition contains no pair-source preparations. Taking the
+    second list to consist of one register gives the corresponding move
+    of that register to the front.
+\end{theorem}
+
+\begin{proof}\leanok
+    Move the first register of the second list past the first list by
+    adjacent exchanges, then repeat for the remaining registers of the
+    second list. Induction on the lists gives the tensor identity.
+\end{proof}
+
+\begin{definition}[The sources of a composition]
+    \label{def:peps_source_inventory}
+    \lean{TNLean.PEPS.PairEffect.PairSource}
+    \lean{TNLean.PEPS.PairEffect.PairSource.layout}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.IsNormalized}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepare}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.vector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_nil}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_cons}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_append}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepare_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.isNormalized_cons}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_eq_appendIso_symm}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_append}
+    \lean{TNLean.PEPS.PairEffect.Word.sources}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_prepare}
+    \leanok
+    \uses{def:peps_party_layout}
+    A pair source consists of distinct parties $p,q$, their Hilbert spaces
+    $\mathcal U,\mathcal V$, and a vector
+    $\eta\in\mathcal U\otimes\mathcal V$.
+    Its two registers remain assigned to $p$ and $q$, respectively.
+    For a finite list $S=(s_1,\ldots,s_m)$ of pair sources, let
+    $\mathcal H_S$ be the tensor product of their registers in list order.
+    Its preparation on a memory $\mathcal H$ is the map
+    \begin{align}
+        P_{S,\mathcal H}:\mathcal H&\longrightarrow\mathcal H_S\otimes\mathcal H,
+        &x&\longmapsto(\eta_1\otimes\cdots\otimes\eta_m)\otimes x.
+        \label{eq:peps_source_preparation}
+    \end{align}
+    Tensor products are identified by the prescribed associativity maps.
+    The source list of a composition records each occurrence separately,
+    including repetitions of the same vector on the same pair of parties.
+    This is the source data used in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--251.
+\end{definition}
+
+\begin{theorem}[Preparation before the local operations]
+    \label{thm:peps_source_preparation}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare}
+    \lean{TNLean.PEPS.PairEffect.Word.localPart}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_localPart}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_localPart}
+    \lean{TNLean.PEPS.PairEffect.Word.isNormalized_sources}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_localPart_prepare}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_frameList_prepare}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_moveHead_prepare}
+    \lean{TNLean.PEPS.PairEffect.Word.castInput}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_castInput}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_castInput}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_castInput_of_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_frameList}
+    \leanok
+    \uses{def:peps_source_inventory}
+    Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be an allowed
+    composition of local contractions, pair-source preparations, and
+    changes of tensor-factor order. Let $S$ be its source list.
+    There is an allowed composition
+    $B:\mathcal H_S\otimes\mathcal H_{\rm in}\to\mathcal H_{\rm out}$
+    consisting of local contractions and changes of tensor-factor order,
+    with no source preparations, such that
+    \begin{align}
+        F=B\circ P_{S,\mathcal H_{\rm in}}.
+        \label{eq:peps_prepared_composition}
+    \end{align}
+    Every vector in $S$ is normalized. The source occurrences and their
+    endpoint parties are those of the original composition.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_register_exchange}
+    Induct on the composition. A local operation, an exchange, or the
+    identity contributes no source. For a pair-source preparation, take
+    that source as the entire list and take the remaining operation to be
+    the identity. In the composition case, move a later preparation before
+    an earlier operation $A:\mathcal H\to\mathcal H'$ by adjoining its
+    untouched registers. The required identity is
+    \begin{align*}
+        P_{S,\mathcal H'}\circ A
+        =(\operatorname{id}_{\mathcal H_S}\otimes A)
+          \circ P_{S,\mathcal H}.
+    \end{align*}
+    It follows first on elementary tensors and then by linearity.
+    When an untouched register precedes the composition, exchanges move
+    it in front of the newly prepared source registers before the remaining
+    local operations act. These
+    exchanges are isometries. Tensoring each original local map with an
+    identity preserves its contraction bound.
+\end{proof}
+
+\begin{definition}[Expansion of a preparation]
+    \label{def:peps_source_expansion}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.refl}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.trans}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.reverse}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.swap}
+    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair}
+    \lean{TNLean.PEPS.PairEffect.PairSource.reverse}
+    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_reverse}
+    \lean{TNLean.PEPS.PairEffect.PairSource.norm_reverse_vector}
+    \lean{TNLean.PEPS.PairEffect.eval_swap_reversedSource}
+    \leanok
+    \uses{def:peps_source_inventory}
+    A source list $G$ expands to $S$ when, beside every spectator memory
+    $\mathcal H$, there is an allowed composition $E$ with no source
+    preparations such that $E\circ P_{G,\mathcal H}=P_{S,\mathcal H}$.
+    Expansion is reflexive and transitive, and remains valid upon adjoining
+    a common source. Exchanging two successive sources, or reversing the
+    endpoint order of a source and exchanging its two half-spaces, gives
+    such an expansion.
+\end{definition}
+
+\begin{theorem}[One source for each participating pair]
+    \label{thm:peps_grouped_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_grouped}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_combined}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation}
+    \lean{TNLean.PEPS.PairEffect.PairSource.combine}
+    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_combine}
+    \lean{TNLean.PEPS.PairEffect.PairSource.norm_combine_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.combine}
+    \lean{TNLean.PEPS.PairEffect.expandCombinedPair}
+    \lean{TNLean.PEPS.PairEffect.isAllowed_expandCombinedPair}
+    \lean{TNLean.PEPS.PairEffect.eval_expandCombinedPair}
+    \leanok
+    \uses{def:peps_source_expansion}
+    Let $S$ be a finite list of normalized pair sources. There is a list
+    $G$ of normalized pair sources containing exactly one source for each
+    unordered pair of parties occurring in $S$, and an allowed composition
+    $E:\mathcal H_G\otimes\mathcal H\to\mathcal H_S\otimes\mathcal H$
+    with no source preparations, such that
+    \begin{align}
+        P_{S,\mathcal H}=E\circ P_{G,\mathcal H}.
+        \label{eq:peps_grouped_preparation}
+    \end{align}
+    Consequently every allowed composition admits
+    (\ref{eq:peps_prepared_composition}) with at most one normalized source
+    on each participating pair.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_combine_sources,thm:peps_source_preparation,thm:peps_register_exchange}
+    Insert the sources successively. Exchange tensor factors to bring
+    together the sources with a prescribed unordered pair of owners;
+    reverse the order of the two half-spaces when necessary. Replace two
+    such vectors by their tensor product, regrouped by owner, using
+    Theorem~\ref{thm:peps_party_combine_sources}. Its norm is the product
+    of the two original norms and is therefore one. The inverse local
+    regrouping maps recover the original registers and are isometries.
+    Continuing through the finite list proves
+    (\ref{eq:peps_grouped_preparation}); no other pair of owners is
+    introduced. Compose this expansion with the local operations in
+    Theorem~\ref{thm:peps_source_preparation}.
+\end{proof}
