@@ -5,7 +5,7 @@ Assessment dated 7 October 2026. The complete ground-state area law
 polynomial PEPS approximation theorem (Theorem 1.1 of *Polynomial PEPS
 approximation of gapped square-grid ground states*) remain unfinished. The
 results below establish distinct steps of their proofs. The combined QICLean
-build, strict examples, all 27 public kernel reports, and complete blueprint
+build, strict examples, all 54 public kernel reports, and complete blueprint
 PDF, web and declaration checks have passed. The three TNLean modules for
 regional entropy, conditional boundary arithmetic and radius scales have also
 passed their actual module builds and all seven strict kernel audits. The complete
@@ -31,9 +31,17 @@ satisfies
 \]
 These QICLean results establish the matrix interpretation of the
 [typical-Schmidt estimates preceding Proposition 8.1](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/07-comparators.tex#L39-L55).
-They allow a kernel outside the selected indices. They do not construct the
-selection from a spectral gap or prove the sector norm comparisons of
-Proposition 8.1.
+They allow a kernel outside the selected indices. The canonical selection can now be constructed from the actual spectral
+surprisal tail. For a density matrix, a tail at most \(\delta<1\) gives
+\(1-\delta\le z\le1\), and hence positive mass. The corresponding
+logarithmic rank and entropy errors are at most
+\(w-\log(1-\delta)\). For a unit bipartite vector, the actual normalized
+selected vector has distance at most \(\sqrt{2\delta}\). These two proofs
+have passed their module build, strict elaboration and kernel audits at QICLean
+source revision `79b9d503971a4ff2409fa557e174b46b13fdbbda`; complete blueprint
+integration is being checked. They assume the tail estimate. The physical
+specialization \(w=n^{3/5}\), \(z\ge1-n^{-100}\) and the sector norm
+comparisons of Proposition 8.1 are not established by these results.
 
 For any normalized finite-product pure state and disjoint regions \(T,E\),
 QICLean now supplies an isometry on the entire complementary Hilbert space and
@@ -86,13 +94,34 @@ TNLean module build and all five strict kernel audits, recorded in the
 [radius evidence](../provenance/openai-math.d/8757-radius-scales.json). This estimate
 does not construct an amplification radius or prove a remote-information bound.
 
-The area law still requires the physical concentration and auxiliary-sector
+The accepted QICLean development now contains marginal moment and tail bounds
+for actual ground vectors, including interactions with designated supports
+(QICLean #590, #595 and #600). Their specialization to the physical scales and
+regions of the comparator argument remains separate from the finite-dimensional
+truncation argument. The area law still requires the auxiliary-sector
 estimates, amplified information bounds of Proposition 10.2, and the ordered
 geometric decomposition of [Proposition 11.2](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex#L98-L142). The remote estimate must control
 the whole exterior together with the same-family past in the original ground
 state. Residual sizes and summed scale losses must be bounded using only the fixed local dimension, interaction range, interaction norm bound
 and full-system spectral gap, before the domain, Hamiltonian and cut are chosen; zero-boundary cases must also be
 included. The numerical entropy implication alone cannot supply those facts.
+
+The actual typical vector also has a regional formulation in
+[QICLean #606](https://github.com/LionSR/QICLean/pull/606): its selection depends
+only on the original marginal of the selected region, and every disjoint
+physical region has reduced density bounded above by the original density
+divided by \(z\). For unit input, its entropy is bounded by the original
+regional entropy divided by \(z\). These statements have passed a complete
+library build, all six additional kernel audits, provenance validation and
+blueprint verification; their dependency update into TNLean remains separate.
+
+[QICLean #607](https://github.com/LionSR/QICLean/pull/607) proves that a positive
+definite matrix and any nonzero real power have the same commutant. In
+particular, commutation with \((x+bI)^{-a/2}\), for \(x\ge0\) and
+\(a,b>0\), implies commutation with \(x\). This is the functional-calculus
+step after native patch stationarity. It does not establish the preceding
+commutation premise. Its three proofs, complete library build, kernel audits,
+provenance validation and blueprint checks have passed.
 
 For PEPS approximation, the separate draft proving attainment of the
 regularized patch minimum does not yet establish
