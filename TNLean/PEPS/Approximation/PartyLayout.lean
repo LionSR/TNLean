@@ -433,8 +433,10 @@ theorem pairHeadIso_tmul (ℓ : Layout P) (x : (⟨p, euc α⟩ : Reg P).space)
     rTensor_tmul, isoL_apply]
 
 /-- A pair register at the front passes words on the remaining registers. -/
-theorem pairHeadIso_frame {ℓ ℓ' : Layout P} (W : Word ℓ ℓ') (z : Mem (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓ)) :
-    pairHeadIso ℓ' ((Word.frame _ (Word.frame _ W)).eval z) = W.eval.lTensor _ (pairHeadIso ℓ z) := by
+theorem pairHeadIso_frame {ℓ ℓ' : Layout P} (W : Word ℓ ℓ')
+    (z : Mem (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓ)) :
+    pairHeadIso ℓ' ((Word.frame _ (Word.frame _ W)).eval z) =
+      W.eval.lTensor _ (pairHeadIso ℓ z) := by
   induction z using tmul₃_induction with
   | tmul x y t =>
       simp only [Word.eval_frame, lTensor_tmul]
@@ -627,7 +629,8 @@ inductive PartyChain : Layout P → Layout P → Type 1
 namespace PartyChain
 
 /-- The monomial as a chain of contractions and pair effects. -/
-@[reducible] def toEffectChain : {ℓX ℓY : Layout P} → PartyChain ℓX ℓY → EffectChain (Mem ℓX) (Mem ℓY)
+@[reducible] def toEffectChain :
+    {ℓX ℓY : Layout P} → PartyChain ℓX ℓY → EffectChain (Mem ℓX) (Mem ℓY)
   | _, _, final w => .final w.eval
   | _, _, effect _ α β ℓS w η rest =>
       .effect α β (Mem ℓS) (isoL (pairHeadIso ℓS) ∘L w.eval) η rest.toEffectChain
@@ -749,7 +752,8 @@ theorem replaceTerm_toEffectChain : {ℓX ℓY : Layout P} → (M : PartyChain �
       rw [ih]
       ext1 x
       simp only [replaceWord, Word.eval_comp, comp_apply, isoL_apply]
-      rw [stackAppIso_effect, iso_lTensor_apply, stackIso_framePairs, stackIso_insWord, lTensor_comp_apply]
+      rw [stackAppIso_effect, iso_lTensor_apply, stackIso_framePairs, stackIso_insWord,
+        lTensor_comp_apply]
 
 /-- Preparation of the ideal content `η^{⊗ m}` of every stack by pair sources. -/
 def prepStack : {ℓX ℓY : Layout P} → (M : PartyChain ℓX ℓY) → (ℓ : Layout P) →
@@ -855,8 +859,9 @@ theorem gateIso_nil (x : Mem ℓY) : gateIso m ([] : PartyGate ℓX ℓY) x = x 
 theorem gateIso_cons (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY)
     (z : Mem (gateOut m (p :: L))) :
     gateIso m (p :: L) z =
-      (TensorProduct.commIsometry ℂ (inventory m (toGate L)) (p.2.toEffectChain.stackSpace m)).lTensor
-        (Mem ℓY) (TensorProduct.assocIsometry ℂ (Mem ℓY) (inventory m (toGate L))
+      (TensorProduct.commIsometry ℂ (inventory m (toGate L))
+          (p.2.toEffectChain.stackSpace m)).lTensor (Mem ℓY)
+        (TensorProduct.assocIsometry ℂ (Mem ℓY) (inventory m (toGate L))
           (p.2.toEffectChain.stackSpace m)
           ((gateIso m L).rTensor (p.2.toEffectChain.stackSpace m)
             (p.2.stackAppIso m (gateOut m L) z))) :=
