@@ -37,41 +37,41 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "650bbc640e475cbc944b293fce2eee1b9c902d9e",
+        "revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-00.log",
-            "sha256": "607d1e9f5a92a1af121288cb8a67c212a1c63d32d05ad6144a669379467c9a55"
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-00.log",
+            "sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-01.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-01.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-02.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-02.log",
             "sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-03.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-03.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-04.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-04.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         ]
@@ -109,41 +109,41 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "650bbc640e475cbc944b293fce2eee1b9c902d9e",
+        "revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-00.log",
-            "sha256": "607d1e9f5a92a1af121288cb8a67c212a1c63d32d05ad6144a669379467c9a55"
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-00.log",
+            "sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-01.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-01.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-02.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-02.log",
             "sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-03.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-03.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-04.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-04.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         ]
@@ -181,41 +181,41 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "650bbc640e475cbc944b293fce2eee1b9c902d9e",
+        "revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding TNLean.PEPS.Approximation",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-00.log",
-            "sha256": "607d1e9f5a92a1af121288cb8a67c212a1c63d32d05ad6144a669379467c9a55"
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-00.log",
+            "sha256": "3d44a265904a911a744540f1b4a5ec02cee16657c061ca978404c1b23fdb7c7f"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-01.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-01.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-02.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-02.log",
             "sha256": "a8464d7694f0c43cc8f7130ce18232f54cb447681b7cf4350d21df21a318fd63"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-03.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-03.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "build",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/RegionOperatorEmbedding.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8770-region-embedding/prose-correction/check-04.log",
+            "log": "docs/provenance/evidence/8770-region-embedding/current-verification/newpin-04.log",
             "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           }
         ]

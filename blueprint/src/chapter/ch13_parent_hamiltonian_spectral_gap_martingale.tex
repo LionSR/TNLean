@@ -8163,6 +8163,25 @@ shorter interaction range.
     large $N$, contradicting $\varepsilon_N\to0$.
 \end{proof}
 
+\begin{theorem}[Algebra of interior observables]
+    \label{thm:bulk_observable_algebra}
+    \lean{MPSTensor.bulkObservable_eq_chainWindowOperator,
+        MPSTensor.bulkObservable_mul,
+        MPSTensor.bulkObservable_conjTranspose,
+        MPSTensor.norm_toEuclideanCLM_bulkObservable_le}
+    \leanok
+    Place a $k$-site observable $X$ between free intervals of lengths
+    $\ell,r$, obtaining $X^{(\ell,r)}=I_\ell\otimes X\otimes I_r$.
+    Placement preserves products and adjoints. When $k\geq1$, it is
+    the usual nonwrapping window inclusion and
+    $\|X^{(\ell,r)}\|\leq\|X\|$.
+\end{theorem}
+\begin{proof}\leanok
+    Tensor products multiply factorwise and commute with adjoints.
+    The nonwrapping window inclusion is a unital homomorphism preserving
+    adjoints between matrix algebras, so it is contractive.
+\end{proof}
+
 \begin{theorem}[Ground-space subtraction in the commutator gap estimate]
     \label{thm:ground_projection_commutator_gap}
     \lean{FrustrationFree.energy_gap_sub_ground_projection,
@@ -8376,6 +8395,242 @@ shorter interaction range.
     equality of open Hamiltonians.
 \end{proof}
 
+\begin{definition}[Insertion expectation]
+    \label{def:primitive_insertion_expectation}
+    \lean{MPSTensor.observableInsertionExpectation}
+    \leanok
+    For a tensor $A$, a matrix $\rho$ with nonzero trace, and an observable
+    $X$ on $k$ sites, write
+    $E_X(Y)=\sum_{\sigma,\tau}X_{\sigma\tau}A^\tau Y(A^\sigma)^*$ and
+    $\eta_A(X)=\operatorname{tr}(E_X(\rho))/\operatorname{tr}\rho$.
+    This is the local expectation appearing in
+    \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{definition}[Observable in an interior interval]
+    \label{def:primitive_bulk_observable}
+    \lean{MPSTensor.bulkObservable}
+    \leanok
+    For an observable $X$ on $k$ sites and nonnegative integers $\ell,r$,
+    let $X_{\ell,r}=I_\ell\otimes X\otimes I_r$ on $N=\ell+k+r$ sites,
+    with the tensor factors ordered from left to right.
+\end{definition}
+
+\begin{theorem}[Boundary compression of an insertion]
+    \label{thm:primitive_insertion_boundary_identity}
+    \lean{MPSTensor.adjoint_groundSpaceMapES_observable_groundSpaceMapES,
+        MPSTensor.physicalObservableTransfer_bulkObservable,
+        MPSTensor.adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES}
+    \leanok
+    Let $\Gamma_n$ be the Hilbert-space boundary map and let
+    $\mathcal R$ denote Gram reshuffling. Then
+    \begin{align}
+        \Gamma_k^*X\Gamma_k          & =\mathcal R(E_X),           &
+        E_{X_{\ell,r}}               & =E^\ell E_XE^r,               \\
+        \Gamma_N^*X_{\ell,r}\Gamma_N & =\mathcal R(E^\ell E_XE^r).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:ground_space_map_es, def:gram_reshuffle, def:primitive_bulk_observable}
+    Pair both sides of the first identity with matrix-unit boundary vectors.
+    The resulting finite sums agree term by term.
+    Insertion transfers multiply under consecutive tensor products,
+    while the identity insertion on $n$ sites is $E^n$.
+    These facts give the remaining identities.
+\end{proof}
+
+\begin{theorem}[Primitive insertion limit]
+    \label{thm:primitive_insertion_transfer_limit}
+    \lean{MPSTensor.fixedPointProj_physicalObservableTransfer_fixedPointProj,
+        MPSTensor.IsPrimitiveMPS.transferMap_pow_tendsto_fixedPointProj,
+        MPSTensor.IsPrimitiveMPS.physicalObservableTransfer_sandwich_tendsto}
+    \leanok
+    Let $A$ be a normalized primitive tensor with invariant matrix $\rho$,
+    and let $P_\rho(Y)=\operatorname{tr}(Y)\rho/\operatorname{tr}\rho$.
+    For every local observable $X$,
+    $P_\rho E_XP_\rho=\eta_A(X)P_\rho$ and $E^n\to P_\rho$ in operator norm.
+    Along any filter on which $\ell,r\to\infty$,
+    $E^\ell E_XE^r\to\eta_A(X)P_\rho$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:primitive_insertion_expectation, thm:primitive_fnw_remainder_power}
+    Substitution into the rank-one projection gives the first identity.
+    For $n\geq1$, the decomposition
+    $E^n=P_\rho+(E-P_\rho)^n$ and decay of the complementary powers
+    give the second. Continuity of multiplication gives the insertion limit.
+\end{proof}
+
+\begin{theorem}[Limiting boundary compression]
+    \label{thm:primitive_insertion_gram_limit}
+    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_bulkObservable_compression_tendsto}
+    \leanok
+    Under the preceding hypotheses, with $K_\infty=\mathcal R(P_\rho)$,
+    $\Gamma_N^*X_{\ell,r}\Gamma_N\to\eta_A(X)K_\infty$ as both
+    free intervals tend to infinity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_insertion_boundary_identity, thm:primitive_insertion_transfer_limit}
+    Apply the continuous linear reshuffling map to the insertion limit.
+\end{proof}
+
+\begin{definition}[Finite open interaction sum in matrix coordinates]
+    \label{def:finite_open_interaction_matrix}
+    \lean{MPSTensor.openInteractionMatrix,
+        MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix,
+        MPSTensor.toEuclideanCLM_openInteractionMatrix_parentInteraction}
+    \leanok
+    For an arbitrary range-$R$ matrix $h$, let
+    $H_N(h)=\sum_{a=0}^{N-R}\iota_a(h)$, where $\iota_a$ places $h$
+    on the sites $a,\ldots,a+R-1$ of an $N$-site chain, with the sum
+    empty when $N<R$. For $R\geq1$ and $N\geq R$, its Euclidean matrix
+    action is the open interaction Hamiltonian. If $h$ is the complement
+    projection of $G_R(A)$, it is the canonical open parent Hamiltonian.
+    This is the nonwrapping interaction sum in
+    \cite[equation (3.12)]{Nachtergaele1996Spectral}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:open_parent_hamiltonian_es}
+    The admissible starts are exactly $0,\ldots,N-R$. Each matrix inclusion
+    acts as the corresponding Euclidean local interaction, so their sums
+    agree. Substitute the local complement projection for the canonical case.
+\end{proof}
+
+\begin{theorem}[Commutation on disjoint intervals]
+    \label{thm:disjoint_interval_observables_commute}
+    \lean{MPSTensor.chainWindowOperator_commute_of_disjoint}
+    \leanok
+    Observables supported on two disjoint nonwrapping intervals of a finite
+    chain commute. No self-adjointness assumption is required.
+\end{theorem}
+\begin{proof}\leanok
+    Operators on the two tensor factors commute; each acts as the identity
+    on the support of the other.
+\end{proof}
+
+\begin{definition}[The fixed local commutator observable]
+    \label{def:fixed_local_commutator_observable}
+    \lean{MPSTensor.localCommutatorObservable}
+    \leanok
+    Let $R,k\geq1$, put $t=R-1$ and $w=2t+k$, and let $X$ be supported
+    on $k$ sites. On $w$ sites set $B=I_t\otimes X\otimes I_t$ and
+    \begin{align}
+        Y_h(X) & =B^\dagger\bigl(H_w(h)B-BH_w(h)\bigr).
+    \end{align}
+    Neither positivity nor self-adjointness of $h$ is needed for this
+    definition. It is the fixed local expression used in the limiting
+    argument of \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Finite-range commutator localization]
+    \label{thm:finite_open_commutator_locality}
+    \lean{MPSTensor.openInteractionMatrix_commutator_chainWindowOperator,
+        MPSTensor.openInteractionMatrix_commutator_bulkObservable,
+        MPSTensor.chainWindowOperator_adjoint_mul_openInteractionMatrix_commutator,
+        MPSTensor.bulkObservable_adjoint_mul_openInteractionMatrix_commutator}
+    \leanok
+    Let $R,k\geq1$ and $X_N=I_\ell\otimes X\otimes I_r$, where
+    $\ell,r\geq t=R-1$ and $N=\ell+k+r$. Then
+    \begin{align}
+        [H_N(h),X_N]
+         & =I_{\ell-t}\otimes[H_{2t+k}(h),B]\otimes I_{r-t}, \\
+        X_N^\dagger[H_N(h),X_N]
+         & =I_{\ell-t}\otimes Y_h(X)\otimes I_{r-t}.
+    \end{align}
+    Equivalently, both identities hold for an arbitrary placement of the
+    enlarged interval inside a longer chain. These are locality identities;
+    no spectral-gap assumption is made.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:finite_open_interaction_matrix,
+        def:fixed_local_commutator_observable,
+        thm:disjoint_interval_observables_commute, thm:bulk_observable_algebra}
+    Terms disjoint from the support of $X$ have zero commutator. The remaining
+    terms are precisely the translates in the enlarged interval. Reindex
+    their sum and use multiplicativity of the interval inclusion. Multiplying
+    by $X_N^\dagger$ gives the second identity.
+\end{proof}
+
+\begin{definition}[Rectangular observable insertion]
+    \label{def:mixed_observable_insertion}
+    \lean{MPSTensor.mixedPhysicalObservableTransfer, MPSTensor.mixedPhysicalObservableTransfer_apply, MPSTensor.mixedPhysicalObservableTransfer_self}
+    \leanok
+    For tensors $A$ and $B$ with a common physical alphabet and possibly different
+    bond dimensions, define the insertion of a $k$-site matrix $X$ by
+    \begin{align}
+        E_{B,A;X}(Y)=\sum_{\sigma,\tau}X_{\sigma\tau}B_\tau Y A_\sigma^*.
+        \notag
+    \end{align}
+    Here $Y$ is a rectangular matrix from the virtual space of $A$ to that of $B$.
+    For $A=B$, this is the ordinary observable insertion.
+\end{definition}
+
+\begin{theorem}[Mixed insertion identities]
+    \label{thm:mixed_observable_insertion_identities}
+    \lean{MPSTensor.inner_single_mixed_observable_groundSpaceMapES_single, MPSTensor.adjoint_groundSpaceMapES_observable_groundSpaceMapES_eq_mixedTransfer, MPSTensor.mixedPhysicalObservableTransfer_one, MPSTensor.mixedPhysicalObservableTransfer_appendObservable, MPSTensor.mixedPhysicalObservableTransfer_bulkObservable, MPSTensor.adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES_eq_mixedTransfer}
+    \leanok
+    The coefficient of $\Gamma_{A,k}^*X\Gamma_{B,k}$ between boundary units
+    $(b,a)$ and $(e,c)$ is $E_{B,A;X}(|c\rangle\langle a|)_{eb}$.
+    Moreover,
+    \begin{align}
+        E_{B,A;1_k}=E_{B,A}^{\,k},\qquad
+        E_{B,A;X\otimes Z}=E_{B,A;X}E_{B,A;Z},
+        \notag
+    \end{align}
+    and
+    \begin{align}
+        E_{B,A;1_\ell\otimes X\otimes1_r}
+        =E_{B,A}^{\,\ell}E_{B,A;X}E_{B,A}^{\,r}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mixed_observable_insertion}
+    Expand the boundary traces in matrix units. Splitting a physical word at a
+    prescribed cut gives the composition identity, and identity insertions give
+    the two ordinary transfer powers.
+\end{proof}
+
+\begin{theorem}[Decay of mixed observable sandwiches]
+    \label{thm:mixed_observable_sandwich_decay}
+    \lean{MPSTensor.mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one, MPSTensor.mixedPhysicalObservableTransfer_sandwich_tendsto_zero}
+    \leanok
+    Suppose the rectangular mixed transfer map $E_{B,A}$ has spectral radius less
+    than one. Then $E_{B,A}^{\,n}\to0$ in operator norm. For a fixed local matrix
+    $X$, and along any filter with $\ell\to\infty$ and $r\to\infty$,
+    \begin{align}
+        E_{B,A}^{\,\ell}E_{B,A;X}E_{B,A}^{\,r}\longrightarrow0
+        \notag
+    \end{align}
+    in operator norm.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mixed_observable_insertion}
+    The mixed transfer powers decay pointwise by the strict spectral-radius
+    bound. Finite dimension upgrades this to operator norm convergence;
+    continuity of composition then gives the inserted sandwich limit.
+\end{proof}
+
+\begin{theorem}[Decay of cross-sector boundary pullbacks]
+    \label{thm:mixed_bulk_boundary_pullback_decay}
+    \lean{MPSTensor.adjoint_groundSpaceMapES_bulkObservable_comp_tendsto_zero}
+    \leanok
+    Under the preceding strict mixed spectral-radius hypothesis, let
+    $N=\ell+k+r$ and $X_{\ell,r}=1_\ell\otimes X\otimes1_r$.
+    As $\ell,r\to\infty$ along any common filter,
+    \begin{align}
+        \bigl\|\Gamma_{A,N}^*X_{\ell,r}\Gamma_{B,N}\bigr\|\longrightarrow0.
+        \notag
+    \end{align}
+    No injectivity of the boundary maps is required. This is a distinct-sector
+    estimate, rather than an assertion of the infinite-volume spectral gap.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mixed_observable_insertion_identities,thm:mixed_observable_sandwich_decay}
+    The pullback is the rectangular coefficient reshuffling of the virtual
+    sandwich. This reshuffling is linear between fixed finite-dimensional
+    spaces and hence continuous. Apply it to the sandwich limit.
+\end{proof}
+
 \begin{lemma}[Subwindows in active-block coordinates]
     \label{lem:open_interaction_subwindow_coordinates}
     \lean{MPSTensor.cyclicCfg_join_cyclicActiveBlock,
@@ -8547,6 +8802,54 @@ shorter interaction range.
     gives one constant for every volume.
 \end{proof}
 
+\begin{theorem}[A vanishing square annihilates left multiples]
+    \label{thm:positive_functional_vanishing_square}
+    \lean{PositiveLinearMap.apply_mul_star_mul_self_eq_zero}
+    \leanok
+    Let $\mathcal A$ be a star-ordered complex algebra admitting
+    self-adjoint decomposition, and let $f:\mathcal A\to\mathbb C$ be
+    positive and complex linear. If $f(C^*C)=0$, then $f(YC^*C)=0$ for
+    every $Y\in\mathcal A$. This is the Cauchy--Schwarz implication used
+    in the zero-energy argument of
+    \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Apply Cauchy--Schwarz to $u=(YC^*)^*$ and $v=C$.
+    Its right-hand side contains $\sqrt{|f(C^*C)|}=0$.
+\end{proof}
+
+\begin{theorem}[Positive comparison of commutator energies]
+    \label{thm:positive_functional_commutator_comparison}
+    \lean{PositiveLinearMap.apply_mul_eq_zero_of_posSemidef}
+    \lean{PositiveLinearMap.apply_conjTranspose_commutator_eq}
+    \lean{PositiveLinearMap.apply_conjTranspose_commutator_le}
+    \leanok
+    Let $f$ be a positive complex-linear functional on a finite matrix
+    algebra, and let $H\geq0$ satisfy $f(H)=0$. Every left multiple of
+    $H$ has zero expectation, and
+    \begin{align}
+        f(X^*[H,X])=f(X^*HX).
+        \label{eq:ph_zero_energy_commutator}
+    \end{align}
+    If $C\geq0$, $c\in\mathbb R$, and $C\leq cH$, then
+    \begin{align}
+        f(X^*[C,X])\leq c f(X^*[H,X]).
+        \label{eq:ph_positive_commutator_comparison}
+    \end{align}
+    These are finite-dimensional positive-comparison consequences of the
+    zero-energy argument in \cite[Section~6]{Nachtergaele1996Spectral}.
+    Normalization of $f$ is unnecessary.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_functional_vanishing_square}
+    Factor $H=S^*S$ and apply the vanishing-square implication to obtain
+    $f(YH)=0$. Expanding the commutator proves
+    (\ref{eq:ph_zero_energy_commutator}). Positivity gives
+    $0\leq f(C)\leq c f(H)=0$, hence the same identity for $C$.
+    Conjugating $C\leq cH$ by $X$ gives $X^*CX\leq cX^*HX$;
+    monotonicity of $f$ proves (\ref{eq:ph_positive_commutator_comparison}).
+\end{proof}
+
 \begin{definition}[Matrix of the canonical parent interaction]
     \label{def:canonical_parent_interaction_matrix}
     \lean{MPSTensor.canonicalParentInteractionMatrix,
@@ -8581,6 +8884,24 @@ shorter interaction range.
     local boundary-space complement. Equality of that space therefore gives
     equality of the matrices and of every sum of their local translates,
     as in \cite[Lemma \texttt{existenceinteraction}]{Nachtergaele1996Spectral}.
+\end{proof}
+
+\begin{theorem}[Two representations of the open interaction sum]
+    \label{thm:all_length_open_interaction_matrix}
+    \lean{MPSTensor.openInteractionMatrix_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all}
+    \leanok
+    Let $h$ be a matrix on an $R$-site interval. Its matrix sum over all
+    nonwrapping windows and the corresponding linear operator both vanish
+    when the chain length satisfies $N<R$. If $R>0$, the matrix and linear
+    operator representations of the open interaction sum agree for every
+    $N\geq0$. No positivity assumption on $h$ is needed.
+    This is the empty-sum convention in \cite{Nachtergaele1996Spectral},
+    equation~\textup{(3.12)}.
+\end{theorem}
+\begin{proof}\leanok
+    For $N<R$ there is no nonwrapping window of length $R$, so both sums
+    are empty. For $N\geq R$, the coordinate representation intertwines
+    each local term, and linearity identifies their sums.
 \end{proof}
 
 \begin{lemma}[Positive canonical interaction from exact open kernels]
@@ -8627,4 +8948,121 @@ shorter interaction range.
     $\kappa\delta_W/(W-R+1)$ on all $N\ge W$.
     Take its minimum with the finitely many positive gaps at $N<W$, each
     measured above the actual kernel.
+\end{proof}
+
+\begin{definition}[Physical matrix slices of a supplied map]
+    \label{def:supplied_physical_isometry_tensor}
+    \lean{MPSTensor.tensorOfPhysicalIsometry}
+    \leanok
+    Let $V:\mathbb C^D\to\mathbb C^d\otimes\mathbb C^D$ be a linear map,
+    with the physical coordinate written first. Define its physical matrix
+    slices by
+    \begin{align}
+        (A_i)_{ab} & =V_{(i,a),b}.
+    \end{align}
+    This is the coordinate convention for the supplied representation in
+    \cite[equation~(3.6)]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Normalization and one-site Heisenberg insertion]
+    \label{thm:supplied_isometry_heisenberg_insertion}
+    \lean{MPSTensor.sum_conjTranspose_mul_tensorOfPhysicalIsometry,
+        MPSTensor.isLeftCanonical_tensorOfPhysicalIsometry,
+        MPSTensor.physicalIsometry_heisenbergInsertion}
+    \leanok
+    For the preceding slices,
+    \begin{align}
+        \sum_iA_i^*A_i   & =V^*V,
+        \\
+        V^*(X\otimes B)V & =\sum_{i,j}X_{ij}A_i^*BA_j
+        \quad(X\in M_d(\mathbb C),\ B\in M_D(\mathbb C)).
+    \end{align}
+    Thus an isometry gives trace-preserving normalized tensor matrices.
+    The insertion identity holds for any supplied $V$, without an isometry
+    assumption. No dimension, stationarity, or faithfulness assumption is
+    needed. This identifies the one-site coordinates of
+    \cite[equation~(3.6)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:supplied_physical_isometry_tensor}
+    Expand the matrix products in physical and virtual coordinates.
+    The normalization is the Gram matrix of $V$. Permuting the finite sums
+    in the insertion gives the displayed two-sided Kraus expression.
+\end{proof}
+
+\begin{theorem}[Trace duality of the one-site insertion]
+    \label{thm:supplied_isometry_insertion_trace_duality}
+    \lean{MPSTensor.physicalObservableTransfer_oneSite_apply,
+        MPSTensor.trace_physicalIsometry_heisenbergInsertion}
+    \leanok
+    Identify configurations on one site with their physical letter. For
+    any tensor $A$, its one-site physical observable transfer is
+    \begin{align}
+        E_X(\rho) & =\sum_{i,j}X_{ij}A_j\rho A_i^*.
+    \end{align}
+    For the slices of $V$, this is trace-dual to the preceding Heisenberg
+    insertion:
+    \begin{align}
+        \operatorname{Tr}\bigl(\rho V^*(X\otimes B)V\bigr)
+         & =\operatorname{Tr}\bigl(B E_X(\rho)\bigr).
+    \end{align}
+    The matrices $X,B,\rho$ are arbitrary. These identities neither
+    construct a supplied isometry from arbitrary GVBS data nor identify
+    multi-site expectations with a particular ordering of source sites.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:supplied_isometry_heisenberg_insertion}
+    Reindex the one-site configuration sum by its unique physical letter.
+    Cyclicity of the trace turns each term
+    $X_{ij}\operatorname{Tr}(\rho A_i^*BA_j)$ into
+    $X_{ij}\operatorname{Tr}(BA_j\rho A_i^*)$.
+\end{proof}
+
+\begin{definition}[Reversed physical product of one-site observables]
+    \label{def:source_reversed_product_observable}
+    \lean{MPSTensor.reversedProductObservable}
+    \leanok
+    For a finite list of one-site observables $(X_1,\ldots,X_n)$, define
+    $O_{\mathrm{rev}}=X_n\otimes\cdots\otimes X_1$. The empty product
+    is the identity on the zero-site space. Equivalently,
+    $O_{\mathrm{rev}}(X_1,X_2,\ldots,X_n)
+        =O_{\mathrm{rev}}(X_2,\ldots,X_n)\otimes X_1$.
+    This records the physical order required by trace duality of the
+    source-written Heisenberg composition in
+    \cite[equations~(3.5)--(3.6)]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Source-ordered Heisenberg expectation and physical reversal]
+    \label{thm:source_ordered_heisenberg_trace_reversal}
+    \lean{MPSTensor.sourceOrderedHeisenberg_trace_eq_reversedProduct_transfer}
+    \leanok
+    Let $V:\mathbb C^D\to\mathbb C^d\otimes\mathbb C^D$ be a supplied
+    map, let $(A_i)_{ab}=V_{(i,a),b}$, and set
+    $F_X(B)=V^*(X\otimes B)V$. For every matrix $\rho$ and every finite
+    list $(X_1,\ldots,X_n)$,
+    \begin{align}
+        \operatorname{Tr}\bigl(\rho\,
+        (F_{X_1}\circ\cdots\circ F_{X_n})(I)\bigr)
+         & =\operatorname{Tr}\bigl(E_{X_n\otimes\cdots\otimes X_1}(\rho)\bigr).
+    \end{align}
+    Here $E$ is the physical observable transfer with forward matrix words.
+    The equality includes $n=0$. It holds in particular for an isometry,
+    whose slices satisfy $\sum_iA_i^*A_i=I$; neither normalization,
+    positivity, nor stationarity is needed for the trace identity itself.
+    This is the explicit order relation for the supplied representation in
+    \cite[equations~(3.5)--(3.6)]{Nachtergaele1996Spectral}, and makes no
+    assertion that arbitrary GVBS boundary data have this representation.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:source_reversed_product_observable,
+        thm:supplied_isometry_insertion_trace_duality,
+        lem:ldp_observable_transfer_products}
+    Induct on the list, allowing an arbitrary matrix $\rho$. Trace duality
+    moves the first Heisenberg insertion to $E_{X_1}(\rho)$.
+    The induction hypothesis then gives
+    $\operatorname{Tr}(E_{O_{\mathrm{rev}}(X_2,\ldots,X_n)}
+        (E_{X_1}(\rho)))$.
+    The inserted-transfer product identity identifies this with the
+    expectation of $O_{\mathrm{rev}}(X_2,\ldots,X_n)\otimes X_1$.
+    At the empty list, both expressions are $\operatorname{Tr}\rho$.
 \end{proof}

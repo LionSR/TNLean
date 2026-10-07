@@ -1,6 +1,10 @@
 # Published regional embedding verification
 
-The three current adapter records identify public source commit
+This packet records the first public-source migration. The subsequent
+[overview correction](../prose-correction/README.md) supplies the current
+adapter verification records; the logs and identities below are preserved.
+
+The three adapter records at this migration identified public source commit
 `bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7`. Its complete tree
 `f9c47755e594c742e64d1b039a67bad676a1977a` is identical to the actual local
 execution revision `22452861589bfb0717cad045c390736147ee94d7`.
