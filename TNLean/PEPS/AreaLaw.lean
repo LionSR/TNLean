@@ -12,6 +12,7 @@ import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
+import TNLean.PEPS.AreaLaw.MarginalTails
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.TheoremStatements
