@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayersplitmask",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the actual Boolean midpoint subdivision of each reference cell side. It is true exactly when some actual fine-cell corner at a layer h \u2265 k\u2080 is its midpoint. The witness ranges over all actual fine-layer cells, including nonbelt cells; the reference index k is unrestricted.",
+        "Source: Section 11, lines 299\u2013310. The definition uses actual unsplit fan endpoints and midpoint \u211d; no radius, reference-membership or late-layer assumption is imposed on the definition."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayersplitmask_eq_true_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Proves the exact existential characterization of a true mask value: there are h \u2265 k\u2080, an actual fineLayerIndices member w and a binary corner \u03b5 whose actual dyadicCellCorner equals the reference whole-side midpoint.",
+        "Source: Section 11, lines 299\u2013310. This characterization holds for arbitrary origin, finite endpoint set, natural radius, reference index and integer reference-cell index."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfan_elementary_endpoints",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every optional Boolean midpoint mask and every actual fan slot, the elementary endpoints are precisely the whole-side endpoints, the start and midpoint, or the midpoint and end. This theorem has no layer-membership, radius or late-layer hypothesis.",
+        "Source: Section 11, lines 299\u2013310. The previously private geometric proof is exposed unchanged apart from declaration-name references, so subsequent contact arguments can reuse it without duplicating the proof."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cellfan_elementary_side_containment",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every optional Boolean midpoint mask and every fan slot, the actual elementary closed segment is contained in the corresponding unsplit whole-side segment. This theorem has no layer-membership, radius or late-layer hypothesis.",
+        "Source: Section 11, lines 299\u2013310. The previously private proof uses the three endpoint cases and convexity of the whole segment; its geometric content is unchanged."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayer_corner_on_elementaryside",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For C \u2265 2, k \u2265 50000000 and actual fine-cell memberships at k and h \u2265 k\u2080, every opposing corner on an elementary segment determined by the actual midpoint mask equals that segment\u2019s start or end. No k \u2265 k\u2080, additional opposing late threshold, distinct-cell or belt assumption is imposed.",
+        "Source: Section 11, lines 299\u2013310. The existing whole-side corner trichotomy and the exact midpoint witness define the subdivision. Matching opposing elementary segments and constancy of a tile identifier remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.neighborhood_dist_bound",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_exists_dist_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For arbitrary origin, finite endpoint set, natural radius C and index k, every point x in the closure of the actual dyadic neighborhood has z \u2208 Z with dist x (integerPoint z) \u2264 (C+1)2^k. Membership supplies the endpoint witness without an extra nonempty-Z hypothesis.",
+        "Source: Section 11, lines 160\u2013177 and geometry:layer-distance, lines 179\u2013191. This is the neighborhood bound rather than the twice-larger bound for a whole layer."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dummy_layer_separation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For arbitrary natural radius C, k\u2080+1 \u2264 k, x in the closed actual initial neighborhood and y in the closed actual later layer, proves (C\u22121)2^k\u2080 \u2264 dist x y. The bound is positive for C \u2265 2, but the inequality itself imposes no radius lower bound.",
+        "Source: Section 11, lines 160\u2013177, geometry:layer-distance in lines 179\u2013191, and the opposing dummy region in lines 299\u2013306. The proof combines the neighborhood endpoint witness, the actual layer lower bound and the triangle inequality."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dummy_contact_index",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_contact_layer_eq",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For C \u2265 2 and k\u2080 \u2264 k, a shared point in the closures of the actual initial neighborhood and layer D_k forces k = k\u2080. No late-layer threshold, positive-length-contact or nonempty-Z assumption is imposed.",
+        "Source: Section 11, lines 160\u2013177, geometry:layer-distance in lines 179\u2013191, and the opposing dummy region in lines 299\u2013306. Every strictly later closed layer has positive separation from the closed initial neighborhood; the actual dummy label and constancy along an open elementary segment remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

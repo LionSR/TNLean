@@ -13,6 +13,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
+import TNLean.PEPS.AreaLaw.Geometry.DummyContacts
 import TNLean.PEPS.AreaLaw.Geometry.DyadicClosure
 import TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion
 import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
@@ -33,5 +34,6 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
+import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.Templates

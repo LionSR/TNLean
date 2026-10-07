@@ -1,0 +1,67 @@
+\section{Subdivisions determined by actual corners}
+\label{sec:area_law_actual_side_mask}
+
+The opposing corners determine the subdivisions used in the cell fans;
+see \cite[Section~11]{OpenAI2026AreaLaw}. Retain the common origin, endpoint
+set and dyadic layers, and fix a lower index $k_0$. All actual fine cells
+at indices at least $k_0$ participate in this construction.
+
+% Source: 10-geometry.tex, lines 299--310. Dummy-neighborhood corners
+% and opposing-region constancy are separate assertions.
+
+\begin{theorem}[Geometry of an elementary side]
+    \label{thm:area_law_elementary_side_geometry}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases,
+        TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Fix any dyadic cell and optional midpoint subdivision. Let $[a,b]$
+    be a whole side and $[u,v]$ one of its elementary segments, ordered
+    counterclockwise. One of the following descriptions applies:
+    the side is undivided and $(u,v)=(a,b)$; the side is divided and
+    $(u,v)=(a,(a+b)/2)$; or the side is divided and
+    $(u,v)=((a+b)/2,b)$. In every case $[u,v]\subseteq[a,b]$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    In the affine parametrization of the whole side by $[0,1]$, the
+    elementary endpoints have parameters $0,1$ for an undivided side,
+    $0,1/2$ for the first half, and $1/2,1$ for the second half.
+    Each resulting interval belongs to $[0,1]$.
+\end{proof}
+
+\begin{definition}[The actual midpoint subdivision]
+    \label{def:area_law_actual_side_mask}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask,
+        TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_corner,
+        def:area_law_fine_layer_indices}
+    For the fine cell indexed by $z$ in layer $k$, write $[a_s,b_s]$
+    for its whole side $s$. Divide this side at its midpoint precisely
+    when that midpoint is a corner of some actual fine cell in a layer
+    $h\ge k_0$. The elementary segments are the whole side if no such
+    corner exists, and its two midpoint halves otherwise.
+\end{definition}
+
+\begin{theorem}[Opposing corners are elementary endpoints]
+    \label{thm:area_law_elementary_corner_endpoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide}
+    \leanok
+    \uses{def:area_law_actual_side_mask}
+    Suppose that $C_0\ge2$, $k\ge50\,000\,000$, and $z$ indexes an
+    actual fine cell of layer $k$. Let $w$ index an actual fine cell of
+    any layer $h\ge k_0$. If a corner of the cell indexed by $w$ belongs
+    to an elementary segment of the reference cell under the actual
+    midpoint subdivision, then it is an endpoint of that segment.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_corner_side_subdivision,def:area_law_actual_side_mask,
+        thm:area_law_elementary_side_geometry}
+    Every elementary segment lies on its whole side. The whole-side
+    assertion gives its start, midpoint or end as the only possible
+    opposing corners. For an undivided side, a corner at the midpoint
+    would be a witness requiring subdivision. For either midpoint half,
+    the opposite endpoint of the whole side lies outside that half.
+    The remaining two possibilities are exactly its endpoints.
+\end{proof}

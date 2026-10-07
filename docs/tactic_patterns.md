@@ -3446,6 +3446,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
+
+- **Pattern:** Choose one cell in the finite closed neighborhood union, then
+  an endpoint in its occupied neighboring cell, and apply the closed-cell
+  distance bound.
+- **Seen:** The private neighborhood witness in `DistanceLayers.lean` and
+  the public `dyadicNeighborhood_exists_dist_le` in `DummyContacts.lean`.
+- **Current reuse:** New consumers use the public theorem. The earlier verified
+  module is preserved; this is the second occurrence, below the promotion
+  threshold.
+- **Promotion trigger:** If a third occurrence is needed, use the public
+  theorem and replace the earlier private copy in one separately verified
+  contribution.
+
+
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
 - **Sites:** `ThetaBondCoordinates` and `ThetaBondOrthonormalCoordinates`.
