@@ -166,7 +166,7 @@ example : (1, 0) ∈ boundaryEndpoints pairDomain {leftSite} :=
 
 example : ¬ Disjoint {(0, 0)} (boundaryEndpoints pairDomain {leftSite}) := by
   intro h
-  exact Finset.disjoint_left.mp h (by simp)
+  exact Finset.disjoint_left.mp h (by simp [leftSite])
     (mem_boundaryEndpoints_of_mem_edgeBoundary (x := leftSite) pair_crossing (by simp))
 
 example : s((1, 0), (0, 0)) ∈ ambientBoundary {(0, 0)} := by
