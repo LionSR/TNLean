@@ -1,0 +1,329 @@
+\section{Finite-domain area laws and polynomial PEPS approximation}
+\label{sec:finite_domain_area_law}
+
+An entropy bound for every cut and an approximation of the entire vector are
+different assertions. The first concerns arbitrary finite induced lattice
+domains. The second asks for one compatible tensor representation on the
+original open square. We state the two models separately, following
+\cite{OpenAI2026AreaLaw,OpenAI2026PolynomialPEPS}.
+
+\begin{definition}[Induced lattice domain]
+\label{def:area_law_domain}
+\lean{
+  TNLean.PEPS.AreaLaw.Site,
+  TNLean.PEPS.AreaLaw.Configuration,
+  TNLean.PEPS.AreaLaw.StateSpace,
+  TNLean.PEPS.AreaLaw.domainGraph,
+  TNLean.PEPS.AreaLaw.configurationSplit,
+  TNLean.PEPS.AreaLaw.card_configuration
+}
+\leanok
+Let $\Lambda\subset\mathbb Z^2$ be finite. Join sites at coordinate distance
+one, and let $d_\Lambda$ be distance in this induced graph, with value
+$+\infty$ between distinct components. At every site put $\mathbb C^q$,
+$q\ge1$. In configuration coordinates the physical Hilbert space is
+\begin{align}
+ \mathcal H_\Lambda&=\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
+ \label{eq:area_law_state_space}\\
+ \dim\mathcal H_\Lambda&=q^{|\Lambda|}.
+ \label{eq:area_law_dimension}
+\end{align}
+Restriction to $A$ and $\Lambda\setminus A$ identifies the configuration set
+with the product of the two regional configuration sets. Empty domains,
+holes, and disconnected components are permitted.
+\end{definition}
+
+\begin{definition}[Finite-range interactions and boundary]
+\label{def:area_law_hamiltonian}
+\lean{
+  TNLean.PEPS.AreaLaw.IsAdmissibleSupport,
+  TNLean.PEPS.AreaLaw.AdmissibleSupport,
+  TNLean.PEPS.AreaLaw.LocalHamiltonian,
+  TNLean.PEPS.AreaLaw.LocalHamiltonian.operator,
+  TNLean.PEPS.AreaLaw.LocalHamiltonian.operator_isHermitian,
+  TNLean.PEPS.AreaLaw.LocalHamiltonian.zero,
+  TNLean.PEPS.AreaLaw.localLift,
+  TNLean.PEPS.AreaLaw.localLift_mem_supportedOperators,
+  TNLean.PEPS.AreaLaw.edgeBoundary,
+  TNLean.PEPS.AreaLaw.edgeBoundary_empty,
+  TNLean.PEPS.AreaLaw.edgeBoundary_univ
+}
+\leanok
+\uses{def:area_law_domain}
+Fix an integer $R\ge0$ and $J>0$. For each nonempty
+$X\subseteq\Lambda$ with $\operatorname{diam}_{d_\Lambda}X\le R$, assign
+one Hermitian operator $h_X$ supported on $X$, with $\|h_X\|\le J$.
+The assigned operator may be zero, and acts as the identity on the
+complementary tensor factors. Define
+\begin{align}
+ H&=\sum_{\substack{\varnothing\ne X\subseteq\Lambda\\
+                   \operatorname{diam}_{d_\Lambda}X\le R}}h_X,
+ \label{eq:area_law_hamiltonian}\\
+ \partial_\Lambda A&=
+ \{\{x,y\}:x\in A,\ y\in\Lambda\setminus A,\ d_\Lambda(x,y)=1\}.
+ \label{eq:area_law_boundary}
+\end{align}
+The norm is the Euclidean operator norm. Boundary edges are unordered and
+counted once; empty and full cuts have empty boundary.
+\end{definition}
+
+\begin{theorem}[Interaction range and rectangular coordinates]
+\label{thm:area_law_domain_identifications}
+\lean{
+  TNLean.PEPS.AreaLaw.exists_walk_length_le_iff_edist_le,
+  TNLean.PEPS.AreaLaw.isAdmissibleSupport_zero_iff,
+  TNLean.PEPS.AreaLaw.isAdmissibleSupport_singleton,
+  TNLean.PEPS.AreaLaw.isAdmissibleSupport_pair_of_adj,
+  TNLean.PEPS.AreaLaw.rectangleEmbedding,
+  TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
+  TNLean.PEPS.AreaLaw.rectangularDomain,
+  TNLean.PEPS.AreaLaw.rectangleSiteEquiv,
+  TNLean.PEPS.AreaLaw.rectangleSiteEquiv_val,
+  TNLean.PEPS.AreaLaw.rectangleGraphIso,
+  TNLean.PEPS.AreaLaw.rectangleConfigurationEquiv,
+  TNLean.PEPS.AreaLaw.isAdmissibleSupport_rectangle_pair_of_adj
+}
+\leanok
+\uses{def:area_law_domain,def:area_law_hamiltonian}
+A pair has induced distance at most $R$ if and only if an induced walk of
+length at most $R$ joins it. At range zero the admissible supports are
+exactly the singletons. Adjacent pairs are admissible at range one.
+The nearest-neighbor graph on
+$\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ is the induced graph of that
+integer rectangle, with the corresponding identification of configurations
+and range-one pair supports.
+\end{theorem}
+\begin{proof}\leanok
+The extended graph distance is the least walk length, or infinity when no
+walk exists. A zero-length walk has equal endpoints. A nonempty support of
+diameter zero therefore has one element. The coordinate embedding preserves
+horizontal and vertical nearest neighbors and is bijective onto the integer
+rectangle. Restricting configurations along this bijection gives the last
+identification.
+\end{proof}
+
+\begin{definition}[Ground vector and regional entropy]
+\label{def:area_law_ground_entropy}
+\lean{
+  TNLean.PEPS.AreaLaw.IsGappedGroundState,
+  TNLean.PEPS.AreaLaw.reducedState,
+  TNLean.PEPS.AreaLaw.reducedState_isHermitian,
+  TNLean.PEPS.AreaLaw.regionalEntropy,
+  TNLean.PEPS.AreaLaw.UniformAreaLaw
+}
+\leanok
+\uses{def:area_law_hamiltonian}
+For a unit vector $\Omega$, a real $E_0$, and $\Delta>0$, the eigenvector and
+full-system projector-gap conditions are
+\begin{align}
+ H\Omega&=E_0\Omega,
+ \label{eq:area_law_ground_vector}\\
+ H-E_0I&\ge\Delta(I-|\Omega\rangle\langle\Omega|).
+ \label{eq:area_law_projector_gap}
+\end{align}
+For $A\subseteq\Lambda$, put
+\begin{align}
+ \rho_A&=\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|,
+ \label{eq:area_law_reduced_state}\\
+ S_\Omega(A)&=-\operatorname{Tr}\rho_A\log\rho_A.
+ \label{eq:area_law_regional_entropy}
+\end{align}
+All logarithms are natural, with $0\log0=0$. The reduced matrix is Hermitian,
+including when its spectrum contains zero. No condition is imposed on the
+gap of a Hamiltonian restricted to a smaller region.
+The uniform boundary assertion requires a single finite constant for each
+$q,R,J,\Delta$, chosen before every domain, Hamiltonian, ground vector, and cut.
+\end{definition}
+
+\begin{theorem}[Uniform finite-domain area law]
+\label{thm:openai_uniform_area_law}
+\uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
+For fixed integers $q\ge1$, $R\ge0$ and reals $J,\Delta>0$, there is a finite
+constant $C=C(q,R,J,\Delta)$ such that every finite induced domain with the
+above interaction bounds and a unique unit ground vector, up to phase,
+satisfying the full-system projector gap obeys
+$S_\Omega(A)\le C|\partial_\Lambda A|$ for every $A\subseteq\Lambda$.
+The same constant applies to all domains, interaction families, and cuts.
+This is Theorem~1.1 of \cite{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+The initial entropy estimate on buffered boxes supplies the input to the
+collar argument. Spectral filters give positive quasi-local constraints, and
+a replica argument improves the box exponent until collar information is
+sublinear. Products of the positive constraints amplify this information
+bound. The planar construction partitions an arbitrary cut into two ordered
+families of separated regions and a residual set. Applying the two-family
+entropy cancellation bounds the residual entropy and the sum of information
+errors by the number of crossing edges. All these estimates use the gap of
+the full system and choose their constants before the domain and cut.
+\end{proof}
+
+\begin{definition}[Open-square Hamiltonian and PEPS approximation]
+\label{def:polynomial_peps_model}
+\lean{
+  TNLean.PEPS.Approximation.Configuration,
+  TNLean.PEPS.Approximation.StateSpace,
+  TNLean.PEPS.Approximation.SquareHamiltonian,
+  TNLean.PEPS.Approximation.SquareHamiltonian.operator,
+  TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState,
+  TNLean.PEPS.Approximation.pepsVector,
+  TNLean.PEPS.Approximation.HasPEPSApproximation,
+  TNLean.PEPS.Approximation.PolynomialPEPSApproximation
+}
+\leanok
+On the original open $L\times L$ graph, let
+\begin{align}
+ H&=\sum_v h_v+\sum_e h_e,
+ \label{eq:polynomial_peps_hamiltonian}\\
+ \|h_v\|&\le J,
+ \label{eq:polynomial_peps_site_bound}\\
+ \|h_e\|&\le J,
+ \label{eq:polynomial_peps_edge_bound}
+\end{align}
+where terms are supported on their designated sites or edges, and only the
+total $H$ is assumed Hermitian. A PEPS approximation with parameters $C,c$
+is a tensor family on those same edges with positive dimensions $D_e$
+satisfying $D_e\le CL^c$ for every edge $e$, and a nonzero contracted vector
+$\Phi$ such that, for some $\theta\in\mathbb R$,
+\begin{align}
+ \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\|&\le L^{-1}.
+ \label{eq:polynomial_peps_vector_error}
+\end{align}
+The norm in (\ref{eq:polynomial_peps_vector_error}) is the Euclidean norm
+of the entire vector.
+The local tensor maps need not be isometries and the bond dimensions need not
+be equal. The uniform approximation assertion requires $C,c>0$ to be chosen
+for fixed $q\ge2$, $J,\Delta>0$ before all $L\ge2$, Hamiltonians, and ground vectors.
+\end{definition}
+
+\begin{theorem}[Polynomial PEPS approximation]
+\label{thm:openai_polynomial_peps}
+\uses{def:polynomial_peps_model}
+Fix an integer $q\ge2$ and reals $J,\Delta>0$. There are $C,c>0$, depending
+only on these parameters, such that for every $L\ge2$, every Hamiltonian in
+the preceding model with a unique unit ground vector, up to phase, satisfying
+(\ref{eq:area_law_projector_gap}) has a nonzero PEPS on the original open
+grid with $D_e\le CL^c$ for every edge $e$ and
+\begin{align}
+ \min_{\theta\in\mathbb R}
+ \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\|&\le L^{-1}.
+ \label{eq:polynomial_peps_phase_error}
+\end{align}
+This is Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+The area-law and collar estimates provide the information bounds for splitting
+physical registers. Adaptive finite-rank constraints control the sum of the
+ranks over the resulting patches. The dyadic ownership construction preserves
+reference vectors while bounding the number of nonprivate operations during
+each party's whole lifetime. Density compression then gives polynomial link
+dimensions. A suitable nonzero vector column approximates the pure ground
+state, and routing the links onto the prescribed square-grid edges preserves
+the contraction while controlling edge dimensions. The accumulated vector
+error and the nonzero norm are controlled before the final normalization.
+\end{proof}
+
+\begin{definition}[Polygonal lattice templates]
+\label{def:area_law_template}
+\lean{
+  TNLean.PEPS.AreaLaw.Geometry.IsAllowedSlope,
+  TNLean.PEPS.AreaLaw.Geometry.integerPoint,
+  TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon,
+  TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region,
+  TNLean.PEPS.AreaLaw.Geometry.Template,
+  TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated,
+  TNLean.PEPS.AreaLaw.Geometry.Template.core,
+  TNLean.PEPS.AreaLaw.Geometry.Template.collar,
+  TNLean.PEPS.AreaLaw.ambientDilation,
+  TNLean.PEPS.AreaLaw.ambientDilation_zero
+}
+\leanok
+Fix $D_0>0$ and a sufficiently large positive numerical constant
+$C_{\rm tpl}$ before choosing templates. A template with positive integer
+parameters $n,s_0$ is a nonempty finite
+$T\subset\mathbb Z^2$ with
+\begin{align}
+ T&=\bigcup_{a=0}^{N_0-1}(P_a\cap\mathbb Z^2),
+ \label{eq:area_law_template_cover}\\
+ N_0&\ge1,
+ \label{eq:area_law_template_pieces}\\
+ C_{\rm tpl}N_0(s_0+1)&\le n,
+ \label{eq:area_law_template_scale}\\
+ \operatorname{diam}_\infty T&\le n.
+ \label{eq:area_law_template_diameter}
+\end{align}
+Each $P_a$ is a closed convex rectangle or triangle of sup-norm diameter at
+most $s_0$, with side slopes in $\{0,\infty,1,-1\}$. The union may be
+disconnected. Geometric estimates require a uniform lower bound on
+$C_{\rm tpl}$, chosen independently of the template.
+Separation from a fixed cut set $Z$ means
+$\operatorname{dist}_\infty(T,Z)>4D_0s_0$. Put
+\begin{align}
+ T_j&=T+([-j,j]^2\cap\mathbb Z^2),
+ \label{eq:area_law_template_dilation}\\
+ X&=A\cap T,
+ \label{eq:area_law_template_core}\\
+ Q_j&=A\cap(T_j\setminus T).
+ \label{eq:area_law_template_collar}
+\end{align}
+In particular, $T_0=T$. These are ambient dilations, not induced-graph
+neighborhoods.
+This is Definition~9.3 of \cite{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{definition}[Ordered two-family partition]
+\label{def:area_law_two_family_partition}
+\lean{
+  TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition,
+  TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily
+}
+\leanok
+A finite region $A$ is partitioned into a residual set $D$ and pairwise
+disjoint pieces $X_i$. Each piece has a family label in $\{0,1\}$, and one
+finite order induces the order within each family. For a piece $X_i$ in
+family $f$, the earlier same-family region is
+$\bigcup_{j<i,\,f(j)=f}X_j$. No size, separation, or information bound is
+part of this partition data; those are additional mathematical assertions.
+\end{definition}
+
+\begin{theorem}[Exact exponent gaps]
+\label{thm:area_law_exponent_gaps}
+\lean{
+  TNLean.PEPS.AreaLaw.Exponents.boxError,
+  TNLean.PEPS.AreaLaw.Exponents.scannerMu,
+  TNLean.PEPS.AreaLaw.Exponents.scannerNu,
+  TNLean.PEPS.AreaLaw.Exponents.scannerEll,
+  TNLean.PEPS.AreaLaw.Exponents.scannerOmega,
+  TNLean.PEPS.AreaLaw.Exponents.scannerKappa,
+  TNLean.PEPS.AreaLaw.Exponents.amplificationEpsilon,
+  TNLean.PEPS.AreaLaw.Exponents.beta,
+  TNLean.PEPS.AreaLaw.Exponents.amplificationPower,
+  TNLean.PEPS.AreaLaw.Exponents.alpha,
+  TNLean.PEPS.AreaLaw.Exponents.geometryDelta,
+  TNLean.PEPS.AreaLaw.Exponents.zeta,
+  TNLean.PEPS.AreaLaw.Exponents.rho,
+  TNLean.PEPS.AreaLaw.Exponents.geometryEll,
+  TNLean.PEPS.AreaLaw.Exponents.alpha_gt,
+  TNLean.PEPS.AreaLaw.Exponents.geometry_gaps
+}
+\leanok
+The final box error exponent is $e_*=2\cdot10^{-6}$, and the scanner choices are
+$(\mu,\nu,\ell,\omega,\kappa)=(1/4,1/1000,1/100000,1/20000,1/1000000)$.
+The amplification uses $\varepsilon=10^{-5}$ and $\alpha=p/(p+1)$.
+Set $\beta=1-2\cdot10^{-6}$, $\delta_0=2\cdot10^{-7}$,
+$\zeta=1-\delta_0/2$, $\rho_0=(1+\beta)/2$, and $\ell=10^{-5}$.
+Then
+\begin{align}
+ (1+2\delta_0)\beta&<\zeta<1,
+ \label{eq:area_law_zeta_gap}\\
+ (1+2\delta_0)(1-\ell)&<1,
+ \label{eq:area_law_ell_gap}\\
+ 1-\ell&<\beta<\rho_0<1.
+ \label{eq:area_law_rho_gap}
+\end{align}
+The choice $p=10^6$ also satisfies $p/(p+1)>1-10^{-6}$.
+\end{theorem}
+\begin{proof}\leanok
+Substitute the stated rational values and compare integers after multiplying
+by positive denominators. Each gap is strictly positive.
+\end{proof}
