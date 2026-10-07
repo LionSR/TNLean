@@ -38,13 +38,22 @@ repairs, birth separation and the complete two-family partition remain open.
 The polynomial series bound does not count actual repairs. The faithful area-law
 and polynomial PEPS main theorems remain unproved.
 
-The next mathematical action is to identify and claim a precise geometric
-prerequisite from Section 11. Initial scouting found the adjacent fine-scale
-estimate in source lines 299–306 absent: successive rounded fine exponents
+The next substantial mathematical action is to claim and construct the actual
+primary birth regions from Section 11, lines 212–218 and 237–249: intersect
+the dyadic layer with an open pitch interior, then take its closure. Prove the
+finite decomposition into closed rectangular fragments, the fragment count,
+the diameter bound and same-layer separation across a belt. Check the source's
+exact constants before presenting the fragment estimate as its formalization.
+Half-open indexing cells and open birth interiors must be distinguished;
+an equality between them at arbitrary real boundary points would be false.
+
+A separate short prerequisite for isolated stars is the adjacent fine-scale
+estimate in source lines 299–306 and 352–356: successive rounded fine exponents
 differ by zero or one, so successive fine-cell sides have ratio one or two.
-The primary-tile construction must also distinguish half-open indexing cells
-from open birth interiors. Confirm the source statement and current ownership
-before implementation.
+The subsequent nine-marks construction must use actual belt cells. The full
+isolated-star result requires actual fan regions and merged identifiers; its
+straight-ray conclusion must be proved rather than assumed. Confirm current
+ownership and publish the precise claim before implementation.
 
 ## Worktrees and evidence preservation
 
