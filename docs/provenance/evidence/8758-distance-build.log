@@ -1,0 +1,308 @@
+Command: lake build TNLean.PEPS
+Revision: 664852f322153faceb0c63ecf30e5886bcd1f228
+Elapsed seconds: 14.139
+Exit code: 0
+
+⚠ [3619/4090] Replayed TNLean.PEPS.RegionBlock.RegionReconcile
+warning: TNLean/PEPS/RegionBlock/RegionReconcile.lean:67:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: TNLean/PEPS/RegionBlock/RegionReconcile.lean:148:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+⚠ [3620/4090] Replayed TNLean.PEPS.RegionBlock.BlockCoeffTransfer
+warning: TNLean/PEPS/RegionBlock/BlockCoeffTransfer.lean:395:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+⚠ [3806/4090] Replayed TNLean.Algebra.SingletMatrix
+warning: TNLean/Algebra/SingletMatrix.lean:6:0: 'Mathlib.Data.Complex.Basic' has been deprecated: please replace this import by
+
+import Mathlib.Basic.Complex.Basic
+ℹ [10092/10167] Replayed Gametheory.Scarf
+info: Gametheory/Scarf.lean:241:33: Try this:
+  [apply] rwa [h1.2] at hd
+
+Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`
+info: Gametheory/Scarf.lean:246:33: Try this:
+  [apply] rwa [h1.2] at hd
+
+Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`
+⚠ [10093/10167] Replayed Gametheory.Brouwer
+warning: Gametheory/Brouwer.lean:39:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:49:45: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:370:14: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:370:37: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:374:33: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:374:33: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:391:42: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:391:42: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:403:32: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:506:40: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:506:63: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:507:65: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:525:38: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:548:23: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:549:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:551:55: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:552:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:566:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:566:57: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:626:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:626:57: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:631:87: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:685:122: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:686:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:705:65: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:706:53: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:713:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:717:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:732:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:740:81: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:742:81: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:743:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer.lean:746:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+⚠ [10094/10167] Replayed Gametheory.Brouwer_product
+warning: Gametheory/Brouwer_product.lean:15:21: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:18:37: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:48:12: `WellFounded.min_le` has been deprecated: Use `WellFoundedLT.min_le` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.min_le` to `WellFoundedLT.min_le x`).
+
+Hint: Replace the deprecated name:
+  WellFoundedL̲T̲.min_le
+warning: Gametheory/Brouwer_product.lean:224:8: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:220:17: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:229:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:253:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:375:8: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:362:17: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+warning: Gametheory/Brouwer_product.lean:382:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+
+Note: The updated constant has a different type:
+  (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+instead of
+  (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+⚠ [10095/10167] Replayed QICLean.Topology.BrouwerProduct
+warning: QICLean/Topology/BrouwerProduct.lean:33:36: `stdSimplexHomeomorphUnitInterval` has been deprecated: Use `Convexity.StdSimplex.homeomorphI` instead
+
+Note: The updated constant has a different type:
+  Convexity.StdSimplex ℝ (Fin 2) ≃ₜ ↑unitInterval
+instead of
+  ↑(stdSimplex ℝ (Fin 2)) ≃ₜ ↑unitInterval
+ℹ [10154/10167] Replayed TNLean.MPS.MPU.DoubleLayerContraction
+info: TNLean/MPS/MPU/DoubleLayerContraction.lean:335:2: Try this:
+  [apply] ring_nf
+
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+✔ [10164/10167] Built TNLean.PEPS.AreaLaw.Geometry.DistanceLayers (2.0s)
+✔ [10165/10167] Built TNLean.PEPS.AreaLaw.Geometry (1.8s)
+✔ [10166/10167] Built TNLean.PEPS.AreaLaw (2.4s)
+✔ [10167/10167] Built TNLean.PEPS (5.1s)
+Build completed successfully (10167 jobs).

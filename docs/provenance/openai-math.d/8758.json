@@ -1430,14 +1430,14 @@
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell_dist_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1457,20 +1457,38 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiccell_dist_lower",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_lower",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1490,20 +1508,38 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_lower",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_lower",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1523,20 +1559,38 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_exists_dist_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_exists_dist_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1556,20 +1610,38 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_infdist_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1589,20 +1661,38 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_separation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_separation",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1622,20 +1712,38 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_nonadjacent",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DistanceLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1655,7 +1763,25 @@
         "Does not prove the two-family construction, its repair and birth-separation arguments, or a source headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "664852f322153faceb0c63ecf30e5886bcd1f228",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-build.log",
+            "sha256": "ca26f22026d1f0901a972a959975e3a82f3ae79073c0c90ed35dda5b9a35aca4"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-distance-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-distance-axioms.log",
+            "sha256": "a2a41853e3c5547c9442c082872e067a92226d04757cb768b4fa801a67fdb776"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
