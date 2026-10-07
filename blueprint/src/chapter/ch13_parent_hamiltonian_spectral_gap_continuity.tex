@@ -660,6 +660,27 @@ is recorded in
     $PV=S$ and $E=SR$ for some $R$ give the reverse inclusion.
 \end{proof}
 
+\begin{theorem}[Bounded simultaneous injective blocking of normal blocks]
+    \label{thm:normal_block_injective_blocking}
+    \lean{MPSTensor.exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor}
+    \leanok
+    Let $(A^j)_j$ be pairwise gauge-phase inequivalent normalized normal
+    blocks, with bond dimensions $D_j$. There is a positive integer $L$
+    satisfying $L+1\leq3\max(\sum_jD_j,1)^5$ such that blocking $L$
+    physical sites gives a simultaneous one-site span of the direct sum
+    of the block matrix algebras. This is the bounded form of the initial
+    blocking in \cite[lines~575--597, Appendix~A]{Schuch2011Phases}, using
+    the bound in \cite[lines~317--345]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:cpsv_bnt_blocked_simultaneous_span}
+    \leanok
+    The simultaneous word-span bound supplies $L$ and spans the direct
+    sum by length-$L$ words. The one-site matrices of the blocked blocks
+    are precisely those length-$L$ word evaluations.
+\end{proof}
+
 \begin{theorem}[Constructed isometric deformation and its uniform gap]
     \label{thm:constructed_isometric_deformation_gap}
     \lean{MPSTensor.blockPhysicalMatrix, MPSTensor.leftPolarBlocks,
@@ -725,6 +746,408 @@ is recorded in
     gives both uniform gaps and the interaction properties.
     For normal blocks, the simultaneous span bound supplies $L$;
     length-$L$ evaluations become one-letter evaluations after blocking.
+\end{proof}
+
+\begin{theorem}[Unitary covariance of the left polar decomposition]
+    \label{thm:parent_polar_unitary_covariance}
+    \lean{Matrix.commute_mul_conjTranspose_of_unitary_covariance,
+        Matrix.commute_leftPolarSupport_of_unitary_covariance,
+        Matrix.commute_leftPolarPos_of_unitary_covariance,
+        Matrix.leftPolarIso_covariance_of_unitary_covariance,
+        MPSTensor.commute_leftPolarPhysicalFactor_of_unitary_covariance,
+        MPSTensor.blockPhysicalMatrix_rotatePhysical}
+    \leanok
+    Let $P:\C^k\to\C^d$, and suppose that unitary matrices $U$ and
+    $X$ satisfy $UP=PX$. Let $E$ project onto $\operatorname{ran}P$, and
+    write $P=QW$ with $Q=(PP^\dagger)^{1/2}+I-E$ as in
+    Theorem~\ref{thm:parent_left_polar_support}. Then $U$ commutes with
+    $PP^\dagger$, $E$, and $Q$, and $UW=WX$.
+    In particular, this applies to the joint physical map of a block
+    family. Physical rotation by a matrix $L$ replaces that map by $LP$.
+    These assertions establish the polar step in
+    \cite[lines~645--676]{Schuch2011Phases}, with the virtual unitary
+    $X$ supplied as a hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:parent_left_polar_support}
+    \leanok
+    Taking adjoints of $UP=PX$ and using unitarity gives
+    $U(PP^\dagger)U^\dagger=PP^\dagger$.
+    The square root and support projection are functions of the positive
+    matrix $PP^\dagger$, and therefore commute with $U$. Hence $Q$
+    also commutes with $U$. Since $Q$ is invertible, the equality
+    $QUW=UP=PX=QWX$ implies $UW=WX$.
+    The rotation identity follows by evaluating each physical coordinate.
+\end{proof}
+
+\begin{theorem}[Unitary covariance along the constructed deformation]
+    \label{thm:isometric_deformation_unitary_covariance}
+    \lean{MPSTensor.commute_positivePhysicalDeformation,
+        MPSTensor.blockPhysicalMatrix_isometricDeformationBlocks_covariance}
+    \leanok
+    If $U$ commutes with a physical matrix $Q$, then it commutes with
+    $Q_\gamma=\gamma Q+(1-\gamma)I$ for every $\gamma\in[0,1]$.
+    In the setting of Theorem~\ref{thm:parent_polar_unitary_covariance},
+    the constructed physical map $P_\gamma=Q_\gamma W$ therefore obeys
+    $UP_\gamma=P_\gamma X$ throughout the path.
+    This is the covariance implication of
+    \cite[lines~672--676]{Schuch2011Phases}; it does not assert the
+    existence of a virtual unitary from an arbitrary state symmetry.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:parent_polar_unitary_covariance,thm:constructed_isometric_deformation_gap}
+    \leanok
+    Commutation is preserved under scalar multiplication and addition.
+    Thus $UP_\gamma=UQ_\gamma W=Q_\gamma UW=Q_\gamma WX=P_\gamma X$.
+\end{proof}
+
+\begin{theorem}[Invariant local spaces and commuting physical deformations]
+    \label{thm:parent_invariant_space_physical_deformation}
+    \lean{MPSTensor.onSiteTensorPow_commute,
+        MPSTensor.parentInteractionES_commute_onSiteTensorPow_of_invariant,
+        MPSTensor.groundSpaceES_invariant_rotatePhysical_of_commute,
+        MPSTensor.groundSpaceES_invariant_rotatePhysical_iff_of_commute,
+        MPSTensor.deformedInteraction_commute_onSiteTensorPow}
+    \leanok
+    \uses{def:deformed_interaction}
+    Let $A$ be a tensor, let $U,Q$ be physical matrices with $UQ=QU$,
+    and write $T_L(V)=V^{\otimes L}$. Then $T_L(U)$ and $T_L(Q)$
+    commute. If $T_L(U)G_L(A)=G_L(A)$, then
+    $T_L(U)G_L(QA)=G_L(QA)$. When $Q$ is invertible, these two
+    invariance statements are equivalent. If $U$ is unitary and
+    $G_L(A)$ is invariant, its canonical complementary projection $h_L(A)$
+    commutes with $T_L(U)$. Finally, if $Q$ is invertible and Hermitian,
+    every interaction $h$ commuting with $T_L(U)$ retains this symmetry
+    under the deformation $T_L(Q^{-1})hT_L(Q^{-1})$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:ground_space_physical_rotation}
+    \leanok
+    Tensor powers preserve matrix products, and
+    $G_L(QA)=T_L(Q)G_L(A)$. Applying the commuting operators in either
+    order gives the forward invariance statement. Applying the same
+    argument with $Q^{-1}$ gives the converse. A unitary preserving a
+    subspace also preserves its orthogonal complement and commutes with
+    the two orthogonal projections. The inverse of $Q$ commutes with $U$,
+    so the final assertion follows by multiplication.
+\end{proof}
+
+\begin{theorem}[On-site symmetry of open and periodic interaction sums]
+    \label{thm:parent_interaction_sum_on_site_symmetry}
+    \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator,
+        MPSTensor.periodicLocalInteractionES_commute_onSiteTensorPow,
+        MPSTensor.periodicInteractionHamiltonianES_commute_onSiteTensorPow,
+        MPSTensor.openInteractionHamiltonianES_commute_onSiteTensorPow}
+    \leanok
+    Let $h$ be an interaction on $R$ sites, let $U$ be a physical
+    matrix, and suppose $[h,U^{\otimes R}]=0$. For every $N\geq R$,
+    each cyclic extension of $h$ commutes with $U^{\otimes N}$.
+    Consequently both the periodic sum and the sum over nonwrapping
+    windows commute with $U^{\otimes N}$. In configuration coordinates,
+    cyclic extension is the matrix obtained by placing $h$ on the
+    window and the identity on its complement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Reordering the physical sites into the window and its complement
+    identifies the extended interaction with $h\otimes I$ and the
+    global action with $U^{\otimes R}\otimes U^{\otimes(N-R)}$.
+    These commute by the hypothesis. Summing over all cyclic windows,
+    or only the nonwrapping ones, preserves commutation.
+\end{proof}
+
+\begin{theorem}[Parent symmetry from supplied invariance along the polar deformation]
+    \label{thm:isometric_deformation_supplied_parent_symmetry}
+    \lean{MPSTensor.groundSpaceES_invariant_leftPolarBlocks,
+        MPSTensor.groundSpaceES_invariant_isometricDeformationBlocks,
+        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute,
+        MPSTensor.isometricDeformationInteractionES_commute,
+        MPSTensor.isometricDeformation_parentHamiltonianES_commute,
+        MPSTensor.isometricDeformation_openParentHamiltonianES_commute,
+        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute,
+        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute}
+    \leanok
+    Let $A=(A^j)_j$ be a finite block family, assembled with unit
+    coefficients, and let $P=QW$ be its constructed joint left polar
+    decomposition. Suppose that $U$ is unitary, $UQ=QU$, and
+    $U^{\otimes2}G_2(A)=G_2(A)$. For every $\gamma\in[0,1]$, put
+    $Q_\gamma=\gamma Q+(1-\gamma)I$ and $P_\gamma=Q_\gamma W$.
+    Then $G_2(W)$ and $G_2(P_\gamma)$ are invariant under
+    $U^{\otimes2}$. Both the canonical parent projection of $P_\gamma$
+    and the positive interaction
+    \begin{align*}
+        h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+        h_2(W)(Q_\gamma^{-1})^{\otimes2}
+    \end{align*}
+    commute with $U^{\otimes2}$. Their open and periodic Hamiltonians
+    commute with $U^{\otimes N}$ for every $N\geq2$.
+    More generally, supplied invariance of $G_L(A)$ implies invariance
+    of $G_L(W)$ and $G_L(P_\gamma)$ for any fixed $L$.
+    This is the conditional parent-symmetry implication of
+    \cite[lines~672--676]{Schuch2011Phases}. The original local-space
+    invariance and commutation of $Q$ are explicit hypotheses; the
+    derivation from arbitrary multiblock state symmetry remains separate
+    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:parent_invariant_space_physical_deformation,thm:parent_interaction_sum_on_site_symmetry,thm:constructed_isometric_deformation_gap}
+    \leanok
+    The positive factor $Q$ is invertible, and $A=QW$. Invariance
+    therefore passes to $W$ by the inverse deformation. Each
+    $Q_\gamma$ commutes with $U$, so invariance passes from $W$ to
+    $P_\gamma$. The invariant local spaces give commuting canonical
+    projections, and inverse conjugation preserves this commutation.
+    The open and periodic conclusions follow by extending and summing
+    the local interactions.
+\end{proof}
+
+\begin{theorem}[Derived polar covariance for one injective unital canonical block]
+    \label{thm:injective_isometric_deformation_derived_covariance}
+    \lean{MPSTensor.exists_unitary_virtual_of_isOnSiteSymmetric,
+        MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric,
+        MPSTensor.commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric,
+        MPSTensor.exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetric}
+    \leanok
+    Let $A$ be a one-site injective tensor of positive bond dimension
+    $D$, in the unital canonical orientation $\E_A(I)=I$. Let
+    $g\mapsto U_g$ be a unitary
+    representation of a monoid $G$, and suppose that the matrix product
+    vectors of $A$ are unchanged by $U_g^{\otimes N}$ for every $g$ and
+    every chain length $N$. For each $g$, there is a virtual unitary
+    $V_g$ such that
+    $\sum_l(U_g)_{il}A_l=V_gA_iV_g^\dagger$ for every $i$.
+
+    For the single-block physical map $P_{i,(a,b)}=A_i(a,b)$, the induced
+    unitary $X_g=V_g^T\otimes V_g^\dagger$ satisfies $U_gP=PX_g$.
+    Consequently, $U_g$ commutes with the extended positive polar factor
+    $Q=(PP^\dagger)^{1/2}+I-E$, and the same $X_g$ satisfies
+    $U_gP_\gamma=P_\gamma X_g$ at every $\gamma\in[0,1]$.
+    No faithful adjoint fixed point or virtual covariance is supplied
+    as an additional hypothesis.
+
+    With the displayed coordinates for $P$, unital normalization means
+    $\sum_iA_iA_i^\dagger=I$. The condition
+    $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ printed in
+    \cite[line~653]{Schuch2011Phases} instead means
+    $\sum_iA_i^\dagger A_i=I$; these are the two dual canonical
+    orientations. This result treats the already-blocked, single-block
+    unital orientation of the argument in
+    \cite[lines~645--676]{Schuch2011Phases}, for exact invariance of
+    the matrix product vectors. The several-block symmetry permutation
+    and a symmetry-compatible initial canonical gauge remain separate
+    assertions; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:gauge_equiv_twisted,thm:virtual_gauge_fixes_boundary_state,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
+    \leanok
+    Injectivity implies irreducibility. The adjoint transfer map is a
+    trace-preserving irreducible quantum channel, and therefore has a
+    faithful invariant density matrix. The fundamental theorem gives
+    an invertible gauge for each symmetric twist. In the stated
+    normalization this gauge is a nonzero scalar multiple of a virtual
+    unitary, by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; the
+    scalar cancels in conjugation. Taking the induced action on matrix
+    entries gives $X_g$, which is unitary as a tensor product of
+    unitaries. The polar covariance and affine covariance theorems give
+    the remaining conclusions, including the identity extension off
+    the physical support.
+\end{proof}
+
+\begin{theorem}[Derived polar covariance in the trace-preserving orientation]
+    \label{thm:injective_isometric_deformation_tp_covariance}
+    \lean{MPSTensor.exists_unitary_virtual_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetric_of_isTP}
+    \leanok
+    Let $A$ be one-site injective, of positive bond dimension, with
+    $\sum_iA_i^\dagger A_i=I$. Let $g\mapsto U_g$ be a unitary
+    representation of a monoid, and suppose that $U_g^{\otimes N}$
+    fixes the matrix product vector of $A$ for every $g$ and $N$.
+    For each $g$ there is a virtual unitary $V_g$ such that
+    $\sum_l(U_g)_{il}A_l=V_gA_iV_g^\dagger$ for every $i$.
+    For $P_{i,(a,b)}=A_i(a,b)$, the induced unitary
+    $X_g=V_g^T\otimes V_g^\dagger$ satisfies $U_gP=PX_g$.
+    Hence $U_g$ commutes with the identity-extended positive polar
+    factor $Q$, and the same $X_g$ intertwines $U_g$ with every
+    $P_\gamma=Q_\gamma W$ in the constructed deformation.
+
+    The normalization here is exactly
+    $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ in
+    \cite[line~653]{Schuch2011Phases}. These conclusions cover the
+    already-blocked single injective block with exact vector symmetry.
+    Ray symmetry and the several-block virtual permutation remain
+    separate; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:gauge_equiv_twisted,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
+    \leanok
+    The fundamental theorem gives an invertible virtual gauge with
+    phase one. Injectivity implies irreducibility, while unitary
+    physical rotation preserves irreducibility and the trace-preserving
+    normalization. The unitary replacement lemma therefore gives a
+    unitary virtual gauge with the same phase one. Its action on the
+    matrix-entry pairs is $X_g$, a tensor product of unitaries.
+    The polar covariance theorem gives $[U_g,Q]=0$, including the
+    identity extension off support, and the affine covariance theorem
+    preserves the same intertwiner throughout the path.
+\end{proof}
+
+\begin{theorem}[Derived parent symmetry for one injective canonical block]
+    \label{thm:injective_isometric_deformation_parent_symmetry}
+    \lean{MPSTensor.groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric,
+        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric}
+    \leanok
+    Let $A$ be a one-site injective tensor of positive bond dimension,
+    in the unital canonical orientation $\E_A(I)=I$. Let
+    $g\mapsto U_g$ be a unitary
+    representation of a monoid, and suppose that $U_g^{\otimes N}$
+    fixes the matrix product vector of $A$ for every $g$ and $N$.
+    Then $U_g^{\otimes L}G_L(A)=G_L(A)$ for every $L$.
+    Along the constructed single-block polar deformation
+    $P_\gamma=Q_\gamma W$, both the canonical two-site parent projection
+    and the positive interaction
+    \begin{align*}
+        h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+        h_2(W)(Q_\gamma^{-1})^{\otimes2}
+    \end{align*}
+    commute with $U_g^{\otimes2}$. Their open and periodic sums
+    commute with $U_g^{\otimes N}$ for every $N\geq2$.
+    The initial local-space invariance follows already from injectivity
+    and exact state symmetry, without the normalization assumption.
+    This proves the parent-symmetry conclusion of
+    \cite[lines~645--676]{Schuch2011Phases} for the stated single-block
+    unital case, dual to the printed partial-trace normalization as
+    explained in Theorem~\ref{thm:injective_isometric_deformation_derived_covariance};
+    the several-block assertion remains separate
+    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:gauge_equiv_twisted,thm:injective_isometric_deformation_derived_covariance,thm:isometric_deformation_supplied_parent_symmetry}
+    \leanok
+    The fundamental theorem gives gauge equivalence between $A$ and
+    its physical twist by each $U_g$. Gauge equivalence preserves every
+    local MPS space, so these spaces are invariant under the physical
+    action. The normalized single-block covariance theorem gives
+    $[U_g,Q]=0$. The supplied-invariance parent-symmetry theorem now
+    applies, proving the local and global conclusions throughout the
+    deformation.
+\end{proof}
+
+\begin{theorem}[Derived parent symmetry in trace-preserving normalization]
+    \label{thm:injective_isometric_deformation_parent_symmetry_tp}
+    \lean{MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP}
+    \leanok
+    Let $A$ be a one-site injective tensor of positive bond dimension,
+    with $\sum_i A_i^\dagger A_i=I$. Let $g\mapsto U_g$ be a unitary
+    representation of a monoid, and suppose that $U_g^{\otimes N}$
+    fixes the matrix product vector of $A$ for every $g$ and $N$.
+    For its constructed single-block polar deformation $P_\gamma=Q_\gamma W$,
+    both the canonical two-site parent projection and the positive interaction
+    \begin{align*}
+        h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+        h_2(W)(Q_\gamma^{-1})^{\otimes2}
+    \end{align*}
+    commute with $U_g^{\otimes2}$. Their open and periodic sums
+    commute with $U_g^{\otimes N}$ for every $N\geq2$.
+    In the coordinates $P_{i,(a,b)}=A_i(a,b)$, the normalization is
+    precisely $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$.
+    This is the already-blocked single-block parent-symmetry conclusion
+    of \cite[lines~645--676]{Schuch2011Phases} in the printed canonical
+    orientation. The several-block assertion remains separate
+    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:gauge_equiv_twisted,thm:injective_isometric_deformation_tp_covariance,thm:isometric_deformation_supplied_parent_symmetry}
+    \leanok
+    The fundamental theorem gives gauge equivalence between $A$ and
+    its physical twist by $U_g$, hence
+    $U_g^{\otimes L}G_L(A)=G_L(A)$ at every length $L$.
+    The trace-preserving covariance theorem gives $[U_g,Q]=0$.
+    Applying the supplied-invariance parent-symmetry theorem proves
+    commutation of both local interactions and their open and periodic sums.
+\end{proof}
+
+\begin{theorem}[Uniform open-chain gap along the positive affine deformation]
+    \label{thm:positive_affine_physical_deformation_open_gap}
+    \lean{MPSTensor.exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation,
+        MPSTensor.exists_uniform_positiveDeformedParentInteractionES_open_gap}
+    \leanok
+    Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
+    bond dimensions, let all block weights be nonzero, and let $Q>0$ on
+    the retained physical space. Set $Q_\gamma=\gamma Q+(1-\gamma)I$ for
+    $\gamma\in[0,1]$. The canonical two-site open parents of
+    $(Q_\gamma A^j)_j$ have a positive gap uniform in $\gamma$ and every
+    length $N\geq2$. The same conclusion holds for the open Hamiltonians
+    with interaction
+    $h_\gamma=(Q_\gamma^{-1})^{\otimes2}h_0(Q_\gamma^{-1})^{\otimes2}$,
+    where $h_0$ is the initial canonical parent projection.
+    In both assertions the gap is on the orthogonal complement of the
+    open Hamiltonian's kernel. This is the open-chain consequence of the
+    deformation in \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:positive_affine_physical_deformation_gap,thm:compact_block_open_gap,thm:compact_block_open_positive_gap}
+    \leanok
+    The path $Q_\gamma$ is continuous and invertible, so joint one-site
+    spanning persists. The compact open-chain theorem at range two gives
+    the canonical gap. The displayed positive interaction varies
+    continuously and has exactly the transformed two-site ground space
+    as its kernel. The compact positive-interaction theorem gives its
+    uniform open gap.
+\end{proof}
+
+\begin{theorem}[Uniform open-chain gaps for the constructed isometric deformation]
+    \label{thm:constructed_isometric_deformation_open_gap}
+    \lean{MPSTensor.exists_uniform_isometricDeformation_open_parent_gap,
+        MPSTensor.exists_uniform_isometricDeformation_open_interaction_gap,
+        MPSTensor.exists_blocked_isometricDeformation_open_parent_gap_of_isNormalTensor,
+        MPSTensor.exists_blocked_isometricDeformation_open_interaction_gap_of_isNormalTensor}
+    \leanok
+    Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
+    bond dimensions, and form their joint polar decomposition $P=QW$.
+    Along the constructed path $A^j(\gamma)=Q_\gamma W^j$, both the
+    canonical two-site open parents and the open Hamiltonians with
+    interaction $h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+        h_0(Q_\gamma^{-1})^{\otimes2}$ have a positive gap uniform in
+    $\gamma\in[0,1]$ and every $N\geq2$; here $h_0$ is the canonical
+    two-site parent projection of the unweighted sum of the polar blocks.
+
+    For pairwise inequivalent normalized normal blocks, each gap assertion
+    applies after finite initial blocking at a positive length $L$ with
+    $L+1\leq3\max(\sum_jD_j,1)^5$. The chain length then counts blocked
+    sites. The path is that of
+    \cite[lines~575--625, Appendix~A]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:constructed_isometric_deformation_gap,thm:positive_affine_physical_deformation_open_gap,thm:normal_block_injective_blocking}
+    \leanok
+    Invertibility of $Q$ transfers the joint one-site span from $A^j$ to
+    $W^j$. Apply Theorem~\ref{thm:positive_affine_physical_deformation_open_gap}
+    to these polar blocks and the constructed positive factor. For normal
+    blocks, the simultaneous spanning bound supplies $L$; length-$L$
+    words become one-letter matrices after blocking.
 \end{proof}
 
 \begin{theorem}[Uniform norm lower bounds on a common tail]

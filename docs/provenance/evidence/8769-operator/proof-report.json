@@ -1,0 +1,382 @@
+{
+  "proof_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+  "original_reviewed_revision": "ac065a663f42d97e160a223b868ce162fe0c7d7f",
+  "public_declarations": 49,
+  "regression_examples": 8,
+  "source_sha256": "5fcab299dd3f163a4a1d234a25a51b91ae49bcd6619202731d471a82d2046dab",
+  "blueprint_entries": 34,
+  "unique_blueprint_tags": 49,
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "combined_scoped_provenance_declarations": 96,
+  "checks": [
+    {
+      "name": "build",
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation.DistributedOperatorContraction",
+        "TNLean.PEPS.Approximation"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:05:31.186880+00:00",
+      "elapsed_seconds": 7.049,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/build.log",
+      "sha256": "af5d2d6c7dfcc6ca8ad59323606b3ee0c47eb454a3acbd0027303a8cb73dacb1"
+    },
+    {
+      "name": "axioms",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "scripts/distributed_operator_contraction_axioms.lean"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:05:38.236146+00:00",
+      "elapsed_seconds": 2.216,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/axioms.log",
+      "sha256": "58c37a2fe4f457aa37c67a0eb9cd46e64acf055ecfaa6171e5f8113a9c73aa76"
+    },
+    {
+      "name": "regression",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "scripts/distributed_operator_contraction_regression.lean"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:05:40.452411+00:00",
+      "elapsed_seconds": 3.759,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/regression.log",
+      "sha256": "15ffee1257c60a0c114a8e942fa7e43076ce355cb32d44dd9ace758804128e4b"
+    },
+    {
+      "name": "source-audit",
+      "command": [
+        "python3",
+        "scripts/check_distributed_operator_blueprint.py",
+        "--upstream-root",
+        "/tmp/openai-math-verification-20261007"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:05:44.211805+00:00",
+      "elapsed_seconds": 1.717,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/source-audit.log",
+      "sha256": "729bca430daf25f353768fe11a5742b3910926c7fb725b87eab4af20bb961ae1"
+    },
+    {
+      "name": "style-driver-build",
+      "command": [
+        "lake",
+        "build",
+        "lint_style"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:05:45.929824+00:00",
+      "elapsed_seconds": 19.298,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/style-driver-build.log",
+      "sha256": "0ed985d3012f0e7c290a533d60936ae75c0670b929490896859dc7805a90c03c"
+    },
+    {
+      "name": "style",
+      "command": [
+        "lake",
+        "exe",
+        "lint_style",
+        "--github"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:06:05.228483+00:00",
+      "elapsed_seconds": 3.197,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/style.log",
+      "sha256": "7bae7494b33fc0a42a0beaddc1592b0c65fcce40acad8a625b90ff4f0e77f96f"
+    },
+    {
+      "name": "imports",
+      "command": [
+        "python3",
+        "scripts/generate_import_aggregators.py",
+        "--check"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:06:08.425876+00:00",
+      "elapsed_seconds": 0.87,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/imports.log",
+      "sha256": "64135df91e649b9e2f3baff17e744283898222316856157008cf5d05115865cd"
+    },
+    {
+      "name": "size",
+      "command": [
+        "python3",
+        "scripts/check_oversized_lean_files.py",
+        "--import-only-aggregator",
+        "TNLean.lean"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:06:09.296452+00:00",
+      "elapsed_seconds": 0.788,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/size.log",
+      "sha256": "6af5a2f9efc75b7bab392613166717c666cd191c358d43c175711bc4577f4387"
+    },
+    {
+      "name": "module-names",
+      "command": [
+        "python3",
+        "scripts/check_numbered_lean_files.py",
+        "--base-ref",
+        "57739227924bef10928e5762a9dd988d95ae5b9e"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:06:10.084533+00:00",
+      "elapsed_seconds": 0.061,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/module-names.log",
+      "sha256": "4e573249cb399c09b010da8065ad7cd4fdff692ea4ade77cd6b0ae5e16810581"
+    },
+    {
+      "name": "blueprint-sync",
+      "command": [
+        "python3",
+        "scripts/blueprint_lean_sync.py",
+        "--ci",
+        "--report-duplicate-tags",
+        "--warn-missing-blueprint",
+        "--diff-base",
+        "57739227924bef10928e5762a9dd988d95ae5b9e",
+        "--changed-files",
+        "TNLean/PEPS/Approximation/DistributedOperatorContraction.lean"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:06:10.145945+00:00",
+      "elapsed_seconds": 5.243,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/blueprint-sync.log",
+      "sha256": "809f075e43672cd6000d9d7d0648650ecac9e2b755be9abd87ba592b656830dd"
+    },
+    {
+      "name": "latex-format",
+      "command": [
+        "bash",
+        "scripts/check_latexindent_formatting.sh"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:06:15.390446+00:00",
+      "elapsed_seconds": 95.926,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/latex-format.log",
+      "sha256": "89206c2b8bab5a0b5f9b8b46670a0432f1471ea9a7af745f18793ab99e4ca959"
+    },
+    {
+      "name": "patterns",
+      "command": [
+        "python3",
+        "scripts/tactic_pattern_scan.py",
+        "--root",
+        "TNLean/PEPS/Approximation",
+        "--top",
+        "5"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "a89886d64e31b363c8dde1411410af3cd9b5ef66",
+      "utc_start": "2026-10-07T11:07:51.317623+00:00",
+      "elapsed_seconds": 0.033,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/patterns.log",
+      "sha256": "27b4d7fb502ee07ff9658f1565880f5c20ef70fae81b41ad38e16c7bffa5f88d"
+    },
+    {
+      "name": "latex-format-final-chapter",
+      "command": [
+        "bash",
+        "scripts/check_latexindent_formatting.sh",
+        "--one",
+        "blueprint/src/chapter/ch24_peps_distributed_operator.tex"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:08:54.515166+00:00",
+      "elapsed_seconds": 0.384,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/latex-format-final-chapter.log",
+      "sha256": "94038d49c7cbceed53f2dbd335a050043d02bb9fd00bbcfd0e3e1876168745b3"
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "57739227924bef10928e5762a9dd988d95ae5b9e..HEAD"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:08:54.900360+00:00",
+      "elapsed_seconds": 0.005,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/whitespace.log",
+      "sha256": "2c3bef95fb1ed191456e0e2338118eb6cb74c7003aa1f8a8d3918e4ecca062b0"
+    },
+    {
+      "name": "tex-first",
+      "command": [
+        "pdflatex",
+        "-interaction=nonstopmode",
+        "-halt-on-error",
+        "-output-directory",
+        "/workspace/proof-build-logs/distributed-operator-blueprint-smoke",
+        "/workspace/proof-build-logs/distributed-operator-blueprint-smoke/smoke.tex"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:08:54.906117+00:00",
+      "elapsed_seconds": 0.113,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/tex-first.log",
+      "sha256": "dc5117e961a924715aec73499a1bb71605249ada121e577b7754a9f55fa5da7f"
+    },
+    {
+      "name": "tex-bib",
+      "command": [
+        "bibtex",
+        "smoke"
+      ],
+      "working_directory": "/workspace/proof-build-logs/distributed-operator-blueprint-smoke",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:08:55.019304+00:00",
+      "elapsed_seconds": 0.014,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/tex-bib.log",
+      "sha256": "94c0a8538eab7e8a0ddaa9f810ce25a6aee6c7a0a691170277d0c9b678e2e0e5"
+    },
+    {
+      "name": "tex-second",
+      "command": [
+        "pdflatex",
+        "-interaction=nonstopmode",
+        "-halt-on-error",
+        "-output-directory",
+        "/workspace/proof-build-logs/distributed-operator-blueprint-smoke",
+        "/workspace/proof-build-logs/distributed-operator-blueprint-smoke/smoke.tex"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:08:55.034189+00:00",
+      "elapsed_seconds": 0.11,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/tex-second.log",
+      "sha256": "c28983748cec489a4171a49c18645ad276c4a61f03e6b68ace486bf3112f75d1"
+    },
+    {
+      "name": "tex-final",
+      "command": [
+        "pdflatex",
+        "-interaction=nonstopmode",
+        "-halt-on-error",
+        "-output-directory",
+        "/workspace/proof-build-logs/distributed-operator-blueprint-smoke",
+        "/workspace/proof-build-logs/distributed-operator-blueprint-smoke/smoke.tex"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:08:55.144800+00:00",
+      "elapsed_seconds": 0.111,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/tex-final.log",
+      "sha256": "9219d443f32f27cae4373201a45c1d3cfe1c906a0b27b0b8925788fb2406063a"
+    },
+    {
+      "name": "source-parity",
+      "command": [
+        "python3",
+        "docs/provenance/evidence/8769-operator/check-proof-evidence.py"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:11:06.165959+00:00",
+      "elapsed_seconds": 0.084,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/source-parity.log",
+      "sha256": "3b822a082261d90b95d686508ac9a4c8d8efc1da860c5fb4de41e9831dac1eb8"
+    },
+    {
+      "name": "provenance",
+      "command": [
+        "python3",
+        "docs/provenance/evidence/8769-operator/validate-provenance.py",
+        "--policy-root",
+        "/workspace/proof-build-logs/provenance-head8789",
+        "--upstream-root",
+        "/tmp/openai-math-verification-20261007"
+      ],
+      "working_directory": "/workspace/worktrees/tn-compression-layout",
+      "source_revision": "cb46263506014207a236393c306bf751e2e7500f",
+      "utc_start": "2026-10-07T11:11:06.251149+00:00",
+      "elapsed_seconds": 8.957,
+      "exit_code": 0,
+      "warnings": 0,
+      "log": "docs/provenance/evidence/8769-operator/provenance.log",
+      "sha256": "9d68dcd4c9f524ea6147e46e3eeb1699475b77e2b629dd1a723b5c74b6a7960b"
+    }
+  ],
+  "remaining_obligations": [
+    "Actual chronological circuit identification with the supplied party-local rectangular operators and global branch/sample expression.",
+    "Uniform polynomial bounds for the actual gate-label and sample families.",
+    "Approximate source correction expansion, probabilistic error estimates, deterministic realization and full Theorem 5.2 composition."
+  ],
+  "review": {
+    "mathematical_source": "Independent Codex agent review passed; mathematical source unchanged after removing49 notices.",
+    "kernel_audit": "Independent Codex agent directly inspected every compiled49-name audit record at the exact proof revision.",
+    "human_maintainer": "Pending."
+  }
+}
