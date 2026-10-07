@@ -8,7 +8,13 @@ results below establish distinct steps of their proofs. The combined QICLean
 build, strict examples, all 27 public kernel reports, and complete blueprint
 PDF, web and declaration checks have passed. The three TNLean modules for
 regional entropy, conditional boundary arithmetic and radius scales have also
-passed their actual module builds and all seven strict kernel audits. The QICLean
+passed their actual module builds and all seven strict kernel audits. The complete
+TNLean root build and native declaration check for the entire blueprint have
+passed, as have the complete PDF and web builds. The 2085-page PDF has no undefined
+references or citations; its new entropy and collar statements were inspected
+on printed pages 1696–1697. The commands and hashed evidence are recorded in
+`docs/provenance/evidence/8759-entropy-dimension/full-verification/`.
+The QICLean
 dependency update remains separate. All manuscript
 references use the September 24, 2026 versions at OpenAI source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.

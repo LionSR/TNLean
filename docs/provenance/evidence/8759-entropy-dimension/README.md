@@ -8,7 +8,7 @@ The guarded three-module build exited successfully. The shared build log is `bui
 
 The current provenance policy, frozen at revision `806099b4dddcce591b3a62ee1921926a6af5ad55`, validates all seven entries in these two shards. `provenance.log` records the policy and schema hashes. This validation checks the immutable Lean source, original-proof notices, exact kernel reports and raw log hashes; it does not claim a repository-wide provenance audit.
 
-The source-level blueprint synchronization and reverse-coverage checks passed for the three new modules (`blueprint-sync.log`). This verifies declaration spelling and chapter coverage; it is distinct from the repository-wide kernel `checkdecls` command, whose root module is not built in this worktree.
+The source-level blueprint synchronization and reverse-coverage checks passed for the three new modules (`blueprint-sync.log`). The complete TNLean root subsequently passed its guarded build. The native declaration checker verified every name in the complete blueprint list against that root. The complete PDF and web builds also passed; the new theorem pages were inspected visually. Commands, hashes, logs and page images are recorded in `full-verification/`.
 
 These are auxiliary results. The boundary implication assumes the partition and its quantitative estimates; the radius comparison assumes the stated radius power bound. Neither the full area law nor Proposition 10.2 is claimed here.
 

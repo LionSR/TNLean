@@ -1,0 +1,5 @@
+LEAN ASSERTION VIOLATION
+File: /Users/runner/work/lean4/lean4/src/library/ir_interpreter.cpp
+Line: 928
+fn_body_tag(decl_fun_body(e.m_decl)) != fn_body_kind::Unreachable
+'unreachable' code was reached
