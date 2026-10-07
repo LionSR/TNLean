@@ -1,0 +1,7 @@
+{
+  "purpose": "Source-only blueprint name check with byte-verified accepted QIC source; no compiler or Lake build",
+  "qic_pin": "378bef486fc0241dee8ad875ccaf659d51d33ac9",
+  "tracked_qic_files_byte_verified": 983,
+  "source_view": "/workspace/scratch/7637e06d0fc2/patch-coordinate-validation/docs/source-view",
+  "actual_manifest_unchanged": true
+}

@@ -10,4 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
+import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
+import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
+import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity

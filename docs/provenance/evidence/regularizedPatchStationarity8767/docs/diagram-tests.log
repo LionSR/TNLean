@@ -1,0 +1,4 @@
+tenkz: xdv route unusable (dvisvgm is not on PATH); falling back to xelatex -> PDF -> pdftocairo.
+== tenkz audit: tenkz-5d2ed86e538c4fb1.tnlog -- 1 picture(s); tex: ordered-insertion.tex (linked) ==
+  ok: no hard errors (0 advisory(ies))
+PASS: ordered insertion, four global tensors, three contractions, one output; cold/warm production render

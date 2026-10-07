@@ -1,0 +1,167 @@
+{
+  "scope": "Coordinate first variation and canonical final-state marginals; local documentation validation only",
+  "base": "e9311cbbaf55517308f416b008df5ddafcc047c9",
+  "base_status": "published unmerged TN8822",
+  "accepted_qic_pin": "378bef486fc0241dee8ad875ccaf659d51d33ac9",
+  "paper_pin": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "tenkz_pin": "08a6493f3605dcf2ca5b512823ccb2698dfc027b",
+  "owned_files": [
+    {
+      "path": ".github/workflows/pr-ci.yml",
+      "sha256": "d4eb97af8df81b535e921d9d94eb20529a13c66a1a5c76cea17df91e9bbe864c"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regions.tex",
+      "sha256": "db6d3cec791a85f6526e98b9da7969a1683c22a1ce9cb26c6ad5979685951055"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex",
+      "sha256": "32e665eaaa12eebe21be6c1d77bcad3434efe0d3382aef447aee18666fd45945"
+    },
+    {
+      "path": "docs/formalization/peps-regularized-patch-stationarity.md",
+      "sha256": "be96abf1dbdd5d0a20e26fb04c38ab34ea4e1b51ce4b0f3b32c18ebf143d673c"
+    },
+    {
+      "path": "docs/glossary.md",
+      "sha256": "6c6b9563914ad6361abfc7b65e027cf93915e0827c02da41f68612cfeb8fe4a4"
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "sha256": "2271c07eb88b78845f4d9478cbc33c1b185b1248661c2144639230c0d3a2c936"
+    },
+    {
+      "path": "docs/provenance/openai-math.d/regularizedPatchStationarity8767.json",
+      "sha256": "f9093d02155ab4929166a339a1438e37ac25fcf3dbddf1f801d8d54860c6a20c"
+    },
+    {
+      "path": "scripts/test_tenkz_patch_stationarity.py",
+      "sha256": "9d23a9b9cb15909f8f453a161482ddf3d7672e7c02afa4bd5a1fc231d69f0cf3"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "13a4749d9a8b5468d78cfdc9de2e2aa271796759bbbc1016c2987027dc561fcf"
+    }
+  ],
+  "author_source_freeze": {
+    "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean": "521de74c002e642a5a118af4baa61eb8f29a1c14cab66186cb5310c8d6c67744",
+    "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean": "0c09dc2590bacac2b386721d952dcf7ed8c86497f6a45b143081c779ff52d162",
+    "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean": "e07fd0865bfe4d59c992664279a2b079f6e21d86195e27729ef2f63b45dea5b3",
+    "TNLean/PEPS/AreaLaw.lean": "9e21bb3f22105ce8609c86a49e559543f8be4f41494ce1ca599de1de565d5606",
+    "TNLeanTest/RegularizedPatchStationarity.lean": "f08ae757a392b2d9a0b6883c00868f83a00db1443fa5bed50305f3a14df5cb9e",
+    "TNLeanTest/RegularizedPatchMarginal.lean": "7c26e7c5e8b984e2e243369445835438dbac281432efcf8e34a0dbfaf04b26a5",
+    "TNLeanTest/RegularizedPatchZeroWeight.lean": "9a91903b16752cf36a0f5258bb84f09b67fcc5ce68992c262e8687560a3601c8"
+  },
+  "author_confirmation": "All seven module/router/regression source hashes were byte-checked against the final strict source freeze before badges. Author reports 18 complete stock-only axiom reports. No Lean compiler invoked by documentation worker.",
+  "planned_rows": 18,
+  "blueprint_exported_name_coverage": 18,
+  "statement_badges": 5,
+  "proof_badges": 3,
+  "checks": {
+    "paper_source": "Pinned Git object exactly matches local source; ranges68\u201399,134\u2013149 checked; subsequent stripping and commutation excluded.",
+    "provenance": "Both f920 and minimal validators passed the distinct planned 18-row shard, exact names and notices; repository-wide scan excluded.",
+    "source_sync": "All 19,911 references resolve using source-only view and all 983 byte-verified accepted QIC files; not elaboration.",
+    "diagram": "Source-owned native tenkz ordered insertion; four atoms, four full-global physical wires, three contracted indices, one output. Exact factor labels/action order checked; zero lint and semantic findings.",
+    "render": "Production renderer cold miss/warm hit with unchanged bytes/mtime. Supported XeLaTeX to PDF to pdftocairo fallback because dvisvgm unavailable. No installs.",
+    "visual_review": "Four-page focused PDF rendered twice; no warnings or overflow; all four pages visually reviewed, new pages reviewed again after badges. Actual production SVG raster visually reviewed. PDFs/screenshots retained only outside repository.",
+    "formatting": "Pinned latexindent 3.24.7 copy comparison passed new section and router.",
+    "prose": "All three new production sources, new section, and router passed with zero findings.",
+    "static_tests": "36 compatible-cache/CI tests; 16 file-policy tests; 9 import-generator tests; blueprint source scanner tests; production renderer tests; sweep unit tests passed.",
+    "routers": "Author regenerated AreaLaw.lean and strictly checked it; generator --check and docbuild manifest checks pass.",
+    "ci": "Three strict regressions explicitly run after full project build; diagram test appears in both triggers and the change filter.",
+    "raw_evidence_whitespace": "The unmodified chapter-pass2.log has one trailing space emitted by XeLaTeX; only that exact raw-evidence path is whitespace-exempt in .gitattributes.",
+    "tactic_scan": "Scoped AreaLaw scan found no exact repeated blocks at default thresholds."
+  },
+  "limits": [
+    "Immutable native source and evidence publication remains pending; ledger stays planned.",
+    "No full Lake build, aggregate checkdecls, full blueprint build, or exact-head CI claim.",
+    "No trace-duality converse, descending commutation, KKT, energy, regulator growth, rank/error estimates, or full Proposition 4.1.",
+    "No commit, remote mutation, Lean compiler invocation, or Lean source edit by documentation worker."
+  ],
+  "evidence": [
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/blueprint-source-sync.log",
+      "sha256": "2a287cbe76c8e6634396d30890fa32ec84d6f0bc59853c0bed7352c27124e92f"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/blueprint-sync-tests.log",
+      "sha256": "4b203a4bd353c9c6d36d014d04b3dabdc9e0961ef2d9dad5159fb866b33e5dc4"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/chapter-pass2.log",
+      "sha256": "5d0195eadede8e9ab441997a9b8245f53f612a7d4786bf3c536f5342c33a9cdd"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/ci-order-tests.log",
+      "sha256": "c6bc8f4258dc2389f306c0fea9d6ced771b4b967e8cdb2d6ad6704c3527c7102"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/diagram-lint.log",
+      "sha256": "5302ec1a98ea44ae6988542a0abd9513c4227f3767d8239a6a6cb6c5eab08030"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/diagram-tests.log",
+      "sha256": "2be9874930f5f36505fc02f2defee7fe503c05be9c490f501014dfc7280c3811"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/diagram-validation.json",
+      "sha256": "960a108adfc3abf3587fc60828651b217ec30583199241a340ea357761b4f69d"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/docbuild.log",
+      "sha256": "9dc6570f1ec606c0ad9ad64df85a8361a3493bec1f95f01e0a0d511636a03034"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/existing-renderer-tests.log",
+      "sha256": "5f88f63ca0be6db3544042dd5b4ec3dc13a61bd0758744ce462f8dece6be0741"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/existing-sweep-tests.log",
+      "sha256": "45666b88c50d862c81cc647cede7af0bc2902ede86882dd7b840b300a78a5f47"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/file-policy-tests.log",
+      "sha256": "180f685ac442f4f9b9fa22cf9a83c70c0b285bac87bd08163515ee93f1368ade"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/import-aggregators.log",
+      "sha256": "9aafb55cd6476a594077555b39e635ebb7b7b5e4d301a5eb82f416d19bcb1eab"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/import-tests.log",
+      "sha256": "b1e2df9be5b3e954c2d2d25efcf39cb02fe4e10735e67c33a5bb9488485289d7"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/latexindent.log",
+      "sha256": "3e0adb8d2a360db4646c26e197867e9ac7477325d0bcff0e7ef3e9125841c372"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/ordered-insertion.tex",
+      "sha256": "1430c6f3b5599589524a7f79ccaff07b7907472743d0787005f321bb4d732418"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/ordered-insertion.tnlog",
+      "sha256": "b3507b13dd9ffa169bf0877a1aca1fa209e9d29a9e57b285e64997ce105ae1fb"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/paper-source-check.json",
+      "sha256": "5fa06621acf3984bbe416e9efdac07d609a9be1d39b03b067022911cd61fb071"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/prose.log",
+      "sha256": "b0ffa11ea8011c519f7b265b95ba412df5acffd93b55a5ff8555b4986cd7744e"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/provenance.log",
+      "sha256": "5091a027f6f44dd6cd85f05847879c0613bcab61213f5a3b2f047f4872dd871f"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/source-view-audit.json",
+      "sha256": "26a75b19b24c4b6e5179b6934473ee2ba6afc869f7339266bff1a6ddaa077575"
+    },
+    {
+      "path": "docs/provenance/evidence/regularizedPatchStationarity8767/docs/tactic-pattern-scan.log",
+      "sha256": "eaf48eec7fd8ce17ad105b9714500bf8ba25f7b1618ba81504a77710c2d1d6e8"
+    }
+  ]
+}

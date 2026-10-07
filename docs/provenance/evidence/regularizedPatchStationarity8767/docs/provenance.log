@@ -1,0 +1,3 @@
+PASS f920: 18 planned original rows; source labels, current names, and exact independence notices.
+PASS minimal: 18 planned original rows; source labels, current names, and exact independence notices.
+Shard-only check; no completed provenance or publication claim and no repository-wide notice scan.

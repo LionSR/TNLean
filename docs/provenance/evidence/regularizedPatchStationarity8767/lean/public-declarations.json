@@ -1,0 +1,20 @@
+[
+  "TNLean.PEPS.regularizedPatchCoordinateUpdate",
+  "TNLean.PEPS.regularizedPatchCoordinateUpdate_mem",
+  "TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow",
+  "TNLean.PEPS.regularizedPatchInsertion",
+  "TNLean.PEPS.regularizedPatchInsertion_apply",
+  "TNLean.PEPS.regularizedPatchOutput_coordinateUpdate",
+  "TNLean.PEPS.regularizedPatchInsertion_self",
+  "TNLean.PEPS.regularizedPatchUnitaryCurve",
+  "TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate",
+  "TNLean.PEPS.regularizedPatchFirstVariation_eq_zero",
+  "TNLean.PEPS.dependentGlobalConfigEquiv",
+  "TNLean.PEPS.dependentGlobalConfigIsometry",
+  "TNLean.PEPS.dependentGlobalConfigIsometry_apply",
+  "TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure",
+  "TNLean.PEPS.normalizedRegularizedPatchMarginal",
+  "TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef",
+  "TNLean.PEPS.trace_normalizedRegularizedPatchMarginal",
+  "TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace"
+]

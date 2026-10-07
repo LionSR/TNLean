@@ -91,6 +91,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -189,6 +190,7 @@ on:
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -328,6 +330,7 @@ jobs:
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
+              - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -571,6 +574,15 @@ jobs:
       - name: Test actual regularized patch minimum regressions strictly
         run: |
           for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Test coordinate first variation and canonical marginals strictly
+        run: |
+          for example in RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
             LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -1101,6 +1113,10 @@ jobs:
       - name: Check regular parent and intersection diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_parent_spanning.py
+
+      - name: Check ordered coordinate insertion diagram
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_patch_stationarity.py
 
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'

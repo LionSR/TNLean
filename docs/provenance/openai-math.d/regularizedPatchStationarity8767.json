@@ -1,0 +1,585 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchCoordinateUpdate",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate_mem",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchCoordinateUpdate_mem",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate_rpow",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchInsertion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion_apply",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchInsertion_apply",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchoutput_coordinateupdate",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchOutput_coordinateUpdate",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion_self",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchInsertion_self",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalize a unitary update of one indexed feasible density, exact shifted-power covariance, and linear insertion in the original reverse ordered product. Repeated regions remain independent; no inter-factor commutation is assumed. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchunitarycurve",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchUnitaryCurve",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently differentiate the actual coordinate-unitary filtered output and prove zero real first variation at every feasible IsMinOn minimizer. No minimizing selection, trace stripping, trace-duality converse, or descending commutation is asserted. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-output-derivative",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
+        "declaration": "TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently differentiate the actual coordinate-unitary filtered output and prove zero real first variation at every feasible IsMinOn minimizer. No minimizing selection, trace stripping, trace-duality converse, or descending commutation is asserted. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.regularizedpatchfirstvariation_eq_zero",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchStationarity.lean",
+        "declaration": "TNLean.PEPS.regularizedPatchFirstVariation_eq_zero",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently differentiate the actual coordinate-unitary filtered output and prove zero real first variation at every feasible IsMinOn minimizer. No minimizing selection, trace stripping, trace-duality converse, or descending commutation is asserted. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigequiv",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.dependentGlobalConfigEquiv",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigisometry",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.dependentGlobalConfigIsometry",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigisometry_apply",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.dependentGlobalConfigIsometry_apply",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-regional-expectation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.normalizedregularizedpatchmarginal",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.normalizedRegularizedPatchMarginal",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-marginal-psd",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-tnlean.peps.trace_normalizedregularizedpatchmarginal",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.trace_normalizedRegularizedPatchMarginal",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "regularizedpatchstationarity8767-normalized-expectation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean",
+        "declaration": "TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex",
+          "labels": [
+            "sec:patches",
+            "prop:patch",
+            "eq:patch-variational-problem"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify full-region and global configurations and use the existing finite-product partial trace for canonical marginals of the same normalized final state. Prove positive semidefiniteness, trace one under normalization hypotheses, and the arbitrary-complex regional expectation identity. No upstream Lean proof text reused."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    }
+  ]
+}

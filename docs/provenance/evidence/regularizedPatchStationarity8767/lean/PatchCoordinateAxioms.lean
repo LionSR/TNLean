@@ -1,0 +1,23 @@
+import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
+import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
+import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
+
+set_option linter.hashCommand false
+#print axioms TNLean.PEPS.regularizedPatchCoordinateUpdate
+#print axioms TNLean.PEPS.regularizedPatchCoordinateUpdate_mem
+#print axioms TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow
+#print axioms TNLean.PEPS.regularizedPatchInsertion
+#print axioms TNLean.PEPS.regularizedPatchInsertion_apply
+#print axioms TNLean.PEPS.regularizedPatchOutput_coordinateUpdate
+#print axioms TNLean.PEPS.regularizedPatchInsertion_self
+#print axioms TNLean.PEPS.regularizedPatchUnitaryCurve
+#print axioms TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate
+#print axioms TNLean.PEPS.regularizedPatchFirstVariation_eq_zero
+#print axioms TNLean.PEPS.dependentGlobalConfigEquiv
+#print axioms TNLean.PEPS.dependentGlobalConfigIsometry
+#print axioms TNLean.PEPS.dependentGlobalConfigIsometry_apply
+#print axioms TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure
+#print axioms TNLean.PEPS.normalizedRegularizedPatchMarginal
+#print axioms TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef
+#print axioms TNLean.PEPS.trace_normalizedRegularizedPatchMarginal
+#print axioms TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace

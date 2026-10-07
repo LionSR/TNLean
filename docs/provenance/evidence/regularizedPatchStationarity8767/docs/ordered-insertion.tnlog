@@ -1,0 +1,35 @@
+picture|id=k1|lang=kernel
+atom|id=atom-1|kind=tn|label=P_j^+|name=coordinateouter|node=addr-1|ports=180:physical, 0:physical|skin=box
+atom|id=atom-2|kind=tn|label=D_j|name=coordinateinsert|node=addr-2|ports=180:physical, 0:physical|skin=box
+atom|id=atom-3|kind=tn|label=P_j^-|name=coordinateinner|node=addr-3|ports=180:physical, 0:physical|skin=box
+atom|id=atom-4|kind=tn|label=\Omega |name=coordinatestate|node=addr-4|ports=180:physical|skin=box
+wire|id=wire-5|from-open-type=physical|from-open=w|kind=index|name=coordinateoutput|port-type=physical|to=addr-5
+wire|id=wire-6|from=addr-6|kind=index|name=coordinatealpha|port-type=physical|to=addr-7
+wire|id=wire-7|from=addr-8|kind=index|name=coordinatebeta|port-type=physical|to=addr-9
+wire|id=wire-8|from=addr-10|kind=index|name=coordinategamma|port-type=physical|to=addr-11
+mark|id=mark-9|form=label|label-pos=n|label=\sigma |node=addr-12
+mark|id=mark-10|form=label|label-pos=n|label=\alpha |node=addr-13
+mark|id=mark-11|form=label|label-pos=n|label=\beta |node=addr-14
+mark|id=mark-12|form=label|label-pos=n|label=\gamma |node=addr-15
+kernel-boundary|signature=phys:w
+wire-ink|picture=k1|name=coordinateoutput|origin=physical-leg|stroke=18023|points=-923016,0;0,0
+wire-ink|picture=k1|name=coordinatealpha|origin=physical-leg|stroke=18023|points=0,0;4102294,0
+wire-ink|picture=k1|name=coordinatebeta|origin=physical-leg|stroke=18023|points=4102294,0;8204588,0
+wire-ink|picture=k1|name=coordinategamma|origin=physical-leg|stroke=18023|points=8204588,0;12306882,0
+ink-use|picture=k1|class=glyph|id=1|shape=roundrect
+glyph-geometry|picture=k1|owner=1|shape=roundrect|xmin=-530808|xmax=530808|ymin=-530808|ymax=530808|radius=18022|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+ink-use|picture=k1|class=glyph|id=2|shape=roundrect
+glyph-geometry|picture=k1|owner=2|shape=roundrect|xmin=3571486|xmax=4633102|ymin=-530808|ymax=530808|radius=18022|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+ink-use|picture=k1|class=glyph|id=3|shape=roundrect
+glyph-geometry|picture=k1|owner=3|shape=roundrect|xmin=7673780|xmax=8735396|ymin=-530808|ymax=530808|radius=18022|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+ink-use|picture=k1|class=glyph|id=4|shape=roundrect
+glyph-geometry|picture=k1|owner=4|shape=roundrect|xmin=11776074|xmax=12837690|ymin=-530808|ymax=530808|radius=18022|stroke=18022|x1=0|y1=0|x2=0|y2=0|x3=0|y3=0
+stringbead|id=coordinateoutput|t=0.5|x=-7.0421pt|y=0pt
+label-use|picture=k1
+bbox|picture=k1|class=label|id=1|owner=0|xmin=-660506|xmax=-262512|ymin=874578|ymax=1156746|shape=rect|radius=0|provenance=explicit
+label-use|picture=k1
+bbox|picture=k1|class=label|id=2|owner=0|xmin=1840317|xmax=2261978|ymin=874578|ymax=1156746|shape=rect|radius=0|provenance=explicit
+label-use|picture=k1
+bbox|picture=k1|class=label|id=3|owner=0|xmin=5950803|xmax=6356079|ymin=874578|ymax=1457120|shape=rect|radius=0|provenance=explicit
+label-use|picture=k1
+bbox|picture=k1|class=label|id=4|owner=0|xmin=10067881|xmax=10443589|ymin=874577|ymax=1284176|shape=rect|radius=0|provenance=explicit
