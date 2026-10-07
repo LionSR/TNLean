@@ -67,11 +67,22 @@ upstream OpenAI Lean proof text was reused. The new shard is
 `docs/provenance/openai-math.d/8769-operator.json`. The historical 47-declaration
 shard and historical proof sources are unchanged.
 
-The pinned validator checks both issue-owned shards together: all 96 declarations
-pass notice/schema, immutable proof-byte, log-hash and allowed-axiom validation.
+At the original publication, the pinned validator checked both issue-owned shards:
+all 96 declarations passed notice/schema, immutable proof-byte, log-hash and
+allowed-axiom validation.
 [policy-snapshot.json](policy-snapshot.json) records the schema and validator hashes
 and Git blob IDs, authenticated against the exact policy revision through GitHub's
 contents API. No policy or schema files were installed or changed in this branch.
+
+The reproduction helper was subsequently corrected after new main-branch shards
+made its wildcard ledger count exceed 96. It now validates the central ledger and
+every current shard with the complete repository notice scan enabled, then checks
+the explicit `8769-lifetime.json` and `8769-operator.json` counts of 47 and 49.
+The historical raw logs, proof revisions and verification rows remain unchanged.
+Fresh helper evidence is recorded separately in
+[integration-helper.log](integration-helper.log) and
+[integration-helper.json](integration-helper.json). This is a correction to the
+evidence helper, with no change to the checked mathematical sources or shards.
 
 From a TNLean checkout with the recorded commits and Lean dependencies available:
 

@@ -727,6 +727,30 @@ is recorded in
     length-$L$ evaluations become one-letter evaluations after blocking.
 \end{proof}
 
+\begin{theorem}[Uniform norm lower bounds on a common tail]
+    \label{thm:compact_norm_lower_bound_tail}
+    \lean{IsCompact.exists_uniform_norm_lower_bound_on_tail}
+    \leanok
+    Let $S$ be a compact subset of a topological parameter space. For each
+    $N\in\mathbb N$, let $E_N,F_N$ be seminormed additive groups, and let
+    $H_N(x):E_N\to F_N$ and $V_N(x)\subseteq E_N$ be families of maps and
+    admissible vectors. Suppose that every $x\in S$ has a neighborhood
+    $U_x$, a constant $\delta_x>0$, and a threshold $N_x$ such that
+    $\delta_x\|v\|\leq\|H_N(y)v\|$ whenever $y\in U_x$, $N\geq N_x$,
+    and $v\in V_N(y)$. Then there are $\delta>0$ and $N_0$ such that
+    $\delta\|v\|\leq\|H_N(x)v\|$ for every $x\in S$, $N\geq N_0$,
+    and $v\in V_N(x)$. Linearity of the maps is unnecessary.
+    This is the norm-bound form of the compactness argument in
+    \cite[Appendix~A]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a finite subcover of the neighborhoods $U_x$. Let $\delta$ be
+    the minimum of the corresponding positive constants and $N_0$ the
+    maximum of their thresholds. Decreasing the constant preserves the
+    inequality because $\|v\|\geq0$, and increasing the threshold restricts
+    the lengths under consideration.
+\end{proof}
+
 \subsection{Additional joint boundary continuity and compactness inputs}
 
 \begin{definition}[Joint boundary map for several blocks]

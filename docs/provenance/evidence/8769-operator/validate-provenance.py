@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate both issue-owned shards using the immutable PR 8789 policy snapshot."""
+"""Validate current ledgers and the issue-owned count with the pinned PR 8789 policy."""
 
 import argparse
 import hashlib
@@ -28,14 +28,27 @@ def main() -> None:
     )
     policy = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(policy)
-    ledgers = sorted((ROOT / "docs/provenance/openai-math.d").glob("*.json"))
+    ledger_root = ROOT / "docs/provenance"
+    owned = [
+        policy.read_json(ledger_root / "openai-math.d" / name)
+        for name in ("8769-lifetime.json", "8769-operator.json")
+    ]
+    owned_counts = [len(ledger["entries"]) for ledger in owned]
+    policy.require(owned_counts == [47, 49], "issue-owned shard counts changed")
+    ledgers = [ledger_root / "openai-math.json"] + sorted(
+        (ledger_root / "openai-math.d").glob("*.json")
+    )
+    roots = {"LionSR/TNLean": ROOT, "openai/math": args.upstream_root}
+    qic_root = ROOT / ".lake/packages/qiclean"
+    if qic_root.is_dir():
+        roots["LionSR/QICLean"] = qic_root
     count = policy.validate(
         [policy.read_json(path) for path in ledgers],
         policy.read_json(args.policy_root / "docs/provenance/openai-math.schema.json"),
-        {"LionSR/TNLean": ROOT, "openai/math": args.upstream_root},
+        roots,
     )
-    assert count == 96
-    print(f"PASS: {count} declarations; all issue-owned shards and source notices validated.")
+    print(f"PASS: {count} current ledger entries; complete repository notice scan validated.")
+    print(f"PASS: {sum(owned_counts)} issue-owned declarations in the two explicit shards.")
     print("Historical 47 and operator 49 are independently verified original formalizations.")
     print("Policy revision: " + POLICY_REVISION)
     for path, digest in HASHES.items():
