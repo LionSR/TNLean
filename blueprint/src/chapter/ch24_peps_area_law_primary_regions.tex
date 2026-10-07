@@ -30,10 +30,10 @@ identifier, even when their union is disconnected.
     $r=2^k$, $t=2^\ell$, and $s=2^p$, and choose integer shifts $a,b$.
     For every $j\in\mathbb Z^2$, set
     \begin{align}
-        v_j     & =o+t(a,b)+sj, \\
+        v_j     & =o+t(a,b)+sj,                                \\
         U_j     & =(v_{j,1}+t,v_{j,1}+s)
-                   \times(v_{j,2}+t,v_{j,2}+s), \\
-        F_{j,z} & =\overline{C_{k,z}\cap U_j}, \\
+        \times(v_{j,2}+t,v_{j,2}+s),                           \\
+        F_{j,z} & =\overline{C_{k,z}\cap U_j},                 \\
         J_j     & =\{z\in I_k:C_{k,z}\cap U_j\ne\varnothing\}, \\
         R_j     & =\overline{D_k\cap U_j}.
     \end{align}
@@ -75,17 +75,17 @@ identifier, even when their union is disconnected.
     If $C_{k,z}\cap U_j\ne\varnothing$, then
     \begin{align}
         F_{j,z}
-        & =\prod_{i=1}^2
-            [\max\{\alpha_{i,z},v_{j,i}+t\},
-             \min\{\beta_{i,z},v_{j,i}+s\}].
+         & =\prod_{i=1}^2
+        [\max\{\alpha_{i,z},v_{j,i}+t\},
+        \min\{\beta_{i,z},v_{j,i}+s\}].
     \end{align}
     Both coordinate intervals have strictly positive length. Every
     fragment, including an empty one, satisfies the following containment
     and diameter bounds. The distance bound holds for arbitrary points
     $x,y\in F_{j,z}$.
     \begin{align}
-        F_{j,z} & \subseteq\overline{C_{k,z}}, \\
-        \|x-y\|_\infty & \le r, \\
+        F_{j,z}                            & \subseteq\overline{C_{k,z}}, \\
+        \|x-y\|_\infty                     & \le r,                       \\
         \operatorname{diam}_\infty F_{j,z} & \le r.
     \end{align}
 \end{theorem}
@@ -117,8 +117,8 @@ identifier, even when their union is disconnected.
     For every primary index $j$, the following containment and diameter
     bounds hold. The distance bound holds for arbitrary points $x,y\in R_j$.
     \begin{align}
-        R_j & \subseteq\overline{U_j}, \\
-        \|x-y\|_\infty & \le s, \\
+        R_j                            & \subseteq\overline{U_j}, \\
+        \|x-y\|_\infty                 & \le s,                   \\
         \operatorname{diam}_\infty R_j & \le s.
     \end{align}
     For distinct indices $i,j$, every $x\in R_i$ and $y\in R_j$ satisfy
@@ -150,7 +150,7 @@ identifier, even when their union is disconnected.
     If $k\le p$, then every primary index satisfies
     \begin{align}
         |J_j| & \le\bigl(2^{p-k}+2\bigr)^2
-                 =\bigl(s/r+2\bigr)^2.
+        =\bigl(s/r+2\bigr)^2.
     \end{align}
     This bound is independent of the endpoint set, neighborhood radius,
     origin, and selected shifts.
