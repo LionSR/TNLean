@@ -29,7 +29,7 @@ class ProvenanceTests(unittest.TestCase):
         self.row["downstream"] = dict(repository=provenance.REPO,
                                       path="TNLean/Example.lean", declaration="Example.Vertex",
                                       name_status="declared")
-        self.row["changes"] = ["Changed namespace to Example; omitted unrelated declarations and imports."]
+        self.row["changes"] = ["Changed namespace to Example and natural-number notation to Nat; omitted unrelated declarations and imports."]
         self.text = (FIXTURES / "Adapted.lean.txt").read_text()
         self.source = (FIXTURES / "Source.lean.txt").read_bytes()
         self.write("TNLean/Example.lean", self.text)
@@ -54,6 +54,8 @@ class ProvenanceTests(unittest.TestCase):
         return hashlib.sha256((self.root / path).read_bytes()).hexdigest()
 
     def git_bytes(self, root, revision, path):
+        if path.endswith(".tex"):
+            return b"\\label{eq:target-error}"
         return self.source if root == self.roots["openai/math"] else self.stored
 
     def ledger(self, row=None):

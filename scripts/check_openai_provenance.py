@@ -119,6 +119,7 @@ def declarations(text):
 
 
 def check_reference(ref, roots, required=False):
+    require(PurePosixPath(ref["path"]).as_posix() == ref["path"], "noncanonical source path")
     start, end = ref["lines"]
     require(start <= end, "reversed source lines")
     expected = (f'https://github.com/{ref["repository"]}/blob/{ref["commit"]}/'
@@ -180,6 +181,12 @@ def check_entry(entry, roots):
         if "openai/math" in roots:
             data = git_bytes(roots["openai/math"], PIN, notice["source_path"]).decode()
             require(notice["text"] in data, "retained notice absent from claimed source")
+    if "openai/math" in roots:
+        for paper in entry["paper_sources"]:
+            source = git_bytes(roots["openai/math"], PIN, paper["path"]).decode()
+            for label in paper["labels"]:
+                require(re.search(r"\\label\s*\{\s*" + re.escape(label) + r"\s*\}", source),
+                        f"missing manuscript label: {label}")
     if not active:
         return
     down, verification = entry["downstream"], entry["verification"]
@@ -264,6 +271,24 @@ def validate(ledgers, schema, roots, scan=True):
     return len(entries)
 
 
+def audit_upstream(root, upstream_root):
+    """Recheck the selected audit manifest against immutable Git objects."""
+    audit = read_json(root / "docs/provenance/source-audit.json")
+    require(audit["repository"] == "openai/math" and audit["commit"] == PIN,
+            "source audit pin mismatch")
+    for item in audit["files"]:
+        data = git_bytes(upstream_root, PIN, item["path"])
+        require(hashlib.sha256(data).hexdigest() == item["sha256"] and len(data) == item["bytes"],
+                f"source audit content mismatch: {item['path']}")
+    result = subprocess.run(["git", "-C", str(upstream_root), "ls-tree", "-r", "--name-only", PIN],
+                            capture_output=True, text=True, check=False)
+    require(result.returncode == 0, "cannot audit upstream tracked NOTICE paths")
+    notices = [p for p in result.stdout.splitlines() if
+               PurePosixPath(p).name.lower() == "notice" or
+               PurePosixPath(p).name.lower().startswith("notice.")]
+    require(notices == audit["tracked_notice_files"], "tracked NOTICE audit mismatch")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
@@ -288,6 +313,7 @@ def main():
         require(hashlib.sha256(license_data).hexdigest() == LICENSE_SHA256,
                 "upstream Apache license changed or missing")
         if args.upstream_root:
+            audit_upstream(root, args.upstream_root)
             for path in ("LICENSE", "lean/LICENSE"):
                 require(git_bytes(args.upstream_root, PIN, path) == license_data,
                         f"upstream license mismatch: {path}")

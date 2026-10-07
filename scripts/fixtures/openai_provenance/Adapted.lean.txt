@@ -8,7 +8,7 @@ Upstream file: lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean
 Upstream declaration: OAI.PolynomialPEPS.Vertex
 Upstream URL: https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L13-L13
 Downstream declaration: Example.Vertex
-Changes for TNLean/QICLean: Changed namespace to Example; omitted unrelated declarations and imports.
+Changes for TNLean/QICLean: Changed namespace to Example and natural-number notation to Nat; omitted unrelated declarations and imports.
 -/
 namespace Example
 /-- Vertices of the open square grid. -/

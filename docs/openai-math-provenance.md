@@ -16,7 +16,8 @@ The audit record is [source-audit.json](provenance/source-audit.json).
 [The preserved license](../LICENSES/openai-math-Apache-2.0.txt) is the upstream
 root license, byte for byte; `lean/LICENSE` has the same SHA-256:
 `c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4`.
-The selected `VectorColumn.lean` has no copyright or author header. An empty
+No tracked `NOTICE` or `NOTICE.*` exists at that revision (case-insensitive basename search).
+The selected `VectorColumn.lean` and `PEPSFilters/Basic.lean` have no copyright or author header. An empty
 `notices` array describes that file only. Never invent an author list,
 copyright holder, upstream model, or a claim that other source files lack notices.
 
@@ -136,7 +137,8 @@ python3 scripts/check_openai_provenance.py --upstream-root /path/to/openai-math 
 
 The default check validates the planned ledger without downloading upstream.
 Supplying `--upstream-root` reads immutable Git objects, checks source declaration
-line ranges and compares both upstream licenses. Completed reuse/replacement
+line ranges, manuscript labels and the recorded source/NOTICE audit, and compares
+both upstream licenses. Completed reuse/replacement
 rows require the applicable source roots. Ledger commands are evidence text;
 the validator never executes them. CI must supply pinned checkouts when completed
 ports are added; missing roots fail closed.
