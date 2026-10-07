@@ -153,7 +153,7 @@ The mathematical source is frozen at
 `90e6071e32453006906390bd4e4f71ff4c5251a0`; the complete library build,
 69 combined kernel reports and full blueprint checks passed.
 [QICLean #614](https://github.com/LionSR/QICLean/pull/614) proves the literal
-repeated-copy identity with coefficient \(\sqrt z/d\)^k, for every copy
+repeated-copy identity with coefficient \((\sqrt z/d)^k\), for every copy
 number including zero, together with the repeated projection and permutation
 identities. Its five new kernel reports, complete library and blueprint
 checks passed. The entropy-compatible label selection and inverse metric
