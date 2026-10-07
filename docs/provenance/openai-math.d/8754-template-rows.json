@@ -29,26 +29,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -78,26 +78,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -127,26 +127,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -176,26 +176,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -225,26 +225,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -274,26 +274,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -323,26 +323,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -372,26 +372,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -421,26 +421,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -470,26 +470,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -519,26 +519,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -568,26 +568,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -617,26 +617,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -666,26 +666,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -715,26 +715,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -764,26 +764,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -813,26 +813,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -862,26 +862,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -911,26 +911,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -960,26 +960,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -1009,26 +1009,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -1058,26 +1058,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -1107,26 +1107,26 @@
       "notices": [],
       "changes": [
         "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "73f37d596041194bdf6c722ac32edc4e4a9325f0",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
         "commands": [
           {
             "kind": "build",
-            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-build.log",
-            "sha256": "44d7e1f5b5a01be8d98658c294884967860bdc91c7869a14950a42337b0a2dd2"
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8754-verified-regression.log",
-            "sha256": "525e2ebde4c69878ffda935d5599d10933b3c33405388b048a237e877480693d"
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
           }
         ]
       },
@@ -1141,7 +1141,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1155,11 +1155,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1172,7 +1190,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1186,11 +1204,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1203,7 +1239,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1217,11 +1253,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1234,7 +1288,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1248,11 +1302,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1265,7 +1337,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1279,11 +1351,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1296,7 +1386,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1310,11 +1400,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1327,7 +1435,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1341,11 +1449,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1358,7 +1484,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1372,11 +1498,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1389,7 +1533,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1403,11 +1547,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1420,7 +1582,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1434,11 +1596,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1451,7 +1631,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1465,11 +1645,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original constructor-based supporting-slab and rounded-row argument; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation. The depth-layer cardinality theorem remains unproved."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1482,7 +1680,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1496,11 +1694,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1513,7 +1729,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1527,11 +1743,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1544,7 +1778,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1558,11 +1792,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1575,7 +1827,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1589,11 +1841,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1606,7 +1876,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1620,11 +1890,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1637,7 +1925,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1651,11 +1939,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1668,7 +1974,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1682,11 +1988,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -1699,7 +2023,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -1713,11 +2037,29 @@
       "license": "Apache-2.0",
       "notices": [],
       "changes": [
-        "Original integer-window and layer-count argument; no upstream Lean proof text reused.",
-        "Candidate implementation of the geometric depth-layer estimate with Ctpl >= 24, awaiting Lean compilation and axiom checks."
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "91af4427ce30546caf7c917f0025fb48d5d2862609ad281cb8dddae59c4b9143"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

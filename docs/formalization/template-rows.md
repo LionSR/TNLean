@@ -32,13 +32,20 @@ The supporting code is split into four modules:
   by at most two per radius step, the single-piece layer count, and the scale
   argument for arbitrary unions.
 
-All four production modules compiled at
-`ada3ccb6dfe231695676953030a4333d36997f8c` in PR CI run `37616454111`,
-build job `112776148232`, step 17. This includes the final layer theorem.
-The full library build, strict actual-model regression, expanded axiom audit,
-and compiled-blueprint checks are still pending on that revision. The earlier
-23-export slice passed all checks at `73f37d596041194bdf6c722ac32edc4e4a9325f0`;
-that earlier result is not being applied to the expanded proof chain.
+All four production modules and the full library build passed at
+`ada3ccb6dfe231695676953030a4333d36997f8c` in
+[PR CI run 37616454111](https://github.com/LionSR/TNLean/actions/runs/37616454111).
+The strict actual-model regression, all 42 axiom audits, style lint, compiled
+blueprint declaration checks, full blueprint job, and compilation-time checks
+also passed. Every export depends only on `propext`, `Classical.choice`, and
+`Quot.sound`. The observed outputs are now guarded in the regression file.
+
+Evidence is preserved in
+[the build log](../provenance/evidence/8754-layer-build.log),
+[the strict regression and axiom output](../provenance/evidence/8754-layer-axioms.log),
+and [the blueprint log](../provenance/evidence/8754-layer-blueprint.log).
+All 42 provenance entries record this revision and evidence hashes. The earlier
+23-export evidence remains explicitly scoped to its earlier revision.
 
 ## Mathematical derivation
 

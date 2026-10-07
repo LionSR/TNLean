@@ -322,27 +322,137 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff
 
--- Record the new constructor and endpoint proofs before guarding their exact output.
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
 
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le
 
 end AxiomChecks
