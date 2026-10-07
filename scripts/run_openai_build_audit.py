@@ -41,6 +41,8 @@ def run_audit(worktree, lake, output, targets, seconds=600, axioms=None):
     report['cache_sentinel'] = str(sentinel)
     if not sentinel.is_file():
         report['cache_gate'] = 'missing_Mathlib.olean'; save(); return report
+    if not run([lake, '--no-build', 'build', '+Mathlib:leanArts'], 'cache-preflight'):
+        report['cache_gate'] = 'Mathlib_not_up_to_date'; save(); return report
     report['cache_gate'] = 'passed'
     successes = [run([lake, 'build', target], 'build-'+target) for target in targets]
     if targets:

@@ -54,14 +54,14 @@ class ClosureTests(unittest.TestCase):
 
 
 class CacheGateTests(unittest.TestCase):
-    def exercise(self, cache_exit=0, sentinel=True, build_exit=0):
+    def exercise(self, cache_exit=0, sentinel=True, build_exit=0, preflight_exit=0):
         temp = tempfile.TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         root = Path(temp.name)
         (root/'lean-toolchain').write_text('test')
         (root/'lake-manifest.json').write_text('{}')
         lake = root/'lake'
-        lake.write_text('#!/bin/sh\ncase "$1" in\nexe) exit ' + str(cache_exit) +
+        lake.write_text('#!/bin/sh\ncase "$1" in\n--no-build) exit ' + str(preflight_exit) + ';;' + '\nexe) exit ' + str(cache_exit) +
                         ';;\nbuild) exit ' + str(build_exit) + ';;\n*) exit 0;;\nesac\n')
         lake.chmod(0o755)
         if sentinel:
@@ -84,7 +84,12 @@ class CacheGateTests(unittest.TestCase):
         self.assertEqual(result['library_build_status'], 'passed')
         self.assertEqual(result['axiom_status'], 'command_passed_requires_review')
         self.assertEqual([a['command'][1] for a in result['attempts']],
-                         ['--version', 'exe', 'build', 'env'])
+                         ['--version', 'exe', '--no-build', 'build', 'env'])
+
+    def test_stale_dependencies_never_rebuild(self):
+        result = self.exercise(preflight_exit=1)
+        self.assertEqual(result['cache_gate'], 'Mathlib_not_up_to_date')
+        self.assertEqual(result['library_build_status'], 'not_attempted')
 
     def test_failed_build_never_prints_axioms(self):
         result = self.exercise(build_exit=1)
@@ -131,6 +136,54 @@ class BuildEvidenceTests(unittest.TestCase):
         for probe in evidence['access_probes']:
             data = gzip.decompress((repo/probe['log']).read_bytes())
             self.assertEqual(hashlib.sha256(data).hexdigest(), probe['log_sha256'])
+
+
+class AxiomAllowlistTests(unittest.TestCase):
+    def test_standard_and_empty_closures(self):
+        from check_openai_baseline_axioms import check
+        text = "'A' depends on axioms: [propext,\n Classical.choice, Quot.sound]\n'B' does not depend on any axioms"
+        self.assertEqual(set(check(text, {'A', 'B'})), {'A', 'B'})
+
+    def test_proof_hole_rejected(self):
+        from check_openai_baseline_axioms import check
+        with self.assertRaisesRegex(ValueError, 'unsupported'):
+            check("'A' depends on axioms: [sorryAx]", {'A'})
+
+    def test_custom_axiom_rejected(self):
+        from check_openai_baseline_axioms import check
+        with self.assertRaisesRegex(ValueError, 'unsupported'):
+            check("'A' depends on axioms: [Domain.assumption]", {'A'})
+
+    def test_missing_root_rejected(self):
+        from check_openai_baseline_axioms import check
+        with self.assertRaisesRegex(ValueError, 'missing'):
+            check("'A' depends on axioms: [propext]", {'A', 'B'})
+
+    def test_duplicate_root_rejected(self):
+        from check_openai_baseline_axioms import check
+        with self.assertRaisesRegex(ValueError, 'duplicate'):
+            check("'A' does not depend on any axioms\n'A' does not depend on any axioms", {'A'})
+
+    def test_unexpected_root_rejected(self):
+        from check_openai_baseline_axioms import check
+        with self.assertRaisesRegex(ValueError, 'unexpected'):
+            check("'Other' does not depend on any axioms", {'A'})
+
+
+class SourceIntegrityTests(unittest.TestCase):
+    def test_mutation_fails_with_retained_evidence(self):
+        from record_openai_ci_evidence import record
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            baseline = root/'baseline'; baseline.mkdir()
+            (baseline/'LICENSE').write_text('test')
+            (baseline/'lake-manifest.json').write_text('{"packages": []}')
+            (baseline/'baseline-source-manifest.json').write_text(json.dumps({'files': {'A.lean': '0'*64}}))
+            (baseline/'A.lean').write_text('changed')
+            with self.assertRaises(SystemExit): record(baseline, root/'out')
+            result = json.loads((root/'out/ci-provenance.json').read_text())
+            self.assertEqual(result['integrity'], 'failed')
+            self.assertEqual(result['modified_or_missing'], ['A.lean'])
 
 
 if __name__ == '__main__': unittest.main()

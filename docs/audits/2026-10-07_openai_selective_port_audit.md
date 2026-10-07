@@ -179,3 +179,32 @@ repository instructions were supplemented by `lean-conventions` and
 OpenAI Codex (GPT-6) produced the scripts, tests and audit text under the user's
 assigned #8741 scope. Mathematical review and any merge remain with the human
 maintainer. No merge or deployment is authorized by this batch.
+
+## Separate GitHub original-pin validation route
+
+Follow-up on #8785 adds `.github/workflows/openai-selected-baseline.yml`, triggered
+only by changes to its workflow, the OpenAI audit scripts or source manifest, and
+available for manual dispatch. This uses ordinary GitHub-hosted runners with
+`contents: read`, no persisted checkout credentials, and no cache upload. It does
+not change local network policy or use a different Mathlib cache source.
+
+The job retrieves the immutable source objects, checks the manifest, constructs
+the external baseline, verifies the audited SHA-256 of the official Lean 4.34.1
+archive, and fetches the official prebuilt Mathlib cache. After the sentinel, it
+runs `lake --no-build build +Mathlib:leanArts` and aborts if dependency artifacts
+are stale. Only then may the three exact OAI roots build with the baseline's
+linter options. No full OAI package or TNLean production source is imported.
+
+After successful builds, the generated `#print axioms` output is checked against
+an exact root-name set and the allowlist `propext`, `Classical.choice`, `Quot.sound`.
+Missing/duplicate roots, `sorryAx`, custom axioms, or a failed command fail the
+job. This kernel-axiom gate does not assert mathematical source faithfulness.
+Source/configuration integrity and locked dependency revisions are checked again
+after the attempt, including failures. Logs, hashes, CI revision/run identifiers,
+the source staging manifest, and upstream license are retained as a 14-day
+artifact. No evidence status in the original local-failure audit is overwritten.
+
+CI artifacts are explicitly **original-pin baseline evidence**, never downstream
+port evidence. No reviewed downstream proof port exists in this PR. The local
+unit suite now also tests stale-cache refusal, axiom allowlist failures and
+source-integrity mutation detection; execution outcomes will be linked on #8785.

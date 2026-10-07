@@ -1,0 +1,86 @@
+name: OpenAI selected original-pin baseline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/openai-selected-baseline.yml'
+      - 'scripts/*openai*.py'
+      - 'docs/provenance/openai-math-port-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openai-selected-baseline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  original-pin:
+    name: Original Lean 4.34.1 roots and axioms (not a downstream port)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SOURCE_PIN: adc7f1241b42e322a6451854ab7e4b4c146bf78a
+      MATHLIB_PIN: d13f23b723b8a846827a245b89c10fc7d3f11612
+      LEAN_NUM_THREADS: '2'
+      MATHLIB_CACHE_DIR: ${{ runner.temp }}/mathlib-cache-original
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Test audit and cache guards
+        run: python3 -m unittest discover -s scripts -p test_audit_openai_closure.py -v
+
+      - name: Fetch immutable source objects and original Mathlib lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout --depth 1 https://github.com/openai/math.git "$RUNNER_TEMP/openai-math"
+          git -C "$RUNNER_TEMP/openai-math" fetch --filter=blob:none --depth 1 origin "$SOURCE_PIN"
+          curl -fLsS --retry 3 "https://raw.githubusercontent.com/leanprover-community/mathlib4/$MATHLIB_PIN/lake-manifest.json" -o "$RUNNER_TEMP/mathlib-manifest.json"
+          python3 scripts/audit_openai_closure.py --upstream "$RUNNER_TEMP/openai-math" --check
+          python3 scripts/prepare_openai_baseline.py --upstream "$RUNNER_TEMP/openai-math" --destination "$RUNNER_TEMP/oai-baseline" --mathlib-manifest "$RUNNER_TEMP/mathlib-manifest.json"
+
+      - name: Install exact official Lean archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fLsS --retry 3 https://github.com/leanprover/lean4/releases/download/v4.34.1/lean-4.34.1-linux.tar.zst -o lean.tar.zst
+          echo '47bf4bbd78f70c2e9670598ab7124d92b6efb7330ff33e5fbb4030f6fd72e4e4  lean.tar.zst' | sha256sum --check
+          tar --zstd -xf lean.tar.zst
+          rm lean.tar.zst
+          "$RUNNER_TEMP/lean-4.34.1-linux/bin/lean" --version
+
+      - name: Fetch prebuilt cache, refuse stale dependencies, build only the three roots
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/run_openai_build_audit.py \
+            --worktree "$RUNNER_TEMP/oai-baseline" \
+            --lake "$RUNNER_TEMP/lean-4.34.1-linux/bin/lake" \
+            --output "$RUNNER_TEMP/original-pin-evidence" --timeout 1200 \
+            --target OAI.MathematicalPhysics.PEPSFilters.GeometricOptimizer \
+            --target OAI.MathematicalPhysics.PEPSMove.PhysicalMove \
+            --target OAI.MathematicalPhysics.PEPSSubvolume.Subvolume \
+            --axioms AuditAxioms.lean
+          python3 scripts/check_openai_baseline_axioms.py --audit-directory "$RUNNER_TEMP/original-pin-evidence"
+
+      - name: Record source and configuration integrity after the attempt
+        if: always()
+        shell: bash
+        run: |
+          python3 scripts/record_openai_ci_evidence.py --baseline "$RUNNER_TEMP/oai-baseline" --output "$RUNNER_TEMP/original-pin-evidence"
+
+      - name: Retain source-pin evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: openai-original-pin-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/original-pin-evidence
+          if-no-files-found: error
+          retention-days: 14
