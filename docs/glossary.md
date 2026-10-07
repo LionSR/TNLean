@@ -2039,6 +2039,27 @@ in `MPS/Preparation/` uses it.
   per-site norm budget as hypotheses; deriving them from the one-term-per-support
   convention on an induced square-lattice domain is a separate step.
 
+#### `QuantumCircuit.siteExpectation`
+
+- **Declaration:**
+  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
+  with the linear map `QuantumCircuit.siteExpectationLM`.
+- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+- **Meaning:** the normalized partial trace
+  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  original sites.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
+- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
+  average over products of on-site Weyl operators outside `K`),
+  `siteExpectation_mem_supportedOperators`,
+  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
+  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
+  `norm_sub_siteExpectation_le` (error through on-site commutators), and
+  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
+  dynamics onto graph balls under a sphere-growth hypothesis).
+- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+
 ## Inhomogeneous short-range correlated chains
 
 ### `MPSTensor.IsInjectiveOn`
@@ -2927,3 +2948,131 @@ involve no boundary.
   the same maps into a complete zipper family after a derived common blocking.
   `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
   of multiplicities under positive dimensions and injective block separation.
+
+## Distributed PEPS compression: finite incidence and choice costs
+
+### Corrected source positions and whole-lifetime gate participation
+
+- **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
+  `incidentGates` and `gatesTouching` in the same namespace.
+- **Defined in:** `TNLean/PEPS/Approximation/DistributedLifetime.lean`.
+- **Meaning:** A source position has two party endpoints. For a finite set `S`
+  of corrected positions, `correctedParties` is their endpoint union. The gate
+  identifiers distinguish occurrences; repeated uses of an identical operation
+  remain distinct. `incidentGates` filters the entire finite nonprivate gate
+  list by party participation. `gatesTouching` includes every gate meeting the
+  corrected party set, including gates with no corrected source of their own.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2, corrected-position expansion,
+  `04-compression.tex:342–381`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L342-L381).
+- **Sanctioned bridges:** `card_correctedParties_le` gives at most `2 * S.card`
+  parties. `card_gatesTouching_correctedParties_le` gives at most
+  `2 * b * S.card` affected gates from the actual whole-lifetime bound of `b`
+  gates per corrected party. `owner_mem_gatesTouching_correctedParties` uses
+  explicit slot-owner incidence; `disjoint_participants_of_not_mem_gatesTouching`
+  proves exterior gates contain no corrected party.
+- **Caveat:** These are finite incidence statements, not a distributed quantum
+  circuit model or a density expansion. Coincident endpoints are permitted by
+  the counting lemmas. The eventual source-position model must supply its
+  owner/endpoint incidence, and the gate list must use occurrence identifiers.
+  No private-memory or source-Schmidt-rank bound is imposed.
+
+### Star and pair-sample virtual links
+
+- **Declarations:** `TNLean.PEPS.Approximation.pairSampleLabels`, `gateLinkLabels`,
+  `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
+  `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
+- **Defined in:** `TNLean/PEPS/Approximation/DistributedLinks.lean`.
+- **Meaning:** Each gate has a star rooted at a chosen participant and a sample
+  link for every unordered pair of distinct participants. Summand tags keep
+  star and sample links distinct, while gate-occurrence tags preserve parallel
+  links from different gates. Endpoint sets and incidence lists are derived
+  from this actual construction.
+- **Source:** The same September 24 manuscript, proof of Theorem 5.2,
+  `04-compression.tex:565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L565-L588).
+- **Sanctioned bridges:** `card_pairSampleLabels` gives `choose n 2` sample
+  links at a gate of arity `n`; `card_gateLinkLabels` gives `n - 1 + choose n 2`
+  total labels when the star root participates. `card_distributedLinkParties`
+  proves two distinct endpoints. `distributedLinkParties_subset` and
+  `exists_common_gate_of_mem_distributedLinkParties` derive original-gate
+  locality. `card_incidentDistributedLinks_le` gives degree at most
+  `2 * b * (b - 1)` from gate arity at most `b` and whole-lifetime participation
+  at most `b`.
+- **Caveat:** Star-root membership is explicit and must come from a chosen
+  participant of a nonprivate gate. This family has no local tensors, virtual
+  dimensions or evaluation map. Contraction and parallel-link combination
+  remain separate results; these links alone do not represent the compressed
+  density operator.
+
+### Weighted cost of affected coefficient and physical-entry choices
+
+- **Declarations:** `TNLean.PEPS.Approximation.ketBraCoefficientCost` and
+  `correctedPositionChoiceCost`.
+- **Defined in:** `TNLean/PEPS/Approximation/CorrectedPositionCost.lean`.
+- **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative
+  absolute coefficient weights. `correctedPositionChoiceCost` multiplies these
+  quantities over affected gates and the squares of intended physical
+  dimensions over corrected parties. Exterior coefficients and dimensions
+  do not occur in these products.
+- **Source:** The same September 24 manuscript, `eq:compression-polynomial-bounds`
+  and `eq:compression-choice-cost`, `04-compression.tex:269–277,356–381`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L356-L381).
+- **Sanctioned bridges:** `ketBraCoefficientCost_eq_sum` identifies the square
+  with the double ket/bra coefficient sum. For `B,d ≥ 1`, actual coefficient
+  sums at affected gates at most `B`, physical dimensions at corrected parties
+  at most `d`, and lifetime participation at most `b`,
+  `correctedPositionChoiceCost_le` proves the bound `(B^(4*b) * d^4)^S.card`.
+  `compressionChoiceBase_le_of_monomial_bounds` gives
+  `Q ≤ C^(4*b) * D^4 * L^(4*b*a + 4*c)` when `B ≤ C*L^a` and `d ≤ D*L^c`.
+- **Caveat:** Coefficients are supplied as nonnegative weights; the circuit
+  expansion must identify them with actual complex coefficient norms. The
+  theorem bounds a finite choice cost, not an expected trace error. The full
+  circuit expansion, local tensor evaluation, virtual dimension estimates,
+  approximate-expansion case and composition with the quantum/sampling results
+  remain open in [#8769](https://github.com/LionSR/TNLean/issues/8769).
+
+## Nested regional cylinders
+
+### `TNLean.PEPS.dependentRegionCylinder`
+
+- **Declaration:** `dependentRegionCylinder R S`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Cylinder.lean`.
+- **Meaning:** the global vectors all of whose complementary coordinate slices
+  lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
+- **Source:** the September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
+- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+  the range of an identity extension with a cylinder;
+  `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
+  projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,
+  containing-region, and image identities in the existing physical coordinates.
+- **Caveat:** inside rank means `dim S`, not the global dimension of the
+  cylinder. No cancellation of a possibly zero-dimensional outside factor
+  is used. The empty region still has inside Hilbert space `ℂ`.
+
+### `TNLean.PEPS.nestedCylinderInnovation`
+
+- **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
+  that the finite family of regions is monotone.
+- **Defined in:** `TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean`.
+- **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
+  `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
+  inside projectors into the current region and taking the sum of their ranges.
+- **Source:** the variable-radius orthogonalization at the manuscript passage
+  linked above.
+- **Sanctioned consequences:** `nestedCylinderInnovation_prefix_span` and
+  `nestedCylinderInnovation_span` identify all prefix and total spans;
+  `nestedCylinderInnovation_pairwise_orthogonal` proves orthogonality in the
+  actual global Hilbert space; `nestedCylinderInnovation_projector_sum` gives
+  the sum of the lifted inside projectors. The individual and summed
+  `finrank` bounds compare inside dimensions directly, in natural and integer
+  form. `nestedCylinder_projector_supported` gives support on any containing
+  region, and that support result does not require nesting.
+- **Caveat:** the image need not equal `Sⱼ ∩ Wⱼ⊥`; the sandwich
+  `(I − P_(Wⱼ)) P_(Sⱼ) (I − P_(Wⱼ))` need not be a projector. Neither
+  commutation of the original projectors nor a spectral rank estimate is
+  assumed. This is the orthogonalization step, not the approximation-error
+  or full adaptive-patch theorem. See
+  [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).
