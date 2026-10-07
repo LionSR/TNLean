@@ -37,6 +37,21 @@ error at most `4 L^{-30}`.
   (`eq:exchange-exact-map`).
 * `EncodedFrame.TwoSheetExchange.exchange`: Lemma 6.6 `lem:exchange`.
 
+## Scope
+
+**Scope restriction (monomial structure):** Lemma 6.6 asserts that the exchange is implemented
+by private contractions and register renaming, using `P∘` and the owners of the renamed registers
+and tags, and is therefore a bounded change in the sense of Theorem 5.2. Here `C = D_U F_A ℛ` is
+constructed, `D_U` and `F_A` act on the raw registers of `U` alone, which `P∘` holds on both
+sheets before and after the exchange, and `ℛ` keeps every register at its party. Reading this as
+an allowed monomial of Theorem 5.2 needs a model of operators placed on parties, which the library
+does not yet have. Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+
+The source condition that every hole's outer square lies on one side of `∂Y` is recorded through
+the physical samples of the outer squares, which it implies, and the holes of each frame are
+listed as those outside `Y` followed by those inside `Y`, which is the canonical identification of
+tag orderings of Definition 6.1.
+
 ## References
 
 * Polynomial-PEPS manuscript (September 24, 2026), Lemma 6.6 `lem:exchange` and its proof,

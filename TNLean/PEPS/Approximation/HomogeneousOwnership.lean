@@ -40,7 +40,7 @@ vectors.
 ## Scope
 
 **Scope restriction (monomial structure):** Lemma 6.5 asserts that the birth and the death are
-bounded changes in the sense of Theorem 5.2, that is, that they admit expansions into allowed
+bounded changes in the sense of Theorem 5.2, that is, that they have expansions into allowed
 monomials (one normalized pair source, respectively one pair effect, and private contractions)
 involving only `P∘` and `Q∘`. Here the canonical map is factored as `B = (𝒱ᴴ S) (Sᴴ 𝒱)`, with
 `S` the source of the single normalized pair vector `s`, every other register it acts on lies in
