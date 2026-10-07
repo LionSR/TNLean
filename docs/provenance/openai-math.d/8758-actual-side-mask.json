@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayersplitmask",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Source: Section 11, lines 299\u2013310. The definition uses actual unsplit fan endpoints and midpoint \u211d; no radius, reference-membership or late-layer assumption is imposed on the definition."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayersplitmask_eq_true_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Source: Section 11, lines 299\u2013310. This characterization holds for arbitrary origin, finite endpoint set, natural radius, reference index and integer reference-cell index."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfan_elementary_endpoints",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +133,38 @@
         "Source: Section 11, lines 299\u2013310. The previously private geometric proof is exposed unchanged apart from declaration-name references, so subsequent contact arguments can reuse it without duplicating the proof."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfan_elementary_side_containment",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,20 +183,38 @@
         "Source: Section 11, lines 299\u2013310. The previously private proof uses the three endpoint cases and convexity of the whole segment; its geometric content is unchanged."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.finelayer_corner_on_elementaryside",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -161,20 +233,38 @@
         "Source: Section 11, lines 299\u2013310. The existing whole-side corner trichotomy and the exact midpoint witness define the subdivision. Matching opposing elementary segments and constancy of a tile identifier remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.neighborhood_dist_bound",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_exists_dist_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -194,20 +284,38 @@
         "Source: Section 11, lines 160\u2013177 and geometry:layer-distance, lines 179\u2013191. This is the neighborhood bound rather than the twice-larger bound for a whole layer."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dummy_layer_separation",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -227,20 +335,38 @@
         "Source: Section 11, lines 160\u2013177, geometry:layer-distance in lines 179\u2013191, and the opposing dummy region in lines 299\u2013306. The proof combines the neighborhood endpoint witness, the actual layer lower bound and the triangle inequality."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dummy_contact_index",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_contact_layer_eq",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -260,7 +386,25 @@
         "Source: Section 11, lines 160\u2013177, geometry:layer-distance in lines 179\u2013191, and the opposing dummy region in lines 299\u2013306. Every strictly later closed layer has positive separation from the closed initial neighborhood; the actual dummy label and constancy along an open elementary segment remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f8b62e1b56c8f7e356c870322aa3418702349a68",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-build.log",
+            "sha256": "3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-actual-side-mask-axioms.log",
+            "sha256": "477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

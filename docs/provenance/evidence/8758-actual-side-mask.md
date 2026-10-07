@@ -71,13 +71,25 @@ obligations.
 
 Proofs are independently written; no upstream Lean source or proof text
 is reused. OpenAI Codex (GPT-6) assists LionSR under #8758.
-Public claims: [actual side mask](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046479723),
-[dummy contacts](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046553755),
-and [shared side geometry](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046753507).
+The work was publicly claimed under #8758 before execution:
+
+- [actual midpoint subdivision](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046479723);
+- [dummy-neighborhood contacts](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046553755);
+- [contribution scope](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046663920);
+- [reusable elementary-side geometry](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6046753507).
 
 ## Exact source and canonical evidence
 
-Frozen source revision: **Pending**.
+Frozen source revision: `f8b62e1b56c8f7e356c870322aa3418702349a68`.
+
+The two production modules and the imported audit match the exact Git
+bytes at that revision:
+
+| Frozen file | SHA256 |
+|---|---|
+| `TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean` | `c564ff35ea9a33079237c38e207e7301e604ead888b502f545eceb4fb94e2d5e` |
+| `TNLean/PEPS/AreaLaw/Geometry/DummyContacts.lean` | `d848dbf2aff6061a43991657197828b5f2adbc4feec0f49dba595c8dd87dc6ae` |
+| `docs/provenance/evidence/8758-actual-side-mask-axioms.lean` | `f179641a0fc5895a8ca8a460242d276e8ec0c783306a55eb434ed68b753bed37` |
 
 `TNLean/PEPS/AreaLaw/Geometry/SideSubdivisionMask.lean`:
 
@@ -95,29 +107,34 @@ Frozen source revision: **Pending**.
 
 | Check | Actual command | Exit code | Elapsed seconds |
 |---|---|---|---|
-| Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | Pending | Pending |
-| Imported eight-name audit | `lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean` | Pending | Pending |
+| Geometry target | `lake build TNLean.PEPS.AreaLaw.Geometry` | 0 | 59.834 |
+| Imported eight-name audit | `lake env lean docs/provenance/evidence/8758-actual-side-mask-axioms.lean` | 0 | 30.477 |
 
-Canonical verification must use the exact frozen source in the existing
-warmed worktree under the shared repository lock and the pinned prebuilt
-Mathlib artifacts. The source-only preparation worktree has no `.lake`
-directory and performs no cache or build operation. The mask source
+Both canonical commands passed at the exact frozen source in the existing
+warmed worktree under the shared repository lock, reusing the pinned prebuilt
+Mathlib artifacts. The build compiled only `DummyContacts`, `SideSubdivisionMask`
+and their `Geometry` aggregator, with no warnings or errors. The eight imported
+reports each list only `propext`, `Classical.choice` and `Quot.sound`.
+The source-only preparation worktree has no `.lake` directory and performs
+no cache or build operation. The mask source
 passed non-mutating package-option elaboration in 5.5077 seconds without
 diagnostics before the two private geometric lemmas were exposed for reuse.
 Independent mathematical review retains the review of those unchanged proofs.
-The completed dummy
+After the two geometric lemmas became public, the source passed a further
+direct package-option check without
+diagnostics; no elapsed time was recorded for that check. The completed dummy
 source also passed direct package-option elaboration and independent
-mathematical review. The two blueprint chapters state the exact
-quantifiers and conclusions; canonical verification remains pending.
+mathematical review. The two blueprint chapters state the exact quantifiers
+and conclusions and were reviewed independently.
 
 Evidence paths and SHA256 hashes:
 
-- `docs/provenance/evidence/8758-actual-side-mask-build.log`: **Pending**;
-- `docs/provenance/evidence/8758-actual-side-mask-axioms.log`: **Pending**.
+- `docs/provenance/evidence/8758-actual-side-mask-build.log`: `3e6af220dca21f07173481916a3f1f82519dd3d72b8acf8c0a66abf3e17ebcca`;
+- `docs/provenance/evidence/8758-actual-side-mask-axioms.log`: `477586bce5162191ccde32d8408fb9518e83d6888dd072b7d94496f80039e3af`.
 
-Each completed log must record its exact command, frozen revision,
-elapsed time and exit code. Only trailing whitespace may be normalized;
-actual diagnostics and quoted axiom reports must be retained.
+Each log records its exact command, frozen revision, elapsed time and exit
+code. Trailing whitespace alone was normalized; the actual build output and
+all eight axiom reports are retained.
 
 ## Provenance and integration
 
@@ -127,20 +144,30 @@ including the original and reverified fan/primary records and the earlier
 first-check warning logs. The previously existing planned root-ledger
 entry remains planned.
 
-The eight new rows remain planned until actual canonical verification.
-The static helper checks the exact eight source declarations, original-proof
-notices, imported audit names, licenses, pinned manuscript labels and the
-259-entry schema. It validates the immutable 251-row byte baseline
-against the parent Git objects. No parent verification is replaced.
+The strict helper promoted precisely the eight new rows after these actual
+checks. The complete 259-entry current-policy audit passed, including the
+exact eight source declarations, original-proof notices, imported audit
+names, licenses and pinned manuscript labels. It validates the immutable
+251-row byte baseline against the parent Git objects. No parent verification
+is replaced.
 
-Strict promotion: **Pending**.
-Complete blueprint source synchronization and reverse coverage: **Pending**.
-Formatter, prose and generated imports: **Pending**.
+The complete blueprint source synchronization passed with 20,213 distinct
+references and 20,207 flattened records; its report has `sync_ok: true` and
+no missing, stale or duplicate entries. Complete changed-declaration coverage
+also passed relative to the 251-row parent. The two chapters contain six
+mathematical environments, eight declaration records and five proof tags.
+Generated imports are current at 75 imports and 2,845 modules. The mathematical
+prose and exact hypotheses were independently reviewed. Formatter idempotence
+passed for both chapters, including the grouped elementary-side theorem:
+formatted temporary copies equal the current and exact frozen Git bytes.
+The final reader-facing prose check passed at the same frozen revision.
 Independent review approved all eight statements and their mathematical proofs,
 including the unchanged geometric arguments previously reviewed as private lemmas.
+The grouped elementary-side blueprint theorem was independently reviewed at
+the frozen revision: it records all three oriented endpoint cases and whole-side
+containment for an arbitrary optional midpoint subdivision.
 
 The historical local whole-library `leanblueprint checkdecls` failure
 caused by a missing pre-existing `Fibonacci.olean` artifact remains
 preserved; that unrelated check is not repeated here. Full-library CI,
 compiled blueprint declaration checking and rendering remain pending.
-Published pull request and evidence head: **Pending**.
