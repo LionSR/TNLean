@@ -1,10 +1,11 @@
 # Selective OpenAI source and build audit (#8741)
 
 This batch establishes reproducible **source import closures**, source hashes,
-regression signatures, candidate reuse boundaries, and failed cache-first build
-attempts. It ports no Lean proof. No OAI proof module, downstream production module,
-or exported axiom closure was compiled or verified. The cache executable itself
-compiled; that is tooling evidence only. #8741 remains open.
+regression signatures and candidate reuse boundaries. The separate GitHub
+original-pin job now builds all three unchanged OAI roots and verifies that their
+axiom closures contain only `propext`, `Classical.choice`, and `Quot.sound`.
+Local cache attempts remain blocked, and no downstream proof is ported. #8741
+remains open for selective downstream implementation and mathematical review.
 
 Source: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`, the September 24
 manuscript baseline. TNLean comparison base:
@@ -27,7 +28,7 @@ and the MPU-gauging exclusion are preserved.
   logs. The recorded log SHA-256 is for the **decompressed** bytes.
 - `scripts/audit_openai_closure.py`, `prepare_openai_baseline.py`, and
   `run_openai_build_audit.py`: regeneration, disposable baseline construction,
-  and bounded cache-first verification. Fifteen passing unit tests exercise graph failures,
+  and bounded cache-first verification. The passing unit tests exercise graph failures,
   immutable reads, manifest consistency and rejection of failed cache gates.
 
 | Root under `OAI.MathematicalPhysics` | OAI module closure |
@@ -64,7 +65,7 @@ therefore retains only the selected unchanged source files and Mathlib's exact
 locked dependency closure. Its generated Lake configuration preserves upstream
 `autoImplicit = false` and adds `weak.linter.mathlibStandardSet = true`. The
 original package configuration is hashed in the manifest, but was **not run**.
-This is a reduced original-pin baseline attempt, not a successful build of the
+This is a reduced original-pin baseline, not a build of the
 original full Lake package. It never changes the source checkout, vendors files
 into TNLean, or changes TNLean's Lake configuration.
 
@@ -161,9 +162,10 @@ The future `docs/provenance/openai-math.d/8741.json` is reserved for real downst
 declaration mappings; this audit does not fabricate them. Source signatures in
 the inventory are attributed by immutable source URL and hash.
 
-Remaining acceptance gates are successful cached original-pin root builds,
-reviewed minimal declaration dependencies, canonical interface/equivalence
-bridges, selective downstream linter-bearing builds, and kernel axiom audits.
+The original-pin root builds and their kernel axiom audits passed in GitHub CI.
+Remaining acceptance gates include reviewed minimal declaration dependencies,
+canonical interface/equivalence bridges, selective downstream linter-bearing
+builds, and downstream kernel axiom audits.
 `AuditAxioms.lean` is generated for the three original roots. Gap and exact
 contraction bridge audits must use the actual declarations from their owners;
 no fictitious bridge is generated here. No blueprint completion tag is added.
@@ -208,3 +210,36 @@ CI artifacts are explicitly **original-pin baseline evidence**, never downstream
 port evidence. No reviewed downstream proof port exists in this PR. The local
 unit suite now also tests stale-cache refusal, axiom allowlist failures and
 source-integrity mutation detection; execution outcomes will be linked on #8785.
+
+
+## Verified original-pin result
+
+[Run 37591286575](https://github.com/LionSR/TNLean/actions/runs/37591286575) passed
+at head `d90bce46ac39781a7540f8aa494b2c8b4b1d3429`, tested merge
+`f1596ea2bf2ca0ece0c4efda555cc1e456f63c71`. The downloaded artifact was verified
+against GitHub's SHA-256 and is retained in this repository so evidence survives
+GitHub artifact expiration. [Machine-readable CI audit](../provenance/openai-math-ci-audit.json)
+records the complete commands, hashes, timings, root axiom arrays and provenance;
+[raw artifact](../provenance/openai-math-ci-37591286575.zip) retains the logs,
+staging manifest and upstream license.
+
+| Command / root | Exit | Seconds | Logged warning lines |
+|---|---:|---:|---:|
+| Official `lake exe cache get` | 0 | 98.705 | see raw cache log |
+| `lake --no-build build +Mathlib:leanArts` | 0 | 4.844 | 0 |
+| `PEPSFilters.GeometricOptimizer` | 0 | 149.086 | 150 |
+| `PEPSMove.PhysicalMove` | 0 | 193.341 | 1317 |
+| `PEPSSubvolume.Subvolume` | 0 | 251.458 | 828 |
+| `lake env lean AuditAxioms.lean` | 0 | 5.159 | 0 |
+
+The no-build preflight reports all 8,922 targets up-to-date. No non-OAI module
+build appears in the three root logs. These are successful **linter-bearing**
+builds with upstream style warnings (including replayed warnings), not a
+warning-free downstream port. Source and generated configuration bytes were
+unchanged after the build; all nine resolved dependencies match their locks.
+All three exported theorems have exactly `[propext, Classical.choice, Quot.sound]`
+as their printed axiom closure. This does not prove manuscript faithfulness or
+remove the exact square/nearest-neighbor restrictions recorded above.
+
+The original local-failure audit is retained separately and is not rewritten
+into a success. No local network restrictions or credential settings changed.

@@ -186,4 +186,25 @@ class SourceIntegrityTests(unittest.TestCase):
             self.assertEqual(result['modified_or_missing'], ['A.lean'])
 
 
+class VerifiedCIEvidenceTests(unittest.TestCase):
+    def test_archive_hash_commands_and_exact_root_axioms(self):
+        import hashlib
+        import zipfile
+        from audit_openai_closure import ROOTS
+        from check_openai_baseline_axioms import check
+        repo = Path(__file__).resolve().parents[1]
+        evidence = json.loads((repo/'docs/provenance/openai-math-ci-audit.json').read_text())
+        archive = repo/evidence['retained_archive']
+        self.assertEqual(hashlib.sha256(archive.read_bytes()).hexdigest(), evidence['archive_sha256'])
+        with zipfile.ZipFile(archive) as z:
+            result = json.loads(z.read('result.json'))
+            self.assertEqual(result['library_build_status'], 'passed')
+            self.assertEqual(result['cache_gate'], 'passed')
+            self.assertEqual(check(z.read('axioms.log').decode(), set(ROOTS.values())), result['root_axioms'])
+            for attempt in result['attempts']:
+                self.assertEqual(attempt['exit_code'], 0)
+                self.assertEqual(hashlib.sha256(z.read(attempt['log'])).hexdigest(), attempt['log_sha256'])
+            self.assertEqual(json.loads(z.read('ci-provenance.json'))['integrity'], 'passed')
+
+
 if __name__ == '__main__': unittest.main()

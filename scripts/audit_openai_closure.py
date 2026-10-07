@@ -125,7 +125,7 @@ def audit(upstream, downstream):
                       'signature': signature, 'source_url': f'https://github.com/openai/math/blob/{PIN}/{source_path(module)}#L{source.count(chr(10), 0, start)+1}', 'signature_sha256': digest(signature.encode()),
                       'source_lines': [source.count('\n', 0, start)+1, source.count('\n', 0, end)+1],
                       'module_count': len(subrows), 'topological_order': suborder,
-                      'kernel_dependency_closure': 'not_verified', 'axioms': 'not_verified'})
+                      'kernel_dependency_closure': 'not_verified', 'axioms': 'not_computed_by_inventory; see openai-math-ci-audit.json'})
     modules = []
     for module in order:
         source, deps = rows[module]

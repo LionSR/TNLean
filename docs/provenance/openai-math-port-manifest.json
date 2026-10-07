@@ -737,7 +737,7 @@
         "OAI.MathematicalPhysics.PEPSFilters.GeometricOptimizer"
       ],
       "kernel_dependency_closure": "not_verified",
-      "axioms": "not_verified"
+      "axioms": "not_computed_by_inventory; see openai-math-ci-audit.json"
     },
     {
       "module": "OAI.MathematicalPhysics.PEPSMove.PhysicalMove",
@@ -786,7 +786,7 @@
         "OAI.MathematicalPhysics.PEPSMove.PhysicalMove"
       ],
       "kernel_dependency_closure": "not_verified",
-      "axioms": "not_verified"
+      "axioms": "not_computed_by_inventory; see openai-math-ci-audit.json"
     },
     {
       "module": "OAI.MathematicalPhysics.PEPSSubvolume.Subvolume",
@@ -853,7 +853,7 @@
         "OAI.MathematicalPhysics.PEPSSubvolume.Subvolume"
       ],
       "kernel_dependency_closure": "not_verified",
-      "axioms": "not_verified"
+      "axioms": "not_computed_by_inventory; see openai-math-ci-audit.json"
     }
   ],
   "modules": [
