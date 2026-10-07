@@ -2,6 +2,7 @@
 
 \begin{definition}[Radius exponent]
     \label{def:area_law_radius_exponent}
+    \leanok
     \lean{TNLean.PEPS.AreaLaw.Exponents.radiusExponent}
     \uses{thm:area_law_exponent_gaps}
     For the fixed amplification parameters, let
@@ -12,6 +13,7 @@
 
 \begin{theorem}[Separation of the collar scales]
     \label{thm:area_law_radius_exponent_gaps}
+    \leanok
     \lean{TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps,
         TNLean.PEPS.AreaLaw.Exponents.collar_radius_scale_tendsto_zero}
     \uses{def:area_law_radius_exponent}
@@ -21,12 +23,14 @@
     as the positive integer $L$ tends to infinity.
 \end{theorem}
 \begin{proof}
+    \leanok
     The inequalities follow by substituting the fixed parameters.
     Each power in the numerator has exponent strictly smaller than $\beta$.
 \end{proof}
 
 \begin{theorem}[Uniform control of rounded collars]
     \label{thm:area_law_uniform_collar_threshold}
+    \leanok
     \lean{TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold,
         TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO}
     \uses{thm:area_law_radius_exponent_gaps}
@@ -40,6 +44,7 @@
     The threshold depends only on $C$ and $\eta$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Apply the preceding limit and use
     $\lfloor L^{1-\varepsilon}\rfloor\le L^{1-\varepsilon}$.
     This proves the scale comparison in the final paragraph of the proof of

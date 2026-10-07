@@ -6,8 +6,10 @@ polynomial PEPS approximation theorem (Theorem 1.1 of *Polynomial PEPS
 approximation of gapped square-grid ground states*) remain unfinished. The
 results below establish distinct steps of their proofs. The combined QICLean
 build, strict examples, all 27 public kernel reports, and complete blueprint
-PDF, web and declaration checks have passed. Incorporation into the TNLean
-dependency and the actual TNLean module builds remain pending. All manuscript
+PDF, web and declaration checks have passed. The three TNLean modules for
+regional entropy, conditional boundary arithmetic and radius scales have also
+passed their actual module builds and all seven strict kernel audits. The QICLean
+dependency update remains separate. All manuscript
 references use the September 24, 2026 versions at OpenAI source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
@@ -61,9 +63,10 @@ S_\Omega(A)\le\left(c_D\log q+\frac{c_E}{2}\right)b.
 \]
 This is the [final numerical implication in the area-law proof](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex#L846-L857),
 conditional on the partition and its stated estimates. It does not establish
-their existence or uniformity. The physical entropy and numerical proof steps
-passed standalone Lean checks; the actual TNLean module builds and axiom audit
-are still pending.
+their existence or uniformity. The actual TNLean modules and both strict kernel
+audits have passed; their
+[evidence records](../provenance/openai-math.d/8759-entropy-dimension.json) refer
+to immutable production revision `548f23f7b274af443eb3644d8153f15148565c31`.
 
 The proved radius estimate isolates the numerical part of
 [Proposition 10.2](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex#L261-L287).
@@ -72,8 +75,9 @@ With \(\gamma=(1-\varepsilon)/\alpha<\beta\), it turns
 which \(\lfloor n^{1-\varepsilon}\rfloor+2r<\eta n^\beta\). Hence every
 eventually admissible radius sequence satisfies
 \(\lfloor n^{1-\varepsilon}\rfloor+2r(n)=o(n^\beta)\).
-The exponent gap, rounded threshold and little-o proofs are complete and pass
-standalone Lean checks; verification against the actual TNLean imports is pending. This estimate
+The exponent gap, rounded threshold and little-o proofs have passed the actual
+TNLean module build and all five strict kernel audits, recorded in the
+[radius evidence](../provenance/openai-math.d/8757-radius-scales.json). This estimate
 does not construct an amplification radius or prove a remote-information bound.
 
 The area law still requires the physical concentration and auxiliary-sector

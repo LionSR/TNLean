@@ -1,0 +1,9 @@
+'TNLean.PEPS.AreaLaw.Exponents.radiusExponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Exponents.collar_radius_scale_tendsto_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO' depends on axioms: [propext, Classical.choice, Quot.sound]

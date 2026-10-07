@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8757-tn-radius-scales-01",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.radiusExponent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -32,20 +32,38 @@
         "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "548f23f7b274af443eb3644d8153f15148565c31",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 /tmp/tnlean-kernel-lock-run.py scripts/lake_build_locked.sh TNLean.PEPS.AreaLaw.EntropyDimension TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly TNLean.PEPS.AreaLaw.Amplification.RadiusScales",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-entropy-dimension/build.log",
+            "sha256": "5bf776858715020e6bf0d745422c3d13534b2bff00119cde55b4938d80e38018"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8757-radius-scales/Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8757-radius-scales/axioms.log",
+            "sha256": "a9048161ebc9217d0abfcbde1b5f8bbcd3f1157b10c792129ad212d0aa85ce3c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8757-tn-radius-scales-02",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -63,20 +81,38 @@
         "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "548f23f7b274af443eb3644d8153f15148565c31",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 /tmp/tnlean-kernel-lock-run.py scripts/lake_build_locked.sh TNLean.PEPS.AreaLaw.EntropyDimension TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly TNLean.PEPS.AreaLaw.Amplification.RadiusScales",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-entropy-dimension/build.log",
+            "sha256": "5bf776858715020e6bf0d745422c3d13534b2bff00119cde55b4938d80e38018"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8757-radius-scales/Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8757-radius-scales/axioms.log",
+            "sha256": "a9048161ebc9217d0abfcbde1b5f8bbcd3f1157b10c792129ad212d0aa85ce3c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8757-tn-radius-scales-03",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.collar_radius_scale_tendsto_zero",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -94,20 +130,38 @@
         "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "548f23f7b274af443eb3644d8153f15148565c31",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 /tmp/tnlean-kernel-lock-run.py scripts/lake_build_locked.sh TNLean.PEPS.AreaLaw.EntropyDimension TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly TNLean.PEPS.AreaLaw.Amplification.RadiusScales",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-entropy-dimension/build.log",
+            "sha256": "5bf776858715020e6bf0d745422c3d13534b2bff00119cde55b4938d80e38018"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8757-radius-scales/Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8757-radius-scales/axioms.log",
+            "sha256": "a9048161ebc9217d0abfcbde1b5f8bbcd3f1157b10c792129ad212d0aa85ce3c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8757-tn-radius-scales-04",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -125,20 +179,38 @@
         "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "548f23f7b274af443eb3644d8153f15148565c31",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 /tmp/tnlean-kernel-lock-run.py scripts/lake_build_locked.sh TNLean.PEPS.AreaLaw.EntropyDimension TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly TNLean.PEPS.AreaLaw.Amplification.RadiusScales",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-entropy-dimension/build.log",
+            "sha256": "5bf776858715020e6bf0d745422c3d13534b2bff00119cde55b4938d80e38018"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8757-radius-scales/Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8757-radius-scales/axioms.log",
+            "sha256": "a9048161ebc9217d0abfcbde1b5f8bbcd3f1157b10c792129ad212d0aa85ce3c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8757-tn-radius-scales-05",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -156,7 +228,25 @@
         "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "548f23f7b274af443eb3644d8153f15148565c31",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "python3 /tmp/tnlean-kernel-lock-run.py scripts/lake_build_locked.sh TNLean.PEPS.AreaLaw.EntropyDimension TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly TNLean.PEPS.AreaLaw.Amplification.RadiusScales",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-entropy-dimension/build.log",
+            "sha256": "5bf776858715020e6bf0d745422c3d13534b2bff00119cde55b4938d80e38018"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8757-radius-scales/Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8757-radius-scales/axioms.log",
+            "sha256": "a9048161ebc9217d0abfcbde1b5f8bbcd3f1157b10c792129ad212d0aa85ce3c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

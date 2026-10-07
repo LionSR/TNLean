@@ -41,5 +41,9 @@ Implementation: `TNLean/PEPS/AreaLaw/EntropyDimension.lean` and
 regional entropy is identified with the QICLean finite-product entropy; no
 additional state, density matrix, partition, or entropy definition is introduced.
 
-Assisted by OpenAI Codex. Human mathematical review remains separate from
-successful Lean elaboration and the axiom audit.
+The two modules passed their linter-bearing builds and strict kernel dependency
+checks. The raw reports and immutable source hashes are recorded in
+`docs/provenance/evidence/8759-entropy-dimension/`.
+
+Assisted by OpenAI Codex. Human mathematical review remains separate from these
+formal checks.
