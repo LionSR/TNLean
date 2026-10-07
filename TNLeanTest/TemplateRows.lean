@@ -1,5 +1,7 @@
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 
+open scoped BigOperators
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 -- Negative coordinates and diagonal integer shifts must not use natural rounding.
@@ -43,7 +45,26 @@ example {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀) (i : Fin T.pieceC
 example {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀) (hC : 1 ≤ Ctpl) :
     T.points.card ≤ 9 * n * s₀ := template_card_le T hC
 
+#print axioms TNLean.PEPS.AreaLaw.mem_ambientDilation_iff
+#print axioms TNLean.PEPS.AreaLaw.ambientDilation_mono
+#print axioms TNLean.PEPS.AreaLaw.ambientDilation_mono_radius
+#print axioms TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset
 #print axioms TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le
+#print axioms TNLean.PEPS.AreaLaw.Geometry.latticeRow
+#print axioms TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region
+#print axioms TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection
+#print axioms TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_card_le
+#print axioms TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row
+#print axioms TNLean.PEPS.AreaLaw.Geometry.floor_affine_row
 #print axioms TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation
+#print axioms TNLean.PEPS.AreaLaw.ambientDilation_add
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff

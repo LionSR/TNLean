@@ -1,0 +1,722 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8754-tnlean.peps.arealaw.mem_ambientdilation_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.mem_ambientDilation_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_mono",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_mono",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_mono_radius",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_mono_radius",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_biunion_sdiff_subset",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.card_ambientdilation_biunion_sdiff_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.latticerow",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeRow",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_latticerow",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.convex_region",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_region",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.horizontal_mem_of_mem_of_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_horizontalsection",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.horizontalsection_eq_icc",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc_ceil_floor",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.mem_sample_of_row_between",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.sample_subset_box",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_sample_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template_card_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_card_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.ceil_affine_row",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.floor_affine_row",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.floor_affine_row",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_latticerow_ambientdilation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_add",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_add",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives row sections, rounding, area, or ambient dilation identities; does not assert the unfinished depth-layer bound."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
