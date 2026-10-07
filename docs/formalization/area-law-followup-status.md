@@ -219,14 +219,14 @@ including singular states. Its eventual mass is at least
 \([2(k+1)^{q^2}]^{-1}\), and \(\log d_{\lambda_k}=kS(\rho)+o(k)\).
 For a unit bipartite vector, it also proves the corresponding squared norm
 of the actual central projection of its literal tensor powers, using its
-actual reduced density. All four proofs pass strict Lean elaboration;
-the source-bound kernel, provenance and complete blueprint verification
-are in progress. These statements supply the high-label input, while the
+actual reduced density. All four proofs pass strict Lean checking and exact stock-only kernel
+checks, and the complete 9,713-job library build passed. The source-bound
+provenance checks passed; complete blueprint verification is in progress. These statements supply the high-label input, while the
 comparator and inverse metric arguments remain unfinished. None of these
 draft results has yet changed TNLean's dependency pin.
 
 The grouped-label operator inequalities have a separate proof frozen at
-`e15c46e`: on the full representation space,
+`d7fa8954`: on the full representation space,
 \(F_{\mathrm{good}}+F_{\mathrm{bad}}\le F_{\mathrm{whole}}\le
 F_{\mathrm{good}}+F_{\mathrm{bad}}+\loginom{k}{r}I\).
 Compatibility follows from the actual joint projections. Source-bound
@@ -239,6 +239,10 @@ Lemma 6.1. Their application to the actual good-copy component and the
 logarithmic dimension comparison remains separate. The accepted
 [QICLean #612](https://github.com/LionSR/QICLean/pull/612) proves the conditional
 movement estimate of area-law Lemma 5.1; it was merged at `29c9584d`.
+The accepted [QICLean #617](https://github.com/LionSR/QICLean/pull/617)
+proves the faithful-state marginal-phase comparison of Lemma 5.2; it was
+merged at `8b9b4bcd`. The singular-state extension remains a separate
+contribution.
 The accepted
 [QICLean #613](https://github.com/LionSR/QICLean/pull/613) supplies a maximizing
 nested feasible filter family, commutation with its marginals, and the
