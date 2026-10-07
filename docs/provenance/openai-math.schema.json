@@ -68,11 +68,11 @@
               "path": {
                 "type": "string",
                 "minLength": 1,
-                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+                "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
               },
               "declaration": {
                 "type": "string",
-                "pattern": "^[\\w\\u0080-\\uffff]+(?:[.\\w\\u0080-\\uffff\\u0027]*)$"
+                "pattern": "^[^\\W\\d][\\w']*(?:\\.[^\\W\\d][\\w']*)*$"
               },
               "name_status": {
                 "enum": [
@@ -100,7 +100,7 @@
                 "path": {
                   "type": "string",
                   "minLength": 1,
-                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+                  "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
                 },
                 "labels": {
                   "type": "array",
@@ -413,6 +413,26 @@
                 }
               }
             }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "excluded"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "verification": {
+                  "properties": {
+                    "result": {
+                      "const": "pending"
+                    }
+                  }
+                }
+              }
+            }
           }
         ]
       },
@@ -442,11 +462,11 @@
         "path": {
           "type": "string",
           "minLength": 1,
-          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
+          "pattern": "^(?!/)(?!.*//)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*[\\\\:#?\\s%])[A-Za-z0-9_.\\-/]+$"
         },
         "declaration": {
           "type": "string",
-          "pattern": "^[\\w\\u0080-\\uffff]+(?:[.\\w\\u0080-\\uffff\\u0027]*)$"
+          "pattern": "^[^\\W\\d][\\w']*(?:\\.[^\\W\\d][\\w']*)*$"
         },
         "lines": {
           "type": "array",

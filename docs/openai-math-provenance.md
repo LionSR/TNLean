@@ -65,7 +65,8 @@ line for a one-line range).
 `planned` means `verification: {"result": "pending"}` and proposed names.
 `ported` means an implemented declaration with exact build and axiom evidence.
 `replaced` means a verified existing-library replacement. `excluded` records a
-decision and reason in `changes`; it is not completion evidence. Empty strings,
+decision and reason in `changes`, with pending verification; it is not completion
+evidence. Empty strings,
 unknown fields, paths escaping a repository and abbreviated commits are errors.
 
 ## Notices and evidence
@@ -156,6 +157,15 @@ source-copy detector, license-closure scanner, or confirmation of log authentici
 Macros, generated declarations and unusual Lean syntax require explicit review
 and validator extension. Review the actual build/axiom logs and dependency pins,
 confirm paper hypotheses and notice retention, and check the closure independently.
+When selected source bytes are available, opening copyright, license, author,
+patent, trademark and attribution comments must appear in the retained-notice
+ledger. This conservative header check does not determine legal applicability
+or find all notices elsewhere in a source/import closure. Every ordinary named
+declaration in a selected derivative module needs a ledger row; include original
+bridge proofs separately. Anonymous/compiler-generated declarations still need
+compiler evidence and review. Named axiom output must match the exact downstream
+declaration, not a longer name sharing its suffix.
+
 Newly discovered source/header notices must be added; a validator pass never
 licenses dropping them. Complete manuscript results remain open until faithful
 proofs exist, irrespective of provenance status.
