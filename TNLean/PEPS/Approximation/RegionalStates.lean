@@ -231,12 +231,11 @@ theorem regionReducedDensity_eq_pinnedReducedDensity (D : ForwardEdge L → ℕ)
   have h : (fun σ τ => stateCoeff (pinnedTensorToGraphTensor D A) (assembleRegionσ R σ τ)) =
       Pinned.coefficientMatrix (Pinned.contractPEPS D A) R := by
     funext σ τ
-    change stateCoeff (pinnedTensorToGraphTensor D A) (assembleRegionσ R σ τ) =
-      Pinned.contractPEPS D A (Pinned.joinConfigurations R σ τ)
-    rw [stateCoeff_pinnedTensorToGraphTensor]
-    congr 1
-    funext v
-    by_cases hv : v ∈ R <;> simp [assembleRegionσ, Pinned.joinConfigurations, hv]
+    have hjoin : assembleRegionσ R σ τ = Pinned.joinConfigurations R σ τ := by
+      funext v
+      by_cases hv : v ∈ R <;> simp [assembleRegionσ, Pinned.joinConfigurations, hv]
+    exact (stateCoeff_pinnedTensorToGraphTensor D A (assembleRegionσ R σ τ)).trans
+      (congrArg (fun x : Vertex L → Fin q => Pinned.contractPEPS D A x) hjoin)
   simp only [Pinned.reducedDensity, h]
 
 /-- The same reduction identity for the separate virtual-first contraction. -/
