@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_polynomial_dyadic_absorption",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PolynomialBudget.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_polynomial_dyadic_absorption",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Source: Section 11, lines 668\u2013692. Auxiliary arithmetic for the convergent sum in geometry:total-repairs; the actual repair count, descendant-count construction, complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5652d02446787ee2b9248db1057df48adbe32492",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-polynomial-budget-build.log",
+            "sha256": "8422ee4d6dfeaed3c46b44a5c247e03b68f68890ea52df4c25a5b7c3f8565067"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-polynomial-budget-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-polynomial-budget-axioms.log",
+            "sha256": "30d19278dde6d52c59eba12cda2b0a30b87c4d80bc42cc7e6111a1cf3c245cf3"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.summable_polynomial_dyadic_decay",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PolynomialBudget.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.summable_polynomial_dyadic_decay",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Source: Section 11, lines 668\u2013692. Auxiliary arithmetic for the convergent sum in geometry:total-repairs; the actual repair count, descendant-count construction, complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5652d02446787ee2b9248db1057df48adbe32492",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-polynomial-budget-build.log",
+            "sha256": "8422ee4d6dfeaed3c46b44a5c247e03b68f68890ea52df4c25a5b7c3f8565067"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-polynomial-budget-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-polynomial-budget-axioms.log",
+            "sha256": "30d19278dde6d52c59eba12cda2b0a30b87c4d80bc42cc7e6111a1cf3c245cf3"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_uniform_polynomial_dyadic_sum_bound",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PolynomialBudget.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_uniform_polynomial_dyadic_sum_bound",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,7 +133,25 @@
         "Source: Section 11, lines 668\u2013692. Auxiliary arithmetic for the convergent sum in geometry:total-repairs; the actual repair count, descendant-count construction, complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "5652d02446787ee2b9248db1057df48adbe32492",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-polynomial-budget-build.log",
+            "sha256": "8422ee4d6dfeaed3c46b44a5c247e03b68f68890ea52df4c25a5b7c3f8565067"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-polynomial-budget-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-polynomial-budget-axioms.log",
+            "sha256": "30d19278dde6d52c59eba12cda2b0a30b87c4d80bc42cc7e6111a1cf3c245cf3"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
