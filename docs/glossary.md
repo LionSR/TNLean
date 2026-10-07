@@ -2039,6 +2039,27 @@ in `MPS/Preparation/` uses it.
   per-site norm budget as hypotheses; deriving them from the one-term-per-support
   convention on an induced square-lattice domain is a separate step.
 
+#### `QuantumCircuit.siteExpectation`
+
+- **Declaration:**
+  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
+  with the linear map `QuantumCircuit.siteExpectationLM`.
+- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+- **Meaning:** the normalized partial trace
+  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  original sites.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
+- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
+  average over products of on-site Weyl operators outside `K`),
+  `siteExpectation_mem_supportedOperators`,
+  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
+  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
+  `norm_sub_siteExpectation_le` (error through on-site commutators), and
+  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
+  dynamics onto graph balls under a sphere-growth hypothesis).
+- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+
 ## Inhomogeneous short-range correlated chains
 
 ### `MPSTensor.IsInjectiveOn`

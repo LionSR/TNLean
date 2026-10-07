@@ -150,22 +150,39 @@ noncomputable def outsideWeyl (q : ℕ) [NeZero q] (K : Finset ι) (p : ι → Z
     Matrix (ι → Fin q) (ι → Fin q) ℂ :=
   rectKronecker fun x => if x ∈ K then 1 else localWeyl q (p x)
 
-theorem outsideWeyl_mem_unitary [NeZero q] (K : Finset ι) (p : ι → ZMod q × ZMod q) :
-    outsideWeyl q K p ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) := by
+/-- The product of the on-site Weyl operators at the sites of `S`. -/
+private noncomputable def partialWeyl [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  rectKronecker fun x => if x ∈ S then localWeyl q (p x) else 1
+
+private theorem partialWeyl_mem_unitary [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
+    partialWeyl S p ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) := by
   have hU := fun x => localWeyl_mem_unitaryGroup (q := q) (p x)
   rw [Unitary.mem_iff]
-  simp only [outsideWeyl, star_eq_conjTranspose, rectKronecker_conjTranspose, rectKronecker_mul]
+  simp only [partialWeyl, star_eq_conjTranspose, rectKronecker_conjTranspose, rectKronecker_mul]
   constructor
   · convert rectKronecker_one (ν := ι) (ι := Fin q) using 2
     funext x
     split_ifs
-    · simp
     · exact Matrix.mem_unitaryGroup_iff'.mp (hU x)
+    · simp
   · convert rectKronecker_one (ν := ι) (ι := Fin q) using 2
     funext x
     split_ifs
-    · simp
     · exact Matrix.mem_unitaryGroup_iff.mp (hU x)
+    · simp
+
+private theorem outsideWeyl_eq_partialWeyl [NeZero q] (K : Finset ι)
+    (p : ι → ZMod q × ZMod q) : outsideWeyl q K p = partialWeyl Kᶜ p := by
+  simp only [outsideWeyl, partialWeyl, Finset.mem_compl]
+  congr 1
+  funext x
+  by_cases hx : x ∈ K <;> simp [hx]
+
+theorem outsideWeyl_mem_unitary [NeZero q] (K : Finset ι) (p : ι → ZMod q × ZMod q) :
+    outsideWeyl q K p ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) := by
+  rw [outsideWeyl_eq_partialWeyl]
+  exact partialWeyl_mem_unitary _ p
 
 theorem outsideWeyl_mem_supportedOperators [NeZero q] (K : Finset ι)
     (p : ι → ZMod q × ZMod q) :
@@ -335,9 +352,13 @@ theorem siteExpectation_eq_average [NeZero q] (K : Finset ι)
 
 /-! ### Consequences of the averaging formula -/
 
+theorem card_weylLabels_nat (q : ℕ) [NeZero q] :
+    Fintype.card (ι → ZMod q × ZMod q) = q ^ (2 * Fintype.card ι) := by
+  simp [Fintype.card_prod, ZMod.card, pow_mul, sq]
+
 theorem card_weylLabels (q : ℕ) [NeZero q] :
     (Fintype.card (ι → ZMod q × ZMod q) : ℂ) = (q : ℂ) ^ (2 * Fintype.card ι) := by
-  simp [Fintype.card_prod, ZMod.card, pow_mul, sq]
+  exact_mod_cast card_weylLabels_nat (ι := ι) q
 
 /-- The expectation as a linear map. -/
 noncomputable def siteExpectationLM (q : ℕ) [NeZero q] (K : Finset ι) :
@@ -395,8 +416,7 @@ theorem norm_siteExpectation_le [NeZero q] (K : Finset ι)
       simp only [hterm, Finset.sum_const, Finset.card_univ, nsmul_eq_mul, norm_inv, norm_pow,
         Complex.norm_natCast]
       have hc : (Fintype.card (ι → ZMod q × ZMod q) : ℝ) = (q : ℝ) ^ (2 * Fintype.card ι) := by
-        exact_mod_cast (by simp [Fintype.card_prod, ZMod.card, pow_mul, sq] :
-          Fintype.card (ι → ZMod q × ZMod q) = q ^ (2 * Fintype.card ι))
+        exact_mod_cast card_weylLabels_nat (ι := ι) q
       rw [hc, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero _ hq.ne'), one_mul]
 
 /-- The expectation is completely positive and trace preserving, with the
@@ -436,28 +456,6 @@ theorem siteExpectationLM_isKrausCPTP [NeZero q] (K : Finset ι) :
 
 /-! ### Localization error through on-site commutators -/
 
-/-- The product of the on-site Weyl operators at the sites of `S`. -/
-private noncomputable def partialWeyl [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
-    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  rectKronecker fun x => if x ∈ S then localWeyl q (p x) else 1
-
-private theorem partialWeyl_mem_unitary [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
-    partialWeyl S p ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) := by
-  have hU := fun x => localWeyl_mem_unitaryGroup (q := q) (p x)
-  rw [Unitary.mem_iff]
-  simp only [partialWeyl, star_eq_conjTranspose, rectKronecker_conjTranspose, rectKronecker_mul]
-  constructor
-  · convert rectKronecker_one (ν := ι) (ι := Fin q) using 2
-    funext x
-    split_ifs
-    · exact Matrix.mem_unitaryGroup_iff'.mp (hU x)
-    · simp
-  · convert rectKronecker_one (ν := ι) (ι := Fin q) using 2
-    funext x
-    split_ifs
-    · exact Matrix.mem_unitaryGroup_iff.mp (hU x)
-    · simp
-
 private theorem partialWeyl_insert [NeZero q] {S : Finset ι} {y : ι} (hy : y ∉ S)
     (p : ι → ZMod q × ZMod q) :
     partialWeyl (insert y S) p = partialWeyl {y} p * partialWeyl S p := by
@@ -473,13 +471,6 @@ private theorem partialWeyl_singleton_mem [NeZero q] (y : ι) (p : ι → ZMod q
   rectKronecker_mem_supportedOperators fun x hx => by
     simp only [Set.mem_singleton_iff] at hx
     simp [hx]
-
-private theorem outsideWeyl_eq_partialWeyl [NeZero q] (K : Finset ι)
-    (p : ι → ZMod q × ZMod q) : outsideWeyl q K p = partialWeyl Kᶜ p := by
-  simp only [outsideWeyl, partialWeyl, Finset.mem_compl]
-  congr 1
-  funext x
-  by_cases hx : x ∈ K <;> simp [hx]
 
 /-- The commutator with a product of unitaries is bounded by the sum of the
 commutators with the factors. -/
