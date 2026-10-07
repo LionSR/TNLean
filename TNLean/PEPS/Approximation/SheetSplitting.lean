@@ -48,6 +48,79 @@ namespace TNLean.PEPS.EncodedFrame
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
+/-! ### Coordinates and operators -/
+
+section Transport
+
+variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
+
+omit [DecidableEq m] [DecidableEq n] in
+/-- Relabelling the coordinates of a vector does not change its norm. -/
+theorem norm_toLp_comp_equiv (e : m ≃ n) (f : n → ℂ) :
+    ‖(WithLp.toLp 2 (f ∘ e) : EuclideanSpace ℂ m)‖ = ‖(WithLp.toLp 2 f : EuclideanSpace ℂ n)‖ := by
+  rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+  congr 1
+  exact e.sum_comp fun j => ‖f j‖ ^ 2
+
+omit [DecidableEq m] [DecidableEq n] in
+/-- The defect `‖(M - 1) ψ‖` of an operator does not depend on the coordinates. -/
+theorem norm_act_submatrix_sub (M : Matrix n n ℂ) (e : m ≃ n) (ψ : EuclideanSpace ℂ m) :
+    ‖act (M.submatrix e e) ψ - ψ‖ =
+      ‖act M (WithLp.toLp 2 (ψ ∘ e.symm)) - WithLp.toLp 2 (ψ ∘ e.symm)‖ := by
+  have h : act (M.submatrix e e) ψ - ψ =
+      WithLp.toLp 2 ((M *ᵥ (ψ ∘ e.symm) - ψ ∘ e.symm) ∘ e) := by
+    ext x
+    simp [act, submatrix_mulVec_equiv]
+  rw [h, norm_toLp_comp_equiv]
+  rfl
+
+/-- Relabelling the coordinates does not increase the operator norm. -/
+theorem norm_submatrix_equiv_le (M : Matrix n n ℂ) (e : m ≃ n) : ‖M.submatrix e e‖ ≤ ‖M‖ :=
+  l2_opNorm_reindex_le e.symm e.symm M
+
+omit [DecidableEq m] [DecidableEq n] in
+/-- Commuting operators commute in all coordinates. -/
+theorem Commute.submatrix_equiv {X Y : Matrix n n ℂ} (h : Commute X Y) (e : m ≃ n) :
+    Commute (X.submatrix e e) (Y.submatrix e e) := by
+  change X.submatrix e e * Y.submatrix e e = Y.submatrix e e * X.submatrix e e
+  rw [submatrix_mul_equiv, submatrix_mul_equiv, h.eq]
+
+omit [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n] in
+theorem submatrix_symm_submatrix (X : Matrix n n ℂ) (e : m ≃ n) :
+    (X.submatrix e e).submatrix e.symm e.symm = X := by
+  simp [submatrix_submatrix]
+
+end Transport
+
+/-- The operator `1 ⊗ B` on the layout of a list of holes, acting as `B` on the raw registers and
+as the identity on the tags, passes through the encoding of the list whenever `B` commutes with
+the raw part of the encoding on every tag configuration. -/
+theorem one_kronecker_mul_frameEncoder [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type*}
+    {l : List (Hole pos q Party)} {B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hB : ∀ t, Commute B (rawProd l t)) :
+    ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ B) * frameEncoder l = frameEncoder l * B := by
+  rw [frameEncoder, stack_mul]
+  ext ⟨t, x⟩ y
+  simp only [mul_apply, kroneckerMap_apply, one_apply, stack_apply, Fintype.sum_prod_type,
+    ite_mul, one_mul, zero_mul]
+  rw [Finset.sum_eq_single t (fun b _ hb => by simp [Ne.symm hb]) (by simp)]
+  have h := congrFun (congrFun (hB t).eq x) y
+  simp only [mul_apply] at h
+  simpa using h
+
+/-- If `B` passes through the encoding, `‖(1 ⊗ B) Ω_F - Ω_F‖ ≤ ‖B Ω - Ω‖`. -/
+theorem norm_act_one_kronecker_refVec_sub_le [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type*}
+    (F : Frame pos q Party) {B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hB : ∀ t, Commute B (rawProd F.holes t)) (Ω : EuclideanSpace ℂ (ι → Fin q)) :
+    ‖act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ B) (F.refVec Ω) - F.refVec Ω‖ ≤
+      ‖act B Ω - Ω‖ := by
+  have h : act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ B) (F.refVec Ω) -
+      F.refVec Ω = act F.encoder (act B Ω - Ω) := by
+    rw [Frame.refVec, ← act_mul, Frame.encoder, one_kronecker_mul_frameEncoder hB, act_mul,
+      act_sub_right]
+  rw [h]
+  exact norm_act_le_of_norm_le_one F.norm_encoder_le_one _
+
 /-! ### Two regions -/
 
 /-- The raw configurations of a sheet as pairs of configurations on `S` and on `Sᶜ`. -/
@@ -303,21 +376,38 @@ theorem quantumRelativeEntropy_splitVec_eq_mutualInformation (Ω : EuclideanSpac
       (FiniteProduct.reducedPure_posSemidef _ Ω (T ∪ E)).isHermitian]
   rfl
 
+/-- **Splitting data** for a pair of disjoint sets of sites `T`, `E` with `U = (T ∪ E)ᶜ`
+(Lemma 6.4 `lem:splitting`): an isometry `V` from the configurations of `U` to `B_T × B_E`, where
+`B_T` is the configuration space of `T` and `B_E` that of `E` or `U`, and unit vectors `s` on
+`T × B_T` and `s'` on `E × B_E`.
+
+Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 352–365. -/
+structure SplittingData (q : ℕ) (T E : Finset ι) where
+  /-- The isometry `V : H_U → B_T ⊗ B_E`. -/
+  V : Matrix ((T → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q))) (↥(T ∪ E)ᶜ → Fin q) ℂ
+  /-- The unit vector `s` on `T × B_T`. -/
+  s : (T → Fin q) × (T → Fin q) → ℂ
+  /-- The unit vector `s'` on `E × B_E`. -/
+  s' : (E → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q)) → ℂ
+  isIsometry : V.IsIsometry
+  star_s : star s ⬝ᵥ s = 1
+  star_s' : star s' ⬝ᵥ s' = 1
+
+/-- The splitting error `‖(1_{TE} ⊗ V) Ω - s ⊗ s'‖` of splitting data on a vector of the sheet. -/
+def SplittingData.error (σ : SplittingData q T E) (Ω : EuclideanSpace ℂ (ι → Fin q)) : ℝ :=
+  ‖(WithLp.toLp 2 ((((1 : Matrix ((T → Fin q) × (E → Fin q))
+      ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ σ.V) *ᵥ splitVec h Ω) -
+      tensorPurification σ.s σ.s') : EuclideanSpace ℂ _)‖
+
 /-- **Splitting consequence on a sheet** (Lemma 6.4 `lem:splitting`). Let `T`, `E` be disjoint
 sets of sites, `U = (T ∪ E)ᶜ`, and `b = I_Ω(T:E)` for a unit vector `Ω` on the sheet. There are
-an isometry `V` from the configurations of `U` to `B_T × B_E`, with `B_T` the configurations of
-`T` and `B_E` the configurations of `E` or `U`, and unit vectors `s` on `T × B_T` and `s'` on
-`E × B_E`, with `‖(1_{TE} ⊗ V) Ω - s ⊗ s'‖ ≤ √(2(1 - e^{-b/2})) ≤ √b`.
+splitting data with `‖(1_{TE} ⊗ V) Ω - s ⊗ s'‖ ≤ √(2(1 - e^{-b/2})) ≤ √b`. No bound on the
+dimensions is imposed.
 
 Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 352–368. -/
 theorem exists_sheetSplitting {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) :
-    ∃ (V : Matrix ((T → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q))) (↥(T ∪ E)ᶜ → Fin q) ℂ)
-      (s : (T → Fin q) × (T → Fin q) → ℂ)
-      (s' : (E → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q)) → ℂ),
-      V.IsIsometry ∧ star s ⬝ᵥ s = 1 ∧ star s' ⬝ᵥ s' = 1 ∧
-      ‖(WithLp.toLp 2 ((((1 : Matrix ((T → Fin q) × (E → Fin q))
-          ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ V) *ᵥ splitVec h Ω) -
-          tensorPurification s s') : EuclideanSpace ℂ _)‖ ≤
+    ∃ σ : SplittingData q T E,
+      σ.error h Ω ≤
         √(2 * (1 - Real.exp (-(FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E
           / 2)))) ∧
       √(2 * (1 - Real.exp (-(FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E
@@ -325,7 +415,7 @@ theorem exists_sheetSplitting {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : �
   obtain ⟨V, s, s', hV, hs, hs', hnorm⟩ :=
     exists_isIsometry_norm_sub_tensorPurification_le (splitVec h Ω)
       (star_splitVec_dotProduct_splitVec h hΩ) rfl
-  refine ⟨V, s, s', hV, hs, hs', ?_, Real.sqrt_two_mul_one_sub_exp_neg_half_le_sqrt _⟩
+  refine ⟨⟨V, s, s', hV, hs, hs'⟩, ?_, Real.sqrt_two_mul_one_sub_exp_neg_half_le_sqrt _⟩
   rw [← quantumRelativeEntropy_splitVec_eq_mutualInformation h Ω rfl]
   exact hnorm
 
@@ -336,15 +426,9 @@ Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 36
 theorem exists_sheetSplitting_zpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
     (hL : 0 < L)
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E ≤ L ^ (-60 : ℤ)) :
-    ∃ (V : Matrix ((T → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q))) (↥(T ∪ E)ᶜ → Fin q) ℂ)
-      (s : (T → Fin q) × (T → Fin q) → ℂ)
-      (s' : (E → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q)) → ℂ),
-      V.IsIsometry ∧ star s ⬝ᵥ s = 1 ∧ star s' ⬝ᵥ s' = 1 ∧
-      ‖(WithLp.toLp 2 ((((1 : Matrix ((T → Fin q) × (E → Fin q))
-          ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ V) *ᵥ splitVec h Ω) -
-          tensorPurification s s') : EuclideanSpace ℂ _)‖ ≤ L ^ (-30 : ℤ) := by
-  obtain ⟨V, s, s', hV, hs, hs', h₁, h₂⟩ := exists_sheetSplitting h hΩ
-  refine ⟨V, s, s', hV, hs, hs', h₁.trans (h₂.trans ?_)⟩
+    ∃ σ : SplittingData q T E, σ.error h Ω ≤ L ^ (-30 : ℤ) := by
+  obtain ⟨σ, h₁, h₂⟩ := exists_sheetSplitting h hΩ
+  refine ⟨σ, h₁.trans (h₂.trans ?_)⟩
   have hsq : L ^ (-60 : ℤ) = (L ^ (-30 : ℤ)) ^ 2 := by
     rw [sq, ← zpow_add₀ hL.ne']; norm_num
   rw [← Real.sqrt_sq (zpow_nonneg hL.le (-30 : ℤ)), ← hsq]

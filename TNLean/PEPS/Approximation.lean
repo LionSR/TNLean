@@ -12,6 +12,7 @@ import TNLean.PEPS.Approximation.CorrectedPositionCost
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.EncodedFrame
+import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.SheetSplitting
