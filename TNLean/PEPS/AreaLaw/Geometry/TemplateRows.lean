@@ -157,8 +157,8 @@ def latticeRow (S : Finset (ℤ × ℤ)) (y : ℤ) : Finset ℤ :=
     x ∈ latticeRow S y ↔ (x, y) ∈ S := by
   simp only [latticeRow, Finset.mem_image, Finset.mem_filter]
   constructor
-  · rintro ⟨⟨a, b⟩, ⟨h, rfl⟩, rfl⟩
-    exact h
+  · rintro ⟨⟨a, b⟩, ⟨hp, rfl⟩, rfl⟩
+    exact hp
   · intro h
     exact ⟨(x, y), ⟨h, rfl⟩, rfl⟩
 
@@ -189,12 +189,12 @@ theorem TemplatePolygon.isCompact_horizontalSection (P : TemplatePolygon) (y : �
       (isClosed_eq continuous_snd continuous_const)).image continuous_fst
   convert h using 1
   ext x
-  simp only [Set.mem_setOf_eq, Set.mem_image, Set.mem_inter_iff]
+  simp only [Set.mem_ofPred_eq, Set.mem_image, Set.mem_inter_iff]
   constructor
   · intro hx
     exact ⟨(x, y), ⟨hx, rfl⟩, rfl⟩
-  · rintro ⟨⟨a, b⟩, ⟨h, rfl⟩, rfl⟩
-    exact h
+  · rintro ⟨⟨a, b⟩, ⟨hp, rfl⟩, rfl⟩
+    exact hp
 
 /-- Every nonempty real horizontal section of an actual template polygon has
 attained real endpoints, even when its integer sample is empty. -/
