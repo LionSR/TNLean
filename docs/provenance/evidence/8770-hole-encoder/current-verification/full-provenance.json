@@ -1,0 +1,19 @@
+{
+  "result": "passed",
+  "entries_checked": 80,
+  "command": "python3 scripts/check_openai_provenance.py --upstream-root <PINNED_UPSTREAM>",
+  "command_normalization": "Only the absolute pinned upstream checkout path is replaced by a placeholder. The stdout log is unchanged.",
+  "upstream_revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "validator_sha256": "8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65",
+  "schema_sha256": "a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459",
+  "exit_code": 0,
+  "log": "full-provenance.log",
+  "original_log_sha256": "5f3155a7f942db6e40f35047f41d21ad9ce7fcce84cce2df0fd08e164f7102b5",
+  "retained_log_sha256": "5f3155a7f942db6e40f35047f41d21ad9ce7fcce84cce2df0fd08e164f7102b5",
+  "local_git_objects_available": true,
+  "public_only_git_context_checked": false,
+  "clean_ci_limit": "The unchanged three-entry adapter ledger references local-only 61f76928032b1eef7417ae9d79dda93796019eb6. This local pass does not establish clean public-only CI. Authorized publication and subsequent public-reference migration remain pending.",
+  "preserved_historical_files": 29,
+  "unchanged_production_tests_router_workflows": true,
+  "external_writes": false
+}

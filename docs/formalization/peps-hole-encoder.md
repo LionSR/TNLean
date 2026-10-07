@@ -122,12 +122,16 @@ labels, and the tag sum remains in the adjacent equation.
 
 The [declaration ledger](../provenance/openai-math.d/hole-encoder8770.json)
 has one independently written-proof row for each of the twenty-two public
-declarations. Its successful verification rows refer to author checkpoint
-`4fa931f810ac576e0142fa955af5fcbd71b2615a`, exact recorded commands and exit
-codes, and retained normalized-log hashes. The production source is unchanged
-from the checked `9df423084befda1874fcf9f7eba289e70d529aaf` version.
+declarations. Its current verification identifies the unchanged source at
+public commit `d92310cca4f63cf1c2b0c91936e538f80288b48c`; the actual integrated
+checks ran at `8602b340cfe0b3b73bad634a06b75f9dd6b20049`. The
+[current identity record](../provenance/evidence/8770-hole-encoder/current-verification/identity.json)
+verifies production, consumer, guard, and raw-audit byte equality between
+these revisions and the original author checkpoint. The original ledger and
+logs for `4fa931f810ac576e0142fa955af5fcbd71b2615a` remain unchanged in the
+[historical archive](../provenance/evidence/8770-hole-encoder/historical).
 
-The [local evidence packet](../provenance/evidence/8770-hole-encoder/README.md)
+The [original local evidence packet](../provenance/evidence/8770-hole-encoder/README.md)
 records successful strict source elaboration, thirteen consumer examples,
 twenty-two axiom guards and twenty-two unguarded axiom reports. Every public
 declaration reports exactly `propext`, `Classical.choice` and `Quot.sound`.
