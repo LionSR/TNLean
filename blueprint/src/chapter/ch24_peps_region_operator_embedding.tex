@@ -1,0 +1,85 @@
+\section{Regional embeddings in uniform physical dimension}
+\label{sec:peps_region_operator_embedding}
+
+Let $V$ be finite, let $q\in\N$, and set $A_q=\{0,\ldots,q-1\}$,
+with $A_0=\varnothing$. For $S\subseteq V$, write $X_S=A_q^S$ and
+$\mathcal H_S=\C^{X_S}$. Fix a region $R\subseteq V$, its inclusion
+$j_R:R\hookrightarrow V$, and an arbitrary matrix
+$H\in\operatorname{End}(\mathcal H_R)$.
+The restriction map identifies $X_V$ with $X_R\times X_{V\setminus R}$;
+let $L_R(H)$ denote $H\otimes I_{V\setminus R}$ in the $X_V$ coordinates.
+For a site inclusion $j$, let $E_j(H)$ act by $H$ on its image and by the
+identity on the remaining sites.
+% Original comparison of existing regional and circuit definitions, supporting
+% the operator conventions of 05-frames.tex, sec:frames, eq:hole-projector,
+% eq:hole-encoder, lines 13--97, at adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is not a source-labelled frame, reset-ownership, or approximation theorem.
+
+\begin{theorem}[Equality of regional and site embeddings]
+    \label{thm:peps_region_site_embedding}
+    \lean{TNLean.PEPS.agreeOff_region_iff,
+        TNLean.PEPS.regionLocalTerm_eq_embedOp}
+    \leanok
+    For every $\sigma,\tau\in X_V$,
+    \begin{align}
+        L_R(H)_{\sigma,\tau}\label{eq:peps_region_embedding_entries}
+         & =(E_{j_R}(H))_{\sigma,\tau}
+        =\begin{cases}
+             H_{\sigma|_R,\tau|_R},
+                & \sigma|_{V\setminus R}=\tau|_{V\setminus R}, \\
+             0, & \text{otherwise}.
+         \end{cases}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $j_R(R)=R$, agreement outside the image of $j_R$ is precisely
+    equality of the restrictions to $V\setminus R$.
+    The complementary identity matrix contributes the Kronecker delta
+    $\delta_{\sigma|_{V\setminus R},\tau|_{V\setminus R}}$.
+    Multiplying it by $H_{\sigma|_R,\tau|_R}$ gives
+    (\ref{eq:peps_region_embedding_entries}) for both operators.
+\end{proof}
+
+\begin{theorem}[Full-region coordinate identification]
+    \label{thm:peps_region_embedding_coordinates}
+    \lean{TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp}
+    \leanok
+    Let $\widetilde X_V=\prod_{v\in V}A_q$ and
+    $\theta_q:X_V\to\widetilde X_V$ be the bijection
+    $\theta_q(\sigma)=(\sigma(v))_{v\in V}$.
+    Write $D_R(H)$ for $H\otimes I_{V\setminus R}$ after splitting this
+    indexed product into its regional and complementary factors.
+    For every $\alpha,\beta\in\widetilde X_V$,
+    \begin{align}
+        D_R(H)_{\alpha,\beta}
+         & =(E_{j_R}(H))_{\theta_q^{-1}(\alpha),\theta_q^{-1}(\beta)}.
+        \label{eq:peps_region_embedding_coordinates}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    The restrictions of $\theta_q^{-1}(\alpha)$ and
+    $\theta_q^{-1}(\beta)$ select the same coordinates as the two indexed
+    product factors. Both sides are $H$ at the regional coordinates when
+    the complementary coordinates agree, and zero otherwise.
+\end{proof}
+
+\begin{remark}[Empty sets and zero physical dimension]
+    If $R=\varnothing$, then $X_R$ has one element and $L_R([c])=cI$.
+    If $R=V$, there is no complementary agreement condition.
+    If $q=1$, all configuration sets have one element, so every regional
+    operator extends as a scalar identity.
+    If $q=0$ and $V\ne\varnothing$, then $X_V=\varnothing$ and the
+    resulting operator is zero. If $V=\varnothing$, then $X_V$ still has
+    one element, including when $q=0$, and its scalar entry is retained.
+\end{remark}
+
+\begin{example}[Complex entries and the complementary identity]
+    Take $V=\{0,1\}$, $R=\{0\}$, $q=2$, and
+    $H=\bigl(\begin{smallmatrix}0&i\\2+i&0\end{smallmatrix}\bigr)$.
+    Formula~(\ref{eq:peps_region_embedding_entries}) gives
+    $L_R(H)_{(0,0),(1,0)}=i$,
+    $L_R(H)_{(1,0),(0,0)}=2+i$, and
+    $L_R(H)_{(0,0),(1,1)}=0$.
+\end{example}

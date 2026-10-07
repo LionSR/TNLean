@@ -1,0 +1,253 @@
+{
+  "slug": "openai-area-law-peps-proof",
+  "pageTitle": "Area Law and PEPS · TNLean",
+  "heading": "Area law and PEPS approximation for gapped two-dimensional ground states",
+  "lede": "Two manuscripts posted on September 24, 2026 claim proofs of two long-open statements about gapped quantum spin systems on the square lattice, assuming only that the full Hamiltonian has a spectral gap. This page follows the Lean formalization of both proofs.",
+  "description": "Hourly progress of the Lean formalization of the two-dimensional area law and polynomial PEPS approximation.",
+  "label": "openai-math",
+  "since": "2026-10-06",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q"
+    }
+  ],
+  "tracker": 8733,
+  "streamNames": {
+    "8734": "Foundations",
+    "8735": "Area law",
+    "8736": "PEPS construction"
+  },
+  "papers": {
+    "area": {
+      "name": "Area-law manuscript",
+      "stream": 8735
+    },
+    "peps": {
+      "name": "PEPS manuscript",
+      "stream": 8736
+    }
+  },
+  "sources": "https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints",
+  "citationPattern": "adc7f1241b|OpenAI2026|September~?\\\\?\\s*24,?~?\\s*2026|polynomial PEPS approximation manuscript|area[- ]law manuscript",
+  "leanDirs": [
+    "TNLean/PEPS/AreaLaw",
+    "TNLean/PEPS/Approximation"
+  ],
+  "statementPR": 8788,
+  "resultNames": {
+    "thm:main": "Polynomial PEPS approximation",
+    "prop:area-law": "Area law, range-one square case",
+    "lem:fidelity": "Fidelity and purification overlap",
+    "prop:coarse": "Coarse information outside a collar",
+    "lem:cell-cmi": "Conditional information of one cell",
+    "lem:reset": "Information reset",
+    "prop:angular": "Angular separation",
+    "prop:patch": "Adaptive patch subspaces",
+    "lem:effects": "Eliminating pair effects",
+    "thm:compression": "Density compression",
+    "rem:compression-retained-norm": "Retained norm after compression",
+    "def:frame": "Encoded frames",
+    "lem:group-tensor": "Whole-group tensor bound",
+    "lem:small-rewrite": "Small-patch rewrites",
+    "lem:splitting": "Buffer splitting",
+    "lem:birth": "Birth and death of parties",
+    "lem:exchange": "Two-copy ownership exchange",
+    "prop:protocol": "Dyadic distribution protocol",
+    "lem:geometry-angular": "Angular separation of templates",
+    "lem:columns": "A nonzero ket column",
+    "lem:routing": "Routing onto the grid"
+  },
+  "routes": [
+    {
+      "id": "area",
+      "paper": "area",
+      "eyebrow": "Part I · Area-law manuscript, 90 pages",
+      "heading": "How the area law is proved",
+      "intro": "The proof shows that a piece of <i>A</i> shares almost no information with anything beyond a thin collar around it, then cuts <i>A</i> into regions whose entropies cancel. Each stage gives the physical idea, the results it needs, and the state of the formalization.",
+      "stages": [
+        {
+          "title": "A first bound below volume",
+          "issues": [
+            8742,
+            8743,
+            8744
+          ],
+          "physics": "The global gap limits how much the eigenvalues of a region's reduced state fluctuate on a logarithmic scale. Optimizing products of positive operators on nested rectangles, and bounding the result in two ways, turns this into a discount on conditional entropy.",
+          "delivers": "A box of side <i>r</i> far from the cut has <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup> with <i>e</i>₀ &lt; 1. The volume bound would be <i>r</i>²."
+        },
+        {
+          "title": "Make the Hamiltonian local and positive",
+          "issues": [
+            8745,
+            8746,
+            8747
+          ],
+          "physics": "Lieb–Robinson bounds in the lattice's own graph distance and a smooth spectral filter with stretched-exponentially decaying Fourier tails rewrite the Hamiltonian as a sum of positive local pieces.",
+          "delivers": "Positive operators that each annihilate Ω, keep a global gap together, and have rapidly decaying spatial tails."
+        },
+        {
+          "title": "Replicas trade information against energy",
+          "issues": [
+            8748,
+            8749,
+            8750,
+            8751,
+            8752,
+            8753
+          ],
+          "physics": "Take many copies of Ω in the symmetric subspace, entangled with an auxiliary pair, and filter them by an inverse power of an operator that interpolates as a small region changes sides. Per copy, the log-norm of the filtered vector approaches a combination of entropies. Schur–Weyl labels and trees of matrix geometric means carry out this bookkeeping.",
+          "delivers": "The decrease of the log-norm bounds conditional mutual information from below, and the same states bound the energy spent. An entangled-pair projection gives an upper comparison. The gap gives a lower one, because low energy forces most copies into Ω."
+        },
+        {
+          "title": "Scan a collar",
+          "issues": [
+            8754,
+            8755,
+            8756
+          ],
+          "physics": "Sweep the partition through a collar along a finite randomized schedule, so that each interaction term is rarely cut. Applied repeatedly, the two norm comparisons first improve the box exponent and then bound the information that crosses the collar.",
+          "delivers": "The mutual information between <i>A</i>∩<i>T</i> and the region beyond a collar of width <i>n</i><sup>1−ε</sup> is at most <i>C n</i><sup>1−ε</sup>, for templates <i>T</i> with <i>O</i>(<i>n</i>) boundary."
+        },
+        {
+          "title": "Amplify the information bound",
+          "issues": [
+            8757
+          ],
+          "physics": "Typical spectral subspaces give an operator that restores the target from an auxiliary reference. Localized products of the positive constraints suppress its excited part, and polar decomposition turns it into a unitary that acts only near the target.",
+          "delivers": "Widening the collar by a sublinear amount makes the leaked information smaller than any fixed inverse power of <i>n</i>."
+        },
+        {
+          "title": "Arrange regions so the entropies cancel",
+          "issues": [
+            8758,
+            8760,
+            8759
+          ],
+          "physics": "Remove <i>O</i>(|∂<i>A</i>|) sites and split the rest of <i>A</i> into two ordered families of regions. A collar separates each region from the outside and from the earlier regions of its family. Narrow strips and recursive repairs at point contacts make this work for arbitrary cuts, including domains with holes.",
+          "delivers": "Two applications of the entropy chain rule cancel the entropy of every region, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors. This is the area law."
+        }
+      ]
+    },
+    {
+      "id": "peps",
+      "paper": "peps",
+      "eyebrow": "Part II · PEPS manuscript, 56 pages",
+      "heading": "How the PEPS is built",
+      "intro": "The construction hands the ground state out among parties, one for each dyadic square, until every site has its own party. Parties may act arbitrarily on what they hold, and each interacts with boundedly many others over its lifetime. Compressing the shared resources gives polynomial bonds, and routing the links places them on the original grid.",
+      "stages": [
+        {
+          "title": "Information fades with angular separation",
+          "issues": [
+            8761,
+            8765,
+            8766
+          ],
+          "physics": "Two regions separated by a buffer that tapers linearly toward finitely many points, and stays wider than a large multiple of log <i>L</i>, are almost independent. The proof adds cells one at a time using the two tile families of the area law. Gaussian filtering with the gap resets the cost after each annular step.",
+          "delivers": "Mutual information at most <i>L</i><sup>−<i>p</i></sup>, so the owner of the buffer can split its purification into two factors with small error."
+        },
+        {
+          "title": "Small patches with polynomial rank",
+          "issues": [
+            8767
+          ],
+          "physics": "Near a square of logarithmic size, the state lies almost entirely in an orthogonal sum of subspaces. Each is spanned by a few vectors inside a nested square, tensored with everything outside. The proof combines nested filters, the gap and the area law, and needs no sharp truncation at one fixed boundary.",
+          "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>, so the label (<i>j</i>, ℓ) fits in a small register at junctions."
+        },
+        {
+          "title": "Local moves on frames",
+          "issues": [
+            8763,
+            8770,
+            8771
+          ],
+          "physics": "The elementary operations change which party owns a region, create or retire a party, and exchange registers between two copies of the state. Each uses only private maps and normalized bipartite vectors, which may be highly entangled.",
+          "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol."
+        },
+        {
+          "title": "A dyadic distribution protocol",
+          "issues": [
+            8772
+          ],
+          "physics": "One party starts with Ω. Ownership passes down a hierarchy of dyadic squares until each site has its own party. Extra copies of Ω supply the surrounding regions that each change of owner needs.",
+          "delivers": "Every party takes part in boundedly many operations with other parties, at two adjacent scales."
+        },
+        {
+          "title": "Compress the shared resources",
+          "issues": [
+            8768,
+            8769
+          ],
+          "physics": "The protocol uses pair resources of unbounded Schmidt rank. In the density calculation they are replaced by polynomial sums of product operators. Bounded participation limits the coefficient cost, and a Gaussian second-moment bound controls the error.",
+          "delivers": "A trace-norm error independent of every private dimension, and an operator network with polynomial bonds on the party graph."
+        },
+        {
+          "title": "Back to a vector on the grid",
+          "issues": [
+            8762,
+            8764,
+            8773
+          ],
+          "physics": "One product-basis column of the compressed operator gives a nonzero vector close to Ω. The links join parties at nearby dyadic scales. Routed along rows and columns, they cross each lattice edge a bounded number of times.",
+          "delivers": "A PEPS on the original <i>L</i>×<i>L</i> grid with bond dimension at most <i>C L<sup>c</sup></i> and error at most 1/<i>L</i>."
+        }
+      ]
+    },
+    {
+      "id": "found",
+      "paper": null,
+      "eyebrow": "Shared ground",
+      "heading": "Foundations both proofs use",
+      "intro": "",
+      "stages": [
+        {
+          "title": "Models and conventions",
+          "issues": [
+            8737,
+            8738,
+            8739,
+            8740,
+            8741
+          ],
+          "physics": "Both proofs use the same definitions: Hamiltonians on finite lattice domains, possibly with holes; regional reduced states and their entropies; the equivalence of the global gap with an energy estimate; and an exact match between the PEPS of the papers and the tensor networks of TNLean.",
+          "delivers": "Lean statements of both main theorems with no hypothesis the papers lack."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Entanglement entropy",
+      "S(A) = −Tr ρ<sub>A</sub> log ρ<sub>A</sub> for the reduced state of region A. It measures how entangled A is with the rest of the system."
+    ],
+    [
+      "Mutual information",
+      "I(B:C) = S(B) + S(C) − S(B∪C), the total correlation between B and C. Small I means B and C are nearly independent."
+    ],
+    [
+      "Collar",
+      "A buffer zone of chosen width around a region. The area-law proof shows that almost no information crosses a collar of slightly sublinear width."
+    ],
+    [
+      "Global gap",
+      "The energy gap Δ of the full Hamiltonian above its unique ground state. No gap is assumed for any subregion."
+    ],
+    [
+      "PEPS and bond dimension",
+      "A state built by contracting one tensor per site along the lattice edges. The bond dimension D is the size of each contracted index."
+    ],
+    [
+      "Replicas",
+      "Many copies of the ground state taken together. The argument works in their symmetric subspace and then lets the number of copies grow."
+    ]
+  ]
+}
