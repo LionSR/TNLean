@@ -37,7 +37,7 @@ private theorem physicalParity_involutive : Function.Involutive physicalParity :
   simp [show (2 : KitaevBit) = 0 by decide]
 
 /-- A full four-spin physical unitary extracts the parity into the last spin.
-Source: SCP10, physical RG footnote in lines 2780–2794. -/
+Source: SCP10, physical RG footnote in lines 2772–2776. -/
 def kitaevPhysicalParity : Equiv.Perm KitaevBlockSpins :=
   { toFun := physicalParity
     invFun := physicalParity
@@ -45,13 +45,13 @@ def kitaevPhysicalParity : Equiv.Perm KitaevBlockSpins :=
     right_inv := physicalParity_involutive }
 
 /-- The physical parity transformation is unitary on the entire four-spin space.
-Source: SCP10, physical RG footnote in lines 2780–2794. -/
+Source: SCP10, physical RG footnote in lines 2772–2776. -/
 theorem kitaevPhysicalParity_permMatrix_mem_unitaryGroup :
     kitaevPhysicalParity.permMatrix ℂ ∈ Matrix.unitaryGroup KitaevBlockSpins ℂ :=
   kitaevPhysicalParity.permMatrix_mem_unitaryGroup
 
 /-- The isometric inclusion fixes the extracted physical parity spin at zero.
-Source: SCP10, lines 2780–2827, physical support of the color-difference tensor. -/
+Source: SCP10, lines 2772–2830, physical support of the color-difference tensor. -/
 def kitaevPhysicalZeroEmbedding : KitaevReducedSpins ↪ KitaevBlockSpins where
   toFun σ := ![σ 0, σ 1, σ 2, 0]
   inj' := by
@@ -63,7 +63,7 @@ def kitaevPhysicalZeroEmbedding : KitaevReducedSpins ↪ KitaevBlockSpins where
     · simpa using congrFun h 2
 
 /-- Fixing the last physical spin at zero is an isometry. Source: SCP10,
-lines 2780–2827, physical support of the color-difference tensor. -/
+lines 2772–2830, physical support of the color-difference tensor. -/
 theorem kitaevPhysicalZeroEmbedding_isIsometry :
     Matrix.IsIsometry (endpointEmbeddingMatrix kitaevPhysicalZeroEmbedding) :=
   endpointEmbeddingMatrix_isIsometry kitaevPhysicalZeroEmbedding
@@ -85,13 +85,13 @@ private theorem parity_color (p : Fin 4 → KitaevBit) :
   simp [show (2 : KitaevBit) = 0 by decide]
 
 /-- The retained tensor after the physical parity spin is removed. Source: SCP10,
-lines 2780–2827; the tensor is defined by its actual color differences. -/
+lines 2772–2830; the tensor is defined by its actual color differences. -/
 def kitaevReducedColorMatrix : Matrix KitaevReducedSpins (Fin 4 → KitaevBit) ℂ :=
   fun σ p => if σ = kitaevReducedColorSpins p then 1 else 0
 
 /-- The original four physical spins are reduced by an explicit physical unitary,
 with an isometric zero-spin inclusion and no assumed tensor equality. Source:
-SCP10, physical RG footnote and color-difference tensor, lines 2780–2827. -/
+SCP10, physical RG footnote and color-difference tensor, lines 2772–2830. -/
 theorem kitaevPhysicalParity_mul_colorMatrix :
     kitaevPhysicalParity.permMatrix ℂ * kitaevBlockColorMatrix =
       endpointEmbeddingMatrix kitaevPhysicalZeroEmbedding * kitaevReducedColorMatrix := by
@@ -139,7 +139,7 @@ def kitaevColorSupportEquiv : (Fin 4 → KitaevBit) ≃ KitaevReducedSpins × Ki
     exact Prod.ext (differences_reconstruct st.1 st.2) rfl
 
 /-- Every retained physical word has precisely two color preimages. Thus the raw
-color tensor has squared singular value two. Source: SCP10, lines 2780–2827,
+color tensor has squared singular value two. Source: SCP10, lines 2772–2830,
 physical support and global binary color symmetry. -/
 theorem kitaevReducedColorMatrix_mul_conjTranspose :
     kitaevReducedColorMatrix * kitaevReducedColorMatrixᴴ = (2 : ℂ) • 1 := by
@@ -151,12 +151,12 @@ theorem kitaevReducedColorMatrix_mul_conjTranspose :
   by_cases h : s = t <;> simp [h, KitaevBit]
 
 /-- The uniform common-color embedding, with the derived normalization 1/√2.
-Source: SCP10, physical RG footnote and color symmetry, lines 2780–2827. -/
+Source: SCP10, physical RG footnote and color symmetry, lines 2772–2830. -/
 def kitaevColorSupportIsometry : Matrix (Fin 4 → KitaevBit) KitaevReducedSpins ℂ :=
   Complex.invSqrtTwo • kitaevReducedColorMatrixᴴ
 
 /-- The uniform color-orbit embedding is isometric, as follows from the actual
-coefficient count. Source: SCP10, physical RG footnote, lines 2780–2794. -/
+coefficient count. Source: SCP10, physical RG footnote, lines 2772–2776. -/
 theorem kitaevColorSupportIsometry_isIsometry :
     Matrix.IsIsometry kitaevColorSupportIsometry := by
   change kitaevColorSupportIsometryᴴ * kitaevColorSupportIsometry = 1
@@ -187,26 +187,26 @@ def kitaevNativePhysicalEquiv (v : TV) : Physical v ≃ KitaevBlockSpins :=
   (kitaevNativeBlockVertexEquiv v).symm.arrowCongr (Equiv.refl KitaevBit)
 
 /-- The physical parity unitary on the original spins of the actual torus block.
-Source: SCP10, physical RG footnote in lines 2780–2794. -/
+Source: SCP10, physical RG footnote in lines 2772–2776. -/
 def kitaevNativePhysicalParity (v : TV) : Equiv.Perm (Physical v) :=
   ((kitaevNativePhysicalEquiv v).trans kitaevPhysicalParity).trans
     (kitaevNativePhysicalEquiv v).symm
 
 /-- The native parity operation is unitary on the full original four-spin space.
-Source: SCP10, physical RG footnote in lines 2780–2794. -/
+Source: SCP10, physical RG footnote in lines 2772–2776. -/
 theorem kitaevNativePhysicalParity_permMatrix_mem_unitaryGroup (v : TV) :
     (kitaevNativePhysicalParity v).permMatrix ℂ ∈ Matrix.unitaryGroup (Physical v) ℂ :=
   (kitaevNativePhysicalParity v).permMatrix_mem_unitaryGroup
 
 /-- The actual physical support inclusion fixes the extracted parity spin at zero.
-Source: SCP10, physical support of the RG step, lines 2780–2827. -/
+Source: SCP10, physical support of the RG step, lines 2772–2830. -/
 def kitaevNativePhysicalZeroEmbedding (v : TV) : KitaevReducedSpins ↪ Physical v :=
   { toFun := fun s => (kitaevNativePhysicalEquiv v).symm (kitaevPhysicalZeroEmbedding s)
     inj' := (kitaevNativePhysicalEquiv v).symm.injective.comp
       kitaevPhysicalZeroEmbedding.injective }
 
 /-- The physical support inclusion is an isometry into the original spins.
-Source: SCP10, physical RG footnote in lines 2780–2794. -/
+Source: SCP10, physical RG footnote in lines 2772–2776. -/
 theorem kitaevNativePhysicalZeroEmbedding_isIsometry (v : TV) :
     Matrix.IsIsometry (endpointEmbeddingMatrix (kitaevNativePhysicalZeroEmbedding v)) :=
   endpointEmbeddingMatrix_isIsometry (kitaevNativePhysicalZeroEmbedding v)
@@ -235,7 +235,7 @@ private theorem native_physical_color (v : TV) :
 /-- An explicit full physical unitary and the actual boundary CNOT reduce the
 native four-site tensor to three physical bits with a zero parity spin and four
 retained boundary colors with four zero registers. Source: SCP10, physical RG
-footnote and color-difference tensor, lines 2780–2827. No coefficient or Gram
+footnote and color-difference tensor, lines 2772–2830. No coefficient or Gram
 identity is a hypothesis. -/
 theorem kitaevNativePhysicalParity_mul_checkerboard_boundaryCNOT (v : TV) :
     (kitaevNativePhysicalParity v).permMatrix ℂ *
@@ -248,13 +248,13 @@ theorem kitaevNativePhysicalParity_mul_checkerboard_boundaryCNOT (v : TV) :
 
 /-- The normalized support of the transformed boundary tensor, including both
 its common-color orbit and its four zero registers. Source: SCP10, physical RG
-footnote, lines 2780–2794. -/
+footnote, lines 2772–2776. -/
 def kitaevNativeTransformedSupport (v : TV) :
     Matrix (Boundary v) KitaevReducedSpins ℂ :=
   endpointEmbeddingMatrix (kitaevNativeBoundaryZeroEmbedding v) * kitaevColorSupportIsometry
 
 /-- The derived transformed virtual support is isometric. Source: SCP10,
-physical RG footnote, lines 2780–2794. -/
+physical RG footnote, lines 2772–2776. -/
 theorem kitaevNativeTransformedSupport_isIsometry (v : TV) :
     Matrix.IsIsometry (kitaevNativeTransformedSupport v) := by
   change (endpointEmbeddingMatrix (kitaevNativeBoundaryZeroEmbedding v) *
@@ -272,7 +272,7 @@ theorem kitaevNativeTransformedSupport_isIsometry (v : TV) :
 /-- The raw native tensor has a single scalar normalization √2 on its support;
 after division by √2 it identifies the derived virtual support with the original
 physical support by an isometry. Source: SCP10, physical RG footnote,
-lines 2780–2794. -/
+lines 2772–2776. -/
 theorem kitaevNativePhysicalParity_mul_checkerboard_support (v : TV) :
     (Complex.invSqrtTwo • ((kitaevNativePhysicalParity v).permMatrix ℂ *
       kitaevNativeCheckerboardMatrix v * (kitaevNativeBoundaryCNOT v).permMatrix ℂ)) *
@@ -289,7 +289,7 @@ theorem kitaevNativePhysicalParity_mul_checkerboard_support (v : TV) :
   rw [← mul_assoc, Complex.invSqrtTwo_mul_self]
   norm_num
 /-- The normalized actual blocked tensor factors between two derived isometric
-support inclusions. Source: SCP10, physical RG footnote, lines 2780–2794.
+support inclusions. Source: SCP10, physical RG footnote, lines 2772–2776.
 In particular the normalization is derived, rather than assumed. -/
 theorem kitaevNativePhysicalParity_mul_checkerboard_supportFactorization (v : TV) :
     Complex.invSqrtTwo • ((kitaevNativePhysicalParity v).permMatrix ℂ *
@@ -303,7 +303,7 @@ theorem kitaevNativePhysicalParity_mul_checkerboard_supportFactorization (v : TV
     Matrix.mul_smul, Matrix.mul_assoc]
 
 /-- The Gram matrix of the normalized actual tensor is exactly its derived
-virtual support projection. Source: SCP10, physical RG footnote, lines 2780–2794. -/
+virtual support projection. Source: SCP10, physical RG footnote, lines 2772–2776. -/
 theorem kitaevNativeCheckerboard_transformed_initialProjection (v : TV) :
     let T := Complex.invSqrtTwo • ((kitaevNativePhysicalParity v).permMatrix ℂ *
       kitaevNativeCheckerboardMatrix v * (kitaevNativeBoundaryCNOT v).permMatrix ℂ)
@@ -319,7 +319,7 @@ theorem kitaevNativeCheckerboard_transformed_initialProjection (v : TV) :
 
 /-- The output support is the isometric image of the three retained physical
 bits, with the fourth spin fixed at zero. Source: SCP10, physical RG footnote
-and the even-parity constraint, lines 2780–2827. -/
+and the even-parity constraint, lines 2772–2830. -/
 theorem kitaevNativeCheckerboard_transformed_finalProjection (v : TV) :
     let T := Complex.invSqrtTwo • ((kitaevNativePhysicalParity v).permMatrix ℂ *
       kitaevNativeCheckerboardMatrix v * (kitaevNativeBoundaryCNOT v).permMatrix ℂ)
