@@ -16744,10 +16744,10 @@ completion from compatible forward and inverse finite-local actions.
 
 \begin{definition}[Coordinates on a consecutive integer interval]
     \label{def:local_interval_coordinates}
-    \lean{SpinChain.intervalRegion, SpinChain.intervalSiteEquiv,
-        SpinChain.intervalSiteEquiv_apply_coe, SpinChain.intervalConfigEquiv,
+    \lean{SpinChain.finiteChainSiteEquiv_val,
         SpinChain.intervalCoordinates, SpinChain.intervalCoordinates_apply}
     \leanok
+    \uses{def:mpu_finite_chain_realization}
     For $a\in\mathbb Z$ and $N\geq0$, put
     $I(a,N)=\{a,a+1,\ldots,a+N-1\}$. The site numbering $i\mapsto a+i$
     identifies configurations on $I(a,N)$ with length-$N$ configurations.
@@ -16760,16 +16760,18 @@ completion from compatible forward and inverse finite-local actions.
 
 \begin{theorem}[Local inclusions in interval coordinates]
     \label{thm:local_interval_coordinate_inclusion}
-    \lean{SpinChain.intervalRegion_subset_expanded,
+    \lean{SpinChain.finiteChainRegion_subset_expanded,
         SpinChain.intervalCoordinates_localInclusion_apply}
     \leanok
     Let $b,c\geq0$, $I=I(a,N)$ and $J=I(a-b,b+N+c)$. Then $I\subseteq J$.
     For configurations $\sigma,\tau$ on $b+N+c$ consecutive sites,
     \begin{align}
         C_{a-b,b+N+c}(\iota_{I,J}(X))_{\sigma\tau}
-        &=C_{a,N}(X)_{\sigma_{[b,b+N)}\tau_{[b,b+N)}}
-          \prod_{i\notin[b,b+N)}\delta_{\sigma_i,\tau_i}.
+        &=C_{a,N}(X)_{\sigma|_M\,\tau|_M}
+          \prod_{i\notin M}\delta_{\sigma_i,\tau_i},
     \end{align}
+    where $M=\{b,b+1,\ldots,b+N-1\}$ and $\sigma|_M$ denotes the
+    configuration $i\mapsto\sigma_{b+i}$ on $N$ sites.
     This is the identity-tensor inclusion of \cite[Appendix]{Cirac2017MPU}
     expressed in increasing integer-site coordinates.
 \end{theorem}
@@ -17007,7 +17009,7 @@ completion from compatible forward and inverse finite-local actions.
 
 \begin{lemma}[Expansion of a consecutive blocked interval]
     \label{lem:qca_blocking_interval_region}
-    \lean{SpinChain.expandedRegion_intervalRegion}
+    \lean{SpinChain.expandedRegion_finiteChainRegion}
     \leanok
     For $L>0$, $a\in\mathbb Z$ and $N\geq0$, the expansion of the
     blocked interval $I(a,N)$ is
@@ -17018,8 +17020,8 @@ completion from compatible forward and inverse finite-local actions.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:local_interval_coordinates, def:qca_expanded_region}
-    Euclidean division by $L$ shows that the quotient of an integer $z$
-    lies in $[a,a+N)$ exactly when $z$ lies in $[aL,(a+N)L)$.
+    Euclidean division by $L$ shows that the quotient $q=\lfloor z/L\rfloor$ of an integer $z$
+    satisfies $a\leq q<a+N$ exactly when $aL\leq z<(a+N)L$.
 \end{proof}
 
 \begin{theorem}[Finite blocking in consecutive matrix coordinates]

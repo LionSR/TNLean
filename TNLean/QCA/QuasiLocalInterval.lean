@@ -25,14 +25,14 @@ namespace SpinChain
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3. -/
 noncomputable def quasiLocalIntervalObservable (d : ℕ) [NeZero d] (a : ℤ) (N : ℕ) :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →⋆ₐ[ℂ] QuasiLocalAlgebra d :=
-  (quasiLocalObservable d (intervalRegion a N)).comp
+  (quasiLocalObservable d (finiteChainRegion a N)).comp
     (intervalCoordinates d a N).symm.toStarAlgHom
 
 /-- The interval inclusion is the finite-region inclusion after coordinate transport.
 Source: arXiv:1703.09188, Appendix, lines 2285--2300. -/
 @[simp] theorem quasiLocalIntervalObservable_apply (d : ℕ) [NeZero d] (a : ℤ) {N : ℕ}
     (X : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
-    quasiLocalIntervalObservable d a N X = quasiLocalObservable d (intervalRegion a N)
+    quasiLocalIntervalObservable d a N X = quasiLocalObservable d (finiteChainRegion a N)
       ((intervalCoordinates d a N).symm X) := rfl
 
 /-- The interval inclusion preserves the matrix operator norm.
