@@ -8,7 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Geometry
 
+import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds

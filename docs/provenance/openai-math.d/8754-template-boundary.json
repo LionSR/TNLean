@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.latticeneighbors",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeNeighbors",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.mem_latticeneighbors_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.latticeneighbors_symm",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.latticeNeighbors_symm",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.card_latticeneighbors_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_latticeNeighbors_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.neighbor_mem_ambientdilation_succ",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.ambientboundaryregion",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientBoundaryRegion",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.ambientboundary",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.card_ambientboundary",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.mem_ambientboundary_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.ambientboundary_orientation_unique",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.ambientboundary_empty",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary_empty",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.card_ambientboundary_le_of_endpoint_cover",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.card_ambientboundary_le_outer_layer",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.card_ambientboundary_dilation_le_layer",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.ambientboundary_sdiff_subset",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.card_ambientboundary_sdiff_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.geometry.template_boundary_card_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-boundary-tnlean.peps.arealaw.geometry.template_shell_boundary_card_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateBoundary.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le",
+        "name_status": "planned"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
