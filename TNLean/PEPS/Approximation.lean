@@ -9,6 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.CorrectedPositionCost
+import TNLean.PEPS.Approximation.DistributedLifetime
+import TNLean.PEPS.Approximation.DistributedLinks
+import TNLean.PEPS.Approximation.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.SourceApproximation

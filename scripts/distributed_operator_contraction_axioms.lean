@@ -1,0 +1,59 @@
+import TNLean.PEPS.Approximation.DistributedOperatorContraction
+
+/-! Complete public declaration kernel-axiom audit for the constructed star/sample operator. -/
+
+-- This audit intentionally queries declarations with `#print axioms`.
+set_option linter.hashCommand false
+
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.ActiveGate
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.Link
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.GateAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.Sample
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.SampleAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.starLink
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLink
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.src
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.tgt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.endpoints_eq
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.alphabet
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.starGateAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.rootGateAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.starLinkAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLinkAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.GateLabelsAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkLabelsAt
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.StarConsistent
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.rootCoefficient
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.localTensor
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.alphabetFintype
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.GateLabels
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkLabels
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictGates
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictLinks
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictSamples
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels_consistent
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.ConsistentConfig
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabelsOfConfig
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.samplesOfConfig
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabel_eq_root
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels_recover
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.consistentConfigEquiv
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels_diagonal
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples_sharedLinkLabels
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.prod_rootCoefficient
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointTensor
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_linkSum
+#print axioms
+  TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum
+#print axioms
+  TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.card_alphabet
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.card_alphabet_le
+#print axioms TNLean.PEPS.Approximation.DistributedOperatorContraction.densityPairCoefficient
+#print axioms
+  TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_densityPair_eq
