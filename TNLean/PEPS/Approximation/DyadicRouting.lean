@@ -215,7 +215,7 @@ theorem card_near_line_le {u v : P → ℕ} {B c : ℕ}
   omega
 
 /-- Counting links whose chosen endpoint satisfies a condition, by the degree bound. -/
-theorem card_link_le {Λ : Type*} [Fintype Λ] [DecidableEq Λ] (f : Λ → P) {Δ : ℕ}
+theorem card_link_le {Λ : Type*} [Fintype Λ] (f : Λ → P) {Δ : ℕ}
     (hdeg : ∀ p, #{ℓ | f ℓ = p} ≤ Δ) (Q : P → Prop) [DecidablePred Q] :
     #{ℓ | Q (f ℓ)} ≤ Δ * #{p | Q p} := by
   classical
@@ -234,7 +234,7 @@ end DyadicPlacement
 
 namespace DyadicPlacement
 
-variable {P Λ : Type*} [Fintype P] [DecidableEq P] [Fintype Λ] [DecidableEq Λ]
+variable {P Λ : Type*} [Fintype P] [DecidableEq P] [Fintype Λ]
 
 variable (src tgt : Λ → P)
 
@@ -244,13 +244,13 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:61–62` and
 `07-assembly.tex:140–141`. -/
 def DegreeBounded (Δ : ℕ) : Prop := ∀ p, #{ℓ | src ℓ = p ∨ tgt ℓ = p} ≤ Δ
 
-omit [Fintype P] [DecidableEq Λ] in
+omit [Fintype P] in
 variable {src tgt} in
 theorem DegreeBounded.src_le {Δ : ℕ} (h : DegreeBounded src tgt Δ) (p : P) :
     #{ℓ | src ℓ = p} ≤ Δ :=
   le_trans (card_le_card fun ℓ => by simp +contextual) (h p)
 
-omit [Fintype P] [DecidableEq Λ] in
+omit [Fintype P] in
 variable {src tgt} in
 theorem DegreeBounded.tgt_le {Δ : ℕ} (h : DegreeBounded src tgt Δ) (p : P) :
     #{ℓ | tgt ℓ = p} ≤ Δ :=
