@@ -4134,91 +4134,9 @@ $\mathcal A_X$ for the algebra of operators supported on $X$. The oriented
 bond indexed by $j$ has support $e_j=\{j,j+1\}$. Distinct oriented bonds
 are counted separately, even when their supports agree. All operator norms
 below are Hilbert-space operator norms. For an operator $H$, put
-$\tau_t(A)=e^{itH}Ae^{-itH}$.
-
-\begin{definition}[Restricted commutator norm]
-    \label{aux:finite-ring-commutator-norm}
-    \lean{MPSPreparation.chainCommutatorNorm}\leanok
-    For an operator $B$ and a support $X$, define
-    \[
-        C_B(X,t)=\sup\{\|[\tau_t(A),B]\|: A\in\mathcal A_X,\ \|A\|\leq1\}.
-    \]
-\end{definition}
-
-\begin{lemma}[Evaluation of the restricted commutator norm]
-    \label{aux:finite-ring-commutator-evaluation}
-    \lean{MPSPreparation.norm_heisenberg_commutator_le_chainCommutatorNorm}\leanok
-    \uses{aux:finite-ring-commutator-norm}
-    For $A\in\mathcal A_X$, one has
-    $\|[\tau_t(A),B]\|\leq C_B(X,t)\|A\|$.
-\end{lemma}
-\begin{proof}\leanok
-    Apply the defining operator-norm bound to $A$.
-\end{proof}
-
-\begin{lemma}[Reversal of time]
-    \label{aux:finite-ring-commutator-negative-time}
-    \lean{MPSPreparation.chainCommutatorNorm_neg_time}\leanok
-    \uses{aux:finite-ring-commutator-norm}
-    The restricted commutator norm for $H$ at time $-t$ equals that for
-    $-H$ at time $t$.
-\end{lemma}
-\begin{proof}\leanok
-    Both Heisenberg evolutions are $A\mapsto e^{-itH}Ae^{itH}$.
-\end{proof}
-
-\begin{lemma}[Continuity in time]
-    \label{aux:finite-ring-commutator-continuity}
-    \lean{MPSPreparation.continuous_chainCommutatorNorm}\leanok
-    \uses{aux:finite-ring-commutator-norm}
-    For fixed $H,B,X$, the function $t\mapsto C_B(X,t)$ is continuous.
-\end{lemma}
-\begin{proof}\leanok
-    Matrix exponentiation and multiplication are continuous; the norm of the
-    resulting linear map on $\mathcal A_X$ is continuous.
-\end{proof}
-
-\begin{lemma}[Initial commutator bound]
-    \label{aux:finite-ring-initial-commutator-bound}
-    \lean{MPSPreparation.chainCommutatorNorm_zero_le}\leanok
-    \uses{aux:finite-ring-commutator-norm}
-    For arbitrary $H,B,X$, one has $C_B(X,0)\leq2\|B\|$.
-\end{lemma}
-\begin{proof}\leanok
-    Use $\|AB-BA\|\leq2\|A\|\|B\|$.
-\end{proof}
-
-\begin{lemma}[Vanishing initial commutator]
-    \label{aux:finite-ring-initial-commutator-vanishing}
-    \lean{MPSPreparation.chainCommutatorNorm_zero_of_disjoint}\leanok
-    \uses{aux:finite-ring-commutator-norm}
-    If $B\in\mathcal A_Y$ and $X\cap Y=\varnothing$, then $C_B(X,0)=0$.
-\end{lemma}
-\begin{proof}\leanok
-    Operators on disjoint tensor factors commute.
-\end{proof}
-
-\begin{lemma}[Local commutator recursion]
-    \label{aux:finite-ring-commutator-recursion}
-    \lean{MPSPreparation.chainCommutatorNorm_le_integral}\leanok
-    \uses{aux:finite-ring-commutator-norm}
-    Let $H=\sum_j h_j$, where each $h_j$ is Hermitian and belongs to
-    $\mathcal A_{e_j}$. For arbitrary $B,X$ and $t\geq0$,
-    \[
-        C_B(X,t)\leq C_B(X,0)
-        +2\sum_{j:X\cap e_j\neq\varnothing}\|h_j\|
-        \int_0^t C_B(e_j,s)\,ds.
-    \]
-    No bound on the ground energy or positivity assumption on $h_j$ is required.
-    This is the finite-ring recursion used in Hastings--Koma, Appendix A,
-    (A.12)--(A.14).
-\end{lemma}
-\begin{proof}\leanok
-    Separate the terms disjoint from $X$. Their sum commutes with every operator
-    in $\mathcal A_X$. Differentiate in the corresponding interaction picture,
-    apply the fundamental theorem of calculus and invariance of operator norm
-    under unitary conjugation, and then take the restricted operator norm.
-\end{proof}
+$\tau_t(A)=e^{itH}Ae^{-itH}$. The restricted commutator norm $C_B(X,t)$, its
+local recursion, and the weighted integral comparison are stated for an
+arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{definition}[Ring support distance]
     \label{aux:ring-support-distance}
@@ -4242,10 +4160,10 @@ $\tau_t(A)=e^{itH}Ae^{-itH}$.
 \begin{lemma}[Finite-ring Lieb--Robinson estimate]
     \label{aux:finite-ring-lieb-robinson}
     \lean{MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint}\leanok
-    \uses{aux:finite-ring-commutator-recursion,aux:finite-ring-commutator-continuity,
-        aux:finite-ring-initial-commutator-bound,aux:finite-ring-initial-commutator-vanishing,
-        aux:ring-support-distance,aux:finite-ring-commutator-evaluation,
-        aux:finite-ring-commutator-negative-time}
+    \uses{aux:restricted-commutator-recursion,aux:restricted-commutator-continuity,
+        aux:restricted-initial-commutator-bound,aux:restricted-initial-commutator-vanishing,
+        aux:ring-support-distance,aux:restricted-commutator-evaluation,
+        aux:restricted-commutator-negative-time,aux:weighted-volterra-comparison}
     Let $H=\sum_j h_j$, with Hermitian $h_j\in\mathcal A_{e_j}$ and
     $\|h_j\|\leq1$. Suppose $A\in\mathcal A_X$ and $B\in\mathcal A_Y$,
     where $X,Y$ are nonempty and disjoint. For every $a\geq0$ and $t\in\mathbb R$,
