@@ -205,7 +205,7 @@
       "environment": {},
       "exit_code": 56,
       "elapsed_seconds": 0.013,
-      "log": "docs/provenance/openai-math-build-logs/cache-default.txt",
+      "log": "docs/provenance/openai-math-build-logs/cache-default.txt.gz",
       "log_sha256": "6a25bfc8fcea45bd9ddd523670d549519d81d2de89670ce28372f6b7b0b74abf"
     },
     {
@@ -222,7 +222,7 @@
       "environment": {},
       "exit_code": 56,
       "elapsed_seconds": 0.011,
-      "log": "docs/provenance/openai-math-build-logs/cache-azure.txt",
+      "log": "docs/provenance/openai-math-build-logs/cache-azure.txt.gz",
       "log_sha256": "6a25bfc8fcea45bd9ddd523670d549519d81d2de89670ce28372f6b7b0b74abf"
     },
     {
@@ -238,7 +238,7 @@
       },
       "exit_code": 1,
       "elapsed_seconds": 0.848,
-      "log": "docs/provenance/openai-math-build-logs/elan-original.txt",
+      "log": "docs/provenance/openai-math-build-logs/elan-original.txt.gz",
       "log_sha256": "3115468e7e339571467add66c497a1bad685f98a932d6c769fc3d5714de39931"
     },
     {
@@ -254,7 +254,7 @@
       },
       "exit_code": 1,
       "elapsed_seconds": 0.499,
-      "log": "docs/provenance/openai-math-build-logs/elan-downstream.txt",
+      "log": "docs/provenance/openai-math-build-logs/elan-downstream.txt.gz",
       "log_sha256": "3115468e7e339571467add66c497a1bad685f98a932d6c769fc3d5714de39931"
     }
   ],

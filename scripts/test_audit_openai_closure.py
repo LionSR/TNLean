@@ -129,7 +129,7 @@ class BuildEvidenceTests(unittest.TestCase):
                 self.assertEqual(hashlib.sha256(data).hexdigest(), attempt['log_sha256'])
                 self.assertNotIn('build', attempt['command'])
         for probe in evidence['access_probes']:
-            data = (repo/probe['log']).read_bytes()
+            data = gzip.decompress((repo/probe['log']).read_bytes())
             self.assertEqual(hashlib.sha256(data).hexdigest(), probe['log_sha256'])
 
 
