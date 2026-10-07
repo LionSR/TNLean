@@ -13,10 +13,14 @@ import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.DyadicAnchors
+import TNLean.PEPS.Approximation.DyadicEdgeBands
+import TNLean.PEPS.Approximation.DyadicHierarchyCounts
+import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.GroupTruncation
+import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.RoutedContraction
