@@ -2,91 +2,91 @@
 \label{sec:area_law_sparse_strips}
 
 \begin{definition}[Coordinate residue strips]
-\label{def:area_law_residue_strips}
-Let $F\subset\mathbb Z^2$ be finite and let $m\ge1$ be an integer.
-For residues $a,b\in\{0,\ldots,m-1\}$, define
-\begin{align}
- B_{a,b}(F)&=\{z\in F:z_1\equiv a\pmod m\ \text{or}\ z_2\equiv b\pmod m\}.
- \label{eq:area_law_residue_strips}
-\end{align}
+    \label{def:area_law_residue_strips}
+    Let $F\subset\mathbb Z^2$ be finite and let $m\ge1$ be an integer.
+    For residues $a,b\in\{0,\ldots,m-1\}$, define
+    \begin{align}
+        B_{a,b}(F) & =\{z\in F:z_1\equiv a\pmod m\ \text{or}\ z_2\equiv b\pmod m\}.
+        \label{eq:area_law_residue_strips}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Sparse choice of residue strips]
-\label{thm:area_law_sparse_belt_shift}
-\lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_belt_shift}
-\leanok
-\uses{def:area_law_residue_strips}
-For every finite $F\subset\mathbb Z^2$ and integer $m\ge1$, there are
-residues $a,b\in\{0,\ldots,m-1\}$ such that
-\begin{align}
- m|B_{a,b}(F)|&\le2|F|.
- \label{eq:area_law_sparse_belt_shift}
-\end{align}
-This is the finite averaging step in the sparse-strip construction of
-\cite[Section~11]{OpenAI2026AreaLaw}.
-% Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
-% build/sections/10-geometry.tex, lines 210--237, geometry:belt-count.
-% This auxiliary theorem does not establish the layer-cell count or the
-% final dyadic decay estimate in geometry:belt-count.
+    \label{thm:area_law_sparse_belt_shift}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_belt_shift}
+    \leanok
+    \uses{def:area_law_residue_strips}
+    For every finite $F\subset\mathbb Z^2$ and integer $m\ge1$, there are
+    residues $a,b\in\{0,\ldots,m-1\}$ such that
+    \begin{align}
+        m|B_{a,b}(F)| & \le2|F|.
+        \label{eq:area_law_sparse_belt_shift}
+    \end{align}
+    This is the finite averaging step in the sparse-strip construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+    % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+    % build/sections/10-geometry.tex, lines 210--237, geometry:belt-count.
+    % This auxiliary theorem does not establish the layer-cell count or the
+    % final dyadic decay estimate in geometry:belt-count.
 \end{theorem}
 \begin{proof}\leanok
-For any map $f:F\to\{0,\ldots,m-1\}$, its $m$ fibres partition $F$.
-One fibre therefore has at most $\lfloor|F|/m\rfloor$ elements.
-Apply this assertion to the two coordinate residue maps and choose their
-residues independently. Each selected strip contains at most
-$\lfloor|F|/m\rfloor$ cells, so their union satisfies
-$|B_{a,b}(F)|\le2\lfloor|F|/m\rfloor$. Multiplying by $m$ and using
-$m\lfloor|F|/m\rfloor\le|F|$ gives
-(\ref{eq:area_law_sparse_belt_shift}). The argument includes $F=\varnothing$
-and $m=1$.
+    For any map $f:F\to\{0,\ldots,m-1\}$, its $m$ fibres partition $F$.
+    One fibre therefore has at most $\lfloor|F|/m\rfloor$ elements.
+    Apply this assertion to the two coordinate residue maps and choose their
+    residues independently. Each selected strip contains at most
+    $\lfloor|F|/m\rfloor$ cells, so their union satisfies
+    $|B_{a,b}(F)|\le2\lfloor|F|/m\rfloor$. Multiplying by $m$ and using
+    $m\lfloor|F|/m\rfloor\le|F|$ gives
+    (\ref{eq:area_law_sparse_belt_shift}). The argument includes $F=\varnothing$
+    and $m=1$.
 \end{proof}
 
 \begin{definition}[Boundary endpoints and dyadic children]
-\label{def:area_law_cell_counts}
-\lean{
-  TNLean.PEPS.AreaLaw.Geometry.boundaryEndpoints,
-  TNLean.PEPS.AreaLaw.Geometry.dyadicChildren
-}
-\leanok
-\uses{def:area_law_hamiltonian}
-Let $Z$ be the set of integer endpoints of the crossing edges of a cut.
-For a finite set $P\subset\mathbb Z^2$ of parent indices, its dyadic child
-indices are
-\begin{align}
- \operatorname{Ch}(P)&=
- \{2z+\varepsilon:z\in P,\ \varepsilon\in\{0,1\}^2\}.
- \label{eq:area_law_dyadic_children}
-\end{align}
-These are the four children of each parent in a translated dyadic mesh.
+    \label{def:area_law_cell_counts}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.boundaryEndpoints,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicChildren
+    }
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $Z$ be the set of integer endpoints of the crossing edges of a cut.
+    For a finite set $P\subset\mathbb Z^2$ of parent indices, its dyadic child
+    indices are
+    \begin{align}
+        \operatorname{Ch}(P) & =
+        \{2z+\varepsilon:z\in P,\ \varepsilon\in\{0,1\}^2\}.
+        \label{eq:area_law_dyadic_children}
+    \end{align}
+    These are the four children of each parent in a translated dyadic mesh.
 \end{definition}
 
 \begin{theorem}[Finite cell counts]
-\label{thm:area_law_cell_counts}
-\lean{
-  TNLean.PEPS.AreaLaw.Geometry.card_ambientDilation_le,
-  TNLean.PEPS.AreaLaw.Geometry.card_boundaryEndpoints_le,
-  TNLean.PEPS.AreaLaw.Geometry.card_dyadicChildren
-}
-\leanok
-\uses{def:area_law_cell_counts,def:area_law_template}
-For every finite $T\subset\mathbb Z^2$, integer $r\ge0$, finite parent
-set $P$, and finite induced domain with cut $A$, one has
-\begin{align}
- |(T+[-r,r]^2)\cap\mathbb Z^2|&\le(2r+1)^2|T|,
- \label{eq:area_law_dilation_count}\\
- |Z|&\le2|\partial_\Lambda A|,
- \label{eq:area_law_endpoint_count}\\
- |\operatorname{Ch}(P)|&=4|P|.
- \label{eq:area_law_children_count}
-\end{align}
-These cardinality estimates are ingredients in the layer count of
-\cite[Section~11]{OpenAI2026AreaLaw}; no connectedness assumption is needed.
+    \label{thm:area_law_cell_counts}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.card_ambientDilation_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_boundaryEndpoints_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_dyadicChildren
+    }
+    \leanok
+    \uses{def:area_law_cell_counts,def:area_law_template}
+    For every finite $T\subset\mathbb Z^2$, integer $r\ge0$, finite parent
+    set $P$, and finite induced domain with cut $A$, one has
+    \begin{align}
+        |(T+[-r,r]^2)\cap\mathbb Z^2| & \le(2r+1)^2|T|,
+        \label{eq:area_law_dilation_count}                        \\
+        |Z|                           & \le2|\partial_\Lambda A|,
+        \label{eq:area_law_endpoint_count}                        \\
+        |\operatorname{Ch}(P)|        & =4|P|.
+        \label{eq:area_law_children_count}
+    \end{align}
+    These cardinality estimates are ingredients in the layer count of
+    \cite[Section~11]{OpenAI2026AreaLaw}; no connectedness assumption is needed.
 \end{theorem}
 \begin{proof}\leanok
-Each point of $T$ contributes an integer square with $(2r+1)^2$ sites;
-counting their union gives the first bound. Each crossing edge contributes
-at most two endpoints, giving the second. In each coordinate the remainder
-modulo two identifies the child label, and division by two then identifies
-the parent index. Thus distinct parent and child-label pairs give distinct
-indices, proving the last equality. All three assertions include empty sets.
+    Each point of $T$ contributes an integer square with $(2r+1)^2$ sites;
+    counting their union gives the first bound. Each crossing edge contributes
+    at most two endpoints, giving the second. In each coordinate the remainder
+    modulo two identifies the child label, and division by two then identifies
+    the parent index. Thus distinct parent and child-label pairs give distinct
+    indices, proving the last equality. All three assertions include empty sets.
 \end{proof}
