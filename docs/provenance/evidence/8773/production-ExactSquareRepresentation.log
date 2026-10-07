@@ -1,0 +1,30 @@
+Local-source validation
+Revision: c9ded2f36083c837bc884ad9d7d475f9e81a514e
+Command: lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/ExactSquareRepresentation.lean
+Exit code: 0
+Wall seconds: 2.739574254999752
+Warnings: none; warnings were errors.
+Output:
+
+import took 1.57s
+cumulative profiling times:
+	attribute application 0.0593ms
+	congr simp thm 1.74ms
+	elaboration 41ms
+	fix level params 0.349ms
+	import 1.57s
+	initialization 30.1ms
+	instantiate metavars 0.983ms
+	interpretation 393ms
+	let-to-have transformation 0.167ms
+	linting 15.4ms
+	module linting 0.00166ms
+	overlappingInstancesLinter 4.84ms
+	parsing 7.21ms
+	process pre-definitions 4.63ms
+	share common exprs 2.18ms
+	simp 37.5ms
+	tactic execution 71.6ms
+	tacticAnalysis 21.7ms
+	type checking 26.2ms
+	typeclass inference 96.9ms

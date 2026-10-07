@@ -1,0 +1,124 @@
+{
+  "status": "Focused PDF and static HTML passed after source-only equation-anchor repair; live browser blocked",
+  "recorded_at_utc": "2026-10-07T11:27:33.023816+00:00",
+  "scope": "Local-only focused mixed-source fixture; no publication or full-book claim.",
+  "source_origins": [
+    {
+      "path": "blueprint/src/chapter/ch34_peps_exact_tree.tex",
+      "commit": "f7b46ce60c2469ffce1d8c0f56766a0cb6d30732",
+      "sha256": "392d66b232ba779c8996d9f6044b104ca6cb23668e5f2f91ba22c708a8a5a035",
+      "lean_links": 40
+    },
+    {
+      "path": "blueprint/src/chapter/ch34_peps_exact_small_size_approximation.tex",
+      "commit": "17f7ba237e476c1ed833acbe8170675d4deb20e4",
+      "sha256": "38bb4cde695f9b6cc895c285403887f5529cf6072abaed997566638aeea5a7af",
+      "lean_links": 2
+    },
+    {
+      "path": "blueprint/src/chapter/ch34_peps_exact_finite_exception.tex",
+      "commit": "a8e6abd11dca1e865f7520750aae3f23e5f142f2",
+      "sha256": "0bd738c2003b56cd0b09aaa9a34d98ad78b120db93fe80ce4d97b1809b59a7d8",
+      "lean_links": 3
+    }
+  ],
+  "source_revision_note": "The renderer recorded the finite-exception leaf as a staged correction above 17f7ba237. Its exact bytes were subsequently committed at a8e6abd11; each listed source hash was independently matched to that commit and the rendered fixture. The held native40 leaf comes from f7b46ce60, not this branch base.",
+  "original_report_sha256": "c89a9003c0087d4b63d67401617b5bfa66defb7ffc95f5f1fc9fdae4f52ef8b3",
+  "lean_sources_sha256": {
+    "TNLean/PEPS/Approximation/Basic.lean": "16c669175f00af22a6e8e274d8210423356ed6b0e88e99f1b1b38d6775a8854c",
+    "TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean": "1cdb20f6b529272fe47b24558f43eb9b371c5f1be3db92da3b516b0e87fbfd35",
+    "TNLean/PEPS/Approximation/ExactFiniteException.lean": "374479c54f16f5fd71b2309a16c0f612fc994131b2822cd04fa06fbfdfef57a8"
+  },
+  "verification": {
+    "pdf_build_exit": 0,
+    "static_web_build_exit": 0,
+    "pdf_pages": 7,
+    "new_theorems": 5,
+    "new_proofs": 5,
+    "new_checked_markers": 10,
+    "new_pdf_links": 5,
+    "new_html_links": 5,
+    "total_pdf_links": 45,
+    "total_html_main_chapter_links": 45,
+    "total_html_declaration_links_including_two_graph_copies": 135,
+    "source_leaves_byte_identical": true,
+    "source_declaration_names_exact": true,
+    "formatting_pinned_3_24_7": "pass, all three leaves",
+    "final_pdf_reference_or_layout_warnings": [],
+    "strict_web_renderer_errors": [],
+    "duplicate_html_ids": {},
+    "missing_static_anchor_links": []
+  },
+  "visual_review": {
+    "all_pdf_pages_inspected": true,
+    "web_tenkz_figure_pdf_raster_inspected": true,
+    "result": "All seven pages legible, no clipping, overlaps or missing glyphs. Changed final pages 5–6 were reinspected; pages 1–4 and 7 have identical PNG hashes to the inspected first render. The uniform-prefactor theorem continues normally across pages 5–6.",
+    "tenkz": "The dependency has one native Tenkz diagram with three physical legs and two virtual bonds. The five new results are algebraic and contain no tensor diagrams."
+  },
+  "static_anchor_repair": {
+    "commit": "a8e6abd11dca1e865f7520750aae3f23e5f142f2",
+    "change": "Move the three multiline equation labels to first numbered rows, suppress final rows instead. No mathematical or prose token changes.",
+    "semantic_tokens_unchanged": true,
+    "before_source_sha256": "9f3a7f2e84bc353d7a9791c5b4d52915d0ed83942805288c794a8d652fea3547",
+    "after_source_sha256": "0bd738c2003b56cd0b09aaa9a34d98ad78b120db93fe80ce4d97b1809b59a7d8",
+    "initial_missing_anchor_count": 3,
+    "initial_broken_reference_count": 5,
+    "initial_report": "render-before-anchor-fix.json",
+    "initial_report_original_sha256": "fdf943d55b1b570535c578036cf58a6f71a8b29273b25741561352e7221ad73c",
+    "result": "All three static ids now exist and all five equation-reference links resolve. No renderer changes."
+  },
+  "browser": {
+    "status": "blocked",
+    "exit": 134,
+    "error": "Chromium process_singleton_posix.cc socket() failed: Operation not permitted (EPERM).",
+    "retry_or_bypass": false
+  },
+  "fixture_only_changes": [
+    "Focused content.tex chapter wrapper and three exact leaves.",
+    "Removed unrelated ft_equal_gauge graph subset from fixture configuration.",
+    "Numeric optional bibliography labels added only to generated web.bbl, matching the existing focused workflow."
+  ],
+  "warnings": [
+    "Tenkz used the supported xelatex → PDF → pdftocairo SVG fallback because dvisvgm is absent.",
+    "xdvipdfmx missing font maps and duplicate title-page destination warnings; final pixels are correct.",
+    "The bibliography has an inherited missing author/key sorting warning."
+  ],
+  "limits": [
+    "Focused PDF and static HTML only; no full-book verification, live MathJax/browser rendering, remote declaration publication checks, Lean builds or CI.",
+    "Live browser/MathJax behavior remains unverified because Chromium is blocked by EPERM.",
+    "Only the authorized finite-exception blueprint leaf changed. No Lean source, held native leaf, shared Lean/tool cache, renderer, root-aggregator, remote, or publication changes were performed."
+  ],
+  "tools": {
+    "texra-blueprint": "0.3.8",
+    "plasTeX": "3.1",
+    "leanblueprint": "0.0.20"
+  },
+  "tenkz_commit": "08a6493f3605dcf2ca5b512823ccb2698dfc027b",
+  "artifacts_sha256": {
+    "blueprint/src/print.pdf": "ff54ec535cfc90ab0679ef80b12ec949a3f487197deca24c87182698e01c619f",
+    "blueprint/web/dep_graph_chapter_1.html": "25af23539d2d7f8eccdb42e94205358eb78a68ba99a7ad2e960843aaebad5236",
+    "blueprint/web/dep_graph_document.html": "d0d590476703b88b8ff95e5281a58dd2998bfb694e232d688fceb0ebe74b76d6",
+    "blueprint/web/dep_graphs.html": "b907079bcd177f0c7422dce26486b4d86d53969371bfd48542399f0e11700ec2",
+    "blueprint/web/index.html": "e6ae4f3089235529c38c838fd8f15f5622c5bb4696a6884ac553a45740a56c23",
+    "blueprint/web/sect0001.html": "7b38941f3769a80803583ea8dd9235e3157c2bd511cde94acbc723d6368f4873",
+    "blueprint/web/sect0002.html": "813cd5dd08a955700aa8ccb14cd397c3b1ef314226860bda8700785947490caf",
+    "blueprint/web/tenkz_svg/tenkz-5314dd44010985d8.svg": "749b5373db08cbaed93b247b6de2e6aa5942f485ba07b85cd770dd650db95ee8",
+    "pdf-pages/page-1.png": "b35de8b551621296924010b11fbaae4a463a4d907031ac75b237bb8dcd086116",
+    "pdf-pages/page-2.png": "e5b944a3fb07095ec5d793544843f9187e8b013355d8478fd16ca155354c430e",
+    "pdf-pages/page-3.png": "1d9f6afb2aa4d68f3c48e981f157950c2d6e365bdb3264647df09cd9e531ed9d",
+    "pdf-pages/page-4.png": "330d43e9b7d0315e6b10a0e382af1f46cc903cd7b86ffa17bfb8e8fdcda2ed20",
+    "pdf-pages/page-5.png": "d83c1b424e99c67a2529c8a6480bfa52f932622b64436e9e5f844cfb127b1e06",
+    "pdf-pages/page-6.png": "7934ec75e3f5e534c65796b7fd4311dd64fa7377b96da95079ffb207e05e0972",
+    "pdf-pages/page-7.png": "bbc42c7790deb8809a404faeccb8c1481d7bb5839a22738336490e3df98ae508",
+    "web-tensor-diagram.png": "ac137773ad534ac22791ae6038d9e4778b59db632f5cf5ba4615c6caee8aca1b"
+  },
+  "raw_evidence_sha256": {
+    "focus-manifest.json": "f0216fae5f4f8254252da1e3fb2f398875d16733e0080380903f5f0db993d47e",
+    "format-verification.json": "7dc632fe4405f88c2a3ab0bee4656d4d0b5687e1d7e9c2172d2178497a4889b8",
+    "pdf-build.log": "078ab29a55feacc71eba4489a60a6605648483b5f838784cb833af757d86d28a",
+    "web-build.log": "381ae3435d26d2b304c504401b6165455fa386c9eade7631f4dc907811319af2",
+    "browser-check.log": "a816421c050f927972d41940890035968452025f74e5ae55b657e28248511a69"
+  },
+  "raw_render_input_manifest_sha256": "c6eb92e9568e20dc112745c0e88cc44d59b1b3e35c61e79682d8ed4c6863adf8",
+  "raw_archive": "Original reports, initial failing render, final PDF/HTML/PNGs, and input manifests remain unchanged in the parent-owned local render archive; no generated site is published."
+}

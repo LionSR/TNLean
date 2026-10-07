@@ -1,0 +1,27 @@
+{
+  "originals_preserved": true,
+  "original_evidence_location": "Parent-owned local focused-render archive; unchanged.",
+  "artifacts": [
+    {
+      "original_artifact": "before-anchor-fix/render-verification.json",
+      "original_sha256": "fdf943d55b1b570535c578036cf58a6f71a8b29273b25741561352e7221ad73c",
+      "retained_artifact": "render-before-anchor-fix.json",
+      "retained_sha256": "cb60f400515185df857595efe4e93460ec56cec79889163ab0e076f2ca4d6d3f",
+      "transformation": "All executor workspace prefixes replaced by <executor-workspace>; the complete original report is otherwise retained."
+    },
+    {
+      "original_artifact": "8773-finite-exception-render-verification.json",
+      "original_sha256": "c89a9003c0087d4b63d67401617b5bfa66defb7ffc95f5f1fc9fdae4f52ef8b3",
+      "retained_artifact": "render-verification.json",
+      "retained_sha256": "c49722a348db65e136ed395ca55f0658be4e025fd1f88490febec87d36326648",
+      "transformation": "Compact record retains source provenance, verification, warnings, scope limitations and artifact hashes; executor-local paths and transient worktree status are omitted. The later committed source identity is explicitly added and independently verified."
+    },
+    {
+      "original_artifact": "browser-check.log",
+      "original_sha256": "a816421c050f927972d41940890035968452025f74e5ae55b657e28248511a69",
+      "retained_artifact": "render-browser-block.log",
+      "retained_sha256": "a816421c050f927972d41940890035968452025f74e5ae55b657e28248511a69",
+      "transformation": "Byte-identical; no executor-local path was present."
+    }
+  ]
+}

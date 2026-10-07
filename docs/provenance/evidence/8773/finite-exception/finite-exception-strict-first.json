@@ -1,0 +1,62 @@
+[
+  {
+    "file": "TNLean/PEPS/Approximation/ExactFiniteException.lean",
+    "sha256": "374479c54f16f5fd71b2309a16c0f612fc994131b2822cd04fa06fbfdfef57a8",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Approximation/ExactFiniteException.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.8243841780058574,
+    "log": "TNLean_PEPS_Approximation_ExactFiniteException.lean-finite-exception-strict-first.log"
+  },
+  {
+    "file": "TNLeanTest/PEPS/Approximation/ExactFiniteException.lean",
+    "sha256": "68dd1f17cc636dede5ed6ba5f30485021d9da2f142a43a398f644ca35d9951fc",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLeanTest/PEPS/Approximation/ExactFiniteException.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.6487236979955924,
+    "log": "TNLeanTest_PEPS_Approximation_ExactFiniteException.lean-finite-exception-strict-first.log"
+  },
+  {
+    "file": "docs/provenance/evidence/8773/ExactFiniteExceptionAxioms.lean",
+    "sha256": "937ae5799e16cd66e0ff648c7288714ad85dd6ecdab4e1f7d327a7b686c3f565",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "docs/provenance/evidence/8773/ExactFiniteExceptionAxioms.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.599842969000747,
+    "log": "docs_provenance_evidence_8773_ExactFiniteExceptionAxioms.lean-finite-exception-strict-first.log"
+  }
+]

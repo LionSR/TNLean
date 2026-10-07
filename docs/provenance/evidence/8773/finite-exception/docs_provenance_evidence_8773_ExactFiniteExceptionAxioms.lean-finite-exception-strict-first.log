@@ -1,0 +1,20 @@
+import took 1.71s
+'TNLean.PEPS.Approximation.HasPEPSApproximation.mono_prefactor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.polynomialPEPSApproximation_iff_sufficiently_large' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+cumulative profiling times:
+	elaboration 0.504ms
+	import 1.71s
+	initialization 26.5ms
+	interpretation 246ms
+	linting 2.16ms
+	module linting 0.00194ms
+	overlappingInstancesLinter 1.72ms
+	parsing 0.161ms
+	tacticAnalysis 10.4ms

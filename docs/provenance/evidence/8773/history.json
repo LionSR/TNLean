@@ -1,0 +1,60 @@
+{
+  "status": "compact historical record; original artifacts retained locally",
+  "initial_strict_checks": {
+    "production_passes": 3,
+    "consumer_or_guard_failures": 3,
+    "original_manifest_sha256": "3b9c86b73e5bd644a12e910af30e0f99f461ca4ee70afd658e926a6c5c50ae35"
+  },
+  "later_milestones": [
+    "The corrected 39-declaration package passed native and strict checks.",
+    "A positive real outer-power bound added the 40th declaration; its raw audit passed.",
+    "All 40 permanent guards and raw queries passed at the final pre-provenance checkpoint.",
+    "Provenance comment blocks added 110 lines without changing proof or statement bytes; all final c9 checks pass."
+  ],
+  "attempts": [
+    {
+      "original_filename": "peps-tree-first.log",
+      "outcome": "failed native proof attempt",
+      "original_raw_sha256": "9b7818cbc4f4cae027c96a28eb5957a917d50d30ddaed97649fb402ea4e1aa13",
+      "sanitized_diagnostic_sha256": "fe9e5e49de7686eb11ef90114bc8ac1237885f9713f7b23716d49f8bc4662af6",
+      "normalization": "Retained diagnostic heading lines; omitted execution traces, full goal contexts and cumulative profiles; trimmed trailing whitespace."
+    },
+    {
+      "original_filename": "peps-tree-repair1.log",
+      "outcome": "failed native proof attempt",
+      "original_raw_sha256": "150448c7c49ebb0759a88b16b426c20fc272483aee2c504069a4ee8126794c7d",
+      "sanitized_diagnostic_sha256": "10c63b7a81a488b3525e72906bf27954ef891ed29bb475537188a6dbe00099fc",
+      "normalization": "Retained diagnostic heading lines; omitted execution traces, full goal contexts and cumulative profiles; trimmed trailing whitespace."
+    },
+    {
+      "original_filename": "peps-tree-repair2.log",
+      "outcome": "failed native proof attempt",
+      "original_raw_sha256": "559a1c568c10cddde7e1fc50823472498fd3017ed17bcb9c3e992851eb8698f3",
+      "sanitized_diagnostic_sha256": "aabb491dcb2f3ee06a6944eeb5bbe37829ffc167c95cbd89ab47ffa9d4f59872",
+      "normalization": "Retained diagnostic heading lines; omitted execution traces, full goal contexts and cumulative profiles; trimmed trailing whitespace."
+    },
+    {
+      "original_filename": "ExactTreeRepresentation-tree-strict-first.log",
+      "outcome": "failed initial consumer/guard check",
+      "original_raw_sha256": "f1f889d787fbfe20e68b7c8e977b7086e2bb1397cf85409e5588f403f5d3fc35",
+      "sanitized_diagnostic_sha256": "1d6b6a0fc525b843467c7f55f4544408e09a7789541cf4fe8e66719fc60bb5c1",
+      "normalization": "Retained diagnostic heading lines; omitted execution traces, full goal contexts and cumulative profiles; trimmed trailing whitespace."
+    },
+    {
+      "original_filename": "SquareLatticeConnectivity-tree-strict-first.log",
+      "outcome": "failed initial consumer/guard check",
+      "original_raw_sha256": "df810cfec60c47647d86fb59a95a35bc339b44269d2b6ae3ead364c1bfc35b42",
+      "sanitized_diagnostic_sha256": "f9dd7a44455183f1617e678eccf967610f64b1600e733952e3b4443ab4e779f2",
+      "normalization": "Retained diagnostic heading lines; omitted execution traces, full goal contexts and cumulative profiles; trimmed trailing whitespace."
+    },
+    {
+      "original_filename": "ExactTreeRepresentationAxioms-tree-strict-first.log",
+      "outcome": "failed initial consumer/guard check",
+      "original_raw_sha256": "8d337620d30abd904b2dcf1f9a95feab45780d08412f571ddb45eb1c060f5dac",
+      "sanitized_diagnostic_sha256": "72b216d7ac51d66bbf4df9bb277e432d5c79b061432355cfc22967a57fe4c092",
+      "normalization": "Retained diagnostic heading lines; omitted execution traces, full goal contexts and cumulative profiles; trimmed trailing whitespace."
+    }
+  ],
+  "diagnostic_log": "docs/provenance/evidence/8773/historical-failures.log",
+  "diagnostic_log_sha256": "1ae7df1554954ee09dcf36c097a802638be64b495d6ce0042602c822d26fea3b"
+}

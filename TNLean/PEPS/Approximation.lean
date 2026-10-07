@@ -9,3 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.ExactFiniteException
+import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
+import TNLean.PEPS.Approximation.ExactSquareRepresentation
+import TNLean.PEPS.Approximation.ExactTreeRepresentation
+import TNLean.PEPS.Approximation.SquareLatticeConnectivity

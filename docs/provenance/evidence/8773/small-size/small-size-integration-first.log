@@ -1,0 +1,16 @@
+⚠ [1152/1215] Ran qiclean:extraDep
+warning: building from source; failed to fetch GitHub release (run with '-v' for details)
+✔ [2775/2819] Built TNLean.Algebra.ListProduct (1.5s)
+✔ [2814/2819] Built QICLean.Algebra.KroneckerFactorPositivity (3.2s)
+✔ [2815/2819] Built TNLean.Algebra.FinKronecker (2.4s)
+✔ [2816/2819] Built TNLean.Circuit.ProductVector (2.1s)
+✔ [2817/2819] Built TNLean.Circuit.LocalCircuit (3.2s)
+✔ [2818/2819] Built TNLean.PEPS.Approximation.Basic (2.1s)
+⚠ [2819/2819] Built TNLean.PEPS.Approximation.ExactSmallSizeApproximation (2.1s)
+warning: TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean:45:4: `simp` already closes the goal
+
+Hint: Use `simp` instead of `simpa`:
+  [apply] simp [hv, hΩ]
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Build completed successfully (2819 jobs).

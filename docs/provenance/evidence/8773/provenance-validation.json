@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "verified_source_revision": "c9ded2f36083c837bc884ad9d7d475f9e81a514e",
+  "source_publication": {
+    "status": "local-only; upstream source commit and PR unavailable",
+    "upstream_source_revision": null,
+    "full_ci": "pending"
+  },
+  "ordinary_named_declarations": 40,
+  "generated_structure_projections": [
+    "TNLean.PEPS.ExactTreeRepresentation.Ports.active",
+    "TNLean.PEPS.ExactTreeRepresentation.Ports.edge"
+  ],
+  "private_helpers": 0,
+  "policy_revision": "a05ef8f8db19f28e987bf3ce599c5f284f96921f",
+  "policy_sha256": "09d4014860e4e8df855417587404c12e5fff4af318cf933588a1847c43e0773a",
+  "schema_sha256": "a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459",
+  "checks": [
+    "schema",
+    "exact source bytes",
+    "declaration and notice identity",
+    "log hashes",
+    "exact named raw axiom reports",
+    "all ordinary authored declarations mapped"
+  ],
+  "limits": [
+    "No upstream publication or full CI inferred from local validation.",
+    "No Lean command executed by this validator.",
+    "Generated structure projections are not invented as separately authored declarations."
+  ]
+}

@@ -1,0 +1,13 @@
+Local-source validation
+Revision: c9ded2f36083c837bc884ad9d7d475f9e81a514e
+Command: lake build TNLean.PEPS.Approximation
+Exit code: 0
+Wall seconds: not recorded; native per-module timings retained.
+Warnings: none in output.
+Output:
+
+✔ [1356/1539] Built TNLean.PEPS.Approximation.SquareLatticeConnectivity (1.7s)
+✔ [2470/2472] Built TNLean.PEPS.Approximation.ExactTreeRepresentation (2.5s)
+✔ [2471/2472] Built TNLean.PEPS.Approximation.ExactSquareRepresentation (2.3s)
+✔ [2472/2472] Built TNLean.PEPS.Approximation (2.0s)
+Build completed successfully (2472 jobs).

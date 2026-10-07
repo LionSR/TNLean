@@ -1,0 +1,81 @@
+Local-source validation
+Revision: c9ded2f36083c837bc884ad9d7d475f9e81a514e
+Command: lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean
+Exit code: 0
+Wall seconds: 2.9149010080000153
+Warnings: none; warnings were errors.
+Output:
+
+import took 1.8s
+'TNLean.PEPS.ExactTreeRepresentation.configurationEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.bondDim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.decode_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.decode_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.bondDim_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.bondDim_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.Ports' depends on axioms: [propext]
+'TNLean.PEPS.ExactTreeRepresentation.Ports.ofConnected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.localLabel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.IsConsistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.tensor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.localLabel_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.isConsistent_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.tensor_component_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.isConsistent_of_component_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.localLabel_eq_of_adj' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.localLabel_eq_of_consistent' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.eq_encode_of_consistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.tensor_product_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.stateCoeff_tensor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.stateCoeff_tensor_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.stateCoeff_tensor_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_tree_tensor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.singletonTensor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.stateCoeff_singletonTensor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_tensor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.stateCoeff_of_isEmpty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tree_tensor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_unit_square_tensor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_bounded' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_polynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.squareLatticeGraph_eq_boxProd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.squareLatticeGraph_preconnected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.squareLatticeGraph_connected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.squareLatticeGraph_connected_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.squareLatticeVertex_nontrivial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_outer_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+cumulative profiling times:
+	elaboration 1.65ms
+	import 1.8s
+	initialization 31.1ms
+	interpretation 595ms
+	linting 9.83ms
+	module linting 0.00172ms
+	overlappingInstancesLinter 6.99ms
+	parsing 0.695ms
+	tacticAnalysis 43ms

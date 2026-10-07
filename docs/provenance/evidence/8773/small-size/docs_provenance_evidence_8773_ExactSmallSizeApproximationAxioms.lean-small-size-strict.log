@@ -1,0 +1,14 @@
+import took 2.19s
+'TNLean.PEPS.Approximation.hasPEPSApproximation_of_small_size' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+cumulative profiling times:
+	elaboration 0.417ms
+	import 2.19s
+	initialization 27.7ms
+	interpretation 296ms
+	linting 19.4ms
+	module linting 0.0243ms
+	overlappingInstancesLinter 0.662ms
+	parsing 0.112ms
+	tacticAnalysis 5.54ms

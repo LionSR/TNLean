@@ -1,0 +1,20 @@
+{
+  "formatter_version": "3.24.7",
+  "formatter_sha256": "14a3f56807f9bdfa8b7b654bbfd054a59be79ddb959b57b691edcf39b2dc65e5",
+  "configuration": "blueprint/latexindent.yaml",
+  "configuration_sha256": "da363716e124f053b94d369c10930a7333da52a88366ea078c0b988decbd68b4",
+  "file": "blueprint/src/chapter/ch34_peps_exact_finite_exception.tex",
+  "formatted_sha256": "9f3a7f2e84bc353d7a9791c5b4d52915d0ed83942805288c794a8d652fea3547",
+  "command": [
+    "latexindent",
+    "-w",
+    "-s",
+    "-l",
+    "blueprint/latexindent.yaml",
+    "<temporary-copy-of-chapter>"
+  ],
+  "first_exit_code": 0,
+  "second_exit_code": 0,
+  "idempotent": true,
+  "scope": "Only the new chapter was formatted; no Lean or Lake command was run."
+}

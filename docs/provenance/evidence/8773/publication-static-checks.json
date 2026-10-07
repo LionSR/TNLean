@@ -1,0 +1,13 @@
+{
+  "source_hash_match": true,
+  "native40_provenance_validation": "passed; scan=False scopes validation to the retained 40-entry ledger",
+  "ordinary_authored_declarations": 45,
+  "blueprint_exact_declaration_coverage": 45,
+  "consumer_examples": 23,
+  "guarded_axiom_queries": 45,
+  "generated_import_check": "passed",
+  "whitespace_check": "passed",
+  "tactic_pattern_scan": "no repeated pattern at current thresholds",
+  "full_static_blueprint_check": "incomplete: QICLean dependency is not checked out in the publication worktree; 524 unresolved inherited references, zero in the three new leaves",
+  "Lean_or_Lake_executed_by_publication_worker": false
+}

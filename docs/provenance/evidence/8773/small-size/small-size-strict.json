@@ -1,0 +1,62 @@
+[
+  {
+    "file": "TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean",
+    "sha256": "1bee42ba2d3a98e58cadf1028d362984a1c7195eb163848d900fd721b61329a2",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 3.0855487209992134,
+    "log": "TNLean_PEPS_Approximation_ExactSmallSizeApproximation.lean-small-size-strict.log"
+  },
+  {
+    "file": "TNLeanTest/PEPS/Approximation/ExactSmallSizeApproximation.lean",
+    "sha256": "d06618821ef1ffc13f2fd9be65d46d111083f7219a6260ae41b1ceb070dedd8a",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLeanTest/PEPS/Approximation/ExactSmallSizeApproximation.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.8734774559998186,
+    "log": "TNLeanTest_PEPS_Approximation_ExactSmallSizeApproximation.lean-small-size-strict.log"
+  },
+  {
+    "file": "docs/provenance/evidence/8773/ExactSmallSizeApproximationAxioms.lean",
+    "sha256": "ad045c04a9c1b693131a884cc3fad0fc72eaa0f1acb5fe84950f478ff9e2b8b7",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "docs/provenance/evidence/8773/ExactSmallSizeApproximationAxioms.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 3.3635424070016597,
+    "log": "docs_provenance_evidence_8773_ExactSmallSizeApproximationAxioms.lean-small-size-strict.log"
+  }
+]

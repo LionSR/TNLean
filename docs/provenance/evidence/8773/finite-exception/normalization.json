@@ -1,0 +1,41 @@
+{
+  "checked_source_revision": "38ca555c8152093bfa06f066a84e5e98d4a02f3e",
+  "original_evidence_location": "Parent-owned local validation directory; originals retained unchanged.",
+  "artifacts": [
+    {
+      "original_artifact": "finite-exception-strict-first.json",
+      "retained_artifact": "docs/provenance/evidence/8773/finite-exception/finite-exception-strict-first.json",
+      "original_sha256": "d428847e1576f75c2f3b7ebcff956ea2b0b3dd2d06b39a389bd0db5e1ece4a59",
+      "retained_sha256": "5a484f80a2355ee56638cad4dfc57ec2349808030f29d17639cba71b9557c1c5",
+      "normalization": "Only each log field is shortened to its file basename; commands, hashes, times, and exit codes are unchanged."
+    },
+    {
+      "original_artifact": "finite-exception-first.log",
+      "retained_artifact": "docs/provenance/evidence/8773/finite-exception/finite-exception-first.log",
+      "original_sha256": "b45cfd2d6e2bbb95a74d942c9d9f2e8207fdd2db751fece793a966e5f8983fb3",
+      "retained_sha256": "b45cfd2d6e2bbb95a74d942c9d9f2e8207fdd2db751fece793a966e5f8983fb3",
+      "normalization": "Byte-identical; no executor-local path was present."
+    },
+    {
+      "original_artifact": "TNLean_PEPS_Approximation_ExactFiniteException.lean-finite-exception-strict-first.log",
+      "retained_artifact": "docs/provenance/evidence/8773/finite-exception/TNLean_PEPS_Approximation_ExactFiniteException.lean-finite-exception-strict-first.log",
+      "original_sha256": "5a5e9019f5779af5470ccd7f626fcfb18a769f6eab51846213a24013ce222a00",
+      "retained_sha256": "5a5e9019f5779af5470ccd7f626fcfb18a769f6eab51846213a24013ce222a00",
+      "normalization": "Byte-identical; no executor-local path was present."
+    },
+    {
+      "original_artifact": "TNLeanTest_PEPS_Approximation_ExactFiniteException.lean-finite-exception-strict-first.log",
+      "retained_artifact": "docs/provenance/evidence/8773/finite-exception/TNLeanTest_PEPS_Approximation_ExactFiniteException.lean-finite-exception-strict-first.log",
+      "original_sha256": "8c078929d6c6abd2369a2ff3cb7ab7b53b83c97175a05ca992dba7ff9d2fd26f",
+      "retained_sha256": "8c078929d6c6abd2369a2ff3cb7ab7b53b83c97175a05ca992dba7ff9d2fd26f",
+      "normalization": "Byte-identical; no executor-local path was present."
+    },
+    {
+      "original_artifact": "docs_provenance_evidence_8773_ExactFiniteExceptionAxioms.lean-finite-exception-strict-first.log",
+      "retained_artifact": "docs/provenance/evidence/8773/finite-exception/docs_provenance_evidence_8773_ExactFiniteExceptionAxioms.lean-finite-exception-strict-first.log",
+      "original_sha256": "7cc89c0958f86a1749cf3f0cdfee1eee7648ea7280109de7061acfc3eb743114",
+      "retained_sha256": "7cc89c0958f86a1749cf3f0cdfee1eee7648ea7280109de7061acfc3eb743114",
+      "normalization": "Byte-identical; no executor-local path was present."
+    }
+  ]
+}
