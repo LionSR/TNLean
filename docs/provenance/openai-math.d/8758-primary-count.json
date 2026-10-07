@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.primarypitchindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryPitchIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b1dc393c764962cbc0cfb4c1bbefd3519c04a967",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-build.log",
+            "sha256": "cb141f53c2671ee9c3efbbc7d4c4120087014bb677fa5bcccac1f56db89674c9"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-count-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-axioms.log",
+            "sha256": "9707040cc097434ddf36e51e5011d70416e4c8d668519bd478bc6528834ae742"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.mem_primarypitchindices_iff",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_primaryPitchIndices_iff",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b1dc393c764962cbc0cfb4c1bbefd3519c04a967",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-build.log",
+            "sha256": "cb141f53c2671ee9c3efbbc7d4c4120087014bb677fa5bcccac1f56db89674c9"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-count-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-axioms.log",
+            "sha256": "9707040cc097434ddf36e51e5011d70416e4c8d668519bd478bc6528834ae742"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_primarypitchindices_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +133,38 @@
         "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b1dc393c764962cbc0cfb4c1bbefd3519c04a967",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-build.log",
+            "sha256": "cb141f53c2671ee9c3efbbc7d4c4120087014bb677fa5bcccac1f56db89674c9"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-count-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-axioms.log",
+            "sha256": "9707040cc097434ddf36e51e5011d70416e4c8d668519bd478bc6528834ae742"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_primarypitchindices_boundary_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_boundary_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,7 +183,25 @@
         "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b1dc393c764962cbc0cfb4c1bbefd3519c04a967",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-build.log",
+            "sha256": "cb141f53c2671ee9c3efbbc7d4c4120087014bb677fa5bcccac1f56db89674c9"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-primary-count-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-primary-count-axioms.log",
+            "sha256": "9707040cc097434ddf36e51e5011d70416e4c8d668519bd478bc6528834ae742"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

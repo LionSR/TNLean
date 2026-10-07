@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 17:49 UTC.
+Last coordination check: October 7, 2026, 18:07 UTC.
 
 ## Verified mathematical contributions
 
@@ -11,23 +11,26 @@ Last coordination check: October 7, 2026, 17:49 UTC.
 | Uniform separation of dyadic scales | [#8846](https://github.com/LionSR/TNLean/pull/8846) | `4be0ad6b5e6bc2d1523ba02b8675377c05549da5` | `44615152fb68de9bc913f491231dd7325f3fdef4` |
 | Polynomial absorption and the numerical series bound | [#8848](https://github.com/LionSR/TNLean/pull/8848) | `5652d02446787ee2b9248db1057df48adbe32492` | `ed84770bf703478d69e4c8625d005c645d1a2529` |
 | Primary birth regions, rectangular fragments and adjacent meshes | [#8851](https://github.com/LionSR/TNLean/pull/8851) | `d469be1a0a7799f4613e64e8139893b0fa2ee11d` | `fd8bf12587482c1db66c8c626a9df57cc4db025f` |
+| Number of actual primary identifiers | Publication accompanies this record | `b1dc393c764962cbc0cfb4c1bbefd3519c04a967` | Evidence commit containing this record |
 
-All 44 exact imported declarations in these four contributions have passing
-canonical build and standard-axiom evidence. Their complete provenance
-validation passes 205 entries. The four new counting rows remain planned
-in the 209-entry continuation.
-The detailed commands, logs, hashes and scope are recorded in
+All 48 exact imported declarations in these five contributions have passing
+canonical build and standard-axiom evidence. Complete provenance validation
+passes 209 entries. The four counting rows alone were promoted in the latest
+contribution; all previous 205 records and their evidence remain unchanged.
+Commands, logs, hashes and mathematical scope are recorded in
 [fine belts](evidence/8758-fine-belts.md),
-[scale separation](evidence/8758-scale-separation.md), and
-[polynomial sums](evidence/8758-polynomial-budget.md), and
-[primary regions](evidence/8758-primary-regions.md).
+[scale separation](evidence/8758-scale-separation.md),
+[polynomial sums](evidence/8758-polynomial-budget.md),
+[primary regions](evidence/8758-primary-regions.md), and
+[primary counts](evidence/8758-primary-count.md).
 These proofs must not be rebuilt merely because work resumes.
 
-At the last coordination check, all three contributions passed their full Lean
-builds, compiled blueprint checks, rendering and module policies. The polynomial
-draft's failed timing job had no diagnostic log; its failed-only rerun passed.
-The fine-belt draft had two approvals on its exact published head. All three
-drafts remained open and unmerged. Refresh external statuses before acting.
+The first three drafts have passing full Lean builds, compiled blueprint
+checks, rendering and module policies. The polynomial draft's failed timing
+job had no diagnostic log; its failed-only rerun passed. The fine-belt draft
+had two approvals on its exact published head. The parent #8851's latest full
+CI and rendering remain in progress at the last read. Refresh external statuses
+before acting; all drafts remain open and no main-branch merge was performed.
 
 ## Ownership and remaining mathematics
 
@@ -35,90 +38,91 @@ The geometric continuation is claimed under
 [TNLean #8758](https://github.com/LionSR/TNLean/issues/8758).
 Template and boundary estimates, entropy improvement, finite scanner iteration,
 generic quantum-information results, and PEPS compression retain their existing
-owners. Consult the live claims before extending or changing those interfaces.
+owners. Consult live claims before extending or changing those interfaces.
 
-The current [primary-region claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042706326)
-is on `feat/area-law-primary-regions`, following #8848. Its source draft is
-[#8851](https://github.com/LionSR/TNLean/pull/8851). Its source contribution
-contains four definitions and thirteen theorems in `PrimaryRegions.lean`,
-`PrimaryFragments.lean` and `AdjacentScales.lean`. Direct elaboration with the
-package options and independent mathematical review passed. The canonical
-Geometry build passed in 11.746 seconds and the seventeen-name actual imported
-audit passed in 4.266 seconds, at exact source
-`d469be1a0a7799f4613e64e8139893b0fa2ee11d`. Only standard logical axioms occur.
-The formatting-only head `8f060ee701641816520b394d8de198d3271dbe44` preserves
-all Lean and audit bytes. The completed evidence is published at
-`fd8bf12587482c1db66c8c626a9df57cc4db025f`.
+The [primary-region claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042706326)
+is on `feat/area-law-primary-regions`, following #8848. Its source contains
+four definitions and thirteen theorems in `PrimaryRegions.lean`,
+`PrimaryFragments.lean` and `AdjacentScales.lean`. The canonical Geometry build
+passed in 11.746 seconds and the seventeen-name imported audit passed in
+4.266 seconds at the exact source recorded above. The formatting-only head
+`8f060ee701641816520b394d8de198d3271dbe44` preserves all Lean and audit bytes;
+completed evidence is published at `fd8bf12587482c1db66c8c626a9df57cc4db025f`.
 
-The local whole-library blueprint check failed at a missing pre-existing
+The parent local whole-library blueprint check failed at a missing pre-existing
 `TNLean.MPS.Examples.Fibonacci.olean` artifact. Its exact diagnostic is retained
-separately from the successful theorem checks. Full CI supplies the compiled
-whole-library blueprint check; inspect the current PR checks before claiming
-that it passed. The source formatting failure was corrected with the repository
-formatter and its idempotence verified.
+separately from the successful theorem checks. That unrelated whole-library
+check was not repeated for the counting contribution. Full CI supplies the
+compiled whole-library check; inspect current checks before claiming success.
 
-The construction closes the intersection of an actual layer with an open pitch
-interior. It gives the exact finite union of nonempty rectangular fragments,
-fragment count `(2^(p-k)+2)^2` for `k ≤ p`, fragment diameter at most `2^k`,
-whole-region diameter at most `2^p`, and same-layer separation at least `2^ℓ`.
-The adjacent fine exponent increases by zero or one, giving side ratio one or
-two. Empty layers and fragments are included. The closed-rectangle identity
-explicitly requires a nonempty actual intersection, exactly as enforced by the
-fragment index set. Half-open indexing cells are distinguished from open birth
-interiors at arbitrary real boundary points.
-
-The number of primary identifiers in an entire layer, contacts, isolated stars,
-descendant estimates, simultaneous repairs, separation from earlier birth
-regions, and the complete two-family partition remain open. The polynomial
-series bound does not count actual repairs. The faithful area-law and polynomial
-PEPS main theorems remain unproved.
+The primary construction closes the intersection of an actual layer with an
+open pitch interior. It gives the exact finite union of nonempty rectangular
+fragments, fragment count `(2^(p-k)+2)^2` for `k ≤ p`, fragment diameter at most
+`2^k`, whole-region diameter at most `2^p`, and same-layer separation at least
+`2^ℓ`. The adjacent fine exponent increases by zero or one, giving side ratio
+one or two. Empty layers and fragments are included. The rectangle identity
+requires a nonempty actual intersection, exactly as enforced by the fragment
+index set. Half-open indexing cells are distinguished from open birth interiors.
 
 The [whole-primary count](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6043238525)
-is now claimed on `feat/area-law-primary-count`, in the source-only preparation
-worktree. `PrimaryCounting.lean` now characterizes the actual nonempty pitch
-intersections at arbitrary scales and proves `|primaries| ≤ 4|layer cells|`
-for `k ≤ p`, then `|primaries| ≤ 32(2C₀+1)^2|boundary edges|`. Its four
-proofs passed direct elaboration with all package options in 4.035 seconds,
-without warnings, and independent mathematical review approved the precise
-source scope. Canonical compilation and the imported four-name audit are
-pending. The four new provenance rows remain planned. The next mathematical contribution is the actual nine-marks construction
-for belt cells and its count at most nine times the belt-cell count, from
-Section 11, lines 325–330. Confirm the live claims and publish its scope
-before implementation. The mixed-scale affine mesh, point separation and
-distance from nonincident axis or diagonal lines are subsequent prerequisites; full isolated-star geometry requires
-actual fan regions and merged identifiers, with its straight-ray conclusion
-proved rather than assumed.
+is on `feat/area-law-primary-count`. Its four declarations characterize the
+actual nonempty pitch intersections at arbitrary scales and prove
+`|primaries| ≤ 4|layer cells| ≤ 32(2C₀+1)^2|boundary edges|` for `k ≤ p`.
+The canonical Geometry build passed in 16.557 seconds and the imported
+four-name audit passed in 4.032 seconds at `b1dc393c764962cbc0cfb4c1bbefd3519c04a967`.
+Only `propext`, `Classical.choice` and `Quot.sound` occur. Independent review,
+package-option elaboration, blueprint source synchronization, prose checks,
+formatter idempotence and complete 209-entry provenance validation passed.
+
+The next [belt-mark claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6043892601)
+is on `feat/area-law-belt-marks`, with source-only preparation in
+`Geometry/BeltMarks.lean`. It constructs the center, corners and side midpoints
+as actual points, proves cell-closure membership and the exact nine-point
+count, then deduplicates the finite union over actual belt cells. The intended
+uniform bound is at most nine times the belt-cell count and hence at most
+`576(2C₀+1)^2|boundary edges|2^(-δ₀k/2)` for a selected sparse shift.
+Source: Section 11, lines 325–330 of the pinned manuscript. The proof author
+owns only the new Lean file; separate reviewers handle source and provenance.
+The root agent owns imports, blueprint, canonical verification and publication.
+
+Contacts, actual fans and merged identifiers, the minimum mark scale across
+layers, isolated stars, descendant estimates, simultaneous repairs, separation
+from earlier birth regions and the complete two-family partition remain open.
+Mixed-scale affine-mesh point separation and distance from nonincident axis
+or diagonal lines are the next independent prerequisites. The straight-ray
+conclusion must be proved on actual tile regions. Polynomial summability does
+not count actual repairs. Both source-faithful headline theorems remain unproved.
 
 ## Worktrees and evidence preservation
 
-- The warmed worktree `worktrees/area-law-peps-models` has completed the parent
-  check and is available for the counting branch. Its package pins and cache
-  are unchanged; the new counting target can reuse the parent Geometry artifacts.
-- `worktrees/area-law-source-preparation` holds `feat/area-law-primary-count`,
-  with the parent evidence merged. It has no Lake cache. Keep its source-only
-  preparation separate from the canonical build; move the checked branch to
-  the existing warmed worktree instead of seeding or rebuilding Mathlib.
-- The parent canonical driver has finished and released the shared lock. Its
-  build, axiom and failed blueprint logs are committed; do not repeat it.
-- The hot-main worktree remains with the coordinating owner. Do not reset or
-  interfere with an active peer worktree or change its dependency pins.
+- `worktrees/area-law-peps-models` holds `feat/area-law-primary-count`. Its
+  canonical counting driver has finished and released the shared lock. The
+  existing warmed cache and all package pins remain unchanged.
+- `worktrees/area-law-source-preparation` holds `feat/area-law-belt-marks`,
+  initially based on the frozen counting source. It has no `.lake` directory.
+  Merge the completed counting evidence before freezing the marks, then move
+  the branch to the existing warmed worktree for one targeted canonical check.
+- The prior canonical checks and logs must not be repeated. Never clear or
+  reseed this warmed cache merely to prepare another auxiliary contribution.
+- The hot-main worktree belongs to the coordinating owner. Do not reset an
+  active peer worktree, interrupt its build or change dependency pins.
 
-The next local action is to freeze the merged counting source, capture the
-immutable 205-entry parent baseline, then build only the changed Geometry target
-and import-audit its four declarations through the warmed worktree wrapper.
-Promote only the new four rows after the actual checks pass. The known missing
-whole-library cache artifact must not trigger a repeated local full build;
-compiled blueprint checking is supplied by the separate full CI.
+The next local action is to publish the completed four-row counting evidence
+and draft, then implement and independently review the actual belt marks.
+Freeze source before the targeted Geometry build and exact imported audit;
+promote only the new rows when actual checks pass. Complete compiled blueprint
+checking is supplied by full CI, preserving the known local artifact limitation.
 
 At the latest coordination check, the boundary comparisons were ready in
-[#8849](https://github.com/LionSR/TNLean/pull/8849), and the analytic owner was
-preparing separate quantum-information and entropy results. Their compressed
-selected-vector construction is disjoint from the geometry assignment.
-No model, entropy, scanner, QICLean, or PEPS-compression ownership is changed.
+[#8849](https://github.com/LionSR/TNLean/pull/8849); the analytic owner published
+separate entropy/radius arithmetic in [#8854](https://github.com/LionSR/TNLean/pull/8854)
+and quantum-information results in [QICLean #605](https://github.com/LionSR/QICLean/pull/605).
+Their compressed selected-vector construction is disjoint from the geometry.
+Template owners are testing current main `18a6dd4d` with QICLean `83fdc804`;
+this geometric branch preserves its own verified pins until coordinated
+integration. No model, entropy, scanner, QICLean or PEPS ownership is changed.
 
-The published
-[geometry handoff](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042318628)
-and
-[tracker handoff](https://github.com/LionSR/TNLean/issues/8733#issuecomment-6042338516)
-record the exact contribution boundaries. No main-branch merge or dependency-pin
+The earlier [geometry handoff](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042318628)
+and [tracker handoff](https://github.com/LionSR/TNLean/issues/8733#issuecomment-6042338516)
+record previous contribution boundaries. No main-branch merge or dependency-pin
 change was performed by this contribution.
