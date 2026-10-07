@@ -3446,6 +3446,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Four orientations of fine-cell endpoints — candidate (2026-10-07)
+
+- **Pattern:** Enumerate the four square sides, identify their endpoint coordinates,
+  and simplify the resulting scalar equalities.
+- **Seen:** `CellContacts.whole_endpoints`, `CellContacts.midpoint_endpoints`,
+  and `DummyCorners.whole_endpoints_mem_fullMesh` in two new geometry files.
+  The scoped scan also finds repeated whole-side and half-side rectangle
+  conversions within `CellContacts`.
+- **Abstraction:** A common endpoint-coordinate formula may replace the initial
+  orientation calculation; the rectangle and mesh conclusions would then
+  remain separate short corollaries.
+- **Notes:** The three conclusions and proof blocks differ. The repeated exact
+  conversions occur within one file and do not yet meet the promotion rule
+  across two files. Existing private normalization lemmas and the public
+  elementary-side endpoint lemmas are reused; no new tactic is warranted.
+
 ### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
 
 - **Pattern:** Choose one cell in the finite closed neighborhood union, then

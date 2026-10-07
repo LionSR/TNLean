@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadiccellside",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicCellSide",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines a whole side of the actual translated dyadic cell as the segment between its corresponding unsplit fan endpoints, for arbitrary origin, scale, integer cell index and side index.",
+        "Source: Section 11, lines 299\u2013306. The definition uses the existing actual fan orientation."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayer_cells_disjoint",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_cells_disjoint",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For actual fineLayerIndices members at k and h with (k,z) \u2260 (h,w), proves that their actual half-open fine cells are disjoint. No radius, late-layer, endpoint nonemptiness or belt hypothesis is imposed.",
+        "Source: Section 11, lines 173\u2013181 and 299\u2013306. Same-layer indexing and disjoint actual layers establish the two cases."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finelayer_closedcell_contact",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellContacts.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For C \u2265 2, reference k \u2265 50000000, actual fine-cell memberships at k and h, distinct indexed pairs and a closed-cell intersection containing two distinct points, proves opposite sides and three exact alternatives: equal fine exponents with a whole side of each cell, or exponents differing by one with a whole side of the smaller cell equal to a midpoint half of the larger side. No late-h, nonempty-Z, belt, actual-mask or label assumption is imposed.",
+        "Source: Section 11, lines 299\u2013306 and 352\u2013356. Actual disjointness, nearby-layer arithmetic and lattice offsets derive the alternatives. The larger-side halves use the all-midpoint fan; matching under the actual midpoint mask remains a separate composition."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_corner_on_side",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyCorners.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_side",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For C \u2265 2, k\u2080 \u2264 k, an actual fineLayerIndices member z and a contributing coarse dummy-cell index w in ambientDilation (occupiedCellIndices o k\u2080 Z) C, a corner of that actual coarse cell on a whole reference fine-cell side equals its start or end. No late-layer, nonempty-Z or distinct-cell assumption is imposed.",
+        "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. Dummy-contact localization forces k=k\u2080; coarse corners and whole-side endpoints belong to the full fine mesh, whose spacing excludes an interior third point."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_corner_on_elementaryside",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyCorners.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_elementarySide",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Under the same C \u2265 2, k\u2080 \u2264 k and two actual cell-membership assumptions, a contributing coarse dummy-cell corner on any elementary segment under an arbitrary optional midpoint mask equals that segment\u2019s start or end. No late-layer, nonempty-Z, distinct-cell or actual-mask assumption is imposed.",
+        "Source: Section 11, lines 160\u2013191, 200\u2013207 and 299\u2013310. The public elementary-side containment and endpoint cases compose the whole-side result for every optional midpoint subdivision."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finecell_assignment",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineCellPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For a nonempty finite endpoint set Z, C \u2265 2, arbitrary origin and lower index k\u2080, every point outside the actual initial neighborhood has a unique pair (k,z), with k\u2080 \u2264 k, actual fineLayerIndices membership and membership in its actual half-open fine cell. No late threshold, closure or template premise is imposed.",
+        "Source: Section 11, prop:two-families, lines 154\u2013181 and 200\u2013207. The proof reuses unique layer assignment, exact fine-cell union and the signed floor index."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finecell_plane_cover",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FineCellPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For a nonempty finite endpoint set Z and C \u2265 2, the actual initial neighborhood and the union of all actually indexed half-open fine cells at or above k\u2080 equal the full plane. Origin and lower index are arbitrary; no late threshold or covering certificate is assumed.",
+        "Source: Section 11, prop:two-families, lines 154\u2013181 and 200\u2013207. The proof uses the independently established unique fine-cell assignment."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

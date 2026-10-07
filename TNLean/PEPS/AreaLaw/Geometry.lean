@@ -10,10 +10,12 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
+import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DummyContacts
+import TNLean.PEPS.AreaLaw.Geometry.DummyCorners
 import TNLean.PEPS.AreaLaw.Geometry.DyadicClosure
 import TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion
 import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
@@ -22,6 +24,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
+import TNLean.PEPS.AreaLaw.Geometry.FineCellPartition
 import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
