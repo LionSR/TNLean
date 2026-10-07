@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.g0",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -34,20 +34,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.mu",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.mu",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -67,20 +85,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.nu",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.nu",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -100,20 +136,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.ell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.ell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -133,20 +187,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.kappa",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.kappa",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -166,20 +238,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.parameter_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -199,20 +289,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.density_exponents",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.density_exponents",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -232,20 +340,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.energy_exponents",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.energy_exponents",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -265,20 +391,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.bootstrapparameters.comparison_exponents",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.comparison_exponents",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -298,20 +442,38 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8756-tnlean.peps.arealaw.scan.exists_uniform_boxerror_bound_of_eventual_improvement",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -331,7 +493,25 @@
         "Proves the fixed scalar exponent inequalities or the conditional finite iteration; the analytic one-step entropy improvement remains unproved."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "c8dda1255e76316961e66d98b795a078ab9468b1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-ci-build.log",
+            "sha256": "42814b37162e7acb795f809e4e25be4b6000e244bf19bab3d0652ed1630e4b0c"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8756-bootstrap-axioms.log",
+            "sha256": "3341b5dd0ac873277ca57ea19ca4d9ac0661242c24698a00bb5b79eb2ce10f25"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

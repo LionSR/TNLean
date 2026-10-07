@@ -1,0 +1,59 @@
+Disposable Lean compilation and imported-declaration axiom audit; not a local Lake build.
+Source revision: c8dda1255e76316961e66d98b795a078ab9468b1
+Primary Lean pin: leanprover/lean4:v4.35.0-rc3
+Primary Mathlib revision: c55e6e786f49471c72fbddbec5415808896aec1e
+Primary toolchain and Mathlib manifest pins match the committed source.
+Primary Mathlib checkout is clean; imported Mathlib dependency pins match.
+Only committed source bytes are exported; all generated artifacts stay under /private/tmp/tnlean-8756-imported-audit-nurds6qy.
+Weak package linter default is supplied explicitly as -Dlinter.mathlibStandardSet=true.
+Started: 2026-10-07T15:07:34.859406+00:00
+Working directory: /private/tmp/tnlean-8756-imported-audit-nurds6qy/source
+LEAN_PATH=/private/tmp/tnlean-8756-imported-audit-nurds6qy/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean
+Source SHA256 1240ad4d494b3b534fc1b1a717267a7606ae8a7644aa411fbe5505b243300f71 TNLean/PEPS/AreaLaw/Geometry/Exponents.lean
+Source SHA256 b6b280ad5ab17aa1a0e207475dd7ec93c8275da04ba400aa1b0fe78e2cec832b TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean
+Source SHA256 61d70a523d5419a85f790c245045666a43437b729e773b6389a154dfe487074b TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean
+Source SHA256 b9983afcbbc48fbde5beeba13bfcb2fda19651542f74f07825f7d0bc601c2d8f docs/provenance/evidence/8756-bootstrap-axioms.lean
+
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -o /private/tmp/tnlean-8756-imported-audit-nurds6qy/lean/TNLean/PEPS/AreaLaw/Geometry/Exponents.olean TNLean/PEPS/AreaLaw/Geometry/Exponents.lean
+Elapsed seconds: 24.460
+Exit code: 0
+
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -o /private/tmp/tnlean-8756-imported-audit-nurds6qy/lean/TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.olean TNLean/PEPS/AreaLaw/Scan/BootstrapParameters.lean
+Elapsed seconds: 16.081
+Exit code: 0
+
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -o /private/tmp/tnlean-8756-imported-audit-nurds6qy/lean/TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.olean TNLean/PEPS/AreaLaw/Scan/ExponentBootstrap.lean
+Elapsed seconds: 22.139
+Exit code: 0
+
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 docs/provenance/evidence/8756-bootstrap-axioms.lean
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0' depends on axioms: [propext, Classical.choice, Quot.sound]
+docs/provenance/evidence/8756-bootstrap-axioms.lean:3:0: warning: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string (`/-! ... -/`) before `#print axioms TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0`.
+
+Hint: Type `m(odule docstring) + [tab]` to insert a template via snippet.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.mu' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.nu' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.ell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.kappa' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.density_exponents' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.energy_exponents' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.comparison_exponents' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Elapsed seconds: 23.267
+Exit code: 0
+
+Total elapsed seconds: 86.444

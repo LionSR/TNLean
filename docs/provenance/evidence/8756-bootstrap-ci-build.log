@@ -1,0 +1,847 @@
+Evidence: complete selected GitHub Actions step output.
+CI job: https://github.com/LionSR/TNLean/actions/runs/37639834213/job/112855574904
+Job head revision: c8dda1255e76316961e66d98b795a078ab9468b1
+Checked-out merge revision: 71c40dacdf706b87df3c8b5cca405ea99e3aa251
+Identical Git tree for both revisions: 59f8297d04461fcda2f0aa8c38a0ba7b6021d1aa
+Job conclusion: success
+Raw job-log SHA256: da02c7576b52b0013441563e0b226b61bbd54ad0c856aba105d0f241547c72aa
+ANSI-stripped job-log SHA256: 36519ea952ee91df6a5601ef543faeacebf69cc24c53e753e9f1a46d6bf6a6e9
+Formatting: ANSI escapes and trailing whitespace removed; complete selected steps retained.
+CI step: Build Lean project and capture timings
+CI step conclusion: success
+Relevant command: lake build
+
+2026-10-07T14:52:18.3093606Z ##[group]Run set -eo pipefail
+2026-10-07T14:52:18.3093963Z set -eo pipefail
+2026-10-07T14:52:18.3094280Z # Check the String Order capstones before unrelated library targets.
+2026-10-07T14:52:18.3094688Z lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder \
+2026-10-07T14:52:18.3095040Z   TNLean.MPS.Examples.StringOrderScalarPhase \
+2026-10-07T14:52:18.3095340Z   2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+2026-10-07T14:52:18.3095577Z {
+2026-10-07T14:52:18.3095741Z   lake build
+2026-10-07T14:52:18.3095928Z   lake build lint_style
+2026-10-07T14:52:18.3096178Z } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+2026-10-07T14:52:18.3149718Z shell: /usr/bin/bash -e {0}
+2026-10-07T14:52:18.3149955Z env:
+2026-10-07T14:52:18.3150398Z   BUILD_CACHE_PATHS: .lake/build
+.lake/packages/Gametheory/.lake/build
+.lake/packages/checkdecls/.lake/build
+.lake/packages/qiclean/.lake/build
+
+2026-10-07T14:52:18.3151113Z ##[endgroup]
+2026-10-07T14:52:21.8386622Z ℹ [9137/9176] Replayed Gametheory.Scarf
+2026-10-07T14:52:21.8387123Z info: Gametheory/Scarf.lean:241:33: Try this:
+2026-10-07T14:52:21.8387475Z   [apply] rwa [h1.2] at hd
+2026-10-07T14:52:21.8387643Z
+2026-10-07T14:52:21.8387989Z Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`
+2026-10-07T14:52:21.8388573Z info: Gametheory/Scarf.lean:246:33: Try this:
+2026-10-07T14:52:21.8388919Z   [apply] rwa [h1.2] at hd
+2026-10-07T14:52:21.8389094Z
+2026-10-07T14:52:21.8389408Z Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`
+2026-10-07T14:52:21.8390333Z ⚠ [9138/9176] Replayed Gametheory.Brouwer
+2026-10-07T14:52:21.8391103Z warning: Gametheory/Brouwer.lean:39:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8391455Z
+2026-10-07T14:52:21.8391563Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8391975Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8392273Z instead of
+2026-10-07T14:52:21.8392629Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8393128Z warning: Gametheory/Brouwer.lean:49:45: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8393444Z
+2026-10-07T14:52:21.8393554Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8393923Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8394201Z instead of
+2026-10-07T14:52:21.8394545Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8395028Z warning: Gametheory/Brouwer.lean:370:14: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8395329Z
+2026-10-07T14:52:21.8395432Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8395788Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8396056Z instead of
+2026-10-07T14:52:21.8396365Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8396827Z warning: Gametheory/Brouwer.lean:370:37: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8397118Z
+2026-10-07T14:52:21.8397219Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8397559Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8397822Z instead of
+2026-10-07T14:52:21.8398153Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8398615Z warning: Gametheory/Brouwer.lean:374:33: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8398912Z
+2026-10-07T14:52:21.8399224Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8399568Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8399839Z instead of
+2026-10-07T14:52:21.8400152Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8400616Z warning: Gametheory/Brouwer.lean:374:33: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8401109Z
+2026-10-07T14:52:21.8401211Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8401553Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8401829Z instead of
+2026-10-07T14:52:21.8402129Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8402587Z warning: Gametheory/Brouwer.lean:391:42: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8402873Z
+2026-10-07T14:52:21.8402982Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8403309Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8403571Z instead of
+2026-10-07T14:52:21.8403870Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8404318Z warning: Gametheory/Brouwer.lean:391:42: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8404612Z
+2026-10-07T14:52:21.8404703Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8405032Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8405424Z instead of
+2026-10-07T14:52:21.8405730Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8406182Z warning: Gametheory/Brouwer.lean:403:32: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8406475Z
+2026-10-07T14:52:21.8406588Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8406921Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8407186Z instead of
+2026-10-07T14:52:21.8407481Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8407934Z warning: Gametheory/Brouwer.lean:506:40: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8408218Z
+2026-10-07T14:52:21.8408315Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8408639Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8408913Z instead of
+2026-10-07T14:52:21.8409203Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8409651Z warning: Gametheory/Brouwer.lean:506:63: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8409951Z
+2026-10-07T14:52:21.8410042Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8410367Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8410728Z instead of
+2026-10-07T14:52:21.8411022Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8411468Z warning: Gametheory/Brouwer.lean:507:65: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8411811Z
+2026-10-07T14:52:21.8411906Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8412235Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8412510Z instead of
+2026-10-07T14:52:21.8412801Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8413412Z warning: Gametheory/Brouwer.lean:525:38: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8413717Z
+2026-10-07T14:52:21.8413816Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8414144Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8414413Z instead of
+2026-10-07T14:52:21.8414715Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8415177Z warning: Gametheory/Brouwer.lean:548:23: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8415462Z
+2026-10-07T14:52:21.8415557Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8415886Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8416143Z instead of
+2026-10-07T14:52:21.8416440Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8416896Z warning: Gametheory/Brouwer.lean:549:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8417186Z
+2026-10-07T14:52:21.8417276Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8417602Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8417857Z instead of
+2026-10-07T14:52:21.8418148Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8418616Z warning: Gametheory/Brouwer.lean:551:55: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8418916Z
+2026-10-07T14:52:21.8419020Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8419474Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8419752Z instead of
+2026-10-07T14:52:21.8420066Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8420546Z warning: Gametheory/Brouwer.lean:552:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8420943Z
+2026-10-07T14:52:21.8421045Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8421388Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8421653Z instead of
+2026-10-07T14:52:21.8421964Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8422422Z warning: Gametheory/Brouwer.lean:566:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8422719Z
+2026-10-07T14:52:21.8422814Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8423167Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8423434Z instead of
+2026-10-07T14:52:21.8423733Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8424195Z warning: Gametheory/Brouwer.lean:566:57: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8424496Z
+2026-10-07T14:52:21.8424599Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8424934Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8425204Z instead of
+2026-10-07T14:52:21.8425504Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8425960Z warning: Gametheory/Brouwer.lean:626:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8426248Z
+2026-10-07T14:52:21.8426359Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8426683Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8426943Z instead of
+2026-10-07T14:52:21.8427240Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8427801Z warning: Gametheory/Brouwer.lean:626:57: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8428101Z
+2026-10-07T14:52:21.8428197Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8428535Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8428795Z instead of
+2026-10-07T14:52:21.8429088Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8429535Z warning: Gametheory/Brouwer.lean:631:87: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8429947Z
+2026-10-07T14:52:21.8430047Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8430387Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8430750Z instead of
+2026-10-07T14:52:21.8431054Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8431533Z warning: Gametheory/Brouwer.lean:685:122: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8431845Z
+2026-10-07T14:52:21.8431952Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8432299Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8432575Z instead of
+2026-10-07T14:52:21.8432889Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8433365Z warning: Gametheory/Brouwer.lean:686:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8433676Z
+2026-10-07T14:52:21.8433771Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8434104Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8434366Z instead of
+2026-10-07T14:52:21.8434671Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8435123Z warning: Gametheory/Brouwer.lean:705:65: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8435416Z
+2026-10-07T14:52:21.8435511Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8435851Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8436123Z instead of
+2026-10-07T14:52:21.8436425Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8436898Z warning: Gametheory/Brouwer.lean:706:53: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8437206Z
+2026-10-07T14:52:21.8437306Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8437639Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8437912Z instead of
+2026-10-07T14:52:21.8438222Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8438675Z warning: Gametheory/Brouwer.lean:713:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8438966Z
+2026-10-07T14:52:21.8439060Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8439391Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8439659Z instead of
+2026-10-07T14:52:21.8439958Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8440411Z warning: Gametheory/Brouwer.lean:717:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8440790Z
+2026-10-07T14:52:21.8440890Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8441216Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8441476Z instead of
+2026-10-07T14:52:21.8441887Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8442348Z warning: Gametheory/Brouwer.lean:732:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8442635Z
+2026-10-07T14:52:21.8442731Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8443058Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8443349Z instead of
+2026-10-07T14:52:21.8443648Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8444102Z warning: Gametheory/Brouwer.lean:740:81: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8444506Z
+2026-10-07T14:52:21.8444600Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8459487Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8460204Z instead of
+2026-10-07T14:52:21.8461019Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8461821Z warning: Gametheory/Brouwer.lean:742:81: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8462321Z
+2026-10-07T14:52:21.8462485Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8463063Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8463533Z instead of
+2026-10-07T14:52:21.8464061Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8465724Z warning: Gametheory/Brouwer.lean:743:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8466226Z
+2026-10-07T14:52:21.8466380Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8466945Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8467374Z instead of
+2026-10-07T14:52:21.8467894Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8468643Z warning: Gametheory/Brouwer.lean:746:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8469135Z
+2026-10-07T14:52:21.8469290Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8469867Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8470294Z instead of
+2026-10-07T14:52:21.8470977Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8471936Z ⚠ [9139/9176] Replayed Gametheory.Brouwer_product
+2026-10-07T14:52:21.8472629Z warning: Gametheory/Brouwer_product.lean:15:21: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8473182Z
+2026-10-07T14:52:21.8473339Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8474151Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8474605Z instead of
+2026-10-07T14:52:21.8475128Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8475947Z warning: Gametheory/Brouwer_product.lean:18:37: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8476489Z
+2026-10-07T14:52:21.8476645Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8477227Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8477645Z instead of
+2026-10-07T14:52:21.8478199Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8483270Z warning: Gametheory/Brouwer_product.lean:48:12: `WellFounded.min_le` has been deprecated: Use `WellFoundedLT.min_le` instead
+2026-10-07T14:52:21.8483820Z
+2026-10-07T14:52:21.8484298Z Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.min_le` to `WellFoundedLT.min_le x`).
+2026-10-07T14:52:21.8484694Z
+2026-10-07T14:52:21.8484786Z Hint: Replace the deprecated name:
+2026-10-07T14:52:21.8485120Z   WellFoundedL̲T̲.min_le
+2026-10-07T14:52:21.8485521Z warning: Gametheory/Brouwer_product.lean:224:8: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8485860Z
+2026-10-07T14:52:21.8485970Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8486333Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8486607Z instead of
+2026-10-07T14:52:21.8487120Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8508359Z warning: Gametheory/Brouwer_product.lean:220:17: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8508733Z
+2026-10-07T14:52:21.8508851Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8509228Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8509500Z instead of
+2026-10-07T14:52:21.8509813Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8510311Z warning: Gametheory/Brouwer_product.lean:229:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8510800Z
+2026-10-07T14:52:21.8510899Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8511248Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8511530Z instead of
+2026-10-07T14:52:21.8511837Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8512334Z warning: Gametheory/Brouwer_product.lean:253:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8512655Z
+2026-10-07T14:52:21.8512759Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8513085Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8513345Z instead of
+2026-10-07T14:52:21.8513638Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8514112Z warning: Gametheory/Brouwer_product.lean:375:8: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8514428Z
+2026-10-07T14:52:21.8514517Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8514840Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8515109Z instead of
+2026-10-07T14:52:21.8515399Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8515872Z warning: Gametheory/Brouwer_product.lean:362:17: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8516369Z
+2026-10-07T14:52:21.8516474Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8516808Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8517071Z instead of
+2026-10-07T14:52:21.8517369Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8517864Z warning: Gametheory/Brouwer_product.lean:382:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:21.8518177Z
+2026-10-07T14:52:21.8518276Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8518615Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:21.8518878Z instead of
+2026-10-07T14:52:21.8519180Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:21.8519574Z ⚠ [9140/9176] Replayed QICLean.Topology.BrouwerProduct
+2026-10-07T14:52:21.8520150Z warning: QICLean/Topology/BrouwerProduct.lean:33:36: `stdSimplexHomeomorphUnitInterval` has been deprecated: Use `Convexity.StdSimplex.homeomorphI` instead
+2026-10-07T14:52:21.8520593Z
+2026-10-07T14:52:21.8520873Z Note: The updated constant has a different type:
+2026-10-07T14:52:21.8521198Z   Convexity.StdSimplex ℝ (Fin 2) ≃ₜ ↑unitInterval
+2026-10-07T14:52:21.8521428Z instead of
+2026-10-07T14:52:21.8521703Z   ↑(stdSimplex ℝ (Fin 2)) ≃ₜ ↑unitInterval
+2026-10-07T14:52:22.0522709Z Build completed successfully (9176 jobs).
+2026-10-07T14:52:26.1424758Z ⚠ [9202/9276] Replayed TNLean.Algebra.SingletMatrix
+2026-10-07T14:52:26.1425362Z warning: TNLean/Algebra/SingletMatrix.lean:6:0: 'Mathlib.Data.Complex.Basic' has been deprecated: please replace this import by
+2026-10-07T14:52:26.1426022Z
+2026-10-07T14:52:26.1426117Z import Mathlib.Basic.Complex.Basic
+2026-10-07T14:52:26.1426468Z ⚠ [9210/9276] Replayed TNLean.Algebra.SymplecticOrthogonalFour
+2026-10-07T14:52:26.1427032Z warning: TNLean/Algebra/SymplecticOrthogonalFour.lean:6:0: 'Mathlib.Data.Complex.Basic' has been deprecated: please replace this import by
+2026-10-07T14:52:26.1427433Z
+2026-10-07T14:52:26.1427522Z import Mathlib.Basic.Complex.Basic
+2026-10-07T14:52:26.4428953Z ℹ [9274/9365] Replayed Gametheory.Scarf
+2026-10-07T14:52:26.4429422Z info: Gametheory/Scarf.lean:241:33: Try this:
+2026-10-07T14:52:26.4429800Z   [apply] rwa [h1.2] at hd
+2026-10-07T14:52:26.4429958Z
+2026-10-07T14:52:26.4430185Z Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`
+2026-10-07T14:52:26.4430583Z info: Gametheory/Scarf.lean:246:33: Try this:
+2026-10-07T14:52:26.4430983Z   [apply] rwa [h1.2] at hd
+2026-10-07T14:52:26.4431149Z
+2026-10-07T14:52:26.4431362Z Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`
+2026-10-07T14:52:26.4431775Z ⚠ [9275/9365] Replayed Gametheory.Brouwer
+2026-10-07T14:52:26.4432179Z warning: Gametheory/Brouwer.lean:39:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4432485Z
+2026-10-07T14:52:26.4432594Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4432973Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4433268Z instead of
+2026-10-07T14:52:26.4433622Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4434131Z warning: Gametheory/Brouwer.lean:49:45: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4434430Z
+2026-10-07T14:52:26.4434537Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4434906Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4435182Z instead of
+2026-10-07T14:52:26.4435514Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4436194Z warning: Gametheory/Brouwer.lean:370:14: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4436509Z
+2026-10-07T14:52:26.4436607Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4436954Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4437221Z instead of
+2026-10-07T14:52:26.4437527Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4437988Z warning: Gametheory/Brouwer.lean:370:37: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4438291Z
+2026-10-07T14:52:26.4438390Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4438730Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4438993Z instead of
+2026-10-07T14:52:26.4439291Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4439757Z warning: Gametheory/Brouwer.lean:374:33: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4440047Z
+2026-10-07T14:52:26.4440145Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4440494Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4440885Z instead of
+2026-10-07T14:52:26.4441200Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4441670Z warning: Gametheory/Brouwer.lean:374:33: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4441973Z
+2026-10-07T14:52:26.4442071Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4442561Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4442831Z instead of
+2026-10-07T14:52:26.4443131Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4443635Z warning: Gametheory/Brouwer.lean:391:42: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4443935Z
+2026-10-07T14:52:26.4444035Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4444373Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4444642Z instead of
+2026-10-07T14:52:26.4444944Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4445396Z warning: Gametheory/Brouwer.lean:391:42: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4445691Z
+2026-10-07T14:52:26.4445803Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4446132Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4446395Z instead of
+2026-10-07T14:52:26.4446690Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4447154Z warning: Gametheory/Brouwer.lean:403:32: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4447441Z
+2026-10-07T14:52:26.4447540Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4447868Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4448129Z instead of
+2026-10-07T14:52:26.4448426Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4448872Z warning: Gametheory/Brouwer.lean:506:40: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4449174Z
+2026-10-07T14:52:26.4449265Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4449592Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4449851Z instead of
+2026-10-07T14:52:26.4450142Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4450779Z warning: Gametheory/Brouwer.lean:506:63: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4451094Z
+2026-10-07T14:52:26.4451197Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4451539Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4451808Z instead of
+2026-10-07T14:52:26.4452112Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4452580Z warning: Gametheory/Brouwer.lean:507:65: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4453009Z
+2026-10-07T14:52:26.4453111Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4453452Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4453717Z instead of
+2026-10-07T14:52:26.4454034Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4454497Z warning: Gametheory/Brouwer.lean:525:38: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4454795Z
+2026-10-07T14:52:26.4454888Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4455222Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4455484Z instead of
+2026-10-07T14:52:26.4455783Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4456234Z warning: Gametheory/Brouwer.lean:548:23: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4456535Z
+2026-10-07T14:52:26.4456631Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4456956Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4457216Z instead of
+2026-10-07T14:52:26.4457525Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4458019Z warning: Gametheory/Brouwer.lean:549:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4458316Z
+2026-10-07T14:52:26.4458422Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4458780Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4459049Z instead of
+2026-10-07T14:52:26.4459348Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4459799Z warning: Gametheory/Brouwer.lean:551:55: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4460105Z
+2026-10-07T14:52:26.4460200Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4460525Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4460872Z instead of
+2026-10-07T14:52:26.4461177Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4461629Z warning: Gametheory/Brouwer.lean:552:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4461914Z
+2026-10-07T14:52:26.4462009Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4462331Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4462594Z instead of
+2026-10-07T14:52:26.4462884Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4463342Z warning: Gametheory/Brouwer.lean:566:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4463654Z
+2026-10-07T14:52:26.4463750Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4464098Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4464367Z instead of
+2026-10-07T14:52:26.4464778Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4465242Z warning: Gametheory/Brouwer.lean:566:57: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4465538Z
+2026-10-07T14:52:26.4465639Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4465983Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4466250Z instead of
+2026-10-07T14:52:26.4466549Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4467156Z warning: Gametheory/Brouwer.lean:626:34: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4467447Z
+2026-10-07T14:52:26.4467547Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4467875Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4468142Z instead of
+2026-10-07T14:52:26.4468453Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4468899Z warning: Gametheory/Brouwer.lean:626:57: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4469191Z
+2026-10-07T14:52:26.4469281Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4469608Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4469873Z instead of
+2026-10-07T14:52:26.4470174Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4470757Z warning: Gametheory/Brouwer.lean:631:87: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4471067Z
+2026-10-07T14:52:26.4471168Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4471511Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4471788Z instead of
+2026-10-07T14:52:26.4472100Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4472566Z warning: Gametheory/Brouwer.lean:685:122: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4472864Z
+2026-10-07T14:52:26.4472962Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4473288Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4473550Z instead of
+2026-10-07T14:52:26.4473843Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4474302Z warning: Gametheory/Brouwer.lean:686:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4474593Z
+2026-10-07T14:52:26.4474683Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4475120Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4475386Z instead of
+2026-10-07T14:52:26.4475691Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4476155Z warning: Gametheory/Brouwer.lean:705:65: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4476453Z
+2026-10-07T14:52:26.4476550Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4476881Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4477138Z instead of
+2026-10-07T14:52:26.4477438Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4480006Z warning: Gametheory/Brouwer.lean:706:53: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4480317Z
+2026-10-07T14:52:26.4480419Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4480997Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4481380Z instead of
+2026-10-07T14:52:26.4481819Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4482316Z warning: Gametheory/Brouwer.lean:713:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4482628Z
+2026-10-07T14:52:26.4482727Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4483085Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4483359Z instead of
+2026-10-07T14:52:26.4483672Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4484300Z warning: Gametheory/Brouwer.lean:717:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4484595Z
+2026-10-07T14:52:26.4484693Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4485035Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4485300Z instead of
+2026-10-07T14:52:26.4485602Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4486054Z warning: Gametheory/Brouwer.lean:732:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4486346Z
+2026-10-07T14:52:26.4486438Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4486763Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4487025Z instead of
+2026-10-07T14:52:26.4487328Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4487776Z warning: Gametheory/Brouwer.lean:740:81: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4488069Z
+2026-10-07T14:52:26.4488163Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4488494Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4488754Z instead of
+2026-10-07T14:52:26.4489042Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4489491Z warning: Gametheory/Brouwer.lean:742:81: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4489776Z
+2026-10-07T14:52:26.4489872Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4490195Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4490453Z instead of
+2026-10-07T14:52:26.4490870Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4491319Z warning: Gametheory/Brouwer.lean:743:46: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4491609Z
+2026-10-07T14:52:26.4491829Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4492159Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4492422Z instead of
+2026-10-07T14:52:26.4492711Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.4493155Z warning: Gametheory/Brouwer.lean:746:83: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.4493444Z
+2026-10-07T14:52:26.4493538Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.4493863Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.4494136Z instead of
+2026-10-07T14:52:26.4494434Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5431152Z ⚠ [9320/9383] Replayed Gametheory.Brouwer_product
+2026-10-07T14:52:26.5431981Z warning: Gametheory/Brouwer_product.lean:15:21: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5432521Z
+2026-10-07T14:52:26.5432678Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5433267Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5433653Z instead of
+2026-10-07T14:52:26.5434003Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5434514Z warning: Gametheory/Brouwer_product.lean:18:37: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5434839Z
+2026-10-07T14:52:26.5434944Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5435545Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5435834Z instead of
+2026-10-07T14:52:26.5436165Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5436714Z warning: Gametheory/Brouwer_product.lean:48:12: `WellFounded.min_le` has been deprecated: Use `WellFoundedLT.min_le` instead
+2026-10-07T14:52:26.5437051Z
+2026-10-07T14:52:26.5437370Z Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.min_le` to `WellFoundedLT.min_le x`).
+2026-10-07T14:52:26.5437747Z
+2026-10-07T14:52:26.5437833Z Hint: Replace the deprecated name:
+2026-10-07T14:52:26.5438215Z   WellFoundedL̲T̲.min_le
+2026-10-07T14:52:26.5438608Z warning: Gametheory/Brouwer_product.lean:224:8: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5438935Z
+2026-10-07T14:52:26.5439037Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5439408Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5439686Z instead of
+2026-10-07T14:52:26.5440014Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5440520Z warning: Gametheory/Brouwer_product.lean:220:17: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5440960Z
+2026-10-07T14:52:26.5441063Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5441406Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5441673Z instead of
+2026-10-07T14:52:26.5441977Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5442452Z warning: Gametheory/Brouwer_product.lean:229:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5442760Z
+2026-10-07T14:52:26.5442871Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5443195Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5443456Z instead of
+2026-10-07T14:52:26.5443762Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5444409Z warning: Gametheory/Brouwer_product.lean:253:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5444733Z
+2026-10-07T14:52:26.5444831Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5445189Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5445460Z instead of
+2026-10-07T14:52:26.5445775Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5446281Z warning: Gametheory/Brouwer_product.lean:375:8: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5446742Z
+2026-10-07T14:52:26.5446847Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5447201Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5447471Z instead of
+2026-10-07T14:52:26.5447780Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5448283Z warning: Gametheory/Brouwer_product.lean:362:17: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5448601Z
+2026-10-07T14:52:26.5448702Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5449040Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5449309Z instead of
+2026-10-07T14:52:26.5449623Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5450113Z warning: Gametheory/Brouwer_product.lean:382:15: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:26.5450440Z
+2026-10-07T14:52:26.5450543Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5450993Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:26.5451268Z instead of
+2026-10-07T14:52:26.5451599Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:26.5452007Z ⚠ [9321/9383] Replayed QICLean.Topology.BrouwerProduct
+2026-10-07T14:52:26.5452571Z warning: QICLean/Topology/BrouwerProduct.lean:33:36: `stdSimplexHomeomorphUnitInterval` has been deprecated: Use `Convexity.StdSimplex.homeomorphI` instead
+2026-10-07T14:52:26.5453014Z
+2026-10-07T14:52:26.5453119Z Note: The updated constant has a different type:
+2026-10-07T14:52:26.5453427Z   Convexity.StdSimplex ℝ (Fin 2) ≃ₜ ↑unitInterval
+2026-10-07T14:52:26.5453660Z instead of
+2026-10-07T14:52:26.5453859Z   ↑(stdSimplex ℝ (Fin 2)) ≃ₜ ↑unitInterval
+2026-10-07T14:52:26.7429541Z ℹ [9819/10300] Replayed TNLean.MPS.Periodic.Overlap.SectorMatch.Contraction
+2026-10-07T14:52:26.7430404Z info: TNLean/MPS/Periodic/Overlap/SectorMatch/Contraction.lean:550:8: Try this:
+2026-10-07T14:52:26.7431092Z   [apply] abel_nf
+2026-10-07T14:52:26.7431952Z info: TNLean/MPS/Periodic/Overlap/SectorMatch/Contraction.lean:736:31: Try this:
+2026-10-07T14:52:26.7432541Z   [apply] abel_nf
+2026-10-07T14:52:26.7433053Z ℹ [9866/10300] Replayed TNLean.MPS.MPU.DoubleLayerContraction
+2026-10-07T14:52:26.7433493Z info: TNLean/MPS/MPU/DoubleLayerContraction.lean:335:2: Try this:
+2026-10-07T14:52:26.7433790Z   [apply] ring_nf
+2026-10-07T14:52:26.7434055Z
+2026-10-07T14:52:26.7434457Z   The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+2026-10-07T14:52:26.7434934Z
+2026-10-07T14:52:26.7435686Z   Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+2026-10-07T14:52:26.7436557Z ⚠ [9919/10300] Replayed TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
+2026-10-07T14:52:26.7437212Z warning: TNLean/MPS/Symmetry/MPOSymmetry/DomainWall.lean:460:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7437813Z
+2026-10-07T14:52:26.7438079Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:26.7438972Z ⚠ [9936/10300] Replayed TNLean.MPS.Examples.CZX.ClusterIsingSymmetry
+2026-10-07T14:52:26.7439716Z warning: TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean:34:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7440329Z
+2026-10-07T14:52:26.7440533Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:26.7441332Z ⚠ [9994/10300] Replayed TNLean.MPS.Examples.Ising.IsingTensors
+2026-10-07T14:52:26.7442095Z warning: TNLean/MPS/Examples/Ising/IsingTensors.lean:114:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7442609Z
+2026-10-07T14:52:26.7442894Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:26.7443604Z ⚠ [10002/10300] Replayed TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
+2026-10-07T14:52:26.7445156Z warning: TNLean/MPS/Symmetry/MPOSymmetry/IsingFusion.lean:121:2: `simp [isingFusion, Fin.sum_univ_three, h0] at hψ hσ` is a flexible tactic modifying `hψ`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+2026-10-07T14:52:26.7446280Z
+2026-10-07T14:52:26.7446533Z Note: This linter can be disabled with `set_option linter.flexible false`
+2026-10-07T14:52:26.7447365Z info: TNLean/MPS/Symmetry/MPOSymmetry/IsingFusion.lean:122:2: `have hψ1 : m 1 = 1 := by simpa using hψ`
+2026-10-07T14:52:26.7448171Z uses `hψ`, which was modified by the flexible tactic `simp` on line 121!
+2026-10-07T14:52:26.7449756Z warning: TNLean/MPS/Symmetry/MPOSymmetry/IsingFusion.lean:121:2: `simp [isingFusion, Fin.sum_univ_three, h0] at hψ hσ` is a flexible tactic modifying `hσ`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+2026-10-07T14:52:26.7451012Z
+2026-10-07T14:52:26.7451223Z Note: This linter can be disabled with `set_option linter.flexible false`
+2026-10-07T14:52:26.7451779Z info: TNLean/MPS/Symmetry/MPOSymmetry/IsingFusion.lean:123:2: `rw [hψ1] at hσ`
+2026-10-07T14:52:26.7452218Z uses `hσ`, which was modified by the flexible tactic `simp` on line 121!
+2026-10-07T14:52:26.7452668Z ⚠ [10018/10300] Replayed TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
+2026-10-07T14:52:26.7453270Z warning: TNLean/MPS/Examples/KramersWannier/KramersWannierTensor.lean:39:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7453745Z
+2026-10-07T14:52:26.7453924Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:26.7454834Z warning: TNLean/MPS/Examples/KramersWannier/KramersWannierTensor.lean:42:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7455508Z
+2026-10-07T14:52:26.7455759Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:26.7456514Z ⚠ [10021/10300] Replayed TNLean.MPS.Examples.KramersWannier.KramersWannierSource
+2026-10-07T14:52:26.7457430Z warning: TNLean/MPS/Examples/KramersWannier/KramersWannierSource.lean:41:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7458034Z
+2026-10-07T14:52:26.7458273Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:26.7458973Z ⚠ [10023/10300] Replayed TNLean.MPS.Examples.KramersWannier.KramersWannierCircuit
+2026-10-07T14:52:26.7459876Z warning: TNLean/MPS/Examples/KramersWannier/KramersWannierCircuit.lean:22:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:26.7460484Z
+2026-10-07T14:52:26.7460861Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:27.0426598Z ⚠ [11196/12155] Replayed TNLean.MPS.Preparation.InhomogeneousChoiResidual
+2026-10-07T14:52:27.0427638Z warning: TNLean/MPS/Preparation/InhomogeneousChoiResidual.lean:177:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:27.0428264Z
+2026-10-07T14:52:27.0428762Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:27.0429321Z warning: TNLean/MPS/Preparation/InhomogeneousChoiResidual.lean:179:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:27.0429698Z
+2026-10-07T14:52:27.0429915Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:27.4479899Z ⚠ [11782/12296] Replayed QICLean.Analysis.ConvexHullCompact
+2026-10-07T14:52:27.4481119Z warning: QICLean/Analysis/ConvexHullCompact.lean:65:4: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:27.4481863Z
+2026-10-07T14:52:27.4482572Z Note: The updated constant has a different type:
+2026-10-07T14:52:27.4483316Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:27.4483893Z instead of
+2026-10-07T14:52:27.4484554Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:27.4485666Z warning: QICLean/Analysis/ConvexHullCompact.lean:70:12: `isCompact_stdSimplex` has been deprecated: Use `Convexity.StdSimplex.compactSpace` instead
+2026-10-07T14:52:27.4486468Z
+2026-10-07T14:52:27.4486750Z Note: The updated constant has a different type:
+2026-10-07T14:52:27.4487496Z   ∀ (R : Type u_1) (M : Type u_2) [inst : Ring R] [inst_1 : TopologicalSpace R] [IsTopologicalRing R]
+2026-10-07T14:52:27.4488897Z     [inst_3 : PartialOrder R] [inst_4 : IsStrictOrderedRing R] [CompactIccSpace R] [OrderClosedTopology R] [Finite M],
+2026-10-07T14:52:27.4489695Z     CompactSpace (Convexity.StdSimplex R M)
+2026-10-07T14:52:27.4490162Z instead of
+2026-10-07T14:52:27.4491004Z   ∀ (𝕜 : Type u_1) (ι : Type u_2) [inst : Fintype ι] [inst_1 : TopologicalSpace 𝕜] [inst_2 : Semiring 𝕜]
+2026-10-07T14:52:27.4492108Z     [inst_3 : PartialOrder 𝕜] [OrderClosedTopology 𝕜] [ContinuousAdd 𝕜] [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜],
+2026-10-07T14:52:27.4492934Z     IsCompact (stdSimplex 𝕜 ι)
+2026-10-07T14:52:27.4493723Z warning: QICLean/Analysis/ConvexHullCompact.lean:99:23: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:27.4494422Z
+2026-10-07T14:52:27.4494700Z Note: The updated constant has a different type:
+2026-10-07T14:52:27.4495380Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:27.4496646Z instead of
+2026-10-07T14:52:27.4497320Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:27.4498124Z ⚠ [11783/12296] Replayed QICLean.Analysis.CyclicReciprocal
+2026-10-07T14:52:27.4499624Z warning: QICLean/Analysis/CyclicReciprocal.lean:103:44: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:27.4500376Z
+2026-10-07T14:52:27.4500775Z Note: The updated constant has a different type:
+2026-10-07T14:52:27.4503236Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:27.4505787Z instead of
+2026-10-07T14:52:27.4506586Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:27.5482820Z ⚠ [11796/12302] Replayed TNLean.PEPS.RegionBlock.RegionReconcile
+2026-10-07T14:52:27.5484471Z warning: TNLean/PEPS/RegionBlock/RegionReconcile.lean:67:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:27.5485861Z
+2026-10-07T14:52:27.5486304Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:27.5488779Z warning: TNLean/PEPS/RegionBlock/RegionReconcile.lean:148:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:27.5491708Z
+2026-10-07T14:52:27.5492169Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:27.6474382Z ⚠ [11842/12308] Replayed TNLean.PEPS.RegionBlock.UnionInjectivity
+2026-10-07T14:52:27.6475939Z warning: TNLean/PEPS/RegionBlock/UnionInjectivity.lean:28:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:27.6476700Z
+2026-10-07T14:52:27.6477110Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:27.6477998Z ⚠ [11843/12308] Replayed TNLean.PEPS.RegionBlock.BlockCoeffTransfer
+2026-10-07T14:52:27.6478971Z warning: TNLean/PEPS/RegionBlock/BlockCoeffTransfer.lean:395:100: This line exceeds the 100 character limit, please shorten it!
+2026-10-07T14:52:27.6479669Z
+2026-10-07T14:52:27.6480053Z Note: This linter can be disabled with `set_option linter.style.longLine false`
+2026-10-07T14:52:28.1488349Z ⚠ [12199/12329] Replayed QICLean.Channel.ChoiTypeMap.YamagamiPositivity
+2026-10-07T14:52:28.1492263Z warning: QICLean/Channel/ChoiTypeMap/YamagamiPositivity.lean:166:25: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:28.1493071Z
+2026-10-07T14:52:28.1493359Z Note: The updated constant has a different type:
+2026-10-07T14:52:28.1495964Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:28.1497198Z instead of
+2026-10-07T14:52:28.1497910Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:28.1499670Z warning: QICLean/Channel/ChoiTypeMap/YamagamiPositivity.lean:175:13: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:28.1501719Z
+2026-10-07T14:52:28.1502030Z Note: The updated constant has a different type:
+2026-10-07T14:52:28.1504591Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:28.1505901Z instead of
+2026-10-07T14:52:28.1506675Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:28.1508297Z warning: QICLean/Channel/ChoiTypeMap/YamagamiPositivity.lean:181:23: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:28.1510438Z
+2026-10-07T14:52:28.1510970Z Note: The updated constant has a different type:
+2026-10-07T14:52:28.1513410Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:28.1514069Z instead of
+2026-10-07T14:52:28.1515394Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:28.1517277Z warning: QICLean/Channel/ChoiTypeMap/YamagamiPositivity.lean:182:45: `isClosed_stdSimplex` has been deprecated: Use `Convexity.StdSimplex.isClosedEmbedding_toFun_comp_weights` instead
+2026-10-07T14:52:28.1519406Z
+2026-10-07T14:52:28.1521581Z Note: The updated constant has a different type:
+2026-10-07T14:52:28.1523014Z   ∀ (R : Type u) [inst : PartialOrder R] [inst_1 : Ring R] [inst_2 : TopologicalSpace R]
+2026-10-07T14:52:28.1524624Z     [inst_3 : IsStrictOrderedRing R] [IsTopologicalRing R] [OrderClosedTopology R] (M : Type u_1) [Finite M],
+2026-10-07T14:52:28.1526560Z     Topology.IsClosedEmbedding fun t ↦ ⇑t.weights
+2026-10-07T14:52:28.1527121Z instead of
+2026-10-07T14:52:28.1529799Z   ∀ (𝕜 : Type u_1) (ι : Type u_2) [inst : Fintype ι] [inst_1 : TopologicalSpace 𝕜] [inst_2 : Semiring 𝕜]
+2026-10-07T14:52:28.1531665Z     [inst_3 : PartialOrder 𝕜] [OrderClosedTopology 𝕜] [ContinuousAdd 𝕜], IsClosed (stdSimplex 𝕜 ι)
+2026-10-07T14:52:28.1533528Z warning: QICLean/Channel/ChoiTypeMap/YamagamiPositivity.lean:184:5: `isCompact_stdSimplex` has been deprecated: Use `Convexity.StdSimplex.compactSpace` instead
+2026-10-07T14:52:28.1535672Z
+2026-10-07T14:52:28.1536054Z Note: The updated constant has a different type:
+2026-10-07T14:52:28.1538736Z   ∀ (R : Type u_1) (M : Type u_2) [inst : Ring R] [inst_1 : TopologicalSpace R] [IsTopologicalRing R]
+2026-10-07T14:52:28.1540399Z     [inst_3 : PartialOrder R] [inst_4 : IsStrictOrderedRing R] [CompactIccSpace R] [OrderClosedTopology R] [Finite M],
+2026-10-07T14:52:28.1542023Z     CompactSpace (Convexity.StdSimplex R M)
+2026-10-07T14:52:28.1543981Z instead of
+2026-10-07T14:52:28.1544747Z   ∀ (𝕜 : Type u_1) (ι : Type u_2) [inst : Fintype ι] [inst_1 : TopologicalSpace 𝕜] [inst_2 : Semiring 𝕜]
+2026-10-07T14:52:28.1547677Z     [inst_3 : PartialOrder 𝕜] [OrderClosedTopology 𝕜] [ContinuousAdd 𝕜] [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜],
+2026-10-07T14:52:28.1549211Z     IsCompact (stdSimplex 𝕜 ι)
+2026-10-07T14:52:28.1550796Z warning: QICLean/Channel/ChoiTypeMap/YamagamiPositivity.lean:263:48: `stdSimplex` has been deprecated: Use `Convexity.StdSimplex` instead
+2026-10-07T14:52:28.1551639Z
+2026-10-07T14:52:28.1552920Z Note: The updated constant has a different type:
+2026-10-07T14:52:28.1553722Z   (R : Type u) → [LE R] → [AddCommMonoid R] → [One R] → Type v → Type (max u v)
+2026-10-07T14:52:28.1556202Z instead of
+2026-10-07T14:52:28.1557786Z   (𝕜 : Type u_2) → (ι : Type u_1) → [Semiring 𝕜] → [PartialOrder 𝕜] → [Fintype ι] → Set (ι → 𝕜)
+2026-10-07T14:52:28.6525036Z ℹ [12378/12424] Replayed QICLean.Channel.LorentzNormalForm.SpinorExponential
+2026-10-07T14:52:28.6527112Z info: QICLean/Channel/LorentzNormalForm/SpinorExponential.lean:452:47: Try this:
+2026-10-07T14:52:28.6574602Z   [apply] ring_nf
+2026-10-07T14:52:28.6591070Z
+2026-10-07T14:52:28.6621385Z   The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+2026-10-07T14:52:28.6621934Z
+2026-10-07T14:52:28.6651722Z   Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+2026-10-07T14:52:28.6676493Z info: QICLean/Channel/LorentzNormalForm/SpinorExponential.lean:454:47: Try this:
+2026-10-07T14:52:28.6679163Z   [apply] ring_nf
+2026-10-07T14:52:28.6679541Z
+2026-10-07T14:52:28.6680164Z   The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+2026-10-07T14:52:28.6681680Z
+2026-10-07T14:52:28.6682505Z   Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+2026-10-07T14:52:28.6691303Z info: QICLean/Channel/LorentzNormalForm/SpinorExponential.lean:484:46: Try this:
+2026-10-07T14:52:28.6692532Z   [apply] ring_nf
+2026-10-07T14:52:28.6692891Z
+2026-10-07T14:52:28.6693465Z   The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+2026-10-07T14:52:28.6694496Z
+2026-10-07T14:52:28.6695326Z   Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+2026-10-07T14:52:28.6697355Z info: QICLean/Channel/LorentzNormalForm/SpinorExponential.lean:486:46: Try this:
+2026-10-07T14:52:28.6697962Z   [apply] ring_nf
+2026-10-07T14:52:28.6702606Z
+2026-10-07T14:52:28.6703188Z   The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+2026-10-07T14:52:28.6704424Z
+2026-10-07T14:52:28.6705839Z   Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+2026-10-07T14:52:28.7508798Z ✔ [12408/12454] Built TNLean.PEPS.AreaLaw.Geometry.Exponents (1.6s)
+2026-10-07T14:52:29.1512144Z ✔ [12488/12502] Built TNLean.PEPS.AreaLaw.FiniteDomain (2.0s)
+2026-10-07T14:52:30.0531793Z ✔ [12489/12502] Built TNLean.PEPS.Approximation.Basic (2.8s)
+2026-10-07T14:52:31.3582215Z ✔ [12490/12502] Built TNLean.PEPS.AreaLaw.Scan.BootstrapParameters (2.6s)
+2026-10-07T14:52:31.5592412Z ✔ [12491/12502] Built TNLean.PEPS.AreaLaw.RectangularDomain (2.4s)
+2026-10-07T14:52:32.2665857Z ✔ [12492/12502] Built TNLean.PEPS.AreaLaw.LocalHamiltonian (3.1s)
+2026-10-07T14:52:32.4672648Z ✔ [12493/12502] Built TNLean.PEPS.AreaLaw.Geometry.Templates (2.5s)
+2026-10-07T14:52:33.7674785Z ✔ [12494/12502] Built TNLean.PEPS.Approximation (2.5s)
+2026-10-07T14:52:34.0682048Z ✔ [12495/12502] Built TNLean.PEPS.AreaLaw.Scan.ExponentBootstrap (2.5s)
+2026-10-07T14:52:34.1714541Z ✔ [12496/12502] Built TNLean.PEPS.AreaLaw.Geometry (1.7s)
+2026-10-07T14:52:34.6684140Z ✔ [12497/12502] Built TNLean.PEPS.AreaLaw.TheoremStatements (2.5s)
+2026-10-07T14:52:35.4692800Z ✔ [12498/12502] Built TNLean.PEPS.AreaLaw.Scan (1.4s)
+2026-10-07T14:52:37.3702593Z ✔ [12499/12502] Built TNLean.PEPS.AreaLaw (1.9s)
+2026-10-07T14:52:47.7828322Z ✔ [12500/12502] Built TNLean.PEPS (10s)
+2026-10-07T14:52:55.5898529Z ✔ [12501/12502] Built TNLean (7.5s)
+2026-10-07T14:52:55.5981582Z Build completed successfully (12502 jobs).
+2026-10-07T14:52:56.6042193Z ✔ [72/143] Built Mathlib.Lean.Linter:c.o (103ms)
+2026-10-07T14:52:56.7042050Z ✔ [73/143] Built Mathlib.Tactic.Lemma:c.o (143ms)
+2026-10-07T14:52:56.8052314Z ✔ [74/143] Built Mathlib.Tactic.AdaptationNote:c.o (337ms)
+2026-10-07T14:52:57.1062246Z ✔ [75/143] Built Mathlib.Tactic.Linter.AuxLemma:c.o (440ms)
+2026-10-07T14:52:57.5061926Z ✔ [76/143] Built Mathlib.Tactic.Linter.DeprecatedSyntaxLinter:c.o (678ms)
+2026-10-07T14:52:57.6072105Z ✔ [77/143] Built Mathlib.Tactic.Linter.DocPrime:c.o (425ms)
+2026-10-07T14:52:57.7082022Z ✔ [78/143] Built Mathlib.Tactic.Linter.Header:c.o (1.2s)
+2026-10-07T14:52:57.8062124Z ✔ [79/143] Built Mathlib.Tactic.Linter.DirectoryDependency:c.o (1.3s)
+2026-10-07T14:52:58.1062988Z ✔ [80/143] Built Mathlib.Tactic.Linter.GlobalAttributeIn:c.o (426ms)
+2026-10-07T14:52:58.5058824Z ✔ [81/143] Built Mathlib.Tactic.Linter.HashCommandLinter:c.o (676ms)
+2026-10-07T14:52:58.5081747Z ✔ [82/143] Built Mathlib.Tactic.Linter.HaveILetI:c.o (378ms)
+2026-10-07T14:52:58.6062075Z ✔ [83/143] Built Mathlib.Tactic.Linter.EmptyLine:c.o (1.0s)
+2026-10-07T14:52:58.9072071Z ✔ [84/143] Built Mathlib.Tactic.Linter.DocString:c.o (1.4s)
+2026-10-07T14:52:59.0072331Z ✔ [85/143] Built Mathlib.Tactic.Linter.InternalConstructor:c.o (502ms)
+2026-10-07T14:52:59.2070211Z ✔ [86/143] Built Mathlib.Tactic.Linter.OldObtain:c.o (295ms)
+2026-10-07T14:52:59.2091795Z ✔ [87/143] Built Batteries.Lean.Position:c.o (266ms)
+2026-10-07T14:52:59.3082049Z ✔ [88/143] Built Mathlib.Lean.Environment:c.o (111ms)
+2026-10-07T14:52:59.4082289Z ✔ [89/143] Built Mathlib.Tactic.Linter.Multigoal:c.o (812ms)
+2026-10-07T14:52:59.9072089Z ✔ [90/143] Built Mathlib.Lean.Elab.InfoTree:c.o (559ms)
+2026-10-07T14:53:00.4082044Z ✔ [91/143] Built Batteries.Tactic.Lint.Basic:c.o (1.0s)
+2026-10-07T14:53:00.7096700Z ✔ [92/143] Built Mathlib.Tactic.Linter.FlexibleLinter:c.o (2.2s)
+2026-10-07T14:53:00.7121887Z ✔ [93/143] Built Batteries.Tactic.Lint.Misc:c.o (850ms)
+2026-10-07T14:53:01.1122075Z ✔ [94/143] Built Mathlib.Lean.Expr.Basic:c.o (1.9s)
+2026-10-07T14:53:01.2095452Z ✔ [95/143] Built Mathlib.Tactic.Linter.PrivateModule:c.o (446ms)
+2026-10-07T14:53:01.3133137Z ✔ [96/143] Built Mathlib.Tactic.Linter.TacticDocumentation:c.o (297ms)
+2026-10-07T14:53:01.5142304Z ✔ [97/143] Built Batteries.Tactic.Unreachable:c.o (173ms)
+2026-10-07T14:53:01.7142332Z ✔ [98/143] Built Mathlib.Tactic.Linter.UnusedTacticExtension:c.o (548ms)
+2026-10-07T14:53:01.9152366Z ✔ [99/143] Built Mathlib.Tactic.Linter.UnusedInstancesInType:c.o (1.5s)
+2026-10-07T14:53:01.9181428Z ✔ [100/143] Built Mathlib.Tactic.DeclarationNames:c.o (167ms)
+2026-10-07T14:53:02.8172541Z ✔ [101/143] Built Mathlib.Tactic.Linter.UnusedTactic:c.o (1.3s)
+2026-10-07T14:53:03.2164042Z ✔ [102/143] Built Mathlib.Tactic.Linter.Whitespace:c.o (1.4s)
+2026-10-07T14:53:03.3172086Z ✔ [103/143] Built Mathlib.Lean.Elab.Tactic.Meta:c.o (507ms)
+2026-10-07T14:53:03.7171361Z ✔ [104/143] Built Mathlib.Tactic.Linter.Style:c.o (1.8s)
+2026-10-07T14:53:03.8202464Z ✔ [105/143] Built Mathlib.Tactic.Linter.OverlappingInstances:c.o (3.0s)
+2026-10-07T14:53:04.0223103Z ✔ [106/143] Built Mathlib.Lean.ContextInfo:c.o (809ms)
+2026-10-07T14:53:04.1222390Z ✔ [107/143] Built Batteries.Lean.Meta.Inaccessible:c.o (396ms)
+2026-10-07T14:53:04.2222153Z ✔ [108/143] Built ImportGraph.Imports.Redundant:c.o (172ms)
+2026-10-07T14:53:04.2252198Z ✔ [109/143] Built ImportGraph.Lean.Environment:c.o (123ms)
+2026-10-07T14:53:04.5202652Z ✔ [110/143] Built ImportGraph.Imports.ImportGraph:c.o (741ms)
+2026-10-07T14:53:04.8201990Z ✔ [111/143] Built Mathlib.Tactic.TacticAnalysis:c.o (1.6s)
+2026-10-07T14:53:05.1212285Z ✔ [112/143] Built Mathlib.Util.ParseCommand:c.o (214ms)
+2026-10-07T14:53:05.9232419Z ✔ [113/143] Built ImportGraph.Imports.RequiredModules:c.o (1.7s)
+2026-10-07T14:53:06.1223837Z ✔ [114/143] Built Mathlib.Tactic.ExtractGoal:c.o (1.6s)
+2026-10-07T14:53:06.1251670Z ✔ [115/143] Built Mathlib.Tactic.TypeStar:c.o (177ms)
+2026-10-07T14:53:06.4217393Z ✔ [116/143] Built Batteries.Util.LibraryNote:c.o (329ms)
+2026-10-07T14:53:06.5233757Z ✔ [117/143] Built Batteries.Lean.Syntax:c.o (106ms)
+2026-10-07T14:53:06.7255307Z ✔ [118/143] Built Mathlib.Tactic.MinImports:c.o (2.4s)
+2026-10-07T14:53:06.8272146Z ✔ [119/143] Built ImportGraph.Graph.TransitiveClosure:c.o (163ms)
+2026-10-07T14:53:08.0270556Z ✔ [120/143] Built Mathlib.Tactic.TacticAnalysis.Declarations:c.o (2.0s)
+2026-10-07T14:53:08.0291528Z ✔ [121/143] Built ImportGraph.Tools.FindHome:c.o (1.2s)
+2026-10-07T14:53:08.3292330Z ✔ [122/143] Built Batteries.Tactic.HelpCmd:c.o (2.2s)
+2026-10-07T14:53:08.4282475Z ✔ [123/143] Built ImportGraph.Tools.MinImports:c.o (408ms)
+2026-10-07T14:53:08.5272349Z ✔ [124/143] Built ImportGraph.Tools.ImportDiff:c.o (482ms)
+2026-10-07T14:53:08.5301806Z ✔ [125/143] Built ImportGraph.Tools:c.o (96ms)
+2026-10-07T14:53:08.6272130Z ✔ [127/143] Built ImportGraph.Tools.RedundantImports:c.o (283ms)
+2026-10-07T14:53:09.1269566Z ✔ [128/143] Built Batteries.Tactic.Lint.TypeClass:c.o (553ms)
+2026-10-07T14:53:09.2272284Z ✔ [129/143] Built Batteries.Tactic.Lint:c.o (96ms)
+2026-10-07T14:53:10.0292153Z ✔ [130/143] Built Mathlib.Tactic.Linter.Lint:c.o (787ms)
+2026-10-07T14:53:10.2283435Z ✔ [131/143] Built Batteries.Tactic.Lint.Simp:c.o (1.7s)
+2026-10-07T14:53:10.3282018Z ✔ [132/143] Built Batteries.Util.ProofWanted:c.o (3.8s)
+2026-10-07T14:53:10.3301812Z ✔ [133/143] Built Mathlib.Util.CodeActions.BinderPlicity:c.o (287ms)
+2026-10-07T14:53:10.3331385Z ✔ [134/143] Built Mathlib.Util.CodeActions:c.o (89ms)
+2026-10-07T14:53:10.4278140Z ✔ [138/143] Built Mathlib.Init:c.o (139ms)
+2026-10-07T14:53:10.4322348Z ✔ [139/143] Built Mathlib.Data.Nat.Notation:c.o (106ms)
+2026-10-07T14:53:10.8276764Z ✔ [140/143] Built Mathlib.Tactic.Linter.TextBased.UnicodeLinter:c.o (565ms)
+2026-10-07T14:53:11.2282204Z ✔ [141/143] Built Batteries.Tactic.Lint.Frontend:c.o (2.6s)
+2026-10-07T14:53:11.9289692Z ✔ [142/143] Built Mathlib.Tactic.Linter.TextBased:c.o (1.6s)
+2026-10-07T14:53:11.9306429Z Build completed successfully (143 jobs).
