@@ -414,6 +414,23 @@ theorem apply_eq_submatrix_apply {m n : Type*} (M : Matrix m m ℂ) (e : m ≃ n
     M x y = M.submatrix e.symm e.symm (e x) (e y) := by
   simp
 
+/-- The swap of the sheets at `S` commutes with every product `R₁ ⊗ R₂` of operators acting off
+`S`. -/
+theorem commute_sheetSwapOp_kronecker {S : Finset ι} {D : Set ι} (hD : Disjoint D (S : Set ι))
+    {R₁ R₂ : Matrix (ι → Fin q) (ι → Fin q) ℂ} (h₁ : R₁ ∈ supportedOperators q D)
+    (h₂ : R₂ ∈ supportedOperators q D) : Commute (sheetSwapOp q S) (R₁ ⊗ₖ R₂) := by
+  obtain ⟨R₁', hR₁'⟩ := exists_one_kronecker_of_mem_supportedOperators hD h₁
+  obtain ⟨R₂', hR₂'⟩ := exists_one_kronecker_of_mem_supportedOperators hD h₂
+  change _ * _ = _ * _
+  rw [sheetSwapOp, PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv, sheetSwap_symm]
+  ext ⟨y₁, y₂⟩ ⟨r₁, r₂⟩
+  simp only [submatrix_apply, kroneckerMap_apply, id]
+  simp only [apply_eq_submatrix_apply R₁ (sheetSplit q S), apply_eq_submatrix_apply R₂
+    (sheetSplit q S)]
+  rw [hR₁', hR₂']
+  simp only [kroneckerMap_apply, sheetSplit_sheetSwap_fst, sheetSplit_sheetSwap_snd]
+  ring
+
 end SheetSwap
 
 /-! ### The buffer correction and the swap of `T` on two sheets -/
@@ -543,6 +560,44 @@ theorem pairwiseDisjointOuter_append {o i : List (Hole pos q Party)} {Y : Finset
   rw [← Finset.disjoint_coe]
   exact Set.disjoint_of_subset_right (hiY h' hh') (hoY h hh)
 
+theorem footprint_mono {l l' : List (SquarePatch pos q)} (h : ∀ p ∈ l, p ∈ l') :
+    footprint l ⊆ footprint l' := fun _ ⟨p, hp, hx⟩ => ⟨p, h p hp, hx⟩
+
+/-- The operator acting as `G` on the raw registers of two sheets and as the identity on the
+tags of two lists of holes. -/
+def liftTags {l₁ l₂ : List (Hole pos q Party)}
+    (G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ) :
+    Matrix ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q)))
+      ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q))) ℂ :=
+  ((1 : Matrix (TagSpace l₁ × TagSpace l₂) (TagSpace l₁ × TagSpace l₂) ℂ) ⊗ₖ G).submatrix
+    (pairShuffle _ _ _ _) (pairShuffle _ _ _ _)
+
+theorem norm_liftTags_le {l₁ l₂ : List (Hole pos q Party)}
+    (G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ) :
+    ‖liftTags (l₁ := l₁) (l₂ := l₂) G‖ ≤ ‖G‖ :=
+  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_le G)
+
+/-- A two-sheet raw operator commuting with every product of raw parts of the two encodings
+passes through the product `K₁ ⊗ K₂` of the encodings. -/
+theorem liftTags_mul_kronecker [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
+    {G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ}
+    (hG : ∀ a b, Commute G (rawProd l₁ a ⊗ₖ rawProd l₂ b)) :
+    liftTags G * (frameEncoder l₁ ⊗ₖ frameEncoder l₂) =
+      (frameEncoder l₁ ⊗ₖ frameEncoder l₂) * G := by
+  have hK : frameEncoder l₁ ⊗ₖ frameEncoder l₂ =
+      (stack fun t : TagSpace l₁ × TagSpace l₂ => rawProd l₁ t.1 ⊗ₖ rawProd l₂ t.2).submatrix
+        (pairShuffle _ _ _ _) (Equiv.refl _) := by
+    ext ⟨⟨a, x⟩, ⟨b, y⟩⟩ ⟨r₁, r₂⟩
+    rfl
+  set S : TagSpace l₁ × TagSpace l₂ → Matrix ((ι → Fin q) × (ι → Fin q))
+    ((ι → Fin q) × (ι → Fin q)) ℂ := fun t => rawProd l₁ t.1 ⊗ₖ rawProd l₂ t.2
+  have hS : ((1 : Matrix (TagSpace l₁ × TagSpace l₂) (TagSpace l₁ × TagSpace l₂) ℂ) ⊗ₖ G) *
+      stack S = stack S * G := one_kronecker_mul_stack fun t => hG t.1 t.2
+  rw [hK, liftTags]
+  rw [submatrix_mul_equiv]
+  rw [hS]
+  conv_rhs => rw [← submatrix_id_id G, ← Equiv.coe_refl, submatrix_mul_equiv]
+
 namespace TwoSheetExchange
 
 variable (X : TwoSheetExchange pos q Party)
@@ -668,6 +723,126 @@ theorem rename_mul_encoder [NeZero q] :
     mul_submatrix_sheetSplit hO₂ hI₁]
   simp only [kroneckerMap_apply, sheetSplit_sheetSwap_fst, sheetSplit_sheetSwap_snd]
   ring
+
+/-! ### The partition and the exchange map -/
+
+variable (P : Party)
+
+open Classical in
+/-- The set `Z = {x : the two old raw owners of x are not both P∘} ∪ H⁺(F₁) ∪ H⁺(F₂)`
+(`eq:exchange-Z`).
+
+Polynomial-PEPS manuscript, Lemma 6.6, `05-frames.tex`, lines 466–470. -/
+def exchangeEnv : Finset ι :=
+  Finset.univ.filter fun x =>
+    ¬(X.owner₁ x = P ∧ X.owner₂ x = P) ∨ x ∈ X.frame₁.outerHoles ∨ x ∈ X.frame₂.outerHoles
+
+/-- `T = Z ∩ Y` (`eq:exchange-partition`). -/
+def tSet : Finset ι := X.exchangeEnv P ∩ X.region
+
+/-- `E = Z ∖ Y` (`eq:exchange-partition`). -/
+def eSet : Finset ι := X.exchangeEnv P \ X.region
+
+/-- `A = Y ∩ U = Y ∖ Z`, where the private swap `F_A` acts (`05-frames.tex`, line 512). -/
+def aSet : Finset ι := X.region \ X.exchangeEnv P
+
+theorem mem_exchangeEnv {x : ι} : x ∈ X.exchangeEnv P ↔
+    ¬(X.owner₁ x = P ∧ X.owner₂ x = P) ∨ x ∈ X.frame₁.outerHoles ∨ x ∈ X.frame₂.outerHoles := by
+  classical
+  unfold exchangeEnv
+  simp
+
+theorem disjoint_tSet_eSet : Disjoint (X.tSet P) (X.eSet P) := by
+  rw [Finset.disjoint_left]
+  intro x hx hx'
+  simp only [tSet, eSet, Finset.mem_inter, Finset.mem_sdiff] at hx hx'
+  exact hx'.2 hx.2
+
+theorem tSet_union_eSet : X.tSet P ∪ X.eSet P = X.exchangeEnv P := by
+  ext x
+  simp only [tSet, eSet, Finset.mem_union, Finset.mem_inter, Finset.mem_sdiff]
+  tauto
+
+theorem mem_tSet_iff (x : ι) : x ∈ X.tSet P ↔ x ∈ X.region ∧ x ∉ X.aSet P := by
+  simp only [tSet, aSet, Finset.mem_inter, Finset.mem_sdiff]
+  tauto
+
+theorem aSet_subset_region : X.aSet P ⊆ X.region := Finset.sdiff_subset
+
+/-- `A` lies in `U = Λ ∖ Z`. -/
+theorem aSet_subset_compl : X.aSet P ⊆ (X.tSet P ∪ X.eSet P)ᶜ := by
+  intro x hx
+  rw [tSet_union_eSet, Finset.mem_compl]
+  exact (Finset.mem_sdiff.mp hx).2
+
+/-- Every register of `U = Λ ∖ Z` is raw and held by `P∘` on both sheets, before the exchange
+(`05-frames.tex`, lines 500–501). -/
+theorem owner_eq_of_notMem_exchangeEnv {x : ι} (hx : x ∉ X.exchangeEnv P) :
+    X.owner₁ x = P ∧ X.owner₂ x = P := by
+  by_contra h
+  exact hx ((X.mem_exchangeEnv P).mpr (Or.inl h))
+
+/-- Every register of `U` is held by `P∘` on both sheets after the exchange as well. -/
+theorem newOwner_eq_of_notMem_exchangeEnv {x : ι} (hx : x ∉ X.exchangeEnv P) :
+    X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P := by
+  obtain ⟨h₁, h₂⟩ := X.owner_eq_of_notMem_exchangeEnv P hx
+  simp only [newFrame₁, newFrame₂]
+  split_ifs <;> exact ⟨by assumption, by assumption⟩
+
+/-- The renaming keeps every register at its party: the new owner of the register of the first
+sheet at `x ∈ Y` is the old owner of the second sheet there (`05-frames.tex`, lines 487–489). -/
+theorem newFrame₁_owner_of_mem {x : ι} (hx : x ∈ X.region) :
+    X.newFrame₁.owner x = X.owner₂ x := if_pos hx
+
+theorem newFrame₂_owner_of_mem {x : ι} (hx : x ∈ X.region) :
+    X.newFrame₂.owner x = X.owner₁ x := if_pos hx
+
+theorem footprint_new₁_subset :
+    footprint ((X.out₁ ++ X.in₂).map Hole.patch) ⊆ (↑(X.tSet P ∪ X.eSet P) : Set ι) := by
+  rw [tSet_union_eSet, List.map_append, footprint_append]
+  rintro x (hx | hx)
+  · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inl (footprint_mono (fun p hp => by
+      simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inl hp) hx)))
+  · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inr (footprint_mono (fun p hp => by
+      simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inr hp) hx)))
+
+theorem footprint_new₂_subset :
+    footprint ((X.out₂ ++ X.in₁).map Hole.patch) ⊆ (↑(X.tSet P ∪ X.eSet P) : Set ι) := by
+  rw [tSet_union_eSet, List.map_append, footprint_append]
+  rintro x (hx | hx)
+  · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inr (footprint_mono (fun p hp => by
+      simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inl hp) hx)))
+  · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inl (footprint_mono (fun p hp => by
+      simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inr hp) hx)))
+
+/-- **The implemented map `C = D_U F_A ℛ`.** First rename the sheets inside `Y`, then apply the
+private swap `F_A` and then the private buffer correction `D_U`, in this order; both act on raw
+registers of `U` alone and as the identity on the tags.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 485–489 and 512–527. -/
+def exchangeOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
+    Matrix (X.newFrame₁.Layout × X.newFrame₂.Layout) (X.frame₁.Layout × X.frame₂.Layout) ℂ :=
+  liftTags (l₁ := X.out₁ ++ X.in₂) (l₂ := X.out₂ ++ X.in₁)
+    (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P)) * X.rename
+
+theorem norm_exchangeOp_le_one (σ : SplittingData q (X.tSet P) (X.eSet P)) :
+    ‖X.exchangeOp P σ‖ ≤ 1 :=
+  norm_mul_le_one ((norm_liftTags_le _).trans (norm_mul_le_one
+    (norm_sheetBufferCorrection_le_one _ σ) (norm_sheetSwapOp_le_one _))) X.norm_rename_le_one
+
+/-- The corrections `D_U` and `F_A` commute with the raw parts of the encoders after the
+exchange: they act on `U`, away from every hole of both sheets (`05-frames.tex`, lines
+514–515). -/
+theorem commute_correction [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P))
+    (a : TagSpace (X.out₁ ++ X.in₂)) (b : TagSpace (X.out₂ ++ X.in₁)) :
+    Commute (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P))
+      (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) := by
+  have h₁ := supportedOperators_mono (X.footprint_new₁_subset P) (rawProd_mem_supportedOperators _ a)
+  have h₂ := supportedOperators_mono (X.footprint_new₂_subset P) (rawProd_mem_supportedOperators _ b)
+  refine Commute.mul_left (commute_sheetBufferCorrection _ σ h₁ h₂)
+    (commute_sheetSwapOp_kronecker ?_ h₁ h₂)
+  exact Finset.disjoint_coe.mpr (Finset.disjoint_of_subset_right (X.aSet_subset_compl P)
+    disjoint_compl_right)
 
 end TwoSheetExchange
 
