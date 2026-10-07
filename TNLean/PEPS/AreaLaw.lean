@@ -8,13 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
-<<<<<<< HEAD
+import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
+import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.TheoremStatements
-=======
-import TNLean.PEPS.AreaLaw.Cylinder
-import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
->>>>>>> d924974f9e296121ea2b3c1099f9ee0a3fffbce2

@@ -8,10 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS
 
-<<<<<<< HEAD
 import TNLean.PEPS.Approximation
-=======
->>>>>>> d924974f9e296121ea2b3c1099f9ee0a3fffbce2
 import TNLean.PEPS.AreaLaw
 import TNLean.PEPS.BasisRepresentation
 import TNLean.PEPS.BlockMultiplicityRepresentation
