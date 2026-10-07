@@ -19,7 +19,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{The source lemma}
 
@@ -75,7 +75,14 @@ parties, and of reorderings of tensor factors. An allowed monomial is a chain
 of source-only words separated by pair effects, each effect contracting a
 register $\mathbb C^\alpha$ of a party $p$ and a register $\mathbb C^\beta$ of
 a party $q\ne p$ with a normalized bra. Its operator is a chain of the form
-above, so the estimates already proved apply to it.
+above, so the estimates already proved apply to it. Writing the effect on registers
+$\mathbb C^\alpha$ and $\mathbb C^\beta$ at the front of the list is a
+convention: an effect on finite-dimensional registers $\mathcal U$ of $p$ and
+$\mathcal V$ of $q$ in any position takes this form after local isometric
+equivalences $\mathcal U\cong\mathbb C^\alpha$ and
+$\mathcal V\cong\mathbb C^\beta$ and a reordering of tensor factors, all
+absorbed into the preceding source-only word without changing its norm or the
+coefficient of the monomial.
 
 In the replaced monomial, the stack of an effect occurrence on $(p,q)$
 consists of $m$ pair registers, the $\mathbb C^\alpha$ half of each owned by
@@ -95,14 +102,35 @@ $I_k$. Consequently:
   $q$ (clause (iii));
 \item the garbage vector $\Gamma_m$ is prepared by normalized pair sources on
   the endpoint parties;
-\item two pair sources on the same pair of parties, followed by merging the
-  two registers of each party, are the single pair source of the regrouped
-  vector, whose norm is the product of the norms (clause (iv)).
+\item two pair sources on the same pair of parties, prepared one after the
+  other and followed by merging the two registers of each party, are the
+  single pair source of the regrouped vector, whose norm is the product of the
+  norms.
 \end{itemize}
-The packaged statement is
-\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination}, with
-\leanid{TNLean.PEPS.PairEffect.eval_combineSources} for clause (iv). Its
-hypotheses are those of the source lemma, without the contraction hypothesis
-on $G$, which the statement does not use.
+The packaged statement of clauses (i)--(iii) and the bound is
+\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination}. Its hypotheses
+are those of the source lemma, without the contraction hypothesis on $G$,
+which the statement does not use. The participating parties of clause (iii)
+are read as the endpoint parties of the effects of the monomials. The
+combination of two adjacent sources is
+\leanid{TNLean.PEPS.PairEffect.eval_combineSources}.
+
+\section{Remaining restriction: combining sources}
+
+Clause (iv) is applied to the expansion of $\widetilde G_m$, whose words
+contain about $m$ sources for every effect occurrence, interleaved with local
+contractions; Theorem~5.2 (lines~132--212) needs the number of pair sources
+per monomial bounded independently of $m$. The source's proof of clause (iv)
+(lines~125--127) is the tensor-product identity above. The formal statement
+covers only two sources prepared one after the other. The step that every
+pair source prepares fresh registers and can therefore be moved past the
+operations on other registers, so that all sources on one pair of parties
+become adjacent, is not formalized.
+
+Elimination: prove that every allowed source-only word has the operator of
+the preparation of all its sources followed by a word without sources, then
+reorder the prepared registers and merge the sources on each pair of parties
+one at a time with the identity above. The inverse merging maps are local
+isometries, so the resulting word stays allowed.
 
 \end{document}

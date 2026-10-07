@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PartyLayout
+import TNLean.PEPS.Approximation.PartyWord
