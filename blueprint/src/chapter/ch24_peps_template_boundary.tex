@@ -9,6 +9,7 @@ with a physical cut.
 
 \begin{definition}[Finite enclosure of the ambient boundary]
     \label{def:area_law_ambient_boundary}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.latticeNeighbors,
         TNLean.PEPS.AreaLaw.ambientBoundaryRegion,
@@ -22,6 +23,7 @@ with a physical cut.
 
 \begin{lemma}[Exact crossing edges and four neighbors]
     \label{lem:area_law_ambient_boundary_crossing}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff,
         TNLean.PEPS.AreaLaw.latticeNeighbors_symm,
@@ -41,6 +43,7 @@ with a physical cut.
     $S_r$ lies in $S_{r+1}$. The empty set has empty boundary.
 \end{lemma}
 \begin{proof}
+    \leanok
     Every neighbor of a point of $S$ lies in $S_1$, so the enclosure loses
     no crossing edge. Its inclusion into the lattice is injective, as is
     the induced map on unordered pairs. The endpoint in $S$ determines the
@@ -50,6 +53,7 @@ with a physical cut.
 
 \begin{lemma}[Counting boundary edges from either endpoint]
     \label{lem:area_law_ambient_boundary_layers}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover,
         TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer,
@@ -65,6 +69,7 @@ with a physical cut.
     \]
 \end{lemma}
 \begin{proof}
+    \leanok
     Cover the crossing edges by the four incident edges at each point of $R$.
     For the first bound use the outside endpoints. For the second, an inside
     endpoint in $S_{j-1}$ would put its outside neighbor in $S_j$, a
@@ -73,6 +78,7 @@ with a physical cut.
 
 \begin{lemma}[Boundaries of set differences]
     \label{lem:area_law_ambient_boundary_difference}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset,
         TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le
@@ -86,12 +92,14 @@ with a physical cut.
     \]
 \end{lemma}
 \begin{proof}
+    \leanok
     An edge leaving $S\setminus U$ either leaves $S$ or enters $U$.
     Count the union of these two sets of unordered edges.
 \end{proof}
 
 \begin{lemma}[Template ambient boundary bounds]
     \label{lem:area_law_template_ambient_boundary}
+    \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le,
         TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le
@@ -106,6 +114,7 @@ with a physical cut.
     \]
 \end{lemma}
 \begin{proof}
+    \leanok
     For positive $j$, count inside endpoints in $T_j\setminus T_{j-1}$
     and apply the depth-layer bound. At $j=0$, use outside endpoints in
     $T_1\setminus T$; the template assumption $s_0\ge1$ permits this layer.
