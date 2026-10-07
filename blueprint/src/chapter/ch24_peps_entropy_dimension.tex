@@ -1,0 +1,39 @@
+\section{Regional entropy dimension bounds}
+
+\begin{theorem}[Entropy bounded by the number of sites]
+    \label{thm:area_law_entropy_dimension}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log}
+    \uses{def:area_law_ground_entropy}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\in\mathbb N$, and let
+    $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
+    Every region $A\subseteq\Lambda$ satisfies $S_\Omega(A)\le |A|\log q$.
+    This is the regional dimension estimate used in the proof of
+    \cite[Theorem~1.1]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    The regional density matrix has trace one and is positive semidefinite.
+    Its entropy is at most the logarithm of its rank. Its rank is at most the
+    dimension $q^{|A|}$ of the regional Hilbert space, so
+    $S_\Omega(A)\le\log(q^{|A|})=|A|\log q$.
+\end{proof}
+
+\begin{theorem}[Boundary estimate from partition bounds]
+    \label{thm:area_law_boundary_assembly}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_partition_estimates}
+    \uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
+    Under the hypotheses of Theorem~\ref{thm:area_law_two_family_entropy},
+    suppose also that $q\ge1$, $|D|\le c_D|\partial_\Lambda A|$, and
+    $\sum_i\varepsilon_i\le c_E|\partial_\Lambda A|$. Then
+    \begin{align}
+        S_\Omega(A)\le
+        \left(c_D\log q+\frac{c_E}{2}\right)|\partial_\Lambda A|.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_two_family_entropy, thm:area_law_entropy_dimension}
+    Two-family entropy cancellation gives
+    $S_\Omega(A)\le S_\Omega(D)+\frac12\sum_i\varepsilon_i$.
+    Apply the regional dimension bound to $D$. Since $\log q\ge0$,
+    substituting the two assumed bounds proves the claimed inequality.
+\end{proof}

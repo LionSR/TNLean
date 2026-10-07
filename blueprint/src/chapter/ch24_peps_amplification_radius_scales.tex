@@ -1,0 +1,48 @@
+\section{Collar and radius scales}
+
+\begin{definition}[Radius exponent]
+    \label{def:area_law_radius_exponent}
+    \lean{TNLean.PEPS.AreaLaw.Exponents.radiusExponent}
+    \uses{thm:area_law_exponent_gaps}
+    For the fixed amplification parameters, let
+    $\gamma=(1-\varepsilon)/\alpha$.
+    This is the exponent in the radius bound of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Separation of the collar scales]
+    \label{thm:area_law_radius_exponent_gaps}
+    \lean{TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps,
+        TNLean.PEPS.AreaLaw.Exponents.collar_radius_scale_tendsto_zero}
+    \uses{def:area_law_radius_exponent}
+    The fixed parameters satisfy $0<\gamma$ and
+    $1-\varepsilon<\gamma<\beta$. For every real constant $C$,
+    $[L^{1-\varepsilon}+2CL^\gamma]/L^\beta\to0$
+    as the positive integer $L$ tends to infinity.
+\end{theorem}
+\begin{proof}
+    The inequalities follow by substituting the fixed parameters.
+    Each power in the numerator has exponent strictly smaller than $\beta$.
+\end{proof}
+
+\begin{theorem}[Uniform control of rounded collars]
+    \label{thm:area_law_uniform_collar_threshold}
+    \lean{TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold,
+        TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO}
+    \uses{thm:area_law_radius_exponent_gaps}
+    For every $C\in\mathbb R$ and $\eta>0$, there is $N\ge2$ such that
+    every integer $L\ge N$ and every nonnegative integer radius
+    $r\le CL^\gamma$ satisfy
+    $\lfloor L^{1-\varepsilon}\rfloor+2r<\eta L^\beta$.
+    Consequently, for every sequence of nonnegative integer radii satisfying
+    $r(L)\le CL^\gamma$ eventually,
+    $\lfloor L^{1-\varepsilon}\rfloor+2r(L)=o(L^\beta)$.
+    The threshold depends only on $C$ and $\eta$.
+\end{theorem}
+\begin{proof}
+    Apply the preceding limit and use
+    $\lfloor L^{1-\varepsilon}\rfloor\le L^{1-\varepsilon}$.
+    This proves the scale comparison in the final paragraph of the proof of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw}; the geometric clearance and
+    amplified mutual-information estimate require separate arguments.
+\end{proof}

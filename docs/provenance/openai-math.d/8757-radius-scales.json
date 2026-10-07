@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8757-tn-radius-scales-01",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Exponents.radiusExponent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex",
+          "labels": [
+            "eq:amplification-radius",
+            "eq:amplification-exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8757-tn-radius-scales-02",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex",
+          "labels": [
+            "eq:amplification-radius",
+            "eq:amplification-exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8757-tn-radius-scales-03",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Exponents.collar_radius_scale_tendsto_zero",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex",
+          "labels": [
+            "eq:amplification-radius",
+            "eq:amplification-exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8757-tn-radius-scales-04",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex",
+          "labels": [
+            "eq:amplification-radius",
+            "eq:amplification-exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8757-tn-radius-scales-05",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex",
+          "labels": [
+            "eq:amplification-radius",
+            "eq:amplification-exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently prove the exponent gap, ratio decay and uniform rounded-collar estimate for every radius satisfying the prescribed power bound. The geometric clearance and amplified information inequality of Proposition 10.2 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

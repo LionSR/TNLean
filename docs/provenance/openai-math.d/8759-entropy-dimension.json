@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8759-tn-entropy-dimension-01",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/EntropyDimension.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "thm:area"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "sec:geometry"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Derive the actual regional entropy dimension estimate from the existing QICLean rank entropy bound, regional positivity and trace one, and the dimension of the regional configuration space; do not add a Hamiltonian or gap hypothesis."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8759-tn-boundary-assembly-01",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/BoundaryEntropyAssembly.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_partition_estimates",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "thm:area"
+          ]
+        },
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "sec:geometry"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Combine the existing two-family entropy cancellation with the regional dimension estimate, a residual site-count bound and a total mutual-information error bound. This is the final numerical implication, not a proof that those estimates exist uniformly or that the full area law holds."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

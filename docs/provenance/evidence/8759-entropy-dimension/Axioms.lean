@@ -1,0 +1,4 @@
+import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
+
+#print axioms TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log
+#print axioms TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_partition_estimates
