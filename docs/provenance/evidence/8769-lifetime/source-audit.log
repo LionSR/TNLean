@@ -1,6 +1,6 @@
 Command: python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007
-Proof revision: 2a5a7a5b17fb0cd71d9555a88b7249e04f550b87
-Started UTC: 2026-10-07T09:35:36.156753+00:00
+Proof revision: d4eb94035d4905c9d243fb1739966a198e266c09
+Started UTC: 2026-10-07T09:41:17.128063+00:00
 
 PASS: 47 public declarations, unique checked blueprint owners, complete audit and ledger coverage.
 Paper: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a:preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex
@@ -32,7 +32,7 @@ Source scope: finite incidence and choice-counting prerequisites; full Theorem 5
 353: A set $S$ specifies which \emph{positions} use centered corrections;
 354: it does not specify their monomial labels.  At a gate with no selected
 355: position, summing its labels gives exactly $G_g(.)G_g^\dagger$.
-356: 
+356:
 357: Fix $S$, write $s=|S|$, and let $\mathcal A$ be the parties which are
 358: endpoints of its slots.  Then $|\mathcal A|\le2s$.  Expand the ket and
 359: bra labels at every nonprivate gate touching $\mathcal A$, whether or
@@ -50,7 +50,7 @@ Source scope: finite incidence and choice-counting prerequisites; full Theorem 5
 371: $(\sum_\xi|c_{g,\xi}|)^2$; the number of physical matrix entries is at
 372: most $d(L)^{2|\mathcal A|}$.  Scalar coefficients are removed from the
 373: maps and charged in this bound.
-374: 
+374:
 375: From now on fix one such deterministic choice of labels and physical
 --- Immutable manuscript lines 565-588 ---
 565: It remains to check the network dimensions and link locality.  At a
@@ -68,7 +68,7 @@ Source scope: finite incidence and choice-counting prerequisites; full Theorem 5
 577: physical ket and bra legs.  In particular, coordinates in the common
 578: private direct sums are contracted locally and are not virtual link
 579: indices.
-580: 
+580:
 581: There are at most $b-1$ star links and $\binom b2$ sample links per
 582: gate.  Every party belongs to at most $b$ nonprivate gates, so the
 583: resulting network has bounded incidence.  Each link joins two
@@ -78,6 +78,6 @@ Source scope: finite incidence and choice-counting prerequisites; full Theorem 5
 587: need not be bounded.  Their existence and link dimensions, rather than
 588: their numerical size or efficient computation, are what is required.
 
-Elapsed seconds: 2.905393
+Elapsed seconds: 1.768168
 Warnings: 0
 Exit code: 0

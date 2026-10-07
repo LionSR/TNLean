@@ -1,6 +1,6 @@
 Command: lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_choice_cost_regression.lean
-Proof revision: 2a5a7a5b17fb0cd71d9555a88b7249e04f550b87
-Started UTC: 2026-10-07T09:35:33.773407+00:00
+Proof revision: d4eb94035d4905c9d243fb1739966a198e266c09
+Started UTC: 2026-10-07T09:41:15.422027+00:00
 
 'TNLean.PEPS.Approximation.ketBraCoefficientCost' depends on axioms: [propext, Classical.choice, Quot.sound]
 'TNLean.PEPS.Approximation.ketBraCoefficientCost_eq_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -10,6 +10,6 @@ Started UTC: 2026-10-07T09:35:33.773407+00:00
  Classical.choice,
  Quot.sound]
 
-Elapsed seconds: 2.382903
+Elapsed seconds: 1.705683
 Warnings: 0
 Exit code: 0

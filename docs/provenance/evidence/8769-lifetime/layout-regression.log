@@ -1,6 +1,6 @@
 Command: lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_layout_regression.lean
-Proof revision: 2a5a7a5b17fb0cd71d9555a88b7249e04f550b87
-Started UTC: 2026-10-07T09:35:32.080140+00:00
+Proof revision: d4eb94035d4905c9d243fb1739966a198e266c09
+Started UTC: 2026-10-07T09:41:13.834534+00:00
 
 'TNLean.PEPS.Approximation.sourceEndpoints' depends on axioms: [propext, Quot.sound]
 'TNLean.PEPS.Approximation.correctedParties' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -23,6 +23,6 @@ Started UTC: 2026-10-07T09:35:32.080140+00:00
  Quot.sound]
 'TNLean.PEPS.Approximation.card_incidentDistributedLinks_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 
-Elapsed seconds: 1.692817
+Elapsed seconds: 1.587129
 Warnings: 0
 Exit code: 0

@@ -1,6 +1,6 @@
 # Finite distributed-compression proof evidence
 
-The checked source revision is `2a5a7a5b17fb0cd71d9555a88b7249e04f550b87` in `LionSR/TNLean`. It contains
+The checked source revision is `d4eb94035d4905c9d243fb1739966a198e266c09` in `LionSR/TNLean`. It contains
 47 named public definitions and theorems across `DistributedLifetime`,
 `DistributedLinks` and `CorrectedPositionCost`, with unchanged proof bodies from
 the original implementation and explicit original-proof provenance notices.
@@ -20,12 +20,12 @@ hypotheses; human maintainer review remains pending.
 
 | Check | SHA-256 | Log |
 | --- | --- | --- |
-| `build` | `d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a` | `build.log` |
-| `axioms` | `5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa` | `axioms.log` |
-| `layout-regression` | `9880a6c7fc16a8d70de0be447241a171fb0abbed294bc611eed43f4ef7db3d39` | `layout-regression.log` |
-| `choice-cost-regression` | `abac68e941a96a8f107ddfe8f1135562c9325cddd27a7e6cacfe123e5e01c064` | `choice-cost-regression.log` |
-| `source-audit` | `c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f` | `source-audit.log` |
-| `imports` | `70bed3720ad928ddb561be99104396f3c131c9b6c8c8de6902fdbae0192aec9f` | `imports.log` |
+| `build` | `aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5` | `build.log` |
+| `axioms` | `8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180` | `axioms.log` |
+| `layout-regression` | `758564e866fb4509ffa9166ec8eb171b942de34319668c81bafb6f52641614c5` | `layout-regression.log` |
+| `choice-cost-regression` | `f3c3e8095fd2af35e278bc937a8e87ff9256a4f7d2f3ac9254b7878d67099109` | `choice-cost-regression.log` |
+| `source-audit` | `5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892` | `source-audit.log` |
+| `imports` | `5db399745c73a2ae713aa8f8728240c9be15b4ac5582df11f5c54350bfa07a67` | `imports.log` |
 
 The issue-owned ledger is [8769-lifetime.json](../../openai-math.d/8769-lifetime.json).
 It records all 47 declarations as original implementations, with no upstream Lean
@@ -50,4 +50,4 @@ The completed ledger was validated through the unchanged `validate` API from
 LionSR/TNLean PR #8789 at `4e9d9c898a4401d51cf1eeeabcea8572242387fe`.
 Policy/schema ownership remains with that PR; this branch adds only the issue-owned shard.
 The archived validator output is [provenance-validation.log](provenance-validation.log),
-SHA-256 `16e07db55f52a4c71a96fc5afd59ad779a150782c23c5262c744b974bfe32cdc`.
+SHA-256 `585a15f797f76099e48779cf02fedc77a6d2556be2cd5d332568dc7cd8fb46ed`.

@@ -35,28 +35,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -92,28 +92,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -149,28 +149,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -206,28 +206,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -263,28 +263,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -319,28 +319,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -375,28 +375,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -431,28 +431,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -487,28 +487,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -543,28 +543,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -599,28 +599,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -655,28 +655,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -711,28 +711,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -767,28 +767,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -823,28 +823,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -879,28 +879,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -935,28 +935,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -991,28 +991,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1047,28 +1047,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1102,28 +1102,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1157,28 +1157,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1212,28 +1212,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1267,28 +1267,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1322,28 +1322,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1377,28 +1377,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1432,28 +1432,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1487,28 +1487,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1542,28 +1542,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1597,28 +1597,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1652,28 +1652,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1707,28 +1707,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1762,28 +1762,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1817,28 +1817,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1872,28 +1872,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1927,28 +1927,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -1982,28 +1982,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2037,28 +2037,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2092,28 +2092,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2147,28 +2147,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2202,28 +2202,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2257,28 +2257,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2312,28 +2312,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2367,28 +2367,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2422,28 +2422,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2477,28 +2477,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2532,28 +2532,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
@@ -2587,28 +2587,28 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "2a5a7a5b17fb0cd71d9555a88b7249e04f550b87",
+        "revision": "d4eb94035d4905c9d243fb1739966a198e266c09",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.Approximation.DistributedLifetime TNLean.PEPS.Approximation.DistributedLinks TNLean.PEPS.Approximation.CorrectedPositionCost TNLean.PEPS.Approximation",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/build.log",
-            "sha256": "d66c5310fbec371f6a04914d4978948a6fa43213133cc5022e22c60da8fb0d4a"
+            "sha256": "aa1e5c394d5cf8519a93149c06354a6c3a387eefcedd0ff96d86339768a918c5"
           },
           {
             "kind": "axioms",
             "command": "lake env lean -DrelaxedAutoImplicit=false scripts/distributed_compression_lifetime_axioms.lean",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/axioms.log",
-            "sha256": "5246fbad97b23232f80641298c4002d63ddb37ead369e4e7533e68d82cea17fa"
+            "sha256": "8f295ba386ce50f93d0d73ee532cca46a1f60279093ffb882c5fc4607c924180"
           },
           {
             "kind": "source-audit",
             "command": "python3 scripts/check_compression_lifetime_blueprint.py --upstream-root /tmp/openai-math-verification-20261007",
             "exit_code": 0,
             "log": "docs/provenance/evidence/8769-lifetime/source-audit.log",
-            "sha256": "c20f809dd3e85a0155e1b1a6bd8440a733f16eda3a99def62e40c046913d418f"
+            "sha256": "5e1e1fa382e41fedb5c498bb0f81e5763f1b10939bbfda6511e4b29d3a0e0892"
           }
         ]
       },
