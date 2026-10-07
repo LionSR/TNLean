@@ -26,13 +26,13 @@ cases recorded before it in Section~2 of that preprint.
 
 \begin{lemma}[Supports and components]
     \label{lem:area_law_support_components}
-    \lean{TNLean.PEPS.AreaLaw.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
+    \lean{TNLean.PEPS.AreaLaw.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty}
     \leanok
     \uses{def:area_law_domain}
     Every support of finite induced-graph diameter lies in one connected
     component of the domain graph. If $\partial_\Lambda A=\varnothing$, every
-    such support lies in $A$ or in $\Lambda\setminus A$. The set of sites of a
-    connected component has no crossing edge.
+    such support lies in $A$ or in $\Lambda\setminus A$. The set of sites of any
+    union of connected components has no crossing edge.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -63,9 +63,9 @@ cases recorded before it in Section~2 of that preprint.
 
 \begin{corollary}[Degenerate cases]
     \label{cor:area_law_degenerate_cases}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_domain_eq_empty}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_domain_eq_empty, TNLean.PEPS.AreaLaw.regionalEntropy_connectedComponents_eq_zero, TNLean.PEPS.AreaLaw.edgeBoundary_empty, TNLean.PEPS.AreaLaw.edgeBoundary_univ}
     \leanok
-    \uses{lem:area_law_zero_boundary}
+    \uses{lem:area_law_zero_boundary, lem:area_law_support_components}
     For range $R=0$ every regional entropy of the gapped ground vector vanishes.
     For $q=1$ or an empty domain every regional entropy of every unit vector
     vanishes. The empty region, the full domain and every union of connected
@@ -76,5 +76,8 @@ cases recorded before it in Section~2 of that preprint.
 \begin{proof}\leanok
     For $R=0$ every support is a single site and so is never split by a cut.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is
-    one-dimensional, and a unit-trace state on it has zero entropy.
+    one-dimensional, and a unit-trace state on it has zero entropy. A union of
+    connected components has no crossing edge by
+    Lemma~\ref{lem:area_law_support_components}, and the empty region and the
+    full domain have no crossing edge directly.
 \end{proof}

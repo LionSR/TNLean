@@ -193,20 +193,30 @@ theorem IsAdmissibleSupport.reachable {R : ℕ} {X : Finset (Site Λ)}
   ⟨w⟩
 
 open scoped Classical in
-/-- **A connected component has no crossing edge.** For a component `c` of the
-induced domain graph, the set of its sites has empty edge boundary. -/
-theorem edgeBoundary_connectedComponent_eq_empty
-    (c : (domainGraph Λ).ConnectedComponent) :
-    edgeBoundary Λ (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x = c) =
+/-- **A union of connected components has no crossing edge.** For a set `s` of
+components of the induced domain graph, the set of sites in components of `s`
+has empty edge boundary. -/
+theorem edgeBoundary_connectedComponents_eq_empty
+    (s : Set (domainGraph Λ).ConnectedComponent) :
+    edgeBoundary Λ (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x ∈ s) =
       ∅ := by
-  classical
   rw [Finset.eq_empty_iff_forall_notMem]
   intro e he
   simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset, Finset.mem_univ,
     true_and] at he
   obtain ⟨hadj, x, hx, y, hy, rfl⟩ := he
   rw [SimpleGraph.mem_edgeSet] at hadj
-  exact hy (hx ▸ (SimpleGraph.ConnectedComponent.eq.mpr ⟨SimpleGraph.Walk.cons hadj .nil⟩).symm)
+  have hxy : (domainGraph Λ).connectedComponentMk x = (domainGraph Λ).connectedComponentMk y :=
+    SimpleGraph.ConnectedComponent.eq.mpr ⟨SimpleGraph.Walk.cons hadj .nil⟩
+  exact hy (hxy ▸ hx)
+
+open scoped Classical in
+/-- **A connected component has no crossing edge.** -/
+theorem edgeBoundary_connectedComponent_eq_empty
+    (c : (domainGraph Λ).ConnectedComponent) :
+    edgeBoundary Λ (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x = c) =
+      ∅ := by
+  simpa using edgeBoundary_connectedComponents_eq_empty (Λ := Λ) {c}
 
 end Graph
 
@@ -375,6 +385,20 @@ theorem regionalEntropy_eq_zero_of_domain_eq_empty {Ω : StateSpace ∅ q} (hΩ 
   regionalEntropy_eq_zero_of_card_le_one Ω hΩ A (by
     rw [Fintype.card_fun]
     simp)
+
+open scoped Classical in
+/-- **Unions of connected components** (area-law preprint, proof of Lemma 2.2):
+the regional entropy of the gapped ground vector vanishes on every union of
+connected components of the induced domain graph, in particular on each
+component of a disconnected domain. -/
+theorem regionalEntropy_connectedComponents_eq_zero (h : LocalHamiltonian Λ q R J)
+    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
+    (hΩ : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (s : Set (domainGraph Λ).ConnectedComponent) :
+    regionalEntropy Λ q Ω
+      (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x ∈ s) = 0 :=
+  regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hΔ hΩ
+    (edgeBoundary_connectedComponents_eq_empty s)
 
 end ZeroBoundary
 
