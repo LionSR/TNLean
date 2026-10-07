@@ -151,9 +151,53 @@ Positive selected mass gives \(\|\beta\|=1\), and the orthogonal projection
 after the indicated regrouping of tensor factors.
 The mathematical source is frozen at
 `90e6071e32453006906390bd4e4f71ff4c5251a0`; the complete library build,
-69 combined kernel reports and full blueprint checks passed. Repeated-copy
-identities are under verification. The label probabilities, defect-mass
-estimate and inverse metric comparison remain separate steps.
+69 combined kernel reports and full blueprint checks passed.
+[QICLean #614](https://github.com/LionSR/QICLean/pull/614) proves the literal
+repeated-copy identity with coefficient \(\sqrt z/d\)^k, for every copy
+number including zero, together with the repeated projection and permutation
+identities. Its five new kernel reports, complete library and blueprint
+checks passed. The entropy-compatible label selection and inverse metric
+comparison remain separate steps.
+
+[QICLean #618](https://github.com/LionSR/QICLean/pull/618) proves that an
+actual density matrix on \(q^k\) dimensions has a Schur sector of mass at least
+\((k+1)^{-q^2}\). For a unit vector with an arbitrary additional factor, this
+is the squared norm of its projection onto the same sector. The two proofs,
+complete library and blueprint checks passed. This generic selection does
+not enforce the entropy window needed for the common label sequence.
+
+[QICLean #621](https://github.com/LionSR/QICLean/pull/621) derives the exact
+projected mass of the repeated uniform auxiliary pair, nonzero occurrence
+precisely when the acting operator is nonzero in positive one-copy dimension,
+and matching left and right central Schur labels. Three proofs and complete
+library and blueprint checks passed. These results supply the initial
+occurrence and matching assertions; they do not establish the required
+entropy-compatible label probability in the selected Schmidt state.
+
+[QICLean #615](https://github.com/LionSR/QICLean/pull/615) proves the actual
+spectral cutoff mass bound from a first moment.
+[QICLean #622](https://github.com/LionSR/QICLean/pull/622) applies it to the
+physical replica Hamiltonian and excitation count. The one-copy gap yields
+cutoff mass at least one minus the mean excess energy divided by the gap and
+cutoff fraction, with arbitrary auxiliary factors. The literal cutoff is the
+sum of the actual excitation-sector projectors, and their components have an
+exact squared-norm partition. All fourteen new kernel reports and the
+complete library and blueprint checks passed. The factorization of the
+ground-state copies, dimension bound and inverse metric estimate are separate.
+
+[QICLean #616](https://github.com/LionSR/QICLean/pull/616) proves the balanced
+regional entropy cancellation in the auxiliary-pair argument directly for
+actual pure-state marginals. For unit input, the resulting expression is
+nonnegative by subadditivity and complementary entropy. Both proofs and
+complete library and blueprint checks passed.
+
+The independent-copy surprisal estimate and replica permutation covariance
+are proved and undergoing complete verification. They include singular
+one-copy densities and invariance of their actual tensor powers. Combining
+their concentration bound with the Schur remainder to select a single label
+with both polynomial mass and the required logarithmic dimension remains
+active work. None of these draft results has yet changed TNLean's dependency
+pin.
 
 [QICLean #607](https://github.com/LionSR/QICLean/pull/607) proves that a positive
 definite matrix and any nonzero real power have the same commutant. In
