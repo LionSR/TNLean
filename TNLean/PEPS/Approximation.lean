@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.ColumnSelection
+import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.VectorColumn
