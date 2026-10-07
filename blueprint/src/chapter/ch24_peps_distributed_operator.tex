@@ -1,0 +1,365 @@
+\section{Exact operator contraction for distributed PEPS compression}
+\label{sec:peps_distributed_operator}
+This is the finite operator representation used in
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{04-compression.tex}, lines 565--579.
+Let $P$ be a finite party set, $G$ a finite set of gate occurrences,
+$P_g\subseteq P$ the participant set of $g$, and $r_g\in P_g$ its chosen root.
+Let $\Lambda_g$ be any finite branch alphabet, possibly empty, and
+$J_k=\{0,\ldots,k-1\}$ for $k\in\mathbb N$.
+The physical input and output alphabets $Y_p,X_p$ may be arbitrary sets;
+the finite-dimensional density application uses finite ones.
+% This chapter proves representation algebra for supplied party-local matrices.
+% Identifying an actual chronological circuit with those matrices and the global
+% branch/sample sum, and proving uniform polynomial label bounds, remain open.
+
+\begin{definition}[Active gate occurrences]
+    \label{def:compression_operator_active_gates}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.ActiveGate}
+    \leanok
+    The active gate occurrences are the elements of the finite set $G$. Occurrences are distinguished even when their operations and participant sets coincide.
+\end{definition}
+
+\begin{definition}[Tagged star and sample links]
+    \label{def:compression_operator_links}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.Link}
+    \leanok
+    The link family $\mathcal L$ is the disjoint union over $g\in G$ of the star labels $q\in P_g\setminus\{r_g\}$ and the unordered distinct pairs in $P_g$. Every link retains both its gate occurrence and its star or sample kind.
+\end{definition}
+
+\begin{definition}[Gate occurrences at a party]
+    \label{def:compression_operator_party_gates}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.GateAt}
+    \leanok
+    For $p\in P$, let $G_p=\{g\in G:p\in P_g\}$. These are precisely the gate labels visible at $p$.
+\end{definition}
+
+\begin{definition}[Pair-sample positions]
+    \label{def:compression_operator_samples}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.Sample}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.SampleAt}
+    \leanok
+    Let $S=\bigsqcup_{g\in G}\{\{p,q\}\subseteq P_g:p\ne q\}$, retaining the gate occurrence in each position. Put $S_p=\{s\in S:p\in s\}$. Positions do not depend on chosen monomial branches.
+\end{definition}
+
+\begin{definition}[Actual star and sample edges]
+    \label{def:compression_operator_edges}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.starLink}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLink}
+    \leanok
+    For $g\in G$ and $q\in P_g\setminus\{r_g\}$, the star edge is $(g,\mathrm{star},q)\in\mathcal L$. For $s=(g,\{p,q\})\in S$, the sample edge is $(g,\mathrm{sample},\{p,q\})\in\mathcal L$.
+\end{definition}
+
+\begin{definition}[Oriented link endpoints]
+    \label{def:compression_operator_endpoints}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.src}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.tgt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.endpoints_eq}
+    \leanok
+    Orient a star from $r_g$ to $q$. Choose an ordered representative $(s^-,s^+)$ of each sample pair and orient its edge accordingly. For every $\ell\in\mathcal L$, write $u_\ell,v_\ell$ for these endpoints. Then $\{u_\ell,v_\ell\}$ is exactly the already specified party endpoint set of $\ell$.
+\end{definition}
+
+\begin{definition}[Party incidences]
+    \label{def:compression_operator_incidences}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkAt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.starLinkAt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLinkAt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.starGateAt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.rootGateAt}
+    \leanok
+    Put $I_p=\{\ell\in\mathcal L:p\in\{u_\ell,v_\ell\}\}$. The star $(g,\mathrm{star},q)$ belongs to $I_p$ when $p=r_g$ or $p=q$; either case gives $g\in G_p$. Every $g$ belongs to $G_{r_g}$. A sample position in $S_p$ supplies its sample edge in $I_p$.
+\end{definition}
+
+\begin{definition}[Virtual alphabets]
+    \label{def:compression_operator_alphabets}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.alphabet}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.alphabetFintype}
+    \leanok
+    Assign the alphabet $D_\ell=\Lambda_g$ to a star edge of $g$ and $D_\ell=J_k$ to a sample edge. These alphabets are finite, including when empty. Private memory and garbage coordinates are absent from $D_\ell$.
+\end{definition}
+
+\begin{definition}[Gate-label assignments]
+    \label{def:compression_operator_gate_labels}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.GateLabels}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.GateLabelsAt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictGates}
+    \leanok
+    A global gate assignment is $\kappa\in\prod_{g\in G}\Lambda_g$, and a local assignment at $p$ is $\xi_p\in\prod_{g\in G_p}\Lambda_g$. The restriction of $\kappa$ to $G_p$ is denoted $\kappa_p$.
+\end{definition}
+
+\begin{definition}[Virtual-label assignments]
+    \label{def:compression_operator_link_labels}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkLabels}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.LinkLabelsAt}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictLinks}
+    \leanok
+    A global virtual assignment is $\eta\in\prod_{\ell\in\mathcal L}D_\ell$. Its restriction $\eta_p$ to $I_p$ is a party-local virtual assignment.
+\end{definition}
+
+\begin{definition}[Local sample assignments]
+    \label{def:compression_operator_sample_labels}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictSamples}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples}
+    \leanok
+    A global sample assignment is $j\in J_k^S$, whose restriction to $S_p$ is $j_p$. A local virtual assignment $\eta_p$ supplies the sample assignment $j(\eta_p)_s=\eta_p(g,\mathrm{sample},s)$ for $s\in S_p$.
+\end{definition}
+
+\begin{definition}[Shared virtual labels]
+    \label{def:compression_operator_shared_labels}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels}
+    \leanok
+    Given $(\kappa,j)$, define $\eta(\kappa,j)_{(g,\mathrm{star},q)}=\kappa_g$ and $\eta(\kappa,j)_{(g,\mathrm{sample},s)}=j_s$. Thus each star carries the complete common gate label and each sample edge carries its position's sample value.
+\end{definition}
+
+\begin{definition}[Local star consistency]
+    \label{def:compression_operator_consistency}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.StarConsistent}
+    \leanok
+    The pair $(\eta_p,\xi_p)$ is consistent if $\eta_p(g,\mathrm{star},q)=\xi_p(g)$ for every star edge incident to $p$. No condition is imposed on sample or physical indices.
+\end{definition}
+
+\begin{theorem}[Consistency of shared assignments]
+    \label{thm:compression_operator_shared_consistency}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels_consistent}
+    \leanok
+    For every global pair $(\kappa,j)$ and party $p$, the assignments $(\eta(\kappa,j)_p,\kappa_p)$ are consistent.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_shared_labels,def:compression_operator_consistency}
+    At each incident star both labels are $\kappa_g$.
+\end{proof}
+
+\begin{definition}[Root-owned scalar coefficients]
+    \label{def:compression_operator_root_coefficients}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.rootCoefficient}
+    \leanok
+    Let $c_g:\Lambda_g\to\mathbb C$ be arbitrary deterministic coefficients. For a local assignment $\xi_p$, put $C_p(\xi_p)=\prod_{g:r_g=p}c_g(\xi_p(g))$. A gate with one participant has no star edge, but its label and coefficient are still present at its root.
+\end{definition}
+
+\begin{definition}[Local operator tensor]
+    \label{def:compression_operator_local_tensor}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.localTensor}
+    \leanok
+    Let $X_p,Y_p$ be the output and input alphabets. Supply arbitrary rectangular matrices $T_p(\xi_p,j_p):Y_p\to X_p$. Define the local tensor by
+    \begin{align}
+        A_p(\eta_p;x_p,y_p)
+         & =\sum_{\xi_p\in\prod_{g\in G_p}\Lambda_g}
+        \mathbf1_{\{(\eta_p,\xi_p)\ {\rm consistent}\}}
+        C_p(\xi_p)\,T_p(\xi_p,j(\eta_p))_{x_p,y_p}.
+        \label{eq:compression_operator_local_tensor}
+    \end{align}
+    No positivity, Hermiticity, normalization or bound on the entries of $T_p$ is required.
+\end{definition}
+
+\begin{definition}[Globally consistent configurations]
+    \label{def:compression_operator_consistent_configs}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.ConsistentConfig}
+    \leanok
+    A globally consistent configuration is a pair $(\eta,(\xi_p)_{p\in P})$ such that $(\eta_p,\xi_p)$ is consistent at every party.
+\end{definition}
+
+\begin{definition}[Recovery at gate roots and sample links]
+    \label{def:compression_operator_recovery}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabelsOfConfig}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.samplesOfConfig}
+    \leanok
+    For a globally consistent configuration, define $\kappa_g=\xi_{r_g}(g)$ and let $j_s$ be the virtual label on the actual sample edge of $s$.
+\end{definition}
+
+\begin{theorem}[Every participant agrees with the root]
+    \label{thm:compression_operator_root_agreement}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabel_eq_root}
+    \leanok
+    In a globally consistent configuration, $\xi_p(g)=\kappa_g$ whenever $g\in G_p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_consistency,def:compression_operator_recovery}
+    If $p=r_g$ this is the definition of $\kappa_g$. Otherwise $(g,\mathrm{star},p)$ is an actual star edge, and consistency at its two endpoints gives $\xi_p(g)=\eta_{(g,\mathrm{star},p)}=\xi_{r_g}(g)$.
+\end{proof}
+
+\begin{theorem}[Recovery of every virtual label]
+    \label{thm:compression_operator_link_recovery}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sharedLinkLabels_recover}
+    \leanok
+    If $(\kappa,j)$ is recovered from a globally consistent configuration $(\eta,(\xi_p))$, then $\eta(\kappa,j)=\eta$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_consistency,def:compression_operator_recovery,def:compression_operator_shared_labels}
+    A star edge is determined by consistency at its root, and a sample edge is determined by the definition of $j_s$.
+\end{proof}
+
+\begin{definition}[Bijection of consistent configurations]
+    \label{def:compression_operator_configuration_bijection}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.consistentConfigEquiv}
+    \leanok
+    The map $(\kappa,j)\mapsto(\eta(\kappa,j),(\kappa_p)_{p\in P})$ is a bijection from $(\prod_{g\in G}\Lambda_g)\times J_k^S$ onto the globally consistent configurations. Its inverse is recovery at the participating roots and sample links. The two inverse identities follow from root agreement and recovery of every virtual label. Singleton gates and empty alphabets are included.
+\end{definition}
+
+\begin{definition}[Reading endpoint configurations]
+    \label{def:compression_operator_endpoint_reader}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels}
+    \leanok
+    Give each edge independent labels at its two endpoints. At a party $p$, read the first endpoint when $u_\ell=p$ and the second otherwise. This assigns a local virtual label to every $\ell\in I_p$.
+\end{definition}
+
+\begin{theorem}[Reading diagonal endpoint labels]
+    \label{thm:compression_operator_diagonal_reader}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels_diagonal}
+    \leanok
+    If both endpoints of each edge carry the same global label $\eta_\ell$, then the labels read at $p$ are exactly $\eta_p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_endpoint_reader,def:compression_operator_link_labels}
+    Either endpoint choice reads $\eta_\ell$.
+\end{proof}
+
+\begin{theorem}[Samples of a shared assignment]
+    \label{thm:compression_operator_shared_samples}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples_sharedLinkLabels}
+    \leanok
+    The sample labels read from $\eta(\kappa,j)_p$ are exactly $j_p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_shared_labels,def:compression_operator_sample_labels}
+    By the definition of the shared assignment, the sample edge of $s$ reads $j_s$.
+\end{proof}
+
+\begin{theorem}[Each scalar coefficient appears once]
+    \label{thm:compression_operator_coefficient_product}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.prod_rootCoefficient}
+    \leanok
+    For every global gate assignment $\kappa$, $\prod_{p\in P}C_p(\kappa_p)=\prod_{g\in G}c_g(\kappa_g)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_root_coefficients}
+    Regroup the gate product by the fibers of $g\mapsto r_g$. Every active gate has precisely one root.
+\end{proof}
+
+\begin{definition}[Endpoint form of the local tensor]
+    \label{def:compression_operator_endpoint_tensor}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointTensor}
+    \leanok
+    Apply the endpoint reader to a party's independent endpoint configuration and evaluate $A_p$ on the resulting local virtual labels. The physical argument remains the output-input pair $(x_p,y_p)$.
+\end{definition}
+
+\begin{definition}[Contracted operator]
+    \label{def:compression_operator_operator}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator}
+    \leanok
+    Use identity bond matrices on every $D_\ell$, the endpoint form of $A_p$, and physical output-input pairs. The resulting contraction defines the rectangular operator $\sigma:\prod_pY_p\to\prod_pX_p$.
+\end{definition}
+
+\begin{theorem}[Reduction to one label per link]
+    \label{thm:compression_operator_link_sum}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_linkSum}
+    \leanok
+    The actual identity-bond contraction satisfies
+    \begin{align}
+        \sigma(x,y)
+         & =\sum_{\eta\in\prod_{\ell\in\mathcal L}D_\ell}
+        \prod_{p\in P}A_p(\eta_p;x_p,y_p).
+        \label{eq:compression_operator_link_sum}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_operator,thm:compression_operator_diagonal_reader}
+    The identity matrix on each edge forces its two endpoint labels to coincide. Reindex the remaining diagonal assignments by one label per edge; the endpoint reader then yields $\eta_p$. No dimension factor is introduced.
+\end{proof}
+
+\begin{theorem}[Exact branch and sample evaluation]
+    \label{thm:compression_operator_branch_sum}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
+    \leanok
+    The constructed operator has the exact entries
+    \begin{align}
+        \sigma(x,y)
+         & =\sum_{\kappa\in\prod_{g\in G}\Lambda_g}
+        \left(\prod_{g\in G}c_g(\kappa_g)\right)
+        \sum_{j\in J_k^S}\prod_{p\in P}T_p(\kappa_p,j_p)_{x_p,y_p}.
+        \label{eq:compression_operator_branch_sum}
+    \end{align}
+    The identity permits empty branch alphabets, empty link families, singleton gates and $k=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_operator_link_sum,def:compression_operator_local_tensor,def:compression_operator_configuration_bijection,thm:compression_operator_shared_samples,thm:compression_operator_coefficient_product}
+    Expand the product of the local sums in~(\ref{eq:compression_operator_link_sum}) using~(\ref{eq:compression_operator_local_tensor}). The consistency indicators restrict the sum to globally consistent configurations. Reindex by the proved bijection with $(\kappa,j)$, then use the shared-sample identity and the root-coefficient product identity.
+\end{proof}
+
+\begin{theorem}[Rectangular matrix form of exact evaluation]
+    \label{thm:compression_operator_matrix_sum}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix}
+    \leanok
+    The operator identity corresponding to~(\ref{eq:compression_operator_branch_sum}) is
+    \begin{align}
+        \sigma
+         & =\sum_{\kappa\in\prod_{g\in G}\Lambda_g}
+        \left(\prod_{g\in G}c_g(\kappa_g)\right)
+        \sum_{j\in J_k^S}\bigotimes_{p\in P}T_p(\kappa_p,j_p).
+        \label{eq:compression_operator_matrix_sum}
+    \end{align}
+    The tensor product here has entry $\prod_pT_p(\kappa_p,j_p)_{x_p,y_p}$ and allows different input and output alphabets at each party.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_operator_branch_sum}
+    Evaluate both sides at $(x,y)$, distribute the finite matrix sums and scalar multiplication, and apply the entrywise identity.
+\end{proof}
+
+\begin{theorem}[Exact virtual dimensions]
+    \label{thm:compression_operator_alphabet_card}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.card_alphabet}
+    \leanok
+    A star edge belonging to $g$ has dimension $|\Lambda_g|$, and every sample edge has dimension $k$. These dimensions contain no private-memory or source-support factor.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_operator_alphabets}
+    Compute the cardinalities of the two cases in the definition of $D_\ell$.
+\end{proof}
+
+\begin{theorem}[Uniform virtual dimension bound]
+    \label{thm:compression_operator_alphabet_bound}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.card_alphabet_le}
+    \leanok
+    If $|\Lambda_g|\le M$ for every $g\in G$, then every virtual edge satisfies $|D_\ell|\le\max\{M,k\}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_operator_alphabet_card}
+    A star edge inherits the supplied bound at its tagged active gate; a sample edge has dimension exactly $k$.
+\end{proof}
+
+\begin{definition}[Density-branch coefficient]
+    \label{def:compression_operator_density_coefficient}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.densityPairCoefficient}
+    \leanok
+    Let $\Lambda_g=K_g\times B_g$ be the complete ordered ket/bra label pair. For coefficient functions $a_g,b_g$ and a gate-owned weight $w_g$, put $c_g(\xi,\zeta)=w_g a_g(\xi)\overline{b_g(\zeta)}$. Any averaging factor for a sample position is included once in its gate's $w_g$.
+\end{definition}
+
+\begin{theorem}[Density-pair specialization]
+    \label{thm:compression_operator_density_pair}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_densityPair_eq}
+    \leanok
+    For arbitrary finite $K_g,B_g$, the star shares the entire pair $(\xi_g,\zeta_g)$. The contracted operator is
+    \begin{align}
+        \sigma
+         & =\sum_{(\xi,\zeta)\in\prod_g(K_g\times B_g)}
+        \left(\prod_g w_g a_g(\xi_g)\overline{b_g(\zeta_g)}\right)
+        \sum_{j\in J_k^S}\bigotimes_p T_p((\xi,\zeta)_p,j_p).
+        \label{eq:compression_operator_density_pair}
+    \end{align}
+    Each gate-owned weight appears once, including at a singleton gate.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_operator_matrix_sum,def:compression_operator_density_coefficient}
+    Specialize the rectangular matrix identity to the complete ket/bra alphabet and the stated coefficient function.
+\end{proof}
