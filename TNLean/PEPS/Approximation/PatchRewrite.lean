@@ -41,6 +41,11 @@ for the reference error; the others serve the polynomial expansion
 
 * Polynomial-PEPS manuscript (September 24, 2026), Lemma 6.3 `lem:small-rewrite`,
   `05-frames.tex`, lines 182–252.
+
+Source text: `openai/math` at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, file
+`preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/`
+`build/sections/05-frames.tex`. The statements and proofs here are formalized independently from
+the manuscript; no upstream Lean proof text was reused.
 -/
 
 open Matrix QuantumCircuit

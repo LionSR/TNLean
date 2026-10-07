@@ -60,6 +60,11 @@ encoders; its reference vector is `Ω_F = K_F Ω`. Disjoint holes commute, so
   `def:frame` (lines 71–82), and `eq:frame-norm` (lines 84–94). The cylinder data are those of
   Proposition 4.1 `prop:patch`, `03-patches.tex`, lines 24–49.
 
+Source text: `openai/math` at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, file
+`preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/`
+`build/sections/05-frames.tex`. The statements and proofs here are formalized independently from
+the manuscript; no upstream Lean proof text was reused.
+
 The pairwise disjointness of outer squares in Definition 6.1 is used only through the
 disjointness of their physical samples, which it implies; `Frame` records the latter.
 -/
