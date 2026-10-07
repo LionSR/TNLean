@@ -30,8 +30,10 @@ pinned together with the consumer. The local verification uses a source-audited
 private artifact overlay; it is not a substitute for the registered linter-bearing
 Lake targets, complete repository CI, or full blueprint `checkdecls`.
 
-The companion pin is the accepted QICLean PR 560 merge
-`e0d95bff81c11eab7db872a927d1d69f820d4f47`. Root and docbuild manifests use
-the same revision. Its entropy modules, imported proof-source closure, toolchain
-and dependency configuration match the checked snapshot. The accepted main tree
-additionally contains independent operator-mean modules outside this closure.
+The companion pin is the accepted QICLean PR 566 merge
+`826a56f5d2a3d0c5b5027c4ab536d24feadbdbb6`, which includes accepted PR 560.
+Root and docbuild manifests use the same revision. The original two-family
+entropy modules and imported proof-source closure are unchanged. The companion
+also provides the conditional two-family theorem used by the PEPS approximation
+consumer; the original issue 8760 evidence continues to identify its own exact
+published source snapshot.

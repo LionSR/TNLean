@@ -554,6 +554,16 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build conditional two-family entropy consumer
+        run: lake build TNLean.PEPS.Approximation.ConditionalTwoFamilies
+
+      - name: Check conditional two-family entropy integration strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ConditionalTwoFamilyEntropy.lean
+
       - name: Build two-family regional entropy consumer
         run: lake build TNLean.PEPS.AreaLaw.TwoFamilies
 

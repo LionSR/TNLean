@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8765-tn-conditional-01",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/ConditionalTwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.conditionalMutualInformation_le_sum",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex",
+          "labels": [
+            "eq:info-tile-cost"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently restrict the existing labelled partition to its two family orders, consume QICLean conditional cancellation, and rewrite the existing model regional entropies. No new state/CMI definition, geometry or canonical tripartite identification is introduced."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    },
+    {
+      "id": "8765-tn-conditional-02",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/ConditionalTwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_residual_add_sum",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex",
+          "labels": [
+            "eq:info-tile-cost"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently restrict the existing labelled partition to its two family orders, consume QICLean conditional cancellation, and rewrite the existing model regional entropies. No new state/CMI definition, geometry or canonical tripartite identification is introduced."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "pending"
+      }
+    }
+  ]
+}
