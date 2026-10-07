@@ -226,6 +226,57 @@ class ProvenanceTests(unittest.TestCase):
         self.write("TNLean/Example.lean", self.stored.decode())
         self.assertEqual(self.validate(), 1)
 
+    def test_axiom_target_requires_exact_quoted_name(self):
+        for output in (
+            "'NotExample.Vertex' does not depend on any axioms",
+            "'Other.Example.Vertex' does not depend on any axioms",
+            "'Example.VertexExtra' does not depend on any axioms",
+            "Example.Vertex does not depend on any axioms",
+            "prefix 'Example.Vertex' does not depend on any axioms",
+        ):
+            with self.subTest(output=output):
+                self.write("axioms.log", output + "\n")
+                self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+                self.rejects("axiom log missing downstream declaration")
+
+    def test_later_bad_axiom_record_is_not_ignored(self):
+        self.write("axioms.log", "'Example.Vertex' depends on axioms: [propext]\n"
+                   "'Example.Vertex' depends on axioms: [sorryAx]\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.rejects("unapproved axiom")
+
+    def test_conflicting_exact_target_records(self):
+        self.write("axioms.log", "'Example.Vertex' does not depend on any axioms\n"
+                   "'Example.Vertex' depends on axioms: [propext]\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.rejects("conflicting exact-target")
+
+    def test_malformed_exact_target_record_is_not_ignored(self):
+        self.write("axioms.log", "'Example.Vertex' does not depend on any axioms\n"
+                   "'Example.Vertex' depends on axioms: unreadable\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.rejects("malformed exact-target")
+
+    def test_multiline_axiom_output_and_unrelated_records(self):
+        self.write("axioms.log", "'Other.theorem' depends on axioms: [sorryAx]\n"
+                   "'Example.Vertex' depends on axioms:\n[propext,\nClassical.choice, Quot.sound]\n")
+        self.row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
+        self.assertEqual(self.validate(), 1)
+
+    def test_same_declaration_different_path_rejected(self):
+        first, second = deepcopy(PLAN), deepcopy(PLAN)
+        second["entries"][0]["id"] = "other-location"
+        second["entries"][0]["downstream"]["path"] = "QICLean/Other.lean"
+        with self.assertRaisesRegex(provenance.Invalid, "duplicate downstream"):
+            provenance.validate([first, second], SCHEMA, {}, scan=False)
+
+    def test_repository_casing_cannot_bypass_uniqueness(self):
+        first, second = deepcopy(PLAN), deepcopy(PLAN)
+        second["entries"][0]["id"] = "other-casing"
+        second["entries"][0]["downstream"]["repository"] = "lionsr/qiclean"
+        with self.assertRaisesRegex(provenance.Invalid, "duplicate downstream"):
+            provenance.validate([first, second], SCHEMA, {}, scan=False)
+
     def test_wrong_manuscript_label(self):
         self.row["paper_sources"][0]["labels"] = ["invented-label"]
         self.rejects("missing manuscript label")
