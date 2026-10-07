@@ -4,9 +4,10 @@ Assessment dated 7 October 2026. The complete ground-state area law
 (Theorem 1.1 of *A two-dimensional area law from a global spectral gap*) and the
 polynomial PEPS approximation theorem (Theorem 1.1 of *Polynomial PEPS
 approximation of gapped square-grid ground states*) remain unfinished. The
-results below establish distinct steps of their proofs. The new QICLean results
-are awaiting incorporation into the TNLean dependency; individual checks and
-common-library verification are distinguished below. All manuscript
+results below establish distinct steps of their proofs. The combined QICLean
+build, strict examples, all 27 public kernel reports, and complete blueprint
+PDF, web and declaration checks have passed. Incorporation into the TNLean
+dependency and the actual TNLean module builds remain pending. All manuscript
 references use the September 24, 2026 versions at OpenAI source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
@@ -24,7 +25,7 @@ These QICLean results establish the matrix interpretation of the
 [typical-Schmidt estimates preceding Proposition 8.1](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/07-comparators.tex#L39-L55).
 They allow a kernel outside the selected indices. They do not construct the
 selection from a spectral gap or prove the sector norm comparisons of
-Proposition 8.1. Their module builds and exported axiom checks passed.
+Proposition 8.1.
 
 For any normalized finite-product pure state and disjoint regions \(T,E\),
 QICLean now supplies an isometry on the entire complementary Hilbert space and
@@ -34,11 +35,20 @@ two normalized purifications \(s,s'\), with
 \le\sqrt{2(1-e^{-I_\psi(T:E)/2})}\le\sqrt{I_\psi(T:E)}.
 \]
 This establishes [the splitting consequence, PEPS Lemma 6.4](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/05-frames.tex#L352-L391)
-for varying local dimensions and empty regions. There is no bound on the new
+for varying local dimensions and empty regions. No polynomial bound in system size is asserted for the new
 purifying dimensions. In particular, \(I_\psi(T:E)\le L^{-60}\) gives error
-at most \(L^{-30}\). The module build, strict source checks, regressions and
-exported axiom checks passed. This is a complement isometry; a distributed
+at most \(L^{-30}\). This is a complement isometry; a distributed
 construction still has to use it with the required locality and dimension bounds.
+
+Three further inequalities are proved for actual regional reduced matrices:
+\(I_\psi(X:C\mid Z)\ge0\) for pairwise disjoint regions,
+\(S_\psi(R\cup T)+S_\psi(R\cap T)\le S_\psi(R)+S_\psi(T)\), and
+\(I_\psi(R:J)\le I_\psi(T:J)\) whenever \(R\subseteq T\) and
+\(T\cap J=\varnothing\). These balanced entropy inequalities hold even for
+unnormalized vectors; ordinary mutual-information positivity for such vectors
+is not asserted. Monotonicity establishes
+[the final discarding step of Proposition 10.2](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex#L560-L561),
+not the amplified information estimate itself.
 
 For a unit vector \(\Omega\) with local dimension \(q\ge1\), the new TNLean
 entropy argument uses the existing regional density matrix to obtain \(S_\Omega(D)\le |D|\log q\). For an ordered two-family partition,
@@ -58,10 +68,12 @@ are still pending.
 The proved radius estimate isolates the numerical part of
 [Proposition 10.2](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex#L261-L287).
 With \(\gamma=(1-\varepsilon)/\alpha<\beta\), it turns
-\(r\le Cn^\gamma\) into a threshold, depending only on \(C,\eta>0\), above
-which \(\lfloor n^{1-\varepsilon}\rfloor+2r<\eta n^\beta\).
-The exponent gap, rounded threshold and little-o consequence pass standalone
-Lean checks; verification against the actual TNLean imports is pending. This estimate
+\(r\le Cn^\gamma\) into a threshold, depending only on \(C\) and \(\eta>0\), above
+which \(\lfloor n^{1-\varepsilon}\rfloor+2r<\eta n^\beta\). Hence every
+eventually admissible radius sequence satisfies
+\(\lfloor n^{1-\varepsilon}\rfloor+2r(n)=o(n^\beta)\).
+The exponent gap, rounded threshold and little-o proofs are complete and pass
+standalone Lean checks; verification against the actual TNLean imports is pending. This estimate
 does not construct an amplification radius or prove a remote-information bound.
 
 The area law still requires the physical concentration and auxiliary-sector
