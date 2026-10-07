@@ -342,8 +342,8 @@ the canonical map `M` between the old and new layouts is a contraction and
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–213;
 proof lines 221–252. -/
-theorem norm_rewrite_le_one_and_refVec_sub_le [NeZero q] (hR : R.Conditions) {Ω : EuclideanSpace ℂ (ι → Fin q)}
-    {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
+theorem norm_rewrite_le_one_and_refVec_sub_le [NeZero q] (hR : R.Conditions)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
     (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
     ‖R.rewrite‖ ≤ 1 ∧
       ‖act R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
