@@ -13,4 +13,6 @@ import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
+import TNLean.PEPS.Approximation.SquareGridContraction
+import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
