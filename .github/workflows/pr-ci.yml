@@ -533,6 +533,12 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build capped dyadic partition early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build rectangular local-window preparation targets early
         run: |
           set -eo pipefail
@@ -554,6 +560,18 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test capped dyadic partition and audit axioms strictly
+        timeout-minutes: 3
+        run: |
+          lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
+            -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
+            -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+            TNLeanTest/CappedDyadicPartition.lean
+          lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
+            -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
+            -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+            docs/provenance/evidence/8754-capped-dyadic-axioms.lean
 
       - name: Test exact square-grid PEPS contraction and audit axioms
         timeout-minutes: 2

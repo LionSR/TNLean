@@ -1,0 +1,745 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.dyadicancestor_eq_cellindex",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor_eq_cellIndex",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_latticedyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_latticedyadiccell_iff_mem_cell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_mem_cell",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.card_latticedyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_latticeDyadicCell",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell_zero",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_zero",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell_subset_of_common_mem",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_of_common_mem",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell_subset_parent",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_parent",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.exists_mem_cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_mem_cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.biunion_cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.biUnion_cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.pairwisedisjoint_cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.sum_card_cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_card_cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.sum_pow_cappeddyadicpartition",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_pow_cappedDyadicPartition",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.card_cappeddyadicpartition_at_cap_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_at_cap_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mixeddyadicindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_mixeddyadicindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_mixedDyadicIndices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.parent_mem_mixeddyadicindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.parent_mem_mixedDyadicIndices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition_subset_mixed_refinement",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_subset_mixed_refinement",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.card_cappeddyadicpartition_below_cap_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_below_cap_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition_empty",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_empty",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition_zero",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_zero",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates",
+            "scanner:mixed-piece"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently proved from the manuscript; no upstream Lean source or proof text reused.",
+        "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
