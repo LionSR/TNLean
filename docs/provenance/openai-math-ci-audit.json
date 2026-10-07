@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "original_pin_baseline_not_downstream_port",
+  "run_url": "https://github.com/LionSR/TNLean/actions/runs/37591286575",
+  "run_id": 37591286575,
+  "job_id": 112693126341,
+  "conclusion": "success",
+  "head_commit": "d90bce46ac39781a7540f8aa494b2c8b4b1d3429",
+  "tested_merge_commit": "f1596ea2bf2ca0ece0c4efda555cc1e456f63c71",
+  "artifact_id": 11468309484,
+  "retained_archive": "docs/provenance/openai-math-ci-37591286575.zip",
+  "archive_sha256": "690d510b8a80bfe185280c3de7952ab56222291c8d0d268fb7c4b55c6e50983f",
+  "result": {
+    "worktree": "/home/runner/work/_temp/oai-baseline",
+    "lake": "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+    "attempts": [
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "--version"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 0.039,
+        "finished_at": "2026-10-07T08:05:14.782908+00:00",
+        "log": "lake-version.log",
+        "log_sha256": "36526a338068c343bedff5daa38fec328b4f722df1e8f0b5d026d4f0f908f3a3",
+        "logged_warning_lines": 0
+      },
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "exe",
+          "cache",
+          "get"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 98.705,
+        "finished_at": "2026-10-07T08:06:53.488251+00:00",
+        "log": "cache-get.log",
+        "log_sha256": "58ec5a412eecaebe0286f9c6117a4eba4163724174e9a23ddda7f45f947f7aa1",
+        "logged_warning_lines": 1
+      },
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "--no-build",
+          "build",
+          "+Mathlib:leanArts"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 4.844,
+        "finished_at": "2026-10-07T08:06:58.346725+00:00",
+        "log": "cache-preflight.log",
+        "log_sha256": "9f1d81628d446e8c781c9d19c54384f8a537db5ad3ee9cb01c8142ca83b6dd1c",
+        "logged_warning_lines": 0
+      },
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "build",
+          "OAI.MathematicalPhysics.PEPSFilters.GeometricOptimizer"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 149.086,
+        "finished_at": "2026-10-07T08:09:27.433538+00:00",
+        "log": "build-OAI.MathematicalPhysics.PEPSFilters.GeometricOptimizer.log",
+        "log_sha256": "a8f5489f9604fd2ff926bb20a0f5be7752129e619a9c7c2345a64ff7235457e7",
+        "logged_warning_lines": 150
+      },
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "build",
+          "OAI.MathematicalPhysics.PEPSMove.PhysicalMove"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 193.341,
+        "finished_at": "2026-10-07T08:12:40.775375+00:00",
+        "log": "build-OAI.MathematicalPhysics.PEPSMove.PhysicalMove.log",
+        "log_sha256": "224bf51d77eef8eff902ae9d2e5e6b767e281a74794120e229d87b8bf958395d",
+        "logged_warning_lines": 1317
+      },
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "build",
+          "OAI.MathematicalPhysics.PEPSSubvolume.Subvolume"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 251.458,
+        "finished_at": "2026-10-07T08:16:52.234044+00:00",
+        "log": "build-OAI.MathematicalPhysics.PEPSSubvolume.Subvolume.log",
+        "log_sha256": "43c39eb14db8c755d0456aa9996abc8ff70833705b4c65042647c5dff4a3dabc",
+        "logged_warning_lines": 828
+      },
+      {
+        "command": [
+          "/home/runner/work/_temp/lean-4.34.1-linux/bin/lake",
+          "env",
+          "lean",
+          "AuditAxioms.lean"
+        ],
+        "cwd": "/home/runner/work/_temp/oai-baseline",
+        "timeout_seconds": 1200,
+        "exit_code": 0,
+        "elapsed_seconds": 5.159,
+        "finished_at": "2026-10-07T08:16:57.393824+00:00",
+        "log": "axioms.log",
+        "log_sha256": "9e303e8e8f8a9f10595e13301f9bf84138a93149e8c6268a57ad163d1688d0a6",
+        "logged_warning_lines": 0
+      }
+    ],
+    "configuration_sha256": {
+      "lean-toolchain": "d5edba4e4b8faad9c1baeadb265716d20d03be4d1a2647dc5e35b0c0325bea7b",
+      "lake-manifest.json": "3c9bedce040b7cc0804fc7e07fbcb871d9c87d1f61b22ebf5df2429235ebfaf2"
+    },
+    "environment": {
+      "MATHLIB_CACHE_DIR": "/home/runner/work/_temp/mathlib-cache-original"
+    },
+    "library_build_status": "passed",
+    "axiom_status": "passed_standard_axioms_only",
+    "cache_sentinel": "/home/runner/work/_temp/oai-baseline/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean",
+    "cache_gate": "passed",
+    "root_axioms": {
+      "OAI.PolynomialPEPS.PinnedEntropy.NestedFilter.Energy.geometric_optimizer_producer": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "OAI.PolynomialPEPS.PhysicalMove.LocalMovePhysical.one_copy_move_bound": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "OAI.PolynomialPEPS.Subvolume.RectangleTiling.uniform_subvolume_square": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  },
+  "provenance": {
+    "evidence_kind": "original_pin_baseline_not_downstream_port",
+    "source_commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+    "downstream_port_validation": "not_performed",
+    "workflow_revision": "f1596ea2bf2ca0ece0c4efda555cc1e456f63c71",
+    "run_id": "37591286575",
+    "run_attempt": "1",
+    "event": "pull_request",
+    "modified_or_missing": [],
+    "dependency_revisions": {
+      "mathlib": {
+        "expected": "d13f23b723b8a846827a245b89c10fc7d3f11612",
+        "actual": "d13f23b723b8a846827a245b89c10fc7d3f11612"
+      },
+      "plausible": {
+        "expected": "118aa17ee84656b8bd727fef7c458ee8c833385c",
+        "actual": "118aa17ee84656b8bd727fef7c458ee8c833385c"
+      },
+      "LeanSearchClient": {
+        "expected": "ddf04cf3949fa556442341e87d47f9f6e6074707",
+        "actual": "ddf04cf3949fa556442341e87d47f9f6e6074707"
+      },
+      "importGraph": {
+        "expected": "e928b72544873815af278d38681b31c0293588e3",
+        "actual": "e928b72544873815af278d38681b31c0293588e3"
+      },
+      "proofwidgets": {
+        "expected": "106ff4fafc74ef4ac99d81dbf3ab399118f497a5",
+        "actual": "106ff4fafc74ef4ac99d81dbf3ab399118f497a5"
+      },
+      "aesop": {
+        "expected": "355695d523e41d0554926416cba2a2b3544fbbc9",
+        "actual": "355695d523e41d0554926416cba2a2b3544fbbc9"
+      },
+      "Qq": {
+        "expected": "6a489d9af5d0c47e5b259e2e8bcdfc1811b5a259",
+        "actual": "6a489d9af5d0c47e5b259e2e8bcdfc1811b5a259"
+      },
+      "batteries": {
+        "expected": "f2effa3d803fda822b1f97b806c47cf2adfbcbc2",
+        "actual": "f2effa3d803fda822b1f97b806c47cf2adfbcbc2"
+      },
+      "Cli": {
+        "expected": "e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204",
+        "actual": "e92c9f15fdfacc8536f31cfb3b7ad26c3c8cd204"
+      }
+    },
+    "integrity": "passed"
+  },
+  "downstream_port_validation": "not_performed",
+  "limitations": [
+    "Linter-bearing builds passed with upstream style warnings; warning counts include replayed cached warnings.",
+    "The reduced configuration preserves source bytes and original dependency locks; the full upstream Lake package was not built.",
+    "No downstream proof port or full area-law/polynomial-PEPS theorem completion is claimed.",
+    "Kernel axioms checked for all three exact exported roots; minimal declaration closure and mathematical source faithfulness remain separate review tasks."
+  ]
+}
