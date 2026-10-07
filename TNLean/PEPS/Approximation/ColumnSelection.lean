@@ -106,9 +106,8 @@ theorem exists_ne_zero_norm_sq_le_of_sum {E : Type*} [SeminormedAddCommGroup E]
   -- Restrict both sums to the indices with nonzero overlap.
   set s : Finset ι := {z | a z ≠ 0}
   have hsa : ∑ z ∈ s, ‖a z‖ ^ 2 = 1 := by
-    rw [Finset.sum_filter_of_ne fun z _ hz ↦ ?_, ha]
-    rintro rfl
-    simp at hz
+    rw [← ha]
+    exact Finset.sum_filter_of_ne fun z _ hz ↦ by simpa using hz
   obtain ⟨z, hz, hle⟩ := Finset.exists_le_of_sum_le
     (f := fun z ↦ ‖f z‖ ^ 2) (g := fun z ↦ η ^ 2 * ‖a z‖ ^ 2)
     (Finset.nonempty_of_sum_ne_zero (hsa ▸ one_ne_zero)) <|

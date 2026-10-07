@@ -84,6 +84,7 @@ def fixInput (A : (v : Vertex) → LocalConfig tail head D v → Out v × In v �
     (z : (v : Vertex) → In v) : (v : Vertex) → LocalConfig tail head D v → Out v → ℂ :=
   fun v η s ↦ A v η (s, z v)
 
+omit [DecidableEq Vertex] in
 /-- Fixing the input index locally selects the corresponding entry of the
 contracted operator, with the same graph, virtual alphabets and bond matrices.
 
@@ -106,7 +107,7 @@ theorem operatorNetworkMatrix_mulVec_single [∀ v, Fintype (In v)] [∀ v, Deci
     (operatorNetworkMatrix tail head D A B) *ᵥ Pi.single z 1 =
       network tail head D (fixInput tail head D A z) B := by
   ext τ
-  simp [Matrix.mulVec_single_one, network_fixInput]
+  simp [network_fixInput]
 
 variable {P : Vertex → Type*} [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)]
 
@@ -161,15 +162,16 @@ def operatorCoeff (A : Tensor G (d * d)) : Matrix (V → Fin d) (V → Fin d) �
 `z v` at every vertex `v`. Its bond dimensions are those of the operator tensor.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
-def Tensor.fixInput (A : Tensor G (d * d)) (z : V → Fin d) : Tensor G d where
+def _root_.TNLean.PEPS.Tensor.fixInput (A : Tensor G (d * d)) (z : V → Fin d) : Tensor G d where
   bondDim := A.bondDim
   component v η s := A.component v η (finProdFinEquiv (s, z v))
 
+omit [Fintype V] in
 /-- Fixing the input indices leaves every bond dimension unchanged.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, line 78. -/
 @[simp]
-theorem Tensor.bondDim_fixInput (A : Tensor G (d * d)) (z : V → Fin d) :
+theorem _root_.TNLean.PEPS.Tensor.bondDim_fixInput (A : Tensor G (d * d)) (z : V → Fin d) :
     (A.fixInput z).bondDim = A.bondDim :=
   rfl
 
@@ -188,7 +190,7 @@ Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
 theorem operatorCoeff_mulVec_single (A : Tensor G (d * d)) (z : V → Fin d) :
     operatorCoeff A *ᵥ Pi.single z 1 = stateCoeff (A.fixInput z) := by
   ext τ
-  simp [Matrix.mulVec_single_one, stateCoeff_fixInput]
+  simp [stateCoeff_fixInput]
 
 /-- **Polynomial-PEPS Lemma 8.1 for operator tensors on a simple graph.**
 
