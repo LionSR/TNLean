@@ -56,7 +56,9 @@ def stamps(root):
 
 def commit(root):
     guard.git(root, 'add', '.')
-    guard.git(root, '-c', 'user.name=Lake Fixture', '-c', 'user.email=fixture@example.invalid',
+    # Keep temporary fixture repositories quiescent when commit returns.
+    guard.git(root, '-c', 'maintenance.auto=false',
+              '-c', 'user.name=Lake Fixture', '-c', 'user.email=fixture@example.invalid',
               'commit', '-qm', 'fixture')
     return guard.git(root, 'rev-parse', 'HEAD').decode().strip()
 

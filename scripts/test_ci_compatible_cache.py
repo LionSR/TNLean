@@ -52,7 +52,9 @@ def mutate_manifest(data, change):
 
 def commit(repo):
     guard.git(repo, 'add', '.')
-    guard.git(repo, '-c', 'user.name=Cache Guard Test', '-c', 'user.email=cache-test@example.invalid',
+    # Detached maintenance can outlive commit and race TemporaryDirectory cleanup.
+    guard.git(repo, '-c', 'maintenance.auto=false',
+              '-c', 'user.name=Cache Guard Test', '-c', 'user.email=cache-test@example.invalid',
               'commit', '-qm', 'fixture')
     return guard.git(repo, 'rev-parse', 'HEAD').decode().strip()
 
@@ -217,6 +219,12 @@ class AdditiveTests(unittest.TestCase):
 
 class NonBuildPathTests(unittest.TestCase):
     setUp = AdditiveTests.setUp
+
+    def test_fixture_commit_disables_automatic_maintenance(self):
+        with patch.object(guard, 'git', side_effect=[b'', b'', OLD.encode()]) as git:
+            self.assertEqual(commit(self.repo), OLD)
+            self.assertEqual(git.call_args_list[1].args[1:3],
+                             ('-c', 'maintenance.auto=false'))
 
     def test_reviewed_evidence_tests_and_workflow(self):
         for path in (
