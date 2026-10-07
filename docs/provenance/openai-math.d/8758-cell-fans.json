@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfanslot",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.CellFanSlot",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfancenter",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanCenter",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfanstart",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanStart",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +133,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfanend",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanEnd",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,20 +183,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfanpolygon",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -161,20 +233,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.card_cellfanslot_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cellFanSlot_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -193,20 +283,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfanpolygons_cover",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -225,20 +333,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfanpolygons_inter_eq",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_inter_eq",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -257,20 +383,38 @@
         "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.cellfan_vertices_mem_beltcellmarks",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -290,20 +434,38 @@
         "Source: Section 11, the actual fan endpoints in lines 299\u2013310 and the nine initial belt-cell marks in lines 325\u2013330, in the proof of prop:two-families immediately before geometry:initial-stars. This theorem connects the actual fan vertices to existing marked points; it does not assign labels or prove active ray and sector assertions."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.nonbeltpitchindex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NonbeltPrimaries.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.nonbeltPitchIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -323,20 +485,38 @@
         "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.closure_nonbeltcell_subset_primarybirthregion",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NonbeltPrimaries.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.closure_nonbeltCell_subset_primaryBirthRegion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -356,20 +536,38 @@
         "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.exists_unique_primary_of_nonbeltcell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/NonbeltPrimaries.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_unique_primary_of_nonbeltCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -389,7 +587,25 @@
         "Source: Section 11, primary identifiers in lines 212\u2013218, geometry:primary-pieces in lines 237\u2013249, and opposing primary regions in lines 299\u2013305. The mathematical statements concern actual nonbelt fine cells and primary birth regions. Fan label assignment, merging equal-label runs, active rays and sectors, and the complete two-family partition remain separate obligations."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
+            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
+            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
