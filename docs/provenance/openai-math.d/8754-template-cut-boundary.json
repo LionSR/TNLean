@@ -6,7 +6,7 @@
   },
   "entries": [
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.mem_boundaryendpoints_of_mem_edgeboundary",
+      "id": "8754-cut-mem_boundaryendpoints_of_mem_edgeboundary",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,
@@ -38,7 +38,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.edgeboundary_filter_image_subset_ambientboundary",
+      "id": "8754-cut-edgeboundary_filter_image_subset_ambientboundary",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,
@@ -70,7 +70,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.card_edgeboundary_filter_le_ambientboundary",
+      "id": "8754-cut-card_edgeboundary_filter_le_ambientboundary",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,
@@ -102,7 +102,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template.isseparated.disjoint_ambientdilation",
+      "id": "8754-cut-template.isseparated.disjoint_ambientdilation",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,
@@ -134,7 +134,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template_cut_boundary_card_le",
+      "id": "8754-cut-template_cut_boundary_card_le",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,
@@ -166,7 +166,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template_core_boundary_card_le",
+      "id": "8754-cut-template_core_boundary_card_le",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,
@@ -198,7 +198,7 @@
       "no_upstream_proof_text_reused": true
     },
     {
-      "id": "8754-cut-boundary-tnlean.peps.arealaw.geometry.template_shell_cut_boundary_card_le",
+      "id": "8754-cut-template_shell_cut_boundary_card_le",
       "status": "planned",
       "reuse_kind": "original",
       "upstream": null,

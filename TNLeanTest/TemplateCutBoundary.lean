@@ -159,15 +159,15 @@ private theorem pair_crossing :
   · exact ⟨leftSite, by simp, rightSite, by decide, rfl⟩
 
 example : (0, 0) ∈ boundaryEndpoints pairDomain {leftSite} :=
-  mem_boundaryEndpoints_of_mem_edgeBoundary pair_crossing (by simp)
+  mem_boundaryEndpoints_of_mem_edgeBoundary (x := leftSite) pair_crossing (by simp)
 
 example : (1, 0) ∈ boundaryEndpoints pairDomain {leftSite} :=
-  mem_boundaryEndpoints_of_mem_edgeBoundary pair_crossing (by simp)
+  mem_boundaryEndpoints_of_mem_edgeBoundary (x := rightSite) pair_crossing (by simp)
 
 example : ¬ Disjoint {(0, 0)} (boundaryEndpoints pairDomain {leftSite}) := by
   intro h
   exact Finset.disjoint_left.mp h (by simp)
-    (mem_boundaryEndpoints_of_mem_edgeBoundary pair_crossing (by simp))
+    (mem_boundaryEndpoints_of_mem_edgeBoundary (x := leftSite) pair_crossing (by simp))
 
 example : s((1, 0), (0, 0)) ∈ ambientBoundary {(0, 0)} := by
   apply mem_ambientBoundary_iff.mpr
@@ -181,6 +181,84 @@ example : (edgeBoundary {(0, 0)} Finset.univ).card = 0 := by
 -- restriction whose physical cut has no edges.
 example : (edgeBoundary {(0, 0), (2, 0)} Finset.univ).card = 0 := by
   simp only [edgeBoundary_univ, Finset.card_empty]
+
+-- A genuine separated cut with a local edge and a remote nonempty cut boundary.
+private def disconnectedDomain : Finset (ℤ × ℤ) :=
+  {(0, 0), (1, 0), (20, 0), (21, 0)}
+
+private def disconnectedCut : Finset (Site disconnectedDomain) :=
+  Finset.univ.filter fun x ↦ x.1 ≠ (21, 0)
+
+private theorem disconnected_endpoints :
+    boundaryEndpoints disconnectedDomain disconnectedCut ⊆ {(20, 0), (21, 0)} := by
+  classical
+  intro z hz
+  obtain ⟨x, hx, rfl⟩ := Finset.mem_image.mp hz
+  obtain ⟨e, he, hx⟩ := Finset.mem_biUnion.mp hx
+  obtain ⟨hedge, p, _, q, hq, rfl⟩ := Finset.mem_filter.mp he
+  have hqval : q.1 = (21, 0) := by
+    simpa only [disconnectedCut, Finset.mem_filter, Finset.mem_univ, true_and,
+      not_not] using hq
+  have hadj : (domainGraph disconnectedDomain).Adj p q := by
+    simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using hedge
+  have hpdomain := p.property
+  simp only [disconnectedDomain, Finset.mem_insert, Finset.mem_singleton] at hpdomain
+  have hpval : p.1 = (20, 0) := by
+    change (p.1.2 = q.1.2 ∧ (p.1.1 + 1 = q.1.1 ∨ q.1.1 + 1 = p.1.1)) ∨
+      (p.1.1 = q.1.1 ∧ (p.1.2 + 1 = q.1.2 ∨ q.1.2 + 1 = p.1.2)) at hadj
+    rw [hqval] at hadj
+    rcases hpdomain with h | h | h | h
+    · rw [h] at hadj
+      norm_num at hadj
+    · rw [h] at hadj
+      norm_num at hadj
+    · exact h
+    · rw [h] at hadj
+      norm_num at hadj
+  have hx' : x = p ∨ x = q := Sym2.mem_iff.mp (Sym2.mem_toFinset.mp hx)
+  rcases hx' with rfl | rfl <;> simp [hpval, hqval]
+
+private theorem disconnected_separated :
+    thinDiagonalTemplate.IsSeparated 1
+      (boundaryEndpoints disconnectedDomain disconnectedCut) := by
+  intro p hp z hz
+  exact separated p hp z (disconnected_endpoints hz)
+
+example : (edgeBoundary disconnectedDomain
+    (disconnectedCut.filter fun x ↦ x.1 ∈ thinDiagonalTemplate.points)).card ≤ 384 :=
+  template_core_boundary_card_le thinDiagonalTemplate (by norm_num)
+    disconnectedDomain disconnectedCut disconnected_separated (by norm_num)
+
+example : (edgeBoundary disconnectedDomain
+    (disconnectedCut.filter fun x ↦ x.1 ∈
+      ambientDilation thinDiagonalTemplate.points 3 \ thinDiagonalTemplate.points)).card ≤ 768 :=
+  template_shell_cut_boundary_card_le thinDiagonalTemplate (by norm_num)
+    disconnectedDomain disconnectedCut disconnected_separated (by norm_num) 3 (by omega)
+
+example : (boundaryEndpoints disconnectedDomain disconnectedCut).Nonempty := by
+  classical
+  let p : Site disconnectedDomain := ⟨(20, 0), by simp [disconnectedDomain]⟩
+  let q : Site disconnectedDomain := ⟨(21, 0), by simp [disconnectedDomain]⟩
+  have he : s(p, q) ∈ edgeBoundary disconnectedDomain disconnectedCut := by
+    apply Finset.mem_filter.mpr
+    constructor
+    · apply SimpleGraph.mem_edgeFinset.mpr
+      change (domainGraph disconnectedDomain).Adj p q
+      decide
+    · exact ⟨p, by simp [disconnectedCut, p], q, by simp [disconnectedCut, q], rfl⟩
+  exact ⟨(20, 0), mem_boundaryEndpoints_of_mem_edgeBoundary (x := p) he (by simp)⟩
+
+example : (edgeBoundary disconnectedDomain
+    (disconnectedCut.filter fun x ↦ x.1 ∈ thinDiagonalTemplate.points)).Nonempty := by
+  classical
+  let p : Site disconnectedDomain := ⟨(0, 0), by simp [disconnectedDomain]⟩
+  let q : Site disconnectedDomain := ⟨(1, 0), by simp [disconnectedDomain]⟩
+  refine ⟨s(p, q), Finset.mem_filter.mpr ⟨?_, p, ?_, q, ?_, rfl⟩⟩
+  · apply SimpleGraph.mem_edgeFinset.mpr
+    change (domainGraph disconnectedDomain).Adj p q
+    decide
+  · simp [disconnectedCut, thinDiagonalTemplate, thinDiagonalSample, p]
+  · simp [disconnectedCut, thinDiagonalTemplate, thinDiagonalSample, q]
 
 set_option linter.hashCommand false
 

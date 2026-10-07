@@ -1,9 +1,12 @@
 # Physical template boundary slice (#8754)
 
-Draft #8832 is stacked on #8826 at acb16ed1, with #8788 6b053b8b and
+Draft #8832 is stacked on #8826 at acb16ed1, with #8788 162fa69a88d407d97c5ce2682c95d2f87542cf10 and
 #8790 cf6736f4 ancestry. The actual model sources are unchanged, and
 `Geometry.boundaryEndpoints` is imported from `CellCounting` without duplication.
-The combined-tree generated import aggregators remove inherited conflict markers.
+The model owner withdrew 6b053b8b because its generated imports contained
+conflict markers; 162fa69a8 supersedes it. Our combined-tree aggregators were
+regenerated and checked, and the corrected model head is now in ancestry.
+No validation claim is made for the withdrawn model head.
 
 The seven new declarations in `Geometry/TemplateCutBoundary.lean` prove:
 
@@ -31,8 +34,10 @@ Lean proof text reused. The private test fixture is reused from TNLean #8826.
 
 The production module built in 1.7 seconds at 38a082f4 in PR CI run
 37638741577. All seven axiom outputs contained only propext, Classical.choice,
-and Quot.sound. One full-cut regression simplification required correction;
-its fix, expanded edge cases, and exact axiom guards await the next run.
+and Quot.sound. The full library and lint targets also built at 9eb697946 in run 37639535818.
+The exact axiom guards passed there; three new endpoint-membership test calls
+needed explicit subtype witnesses. These test-only fixes and a concrete
+nonempty separated cut fixture await final-head CI.
 
 Full validation is pending normal PR CI: the toolchain download in this fresh Linux
 workspace returned HTTP 403. No Mathlib source build was attempted. The workflow

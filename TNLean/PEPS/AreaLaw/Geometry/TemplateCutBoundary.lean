@@ -26,20 +26,20 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 Source: September 24, 2026; scanner:templates (Lemma 9.4).
 Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.mem_boundaryendpoints_of_mem_edgeboundary
+Provenance-ID: 8754-cut-mem_boundaryendpoints_of_mem_edgeboundary
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.edgeboundary_filter_image_subset_ambientboundary
+Provenance-ID: 8754-cut-edgeboundary_filter_image_subset_ambientboundary
 Downstream declaration:
   TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.card_edgeboundary_filter_le_ambientboundary
+Provenance-ID: 8754-cut-card_edgeboundary_filter_le_ambientboundary
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.template.isseparated.disjoint_ambientdilation
+Provenance-ID: 8754-cut-template.isseparated.disjoint_ambientdilation
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.template_cut_boundary_card_le
+Provenance-ID: 8754-cut-template_cut_boundary_card_le
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.template_core_boundary_card_le
+Provenance-ID: 8754-cut-template_core_boundary_card_le
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le
-Provenance-ID: 8754-cut-boundary-tnlean.peps.arealaw.geometry.template_shell_cut_boundary_card_le
+Provenance-ID: 8754-cut-template_shell_cut_boundary_card_le
 Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le
 -/
 
