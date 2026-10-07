@@ -36,6 +36,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_blueprint_web_render.py'
@@ -76,6 +77,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install system dependencies
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
@@ -90,6 +92,9 @@ jobs:
 
       - name: Fetch pinned tenkz package
         run: python3 scripts/fetch_tenkz.py
+
+      - name: Test blueprint PDF string-pool capacity
+        run: python3 scripts/test_blueprint_pdf_capacity.py
 
       - name: Check native tenkz sources and picture pipeline
         run: |
@@ -170,6 +175,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install system dependencies
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3
