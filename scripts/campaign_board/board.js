@@ -172,13 +172,20 @@
   /* ---------- gaps ---------- */
   const G = D.gaps || { entries: [], checked: [] };
   const isOpenGap = g => (g.status || "open") === "open";
+  // Notes are identified by repository and path; two repositories may use the same file name.
+  const gapKey = (repo, path) => `${repo || PRIMARY.name}:${path}`;
+  const noteFor = g => (D.gapNotes || []).find(n => gapKey(n.repo, n.path) === gapKey(g.repo, g.id));
   (function renderGaps() {
-    const curated = new Set(G.entries.map(g => g.id));
-    const pending = (D.gapNotes || []).filter(n => !curated.has(n.path));
+    const curated = new Set(G.entries.map(g => gapKey(g.repo, g.id)));
+    const pending = (D.gapNotes || []).filter(n => !curated.has(gapKey(n.repo, n.path)));
     const openCount = k => G.entries.filter(g => g.kind === k && isOpenGap(g)).length;
     const serious = openCount("error") + openCount("missing-step");
-    const verdict = serious === 0 ? "No errors or missing steps found in either paper so far."
-      : `${openCount("error")} open error${openCount("error") === 1 ? "" : "s"} and ${openCount("missing-step")} open missing step${openCount("missing-step") === 1 ? "" : "s"} in the papers.`;
+    const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+    const verdict = serious > 0
+      ? `${plural(openCount("error"), "open error")} and ${plural(openCount("missing-step"), "open missing step")} in the papers.`
+      : pending.length
+        ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
+        : "No open errors or missing steps in either paper.";
     const counts = el("div", { class: "counts" }, el("span", { class: "muted", text: "Open:" }),
       ...Object.keys(GAP_KIND).map(k => el("span", {}, el("span", { class: "pill k-" + k, text: String(openCount(k)) }), " " + GAP_KIND[k][0].toLowerCase())));
     const done = G.entries.filter(g => !isOpenGap(g)).length;
@@ -190,7 +197,7 @@
     const order = { error: 0, "missing-step": 1, narrower: 2, convention: 3 };
     const list = $("gaplist");
     for (const g of [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || order[a.kind] - order[b.kind])) {
-      const note = (D.gapNotes || []).find(n => n.path === g.id);
+      const note = noteFor(g);
       const [statusName, statusCls] = GAP_STATUS[g.status || "open"];
       list.append(el("article", { class: "gap" },
         el("div", { class: "where" }, el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }), el("span", { class: "pill " + statusCls, text: statusName }),
@@ -276,8 +283,8 @@
       el("h3", {}, el("span", { text: title }), el("span", { class: "mono", text: String(rows.length) })), el("p", { text: blurb }),
       el("ul", {}, ...(rows.length ? rows : [el("li", {}, el("span"), el("span", { class: "muted", text: "Nothing here right now." }))]))));
     const forIssues = p => p.work.length ? el("span", { class: "why", text: " → " + p.work.map(n => "#" + n).join(" ") }) : null;
-    card("Ready to merge", "Out of draft, CI passing, no conflicts.",
-      open.filter(p => p.kind === "review" && p.ci === "SUCCESS" && p.mergeable !== "CONFLICTING").map(p => el("li", {}, prChip(p), el("span", {}, prTitle(p.title), forIssues(p)))));
+    card("Ready to merge", "Out of draft, CI passing, and GitHub reports no conflicts.",
+      open.filter(p => p.kind === "review" && p.ci === "SUCCESS" && p.mergeable === "MERGEABLE").map(p => el("li", {}, prChip(p), el("span", {}, prTitle(p.title), forIssues(p)))));
     card("Needs a fix", "Merge conflict or failing CI.",
       open.filter(p => p.attention).map(p => el("li", {}, prChip(p), el("span", {}, prTitle(p.title),
         el("span", { class: "why", text: " · " + [p.mergeable === "CONFLICTING" ? "conflicts" : "", p.ci === "FAILURE" || p.ci === "ERROR" ? "CI failing" : ""].filter(Boolean).join(", ") })))));
@@ -400,27 +407,32 @@
   function stepChart(target, series, t0, t1) {
     const W = 900, H = 260, L = 52, R = 170, T = 14, B = 36;
     target.setAttribute("viewBox", `0 0 ${W} ${H}`);
-    const totals = series.map(s => s.events.reduce((a, e) => a + e.v, 0));
-    const ymax = Math.max(1, ...totals);
-    const mag = Math.pow(10, Math.floor(Math.log10(ymax)));
-    const step = ymax / mag > 5 ? 2 * mag : ymax / mag > 2 ? mag : Math.max(1, mag / 2);
-    const ytop = Math.ceil(ymax / step) * step;
+    // Running sums can rise and fall (a deletion-heavy merge), so scale from their extremes.
+    const sorted = series.map(s => [...s.events].sort((a, b) => a.t - b.t));
+    const prefixes = sorted.map(evs => { let c = 0; return evs.map(e => (c += e.v)); });
+    const totals = prefixes.map(ps => ps.length ? ps[ps.length - 1] : 0);
+    const all = [0, ...prefixes.flat()];
+    const span = Math.max(1, Math.max(...all) - Math.min(...all));
+    const mag = Math.pow(10, Math.floor(Math.log10(span)));
+    const step = span / mag > 5 ? 2 * mag : span / mag > 2 ? mag : Math.max(1, mag / 2);
+    const ytop = Math.max(step, Math.ceil(Math.max(...all) / step) * step);
+    const ybot = Math.min(0, Math.floor(Math.min(...all) / step) * step);
     const X = t => L + (W - L - R) * (t - t0) / Math.max(1, t1 - t0);
-    const Y = v => T + (H - T - B) * (1 - Math.max(0, v) / ytop);
-    for (let v = 0; v <= ytop + 1e-9; v += step) {
-      target.append(sv("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), class: v ? "grid" : "axis" }));
+    const Y = v => T + (H - T - B) * (ytop - v) / (ytop - ybot);
+    for (let v = ybot; v <= ytop + 1e-9; v += step) {
+      target.append(sv("line", { x1: L, x2: W - R, y1: Y(v), y2: Y(v), class: Math.abs(v) < 1e-9 ? "axis" : "grid" }));
       const t = sv("text", { x: L - 8, y: Y(v) + 4, "text-anchor": "end" }); t.textContent = kfmt(Math.round(v)); target.append(t);
     }
     const hours = (t1 - t0) / 36e5, tick = hours > 96 ? 48 : hours > 48 ? 24 : hours > 24 ? 12 : 6;
     for (let t = new Date(Math.ceil(t0 / (tick * 36e5)) * tick * 36e5); t <= t1; t = new Date(+t + tick * 36e5)) {
-      target.append(sv("line", { x1: X(t), x2: X(t), y1: H - B, y2: H - B + 4, class: "axis" }));
+      target.append(sv("line", { x1: X(t), x2: X(t), y1: H - B, y2: H - B + 4, class: "grid" }));
       const lb = sv("text", { x: X(t), y: H - B + 17, "text-anchor": "middle" });
       lb.textContent = t.toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit" });
       target.append(lb);
     }
     const ends = series.map((s, k) => {
       let c = 0, d = `M${X(t0)},${Y(0)}`;
-      for (const e of [...s.events].sort((a, b) => a.t - b.t)) { c += e.v; d += ` H${X(e.t)} V${Y(c)}`; }
+      for (const e of sorted[k]) { c += e.v; d += ` H${X(e.t)} V${Y(c)}`; }
       d += ` H${X(t1)}`;
       const path = sv("path", { d }); path.style.fill = "none"; path.style.stroke = s.color; path.style.strokeWidth = s.thin ? "1.6" : "2.4";
       if (s.dash) path.setAttribute("stroke-dasharray", s.dash);

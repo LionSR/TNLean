@@ -30,6 +30,10 @@ import re
 import subprocess
 import sys
 
+# The sorry badge's Lean-aware stripper (nested block comments and string literals).
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+from generate_badges import strip_lean_comments_and_strings  # noqa: E402
+
 THEOREM_KINDS = r"Theorem|Lemma|Proposition|Corollary|Definition|Remark"
 
 
@@ -96,13 +100,17 @@ class Checkout:
         return run("git", "-C", self.path, "rev-parse", "--short", "origin/main").strip()
 
 
-def lean_code(source: str) -> str:
-    """Lean source with comments removed, for counting `sorry`."""
-    return re.sub(r"/-.*?-/|--[^\n]*", "", source, flags=re.S)
-
-
 def count_sorry(source: str) -> int:
-    return len(re.findall(r"\bsorry\b", lean_code(source)))
+    """Occurrences of `sorry` outside comments and string literals of a complete Lean file."""
+    return len(re.findall(r"\bsorry\b", strip_lean_comments_and_strings(source)))
+
+
+def raw_file(repo_slug: str, path: str, ref: str) -> str:
+    """A file at a commit, or the empty string when it does not exist there."""
+    try:
+        return run("gh", "api", f"repos/{repo_slug}/contents/{path}?ref={ref}", "-H", "Accept: application/vnd.github.raw")
+    except subprocess.CalledProcessError:
+        return ""
 
 
 # ------------------------------------------------------------------------- issues
@@ -174,15 +182,20 @@ def result_table(body: str) -> list[dict]:
 
 PR_FIELDS = """... on PullRequest {
   number title state isDraft url createdAt mergedAt closedAt
-  additions deletions changedFiles headRefOid baseRefName mergeable body
+  additions deletions changedFiles headRefOid baseRefOid baseRefName mergeable body
   labels(first: 20) { nodes { name } }
   closingIssuesReferences(first: 20) { nodes { number } }
   commits(last: 1) { nodes { commit { statusCheckRollup { state } } } }
 }"""
 
 
-def file_stats(repo_slug: str, number: int) -> dict:
-    """Line, `sorry` and `\\leanok` counts from the full, paginated file list of a PR."""
+def file_stats(repo_slug: str, number: int, head: str, base: str) -> dict:
+    """Line, `sorry` and `\\leanok` counts from the full, paginated file list of a PR.
+
+    `sorry` is counted exactly, as the change in occurrences between the base and
+    head versions of each Lean file. The two files are fetched only when an added
+    line mentions `sorry`, which keeps the request count low.
+    """
     stats = {"leanAdd": 0, "leanDel": 0, "sorryAdded": 0, "leanokAdded": 0, "leanFiles": [], "gapFiles": []}
     for f in gh_api(f"repos/{repo_slug}/pulls/{number}/files?per_page=100"):
         path = f["filename"]
@@ -191,7 +204,9 @@ def file_stats(repo_slug: str, number: int) -> dict:
             stats["leanAdd"] += f["additions"]
             stats["leanDel"] += f["deletions"]
             stats["leanFiles"].append(path)
-            stats["sorryAdded"] += count_sorry("\n".join(added))
+            if any("sorry" in line for line in added):
+                before = "" if f["status"] == "added" else raw_file(repo_slug, f.get("previous_filename", path), base)
+                stats["sorryAdded"] += max(0, count_sorry(raw_file(repo_slug, path, head)) - count_sorry(before))
         elif path.startswith("blueprint/") and path.endswith(".tex"):
             stats["leanokAdded"] += sum(l.count("\\leanok") for l in added)
         if re.match(r"docs/paper-gaps/.*\.tex$", path):
@@ -224,7 +239,7 @@ def collect_prs(cfg: dict, campaign_issues: set[int]) -> list[dict]:
                 "closes": sorted(closing & campaign_issues),
                 "refs": sorted((referenced & campaign_issues) - closing),
                 "ci": (rollup[0]["commit"]["statusCheckRollup"] or {}).get("state") if rollup else None,
-                **file_stats(repo["slug"], p["number"]),
+                **file_stats(repo["slug"], p["number"], p["headRefOid"], p["baseRefOid"]),
             })
     return sorted(prs, key=lambda p: (p["repo"], p["number"]))
 
@@ -248,20 +263,21 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
             if source and cites.search(source):
                 notes[(repo["name"], path)] = {"repo": repo["name"], "path": path, "onMain": True, "prs": [], **note_meta(source)}
     slugs = {r["name"]: r["slug"] for r in cfg["repos"]}
-    # When several pull requests carry the same note, the newest one has its latest version.
+    # A note touched by open pull requests is read from the newest of them, which
+    # carries its latest version (for example a status changed to resolved).
+    refreshed: set[tuple[str, str]] = set()
     for pr in sorted(prs, key=lambda p: p["number"], reverse=True):
         for path in pr["gapFiles"]:
             key = (pr["repo"], path)
-            if key not in notes:
-                try:
-                    source = run("gh", "api", f"repos/{slugs[pr['repo']]}/contents/{path}?ref={pr['headRefOid']}",
-                                 "-H", "Accept: application/vnd.github.raw")
-                except subprocess.CalledProcessError:
-                    continue
-                if not cites.search(source):
-                    continue
-                notes[key] = {"repo": pr["repo"], "path": path, "onMain": False, "prs": [], **note_meta(source)}
-            notes[key]["prs"].append({"number": pr["number"], "state": pr["state"]})
+            if key not in refreshed and (pr["state"] == "OPEN" or key not in notes):
+                source = raw_file(slugs[pr["repo"]], path, pr["headRefOid"])
+                if source and cites.search(source):
+                    on_main = key in notes and notes[key]["onMain"]
+                    notes[key] = {"repo": pr["repo"], "path": path, "onMain": on_main,
+                                  "prs": notes.get(key, {}).get("prs", []), **note_meta(source)}
+                    refreshed.add(key)
+            if key in notes:
+                notes[key]["prs"].append({"number": pr["number"], "state": pr["state"]})
     return list(notes.values())
 
 

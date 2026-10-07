@@ -410,12 +410,12 @@ This is not triggered directly — it is called via `workflow_call` by the two C
 
 Every hour, at minute 23, this workflow renders the public progress page of a
 formalization campaign and redeploys Pages. The area-law and PEPS campaign
-(label `openai-math`, tracker #8733) is served at `/openai-proof/`. The campaign is
-described by `docs/campaign/openai-proof/`, and the tools in
+(label `openai-math`, tracker #8733) is served at `/openai-area-law-peps-proof/`. The campaign is
+described by `docs/campaign/openai-area-law-peps-proof/`, and the tools in
 `scripts/campaign_board/` are shared by all campaigns; see
 `docs/campaign/README.md`. The workflow calls no model and writes nothing to
 either repository. A new paper-gap note appears on the page as "summary
-pending" until `docs/campaign/openai-proof/gaps.json` gains an entry for it.
+pending" until `docs/campaign/openai-area-law-peps-proof/gaps.json` gains an entry for it.
 
 ### Claude Provider Limit Guard (`claude-provider-limit-guard.yml`)
 
