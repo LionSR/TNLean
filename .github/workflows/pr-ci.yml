@@ -574,6 +574,13 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TwoFamilyEntropy.lean
 
+      - name: Check QICLean conjugator import compatibility strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/QICConjugatorCompatibility.lean
+
       - name: Test actual rectangular local-window regression strictly
         run: >
           LEAN_NUM_THREADS=1 lake env lean -j1

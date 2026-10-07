@@ -18,7 +18,7 @@ import tomllib
 import urllib.parse
 import urllib.request
 
-from lean_import_syntax import pure_import_modules
+from lean_import_syntax import pure_import_modules, strip_lean_comments
 
 INPUTS = ("lean-toolchain", "lake-manifest.json", "lakefile.toml")
 PATHS = (".lake/build", *(f".lake/packages/{p}/.lake/build" for p in
@@ -30,6 +30,8 @@ MANIFEST_FIELDS = {"version", "packagesDir", "packages", "name", "lakeDir", "fix
 PACKAGE_FIELDS = {"url", "type", "subDir", "scope", "rev", "name", "manifestFile",
                   "inputRev", "inherited", "configFile"}
 WINDOW = 64
+QIC_CONFIG_FIELDS = {"name", "version", "keywords", "defaultTargets", "releaseRepo",
+                     "preferReleaseBuild", "leanOptions", "require", "lean_lib", "lean_exe"}
 
 
 class Refusal(ValueError):
@@ -123,6 +125,52 @@ def tree(repo, commit):
     return entries
 
 
+def non_build_qic_path(path):
+    """Reviewed data/test paths, never a blanket exception for non-library files."""
+    return ((path.startswith("docs/") and path.endswith(".md"))
+            or (path.startswith("blueprint/") and path.endswith((".md", ".tex")))
+            or path in {".github/workflows/pr-ci.yml", "blueprint/src/references.bib"}
+            or re.fullmatch(r"QICLeanTest/[A-Za-z_][A-Za-z_0-9]*\.lean", path) is not None
+            or re.fullmatch(r"docs/audits/[A-Za-z_0-9-]+_validation\.json", path) is not None
+            or re.fullmatch(r"docs/provenance/openai-math\.d/[A-Za-z_0-9-]+\.json", path) is not None
+            or re.fullmatch(r"docs/provenance/evidence/[A-Za-z_0-9-]+/"
+                            r"[A-Za-z_0-9.-]+\.(?:md|json|log|lean)", path) is not None)
+
+
+def require_non_build_qic_scope(repo, old, new, trees):
+    """Certify the fixed library layout before ignoring source-only evidence.
+
+    Unknown roots, executable targets and build hooks refuse reuse. The reference
+    screen below is conservative, not a proof against arbitrary dynamic Lean IO.
+    """
+    config = tomllib.loads(file_at(repo, new, "lakefile.toml").decode())
+    require(set(config) <= QIC_CONFIG_FIELDS
+            and config.get("name") == "QICLean"
+            and config.get("defaultTargets") == ["QICLean"]
+            and config.get("lean_lib") == [{"name": "QICLean"}]
+            and config.get("lean_exe") == [{"name": "lint_style", "srcDir": "scripts",
+                                          "root": "LintStyle", "supportInterpreter": True}],
+            "unvalidated QIC non-build path scope")
+    seen = set()
+    for revision, entries in zip((old, new), trees):
+        for path, entry in sorted(entries.items()):
+            if not (path == "QICLean.lean" or
+                    (path.startswith("QICLean/") and path.endswith(".lean"))):
+                continue
+            require(entry[:2] == ("100644", "blob"), f"non-regular QIC source: {path}")
+            if entry[2] in seen:
+                continue
+            seen.add(entry[2])
+            source = file_at(repo, revision, path).decode()
+            # The reviewed sources have no external-input IO or imports from
+            # these trees. Recognizable counterexamples require separate review.
+            require(not re.search(r"\b(?:IO\.FS|IO\.Process|include_str|readFile|readBinFile)\b", source),
+                    f"QIC source may read non-build inputs: {path}")
+            clean, error = strip_lean_comments(source)
+            require(not error and not re.search(r"\b(?:docs|blueprint|QICLeanTest)\b|\.github", clean),
+                    f"QIC source references non-build paths: {path}")
+
+
 def additive_qic(repo, old, new):
     """Existing proof source is identical; aggregators may only import additions."""
     require(SHA.fullmatch(old) and SHA.fullmatch(new), "QIC revisions must be full SHAs")
@@ -131,15 +179,18 @@ def additive_qic(repo, old, new):
         require(p in a and p in b and a[p] == b[p], f"QIC metadata differs/missing: {p}")
     require("lakefile.lean" not in a and "lakefile.lean" not in b,
             "unvalidated QIC lakefile.lean")
+    require_non_build_qic_scope(repo, old, new, (a, b))
     added = {p[:-5].replace("/", ".") for p in b.keys() - a.keys()
              if p.startswith("QICLean/") and p.endswith(".lean")}
     require(added, "no added QIC module")
     aggregators = []
-    for p in a.keys() | b.keys():
+    for p in sorted(a.keys() | b.keys()):
         if a.get(p) == b.get(p):
             continue
-        if ((p.startswith("docs/") and p.endswith(".md"))
-                or (p.startswith("blueprint/") and p.endswith((".md", ".tex")))):
+        if non_build_qic_path(p):
+            require(p in b and b[p][:2] == ("100644", "blob")
+                    and (p not in a or a[p][:2] == ("100644", "blob")),
+                    f"QIC non-build change is not a regular file: {p}")
             continue
         require(p.startswith("QICLean/") and p.endswith(".lean")
                 and p in b and b[p][:2] == ("100644", "blob"),

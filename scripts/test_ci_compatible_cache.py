@@ -17,6 +17,16 @@ import ci_compatible_cache as guard
 ROOT = Path(__file__).resolve().parents[1]
 OLD = 'a' * 40
 NEW = 'b' * 40
+QIC_LAYOUT = '''name = "QICLean"
+defaultTargets = ["QICLean"]
+[[lean_lib]]
+name = "QICLean"
+[[lean_exe]]
+name = "lint_style"
+srcDir = "scripts"
+root = "LintStyle"
+supportInterpreter = true
+'''
 
 
 def pinned_inputs():
@@ -158,6 +168,7 @@ class AdditiveTests(unittest.TestCase):
         guard.git(self.repo, 'init', '-q')
         for path in guard.INPUTS:
             put(self.repo, path, 'metadata bytes')
+        put(self.repo, 'lakefile.toml', QIC_LAYOUT)
         put(self.repo, 'QICLean.lean', 'import QICLean.Analysis\n')
         put(self.repo, 'QICLean/Analysis.lean', 'import QICLean.Analysis.Existing\n')
         put(self.repo, 'QICLean/Analysis/Existing.lean', 'def existing := 1\n')
@@ -201,6 +212,89 @@ class AdditiveTests(unittest.TestCase):
     def test_unknown_configuration(self):
         put(self.repo, 'lakefile.lean', 'import Lake\n')
         with self.assertRaises(guard.Refusal):
+            guard.additive_qic(self.repo, self.old, commit(self.repo))
+
+
+class NonBuildPathTests(unittest.TestCase):
+    setUp = AdditiveTests.setUp
+
+    def test_reviewed_evidence_tests_and_workflow(self):
+        for path in (
+            '.github/workflows/pr-ci.yml', 'QICLeanTest/ConditionalTwoFamilies.lean',
+            'blueprint/src/references.bib',
+            'docs/audits/2026-10-06_hermitian_intertwiner_paths_validation.json',
+            'docs/provenance/openai-math.d/8765.json',
+            'docs/provenance/evidence/8760/QICAxioms.lean',
+            'docs/provenance/evidence/8760/QICLean.Entropy.TwoFamilies.log',
+            'docs/provenance/evidence/shiftedDensityPowers8767/checks.json',
+        ):
+            put(self.repo, path, 'source-only evidence\n')
+        self.assertEqual(guard.additive_qic(self.repo, self.old, commit(self.repo)),
+                         ['QICLean.Analysis'])
+
+    def test_not_a_blanket_docs_or_workflow_exception(self):
+        for path in ('scripts/helper.lean', 'docs/provenance/evidence/8760/run.py',
+                     'docs/provenance/evidence/8760/cached.olean',
+                     'docs/provenance/config.toml', '.github/workflows/build.yml',
+                     'QICLeanTest/nested/Example.lean'):
+            with self.subTest(path=path):
+                self.assertFalse(guard.non_build_qic_path(path))
+
+    def test_ignored_path_cannot_be_symlink_executable_or_deleted(self):
+        path = self.repo / 'docs/provenance/evidence/8760/QICAxioms.lean'
+        path.parent.mkdir(parents=True)
+        path.symlink_to('../../../QICLean/Analysis/Existing.lean')
+        with self.assertRaisesRegex(guard.Refusal, 'non-build change is not a regular file'):
+            guard.additive_qic(self.repo, self.old, commit(self.repo))
+        path.unlink()
+        path.write_text('collector\n')
+        path.chmod(0o755)
+        with self.assertRaisesRegex(guard.Refusal, 'non-build change is not a regular file'):
+            guard.additive_qic(self.repo, self.old, commit(self.repo))
+        path.chmod(0o644)
+        before = commit(self.repo)
+        path.unlink()
+        put(self.repo, 'QICLean/Analysis/Another.lean', 'def another := 3\n')
+        with self.assertRaisesRegex(guard.Refusal, 'non-build change is not a regular file'):
+            guard.additive_qic(self.repo, before, commit(self.repo))
+
+    def test_non_build_layout_even_when_identical_between_revisions(self):
+        original = guard.tomllib.loads(QIC_LAYOUT)
+        changes = (
+            lambda c: c.update(srcDir='docs'),
+            lambda c: c.update(extraDepTargets=['evidence']),
+            lambda c: c.update(defaultTargets=['QICLean', 'lint_style']),
+            lambda c: c['lean_lib'][0].update(roots=['QICLean', 'docs']),
+            lambda c: c['lean_lib'][0].update(globs=['**']),
+            lambda c: c['lean_lib'].append({'name': 'QICLeanTest'}),
+            lambda c: c['lean_exe'][0].update(srcDir='docs/provenance/evidence'),
+        )
+        for change in changes:
+            config = copy.deepcopy(original)
+            change(config)
+            with self.subTest(config=config), \
+                    patch.object(guard, 'file_at', return_value=QIC_LAYOUT.encode()), \
+                    patch.object(guard.tomllib, 'loads', return_value=config), \
+                    self.assertRaisesRegex(guard.Refusal, 'non-build path scope'):
+                guard.require_non_build_qic_scope(self.repo, OLD, NEW, ({}, {}))
+
+    def test_library_cannot_reference_ignored_inputs(self):
+        for source in (
+            'import QICLeanTest.ConditionalTwoFamilies\ndef added := 2\n',
+            'public import docs.provenance.evidence.checks\ndef added := 2\n',
+            'import\n  docs.provenance.evidence.checks\ndef added := 2\n',
+            'def evidence := "docs/provenance/evidence/8760/checks.json"\n',
+            'run_cmd IO.FS.readFile ("do" ++ "cs/file")\n',
+        ):
+            with self.subTest(source=source):
+                put(self.repo, 'QICLean/Analysis/Added.lean', source)
+                with self.assertRaisesRegex(guard.Refusal, 'QIC source (references|may read)'):
+                    guard.additive_qic(self.repo, self.old, commit(self.repo))
+
+    def test_sorted_refusal_witness(self):
+        put(self.repo, 'Z.txt', 'unknown\n')
+        put(self.repo, 'A.txt', 'unknown\n')
+        with self.assertRaisesRegex(guard.Refusal, 'aggregator: A.txt$'):
             guard.additive_qic(self.repo, self.old, commit(self.repo))
 
 
