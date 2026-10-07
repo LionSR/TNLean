@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.pitchinterior",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.pitchInterior",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the actual open pitch square between the selected periodic horizontal and vertical belts, for a translated origin and integer residue representatives.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the closure of an actual coarse-cell/pitch-interior intersection.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primaryfragmentindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragmentIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the finite collection of precisely those retained layer cells whose actual pitch-interior intersections are nonempty.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the closure of the part of an actual dyadic layer contained in one pitch interior.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_subset_closure_pitchinterior",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_subset_closure_pitchInterior",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Places the entire primary birth region inside the closure of its pitch interior.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_dist_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Bounds the sup-metric distance between any two points of a primary birth region by its belt pitch.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_diam_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_diam_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Bounds the sup-metric diameter of an actual primary birth region by its belt pitch, including an empty region.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_dist_separation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_separation",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Derives a lower bound equal to the belt width for the sup-metric distance between points of two differently indexed primary birth regions in one layer.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_primaryfragmentindices_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryRegions.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_primaryFragmentIndices_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For layer index k at most pitch index p, bounds the number of actual nonempty coarse-cell fragments in a primary by (2^(p-k) + 2)^2. The scale ordering is intrinsic to the manuscript fixed scales and is explicit in this general-scale auxiliary statement.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These statements do not bound the number of primary identifiers in an entire layer, construct repairs, or establish the two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarybirthregion_eq_iunion_primaryfragment",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_primaryFragment",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Expresses the actual closed primary birth region as the union of the closures of its intersections with the retained coarse cells.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_eq_closedrectangle",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_eq_closedRectangle",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Identifies the closure of a nonempty actual coarse-cell/pitch-interior intersection with the closed rectangle given by coordinatewise maximum lower endpoints and minimum upper endpoints. The nonemptiness condition belongs to this auxiliary rectangle identity.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_subset_closure_dyadiccell",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_subset_closure_dyadicCell",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Shows that every actual primary fragment lies in the closure of its coarse dyadic cell.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_dist_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_dist_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Derives the coarse-cell side-length bound on the sup-norm distance between every pair of points of an actual primary fragment.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primaryfragment_diam_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryFragments.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryFragment_diam_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Bounds the sup-metric diameter of every actual primary fragment by its coarse-cell side length (2 : \u211d)^k, including the empty fragment.",
+        "Source: Section 11, primary construction lines 212\u2013218 and geometry:primary-pieces lines 237\u2013249. These auxiliary results do not establish the complete primary count, repair construction, two-family partition or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex_mono",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AdjacentScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_mono",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Proves monotonicity of the existing rounded fine-scale index over all natural indices.",
+        "Source: Section 11, lines 299\u2013306 and 352\u2013356 in the initial-contact and isolated-star discussion. These are adjacent-scale arithmetic ingredients only. A common origin, midpoint division, the affine mesh, contacts, isolation, repairs and the complete two-family construction remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finescaleindex_succ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AdjacentScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_succ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Proves that the next rounded fine-scale index equals the present index or its successor, without an additional hypothesis.",
+        "Source: Section 11, lines 299\u2013306 and 352\u2013356 in the initial-contact and isolated-star discussion. These are adjacent-scale arithmetic ingredients only. A common origin, midpoint division, the affine mesh, contacts, isolation, repairs and the complete two-family construction remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.finescale_side_succ",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/AdjacentScales.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineScale_side_succ",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Proves that the next natural fine-cell side equals the present side or twice that side, without an additional hypothesis.",
+        "Source: Section 11, lines 299\u2013306 and 352\u2013356 in the initial-contact and isolated-star discussion. These are adjacent-scale arithmetic ingredients only. A common origin, midpoint division, the affine mesh, contacts, isolation, repairs and the complete two-family construction remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

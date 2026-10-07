@@ -1,0 +1,197 @@
+\section{Primary birth regions and adjacent fine meshes}
+\label{sec:area_law_primary_regions}
+
+Retain the half-open cells $C_{k,z}$, the layer $D_k$, and its finite
+index set $I_k$ from Definition~\ref{def:area_law_dyadic_layers}.
+The origin $o\in\mathbb R^2$ is arbitrary, the endpoint set
+$Z\subset\mathbb Z^2$ is finite, and the neighborhood radius $C_0$ is
+a nonnegative integer. All distances and diameters use the sup metric
+on $\mathbb R^2$.
+
+The primary regions in \cite[Section~11]{OpenAI2026AreaLaw} are obtained
+by intersecting a pitch interior with an actual layer and taking its
+closure. All fragments in one pitch interior receive the same primary
+identifier, even when their union is disconnected.
+
+% Source: 10-geometry.tex, lines 212--218 and 237--249,
+% geometry:primary-pieces. These entries describe individual primary
+% birth regions and their fragments; they do not state the full partition
+% or the scanner-template conditions of prop:two-families.
+
+\begin{definition}[Pitch interiors and primary birth regions]
+    \label{def:area_law_primary_regions}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.pitchInterior,
+        TNLean.PEPS.AreaLaw.Geometry.primaryFragment,
+        TNLean.PEPS.AreaLaw.Geometry.primaryFragmentIndices,
+        TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion}
+    \leanok
+    \uses{def:area_law_dyadic_cells,def:area_law_dyadic_layers}
+    Fix nonnegative integer indices $k,\ell,p$, put
+    $r=2^k$, $t=2^\ell$, and $s=2^p$, and choose integer shifts $a,b$.
+    For every $j\in\mathbb Z^2$, set
+    \begin{align}
+        v_j     & =o+t(a,b)+sj, \\
+        U_j     & =(v_{j,1}+t,v_{j,1}+s)
+                   \times(v_{j,2}+t,v_{j,2}+s), \\
+        F_{j,z} & =\overline{C_{k,z}\cap U_j}, \\
+        J_j     & =\{z\in I_k:C_{k,z}\cap U_j\ne\varnothing\}, \\
+        R_j     & =\overline{D_k\cap U_j}.
+    \end{align}
+    Here $U_j$ is the open pitch interior, $F_{j,z}$ is a closed cell
+    fragment, and $R_j$ is the corresponding primary birth region.
+    These definitions also allow empty interiors and empty fragments.
+    In the geometric construction, $\ell=\ell_k$, $p=p_k$, and
+    $a,b$ represent the selected residue classes modulo $s/t$.
+\end{definition}
+
+\begin{theorem}[Finite rectangular decomposition]
+    \label{thm:area_law_primary_fragment_union}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_primaryFragment}
+    \leanok
+    \uses{def:area_law_primary_regions}
+    For every choice of the preceding data,
+    \begin{align}
+        R_j & =\bigcup_{z\in J_j}F_{j,z}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_nesting}
+    The exact cell union gives $D_k=\bigcup_{z\in I_k}C_{k,z}$.
+    Intersect this finite union with $U_j$ and commute closure with
+    the finite union. Empty intersections have empty closures, so
+    retaining precisely the indices in $J_j$ leaves the union unchanged.
+\end{proof}
+
+\begin{theorem}[Closed cell fragments]
+    \label{thm:area_law_primary_fragment_rectangles}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryFragment_eq_closedRectangle,
+        TNLean.PEPS.AreaLaw.Geometry.primaryFragment_subset_closure_dyadicCell,
+        TNLean.PEPS.AreaLaw.Geometry.primaryFragment_dist_le,
+        TNLean.PEPS.AreaLaw.Geometry.primaryFragment_diam_le}
+    \leanok
+    \uses{def:area_law_primary_regions}
+    For $i\in\{1,2\}$, write
+    $\alpha_{i,z}=o_i+rz_i$ and $\beta_{i,z}=o_i+r(z_i+1)$.
+    If $C_{k,z}\cap U_j\ne\varnothing$, then
+    \begin{align}
+        F_{j,z}
+        & =\prod_{i=1}^2
+            [\max\{\alpha_{i,z},v_{j,i}+t\},
+             \min\{\beta_{i,z},v_{j,i}+s\}].
+    \end{align}
+    Both coordinate intervals have strictly positive length. Every
+    fragment, including an empty one, satisfies the following containment
+    and diameter bounds. The distance bound holds for arbitrary points
+    $x,y\in F_{j,z}$.
+    \begin{align}
+        F_{j,z} & \subseteq\overline{C_{k,z}}, \\
+        \|x-y\|_\infty & \le r, \\
+        \operatorname{diam}_\infty F_{j,z} & \le r.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_cell_distance}
+    A point of the nonempty intersection lies below both upper endpoints
+    in each coordinate. It lies at or above the cell's lower endpoint
+    and strictly above the pitch interior's lower endpoint. Hence the
+    maximum lower endpoint is strictly below the minimum upper endpoint.
+    The coordinate intersection contains the open interval between these
+    endpoints and is contained in their closed interval. Taking closures
+    therefore gives that closed interval. Closure commutes with products,
+    proving the rectangle formula.
+
+    Containment in the closed cell follows from monotonicity of closure.
+    Apply the closed-cell distance bound with identical cell indices and
+    index radius zero. This gives the pointwise distance bound, and hence
+    the diameter bound.
+\end{proof}
+
+\begin{theorem}[Primary diameter and separation]
+    \label{thm:area_law_primary_diameter_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_subset_closure_pitchInterior,
+        TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_le,
+        TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_diam_le,
+        TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_separation}
+    \leanok
+    \uses{def:area_law_primary_regions}
+    For every primary index $j$, the following containment and diameter
+    bounds hold. The distance bound holds for arbitrary points $x,y\in R_j$.
+    \begin{align}
+        R_j & \subseteq\overline{U_j}, \\
+        \|x-y\|_\infty & \le s, \\
+        \operatorname{diam}_\infty R_j & \le s.
+    \end{align}
+    For distinct indices $i,j$, every $x\in R_i$ and $y\in R_j$ satisfy
+    \begin{align}
+        \|x-y\|_\infty & \ge t.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_primary_regions}
+    Monotonicity of closure gives $R_j\subseteq\overline{U_j}$.
+    This closure is contained in the product of the closed intervals
+    $[v_{j,q}+t,v_{j,q}+s]$, for $q=1,2$. Two points in this product
+    have coordinate differences at most $s$, proving the distance and
+    diameter bounds.
+
+    Distinct integer indices differ in at least one coordinate. Suppose
+    $i_q<j_q$. The upper endpoint for index $i_q$ is at most
+    $o_q+t(a,b)_q+sj_q$, while the lower endpoint for index $j_q$ is
+    $o_q+t(a,b)_q+sj_q+t$. Thus the two coordinate intervals are
+    separated by at least $t$. Taking the maximum coordinate distance
+    proves the separation claim; the other ordering is symmetric.
+\end{proof}
+
+\begin{theorem}[Number of fragments of one primary]
+    \label{thm:area_law_primary_fragment_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_primaryFragmentIndices_le}
+    \leanok
+    \uses{def:area_law_primary_regions}
+    If $k\le p$, then every primary index satisfies
+    \begin{align}
+        |J_j| & \le\bigl(2^{p-k}+2\bigr)^2
+                 =\bigl(s/r+2\bigr)^2.
+    \end{align}
+    This bound is independent of the endpoint set, neighborhood radius,
+    origin, and selected shifts.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_primary_regions}
+    Put $N=2^{p-k}$, so $s=Nr$, and let
+    $q_i=\lfloor(v_{j,i}-o_i)/r\rfloor$. If a cell indexed by $z$ meets
+    $U_j$, a point in that intersection lies above $v_{j,i}$ and below
+    $v_{j,i}+s$. The half-open cell inequalities and the defining floor
+    inequalities consequently give, for each coordinate $i\in\{1,2\}$,
+    \begin{align}
+        q_i & \le z_i\le q_i+N.
+    \end{align}
+    Thus $J_j$ lies in an integer rectangle with $N+1$ indices in each
+    coordinate. Its cardinality is at most $(N+1)^2$, which is at most
+    $(N+2)^2$.
+\end{proof}
+
+% Source: 10-geometry.tex, lines 299--306 and 352--356,
+% the adjacent-mesh arithmetic used in geometry:initial-stars.
+\begin{theorem}[Adjacent fine meshes]
+    \label{thm:area_law_adjacent_fine_meshes}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_mono,
+        TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_succ,
+        TNLean.PEPS.AreaLaw.Geometry.fineScale_side_succ}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
+    The fixed fine exponents $\ell_k=\lfloor\zeta k\rfloor$ are
+    nondecreasing. For every nonnegative integer $k$,
+    \begin{align}
+        \ell_{k+1} & \in\{\ell_k,\ell_k+1\}, \\
+        t_{k+1}    & \in\{t_k,2t_k\}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_exponent_gaps}
+    Since $0\le\zeta\le1$, multiplication by $\zeta$ and taking floors
+    preserve the order of the layer indices. Also
+    $\zeta(k+1)\le\zeta k+1$, and adding one commutes with taking the
+    floor. Therefore $\ell_k\le\ell_{k+1}\le\ell_k+1$.
+    Exponentiating the two possible integer values gives the side-length
+    assertion.
+\end{proof}

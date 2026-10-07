@@ -1,7 +1,7 @@
 # Continuation record for the area-law and PEPS formalization
 
 This record supports the [continuing goal](area-law-peps-goal.md).
-Last coordination check: October 7, 2026, 16:51:55 UTC.
+Last coordination check: October 7, 2026, 17:20:05 UTC.
 
 ## Verified mathematical contributions
 
@@ -19,11 +19,11 @@ The detailed commands, logs, hashes and scope are recorded in
 [polynomial sums](evidence/8758-polynomial-budget.md).
 These proofs must not be rebuilt merely because work resumes.
 
-At the last coordination check, all three full Lean builds and provenance and
-module-policy checks passed. Blueprint rendering was running; the polynomial
-draft's compilation-time check was queued. The fine-belt draft had two approvals
-on its exact published head. All three drafts remained open and unmerged.
-Refresh these external statuses before acting on them.
+At the last coordination check, all three contributions passed their full Lean
+builds, compiled blueprint checks, rendering and module policies. The polynomial
+draft's failed timing job had no diagnostic log; its failed-only rerun passed.
+The fine-belt draft had two approvals on its exact published head. All three
+drafts remained open and unmerged. Refresh external statuses before acting.
 
 ## Ownership and remaining mathematics
 
@@ -33,39 +33,55 @@ Template and boundary estimates, entropy improvement, finite scanner iteration,
 generic quantum-information results, and PEPS compression retain their existing
 owners. Consult the live claims before extending or changing those interfaces.
 
-Primary tiles, contacts, isolated stars, descendant estimates, simultaneous
-repairs, birth separation and the complete two-family partition remain open.
-The polynomial series bound does not count actual repairs. The faithful area-law
-and polynomial PEPS main theorems remain unproved.
+The current [primary-region claim](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042706326)
+is on `feat/area-law-primary-regions`, following #8848. Its source contribution
+contains four definitions and thirteen theorems in `PrimaryRegions.lean`,
+`PrimaryFragments.lean` and `AdjacentScales.lean`. Direct elaboration with the
+package options and independent mathematical review passed. The canonical
+Geometry build and seventeen-name imported audit are the next checks; the new
+provenance rows remain planned until their exact logs pass.
 
-The next substantial mathematical action is to claim and construct the actual
-primary birth regions from Section 11, lines 212–218 and 237–249: intersect
-the dyadic layer with an open pitch interior, then take its closure. Prove the
-finite decomposition into closed rectangular fragments, the fragment count,
-the diameter bound and same-layer separation across a belt. Check the source's
-exact constants before presenting the fragment estimate as its formalization.
-Half-open indexing cells and open birth interiors must be distinguished;
-an equality between them at arbitrary real boundary points would be false.
+The construction closes the intersection of an actual layer with an open pitch
+interior. It gives the exact finite union of nonempty rectangular fragments,
+fragment count `(2^(p-k)+2)^2` for `k ≤ p`, fragment diameter at most `2^k`,
+whole-region diameter at most `2^p`, and same-layer separation at least `2^ℓ`.
+The adjacent fine exponent increases by zero or one, giving side ratio one or
+two. Empty layers and fragments are included. The closed-rectangle identity
+explicitly requires a nonempty actual intersection, exactly as enforced by the
+fragment index set. Half-open indexing cells are distinguished from open birth
+interiors at arbitrary real boundary points.
 
-A separate short prerequisite for isolated stars is the adjacent fine-scale
-estimate in source lines 299–306 and 352–356: successive rounded fine exponents
-differ by zero or one, so successive fine-cell sides have ratio one or two.
-The subsequent nine-marks construction must use actual belt cells. The full
-isolated-star result requires actual fan regions and merged identifiers; its
-straight-ray conclusion must be proved rather than assumed. Confirm current
-ownership and publish the precise claim before implementation.
+The number of primary identifiers in an entire layer, contacts, isolated stars,
+descendant estimates, simultaneous repairs, separation from earlier birth
+regions, and the complete two-family partition remain open. The polynomial
+series bound does not count actual repairs. The faithful area-law and polynomial
+PEPS main theorems remain unproved.
+
+After canonical verification and publication, the next substantial geometric
+obligation is a finite set of actual primary pitch indices, with a bound by a
+universal constant times the layer-cell count. Check current ownership and
+claim this precise continuation before implementation. The later nine-marks
+construction must use actual belt cells; full isolated-star geometry requires
+actual fan regions and merged identifiers, with its straight-ray conclusion
+proved rather than assumed.
 
 ## Worktrees and evidence preservation
 
-- The warmed worktree `worktrees/area-law-peps-models` is clean on
-  `feat/area-law-polynomial-budget`, at `ed84770bf703478d69e4c8625d005c645d1a2529`.
+- The warmed worktree `worktrees/area-law-peps-models` is on
+  `feat/area-law-primary-regions`, based on `7d288086001edc540f46b0fe97b52863cc3bd310`.
+  Freeze its new source before canonical verification; record the exact source
+  and evidence heads after the checks pass.
 - `worktrees/area-law-source-preparation` holds the documentation preparation
   branch. It has no seeded Lake cache; no builds should run there.
 - The hot-main worktree is maintained by the coordinating owner. Inspect its
   activity and exact revision before using it; do not reset a peer's active
   worktree or seed from an incompletely warmed source.
-- The previous local verification has finished and released the shared lock.
-  No outstanding local proof check needs to be resumed.
+- The previous local verification finished and released the shared lock.
+  The new primary-region check must use the same lock without busy waiting.
+  The entropy-dimension build belongs to another team; it was actively compiling
+  at 17:18 UTC and has no completion estimate. No peer process was interrupted.
+  The [boundary-owner coordination](https://github.com/LionSR/TNLean/issues/8759#issuecomment-6043017148)
+  records the intended targeted check.
 
 The published
 [geometry handoff](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6042318628)
