@@ -88,7 +88,8 @@ private theorem exists_dist_le_of_mem_closure_dyadicNeighborhood
     Finset.mem_product, Finset.mem_Icc] at hu
   obtain ⟨v, hv, huv⟩ := hu
   obtain ⟨z, hz, rfl⟩ := Finset.mem_image.mp hv
-  refine ⟨z, hz, dyadicCell_dist_le o k u (dyadicCellIndex o k (integerPoint z)) C x (integerPoint z) hxu ?_ ?_⟩
+  refine ⟨z, hz,
+    dyadicCell_dist_le o k u (dyadicCellIndex o k (integerPoint z)) C x (integerPoint z) hxu ?_ ?_⟩
   · exact subset_closure ((mem_dyadicCell_iff o k _ (integerPoint z)).mpr rfl)
   · simp only [abs_le, integerPoint]
     constructor <;> constructor <;> omega
