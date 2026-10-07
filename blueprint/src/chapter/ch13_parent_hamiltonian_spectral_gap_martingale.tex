@@ -6958,6 +6958,452 @@ tensors.
     their open Hamiltonians and their spaces $G_N^{\mathrm{ES}}$ agree.
 \end{proof}
 
+\begin{theorem}[Open-chain gaps at a simultaneous injectivity length]
+    \label{thm:block_open_gap_all_lengths_simultaneous_injectivity}
+    \lean{MPSTensor.%
+        exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ have positive bond dimensions and common
+    physical dimension $d\geq1$. Suppose that their simultaneous
+    length-$S$ word tuples span the product matrix algebra, where $S>0$.
+    Let $B=\bigoplus_j\mu_jA^j$, with every $\mu_j\ne0$.
+    For every interaction range $R\geq S+1$, there exists $\delta>0$
+    such that
+    \begin{align}
+        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|
+        \notag
+    \end{align}
+    for every $N\geq R$ and every $v\perp G_N(B)$.
+    No normalization or inequivalence assumption on the original blocks
+    is required. This is the finite-interval conclusion of
+    \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral} at the
+    sufficient interaction ranges supplied by block injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_word_span_primitive_normalization,
+        thm:block-word-span-separation,
+        thm:block_open_kernel_simultaneous_injectivity,
+        thm:primitive_block_sum_open_gap_all_lengths,
+        lem:parent-finite-interval-comparison,
+        lem:open_parent_range_comparison}
+    Independently normalize the blocks into primitive form while preserving
+    their simultaneous span at $S$ and all component local ground spaces.
+    Simultaneous injectivity separates these normalized blocks. The
+    all-length primitive theorem gives a uniform gap at some range $2p$
+    with $p\geq R$. At range $R$, the open kernel is $G_N$ for every
+    $N\geq R$. On the interval of length $2p$, finite-dimensional
+    comparison gives $\kappa h_{2p}\leq H^{\mathrm{open}}_{2p,R}$ for
+    some $\kappa>0$. The interval comparison transfers the long-range
+    gap to range $R$ at every $N\geq2p$, with loss $2p-R+1$.
+    A finite minimum includes $R\leq N<2p$. Equality of the local spaces
+    returns the same Hamiltonians and ground spaces for the original
+    weighted block tensor.
+\end{proof}
+
+\begin{theorem}[Dimension-bound open gaps for normal blocks]
+    \label{thm:normal_block_open_gap_dimension_bound}
+    \lean{MPSTensor.%
+        exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_isNormalTensor}
+    \leanok
+    Let $A^j$ be normal tensors with common physical dimension $d\geq1$,
+    pairwise inequivalent under virtual similarity and phase. Set
+    $D_* = \max\{\sum_j D_j,1\}$ and $B=\bigoplus_j\mu_jA^j$,
+    with every $\mu_j\ne0$. For every $R\geq3D_*^5$, there exists
+    $\delta>0$ such that $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|$
+    for every $N\geq R$ and every $v\perp G_N(B)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
+        thm:cpsv_bnt_sharp_span_ambient_cap}
+    The dimension-bound blocking theorem gives a positive simultaneous
+    injectivity length $S$ with $S+1\leq3D_*^5$. Apply the open-chain gap
+    theorem at $R\geq S+1$.
+\end{proof}
+
+\begin{theorem}[Open parent gaps for canonical tensors]
+    \label{thm:canonical_open_gap_all_lengths}
+    \lean{MPSTensor.CPSVCanonicalFormData.openParentHamiltonianES_eq_representatives,
+        MPSTensor.CPSVCanonicalFormData.%
+        exists_openParentHamiltonianES_gap_of_wordTupleSpanTop,
+        MPSTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop,
+        MPSTensor.IsCPSVCanonicalForm.%
+        exists_openParentHamiltonianES_gap_of_three_bondDim_pow_five_le,
+        MPSTensor.CPSVCanonicalFormData.%
+        ker_openParentHamiltonianES_eq_groundSpaceES_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a canonical tensor with physical dimension $d\geq1$, and
+    choose its distinct normal representatives $B^j$. At every positive
+    interaction range, its open parent Hamiltonian agrees with that of
+    $\bigoplus_j B^j$, including all multiplicities and the ambient
+    reconstruction of $A$. If the representatives are simultaneously
+    injective at $S>0$ and $R\geq S+1$, then
+    $\ker H^{\mathrm{open}}_{N,R}(A)=G_N(A)$ for every $N\geq R$,
+    and there is $\delta>0$ such that
+    \begin{align}
+        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|
+        \notag
+    \end{align}
+    for every $N\geq R$ and every $v\perp G_N(A)$.
+    If the bond dimension $D$ is positive, the conclusion holds at every
+    $R\geq3D^5$ without a supplied injectivity length.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
+        thm:block_open_kernel_simultaneous_injectivity,
+        thm:canonical_bounded_range_ground_space}
+    The canonical reconstruction preserves every positive-length local
+    ground space. This identifies the open parent Hamiltonians and their
+    boundary-condition spaces with those of the distinct representatives.
+    Apply the block open-chain gap and kernel theorems. For the dimension
+    bound, the blocking estimate supplies $S>0$ with $S+1\leq3D^5$.
+\end{proof}
+
+\begin{definition}[Open sums of a local interaction]
+    \label{def:open_local_interaction_sum}
+    \lean{MPSTensor.openInteractionHamiltonianES}
+    \leanok
+    For a local operator $h$ on $R$ sites, let
+    $H^{\mathrm{open}}_N(h)$ be the sum of its translates over starts
+    $i$ satisfying $0\leq i$ and $i+R\leq N$. Each translate acts as
+    the identity on the remaining physical sites.
+\end{definition}
+
+\begin{lemma}[Properties of open interaction sums]
+    \label{lem:open_local_interaction_sum_properties}
+    \lean{MPSTensor.openInteractionHamiltonianES_mono,
+        MPSTensor.openInteractionHamiltonianES_smul,
+        MPSTensor.openInteractionHamiltonianES_zero,
+        MPSTensor.openInteractionHamiltonianES_isPositive,
+        MPSTensor.openInteractionHamiltonianES_parentInteractionES}
+    \leanok
+    Open interaction sums preserve order and positivity, commute with
+    scalar multiplication, and vanish for the zero interaction.
+    When $R>0$, the sum of the canonical parent projection is the
+    canonical open parent Hamiltonian.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:open_local_interaction_sum}
+    Extension by the identity and physical coordinate isometries preserve
+    order, positivity, and scalar multiplication. Summation preserves
+    these properties. Extending the local parent projection gives each
+    canonical parent term.
+\end{proof}
+
+\begin{theorem}[Open gaps for fixed positive parent interactions]
+    \label{thm:open_positive_parent_gap}
+    \lean{MPSTensor.IsParentInteraction.exists_pos_open_comparison,
+        MPSTensor.IsParentInteraction.exists_open_uniform_gap_of_canonical_gap,
+        MPSTensor.CPSVCanonicalFormData.%
+        exists_openInteraction_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $R>0$, and let $h\geq0$ have kernel $G_R(A)$.
+    There are $\kappa,C>0$, independent of $N$, such that
+    \begin{align}
+        \kappa H^{\mathrm{open}}_{N,R}(A)
+        \leq H^{\mathrm{open}}_N(h)
+        \leq C H^{\mathrm{open}}_{N,R}(A).
+        \notag
+    \end{align}
+    Hence a uniform canonical open-chain gap $\gamma>0$ for $N\geq R$
+    gives the gap $\kappa\gamma$ for $H^{\mathrm{open}}_N(h)$ on its
+    kernel complement. In particular, this applies to every fixed positive
+    parent interaction of a canonical tensor when its normal representatives
+    are simultaneously injective at $S>0$ and $R\geq S+1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:open_local_interaction_sum_properties,
+        thm:canonical_open_gap_all_lengths}
+    Finite-dimensional positivity and the prescribed local kernel give
+    $\kappa h_R(A)\leq h\leq C h_R(A)$. Sum the translated comparisons.
+    The two positive operators bound one another by positive constants,
+    so their kernels coincide. The lower bound transfers the canonical
+    gap to the common kernel complement.
+\end{proof}
+
+\begin{theorem}[Compact comparison for open parent interactions]
+    \label{thm:compact_open_positive_parent_gap}
+    \lean{MPSTensor.%
+        exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap,
+        MPSTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact,
+        MPSTensor.IsCPSVCanonicalForm.%
+        exists_uniform_openInteraction_gap_of_compact_of_bounded_range}
+    \leanok
+    Let $K$ be a compact parameter set. Suppose the local ground projections
+    of $A_x$ are continuous, and let $h_x$ be a continuous family of positive
+    interactions with kernel $G_R(A_x)$, where $R>0$. If the canonical open
+    parent Hamiltonians have one positive gap for every $x\in K$ and every
+    $N\geq N_0$, then the interaction sums $H^{\mathrm{open}}_N(h_x)$
+    also have one positive gap for those parameters and lengths.
+
+    For a fixed canonical tensor $A$, this conclusion requires no supplied
+    canonical gap: simultaneous injectivity at $S>0$ and $R\geq S+1$
+    give one gap uniform over $x\in K$ and every $N\geq R$.
+    When its bond dimension $D$ is positive, $R\geq3D^5$ suffices without
+    a supplied injectivity length.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:open_positive_parent_gap,thm:canonical_open_gap_all_lengths}
+    Compactness and continuity give a single $\kappa>0$ with
+    $\kappa h_R(A_x)\leq h_x$ for every $x\in K$. Each interaction also
+    has a finite positive upper comparison constant. The preceding proof
+    transfers the supplied gap with the common lower constant; the upper
+    constants identify the kernels and do not affect the resulting gap.
+    For a fixed canonical tensor, apply its all-length open gap theorem.
+\end{proof}
+
+\begin{theorem}[Compact gaps on bounded open intervals]
+    \label{thm:compact_bounded_open_interval_gap}
+    \lean{MPSTensor.%
+        exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_fixed_volume,
+        MPSTensor.%
+        exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_bounded_volumes}
+    \leanok
+    Let $K$ be a compact parameter set, and let $A_x^j$ be continuous
+    block tensors with positive physical and bond dimensions. Suppose that
+    their length-$S$ word tuples span the product matrix algebra for every
+    parameter, where $S>0$. Set $B_x=\bigoplus_j\mu_j(x)A_x^j$, with
+    all weights nonzero; the weights need not be continuous.
+    Fix $R\geq S+1$ and a finite upper length $M$.
+    There is $\delta>0$ such that
+    \begin{align}
+        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|
+        \notag
+    \end{align}
+    for every $x\in K$, every $R\leq N\leq M$, and every
+    $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
+    The constant may depend on $M$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_open_kernel_simultaneous_injectivity,
+        thm:block_word_span_propagation}
+    At each fixed $N\geq R$, simultaneous injectivity gives continuous
+    local ground projections at lengths $R$ and $N$. The open Hamiltonian
+    depends continuously on the first projection, and its kernel is $G_N$.
+    The compact finite-dimensional norm-gap theorem supplies one positive
+    bound at this $N$. Taking the minimum over $R\leq N\leq M$ gives the
+    claim. Nonzero weights preserve every local ground space.
+\end{proof}
+
+\begin{definition}[Zero-padded open interactions]
+    \label{def:open_knabe_padding}
+    \lean{MPSTensor.zmodOpenLocalTermES}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es}
+    Let $R,P>0$. On the Hilbert space of an $N$-site chain, index the
+    nonwrapping canonical interactions by $s\in\Z/P\Z$. Writing $\bar s$
+    for the representative in $\{0,\ldots,P-1\}$, define
+    \begin{align}
+        \widetilde h_s & =
+        \begin{cases}
+            h_{\bar s}^{(N,R)}(A), & \bar s+R\leq N, \\
+            0,                     & \bar s+R>N.
+        \end{cases}
+        \label{eq:open_knabe_padding}
+    \end{align}
+    The period indexes the interactions; the physical chain still has $N$ sites.
+\end{definition}
+
+\begin{theorem}[Projection, sum, and separation of padded interactions]
+    \label{thm:open_knabe_padding_properties}
+    \lean{MPSTensor.zmodOpenLocalTermES_isSymmetricProjection,
+        MPSTensor.zmodOpenLocalTermES_commute_of_oriented_separation,
+        MPSTensor.sum_zmodOpenLocalTermES_eq_openParentHamiltonianES}
+    \leanok
+    \uses{def:open_knabe_padding}
+    Every $\widetilde h_s$ is an orthogonal projection. If $R\leq e$ and
+    $e+R\leq P$, then $\widetilde h_s\widetilde h_{s+e}
+        =\widetilde h_{s+e}\widetilde h_s$ for every $s$. If $N\leq P$,
+    $\sum_s\widetilde h_s=H^{\mathrm{open}}_{N,R}(A)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:open_knabe_padding,lem:transported_es_local_projections,
+        lem:transported_es_nonoverlap_positive,
+        thm:physical-outside-window-martingale-cancellation}
+    Each term is a local projection or zero. At the stated separation,
+    either $\bar s+R\leq\overline{s+e}$ or
+    $\overline{s+e}+R\leq\bar s$. When both terms are active, their
+    nonwrapping intervals are disjoint, so the local terms commute.
+    For $P\geq N$, every nonwrapping start occurs exactly once; all
+    remaining summands vanish.
+\end{proof}
+
+\begin{theorem}[Clipped windows of padded interactions]
+    \label{thm:open_knabe_clipped_windows}
+    \lean{MPSTensor.cyclicWindowSum_zmodOpenLocalTermES_eq_zero_or_interval,
+        MPSTensor.cyclicWindowSum_zmodOpenLocalTermES_quadraticForm_gap}
+    \leanok
+    \uses{def:open_knabe_padding}
+    Let $m>0$, $N\geq R>0$, and $P=N+2m$. Put
+    $A_s=\sum_{q=0}^{m-1}\widetilde h_{s+q}$. Each $A_s$ is zero or the
+    range-$R$ open Hamiltonian on an interval $[n-W,n)$, extended by the
+    identity on the remaining sites, with
+    $R\leq W\leq m+R-1$ and $W\leq n\leq N$.
+    If every open Hamiltonian on $R\leq W\leq m+R-1$ sites has norm
+    gap at least $\gamma>0$ on its kernel complement, then
+    $A_s^2\geq\gamma A_s$ for every $s$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:open_knabe_padding,thm:open_interval_gap_transport}
+    The active starts are $0,\ldots,N-R$. Padding by $2m$ zeros prevents
+    a cyclic window of $m$ starts from meeting two separated parts of this
+    interval. Its active starts therefore form one interval $[a,b)$, or
+    none. In the first case, put $W=b-a+R-1$ and $n=b+R-1$.
+    The local terms sum to the interval Hamiltonian on $[a,n)$.
+    Its norm gap is preserved under extension by free sites. Positivity
+    converts this norm gap into $A_s^2\geq\gamma A_s$; the zero case is immediate.
+\end{proof}
+
+\begin{theorem}[An open-chain finite-size gap criterion]
+    \label{thm:open_finite_range_knabe_gap}
+    \lean{MPSTensor.openParentHamiltonianES_gap_of_finite_open_gaps}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es}
+    Let $1\leq R\leq m$, and suppose that every range-$R$ open parent
+    Hamiltonian on $R\leq W\leq m+R-1$ sites has norm gap at least
+    $\gamma$ on its kernel complement. If $m\gamma>(R-1)^2$, then
+    \begin{align}
+        \delta & =\frac{m\gamma-(R-1)^2}{m-R+1}>0,
+        \label{eq:open_finite_range_knabe_delta}
+    \end{align}
+    and $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|$ for every
+    $N\geq R$ and $v\perp\ker H^{\mathrm{open}}_{N,R}(A)$.
+    This is a consequence of the cyclic finite-range inequality, as derived
+    in \cite{gap:knabe88_finite_range_coefficient}; it is not the printed
+    periodic nearest-neighbor criterion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:open_knabe_padding_properties,thm:open_knabe_clipped_windows,
+        thm:finite_range_cyclic_knabe,lem:quadratic_form_to_norm_bound}
+    For each physical volume $N$, take period $P=N+2m$.
+    The padded projections have sum $H^{\mathrm{open}}_{N,R}(A)$ and
+    satisfy the separated commutation hypothesis. Every cyclic window
+    satisfies $A_s^2\geq\gamma A_s$. The cyclic inequality therefore gives
+    $(H^{\mathrm{open}}_{N,R}(A))^2\geq\delta H^{\mathrm{open}}_{N,R}(A)$
+    with $\delta$ as in~(\ref{eq:open_finite_range_knabe_delta}).
+    The positive-operator quadratic-form estimate gives the asserted norm gap.
+\end{proof}
+
+\begin{theorem}[Persistence of gaps on finitely many open intervals]
+    \label{thm:open_gap_bounded_volume_continuity}
+    \lean{MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_fixed_volume,
+        MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_bounded_volumes}
+    \leanok
+    Let $A_x^j$ be continuous block tensors with positive physical and bond
+    dimensions. Suppose their length-$S$ word tuples span the product matrix
+    algebra at every parameter, where $S>0$, and put
+    $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
+    Fix $R\geq S+1$ and a finite upper volume $M$.
+    If at $x_0$ the open Hamiltonians on every $R\leq N\leq M$ have
+    norm gap at least $\gamma>0$ on $G_N(B_{x_0})^\perp$, then every
+    $\delta<\gamma$ is a common lower bound on $G_N(B_x)^\perp$ for
+    those volumes and all $x$ in some neighborhood of $x_0$.
+    The same assertion holds for one fixed $N\geq R$.
+    No continuity of the weights is required.
+    This is the finite-volume continuity step of
+    \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_ground_space_continuity,thm:block_word_span_propagation,
+        thm:kernel_gap_perturbation}
+    The ground projections at $R$ and $N$ are continuous. The open
+    Hamiltonian is a finite sum of translates of $I-P_{G_R}$, hence
+    continuous. Its ground space contains $G_N$.
+    The operator and projection perturbation estimate preserves each strict
+    lower bound at fixed $N$. Intersect the finitely many resulting neighborhoods.
+\end{proof}
+
+\begin{theorem}[Local persistence of an all-length open gap]
+    \label{thm:open_gap_all_length_neighborhood}
+    \lean{MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_of_uniform_gap}
+    \leanok
+    Under the block-family hypotheses of
+    Theorem~\ref{thm:open_gap_bounded_volume_continuity}, suppose that at
+    $x_0$ one $\gamma>0$ bounds the open norm gaps on $G_N(B_{x_0})^\perp$
+    for every $N\geq R$. Then some $\delta>0$ bounds the open norm gaps
+    on their kernel complements for every $N\geq R$ and every $x$ in
+    one neighborhood of $x_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:open_gap_bounded_volume_continuity,thm:open_finite_range_knabe_gap,
+        thm:block_open_kernel_simultaneous_injectivity}
+    Choose $m\geq R$ with $m\gamma/2>(R-1)^2$. Continuity preserves
+    the bound $\gamma/2$ on every $R\leq W\leq m+R-1$ in one
+    neighborhood. Simultaneous injectivity identifies each kernel with
+    $G_W(B_x)$. The finite-size criterion gives the same positive
+    $\delta=(m\gamma/2-(R-1)^2)/(m-R+1)$ for all $N\geq R$ there.
+\end{proof}
+
+\begin{theorem}[Compact uniform open gaps for simultaneously injective blocks]
+    \label{thm:compact_block_open_gap}
+    \lean{MPSTensor.exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths}
+    \leanok
+    Let $K$ be compact, and let $A_x^j$ be continuous block tensors with
+    positive physical and bond dimensions. Suppose their length-$S$ word
+    tuples span the product matrix algebra for every $x$, with $S>0$.
+    Put $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
+    For each fixed $R\geq S+1$, there is $\delta>0$ such that
+    $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|$ for every
+    $x\in K$, every $N\geq R$, and every
+    $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
+    No continuity of the weights is required. The compactness argument
+    follows \cite[Appendix~A]{Schuch2011Phases} at the stated sufficient range.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
+        thm:open_gap_all_length_neighborhood}
+    The pointwise all-length open gap gives a positive bound at each
+    parameter. The preceding theorem preserves some positive bound on
+    a neighborhood, uniformly in $N$. A finite subcover of $K$ and the
+    minimum of its finitely many bounds give $\delta>0$.
+\end{proof}
+
+\begin{theorem}[Compact dimension-bound open gaps for normal blocks]
+    \label{thm:compact_normal_block_open_gap}
+    \lean{MPSTensor.exists_uniform_block_openParentHamiltonianES_gap_of_compact_isNormalTensor}
+    \leanok
+    Let $A_x^j$ be continuous normalized normal blocks, pairwise inequivalent
+    under virtual similarity and phase at every parameter, with physical
+    dimension $d\geq1$ and fixed bond dimensions $D_j$.
+    Put $D_* =\max\{\sum_jD_j,1\}$ and
+    $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
+    For every compact $K$ and every fixed $R\geq3D_*^5$, one positive
+    open norm gap holds uniformly for $x\in K$ and all $N\geq R$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:block_word_span_propagation,
+        thm:compact_block_open_gap}
+    The dimension-bound span theorem gives, at each parameter, a positive
+    simultaneous injectivity length $L_x$ with $L_x+1\leq3D_*^5$.
+    Propagation gives the common length $S=3D_*^5-1>0$.
+    Apply the compact open-gap theorem at $R\geq S+1$.
+\end{proof}
+
+\begin{theorem}[Compact uniform open gaps for positive parent interactions]
+    \label{thm:compact_block_open_positive_gap}
+    \lean{MPSTensor.exists_uniform_block_openParentInteraction_gap_of_compact,
+        MPSTensor.exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor}
+    \leanok
+    Under the hypotheses of Theorem~\ref{thm:compact_block_open_gap},
+    let $h_x$ be a continuous family of positive range-$R$ interactions
+    with $\ker h_x=G_R(B_x)$. Then there is $\delta>0$ such that
+    $\delta\|v\|\leq\|H^{\mathrm{open}}_N(h_x)v\|$ for every $x\in K$,
+    every $N\geq R$, and every $v\perp\ker H^{\mathrm{open}}_N(h_x)$.
+    The same conclusion holds under the normalized normal-block hypotheses
+    of Theorem~\ref{thm:compact_normal_block_open_gap} at $R\geq3D_*^5$.
+    Nonzero weights need not be continuous.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:compact_block_open_gap,thm:compact_normal_block_open_gap,
+        thm:block_ground_space_continuity,thm:block_word_span_propagation,
+        thm:cpsv_bnt_sharp_span_ambient_cap,thm:compact_open_positive_parent_gap}
+    The local ground projections are continuous at range $R$.
+    The canonical open gaps are uniform on $K$ and all $N\geq R$ by
+    the two preceding compact results. Compact positive comparison gives
+    one $\kappa>0$ with $\kappa h_R(B_x)\leq h_x$ on $K$.
+    Summing translates transfers the canonical gap with factor $\kappa$.
+    A pointwise upper comparison identifies the kernels.
+\end{proof}
+
 \begin{theorem}[Open-chain gaps at a prescribed simultaneous injectivity range]
     \label{thm:block_open_gap_subsequence_simultaneous_injectivity}
     \lean{MPSTensor.%
@@ -7450,6 +7896,37 @@ shorter interaction range.
     Cauchy--Schwarz give the asserted norm bound.
 \end{proof}
 
+\begin{theorem}[Sharp gap comparison from two ground spaces]
+    \label{thm:sharp_two_ground_projection_gap}
+    \lean{FrustrationFree.norm_gap_of_two_ground_projection_bounds}
+    \leanok
+    Let $H$ be a linear operator on a finite-dimensional complex Hilbert
+    space, let $W=\ker H$, and suppose $W\subseteq U\cap V$. Write
+    $P_W,P_U,P_V$ for the orthogonal projections onto these subspaces.
+    Suppose $\kappa\geq0$, $c<1$,
+    $\|P_W-P_UP_V\|\leq c$, and
+    $\kappa((I-P_U)+(I-P_V))\leq H$ in the order of self-adjoint
+    operators. Then $\kappa(1-c)\|v\|\leq\|Hv\|$ for every $v\perp W$.
+    This is a two-subspace consequence of the ground-projection estimate
+    in \cite[Section~6, the three-interval commutation lemma,
+        part~(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:friedrichs_ground_space_excitation_anticommutator,
+        lem:quadratic_form_to_norm_bound,lem:positive_gap_transfer_loewner}
+    If $z\in U\cap V$ and $z\perp W$, the projection defect gives
+    $\|z\|\leq c\|z\|$, hence $z=0$. Subtracting $P_Wv$ from an
+    arbitrary $v\in U\cap V$ proves $W=U\cap V$.
+    Put $L=(I-P_U)+(I-P_V)$. The projection defect bounds the
+    Friedrichs overlap by $c$. The complementary-projection
+    anticommutator inequality gives $L^2\geq(1-c)L$, and
+    $\ker L=U\cap V=W$. The finite-dimensional spectral theorem gives
+    $(1-c)\|v\|^2\leq\langle Lv,v\rangle$ for $v\perp W$.
+    Applying $\kappa L\leq H$ and Cauchy--Schwarz yields
+    $\kappa(1-c)\|v\|^2\leq\langle Hv,v\rangle
+        \leq\|Hv\|\|v\|$. Cancel $\|v\|$ when $v\ne0$.
+\end{proof}
+
 \begin{theorem}[Combining gaps on two open intervals]
     \label{thm:open_parent_overlapping_interval_gap}
     \lean{MPSTensor.openPrefixParentHamiltonianES_le_openParentHamiltonianES,
@@ -7684,4 +8161,470 @@ shorter interaction range.
     Self-adjointness makes it orthogonal to the kernel. A uniform positive
     norm bound would give $\delta\leq\varepsilon_N$ for every sufficiently
     large $N$, contradicting $\varepsilon_N\to0$.
+\end{proof}
+
+\begin{theorem}[Ground-space subtraction in the commutator gap estimate]
+    \label{thm:ground_projection_commutator_gap}
+    \lean{FrustrationFree.energy_gap_sub_ground_projection,
+        FrustrationFree.commutator_ground_expectation,
+        FrustrationFree.commutator_ground_gap,
+        FrustrationFree.commutator_ground_gap_of_ker_eq_span}
+    \leanok
+    Let $H\geq0$ act on a finite-dimensional complex Hilbert space,
+    let $K=\ker H$, and suppose $\gamma\geq0$ and
+    $\gamma\|v\|\leq\|Hv\|$ for every $v\perp K$.
+    Then $\langle Hv,v\rangle\geq
+        \gamma(\|v\|^2-\|P_Kv\|^2)$ for every $v$.
+    For every $\psi\in K$ and linear operator $X$,
+    \begin{align}
+        \langle\psi,X^*[H,X]\psi\rangle
+         & =\langle HX\psi,X\psi\rangle
+        \geq\gamma\bigl(\|X\psi\|^2-\|P_KX\psi\|^2\bigr).
+        \label{eq:ph_ground_commutator}
+    \end{align}
+    If $K=\C\psi$ and $\|\psi\|=1$, the subtracted term is
+    $|\langle\psi,X\psi\rangle|^2$.
+    This is the finite-volume estimate for the limiting argument in
+    \cite[Section~6]{Nachtergaele1996Spectral}; the full ground-space
+    projection is retained as described in
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive-kernel-projection-comparison}
+    The gap gives $H\geq\gamma P_{K^\perp}$. Pythagoras yields
+    $\|P_{K^\perp}v\|^2=\|v\|^2-\|P_Kv\|^2$.
+    Since $H\psi=0$, the adjoint identity gives
+    $\langle\psi,X^*[H,X]\psi\rangle=\langle HX\psi,X\psi\rangle$.
+    Apply the first estimate to $v=X\psi$.
+    For a one-dimensional ground space, its projection is
+    $P_Kv=\langle\psi,v\rangle\psi$.
+\end{proof}
+
+\begin{theorem}[Limiting gap from decay of the ground projection]
+    \label{thm:commutator_gap_projection_limit}
+    \lean{FrustrationFree.commutator_gap_of_tendsto_ground_projection_zero}
+    \leanok
+    Let $H_n,X_n$ act on finite-dimensional complex Hilbert spaces which
+    may depend on $n$. Suppose that, for all sufficiently large $n$,
+    $H_n\geq0$, $\psi_n\in\ker H_n$, and $H_n$ has norm gap at least
+    the same constant $\gamma\geq0$ on $(\ker H_n)^\perp$.
+    Let $a,e\in\R$. If $\|X_n\psi_n\|^2\to a$,
+    $\|P_{\ker H_n}X_n\psi_n\|^2\to0$, and
+    $\langle\psi_n,X_n^*[H_n,X_n]\psi_n\rangle\to e$, then
+    $\gamma a\leq e$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ground_projection_commutator_gap}
+    For all sufficiently large $n$, (\ref{eq:ph_ground_commutator})
+    gives the required inequality before taking limits.
+    Its left side tends to $\gamma(a-0)=\gamma a$ and its right side
+    tends to $e$. The order relation on $\R$ is closed.
+\end{proof}
+
+\begin{corollary}[Limiting gap for one-dimensional finite-volume ground spaces]
+    \label{cor:commutator_gap_rank_one_limit}
+    \lean{FrustrationFree.commutator_gap_of_tendsto_mean_zero_of_ker_eq_span}
+    \leanok
+    Let $H_n,X_n$ act on finite-dimensional complex Hilbert spaces which
+    may depend on $n$. Suppose that, for all sufficiently large $n$,
+    $H_n\geq0$, $\|\psi_n\|=1$, $\ker H_n=\C\psi_n$, and $H_n$ has
+    norm gap at least the same constant $\gamma\geq0$ on
+    $(\ker H_n)^\perp$. If $\|X_n\psi_n\|^2\to a$,
+    $\langle\psi_n,X_n\psi_n\rangle\to0$, and
+    $\langle\psi_n,X_n^*[H_n,X_n]\psi_n\rangle\to e$, then
+    $\gamma a\leq e$.
+    Finite-volume uniqueness is a hypothesis of this corollary.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:ground_projection_commutator_gap}
+    The rank-one projection formula makes the subtracted term the squared
+    absolute value of the mean. This tends to zero, so the finite-volume
+    estimate passes to the limit.
+\end{proof}
+
+\begin{theorem}[Sparse grouped open-chain energy bound]
+    \label{thm:sparse_grouped_open_energy_gap}
+    \lean{MPSTensor.sparseGroupedOpenParentHamiltonianES,
+        MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect_of_le,
+        MPSTensor.sparseGroupedOpenParentHamiltonianES_energy_bound_of_grouped_c3,
+        MPSTensor.sparseGroupedOpenParentHamiltonianES_isPositive,
+        MPSTensor.sparseGroupedOpenParentHamiltonianES_projection_bound_of_grouped_c3,
+        MPSTensor.sparseGroupedOpenParentHamiltonianES_add_terminal_le}
+    \leanok
+    Let $p\geq1$, $M\geq2$, and $pM\leq N$. Sample the canonical
+    range-$2p$ interactions at starts $0,p,\ldots,p(M-2)$, and write
+    $H_{\mathrm{sp}}$ for their sum on $N$ sites. Let $U$ be the kernel
+    of the full range-$2p$ interaction on the prefix of length $pM$.
+    Suppose the grouped martingale projections satisfy
+    $\|Q_nE_n\|\leq\epsilon<1/\sqrt2$, with $\epsilon\geq0$.
+    Then
+    \[
+        \langle H_{\mathrm{sp}}v,v\rangle
+        \geq(1-\sqrt2\epsilon)^2\|v\|^2
+        \qquad(v\perp U),
+        \qquad
+        H_{\mathrm{sp}}\geq(1-\sqrt2\epsilon)^2(I-P_U).
+    \]
+    The grouped projector estimate remains valid after adjoining free
+    sites on the right. If $N=pM+q$ with $q>0$, adjoining the terminal
+    range-$2p$ parent projection $T$ gives
+    $H_{\mathrm{sp}}+T\leq H^{\mathrm{open}}_{N,2p}$.
+    This is a consequence of
+    \cite[Theorem~2.1(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:grouped_c3_from_projector_defect,thm:grouped_spectator_norm,
+        thm:nachtergaele_c1_c3_full_range_energy_estimate}
+    Apply the grouped martingale energy inequality directly to the sampled
+    interaction sum. Every sampled term annihilates $U$, so decomposition
+    into $U$ and $U^\perp$ gives the operator inequality. Free-site extension
+    does not increase the projector norm. When $q>0$, the terminal start
+    $N-2p=p(M-2)+q$ is strictly larger than all sampled starts. Thus the
+    sampled terms and the terminal term form a subfamily of the full
+    positive interaction sum, each counted once.
+\end{proof}
+
+\begin{theorem}[Sharp open-chain gap with a residual terminal interval]
+    \label{thm:sparse_grouped_terminal_open_gap}
+    \lean{MPSTensor.openParentHamiltonianES_gap_of_sparse_grouped_and_terminal}
+    \leanok
+    Let $p\geq1$, $M\geq2$, $0<q<p$, and $N=pM+q$.
+    Assume that every range-$2p$ open Hamiltonian at length at least $2p$
+    has its boundary-condition space as kernel. Suppose that the
+    three-interval ground-projection defect is at most
+    $0\leq\epsilon<1/\sqrt2$ whenever the overlap has at least $p$ sites,
+    uniformly in both outer intervals, with the right interval nonempty.
+    Then
+    \[
+        (1-\sqrt2\epsilon)^2(1-\epsilon)\|v\|
+        \leq\|H^{\mathrm{open}}_{N,2p}v\|
+        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}).
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:sparse_grouped_open_energy_gap,
+        thm:sharp_two_ground_projection_gap,thm:ph_terminal_interval_kernel,
+        thm:ph_prefix_kernel_free_right_sites}
+    Let $U$ be the prefix ground space at length $pM$, and let $V$ be
+    the terminal ground space on $2p$ sites. Their overlap contains
+    $2p-q\geq p$ sites. Put $\kappa=(1-\sqrt2\epsilon)^2\leq1$.
+    The sparse energy bound and the terminal projection give
+    $H^{\mathrm{open}}_{N,2p}\geq\kappa((I-P_U)+(I-P_V))$.
+    The full ground space is contained in both $U$ and $V$, and the
+    three-interval estimate bounds its projection defect by $\epsilon$.
+    The sharp two-ground-space comparison gives the conclusion.
+\end{proof}
+
+\begin{theorem}[Prescribed open-chain gaps for primitive block sums]
+    \label{thm:primitive_block_open_prescribed_gap}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub}
+    \leanok
+    Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with common
+    physical dimension $d\geq1$, positive bond dimensions, and
+    positive-definite invariant matrices. Suppose no two distinct blocks
+    are related by a virtual similarity and a phase. Put
+    $B=\bigoplus_j\mu_jA_j$, with $\mu_j\ne0$ for every $j$.
+    For every $0<\eta<1$, there is $p_0$ such that, for every
+    $p\geq p_0$ and every $N\geq2p$,
+    \[
+        (1-\eta)\|v\|\leq\|H^{\mathrm{open}}_{N,2p}(B)v\|
+        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}(B)).
+    \]
+    This is a quantitative consequence of
+    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:sparse_grouped_terminal_open_gap,
+        thm:grouped_open_parent_gap,thm:ph_primitive_blocks_open_kernel,
+        thm:ph_block_diagonal_projector_decay}
+    Choose $\epsilon=\eta/(4\sqrt2)$ and take $p$ above the kernel
+    threshold and the projector-decay threshold for every overlap length
+    at least $p$. Write $N=pM+q$, with $M\geq2$ and $0\leq q<p$.
+    For $q=0$, the grouped gap is $(1-\sqrt2\epsilon)^2$.
+    For $q>0$, the residual-interval theorem gives
+    $(1-\sqrt2\epsilon)^2(1-\epsilon)$.
+    Both coefficients are at least $1-\eta$.
+\end{proof}
+
+\begin{theorem}[Prescribed open-chain gaps for normal block sums]
+    \label{thm:normal_block_open_prescribed_gap}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub_of_isNormal}
+    \leanok
+    Let $A_0,\ldots,A_{r-1}$ be normal tensors with common physical
+    dimension $d\geq1$ and positive bond dimensions. Suppose no two
+    distinct blocks are related by similarity and multiplication by a
+    nonzero complex scalar, and let $B=\bigoplus_j\mu_jA_j$, with
+    $\mu_j\ne0$ for every $j$. For every $0<\eta<1$, there is $p_0$
+    such that, for every $p\geq p_0$ and every $N\geq2p$,
+    \[
+        (1-\eta)\|v\|\leq\|H^{\mathrm{open}}_{N,2p}(B)v\|
+        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}(B)).
+    \]
+    Thus the canonical open-chain gap approaches one as the even
+    interaction range grows, uniformly over all lengths at least that
+    range. This is a quantitative consequence of the projector decay and
+    martingale estimates of
+    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_block_open_prescribed_gap,
+        thm:normal_blocks_primitive_representatives}
+    Independent primitive normalization preserves all block ground spaces
+    and therefore every assembled canonical open Hamiltonian. It also
+    preserves inequivalence. Apply the primitive block theorem to the
+    normalized representatives and transfer its bound through the exact
+    equality of open Hamiltonians.
+\end{proof}
+
+\begin{lemma}[Subwindows in active-block coordinates]
+    \label{lem:open_interaction_subwindow_coordinates}
+    \lean{MPSTensor.cyclicCfg_join_cyclicActiveBlock,
+        MPSTensor.extractWindow_join_cyclicActiveBlock,
+        MPSTensor.nonwrappingSuffixStartEquiv,
+        MPSTensor.periodicLocalInteractionES_apply,
+        MPSTensor.periodicLocalInteractionES_conj_cyclicActiveBlock}
+    \leanok
+    \uses{def:cyclic_active_block_coordinates,
+        def:open_local_interaction_sum}
+    Suppose $W\leq N$, fix a cyclic start $s$, and let $q<W$ satisfy
+    $q+R\leq W$. Replacing the range-$R$ subwindow beginning at $s+q$
+    changes only the active configuration. Restriction to this subwindow
+    agrees with restriction at $q$ inside the active block. When $R>0$, any local
+    operator, extended by the identity, satisfies
+    \[
+        U_s h_{s+q}^{(N)}U_s^{-1}
+        =\bigl(h_q^{(W)}\bigr)^{\oplus[d]^{N-W}}.
+    \]
+    Its action is obtained by applying $h$ to the restricted window with
+    outside coordinates fixed. If $0<R\leq W\leq n\leq N$, translation
+    $q\mapsto n-W+q$ also identifies the nonwrapping starts on $W$ sites
+    with the range-$R$ starts contained in $[n-W,n)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:cyclic_active_block_coordinates}
+    In active-block coordinates, subwindow replacement changes only the
+    first coordinate. The start bijection has inverse subtraction of
+    $n-W$. Applying the local operator separately on each complementary
+    configuration gives the conjugation identity.
+\end{proof}
+
+\begin{definition}[An interaction on an embedded suffix]
+    \label{def:open_suffix_interaction_sum}
+    \lean{MPSTensor.openSuffixInteractionHamiltonianES}
+    \leanok
+    \uses{def:open_local_interaction_sum}
+    For a range-$R$ operator $h$, let $H_{[n-W,n)}(h)$ be the sum of its
+    nonwrapping translates in an $N$-site chain whose starts satisfy
+    $n-W\leq i$ and $i+R\leq n$.
+\end{definition}
+
+\begin{lemma}[Counting positive terms in complete open windows]
+    \label{lem:positive_open_window_counting}
+    \lean{MPSTensor.sum_nonwrappingWindowTerms_le,
+        MPSTensor.sum_openSuffixInteractionHamiltonianES_le}
+    \leanok
+    \uses{def:open_suffix_interaction_sum}
+    Let $R\leq W$. For any positive operators $T_i$, indexed by the
+    nonwrapping range-$R$ starts in an $N$-site chain,
+    \[
+        \sum_{n=W}^{N}\ \sum_{\substack{n-W\leq i\\i+R\leq n}}T_i
+        \leq (W-R+1)\sum_i T_i.
+    \]
+    In particular, for a positive interaction $h$,
+    $\sum_{n=W}^{N}H_{[n-W,n)}(h)
+        \leq(W-R+1)H_N^{\mathrm{open}}(h)$.
+    This is the counting argument of condition C1 in
+    \cite{Nachtergaele1996Spectral}, applied to arbitrary positive terms.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:open_suffix_interaction_sum}
+    A term beginning at $i$ can occur only for
+    $i+R\leq n\leq i+W$, an interval containing $W-R+1$ integers.
+    Reverse the order of summation and use positivity of each term.
+\end{proof}
+
+\begin{lemma}[Transport of a finite-window comparison]
+    \label{lem:open_interaction_suffix_comparison}
+    \lean{MPSTensor.openSuffixInteractionHamiltonianES_conj_cyclicActiveBlock,
+        MPSTensor.openSuffixInteractionHamiltonianES_comparison_of_local}
+    \leanok
+    \uses{lem:open_interaction_subwindow_coordinates,
+        def:open_suffix_interaction_sum}
+    Suppose $0<R\leq W\leq n\leq N$. The suffix Hamiltonian is unitarily
+    equivalent to $H_W^{\mathrm{open}}(h)$ acting independently on the
+    complementary configurations. If
+    $\kappa p_W(A)\leq H_W^{\mathrm{open}}(h)$, then the same inequality
+    holds after embedding both sides on the suffix $[n-W,n)$.
+    Here $p_W(A)$ is the canonical complementary ground-space projection;
+    no sign condition on $\kappa$ or positivity condition on $h$ is needed
+    for this transport of order.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:open_interaction_subwindow_coordinates}
+    Sum the conjugation identity over the corresponding start bijection.
+    Extension by the identity and conjugation by an isometry preserve order.
+\end{proof}
+
+\begin{theorem}[Open-chain comparison for an arbitrary positive interaction]
+    \label{thm:positive_open_interaction_range_comparison}
+    \lean{MPSTensor.openInteractionHamiltonianES_comparison_of_local,
+        MPSTensor.openInteractionHamiltonianES_gap_of_long_gap_at_length}
+    \leanok
+    \uses{lem:positive_open_window_counting,
+        lem:open_interaction_suffix_comparison,
+        lem:open_parent_range_comparison}
+    Let $0<R\leq W\leq N$, let $h$ be positive, and suppose
+    $\kappa p_W(A)\leq H_W^{\mathrm{open}}(h)$. Then
+    \[
+        \kappa H_{N,W}^{\mathrm{open}}(A)
+        \leq (W-R+1)H_N^{\mathrm{open}}(h).
+    \]
+    If additionally $\kappa,\gamma>0$, both global kernels equal $G_N(A)$,
+    and $\gamma\lVert v\rVert\leq
+        \lVert H_{N,W}^{\mathrm{open}}(A)v\rVert$ for $v\perp G_N(A)$, then
+    \[
+        \frac{\kappa\gamma}{W-R+1}\lVert v\rVert
+        \leq\lVert H_N^{\mathrm{open}}(h)v\rVert
+        \qquad(v\perp G_N(A)).
+    \]
+    No local parent-kernel equality is assumed for $h$. This is a
+    finite-window consequence of condition C1 and the comparison argument
+    in Section~6 of \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive_open_window_counting,
+        lem:open_interaction_suffix_comparison}
+    Sum the embedded local comparisons. Each full range-$W$ parent term
+    occurs once, whereas a range-$R$ term occurs at most $W-R+1$ times.
+    For the gap, compare the positive operators
+    $\kappa H_{N,W}^{\mathrm{open}}(A)$ and
+    $(W-R+1)H_N^{\mathrm{open}}(h)$, whose kernels agree, and divide by
+    the positive window multiplicity.
+\end{proof}
+
+\begin{theorem}[Uniform finite-chain gap from an eventual kernel identity]
+    \label{thm:eventual_kernel_open_interaction_gap}
+    \lean{MPSTensor.exists_openInteractionHamiltonianES_gap_of_eventual_kernel,
+        MPSTensor.exists_openInteractionMatrix_gap_of_eventual_kernel}
+    \leanok
+    Let $A_j$ be a finite family of normalized primitive MPS tensors with
+    faithful fixed density matrices, pairwise inequivalent under gauge and
+    phase, and let $B=\bigoplus_j\mu_jA_j$, where every $\mu_j\ne0$.
+    Let $h\geq0$ be an interaction of range $R\geq1$.
+    Suppose that $\ker H^{\mathrm{open}}_{h,N}=\mathcal G_N(B)$
+    for all sufficiently large $N$. Then there exists $\gamma>0$ such that
+    \begin{align}
+        \gamma\|v\|\leq\|H^{\mathrm{open}}_{h,N}v\|
+        \notag
+    \end{align}
+    for every $N\in\mathbb N$ and every
+    $v\perp\ker H^{\mathrm{open}}_{h,N}$.
+    No condition on the local kernel of $h$, or lower bound on $R$
+    beyond $R\geq1$, is required. This is the finite-chain conclusion of
+    \cite[Theorem~1.2]{Nachtergaele1996Spectral}, under its eventual
+    finite-interval kernel hypothesis, for the primitive-sector representation;
+    the passage from more general periodic presentations is separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_block_sum_open_gap_all_lengths,
+        thm:ph_primitive_blocks_open_kernel,
+        lem:parent-finite-interval-comparison,
+        thm:positive_open_interaction_range_comparison}
+    Choose a canonical interaction range $W=2p$ above the original range
+    and both kernel thresholds, with canonical gap $\delta>0$ uniform in
+    the volume. Finite dimensionality and positivity give
+    $\kappa P_{\mathcal G_W(B)^\perp}\leq H^{\mathrm{open}}_{h,W}$
+    for some $\kappa>0$. For $N\geq W$, the finite-window comparison gives
+    \begin{align}
+        \kappa H^{\mathrm{open}}_{N,W}(B)
+        \leq (W-R+1)H^{\mathrm{open}}_{h,N},
+        \notag
+    \end{align}
+    The kernels coincide for these volumes, so the transferred gap is
+    $\kappa\delta/(W-R+1)$. Taking a minimum with the positive gaps
+    on the kernel complements at the finitely many volumes $N<W$
+    gives one constant for every volume.
+\end{proof}
+
+\begin{definition}[Matrix of the canonical parent interaction]
+    \label{def:canonical_parent_interaction_matrix}
+    \lean{MPSTensor.canonicalParentInteractionMatrix,
+        MPSTensor.toEuclideanLin_canonicalParentInteractionMatrix,
+        MPSTensor.canonicalParentInteractionMatrix_posSemidef}
+    \leanok
+    Let \(h_R\) be the configuration-basis matrix of the orthogonal
+    projection onto \(G_R(A)^\perp\). This matrix is positive semidefinite
+    and represents the same projection on the Euclidean realization of
+    the physical configuration space. It is the canonical choice in
+    \cite[Lemma existenceinteraction]{Nachtergaele1996Spectral}.
+\end{definition}
+\begin{proof}\leanok
+    Identify matrices with bounded operators in the configuration basis.
+    Under this identification, matrix positive semidefiniteness is equivalent
+    to positivity of the represented operator. Orthogonal projections are
+    positive.
+\end{proof}
+
+\begin{lemma}[Canonical interactions depend only on local support]
+    \label{lem:canonical_interaction_support_transport}
+    \lean{MPSTensor.canonicalParentInteractionMatrix_eq_of_groundSpaceES_eq,
+        MPSTensor.openParentHamiltonianES_eq_of_groundSpaceES_eq}
+    \leanok
+    If two tensors have the same $R$-site boundary space, their canonical
+    interaction matrices agree. For $R>0$, their canonical open Hamiltonians
+    consequently agree at every volume. Their bond dimensions may differ.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_parent_interaction_matrix}
+    The canonical matrix represents the orthogonal projection onto the
+    local boundary-space complement. Equality of that space therefore gives
+    equality of the matrices and of every sum of their local translates,
+    as in \cite[Lemma \texttt{existenceinteraction}]{Nachtergaele1996Spectral}.
+\end{proof}
+
+\begin{lemma}[Positive canonical interaction from exact open kernels]
+    \label{lem:positive_canonical_interaction_exact_open_kernels}
+    \lean{MPSTensor.exists_positive_canonical_parent_interaction_of_exact_open_kernels}
+    \leanok
+    Let $A$ be a tensor and let $R>0$. Suppose the canonical open
+    Hamiltonian has kernel $\mathcal G_A(N)$ for every $N\ge R$.
+    Then the range-$R$ canonical orthogonal-complement projection is a
+    positive interaction $h$, and the open interaction generated by $h$
+    has those same exact kernels. The interaction is literally the
+    configuration-basis matrix of that canonical projection.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_parent_interaction_matrix}
+    The canonical orthogonal-complement projection is positive. Its
+    configuration-basis matrix represents the same local operator,
+    hence gives the same open Hamiltonian and kernel at every volume.
+\end{proof}
+
+\begin{theorem}[Transfer of canonical gaps to an eventual-kernel interaction]
+    \label{thm:canonical_gap_to_eventual_kernel_interaction}
+    \lean{MPSTensor.exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel}
+    \leanok
+    Let $A$ be a tensor. Suppose that, for every sufficiently large range $W$,
+    its canonical open Hamiltonians have kernels $\mathcal G_A(N)$ for $N\ge W$
+    and a positive uniform norm gap above their actual kernels at all volumes.
+    Let $h\ge0$ have positive range $R$, and suppose
+    $\ker H_h(N)=\mathcal G_A(N)$ for all sufficiently large $N$.
+    Then there exists $\gamma>0$ such that, for every $N\ge0$ and
+    $v\perp\ker H_h(N)$,
+    \begin{align}
+        \gamma\|v\|\le\|H_h(N)v\|.
+    \end{align}
+    No local kernel condition or tensor injectivity is imposed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive-kernel-projection-comparison,thm:positive_open_interaction_range_comparison}
+    Choose $W\ge R$ large enough for both kernel identities and the canonical
+    gap. Positivity and finite dimensionality give
+    $H_h(W)\ge\kappa P_{\mathcal G_A(W)^\perp}$ with $\kappa>0$.
+    Sum this comparison over all $W$-site windows. Their multiplicity is at most
+    $W-R+1$, so the canonical gap $\delta_W$ gives the positive bound
+    $\kappa\delta_W/(W-R+1)$ on all $N\ge W$.
+    Take its minimum with the finitely many positive gaps at $N<W$, each
+    measured above the actual kernel.
 \end{proof}
