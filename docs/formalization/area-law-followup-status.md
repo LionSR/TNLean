@@ -204,15 +204,42 @@ cutoff. Five kernel reports and complete library and blueprint checks passed.
 ground-state tensor from the complementary copies of each excitation
 component by explicit contraction and proves equality of the remainder's norm.
 Four kernel reports and complete library and blueprint checks passed.
-Combining concentration with the Schur remainder to select a single label
-with both polynomial mass and the required logarithmic dimension remains
-active work. None of these draft results has yet changed TNLean's dependency
-pin.
+[QICLean #627](https://github.com/LionSR/QICLean/pull/627) proves the numerical
+threshold needed for that combination: for fixed \(V\in\mathbb R\) and
+\(m\in\mathbb N\), eventually
+\[
+ V/\sqrt{k}+(k+1)^m\exp(-k^{3/4}/2)\le\tfrac12.
+\]
+The new proof, five combined kernel reports and complete library and blueprint
+checks passed. The coefficient one half is inside the exponential.
+
+The high-label contribution, with source and mathematical exposition frozen
+at `89941482`, now proves one common sequence for an arbitrary density matrix,
+including singular states. Its eventual mass is at least
+\([2(k+1)^{q^2}]^{-1}\), and \(\log d_{\lambda_k}=kS(\rho)+o(k)\).
+For a unit bipartite vector, it also proves the corresponding squared norm
+of the actual central projection of its literal tensor powers, using its
+actual reduced density. All four proofs pass strict Lean elaboration;
+the source-bound kernel, provenance and complete blueprint verification
+are in progress. These statements supply the high-label input, while the
+comparator and inverse metric arguments remain unfinished. None of these
+draft results has yet changed TNLean's dependency pin.
+
+The grouped-label operator inequalities have a separate proof frozen at
+`e15c46e`: on the full representation space,
+\(F_{\mathrm{good}}+F_{\mathrm{bad}}\le F_{\mathrm{whole}}\le
+F_{\mathrm{good}}+F_{\mathrm{bad}}+\loginom{k}{r}I\).
+Compatibility follows from the actual joint projections. Source-bound
+verification is in progress; the bound for occurring bad-copy labels and
+the good auxiliary support comparison remain separate steps.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
 Lemma 6.1. Their application to the actual good-copy component and the
 logarithmic dimension comparison remains separate. The accepted
+[QICLean #612](https://github.com/LionSR/QICLean/pull/612) proves the conditional
+movement estimate of area-law Lemma 5.1; it was merged at `29c9584d`.
+The accepted
 [QICLean #613](https://github.com/LionSR/QICLean/pull/613) supplies a maximizing
 nested feasible filter family, commutation with its marginals, and the
 floor-clipped spectral form in the area-law initial-buffer argument.
