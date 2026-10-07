@@ -1074,3 +1074,12 @@ tori of periods at least three, and the remaining tiny-period/twisted scope.
 records the single block-local map for every native closure and coherent
 sum, with the same original coarse tensor and normalized Bell factors.
 Coarse periods at least three and the stated boundary/support scope remain.
+
+### Polynomial PEPS approximation: small-patch rewrites
+
+[polypeps_small_rewrite_monomials.tex](polypeps_small_rewrite_monomials.tex)
+records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
+formalized for the canonical contraction and its reference error, with the
+branch expansion, the wire classification and the final rescaling of the
+approximation, and that the expansion into allowed monomials awaits a party
+layout for monomials.

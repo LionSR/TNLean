@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.PatchRewrite
+import TNLean.PEPS.Approximation.PatchRewriteExpansion
