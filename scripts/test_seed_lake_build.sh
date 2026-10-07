@@ -89,8 +89,12 @@ test -e "$LOCK_READY"
 (
   cd "$REPO"
   # shellcheck disable=SC2016
-  scripts/lake_build_locked.sh -- /bin/sh -c \
-    'test -e /dev/fd/9; printf ran >"$1"; while test ! -e "$2"; do sleep 0.1; done' \
+  scripts/lake_build_locked.sh -- scripts/lake_build_locked.sh -- /bin/sh -c \
+    'set -e
+     test "$TNLEAN_LAKE_LOCK_HELD" = 1
+     test -e /dev/fd/9
+     printf ran >"$1"
+     while test ! -e "$2"; do sleep 0.1; done' \
     sh "$LOCKED_COMMAND_RAN" "$COMMAND_CONTINUE"
 ) &
 LOCKED_COMMAND_PID="$!"
@@ -104,7 +108,7 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
 done
 test "$(cat "$LOCKED_COMMAND_RAN")" = "ran"
 (
-  cd "$REPO"
+  cd "$TARGET"
   # shellcheck disable=SC2016
   scripts/lake_build_locked.sh -- /bin/sh -c \
     'printf second >"$1"' sh "$SECOND_COMMAND_RAN"
@@ -117,6 +121,58 @@ wait "$LOCKED_COMMAND_PID"
 wait "$SECOND_COMMAND_PID"
 test "$(cat "$SECOND_COMMAND_RAN")" = "second"
 test -f "$LOCK_FILE"
+
+# Check both acquisition paths under contention. The child usage includes its
+# descendants, so a busy-waiting lock helper cannot hide behind an idle shell.
+# Subtract an uncontended run to exclude the seeder's normal validation cost.
+python3 - "$REPO" "$TARGET" "$LOCK_FILE" <<'PY'
+import fcntl
+import os
+from pathlib import Path
+import resource
+import signal
+import subprocess
+import sys
+import time
+
+repo, target, lock_path = map(Path, sys.argv[1:])
+commands = [
+    (target, ["scripts/lake_build_locked.sh", "--", "/usr/bin/true"]),
+    (repo, ["scripts/seed_lake_build.sh", str(target), "--dry-run"]),
+]
+wait_seconds = 2
+for cwd, command in commands:
+    before = resource.getrusage(resource.RUSAGE_CHILDREN)
+    subprocess.run(command, cwd=cwd, stdout=subprocess.DEVNULL, check=True, timeout=15)
+    after = resource.getrusage(resource.RUSAGE_CHILDREN)
+    baseline_cpu = after.ru_utime + after.ru_stime - before.ru_utime - before.ru_stime
+    with lock_path.open("r+") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        identity = os.fstat(lock.fileno())
+        before = resource.getrusage(resource.RUSAGE_CHILDREN)
+        child = subprocess.Popen(
+            command, cwd=cwd, stdout=subprocess.DEVNULL, start_new_session=True
+        )
+        try:
+            time.sleep(wait_seconds)
+            assert child.poll() is None, f"command bypassed the common lock: {command}"
+            fcntl.flock(lock, fcntl.LOCK_UN)
+            assert child.wait(timeout=15) == 0, f"command failed after release: {command}"
+            after = resource.getrusage(resource.RUSAGE_CHILDREN)
+            cpu = after.ru_utime + after.ru_stime - before.ru_utime - before.ru_stime
+            extra_cpu = cpu - baseline_cpu
+            assert extra_cpu < wait_seconds / 4, (
+                f"blocked command consumed {extra_cpu:.3f}s extra CPU: {command}"
+            )
+            current = lock_path.stat()
+            assert (current.st_dev, current.st_ino) == (identity.st_dev, identity.st_ino)
+            print(f"Quiet lock wait: {command[0]} ({max(0, extra_cpu):.3f}s extra CPU)")
+        finally:
+            if child.poll() is None:
+                os.killpg(child.pid, signal.SIGTERM)
+                child.wait(timeout=15)
+PY
+
 (
   cd "$REPO"
   scripts/lake_build_locked.sh Example.Target
