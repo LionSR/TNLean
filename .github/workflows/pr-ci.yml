@@ -33,6 +33,7 @@ on:
       - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
@@ -138,6 +139,7 @@ on:
       - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
@@ -292,6 +294,7 @@ jobs:
               - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
+              - 'scripts/test_pr_ci_base_snapshot.py'
               - 'scripts/lake_build_locked.sh'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
@@ -761,18 +764,18 @@ jobs:
         id: compilation-time
         if: github.event_name == 'pull_request'
         env:
-          BASE_REF_NAME: ${{ github.event.pull_request.base.ref }}
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
         run: |
           set -o pipefail
           timing_status=0
           archive_build_failed=false
-          git fetch --no-tags origin \
-            "+refs/heads/$BASE_REF_NAME:refs/remotes/origin/$BASE_REF_NAME" \
-            || timing_status=$?
+          git fetch --no-tags origin "$BASE_REF" || timing_status=$?
+          if [ "$timing_status" -eq 0 ]; then
+            git merge-base --is-ancestor "$BASE_REF" HEAD || timing_status=$?
+          fi
           if [ "$timing_status" -eq 0 ]; then
             git -c core.quotePath=false diff \
-              --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
+              --name-only --diff-filter=AMR "$BASE_REF" HEAD -- '*.lean' \
               > "$RUNNER_TEMP/changed-lean-files.txt" \
               || timing_status=$?
           fi
@@ -903,6 +906,7 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
           python3 scripts/test_ci_compatible_cache.py
+          python3 scripts/test_pr_ci_base_snapshot.py
           python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
 
       - name: Check local cache-seeding shell syntax
@@ -991,6 +995,8 @@ jobs:
     if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.result == 'success')"
     runs-on: ubuntu-latest
     env:
+      # This SHA belongs to the checked-out PR merge, even if its base branch advances.
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
       # TeX-facing steps run only when blueprint sources changed (always on
       # push/dispatch); the Lean-blueprint sync checks run on Lean-only
       # changes too.
@@ -1002,6 +1008,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Fetch immutable PR base for blueprint comparisons
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin "$BASE_REF"
+          git merge-base --is-ancestor "$BASE_REF" HEAD
 
       - name: Test tenkz render-cache pruning
         run: python3 scripts/test_prune_tenkz_render_cache.py
@@ -1026,20 +1038,14 @@ jobs:
 
       - name: Check reader-facing prose patterns
         if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
           python3 scripts/check_reader_facing_prose.py --root . --diff-base "$BASE_REF" --ci
 
       - name: Detect changed Lean files
         id: changed-lean-files
         if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          changed_lean_paths="$(git diff --merge-base --name-only "$BASE_REF" -- \
+          changed_lean_paths="$(git diff --name-only "$BASE_REF" HEAD -- \
             TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json)"
           if [ -n "$changed_lean_paths" ]; then
             has_changed_lean=true
@@ -1056,7 +1062,7 @@ jobs:
                 has_changed_lean=true
                 break
               fi
-            done < <(git diff --merge-base --name-only "$BASE_REF" -- \
+            done < <(git diff --name-only "$BASE_REF" HEAD -- \
               'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
           fi
           echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
@@ -1273,17 +1279,15 @@ jobs:
         if: steps.lean-decls.outcome == 'success'
         run: python3 scripts/blueprint_lean_sync.py --root . --ci --report-duplicate-tags
 
-      - name: Fetch PR base ref for diff
+      - name: Verify immutable PR base for diff
         id: fetch-base-ref
         if: github.event_name == 'pull_request' && steps.changed-lean-files.outputs.has_changed_lean == 'true'
-        env:
-          BASE_REF: ${{ github.event.pull_request.base.ref }}
-        run: git fetch --no-tags origin "$BASE_REF"
+        run: |
+          git cat-file -e "$BASE_REF^{commit}"
+          git merge-base --is-ancestor "$BASE_REF" HEAD
 
       - name: Error on changed Lean declarations missing blueprint entries
         if: github.event_name == 'pull_request' && steps.changed-lean-files.outputs.has_changed_lean == 'true'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           python3 - <<'PY'
           import os
@@ -1295,10 +1299,10 @@ jobs:
               [
                   "git",
                   "diff",
-                  "--merge-base",
                   "--name-only",
                   "--diff-filter=AMR",
                   base_ref,
+                  "HEAD",
                   "--",
                   "TNLean.lean",
                   "TNLean/**/*.lean",
