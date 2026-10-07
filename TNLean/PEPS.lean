@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS
 
 import TNLean.PEPS.Approximation
+import TNLean.PEPS.AreaLaw
 import TNLean.PEPS.BasisRepresentation
 import TNLean.PEPS.BlockMultiplicityRepresentation
 import TNLean.PEPS.Blocking
