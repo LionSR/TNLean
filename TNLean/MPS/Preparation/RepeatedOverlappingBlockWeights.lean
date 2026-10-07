@@ -111,7 +111,7 @@ variable (hι : ∀ j k, Function.Injective (ι j k))
 include hι hdisj
 
 /-- The positive part vanishes off the ranges of the copy isometries: `P ∑ⱼ L_j L_jᴴ = P`. -/
-private theorem polarPos_mul_sum_copyIsometry {Aj : (j : Fin b) → MPSTensor d (Dj j)}
+theorem polarPos_mul_sum_copyIsometry {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) :
     Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) *
         ∑ j, copyIsometry ι μ q j * (copyIsometry ι μ q j)ᴴ =
