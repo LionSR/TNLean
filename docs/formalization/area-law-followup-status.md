@@ -233,12 +233,11 @@ draft results has yet changed TNLean's dependency pin.
 frozen at `d7fa8954`, gives the grouped-label operator inequalities: on the
 full representation space,
 \(F_{\mathrm{good}}+F_{\mathrm{bad}}\le F_{\mathrm{whole}}\le
-F_{\mathrm{good}}+F_{\mathrm{bad}}+\loginom{k}{r}I\).
+F_{\mathrm{good}}+F_{\mathrm{bad}}+\log\binom{k}{r}I\).
 Compatibility follows from the actual joint projections. Strict checking,
 the complete 9,707-job library build, the exact standard-kernel audit,
-provenance and complete PDF/web/native declaration checks passed. The bound
-for occurring bad-copy labels and the good auxiliary support comparison
-remain separate steps.
+provenance and complete PDF/web/native declaration checks passed. The occurring bad-copy dimension bound is proved separately below; transfer
+to an actual excitation component remains a further step.
 
 [QICLean #631](https://github.com/LionSR/QICLean/pull/631) has source and
 exposition frozen at `f0c7d137`. It proves that one label sequence gives, for every positive copy
@@ -252,6 +251,31 @@ passed. The complete 9,716-job library build, two exact standard-kernel
 reports, provenance and complete PDF/web/native declaration checks also
 passed. The physical Schmidt-truncation instantiation and later comparator
 estimates remain separate.
+
+[QICLean #632](https://github.com/LionSR/QICLean/pull/632), with the two
+new mathematical sources frozen at `fe621df0` and `0b6ff5a3`, proves that
+an occurring bad-copy label has dimension at most \(|C|^r\), even with
+the good copies retained as multiplicity. Consequently
+\[
+ F_{\mathrm{bad}}\le r\log|C|I,\qquad
+ F_{\mathrm{whole}}\le F_{\mathrm{good}}+
+ \left(r\log|C|+\log\binom{k}{r}\right)I.
+\]
+The statements include empty coordinate sets and zero copy groups, with the
+total real logarithm. The complete 9,709-job library build, three exact
+standard-kernel reports (one inherited and two new), provenance and complete
+PDF/web/native checks passed. The actual whole-label compression and physical
+component quadratic-form estimate remain separate.
+
+[QICLean #633](https://github.com/LionSR/QICLean/pull/633), with source and
+exposition frozen at `6c2e9382`, proves the literal covariance
+\(U_\sigma R_B=R_{\sigma B}U_\sigma\). A permutation stabilizing \(B\)
+therefore commutes with the component projection, including arbitrary
+disjoint auxiliary operators, and projection preserves the corresponding
+fixed-vector equation. The three identities require no normalization and
+include zero copies. Strict checking, the complete 9,710-job library build,
+three standard-kernel reports, provenance and complete PDF/web/native checks
+passed. They do not assert commutation with the band metric.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
@@ -303,6 +327,15 @@ coefficients in the operator and density identities. Strict checking,
 replay covering 323 declarations passed. These checks are distinguished from
 a complete Lake build. The actual corrected-density estimate, source sampling,
 physical protocol and local tensor-network construction remain separate.
+
+[TNLean #8893](https://github.com/LionSR/TNLean/pull/8893) adds the fixed-slot,
+original-vector and direct selective-contraction statements to that source
+expansion. Its mathematical source is `6246647741ce41a55a3897329336055330dd7e6f`
+and publication head is `4097a00b1`. The 19 exported declarations have separate
+source and kernel evidence. A complete build of the preceding #8887
+integration has also passed. Adoption of the full QICLean source chain into
+the current TNLean development is being checked separately; the actual
+corrected-density estimate and physical construction remain open.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
