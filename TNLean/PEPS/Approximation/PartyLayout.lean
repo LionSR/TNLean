@@ -1075,10 +1075,11 @@ the common garbage vector `Γ_m = inventoryVector`:
   equivalently, every term of the expansion `termList` is source-only;
 * there are at most `K m^r` such words, with absolute coefficient sum `∑_ξ |c_ξ|`;
 * the output layout consists of the stacks of all effect occurrences followed by the output
-  layout of `G`, and the stacks of a monomial are owned by the endpoint parties of its effects.
+  layout of `G`, and the stacks of a monomial are owned by the endpoint parties of its effects;
+* two normalized pair sources on one pair of parties, followed by merging the two registers
+  of each party, are one normalized pair source (`eval_combineSources`).
 
-The combination of the sources on one pair of parties into one normalized pair source is
-`eval_combineSources`.  The hypothesis that `G` is a contraction is not needed.
+The hypothesis that `G` is a contraction is not needed.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`,
 `04-compression.tex`, lines 53–127. -/
@@ -1096,8 +1097,13 @@ theorem partyPairEffectElimination {m r : ℕ} (hm : m ≠ 0) (L : PartyGate ℓ
     (wordList m L).length ≤ L.length * m ^ r ∧
     ((wordList m L).map fun q => ‖q.1‖).sum = (L.map fun p => ‖p.1‖).sum ∧
     gateOut m L = (L.flatMap fun p => p.2.stackRegs m) ++ ℓY ∧
-    ∀ p ∈ L, (p.2.stackRegs m).map Reg.owner =
-      p.2.effectParties.flatMap fun e => (List.replicate m [e.1, e.2]).flatten := by
+    (∀ p ∈ L, (p.2.stackRegs m).map Reg.owner =
+      p.2.effectParties.flatMap fun e => (List.replicate m [e.1, e.2]).flatten) ∧
+    ∀ {p q : P} (hpq : p ≠ q) (U V U' V' : HSpace) (η : U ⊗[ℂ] V) (η' : U' ⊗[ℂ] V')
+      (ℓ : Layout P), ‖η‖ = 1 → ‖η'‖ = 1 →
+      (combineSources hpq U V U' V' η η' ℓ).eval =
+        (Word.source hpq _ _ (pairRegroup U V U' V' (η ⊗ₜ η')) ℓ).eval ∧
+      ‖pairRegroup U V U' V' (η ⊗ₜ η')‖ = 1 := by
   have hG : ∀ p ∈ toGate L, p.2.IsAllowed ∧ p.2.effectCount ≤ r := by
     intro p hp
     obtain ⟨p', hp', rfl⟩ := mem_toGate hp
@@ -1110,10 +1116,12 @@ theorem partyPairEffectElimination {m r : ℕ} (hm : m ≠ 0) (L : PartyGate ℓ
   rw [map_norm_toGate] at h2 h5
   refine ⟨h1, gateIso_prepGate m L, isAllowed_prepGate m L hA, h2, ?_,
     isAllowed_wordList m L hA, isSourceOnly_termList m L hA, h4, ?_, gateOut_eq m L,
-    fun p _ => p.2.owner_stackRegs m⟩
+    fun p _ => p.2.owner_stackRegs m, fun hpq U V U' V' η η' ℓ hη hη' => ?_⟩
   · rw [h3]
     rfl
   · rw [← h5]
     rfl
+  · obtain ⟨h, hn⟩ := eval_combineSources hpq U V U' V' η η' ℓ
+    exact ⟨h, by rw [hn, hη, hη', one_mul]⟩
 
 end TNLean.PEPS.PairEffect
