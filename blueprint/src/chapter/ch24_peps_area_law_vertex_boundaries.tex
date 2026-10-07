@@ -1,0 +1,87 @@
+\subsection{Vertex-boundary formulations}
+\label{sec:area_law_vertex_boundaries}
+
+\begin{definition}[Inner boundary and boundary endpoints]
+    \label{def:area_law_vertex_boundaries}
+    \lean{TNLean.PEPS.AreaLaw.innerBoundary,
+        TNLean.PEPS.AreaLaw.endpointBoundary,
+        TNLean.PEPS.AreaLaw.innerBoundary_empty,
+        TNLean.PEPS.AreaLaw.innerBoundary_univ,
+        TNLean.PEPS.AreaLaw.endpointBoundary_empty,
+        TNLean.PEPS.AreaLaw.endpointBoundary_univ}
+    \leanok
+    \uses{def:area_law_domain,def:area_law_hamiltonian}
+    For a finite induced domain $\Lambda\subset\mathbb Z^2$ and $A\subseteq\Lambda$,
+    define
+    \begin{align}
+        \partial_{\rm in}A
+            &=\{x\in A:\exists y\in\Lambda\setminus A,
+                \ \{x,y\}\in\partial_\Lambda A\},
+        \label{eq:area_vertex_inner} \\
+        Z_A&=\bigcup_{e\in\partial_\Lambda A}e.
+        \label{eq:area_vertex_endpoints}
+    \end{align}
+    Both sets are empty when $A=\varnothing$ or $A=\Lambda$.
+    These are the conventions of \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Degree bound for induced lattice domains]
+    \label{thm:area_law_lattice_degree}
+    \lean{TNLean.PEPS.AreaLaw.domainGraph_degree_le_four}
+    \leanok
+    \uses{def:area_law_domain}
+    Every site of a finite induced square-lattice domain has degree at most four.
+\end{theorem}
+\begin{proof}\leanok
+    The neighbors of $(a,b)$ form a subset of
+    $\{(a+1,b),(a-1,b),(a,b+1),(a,b-1)\}$.
+\end{proof}
+
+\begin{theorem}[Comparison of edge and vertex boundaries]
+    \label{thm:area_law_vertex_boundary_counts}
+    \lean{TNLean.PEPS.AreaLaw.edgeBoundary_card_le_four_mul_innerBoundary_card,
+        TNLean.PEPS.AreaLaw.edgeBoundary_card_le_two_mul_endpointBoundary_card}
+    \leanok
+    \uses{def:area_law_vertex_boundaries}
+    For every cut in a finite induced lattice domain,
+    $|\partial_\Lambda A|\le4|\partial_{\rm in}A|$ and
+    $|\partial_\Lambda A|\le2|Z_A|$.
+    No connectedness assumption is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_vertex_boundaries,thm:area_law_lattice_degree}
+    Let $G_A$ have exactly the crossing edges, with degrees $d_A(x)$.
+    It is bipartite between the inner boundaries of $A$ and its complement,
+    and its nonisolated sites are exactly $Z_A$.
+    Counting degrees on one side and on both sides gives
+    \begin{align}
+        |\partial_\Lambda A|
+            &=\sum_{x\in\partial_{\rm in}A}d_A(x)
+              \le4|\partial_{\rm in}A|, \\
+        2|\partial_\Lambda A|
+            &=\sum_{x\in Z_A}d_A(x)\le4|Z_A|.
+    \end{align}
+    Empty boundaries satisfy the same identities.
+\end{proof}
+
+\begin{theorem}[Vertex bounds assuming the uniform edge area law]
+    \label{thm:area_law_conditional_vertex_bounds}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_four_mul_innerBoundary_card,
+        TNLean.PEPS.AreaLaw.regionalEntropy_le_two_mul_endpointBoundary_card,
+        TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds}
+    \leanok
+    \uses{def:area_law_vertex_boundaries,def:area_law_ground_entropy}
+    Assume that, for fixed $q,R,J,\Delta$, a nonnegative constant $C$ gives
+    $S_\Omega(A)\le C|\partial_\Lambda A|$ uniformly for the finite-domain
+    Hamiltonians and ground vectors of Section~\ref{sec:finite_domain_area_law}.
+    Then the same constant gives
+    $S_\Omega(A)\le4C|\partial_{\rm in}A|$ and
+    $S_\Omega(A)\le2C|Z_A|$ uniformly for those instances.
+    The two implications also hold for a single entropy inequality.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_vertex_boundary_counts}
+    Multiply the two boundary comparisons by $C\ge0$ and apply the assumed
+    edge-boundary entropy inequality. The constant is chosen before the
+    domain, Hamiltonian, ground vector, and cut.
+\end{proof}
