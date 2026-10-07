@@ -31,6 +31,7 @@ import TNLean.PEPS.Approximation.PairSourceOrdering
 import TNLean.PEPS.Approximation.PartialSourceDensity
 import TNLean.PEPS.Approximation.PartialSourceEvaluation
 import TNLean.PEPS.Approximation.PartialSourceInventory
+import TNLean.PEPS.Approximation.PartialSourcePreparation
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGrouping
@@ -46,6 +47,7 @@ import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceChoiceCost
+import TNLean.PEPS.Approximation.SourceCircuitChoiceAt
 import TNLean.PEPS.Approximation.SourceCircuitChoiceProduct
 import TNLean.PEPS.Approximation.SourceCircuitLocations
 import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
@@ -63,3 +65,4 @@ import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
+import TNLean.PEPS.Approximation.WordSelectivePartition
