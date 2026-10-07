@@ -4,7 +4,9 @@ Assessment dated 7 October 2026. The complete ground-state area law
 (Theorem 1.1 of *A two-dimensional area law from a global spectral gap*) and the
 polynomial PEPS approximation theorem (Theorem 1.1 of *Polynomial PEPS
 approximation of gapped square-grid ground states*) remain unfinished. The
-results below establish distinct steps of their proofs. All manuscript
+results below establish distinct steps of their proofs. The new QICLean results
+are awaiting incorporation into the TNLean dependency; individual checks and
+common-library verification are distinguished below. All manuscript
 references use the September 24, 2026 versions at OpenAI source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
