@@ -2,7 +2,7 @@
 
 \begin{definition}[Forward square edges]
 \label{def:peps_forward_square_edges}
-\lean{TNLean.PEPS.Approximation.ForwardAdjacent,TNLean.PEPS.Approximation.ForwardEdge}
+\lean{TNLean.PEPS.Approximation.Vertex,TNLean.PEPS.Approximation.ForwardAdjacent,TNLean.PEPS.Approximation.ForwardEdge}
 \leanok
 For $\Lambda=\{0,\ldots,L-1\}^2$, a forward edge is an ordered pair
 $((x,y),(x+1,y))$ or $((x,y),(x,y+1))$ with both endpoints in $\Lambda$.
@@ -10,7 +10,7 @@ $((x,y),(x+1,y))$ or $((x,y),(x,y+1))$ with both endpoints in $\Lambda$.
 
 \begin{definition}[Square-edge correspondence]
 \label{def:peps_square_edge_correspondence}
-\lean{TNLean.PEPS.Approximation.forwardSquareEdgeEquiv,TNLean.PEPS.Approximation.forwardSquareIncidentEquiv,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv}
+\lean{TNLean.PEPS.Approximation.forwardSquareEdgeEquiv,TNLean.PEPS.Approximation.forwardSquareIncidentEquiv,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv,TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_val,TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_symm_val,TNLean.PEPS.Approximation.forwardSquareIncidentEquiv_val,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv_val,TNLean.PEPS.Approximation.graphBondDim,TNLean.PEPS.Approximation.graphBondDim_forward,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_incident,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_pinnedIncident}
 \leanok
 \uses{def:peps_forward_square_edges}
 The forward edges are in bijection with the lexicographically oriented
@@ -22,7 +22,7 @@ $\prod_e\{0,\ldots,D_e-1\}$, with each coordinate unchanged.
 
 \begin{theorem}[Equality of square-grid contractions]
 \label{thm:peps_square_grid_contraction}
-\lean{TNLean.PEPS.Approximation.stateCoeff_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.stateCoeff_vectorTensorToGraphTensor}
+\lean{TNLean.PEPS.Approximation.stateCoeff_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.stateCoeff_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.vectorTensorToGraphTensor,TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_component,TNLean.PEPS.Approximation.vectorTensorToGraphTensor_component}
 \leanok
 \uses{def:peps_square_edge_correspondence}
 Let $A_v$ be arbitrary local tensors with physical dimension $q$ and
@@ -44,3 +44,17 @@ Reindex the finite sum by the bijection of virtual assignments.
 Its restriction to every incident edge preserves that edge's index, so each
 factor in the vertex product is equal.
 \end{proof}
+
+
+\begin{definition}[Two orders for local tensor arguments]
+\label{def:peps_square_local_presentations}
+\lean{TNLean.PEPS.Approximation.Pinned.IncidentEdge,TNLean.PEPS.Approximation.Pinned.State,TNLean.PEPS.Approximation.Pinned.LocalTensor,TNLean.PEPS.Approximation.Pinned.contractPEPS,TNLean.PEPS.Approximation.Vector.IncidentEdge,TNLean.PEPS.Approximation.Vector.State,TNLean.PEPS.Approximation.Vector.PEPS,TNLean.PEPS.Approximation.Vector.PEPS.contract,TNLean.PEPS.Approximation.Vector.PEPS.maxBondDim}
+\leanok
+\uses{def:peps_forward_square_edges}
+A local tensor may be written as $A_v(s_v,a|_v)$ or $A_v(a|_v,s_v)$.
+In either case its contraction is the vector in
+$\ell^2(\Lambda\to\{0,\ldots,q-1\};\C)$ whose $s$ coordinate is
+$\sum_a\prod_v A_v(s_v,a|_v)$, with the arguments reversed in the second
+presentation. The second presentation includes the requirement $D_e>0$.
+Its maximum bond dimension is $\max(\{D_e:e\in E\}\cup\{0\})$.
+\end{definition}
