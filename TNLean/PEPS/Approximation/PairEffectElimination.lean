@@ -117,6 +117,17 @@ theorem rTensor_finsetSum {ι : Type*} (s : Finset ι) (f : ι → E →L[ℂ] F
     (∑ i ∈ s, f i).rTensor G = ∑ i ∈ s, (f i).rTensor G := by
   induction s using Finset.cons_induction <;> simp_all
 
+theorem norm_comp_le_of_norm_le_one {f : F →L[ℂ] G} (g : E →L[ℂ] F) (hf : ‖f‖ ≤ 1) :
+    ‖f ∘L g‖ ≤ ‖g‖ :=
+  (opNorm_comp_le f g).trans (mul_le_of_le_one_left (norm_nonneg _) hf)
+
+/-- Composition with a fixed map commutes with a weighted list sum. -/
+theorem comp_listSum (A : F →L[ℂ] G) (l : List (ℂ × (E →L[ℂ] F))) :
+    A ∘L (l.map fun q => q.1 • q.2).sum = (l.map fun q => q.1 • (A ∘L q.2)).sum := by
+  induction l with
+  | nil => simp
+  | cons q l ih => simp [comp_add, ih]
+
 theorem norm_appendRight_one_le : ‖appendRight (E := E) (1 : ℂ)‖ ≤ 1 :=
   (norm_appendRight_le _).trans norm_one.le
 
@@ -402,5 +413,207 @@ theorem replace_eq_sum (m : ℕ) : {X Y : HSpace} → (M : EffectChain X Y) →
         effectCount, pow_succ, mul_inv, mul_comm]
 
 end EffectChain
+
+/-! ### Gate expansions with a common stack inventory -/
+
+/-- A gate expansion `G = ∑_ξ c_ξ M_ξ`: a finite list of coefficients and monomials.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1, `04-compression.tex`,
+lines 56–58. -/
+abbrev GateExpansion (X Y : HSpace) : Type 1 := List (ℂ × EffectChain X Y)
+
+variable {X Y : HSpace}
+
+/-- The gate `∑_ξ c_ξ M_ξ` of an expansion. -/
+def gate : GateExpansion X Y → (X →L[ℂ] Y)
+  | [] => 0
+  | p :: L => p.1 • p.2.eval + gate L
+
+/-- The common stack inventory of a gate expansion: the stacks of every effect occurrence of
+every monomial, indexed by the monomial and the position of the occurrence in it. -/
+@[reducible] def inventory (m : ℕ) : GateExpansion X Y → HSpace
+  | [] => HSpace.of ℂ
+  | p :: L => HSpace.of (p.2.stackSpace m ⊗[ℂ] inventory m L)
+
+/-- The common normalized garbage vector `Γ_m = ⨂_o η_o^{⊗ m}`.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 104–111. -/
+def inventoryVector (m : ℕ) : (L : GateExpansion X Y) → inventory m L
+  | [] => (1 : ℂ)
+  | p :: L => p.2.stackVector m ⊗ₜ[ℂ] inventoryVector m L
+
+/-- The replaced gate `G̃_m`: in the branch of each monomial its effect occurrences are
+replaced by cyclic insertions, and the stacks of all other monomials are prepared as their
+fixed vectors `η^{⊗ m}`.  Every branch has the same output space `Y ⊗ inventory m L`.
+
+Polynomial-PEPS manuscript (September 24, 2026), proof of Lemma 5.1, `04-compression.tex`,
+lines 100–115. -/
+def replaceGate (m : ℕ) : (L : GateExpansion X Y) → (X →L[ℂ] Y ⊗[ℂ] inventory m L)
+  | [] => 0
+  | p :: L => p.1 • (assocL _ _ _ ∘L appendRight (inventoryVector m L) ∘L p.2.replace m) +
+      leftCommL _ _ _ ∘L appendLeft (p.2.stackVector m) ∘L replaceGate m L
+
+/-- The expansion of the replaced gate into effect-free terms with their coefficients: the
+term of a monomial `c M` with `n` effects and insertion positions `κ` has coefficient
+`c / m^n`.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 120–124. -/
+def termList (m : ℕ) :
+    (L : GateExpansion X Y) → List (ℂ × (X →L[ℂ] Y ⊗[ℂ] inventory m L))
+  | [] => []
+  | p :: L =>
+      (Finset.univ.toList.map fun κ => (p.1 * ((m : ℂ) ^ p.2.effectCount)⁻¹,
+        assocL _ _ _ ∘L appendRight (inventoryVector m L) ∘L p.2.replaceTerm m κ)) ++
+      (termList m L).map fun q => (q.1, leftCommL _ _ _ ∘L appendLeft (p.2.stackVector m) ∘L q.2)
+
+theorem norm_inventoryVector (m : ℕ) : (L : GateExpansion X Y) → (∀ p ∈ L, p.2.IsAllowed) →
+    ‖inventoryVector m L‖ = 1
+  | [], _ => norm_one (α := ℂ)
+  | p :: L, hL => by
+      simp only [inventoryVector]
+      rw [TensorProduct.norm_tmul, p.2.norm_stackVector m (hL p List.mem_cons_self),
+        norm_inventoryVector m L fun q hq => hL q (List.mem_cons_of_mem _ hq), one_mul]
+
+/-- **Gate error.** If every monomial of `G = ∑_ξ c_ξ M_ξ` is allowed and has at most `r`
+pair effects, then `‖G̃_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`, displayed
+equation `eq:compression-effect-error`, `04-compression.tex`, lines 59–66 and 116–119. -/
+theorem norm_replaceGate_sub_le {m : ℕ} (hm : m ≠ 0) {r : ℕ} :
+    (L : GateExpansion X Y) → (∀ p ∈ L, p.2.IsAllowed ∧ p.2.effectCount ≤ r) →
+    ‖replaceGate m L - appendRight (inventoryVector m L) ∘L gate L‖ ≤
+      r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum
+  | [], _ => by simp [replaceGate, gate]
+  | p :: L, hL => by
+      obtain ⟨hpA, hpr⟩ := hL p List.mem_cons_self
+      have hL' : ∀ q ∈ L, q.2.IsAllowed ∧ q.2.effectCount ≤ r :=
+        fun q hq => hL q (List.mem_cons_of_mem _ hq)
+      have ih := norm_replaceGate_sub_le hm L hL'
+      have hΓL : ‖inventoryVector m L‖ = 1 := norm_inventoryVector m L fun q hq => (hL' q hq).1
+      set Γp := p.2.stackVector m
+      set ΓL := inventoryVector m L
+      have e1 : appendRight (Γp ⊗ₜ[ℂ] ΓL) ∘L (p.1 • p.2.eval) =
+          p.1 • (assocL _ _ _ ∘L appendRight ΓL ∘L (appendRight Γp ∘L p.2.eval)) := by
+        ext1 x
+        simp [TensorProduct.smul_tmul']
+      have e2 : appendRight (Γp ⊗ₜ[ℂ] ΓL) ∘L gate L =
+          leftCommL _ _ _ ∘L appendLeft Γp ∘L (appendRight ΓL ∘L gate L) := by
+        ext1 x
+        simp
+      have hsplit : replaceGate m (p :: L) -
+          appendRight (inventoryVector m (p :: L)) ∘L gate (p :: L) =
+          p.1 • (assocL _ _ _ ∘L appendRight ΓL ∘L (p.2.replace m - appendRight Γp ∘L p.2.eval)) +
+          leftCommL _ _ _ ∘L appendLeft Γp ∘L (replaceGate m L - appendRight ΓL ∘L gate L) := by
+        simp only [replaceGate, gate, inventoryVector, comp_add]
+        rw [e1, e2]
+        simp only [comp_sub, smul_sub]
+        abel
+      rw [hsplit, List.map_cons, List.sum_cons, mul_add]
+      refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+      · rw [norm_smul, mul_comm (r / Real.sqrt m)]
+        gcongr
+        refine (norm_comp_le_of_norm_le_one _ norm_assocL_le).trans <|
+          (norm_comp_le_of_norm_le_one _ ((norm_appendRight_le _).trans hΓL.le)).trans <|
+          (p.2.norm_replace_sub_le hm hpA).trans ?_
+        gcongr
+      · exact (norm_comp_le_of_norm_le_one _ norm_leftCommL_le).trans <|
+          (norm_comp_le_of_norm_le_one _ ((norm_appendLeft_le _).trans
+            (p.2.norm_stackVector m hpA).le)).trans ih
+
+/-- **Expansion of the replaced gate** into the effect-free terms of `termList`. -/
+theorem replaceGate_eq_sum_termList (m : ℕ) : (L : GateExpansion X Y) →
+    replaceGate m L = ((termList m L).map fun q => q.1 • q.2).sum
+  | [] => rfl
+  | p :: L => by
+      simp only [replaceGate, termList, List.map_append, List.sum_append, List.map_map]
+      congr 1
+      · rw [p.2.replace_eq_sum m]
+        simp only [comp_finsetSum, comp_smul, Finset.smul_sum, smul_smul]
+        rw [← Finset.sum_map_toList]
+        rfl
+      · rw [replaceGate_eq_sum_termList m L, ← comp_assoc, comp_listSum]
+        rfl
+
+/-- **Monomial count.** The expansion of `G̃_m` has at most `K m^r` terms, where `K` is the
+number of monomials of `G`.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 66–69 and
+120–124. -/
+theorem length_termList_le {m r : ℕ} (hm : m ≠ 0) : (L : GateExpansion X Y) →
+    (∀ p ∈ L, p.2.effectCount ≤ r) → (termList m L).length ≤ L.length * m ^ r
+  | [], _ => by simp [termList]
+  | p :: L, hL => by
+      simp only [termList, List.length_append, List.length_map, Finset.length_toList,
+        Finset.card_univ, Fintype.card_fun, Fintype.card_fin, List.length_cons, add_mul,
+        one_mul]
+      rw [add_comm]
+      exact add_le_add (length_termList_le hm L fun q hq => hL q (List.mem_cons_of_mem _ hq))
+        (Nat.pow_le_pow_right (Nat.pos_of_ne_zero hm) (hL p List.mem_cons_self))
+
+/-- **Absolute coefficient sum.** The expansion of `G̃_m` has the same absolute coefficient
+sum `∑_ξ |c_ξ|` as the original expansion.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 68–69 and
+121–123. -/
+theorem sum_norm_coeff_termList {m : ℕ} (hm : m ≠ 0) : (L : GateExpansion X Y) →
+    ((termList m L).map fun q => ‖q.1‖).sum = (L.map fun p => ‖p.1‖).sum
+  | [] => rfl
+  | p :: L => by
+      simp only [termList, List.map_append, List.sum_append, List.map_map, List.map_cons,
+        List.sum_cons]
+      congr 1
+      · rw [show ((fun q : ℂ × (X →L[ℂ] Y ⊗[ℂ] inventory m (p :: L)) => ‖q.1‖) ∘ _) =
+            fun _ => ‖p.1 * ((m : ℂ) ^ p.2.effectCount)⁻¹‖ from rfl, List.map_const',
+          List.sum_replicate, Finset.length_toList, Finset.card_univ, Fintype.card_fun,
+          Fintype.card_fin, nsmul_eq_mul, norm_mul, norm_inv, norm_pow, Complex.norm_natCast]
+        have : ((m : ℝ) ^ p.2.effectCount) ≠ 0 := pow_ne_zero _ (by exact_mod_cast hm)
+        push_cast
+        field_simp
+        simp only [Fintype.card_fin]
+        ring
+      · exact sum_norm_coeff_termList hm L
+
+/-- Every term of the expansion of `G̃_m` is a contraction. -/
+theorem norm_term_le_one (m : ℕ) : (L : GateExpansion X Y) → (∀ p ∈ L, p.2.IsAllowed) →
+    ∀ q ∈ termList m L, ‖q.2‖ ≤ 1
+  | [], _ => by simp [termList]
+  | p :: L, hL => by
+      have hp := hL p List.mem_cons_self
+      have hL' : ∀ q ∈ L, q.2.IsAllowed := fun q hq => hL q (List.mem_cons_of_mem _ hq)
+      intro q hq
+      simp only [termList, List.mem_append, List.mem_map] at hq
+      rcases hq with ⟨κ, _, rfl⟩ | ⟨q', hq', rfl⟩
+      · exact norm_comp_le_one norm_assocL_le <| norm_comp_le_one
+          ((norm_appendRight_le _).trans (norm_inventoryVector m L hL').le)
+          (p.2.norm_replaceTerm_le_one m hp κ)
+      · exact norm_comp_le_one norm_leftCommL_le <| norm_comp_le_one
+          ((norm_appendLeft_le _).trans (p.2.norm_stackVector m hp).le)
+          (norm_term_le_one m L hL' q' hq')
+
+/-- **Elimination of normalized pair effects.** Let `G = ∑_ξ c_ξ M_ξ` be a gate expansion into
+`K` allowed monomials, each with at most `r` normalized pair effects, and let `m ≥ 1`.  The
+replaced gate `G̃_m` and the common garbage vector `Γ_m` satisfy:
+
+* `Γ_m` is normalized;
+* `‖G̃_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m) ∑_ξ |c_ξ|`;
+* `G̃_m` is the weighted sum of the effect-free terms of `termList`;
+* there are at most `K m^r` such terms;
+* their absolute coefficient sum equals `∑_ξ |c_ξ|`;
+* each term is a contraction.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`,
+`04-compression.tex`, lines 53–127. -/
+theorem pairEffectElimination {m r : ℕ} (hm : m ≠ 0) (L : GateExpansion X Y)
+    (hL : ∀ p ∈ L, p.2.IsAllowed ∧ p.2.effectCount ≤ r) :
+    ‖inventoryVector m L‖ = 1 ∧
+    ‖replaceGate m L - appendRight (inventoryVector m L) ∘L gate L‖ ≤
+      r / Real.sqrt m * (L.map fun p => ‖p.1‖).sum ∧
+    replaceGate m L = ((termList m L).map fun q => q.1 • q.2).sum ∧
+    (termList m L).length ≤ L.length * m ^ r ∧
+    ((termList m L).map fun q => ‖q.1‖).sum = (L.map fun p => ‖p.1‖).sum ∧
+    ∀ q ∈ termList m L, ‖q.2‖ ≤ 1 :=
+  ⟨norm_inventoryVector m L fun p hp => (hL p hp).1, norm_replaceGate_sub_le hm L hL,
+    replaceGate_eq_sum_termList m L, length_termList_le hm L fun p hp => (hL p hp).2,
+    sum_norm_coeff_termList hm L, norm_term_le_one m L fun p hp => (hL p hp).1⟩
 
 end TNLean.PEPS.PairEffect
