@@ -19,6 +19,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
+import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation

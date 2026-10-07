@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.primarypitchindices",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.primaryPitchIndices",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Defines the finite set of pitch indices whose actual open pitch interiors meet the dyadic layer. Private finite candidate boxes retain exact membership even outside the scale ordering used for the count.",
+        "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.mem_primarypitchindices_iff",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_primaryPitchIndices_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Characterizes membership exactly by nonemptiness of the actual intersection dyadicLayer o k Z C \u2229 pitchInterior o \u2113 p a b j, without assuming a certificate of occupancy.",
+        "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_primarypitchindices_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For coarse index k at most pitch index p, bounds the number of actual nonempty primary identifiers in one layer by four times the number of retained coarse cells.",
+        "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.card_primarypitchindices_boundary_le",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/PrimaryCounting.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_boundary_le",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:primary-pieces"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For coarse index k at most pitch index p and the actual cut-endpoint set Z = boundaryEndpoints \u039b A, bounds the number of actual nonempty primary identifiers in one layer by 32 * (2 * C + 1)^2 * (edgeBoundary \u039b A).card.",
+        "Source: Section 11, primary construction lines 212\u2013218 and the entire-layer primary count in lines 237\u2013238 immediately preceding geometry:primary-pieces. The count is derived from actual intersections. Contacts, isolated stars, repairs, descendants, birth separation and the complete two-family partition and both manuscript headline theorems remain open."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
