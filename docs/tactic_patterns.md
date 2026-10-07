@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Boundary geometry of an elementary side — promoted (2026-10-07)
+
+- **Pattern:** Derive nondegeneracy and the constant square-boundary coordinate
+  of an elementary side, allowing arbitrary midpoint subdivisions.
+- **Seen:** The two opposing-region existence cases in
+  `ElementarySideOpponents.lean` and the opposing-region uniqueness proof in
+  `ElementarySideOpponentUniqueness.lean`.
+- **Abstraction:** `cellFan_elementary_geometry` promotes the existing private
+  statement and proof unchanged in `ElementarySideOpponents.lean`. The two
+  existing callers and the new uniqueness proof use this common theorem.
+- **Notes:** No compatibility alias or additional hypothesis is introduced.
+  The existing existence statement is unchanged; its complete source file
+  receives fresh verification with the two new declarations.
+
 ### Four orientations of fine-cell endpoints — promoted (2026-10-07)
 
 - **Pattern:** Identify the ordered whole-side endpoints from the cell center
@@ -5629,3 +5643,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   normalization if it recurs in another file; the current occurrences are in
   one file and do not meet the two-file promotion condition.
 - **Notes:** The October 7 Geometry scan detected these three short blocks.
+
+### Rectangle corners and elementary midpoints — candidate (2026-10-07)
+
+- **Pattern:** Express the four corners of a rectangle and the two coordinates
+  of the midpoint of an elementary side to compare open and closed rectangles.
+- **Seen:** The private `rectangleCorner` and `midpoint_coordinates` helpers in
+  `ElementarySideOpponents.lean` and `ElementarySideOpponentUniqueness.lean`.
+- **Abstraction:** Two occurrences across two files, below the promotion
+  threshold. Reuse a shared geometric statement if a third proof needs these
+  calculations; do not copy the coordinate table again.
+- **Notes:** The existence proof extends midpoint containment to an entire
+  side, while uniqueness compares three rectangles. Their common elementary
+  boundary geometry has already been promoted separately.

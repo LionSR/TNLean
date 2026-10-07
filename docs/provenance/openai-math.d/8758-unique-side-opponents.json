@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.elementary_geometry",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideOpponents.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For every origin, natural exponent, signed integer cell index, arbitrary optional midpoint mask and its elementary slot, proves that the two endpoints are distinct and that their common first or second coordinate is a boundary coordinate of the actual square. No layer, radius, late-scale, membership or belt assumption is imposed.",
+        "Section 11, lines 299\u2013310. The existing independently proved private elementary_geometry lemma is exported under this public name without changing its statement or proof; two callers are renamed, with no alias. The unchanged promotion and both renamed callers have been independently reviewed; exact-source canonical verification remains pending."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.unique_elementary_side_opponent",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideOpponentUniqueness.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For the same data and assumptions as opponent existence (C \u2265 2, reference k \u2265 50000000, k\u2080 \u2264 k, actual fine-layer membership, and every slot of the exact actual midpoint mask), proves a unique Option (\u2115 \u00d7 (\u2124 \u00d7 \u2124)) tag. The none case means whole-segment containment in the initial dummy closure; some(h,w) means h \u2265 k\u2080, actual opposing fine membership, distinctness from the reference indexed cell and whole-segment containment in that closed cell. There is no supplied uniqueness, contact, plane-cover, nonempty-Z, label or sparsity premise.",
+        "Section 11, lines 299\u2013316. The complete proof passed the reported package-option direct check without diagnostics in 12.76 seconds and independent mathematical review. Exact-source canonical verification remains pending. Region labels, ray/sector constructions, repairs, descendants, isolated stars and the global two-family partition are separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

@@ -45,6 +45,25 @@ Source: Section 11, lines 154–181 and 299–310.
 OpenAI Codex (GPT-6) assistance was used in this formalization.
 -/
 
+/-
+Original formalization from the cited manuscript;
+no upstream Lean proof text reused.
+Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
+September 24, 2026.
+Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
+Manuscript path:
+preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+build/sections/10-geometry.tex
+
+Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_geometry
+Downstream declaration:
+TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry
+Source labels: prop:two-families
+Source: Section 11, lines 299–310.
+
+OpenAI Codex (GPT-6) assistance was used in this formalization.
+-/
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem interval_overlap_of_mem {a b c d x : ℝ}
@@ -242,7 +261,10 @@ private theorem unsplit_geometry (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (
     · exact Or.inl ⟨rfl, Or.inl (by simp [dyadicCellCorner])⟩
     · exact Or.inr ⟨rfl, Or.inl (by simp [dyadicCellCorner])⟩
 
-private theorem elementary_geometry (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+/-- Every optional elementary side is nondegenerate and axis-parallel, with
+its constant coordinate equal to a boundary coordinate of its dyadic square.
+Source: area-law Section 11, lines 299–310. -/
+theorem cellFan_elementary_geometry (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split) :
     let a := cellFanStart o ℓ z split i
     let b := cellFanEnd o ℓ z split i
@@ -294,7 +316,7 @@ private theorem cell_contains_elementary_segment (o : ℝ × ℝ) (ℓ j : ℕ)
     segment ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) ⊆
       closure (dyadicCell o j w) := by
   obtain ⟨ha, hb⟩ := elementary_endpoints_closed o ℓ z split i
-  obtain ⟨hne, haxis⟩ := elementary_geometry o ℓ z split i
+  obtain ⟨hne, haxis⟩ := cellFan_elementary_geometry o ℓ z split i
   have hdi := hd.mono interior_subset interior_subset
   rw [(cell_rectangle o ℓ z).1, (cell_rectangle o j w).1] at hdi
   rw [(cell_rectangle o ℓ z).2] at ha hb
@@ -312,7 +334,7 @@ private theorem elementary_midpoint_not_mem_interior (o : ℝ × ℝ) (ℓ : ℕ
   rw [(cell_rectangle o ℓ z).2, interior_prod_eq, interior_Icc, interior_Icc]
   intro hx
   rw [midpoint_coordinates] at hx
-  rcases (elementary_geometry o ℓ z split i).2 with ⟨he, hbound⟩ | ⟨he, hbound⟩
+  rcases (cellFan_elementary_geometry o ℓ z split i).2 with ⟨he, hbound⟩ | ⟨he, hbound⟩
   · have hm : ((cellFanStart o ℓ z split i).1 + (cellFanEnd o ℓ z split i).1) / 2 =
         (cellFanStart o ℓ z split i).1 := by linarith
     rw [hm] at hx
