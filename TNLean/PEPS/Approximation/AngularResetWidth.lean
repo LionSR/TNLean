@@ -38,7 +38,7 @@ after equation `eq:info-reset-scale-cost`, without restricting `K` to integers.
 
 Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_reset_scale_polylog_le
 Downstream declaration: TNLean.PEPS.Approximation.exists_reset_scale_polylog_le
-Source: the pinned paper above, equation `eq:info-reset-scale-cost` and its ensuing argument.
+Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_reset_scale_polylog_le (K C₃ c : ℝ) (hc : 0 < c) :
     ∃ S : ℝ, 1 ≤ S ∧ ∀ s : ℝ, S ≤ s →
@@ -70,7 +70,7 @@ threshold depends on the subsequently quantified size or scale.
 
 Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_bound_of_slope
 Downstream declaration: TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope
-Source: the pinned paper above, equation `eq:info-reset-scale-cost` and its ensuing argument.
+Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_angular_reset_width_bound_of_slope (K C₃ C₄ c D : ℝ)
     (hc : 0 < c) (hD : 0 < D) (hCD : 4 * C₄ / c ≤ D) :
@@ -107,7 +107,7 @@ zero coefficients and exponent zero.
 
 Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_bound
 Downstream declaration: TNLean.PEPS.Approximation.exists_angular_reset_width_bound
-Source: the pinned paper above, equation `eq:info-reset-scale-cost` and its ensuing argument.
+Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_angular_reset_width_bound (K C₃ C₄ c : ℝ) (hc : 0 < c) :
     ∃ D : ℝ, 1 ≤ D ∧ 4 * C₄ / c ≤ D ∧
@@ -127,7 +127,7 @@ conclusion is derived from the uniform scalar estimate.
 
 Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_lt_of_slope
 Downstream declaration: TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_slope
-Source: the pinned paper above, equation `eq:info-reset-scale-cost` and its ensuing argument.
+Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_angular_reset_width_lt_of_slope (K C₃ C₄ c D : ℝ)
     (hc : 0 < c) (hD : 0 < D) (hCD : 4 * C₄ / c ≤ D) :
