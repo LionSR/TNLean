@@ -562,6 +562,7 @@ jobs:
             +TNLean.Algebra.CommutingMatrixProjectionProduct:olean \
             +TNLean.Algebra.FinitePermutationAverage:olean \
             +TNLean.PEPS.Examples.QuantumDoubleLatticeHamiltonian:olean \
+            +TNLean.PEPS.QuantumDoubleBlockingTransport:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
           # Refuse to continue toward acceptance with missing source imports.
           # This checks TN source presence; the root build checks external imports.
