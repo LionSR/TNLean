@@ -1,0 +1,15 @@
+CI run: https://github.com/LionSR/TNLean/actions/runs/37657123229/job/112915551757
+Source revision: cdeeeb243d7369c1eec28d74991a93545b04d630
+Job conclusion: success; recorded step exit status: 0
+Transcript excerpt: CI timestamp prefixes, ANSI color codes, and whitespace on empty lines removed.
+
+##[group]Run lake exe lint_style --github
+lake exe lint_style --github
+shell: /usr/bin/bash -e {0}
+env:
+  BUILD_CACHE_PATHS: .lake/build
+.lake/packages/Gametheory/.lake/build
+.lake/packages/checkdecls/.lake/build
+.lake/packages/qiclean/.lake/build
+
+##[endgroup]

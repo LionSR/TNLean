@@ -1,0 +1,35 @@
+CI run: https://github.com/LionSR/TNLean/actions/runs/37657123229/job/112915551757
+Source revision: cdeeeb243d7369c1eec28d74991a93545b04d630
+Job conclusion: success; recorded step exit status: 0
+Transcript excerpt: CI timestamp prefixes, ANSI color codes, and whitespace on empty lines removed.
+
+##[group]Run lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean
+lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean
+shell: /usr/bin/bash -e {0}
+env:
+  BUILD_CACHE_PATHS: .lake/build
+.lake/packages/Gametheory/.lake/build
+.lake/packages/checkdecls/.lake/build
+.lake/packages/qiclean/.lake/build
+
+##[endgroup]
+'TNLean.PEPS.AreaLaw.innerBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.endpointBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.innerBoundary_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.innerBoundary_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.endpointBoundary_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.endpointBoundary_univ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.domainGraph_degree_le_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.edgeBoundary_card_le_four_mul_innerBoundary_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.edgeBoundary_card_le_two_mul_endpointBoundary_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.regionalEntropy_le_four_mul_innerBoundary_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.regionalEntropy_le_two_mul_endpointBoundary_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]

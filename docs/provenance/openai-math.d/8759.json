@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8759-tnlean.peps.arealaw.innerboundary",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.innerBoundary",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -32,20 +32,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.endpointboundary",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.endpointBoundary",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -63,20 +81,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.innerboundary_empty",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.innerBoundary_empty",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -94,20 +130,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.innerboundary_univ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.innerBoundary_univ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -125,20 +179,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.endpointboundary_empty",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.endpointBoundary_empty",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -156,20 +228,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.endpointboundary_univ",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.endpointBoundary_univ",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -187,20 +277,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.domaingraph_degree_le_four",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.domainGraph_degree_le_four",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -218,20 +326,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.edgeboundary_card_le_four_mul_innerboundary_card",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.edgeBoundary_card_le_four_mul_innerBoundary_card",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -249,20 +375,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.edgeboundary_card_le_two_mul_endpointboundary_card",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/BoundaryConventions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.edgeBoundary_card_le_two_mul_endpointBoundary_card",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -280,20 +424,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.regionalentropy_le_four_mul_innerboundary_card",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_four_mul_innerBoundary_card",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -311,20 +473,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.regionalentropy_le_two_mul_endpointboundary_card",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
         "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_two_mul_endpointBoundary_card",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -342,20 +522,38 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8759-tnlean.peps.arealaw.uniformarealaw.vertex_boundary_bounds",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
         "declaration": "TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -373,7 +571,25 @@
         "Uses the existing finite-domain boundary and entropy definitions; the uniform entropy consequences retain the area law as an explicit premise."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "cdeeeb243d7369c1eec28d74991a93545b04d630",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder TNLean.MPS.Examples.StringOrderScalarPhase && lake build && lake build lint_style",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-build.log",
+            "sha256": "b060b012a9b03c790d79a1b32edd8913aafa7f5b41d7bdfc758a680c85084942"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8759-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8759-axioms.log",
+            "sha256": "1394afda7e45c4a10bfae0bf77638738e49286936deb2652dda965de00a03373"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
