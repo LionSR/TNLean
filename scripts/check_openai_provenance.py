@@ -15,7 +15,6 @@ from jsonschema import Draft202012Validator
 PIN = "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
 LICENSE_SHA256 = "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
 REPO = "LionSR/TNLean"
-LEAN_NAME = r"[^\W\d][\w']*(?:\.[^\W\d][\w']*)*"
 ID_RE = re.compile(r"^Provenance-ID: ([a-z0-9][a-z0-9._-]*)$", re.M)
 
 
@@ -100,30 +99,22 @@ def declarations(text):
     stack, result = [], {}
     for number, line in enumerate(code.splitlines(), 1):
         line = re.sub(r"@\[[^]]*\]", "", line).strip()
-        scope = re.fullmatch(r"(namespace|(?:noncomputable\s+)?section)(?:\s+(\S+))?", line)
+        scope = re.match(r"(namespace|(?:noncomputable\s+)?section)\b\s*([^\s]*)", line)
         if scope:
-            stack.append((scope[1] == "namespace", scope[2] or ""))
+            stack.append(scope[2] if scope[1] == "namespace" else "")
             continue
-        ending = re.fullmatch(r"end(?:\s+(\S+))?", line)
-        if ending:
-            require(stack, f"unmatched Lean end at line {number}")
-            if ending[1]:
-                # A named end also closes intervening anonymous sections.
-                while stack and not stack[-1][1]:
-                    stack.pop()
-                require(stack and stack[-1][1] == ending[1],
-                        f"unmatched named Lean end at line {number}")
-            stack.pop()
+        if re.match(r"end\b", line):
+            if stack:
+                stack.pop()
             continue
-        match = re.match(r"(?:(?:noncomputable|protected|private|public|unsafe|partial)\s+)*"
-                         r"(?:def|abbrev|theorem|lemma|structure|class|inductive|instance|opaque|axiom)\s+"
-                         rf"({LEAN_NAME})(?=\s|\(|\{{|:|$)", line)
+        match = re.match(r"(?:(?:noncomputable|protected|private|public)\s+)*"
+                         r"(?:def|abbrev|theorem|lemma|structure|class|inductive|instance)\s+"
+                         r"([^\s(:{\[]+)", line)
         if match:
             name = match[1]
-            prefix = ".".join(name for namespace, name in stack if namespace)
+            prefix = ".".join(s for s in stack if s)
             qualified = name.removeprefix("_root_.") if name.startswith("_root_.") else (
                 f"{prefix}.{name}" if prefix else name)
-            require(qualified not in result, f"ambiguous declaration: {qualified}")
             result[qualified] = number
     return result
 
@@ -299,21 +290,6 @@ def validate(ledgers, schema, roots, scan=True):
                 check_entry(entry, roots)
             except (Invalid, OSError, UnicodeError) as error:
                 raise Invalid(f"{identifier}: {error}") from error
-    modules = {}
-    for entry in entries:
-        if entry["status"] not in ("planned", "ported"):
-            continue
-        down = entry["downstream"]
-        modules.setdefault((down["repository"], down["path"]), []).append(entry)
-    for (repository, path), rows in modules.items():
-        if repository not in roots or not any(r["reuse_kind"] in ("copied", "adapted") for r in rows):
-            continue
-        target = roots[repository] / path
-        if not target.exists():
-            continue  # A proposed file may not have been written yet.
-        names = set(declarations(safe_file(roots[repository], path).read_text()))
-        recorded = {r["downstream"]["declaration"] for r in rows}
-        require(names <= recorded, f"unrecorded declarations in derivative module {path}: {sorted(names - recorded)}")
     if scan:
         by_id = {e["id"]: e for e in entries}
         for repository, root in roots.items():

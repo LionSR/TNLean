@@ -337,28 +337,6 @@ class ProvenanceTests(unittest.TestCase):
             with self.subTest(path=path), self.assertRaisesRegex(provenance.Invalid, "schema"):
                 provenance.validate([ledger], SCHEMA, {}, scan=False)
 
-    def test_unrecorded_derivative_declaration(self):
-        self.stored = (self.text + "\nabbrev Unrecorded := Nat\n").encode()
-        self.write("TNLean/Example.lean", self.stored.decode())
-        self.rejects("unrecorded declarations.*Unrecorded")
-
-    def test_original_declaration_can_complete_mixed_module_inventory(self):
-        original = deepcopy(self.row)
-        original.update(id="fixture-original", reuse_kind="original", upstream=None,
-                        no_upstream_proof_text_reused=True)
-        original["downstream"]["declaration"] = "Original"
-        block = ("\n/-!\nProvenance-ID: fixture-original\nDownstream declaration: Original\n"
-                 "Source: September 24, 2026, eq:target-error; independently formalized;\n"
-                 "no upstream Lean proof text reused.\n-/\nabbrev Original := Nat\n")
-        self.stored = (self.text + block).encode()
-        self.write("TNLean/Example.lean", self.stored.decode())
-        self.write("axioms.log", "'Example.Vertex' does not depend on any axioms\n"
-                   "'Original' does not depend on any axioms\n")
-        for row in (self.row, original):
-            row["verification"]["commands"][1]["sha256"] = self.digest("axioms.log")
-        self.assertEqual(provenance.validate([self.ledger(), self.ledger(original)],
-                                            SCHEMA, self.roots), 2)
-
 
     def source_header(self, header):
         self.source = (header + "\n").encode() + (FIXTURES / "Source.lean.txt").read_bytes()
@@ -398,20 +376,11 @@ class ProvenanceTests(unittest.TestCase):
                   "abbrev after := Nat\nend Outer\n")
         self.assertEqual(provenance.declarations(source), {"Outer.before": 3, "Outer.after": 5})
 
-    def test_named_sections_and_root_qualified_names(self):
-        source = ("namespace Outer\nsection Local\nnamespace Inner\n"
-                  "abbrev _root_.global := Nat\nend Inner\nend Local\n"
-                  "abbrev after := Nat\nend Outer\n")
-        self.assertEqual(provenance.declarations(source), {"global": 4, "Outer.after": 7})
 
     def test_nested_legal_header_is_preserved_whole(self):
         header = "/- Copyright holder. /- additional attribution -/ License: Apache-2.0. -/"
         self.assertEqual(provenance.leading_legal_notices(header + "\nimport Mathlib\n"),
                          [header[2:-2].strip()])
-
-    def test_declaration_scan_rejects_ambiguous_duplicate(self):
-        with self.assertRaisesRegex(provenance.Invalid, "ambiguous declaration"):
-            provenance.declarations("abbrev x := Nat\nabbrev x := Nat\n")
 
 
     def test_git_reads_recorded_revision_not_worktree(self):

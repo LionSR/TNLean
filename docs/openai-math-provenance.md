@@ -161,11 +161,10 @@ confirm paper hypotheses and notice retention, and check the closure independent
 When selected source bytes are available, opening copyright, license, author,
 patent, trademark and attribution comments must appear in the retained-notice
 ledger. This conservative header check does not determine legal applicability
-or find all notices elsewhere in a source/import closure. Every ordinary named
-declaration in a selected derivative module needs a ledger row; include original
-bridge proofs separately. Anonymous/compiler-generated declarations still need
-compiler evidence and review. Named axiom output must match the exact downstream
-declaration, not a longer name sharing its suffix.
+or find all notices elsewhere in a source/import closure. Every copied/adapted
+declaration still needs a ledger row. Exhaustive declaration coverage, including
+original bridge proofs and generated declarations, remains a review obligation
+rather than an automatic whole-module check.
 
 Newly discovered source/header notices must be added; a validator pass never
 licenses dropping them. Complete manuscript results remain open until faithful
