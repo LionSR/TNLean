@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_choice",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideReciprocity.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Chooses the unique dummy or actual fine-cell identifier opposing a given actual elementary segment. Assumptions are common origin and finite endpoint data, C \u2265 2, reference k \u2265 50000000, k\u2080 \u2264 k and actual reference fine-cell membership. The dummy neighborhood has one identifier. The lower index k\u2080 has no separate late bound. The choice is noncomputable.",
+        "Section 11, lines 299\u2013316. The released proofs passed the reported direct package-option check without diagnostics in 4.62 seconds and independent full mathematical review. Exact-source canonical verification remains pending. Primary identifiers, colors, global labels and the full source proposition are separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_contact",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideReciprocity.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_eq_some_iff_contact",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an actual candidate fine cell at h \u2265 k\u2080, under the same reference hypotheses as the choice, proves that its identifier is selected exactly when the indexed cells are distinct and its closed cell has contact containing two distinct points with the reference elementary segment. Only the reference k has a late bound; no contact is supplied as a premise.",
+        "Section 11, lines 299\u2013316. The released proofs passed the reported direct package-option check without diagnostics in 4.62 seconds and independent full mathematical review. Exact-source canonical verification remains pending. Primary identifiers, colors, global labels and the full source proposition are separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_reciprocity",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideReciprocity.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_reciprocal_iff",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "With C \u2265 2, k\u2080 \u2265 50000000, actual reference and candidate cells at k,h \u2265 k\u2080 and any actual reference slot, proves that the candidate is selected exactly when the cells are distinct and an actual candidate slot has opposite facing side, reversed endpoints and selects the reference cell in return. Both late bounds are derived from k\u2080. Matching, return selection, contact and distinctness are conclusions of the equivalence, rather than supplied premises.",
+        "Section 11, lines 299\u2013323. The released proofs passed the reported direct package-option check without diagnostics in 4.62 seconds and independent full mathematical review. Exact-source canonical verification remains pending. Primary identifiers, colors, global labels and the full source proposition are separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

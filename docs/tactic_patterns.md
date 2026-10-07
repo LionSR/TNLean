@@ -5656,3 +5656,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The existence proof extends midpoint containment to an entire
   side, while uniqueness compares three rectangles. Their common elementary
   boundary geometry has already been promoted separately.
+
+### Marked-endpoint segment containment — candidate (2026-10-07)
+
+- **Pattern:** Put two marked endpoints in a closed dyadic square and use
+  `Convex.segment_subset` to contain their segment in that square.
+- **Seen:** The private whole-side containment in `SideSubdivision.lean` and
+  `segment_contact_of_marks` in `ElementarySideReciprocity.lean`.
+- **Abstraction:** Two computations across two files, below the promotion
+  threshold. The reciprocal module shares its one private helper across
+  three uses, adding nontrivial contact when the endpoints are distinct.
+- **Notes:** Mathlib supplies the interval and product convexity statements.
+  Future fan-base containment can instead follow directly from the actual
+  triangle's convex hull and the existing fan-cover theorem. Do not copy the
+  marked-endpoint calculation into a third file.

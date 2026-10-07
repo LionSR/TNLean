@@ -24,6 +24,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
+import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
