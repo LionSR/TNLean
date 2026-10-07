@@ -1,3 +1,5 @@
 .github/workflows/*.lock.yml linguist-generated=true merge=ours
 Papers/**/*.eps binary
 Papers/quant-ph_0405174/qca.tex binary
+# Preserve the pinned upstream excerpt byte-for-byte, including its whitespace.
+scripts/fixtures/openai_provenance/Source.lean.txt -whitespace
