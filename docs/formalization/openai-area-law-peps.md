@@ -140,9 +140,16 @@ factor of four. Thus `exists_sparse_dyadic_belt_shift` proves the source's
 `geometry:belt-count` estimate with the explicit bound
 `64*(2*C₀+1)^2*b*2^(-δ₀*k/2)`. The coefficient is fixed after the radius
 and before the domain, cut, origin, and scale. Empty endpoint sets and
-layers are included. Strict scale asymptotics, absorption of polynomial
-factors, primary-tile geometry, contacts, repairs, birth separation, and
+layers are included. Absorption of polynomial factors, primary-tile
+geometry, contacts, repairs, birth separation, and
 the two-family construction remain open.
+
+The three dyadic sides are uniformly separated at large scales. For every
+fixed real factor `M`, one threshold chosen independently of the domain and
+cut gives `M t_k ≤ r_k` and `M r_k ≤ s_k` for every later scale. An explicit
+threshold for the factor `2^d` is `10^7 d`. This proves the scale-separation
+passage in Section 11, lines 200–207; polynomial-factor absorption and the
+later geometric constructions are separate obligations.
 
 ## Mathematical coverage
 
@@ -154,10 +161,10 @@ the two-family construction remain open.
 | Area-law `scanner:template` | Template data defined | Geometric and entropy bounds, #8754 and #8758. |
 | Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
-| Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, and sparse-belt decay with the fixed exponents proved | Strict scale asymptotics; primary-tile geometry, contacts, and repairs. |
+| Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, and sparse-belt decay with the fixed exponents proved | Polynomial-factor absorption, primary-tile geometry, contacts, repairs, and birth separation. |
 | Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
 | Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
-| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, and nonadjacent-layer separation proved | Contacts, simultaneous repairs, and the full partition. |
+| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, and nonadjacent-layer separation proved | Contacts, simultaneous repairs, birth separation, and the full partition. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
 
 Defining a target proposition does not prove the corresponding theorem. The

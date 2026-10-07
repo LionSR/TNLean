@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicscale_index_gaps",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ScaleSeparation.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicScale_index_gaps",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves an explicit domain-independent threshold for every prescribed gap between the fine-cell, layer-cell and belt-pitch indices.",
+        "Source: Section 11, lines 70–78 and 200–207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dyadicscale_side_ratios",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ScaleSeparation.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicScale_side_ratios",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Derives the prescribed dyadic-factor separation of successive cell sides from the uniform index gaps.",
+        "Source: Section 11, lines 70–78 and 200–207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.exists_dyadicscale_side_ratios",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ScaleSeparation.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:exponents"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text was reused.",
+        "Proves eventual separation of successive cell sides by every fixed real multiplicative factor, with a threshold independent of the domain and cut.",
+        "Source: Section 11, lines 70–78 and 200–207. Uses the fixed geometric exponents and existing dyadic-scale definitions; does not assert the complete two-family construction or either manuscript headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
