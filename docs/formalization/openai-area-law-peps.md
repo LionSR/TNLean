@@ -112,7 +112,7 @@ not identified with the final choices.
 |---|---|---|
 | Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
 | Area-law `thm:area` | Target proposition defined | Faithful full proof, #8759 and its prerequisites. |
-| Area-law `cor:rectangles` | Graph and configuration identification proved | Hamiltonian and entropy transport and the boundary estimates. |
+| Area-law `cor:rectangles` | Graph and configuration identification and vertex-boundary comparisons proved; vertex entropy bounds proved assuming the uniform edge area law | Hamiltonian and entropy transport and the unconditional area-law theorem. |
 | Area-law `scanner:template` | Template data defined | Geometric and entropy bounds, #8754 and #8758. |
 | Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
