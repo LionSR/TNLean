@@ -10,10 +10,18 @@ All new production proofs are original; no upstream Lean text is reused.
 The theorem `template_boundary_card_le` states the actual unordered ambient
 nearest-neighbor boundary bound `4*n` for every `0 ≤ j ≤ s₀` when `Ctpl ≥ 24`.
 `template_shell_boundary_card_le` gives `8*n` for `T_j \ T`.
-Both production modules compiled at
-`e2c3c2111922ebebf7c665db52d8e382e4318ba1` in PR CI run `37629687127`,
-build job `112820824577`, step 18. Full-library, strict regression, axiom, and
-blueprint integration checks are still pending on this revision.
+Both production modules, the full library build, strict actual-model
+regressions, all 18 axiom audits, style lint, compiled declarations, the
+full blueprint job, and compilation-time checks passed at
+`e2c3c2111922ebebf7c665db52d8e382e4318ba1` in
+[PR CI run 37629687127](https://github.com/LionSR/TNLean/actions/runs/37629687127).
+All exports use only the standard axioms; `latticeNeighbors` uses `propext`
+and `Quot.sound`, and the other 17 use those plus `Classical.choice`.
+The observed outputs are now guarded in the regression file.
+Evidence is preserved in [the build log](../provenance/evidence/8754-boundary-build.log),
+[the axiom output](../provenance/evidence/8754-boundary-axioms.log), and
+[the blueprint log](../provenance/evidence/8754-boundary-blueprint.log).
+All 18 provenance entries record the verified revision and evidence hashes.
 
 `ambientBoundary S` uses the existing `edgeBoundary` and `domainGraph` on
 `ambientDilation S 1`, then maps subtype endpoints back with `Sym2.map`.
@@ -32,9 +40,8 @@ Regressions cover four unordered edges of a singleton, reversed orientation,
 negative coordinates, exclusion of diagonal and internal edges, and a complete
 actual thin-real-polygon Template at radii zero and `s₀`. Its private fixture
 is preserved from the original #8798 regression without changing that PR.
-All 18 exports have axiom audits. Blueprint completion marks reflect the
-successful production build; provenance verification awaits the complete
-strict checks and recorded axiom output.
+All 18 exports have exact axiom guards. Blueprint completion marks and
+provenance verification reflect the passing checks.
 
 Local prebuilt Mathlib retrieval again returned HTTP 403. No local Mathlib
 proof-source rebuild was started; normal PR CI is the validation fallback.

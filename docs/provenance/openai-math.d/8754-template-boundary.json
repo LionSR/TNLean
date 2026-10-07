@@ -14,7 +14,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeNeighbors",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -29,10 +29,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -45,7 +63,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -60,10 +78,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -76,7 +112,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.latticeNeighbors_symm",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -91,10 +127,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -107,7 +161,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_latticeNeighbors_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -122,10 +176,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -138,7 +210,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -153,10 +225,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -169,7 +259,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientBoundaryRegion",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -184,10 +274,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -200,7 +308,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -215,10 +323,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -231,7 +357,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -246,10 +372,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -262,7 +406,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -277,10 +421,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -293,7 +455,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -308,10 +470,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -324,7 +504,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary_empty",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -339,10 +519,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -355,7 +553,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -370,10 +568,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -386,7 +602,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -401,10 +617,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -417,7 +651,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -432,10 +666,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -448,7 +700,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -463,10 +715,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -479,7 +749,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/AmbientBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -494,10 +764,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -510,7 +798,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -525,10 +813,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
@@ -541,7 +847,7 @@
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateBoundary.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le",
-        "name_status": "planned"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -556,10 +862,28 @@
       "notices": [],
       "changes": [
         "Original unordered lattice-edge counting argument from the mathematical manuscript; no upstream Lean proof text reused.",
-        "Candidate implementation awaiting Lean compilation and axiom checks. No physical cut clearance or entropy theorem is claimed."
+        "Derives actual unordered ambient crossing membership and counting, the 4n template-dilation boundary bound, or its 8n ambient-shell corollary. No physical cut clearance or entropy theorem is claimed."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "e2c3c2111922ebebf7c665db52d8e382e4318ba1",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-build.log",
+            "sha256": "8558c96c9e5c3e84160e3a1e418eaa9377db3a105acb509d5e5f4cb30e531a21"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-boundary-axioms.log",
+            "sha256": "04ad7c0412154f713d9baa452b25e8a37d34873abb6dcf2f58a17478b66442e6"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

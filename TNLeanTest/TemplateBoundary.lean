@@ -169,23 +169,113 @@ section AxiomChecks
 
 set_option linter.hashCommand false
 
+/--
+info: 'TNLean.PEPS.AreaLaw.latticeNeighbors'
+depends on axioms: [propext, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.latticeNeighbors
+/--
+info: 'TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff
+/--
+info: 'TNLean.PEPS.AreaLaw.latticeNeighbors_symm'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.latticeNeighbors_symm
+/--
+info: 'TNLean.PEPS.AreaLaw.card_latticeNeighbors_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.card_latticeNeighbors_le
+/--
+info: 'TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ
+/--
+info: 'TNLean.PEPS.AreaLaw.ambientBoundaryRegion'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.ambientBoundaryRegion
+/--
+info: 'TNLean.PEPS.AreaLaw.ambientBoundary'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.ambientBoundary
+/--
+info: 'TNLean.PEPS.AreaLaw.card_ambientBoundary'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.card_ambientBoundary
+/--
+info: 'TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff
+/--
+info: 'TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique
+/--
+info: 'TNLean.PEPS.AreaLaw.ambientBoundary_empty'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.ambientBoundary_empty
+/--
+info: 'TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover
+/--
+info: 'TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer
+/--
+info: 'TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer
+/--
+info: 'TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset
+/--
+info: 'TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le
 
 end AxiomChecks

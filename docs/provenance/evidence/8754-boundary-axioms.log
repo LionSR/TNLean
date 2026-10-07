@@ -1,0 +1,24 @@
+Source: https://github.com/LionSR/TNLean/actions/runs/37629687127/job/112820824577
+Revision: e2c3c2111922ebebf7c665db52d8e382e4318ba1
+GitHub build job conclusion: success.
+GitHub step 22, Test template boundary strictly and audit axioms: success.
+Actual unordered singleton counting and the complete thin-real-polygon Template at radii zero and s0 passed. All 18 outputs below were checked against the standard axiom set.
+Command: lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateBoundary.lean
+'TNLean.PEPS.AreaLaw.latticeNeighbors' depends on axioms: [propext, Quot.sound]
+'TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.latticeNeighbors_symm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_latticeNeighbors_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientBoundaryRegion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_ambientBoundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientBoundary_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
