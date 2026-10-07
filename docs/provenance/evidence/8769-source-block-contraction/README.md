@@ -61,3 +61,7 @@ identifier collisions. It does not recompile Lean or repeat the unrelated
 historical provenance and license audit. Without `--upstream-root`, the checker
 explicitly reports that manuscript labels were not rechecked. All 21 proofs
 are independent formalizations; no upstream Lean proof text was reused.
+
+A later comment-only correction is verified in [style-recheck](style-recheck/README.md).
+Its seven source-block declarations now use that exact revision in the provenance ledger.
+The original records above remain unchanged historical evidence.
