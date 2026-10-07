@@ -64,6 +64,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Build blueprint PDFs
     env:
+      # The full print volume exceeds XeTeX's default string pool.
+      # Limit the larger pool to this job; do not change system TeX settings.
+      pool_size: '12000000'
       PRINT_AUX_FILES: |
         blueprint/print/*.aux
         blueprint/print/*.bbl
