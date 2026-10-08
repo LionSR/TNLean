@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
 import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CorrectedPositionCost
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
@@ -25,9 +26,11 @@ import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.HoleEncoder
+import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork

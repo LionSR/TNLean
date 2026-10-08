@@ -1,0 +1,305 @@
+{
+  "source_head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+  "parent_pr_head": "c0fa5ac606671cce71548adaba1e371188e5f952",
+  "previous_public_head": "cf800175d34f4409f4f189cfe3b67445ef84fdef",
+  "resolution": "Preserved SquareLatticeConnectivity and VectorColumn in the generated Approximation imports, then regenerated and checked every aggregator.",
+  "proof_and_pin_identity": {
+    "TNLean/PEPS/Approximation/ExactFiniteException.lean": "374479c54f16f5fd71b2309a16c0f612fc994131b2822cd04fa06fbfdfef57a8",
+    "TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean": "1cdb20f6b529272fe47b24558f43eb9b371c5f1be3db92da3b516b0e87fbfd35",
+    "TNLean/PEPS/Approximation/ExactSquareRepresentation.lean": "8fb01d0300c4b31d73c542bd3a1855385216af7c7553087756fc4cfab88e4289",
+    "TNLean/PEPS/Approximation/ExactTreeRepresentation.lean": "ee22b624eac15c78542315e8424c9e48ed1e470f51ed84b979f591cab73a81ed",
+    "TNLean/PEPS/Approximation/SquareLatticeConnectivity.lean": "b63b83d1c2675f9580185490a83faf341ed8289c0fab63aca4ace3d711813e19",
+    "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+    "lake-manifest.json": "d3c1569a3f25b8667f45b28e34fe4671696b38a7cb5cc86e98a05ff3c56ce929"
+  },
+  "validation": "All14 targeted native/strict/consumer/axiom checks pass on source0c0ff528; all import and provenance checks pass.",
+  "checks": [
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "aggregate",
+      "sha256": null,
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation.ExactFiniteException"
+      ],
+      "exit_code": 0,
+      "seconds": 13.172634122005547,
+      "log_sha256": "ce0a4b194f6ba4dd220cd0dae78a3d891d2aebbd28bd262418afab4fc3fe5999",
+      "log_bytes": 372
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLean/PEPS/Approximation/SquareLatticeConnectivity.lean",
+      "sha256": "b63b83d1c2675f9580185490a83faf341ed8289c0fab63aca4ace3d711813e19",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/SquareLatticeConnectivity.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.2391440859937575,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLean/PEPS/Approximation/ExactTreeRepresentation.lean",
+      "sha256": "ee22b624eac15c78542315e8424c9e48ed1e470f51ed84b979f591cab73a81ed",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/ExactTreeRepresentation.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.65752760299074,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLean/PEPS/Approximation/ExactSquareRepresentation.lean",
+      "sha256": "8fb01d0300c4b31d73c542bd3a1855385216af7c7553087756fc4cfab88e4289",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/ExactSquareRepresentation.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 3.093748957006028,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean",
+      "sha256": "1cdb20f6b529272fe47b24558f43eb9b371c5f1be3db92da3b516b0e87fbfd35",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.9037381039961474,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLean/PEPS/Approximation/ExactFiniteException.lean",
+      "sha256": "374479c54f16f5fd71b2309a16c0f612fc994131b2822cd04fa06fbfdfef57a8",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/ExactFiniteException.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.8083126499986975,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLeanTest/PEPS/Approximation/ExactTreeRepresentation.lean",
+      "sha256": "5e81a3c6efbc7536f23f82c0906d8a16be33b2a828c0b31bffa36057e2b85836",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/Approximation/ExactTreeRepresentation.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.663075566990301,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLeanTest/PEPS/Approximation/SquareLatticeConnectivity.lean",
+      "sha256": "37cf01cbabd8233021a1e3d2ddb7a9b595a533e314b3b2ac8093ba85df23054b",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/Approximation/SquareLatticeConnectivity.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 1.965350288010086,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLeanTest/PEPS/Approximation/ExactTreeRepresentationAxioms.lean",
+      "sha256": "7731480ad38a90e1b41881d89dd1c292f938200c9e6854f370fc36f792950004",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/Approximation/ExactTreeRepresentationAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.527629557007458,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLeanTest/PEPS/Approximation/ExactSmallSizeApproximation.lean",
+      "sha256": "1efec20337e5cfb97c6442f8cb384b41508245689ca3f1141b9433c92ebc3645",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/Approximation/ExactSmallSizeApproximation.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.880111036996823,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "TNLeanTest/PEPS/Approximation/ExactFiniteException.lean",
+      "sha256": "68dd1f17cc636dede5ed6ba5f30485021d9da2f142a43a398f644ca35d9951fc",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/Approximation/ExactFiniteException.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.6214844140049536,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean",
+      "sha256": "a6a24755df7f0654e429fb254fe3bb1dec8cb88630235e9bf848bf7a26315b88",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "docs/provenance/evidence/8773/ExactTreeRepresentationAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.4839086870051688,
+      "log_sha256": "aa3e4b0b67a64078906963aba5c6ee641353734665770dcdacb44263c71681c9",
+      "log_bytes": 4627
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "docs/provenance/evidence/8773/ExactSmallSizeApproximationAxioms.lean",
+      "sha256": "6509f62caae253a4fc41d4eddf569f3cbc7de84a4aeff7a3204fc33157afebd5",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "docs/provenance/evidence/8773/ExactSmallSizeApproximationAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.708341150995693,
+      "log_sha256": "2ae7c58f7ccfeb36056571e2696b5f6c1ac61a67be245b2e44ad6a909edba08f",
+      "log_bytes": 253
+    },
+    {
+      "head": "0c0ff528a6665bdbf0a70b1853c1864cb7acf7a5",
+      "file": "docs/provenance/evidence/8773/ExactFiniteExceptionAxioms.lean",
+      "sha256": "937ae5799e16cd66e0ff648c7288714ad85dd6ecdab4e1f7d327a7b686c3f565",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "docs/provenance/evidence/8773/ExactFiniteExceptionAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.542360188002931,
+      "log_sha256": "1d635415dcdef1105768bb69066504b9d772f5848af62c4011ad6886cef0f53c",
+      "log_bytes": 405
+    }
+  ]
+}
