@@ -162,6 +162,7 @@ def swapPairs (a₁ b₁ m₁ m₂ a₂ b₂ t : Layout P) :
   .comp (frameList (a₂ ++ b₂) (assocWord m₁ m₂ (a₁ ++ (b₁ ++ t)))) <|
   assocWord a₂ b₂ (m₁ ++ (m₂ ++ (a₁ ++ (b₁ ++ t))))
 
+/-- `swapPairs` exchanges the two pairs of factors of a product vector. -/
 theorem eval_swapPairs (a₁ b₁ m₁ m₂ a₂ b₂ t : Layout P) (x₁ : Mem a₁) (y₁ : Mem b₁)
     (u₁ : Mem m₁) (u₂ : Mem m₂) (x₂ : Mem a₂) (y₂ : Mem b₂) (z : Mem t) :
     (swapPairs a₁ b₁ m₁ m₂ a₂ b₂ t).eval
@@ -249,6 +250,7 @@ theorem eval_partStepApp (own : ι → Party) (x : ι) (a b : List ι) (tail : L
       rw [appendIso_one_symm_tmul, appendIso_one_symm_tmul] at h
       exact h
 
+/-- `partWordApp` on product basis vectors in front of further registers. -/
 theorem eval_partWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
     (c : ι → Fin q) (y : Mem tail) : (S : List ι) →
     (partWordApp own p tail S).eval
@@ -288,6 +290,7 @@ theorem eval_unpartStepApp (own : ι → Party) (x : ι) (a b : List ι) (tail :
       (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q))
       ((appendIso (siteRegs q own b) tail).symm (siteVec own b c ⊗ₜ y))
 
+/-- `unpartWordApp` on product basis vectors in front of further registers. -/
 theorem eval_unpartWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
     (c : ι → Fin q) (y : Mem tail) : (S : List ι) →
     (unpartWordApp own p tail S).eval
@@ -359,6 +362,7 @@ def relabelSitesApp (own own' : ι → Party) (tail : Layout Party) :
         (relabelSitesApp own own' tail S fun y hy => h y (List.mem_cons_of_mem x hy)))
       (relabelHead (h x List.mem_cons_self) (euc (Fin q)) (siteRegs q own' S ++ tail))
 
+/-- Renaming owners in front of further registers moves no vector. -/
 theorem eval_relabelSitesApp (own own' : ι → Party) (tail : Layout Party) (c : ι → Fin q)
     (y : Mem tail) : (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
       (relabelSitesApp own own' tail S h).eval
@@ -458,6 +462,7 @@ def tagMerge : (l₁ l₂ : List (Hole pos q Party)) → (tail : Layout Party) �
   | [], _, _ => .id _
   | _ :: l₁, l₂, tail => .frame _ (tagMerge l₁ l₂ tail)
 
+/-- Splitting the tag registers of a concatenated list on basis vectors. -/
 theorem eval_tagSplit (tail : Layout Party) (y : Mem tail) :
     (l₁ l₂ : List (Hole pos q Party)) → (τ : TagSpace (l₁ ++ l₂)) →
       (tagSplit l₁ l₂ tail).eval
@@ -475,6 +480,7 @@ theorem eval_tagSplit (tail : Layout Party) (y : Mem tail) :
           EuclideanSpace ℂ h.patch.Tag) ⊗ₜ w : Mem (tagRegs (h :: l₁) ++ (tagRegs l₂ ++ tail))))
         (eval_tagSplit tail y l₁ l₂ τ)
 
+/-- Merging the tag registers of two lists on basis vectors. -/
 theorem eval_tagMerge (tail : Layout Party) (y : Mem tail) :
     (l₁ l₂ : List (Hole pos q Party)) → (τ₁ : TagSpace l₁) → (τ₂ : TagSpace l₂) →
       (tagMerge l₁ l₂ tail).eval

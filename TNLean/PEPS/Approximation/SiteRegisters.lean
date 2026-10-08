@@ -150,6 +150,8 @@ def siteIsoList (own : ι → Party) :
   | _ :: S => ((siteIsoList own S).lTensor (EuclideanSpace ℂ (Fin q))).trans
       (consIso (Fin q) S.length)
 
+/-- The identification of the raw registers of a list sends `⊗_x |c x⟩` to the standard basis
+vector of the configuration read along the list. -/
 theorem siteIsoList_siteVec (own : ι → Party) (c : ι → Fin q) :
     (S : List ι) → siteIsoList own S (siteVec own S c) =
       EuclideanSpace.single (fun k => c (S.get k)) (1 : ℂ)
@@ -190,6 +192,8 @@ def groupIso (own : ι → Party) (S : List ι) {κ : Type} [Fintype κ] [Decida
   (siteIsoList own S).trans
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (e.arrowCongr (Equiv.refl (Fin q))))
 
+/-- **Grouped raw registers on basis vectors.** If the list `S` is enumerated by `κ` through
+`f`, the grouping sends `⊗_{x ∈ S} |c x⟩` to `|c ∘ f⟩`. -/
 theorem groupIso_siteVec (own : ι → Party) (S : List ι) {κ : Type} [Fintype κ]
     [DecidableEq κ] (e : Fin S.length ≃ κ) (f : κ → ι) (hf : ∀ k, S.get k = f (e k))
     (c : ι → Fin q) :
@@ -231,6 +235,7 @@ def relabelSites (own own' : ι → Party) :
         (relabelSites own own' S fun y hy => h y (List.mem_cons_of_mem x hy)))
       (relabelHead (h x List.mem_cons_self) (euc (Fin q)) (siteRegs q own' S))
 
+/-- Renaming owners moves no vector. -/
 theorem eval_relabelSites (own own' : ι → Party) (c : ι → Fin q) :
     (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
       (relabelSites own own' S h).eval (siteVec own S c) = siteVec own' S c
@@ -376,6 +381,8 @@ theorem eval_partStep (own : ι → Party) (x : ι) (a b : List ι) (c : ι → 
       rw [appendIso_one_symm_tmul, appendIso_one_symm_tmul] at h
       exact h
 
+/-- **Moving the registers of the sites satisfying `p` to the front.** On a product basis
+vector the word gives the product vectors of the two parts. -/
 theorem eval_partWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q) :
     (S : List ι) → (partWord own p S).eval (siteVec own S c) =
       (appendIso _ _).symm (siteVec own (partSites p S).1 c ⊗ₜ siteVec own (partSites p S).2 c)
@@ -399,6 +406,7 @@ theorem eval_unpartStep (own : ι → Party) (x : ι) (a b : List ι) (c : ι �
       (siteRegs q own b) (siteVec own a c)
       (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) (siteVec own b c)
 
+/-- The inverse reordering on product basis vectors. -/
 theorem eval_unpartWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q) :
     (S : List ι) → (unpartWord own p S).eval
         ((appendIso _ _).symm (siteVec own (partSites p S).1 c ⊗ₜ
@@ -412,6 +420,7 @@ theorem eval_unpartWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q
       rw [eval_unpartWord own p c S]
       rfl
 
+/-- The product vector of `S` depends only on the configuration on `S`. -/
 theorem siteVec_congr (own : ι → Party) {c c' : ι → Fin q} :
     (S : List ι) → (∀ x ∈ S, c x = c' x) → siteVec own S c = siteVec own S c'
   | [], _ => rfl
@@ -446,6 +455,7 @@ def tagIso : (l : List (Hole pos q Party)) → Mem (tagRegs l) ≃ₗᵢ[ℂ] Eu
   | h :: l => ((tagIso l).lTensor (EuclideanSpace ℂ h.patch.Tag)).trans
       (pairIso h.patch.Tag (TagSpace l))
 
+/-- The tag registers on basis vectors: `⊗_a |τ_a⟩ ↦ |τ⟩`. -/
 theorem tagIso_tagVec : (l : List (Hole pos q Party)) → (τ : TagSpace l) →
     tagIso l (tagVec l τ) = EuclideanSpace.single τ (1 : ℂ)
   | [], τ => by

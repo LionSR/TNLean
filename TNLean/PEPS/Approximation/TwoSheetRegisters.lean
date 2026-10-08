@@ -227,6 +227,8 @@ theorem mem_sitesR_iff (x : ι) : x ∈ sitesR T E ↔ x ∈ T ∪ E := by
   simp only [mem_partSites_snd, mem_sites, true_and, decide_eq_false_iff_not, Finset.mem_compl,
     not_not]
 
+/-- **The corrections on basis vectors.** The configurations of the two sheets on `U` are
+mixed by `W`; those on `T ∪ E` and the tags are untouched. -/
 theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
@@ -349,6 +351,7 @@ theorem twoLayoutIso_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (
     refine Finset.sum_congr rfl fun u _ => ?_
     rw [LinearIsometryEquiv.map_smul, twoLayoutIso_basis]) z
 
+/-- The corrections form an allowed word using only `P`, without pair sources. -/
 theorem correctionLayoutWord_props (l₁ l₂ : List (Hole pos q Party))
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
@@ -447,6 +450,8 @@ def renameWord : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs +
   Word.unassocWord (tagRegs (X.out₁ ++ X.in₂)) (siteRegs q X.newFrame₁.owner (sites ι))
     X.newFrame₂.regs
 
+/-- **The renaming on basis vectors.** Inside `Y` the configurations and the inside tags of the
+two sheets change places. -/
 theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → Fin q)
     (τ₂ : TagSpace (X.out₂ ++ X.in₂)) (c₂ : ι → Fin q) :
     X.renameWord.eval ((appendIso X.frame₁.regs X.frame₂.regs).symm
@@ -489,6 +494,7 @@ theorem twoLayoutIso_renameWord
     rw [eval_renameWord, twoLayoutIso_basis, rename, act_toMatrix_symm_single]
     rfl) z
 
+/-- The renaming is an allowed word using no party and no pair source. -/
 theorem renameWord_props (S : Set Party) :
     X.renameWord.IsAllowed ∧ X.renameWord.UsesOnly S ∧ X.renameWord.sourceCount = 0 := by
   simp [renameWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,

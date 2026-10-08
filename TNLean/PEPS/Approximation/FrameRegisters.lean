@@ -183,6 +183,8 @@ def ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S) (ℓ
     (unpartWord own (fun x => decide (x ∈ (T ∪ E)ᶜ)) (listR S T)))) <|
   Word.frameList ℓ₀ (unpartWord own _ S)
 
+/-- **Grouping on basis vectors.** The basis vector of a configuration `c` is sent to
+`|c|_T⟩ ⊗ |c|_U⟩` in front of the untouched registers. -/
 theorem eval_groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (ℓ₀ : Layout Party) {pA pB : Party} (hA : ∀ x ∈ T, own x = pA)
     (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) (t : Mem ℓ₀) (c : ι → Fin q) :
@@ -202,6 +204,7 @@ theorem eval_groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ 
     Word.eval_exchangeBlocks_appendIso_symm, lTensor_tmul, eval_localMap, isoL_apply,
     LinearIsometryEquiv.trans_apply, groupIso_listU_siteVec, appendIso_one_symm]
 
+/-- **Ungrouping on basis vectors**, the inverse of `eval_groupWord`. -/
 theorem eval_ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (ℓ₀ : Layout Party) {pA pB : Party} (hA : ∀ x ∈ T, own x = pA)
     (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) (t : Mem ℓ₀) (c : ι → Fin q) :
@@ -230,6 +233,8 @@ theorem eval_ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x �
     Word.eval_frameList_appendIso_symm, Word.eval_frameList_appendIso_symm,
     Word.eval_frameList_appendIso_symm, eval_unpartWord, eval_unpartWord]
 
+/-- Grouping is an allowed word using only the owners of the two regions, without pair
+sources. -/
 theorem groupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (ℓ₀ : Layout Party) {pA pB : Party} (hA : ∀ x ∈ T, own x = pA)
     (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) {V : Set Party} (hpA : pA ∈ V) (hpB : pB ∈ V) :
@@ -250,6 +255,8 @@ theorem groupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
       hpB⟩, ?_⟩
   simp only [groupWord, Word.sourceCount, Word.sourceCount_exchangeBlocks, c₃, a₃, e₃, d₃, b₃]
 
+/-- Ungrouping is an allowed word using only the owners of the two regions, without pair
+sources. -/
 theorem ungroupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (ℓ₀ : Layout Party) {pA pB : Party} (hA : ∀ x ∈ T, own x = pA)
     (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) {V : Set Party} (hpA : pA ∈ V) (hpB : pB ∈ V) :
@@ -505,6 +512,7 @@ def layoutIso (l : List (Hole pos q Party)) (own : ι → Party) :
   (appendIso _ _).trans ((((tagIso l).rTensor _).trans
     ((groupIso own (sites ι) (sitesEquiv ι)).lTensor _)).trans (pairIso _ _))
 
+/-- The canonical coordinates on basis vectors: `|τ⟩ ⊗ ⊗_x |c x⟩ ↦ |τ, c⟩`. -/
 theorem layoutIso_layoutVec (l : List (Hole pos q Party)) (own : ι → Party) (τ : TagSpace l)
     (c : ι → Fin q) :
     layoutIso l own (layoutVec l own τ c) = EuclideanSpace.single (τ, c) (1 : ℂ) := by
@@ -516,6 +524,7 @@ theorem layoutIso_layoutVec (l : List (Hole pos q Party)) (own : ι → Party) (
     groupIso_siteVec own _ _ id (fun _ => rfl) c]
   exact pairIso_single_tmul_single τ c
 
+/-- The basis vector `|τ, c⟩` read on the registers of a frame. -/
 theorem layoutIso_symm_single (l : List (Hole pos q Party)) (own : ι → Party) (τ : TagSpace l)
     (c : ι → Fin q) :
     (layoutIso l own).symm (EuclideanSpace.single (τ, c) (1 : ℂ)) = layoutVec l own τ c := by
