@@ -3558,6 +3558,15 @@ three-plaquette output measurement, and the routed reunion measurement.
   theorem and replace the earlier private copy in one separately verified
   contribution.
 
+### Entropy bounds from boundary counts — candidate (2026-10-07)
+
+- **Pattern:** Cast a cardinal comparison to the reals, multiply by the
+  nonnegative entropy constant, and compose with the assumed entropy bound.
+- **Seen:** Two occurrences in `PEPS/AreaLaw/VertexBoundaryCorollaries.lean`,
+  for the inner boundary and the set of both endpoints.
+- **Abstraction:** Both proofs already use Mathlib's cast and multiplication
+  lemmas. A third occurrence in another module should extract the common
+  inequality argument into a lemma, with the comparison factor explicit.
 
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 

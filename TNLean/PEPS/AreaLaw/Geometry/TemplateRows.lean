@@ -104,7 +104,7 @@ def latticeRow (S : Finset (ℤ × ℤ)) (y : ℤ) : Finset ℤ :=
   · intro h
     exact ⟨(x, y), ⟨h, rfl⟩, rfl⟩
 
-/-- Every permitted polygon is convex by its actual convex-hull definition. -/
+/-- Every permitted polygon is convex by its convex-hull definition. -/
 theorem TemplatePolygon.convex_region (P : TemplatePolygon) : Convex ℝ P.region := by
   cases P <;> exact convex_convexHull ℝ _
 
@@ -138,7 +138,7 @@ theorem TemplatePolygon.isCompact_horizontalSection (P : TemplatePolygon) (y : �
   · rintro ⟨⟨a, b⟩, ⟨hp, rfl⟩, rfl⟩
     exact hp
 
-/-- Every nonempty real horizontal section of an actual template polygon has
+/-- Every nonempty real horizontal section of a template polygon has
 attained real endpoints, even when its integer sample is empty. -/
 theorem TemplatePolygon.horizontalSection_eq_Icc (P : TemplatePolygon) (y : ℝ)
     (h : ∃ x : ℝ, (x, y) ∈ P.region) :
@@ -230,7 +230,7 @@ theorem Template.card_sample_le {Ctpl : ℝ} {n s₀ : ℕ}
         simp only [h, Int.toNat_natCast, pow_two]
 
 /-- The area estimate in Lemma 9.4, with the explicit universal constant `9`.
-It follows from the actual piece diameters and scale, with no row assumption. -/
+It follows from the piece diameters and scale, with no row assumption. -/
 theorem template_card_le {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 1 ≤ Ctpl) : T.points.card ≤ 9 * n * s₀ := by
   have hcard : T.points.card ≤ T.pieceCount * (2 * s₀ + 1) ^ 2 := by
@@ -277,7 +277,7 @@ theorem mem_latticeRow_ambientDilation {S : Finset (ℤ × ℤ)} {r : ℕ} {x y 
   · rintro ⟨z, hz, a, ha, hx⟩
     exact ⟨(a, z), ha, by omega⟩
 
-/-- For an actual sampled polygon, dilation extends the attained endpoints of
+/-- For a sampled polygon, dilation extends the attained endpoints of
 each nonempty row in the vertical window. This formula does not assume that
 the union of these intervals is itself an interval. -/
 theorem Template.mem_latticeRow_dilation_iff {Ctpl : ℝ} {n s₀ : ℕ}
