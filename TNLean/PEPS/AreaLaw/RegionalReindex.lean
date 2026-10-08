@@ -22,28 +22,6 @@ Independently proved from the manuscript and existing QICLean APIs;
 no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/01-preliminaries.tex
-Labels: sec:prelim.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8739-tnlean.peps.arealaw.configurationsiteequiv
-Downstream declaration: TNLean.PEPS.AreaLaw.configurationSiteEquiv
-Provenance-ID: 8739-tnlean.peps.arealaw.regionconfigurationequiv
-Downstream declaration: TNLean.PEPS.AreaLaw.regionConfigurationEquiv
-Provenance-ID: 8739-tnlean.peps.arealaw.relabelstate
-Downstream declaration: TNLean.PEPS.AreaLaw.relabelState
-Provenance-ID: 8739-tnlean.peps.arealaw.reducedstate_relabel
-Downstream declaration: TNLean.PEPS.AreaLaw.reducedState_relabel
-Provenance-ID: 8739-tnlean.peps.arealaw.regionalentropy_relabel
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_relabel
-Provenance-ID: 8739-tnlean.peps.arealaw.norm_relabelstate
-Downstream declaration: TNLean.PEPS.AreaLaw.norm_relabelState
--/
-
 open scoped ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
