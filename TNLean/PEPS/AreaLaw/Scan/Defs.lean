@@ -19,6 +19,12 @@ results. Here their conclusions are recorded as explicit fields of `ScanRound` a
 each field cites the source line it transcribes. No field asserts anything beyond the cited
 statement.
 
+**Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
+Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for one scan as fields instead of deriving them
+from the scan geometry and the transported states, so every result stated over `ScanData` is
+Proposition 9.2 restricted to those conclusions. Documented in
+`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+
 ## Abstraction of the transported states
 
 For a terminal leaf `j` the source integrates a function of `θ` against
