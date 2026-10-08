@@ -90,67 +90,9 @@ retained-rank estimates, approximation error, or the full adaptive patch
 constraint of Proposition 4.1. It supplies the minimum and its elementary
 bounds, not those subsequent arguments.
 
-## Dependency, integration base, and acceptance gates
+## Dependencies and scope
 
-The distinct issue-owned ledger
-`docs/provenance/openai-math.d/regularizedPatchMinimum8767.json` records all
-24 public declarations as original proofs. The original evidence child
-activated these rows at immutable native source revision
-`38a4fa419eed06cf19777728f684a9caa69ba925`. Its unmodified compiler logs, all
-24 public axiom reports, source/artifact closure audits and source-tree
-attestation remain archived in
-`docs/provenance/evidence/regularizedPatchMinimum8767/`.
-
-Those original checks used accepted QICLean revision
-`378bef486fc0241dee8ad875ccaf659d51d33ac9`, merged in
-[QICLean #570](https://github.com/LionSR/QICLean/pull/570), with tree
-`cd30ee82f48870554cd3e47ec463b203d9597050`.
-This supplied `QICLean/Analysis/ShiftedDensityPowers.lean` from reviewed source
-revision `81ca38e523242fe7d1be1195f3e974c7a5da6134`.
-All 983 tracked files of that dependency checkout were byte-verified.
-The core, router, both regression modules and all 24 exported-name axiom
-reports passed strict checks with package options, Mathlib standard linters
-and warnings as errors. Their source closures were unchanged during checking.
-These records retain their original source revision and dependency pin.
-
-The original source was checked on published revision
-`c8a2fdfc19895245cc71f6f6c0fdff8f5da32592` of
-[TNLean #8809](https://github.com/LionSR/TNLean/pull/8809), which was an
-unmerged integration base at that time and has since merged into main.
-The minimum does not mathematically depend on cylinder orthogonalization.
-The later integration at `a5ae1ba4f0238984e0e81eb81312ebdf6b6f9d27`
-passed its full build and strict minimum regressions with QICLean 378bef.
-
-TNLean now pins accepted QICLean revision
-`83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c` in all five dependency fields.
-The independent merge at `9953e6d11dfe9fa1fb68932fd73e3ef5427911f9`
-incorporated main `27f53fdfd2d2582259792075386ef4a96e4cd027` and that pin.
-A source audit found all 75 recorded native source files unchanged before
-the docstring cleanup, with unchanged QICLean build inputs. Removing the
-merge's duplicate canonical conjugator import restores the previously
-checked compatibility source exactly.
-
-The docstring cleanup changes file hashes while preserving all declaration
-and proof tokens. All noncomment blueprint content is unchanged. Fresh
-strict QICLean 83fdc804 checks passed for the core, both regression modules
-and all 24 axiom reports, with 90-second module limits and unchanged source
-closures. All 1,003 tracked dependency files were byte-verified. The 24
-minimum ledger rows are bound to immutable revised source
-`bb3043de9849792685781949ddc2aca8e711fda5`. Their fresh evidence is archived in
-`docs/provenance/evidence/regularizedPatchMinimum8767-qic83-refresh/`.
-The source commit retained planned rows until that revision existed. The
-historical logs and attestations are not relabelled.
-
-The original canonical QIC matrix-unit conjugator migration has a
-mixed-import regression, 19 clean axiom reports and a negative control
-reproducing the former collision. Its 41-source production closure matches
-the restored source byte for byte. The archived cache tests and
-parent-executed Lake invalidation experiment also retain their original
-script hashes and execution records.
-
-Acceptance of the revised head still requires its full Lake build, strict
-regressions, aggregate declaration check, full blueprint validation and CI.
-The earlier successful build and the new local strict checks do not establish
-those integration results. The blueprint badges concern only the proved
-finite-dimensional auxiliary statements; these results do not complete
+The shifted density powers come from `QICLean/Analysis/ShiftedDensityPowers.lean`.
+The minimum does not depend on cylinder orthogonalization. These results
+cover the finite-dimensional auxiliary statements only; they do not complete
 Proposition 4.1.
