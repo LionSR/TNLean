@@ -24,41 +24,6 @@ both coordinates by one gives the convention of the polynomial-PEPS manuscript.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: cor:rectangles.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: sec:introduction.
-Provenance-ID: 8738-tnlean.peps.arealaw.rectangleembedding
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangleEmbedding
-Provenance-ID: 8738-tnlean.peps.arealaw.rectangleembedding_injective
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangleEmbedding_injective
-Provenance-ID: 8738-tnlean.peps.arealaw.rectangulardomain
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangularDomain
-Provenance-ID: 8738-tnlean.peps.arealaw.rectanglesiteequiv
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangleSiteEquiv
-Provenance-ID: 8738-tnlean.peps.arealaw.rectanglesiteequiv_val
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangleSiteEquiv_val
-Provenance-ID: 8738-tnlean.peps.arealaw.rectanglegraphiso
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangleGraphIso
-Provenance-ID: 8738-tnlean.peps.arealaw.rectangleconfigurationequiv
-Downstream declaration: TNLean.PEPS.AreaLaw.rectangleConfigurationEquiv
-Provenance-ID: 8738-tnlean.peps.arealaw.isadmissiblesupport_rectangle_pair_of_adj
-Downstream declaration: TNLean.PEPS.AreaLaw.isAdmissibleSupport_rectangle_pair_of_adj
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The integer-coordinate embedding of the native rectangular vertices.

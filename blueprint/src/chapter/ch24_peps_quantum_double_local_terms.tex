@@ -1,0 +1,372 @@
+% SCP10, paper_v3.tex:2832--2940, especially 2861--2877 and 2896--2923.
+% The available tc-lattice and tc-blocked-lattice artwork was inspected.
+% The unavailable renorm-as-diff-doubles artwork is not reconstructed here.
+% Declaration links are added only after the corresponding statements pass.
+\paragraph{The clockwise color-difference tensor.}
+Let $G$ be a finite group. At one blocked site, place virtual colors
+$(p,q,r,s)$ on the north, east, south and west legs, respectively.
+The physical tuple $(a,b,c,d)$ is ordered northeast, southeast, southwest,
+northwest. The ordered differences follow
+\cite[Equation~(7.10) and its clockwise-convention footnote]{Schuch2010PEPS}.
+The earlier checkerboard drawings specify the incidence and blocking
+pattern. The physical orientation and ordered products below use this
+clockwise convention.
+
+\begin{definition}[The clockwise blocked tensor]
+    \label{def:peps_quantum_double_k_tensor}
+    \lean{TNLean.PEPS.quantumDoubleKSpins,TNLean.PEPS.quantumDoubleKTensor,
+        TNLean.PEPS.siteMap_quantumDoubleKTensor_apply}
+    \leanok
+    Define the color-difference map $F:G^4\to G^4$ and the tensor $K$ by
+    \begin{align}
+        F(p,q,r,s)         & =(pq^{-1},qr^{-1},rs^{-1},sp^{-1}), \\
+        K(p,q,r,s;a,b,c,d) & =\delta_{(a,b,c,d),F(p,q,r,s)}.
+        \label{eq:peps_qd_k_tensor}
+    \end{align}
+    Its linear map is $\mathsf K\ket{p,q,r,s}=\ket{F(p,q,r,s)}$.
+    No normalization is included in $K$.
+\end{definition}
+% Formula: K(p,q,r,s;a,b,c,d)=delta_((a,b,c,d),F(p,q,r,s)).
+% Ink: virtual N,E,S,W = p,q,r,s; physical NE,SE,SW,NW = a,b,c,d.
+% All eight legs are open; no repeated label is summed in this picture.
+% External boundary signature: (virtual,physical)=(4,4), alphabet G per leg.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire},cols=1,bonds=none]
+        \tn[at=(1,1),name=qdK,skin=box,
+            ports={90:virtual:$p$,0:virtual:$q$,270:virtual:$r$,180:virtual:$s$,
+                    45:physical:$a$,315:physical:$b$,225:physical:$c$,135:physical:$d$}]{K}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Comparison of physical orientation conventions]
+    \label{thm:peps_quantum_double_k_orientation}
+    \lean{TNLean.PEPS.quantumDoubleDualToK,
+        TNLean.PEPS.quantumDoubleDualToK_spins,
+        TNLean.PEPS.quantumDoubleKTensor_eq_dual}
+    \leanok
+    \uses{def:peps_quantum_double_k_tensor}
+    For the dual convention
+    $F_{\rm dual}(p,q,r,s)=(ps^{-1},qp^{-1},qr^{-1},rs^{-1})$, the
+    physical basis permutation
+    $J(y_1,y_2,y_3,y_4)=(y_2^{-1},y_3,y_4,y_1^{-1})$ satisfies
+    $J\circ F_{\rm dual}=F$.
+\end{theorem}
+\begin{proof}\leanok
+    The first and fourth components follow from
+    $(qp^{-1})^{-1}=pq^{-1}$ and $(ps^{-1})^{-1}=sp^{-1}$.
+    The other two components retain their original order.
+\end{proof}
+% J is a local physical coordinate permutation of two blocked conventions;
+% it is not a unitary renormalization of the unblocked tensor T.
+
+\begin{definition}[The local flatness projector]
+    \label{def:peps_quantum_double_local_projector}
+    \lean{TNLean.PEPS.quantumDoubleKHolonomy,
+        TNLean.PEPS.quantumDoubleKLocalProjector,TNLean.PEPS.quantumDoubleKLocalTerm,
+        TNLean.PEPS.quantumDoubleKLocalProjector_mulVec}
+    \leanok
+    \uses{def:peps_quantum_double_k_tensor}
+    On the full four-spin space $\C[G^4]$, set
+    \begin{align}
+        P_0 & =\sum_{abcd=1}\ketbra{a,b,c,d}{a,b,c,d},
+            & h_0                                      & =I-P_0.
+        \label{eq:peps_qd_local_projector}
+    \end{align}
+    The product is ordered as displayed; $G$ need not be abelian.
+\end{definition}
+
+\begin{theorem}[The actual local tensor image]
+    \label{thm:peps_quantum_double_local_image}
+    \lean{TNLean.PEPS.quantumDoubleKSpins_range,
+        TNLean.PEPS.quantumDoubleKHolonomy_spins,
+        TNLean.PEPS.quantumDoubleKColors,TNLean.PEPS.quantumDoubleKSpins_colors,
+        TNLean.PEPS.siteMap_quantumDoubleKTensor_single,
+        TNLean.PEPS.quantumDoubleKLocalProjector_isStarProjection,
+        TNLean.PEPS.quantumDoubleKLocalTerm_isStarProjection,
+        TNLean.PEPS.quantumDoubleKLocalProjector_siteMap,
+        TNLean.PEPS.range_siteMap_quantumDoubleKTensor,
+        TNLean.PEPS.range_siteMap_quantumDoubleKTensor_eq_ker_localTerm}
+    \leanok
+    \uses{def:peps_quantum_double_local_projector}
+    The operators $P_0$ and $h_0$ are orthogonal projectors, with
+    $P_0\mathsf K=\mathsf K$ and $\operatorname{ran}\mathsf K=\ker h_0$.
+    \begin{align}
+        \operatorname{ran}\mathsf K
+         & =\operatorname{ran}P_0
+        =\operatorname{span}\{\ket{a,b,c,d}:abcd=1\}.
+        \label{eq:peps_qd_local_image}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The ordered product of the four components of $F(p,q,r,s)$ is one.
+    Conversely, if $abcd=1$, the coloring
+    $(1,a^{-1},(ab)^{-1},(abc)^{-1})$ maps to $(a,b,c,d)$.
+    Applying $\mathsf K$ to that virtual basis vector therefore gives the
+    indicated physical basis vector. This proves the two range inclusions.
+    The diagonal entries of $P_0$ are zero or one, so $P_0^2=P_0=P_0^\dagger$;
+    its complement has the same properties.
+    Idempotence gives $\operatorname{ran}P_0=\ker(I-P_0)$.
+\end{proof}
+
+\paragraph{One shared bond.}
+The east color of a left tensor and the west color of a right tensor are
+one summed index $x$. With six exterior colors fixed, the actual open
+contraction is
+\begin{align}
+    \Psi_{p,r,s;t,v,w}
+     & =\sum_{x\in G}\ket{F(p,x,r,s)}\otimes\ket{F(t,v,w,x)}.
+    \label{eq:peps_qd_bond_contraction}
+\end{align}
+% Formula: Psi=sum_x |F(p,x,r,s)> tensor |F(t,v,w,x)>.
+% Ink: the sole internal virtual wire is q(left)=s(right)=x, summed once.
+% The six other virtual colors p,r,s,t,v,w are open boundary arguments.
+% Each physical leg is a complete G^4 tuple, not one selected corner spin.
+% External boundary signature: (virtual,physical)=(6,2).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire},cols=2,bonds=none]
+        \tn[at=(1,1),name=qdLeft,skin=box,
+            ports={90:virtual:$p$,0:virtual,270:virtual:$r$,180:virtual:$s$,
+                    135:physical:$\sigma_L$}]{K_L}
+        \tn[at=3 e of qdLeft,name=qdRight,skin=box,
+            ports={90:virtual:$t$,0:virtual:$v$,270:virtual:$w$,180:virtual,
+                    45:physical:$\sigma_R$}]{K_R}
+        \tnwire[name=qdShared]{qdLeft.0}{qdRight.180}
+        \tnmark[form=label,label pos=n]{on qdShared 0.5}{$x$}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{definition}[Coherent action at an east--west bond]
+    \label{def:peps_quantum_double_bond_average}
+    \lean{TNLean.PEPS.quantumDoubleKBondContraction,
+        TNLean.PEPS.quantumDoubleKBondContraction_eq,
+        TNLean.PEPS.quantumDoubleKBondLeft,TNLean.PEPS.quantumDoubleKBondRight,
+        TNLean.PEPS.quantumDoubleKBondAction,TNLean.PEPS.quantumDoubleKBondPermutation,
+        TNLean.PEPS.quantumDoubleKBondMatrix,TNLean.PEPS.quantumDoubleKBondMatrix_mulVec,
+        TNLean.PEPS.quantumDoubleKBondAverage,
+        TNLean.PEPS.quantumDoubleKBondTerm}
+    \leanok
+    \uses{def:peps_quantum_double_k_tensor}
+    For $u\in G$, define the permutation operator $V_u$ on
+    $\C[G^4]\otimes\C[G^4]$ by
+    \begin{align}
+        V_u\bigl(\ket{a,b,c,d}\otimes\ket{e,f,g,h}\bigr)
+            & =\ket{au^{-1},ub,c,d}\otimes\ket{e,f,gu^{-1},uh},           \\
+        A_e & =\frac1{|G|}\sum_{u\in G}V_u,
+            & h_e                                               & =I-A_e.
+        \label{eq:peps_qd_bond_average}
+    \end{align}
+    The four changed spins carry $R_u,L_u,R_u,L_u$, respectively, where
+    $L_u\ket z=\ket{uz}$ and $R_u\ket z=\ket{zu^{-1}}$.
+    These are the incoming/outgoing spin actions of
+    \cite[Section~7, ``The double models'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[The normalized bond projector fixes the contraction]
+    \label{thm:peps_quantum_double_bond_fixed}
+    \lean{TNLean.PEPS.quantumDoubleKBondAction_mul,
+        TNLean.PEPS.quantumDoubleKBondAction_one,
+        TNLean.PEPS.quantumDoubleKSpins_bondLeft,TNLean.PEPS.quantumDoubleKSpins_bondRight,
+        TNLean.PEPS.quantumDoubleKBondMatrix_single,
+        TNLean.PEPS.quantumDoubleKBondAverage_isStarProjection,
+        TNLean.PEPS.quantumDoubleKBondTerm_isStarProjection,
+        TNLean.PEPS.quantumDoubleKBondAverage_mulVec_eq_self_iff,
+        TNLean.PEPS.quantumDoubleKBondContraction_invariant,
+        TNLean.PEPS.quantumDoubleKBondAverage_contraction}
+    \leanok
+    \uses{def:peps_quantum_double_bond_average}
+    The operators satisfy $V_uV_v=V_{uv}$ and $V_u^\dagger=V_{u^{-1}}$.
+    The average $A_e$ and its complement $h_e$ are orthogonal projectors.
+    For every physical vector $v$, the equality $A_ev=v$ holds exactly
+    when $V_uv=v$ for all $u\in G$.
+    For every choice of the six exterior colors,
+    \begin{align}
+        V_u\Psi_{p,r,s;t,v,w} & =\Psi_{p,r,s;t,v,w},        \\
+        A_e\Psi_{p,r,s;t,v,w} & =\Psi_{p,r,s;t,v,w},
+                              & h_e\Psi_{p,r,s;t,v,w} & =0.
+        \label{eq:peps_qd_bond_fixed}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Composition follows from $(uv)^{-1}=v^{-1}u^{-1}$; the inverse
+    permutation is $V_{u^{-1}}$. In the double sum for $A_e^2$, each
+    product $uv$ occurs exactly $|G|$ times. Inversion permutes the sum
+    for $A_e^\dagger$, proving both projector identities.
+    The image of the group average is its invariant subspace.
+    On each summand of (\ref{eq:peps_qd_bond_contraction}), $V_u$ replaces
+    the common virtual color $x$ by $ux$ in both tensors. The bijection
+    $x\mapsto ux$ preserves the sum. Averaging the resulting identities
+    gives (\ref{eq:peps_qd_bond_fixed}).
+\end{proof}
+
+The factor $|G|^{-1}$ in (\ref{eq:peps_qd_bond_average}) is necessary.
+For $S_e=\sum_uV_u$, one has $S_e^2=|G|S_e$; on an invariant vector,
+$(I-S_e)\psi=(1-|G|)\psi$. Thus the unnormalized sum printed in
+\cite[Section~7, ``The double models'']{Schuch2010PEPS} must be divided
+by $|G|$ to obtain the projector complement that annihilates the state.
+% Local correction and remaining scope are recorded in
+% docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex.
+
+\begin{theorem}[The actual two-block tensor image]
+    \label{thm:peps_quantum_double_bond_image}
+    \lean{TNLean.PEPS.quantumDoubleKPairLocalProjector,
+        TNLean.PEPS.quantumDoubleKHolonomy_bondLeft,
+        TNLean.PEPS.quantumDoubleKHolonomy_bondRight,
+        TNLean.PEPS.quantumDoubleKPairLocalProjector_isStarProjection,
+        TNLean.PEPS.quantumDoubleKPairLocalProjector_commute_bondAverage,
+        TNLean.PEPS.quantumDoubleKBondSupportProjector,
+        TNLean.PEPS.quantumDoubleKBondSupportProjector_isStarProjection,
+        TNLean.PEPS.quantumDoubleKPairLocalProjector_contraction,
+        TNLean.PEPS.quantumDoubleKBondSupportProjector_contraction,
+        TNLean.PEPS.quantumDoubleKBondBoundaryColors,
+        TNLean.PEPS.quantumDoubleKBondBoundaryColors_spins,
+        TNLean.PEPS.quantumDoubleKBondAverage_single_eq_contraction,
+        TNLean.PEPS.range_quantumDoubleKBondContraction,
+        TNLean.PEPS.mem_range_quantumDoubleKBondContraction_iff}
+    \leanok
+    \uses{def:peps_quantum_double_local_projector,
+        thm:peps_quantum_double_bond_fixed}
+    Let $\mathsf C\ket\beta=\Psi_\beta$ be the open contraction map in
+    (\ref{eq:peps_qd_bond_contraction}), and let $P_{00}=P_0\otimes P_0$.
+    Then $P_{00}A_e=A_eP_{00}$, the product $Q_e=A_eP_{00}$ is an
+    orthogonal projector, and
+    \begin{align}
+        \operatorname{ran}\mathsf C & =\operatorname{ran}Q_e.
+        \label{eq:peps_qd_bond_image}
+    \end{align}
+    Equivalently, a physical vector $v$ belongs to this actual contraction
+    image exactly when $P_{00}v=v$ and $V_uv=v$ for every $u\in G$.
+\end{theorem}
+\begin{proof}\leanok
+    Each bond action preserves both ordered local products, so its
+    permutation matrix commutes with $P_{00}$. Hence the average commutes
+    with $P_{00}$ and their product is an orthogonal projector.
+    Each contraction column is fixed by both factors, proving one inclusion.
+    For the reverse inclusion, take
+    $\xi=(a,b,c,d;e,f,g,h)$ with $abcd=efgh=1$ and set
+    $\beta(\xi)=(a,b^{-1},(bc)^{-1};efg,fg,g)$. At shared color one,
+    these boundary colors produce precisely $\ket\xi$. Varying the shared
+    color gives
+    \begin{align}
+        A_e\ket\xi & =|G|^{-1}\Psi_{\beta(\xi)}.
+    \end{align}
+    The projector $P_{00}$ kills every other computational basis vector.
+    Expand an arbitrary vector in that basis to obtain the second inclusion.
+\end{proof}
+
+\paragraph{The hole between four blocked tensors.}
+Place four copies of $K$ at northwest, northeast, southeast and southwest.
+Let their four shared colors, starting at the northern bond, be $x,y,z,w$
+on the north, west, south and east bonds, respectively. Fix the eight
+exterior colors $\beta=(p,s,t,v,k,l,m,n)$ and define
+\begin{align}
+    \Phi_\beta
+     & =\sum_{x,y,z,w\in G}
+    \ket{F(p,x,y,s)}\otimes\ket{F(t,v,w,x)}\nonumber                 \\
+     & \hspace{2.5em}\otimes\ket{F(w,k,l,z)}\otimes\ket{F(y,z,m,n)}.
+    \label{eq:peps_qd_hole_contraction}
+\end{align}
+The tensor factors are ordered northwest, northeast, southeast, southwest.
+% Formula: Phi_beta is the literal four-K sum in eq:peps_qd_hole_contraction.
+% Ink: NW.E=NE.W=x; NW.S=SW.N=y; SW.E=SE.W=z; NE.S=SE.N=w.
+% The four internal virtual colors are each summed once; exterior colors
+% p,s,t,v,k,l,m,n are independent, unsummed boundary arguments.
+% Physical sigma_NW,sigma_NE,sigma_SE,sigma_SW are complete G^4 tuples.
+% The selected hole spins are NW.b,SW.a,SE.d,NE.c, in that product order.
+% External boundary signature: (virtual,physical)=(8,4).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire},cols=2,bonds=none]
+        \tn[at=(1,1),name=qdNW,skin=box,
+            ports={90:virtual:$p$,0:virtual,270:virtual,180:virtual:$s$,
+                    135:physical:$\sigma_{NW}$}]{K}
+        \tn[at=3 e of qdNW,name=qdNE,skin=box,
+            ports={90:virtual:$t$,0:virtual:$v$,270:virtual,180:virtual,
+                    45:physical:$\sigma_{NE}$}]{K}
+        \tn[at=3 s of qdNE,name=qdSE,skin=box,
+            ports={90:virtual,0:virtual:$k$,270:virtual:$l$,180:virtual,
+                    315:physical:$\sigma_{SE}$}]{K}
+        \tn[at=3 s of qdNW,name=qdSW,skin=box,
+            ports={90:virtual,0:virtual,270:virtual:$m$,180:virtual:$n$,
+                    225:physical:$\sigma_{SW}$}]{K}
+        \tnwire[name=qdNorth]{qdNW.0}{qdNE.180}
+        \tnwire[name=qdWest]{qdNW.270}{qdSW.90}
+        \tnwire[name=qdSouth]{qdSW.0}{qdSE.180}
+        \tnwire[name=qdEast]{qdNE.270}{qdSE.90}
+        \tnmark[form=label,label pos=n]{on qdNorth 0.5}{$x$}
+        \tnmark[form=label,label pos=w]{on qdWest 0.5}{$y$}
+        \tnmark[form=label,label pos=s]{on qdSouth 0.5}{$z$}
+        \tnmark[form=label,label pos=e]{on qdEast 0.5}{$w$}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{definition}[The four-block plaquette projector]
+    \label{def:peps_quantum_double_hole_projector}
+    \lean{TNLean.PEPS.QuantumDoubleKPlaquetteConfig,
+        TNLean.PEPS.quantumDoubleKPlaquetteSpins,
+        TNLean.PEPS.quantumDoubleKPlaquetteContraction,
+        TNLean.PEPS.quantumDoubleKPlaquetteHolonomy,
+        TNLean.PEPS.quantumDoubleKPlaquetteProjector,
+        TNLean.PEPS.quantumDoubleKPlaquetteTerm}
+    \leanok
+    \uses{def:peps_quantum_double_k_tensor}
+    For $\sigma=(\sigma_{NW},\sigma_{NE},\sigma_{SE},\sigma_{SW})$, set
+    \begin{align}
+        H_\square(\sigma)   & =\sigma_{NW,b}\sigma_{SW,a}
+        \sigma_{SE,d}\sigma_{NE,c},                                                    \\
+        P_\square\ket\sigma & =\delta_{H_\square(\sigma),1}\ket\sigma,
+                            & h_\square                                & =I-P_\square.
+        \label{eq:peps_qd_hole_projector}
+    \end{align}
+    Both operators act on the full sixteen-spin space.
+\end{definition}
+
+\begin{theorem}[Plaquette flatness of the actual four-block contraction]
+    \label{thm:peps_quantum_double_hole_fixed}
+    \lean{TNLean.PEPS.quantumDoubleKPlaquetteHolonomy_spins,
+        TNLean.PEPS.quantumDoubleKPlaquetteProjector_isStarProjection,
+        TNLean.PEPS.quantumDoubleKPlaquetteTerm_isStarProjection,
+        TNLean.PEPS.quantumDoubleKPlaquetteContraction_eq,
+        TNLean.PEPS.quantumDoubleKPlaquetteProjector_contraction}
+    \leanok
+    \uses{def:peps_quantum_double_hole_projector}
+    The operators $P_\square$ and $h_\square$ are orthogonal projectors.
+    For every exterior coloring $\beta$, one has
+    $P_\square\Phi_\beta=\Phi_\beta$ and $h_\square\Phi_\beta=0$.
+\end{theorem}
+\begin{proof}\leanok
+    Each summand in (\ref{eq:peps_qd_hole_contraction}) has selected spins
+    $(xy^{-1},yz^{-1},zw^{-1},wx^{-1})$. Their product is one by
+    adjacent cancellation, without commuting any two factors.
+    The diagonal projector therefore fixes each summand and their sum.
+    Its entries are zero or one, proving the orthogonal-projector assertions.
+\end{proof}
+
+\begin{theorem}[Commutation at the northern bond]
+    \label{thm:peps_quantum_double_hole_commute}
+    \lean{TNLean.PEPS.quantumDoubleKPlaquetteTopBond,
+        TNLean.PEPS.quantumDoubleKPlaquetteHolonomy_topBond,
+        TNLean.PEPS.quantumDoubleKPlaquetteHolonomy_topBond_eq_one_iff,
+        TNLean.PEPS.quantumDoubleKPlaquetteProjector_commute_topBond,
+        TNLean.PEPS.quantumDoubleKPlaquetteProjector_commute_topBondAverage}
+    \leanok
+    \uses{def:peps_quantum_double_bond_average,
+        def:peps_quantum_double_hole_projector}
+    Let $W_u$ act by $V_u$ on the northwest and northeast physical tuples
+    and by the identity on the southeast and southwest tuples.
+    The hole projector commutes with every $W_u$ and with
+    $|G|^{-1}\sum_uW_u$.
+\end{theorem}
+\begin{proof}\leanok
+    The northern bond changes the ordered holonomy by conjugation:
+    $H_\square(W_u\sigma)=uH_\square(\sigma)u^{-1}$.
+    Consequently the product-one indicator is unchanged on the entire
+    physical basis, including configurations with nontrivial holonomy.
+    The diagonal projector therefore commutes with the permutation and
+    with its normalized average.
+\end{proof}
+
+% Scope: exact local and east--west two-block terms, and a four-block hole.
+% These statements do not identify a full-lattice common kernel, prove
+% commutation of all placed terms, or construct the unblocked T-to-K unitary.

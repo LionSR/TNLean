@@ -31,26 +31,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped ComplexOrder
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:area, eq:area-law.
-Provenance-ID: 8738-tnlean.peps.arealaw.reducedstate
-Downstream declaration: TNLean.PEPS.AreaLaw.reducedState
-Provenance-ID: 8738-tnlean.peps.arealaw.reducedstate_ishermitian
-Downstream declaration: TNLean.PEPS.AreaLaw.reducedState_isHermitian
-Provenance-ID: 8738-tnlean.peps.arealaw.regionalentropy
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy
-Provenance-ID: 8738-tnlean.peps.arealaw.uniformarealaw
-Downstream declaration: TNLean.PEPS.AreaLaw.UniformAreaLaw
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The reduced pure-state matrix obtained by tracing over complementary

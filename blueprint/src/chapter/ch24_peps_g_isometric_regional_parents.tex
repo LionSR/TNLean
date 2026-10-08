@@ -98,6 +98,36 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
     difference, or commutator there.
 \end{proof}
 
+\begin{theorem}[Continuity and norm bound for regional extensions]%
+    \label{thm:peps_regional_extension_norm}
+    \lean{TNLean.PEPS.norm_dependentRegionOperatorLift_mulVec_le,
+        TNLean.PEPS.continuous_dependentRegionOperatorLift}
+    \leanok
+    \uses{def:peps_regional_operator_extension}
+    For every region $R$, the map $K\mapsto\widehat K_R$ is continuous.
+    For every operator $K$ on $\mathcal H_R$ and every
+    $\xi\in\mathcal H_V$, one has $\|\widehat K_R\xi\|\le\|K\|\,\|\xi\|$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_regional_operator_extension}
+    Regroup the coordinates as
+    $\mathcal H_V=\mathcal H_R\otimes\mathcal H_{V\setminus R}$.
+    For each complementary configuration $\tau\in X_{V\setminus R}$,
+    put $\xi_\tau(\alpha)=\xi(\alpha,\tau)$ for $\alpha\in X_R$.
+    The coordinate decomposition is an isometry, and each slice satisfies
+    $(\widehat K_R\xi)_\tau=K\xi_\tau$. Therefore
+    \begin{align*}
+        \|\widehat K_R\xi\|^2
+         & =\sum_{\tau\in X_{V\setminus R}}\|K\xi_\tau\|^2         \\
+         & \le\|K\|^2\sum_{\tau\in X_{V\setminus R}}\|\xi_\tau\|^2
+        =\|K\|^2\|\xi\|^2.
+    \end{align*}
+    Taking nonnegative square roots gives the bound. The coefficient formula
+    $\widehat K_R((\alpha,\tau),(\beta,\rho))
+        =K(\alpha,\beta)\delta_{\tau,\rho}$
+    shows that the extension depends linearly, and hence continuously, on $K$.
+\end{proof}
+
 \begin{theorem}[Product maps and complementary cancellation]%
     \label{thm:peps_regional_product_cancellation}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_univ_eq_reindex_kronecker,
