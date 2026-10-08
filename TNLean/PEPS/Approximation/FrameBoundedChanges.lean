@@ -8,7 +8,42 @@ import TNLean.PEPS.Approximation.TwoSheetRegisters
 /-!
 # Births, deaths and exchanges as bounded changes
 
-test
+Lemmas 6.5 and 6.6 of the polynomial-PEPS manuscript assert that a homogeneous birth or death,
+and a two-sheet exchange, are bounded changes: monomials allowed by Theorem 5.2 on a fixed list
+of parties, with small reference-vector error. This file proves these assertions on the
+registers of the frames, one register per site and per tag, each held by its owner
+(`TNLean.PEPS.Approximation.FrameRegisters`), in their canonical coordinates.
+
+* `Frame.birth_bounded`: the birth is an allowed word using only `P∘` and `Q∘`, with at most one
+  normalized pair source, whose operator is `1_tags ⊗ B` for the canonical map `B` of
+  `eq:birth-map`; the reference-vector error is at most `L^{-30}`. The word groups the raw
+  registers of `T` and `U` at `P∘` (`groupWord`), applies the birth monomial of
+  `TNLean.PEPS.Approximation.OwnershipMonomials`, and ungroups at `Q∘` and `P∘`.
+* `Frame.death_bounded`: the death is the same with one normalized pair effect instead.
+* `TwoSheetExchange.exchange_bounded`: the exchange is the renaming `ℛ`, a word of exchanges of
+  tensor factors, followed by one private contraction at `P∘`; it uses only `P∘`, and its
+  operator is `C = D_U F_A ℛ` with reference-vector error at most `4 L^{-30}`.
+* `TwoSheetExchange.exchange_ofFrames_bounded`: the same for two frames whose holes are listed in
+  any order, after the canonical identification of tag orderings, itself a word of exchanges.
+
+## Main definitions
+
+* `PairEffect.PartyChain.precomp`, `PairEffect.PartyChain.postcomp`: a monomial composed with
+  words.
+
+## Main results
+
+* `EncodedFrame.Frame.birth_bounded`, `EncodedFrame.Frame.death_bounded`: Lemma 6.5 `lem:birth`.
+* `EncodedFrame.TwoSheetExchange.exchange_bounded`,
+  `EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded`: Lemma 6.6 `lem:exchange`.
+* `EncodedFrame.exists_tagReorderWord`: the canonical identification of tag orderings of two
+  frames as a word.
+
+## References
+
+* Polynomial-PEPS manuscript (September 24, 2026), bounded changes, `05-frames.tex`,
+  lines 99–105; Lemma 6.5 `lem:birth`, lines 396–447; Lemma 6.6 `lem:exchange`, lines 460–561;
+  allowed monomials, `04-compression.tex`, lines 32–35.
 -/
 
 noncomputable section
@@ -217,7 +252,8 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (tagRegs F.holes) ⟨P, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩).comp
       (ungroupWord F.owner nodup_sites mem_sites (tagRegs F.holes) hTP hB')
   obtain ⟨p₁, p₂, p₃, p₄⟩ := PartyChain.postcomp_props {P, Q} Mm tail ⟨r₁, u₁⟩ ⟨r₂, u₂⟩ hMA hMU
-  let G := groupWord (q := q) (F.changeOwner T Q).owner nodup_sites mem_sites (tagRegs F.holes) hA hB
+  let G := groupWord (q := q) (F.changeOwner T Q).owner nodup_sites mem_sites (tagRegs F.holes)
+    hA hB
   obtain ⟨q₁, q₂, q₃, q₄⟩ := PartyChain.precomp_props G {P, Q} g₁ g₂ (Mm.postcomp tail) p₁ p₂
   have heval : ∀ z, F.regIso (((Mm.postcomp tail).precomp G).toEffectChain.eval z) =
       act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ sheetBirthOp hTE σ)
@@ -274,7 +310,8 @@ theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos
     simp only [layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
       Word.eval_assocWord_appendIso_symm, hw₁, Word.eval_unassocWord_appendIso_symm,
       Word.eval_frameList_appendIso_symm, hw₂]
-    rw [← layoutVec, ← layoutVec, twoLayoutIso_basis, TwoSheetExchange.tagReorder, act_toMatrix_symm_single]
+    rw [← layoutVec, ← layoutVec, twoLayoutIso_basis, TwoSheetExchange.tagReorder,
+      act_toMatrix_symm_single]
     rfl
 
 namespace TwoSheetExchange

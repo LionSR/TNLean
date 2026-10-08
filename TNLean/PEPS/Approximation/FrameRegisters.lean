@@ -3,73 +3,55 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.OwnershipMonomials
-import TNLean.PEPS.Approximation.WordPermutation
+import TNLean.PEPS.Approximation.SiteRegisters
 
 /-!
 # The registers of an encoded frame
 
-test
+A sheet has one raw register `ℂ^q` at each site, with a specified owner for each register, and
+an encoded frame has in addition one tag register for each hole, held by a specified party
+(`05-frames.tex`, lines 13–20 and Definition 6.1). This file lists these registers as a party
+layout, one register per tag followed by one register per site (`layoutRegs`, `Frame.regs`),
+and identifies their tensor product with the canonical coordinates `TagSpace × (Λ → Fin q)` in
+which the encodings and the operators of the frame act (`layoutIso`, `Frame.regIso`): the basis
+vector `|τ⟩ ⊗ ⊗_x |c x⟩` goes to `|τ, c⟩` (`layoutIso_layoutVec`).
+
+It then places a monomial acting on two grouped registers on this layout. For disjoint `T`
+and `E`, with `U = (T ∪ E)ᶜ`, `groupWord` moves the raw registers of `T` and of `U` in front by
+exchanges of tensor factors and groups each block into one register `ℂ^{T → Fin q}`,
+`ℂ^{U → Fin q}` by a private unitary at its owner; `ungroupWord` undoes this at the owners after
+a change. If a map acts on the two grouped registers as `M ⊗ 1`, then grouping, applying it,
+renaming the untouched owners and ungrouping acts on the registers of the frame, in canonical
+coordinates, as `1_tags ⊗ (1_E ⊗ M)` (`layoutIso_place`).
+
+## Main definitions
+
+* `EncodedFrame.groupWord`, `EncodedFrame.ungroupWord`: grouping the raw registers of two
+  regions.
+* `EncodedFrame.sheetPlace`: the matrix `1_E ⊗ M` on a sheet.
+* `EncodedFrame.sites`, `EncodedFrame.layoutRegs`, `EncodedFrame.layoutVec`,
+  `EncodedFrame.layoutIso`: the registers of a frame and their canonical coordinates.
+* `EncodedFrame.Frame.regs`, `EncodedFrame.Frame.regIso`.
+
+## Main results
+
+* `EncodedFrame.eval_groupWord`, `EncodedFrame.eval_ungroupWord`, `EncodedFrame.groupWord_props`,
+  `EncodedFrame.ungroupWord_props`: grouping is an allowed word at the owners of the regions.
+* `EncodedFrame.layoutIso_layoutVec`: the identification on basis vectors.
+* `EncodedFrame.layoutIso_place`: a grouped monomial acts on the frame as `1_tags ⊗ (1_E ⊗ M)`.
+* `EncodedFrame.Frame.map_owner_regs`: one register per tag and per site, each held by its
+  owner.
+
+## References
+
+* Polynomial-PEPS manuscript (September 24, 2026), `05-frames.tex`, lines 13–20 (sheets), 71–82
+  (Definition 6.1 `def:frame`), 94–96 (canonical site and sheet coordinates with the owners of
+  the registers specified separately); allowed monomials, `04-compression.tex`, lines 21–35.
 -/
 
 noncomputable section
 
 open scoped InnerProductSpace TensorProduct Kronecker
-
-/-! ### Reorderings use no party and no pair source -/
-
-namespace TNLean.PEPS.PairEffect.Word
-
-variable {P : Type}
-
-theorem usesOnly_moveHead (S : Set P) (r : Reg P) :
-    (ℓ₀ tail : Layout P) → (moveHead r ℓ₀ tail).UsesOnly S
-  | [], _ => trivial
-  | _ :: ℓ₀, tail => ⟨usesOnly_moveHead S r ℓ₀ tail, trivial⟩
-
-theorem sourceCount_moveHead (r : Reg P) :
-    (ℓ₀ tail : Layout P) → (moveHead r ℓ₀ tail).sourceCount = 0
-  | [], _ => rfl
-  | _ :: ℓ₀, tail => by
-      change sourceCount (moveHead r ℓ₀ tail) + 0 = 0
-      rw [sourceCount_moveHead r ℓ₀ tail]
-
-theorem usesOnly_exchangeBlocks (S : Set P) (a : Layout P) :
-    (b tail : Layout P) → (exchangeBlocks a b tail).UsesOnly S
-  | [], _ => trivial
-  | r :: b, tail => ⟨usesOnly_moveHead S r a (b ++ tail), usesOnly_exchangeBlocks S a b tail⟩
-
-theorem sourceCount_exchangeBlocks (a : Layout P) :
-    (b tail : Layout P) → (exchangeBlocks a b tail).sourceCount = 0
-  | [], _ => rfl
-  | r :: b, tail => by
-      change sourceCount (moveHead r a (b ++ tail)) + sourceCount (exchangeBlocks a b tail) = 0
-      rw [sourceCount_moveHead, sourceCount_exchangeBlocks a b tail]
-
-/-- A word framed by untouched registers acts on the second factor of the concatenation. -/
-theorem eval_frameList_appendIso_symm {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    (ℓ₀ : Layout P) → (a : Mem ℓ₀) → (b : Mem ℓ) →
-      (frameList ℓ₀ w).eval ((appendIso ℓ₀ ℓ).symm (a ⊗ₜ b)) =
-        (appendIso ℓ₀ ℓ').symm (a ⊗ₜ w.eval b)
-  | [], a, b => by
-      change w.eval (TensorProduct.lidIsometry ℂ (Mem ℓ) (a ⊗ₜ b)) =
-        TensorProduct.lidIsometry ℂ (Mem ℓ') (a ⊗ₜ w.eval b)
-      simp
-  | r :: ℓ₀, a, b => by
-      induction a using TensorProduct.inductionOn with
-      | tmul x s =>
-          rw [appendIso_symm_cons_tmul, appendIso_symm_cons_tmul]
-          change x ⊗ₜ (frameList ℓ₀ w).eval _ = _
-          rw [eval_frameList_appendIso_symm w ℓ₀ s b]
-      | add x y hx hy => simp only [TensorProduct.add_tmul, map_add, hx, hy]
-
-theorem frameList_props {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (S : Set P) (hw : w.UsesOnly S) :
-    (ℓ₀ : Layout P) → (frameList ℓ₀ w).UsesOnly S ∧
-      (frameList ℓ₀ w).sourceCount = w.sourceCount
-  | [] => ⟨hw, rfl⟩
-  | _ :: ℓ₀ => frameList_props w S hw ℓ₀
-
-end TNLean.PEPS.PairEffect.Word
 
 namespace TNLean.PEPS.EncodedFrame
 
@@ -77,370 +59,13 @@ open PairEffect ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 
-/-- A linear isometric equivalence on the second factor, on a pure tensor. -/
-theorem iso_lTensor_tmul {E F G : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [NormedAddCommGroup G]
-    [InnerProductSpace ℂ G] (e : F ≃ₗᵢ[ℂ] G) (x : E) (y : F) :
-    e.lTensor E (x ⊗ₜ y) = x ⊗ₜ e y := by
-  simp [LinearIsometryEquiv.lTensor_def]
-
-/-- A linear isometric equivalence on the first factor, on a pure tensor. -/
-theorem iso_rTensor_tmul {E F G : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [NormedAddCommGroup G]
-    [InnerProductSpace ℂ G] (e : E ≃ₗᵢ[ℂ] F) (x : E) (y : G) :
-    e.rTensor G (x ⊗ₜ y) = e x ⊗ₜ y := by
-  simp [LinearIsometryEquiv.rTensor_def]
-
-/-! ### Raw registers of a list of sites -/
-
-/-- The raw registers `ℂ^q` of a list of sites, the register of `x` held by `own x`. -/
-def siteRegs (q : ℕ) (own : ι → Party) (S : List ι) : Layout Party :=
-  S.map fun x => ⟨own x, euc (Fin q)⟩
-
-/-- The product basis vector `⊗_{x ∈ S} |c x⟩` of the raw registers of `S`. -/
-def siteVec (own : ι → Party) : (S : List ι) → (ι → Fin q) → Mem (siteRegs q own S)
-  | [], _ => (1 : ℂ)
-  | x :: S, c => (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-      siteVec own S c
-
-/-- The raw registers of `S`, identified with `ℂ^{Fin |S| → Fin q}` by listing the sites. -/
-def siteIsoList (own : ι → Party) :
-    (S : List ι) → Mem (siteRegs q own S) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (Fin S.length → Fin q)
-  | [] => emptyIso (Fin q)
-  | _ :: S => ((siteIsoList own S).lTensor (EuclideanSpace ℂ (Fin q))).trans
-      (consIso (Fin q) S.length)
-
-theorem siteIsoList_siteVec (own : ι → Party) (c : ι → Fin q) :
-    (S : List ι) → siteIsoList own S (siteVec own S c) =
-      EuclideanSpace.single (fun k => c (S.get k)) (1 : ℂ)
-  | [] => by
-      change emptyIso (Fin q) (1 : ℂ) = _
-      ext f
-      rw [emptyIso_one (0 : EuclideanSpace ℂ (Fin q))]
-      simp only [tensorPower, piTensor_apply, Finset.univ_eq_empty, Finset.prod_empty,
-        PiLp.single_apply]
-      have hf : f = fun k => c ([].get k) := funext fun k => k.elim0
-      simp only [hf, ↓reduceIte]
-  | x :: S => by
-      have hc : (fun k : Fin (x :: S).length => c ((x :: S).get k)) =
-          Fin.cons (c x) (fun k => c (S.get k)) := by
-        funext k
-        refine Fin.cases rfl (fun _ => rfl) k
-      change consIso (Fin q) S.length ((siteIsoList own S).lTensor (EuclideanSpace ℂ (Fin q))
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          siteVec own S c)) = _
-      ext f
-      rw [iso_lTensor_tmul, siteIsoList_siteVec own c S, consIso_tmul_apply, hc]
-      simp only [PiLp.single_apply]
-      by_cases h : f = Fin.cons (c x) (fun k => c (S.get k))
-      · subst h
-        simp
-      · simp only [h, ↓reduceIte]
-        by_cases h0 : f 0 = c x
-        · have ht : Fin.tail f ≠ fun k => c (S.get k) := fun ht =>
-            h (by rw [← Fin.cons_self_tail f, h0, ht])
-          simp only [h0, ht, ↓reduceIte, mul_zero]
-        · simp only [h0, ↓reduceIte, zero_mul]
-
-/-- The raw registers of `S` grouped into one register `ℂ^{κ → Fin q}`, along an enumeration
-`e` of the positions of the list by `κ`. -/
-def groupIso (own : ι → Party) (S : List ι) {κ : Type} [Fintype κ] [DecidableEq κ] (e : Fin S.length ≃ κ) :
-    Mem (siteRegs q own S) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (κ → Fin q) :=
-  (siteIsoList own S).trans
-    (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (e.arrowCongr (Equiv.refl (Fin q))))
-
-theorem groupIso_siteVec (own : ι → Party) (S : List ι) {κ : Type} [Fintype κ]
-    [DecidableEq κ] (e : Fin S.length ≃ κ) (f : κ → ι) (hf : ∀ k, S.get k = f (e k))
-    (c : ι → Fin q) :
-    groupIso own S e (siteVec own S c) = EuclideanSpace.single (c ∘ f) (1 : ℂ) := by
-  rw [groupIso, LinearIsometryEquiv.trans_apply, siteIsoList_siteVec,
-    EuclideanSpace.piLpCongrLeft_single]
-  congr 1
-  funext j
-  simp only [Equiv.arrowCongr_apply, Equiv.coe_refl, Function.comp_apply, id_eq]
-  rw [hf, Equiv.apply_symm_apply]
-
-
-/-! ### Relabelling owners -/
-
-/-- The front register, held by `p`, named as a register of `p' = p`. -/
-def relabelHead {p p' : Party} (h : p = p') (X : HSpace) (ℓ : Layout Party) :
-    Word (⟨p, X⟩ :: ℓ) (⟨p', X⟩ :: ℓ) :=
-  h ▸ .id _
-
-theorem eval_relabelHead {p p' : Party} (h : p = p') (X : HSpace) (ℓ : Layout Party)
-    (z : Mem (⟨p, X⟩ :: ℓ)) : (relabelHead h X ℓ).eval z = z := by
-  subst h
-  rfl
-
-theorem relabelHead_props {p p' : Party} (h : p = p') (X : HSpace) (ℓ : Layout Party)
-    (S : Set Party) :
-    (relabelHead h X ℓ).IsAllowed ∧ (relabelHead h X ℓ).UsesOnly S ∧
-      (relabelHead h X ℓ).sourceCount = 0 := by
-  subst h
-  exact ⟨trivial, trivial, rfl⟩
-
-/-- The raw registers of `S` with owners `own`, named with owners `own'` that agree on `S`.
-No register changes its party. -/
-def relabelSites (own own' : ι → Party) :
-    (S : List ι) → (∀ x ∈ S, own x = own' x) → Word (siteRegs q own S) (siteRegs q own' S)
-  | [], _ => .id []
-  | x :: S, h => .comp
-      (.frame ⟨own x, euc (Fin q)⟩
-        (relabelSites own own' S fun y hy => h y (List.mem_cons_of_mem x hy)))
-      (relabelHead (h x List.mem_cons_self) (euc (Fin q)) (siteRegs q own' S))
-
-theorem eval_relabelSites (own own' : ι → Party) (c : ι → Fin q) :
-    (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
-      (relabelSites own own' S h).eval (siteVec own S c) = siteVec own' S c
-  | [], _ => rfl
-  | x :: S, h => by
-      change (relabelHead (h x List.mem_cons_self) (euc (Fin q)) (siteRegs q own' S)).eval
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          (relabelSites own own' S _).eval (siteVec own S c)) = _
-      rw [eval_relabelHead, eval_relabelSites own own' c S]
-      rfl
-
-theorem relabelSites_props (own own' : ι → Party) (T : Set Party) :
-    (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
-      (relabelSites (q := q) own own' S h).IsAllowed ∧
-        (relabelSites (q := q) own own' S h).UsesOnly T ∧
-        (relabelSites (q := q) own own' S h).sourceCount = 0
-  | [], _ => ⟨trivial, trivial, rfl⟩
-  | x :: S, h => by
-      obtain ⟨h₁, h₂, h₃⟩ := relabelSites_props own own' T S
-        fun y hy => h y (List.mem_cons_of_mem x hy)
-      obtain ⟨g₁, g₂, g₃⟩ := relabelHead_props (h x List.mem_cons_self) (euc (Fin q))
-        (siteRegs q own' S) T
-      exact ⟨⟨h₁, g₁⟩, ⟨h₂, g₂⟩, congrArg₂ (· + ·) h₃ g₃⟩
-
-/-! ### Partitioning a list of sites -/
-
-/-- The sites of a list satisfying `p`, and the others, each in their order in the list. -/
-def partSites (p : ι → Bool) : List ι → List ι × List ι
-  | [] => ([], [])
-  | x :: S => cond (p x) (x :: (partSites p S).1, (partSites p S).2)
-      ((partSites p S).1, x :: (partSites p S).2)
-
-theorem partSites_eq (p : ι → Bool) :
-    (S : List ι) → partSites p S = (S.filter p, S.filter fun x => !p x)
-  | [] => rfl
-  | x :: S => by
-      rw [partSites, partSites_eq p S]
-      cases h : p x <;> simp [h]
-
-theorem mem_partSites_fst (p : ι → Bool) (S : List ι) (x : ι) :
-    x ∈ (partSites p S).1 ↔ x ∈ S ∧ p x = true := by
-  rw [partSites_eq, List.mem_filter]
-
-theorem mem_partSites_snd (p : ι → Bool) (S : List ι) (x : ι) :
-    x ∈ (partSites p S).2 ↔ x ∈ S ∧ p x = false := by
-  simp [partSites_eq]
-
-theorem nodup_partSites_fst (p : ι → Bool) {S : List ι} (hS : S.Nodup) :
-    (partSites p S).1.Nodup := by
-  rw [partSites_eq]
-  exact hS.filter _
-
-theorem nodup_partSites_snd (p : ι → Bool) {S : List ι} (hS : S.Nodup) :
-    (partSites p S).2.Nodup := by
-  rw [partSites_eq]
-  exact hS.filter _
-
-/-- One step of moving the registers of the sites satisfying a predicate to the front. -/
-def partStep (own : ι → Party) (x : ι) (a b : List ι) : (c : Bool) →
-    Word (⟨own x, euc (Fin q)⟩ :: (siteRegs q own a ++ siteRegs q own b))
-      (siteRegs q own (cond c (x :: a, b) (a, x :: b)).1 ++
-        siteRegs q own (cond c (x :: a, b) (a, x :: b)).2)
-  | true => .id _
-  | false => Word.exchangeBlocks [⟨own x, euc (Fin q)⟩] (siteRegs q own a) (siteRegs q own b)
-
-/-- The registers of the sites satisfying `p` moved to the front by exchanges of adjacent
-tensor factors, the order within both parts kept. -/
-def partWord (own : ι → Party) (p : ι → Bool) :
-    (S : List ι) → Word (siteRegs q own S)
-      (siteRegs q own (partSites p S).1 ++ siteRegs q own (partSites p S).2)
-  | [] => .id []
-  | x :: S => .comp (.frame _ (partWord own p S)) (partStep own x _ _ (p x))
-
-/-- One step of the inverse reordering. -/
-def unpartStep (own : ι → Party) (x : ι) (a b : List ι) : (c : Bool) →
-    Word (siteRegs q own (cond c (x :: a, b) (a, x :: b)).1 ++
-        siteRegs q own (cond c (x :: a, b) (a, x :: b)).2)
-      (⟨own x, euc (Fin q)⟩ :: (siteRegs q own a ++ siteRegs q own b))
-  | true => .id _
-  | false => Word.moveHead ⟨own x, euc (Fin q)⟩ (siteRegs q own a) (siteRegs q own b)
-
-/-- The inverse of `partWord`. -/
-def unpartWord (own : ι → Party) (p : ι → Bool) :
-    (S : List ι) → Word (siteRegs q own (partSites p S).1 ++ siteRegs q own (partSites p S).2)
-      (siteRegs q own S)
-  | [] => .id []
-  | x :: S => .comp (unpartStep own x _ _ (p x)) (.frame _ (unpartWord own p S))
-
-theorem partWord_props (own : ι → Party) (p : ι → Bool) (T : Set Party) :
-    (S : List ι) → (partWord (q := q) own p S).IsAllowed ∧
-      (partWord (q := q) own p S).UsesOnly T ∧ (partWord (q := q) own p S).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | x :: S => by
-      obtain ⟨h₁, h₂, h₃⟩ := partWord_props own p T S
-      have hs : (partStep (q := q) own x (partSites p S).1 (partSites p S).2 (p x)).IsAllowed ∧
-          (partStep (q := q) own x (partSites p S).1 (partSites p S).2 (p x)).UsesOnly T ∧
-          (partStep (q := q) own x (partSites p S).1 (partSites p S).2 (p x)).sourceCount =
-            0 := by
-        cases p x
-        · exact ⟨Word.isAllowed_exchangeBlocks _ _ _, Word.usesOnly_exchangeBlocks _ _ _ _,
-            Word.sourceCount_exchangeBlocks _ _ _⟩
-        · exact ⟨trivial, trivial, rfl⟩
-      exact ⟨⟨h₁, hs.1⟩, ⟨h₂, hs.2.1⟩, congrArg₂ (· + ·) h₃ hs.2.2⟩
-
-theorem unpartWord_props (own : ι → Party) (p : ι → Bool) (T : Set Party) :
-    (S : List ι) → (unpartWord (q := q) own p S).IsAllowed ∧
-      (unpartWord (q := q) own p S).UsesOnly T ∧ (unpartWord (q := q) own p S).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | x :: S => by
-      obtain ⟨h₁, h₂, h₃⟩ := unpartWord_props own p T S
-      have hs : (unpartStep (q := q) own x (partSites p S).1 (partSites p S).2 (p x)).IsAllowed ∧
-          (unpartStep (q := q) own x (partSites p S).1 (partSites p S).2 (p x)).UsesOnly T ∧
-          (unpartStep (q := q) own x (partSites p S).1 (partSites p S).2 (p x)).sourceCount =
-            0 := by
-        cases p x
-        · exact ⟨Word.isAllowed_moveHead _ _ _, Word.usesOnly_moveHead _ _ _ _,
-            Word.sourceCount_moveHead _ _ _⟩
-        · exact ⟨trivial, trivial, rfl⟩
-      exact ⟨⟨hs.1, h₁⟩, ⟨hs.2.1, h₂⟩, congrArg₂ (· + ·) hs.2.2 h₃⟩
-
-/-- One register in front, regrouped as a one-register layout and the rest. -/
-theorem appendIso_one_symm_tmul (r : Reg Party) (ℓ : Layout Party) (x : r.space) (w : Mem ℓ) :
-    (appendIso [r] ℓ).symm ((x ⊗ₜ (1 : ℂ)) ⊗ₜ w) = (x ⊗ₜ w : Mem (r :: ℓ)) := by
-  rw [LinearIsometryEquiv.symm_apply_eq, appendIso_one_tmul]
-
-theorem appendIso_nil_symm_one :
-    (appendIso ([] : Layout Party) []).symm ((1 : ℂ) ⊗ₜ (1 : ℂ)) = (1 : ℂ) := by
-  rw [LinearIsometryEquiv.symm_apply_eq, appendIso_nil_apply]
-
-theorem eval_partStep (own : ι → Party) (x : ι) (a b : List ι) (c : ι → Fin q) :
-    (cb : Bool) → (partStep own x a b cb).eval
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          (appendIso (siteRegs q own a) (siteRegs q own b)).symm
-            (siteVec own a c ⊗ₜ siteVec own b c)) =
-      (appendIso _ _).symm (siteVec own (cond cb (x :: a, b) (a, x :: b)).1 c ⊗ₜ
-        siteVec own (cond cb (x :: a, b) (a, x :: b)).2 c)
-  | true => rfl
-  | false => by
-      have h := Word.eval_exchangeBlocks_appendIso_symm [⟨own x, euc (Fin q)⟩] (siteRegs q own a)
-        (siteRegs q own b)
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ (1 : ℂ))
-        (siteVec own a c) (siteVec own b c)
-      rw [appendIso_one_symm_tmul, appendIso_one_symm_tmul] at h
-      exact h
-
-theorem eval_partWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q) :
-    (S : List ι) → (partWord own p S).eval (siteVec own S c) =
-      (appendIso _ _).symm (siteVec own (partSites p S).1 c ⊗ₜ siteVec own (partSites p S).2 c)
-  | [] => appendIso_nil_symm_one.symm
-  | x :: S => by
-      change (partStep own x (partSites p S).1 (partSites p S).2 (p x)).eval
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          (partWord own p S).eval (siteVec own S c)) = _
-      rw [eval_partWord own p c S]
-      exact eval_partStep own x _ _ c (p x)
-
-theorem eval_unpartStep (own : ι → Party) (x : ι) (a b : List ι) (c : ι → Fin q) :
-    (cb : Bool) → (unpartStep own x a b cb).eval
-        ((appendIso _ _).symm (siteVec own (cond cb (x :: a, b) (a, x :: b)).1 c ⊗ₜ
-          siteVec own (cond cb (x :: a, b) (a, x :: b)).2 c)) =
-      (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-        (appendIso (siteRegs q own a) (siteRegs q own b)).symm
-          (siteVec own a c ⊗ₜ siteVec own b c)
-  | true => rfl
-  | false => Word.eval_moveHead_appendIso_symm ⟨own x, euc (Fin q)⟩ (siteRegs q own a)
-      (siteRegs q own b) (siteVec own a c)
-      (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) (siteVec own b c)
-
-theorem eval_unpartWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q) :
-    (S : List ι) → (unpartWord own p S).eval
-        ((appendIso _ _).symm (siteVec own (partSites p S).1 c ⊗ₜ
-          siteVec own (partSites p S).2 c)) = siteVec own S c
-  | [] => appendIso_nil_symm_one
-  | x :: S => by
-      refine (congrArg (Word.frame _ (unpartWord (q := q) own p S)).eval
-        (eval_unpartStep own x (partSites p S).1 (partSites p S).2 c (p x))).trans ?_
-      change (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-        (unpartWord (q := q) own p S).eval _ = _
-      rw [eval_unpartWord own p c S]
-      rfl
-
-theorem siteVec_congr (own : ι → Party) {c c' : ι → Fin q} :
-    (S : List ι) → (∀ x ∈ S, c x = c' x) → siteVec own S c = siteVec own S c'
-  | [], _ => rfl
-  | x :: S, h => by
-      change (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          siteVec own S c = (EuclideanSpace.single (c' x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          siteVec own S c'
-      rw [h x List.mem_cons_self,
-        siteVec_congr own S fun y hy => h y (List.mem_cons_of_mem x hy)]
-
-/-! ### Tag registers -/
-
-section Tags
-
-variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ}
-
-/-- The tag registers of a list of holes, in the order of the list, the tag of a hole held by
-its tag owner. -/
-def tagRegs : List (Hole pos q Party) → Layout Party
-  | [] => []
-  | h :: l => ⟨h.tagOwner, euc h.patch.Tag⟩ :: tagRegs l
-
-/-- The basis vector `⊗_a |τ_a⟩` of the tag registers. -/
-def tagVec : (l : List (Hole pos q Party)) → TagSpace l → Mem (tagRegs l)
-  | [], _ => (1 : ℂ)
-  | h :: l, τ => (EuclideanSpace.single τ.1 (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) ⊗ₜ
-      tagVec l τ.2
-
-/-- The tag registers identified with `ℂ^{TagSpace l}`. -/
-def tagIso : (l : List (Hole pos q Party)) → Mem (tagRegs l) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (TagSpace l)
-  | [] => (OrthonormalBasis.singleton Unit ℂ).repr
-  | h :: l => ((tagIso l).lTensor (EuclideanSpace ℂ h.patch.Tag)).trans
-      (pairIso h.patch.Tag (TagSpace l))
-
-theorem tagIso_tagVec : (l : List (Hole pos q Party)) → (τ : TagSpace l) →
-    tagIso l (tagVec l τ) = EuclideanSpace.single τ (1 : ℂ)
-  | [], τ => by
-      change (OrthonormalBasis.singleton Unit ℂ).repr (1 : ℂ) = _
-      ext u
-      rw [OrthonormalBasis.singleton_repr]
-      erw [PiLp.single_apply]
-      split_ifs with hu
-      · rfl
-      · exact absurd rfl hu
-  | h :: l, τ => by
-      change pairIso h.patch.Tag (TagSpace l) ((tagIso l).lTensor (EuclideanSpace ℂ h.patch.Tag)
-        ((EuclideanSpace.single τ.1 (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) ⊗ₜ
-          tagVec l τ.2)) = _
-      ext i
-      rw [iso_lTensor_tmul, tagIso_tagVec l τ.2, pairIso_tmul_apply]
-      change (EuclideanSpace.single τ.1 (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) i.1 *
-          (EuclideanSpace.single τ.2 (1 : ℂ) : EuclideanSpace ℂ (TagSpace l)) i.2 =
-        (EuclideanSpace.single (τ : h.patch.Tag × TagSpace l) (1 : ℂ) :
-          EuclideanSpace ℂ (h.patch.Tag × TagSpace l)) i
-      simp only [PiLp.single_apply, ite_zero_mul_ite_zero, one_mul]
-      erw [PiLp.single_apply]
-      split_ifs with h₁ h₂ h₂
-      · rfl
-      · exact absurd (Prod.ext h₁.1 h₁.2) h₂
-      · exact absurd ⟨congrArg Prod.fst h₂, congrArg Prod.snd h₂⟩ h₁
-      · rfl
-
-end Tags
-
 /-! ### Grouping the raw registers of two regions -/
 
 section Group
 
 variable [Fintype ι] [DecidableEq ι]
 
+omit [Fintype ι] [DecidableEq ι] in
 theorem owner_siteRegs {own : ι → Party} {S : List ι} {p : Party} (h : ∀ x ∈ S, own x = p) :
     ∀ r ∈ siteRegs q own S, r.owner = p := by
   intro r hr
@@ -463,6 +88,7 @@ abbrev listE (S : List ι) (T E : Finset ι) : List ι :=
 
 variable {S : List ι} {T E : Finset ι}
 
+omit [Fintype ι] in
 theorem mem_listT (hall : ∀ x, x ∈ S) (x : ι) : x ∈ listT S T ↔ x ∈ T := by
   simp [mem_partSites_fst, hall]
 
@@ -481,6 +107,7 @@ theorem mem_listE (hall : ∀ x, x ∈ S) (h : Disjoint T E) (x : ι) : x ∈ li
   · intro hE
     exact ⟨Finset.disjoint_right.mp h hE, Or.inr hE⟩
 
+omit [Fintype ι] in
 theorem nodup_listT (hS : S.Nodup) : (listT S T).Nodup := nodup_partSites_fst _ hS
 
 theorem nodup_listU (hS : S.Nodup) : (listU S T E).Nodup :=
@@ -494,6 +121,7 @@ def equivT (hS : S.Nodup) (hall : ∀ x, x ∈ S) : Fin (listT S T).length ≃ T
 def equivU (hS : S.Nodup) (hall : ∀ x, x ∈ S) : Fin (listU S T E).length ≃ ↥(T ∪ E)ᶜ :=
   (List.Nodup.getEquiv _ (nodup_listU hS)).trans (Equiv.subtypeEquivRight (mem_listU hall))
 
+omit [Fintype ι] in
 theorem groupIso_listT_siteVec (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (c : ι → Fin q) :
     groupIso own (listT S T) (equivT hS hall) (siteVec own (listT S T) c) =
@@ -571,8 +199,8 @@ theorem eval_groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ 
     Word.eval_frameList_appendIso_symm, eval_partWord, Word.eval_exchangeBlocks_appendIso_symm,
     eval_localMap, isoL_apply, LinearIsometryEquiv.trans_apply, groupIso_listT_siteVec,
     appendIso_one_symm, Word.eval_frame, Word.eval_frame, lTensor_tmul,
-    Word.eval_exchangeBlocks_appendIso_symm, lTensor_tmul, eval_localMap, isoL_apply, LinearIsometryEquiv.trans_apply,
-    groupIso_listU_siteVec, appendIso_one_symm]
+    Word.eval_exchangeBlocks_appendIso_symm, lTensor_tmul, eval_localMap, isoL_apply,
+    LinearIsometryEquiv.trans_apply, groupIso_listU_siteVec, appendIso_one_symm]
 
 theorem eval_ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (ℓ₀ : Layout Party) {pA pB : Party} (hA : ∀ x ∈ T, own x = pA)
@@ -836,8 +464,10 @@ variable (ι) in
 tensor factors. -/
 def sites : List ι := (Finset.univ : Finset ι).toList
 
+omit [DecidableEq ι] in
 theorem nodup_sites : (sites ι).Nodup := Finset.nodup_toList _
 
+omit [DecidableEq ι] in
 theorem mem_sites (x : ι) : x ∈ sites ι := Finset.mem_toList.mpr (Finset.mem_univ x)
 
 attribute [irreducible] sites
