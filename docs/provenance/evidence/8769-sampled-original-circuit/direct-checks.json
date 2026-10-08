@@ -1,0 +1,52 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "dae297bb54a3c08e41afe7e65d6d8754f1e4e06c",
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "checked_source": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/SampledOriginalCircuit.lean",
+  "checked_source_sha256": "64038ead3c3920ddd369a55fbcc4bd4878f3dee84d92b5337ae5adb3e8c815a6",
+  "production_source": "TNLean/PEPS/Approximation/SampledOriginalCircuit.lean",
+  "production_source_sha256": "de41e21740168642951d22e13b3ce040222c37ab3683b20997573819127e0bf2",
+  "artifact": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/SampledOriginalCircuit.olean",
+  "artifact_sha256": "4d56825a6ecd39348a02eea31a7067136a02ac0dc300a8a0ac5d1ba793a1c327",
+  "public_exports": [
+    "TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_mono",
+    "TNLean.PEPS.PairEffect.OriginalCircuit.exists_isMonomialBounded",
+    "TNLean.PEPS.PairEffect.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le",
+    "TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le"
+  ],
+  "public_export_count": 4,
+  "prerequisites": {
+    "PhysicalFirstExchange": "fbc730dc615e00d34c36ebb5cdfc500b4544a9f989362de9f73955d93d95f30e",
+    "PhysicalDensityPureInput": "87dbcb738b2460d8fd60956d2013cac3bca14623df386b1a635aa90ce3a21f8c",
+    "AuxiliaryRegisterFiniteness": "1e5f6ba694f8258f5d8c6b1185df76e42d28a21725877c437b39eb918201a83d",
+    "PhysicalFirstReadout": "131095fd5c54f484546a7423e3474f51659d9cdae4681006f85ed6fe31a49a62"
+  },
+  "logs": {
+    "strict_log": {
+      "file": "SampledOriginalCircuit.strict.log.gz",
+      "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "all_public_stock_log": {
+      "file": "SampledOriginalCircuitAudit.strict.log.gz",
+      "uncompressed_sha256": "983772d88e0c285cd60b151c6a55eb875f18b1321f7ab641d36e15f068d70798"
+    }
+  },
+  "audit_source": "SampledOriginalCircuitAudit.lean",
+  "checked_source_rewrite": "Only TNLeanRelayOutput import prefixes change to TNLean.PEPS.Approximation. Mathematical statements and proofs are identical.",
+  "unperformed_checks": "Canonical integration checks are performed by the coordinating branch."
+}
