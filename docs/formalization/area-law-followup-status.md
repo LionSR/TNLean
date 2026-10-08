@@ -541,6 +541,37 @@ The compatible physical spectral support and the reduction tracing good Y
 coordinates are assigned as subsequent proofs, with this final source held
 unchanged.
 
+[QICLean #672](https://github.com/LionSR/QICLean/pull/672), at checked head
+`5c5a5068d5bb5ef1f2571593dcf17d68ad86449d`, proves the positive and negative
+centered Schur-label comparisons and their actual tensor-copy specialization.
+The positive comparison uses trace one and a nonnegative exponent; the negative
+comparison holds for every real exponent without normalization. The kernel
+contributes zero trace weight, so no global label-versus-surprisal order is
+asserted. Source `6c8a3e8c`, leaf `fd7d585b` and exact inclusion `cd2375eb`
+remain unchanged. The full 9,825-job build, three exact standard-kernel reports,
+473-page PDF, complete web/declaration checks and 93-binding manifest passed.
+Original independent proof text and all 22 historical text records are retained;
+the new complete statements, proofs and mobile formula endpoints were
+independently inspected. Quantitative logarithmic rates and the independent-copy
+surprisal identity are separate contributions.
+
+[QICLean #673](https://github.com/LionSR/QICLean/pull/673), at checked head
+`d949d2dc7dec1872aa4838d374dbe47512ae4919`, proves the actual five-operator
+Hölder inequality for Q, Y, V, C and R. It derives all Hermiticity and
+commutation statements from their nested and disjoint subsystem copy actions,
+with an arbitrary positive trace weight and every real exponent. No global
+positivity of the physical expression \(F_Q+F_V-F_Y\) is used. Mathematical
+source `ad1da831` and notice-only correction `4907ab67` have identical proofs;
+leaf `f932f732`, checked prerequisite join `44817678` and unique inclusion
+`a8910b9c` are preserved. The full 9,826-job build, exact standard-kernel report,
+473-page PDF, all 3,774 native declarations, complete reader checks and
+87-artifact manifest passed. All 4,896 parent files are preserved except the
+two stated inclusion lines. The source and complete PDF/mobile entry were
+independently inspected. Eight operational failures are retained separately;
+serial imported checks with one Lean worker passed without changing the
+mathematical source. Application to the literal excitation density and the
+signed entropy rates remains subsequent work.
+
 The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
 bad physical and auxiliary copies. The local QC theorem above accommodates
