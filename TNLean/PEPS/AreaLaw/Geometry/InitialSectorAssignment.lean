@@ -32,7 +32,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:initial-stars`, lines 333–370,
 especially 352–370, and `prop:two-families`, lines 299–323.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-Manuscript file: `preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
+Manuscript file:
+`preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
 `build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/

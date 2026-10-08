@@ -27,7 +27,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:initial-stars`, lines 333–370,
 especially 361–370, and `prop:two-families`, lines 313–323.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-Manuscript file: `preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
+Manuscript file:
+`preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
 `build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
@@ -70,11 +71,11 @@ theorem exists_unique_initialRegion_sector_run_assignment
         o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
     let family : J → Fin 2 := fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
     let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
-    ∃! λ : G.ConnectedComponent → I,
-      (∀ s : J, λ (G.connectedComponentMk s) = σ s) ∧
+    ∃! runLabel : G.ConnectedComponent → I,
+      (∀ s : J, runLabel (G.connectedComponentMk s) = σ s) ∧
       ∀ i : I,
         initialBirthRegion o k₀ Z C a b hC h₀ i ∩ Metric.closedBall v r =
-          ⋃ R : {R : G.ConnectedComponent // λ R = i},
+          ⋃ R : {R : G.ConnectedComponent // runLabel R = i},
             cellFanRunRegion oSmall ℓ (0, 0) (fun _ ↦ true) family R.val := by
   classical
   dsimp only
@@ -87,19 +88,19 @@ theorem exists_unique_initialRegion_sector_run_assignment
     (exists_unique_initialRegion_sector_assignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
   let family : J → Fin 2 := fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
   let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
-  change ∃! λ : G.ConnectedComponent → I,
-    (∀ s : J, λ (G.connectedComponentMk s) = σ s) ∧
+  change ∃! runLabel : G.ConnectedComponent → I,
+    (∀ s : J, runLabel (G.connectedComponentMk s) = σ s) ∧
     ∀ i : I,
       initialBirthRegion o k₀ Z C a b hC h₀ i ∩ Metric.closedBall v r =
-        ⋃ R : {R : G.ConnectedComponent // λ R = i},
+        ⋃ R : {R : G.ConnectedComponent // runLabel R = i},
           cellFanRunRegion oSmall ℓ (0, 0) (fun _ ↦ true) family R.val
   have hedge (s t : J) (h : G.Adj s t) : σ s = σ t :=
     (initialRegion_sector_assignment_adjacent_colors_eq_iff
       o k₀ Z C a b hC h₀ k z v hk₀ hz hv s t h.2.1).mp h.2.2
   have hpath (s t : J) (p : G.Walk s t) (_ : p.IsPath) : σ s = σ t :=
     identifier_eq_of_reachable G σ hedge p.reachable
-  let λ : G.ConnectedComponent → I := SimpleGraph.ConnectedComponent.lift σ hpath
-  have hλ (s : J) : λ (G.connectedComponentMk s) = σ s := rfl
+  let runLabel : G.ConnectedComponent → I := SimpleGraph.ConnectedComponent.lift σ hpath
+  have hλ (s : J) : runLabel (G.connectedComponentMk s) = σ s := rfl
   have hdecomp (i : I) :
       initialBirthRegion o k₀ Z C a b hC h₀ i ∩ Metric.closedBall v r =
         ⋃ s : {s : J // σ s = i},
@@ -107,13 +108,13 @@ theorem exists_unique_initialRegion_sector_run_assignment
     (Classical.choose_spec
       (exists_unique_initialRegion_sector_assignment
         o k₀ Z C a b hC h₀ k z v hk₀ hz hv)).1.2 i
-  refine ⟨λ, ⟨hλ, ?_⟩, ?_⟩
+  refine ⟨runLabel, ⟨hλ, ?_⟩, ?_⟩
   · intro i
     apply Set.Subset.antisymm
     · intro x hx
       rw [hdecomp i] at hx
       obtain ⟨s, hxs⟩ := Set.mem_iUnion.mp hx
-      have hRi : λ (G.connectedComponentMk s.val) = i :=
+      have hRi : runLabel (G.connectedComponentMk s.val) = i :=
         (hλ s.val).trans s.property
       refine Set.mem_iUnion.mpr ⟨⟨G.connectedComponentMk s.val, hRi⟩, ?_⟩
       change x ∈ ⋃ t ∈ (G.connectedComponentMk s.val).supp,
@@ -129,7 +130,7 @@ theorem exists_unique_initialRegion_sector_run_assignment
       have hMk : G.connectedComponentMk s = R.val :=
         (SimpleGraph.ConnectedComponent.mem_supp_iff _ _).mp hsR
       have hsi : σ s = i := (hλ s).symm.trans
-        ((congrArg λ hMk).trans R.property)
+        ((congrArg runLabel hMk).trans R.property)
       rw [hdecomp i]
       exact Set.mem_iUnion.mpr ⟨⟨s, hsi⟩, hxs⟩
   · intro μ hμ
@@ -198,13 +199,13 @@ theorem exists_unique_initialRegion_of_no_active_sector
   have hconnected (s t : J) : G.connectedComponentMk s = G.connectedComponentMk t :=
     SimpleGraph.ConnectedComponent.sound
       ((SimpleGraph.ConnectedComponent.exact (hconstant s t)).mono hle)
-  obtain ⟨λ, hλ, _⟩ :=
+  obtain ⟨runLabel, hλ, _⟩ :=
     (exists_unique_initialRegion_sector_run_assignment
       o k₀ Z C a b hC h₀ k z v hk₀ hz hv).exists
   let s₀ : J := ⟨0, 0⟩
   let i₀ : I := σ s₀
   have hσ (s : J) : σ s = i₀ :=
-    (hλ s).symm.trans ((congrArg λ (hconnected s s₀)).trans (hλ s₀))
+    (hλ s).symm.trans ((congrArg runLabel (hconnected s s₀)).trans (hλ s₀))
   have hworking (s : J) : interior (P s) ⊆ U (σ s) :=
     (Classical.choose_spec
       (exists_unique_initialRegion_sector_assignment
