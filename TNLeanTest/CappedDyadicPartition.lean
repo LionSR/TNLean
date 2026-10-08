@@ -1,5 +1,12 @@
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
 
+/-!
+# Capped dyadic partition regressions
+
+Check empty sets, zero cap, negative coordinates, mixed scales, disconnected
+sets with holes, and retained cap cells whose parents are contained.
+-/
+
 open TNLean.PEPS.AreaLaw.Geometry
 
 -- Empty sets and cap zero have no hidden positivity hypotheses.
@@ -12,7 +19,8 @@ example (S : Finset (ℤ × ℤ)) :
 private def negativeExample : Finset (ℤ × ℤ) :=
   {(-4, -2), (-4, -1), (-3, -2), (-3, -1), (-1, -1)}
 
-example : cappedDyadicPartition negativeExample 2 = {(1, (-2, -1)), (0, (-1, -1))} := by
+private theorem negativeExample_partition :
+    cappedDyadicPartition negativeExample 2 = {(1, (-2, -1)), (0, (-1, -1))} := by
   decide
 
 example : ((cappedDyadicPartition negativeExample 2).biUnion
@@ -20,10 +28,12 @@ example : ((cappedDyadicPartition negativeExample 2).biUnion
   biUnion_cappedDyadicPartition negativeExample 2
 
 example : Disjoint (latticeDyadicCell 1 (-2, -1)) (latticeDyadicCell 0 (-1, -1)) :=
-  pairwiseDisjoint_cappedDyadicPartition negativeExample 2 (by decide) (by decide) (by decide)
+  (pairwiseDisjoint_cappedDyadicPartition negativeExample 2).disjoint_of_ne
+    (i := (1, (-2, -1))) (j := (0, (-1, -1)))
+    (by simp [negativeExample_partition]) (by simp [negativeExample_partition]) (by decide)
 
 example : dyadicParent (-2, -1) ∈ mixedDyadicIndices negativeExample 2 :=
-  parent_mem_mixedDyadicIndices (by decide :
+  parent_mem_mixedDyadicIndices (by simp [negativeExample_partition] :
     (1, (-2, -1)) ∈ cappedDyadicPartition negativeExample 2) (by decide)
 
 -- At the cap a contained parent must not suppress the selected cell.
@@ -35,7 +45,7 @@ example : cappedDyadicPartition (latticeDyadicCell 2 (-1, -1)) 2 = {(2, (-1, -1)
 
 -- A disconnected set with a hole and points on both sides of the origin.
 example : cappedDyadicPartition {(-1, -1), (0, 0), (1, 1), (20, -3)} 3 =
-    {(0, (-1, -1)), (0, (0, 0)), (0, (1, 1)), (0, (20, -3))} := by decide
+    {(0, (-1, -1)), (0, (0, 0)), (0, (1, 1)), (0, (20, -3))} := by decide +kernel
 
 example : (∑ c ∈ cappedDyadicPartition negativeExample 2, 4 ^ c.1) = 5 :=
   sum_pow_cappedDyadicPartition negativeExample 2

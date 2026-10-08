@@ -13,9 +13,25 @@ Claims on #8754, #8758 and #8837 were inspected; scope was announced in
 
 ## Current evidence
 
-Kernel verification, regression elaboration and exported dependency audits are
-pending normal draft-PR CI. The new provenance records are `planned` with
-pending verification, and the separate blueprint entries have no `leanok`.
+The production module compiled successfully at
+`b6f1f462625c3d83074b1c3c1299d6cc30c3b4b2` in both normal CI and the reviewer's
+compatible warmed worktree. CI run
+[37682366487, job 113017568227](https://github.com/LionSR/TNLean/actions/runs/37682366487/job/113017568227)
+completed the 1,150-job production target and the 12,511-job full library build.
+The subsequent strict regression step failed; the strict imported dependency
+command did not run in that job. Therefore overall verification remains
+pending, as do the new provenance records. The separate blueprint entries
+have no `leanok`.
+
+The canonical reviewer check and its actual command, revision, timing and
+exit-code logs are in
+[#8863 comment 6046537485](https://github.com/LionSR/TNLean/pull/8863#issuecomment-6046537485).
+Its successful production log is preserved verbatim in
+`8754-capped-dyadic-build-b6f1f462.log`. The reviewer separately ran the strict
+regression and dependency commands: both exited 1. The twenty-three actual
+dependency reports contained only the three standard logical dependencies,
+and passed the unchanged exact-name policy, but the audit command's lint
+errors prevent treating it as a successful strict audit.
 
 The selected Linux workspace began without Lean or `.lake`. The pinned Lean
 4.35.0-rc3 release was installed from GitHub; all dependency source checkouts
@@ -56,13 +72,34 @@ modify the production branch or its provenance.
 The owner reviewed and applied the explicit search bound `(n := K)` and
 `Nat.lt_succ_self k` in the maximal-scale argument, and removed `not_imp` from
 the mixedness simplification. These preserve the statements and mathematical
-proofs. The reviewer's temporary-copy elaboration is not canonical production
-build or regression evidence. Production provenance remains pending.
+proofs. The later canonical build evidence above supersedes the temporary-copy
+check; regression and strict audit verification remain pending.
 
 The imported dependency script prints all 23 exact export names. CI now saves
 the actual output and applies the existing `check_axiom_output` validator to
 every name in this contribution's ledger. The validator rejects missing or
 malformed records, inconsistent repeated output, and any dependency beyond
 `propext`, `Classical.choice` and `Quot.sound`. This makes successful execution
-alone insufficient for an audit pass. No successful production output has yet
-been observed or recorded; all verification statuses remain pending.
+alone insufficient for an audit pass. Verification statuses remain pending
+until a successful strict audit and repaired regression run are observed.
+
+## Regression and audit repairs
+
+The failed CI log identifies a missing module docstring, expensive implicit
+index inference in the mixed-scale disjointness example, and elaborator
+recursion depth in the disconnected cap-three computation. The repair adds
+the docstring, supplies the two selected indices explicitly, reuses the
+already checked finite partition equality, and evaluates the unchanged
+cap-three fixture with `decide +kernel`. This uses trusted kernel reduction
+without increasing resource limits. The production theorem file is unchanged.
+
+The diagnostic dependency module now has its required module docstring and
+locally disables `linter.hashCommand`, because its purpose is to print those
+reports. All twenty-three exact declaration names and the dependency policy
+validator are unchanged. Successful compilation of these repaired diagnostic
+files is still pending at publication of this repair.
+
+The previous blueprint job was still installing system dependencies when the
+regression failure was inspected; it had produced no blueprint source
+diagnostic. That infrastructure state is separate from the concrete Lean
+regression failure.

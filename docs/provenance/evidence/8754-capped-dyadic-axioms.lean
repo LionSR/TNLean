@@ -1,5 +1,10 @@
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
 
+/-! # Imported kernel dependencies of all capped dyadic partition exports -/
+
+-- Dependency reports are the purpose of this audit module.
+set_option linter.hashCommand false
+
 #print axioms TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell
 #print axioms TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor_eq_cellIndex
 #print axioms TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell
