@@ -21,6 +21,7 @@ import TNLean.Circuit.ExactSubspaceAmplification
 import TNLean.Circuit.ExpectationBounds
 import TNLean.Circuit.GHZState
 import TNLean.Circuit.Gates
+import TNLean.Circuit.Geometry
 import TNLean.Circuit.ImageReflectionCircuit
 import TNLean.Circuit.InitializedRegisterProjection
 import TNLean.Circuit.LiebRobinson

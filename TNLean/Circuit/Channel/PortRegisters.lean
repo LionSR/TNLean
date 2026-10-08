@@ -153,12 +153,12 @@ variable {N : ℕ} [NeZero N]
 
 /-- The right endpoint of a nontrivial selected bond cannot start another selected bond. -/
 theorem right_notMem (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) {i : Fin N}
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∈ K) (hne : i ≠ i + 1) : i + 1 ∉ K := by
   intro hj
   exact Set.disjoint_left.mp (hK hi hj hne)
-    (show i + 1 ∈ bond i by simp [bond])
-    (show i + 1 ∈ bond (i + 1) by simp [bond])
+    (show i + 1 ∈ ringBond i by simp [ringBond])
+    (show i + 1 ∈ ringBond (i + 1) by simp [ringBond])
 
 end PortMatching
 
@@ -168,7 +168,7 @@ variable {d N k r : ℕ} [NeZero N]
 
 /-- The common routing that exchanges left data digits with right scratch digits. -/
 noncomputable def routingPermutation (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) :
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) :
     Equiv.Perm (Fin (N * (1 + k + k))) :=
   registerPermutation (selection K) (PortMatching.perm K hK)
 
@@ -184,7 +184,7 @@ theorem data_notMem_selection (K : Finset (Fin N)) {i : Fin N} (hi : i ∉ K)
 
 /-- The left data register moves to the right scratch register on every selected bond. -/
 theorem routingPermutation_data_left (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) {i : Fin N}
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∈ K) (hne : i ≠ i + 1) (t : Fin k) :
     routingPermutation K hK (data i t) = scratch (i + 1) t := by
   have hleft : selection K t i = data i t := by simp [selection_apply, hi]
@@ -194,13 +194,13 @@ theorem routingPermutation_data_left (K : Finset (Fin N))
 
 /-- Data at every site outside the left endpoints remains exactly fixed. -/
 theorem routingPermutation_data_of_notMem (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) {i : Fin N}
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∉ K) (t : Fin k) : routingPermutation K hK (data i t) = data i t :=
   registerPermutation_apply_of_notMem _ _ _ fun u => data_notMem_selection K hi t u
 
 /-- Both data registers of a selected nontrivial bond are routed into its right site. -/
 theorem routingPermutation_pairData_site (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) {i : Fin N}
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∈ K) (hne : i ≠ i + 1) (a : Fin (k + k)) :
     (layout N k).site (routingPermutation K hK (pairData i (i + 1) hne a)) = i + 1 := by
   refine Fin.addCases (fun t => ?_) (fun t => ?_) a
@@ -210,7 +210,7 @@ theorem routingPermutation_pairData_site (K : Finset (Fin N))
 
 /-- The shared data-to-scratch routing uses at most one physical layer per digit. -/
 theorem routingPermutation_isPhysicalPortUnitary (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) :
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) :
     IsPhysicalPortUnitary (d := d) (layout N k) k (permOp (routingPermutation K hK)) :=
   IsPhysicalPortUnitary.register_matching (layout N k) (selection K)
     (site_selection K) K hK
@@ -218,7 +218,7 @@ theorem routingPermutation_isPhysicalPortUnitary (K : Finset (Fin N))
 /-- Every channel on the two data registers of a selected bond has a concrete
 physical-port realization of depth at most twice the register length. -/
 theorem pairData_isPhysicalPortProtocol (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) {i : Fin N}
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∈ K) (hne : i ≠ i + 1)
     (A : Fin r → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
     (hA : ∑ a, (A a)ᴴ * A a = 1) :
