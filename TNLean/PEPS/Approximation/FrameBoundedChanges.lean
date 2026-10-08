@@ -348,6 +348,100 @@ theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (h�
     LinearIsometryEquiv.apply_symm_apply, heval, LinearIsometryEquiv.apply_symm_apply]
   exact herr
 
+/-- **Lemma 6.6 (two-sheet exchange) for frames with holes in any order: the exchange is a bounded
+change.** Let `F₁`, `F₂` be encoded frames and `Y` the physical sample of a region, with the
+holes of both frames classified as outside or inside the region as in `ofFrames`. With `Z`, `T`,
+`E`, `U` computed from the two frames (`mem_ofFrames_exchangeEnv`), if `I_Ω(T:E) ≤ L^{-60}` for a
+unit vector `Ω`, there are relabellings `e₁`, `e₂` of the tag configurations identifying the
+encodings of each frame with those of its holes listed outside first (the canonical
+identification of tag orderings), splitting data with error at most `L^{-30}`, and an allowed
+monomial `w` from the registers of `F₁` and `F₂` to the registers of the two frames after the
+exchange, such that `w` consists of exchanges of tensor factors and one private contraction at
+`P∘`, uses only `P∘` and no pair resource, acts in canonical coordinates as
+`C G = D_U F_A ℛ G` with `G = tagReorder e₁ e₂`, satisfies `C G (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`,
+and has reference-vector error `‖w (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`.
+
+Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479, with the
+canonical identification of tag orderings of lines 75–76 and 84–85; proof lines 481–561;
+bounded changes, lines 99–105. -/
+theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
+    (out : Hole pos q Party → Bool)
+    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
+    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) (P : Party)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
+    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
+      ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤
+        L ^ (-60 : ℤ)) :
+    ∃ (e₁ : TagSpace F₁.holes ≃ TagSpace (ofFrames F₁ F₂ Y out hout hin).frame₁.holes)
+      (e₂ : TagSpace F₂.holes ≃ TagSpace (ofFrames F₁ F₂ Y out hout hin).frame₂.holes),
+      (∀ t, rawProd _ (e₁ t) = rawProd F₁.holes t) ∧ (∀ t, rawProd _ (e₂ t) = rawProd F₂.holes t) ∧
+      ∃ σ : SplittingData q ((ofFrames F₁ F₂ Y out hout hin).tSet P)
+          ((ofFrames F₁ F₂ Y out hout hin).eSet P),
+        σ.error ((ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
+        (ofFrames F₁ F₂ Y out hout hin).exchangeOp P σ * tagReorder e₁ e₂ *
+            (F₁.encoder ⊗ₖ F₂.encoder) =
+          ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.encoder ⊗ₖ
+              (ofFrames F₁ F₂ Y out hout hin).newFrame₂.encoder) *
+            (sheetBufferCorrection ((ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet P) σ *
+              sheetSwapOp q ((ofFrames F₁ F₂ Y out hout hin).tSet P)) ∧
+        ∃ w : Word (F₁.regs ++ F₂.regs) ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.regs ++
+            (ofFrames F₁ F₂ Y out hout hin).newFrame₂.regs),
+          w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
+          (∀ z, twoLayoutIso _ _ (ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
+              (ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner (w.eval z) =
+            act ((ofFrames F₁ F₂ Y out hout hin).exchangeOp P σ * tagReorder e₁ e₂)
+              (twoLayoutIso _ _ F₁.owner F₂.owner z)) ∧
+          ‖w.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
+              (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) -
+            (twoLayoutIso _ _ (ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
+                (ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner).symm
+              (vecKron ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
+                ((ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤ 4 * L ^ (-30 : ℤ) := by
+  set X := ofFrames F₁ F₂ Y out hout hin
+  obtain ⟨e₁, e₂, he₁, he₂, g, g₁, g₂, g₃, hg⟩ := exists_tagReorderWord (q := q) F₁.disjoint
+    F₂.disjoint (List.filter_append_perm out F₁.holes).symm
+    (List.filter_append_perm out F₂.holes).symm F₁.owner F₂.owner
+  obtain ⟨σ, hσ, hK, w, w₁, w₂, w₃, hw, herr⟩ := X.exchange_bounded P hΩ hI
+  have hG : tagReorder e₁ e₂ * (F₁.encoder ⊗ₖ F₂.encoder) =
+      X.frame₁.encoder ⊗ₖ X.frame₂.encoder :=
+    tagReorder_mul_kronecker he₁ he₂
+  have heval : ∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner ((g.comp w).eval z) =
+      act (X.exchangeOp P σ * (tagReorder e₁ e₂ :
+        Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ))
+        (twoLayoutIso _ _ F₁.owner F₂.owner z) := by
+    intro z
+    calc _ = act (X.exchangeOp P σ)
+          (twoLayoutIso _ _ X.owner₁ X.owner₂ (g.eval z)) := hw (g.eval z)
+      _ = act (X.exchangeOp P σ) (act (tagReorder e₁ e₂ :
+          Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ)
+            (twoLayoutIso _ _ F₁.owner F₂.owner z)) := congrArg (act (X.exchangeOp P σ)) (hg z)
+      _ = _ := (act_mul _ _ _).symm
+  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, ?_, g.comp w, ⟨g₁, w₁⟩, ⟨g₂ {P}, w₂⟩,
+    congrArg₂ (· + ·) g₃ w₃, heval, ?_⟩
+  · rw [Matrix.mul_assoc]
+    exact (congrArg _ hG).trans hK
+  · have hv : act (tagReorder e₁ e₂ :
+          Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ)
+          (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) =
+        vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω) := by
+      rw [Frame.refVec, Frame.refVec, Frame.refVec, Frame.refVec, ← act_kronecker_vecKron,
+        ← act_kronecker_vecKron, ← act_mul]
+      exact congrArg (fun M => act M (vecKron Ω Ω)) hG
+    have hgv : g.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
+        (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) = (twoLayoutIso _ _ X.owner₁ X.owner₂).symm
+          (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω)) := by
+      apply (twoLayoutIso _ _ X.owner₁ X.owner₂).injective
+      refine (hg _).trans ?_
+      rw [LinearIsometryEquiv.apply_symm_apply]
+      exact hv.trans ((twoLayoutIso _ _ X.owner₁ X.owner₂).apply_symm_apply _).symm
+    calc _ = ‖w.eval ((twoLayoutIso _ _ X.owner₁ X.owner₂).symm
+          (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω))) -
+        (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).symm
+          (vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω))‖ := by
+          rw [← hgv]
+          rfl
+      _ ≤ _ := herr
+
 end TwoSheetExchange
 
 end TNLean.PEPS.EncodedFrame
