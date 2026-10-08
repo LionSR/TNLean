@@ -402,7 +402,7 @@ def exchangeOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
 
 theorem norm_exchangeOp_le_one (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     ‖X.exchangeOp P σ‖ ≤ 1 :=
-  l2_opNorm_mul_le_one ((norm_liftTags_le _).trans (l2_opNorm_mul_le_one
+  l2_opNorm_mul_le_one _ _ ((norm_liftTags_le _).trans (l2_opNorm_mul_le_one _ _
     (norm_sheetBufferCorrection_le_one _ σ) (norm_sheetSwapOp_le_one _))) X.norm_rename_le_one
 
 /-- The corrections `D_U` and `F_A` commute with the raw parts of the encoders after the
@@ -641,7 +641,8 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
   have hG : tagReorder e₁ e₂ * (F₁.encoder ⊗ₖ F₂.encoder) =
       X.frame₁.encoder ⊗ₖ X.frame₂.encoder :=
     tagReorder_mul_kronecker he₁ he₂
-  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, l2_opNorm_mul_le_one hC (norm_tagReorder_le_one e₁ e₂), ?_, ?_⟩
+  refine ⟨e₁, e₂, he₁, he₂, σ, hσ,
+    l2_opNorm_mul_le_one _ _ hC (norm_tagReorder_le_one e₁ e₂), ?_, ?_⟩
   · rw [Matrix.mul_assoc]
     exact (congrArg _ hG).trans hK
   · have hv : act (tagReorder e₁ e₂ :
