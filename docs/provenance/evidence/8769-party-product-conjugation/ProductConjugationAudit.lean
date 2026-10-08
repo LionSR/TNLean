@@ -1,0 +1,7 @@
+import TNLeanRelayMatrix.PartyProductConjugation
+set_option linter.hashCommand false
+namespace TNLean.PEPS.PairEffect
+#print axioms partyProductMatrix_conjTranspose
+#print axioms partyProductMatrix_conjugate
+#print axioms partialTraceRight_partyProduct_conjugate
+end TNLean.PEPS.PairEffect

@@ -1,0 +1,35 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "c327b911c",
+  "module_count": 1,
+  "public_export_count": 3,
+  "checked_source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/PartyProductConjugation.lean",
+  "checked_source_sha256": "48a1566c713c2262f53404a1791b256587cffe87fc4af80c84a4ae32e3f26605",
+  "production_source": "TNLean/PEPS/Approximation/PartyProductConjugation.lean",
+  "production_source_sha256": "c2e13743b4e322ba0f9822587767f25980945a090e68ebf83a8c62b3d5c3ac3a",
+  "artifact_sha256": "f5f38d90c989834d650549434aba38334d366c9365142ae60bd2a11d3e097ae0",
+  "strict_log": "strict.log.gz",
+  "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "all_public_audit_source": "ProductConjugationAudit.lean",
+  "all_public_audit_log": "all-public-axioms.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "1d0226aed26452f58650246527efd0589bb198cce3dd863f546bbf6b925aa29e",
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "prerequisites": [
+    "644a45a22d077083fedcf248618e51aff00a6cf8"
+  ]
+}
