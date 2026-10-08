@@ -11,6 +11,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.ColumnSelection
+import TNLean.PEPS.Approximation.CommonPairSources
+import TNLean.PEPS.Approximation.CommonPartyMaps
+import TNLean.PEPS.Approximation.CommonSourceGate
+import TNLean.PEPS.Approximation.CommonSourcePreparation
 import TNLean.PEPS.Approximation.CompletePartyMaps
 import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.Approximation.CorrectedPositionCost
@@ -42,6 +46,9 @@ import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
+import TNLean.PEPS.Approximation.FinitePairSources
+import TNLean.PEPS.Approximation.FiniteSourceGate
+import TNLean.PEPS.Approximation.FiniteSourcePreparation
 import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.HoleEncoder
@@ -53,6 +60,7 @@ import TNLean.PEPS.Approximation.PairSourceCombination
 import TNLean.PEPS.Approximation.PairSourceCompletion
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
+import TNLean.PEPS.Approximation.PairSourceOrdering
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGrouping
@@ -73,6 +81,7 @@ import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
 import TNLean.PEPS.Approximation.SourceApproximation
+import TNLean.PEPS.Approximation.SourcePairMaps
 import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction

@@ -1100,24 +1100,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{theorem}[Patch ratios for the sampled guides]
     \label{thm:peps_dyadic_sampled_ratio}
-    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.range_subset, TNLean.PEPS.Approximation.IsDisplacedReading.eq_on_ball, TNLean.PEPS.Approximation.IsRayConstant.comp_affine, TNLean.PEPS.Approximation.IsRayConstant.pointTreated, TNLean.PEPS.Approximation.HasLineWalls.pointTreated, TNLean.PEPS.Approximation.isChamberSampling_pointTreated, TNLean.PEPS.Approximation.isRayConstant_footprintTemplate, TNLean.PEPS.Approximation.exists_template_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.range_subset, TNLean.PEPS.Approximation.IsDisplacedReading.eq_on_ball, TNLean.PEPS.Approximation.IsRayConstant.comp_affine, TNLean.PEPS.Approximation.IsRayConstant.pointTreated, TNLean.PEPS.Approximation.HasLineWalls.pointTreated, TNLean.PEPS.Approximation.isChamberSampling_pointTreated, TNLean.PEPS.Approximation.isRayConstant_footprintTemplate, TNLean.PEPS.Approximation.IsLocallyInLines.preimage_affine, TNLean.PEPS.Approximation.HasLineWalls.comp_affine, TNLean.PEPS.Approximation.hasLineWalls_footprintTemplate, TNLean.PEPS.Approximation.HasLineWalls.eventually_eq_of_sameSide, TNLean.PEPS.Approximation.IsDisplacedReading.of_sameSide, TNLean.PEPS.Approximation.finite_wallNormals, TNLean.PEPS.Approximation.HasLineWalls.finite_genericReadings, TNLean.PEPS.Approximation.exists_template_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}
     \leanok
     \uses{thm:peps_dyadic_point_ratio, thm:peps_dyadic_block_ratio, lem:peps_dyadic_readings_exist, lem:peps_dyadic_chamber_sampling}
-    Fix a displacement $v$. The conclusions of
+    There is a ratio $\nu>0$, depending only on the fixed constants, such that for every
+    generic displacement $v$ the conclusions of
     Theorems~\ref{thm:peps_dyadic_point_ratio} and~\ref{thm:peps_dyadic_block_ratio}
-    hold, with a ratio $\nu>0$ depending on $v$ and on the fixed constants, for every
-    labelling that reads the guides concerned after $v$, with holes at its own true
-    vertices. For generic $v$ these are the source's sampled guides, by
+    hold for every labelling that reads the guides concerned after $v$, with holes at
+    its own true vertices. These are the source's sampled guides, by
     Lemma~\ref{lem:peps_dyadic_chamber_sampling}; the point-treated guides are also
     constant off finitely many lines with normals in $\mathcal N$ near every point, so
-    the same holds for them. The ratio is proved for each displacement, while the
-    source's ratio serves every generic displacement: the source chooses $\nu$ before
-    the information scale $D$ and the displacement only after all the guides, which
-    depend on $D$ (\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 73--77 and
-    559--563). Genericity does not depend on $L$, $D$, $n$ or $t$, so one generic
-    direction, such as $v=(1,1)$, may be fixed before every constant, and $\nu$ for it is
-    a fixed constant. This scope restriction is recorded
-    in~\cite{gap:openai26_dyadic_geometry_guide_properties}.
+    the same holds for them. As in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines
+    73--77 and 559--563, the ratio is chosen before the displacement, which is chosen
+    only after all the guides are specified.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1126,9 +1121,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     of the guide after $v$ agrees there with $u\mapsto\sigma(T'((u-c)/s))$ for the
     reading $T'$ of $T$ after $v$, since $(u+\varepsilon v-c)/s=(u-c)/s+(\varepsilon/s)v$.
     The templates of the point treatment and of the block guides are eventually constant
-    along rays, so they have readings after $v$. Apply the compactness argument of
-    Lemma~\ref{lem:peps_dyadic_footprint_uniform} to the finitely many readings of the
-    templates.
+    along rays, so they have readings after $v$. They are also constant off walls on
+    lines with normals in the finite set $\mathcal N$. Let $v$ and $w$ lie strictly on
+    the same side of each line through the origin with normal in $\mathcal N$. For a
+    point $p$ and small $\varepsilon>0$, the segment from $p+\varepsilon v$ to
+    $p+\varepsilon w$ stays near $p$ and avoids the walls that miss $p$; a wall through
+    $p$ with normal $N$ meets it only where $N\cdot((1-a)v+aw)=0$ for some
+    $a\in[0,1]$, which is impossible because $N\cdot v$ and $N\cdot w$ have the same
+    sign. So the template is locally constant along the segment, hence constant on it,
+    and its readings after $v$ and after $w$ agree. A template therefore has at most one
+    reading for each choice of sides of the finitely many wall directions, and only
+    finitely many readings after generic displacements. Apply the compactness argument
+    of Lemma~\ref{lem:peps_dyadic_footprint_uniform} to these finitely many readings of
+    the finitely many templates.
 \end{proof}
 
 \begin{lemma}[Trivial holes at the last level]

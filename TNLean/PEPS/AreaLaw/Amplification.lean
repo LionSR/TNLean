@@ -8,4 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Amplification
 
+import TNLean.PEPS.AreaLaw.Amplification.ChannelShellOscillation
+import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
 import TNLean.PEPS.AreaLaw.Amplification.RadiusScales

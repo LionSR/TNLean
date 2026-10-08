@@ -91,6 +91,7 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -193,6 +194,7 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -338,6 +340,7 @@ jobs:
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
+              - 'scripts/test_tenkz_canonical_pairs.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -653,6 +656,14 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
 
+      - name: Test partial-row entropy strictly
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateEntropy.lean
+
       - name: Test square-grid vector, regional and approximation transport
         timeout-minutes: 2
         run: >
@@ -668,6 +679,14 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/AreaLawVertexBoundaries.lean
+
+      - name: Test physical template boundaries strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateCutBoundary.lean
 
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
@@ -834,6 +853,14 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/OperatorClosurePowerSum.lean
 
+      - name: Test canonical fixed-point pairs
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CanonicalFixedPoint.lean
+
       - name: Test structure coefficients, cocycles, and boundary examples
         timeout-minutes: 5
         run: |
@@ -943,7 +970,7 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
 
-      - name: Test area-law graph interaction foundations
+      - name: Test area-law foundations and physical oscillations
         timeout-minutes: 2
         run: |
           set -e
@@ -953,6 +980,16 @@ jobs:
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
+          done
+          for file in scripts/spectator_site_expectation_regression.lean \
+              TNLeanTest/SiteOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannels.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannelsAxioms.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelShellOscillation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
           done
 
       - name: Check changed Lean compilation times
@@ -1425,6 +1462,10 @@ jobs:
       - name: Prune unused tenkz pictures
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/prune_tenkz_render_cache.py
+
+      - name: Test canonical fixed-point diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_canonical_pairs.py
 
       - name: Test tenkz blueprint sweep unit selection
         if: env.TEX_CHANGED == 'true'
