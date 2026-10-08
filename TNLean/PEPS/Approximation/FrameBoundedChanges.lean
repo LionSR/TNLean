@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FrameRegisters
+import TNLean.PEPS.Approximation.TwoSheetRegisters
 
 /-!
 # Births, deaths and exchanges as bounded changes
@@ -79,25 +79,6 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ �
 namespace Frame
 
 variable (F : Frame pos q Party)
-
-/-- **The registers of an encoded frame**: one register per tag, held by the tag owner, and one
-raw register `ℂ^q` per site, held by the raw owner.
-
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 13–20 and Definition 6.1 `def:frame`,
-lines 71–82. -/
-abbrev regs : PairEffect.Layout Party := layoutRegs q F.holes F.owner
-
-/-- The registers of a frame identified with the canonical coordinates `F.Layout` of its tags and
-raw sites (`05-frames.tex`, lines 94–96). -/
-abbrev regIso : Mem F.regs ≃ₗᵢ[ℂ] EuclideanSpace ℂ F.Layout := layoutIso F.holes F.owner
-
-theorem map_owner_regs : F.regs.map Reg.owner =
-    F.holes.map Hole.tagOwner ++ (sites ι).map F.owner := by
-  simp only [List.map_append, siteRegs, List.map_map]
-  congr 1
-  induction F.holes with
-  | nil => rfl
-  | cons h l ih => simp only [tagRegs, List.map_cons, ih]
 
 variable {T : Finset ι} {P Q : Party}
 

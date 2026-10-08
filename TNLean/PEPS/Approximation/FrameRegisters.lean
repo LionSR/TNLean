@@ -935,4 +935,35 @@ theorem layoutIso_place {T E : Finset ι} (l : List (Hole pos q Party)) (own own
 
 end FrameLayout
 
+section FrameRegs
+
+variable [Fintype ι] [DecidableEq ι]
+
+namespace Frame
+
+variable {pos : ι → ℝ × ℝ} (F : Frame pos q Party)
+
+/-- **The registers of an encoded frame**: one register per tag, held by the tag owner, and one
+raw register `ℂ^q` per site, held by the raw owner.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 13–20 and Definition 6.1 `def:frame`,
+lines 71–82. -/
+abbrev regs : PairEffect.Layout Party := layoutRegs q F.holes F.owner
+
+/-- The registers of a frame identified with the canonical coordinates `F.Layout` of its tags and
+raw sites (`05-frames.tex`, lines 94–96). -/
+abbrev regIso : Mem F.regs ≃ₗᵢ[ℂ] EuclideanSpace ℂ F.Layout := layoutIso F.holes F.owner
+
+theorem map_owner_regs : F.regs.map Reg.owner =
+    F.holes.map Hole.tagOwner ++ (sites ι).map F.owner := by
+  simp only [List.map_append, siteRegs, List.map_map]
+  congr 1
+  induction F.holes with
+  | nil => rfl
+  | cons h l ih => simp only [tagRegs, List.map_cons, ih]
+
+end Frame
+
+end FrameRegs
+
 end TNLean.PEPS.EncodedFrame

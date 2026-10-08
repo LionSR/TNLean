@@ -50,6 +50,7 @@ import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.TwoSheetExchange
+import TNLean.PEPS.Approximation.TwoSheetRegisters
 import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
