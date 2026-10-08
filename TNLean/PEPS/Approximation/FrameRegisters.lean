@@ -14,7 +14,7 @@ test
 
 noncomputable section
 
-open scoped InnerProductSpace TensorProduct
+open scoped InnerProductSpace TensorProduct Kronecker
 
 /-! ### Reorderings use no party and no pair source -/
 
@@ -758,6 +758,181 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
       fun x hx => (merge_of_mem_E h ab c ((mem_listE hall h x).mp hx)).symm]
   exact eval_ungroupWord own' hS hall ℓ₀ hA' hB' t (merge h ab c)
 
+/-- The matrix `1_E ⊗ M` on a sheet, in the coordinates `((t, e), u)` of `threeSplit T E`: the
+operator `M` on the configurations of `T` and `U = (T ∪ E)ᶜ`, the identity on those of `E`. -/
+def sheetPlace (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ M).submatrix
+    (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h)
+
+theorem sheetPlace_apply (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (c' c : ι → Fin q) :
+    sheetPlace h M c' c = (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) *
+      M ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x))
+        ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) := by
+  simp only [sheetPlace, Matrix.submatrix_apply, Function.comp_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, teuShuffle, Equiv.coe_fn_mk]
+  rfl
+
+theorem merge_eq_iff (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+    (c c' : ι → Fin q) : c' = merge h ab c ↔
+      ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) ∧
+        (fun x : E => c' x) = (fun x : E => c x) := by
+  constructor
+  · rintro rfl
+    refine ⟨Prod.ext (merge_restrict_T h ab c).symm (merge_restrict_U h ab c).symm, ?_⟩
+    funext x
+    exact merge_of_mem_E h ab c x.2
+  · rintro ⟨rfl, hE⟩
+    funext x
+    by_cases hT : x ∈ T
+    · rw [merge, threeSplit_symm_apply_of_mem_left h _ _ _ hT]
+    · by_cases hx : x ∈ E
+      · rw [merge, threeSplit_symm_apply_of_mem_right h _ _ _ hx]
+        exact congrFun hE ⟨x, hx⟩
+      · rw [merge, threeSplit_symm_apply_of_notMem h _ _ _ (by simp [hT, hx])]
+
+/-- The coordinates of the placed monomial: `∑_{ab} M_{ab, (c|_T, c|_U)} |τ, merge ab c⟩` is the
+column `(τ, c)` of `1_tags ⊗ (1_E ⊗ M)`. -/
+theorem sum_single_merge {κ : Type} [Fintype κ] [DecidableEq κ] (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (τ : κ) (c : ι → Fin q) :
+    ∑ ab, M ab ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) •
+        (EuclideanSpace.single (τ, merge h ab c) (1 : ℂ) : EuclideanSpace ℂ (κ × (ι → Fin q))) =
+      act ((1 : Matrix κ κ ℂ) ⊗ₖ sheetPlace h M) (EuclideanSpace.single (τ, c) (1 : ℂ)) := by
+  ext ⟨τ', c'⟩
+  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, WithLp.ofLp_sum, WithLp.ofLp_smul,
+    Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, sheetPlace_apply]
+  have key : ∀ ab, (Pi.single (τ, merge h ab c) (1 : ℂ) : κ × (ι → Fin q) → ℂ) (τ', c') =
+      if ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) then
+        (if τ' = τ then 1 else 0) *
+          (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) else 0 := by
+    intro ab
+    rw [Pi.single_apply]
+    simp only [Prod.mk.injEq, merge_eq_iff]
+    by_cases h₁ : τ' = τ <;>
+      by_cases h₂ : ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) <;>
+      by_cases h₃ : (fun x : E => c' x) = (fun x : E => c x) <;> simp [h₁, h₂, h₃]
+  simp_rw [key, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+  split_ifs <;> ring
+
 end Placement
+
+theorem act_eq_matL {m n : Type} [Fintype m] [Fintype n] [DecidableEq n] (A : Matrix m n ℂ)
+    (ψ : EuclideanSpace ℂ n) : act A ψ = matL A ψ :=
+  rfl
+
+/-! ### The registers of an encoded frame -/
+
+section FrameLayout
+
+variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ}
+
+variable (ι) in
+/-- The sites of the lattice, listed in a fixed order. The order only fixes the order of the
+tensor factors. -/
+def sites : List ι := (Finset.univ : Finset ι).toList
+
+theorem nodup_sites : (sites ι).Nodup := Finset.nodup_toList _
+
+theorem mem_sites (x : ι) : x ∈ sites ι := Finset.mem_toList.mpr (Finset.mem_univ x)
+
+attribute [irreducible] sites
+
+variable (ι) in
+/-- The positions of `sites ι` enumerate the sites. -/
+def sitesEquiv : Fin (sites ι).length ≃ ι :=
+  List.Nodup.getEquivOfForallMemList _ nodup_sites mem_sites
+
+variable (q) in
+/-- **The registers of a frame.** One register `ℂ^{Tag}` per hole of `l`, held by its tag owner,
+followed by one raw register `ℂ^q` per site, held by its owner `own`.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 13–20 (a sheet has one raw register `ℂ^q` at
+each site and a specified owner for each register) and Definition 6.1 `def:frame`, lines 71–82
+(a specified party holds each hole's tag). -/
+abbrev layoutRegs (l : List (Hole pos q Party)) (own : ι → Party) : Layout Party :=
+  tagRegs l ++ siteRegs q own (sites ι)
+
+/-- The basis vector `|τ⟩ ⊗ |c⟩` of the registers of a frame. -/
+def layoutVec (l : List (Hole pos q Party)) (own : ι → Party) (τ : TagSpace l)
+    (c : ι → Fin q) : Mem (layoutRegs q l own) :=
+  (appendIso _ _).symm (tagVec l τ ⊗ₜ siteVec own (sites ι) c)
+
+/-- **The registers of a frame in canonical coordinates.** The tensor product of the registers
+of a frame is identified with `ℂ^{TagSpace l × (ι → Fin q)}`, the space on which the encoding
+`K_F` and the operators of the frame act, by sending `|τ⟩ ⊗ ⊗_x |c x⟩` to `|τ, c⟩`
+(`layoutIso_layoutVec`).
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 15–19 (canonical raw reference vectors with
+sites indexed by position) and 94–96 (vectors are compared in their canonical site and sheet
+coordinates while the owners of their registers are specified separately). -/
+def layoutIso (l : List (Hole pos q Party)) (own : ι → Party) :
+    Mem (layoutRegs q l own) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (TagSpace l × (ι → Fin q)) :=
+  (appendIso _ _).trans ((((tagIso l).rTensor _).trans
+    ((groupIso own (sites ι) (sitesEquiv ι)).lTensor _)).trans (pairIso _ _))
+
+theorem layoutIso_layoutVec (l : List (Hole pos q Party)) (own : ι → Party) (τ : TagSpace l)
+    (c : ι → Fin q) :
+    layoutIso l own (layoutVec l own τ c) = EuclideanSpace.single (τ, c) (1 : ℂ) := by
+  change pairIso (TagSpace l) (ι → Fin q) ((groupIso own (sites ι) (sitesEquiv ι)).lTensor _
+    ((tagIso l).rTensor _ (appendIso (tagRegs l) (siteRegs q own (sites ι))
+      ((appendIso (tagRegs l) (siteRegs q own (sites ι))).symm
+        (tagVec l τ ⊗ₜ siteVec own (sites ι) c))))) = _
+  rw [LinearIsometryEquiv.apply_symm_apply, iso_rTensor_tmul, iso_lTensor_tmul, tagIso_tagVec,
+    groupIso_siteVec own _ _ id (fun _ => rfl) c]
+  exact pairIso_single_tmul_single τ c
+
+theorem layoutIso_symm_single (l : List (Hole pos q Party)) (own : ι → Party) (τ : TagSpace l)
+    (c : ι → Fin q) :
+    (layoutIso l own).symm (EuclideanSpace.single (τ, c) (1 : ℂ)) = layoutVec l own τ c := by
+  rw [LinearIsometryEquiv.symm_apply_eq, layoutIso_layoutVec]
+
+/-- **A monomial on two grouped regions, placed on the registers of a frame.** If `f` acts on a
+register `ℂ^{T → Fin q}` and a register `ℂ^{U → Fin q}`, `U = (T ∪ E)ᶜ`, in front of the tag
+registers and the raw registers of `E` as `M ⊗ 1`, then grouping the raw registers of `T` and
+`U` at their owners before, applying `f`, and ungrouping at their owners after acts on the
+registers of the frame, in canonical coordinates, as `1_tags ⊗ (1_E ⊗ M)`. -/
+theorem layoutIso_place {T E : Finset ι} (l : List (Hole pos q Party)) (own own' : ι → Party)
+    (h : Disjoint T E) {pA pB pA' pB' : Party}
+    (hA : ∀ x ∈ T, own x = pA) (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB)
+    (hA' : ∀ x ∈ T, own' x = pA') (hB' : ∀ x ∈ (T ∪ E)ᶜ, own' x = pB')
+    (hE : ∀ x ∈ E, own x = own' x)
+    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+        (tagRegs l ++ siteRegs q own (listE (sites ι) T E))) →L[ℂ]
+      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+        (tagRegs l ++ siteRegs q own (listE (sites ι) T E))))
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (hf : ∀ z, pairHeadIso _ (f z) = (matL M).rTensor _ (pairHeadIso _ z))
+    (z : Mem (layoutRegs q l own)) :
+    layoutIso l own' ((ungroupWord own' nodup_sites mem_sites (tagRegs l) hA' hB').eval
+        ((relabelRest own own' mem_sites h hE (tagRegs l) _ _).eval
+          (f ((groupWord own nodup_sites mem_sites (tagRegs l) hA hB).eval z)))) =
+      act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ sheetPlace h M) (layoutIso l own z) := by
+  obtain ⟨y, rfl⟩ : ∃ y, z = (layoutIso l own).symm y := ⟨layoutIso l own z, by simp⟩
+  rw [LinearIsometryEquiv.apply_symm_apply, act_eq_matL]
+  have hy : (layoutIso l own).symm y =
+      ∑ i, y i • layoutVec l own i.1 i.2 := by
+    conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
+    rw [map_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [LinearIsometryEquiv.map_smul, EuclideanSpace.basisFun_apply, EuclideanSpace.basisFun_repr,
+      layoutIso_symm_single]
+  conv_rhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
+  rw [hy]
+  simp only [map_sum, map_smul]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  obtain ⟨τ, c⟩ := i
+  rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply, ← act_eq_matL,
+    ← sum_single_merge, layoutVec,
+    eval_place own own' nodup_sites mem_sites h (tagRegs l) hA hB hA' hB' hE f M hf, map_sum]
+  congr 1
+  refine Finset.sum_congr rfl fun ab _ => ?_
+  rw [LinearIsometryEquiv.map_smul, ← layoutVec, layoutIso_layoutVec]
+
+end FrameLayout
 
 end TNLean.PEPS.EncodedFrame
