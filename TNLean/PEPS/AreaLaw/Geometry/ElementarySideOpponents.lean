@@ -1,4 +1,22 @@
 /-
+Original formalization from the cited manuscript;
+no upstream Lean proof text reused.
+Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
+September 24, 2026.
+Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
+Manuscript path:
+preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+build/sections/10-geometry.tex
+
+Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dummy_open_elementary_side
+Downstream declaration:
+TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementarySide_subset_dummy_of_mem_openSegment
+Source labels: prop:two-families
+Source: Section 11, lines 154–177 and 299–310.
+
+OpenAI Codex (GPT-6) assistance was used in this formalization.
+-/
+/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
@@ -97,26 +115,27 @@ private theorem rectangle_normal_boundary {p q a b : ℝ × ℝ} {ξ η : ℝ}
 private def rectangleCorner (a b : ℝ × ℝ) (ε : Fin 2 × Fin 2) : ℝ × ℝ :=
   (if ε.1.val = 0 then a.1 else b.1, if ε.2.val = 0 then a.2 else b.2)
 
-private theorem rectangle_vertical_containment {p q a b : ℝ × ℝ} {ξ l u : ℝ}
+private theorem rectangle_vertical_containment {p q a b : ℝ × ℝ} {ξ η l u : ℝ}
     (hp : p.1 < q.1 ∧ p.2 < q.2) (ha : a.1 < b.1 ∧ a.2 < b.2)
-    (hξp : ξ ∈ Set.Icc p.1 q.1) (hl : p.2 ≤ l) (hu : u ≤ q.2) (hlu : l < u)
-    (hx : (ξ, (l + u) / 2) ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2)
+    (hξp : ξ ∈ Set.Icc p.1 q.1) (hl : p.2 ≤ l) (hu : u ≤ q.2)
+    (hη : η ∈ Set.Ioo l u)
+    (hx : (ξ, η) ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2)
     (hdisj : Disjoint (Set.Ioo p.1 q.1 ×ˢ Set.Ioo p.2 q.2)
       (Set.Ioo a.1 b.1 ×ˢ Set.Ioo a.2 b.2))
     (hcorners : ∀ ε : Fin 2 × Fin 2,
       rectangleCorner a b ε ∉ {ξ} ×ˢ Set.Ioo l u) :
     {ξ} ×ˢ Set.Icc l u ⊆ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2 := by
-  have hηp : (l + u) / 2 ∈ Set.Ioo p.2 q.2 := by constructor <;> linarith
+  have hηp : η ∈ Set.Ioo p.2 q.2 := ⟨hl.trans_lt hη.1, hη.2.trans_le hu⟩
   have hξ := rectangle_normal_boundary hp ha hξp hηp hx.1 hx.2 hdisj
   have hlo : a.2 ≤ l := by
     by_contra! h
-    have hy : a.2 ∈ Set.Ioo l u := ⟨h, by linarith [hx.2.1]⟩
+    have hy : a.2 ∈ Set.Ioo l u := ⟨h, lt_of_le_of_lt hx.2.1 hη.2⟩
     rcases hξ with rfl | rfl
     · exact hcorners (0, 0) (by simpa [rectangleCorner] using hy)
     · exact hcorners (1, 0) (by simpa [rectangleCorner] using hy)
   have hhi : u ≤ b.2 := by
     by_contra! h
-    have hy : b.2 ∈ Set.Ioo l u := ⟨by linarith [hx.2.2], h⟩
+    have hy : b.2 ∈ Set.Ioo l u := ⟨lt_of_lt_of_le hη.1 hx.2.2, h⟩
     rcases hξ with rfl | rfl
     · exact hcorners (0, 1) (by simpa [rectangleCorner] using hy)
     · exact hcorners (1, 1) (by simpa [rectangleCorner] using hy)
@@ -129,12 +148,13 @@ private theorem midpoint_coordinates (u v : ℝ × ℝ) :
     midpoint ℝ u v = ((u.1 + v.1) / 2, (u.2 + v.2) / 2) := by
   apply Prod.ext <;> norm_num [midpoint_eq_smul_add, smul_eq_mul] <;> ring
 
-private theorem rectangle_vertical_segment {p q a b u v : ℝ × ℝ}
+private theorem rectangle_vertical_segment {p q a b u v x : ℝ × ℝ}
     (hp : p.1 < q.1 ∧ p.2 < q.2) (ha : a.1 < b.1 ∧ a.2 < b.2)
     (hu : u ∈ Set.Icc p.1 q.1 ×ˢ Set.Icc p.2 q.2)
     (hv : v ∈ Set.Icc p.1 q.1 ×ˢ Set.Icc p.2 q.2)
     (hne : u ≠ v) (haxis : u.1 = v.1)
-    (hx : midpoint ℝ u v ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2)
+    (hxS : x ∈ openSegment ℝ u v)
+    (hx : x ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2)
     (hdisj : Disjoint (Set.Ioo p.1 q.1 ×ˢ Set.Ioo p.2 q.2)
       (Set.Ioo a.1 b.1 ×ˢ Set.Ioo a.2 b.2))
     (hcorners : ∀ ε : Fin 2 × Fin 2, rectangleCorner a b ε ∈ segment ℝ u v →
@@ -144,12 +164,16 @@ private theorem rectangle_vertical_segment {p q a b u v : ℝ × ℝ}
   have hS : segment ℝ u v = {u.1} ×ˢ Set.Icc (min u.2 v.2) (max u.2 v.2) := by
     change segment ℝ (u.1, u.2) (v.1, v.2) = _
     rw [← haxis, ← Prod.image_mk_segment_right, segment_eq_Icc', ← Set.singleton_prod]
-  have hm : (u.1 + v.1) / 2 = u.1 := by rw [← haxis]; ring
-  rw [midpoint_coordinates, hm] at hx
+  have hxcoord := Prod.openSegment_subset (𝕜 := ℝ) u v hxS
+  have hη : x.2 ∈ Set.Ioo (min u.2 v.2) (max u.2 v.2) := by
+    simpa only [openSegment_eq_Ioo' hneq] using hxcoord.2
+  have hξ : x.1 = u.1 := by
+    simpa only [← haxis, openSegment_same, Set.mem_singleton_iff] using hxcoord.1
+  have hx' : (u.1, x.2) ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2 := by
+    exact ⟨by simpa only [hξ] using hx.1, hx.2⟩
   rw [hS]
   apply rectangle_vertical_containment hp ha hu.1 (le_min hu.2.1 hv.2.1)
-    (max_le hu.2.2 hv.2.2) (min_lt_max.mpr hneq)
-    (by simpa only [min_add_max] using hx) hdisj
+    (max_le hu.2.2 hv.2.2) hη hx' hdisj
   intro ε hε
   have hmem : rectangleCorner a b ε ∈ segment ℝ u v := by
     rw [hS]
@@ -169,19 +193,20 @@ private theorem swap_mem_segment {u v x : ℝ × ℝ} (hx : x ∈ segment ℝ u 
   exact (image_segment ℝ (AffineEquiv.prodComm ℝ ℝ ℝ).toAffineMap u v) ▸
     Set.mem_image_of_mem _ hx
 
-private theorem rectangle_axis_segment {p q a b u v : ℝ × ℝ}
+private theorem rectangle_axis_segment {p q a b u v x : ℝ × ℝ}
     (hp : p.1 < q.1 ∧ p.2 < q.2) (ha : a.1 < b.1 ∧ a.2 < b.2)
     (hu : u ∈ Set.Icc p.1 q.1 ×ˢ Set.Icc p.2 q.2)
     (hv : v ∈ Set.Icc p.1 q.1 ×ˢ Set.Icc p.2 q.2)
     (hne : u ≠ v) (haxis : u.1 = v.1 ∨ u.2 = v.2)
-    (hx : midpoint ℝ u v ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2)
+    (hxS : x ∈ openSegment ℝ u v)
+    (hx : x ∈ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2)
     (hdisj : Disjoint (Set.Ioo p.1 q.1 ×ˢ Set.Ioo p.2 q.2)
       (Set.Ioo a.1 b.1 ×ˢ Set.Ioo a.2 b.2))
     (hcorners : ∀ ε : Fin 2 × Fin 2, rectangleCorner a b ε ∈ segment ℝ u v →
       rectangleCorner a b ε = u ∨ rectangleCorner a b ε = v) :
     segment ℝ u v ⊆ Set.Icc a.1 b.1 ×ˢ Set.Icc a.2 b.2 := by
   rcases haxis with haxis | haxis
-  · exact rectangle_vertical_segment hp ha hu hv hne haxis hx hdisj hcorners
+  · exact rectangle_vertical_segment hp ha hu hv hne haxis hxS hx hdisj hcorners
   · have hd : Disjoint (Set.Ioo p.2 q.2 ×ˢ Set.Ioo p.1 q.1)
         (Set.Ioo a.2 b.2 ×ˢ Set.Ioo a.1 b.1) := by
       refine Set.disjoint_left.mpr ?_
@@ -189,10 +214,9 @@ private theorem rectangle_axis_segment {p q a b u v : ℝ × ℝ}
       exact Set.disjoint_left.mp hdisj
         (show x.swap ∈ _ from ⟨hxp.2, hxp.1⟩)
         (show x.swap ∈ _ from ⟨hxa.2, hxa.1⟩)
-    have hxm : midpoint ℝ u.swap v.swap ∈
-        Set.Icc a.2 b.2 ×ˢ Set.Icc a.1 b.1 := by
-      rw [midpoint_coordinates] at hx ⊢
-      exact ⟨hx.2, hx.1⟩
+    have hxS' : x.swap ∈ openSegment ℝ u.swap v.swap :=
+      (image_openSegment ℝ (AffineEquiv.prodComm ℝ ℝ ℝ).toAffineMap u v) ▸
+        Set.mem_image_of_mem _ hxS
     have hc : ∀ ε : Fin 2 × Fin 2,
         rectangleCorner a.swap b.swap ε ∈ segment ℝ u.swap v.swap →
         rectangleCorner a.swap b.swap ε = u.swap ∨
@@ -206,7 +230,7 @@ private theorem rectangle_axis_segment {p q a b u v : ℝ × ℝ}
     have hsub := rectangle_vertical_segment (p := p.swap) (q := q.swap)
       (a := a.swap) (b := b.swap) (u := u.swap) (v := v.swap)
       ⟨hp.2, hp.1⟩ ⟨ha.2, ha.1⟩ ⟨hu.2, hu.1⟩ ⟨hv.2, hv.1⟩
-      (fun h ↦ hne (Prod.swap_injective h)) haxis hxm hd hc
+      (fun h ↦ hne (Prod.swap_injective h)) haxis hxS' ⟨hx.2, hx.1⟩ hd hc
     intro x hxS
     have hr := hsub (swap_mem_segment hxS)
     exact ⟨hr.2, hr.1⟩
@@ -306,9 +330,10 @@ private theorem elementary_endpoints_closed (o : ℝ × ℝ) (ℓ : ℕ) (z : �
 
 private theorem cell_contains_elementary_segment (o : ℝ × ℝ) (ℓ j : ℕ)
     (z w : ℤ × ℤ) (split : Fin 4 → Bool) (i : CellFanSlot split)
+    (x : ℝ × ℝ)
     (hd : Disjoint (dyadicCell o ℓ z) (dyadicCell o j w))
-    (hx : midpoint ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) ∈
-      closure (dyadicCell o j w))
+    (hxS : x ∈ openSegment ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i))
+    (hx : x ∈ closure (dyadicCell o j w))
     (hcorners : ∀ ε : Fin 2 × Fin 2, dyadicCellCorner o j w ε ∈ segment ℝ
         (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) →
       dyadicCellCorner o j w ε = cellFanStart o ℓ z split i ∨
@@ -322,7 +347,7 @@ private theorem cell_contains_elementary_segment (o : ℝ × ℝ) (ℓ j : ℕ)
   rw [(cell_rectangle o ℓ z).2] at ha hb
   rw [(cell_rectangle o j w).2] at hx ⊢
   apply rectangle_axis_segment (cell_corner_bounds o ℓ z) (cell_corner_bounds o j w)
-    ha hb hne (haxis.imp And.left And.left) hx hdi
+    ha hb hne (haxis.imp And.left And.left) hxS hx hdi
   intro ε hε
   rw [rectangleCorner_eq_dyadicCellCorner] at hε ⊢
   exact hcorners ε hε
@@ -421,7 +446,8 @@ theorem exists_elementarySide_opponent (o : ℝ × ℝ) (k₀ k : ℕ)
     have hd := (dyadicNeighborhood_disjoint_later_layer o Z C k₀ k hk₀).symm.mono
       href hsub
     have hseg := cell_contains_elementary_segment o (fineScaleIndex k) k₀ z w
-      split i hd hxw (fun ε hε ↦ dyadicNeighborhood_corner_on_elementarySide
+      split i x hd (midpoint_mem_openSegment (𝕜 := ℝ) _ _) hxw
+      (fun ε hε ↦ dyadicNeighborhood_corner_on_elementarySide
         o k₀ k Z C z w split i ε hC hk₀ hz hw hε)
     exact Or.inl (hseg.trans (closure_mono hsub))
   · obtain ⟨p, hp, hxp⟩ := Set.mem_iUnion₂.mp hxF
@@ -433,7 +459,36 @@ theorem exists_elementarySide_opponent (o : ℝ × ℝ) (k₀ k : ℕ)
     have hd := fineLayer_cells_disjoint o k h Z C z w hz hw hne.symm
     refine Or.inr ⟨h, hh₀, w, hw, hne.symm, ?_⟩
     exact cell_contains_elementary_segment o (fineScaleIndex k) (fineScaleIndex h)
-      z w split i hd hxp (fun ε hε ↦ fineLayer_corner_on_elementarySide
+      z w split i x hd (midpoint_mem_openSegment (𝕜 := ℝ) _ _) hxp
+      (fun ε hε ↦ fineLayer_corner_on_elementarySide
         o k₀ k h Z C z w i ε hC hk hz hh₀ hw hε)
+
+/-- An open elementary-side contact with the actual dummy closure extends to
+the whole segment. Arbitrary optional midpoint subdivisions are permitted.
+Source: area-law Section 11, `prop:two-families`, lines 154–177 and 299–310. -/
+theorem fineLayer_elementarySide_subset_dummy_of_mem_openSegment
+    (o : ℝ × ℝ) (k₀ k : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (z : ℤ × ℤ) (split : Fin 4 → Bool) (i : CellFanSlot split)
+    (x : ℝ × ℝ) (hC : 2 ≤ C) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hx : x ∈ openSegment ℝ
+      (cellFanStart o (fineScaleIndex k) z split i)
+      (cellFanEnd o (fineScaleIndex k) z split i))
+    (hxN : x ∈ closure (dyadicNeighborhood o k₀ Z C)) :
+    segment ℝ (cellFanStart o (fineScaleIndex k) z split i)
+      (cellFanEnd o (fineScaleIndex k) z split i) ⊆
+        closure (dyadicNeighborhood o k₀ Z C) := by
+  rw [dyadicNeighborhood, Finset.closure_biUnion] at hxN
+  obtain ⟨w, hw, hxw⟩ := Set.mem_iUnion₂.mp hxN
+  have hsub : dyadicCell o k₀ w ⊆ dyadicNeighborhood o k₀ Z C :=
+    fun y hy ↦ Set.mem_iUnion₂.mpr ⟨w, hw, hy⟩
+  have href := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k
+    (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz
+  have hd := (dyadicNeighborhood_disjoint_later_layer o Z C k₀ k hk₀).symm.mono
+    href hsub
+  have hseg := cell_contains_elementary_segment o (fineScaleIndex k) k₀ z w
+    split i x hd hx hxw (fun ε hε ↦ dyadicNeighborhood_corner_on_elementarySide
+      o k₀ k Z C z w split i ε hC hk₀ hz hw hε)
+  exact hseg.trans (closure_mono hsub)
 
 end TNLean.PEPS.AreaLaw.Geometry

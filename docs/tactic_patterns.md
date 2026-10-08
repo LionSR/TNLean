@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Connectivity from two run-support memberships — promoted (2026-10-08)
+
+- **Pattern:** Convert membership of two fan slots in one run's support into
+  equality of their connected-component identifiers before applying colour
+  constancy.
+- **Seen:** Three transfers in `BeltRunInterfaces.lean` and one in
+  `DummyRunInterfaces.lean`.
+- **Abstraction:** Mathlib already provides
+  `SimpleGraph.ConnectedComponent.reachable_of_mem_supp` and
+  `SimpleGraph.ConnectedComponent.eq`. Their composition replaces all four
+  manual pairs of support-membership equalities. No additional theorem or
+  tactic is needed.
+- **Notes:** The two existing belt-interface statements are unchanged. Both
+  receive fresh whole-file verification with the dummy-interface contribution.
+
 ### Boundary geometry of an elementary side — promoted (2026-10-07)
 
 - **Pattern:** Derive nondegeneracy and the constant square-boundary coordinate
@@ -5686,3 +5701,15 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The present contact proof reuses the promoted elementary-side
   geometry and whole-side coordinate identities. It introduces no new
   center-and-radius coordinate table.
+
+### Infinitude of a nondegenerate real segment — candidate (2026-10-08)
+
+- **Pattern:** Express a real segment as the affine image of $[0,1]$;
+  distinct endpoints make the affine map injective and preserve infinitude.
+- **Seen:** The private `segment_infinite` in `BeltRunInterfaces.lean` and
+  the local infinitude argument in `DummyRunInterfaces.lean`.
+- **Abstraction:** Two instances in two files are below the promotion
+  threshold. A third consumer should first search Mathlib for a direct
+  infinitude lemma, then share the minimal geometric consequence if needed.
+- **Notes:** The interface proofs require an actual nondegenerate segment;
+  two isolated points of a disconnected intersection are insufficient.

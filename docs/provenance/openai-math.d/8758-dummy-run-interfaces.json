@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dummy_open_elementary_side",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ElementarySideOpponents.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementarySide_subset_dummy_of_mem_openSegment",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an actual reference fine cell at layer k at least k0, width C at least two and an arbitrary optional midpoint subdivision, an interior point of an elementary side in the actual dummy closure implies containment of the whole elementary segment in that closure. No late-layer, nonempty-endpoint, actual-mask, sparse-shift, contact certificate or selected opponent premise is imposed. The actual origin, signed cell indices and finite endpoint set are arbitrary. The existing private rectangle continuation is generalized rather than copied; the two retained public signatures are unchanged.",
+        "Section 11, prop:two-families, lines 154\u2013177 and 299\u2013310. The exact released whole-file package-option check passed without diagnostics in 18.49 seconds wall, 5.84 seconds user and 7.51 seconds system time, at SHA-256 b0c9d65526a8591745f79ff3c98861ac7aff48c3d3c299baae3a0a43a63f5b8c. Independent complete mathematical review approves the released statements and proofs. Completed parent draft #8901 at d6f8fca2f3420463d833fe2b21918edf64a6c677, with verified proof 3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a, is publicly handed off at #8758 comment 6049567158 and #8733 comment 6049567419. Immutable capture measures all 286 records in 23 ledgers and all 136 recursive historical evidence files. The public dummy scope #8758 comment 6049462072 adds exactly three original declarations; the proof-only Mathlib component-reuse clarification #8758 comment 6049602171 requires fresh whole-file verification of exactly four existing rows. Every other 282 parent row and all historical evidence remain unchanged. Source freeze and canonical verification remain pending. Global region and label assembly, local sectors, isolated stars, recursive repairs, the full two-family proposition and both headline PEPS/area-law theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dummy_fan_polygon_interface",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyRunInterfaces.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_dummy_eq",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an actual fine cell at layer k at least k0 and every optional midpoint subdivision, its closed fan triangle meets the closed dummy neighborhood exactly through its elementary base. The neighborhood width is arbitrary, with no late-layer, C-at-least-two, nonempty-domain, positive-contact or assigned-label premise. Empty and singleton contacts are included. Existing actual layer disjointness, whole-side coordinates and the triangle/side equality are reused.",
+        "Section 11, prop:two-families, lines 154\u2013177 and 299\u2013323. The exact released whole-file package-option check passed without diagnostics in 3.42 seconds wall, 1.80 seconds user and 1.84 seconds system time, at SHA-256 04636a8f7ebf5701884ecf3136e97f69d1254a7b583e584c61f06baba5d95847. Independent complete mathematical review approves the released statements and proofs. Completed parent draft #8901 at d6f8fca2f3420463d833fe2b21918edf64a6c677, with verified proof 3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a, is publicly handed off at #8758 comment 6049567158 and #8733 comment 6049567419. Immutable capture measures all 286 records in 23 ledgers and all 136 recursive historical evidence files. The public dummy scope #8758 comment 6049462072 adds exactly three original declarations; the proof-only Mathlib component-reuse clarification #8758 comment 6049602171 requires fresh whole-file verification of exactly four existing rows. Every other 282 parent row and all historical evidence remain unchanged. Source freeze and canonical verification remain pending. Global region and label assembly, local sectors, isolated stars, recursive repairs, the full two-family proposition and both headline PEPS/area-law theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dummy_belt_run_interface",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/DummyRunInterfaces.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_dummy_interface",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an actual belt run at layer k at least k0, width C at least two, k0 at least 50000000, and arbitrary valid dependent residue functions, a closed segment with distinct endpoints shared with the actual dummy closure forces every constituent triangle to have the opposite dummy parity and differ from that parity. A shared nondegenerate segment is a premise; a bare two-point intersection of disconnected regions is not substituted for it. Actual masks, colors and connected components are reused, with no sparse-shift, finite-support, supplied whole-side containment, opposing tag or assigned-label certificate.",
+        "Section 11, prop:two-families, lines 172\u2013174 and 299\u2013323. The exact released whole-file package-option check passed without diagnostics in 3.42 seconds wall, 1.80 seconds user and 1.84 seconds system time, at SHA-256 04636a8f7ebf5701884ecf3136e97f69d1254a7b583e584c61f06baba5d95847. Independent complete mathematical review approves the released statements and proofs. Completed parent draft #8901 at d6f8fca2f3420463d833fe2b21918edf64a6c677, with verified proof 3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a, is publicly handed off at #8758 comment 6049567158 and #8733 comment 6049567419. Immutable capture measures all 286 records in 23 ledgers and all 136 recursive historical evidence files. The public dummy scope #8758 comment 6049462072 adds exactly three original declarations; the proof-only Mathlib component-reuse clarification #8758 comment 6049602171 requires fresh whole-file verification of exactly four existing rows. Every other 282 parent row and all historical evidence remain unchanged. Source freeze and canonical verification remain pending. Global region and label assembly, local sectors, isolated stars, recursive repairs, the full two-family proposition and both headline PEPS/area-law theorems remain separate obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

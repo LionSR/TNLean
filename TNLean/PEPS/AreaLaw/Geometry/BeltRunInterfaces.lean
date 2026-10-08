@@ -145,8 +145,7 @@ theorem beltCellFanRun_primary_interface
   have hsame := cellFanRun_color_eq o (fineScaleIndex k) z
     (fineLayerSplitMask o k₀ k Z C z)
     (beltCellFanColor o k₀ Z C a b k z hC h₀ hk₀ hz) j i
-    (((SimpleGraph.ConnectedComponent.mem_supp_iff R j).mp hj).trans
-      ((SimpleGraph.ConnectedComponent.mem_supp_iff R i).mp hi).symm)
+    (SimpleGraph.ConnectedComponent.eq.mpr (R.reachable_of_mem_supp hj hi))
   exact ⟨hsame.trans hlocal.2.2.1, hsame.symm ▸ hlocal.2.2.2⟩
 
 /-- A shared nondegenerate segment between actual runs in distinct indexed belt
@@ -221,13 +220,11 @@ theorem beltCellFanRuns_interface_colors_ne
   have hsameR := cellFanRun_color_eq o (fineScaleIndex k) z
     (fineLayerSplitMask o k₀ k Z C z)
     (beltCellFanColor o k₀ Z C a b k z hC h₀ hk₀ hz) i' i
-    (((SimpleGraph.ConnectedComponent.mem_supp_iff R i').mp hi').trans
-      ((SimpleGraph.ConnectedComponent.mem_supp_iff R i).mp hi).symm)
+    (SimpleGraph.ConnectedComponent.eq.mpr (R.reachable_of_mem_supp hi' hi))
   have hsameT := cellFanRun_color_eq o (fineScaleIndex h) w
     (fineLayerSplitMask o k₀ h Z C w)
     (beltCellFanColor o k₀ Z C a b h w hC h₀ hh₀ hw) j' j
-    (((SimpleGraph.ConnectedComponent.mem_supp_iff T j').mp hj').trans
-      ((SimpleGraph.ConnectedComponent.mem_supp_iff T j).mp hj).symm)
+    (SimpleGraph.ConnectedComponent.eq.mpr (T.reachable_of_mem_supp hj' hj))
   simpa only [hsameR, hsameT] using hcolors
 
 end TNLean.PEPS.AreaLaw.Geometry
