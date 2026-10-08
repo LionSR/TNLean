@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
 # Gapped ground vectors of a finite-dimensional Hamiltonian
@@ -36,7 +37,7 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 def IsGappedGroundState (H : Matrix n n ℂ) (E₀ : ℝ) (Ω : EuclideanSpace ℂ n) (Δ : ℝ) :
     Prop :=
   ‖Ω‖ = 1 ∧ Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) H Ω = (E₀ : ℂ) • Ω ∧
-    (H - (E₀ : ℂ) • 1 - (Δ : ℂ) •
-      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef
+    Matrix.PosSemidef (H - (E₀ : ℂ) • (1 : Matrix n n ℂ) - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x))))
 
 end Matrix
