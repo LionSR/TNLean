@@ -20,7 +20,7 @@ approximation conclusions are not part of these data.
 party. The scalar-absorption step of the source proof places scalar factors in
 an existing local tensor. For zero parties the empty-node network has value one,
 whereas an empty-participant gate can change the scalar output. This convention
-is recorded in `docs/paper-gaps/poly_peps_nonempty_parties.tex`. The general
+is recorded in `docs/paper-gaps/polypeps_nonempty_parties.tex`. The general
 circuit type and its empty-participant gates remain unrestricted.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–30,
