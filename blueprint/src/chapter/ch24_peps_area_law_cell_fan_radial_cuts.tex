@@ -8,7 +8,7 @@ its two midpoint halves. Orient the perimeter counterclockwise, and
 orient each chosen base accordingly. Let $\mathcal E$ index the resulting
 ordered bases $[a_i,b_i]$, and put
 \begin{align}
-    P_i & =\operatorname{conv}\{c,a_i,b_i\}, &
+    P_i & =\operatorname{conv}\{c,a_i,b_i\}, \\
     R_i & =[c,b_i].
 \end{align}
 These are the triangles and radial segments of the elementary fan in
@@ -21,13 +21,11 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
 % build/sections/10-geometry.tex.
-% The radial-incidence, affine-basis and radial-deletion auxiliaries have
-% declaration references.
-% Completion markers await ordinary-module and blueprint verification.
 
 \begin{theorem}[Noncentral radial incidence]
     \label{thm:area_law_fan_noncentral_radial_incidence}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_mem_iff_of_mem_radial}
+    \leanok
     \uses{def:area_law_cell_fan}
     For $i,t\in\mathcal E$ and $x\in R_t$ with $x\ne c$,
     \begin{align}
@@ -36,7 +34,7 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
         \label{eq:fan_radial_incidence}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_fan_triangle_contact,
         thm:area_law_cell_fan_end_same_ray}
     The segment $R_t$ is contained in $P_t$ by convexity. If $t=i$,
@@ -48,7 +46,8 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
     between distinct fan triangles therefore gives either $b_t=a_i$,
     as required, or
     \begin{align}
-        b_i & =a_t, & P_t\cap P_i & =R_i.
+        b_i         & =a_t, \\
+        P_t\cap P_i & =R_i.
     \end{align}
     In the second case $x\in R_t\cap R_i$ and $x\ne c$. Thus there
     are $u,v>0$ with
@@ -63,11 +62,12 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
 \begin{theorem}[Affine basis of an elementary fan triangle]
     \label{thm:area_law_fan_triangle_affine_basis}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_exists_affineBasis}
+    \leanok
     \uses{def:area_law_cell_fan}
     For every $i\in\mathcal E$, the ordered triple $(c,a_i,b_i)$
     is an affine basis of $\R^2$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_cell_fan_regularity}
     The triangle $P_i$ has nonempty interior. Its affine span is
     therefore the whole plane. The vector space parallel to that
@@ -78,10 +78,11 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
 \begin{theorem}[Convexity after removal of a radial]
     \label{thm:area_law_fan_radial_deletion_convex}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radial_convex}
+    \leanok
     \uses{def:area_law_cell_fan}
     For every $i,t\in\mathcal E$, the set $P_i\setminus R_t$ is convex.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_fan_noncentral_radial_incidence,
         thm:area_law_fan_triangle_affine_basis}
     Every $R_t$ contains $c$. Applying~(\ref{eq:fan_radial_incidence})
@@ -120,16 +121,13 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
 \begin{theorem}[Convexity after removal of any family of radials]
     \label{thm:area_law_fan_radial_union_deletion_convex}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radials_convex}
+    \leanok
     \uses{def:area_law_cell_fan}
     For every $i\in\mathcal E$ and every subset $A\subseteq\mathcal E$,
-    the set
-    \begin{align}
-        P_i\setminus\bigcup_{t\in A}R_t
-        \label{eq:fan_radial_union_deletion}
-    \end{align}
-    is convex. The set $A$ may be empty.
+    the set $P_i\setminus\bigcup_{t\in A}R_t$ is convex.
+    The set $A$ may be empty.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_fan_radial_deletion_convex}
     By the preceding theorem, $P_i\setminus R_t$ is convex for every
     $t\in\mathcal E$. Moreover,
