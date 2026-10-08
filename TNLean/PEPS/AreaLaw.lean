@@ -28,6 +28,7 @@ import TNLean.PEPS.AreaLaw.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
+import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius
