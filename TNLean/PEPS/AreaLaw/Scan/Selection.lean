@@ -95,11 +95,11 @@ inequality at `k` yields a charge round and a common `p_k ∈ [ε/2, ε]` with
 round or parameter (lines 393–395, 529–532). -/
 theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C₁ C_T : ℝ) :
     ∃ Cδ : ℝ, 0 ≤ Cδ ∧ ∀ᶠ n in atTop, ScaleFacts X n C₁ → ∀ S : ScanData X κ n,
-      S.terminalBound ≤ C_T * X.W * (n : ℝ) ^ (1 + X.e) →
+      S.terminalBound ≤ C_T * S.W * (n : ℝ) ^ (1 + X.e) →
       ∃ ρ : ℕ → ℝ, (∀ k, 0 ≤ ρ k) ∧ Tendsto ρ atTop (𝓝 0) ∧
         ∀ k, 1 ≤ k → S.IntegratedChargeBound k →
           ∃ r ∈ X.chargeRounds n, ∃ p ∈ Icc (X.eps n / 2) (X.eps n),
-            (S.round r).chargeDefect k p / (X.K n * n * X.D n) ≤ X.delta Cδ κ.Cl n + ρ k := by
+            (S.round r).chargeDefect k p / (X.K n * n * X.D n) ≤ X.delta S.W Cδ κ.Cl n + ρ k := by
   have hc := κ.c_pos
   refine ⟨2 * |C_T| * |C₁| / κ.c + 4 * κ.C / κ.c,
     by have := κ.one_le_C; positivity, Eventually.of_forall fun n hF S hT ↦ ?_⟩
@@ -108,10 +108,10 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
   have hK : (1 : ℝ) ≤ X.K n := by exact_mod_cast hF.one_le_K
   have hD : (1 : ℝ) ≤ X.D n := by exact_mod_cast hF.one_le_D
   have hε := hF.eps_pos
-  have hW : 1 ≤ X.W := X.one_le_W
-  have haK : X.a n * X.K n = X.W := by
+  have hW : 1 ≤ S.W := S.one_le_W
+  have haK : X.a S.W n * X.K n = S.W := by
     unfold ScannerExponents.a; field_simp
-  set M : ℝ := X.W * κ.c * n * X.m n * X.eps n / 2 with hM
+  set M : ℝ := S.W * κ.c * n * X.m n * X.eps n / 2 with hM
   have hMpos : 0 < M := by positivity
   set R : ℝ := ((X.rounds n : ℕ) : ℝ) with hR
   have hR2 : R = 2 * n * X.m n := by simp [hR, ScannerExponents.rounds]
@@ -128,7 +128,7 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
     simpa only [mul_div_assoc] using this
   intro k hk hI
   have hk' : (1 : ℝ) ≤ k := by exact_mod_cast hk
-  set δ := X.delta (2 * |C_T| * |C₁| / κ.c + 4 * κ.C / κ.c) κ.Cl n with hδ
+  set δ := X.delta S.W (2 * |C_T| * |C₁| / κ.c + 4 * κ.C / κ.c) κ.Cl n with hδ
   set ρk := (S.rem k + (1 + R) * S.β k / k) / M with hρk
   have hKnD : 0 < (X.K n : ℝ) * n * X.D n := by positivity
   have hcard := card_chargeRounds X n
@@ -139,10 +139,10 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
     ⟨by linarith [hp.1], by linarith [hp.2, hF.eps_lt_one]⟩
   -- The normalization of the integrated inequality (lines 476–484).
   set Ssum := ∑ r ∈ X.chargeRounds n, ∫ p in (X.eps n / 2)..(X.eps n), (S.round r).chargeDefect k p
-  have hA : 0 < k * X.a n * (κ.c / (n * X.D n)) := by
+  have hA : 0 < k * X.a S.W n * (κ.c / (n * X.D n)) := by
     unfold ScannerExponents.a; positivity
   set P : ℝ := (n : ℝ) ^ (X.e - X.mu)
-  set A4 : ℝ := X.a n ^ (1 / 4 : ℝ)
+  set A4 : ℝ := X.a S.W n ^ (1 / 4 : ℝ)
   set Lg : ℝ := Real.log n ^ κ.Cl
   have hP : 0 ≤ P := by positivity
   have hA4 : 0 ≤ A4 := by unfold A4 ScannerExponents.a; positivity
@@ -154,42 +154,43 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
     calc (n : ℝ) ^ X.e ≤ C₁ * P * X.m n := h1
       _ ≤ |C₁| * P * X.m n := by gcongr; exact le_abs_self _
       _ = _ := by ring
-  have hTb : S.terminalBound ≤ |C_T| * X.W * n * X.m n * |C₁| * P := by
+  have hTb : S.terminalBound ≤ |C_T| * S.W * n * X.m n * |C₁| * P := by
     have h1 : (n : ℝ) ^ (1 + X.e) = n * (n : ℝ) ^ X.e := by
       rw [Real.rpow_add (by linarith), Real.rpow_one]
-    have h2 : C_T * X.W * (n : ℝ) ^ (1 + X.e) ≤ |C_T| * X.W * (n * (X.m n * (|C₁| * P))) := by
+    have h2 : C_T * S.W * (n : ℝ) ^ (1 + X.e) ≤ |C_T| * S.W * (n * (X.m n * (|C₁| * P))) := by
       rw [h1]
       apply mul_le_mul (mul_le_mul_of_nonneg_right (le_abs_self _) (by linarith))
         (mul_le_mul_of_nonneg_left hne' (by linarith)) (by positivity) (by positivity)
     nlinarith
-  have hδM : M * δ = X.W * n * X.m n * (|C_T| * |C₁| + 2 * κ.C) * (P + A4 * Lg) := by
+  have hδM : M * δ = S.W * n * X.m n * (|C_T| * |C₁| + 2 * κ.C) * (P + A4 * Lg) := by
     rw [hδ, hM, ScannerExponents.delta]
     field_simp
     ring
   have hkey : S.β k + k * (S.terminalBound + S.rem k) +
-      R * (κ.C * k * X.a n * X.K n * A4 * Lg + S.β k) ≤ k * M * (δ + ρk) := by
+      R * (κ.C * k * X.a S.W n * X.K n * A4 * Lg + S.β k) ≤ k * M * (δ + ρk) := by
     have hρ : k * M * ρk = k * S.rem k + (1 + R) * S.β k := by
       rw [hρk]; field_simp
     have hC := κ.one_le_C
-    have hcross : 0 ≤ X.W * n * X.m n * (|C_T| * |C₁| * A4 * Lg + 2 * κ.C * P) := by
+    have hcross : 0 ≤ S.W * n * X.m n * (|C_T| * |C₁| * A4 * Lg + 2 * κ.C * P) := by
       positivity
-    have h3 : k * (X.W * n * X.m n * (|C_T| * |C₁| + 2 * κ.C) * (P + A4 * Lg)) ≥
-        k * (|C_T| * X.W * n * X.m n * |C₁| * P) + R * (κ.C * k * X.W * A4 * Lg) := by
+    have h3 : k * (S.W * n * X.m n * (|C_T| * |C₁| + 2 * κ.C) * (P + A4 * Lg)) ≥
+        k * (|C_T| * S.W * n * X.m n * |C₁| * P) + R * (κ.C * k * S.W * A4 * Lg) := by
       rw [hR2]; nlinarith
-    have h4 : κ.C * k * X.a n * X.K n * A4 * Lg = κ.C * k * X.W * A4 * Lg := by
-      rw [← haK]; ring
+    have h4 : κ.C * k * X.a S.W n * X.K n * A4 * Lg = κ.C * k * S.W * A4 * Lg := by
+      linear_combination κ.C * k * A4 * Lg * haK
     have h5 : (k : ℝ) * M * (δ + ρk) = k * (M * δ) + k * M * ρk := by ring
     have hkT := mul_le_mul_of_nonneg_left hTb (Nat.cast_nonneg (α := ℝ) k)
     rw [h5, hρ, hδM, h4]
     linarith
-  have hmain : k * X.a n * (κ.c / (n * X.D n)) * Ssum ≤
-      k * X.a n * (κ.c / (n * X.D n)) *
+  have hmain : k * X.a S.W n * (κ.c / (n * X.D n)) * Ssum ≤
+      k * X.a S.W n * (κ.c / (n * X.D n)) *
         (((X.chargeRounds n).card : ℝ) * ((X.eps n - X.eps n / 2) *
           (X.K n * n * X.D n * (δ + ρk)))) := by
     refine hI.trans (le_of_le_of_eq hkey ?_)
     rw [hcard, hM]; push_cast
-    have : X.a n * X.K n = X.W := haK
+    have : X.a S.W n * X.K n = S.W := haK
     field_simp
+    generalize X.a S.W n = a at this ⊢
     rw [← this]; ring
   obtain ⟨r, hr, p, hp, hQ⟩ := exists_mem_Icc_le_of_sum_integral_le
     (fun r ↦ (S.round r).chargeDefect k) (X.chargeRounds n) hne (by linarith)

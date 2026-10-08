@@ -18,9 +18,8 @@ and behind the choice of the constants `K₀` and `ε₀`:
 * the abstract compactness argument: if no three closed label regions with the inner holes
   removed meet, there is a positive footprint radius below which no footprint meets three of them,
   uniformly over a parameter set when the joint sets are compact; for one guide whose true vertices
-  lie in open inner holes this is the two-owner condition. The instantiation on the scaled guide
-  families of the protocol, which makes the footprint radius uniform in the scale, is not proved
-  here;
+  lie in open inner holes this is the two-owner condition. Its uniformity in the radius and in the
+  scale is in `TNLean.PEPS.Approximation.DyadicFootprintScaling`;
 * square nets: a net of mesh `u` covers a bounded set by a number of patches bounded in terms of
   its radius over `u`, with outer patches within `3u` of the set;
 * the hole radius `h_n / n` of a direct repainting lies in `[ε₀ / max(K₀, 1), ε₀]`, and the two
@@ -116,7 +115,8 @@ theorem exists_footprint_two_owners {X ι : Type*} [MetricSpace X] [Finite ι] {
 point are compact, and no three with distinct labels have a common point, then one footprint
 radius `δ > 0` works for every value of the parameter: no closed ball of radius `δ` meets three
 slices with distinct labels at the same parameter. The compactness of the joint sets is a
-hypothesis here; the source derives it for its radius parameters at lines 465–468.
+hypothesis here; for the radius parameter of the inner holes it is
+`isCompact_footprintJointSet`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–469`. -/
 theorem exists_footprint_two_owners_param {Λ X ι : Type*} [MetricSpace Λ] [MetricSpace X]
@@ -135,8 +135,8 @@ true vertex of it in the compact working neighborhood `W` lie in an open inner h
 `ball h r` with `h ∈ H`. Then there is a footprint radius `δ > 0` such that every closed footprint
 of radius `δ` meets at most two labels at its points of `W` outside the open inner holes.
 
-This is the test for one fixed guide and one working neighborhood; its uniformity over the scaled
-guide families of the protocol is not proved here.
+This is the test for one fixed guide and one working neighborhood; its uniformity in the radius
+and the scale is `exists_footprintRatio`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:453–462, 475–479`. -/
 theorem exists_footprint_two_owners_guide {ι : Type*} {f : ℝ × ℝ → ι} (hfin : (range f).Finite)
@@ -312,7 +312,7 @@ theorem holeRadius_resize {ε₀ n t : ℝ} (hε : 0 ≤ ε₀) (hn : 0 ≤ n) (
 /-! ### Grid corners -/
 
 /-- Near a point that is not a multiple of `n`, the block index `⌊y / n⌋` is constant. -/
-private theorem floor_div_eventually_eq {n x : ℝ} (hn : 0 < n) (hx : ∀ a : ℤ, x ≠ n * a) :
+theorem floor_div_eventually_eq {n x : ℝ} (hn : 0 < n) (hx : ∀ a : ℤ, x ≠ n * a) :
     ∀ᶠ y in nhds x, ⌊y / n⌋ = ⌊x / n⌋ := by
   have h1 := Int.floor_le (x / n)
   have h2 := Int.lt_floor_add_one (x / n)
@@ -340,6 +340,58 @@ private theorem floor_div_eventually_mem {n x : ℝ} (hn : 0 < n) :
     rw [Int.floor_lt, div_lt_iff₀ hn]; push_cast; exact hy.2
   omega
 
+/-- A labelling takes at most two values near `p`. Such a point is not a true vertex.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:109–111, 321–326`. -/
+def HasTwoLabelsNear {X ι : Type*} [TopologicalSpace X] (f : X → ι) (p : X) : Prop :=
+  ∃ P Q : ι, ∀ᶠ q in nhds p, f q ∈ ({P, Q} : Set ι)
+
+section HasTwoLabelsNear
+
+variable {X ι : Type*} [TopologicalSpace X] {f g : X → ι} {p : X}
+
+/-- A point near which a labelling takes at most two values is not a true vertex. -/
+theorem HasTwoLabelsNear.not_isTrueVertex (h : HasTwoLabelsNear f p) : ¬ IsTrueVertex f p := by
+  obtain ⟨P, Q, h⟩ := h
+  exact not_isTrueVertex_of_subset_pair (incidentLabels_subset h fun _ hq => hq)
+
+/-- Taking at most two values near a point depends only on the labelling near that point. -/
+theorem HasTwoLabelsNear.congr (h : HasTwoLabelsNear f p) (hfg : f =ᶠ[nhds p] g) :
+    HasTwoLabelsNear g p := by
+  obtain ⟨P, Q, h⟩ := h
+  exact ⟨P, Q, by filter_upwards [h, hfg] with q hq e; rwa [← e]⟩
+
+/-- A labelling constant near a point takes at most two values there. -/
+theorem hasTwoLabelsNear_of_eventuallyEq_const {c : ι} (h : f =ᶠ[nhds p] fun _ => c) :
+    HasTwoLabelsNear f p :=
+  ⟨c, c, by filter_upwards [h] with q hq; simp [hq]⟩
+
+end HasTwoLabelsNear
+
+/-- **A block guide has at most two labels near every point other than a grid corner.**
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:321–322, 508`. -/
+theorem hasTwoLabelsNear_blockGuide {ι : Type*} {n : ℝ} (hn : 0 < n) (lab : ℤ × ℤ → ι) {c : ℝ × ℝ}
+    (hQ : ∀ Q : ℤ × ℤ, c ≠ blockCorner n Q) : HasTwoLabelsNear (blockGuide n lab) c := by
+  have hc : (∀ a : ℤ, c.1 ≠ n * a) ∨ ∀ b : ℤ, c.2 ≠ n * b := by
+    by_contra hc
+    push Not at hc
+    obtain ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := hc
+    exact hQ (a, b) (Prod.ext ha hb)
+  rcases hc with hc | hc
+  · refine ⟨lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋, ⌊c.2 / n⌋ - 1), ?_⟩
+    filter_upwards [continuous_fst.continuousAt.eventually (floor_div_eventually_eq hn hc),
+      continuous_snd.continuousAt.eventually (floor_div_eventually_mem (x := c.2) hn)]
+      with p h1 h2
+    simp only [blockGuide, blockIndex, h1]
+    rcases h2 with h2 | h2 <;> simp [h2]
+  · refine ⟨lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋ - 1, ⌊c.2 / n⌋), ?_⟩
+    filter_upwards
+      [continuous_fst.continuousAt.eventually (floor_div_eventually_mem (x := c.1) hn),
+        continuous_snd.continuousAt.eventually (floor_div_eventually_eq hn hc)] with p h1 h2
+    simp only [blockGuide, blockIndex, h2]
+    rcases h1 with h1 | h1 <;> simp [h1]
+
 /-- **True vertices of a block guide are grid corners.** A guide uniform on the `n`-blocks has
 its true vertices among the corners `(n a, n b)`.
 
@@ -348,28 +400,7 @@ theorem IsTrueVertex.eq_blockCorner {ι : Type*} {n : ℝ} (hn : 0 < n) {lab : �
     {c : ℝ × ℝ} (h : IsTrueVertex (blockGuide n lab) c) : ∃ Q : ℤ × ℤ, c = blockCorner n Q := by
   by_contra hQ
   push Not at hQ
-  have hc : (∀ a : ℤ, c.1 ≠ n * a) ∨ ∀ b : ℤ, c.2 ≠ n * b := by
-    by_contra hc
-    push Not at hc
-    obtain ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := hc
-    exact hQ (a, b) (Prod.ext ha hb)
-  rcases hc with hc | hc
-  · have ev : ∀ᶠ p in nhds c, blockGuide n lab p ∈
-        ({lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋, ⌊c.2 / n⌋ - 1)} : Set ι) := by
-      filter_upwards [continuous_fst.continuousAt.eventually (floor_div_eventually_eq hn hc),
-        continuous_snd.continuousAt.eventually (floor_div_eventually_mem (x := c.2) hn)]
-        with p h1 h2
-      simp only [blockGuide, blockIndex, h1]
-      rcases h2 with h2 | h2 <;> simp [h2]
-    exact not_isTrueVertex_of_subset_pair (incidentLabels_subset ev fun _ hp => hp) h
-  · have ev : ∀ᶠ p in nhds c, blockGuide n lab p ∈
-        ({lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋ - 1, ⌊c.2 / n⌋)} : Set ι) := by
-      filter_upwards
-        [continuous_fst.continuousAt.eventually (floor_div_eventually_mem (x := c.1) hn),
-          continuous_snd.continuousAt.eventually (floor_div_eventually_eq hn hc)] with p h1 h2
-      simp only [blockGuide, blockIndex, h2]
-      rcases h1 with h1 | h1 <;> simp [h1]
-    exact not_isTrueVertex_of_subset_pair (incidentLabels_subset ev fun _ hp => hp) h
+  exact (hasTwoLabelsNear_blockGuide hn lab hQ).not_isTrueVertex h
 
 /-- The grid corner `Q` is one of the four corners of the block `S`. -/
 def IsBlockCornerOf (S Q : ℤ × ℤ) : Prop :=
