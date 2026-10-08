@@ -452,7 +452,7 @@ jobs:
           for example in MixedEndpointComparison MixedEndpointPhase \
               MixedEndpointOpenGap MixedEndpointUniformPathGap \
               PhysicalIsometricGapTransport ArbitraryPhysicalMixedPathGap \
-              ArbitraryPhysicalEndpointAttachment; do
+              ArbitraryPhysicalEndpointAttachment JointInsertedOpenKernel; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
