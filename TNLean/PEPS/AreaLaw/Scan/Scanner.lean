@@ -46,18 +46,20 @@ remainder `ρ_k → 0`, uniform over the selected round and parameter, such that
 replica count `k ≥ 1` some charge round and common `p_k ∈ [ε/2, ε]` satisfy
 `𝒬(p_k)/(KnD) ≤ δ_n + ρ_k` (`scanner:selected-density`) and
 `E_def ≤ C n^ℓ D² W² (log n)^{C_l} (δ_n^{1/8} + ε + n^{-100}) + C n^{-1000} + ρ_k`
-(`scanner:energy-output`). The constants depend only on the fixed exponents and on the
-constants `κ` of the inputs. -/
+(`scanner:energy-output`). The constants and the threshold for `n` depend only on the fixed
+exponents and on the constants `κ` of the inputs. They do not depend on the total metric weight
+`W = S.W ≥ 1`, which is part of the scan, so `W` may grow with `n` as in
+`scanner:final-parameters` (line 843). -/
 theorem scanner_estimate (X : ScannerExponents) (κ : ScanConstants) :
     ∃ Cb Clb C Cl Cδ : ℝ, ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
       (S.Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ S.Bexc ≤ Cb * n * X.D n ∧
         S.Bmarg ≤ Cb * n * X.D n * Real.log n ^ Clb) ∧
       ∃ ρ : ℕ → ℝ, Tendsto ρ atTop (𝓝 0) ∧ ∀ k, 1 ≤ k →
         ∃ r ∈ X.chargeRounds n, ∃ p ∈ Icc (X.eps n / 2) (X.eps n),
-          (S.round r).chargeDefect k p / (X.K n * n * X.D n) ≤ X.delta Cδ κ.Cl n + ρ k ∧
+          (S.round r).chargeDefect k p / (X.K n * n * X.D n) ≤ X.delta S.W Cδ κ.Cl n + ρ k ∧
           S.defectEnergy r k p ≤
-            C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * X.W ^ 2 * Real.log n ^ Cl *
-                (X.delta Cδ κ.Cl n ^ (1 / 8 : ℝ) + X.eps n + (n : ℝ) ^ (-100 : ℝ)) +
+            C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * S.W ^ 2 * Real.log n ^ Cl *
+                (X.delta S.W Cδ κ.Cl n ^ (1 / 8 : ℝ) + X.eps n + (n : ℝ) ^ (-100 : ℝ)) +
               C * (n : ℝ) ^ (-1000 : ℝ) + ρ k := by
   obtain ⟨C₁, hC₁⟩ := eventually_scaleFacts X
   obtain ⟨Cb, Clb, hB⟩ := exists_budgets X κ
