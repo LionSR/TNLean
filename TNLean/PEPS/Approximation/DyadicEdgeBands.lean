@@ -50,6 +50,11 @@ inductive SquareEdge
   | left
   deriving DecidableEq
 
+/-- There are four edges. -/
+instance : Fintype SquareEdge where
+  elems := {.bottom, .right, .top, .left}
+  complete e := by cases e <;> simp
+
 namespace SquareEdge
 
 /-- The coordinate `s` parallel to an edge, measured from one endpoint.

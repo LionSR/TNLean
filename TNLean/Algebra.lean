@@ -40,6 +40,7 @@ import TNLean.Algebra.ConjugateRegularRepresentation
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
+import TNLean.Algebra.ConvexWeightsCompactness
 import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
@@ -103,6 +104,7 @@ import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Algebra.MatrixProjectionReindex
+import TNLean.Algebra.MatrixReindexGap
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MatrixSylvesterBound
@@ -190,6 +192,7 @@ import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
