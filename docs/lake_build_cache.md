@@ -53,8 +53,9 @@ verification.
 
 ## Serialize local builds
 
-The seed command and the build wrapper use the standard macOS `lockf` utility
-with one lock file in Git's common directory. This serializes cooperating
+The seed command and the build wrapper acquire a blocking BSD file lock through
+Python 3's `fcntl.flock`, using one lock file in Git's common directory. Descriptor
+9 remains open in the command and its children. This serializes cooperating
 commands across TNLean worktrees without sharing writable package checkouts:
 
 ```bash

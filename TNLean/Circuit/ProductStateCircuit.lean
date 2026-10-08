@@ -156,17 +156,17 @@ private def evenSites (N : ℕ) [NeZero N] : Finset (Fin N) :=
   (evenBonds N).biUnion fun k => {k, k + 1}
 
 private theorem coe_pair_eq_bond (k : Fin N) : (({k, k + 1} : Finset (Fin N)) : Set (Fin N)) =
-    bond k := by
-  simp [bond]
+    ringBond k := by
+  simp [ringBond]
 
 private theorem disjoint_bond_of_mem_evenBonds {k l : Fin N} (hk : k ∈ evenBonds N)
-    (hl : l ∈ evenBonds N) (hkl : k ≠ l) : Disjoint (bond k) (bond l) := by
+    (hl : l ∈ evenBonds N) (hkl : k ≠ l) : Disjoint (ringBond k) (ringBond l) := by
   simp only [evenBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hk hl
   have e1 : ((k + 1 : Fin N) : ℕ) = k + 1 := Fin.val_add_one_of_lt' hk.2
   have e2 : ((l + 1 : Fin N) : ℕ) = l + 1 := Fin.val_add_one_of_lt' hl.2
   rw [Set.disjoint_left]
   intro x hx hx'
-  simp only [bond, Set.mem_insert_iff, Set.mem_singleton_iff] at hx hx'
+  simp only [ringBond, Set.mem_insert_iff, Set.mem_singleton_iff] at hx hx'
   apply hkl
   ext
   rcases hx with rfl | rfl <;> rcases hx' with h | h <;> rw [Fin.ext_iff] at h <;> omega
@@ -184,7 +184,7 @@ private noncomputable def evenLayer (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
 private theorem evenLayer_op (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
     (evenLayer u hu).op = siteOp u (evenSites N) := by
-  unfold Layer.op Layer.partialOp
+  unfold BondLayer.op BondLayer.partialOp
   exact noncommProd_siteOp u (fun k => {k, k + 1}) (evenBonds N) (fun _ hk _ hl hkl => by
     rw [Function.onFun, ← Finset.disjoint_coe, coe_pair_eq_bond, coe_pair_eq_bond]
     exact disjoint_bond_of_mem_evenBonds hk hl hkl) _
@@ -217,13 +217,13 @@ theorem isLocalCircuitOfDepth_finKronecker {u : Fin N → Matrix (Fin d) (Fin d)
     IsLocalCircuitOfDepth (finKronecker u) 2 := by
   classical
   have hrest : ((Finset.univ \ evenSites N : Finset (Fin N)) : Set (Fin N)) ⊆
-      bond (lastSite N) := fun i hi => by
+      ringBond (lastSite N) := fun i hi => by
     rw [eq_lastSite_of_notMem_evenSites (Finset.mem_sdiff.mp hi).2]
     exact Set.mem_insert _ _
-  let L₂ := Layer.single (lastSite N) (siteOp u (Finset.univ \ evenSites N))
+  let L₂ := BondLayer.single (lastSite N) (siteOp u (Finset.univ \ evenSites N))
     (siteOp_mem_unitary hu _) (siteOp_mem_supportedOperators u hrest)
   refine ⟨[evenLayer u hu, L₂], rfl, ?_⟩
-  rw [circuitOp, circuitOp, circuitOp, Matrix.one_mul, Layer.single_op, evenLayer_op,
+  rw [circuitOp, circuitOp, circuitOp, Matrix.one_mul, BondLayer.single_op, evenLayer_op,
     siteOp_union u Finset.sdiff_disjoint, Finset.sdiff_union_of_subset (Finset.subset_univ _),
     siteOp_univ]
 
