@@ -440,8 +440,8 @@ by the full QYV construction, with no parallel bipartite definitions.
 [QICLean #659](https://github.com/LionSR/QICLean/pull/659), at checked head
 `a820e67e`, bounds the joint exponential of both actual deficits in that
 common density. With only the unit one-copy vector and original simultaneous
-physical/C/R copy symmetry, every real exponent satisfying twice the exponent
-at most one has the average of the two polynomial moment bounds, multiplied
+physical/C/R copy symmetry, for every real \(a\) with \(2a\le1\), the joint
+trace is at most the average of the two polynomial moment bounds, multiplied
 by the same component's squared norm. The literal exterior-region exchange
 preserves Y and derives the second ground norm, symmetry and component mass.
 The source is `7c8099cf`, independent evidence `1966e51e`, and exact two-line
@@ -465,6 +465,22 @@ standard-kernel reports, original provenance, 471-page PDF and complete
 web/native checks passed. The 175-file manifest preserves all 4,454 parent
 files, with only the two inclusion lines changed. Four preliminary metadata
 check failures and their successful corrections are retained explicitly.
+
+[QICLean #661](https://github.com/LionSR/QICLean/pull/661), at checked head
+`1c5769bed4719bb3e766800a4dad55164dacd6ee`, proves that the actual
+physical good-copy density is fixed by the physical symmetric projection.
+It retains every good physical coordinate, including Y, together with the
+whole auxiliary system. Only the unit one-copy physical vector is assumed;
+the auxiliary vector is arbitrary, and zero components and zero good-copy
+counts are included. The mathematical source is `24f1008f`, followed by the
+docstring-only citation revision `eba46627`, independent evidence `6bd427e9`,
+and exact two-line inclusion `9b955ec2`. The full 9,735-job library build,
+strict and fresh standard-kernel checks, original provenance, 438-page PDF
+and complete web/native checks passed. The integration manifest has 106
+bindings and the leaf manifest 116; the complete physical statement and
+proof were inspected in the PDF and mobile reader. Reducing the auxiliary
+systems to their good copies and expressing the density in five-factor
+coordinates are subsequent steps.
 
 The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
@@ -622,9 +638,22 @@ The coordinator reports 48 strict compilations, 328 standard-kernel reports
 a direct library-root check of all 21,283 blueprint names, and the visually
 reviewed 55-page focused PDF and seven-page web reader. These are precise
 narrow checks; no full Lake build or declaration-checker invocation is
-claimed. The subsequent actual corrected-term integral estimate and common
-sampling proofs are separately checked and await their own contribution;
-the final sampled tensor-network representation remains unfinished.
+claimed. The final sampled tensor-network representation remains unfinished.
+
+[TNLean #8914](https://github.com/LionSR/TNLean/pull/8914), at checked head
+`0fa31ddad11ab7a8f06a3a34f1381c3ff974e8bf`, constructs one common global
+Gaussian sample with physical operator error at most one quarter of the
+prescribed accuracy. The corrected-term estimates use the original
+coefficients, lifetime participation and physical dimensions; source
+Schmidt data and regional orthonormal bases are chosen within the proof.
+For every real accuracy exponent, the same sample count has an explicit
+polynomial bound. This is the sampling step of Theorem 5.2; the actual
+tensor-network contraction and final assembly remain unfinished.
+The coordinator records 13 strict direct checks, 18 standard-kernel reports,
+14,707 imported artifact hashes, direct library-root declaration checking of
+21,301 names, 1,009 provenance entries, and a visually inspected 59-page
+focused PDF and seven-page web reader. These are direct and focused checks;
+no local full Lake build is claimed.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
