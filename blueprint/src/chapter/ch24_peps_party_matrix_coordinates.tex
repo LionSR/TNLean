@@ -1,0 +1,69 @@
+\section{Coordinates and partial traces of party products}
+\label{sec:peps_party_matrix_coordinates}
+
+\begin{definition}[Party tensor basis]
+    \label{def:peps_party_tensor_basis}
+    \lean{TNLean.PEPS.PairEffect.partyListBasis,
+      TNLean.PEPS.PairEffect.partyLabelledBasis}
+    \leanok
+    For each party $p$, choose an orthonormal basis $b_p$ of its input
+    memory and an orthonormal basis $c_p$ of its output memory. An
+    exhaustive party order without repetitions determines their ordered
+    tensor bases. Relabel the coordinates by original parties, so that
+    a basis vector is indexed by a function $p\mapsto i_p$.
+    The empty tensor basis is the scalar unit.
+\end{definition}
+
+\begin{theorem}[Entries of the local tensor product]
+    \label{thm:peps_party_tensor_entries}
+    \lean{TNLean.PEPS.PairEffect.partyListBasis_repr_tensorPartyMaps,
+      TNLean.PEPS.PairEffect.partyLabelledBasis_repr_tensorPartyMaps}
+    \leanok
+    \uses{def:peps_party_tensor_basis}
+    Let $B_p$ be a linear map between the chosen input and output
+    memories. In the party tensor bases, the matrix entries satisfy
+    \begin{align}
+        \left(\bigotimes_p B_p\right)_{x,y}
+        &=\prod_p\langle c_p(x_p),B_pb_p(y_p)\rangle.
+        \label{eq:peps_party_tensor_entries}
+    \end{align}
+    No bound on the local dimensions or map norms is needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_party_tensor_basis}
+    Induct on the party order. The coordinate of a simple tensor is
+    the product of its two coordinates. Apply the first local map,
+    use the induction hypothesis on the remaining maps, and separate
+    the first factor of the finite product. Relabelling the exhaustive
+    order replaces the product over positions by the product over parties.
+\end{proof}
+
+\begin{theorem}[Private trace of a product matrix]
+    \label{thm:peps_party_product_trace}
+    \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix}
+    \leanok
+    Let $P$ be finite. For each $p\in P$, let $X_p$ be a physical
+    coordinate set, let $E_p$ be a finite private coordinate set, and
+    let $M_p$ be a complex matrix indexed by $X_p\times E_p$.
+    Define $M_{(x,i),(y,j)}=\prod_p(M_p)_{(x_p,i_p),(y_p,j_p)}$.
+    Then
+    \begin{align}
+        \operatorname{Tr}_{\prod_p E_p}M
+        &=\bigotimes_p\operatorname{Tr}_{E_p}M_p.
+        \label{eq:peps_party_product_trace}
+    \end{align}
+    The matrices may be arbitrary; positivity is not assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    At coordinates $x,y$, the left side is
+    $\sum_i\prod_p(M_p)_{(x_p,i_p),(y_p,i_p)}$.
+    Finite distributivity makes this
+    $\prod_p\sum_{i_p}(M_p)_{(x_p,i_p),(y_p,i_p)}$, which is the
+    corresponding entry on the right.
+\end{proof}
+
+These coordinate and trace identities express the local contractions in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 565--579.

@@ -74,9 +74,12 @@ import TNLean.PEPS.Approximation.PartialSourcePreparation
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGrouping
+import TNLean.PEPS.Approximation.PartyLabelledCoordinates
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyLocalMaps
 import TNLean.PEPS.Approximation.PartyPartition
+import TNLean.PEPS.Approximation.PartyProductPartialTrace
+import TNLean.PEPS.Approximation.PartyTensorCoordinates
 import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PhysicalDensityPureInput
