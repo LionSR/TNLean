@@ -1,0 +1,343 @@
+\section{Schmidt coordinates and one Gaussian source law}
+
+We use the original source positions of a chronological composition,
+with the notation of Definition~\ref{def:peps_source_substitution}.
+Write $\mathcal E$ for these positions, $\Xi_g$ for the labels of gate $g$,
+and $\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for the normalized
+source vector at position $e=(g,j)$ in local branch $\alpha$.
+All choices below are made by original position and local label.
+They precede any choice of affected parties or partial branch.
+The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 279--434.
+
+\begin{definition}[Coordinates of an original source]
+    \label{def:peps_source_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCoordinates}
+    \leanok
+    Let $z_{e,\alpha}\in\C^{u_ev_e}$ be the coordinates of
+    $\nu_{e,\alpha}$ in the tensor product of the standard orthonormal
+    endpoint bases. Put $r_e=\min(u_e,v_e)$.
+\end{definition}
+
+\begin{theorem}[Local Schmidt frames chosen before partial expansion]
+    \label{thm:peps_local_schmidt_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCoordinates_norm}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_local_schmidt_source_frames}
+    \leanok
+    \uses{def:peps_source_coordinates}
+    For every original position $e=(g,j)$ and local label $\alpha\in\Xi_g$,
+    the vector $z_{e,\alpha}$ has norm one. There are weights
+    $\lambda_{e,\alpha,t}\geq0$, summing to one, and matrices
+    $E_{e,\alpha}:\C^{r_e}\to\C^{u_e}$ and
+    $F_{e,\alpha}:\C^{r_e}\to\C^{v_e}$ such that
+    \begin{align}
+        E_{e,\alpha}^{\dagger}E_{e,\alpha}
+         & =F_{e,\alpha}^{\dagger}F_{e,\alpha}=I,         \\
+        z_{e,\alpha}
+         & =\sum_{t=1}^{r_e}\sqrt{\lambda_{e,\alpha,t}}\,
+        E_{e,\alpha}|t\rangle\otimes F_{e,\alpha}|t\rangle.
+        \label{eq:peps_local_schmidt_source}
+    \end{align}
+    The same choices represent every retained source in every partial
+    expansion: one reads the label of its original owning gate.
+    For two partial branches, the mixed source matrix is the outer product
+    of these two represented vectors. Zero Schmidt weights are permitted;
+    neither endpoint frame is required to span its ambient space.
+\end{theorem}
+
+\begin{proof}\leanok
+    Coordinates in an orthonormal basis preserve the norm. Apply the finite
+    Schmidt decomposition to each $z_{e,\alpha}$ independently. The actual
+    retained vector at a partial slot is its original source vector at the
+    selected local label, so both the vector and outer-product assertions
+    follow by substitution.
+\end{proof}
+
+\begin{theorem}[Finite Schmidt support in arbitrary endpoint spaces]
+    \label{thm:peps_tensor_schmidt_isometries}
+    \lean{TNLean.PEPS.PairEffect.PairSource.exists_probability_schmidt_isometries}
+    \leanok
+    Let $U,V$ be complex inner-product spaces and let
+    $z$ in the algebraic tensor product $U\otimes V$ have norm one. There exist a natural number $r$,
+    nonnegative weights $\lambda_t$ with $\sum_t\lambda_t=1$, and linear
+    isometries $f:\C^r\to U$, $g:\C^r\to V$ such that
+    \begin{align}
+        z=\sum_{t=1}^{r}\sqrt{\lambda_t}\,f|t\rangle\otimes g|t\rangle.
+    \end{align}
+    No completeness or finite-dimensionality of $U$ or $V$ is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    An algebraic tensor belongs to the tensor product of two finite-dimensional
+    subspaces. Choose orthonormal coordinates on these subspaces, apply the
+    finite Schmidt decomposition, and compose the Schmidt frames with the
+    coordinate inclusions. Isometry preserves both the vector and its norm.
+\end{proof}
+
+\begin{definition}[A single law indexed by original sources]
+    \label{def:peps_source_gaussian_law}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.SourceGaussianSamples}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLaw}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLawIsProbabilityMeasure}
+    \leanok
+    Fix a sample count $k\geq0$. For every $e=(g,j)$, every ordered pair
+    $(\alpha,\beta)\in\Xi_g^2$, every $0\leq s<k$, and every
+    $p,q\in\{1,\ldots,r_e\}$, choose a standard circular complex Gaussian
+    coordinate $\omega_{e,\alpha,\beta,s,p,q}$. Give all these coordinates
+    their product probability law, denoted by $\mathbb P_k$.
+    The ordered pair of local labels is part of the sample index.
+\end{definition}
+
+\begin{theorem}[Fixed selections retain the Gaussian law]
+    \label{thm:peps_source_gaussian_selection}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_sourceGaussian_eval}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_selected_sourceGaussian}
+    \leanok
+    \uses{def:peps_source_gaussian_law}
+    Selecting a fixed original position and a fixed ordered pair of local
+    labels gives the standard Gaussian law on its sample coordinates.
+    More generally, for any $S\subseteq\mathcal E$ and fixed labels
+    $\alpha_e,\beta_e$ for $e\in S$, the selected families are independent
+    with their prescribed Gaussian laws. The labels in this assertion are
+    chosen independently of the random sample.
+\end{theorem}
+
+\begin{proof}\leanok
+    Coordinate projections preserve product measures. Project first to
+    the selected original positions, then to the fixed
+    ordered local labels at those positions.
+\end{proof}
+
+\begin{definition}[Sampled source operators]
+    \label{def:peps_sampled_source_matrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection}
+    \leanok
+    \uses{thm:peps_local_schmidt_sources,def:peps_source_gaussian_law}
+    For $k>0$, let $\widehat X_{e,\alpha\beta}$ be the average of the
+    Gaussian product operators in Equation~(5.6) of the manuscript,
+    transported by $E_{e,\alpha},F_{e,\alpha}$ on the ket side and
+    $E_{e,\beta},F_{e,\beta}$ on the bra side. Thus
+    \begin{align}
+        \widehat X_{e,\alpha\beta}
+         & =\frac1k\sum_{s=0}^{k-1}
+        (E_{e,\alpha}U_sE_{e,\beta}^{\dagger})
+        \otimes(F_{e,\alpha}V_sF_{e,\beta}^{\dagger}), \\
+        X_{e,\alpha\beta}
+         & =z_{e,\alpha}z_{e,\beta}^{\dagger},\qquad
+        \Delta_{e,\alpha\beta}=\widehat X_{e,\alpha\beta}-X_{e,\alpha\beta}.
+    \end{align}
+    Here $U_s$ uses the Gaussian coordinates and $V_s$ their complex
+    conjugates, with the quarter-power weights of that equation.
+    The averaged operator need not have rank one.
+\end{definition}
+
+\begin{theorem}[Unbiasedness of the original-source construction]
+    \label{thm:peps_unbiased_original_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_sampledSourceMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sampledSourceMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_unbiased_sampledSourceMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceGaussianCorrection}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection_eq_transport}
+    \leanok
+    \uses{thm:peps_local_schmidt_sources,thm:peps_source_gaussian_selection,def:peps_sampled_source_matrix}
+    For every $k>0$, the Schmidt weights and frames may be chosen so that
+    each $\widehat X_{e,\alpha\beta}$ is integrable and
+    \begin{align}
+        \mathbb E_k\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta},
+        \qquad \mathbb E_k\Delta_{e,\alpha\beta}=0.
+    \end{align}
+    The choices precede all corrected subsets and partial branches.
+    More generally, these assertions hold for any nonnegative weights and
+    endpoint matrices representing the actual vectors as in
+    (\ref{eq:peps_local_schmidt_source}); their normalization and isometry
+    identities are not needed for the expectation calculation.
+    The ambient correction is exactly the four-frame transport of the
+    centered correction in Schmidt coordinates.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the single-source expectation formula and the projection from
+    Theorem~\ref{thm:peps_source_gaussian_selection}. The exact source
+    representation identifies the mean with $X_{e,\alpha\beta}$.
+    Subtraction gives the centered identity; linearity of the four-frame
+    transport gives the final assertion. The required representatives are
+    supplied by Theorem~\ref{thm:peps_local_schmidt_sources}.
+\end{proof}
+
+\begin{theorem}[Covariance at original corrected positions]
+    \label{thm:peps_actual_gaussian_covariance}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCorrection_product_eq_selected}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_sourceCorrection_product_mul_conj}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceCorrection_product_mul_conj}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceCorrection_product_eq_zero}
+    \leanok
+    \uses{thm:peps_source_gaussian_selection}
+    Fix $k>0$, $S\subseteq\mathcal E$, deterministic local labels
+    $\alpha_e,\beta_e$, and nonnegative weights. Let $\delta_e$ denote
+    the centered Schmidt-coordinate source matrix at these labels, and set
+    \begin{align}
+        Z_{u,v}(\omega) & =\prod_{e\in S}(\delta_e(\omega))_{u_e,v_e}, \\
+        p_{\alpha}(u)   & =\prod_{e\in S}
+        \lambda_{e,\alpha_e,(u_e)_1}\lambda_{e,\alpha_e,(u_e)_2}.
+    \end{align}
+    Both $u_e$ and $v_e$ are independent pairs of Schmidt indices.
+    Every conjugate pair product is integrable, and
+    \begin{align}
+        \mathbb E_k[Z_{u,v}\overline{Z_{u',v'}}]
+         & =\mathbf1_{u=u'}\mathbf1_{v=v'}\,
+        k^{-|S|}\sqrt{p_{\alpha}(u)p_{\beta}(v)}.
+        \label{eq:peps_actual_gaussian_covariance}
+    \end{align}
+    If $S$ is nonempty, then $\mathbb E_k Z_{u,v}=0$.
+    These identities require no normalization of the weight lists.
+\end{theorem}
+
+\begin{proof}\leanok
+    The product is the established selected Gaussian coefficient with
+    precisely the same original positions and ordered local labels.
+    Substitute its diagonal covariance formula. Independence multiplies
+    the factors $k^{-1}$, one for each original corrected position.
+\end{proof}
+
+\begin{theorem}[Expansion in selected multilinear arguments]
+    \label{thm:peps_selected_multilinear_expansion}
+    \lean{MultilinearMap.map_piecewise_sum_smul}
+    \leanok
+    Let $T$ be a complex multilinear map, let $S$ be a finite set of its
+    argument positions, and fix the arguments $x_i$ outside $S$.
+    Replacing argument $i\in S$ by a finite sum
+    $\sum_j c_{ij}v_{ij}$ gives
+    \begin{align}
+        T\bigl(x[S\leftarrow\textstyle\sum_j c_{ij}v_{ij}]\bigr)
+         & =\sum_{a\in\prod_{i\in S}J_i}
+        \Bigl(\prod_{i\in S}c_{i,a_i}\Bigr)
+        T\bigl(x[S\leftarrow v_{i,a_i}]\bigr).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Restrict the multilinear map to the selected arguments and expand
+    the finite sums. Multilinearity brings out one scalar per selected
+    position. The empty selected set gives a single summand.
+\end{proof}
+
+\begin{theorem}[Transported sources in actual prepared words]
+    \label{thm:peps_prepared_source_frames}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
+    \leanok
+    \uses{thm:peps_selected_multilinear_expansion}
+    Let $V,V'$ be words acting after the same ordered pair-source layout,
+    with finite orthonormal coordinates on the input and output memories
+    and on each source halfspace. Ket and bra endpoint bases may differ.
+    Fix arbitrary source vectors $\eta_i,\zeta_i$ and a selected set $S$.
+    For $i\in S$, let $M_i$ have independent row indices $K_i^2$ and
+    column indices $(K'_i)^2$, and transport it by arbitrary endpoint
+    families $u_i,v_i$ and $u'_i,v'_i$.
+    Contracting these transported matrices against the actual prepared
+    density coefficient, with $|\eta_i\rangle\langle\zeta_i|$ elsewhere,
+    equals
+    \begin{align}
+        \sum_{a\in\prod_{i\in S}K_i^2}
+        \sum_{b\in\prod_{i\in S}(K'_i)^2}
+        \Bigl(\prod_{i\in S}(M_i)_{a_i,b_i}\Bigr)
+        K_V(\eta^{a})\rho K_{V'}(\zeta^{b})^{\dagger}.
+    \end{align}
+    Here $\eta_i^a=u_i((a_i)_1)\otimes v_i((a_i)_2)$ on $S$ and
+    $\eta_i$ elsewhere; the bra definition is analogous.
+    The matrix $K_V$ is the actual preparation followed by $V$.
+    No spanning, normalization, or contraction hypothesis is imposed on
+    the endpoint families or words. The input matrix $\rho$ is arbitrary.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand each transported matrix as the sum of its entries times the
+    corresponding rank-one endpoint matrices. Apply
+    Theorem~\ref{thm:peps_selected_multilinear_expansion}, and identify
+    each rank-one source contraction with the actual prepared ket and
+    bra matrices. Separate the independent ket and bra assignments.
+\end{proof}
+
+\begin{definition}[Schmidt assignments at retained original positions]
+    \label{def:peps_partial_schmidt_assignments}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.PartialSchmidtCoordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv_apply}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtSourceVectors}
+    \leanok
+    Let $S\subseteq\mathcal E$ and suppose every position in $S$ has an
+    endpoint among the affected parties $\mathcal A$.
+    The actual ordered retained slots identify the selected partial slots
+    bijectively with $S$. Hence their Schmidt assignments are identified
+    with $\prod_{e\in S}\{1,\ldots,r_e\}^2$ by reading the same original
+    position. For a partial branch $\xi$, replace a selected source by
+    the two endpoint frame columns at its original local label, indexed
+    independently by this assignment, and keep all other sources original.
+\end{definition}
+
+\begin{theorem}[Actual corrected terms in Schmidt coordinates]
+    \label{thm:peps_corrected_gaussian_sum}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
+    \leanok
+    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,thm:peps_unbiased_original_sources}
+    Under the preceding incidence condition, suppose the fixed weights
+    and frames represent every original source vector. For every sample
+    $\omega$ and every input matrix $\rho$, the globally defined corrected
+    term satisfies
+    \begin{align}
+        F_S(\Delta(\omega))
+         & =\sum_{\xi,\zeta}c_{\mathcal A,\xi}
+        \overline{c_{\mathcal A,\zeta}}
+        \sum_{u,v}Z^{\xi,\zeta}_{u,v}(\omega)
+        K_{\xi,u}\rho K_{\zeta,v}^{\dagger}.
+        \label{eq:peps_corrected_gaussian_sum}
+    \end{align}
+    Here $Z^{\xi,\zeta}$ reads exactly the original positions and the
+    local labels selected by $\xi,\zeta$. The matrices $K_{\xi,u}$ are
+    the canonical residual words with the source vectors of
+    Definition~\ref{def:peps_partial_schmidt_assignments} prepared at their inputs.
+    Each gate coefficient occurs once on each side.
+\end{theorem}
+
+\begin{proof}\leanok
+    Express the actual corrected term as its partial-branch source
+    contraction. The ambient correction is the transport of its Schmidt
+    correction. Apply Theorem~\ref{thm:peps_prepared_source_frames} at the
+    selected retained slots, and use their original-position identification.
+    This is an operator identity; it precedes the expectation and norm estimates.
+\end{proof}
+
+\begin{theorem}[Pointwise physical error of the sampled operators]
+    \label{thm:peps_sampled_physical_error}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
+    \leanok
+    \uses{def:peps_sampled_source_matrix}
+    Suppose the final memory is the ordered tensor product of physical
+    and discarded registers. Choose finite orthonormal bases on the
+    input and both output factors. Let $\widehat\rho_{\rm phys}(\omega)$
+    be the operator obtained from the independently defined local sampled
+    source replacements, followed by the trace over discarded registers.
+    Then, for every sample and every input matrix,
+    \begin{align}
+        \widehat\rho_{\rm phys}(\omega)-\rho_{\rm phys}
+         & =\sum_{\varnothing\ne S\subseteq\mathcal E}
+        \operatorname{tr}_{\rm disc}F_S(\Delta(\omega)),  \\
+        \|\widehat\rho_{\rm phys}(\omega)-\rho_{\rm phys}\|_1
+         & \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
+        \|\operatorname{tr}_{\rm disc}F_S(\Delta(\omega))\|_1.
+    \end{align}
+    The finite bases follow the manuscript's finite-space convention;
+    no bound on private dimensions enters these identities.
+\end{theorem}
+
+\begin{proof}\leanok
+    Substitute the sampled operators into the established nonempty-subset
+    expansion of local source replacements, then apply the triangle inequality
+    after the actual final partial trace.
+\end{proof}
+
+The statements above construct the source samples and derive their exact
+covariance and density identities. Bounding each physical corrected term
+requires the further identification of its original registers with the
+separated affected and exterior contractions.

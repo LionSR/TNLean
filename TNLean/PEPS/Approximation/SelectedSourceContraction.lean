@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PreparedSourceContraction
+import TNLean.Algebra.MultilinearSelectedSum
 
 /-!
 # Selected coordinates of prepared source contractions
@@ -44,18 +45,14 @@ private theorem selected_matrix_expansion {I : Type} [DecidableEq I]
           F (fun i ↦ if h : i ∈ S then Matrix.single (z ⟨i, h⟩).1 (z ⟨i, h⟩).2 1
             else X i) := by
   classical
-  let G := F.domDomRestrict (fun i ↦ i ∈ S) (fun i ↦ X i)
-  have hE (i : S) : E i = ∑ z : A i × B i, E i z.1 z.2 • Matrix.single z.1 z.2 1 := by
+  have hE (i : I) :
+      (∑ z : A i × B i, E i z.1 z.2 • Matrix.single z.1 z.2 1) = E i := by
     rw [Fintype.sum_prod_type]
-    simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using Matrix.matrix_eq_sum_single (E i)
-  change G (fun i ↦ E i) = _
-  calc
-    _ = G (fun i ↦ ∑ z : A i × B i, E i z.1 z.2 • Matrix.single z.1 z.2 1) :=
-      congrArg G (funext hE)
-    _ = _ := by
-      rw [G.map_sum]
-      simp_rw [G.map_smul_univ]
-      rfl
+    simpa only [Matrix.smul_single, smul_eq_mul, mul_one] using
+      (Matrix.matrix_eq_sum_single (E i)).symm
+  simpa only [hE] using F.map_piecewise_sum_smul S
+    (fun (i : I) (z : A i × B i) ↦ E i z.1 z.2)
+    (fun i (z : A i × B i) ↦ Matrix.single z.1 z.2 1) X
 
 /-- A pair of endpoint basis vectors has one matrix-unit source coordinate. -/
 private theorem rankOne_basis_coordinates {A B A' B' : Type}
