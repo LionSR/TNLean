@@ -193,6 +193,12 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   See `docs/audits/2026-10-04_peps_three_block_resonate.md` for the name census
   and validation.
 
+- **Fifth slice (2026-10-07, #8782; net -133 Lean lines)**: delete the five
+  consumer-free `ThreeBlockGeometry`-namespaced blue mirror lemmas of
+  `UnionInjectivityGeneralBlue.lean` and the function-level complement-first
+  factorization of `UnionInjectivityGeneral.lean`. See
+  `docs/audits/2026-10-07_peps_union_injectivity_blue_dead_blocks.md`.
+
 ### S2. Delete ~185 zero-reference declarations across ~103 files — net 2,950 lines, risk 3/10
 - **Status**: open (#4564)
 - **What**: top-level declarations whose name appears exactly once

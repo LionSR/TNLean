@@ -320,7 +320,8 @@ theorem stringPhaseTensor_twist_eq_one_of_nonzero_fixed
   have hPhase := (twistedTransfer_peripheral_eq_of_primitive
     stringPhaseTensor hIrr hPrim stringPhaseTensor_unital u W μ hW hμ hInter
       1 Q hQ (by simp) (by simpa using hFix)).1
-  have hC1 : CondC1 stringPhaseTensor u W := by simpa [← hPhase] using hInter
+  have hC1 : CondC1 stringPhaseTensor u W := by
+    simpa only [CondC1, ← hPhase, one_smul] using hInter
   have hCov := condC1_imp_condC2 hW hu hC1
   have hrow (i : Fin 4) : ∑ j, (u i j - (1 : Matrix (Fin 4) (Fin 4) ℂ) i j) •
       stringPhaseTensor j = 0 := by

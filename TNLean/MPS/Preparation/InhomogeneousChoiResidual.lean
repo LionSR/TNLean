@@ -7,6 +7,7 @@ import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.SecondOrderOverlap
 import QICLean.Channel.Semigroup.CPClosure
+import QICLean.Channel.ChoiResidual
 
 /-!
 # Residual Choi bounds for actual inhomogeneous blocks
@@ -82,10 +83,7 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
       (hB : IsTracePreservingMap B) (e : ℝ) (ω : Matrix (Fin D) (Fin D) ℂ)
       (hω : ω.trace = 1) (X : Matrix (Fin D) (Fin D) ℂ) :
       (R B e ω X).trace = ((1 - e : ℝ) : ℂ) * X.trace := by
-    simp only [R, LinearMap.sub_apply, LinearMap.smul_apply, Matrix.trace_sub,
-      Matrix.trace_smul, smul_eq_mul, hB X, Matrix.tracePrepareMap_trace, hω, mul_one]
-    push_cast
-    ring
+    exact Matrix.trace_sub_smul_tracePrepareMap B hB ω hω e X
   have hprodtr : ∀ m (B : Fin m → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
       (∀ i, IsTracePreservingMap (B i)) → ∀ X,
         (((List.ofFn B).prod) X).trace = X.trace := by
@@ -131,20 +129,8 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
   let Q := (List.ofFn fun i => R (E i) (ε i) (τ i)).prod
   have hRcp : ∀ i, IsCPMap (R (E i) (ε i) (τ i)) := by
     intro i
-    apply (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef _).2
-    have hC : ChoiRectangular.choiMatrix (R (E i) (ε i) (τ i)) =
-        ChoiRectangular.choiMatrix (E i) -
-          ((ε i : ℂ) / D) • (τ i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-      change ChoiRectangular.choiMatrixLinearMap (E i - (ε i : ℂ) •
-        Matrix.tracePrepareMap (α := Fin D) (τ i)) = _
-      rw [map_sub, map_smul]
-      change _ - (ε i : ℂ) • ChoiRectangular.choiMatrix
-        (Matrix.tracePrepareMap (α := Fin D) (τ i)) = _
-      rw [Matrix.choiMatrix_tracePrepareMap, smul_smul]
-      congr 2
-      ring
-    rw [hC]
-    exact Matrix.le_iff.mp (hchoi i)
+    exact Matrix.isKrausCP_sub_smul_tracePrepareMap_of_choi_domination
+      (E i) (τ i) (ε i) (hchoi i)
   have hprodcp : ∀ Ts : List (Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
       (∀ T ∈ Ts, IsCPMap T) → IsCPMap Ts.prod := by
     intro Ts
@@ -187,26 +173,10 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
     exact ((hQcp.isPositiveMap ρ hρ).kronecker Matrix.PosSemidef.one).smul (by positivity)
   have hQcpos : (ChoiRectangular.choiMatrix Q).PosSemidef :=
     (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef Q).1 hQcp
-  have hnorm : ∀ {X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ},
-      X.PosSemidef → ‖X‖ ≤ X.trace.re := by
-    intro X hX
-    have ht : X.trace.re = ∑ i, hX.isHermitian.eigenvalues i := by
-      rw [hX.isHermitian.trace_eq_sum_eigenvalues]
-      simp
-    conv_lhs => rw [hX.isHermitian.spectral_theorem]
-    simp only [Unitary.conjStarAlgAut_apply, ← Unitary.coe_star,
-      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul,
-      Matrix.l2_opNorm_diagonal]
-    rw [ht]
-    refine (pi_norm_le_iff_of_nonneg
-      (Finset.sum_nonneg fun i _ => hX.eigenvalues_nonneg i)).2 ?_
-    intro i
-    simp only [Function.comp_apply, RCLike.norm_ofReal, abs_of_nonneg (hX.eigenvalues_nonneg i)]
-    exact Finset.single_le_sum (fun j _ => hX.eigenvalues_nonneg j) (Finset.mem_univ i)
   have hQnorm : ‖(ChoiRectangular.choiMatrix Q).transpose‖ ≤ t := by
-    simpa only [Matrix.trace_transpose, hQctr, Complex.ofReal_re] using hnorm hQcpos.transpose
+    simpa only [Matrix.trace_transpose, hQctr, Complex.ofReal_re] using hQcpos.transpose.l2_opNorm_le_trace_re
   have hPnorm : ‖(ChoiRectangular.choiMatrix P).transpose‖ ≤ t := by
-    simpa only [Matrix.trace_transpose, hPctr, Complex.ofReal_re] using hnorm hPcpos.transpose
+    simpa only [Matrix.trace_transpose, hPctr, Complex.ofReal_re] using hPcpos.transpose.l2_opNorm_le_trace_re
   have hlim (ω : Matrix (Fin D) (Fin D) ℂ) :
       (D : ℂ) • (ChoiRectangular.choiMatrix (Matrix.tracePrepareMap (α := Fin D) ω)).transpose =
         ωᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by

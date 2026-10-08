@@ -25,6 +25,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:physical_observable_word_span_mul}
     Consider the increasing spaces
     \begin{align}
         S_\ell(\Omega)
@@ -35,8 +36,8 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     Stationarity gives $S_\ell\subseteq S_{\ell+1}$. Equality at one step
     propagates through the recurrence
     $S_{\ell+1}=\sum_{i,j}A_iS_\ell A_j^\dagger$.
-    Normality and invertibility of $\Omega$ make one of these spaces all of
-    $\MN{D}$. A dimension argument therefore gives $S_{D^2}=\MN{D}$.
+    By Theorem~\ref{thm:physical_observable_word_span_mul}, normality and
+    invertibility of $\Omega$ make one of these spaces all of $\MN{D}$. A dimension argument therefore gives $S_{D^2}=\MN{D}$.
     The coefficients of a spanning expansion are the entries of $O$ in
     (\ref{eq:physical_block_transfer}).
 \end{proof}
@@ -60,7 +61,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
         MPSTensor.exists_physicalStringBlockEndpoints}
     \leanok
     \uses{thm:physical_endpoint_stationary_span,
-        thm:block_injectivity_adjoint_reverse, def:has_string_order}
+        thm:block_injectivity_adjoint_reverse, def:string_order_boundary_param}
     Let $A$ be normal and unital, and let $\Lambda$ be invertible with
     $\E_A^*(\Lambda)=\Lambda$. For all virtual matrices $X,Y$, there are
     physical operators $x,y$ on $q=D^2$ sites such that, for every physical
@@ -150,7 +151,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
         MPSTensor.pureCanonical_exists_physicalStringBlockEndpoints,
         MPSTensor.physicalStringBlock_norm_tendsto,
         MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder}
-    \notready
+    \leanok
     \uses{lem:pgwsvc08_twisted_spectral_radius,
         thm:physical_block_product_coefficients,
         thm:physical_string_phase_retaining_asymptotics}
@@ -167,7 +168,7 @@ length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
     claim of nontrivial physical action separately requires the projective
     convention of Definition~\ref{def:has_physical_string_order}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Canonical purity gives irreducibility and peripheral primitivity.
     Apply primitive-channel word-span fullness to the adjoint family and
     reverse words to obtain normality. Peripheral rigidity supplies a

@@ -21,7 +21,7 @@ and test scalar phase removal at fixed endpoints.
   display `SOP`, Theorem 1, lines 278–291, and Examples 1–2.
 -/
 
-open scoped Matrix TNOperatorSpace
+open scoped Matrix TNOperatorSpace ComplexOrder
 
 open MPSTensor
 
@@ -111,3 +111,30 @@ example {d D : ℕ} [NeZero D] (A : MPSTensor d D)
           Filter.atTop (nhds s) :=
   pureCanonical_exists_isHermitian_physicalStringProductOrder
     A Λ hΛpos hΛtr hΛfix hNorm hPure u hu hRad
+
+section AxiomChecks
+-- The repository's test-only presentation exception permits the guarded #print commands.
+-- All compiler warning/error settings and proof-related linters remain unchanged.
+set_option linter.hashCommand false
+
+/--
+info: 'MPSTensor.stringPhaseTensor_literal_criterion_counterexample'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.stringPhaseTensor_literal_criterion_counterexample
+
+/--
+info: 'MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter
+
+/--
+info: 'MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder
+end AxiomChecks

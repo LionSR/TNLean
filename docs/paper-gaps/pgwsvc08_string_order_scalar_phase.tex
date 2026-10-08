@@ -1,0 +1,198 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{Scalar Phases in the Physical String-Order Criterion}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+% Full production counterexample target checked at 4e22a416, PR CI
+% 37385801777, job 112019128398, step 5. Full-root/regression gates remain separate.
+\gapnote{false-source}{resolved}
+
+\section{The two literal assertions}
+
+P\'erez-Garc\'ia, Wolf, Sanz, Verstraete, and Cirac define string order by
+\begin{align}
+ S_N(x,y,u)&=\langle x\otimes u^{\otimes N}\otimes y\rangle,
+ &\lim_{N\to\infty}|S_N(x,y,u)|&>0,
+ \label{eq:scalar_phase_source_order}
+\end{align}
+for some local unitary $u\ne\Id$ and local endpoint operators $x,y$, which
+may be taken Hermitian. The exclusion is the literal identity matrix,
+not every scalar unitary. This is display SOP, lines 114--121 of the local
+source for arXiv:0802.0447 \cite{PerezGarcia2008StringOrder}.
+
+For a pure finitely correlated state, Theorem 1 asserts that this property
+is equivalent to the existence of a unitary $\widetilde u\ne\Id$, a virtual
+matrix $V$, and physical letters $n,m$ such that
+\begin{align}
+ \mathcal E_{\widetilde u}(V)&=V,
+ &\operatorname{tr}(V\Lambda A_n A_m^\dagger)&\ne0.
+ \label{eq:scalar_phase_source_fixed}
+\end{align}
+The source passage preceding this theorem replaces the original twist $u$
+by $\widetilde u=\mu^{-1}u$, where $\mu$ is its peripheral eigenvalue.
+Although this preserves unitarity, it need not preserve $u\ne\Id$:
+if $u=\mu\Id$, the new twist is the identity. The relevant source passages
+are lines 257--264 and 270--275.\footnote{Local source:
+\path{Papers/0802.0447/StringOrder-v10.tex}.}
+
+\section{The literal string-order predicate is automatic}
+
+For every normalized state with positive physical dimension, choose
+$x=y=\Id$ and $u=-\Id$. Then
+\begin{align}
+ S_N(\Id,\Id,-\Id)&=(-1)^N,
+ &|S_N(\Id,\Id,-\Id)|&=1.
+ \label{eq:scalar_phase_trivial_order}
+\end{align}
+Both endpoints are Hermitian. For a canonical tensor this is the exact
+transfer calculation
+$\mathcal E_{\mu\Id}=\mu\mathcal E$,
+$\mathcal E(\Id)=\Id$, and $\operatorname{tr}\Lambda=1$.
+Thus the literal definition supplies no nontriviality test on the state.
+
+This observation alone does not disprove the existential conclusion in
+(\ref{eq:scalar_phase_source_fixed}): a state could possess some other
+nonidentity fixed twist. The following example rules out all such twists.
+
+\section{A nondegenerate canonical example}
+
+Write $\sigma_x,\sigma_y,\sigma_z$ for the Pauli matrices. For
+$k=x,y,z$, set
+\begin{align}
+ U_0&=\Id,
+ &U_k&=\frac{\Id-i\sigma_k}{\sqrt2},
+ \label{eq:scalar_phase_tensor}\\
+ A_j&=\sqrt{p_j}\,U_j,
+ &\Lambda&=\frac{\Id}{2},
+ \notag\\
+ (p_0,p_x,p_y,p_z)&=\left(\frac12,\frac14,\frac16,\frac1{12}\right).
+ \notag
+\end{align}
+Each $U_j$ is unitary. Hence the transfer map is unital and trace
+preserving, and $\Lambda$ is faithful, stationary, and has trace one.
+The four Kraus matrices are linearly independent: after removing their
+nonzero scalar factors, they are
+$\Id,\Id-i\sigma_x,\Id-i\sigma_y,\Id-i\sigma_z$, an invertible triangular
+change of the Pauli basis. Therefore they span $M_2(\C)$. For each nonzero
+vector $v$, the vectors $A_jv$ span $\C^2$, so
+$\mathcal E(|v\rangle\langle v|)$ is positive definite. Full one-letter
+span consequently implies irreducibility and primitivity. In particular, every nonzero
+matrix $X$ satisfying
+$\mathcal E(X)=\nu X$ with $|\nu|=1$ has $\nu=1$ and is scalar.
+The example therefore meets the source's canonical pure-FCS hypotheses;
+its bond space and physical alphabet are both nondegenerate.
+
+On the traceless Pauli basis the transfer action is
+\begin{align}
+ T&=\begin{pmatrix}
+ 3/4&-1/12&1/6\\
+ 1/12&2/3&-1/4\\
+ -1/6&1/4&7/12
+ \end{pmatrix}.
+ \label{eq:scalar_phase_bloch}
+\end{align}
+Suppose a unitary $u$ and nonzero $Q$ satisfy $\mathcal E_u(Q)=Q$.
+The peripheral rigidity statement of the source's Lemma 1 supplies a
+unitary $W$ and $|\mu|=1$ with
+$\sum_j u_{ij}A_j=\mu W A_iW^\dagger$.
+Peripheral uniqueness forces $\mu=1$. Consequently the transfer map
+commutes with conjugation by $W$.
+
+Let $R$ be the complex $3\times3$ matrix of this conjugation on the Pauli
+basis. Trace preservation of the bilinear form
+$(X,Y)\mapsto\tfrac12\operatorname{tr}(XY)$ gives $R^{\mathsf T}R=\Id$.
+Covariance gives $RT=TR$. Transpose this relation and use orthogonality
+to obtain $RT^{\mathsf T}=T^{\mathsf T}R$. Thus $R$ commutes with
+\begin{align}
+ T+T^{\mathsf T}&=\operatorname{diag}(3/2,4/3,7/6).
+ \notag
+\end{align}
+Its diagonal entries are distinct, so $R$ is diagonal. All off-diagonal
+entries of $T$ are nonzero, so $RT=TR$ makes all three diagonal entries of
+$R$ equal. Write $R=c\Id$. Orthogonality gives $c^2=1$, whereas preservation
+of $\sigma_x\sigma_y=i\sigma_z$ gives $c^2=c$. Therefore $c=1$.
+
+Conjugation by $W$ fixes the identity and all Pauli matrices, hence every
+matrix. The intertwining equations now read
+$\sum_j u_{ij}A_j=A_i$. Linear independence of the physical letters yields
+$u=\Id$. This contradicts the required nonidentity twist in
+(\ref{eq:scalar_phase_source_fixed}); its nonzero trace coefficient already
+implies $Q\ne0$. Yet (\ref{eq:scalar_phase_trivial_order}) proves string
+order for this same tensor. The literal existential Theorem 1 is therefore
+false as printed.\footnote{The explicit declarations are
+\leanid{MPSTensor.stringPhaseTensor_canonical},
+\leanid{MPSTensor.stringPhaseTensor_pure}, and
+\leanid{MPSTensor.stringPhaseTensor_literal_criterion_counterexample},
+in \path{TNLean/MPS/Examples/StringOrderScalarPhase.lean}.}
+
+\section{A phase-retaining correction}
+
+Keep the original physical twist $u$. Under the canonical pure-FCS
+hypotheses, physical endpoints with positive limiting magnitude exist
+if and only if there are a virtual matrix $V$, a phase $|\mu|=1$, and
+physical letters $n,m$ such that
+\begin{align}
+ \mathcal E_u(V)&=\mu V,
+ &\operatorname{tr}(V\Lambda A_nA_m^\dagger)&\ne0.
+ \label{eq:scalar_phase_corrected}
+\end{align}
+To prove necessity, positive limiting magnitude excludes twisted spectral
+radius less than one. The unitary-twist bound and peripheral rigidity then
+supply a virtual unitary intertwiner. The physical endpoint coefficient
+criterion supplies the two letters. Conversely the nonzero coefficient
+makes $V$ nonzero. Peripheral rigidity and uniqueness normalize its
+one-dimensional eigendirection to a unitary intertwiner, and the same
+endpoint criterion constructs physical endpoints.
+
+\section{The explicit projective convention}
+
+For physical string order, require the unitary twist to satisfy
+\begin{align}
+ u&\notin\{c\Id:c\in\C\}.
+ \label{eq:scalar_phase_nonscalar}
+\end{align}
+This is an explicit correction to the printed definition, rather than an
+unstated assumption on the source theorem. If $|\mu|=1$, then $u$ satisfies
+(\ref{eq:scalar_phase_nonscalar}) exactly when $\mu^{-1}u$ does: an equality
+$\mu^{-1}u=c\Id$ would give $u=(\mu c)\Id$.
+Consequently the phase-retaining criterion implies the corrected global
+fixed-point criterion. Physical string order in this projective sense is
+equivalent to the existence of a nonscalar unitary $\widetilde u$, a virtual
+matrix $V$, and letters $n,m$ satisfying
+\begin{align}
+ \mathcal E_{\widetilde u}(V)&=V,
+ &\operatorname{tr}(V\Lambda A_nA_m^\dagger)&\ne0.
+ \label{eq:scalar_phase_projective_fixed}
+\end{align}
+The reverse direction follows from (\ref{eq:scalar_phase_corrected}) with
+$\mu=1$.\footnote{The definition
+\leanid{MPSTensor.HasPhysicalStringOrder} now states the nonscalar condition.
+The global criterion is
+\leanid{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}.
+The fixed-twist criterion is
+\leanid{MPSTensor.pureCanonical_exists_physicalStringOrderWith_iff_peripheral_letter},
+both in \path{TNLean/MPS/Symmetry/PhysicalStringPhase.lean}.}
+
+The four-letter example has no physical string order in this corrected
+sense, while its literal nonidentity-twist condition remains true.
+Both the AKLT and two-site cluster physical witnesses are nonscalar, so their
+physical endpoint conclusions are unchanged. Only this corrected physical
+predicate is retained. The literal condition appears in the explicit
+counterexample and scalar-twist calculation; it is not a second general
+predicate. The fixed-twist physical condition remains unchanged, as does
+virtual-boundary nondecay for fixed twists, including the identity.
+
+The finite-support comparison and the $D^2$ Hermitian-product endpoint bound
+are established separately in
+\path{pgwsvc08_string_order_virtual_boundary.tex}, using
+\leanid{MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder}.
+The physical reduced-state symmetry theorem is a separate source assertion.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

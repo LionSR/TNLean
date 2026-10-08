@@ -190,5 +190,6 @@
       "native Tenkz render"
     ],
     "excluded": "Actual-import analytic, counterexample, regression and reverse-consumer validation; no kernel-check claim."
-  }
+  },
+  "subsequent_CI_repair_record": "docs/audits/2026-10-05_string_order_convergence_repair.json"
 }

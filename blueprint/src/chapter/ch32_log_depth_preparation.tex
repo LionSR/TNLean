@@ -1377,6 +1377,9 @@ Chapter~\ref{ch:local_quantum_circuits}.
 
 \input{chapter/ch32_log_depth_compatible_seed}
 \input{chapter/ch32_log_depth_sector_weights}
+\input{chapter/ch32_log_depth_sector_encoders}
+\input{chapter/ch32_log_depth_exact_sector_encoder}
+\input{chapter/ch32_log_depth_coherent_conversion}
 
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
 %% R_k are realized on groups of D sites, as in
@@ -2356,8 +2359,7 @@ $A$ along $w$.
 \begin{theorem}[The depth lower bound with the constant $\xi/4$]
     \label{thm:ldp_depth_lower_bound_constant}
     \lean{MPSTensor.exists_log_le_of_infidelity_le_one_half_of_isNormal,
-        MPSTensor.exists_mul_log_le_of_infidelity_le_one_half_of_isNormal,
-        Real.log_le_mul_sub_one_sub_log}
+        MPSTensor.exists_mul_log_le_of_infidelity_le_one_half_of_isNormal}
     \leanok
     \uses{def:qc_local_circuit, def:correlation_length,
         thm:ldp_depth_lower_bound}
@@ -2439,6 +2441,7 @@ $A$ along $w$.
 \input{chapter/ch32_log_depth_varying_reference}
 \input{chapter/ch32_log_depth_rectangular}
 \input{chapter/ch32_log_depth_window_mixing}
+\input{chapter/ch32_log_depth_rectangular_windows}
 
 \section{Tensors that are not normal}
 
@@ -2949,9 +2952,8 @@ $A$ along $w$.
 \begin{theorem}[Approximation error for orthogonal blocks of multiplicity one]
     \label{thm:ldp_approximation_error_orthogonal_blocks}
     \lean{MPSTensor.exists_approximationError_le_mul_blockSum,
-        MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
+        MPSTensor.exists_approximationError_le_blockSum,
         MPSTensor.nonNormalApproxVector_blockSum,
-        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
         MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero,
         MPSTensor.mpvOverlap_eq_zero,
         MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero}
