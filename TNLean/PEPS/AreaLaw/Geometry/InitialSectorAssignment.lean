@@ -103,7 +103,7 @@ private theorem centered_cell_closedBall (c : ℝ × ℝ) (ℓ : ℕ) :
     let r := (2 : ℝ) ^ ℓ / 2
     closure (dyadicCell (c.1 - r, c.2 - r) ℓ (0, 0)) = Metric.closedBall c r := by
   dsimp only
-  rw [closure_dyadicCell, ← Metric.closedBall_prod_same]
+  rw [closure_dyadicCell, ← closedBall_prod_same]
   simp only [Real.closedBall_eq_Icc, Prod.fst, Prod.snd, zero_add, Int.cast_zero,
     Int.cast_one, mul_zero, mul_one, add_zero]
   congr 2 <;> ring
