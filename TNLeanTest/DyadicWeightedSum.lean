@@ -29,7 +29,7 @@ example : (∑ k ∈ Finset.range 2, (1 : ℝ) * ((2 : ℝ) ^ k) ^ (1 + (1 : ℝ
 -- Empty weights and an arbitrary positive exponent require no occupied scale.
 example (K : ℕ) {e : ℝ} (he : 0 < e) :
     (∑ k ∈ Finset.range (K + 1), (0 : ℝ) * ((2 : ℝ) ^ k) ^ (1 + e)) ≤ 0 := by
-  exact (sum_weighted_dyadic_rpow_le (fun _ ↦ 0) K he (le_refl (0 : ℝ))
+  exact (sum_weighted_dyadic_rpow_le (fun _ ↦ 0) K (A := 0) he (le_refl (0 : ℝ))
     (by simp) (by intros; simp)).trans (by simp)
 
 set_option linter.hashCommand false in
