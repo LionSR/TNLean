@@ -49,3 +49,6 @@ checked-source, and generated artifact hashes, and the recovered baseline
 manifest hash. The earlier 29-report evidence is retained separately. These
 checks still use the temporary module prefix and do not replace canonical
 integration verification.
+
+The tactic-pattern scan is preserved byte-for-byte in `tactic-pattern-scan.log.gz`.
+Its decompressed SHA-256 is `7e60fcde4c763ca9b289a8d98dd1e9767774edda911121a4e57933df40332c42` (1235 bytes).

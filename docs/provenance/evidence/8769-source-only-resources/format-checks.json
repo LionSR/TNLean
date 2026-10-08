@@ -1,0 +1,62 @@
+{
+  "source_freeze": "1ad40310757fb5d95345a431038b4427c539739c",
+  "upstream_revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "immutable_snapshot_sha256": "a06a282f0c70d28f28ca92a9a1b0ad819b485403b930887c0e3a9f1e10b437ed",
+  "immutable_input_manifest_sha256": "3b2e1394f772a37d848d7437e3278e69f5eace04fd4b1dcc5773ab4df8fa74bc",
+  "validation_baseline": "Recovered immutable published TNLean Gaussian PR #8903 artifact closure. Canonical production-pinned integration verification remains separate.",
+  "strict_options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "resource_kernel_reports": 31,
+  "full_lake_build": false,
+  "blueprint_checkdecls": false,
+  "full_provenance_replay": false,
+  "change": "Remove one extra final blank line from EffectReplacementCoefficients.lean; proof text and declarations unchanged.",
+  "preceding_checks": "direct-checks.json",
+  "modules": [
+    {
+      "module": "TNLean.PEPS.Approximation.EffectReplacementCoefficients",
+      "source_sha256": "a95ec0756b56e913b913c6c93128b6334d761b7b3524c308b3d3e612da1da2f2",
+      "checked_module": "TNLeanReduction.EffectReplacementCoefficients",
+      "checked_source_sha256": "39bf584829790fb559d587d56a9de0ec3e4ed43e14fad1a8d3708060157f879b",
+      "artifact_sha256": "c969a83e6c3c84538812efe04ae33a8b3d78498aef8bd1e02929ee05d337e739",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementCoefficients.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementCoefficients.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.EffectReplacementExpansion",
+      "source_sha256": "da6dfeb690768391db87170527d0bfef1b9fc1dfa1882da2582b4a92fd6512e3",
+      "checked_module": "TNLeanReduction.EffectReplacementExpansion",
+      "checked_source_sha256": "7a875531174f3d81b4b2f8a43a97255f1081ac126e0eb7681cdd4b9253e3b1eb",
+      "artifact_sha256": "f2649818f37d5b0f62bcec5e2caef02366683cd396ef3e5ed753eecd27db5263",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementExpansion.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementExpansion.lean"
+      ]
+    }
+  ]
+}

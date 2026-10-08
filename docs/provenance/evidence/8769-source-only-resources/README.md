@@ -43,3 +43,12 @@ These records do not assert a full Lake build, full blueprint declaration check
 or rendering, or canonical provenance replay for this branch. Those belong to
 the integration verification. They do not establish the subsequent sampled
 operator-network construction or either full headline theorem.
+
+The tactic-pattern scan is preserved byte-for-byte in `tactic-pattern-scan.log.gz`.
+Its decompressed SHA-256 is `04f27572e81cae76bdf33c60032368d3ff9f8026d84f81b06099c5b5aedf5243` (1235 bytes).
+
+The final newline correction is frozen at
+`1ad40310757fb5d95345a431038b4427c539739c`. The two affected module
+checks and the repeated 31-report resource audit are recorded in
+`format-checks.json` and `format-resources-axioms.log`. The original
+checks above remain unchanged as historical records.

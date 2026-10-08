@@ -12,8 +12,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "dbf4b4a4a614b6755605c5712351bb02e516524d9ca76755f54ea39984973828",
-      "bytes": 3230
+      "sha256": "7abff3897f5db788630641f7472d84937f79dcbbe8133d986c33c258814d57f9",
+      "bytes": 3424
     },
     {
       "path": "axioms.log",
@@ -36,9 +36,9 @@
       "bytes": 7711
     },
     {
-      "path": "tactic-pattern-scan.log",
-      "sha256": "7e60fcde4c763ca9b289a8d98dd1e9767774edda911121a4e57933df40332c42",
-      "bytes": 1235
+      "path": "tactic-pattern-scan.log.gz",
+      "sha256": "c90d6cbca4358e80054b71e50f5268c165289b0eef69c35adcb2ad62fc70a05c",
+      "bytes": 360
     }
   ]
 }
