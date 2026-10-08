@@ -98,11 +98,8 @@ theorem eval_partial_gate (A : P → Bool) (owner : C ↪ P)
       ← G.evalAtOwners_eq_sum owner]
     rfl
   · have hExt (l : Layout C) : ∀ r ∈ Layout.mapOwner owner l,
-        affectedOwner A r.owner = none := by
-      rintro r hr
-      obtain ⟨s, _, rfl⟩ := List.mem_map.mp hr
-      exact (affectedOwner_eq_none A _).mpr
-        (Bool.eq_false_iff.mpr (fun hp ↦ h ⟨s.owner, hp⟩))
+        affectedOwner A r.owner = none :=
+        Layout.affectedOwner_mapOwner_eq_none A owner h l
     let e : Choices A (.gate owner G tail) ≃ Unit := Equiv.cast (by simp [Choices, h])
     let T := (Word.groupedBlockMap (affectedOwner A) none
       (Layout.mapOwner owner a) (Layout.mapOwner owner b) (hExt a) (hExt b)

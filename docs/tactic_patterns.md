@@ -5655,27 +5655,31 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The aggregate case permits several original owners on the block;
   it retains the full operator after those owners are grouped together.
 
-### Weighted ket–bra matrix sums — candidate (2026-10-08)
+### Weighted ket–bra matrix sums — promoted (2026-10-08)
 
 - **Pattern:** Distribute a matrix product through two finite weighted sums,
-  conjugate the bra coefficients, and exchange the two summations.
-- **Seen:** `sum_density_expansion` in `SourceGateDensity.lean` and
-  `density_eval_eq_sum_partialWord` in `PartialSourceDensity.lean` under
-  `PEPS/Approximation` (two occurrences).
-- **Abstraction:** Before a third consumer, expose the rectangular matrix
-  identity as a shared lemma. Its two coefficient families and output index
-  types should remain independent.
-- **Scan:** The full repository scan was run. A focused scan of the eight
-  chronological-expansion modules with minimum count two found no repeated
-  tactic blocks at the default window lengths.
+  conjugating the bra coefficients and exchanging the two summations.
+- **Helper:** `Matrix.sum_smul_mul_mul_conjTranspose` in
+  `TNLean/Algebra/MatrixDensitySum.lean`. Both coefficient families and both
+  output and input coordinate types are independent; the middle matrix may
+  be rectangular.
+- **Refactored occurrences:** The private `sum_density_expansion` in
+  `SourceGateDensity.lean` is removed. Its two callers and
+  `PartialSourceDensity.density_eval_eq_sum_partialWord` use the shared lemma.
+  Corrected source reaggregation uses the same lemma.
+- **Decision:** Ordinary finite-sum and matrix identities suffice. No tactic
+  or special simplification attribute is needed.
 
-### Exterior ownership of a placed block — candidate (2026-10-08)
+### Exterior ownership of a placed block — promoted (2026-10-08)
 
 - **Pattern:** If no participant of a placed gate is affected, every register
   in its transported layout has the exterior owner.
-- **Seen:** `exterior_layout` in `DistributedSourceComposition.lean` and
-  the corresponding local assertion in `PartialSourceEvaluation.lean` under
-  `PEPS/Approximation` (two occurrences).
-- **Abstraction:** A third consumer should use one public layout-membership
-  lemma. The existing `affectedOwner_eq_none` already supplies the pointwise
-  fact; no new tactic is needed.
+- **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
+  `TNLean/PEPS/Approximation/SourceOwnerSupport.lean`, using
+  `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
+- **Refactored occurrences:** The private proof in
+  `DistributedSourceComposition.lean` is removed; its gate constructor,
+  `PartialSourceEvaluation.eval_partial_gate`, and the substituted gate
+  constructor in `SourceCircuitSubstitution.lean` use the shared lemma.
+- **Decision:** One layout-membership lemma removes the repeated argument;
+  no further automation is required.

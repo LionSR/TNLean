@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartialSourceEvaluation
+import TNLean.Algebra.MatrixDensitySum
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 
 /-!
@@ -87,10 +88,6 @@ theorem density_eval_eq_sum_partialWord {m n : Type}
       (coefficient A w ξ * conj (coefficient A w ζ)) • (K ξ * ρ * (K ζ)ᴴ) := by
   dsimp only
   rw [toMatrix_eval_eq_sum_partialWord A w bIn bOut]
-  simp only [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, Matrix.sum_mul,
-    Matrix.mul_sum, Matrix.smul_mul, Matrix.mul_smul, Finset.smul_sum, smul_smul,
-    Complex.star_def]
-  rw [Finset.sum_comm]
-  simp only [mul_comm]
+  exact Matrix.sum_smul_mul_mul_conjTranspose _ _ _ _ _
 
 end TNLean.PEPS.PairEffect.SourceCircuit

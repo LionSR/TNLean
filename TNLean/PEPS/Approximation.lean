@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
 import TNLean.PEPS.Approximation.AffectedOwners
+import TNLean.PEPS.Approximation.AllSourceSlots
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
@@ -54,8 +55,11 @@ import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
+import TNLean.PEPS.Approximation.PreparedSourceContraction
+import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.RoutedContraction
+import TNLean.PEPS.Approximation.SelectedSourceContraction
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
@@ -64,15 +68,26 @@ import TNLean.PEPS.Approximation.SourceCircuitChoiceAt
 import TNLean.PEPS.Approximation.SourceCircuitChoiceProduct
 import TNLean.PEPS.Approximation.SourceCircuitLocations
 import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
+import TNLean.PEPS.Approximation.SourceCircuitSubstitution
+import TNLean.PEPS.Approximation.SourceCompressedDensity
+import TNLean.PEPS.Approximation.SourceCorrectedContraction
+import TNLean.PEPS.Approximation.SourceCorrectedContractionIdentity
+import TNLean.PEPS.Approximation.SourceCorrectedSlots
+import TNLean.PEPS.Approximation.SourceCorrectedTerm
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceGateDensity
 import TNLean.PEPS.Approximation.SourceOwnerMap
+import TNLean.PEPS.Approximation.SourceOwnerSupport
 import TNLean.PEPS.Approximation.SourcePairIndex
 import TNLean.PEPS.Approximation.SourcePairMaps
+import TNLean.PEPS.Approximation.SourcePhysicalDensity
 import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
+import TNLean.PEPS.Approximation.SourceResidualCoordinates
 import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
+import TNLean.PEPS.Approximation.SourceSubstitutionInventory
+import TNLean.PEPS.Approximation.SourceSubstitutionResidual
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.UnitPairSource

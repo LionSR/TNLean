@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.WordAppendTail
-import TNLean.PEPS.Approximation.AffectedOwners
+import TNLean.PEPS.Approximation.SourceOwnerSupport
 
 /-!
 # Chronological compositions of source-prepared gates
@@ -146,13 +146,6 @@ instance choicesFintype (A : P → Bool) : {a b : Layout P} →
   | _, _, .swap .. => inferInstanceAs (Fintype Unit)
   | _, _, .frame _ w => choicesFintype A w
 
-private theorem exterior_layout {C : Type} (A : P → Bool) (owner : C → P)
-    (h : ¬ ∃ p, A (owner p) = true) (a : Layout C) :
-    ∀ r ∈ Layout.mapOwner owner a, affectedOwner A r.owner = none := by
-  rintro r hr
-  obtain ⟨s, _, rfl⟩ := List.mem_map.mp hr
-  exact (affectedOwner_eq_none A _).mpr (Bool.eq_false_iff.mpr (fun hp ↦ h ⟨s.owner, hp⟩))
-
 /-- The actual branch of the partial expansion; untouched exterior gates are
 retained as whole local operations. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 351–417. -/
@@ -170,7 +163,8 @@ def partialWord (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) 
         exact (((G.branchWord i).mapOwner owner).appendTail tail).mapOwner (affectedOwner A)
       · exact Word.groupedBlockMap (affectedOwner A) none
           (Layout.mapOwner owner a) (Layout.mapOwner owner b)
-          (exterior_layout A owner h a) (exterior_layout A owner h b)
+          (Layout.affectedOwner_mapOwner_eq_none A owner h a)
+          (Layout.affectedOwner_mapOwner_eq_none A owner h b)
           (G.evalAtOwners owner) tail
   | _, _, .swap r t tail, _ => (Word.swap r t tail).mapOwner (affectedOwner A)
   | _, _, .frame r w, ξ => .frame ⟨affectedOwner A r.owner, r.space⟩ (partialWord A w ξ)
