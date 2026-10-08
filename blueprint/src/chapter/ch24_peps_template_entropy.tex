@@ -67,7 +67,7 @@
     satisfies $2^K a_K\le2n$.
 \end{theorem}
 \begin{proof}
-    \uses{thm:area_law_template_depth_layers}
+    \uses{thm:area_law_template_depth_layers,thm:area_law_capped_dyadic_partition}
     Sum the depth-layer estimates to obtain $|T_j\setminus T|\le nj$.
     Disjointness gives $4^K a_K\le nj\le nL<2n2^K$; divide by $2^K>0$.
 \end{proof}
@@ -88,7 +88,7 @@
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
 \end{theorem}
 \begin{proof}
-    \uses{thm:area_template_shell_cap}
+    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count}
     Write $a_k$ for the number of selected squares of side $2^k$.
     The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
     The cap bound gives $2^K a_K\le2n$. Hence

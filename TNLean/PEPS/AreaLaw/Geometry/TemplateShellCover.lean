@@ -47,7 +47,7 @@ theorem Template.card_shell_le {Ctpl : ℝ} {n s₀ : ℕ}
           (ambientDilation T.points (j + 1) \ ambientDilation T.points j).card :=
         Finset.card_union_le _ _
       _ ≤ n * j + n := Nat.add_le_add (ih (by omega)) hlayer
-      _ = n * (j + 1) := by omega
+      _ = n * (j + 1) := (Nat.mul_succ n j).symm
 
 /-- At a cap comparable to `L`, the selected cap squares have total side at
 most `2*n`. Source: Lemma 9.4, lines 644–646. -/
