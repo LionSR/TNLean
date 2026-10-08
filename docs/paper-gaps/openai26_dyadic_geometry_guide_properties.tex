@@ -9,7 +9,8 @@
 
 \title{Guide Properties in the Angular Separation of Dyadic Repaintings}
 \author{}
-\date{2026-10-07; resolved 2026-10-08; interface labels and sampled guides 2026-10-08}
+\date{2026-10-07; resolved 2026-10-08; interface labels, sampled guides
+    and one ratio for all displacements 2026-10-08}
 
 \begin{document}
 \maketitle
@@ -229,35 +230,32 @@ The estimates need no hypothesis beyond $n>0$; the genericity of the displacemen
 which the source assumes, is used only for the existence of the sampled guides.
 
 The uniform footprint ratios of the point treatment and of the block guides also hold
-for the readings, with holes at the true vertices of the readings. A reading takes only
+for the readings, with holes at the true vertices of the readings, and with one ratio
+$\nu$ for all generic displacements. The source chooses $K_0$, then $\epsilon_0$, then
+$\nu$, and only afterwards the clearance $a$ and the information scale $D$ (lines
+559--563), while the displacement is chosen after all the guides are specified (lines
+73--77); so its $\nu$ must serve every generic displacement. A reading takes only
 values of the labelling, and a reading of a relabelled similar image of a template is
 the same image of a reading of the template; the templates are eventually constant
-along rays, so their finitely many readings serve as templates
+along rays, so their readings serve as templates. Each template is constant off walls
+on lines with normals in the finite set of the previous paragraph. If $v$ and $w$ lie
+strictly on the same side of each of these finitely many directions, then for every
+point $p$ and all small $\varepsilon>0$ the segment from $p+\varepsilon v$ to
+$p+\varepsilon w$ crosses no wall: a wall through $p$ separates neither $v$ from $w$,
+and the other walls near $p$ stay away from $p$. Along that segment the template is
+locally constant, hence constant, so its readings after $v$ and after $w$ agree
+(\leanid{TNLean.PEPS.Approximation.HasLineWalls.eventually_eq_of_sameSide}). Hence a
+template has at most one reading for each pattern of sides, and only finitely many
+readings after generic displacements
+(\leanid{TNLean.PEPS.Approximation.HasLineWalls.finite_genericReadings}). The
+compactness argument applied to these finitely many readings gives one ratio for all
+generic displacements
 (\leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading},
 \leanid{TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}).
-
-\section{Scope restriction: one ratio for each displacement}
-
-The footprint ratio $\nu$ for the readings is proved for each displacement $v$, and
-may depend on $v$. The source's ratio does not: it chooses $K_0$, then $\epsilon_0$,
-then $\nu$, and only afterwards the clearance $a$ and the information scale $D$
-(lines 559--563), while the guides depend on $D$ through $t=D\log L$ and the
-displacement is chosen after all the guides are specified (lines 73--77). So the
-source's $\nu$ serves every generic displacement; its compactness argument (lines
-453--462) uses only the closures of the label regions, which do not depend on $v$.
-
-The formal genericity condition does not depend on $L$, $D$, $n$ or $t$: a direction
-is generic when it is parallel to none of the lines with normals $(\pm t,1000)$ or
-$(1000,\pm t)$, $t\in T$. One generic direction, such as $v=(1,1)$, can therefore be
-fixed before every constant, and $\nu$ for it is then a fixed constant chosen in the
-source's order. The restriction does not affect Lemma~7.2, whose estimates hold for
-every displacement. Elimination: prove one ratio for all generic directions, using that
-for generic $v$ the closure of each label region of a reading is the closure of the
-interior of the corresponding region of the labelling, independent of $v$.
 
 Nothing of Lemma~7.2 or of its sampling convention remains open.
 
