@@ -674,7 +674,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{lemma}[Footprint ratios uniform in the scale]
     \label{lem:peps_dyadic_footprint_uniform}
-    \lean{TNLean.PEPS.Approximation.TwoOwnerFootprints, TNLean.PEPS.Approximation.TwoOwnerFootprints.mono, TNLean.PEPS.Approximation.TwoOwnerFootprints.relabel, TNLean.PEPS.Approximation.similarity, TNLean.PEPS.Approximation.dist_similarity, TNLean.PEPS.Approximation.similarity_inv, TNLean.PEPS.Approximation.TwoOwnerFootprints.image_similarity, TNLean.PEPS.Approximation.isCompact_footprintJointSet, TNLean.PEPS.Approximation.exists_twoOwnerFootprints_Icc, TNLean.PEPS.Approximation.exists_footprintRatio}
+    \lean{TNLean.PEPS.Approximation.TwoOwnerFootprints, TNLean.PEPS.Approximation.TwoOwnerFootprints.mono, TNLean.PEPS.Approximation.TwoOwnerFootprints.relabel, TNLean.PEPS.Approximation.similarity, TNLean.PEPS.Approximation.dist_similarity, TNLean.PEPS.Approximation.similarity_inv, TNLean.PEPS.Approximation.TwoOwnerFootprints.image_similarity, TNLean.PEPS.Approximation.isCompact_footprintJointSet, TNLean.PEPS.Approximation.exists_twoOwnerFootprints_Icc, TNLean.PEPS.Approximation.exists_footprintRatio, TNLean.PEPS.Approximation.TwoOwnerFootprints.of_template}
     \leanok
     \uses{lem:peps_dyadic_footprint}
     Say that a guide satisfies the two-owner condition with working set $W$, hole
@@ -929,9 +929,34 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     vertices. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform}.
 \end{proof}
 
-The source applies the same argument at a direct repainting and at a resizing, in
-units of $n$, with the radius ratio in the interval of
-Lemma~\ref{lem:peps_dyadic_small_radius}. That instance is not formalized here.
+\begin{theorem}[One patch ratio for direct repaintings and resizings]
+    \label{thm:peps_dyadic_block_ratio}
+    \lean{TNLean.PEPS.Approximation.blockWindow, TNLean.PEPS.Approximation.BlockSlot, TNLean.PEPS.Approximation.blockSlot, TNLean.PEPS.Approximation.blockSlotLabel, TNLean.PEPS.Approximation.blockGuide_eq_blockSlot, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio}
+    \leanok
+    \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_small_radius, lem:peps_dyadic_direct_repainting}
+    Fix $\rho$ and $0<r_0\le r_1$. There is a ratio $\nu>0$ such that every guide
+    uniform on the blocks of side $s>0$, about every grid corner $v$ and for every
+    inner radius $r\in[r_0s,r_1s]$, satisfies the two-owner condition with working set
+    the closed square of radius $s\rho$ about $v$, holes at its true vertices within
+    $s(\rho+1)$ of $v$, and footprint radius $\nu s$. In particular, for fixed
+    $\epsilon_0>0$ and $K_0$, one ratio serves every direct repainting of a square of
+    side $0<n\le K_0t$, before and after, with inner radius $h_n$ and working set the
+    closed square of radius $2n$ about a corner of the square; and one ratio serves
+    every resizing with $0<n<t$, with both radii $h_n$ and $h_{2n}$ on the guide uniform
+    on the blocks of side $2n$ and working set of radius $2n$. These are the
+    compactness arguments of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines
+    515--520 and 534--538, in units of $n$.
+\end{theorem}
+
+\begin{proof}\leanok
+    In units of $s$ about a grid corner, a block guide is the block guide of side one
+    whose labels are those of a fixed square window of blocks, so it is an injective
+    relabelling of one of finitely many templates, one for each label-equality type of
+    the window. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform} and
+    Lemma~\ref{lem:peps_dyadic_small_radius} for the radius ratios; when $n<t$ the
+    radius $h_n=\epsilon_0n$ and $h_{2n}=\epsilon_0\min(2n,t)$ lie between
+    $\epsilon_0n$ and $2\epsilon_0n$.
+\end{proof}
 
 \begin{lemma}[Trivial holes at the last level]
     \label{lem:peps_dyadic_last_level}

@@ -30,8 +30,8 @@ guides of a large-scale repainting and their point treatments:
 * with `exists_footprintRatio`, one ratio `ν > 0` gives the two-owner condition at footprint
   radius `ν t` near every mark of every large-scale repainting, at every scale.
 
-The direct repaintings and the resizings, whose guides are block guides in units of `n`, are not
-treated here.
+The direct repaintings and the resizings, whose guides are block guides in units of `n`, are in
+`TNLean.PEPS.Approximation.DyadicBlockFootprints`.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -529,83 +529,6 @@ theorem IsUnmodifiedGuide.isConicalAt (hn : R.n = 1) {c : ℝ × ℝ} (hc : IsSq
 
 end RepaintingBaseline
 
-/-! ### True vertices under relabelling and similarities -/
-
-/-- An injective relabelling on the values of a guide keeps its true vertices. -/
-theorem isTrueVertex_comp_iff {X ι κ : Type*} [TopologicalSpace X] {f : X → ι} {σ : ι → κ}
-    (hσ : InjOn σ (range f)) {c : X} : IsTrueVertex (σ ∘ f) c ↔ IsTrueVertex f c := by
-  have pre (k : ι) (hk : k ∈ range f) : (σ ∘ f) ⁻¹' {σ k} = f ⁻¹' {k} := by
-    ext p
-    simp only [mem_preimage, Function.comp_apply, mem_singleton_iff]
-    exact ⟨fun h => hσ (mem_range_self p) hk h, fun h => by rw [h]⟩
-  constructor
-  · rintro ⟨l₁, l₂, l₃, h12, h13, h23, h1, h2, h3⟩
-    have back {l : κ} (hl : c ∈ closure ((σ ∘ f) ⁻¹' {l})) :
-        ∃ k ∈ range f, l = σ k ∧ c ∈ closure (f ⁻¹' {k}) := by
-      obtain ⟨p, hp⟩ : ((σ ∘ f) ⁻¹' {l}).Nonempty := by
-        by_contra h
-        rw [not_nonempty_iff_eq_empty] at h
-        rw [h, closure_empty] at hl
-        exact hl
-      have hl' : l = σ (f p) := hp.symm
-      exact ⟨f p, mem_range_self p, hl', by rwa [← pre _ (mem_range_self p), ← hl']⟩
-    obtain ⟨k₁, -, rfl, c₁⟩ := back h1
-    obtain ⟨k₂, -, rfl, c₂⟩ := back h2
-    obtain ⟨k₃, -, rfl, c₃⟩ := back h3
-    exact ⟨k₁, k₂, k₃, fun h => h12 (h ▸ rfl), fun h => h13 (h ▸ rfl), fun h => h23 (h ▸ rfl),
-      c₁, c₂, c₃⟩
-  · rintro ⟨k₁, k₂, k₃, h12, h13, h23, h1, h2, h3⟩
-    have inr {k : ι} (hk : c ∈ closure (f ⁻¹' {k})) : k ∈ range f := by
-      by_contra h
-      have : f ⁻¹' {k} = ∅ := eq_empty_of_forall_notMem fun p hp => h ⟨p, hp⟩
-      rw [this, closure_empty] at hk
-      exact hk
-    refine ⟨σ k₁, σ k₂, σ k₃, fun h => h12 (hσ (inr h1) (inr h2) h),
-      fun h => h13 (hσ (inr h1) (inr h3) h), fun h => h23 (hσ (inr h2) (inr h3) h), ?_, ?_, ?_⟩
-    · rwa [pre _ (inr h1)]
-    · rwa [pre _ (inr h2)]
-    · rwa [pre _ (inr h3)]
-
-/-- A homeomorphism carries true vertices. -/
-theorem isTrueVertex_comp_homeomorph {X Y ι : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    {f : Y → ι} (h : X ≃ₜ Y) {c : X} : IsTrueVertex (f ∘ h) c ↔ IsTrueVertex f (h c) := by
-  have key (l : ι) : c ∈ closure ((f ∘ h) ⁻¹' {l}) ↔ h c ∈ closure (f ⁻¹' {l}) := by
-    rw [preimage_comp, ← h.preimage_closure]; rfl
-  simp only [IsTrueVertex, key]
-
-/-- The inverse `q ↦ t⁻¹ (q - v)` of the similarity `u ↦ v + t u`, as a homeomorphism. -/
-noncomputable def similarityInv (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) : (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
-  (Homeomorph.addRight (-v)).trans (Homeomorph.smulOfNeZero t⁻¹ (inv_ne_zero ht))
-
-theorem similarityInv_apply (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) (q : ℝ × ℝ) :
-    similarityInv v ht q = t⁻¹ • (q - v) := by
-  simp [similarityInv, sub_eq_add_neg]
-
-theorem image_similarity_closedBall (v : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ : ℝ) :
-    similarity v t '' closedBall 0 ρ = closedBall v (t * ρ) := by
-  ext q
-  constructor
-  · rintro ⟨u, hu, rfl⟩
-    have h0 : similarity v t 0 = v := by simp [similarity]
-    rw [mem_closedBall]
-    nth_rewrite 2 [← h0]
-    rw [dist_similarity v ht]
-    exact mul_le_mul_of_nonneg_left (mem_closedBall.1 hu) ht.le
-  · intro hq
-    refine ⟨t⁻¹ • (q - v), ?_, similarity_inv v ht.ne' q⟩
-    rw [mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht,
-      ← dist_eq_norm]
-    rw [mem_closedBall] at hq
-    rw [inv_mul_le_iff₀ ht]
-    exact hq
-
-/-- The two-owner condition depends only on the values of the guide on the working set. -/
-theorem TwoOwnerFootprints.congr {ι : Type*} {f g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)} {r δ : ℝ}
-    (h : TwoOwnerFootprints f W H r δ) (hfg : ∀ p ∈ W, f p = g p) :
-    TwoOwnerFootprints g W H r δ := fun x p₁ p₂ p₃ h₁ h₂ h₃ => by
-  rw [← hfg p₁ h₁.1.2, ← hfg p₂ h₂.1.2, ← hfg p₃ h₃.1.2]
-  exact h x p₁ p₂ p₃ h₁ h₂ h₃
-
 /-! ### The reference repainting -/
 
 /-- The `3 × 3` blocks about the block `(0, 0)`. -/
@@ -717,27 +640,6 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:330–338`. 
 noncomputable def pointTreated {ι : Type*} (v : ℝ × ℝ) (t : ℝ) (P : Option ι)
     (f : ℝ × ℝ → ι) : ℝ × ℝ → ι :=
   Option.elim P f fun P₀ => homogenize (ball v t) P₀ f
-
-/-- A preimage under `σ` of each value of `σ`. -/
-noncomputable def classSection {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (y : ι) : κ := by
-  classical
-  exact if h : ∃ k, σ k = y then h.choose else default
-
-/-- A representative, under `σ`, of the class of `k`: a function of `σ k`. -/
-noncomputable def classRep {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (k : κ) : κ :=
-  classSection σ (σ k)
-
-theorem classRep_spec {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (k : κ) :
-    σ (classRep σ k) = σ k := by
-  have h : ∃ k', σ k' = σ k := ⟨k, rfl⟩
-  simp only [classRep, classSection, h, dite_true]
-  exact h.choose_spec
-
-theorem injOn_range_classRep {κ ι : Type*} [Inhabited κ] (σ : κ → ι) :
-    InjOn σ (range (classRep σ)) := by
-  rintro _ ⟨k, rfl⟩ _ ⟨k', rfl⟩ h
-  rw [classRep_spec σ k, classRep_spec σ k'] at h
-  simp only [classRep, h]
 
 /-- The index of the templates: an unmodified guide of the reference repainting, a corner of the
 unit square, the homogenizing label if any, and a representative map of a label-equality type. -/
@@ -921,40 +823,13 @@ theorem exists_pointTreatment_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
       · exact ⟨some none, rfl⟩
       · exact ⟨some (some ⟨R, hR⟩), rfl⟩
   obtain ⟨i, -, -, hπ, heq⟩ := exists_template_eq hn hg hQ ht htn Pκ
-  set f := pointTreated v t (Pκ.map σ) (shiftGuide (blockCorner n S) g)
   have hinj : InjOn σ (range (template i)) := (injOn_range_classRep σ).mono (by
     rintro _ ⟨w, rfl⟩
     simp only [template, hπ]
     exact mem_range_self _)
-  have htv (q : ℝ × ℝ) (hq : q ∈ closedBall v (3 * t)) :
-      IsTrueVertex f q ↔ IsTrueVertex (template i) (t⁻¹ • (q - v)) := by
-    have hq4 : q ∈ ball v (4 * t) := closedBall_subset_ball (by linarith) hq
-    have hloc : f =ᶠ[𝓝 q] (σ ∘ (template i ∘ similarityInv v ht.ne')) := by
-      filter_upwards [isOpen_ball.mem_nhds hq4] with p hp
-      simp only [Function.comp_apply, similarityInv_apply]
-      exact heq p hp
-    rw [isTrueVertex_congr (incidentLabels_congr hloc),
-      isTrueVertex_comp_iff (hinj.mono (range_comp_subset_range _ _)),
-      isTrueVertex_comp_homeomorph, similarityInv_apply]
-  have Hi := H i σ v ht ε₀ ⟨le_rfl, le_rfl⟩
-  rw [image_similarity_closedBall v ht, show t * 2 = 2 * t by ring,
-    show t * ε₀ = ε₀ * t by ring] at Hi
-  have hH : similarity v t '' {u | u ∈ closedBall (0 : ℝ × ℝ) 3 ∧ IsTrueVertex (template i) u} =
-      {c | c ∈ closedBall v (3 * t) ∧ IsTrueVertex f c} := by
-    ext q
-    constructor
-    · rintro ⟨w, ⟨hw, hwt⟩, rfl⟩
-      have hq : similarity v t w ∈ closedBall v (3 * t) := by
-        rw [show 3 * t = t * 3 by ring, ← image_similarity_closedBall v ht]
-        exact mem_image_of_mem _ hw
-      refine ⟨hq, (htv _ hq).2 ?_⟩
-      rwa [similarity, add_sub_cancel_left, smul_smul, inv_mul_cancel₀ ht.ne', one_smul]
-    · rintro ⟨hq, hqt⟩
-      refine ⟨t⁻¹ • (q - v), ⟨?_, (htv q hq).1 hqt⟩, similarity_inv v ht.ne' q⟩
-      rw [mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht,
-        ← dist_eq_norm, inv_mul_le_iff₀ ht, mul_comm]
-      exact mem_closedBall.1 hq
-  rw [hH] at Hi
-  exact Hi.congr fun q hq => (heq q (closedBall_subset_ball (by linarith) hq)).symm
+  have key := TwoOwnerFootprints.of_template (ρ₁ := 2) (ρ₂ := 3) (ρ₃ := 4) hinj ht
+    (by norm_num) (by norm_num) (fun q hq => heq q (by rwa [mul_comm] at hq))
+    (H i σ v ht ε₀ ⟨le_rfl, le_rfl⟩)
+  rwa [mul_comm t 2, mul_comm t 3, mul_comm t ε₀] at key
 
 end TNLean.PEPS.Approximation

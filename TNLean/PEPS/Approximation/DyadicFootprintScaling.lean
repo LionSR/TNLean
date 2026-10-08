@@ -26,9 +26,15 @@ proves this argument in the following form:
 * consequently, for finitely many template guides, one ratio `ν > 0` works for every template,
   every relabelling, every scale `s > 0`, every center and every inner radius in `s [r₀, r₁]`, with
   footprint radius `ν s`.
+* injective relabellings and homeomorphisms preserve true vertices, so a guide that agrees near a
+  center with an injective relabelling of a similar image of a template inherits the template's
+  two-owner condition, with holes at its own true vertices;
+* a representative map of each label-equality type of a relabelling, through which the relabelling
+  is injective.
 
-The identification of the guides of the protocol near a mark, at a direct repainting and at a
-resizing, with relabelled similar images of finitely many templates is not proved here.
+The guides of the protocol are identified with relabelled similar images of finitely many
+templates in `TNLean.PEPS.Approximation.DyadicFootprintTemplates` (near a mark) and
+`TNLean.PEPS.Approximation.DyadicBlockFootprints` (direct repaintings and resizings).
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -212,5 +218,152 @@ theorem exists_footprintRatio {I κ : Type*} [Finite I] {g : I → ℝ × ℝ �
   have := (((hδr i r hr).mono (hν i)).image_similarity v hs).relabel σ
   rw [mul_comm ν s]
   exact this
+
+/-! ### True vertices under relabelling and similarities -/
+
+/-- An injective relabelling on the values of a guide keeps its true vertices. -/
+theorem isTrueVertex_comp_iff {X ι κ : Type*} [TopologicalSpace X] {f : X → ι} {σ : ι → κ}
+    (hσ : InjOn σ (range f)) {c : X} : IsTrueVertex (σ ∘ f) c ↔ IsTrueVertex f c := by
+  have pre (k : ι) (hk : k ∈ range f) : (σ ∘ f) ⁻¹' {σ k} = f ⁻¹' {k} := by
+    ext p
+    simp only [mem_preimage, Function.comp_apply, mem_singleton_iff]
+    exact ⟨fun h => hσ (mem_range_self p) hk h, fun h => by rw [h]⟩
+  constructor
+  · rintro ⟨l₁, l₂, l₃, h12, h13, h23, h1, h2, h3⟩
+    have back {l : κ} (hl : c ∈ closure ((σ ∘ f) ⁻¹' {l})) :
+        ∃ k ∈ range f, l = σ k ∧ c ∈ closure (f ⁻¹' {k}) := by
+      obtain ⟨p, hp⟩ : ((σ ∘ f) ⁻¹' {l}).Nonempty := by
+        by_contra h
+        rw [not_nonempty_iff_eq_empty] at h
+        rw [h, closure_empty] at hl
+        exact hl
+      have hl' : l = σ (f p) := hp.symm
+      exact ⟨f p, mem_range_self p, hl', by rwa [← pre _ (mem_range_self p), ← hl']⟩
+    obtain ⟨k₁, -, rfl, c₁⟩ := back h1
+    obtain ⟨k₂, -, rfl, c₂⟩ := back h2
+    obtain ⟨k₃, -, rfl, c₃⟩ := back h3
+    exact ⟨k₁, k₂, k₃, fun h => h12 (h ▸ rfl), fun h => h13 (h ▸ rfl), fun h => h23 (h ▸ rfl),
+      c₁, c₂, c₃⟩
+  · rintro ⟨k₁, k₂, k₃, h12, h13, h23, h1, h2, h3⟩
+    have inr {k : ι} (hk : c ∈ closure (f ⁻¹' {k})) : k ∈ range f := by
+      by_contra h
+      have : f ⁻¹' {k} = ∅ := eq_empty_of_forall_notMem fun p hp => h ⟨p, hp⟩
+      rw [this, closure_empty] at hk
+      exact hk
+    refine ⟨σ k₁, σ k₂, σ k₃, fun h => h12 (hσ (inr h1) (inr h2) h),
+      fun h => h13 (hσ (inr h1) (inr h3) h), fun h => h23 (hσ (inr h2) (inr h3) h), ?_, ?_, ?_⟩
+    · rwa [pre _ (inr h1)]
+    · rwa [pre _ (inr h2)]
+    · rwa [pre _ (inr h3)]
+
+/-- A homeomorphism carries true vertices. -/
+theorem isTrueVertex_comp_homeomorph {X Y ι : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    {f : Y → ι} (h : X ≃ₜ Y) {c : X} : IsTrueVertex (f ∘ h) c ↔ IsTrueVertex f (h c) := by
+  have key (l : ι) : c ∈ closure ((f ∘ h) ⁻¹' {l}) ↔ h c ∈ closure (f ⁻¹' {l}) := by
+    rw [preimage_comp, ← h.preimage_closure]; rfl
+  simp only [IsTrueVertex, key]
+
+/-- The inverse `q ↦ t⁻¹ (q - v)` of the similarity `u ↦ v + t u`, as a homeomorphism. -/
+noncomputable def similarityInv (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) : (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
+  (Homeomorph.addRight (-v)).trans (Homeomorph.smulOfNeZero t⁻¹ (inv_ne_zero ht))
+
+theorem similarityInv_apply (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) (q : ℝ × ℝ) :
+    similarityInv v ht q = t⁻¹ • (q - v) := by
+  simp [similarityInv, sub_eq_add_neg]
+
+theorem image_similarity_closedBall (v : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ : ℝ) :
+    similarity v t '' closedBall 0 ρ = closedBall v (t * ρ) := by
+  ext q
+  constructor
+  · rintro ⟨u, hu, rfl⟩
+    have h0 : similarity v t 0 = v := by simp [similarity]
+    rw [mem_closedBall]
+    nth_rewrite 2 [← h0]
+    rw [dist_similarity v ht]
+    exact mul_le_mul_of_nonneg_left (mem_closedBall.1 hu) ht.le
+  · intro hq
+    refine ⟨t⁻¹ • (q - v), ?_, similarity_inv v ht.ne' q⟩
+    rw [mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht,
+      ← dist_eq_norm]
+    rw [mem_closedBall] at hq
+    rw [inv_mul_le_iff₀ ht]
+    exact hq
+
+/-- The two-owner condition depends only on the values of the guide on the working set. -/
+theorem TwoOwnerFootprints.congr {ι : Type*} {f g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)} {r δ : ℝ}
+    (h : TwoOwnerFootprints f W H r δ) (hfg : ∀ p ∈ W, f p = g p) :
+    TwoOwnerFootprints g W H r δ := fun x p₁ p₂ p₃ h₁ h₂ h₃ => by
+  rw [← hfg p₁ h₁.1.2, ← hfg p₂ h₂.1.2, ← hfg p₃ h₃.1.2]
+  exact h x p₁ p₂ p₃ h₁ h₂ h₃
+
+/-- **Transfer from a template.** Let a guide `f` agree, on the open square of radius `s ρ₃` about
+`v`, with the relabelling by `σ` of a template `T` read through the similarity `u ↦ v + s u`, where
+`σ` is injective on the values of `T`. If the image of `T` satisfies the two-owner condition with
+the image working set `closedBall 0 ρ₁` and the image hole centers at the true vertices of `T` in
+`closedBall 0 ρ₂`, `ρ₁ ≤ ρ₂ < ρ₃`, then `f` satisfies it with working set `closedBall v (s ρ₁)` and
+hole centers at its true vertices in `closedBall v (s ρ₂)`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:469–471, 486–491`. -/
+theorem TwoOwnerFootprints.of_template {ι κ : Type*} {f : ℝ × ℝ → ι} {T : ℝ × ℝ → κ}
+    {σ : κ → ι} (hσ : InjOn σ (range T)) {v : ℝ × ℝ} {s : ℝ} (hs : 0 < s) {ρ₁ ρ₂ ρ₃ : ℝ}
+    (h12 : ρ₁ ≤ ρ₂) (h23 : ρ₂ < ρ₃) (hf : ∀ q ∈ ball v (s * ρ₃), f q = σ (T (s⁻¹ • (q - v))))
+    {r δ : ℝ} (hT : TwoOwnerFootprints (fun q => σ (T (s⁻¹ • (q - v))))
+      (similarity v s '' closedBall 0 ρ₁)
+      (similarity v s '' {u | u ∈ closedBall (0 : ℝ × ℝ) ρ₂ ∧ IsTrueVertex T u}) r δ) :
+    TwoOwnerFootprints f (closedBall v (s * ρ₁))
+      {c | c ∈ closedBall v (s * ρ₂) ∧ IsTrueVertex f c} r δ := by
+  have htv (q : ℝ × ℝ) (hq : q ∈ closedBall v (s * ρ₂)) :
+      IsTrueVertex f q ↔ IsTrueVertex T (s⁻¹ • (q - v)) := by
+    have hq3 : q ∈ ball v (s * ρ₃) :=
+      closedBall_subset_ball (mul_lt_mul_of_pos_left h23 hs) hq
+    have hloc : f =ᶠ[nhds q] (σ ∘ (T ∘ similarityInv v hs.ne')) := by
+      filter_upwards [isOpen_ball.mem_nhds hq3] with p hp
+      simp only [Function.comp_apply, similarityInv_apply]
+      exact hf p hp
+    rw [isTrueVertex_congr (incidentLabels_congr hloc),
+      isTrueVertex_comp_iff (hσ.mono (range_comp_subset_range _ _)),
+      isTrueVertex_comp_homeomorph, similarityInv_apply]
+  have hH : similarity v s '' {u | u ∈ closedBall (0 : ℝ × ℝ) ρ₂ ∧ IsTrueVertex T u} =
+      {c | c ∈ closedBall v (s * ρ₂) ∧ IsTrueVertex f c} := by
+    ext q
+    constructor
+    · rintro ⟨w, ⟨hw, hwt⟩, rfl⟩
+      have hq : similarity v s w ∈ closedBall v (s * ρ₂) := by
+        rw [← image_similarity_closedBall v hs]
+        exact mem_image_of_mem _ hw
+      refine ⟨hq, (htv _ hq).2 ?_⟩
+      rwa [similarity, add_sub_cancel_left, smul_smul, inv_mul_cancel₀ hs.ne', one_smul]
+    · rintro ⟨hq, hqt⟩
+      refine ⟨s⁻¹ • (q - v), ⟨?_, (htv q hq).1 hqt⟩, similarity_inv v hs.ne' q⟩
+      rw [mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos hs,
+        ← dist_eq_norm, inv_mul_le_iff₀ hs]
+      exact mem_closedBall.1 hq
+  rw [image_similarity_closedBall v hs, hH] at hT
+  exact hT.congr fun q hq =>
+    (hf q (closedBall_subset_ball ((mul_le_mul_of_nonneg_left h12 hs.le).trans_lt
+      (mul_lt_mul_of_pos_left h23 hs)) hq)).symm
+
+/-! ### Label-equality types -/
+
+/-- A preimage under `σ` of each value of `σ`. -/
+noncomputable def classSection {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (y : ι) : κ := by
+  classical
+  exact if h : ∃ k, σ k = y then h.choose else default
+
+/-- A representative, under `σ`, of the class of `k`: a function of `σ k`. -/
+noncomputable def classRep {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (k : κ) : κ :=
+  classSection σ (σ k)
+
+theorem classRep_spec {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (k : κ) :
+    σ (classRep σ k) = σ k := by
+  have h : ∃ k', σ k' = σ k := ⟨k, rfl⟩
+  simp only [classRep, classSection, h, dite_true]
+  exact h.choose_spec
+
+theorem injOn_range_classRep {κ ι : Type*} [Inhabited κ] (σ : κ → ι) :
+    InjOn σ (range (classRep σ)) := by
+  rintro _ ⟨k, rfl⟩ _ ⟨k', rfl⟩ h
+  rw [classRep_spec σ k, classRep_spec σ k'] at h
+  simp only [classRep, h]
 
 end TNLean.PEPS.Approximation
