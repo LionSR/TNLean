@@ -236,8 +236,7 @@ theorem le_dist_of_dist_le_closure {X : Type*} [PseudoMetricSpace X] {Z : Set X}
     {a t Q ε : ℝ} (ha : 0 ≤ a) (ht : 0 ≤ t) (htQ : t ≤ Q) (hε : 2 * ε ≤ a / 2)
     (H : ∀ z ∈ Z, a * Q ≤ dist y z) (hc : c ∈ closure Z) (hx : dist x c ≤ 2 * ε * t) :
     a / 2 * Q ≤ dist y x := by
-  have hyc : a * Q ≤ dist y c :=
-    closure_minimal H (isClosed_le continuous_const (continuous_const.dist continuous_id)) hc
+  have hyc : a * Q ≤ dist y c := le_dist_of_mem_closure H hc
   have htri := dist_triangle y x c
   have h1 : 2 * ε * t ≤ a / 2 * t := mul_le_mul_of_nonneg_right hε ht
   have h2 : a / 2 * t ≤ a / 2 * Q := mul_le_mul_of_nonneg_left htQ (by linarith)
@@ -261,6 +260,23 @@ theorem BandOperation.floor_outerHole {ι : Type*} (op : BandOperation ι) {n t 
   rw [← mul_assoc] at hx
   exact le_dist_of_dist_le_closure angularConstant_pos.le ht (le_max_left _ _) hε
     (fun _ hz => op.floor_bandUpdate htn e g hy hz) (hc.mem_closure_ne op.label) hx
+
+/-- **Birth-side floor at outer hole sites, central birth.** In the setting of
+`RepaintingBaseline.floor_central`, every point within `2 ε₀ t` of a true vertex of the homogenized
+starting guide lies at distance at least `(a₀ / 2) max(t, min(n, d_V(y)))` from every point `y` of
+the closure of the remaining changed region, once `2 ε₀ ≤ a₀ / 2`; here `V` is the four corners.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:368–373`. -/
+theorem RepaintingBaseline.floor_central_outerHole {ι : Type*} (R : RepaintingBaseline ι)
+    {t ε₀ : ℝ} (ht : 0 ≤ t) (htn : t ≤ R.n) (hε : 2 * ε₀ ≤ angularConstant / 2) {y : ℝ × ℝ}
+    (hy : y ∈ closure {p | homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
+      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p})
+    {c : ℝ × ℝ} (hc : IsTrueVertex (homogenize (cornerTreated R.n t) R.oldLabel R.guide) c)
+    {x : ℝ × ℝ} (hx : dist x c ≤ 2 * (ε₀ * t)) :
+    angularConstant / 2 * max t (min R.n (cornerMarkDist R.n y)) ≤ dist y x := by
+  rw [← mul_assoc] at hx
+  exact le_dist_of_dist_le_closure angularConstant_pos.le ht (le_max_left _ _) hε
+    (fun _ hz => R.floor_central htn hy hz) (hc.mem_closure_ne R.oldLabel) hx
 
 /-! ### The exchange side -/
 

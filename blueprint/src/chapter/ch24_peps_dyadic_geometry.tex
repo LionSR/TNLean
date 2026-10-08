@@ -217,12 +217,15 @@ $A$, $B$, $C$ below are permitted to coincide.
     is the completed guide with the band of $e$ replaced by $W$, and the auxiliary
     guide with normal word $W$ is the uniform guide $C_e$ with the band of $e$
     replaced by $W$. The three auxiliary births and the four main births and deaths
-    are those of Definition~\ref{def:peps_dyadic_normal_words}.
+    are those of Definition~\ref{def:peps_dyadic_normal_words}. Guides are
+    labellings of the plane; at the start of the construction along $e$ the schedule
+    passes from the completed guide to the main guide with the starting word, which
+    agrees with it off the curves $x=0$ and $x=1$ of the band of $e$.
 \end{definition}
 
 \begin{lemma}[The guides of the schedule]
     \label{lem:peps_dyadic_schedule_guides}
-    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_edgeBand, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_edgeStartWord, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start, TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_mainGuide, TNLean.PEPS.Approximation.auxSteps_chain, TNLean.PEPS.Approximation.mainSteps_chain, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mainWordFive, TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide_uniform, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_notMem_closedSquare, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_openSquare, TNLean.PEPS.Approximation.exists_edgeBand_of_not_mem_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_forall_notMem}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_edgeBand, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_edgeStartWord, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start, TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_mainGuide, TNLean.PEPS.Approximation.auxSteps_chain, TNLean.PEPS.Approximation.mainSteps_chain, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mainWordFive, TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide_uniform, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_notMem_closedSquare, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_openSquare, TNLean.PEPS.Approximation.exists_edgeBand_of_notMem_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_forall_notMem}
     \leanok
     \uses{def:peps_dyadic_schedule, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_lens_word}
     Let $e\notin E$. On the band of $e$, off the curves $x=0$ and $x=1$, the
@@ -289,7 +292,8 @@ $A$, $B$, $C$ below are permitted to coincide.
     \leanok
     \uses{thm:peps_dyadic_central_clearance, thm:peps_dyadic_band_clearance, thm:peps_dyadic_lens_clearance, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_schedule_guides, lem:peps_dyadic_translation}
     Let $a_0=1/5000$, $n>0$, and consider the repainting of a block $S$ of side $n$
-    from a block guide, with any block labels and any final label. Every elementary
+    from a block guide, with any block labels and any final label, through the
+    guides that the schedule specifies at each operation. Every elementary
     birth or death of its schedule, the central birth and the seven births and
     deaths along each edge after any completed edges, has changed region $R$ of
     diameter at most $n$, and its surrounding guide $f$ satisfies
@@ -307,12 +311,15 @@ $A$, $B$, $C$ below are permitted to coincide.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Lemma~\ref{lem:peps_dyadic_schedule_guides} the guides of the schedule have
-    the properties assumed in Theorems~\ref{thm:peps_dyadic_central_clearance},
+    The guides of an edge construction are obtained from one guide of their sheet by
+    replacing the band of the edge by a word, so they have the properties assumed in
+    Theorems~\ref{thm:peps_dyadic_central_clearance},
     \ref{thm:peps_dyadic_band_clearance} and~\ref{thm:peps_dyadic_lens_clearance}:
-    a guide obtained by replacing a band by a word carries that word on the band, two
-    such guides of one sheet agree off the band, and the starting main word is $C_e$
-    on $\{-8<x<0\}$. The diameter bound is
+    such a guide carries its word on the band, two such guides of one sheet agree off
+    the band, and the starting main word is $C_e$ on $\{-8<x<0\}$; the starting
+    guide of the central birth is $A$ on the open square.
+    Lemma~\ref{lem:peps_dyadic_schedule_guides} identifies these guides with the
+    guides reached by the schedule. The diameter bound is
     Lemma~\ref{lem:peps_dyadic_band_disjoint}. Translate by
     Lemma~\ref{lem:peps_dyadic_translation}.
 \end{proof}
@@ -333,9 +340,9 @@ $A$, $B$, $C$ below are permitted to coincide.
     $\{-8<x<0\}$ the main guides keep their starting values. The labels $A$, $B$,
     $C_e$ of the repainting of $S$ are owned by $S$, its parent, a neighboring block
     or its parent, or the placeholder; a neighboring block differs from $S$ by at
-    most one in each index. These are the guide part of the invariant
-    (\texttt{eq:geometry-active-labels}) in~\cite[Section~7]{OpenAI2026PolynomialPEPS},
-    lines 597--618; its part on tags is not treated here.
+    most one in each index. These are the guide part of the invariant on active
+    labels in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 597--618; its part on
+    tags is not treated here.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -346,6 +353,29 @@ $A$, $B$, $C$ below are permitted to coincide.
     lies in the root square of $2M$ blocks per side if and only if its parent lies in
     that of $M$ blocks. The words use only $A$, $B$, $C_e$, which are values of the
     starting guide or the final label.
+\end{proof}
+
+\begin{lemma}[Lattice sites off the interface curves]
+    \label{lem:peps_dyadic_sites}
+    \lean{TNLean.PEPS.Approximation.IsCellCenter, TNLean.PEPS.Approximation.IsCellCenter.sub_blockCorner, TNLean.PEPS.Approximation.IsCellCenter.mem_openSquare_or_notMem_closedSquare, TNLean.PEPS.Approximation.IsCellCenter.notMem_edgeInterface, TNLean.PEPS.Approximation.blockRepainting_start_site, TNLean.PEPS.Approximation.blockRepainting_final_site}
+    \leanok
+    \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels}
+    Let the side $n$ be an integer. No cell center $(i+\tfrac12,j+\tfrac12)$ lies
+    on the boundary of a block, or on the curves $x=0$ and $x=1$ of the band of an
+    edge of a block. Hence, at every cell center, the guide reached at the start of
+    the construction along an edge equals the main guide with the starting word, and
+    the guide left by a repainting equals the block guide of the next repainting.
+    The two replacements of guides in the schedule therefore leave the labels at the
+    lattice sites unchanged, as in the sampling convention
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 62--80.
+\end{lemma}
+
+\begin{proof}\leanok
+    In block coordinates a cell center still has half-odd integer coordinates, and so
+    do $s$ and $d$ for every edge. Thus $d\ne0$, and $d\ne w(s)$, since $1000d$ is an
+    integer while $1000\,w(s)=\min(s,n-s)$ is a half-odd integer. Apply
+    Lemmas~\ref{lem:peps_dyadic_schedule_guides}
+    and~\ref{lem:peps_dyadic_active_labels}.
 \end{proof}
 
 \begin{lemma}[Logarithmic floor]
@@ -360,9 +390,8 @@ $A$, $B$, $C$ below are permitted to coincide.
     $|y-z|\ge a_0\max\{t,\min(n,d_{\mathcal V}(y))\}$ for every position $z$ of
     another label in the homogenized surrounding guide, and every point $y$ of the
     closure of the remaining positions that are not common $C_e$ satisfies the same
-    bound for every point $z$ of $\partial Y$. This
-    is~(\texttt{eq:geometry-floor}) in~\cite[Section~7]{OpenAI2026PolynomialPEPS},
-    lines 357--367, with $a_1=a_0$.
+    bound for every point $z$ of $\partial Y$. This is the logarithmic floor
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 357--367, with $a_1=a_0$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -375,7 +404,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{lemma}[Outer holes on the birth side]
     \label{lem:peps_dyadic_birth_enlargement}
-    \lean{TNLean.PEPS.Approximation.IsTrueVertex, TNLean.PEPS.Approximation.IsTrueVertex.mem_closure_ne, TNLean.PEPS.Approximation.le_dist_of_dist_le_closure, TNLean.PEPS.Approximation.BandOperation.floor_outerHole}
+    \lean{TNLean.PEPS.Approximation.IsTrueVertex, TNLean.PEPS.Approximation.IsTrueVertex.mem_closure_ne, TNLean.PEPS.Approximation.le_dist_of_dist_le_closure, TNLean.PEPS.Approximation.BandOperation.floor_outerHole, TNLean.PEPS.Approximation.RepaintingBaseline.floor_central_outerHole}
     \leanok
     \uses{lem:peps_dyadic_floor}
     A true vertex, a point in the closures of the regions of three distinct labels,
@@ -383,7 +412,8 @@ $A$, $B$, $C$ below are permitted to coincide.
     $2\epsilon_0\le a_0/2$, every point within $2\epsilon_0t$ of a true vertex of
     the homogenized surrounding guide lies at distance at least
     $\tfrac{a_0}2\max\{t,\min(n,d_{\mathcal V}(y))\}$ from every point $y$ of the
-    closure of the remaining changed region. This is the enlargement
+    closure of the remaining changed region, for the central birth and for every
+    birth or death along an edge. This is the enlargement
     of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 368--373.
 \end{lemma}
 
@@ -462,7 +492,8 @@ $A$, $B$, $C$ below are permitted to coincide.
     fewer than $16L^2/3$ squares, and $M$ times the number of squares plus
     junctions is at most $80ML^2/3$, and for $L\ge1$ at most $80ML^3/3$. This is
     the count behind a schedule using at most $M$ changes for each repainting of a
-    square and each junction resize; the schedule itself is not constructed here.
+    square and each junction resize; the schedule of changes and gates of the
+    protocol is not constructed here.
 \end{theorem}
 
 \begin{proof}\leanok

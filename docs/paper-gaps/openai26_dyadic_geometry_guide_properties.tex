@@ -37,10 +37,10 @@ the obstructing set is the boundary of the lens $Y=\{-7<x<-7/2\}$.
 
 \section{The earlier formal statement}
 
-The schedule of guides was first not constructed in the formal development. The
-estimate~(\ref{eq:openai26_dyadic_geometry_guide_properties_clearance}) is
-instead proved with $a_0=1/5000$ for every guide having the properties that the
-source's proof uses:
+Initially the schedule of guides was not constructed. The
+estimate~(\ref{eq:openai26_dyadic_geometry_guide_properties_clearance}) was
+proved with $a_0=1/5000$ for every guide having the properties that the source's
+proof uses:
 \begin{itemize}
     \item for an edge birth or death, the guides before, after and surrounding
     the operation carry the source's normal words on the band $\{-8<x<2\}$, and
@@ -100,18 +100,38 @@ and stated in the source's form with closures:
 \leanid{TNLean.PEPS.Approximation.blockRepainting_exchange}. Their only
 hypothesis is $n>0$; the block labels and the final label are arbitrary.
 
-One convention remains. A guide of the source is a partition into open
-chambers, with labels on boundaries sampled after one small generic displacement
-(lines 69--80). A formal guide is a labelling of the whole plane, and two
-labellings that agree off finitely many interface curves represent the same
-guide. Thus the completed guide and the main guide with the starting word
-$C_e\mid A\mid B$ agree off the curves $x=0$ and $x=1$ of the band of $e$
-(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start}),
-and the final guide of a repainting agrees with the block guide of the next
-repainting off the boundary of the repainted square
-(\leanid{TNLean.PEPS.Approximation.blockRepainting_final}). The estimates of
-Lemma~7.2 concern closures of chambers, so the choice of representative does
-not affect them. This is a convention, not a restriction of the source's
-statement.
+One convention remains, and it follows the source's own. A guide of the source
+is specified by its open polygonal chambers, and its labels are read at the
+lattice sites, the cell centers $(i+\tfrac12,j+\tfrac12)$, after one small
+generic displacement (lines 62--80). A formal guide is a labelling of the whole
+plane, and the estimates are proved for the labellings that the schedule
+specifies at each operation; within one edge construction consecutive labellings
+match exactly. Twice the schedule passes to a labelling that agrees with the one
+reached only off finitely many curves. At the start of the construction along an
+edge~$e$, the completed guide is replaced by the main guide with the starting
+word $C_e\mid A\mid B$, which agrees with it off the curves $x=0$ and $x=1$ of
+the band of $e$
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start}).
+At the end of a repainting, the final guide is replaced by the block guide of
+the next repainting, which agrees with it off the boundary of the repainted
+square (\leanid{TNLean.PEPS.Approximation.blockRepainting_final}).
+
+These replacements matter for the formal changed regions: the set where two
+labellings differ is sensitive to their values on a curve, and if the labelling
+reached at the start of an edge were carried through the operations unchanged,
+the curve $x=1$ would enter the changed region of a main death and the estimate
+would fail there. The estimates are therefore not claimed for every labelling
+that agrees with the schedule's off these curves. The replacements do not matter
+for the source: the labellings represent the same partition into open chambers,
+and no lattice site lies on the curves. A cell center is never on the boundary
+of an aligned square of integer side, and never on the curves $x=0$ or $x=1$ of
+the band of one of its edges: there $d$ is a half-odd integer, so $d\ne0$ and
+$1000d$ is an integer, while $1000\,w(s)=\min(s,n-s)$ is a half-odd integer
+(\leanid{TNLean.PEPS.Approximation.IsCellCenter.mem_openSquare_or_notMem_closedSquare},
+\leanid{TNLean.PEPS.Approximation.IsCellCenter.notMem_edgeInterface}). Hence the
+labels at every lattice site are unchanged by both replacements
+(\leanid{TNLean.PEPS.Approximation.blockRepainting_start_site},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_final_site}). This is the
+source's sampling convention, not a hypothesis of the formal statements.
 
 \end{document}

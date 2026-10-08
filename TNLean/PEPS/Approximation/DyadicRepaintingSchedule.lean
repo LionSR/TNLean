@@ -30,12 +30,16 @@ proves:
   and outside the closed square together with the four exterior bands the main guides keep their
   starting values.
 
-A guide of the source is a polygonal partition into open chambers, with labels on boundaries
-sampled after one small generic displacement (`06-geometry.tex:69–80`). A guide here is a
-labelling of the whole plane, which represents such a partition through its values on the open
-chambers. Two labellings that agree off finitely many interface curves represent the same guide;
-this is the sense in which the main guide at the start of an edge operation carries the normal
-word `C | A | B`.
+A guide of the source is specified by its open polygonal chambers and read at the lattice sites
+after one small generic displacement (`06-geometry.tex:62–80`). A guide here is a labelling of the
+whole plane, and the estimates are proved for the labellings that the schedule specifies at each
+operation. Within an edge construction consecutive labellings match exactly. At the start of the
+construction along `e` the schedule passes from the completed guide to the main guide with the
+starting word `C | A | B`; the two agree only off the curves `x = 0` and `x = 1`
+(`RepaintingBaseline.completedGuide_eq_mainGuide_start`), and no lattice site lies on those curves
+(`IsCellCenter.notMem_edgeInterface` in `TNLean.PEPS.Approximation.DyadicLevelSchedule`). The
+estimates are not claimed for every labelling that agrees with the schedule's off these curves:
+the set where two labellings differ depends on their values on a curve.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -117,7 +121,7 @@ theorem notMem_closedSquare_of_mem_edgeNeighbor {n : ℝ} {e : SquareEdge} {p : 
 edge.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:155–160`. -/
-theorem exists_edgeBand_of_not_mem_centralRegion {n : ℝ} {p : ℝ × ℝ} (hp : p ∈ openSquare n)
+theorem exists_edgeBand_of_notMem_centralRegion {n : ℝ} {p : ℝ × ℝ} (hp : p ∈ openSquare n)
     (hc : p ∉ centralRegion n) :
     ∃ e : SquareEdge, p ∈ edgeBand n e (-8) 2 ∧ e.nor n p ≤ bandWidth n (e.par p) := by
   obtain ⟨h1, h2, h3, h4⟩ := mem_openSquare.1 hp
@@ -135,8 +139,13 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:155–160, 2
 theorem mem_centralRegion_of_forall_notMem {n : ℝ} {p : ℝ × ℝ} (hp : p ∈ openSquare n)
     (hb : ∀ e : SquareEdge, p ∉ edgeBand n e (-8) 2) : p ∈ centralRegion n := by
   by_contra hc
-  obtain ⟨e, he, -⟩ := exists_edgeBand_of_not_mem_centralRegion hp hc
+  obtain ⟨e, he, -⟩ := exists_edgeBand_of_notMem_centralRegion hp hc
   exact hb e he
+
+/-- A lower bound on the distance from a point to every point of a set extends to its closure. -/
+theorem le_dist_of_mem_closure {X : Type*} [PseudoMetricSpace X] {s : Set X} {y : X} {c : ℝ}
+    (h : ∀ z ∈ s, c ≤ dist y z) {z : X} (hz : z ∈ closure s) : c ≤ dist y z :=
+  closure_minimal h (isClosed_le continuous_const (continuous_const.dist continuous_id)) hz
 
 /-! ### Band updates -/
 
@@ -525,7 +534,9 @@ theorem clearance_auxStep (e : SquareEdge) {op : BandOperation ι}
     angularConstant * min R.n (edgeMarkDist R.n e y) ≤ dist y z :=
   op.clearance_bandUpdate e _ hy hz
 
-/-- **Lemma 7.2 for the main births and deaths of the schedule.**
+/-- **Lemma 7.2 for the main births and deaths of the schedule.** For `e ∉ E` the guides
+`R.mainGuide E e W` are the main guides of the construction along `e`; the estimate holds for every
+list `E`, since it uses only that these guides are band replacements of one guide.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 equation `eq:geometry-birth-clearance`, `06-geometry.tex:254–264, 286–293`. -/
@@ -538,7 +549,10 @@ theorem clearance_mainStep (E : List SquareEdge) (e : SquareEdge) {op : BandOper
 
 /-- **Lemma 7.2 for the lens exchange of the schedule.** Every point `y` of the closure of the
 positions that are not common `C_e` on the two guides before the exchange lies at ambient sup
-distance at least `a₀ min(n, d_V(y))` from the boundary of the lens.
+distance at least `a₀ min(n, d_V(y))` from the boundary of the lens. For `e ∉ E` the main guide
+here is the one the schedule specifies at the start of the construction along `e`, which agrees
+with the completed guide off the curves `x = 0` and `x = 1`
+(`completedGuide_eq_mainGuide_start`).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 equation `eq:geometry-exchange-clearance`, `06-geometry.tex:265–272, 295–299`. -/
@@ -570,12 +584,13 @@ theorem bandWord_mem {s : Set ι} {c : ι} (hc : c ∈ s) {l : List (ℝ × ι)}
     · exact hc
     · exact ih hl.1 hl.2
 
-/-- The labels `A`, `B` and `C_e` are values of the starting guide or the final label. -/
+/-- The label `C_e` across an edge is a value of the starting guide. -/
 theorem nbrLabel_mem (e : SquareEdge) : R.nbrLabel e ∈ Set.range R.guide := by
   have hn := R.n_pos
   refine ⟨e.point R.n (R.n / 2) (-(R.n / 2)), R.guide_edgeNeighbor e _ ?_⟩
   refine ⟨?_, ?_, ?_, ?_⟩ <;> simp only [par_point, nor_point] <;> linarith
 
+/-- The old label `A` is a value of the starting guide. -/
 theorem oldLabel_mem : R.oldLabel ∈ Set.range R.guide := by
   have hn := R.n_pos
   exact ⟨(R.n / 2, R.n / 2), R.guide_openSquare _

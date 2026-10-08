@@ -75,8 +75,8 @@
         ]
       },
       "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
-      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that agree with the paper's open chambers. The estimates concern closures, so they do not depend on how labels are chosen on chamber boundaries.",
-      "impact": "None. Lemma 7.2 is formalized as stated once #8910 merges.",
+      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that represent the paper's open chambers, and the estimates are proved for the labellings the schedule specifies. At the start of each edge and at the end of each repainting the schedule passes to a labelling that agrees with the one reached only off a few curves; no lattice site lies on those curves, so the labels at the sites are unchanged, matching the paper's sampling convention.",
+      "impact": "No problem with the paper. Lemma 7.2 is formalized with the paper's hypotheses once #8910 merges, for guides represented by labellings that are read at the lattice sites.",
       "plan": "Merge #8910. The protocol of Proposition 7.1 is separate work."
     },
     {
