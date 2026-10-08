@@ -1,0 +1,45 @@
+'TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair_bijective' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv_endpoints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_gate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_parties' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_eq_coeffSum_smul_id_of_isEmpty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_heq_coeffSum_smul_id_of_participants_eq_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

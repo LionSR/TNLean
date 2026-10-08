@@ -55,5 +55,7 @@
   "selected_kernel_reports": 14,
   "full_lake_build": false,
   "blueprint_checkdecls": false,
-  "full_provenance_replay": false
+  "full_provenance_replay": false,
+  "named_public_exports": 21,
+  "all_named_public_kernel_reports": 21
 }

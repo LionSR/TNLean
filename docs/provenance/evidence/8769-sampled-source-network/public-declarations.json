@@ -1,0 +1,86 @@
+[
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt_injective"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair_bijective"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv_endpoints"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_gate"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_parties"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices_apply"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels_le"
+  },
+  {
+    "module": "SampledSourceNetwork",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le"
+  },
+  {
+    "module": "ZeroPartyGates",
+    "name": "TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty"
+  },
+  {
+    "module": "ZeroPartyGates",
+    "name": "TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty"
+  },
+  {
+    "module": "ZeroPartyGates",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_eq_coeffSum_smul_id_of_isEmpty"
+  },
+  {
+    "module": "ZeroPartyGates",
+    "name": "TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_heq_coeffSum_smul_id_of_participants_eq_empty"
+  }
+]

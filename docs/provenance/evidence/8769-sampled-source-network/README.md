@@ -33,3 +33,11 @@ those checks belong to integration.
 
 The tactic scan is preserved in `tactic-pattern-scan.log.gz`; its exact
 decompressed SHA-256 is `491f415cc22edbb3da2dc32b56d34a365a91bbcd3f8fbf1cef321c3d86b48120` (1235 bytes).
+
+The complete named public inventory contains 17 sampled-source declarations
+and four scalar-gate theorems. All 21 have now been audited, with only the
+standard axioms, in `AllPublicAxioms.lean` and `all-public-axioms.log`; the
+exact list is `public-declarations.json`. The earlier 14 selected reports
+remain unchanged. One anonymous local decidable-equality instance and two
+private helper lemmas are implementation details, excluded from this public
+inventory. Canonical integration may audit the generated declarations as well.
