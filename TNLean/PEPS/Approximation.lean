@@ -44,11 +44,17 @@ import TNLean.PEPS.Approximation.PairSourceCombination
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
 import TNLean.PEPS.Approximation.PartyChain
+import TNLean.PEPS.Approximation.PartyFactorization
+import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyLayout
+import TNLean.PEPS.Approximation.PartyLocalMaps
+import TNLean.PEPS.Approximation.PartyPartition
+import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
@@ -63,3 +69,4 @@ import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
 import TNLean.PEPS.Approximation.WordPermutation
+import TNLean.PEPS.Approximation.WordRestriction
