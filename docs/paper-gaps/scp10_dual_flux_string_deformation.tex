@@ -176,4 +176,27 @@ The continuation under \ghissue{8703} and \ghissue{8271} is to extend these
 precisely stated boundaries when the wider source setting is required,
 rather than introduce a flatness assumption or a supplied gauge witness
 into the geometric deformation theorem.
+
+\section{Finite rectangular continuation}
+The finite bulk case of the deformation holds for embedded rectangles.
+Choose a translated lifted rectangle $[0,W]\times[0,H]$ with $W<w$ and
+$H<h$, retain the four unit-step labels, and require both paths to have
+the same lifted endpoints. Then the two projected paths are related by
+square moves and backtracks, and the two actual contractions with these
+paths are equal.\footnote{Lean statements:
+\leanid{TNLean.PEPS.TorusDualRectangle.homotopy} and
+\leanid{TNLean.PEPS.TorusDualRectangle.torusBondNetwork_eq_with_exterior};
+see \ghpr{8726}.}
+A bottom-row and column comb reduces the
+paths by adjacent-square exchanges and backtrack cancellations.
+The permitted swept primal sites form the whole rectangular interior
+$R=\{(x_0+i+1,y_0+j+1):i<W,\ j<H\}$, with coordinates reduced modulo
+the two periods. The contraction statement requires virtual invariance
+at every site of this chosen $R$. Arbitrary fixed exterior matrices are
+allowed only on bonds whose two endpoints both lie outside $R$.
+
+This specialization does not assert deformation avoiding an arbitrary
+region, equality of winding classes, an open-boundary theorem, or equality
+with a vacuum reduced density matrix. The unrestricted source gap remains open.
+
 \end{document}
