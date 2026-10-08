@@ -1,0 +1,87 @@
+\section{The half-open layer partition}
+\label{sec:area_law_layer_partition}
+
+The nested neighborhoods $N_k$ determine the layers
+$D_k=N_{k+1}\setminus N_k$. Their half-open convention gives a
+unique layer assignment before taking closures of birth regions;
+see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 154--181. All disjointness statements
+% concern the half-open sets, not their closures.
+
+\begin{theorem}[An actual fine cell belongs to its layer]
+    \label{thm:area_law_fine_cell_containment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices}
+    \leanok
+    \uses{def:area_law_fine_layer_indices}
+    For arbitrary origin, finite endpoint set and nonnegative integer
+    width, suppose that $\ell\le k$ and that $z$ is an actual fine-layer
+    index at exponent $\ell$. Then its half-open cell belongs to $D_k$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fine_layer_count}
+    The exact union of the fine cells in $D_k$ contains the cell
+    indexed by $z$.
+\end{proof}
+
+\begin{theorem}[Pairwise disjoint half-open layers]
+    \label{thm:area_law_layer_pairwise_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_pairwiseDisjoint}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    For arbitrary origin, finite endpoint set and nonnegative integer
+    width, $D_k\cap D_h=\varnothing$ whenever $k\ne h$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_dyadic_layers,thm:area_law_dyadic_nesting}
+    If $k<h$, then $D_k\subseteq N_{k+1}\subseteq N_h$, whereas
+    $D_h$ is disjoint from $N_h$. The other order follows by symmetry.
+\end{proof}
+
+\begin{theorem}[The dummy region is disjoint from later layers]
+    \label{thm:area_law_dummy_layer_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_disjoint_later_layer}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    Under the same hypotheses, fix a lower index $k_0$. For every
+    $k\ge k_0$, the dummy neighborhood $N_{k_0}$ is disjoint from $D_k$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_dyadic_layers,thm:area_law_dyadic_nesting}
+    Nesting gives $N_{k_0}\subseteq N_k$, and
+    $D_k=N_{k+1}\setminus N_k$.
+\end{proof}
+
+\begin{theorem}[Unique layer outside the dummy region]
+    \label{thm:area_law_unique_layer}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_layer_of_not_mem_dyadicNeighborhood}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    Suppose that $Z$ is nonempty and $C_0\ge2$. For every lower
+    index $k_0$ and every $x\notin N_{k_0}$, there is a unique
+    $k\ge k_0$ such that $x\in D_k$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_exhaustion,thm:area_law_dyadic_nesting,
+        thm:area_law_layer_pairwise_disjoint}
+    Exhaustion gives a least $K$ for which $x\in N_K$.
+    Nesting and $x\notin N_{k_0}$ imply $K>k_0$. Minimality gives
+    $x\notin N_{K-1}$, so $x\in D_{K-1}$. Pairwise disjointness
+    gives uniqueness.
+\end{proof}
+
+\begin{theorem}[Exact cover by the dummy region and later layers]
+    \label{thm:area_law_dummy_layers_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_layers_eq_univ}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    For nonempty $Z$, integer $C_0\ge2$ and every lower index $k_0$,
+    \begin{align}
+        \mathbb R^2=N_{k_0}\cup\bigcup_{k\ge k_0}D_k.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unique_layer}
+    A point either belongs to $N_{k_0}$ or lies in its unique later
+    layer.
+\end{proof}

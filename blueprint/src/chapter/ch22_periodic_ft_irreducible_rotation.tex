@@ -228,6 +228,19 @@
     eigenvector, which is a contradiction.
 \end{proof}
 
+\begin{theorem}[A periodic tensor has positive physical dimension]
+    \label{thm:periodic_physical_dimension_pos}
+    \lean{MPSTensor.IsPeriodic.physDim_ne_zero}
+    \leanok
+    \uses{def:periodic_tensor}
+    If $A$ is a normalized periodic tensor, then $d\geq1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_bond_dimension_pos,thm:left_canonical_physical_dimension}
+    The bond dimension of $A$ is positive. A left-canonical tensor on a
+    bond space of positive dimension has positive physical dimension.
+\end{proof}
+
 \begin{definition}[Irreducible form]
     \label{def:irreducible_form}
     \lean{MPSTensor.IsIrreducibleForm}

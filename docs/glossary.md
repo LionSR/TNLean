@@ -389,6 +389,42 @@ normalizations.
 
 ### PEPS predicates
 
+#### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
+
+- **Defined in:** `TNLean/PEPS/Approximation/SourcePreparation.lean`.
+- **Meaning:** every recorded pair-source vector has norm one. The list records
+  source occurrences separately, including repeated pairs of parties.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
+  `04-compression.tex`, lines 53–70 and 125–127.
+- **Sanctioned bridges:** `SourceInventory.isAllowed_prepare_iff` and
+  `Word.isNormalized_sources` identify normalization with allowed preparation
+  and derive it from an allowed composition.
+
+#### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
+
+- **Defined in:** `TNLean/PEPS/Approximation/PairSourceGrouping.lean`.
+- **Meaning:** `G.Expands S` means that, beside any spectator registers,
+  allowed local operations and register exchanges containing no pair-source
+  preparations take the preparation of `G` exactly to the preparation of `S`.
+- **Source:** the same Lemma 5.1, lines 125–127; the fresh-register argument
+  in Theorem 5.2, `eq:compression-source-gate`, lines 233–251.
+- **Sanctioned bridges:** `SourceInventory.exists_grouped` constructs a
+  normalized `G` with one source for each unordered pair occurring in `S`.
+  `Word.exists_grouped_source_preparation` gives the resulting exact
+  factorization of an arbitrary allowed composition.
+- **Further consequence:** `Word.exists_tensorPartyMaps_parties` collects the
+  remaining operations into one contraction per party under canonical register
+  identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
+  grouped preparation for a prescribed finite gate party type.
+- **All pair slots:** `Word.exists_complete_prepared_tensorPartyMaps` also
+  supplies a source on every unordered pair of distinct gate parties. Sources
+  on pairs absent from the original monomial have one-dimensional halves.
+  `SourceInventory.exists_complete_extension` retains the original inventory
+  verbatim and supplies an allowed recovery of its preparation.
+- **Caveat:** the finite type is the party set of the gate, not necessarily all
+  parties in a larger construction. A bound on its cardinality and common
+  source spaces across different monomials remain separate data or constructions.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.
@@ -743,6 +779,35 @@ normalizations.
   `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
 - **Caveat:** nearness includes diagonal contact, so it is not the
   four-neighbor adjacency of the square lattice.
+
+#### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean`.
+- **Meaning:** the domain consists of independent positive semidefinite
+  trace-one matrices on the physical spaces of a finite family of regions.
+  For shift `b > 0`, the objective is the norm of the reverse index-ordered
+  product of the identity-extended powers `(xⱼ + bI)^(-aⱼ/2)` applied to a
+  unit global Euclidean vector. The minimum is the infimum of this actual
+  objective image.
+- **Source:** September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 68–99](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L68-L99),
+  `eq:patch-variational-problem` and `eq:patch-elementary-norm-bounds`.
+- **Sanctioned consequences:** compactness, nonemptiness derived from the unit
+  vector, continuity, and `exists_isMinOn_regularizedPatchObjective` for
+  arbitrary real weights. For nonnegative weights,
+  `regularizedPatchObjective_bounds` applies to every feasible tuple;
+  `regularizedPatchObjective_eq_minimum` identifies every feasible minimizer
+  with the common value, and positivity permits unit normalization.
+- **Caveats:** repeated regions retain independent variables; singular
+  densities are shifted on the full regional space. No nestedness,
+  inter-factor commutation, uniqueness, or smooth optimizer is assumed.
+  Stationarity, energy, later regulator-growth and retained-rank estimates,
+  and the full adaptive patch constraint are outside this result.
+- **Verification boundary:** the minimum module passed a strict local check
+  with the accepted QICLean shifted-density dependency. The original-proof
+  ledger remains planned pending immutable native source/evidence publication;
+  full-build and exact-head CI gates remain separate. See
+  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
 
 #### `TNLean.PEPS.IsRegionParentInteraction`
 
@@ -1478,9 +1543,14 @@ The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
 from `TNLean/MPS/`. Its local labels are `Fin d`. The notions that involve no
 geometry (operators acting on a set of sites, expectations, product vectors,
 placed operators, permutations of configurations and of sites, onsite
-channels) are stated for any finite type of sites `ι`; layers, circuits,
-neighbourhoods and light cones use the sites `Fin N`, closed into a ring by
-addition modulo `N`. The blueprint chapter is
+channels) are stated for any finite type of sites `ι`. Layers, circuits and
+light cones are stated for a bond geometry `bond : β → Set ι` on such a type
+(`TNLean/Circuit/Geometry.lean`), with the ring `ringBond k = {k, k + 1}` on
+`Fin N` (addition modulo `N`), the open chain `openBond`, and the edges of a
+simple graph `edgeBond G` as instances; the ring-facing names (`Layer`,
+`IsLocalCircuitOfDepth`, `IsPreparedInDepth`, `IsCircuitOn`, `ChannelLayer`,
+`IsChannelPreparedInDepth`) abbreviate the general notions for `ringBond`.
+Measurement protocols and teleportation remain stated on the ring. The blueprint chapter is
 `ch33_local_quantum_circuits.tex`; the preparation of matrix product states
 in `MPS/Preparation/` uses it.
 
@@ -1510,26 +1580,50 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** membership says nothing about unitarity; for `S = ∅` the
   submodule consists of the scalar multiples of the identity.
 
-#### `QuantumCircuit.Layer`
+#### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
 
-- **Declaration:** `structure QuantumCircuit.Layer (d N : ℕ) [NeZero N]`, with
-  fields `bonds : Finset (Fin N)` (the left sites `k` of the pairs
-  `{k, k + 1}`), `gate : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ`,
+- **Declarations:**
+  `QuantumCircuit.bondNeighbourhood {ι β : Type*} (bond : β → Set ι) (X : Set ι) : Set ι`
+  and `QuantumCircuit.lightCone (bond : β → Set ι) (X : Set ι) : ℕ → Set ι`.
+- **Defined in:** `TNLean/Circuit/Geometry.lean`.
+- **Meaning:** `X` together with every bond meeting `X`, and its `r`-fold
+  iterate.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
+  light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
+  LOCC" (gates on nearest-neighbour pairs of a lattice) and the graph
+  distance before Proposition `propQCA2`.
+- **Sanctioned bridges:** `QuantumCircuit.lightCone_ringBond` (on the ring,
+  the light cone of radius `r` is `neighbourhood X r`, the sites within ring
+  distance `r`, for every `N`), `QuantumCircuit.lightCone_openBond_subset`,
+  `QuantumCircuit.lightCone_edgeBond_subset` and
+  `QuantumCircuit.lightCone_edgeBond_subset_dist` (graph distance), with the
+  disjointness criteria `disjoint_lightCone_ringBond_of_isSeparatedBy`,
+  `disjoint_lightCone_openBond`, `disjoint_lightCone_edgeBond` and
+  `disjoint_lightCone_edgeBond_of_dist`.
+- **Caveat:** for the open chain and graphs only the inclusion in the metric
+  ball is proved; on the ring the equality holds.
+
+#### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
+
+- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
+  with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and lies in
-  `supportedOperators d (bond k)`, and that the pairs `bond k` of distinct
-  bonds are disjoint.
+  `supportedOperators d (bond b)`, and that the bonds carrying gates are
+  pairwise disjoint; `QuantumCircuit.Layer (d N : ℕ) [NeZero N]` abbreviates
+  `BondLayer d ringBond` on `Fin N`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** one layer of a local circuit on the ring of `N` sites:
-  unitaries on pairwise disjoint pairs of neighbouring sites. Its operator
-  `Layer.op` is the product of its gates, which commute.
+- **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
+  bonds; on the ring, pairs of neighbouring sites. Its operator
+  `BondLayer.op` is the product of its gates, which commute.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
-  quantum circuits").
-- **Sanctioned bridges:** `Layer.op_mem_unitary`,
-  `Layer.conj_op_mem_supportedOperators` (the light cone of one layer), and
-  `Layer.adjoint` with `Layer.adjoint_op` (the layer of the adjoint gates
-  implements the adjoint).
-- **Caveat:** the pairs are taken modulo `N`, so for `N ≤ 2` they degenerate;
-  a circuit on the open chain is one whose bonds avoid the pair `{N - 1, 0}`.
+  quantum circuits"); arXiv:2103.13367, main text, paragraph "Quantum circuits
+  and LOCC".
+- **Sanctioned bridges:** `BondLayer.op_mem_unitary`,
+  `BondLayer.conj_op_mem_supportedOperators` (the light cone of one layer),
+  and `BondLayer.adjoint` with `BondLayer.adjoint_op` (the layer of the adjoint
+  gates implements the adjoint).
+- **Caveat:** on the ring the pairs are taken modulo `N`, so for `N ≤ 2` they
+  degenerate; the open chain is the separate geometry `openBond`.
 
 #### `QuantumCircuit.IsLocalCircuitOfDepth`
 
@@ -1540,13 +1634,16 @@ in `MPS/Preparation/` uses it.
   head of the list applied first.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits").
-- **Sanctioned bridges:** `IsLocalCircuitOfDepth.mem_unitary`,
-  `IsLocalCircuitOfDepth.star`, `IsLocalCircuitOfDepth.mul` (depths add),
-  `QuantumCircuit.conj_circuitOp_mem_supportedOperators` (the light cone of
-  radius `T`), `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site
-  unitaries in depth `2`), and `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`.
+- **Sanctioned bridges:** it abbreviates `IsBondCircuitOfDepth ringBond U T`;
+  `IsBondCircuitOfDepth.mem_unitary`, `IsBondCircuitOfDepth.star`,
+  `IsBondCircuitOfDepth.mul` (depths add),
+  `IsBondCircuitOfDepth.conj_mem_supportedOperators` (the light cone of radius
+  `T` for any bond geometry), `QuantumCircuit.conj_circuitOp_mem_supportedOperators`
+  (on the ring, within ring distance `T`),
+  `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site unitaries in
+  depth `2`), and `QuantumCircuit.IsBondCircuitOn.isBondCircuitOfDepth`.
 - **Caveat:** the depth is exact in the definition; a smaller depth is padded
-  with empty layers, as in `IsCircuitOn.mono`.
+  with empty layers, as in `IsBondCircuitOn.mono`.
 
 #### `QuantumCircuit.IsPreparedInDepth`
 
@@ -1557,10 +1654,12 @@ in `MPS/Preparation/` uses it.
   and a product vector `productVector v = ⊗ᵢ vᵢ`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
   obtained from depth-`T` local quantum circuits applied to product states").
-- **Sanctioned bridges:** `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
+- **Sanctioned bridges:** it abbreviates `IsBondPreparedInDepth ringBond T ψ`;
+  `IsBondPreparedInDepth.expect_mul_eq` (vanishing connected correlations of
+  operators on sets with disjoint light cones, for any bond geometry),
+  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
   and `QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth`
-  (vanishing connected correlations of operators at ring distance larger than
-  `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
+  (on the ring, operators at ring distance larger than `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
   (a nonzero prepared vector is a multiple of a local circuit of depth `T + 2`
   applied to `|0⋯0⟩`), and
   `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`.
@@ -1589,39 +1688,44 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
-#### `QuantumCircuit.Layer.IsIn`
+#### `QuantumCircuit.BondLayer.IsIn`
 
 - **Declaration:**
-  `QuantumCircuit.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
+  `QuantumCircuit.BondLayer.IsIn (L : BondLayer d bond) (R : Set ι) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** every gate of the layer `L` acts on a bond `{k, k+1}` contained
-  in the set of sites `R`.
+- **Meaning:** every gate of the layer `L` acts on a bond contained in the set
+  of sites `R`.
 - **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
   the block unitaries act in parallel on disjoint blocks of sites; the source
   has no separate name for this support condition.
-- **Sanctioned bridges:** `Layer.IsIn.mono` enlarges `R`;
-  `Layer.op_mem_supportedOperators` places the layer operator among the
-  operators supported on `R`; `Layer.union` and `Layer.union_op` merge layers
-  acting in disjoint sets; `Layer.empty_isIn` covers the empty layer.
+- **Sanctioned bridges:** `BondLayer.IsIn.mono` enlarges `R`;
+  `BondLayer.op_mem_supportedOperators` places the layer operator among the
+  operators supported on `R`; `BondLayer.union` and `BondLayer.union_op`
+  merge layers acting in disjoint sets; `BondLayer.empty_isIn` covers the
+  empty layer.
 - **Caveat:** the condition is on the bonds of the layer, not on its operator;
-  it is the per-layer ingredient of `IsCircuitOn`.
+  it is the per-layer ingredient of `IsBondCircuitOn`. `BondLayer.union_op`
+  needs every bond to be nonempty, as the ring bonds are.
 
-#### `QuantumCircuit.IsCircuitOn`
+#### `QuantumCircuit.IsBondCircuitOn` and `QuantumCircuit.IsCircuitOn`
 
-- **Declaration:**
+- **Declarations:**
+  `QuantumCircuit.IsBondCircuitOn (bond : β → Set ι) (R : Set ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fin d) ℂ) : Prop`
+  and its ring abbreviation
   `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
-  each of whose gates acts inside the set of sites `R`.
+- **Meaning:** `U` is the operator of a list of exactly `T` layers, each of
+  whose gates acts inside the set of sites `R`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits"), restricted to gates inside `R` as in the parallel
   application of block unitaries in the paragraph "The sequential-RG circuit".
-- **Sanctioned bridges:** `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`
-  forgets the support; `IsCircuitOn.mul` composes in series (depths add), and
-  `IsCircuitOn.par` runs two circuits of the same depth on disjoint sets of
+- **Sanctioned bridges:** `IsBondCircuitOn.isBondCircuitOfDepth` forgets the
+  support; `IsBondCircuitOn.mul` composes in series (depths add), and
+  `IsBondCircuitOn.par` (for nonempty bonds) and its ring form
+  `IsCircuitOn.par` run two circuits of the same depth on disjoint sets of
   sites in parallel.
-- **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
-  with empty layers.
+- **Caveat:** the depth is exact in the definition; `IsBondCircuitOn.mono`
+  pads it with empty layers.
 
 #### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
@@ -2059,6 +2163,28 @@ in `MPS/Preparation/` uses it.
   `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
   dynamics onto graph balls under a sphere-growth hypothesis).
 - **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+
+#### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
+  constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
+  from QICLean and their ball expectations
+  `QuantumCircuit.siteExpectation q (QuantumCircuit.graphBall G aᵢ l) kᵢ`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
+- **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
+  centered at the ground vector; the positive contractions annihilate `Ω`, their sum
+  dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
+  `e^{-c l^{p/(p+1)}}`.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Proposition 4.3 (`prop:positive`) and Lemma 4.4 (`lem:quasilocal-roots`),
+  `03-quasilocal.tex`, lines 220–389.
+- **Sanctioned bridges:** `SpectralFilter.positive_replacement`,
+  `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` (QICLean),
+  `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
+- **Caveat:** stated for a general finite graph with the support, multiplicity and
+  sphere-growth hypotheses of the propagation estimate; the specialization to the induced
+  lattice domains is a separate step.
 
 ## Inhomogeneous short-range correlated chains
 
@@ -2959,18 +3085,26 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 |---|---|---|
 | `TNLean.PEPS.AreaLaw.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
 | `TNLean.PEPS.AreaLaw.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
+| `Matrix.IsGappedGroundState` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
+| `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
+| `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
+| `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. |
 | `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
 | `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
+| `TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood`, `dyadicLayer` | Actual translated half-open cell unions and their successive differences at nonnegative dyadic scales | Area-law Section 11; nesting, exact layer-cell unions, closed-cell formulas, uniform cell counts, endpoint-distance bounds, and nonadjacent-layer separation proved. Exhaustion holds for a nonempty endpoint set and radius at least two. |
+| `TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds`, `dyadicLayer_dist_nonadjacent` | The source's lower and upper sup-distance bounds to the endpoints, and separation of closed layers whose scales differ by at least two | Area-law `geometry:layer-distance` and `geometry:nonadjacent`; proved for arbitrary origin and nonnegative integer radius. The nonadjacent lower bound is positive when the radius is at least two; the full two-family partition remains open. |
+| `TNLean.PEPS.AreaLaw.Geometry.fineLayerIndices`, `fineScaleIndex`, `pitchScaleIndex`, `exists_sparse_dyadic_belt_shift` | Actual fine-cell layer indices, the fixed rounded fine and pitch scales, and selection of sparse coordinate belts | Area-law `geometry:belt-count`; exact fine-cell unions and counts, scale divisibility, and the bound `64*(2*C₀+1)^2*b*2^(-δ₀*k/2)` proved, including empty layers. The constant is uniform in domain, cut, origin, and scale. The two-family construction remains open. |
+| `TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios` | A threshold for each fixed factor separates the fine-cell side, layer-cell side, and belt pitch at every later scale | Area-law Section 11, lines 200–207; proved uniformly in all physical and geometric data. The later geometric construction remains open. |
+| `TNLean.PEPS.AreaLaw.Geometry.exists_polynomial_dyadic_absorption`, `summable_polynomial_dyadic_decay`, `exists_uniform_polynomial_dyadic_sum_bound` | Absorption of every fixed real power into the exponential belt decay, convergence of the resulting series, and one positive bound on arbitrary finite scale sums | Auxiliary numerical estimates for Area-law `geometry:total-repairs`, lines 668–692, uniform in all physical and geometric data. Descendant counts and the actual repair construction and count remain open. |
 | `TNLean.PEPS.AreaLaw.Geometry.latticeRow` | Horizontal integer coordinates at a fixed vertical coordinate | Lemma 9.4 proof; this is a horizontal section, not a dilation depth layer. |
 | `TNLean.PEPS.AreaLaw.Geometry.template_card_le` | The template area is at most `9*n*s₀` when `Ctpl ≥ 1` | Area part of Lemma 9.4; distinct from the dilation depth-layer bound. |
 | `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
 | `TNLean.PEPS.AreaLaw.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
-| `TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
@@ -3099,3 +3233,19 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   assumed. This is the orthogonalization step, not the approximation-error
   or full adaptive-patch theorem. See
   [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).
+
+## Two-family regional entropy
+
+- `FiniteProduct.entropy` (QICLean): canonical von Neumann entropy of the actual
+  regional reduced pure-state matrix, for arbitrary finite dependent local bases.
+- `FiniteProduct.entropy_le_remainder_add_half_sum` (QICLean): exact normalized
+  pure-state two-family cancellation, with coefficient `1/2` and the entire
+  exterior-plus-earlier-same-family mutual-information assumptions.
+- `TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum`: the finite-domain
+  specialization using the existing `OrderedTwoFamilyPartition` and regional
+  entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
+  nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
+- `FiniteProduct.conditionalMutualInformation` (QICLean): the physical regional
+  entropy combination. Generic difference, finite-chain and pure-duality
+  identities are available; canonical tripartite identification, exceptional-site
+  dimension bounds and the full PEPS conditional-cell theorem remain separate.

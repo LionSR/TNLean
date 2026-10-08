@@ -18,16 +18,6 @@ Original formalization from the mathematical manuscript; no upstream Lean
 proof text is reused. Physical cut clearance and entropy remain separate.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.geometry.template_boundary_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.geometry.template_shell_boundary_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The actual unordered ambient boundary of every permitted template dilation

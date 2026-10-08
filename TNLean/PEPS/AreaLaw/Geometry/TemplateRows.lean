@@ -26,64 +26,6 @@ Lemma 9.4 (`scanner:templates`), `08-scanner.tex`, lines 571–629, at
 Original formalization from the mathematical manuscript. No upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  08-scanner.tex
-Labels: scanner:templates.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff
-Provenance-ID: 8754-tnlean.peps.arealaw.ambientdilation_add
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientDilation_add
-Provenance-ID: 8754-tnlean.peps.arealaw.mem_ambientdilation_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.mem_ambientDilation_iff
-Provenance-ID: 8754-tnlean.peps.arealaw.ambientdilation_mono
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientDilation_mono
-Provenance-ID: 8754-tnlean.peps.arealaw.ambientdilation_mono_radius
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientDilation_mono_radius
-Provenance-ID: 8754-tnlean.peps.arealaw.ambientdilation_biunion_sdiff_subset
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset
-Provenance-ID: 8754-tnlean.peps.arealaw.card_ambientdilation_biunion_sdiff_le
-Downstream declaration: TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.latticerow
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.latticeRow
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.mem_latticerow
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.convex_region
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_region
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.horizontal_mem_of_mem_of_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_horizontalsection
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.horizontalsection_eq_icc
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc_ceil_floor
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.mem_sample_of_row_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.sample_subset_box
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_sample_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_card_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.ceil_affine_row
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.floor_affine_row
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.floor_affine_row
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.mem_latticerow_ambientdilation
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation
--/
-
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw
@@ -162,7 +104,7 @@ def latticeRow (S : Finset (ℤ × ℤ)) (y : ℤ) : Finset ℤ :=
   · intro h
     exact ⟨(x, y), ⟨h, rfl⟩, rfl⟩
 
-/-- Every permitted polygon is convex by its actual convex-hull definition. -/
+/-- Every permitted polygon is convex by its convex-hull definition. -/
 theorem TemplatePolygon.convex_region (P : TemplatePolygon) : Convex ℝ P.region := by
   cases P <;> exact convex_convexHull ℝ _
 
@@ -196,7 +138,7 @@ theorem TemplatePolygon.isCompact_horizontalSection (P : TemplatePolygon) (y : �
   · rintro ⟨⟨a, b⟩, ⟨hp, rfl⟩, rfl⟩
     exact hp
 
-/-- Every nonempty real horizontal section of an actual template polygon has
+/-- Every nonempty real horizontal section of a template polygon has
 attained real endpoints, even when its integer sample is empty. -/
 theorem TemplatePolygon.horizontalSection_eq_Icc (P : TemplatePolygon) (y : ℝ)
     (h : ∃ x : ℝ, (x, y) ∈ P.region) :
@@ -288,7 +230,7 @@ theorem Template.card_sample_le {Ctpl : ℝ} {n s₀ : ℕ}
         simp only [h, Int.toNat_natCast, pow_two]
 
 /-- The area estimate in Lemma 9.4, with the explicit universal constant `9`.
-It follows from the actual piece diameters and scale, with no row assumption. -/
+It follows from the piece diameters and scale, with no row assumption. -/
 theorem template_card_le {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 1 ≤ Ctpl) : T.points.card ≤ 9 * n * s₀ := by
   have hcard : T.points.card ≤ T.pieceCount * (2 * s₀ + 1) ^ 2 := by
@@ -335,7 +277,7 @@ theorem mem_latticeRow_ambientDilation {S : Finset (ℤ × ℤ)} {r : ℕ} {x y 
   · rintro ⟨z, hz, a, ha, hx⟩
     exact ⟨(a, z), ha, by omega⟩
 
-/-- For an actual sampled polygon, dilation extends the attained endpoints of
+/-- For a sampled polygon, dilation extends the attained endpoints of
 each nonempty row in the vertical window. This formula does not assume that
 the union of these intervals is itself an interval. -/
 theorem Template.mem_latticeRow_dilation_iff {Ctpl : ℝ} {n s₀ : ℕ}

@@ -5,7 +5,7 @@ import Mathlib.Data.Rat.Floor
 # Template row regression checks
 
 These examples check signed rounding, empty dilation, thin diagonal samples,
-disconnected rows, overlapping unions, and the actual template interface.
+disconnected rows, overlapping unions, and the template interface.
 The audit records the proof dependencies of every new export.
 -/
 

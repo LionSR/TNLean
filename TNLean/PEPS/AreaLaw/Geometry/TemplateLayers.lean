@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
 
 /-!
-# Ambient dilation layers of actual templates
+# Ambient dilation layers of templates
 
-The argument uses the proved supporting-strip description of each actual
+The argument uses the proved supporting-strip description of each
 polygon. Windowed column intervals give horizontal intervals after integer
 dilation. Comparing two consecutive radius windows changes old row endpoints
 by at most two sites each.
@@ -17,33 +17,11 @@ Original formalization of manuscript Lemma 9.4; no upstream Lean proof text
 is reused. The template model has no additional regularity fields.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_of_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_eq_icc
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_succ_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_latticerow_layer_le_four
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_latticerow_dilation_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_dilation_row_domain
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_dilation_layer_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template_layer_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open scoped BigOperators
 
-/-- Every horizontal row of a dilated actual polygon is an integer interval. -/
+/-- Every horizontal row of a dilated polygon is an integer interval. -/
 theorem Template.mem_latticeRow_dilation_of_between {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (i : Fin T.pieceCount) (r : ℕ) {a b x y : ℤ}
     (ha : a ∈ latticeRow (ambientDilation (T.sample i) r) y)
@@ -175,7 +153,7 @@ theorem Template.card_latticeRow_dilation_le {Ctpl : ℝ} {n s₀ : ℕ}
       simp only [Int.card_Icc]
       omega
 
-/-- A nonempty actual sample has one interval of occupied rows, with a
+/-- A nonempty sample has one interval of occupied rows, with a
 diameter-controlled length. Every radius expands that interval by its radius. -/
 theorem Template.exists_dilation_row_domain {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (i : Fin T.pieceCount) (hne : (T.sample i).Nonempty) :
@@ -260,7 +238,7 @@ private theorem card_le_rows_and_ends (S : Finset (ℤ × ℤ)) (a b : ℤ) (k w
       Nat.add_le_add (Nat.add_le_add hm ((hR _).trans hlo)) ((hR _).trans hhi)
     _ = (Finset.Icc a b).card * k + 2 * w := by omega
 
-/-- A single actual polygon contributes at most `24 * (s₀ + 1)` sites to a
+/-- A single polygon contributes at most `24 * (s₀ + 1)` sites to a
 depth layer at every radius from one through `s₀`, including empty samples. -/
 theorem Template.card_dilation_layer_le {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (i : Fin T.pieceCount) (j : ℕ)
@@ -299,7 +277,7 @@ theorem Template.card_dilation_layer_le {Ctpl : ℝ} {n s₀ : ℕ}
   omega
 
 /-- The geometric depth-layer estimate of Lemma 9.4, derived directly from
-the actual template with the universal sufficient lower bound `Ctpl ≥ 24`. -/
+the template with the universal sufficient lower bound `Ctpl ≥ 24`. -/
 theorem template_layer_card_le {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ s₀) :
     (ambientDilation T.points j \ ambientDilation T.points (j - 1)).card ≤ n := by

@@ -26,7 +26,6 @@ with a physical cut.
     \leanok
     \lean{
         TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff,
-        TNLean.PEPS.AreaLaw.latticeNeighbors_symm,
         TNLean.PEPS.AreaLaw.card_latticeNeighbors_le,
         TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ,
         TNLean.PEPS.AreaLaw.card_ambientBoundary,
@@ -34,7 +33,7 @@ with a physical cut.
         TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique,
         TNLean.PEPS.AreaLaw.ambientBoundary_empty
     }
-    \uses{def:area_law_ambient_boundary}
+    \uses{def:area_law_ambient_boundary,lem:area_law_dilation_rows_union}
     The boundary consists exactly of edges $\{p,q\}$ with
     $p\in S$, $q\notin S$, and $q\in\mathcal N(p)$.
     The inside--outside orientation is unique, and mapping back from the
@@ -55,18 +54,18 @@ with a physical cut.
     \label{lem:area_law_ambient_boundary_layers}
     \leanok
     \lean{
+        TNLean.PEPS.AreaLaw.latticeNeighbors_symm,
         TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover,
         TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer,
         TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer
     }
     \uses{lem:area_law_ambient_boundary_crossing}
-    If a finite set $R$ meets every edge of $\partial S$, then
-    $|\partial S|\le4|R|$. In particular,
-    \[
-        |\partial S|\le4|S_1\setminus S|,
-        \qquad
-        |\partial S_j|\le4|S_j\setminus S_{j-1}|\quad(j\ge1).
-    \]
+    The neighbor relation is symmetric. If a finite set $R$ meets every edge
+    of $\partial S$, then $|\partial S|\le4|R|$. In particular,
+    \begin{align}
+        |\partial S|   & \le4|S_1\setminus S|,                   \\
+        |\partial S_j| & \le4|S_j\setminus S_{j-1}|\quad(j\ge1).
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -85,11 +84,10 @@ with a physical cut.
     }
     \uses{lem:area_law_ambient_boundary_crossing}
     For finite lattice sets $S,U$,
-    \[
-        \partial(S\setminus U)\subseteq\partial S\cup\partial U,
-        \qquad
-        |\partial(S\setminus U)|\le|\partial S|+|\partial U|.
-    \]
+    \begin{align}
+        \partial(S\setminus U)   & \subseteq\partial S\cup\partial U, \\
+        |\partial(S\setminus U)| & \le|\partial S|+|\partial U|.
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -104,14 +102,13 @@ with a physical cut.
         TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le,
         TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le
     }
-    \uses{lem:area_law_template_depth_layers,lem:area_law_ambient_boundary_layers,
-        lem:area_law_ambient_boundary_difference}
+    \uses{def:area_law_template,lem:area_law_template_depth_layers,
+        lem:area_law_ambient_boundary_layers,lem:area_law_ambient_boundary_difference}
     If $C_{\rm tpl}\ge24$ and $0\le j\le s_0$, then
-    \[
-        |\partial T_j|\le4n,
-        \qquad
-        |\partial(T_j\setminus T)|\le8n.
-    \]
+    \begin{align}
+        |\partial T_j|             & \le4n, \\
+        |\partial(T_j\setminus T)| & \le8n.
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok

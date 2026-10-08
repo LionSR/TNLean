@@ -7,35 +7,15 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
 
 /-!
-# Rounded row bounds from actual template polygons
+# Rounded row bounds from template polygons
 
 The supporting-strip characterization gives integer affine endpoint formulas.
 Consequently nonempty sampled rows are consecutive, and their endpoints move
-by at most one between consecutive rows. These are consequences of the actual
+by at most one between consecutive rows. These are consequences of the
 polygon model, including exact sampling, rather than additional assumptions.
 
 Original formalization of the geometric argument in manuscript Lemma 9.4;
 no upstream Lean proof text is reused.
--/
-
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_sample_four_strip_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_latticerow_profile
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_nonempty_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_min_step
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_max_step
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_sample_in_window_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_nearby_sample_in_row
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
 -/
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -76,7 +56,7 @@ theorem Template.exists_latticeRow_profile {Ctpl : ℝ} {n s₀ : ℕ}
     · intro hx
       exact (Finset.notMem_empty x hx).elim
 
-/-- Nonempty rows of an actual sampled polygon form an integer interval. -/
+/-- Nonempty rows of a sampled polygon form an integer interval. -/
 theorem Template.latticeRow_nonempty_between {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (i : Fin T.pieceCount) {a b y : ℤ}
     (ha : (latticeRow (T.sample i) a).Nonempty)

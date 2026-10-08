@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.Circuit.LocalCircuit
+import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
@@ -34,55 +35,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
-
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: eq:global-gap.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: eq:model.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:main.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:main, eq:target-error.
-Provenance-ID: 8738-tnlean.peps.approximation.configuration
-Downstream declaration: TNLean.PEPS.Approximation.Configuration
-Provenance-ID: 8738-tnlean.peps.approximation.statespace
-Downstream declaration: TNLean.PEPS.Approximation.StateSpace
-Provenance-ID: 8738-tnlean.peps.approximation.squarehamiltonian
-Downstream declaration: TNLean.PEPS.Approximation.SquareHamiltonian
-Provenance-ID: 8738-tnlean.peps.approximation.squarehamiltonian.operator
-Downstream declaration: TNLean.PEPS.Approximation.SquareHamiltonian.operator
-Provenance-ID: 8738-tnlean.peps.approximation.squarehamiltonian.isgappedgroundstate
-Downstream declaration: TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState
-Provenance-ID: 8738-tnlean.peps.approximation.pepsvector
-Downstream declaration: TNLean.PEPS.Approximation.pepsVector
-Provenance-ID: 8738-tnlean.peps.approximation.haspepsapproximation
-Downstream declaration: TNLean.PEPS.Approximation.HasPEPSApproximation
-Provenance-ID: 8738-tnlean.peps.approximation.polynomialpepsapproximation
-Downstream declaration: TNLean.PEPS.Approximation.PolynomialPEPSApproximation
--/
 
 namespace TNLean.PEPS.Approximation
 
@@ -120,14 +72,12 @@ noncomputable def SquareHamiltonian.operator {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) : Matrix (Configuration L q) (Configuration L q) ℂ :=
   (∑ v, h.siteTerm v) + ∑ e, h.edgeTerm e
 
-/-- Unit eigenvector and the full-system projector gap on the open square.
+/-- Unit eigenvector and the full-system projector gap on the open square, the
+specialization of `Matrix.IsGappedGroundState` to `h.operator`.
 Source: polynomial-PEPS `eq:global-gap`; uniqueness follows for positive `Δ`. -/
 def SquareHamiltonian.IsGappedGroundState {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q) (Δ : ℝ) : Prop :=
-  ‖Ω‖ = 1 ∧
-    Matrix.toEuclideanCLM (n := Configuration L q) (𝕜 := ℂ) h.operator Ω = (E₀ : ℂ) • Ω ∧
-      (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
-        (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef
+  Matrix.IsGappedGroundState h.operator E₀ Ω Δ
 
 /-- The contraction of a native PEPS, in Euclidean configuration coordinates.
 Source: polynomial-PEPS Section 1, the unnormalized vector `Φ`. -/

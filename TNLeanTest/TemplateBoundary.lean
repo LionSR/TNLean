@@ -1,5 +1,4 @@
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
-import Mathlib.Data.Rat.Floor
 
 /-!
 # Ambient template boundary regressions
