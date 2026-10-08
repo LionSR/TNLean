@@ -1,0 +1,331 @@
+\section{Sampling an original construction}
+\label{sec:peps_original_compression_sampling}
+
+We now combine the local approximation, pair-effect replacement and source
+sampling estimates for the original gate maps. These are the approximation
+steps in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 137--175, 199--229 and 590--600.
+The sampled physical operator need not be positive. Its identification with a
+contraction of local tensors is a separate assertion.
+
+\begin{definition}[Distributed construction]
+    \label{def:peps_distributed_construction}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction}
+    \leanok
+    A distributed construction has a finite nonempty set $P$ of parties.
+    For each $p\in P$, it specifies a finite-dimensional initial private
+    memory $H_p$ and a unit vector $x_p\in H_p$. It also specifies a physical
+    dimension $d_p$, an ordering of the parties without repetition, a finite
+    ordered collection $R$ of finite-dimensional private output registers,
+    and an actual contraction circuit
+    \begin{align}
+        W:\bigotimes_{p\in P}H_p
+        \longrightarrow
+        \left(\bigotimes_{p\in P}\mathbb C^{d_p}\right)\otimes\mathcal H_R.
+    \end{align}
+    The circuit retains the original gate expansions and participant labels.
+    There is no numerical bound on private dimensions in this definition.
+    Resource estimates and approximation conclusions are separate statements.
+
+    The nonempty-party convention permits scalar factors to be absorbed in
+    an existing local tensor, as in the proof of Theorem~5.2. It does not
+    exclude gates with no participating parties. The zero-party scalar
+    boundary case is recorded in \cite{gap:poly_peps_nonempty_parties}.
+\end{definition}
+
+\begin{definition}[Original input and physical density]
+    \label{def:peps_distributed_construction_density}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.input,
+        TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity}
+    \leanok
+    The input of a distributed construction is the normalized product
+    $\psi=\bigotimes_{p\in P}x_p$. Its physical density is
+    \begin{align}
+        \rho=\operatorname{Tr}_{\mathcal H_R}
+        \bigl(|W\psi\rangle\langle W\psi|\bigr),
+    \end{align}
+    expressed in the physical coordinates indexed by the original parties.
+    The private trace uses a finite orthonormal basis of the actual retained
+    registers. No normalization by $\|W\psi\|$ is performed.
+\end{definition}
+
+\begin{theorem}[Subnormalized physical density]
+    \label{thm:peps_distributed_construction_density}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef,
+        TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one}
+    \leanok
+    \uses{def:peps_distributed_construction_density}
+    The actual physical density of a distributed construction is positive
+    semidefinite and satisfies $\operatorname{Tr}\rho\leq1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The outer product of the original output vector is positive semidefinite,
+    and partial trace preserves positivity. Partial trace also preserves the
+    full trace, so $\operatorname{Tr}\rho=\|W\psi\|^2$. Each gate is a
+    contraction and $\|\psi\|=1$, giving the asserted bound.
+\end{proof}
+
+\begin{theorem}[A fixed inverse power meets the actual gate budget]
+    \label{thm:peps_fixed_power_gate_budget}
+    \lean{TNLean.PEPS.PairEffect.inversePower_le_sourceGateBudget_half}
+    \leanok
+    Let $L\ge2$, $C\ge1$, $M\le CL^n$, where $M,n$ are nonnegative
+    integers, and let $p$ be real. Set
+    $q=n+\lceil p\rceil_++\lceil16C\rceil_+$. Then
+    \begin{align}
+        L^{-q}\le \frac{L^{-p}}{16\max\{1,M\}}.
+    \end{align}
+    The exponent is fixed by the original count bound and the target accuracy,
+    and works simultaneously at every size $L\ge2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_approximate_gate_real_accuracy}
+    The bound $\max\{1,M\}\le CL^n$ follows from $C,L\ge1$.
+    Apply the earlier scalar accuracy estimate with this enlarged count,
+    and divide by its positive denominator.
+\end{proof}
+
+\begin{theorem}[Using the original local approximation budget]
+    \label{thm:peps_original_approximation_budget}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation.mono}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_budget_of_power_bound}
+    \leanok
+    Increasing the permitted local approximation error preserves the original
+    operators, approximate monomial lists and all contraction and allowedness
+    conditions. Consequently, under the preceding count assumptions, gate
+    expansions available at accuracy $L^{-q}$ satisfy the local budget
+    $L^{-p}/(16\max\{1,M\})$ required to reserve one quarter of the final
+    physical error for this approximation step.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_fixed_power_gate_budget}
+    Only the inequality bounding each local operator difference changes.
+    Apply transitivity with the displayed scalar estimate at every original
+    occurrence. All the other local hypotheses are unchanged.
+\end{proof}
+
+\begin{theorem}[A positive polynomial coefficient bound]
+    \label{thm:peps_original_coefficient_majorant}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
+    \leanok
+    Let $L\geq1$. Suppose every nonprivate gate of the original circuit
+    has at most $K\leq C_KL^u$ monomials, each with at most $r$ pair
+    effects and coefficient of absolute value at most $C_CL^v$, where
+    $C_K,C_C\geq0$ and $u,v$ are nonnegative integers. Then there is
+    a bound $B\geq1$ for the absolute coefficient sum of every gate,
+    with the same effect bound $r$, such that
+    \begin{align}
+        B\leq (1+C_KC_C)L^{u+v}.
+    \end{align}
+    Thus the lower bound $B\geq1$ required in the source-sampling
+    estimate follows from the original polynomial assumptions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_original_coefficient_sum}
+    Choose $B=(1+C_KC_C)L^{u+v}$. This is at least one since $L\geq1$.
+    Each coefficient sum is at most
+    $K C_CL^v\leq C_KC_CL^{u+v}\leq B$.
+\end{proof}
+
+\begin{theorem}[Finite expansion bounds and replacement coefficients]
+    \label{thm:peps_original_finite_expansion_bound}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_mono}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_isMonomialBounded}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
+    \leanok
+    Every finite original circuit has an integer $K$ bounding the lengths
+    of all its gate expansions. Any larger integer is also such a bound.
+    Suppose its monomials contain at most $r$ pair effects and the absolute
+    coefficient sum at every gate is at most $B$. For any positive
+    replacement accuracy, every gate of the actual source replacement,
+    with the physical output registers placed first, has absolute branch
+    coefficient sum at most $B$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_physical_first_occurrences}
+    \leanok
+    Take a common bound on the finitely many original gate lists. The
+    expansion estimate for effect replacement then gives the coefficient
+    bound. The final exchange of physical and auxiliary registers
+    introduces no gate and changes no coefficient.
+\end{proof}
+
+\begin{theorem}[Physical approximation after replacement and sampling]
+    \label{thm:peps_sampled_original_density}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
+    \leanok
+    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
+        thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
+    Let $W$ be a circuit on a finite party set $P$, with initial vector
+    $\psi=\bigotimes_{p\in P}\psi_p$, where each $\psi_p$ is normalized
+    in the whole initial private memory of party $p$. The final physical
+    register at $p$ has dimension $d_p$, and every discarded private
+    register is finite-dimensional. Suppose that the original nonprivate
+    gate count is at most $M$, each party participates in at most $\ell$
+    nonprivate occurrences, and the original expansion bounds hold with
+    effect budget $r$ and coefficient-sum bound $B\ge1$. Let $D\ge1$
+    satisfy $d_p\le D$ for every $p$.
+
+    Fix finite orthonormal coordinates on the whole initial memory.
+    Fix $0<\varepsilon\le1$. Set
+    $\delta=\varepsilon/(8\max\{1,M\})$, and form the physical-first
+    replacement $R$ using the corresponding prepared stack length.
+    Let $\mathcal E_R$ be its actual source occurrences and
+    $N_R=|\mathcal E_R|$. Choose
+    \begin{align}
+        Q & =B^{4\ell}D^4, &
+        k & =\left\lceil
+        \left(\frac{8\max\{1,N_R\}Q}{\varepsilon}\right)^2
+        \right\rceil+1.
+        \label{eq:peps_original_sample_count}
+    \end{align}
+    There exist Schmidt data for every actual source and branch, and
+    one Gaussian sample array $\omega$, such that the sampled physical
+    operator $\widehat\rho_R(\omega)$ satisfies
+    \begin{align}
+        \|\widehat\rho_R(\omega)-\rho_W\|_1
+        \le\frac{3\varepsilon}{4}.
+        \label{eq:peps_original_sample_error}
+    \end{align}
+    Here $\rho_W$ is the physical partial trace of $|W\psi\rangle
+        \langle W\psi|$, in the original party-labelled coordinates.
+    No numerical bound on private-memory dimensions is assumed.
+    These are the density-approximation steps in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--151, 199--229 and 342--381.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
+        thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
+    Prepare each $\psi_p$ by a local contraction from the scalar space.
+    Their chronological composition prepares $\psi$ and introduces no
+    pair source. The replacement is a contraction, preserves the original
+    participating occurrences, and retains coefficient-sum bound $B$.
+    A finite bound on its monomial counts follows from the finite original
+    gate lists; it is not an additional hypothesis. Every auxiliary
+    register is finite-dimensional by its Euclidean construction, so the
+    individual private-register assumption suffices for all discarded
+    registers of $R$.
+
+    Apply Theorem~\ref{thm:peps_actual_source_sampling} to this actual
+    circuit, preparation, and discarded memory. It gives original-source
+    Schmidt data and one sample $\omega$ with
+    $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$.
+    Theorem~\ref{thm:peps_physical_first_exact_sources} gives
+    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$. The trace-norm triangle
+    inequality yields~(\ref{eq:peps_original_sample_error}).
+\end{proof}
+
+
+\begin{theorem}[Sampling from approximate original gates]
+    \label{thm:peps_approximate_source_sample}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_sourceSample_approximate_error_le}
+    \leanok
+    Let a finite distributed construction begin in a product of normalized
+    party vectors. Suppose its original gates are contractions, its number of
+    nonprivate gates is at most $M$, and each party participates in at most $b$
+    such gates. All private spaces are finite-dimensional, without numerical
+    dimension bounds. Let the physical dimension at each party be at most
+    $D\ge1$.
+
+    Fix $0<\epsilon\le1$. Suppose the actual monomial list for each original
+    nonprivate gate approximates that gate in operator norm within
+    $\delta_a=\epsilon/(16\max(1,M))$. Its monomials are allowed, each has at
+    most $r$ pair effects, and its absolute coefficient sum is at most $B\ge1$.
+    Rescale each such list by $(1+\delta_a)^{-1}$ to obtain a contraction
+    circuit $W$. Set
+    \begin{align}
+        \delta_e & =\frac{\epsilon}{8\max(1,M)},                                 &
+        m        & =\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1.
+    \end{align}
+    Apply the constructed pair-effect replacement of length $m$ to $W$, and
+    let $N$ be the number of sources of the resulting circuit. With
+    \begin{align}
+        Q & =B^{4b}D^4,                                                            &
+        k & =\left\lceil\left(\frac{8\max(1,N)Q}{\epsilon}\right)^2\right\rceil+1,
+    \end{align}
+    there are normalized Schmidt data for these actual sources and a Gaussian
+    sample of size $k$ whose sampled physical operator $\widehat\rho$ satisfies
+    $\|\widehat\rho-\rho_G\|_1\le\epsilon$. Here $\rho_G$ is the physical
+    density computed from the original gate operators, with all private
+    registers traced out.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_sampled_original_density,thm:peps_approximate_physical_error,thm:peps_finite_whole_party_input}
+    The input coordinates are obtained from finite-dimensionality of the
+    original party memories. Rescaling preserves the original gate
+    occurrences and participating sets, and does not increase the coefficient
+    sums or pair-effect counts. The actual sampling theorem applied to $W$
+    therefore gives $\|\widehat\rho-\rho_W\|_1\le3\epsilon/4$ with the
+    stated replacement and sample counts. The local approximation estimate
+    gives $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\epsilon/4$. Thus
+    \begin{align}
+        \|\widehat\rho-\rho_G\|_1
+         & \le\|\widehat\rho-\rho_W\|_1+\|\rho_W-\rho_G\|_1
+        \le\epsilon.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Explicit polynomial dimensions of the replacement links]
+    \label{thm:peps_physical_first_link_polynomial}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
+    \uses{thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial,thm:peps_source_alphabet_polynomial}
+    \leanok
+    Let an original circuit have at most $N$ nonprivate gate occurrences,
+    each with at most $b$ participants. Suppose each gate has at most $K$
+    monomials, at most $r$ pair effects in each monomial, and absolute
+    coefficient sum at most $B$. Let $L\geq1$, and assume
+    \begin{align}
+        K\leq C_KL^u,\qquad N\leq C_NL^n,\qquad
+        0\leq B\leq C_BL^s,\qquad 0\leq D\leq C_DL^d,
+    \end{align}
+    where $C_K,C_B\geq0$, $C_N\geq1$, and $u,n,s,d,p$ are nonnegative
+    integers. Use the per-gate budget
+    $\delta=L^{-p}/(8\max(1,N))$, and let $R$ be the resulting source
+    replacement, with the physical output registers ordered first.
+    For any nonnegative integer $\tau$, choose the actual sample count
+    \begin{align}
+        k=\left\lceil
+        \bigl(8\max(1,\lvert\operatorname{Sources}(R)\rvert)
+        B^{4\tau}D^4L^p\bigr)^2
+        \right\rceil+1.
+    \end{align}
+    Define constants and exponents by
+    \begin{align}
+        C_{\mathrm{src}} & =\max\left(1,C_N\binom b2\right),                          \\
+        C_{\mathrm{br}}  & =C_K\bigl(64C_N^2(rC_B)^2+2\bigr)^r,
+                         & a_{\mathrm{br}}                      & =u+2r(n+s+p),       \\
+        C_{\mathrm{sam}} & =64C_{\mathrm{src}}^2
+        (C_B^{4\tau}C_D^4)^2+2,
+                         & a_{\mathrm{sam}}                     & =2(n+4\tau s+4d+p).
+    \end{align}
+    For every retained set of gate occurrences, every root assignment,
+    and every corresponding star or sample link $e$, its actual alphabet
+    $\mathcal A_e$ satisfies
+    \begin{align}
+        \lvert\mathcal A_e\rvert
+        \leq (C_{\mathrm{br}}^2+C_{\mathrm{sam}})
+        L^{\max(2a_{\mathrm{br}},a_{\mathrm{sam}})}.
+    \end{align}
+    These constants depend only on the displayed uniform resource bounds.
+    No private-memory dimension or source Schmidt rank occurs. This is a
+    dimension estimate for the constructed alphabets; the error estimate
+    and equality with a contraction of local tensors are separate assertions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Effect elimination gives at most
+    $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ actual branches per gate.
+    There are at most $N\binom b2$ actual source occurrences, so the
+    sample-count estimate gives $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$.
+    A star alphabet has cardinality equal to the square of its gate's
+    branch count; a sample alphabet has cardinality $k$. Apply the
+    polynomial alphabet bound to these two estimates. The use of
+    $C_{\mathrm{src}}\geq1$ includes circuits without sources.
+\end{proof}
