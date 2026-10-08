@@ -63,20 +63,21 @@
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved-pending",
       "paper": "peps",
       "result": "Lemma 7.2",
       "title": "Clearance during the dyadic repainting",
       "issue": 8772,
       "prs": {
         "TNLean": [
-          8836
+          8836,
+          8910
         ]
       },
       "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
-      "found": "Lean proves the clearance with a₀ = 1/5000 for any schedule of guides that has the properties the paper's proof uses. The schedule itself is not yet built. The paper derives those properties in a few lines from the disjointness of the bands along different edges, and that disjointness is proved.",
-      "impact": "No problem with the paper has been found. What remains is to construct the schedule as part of Proposition 7.1.",
-      "plan": "Construct the repainting schedule, derive the guide properties from the band disjointness, and translate the estimates to the actual square."
+      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that agree with the paper's open chambers. The estimates concern closures, so they do not depend on how labels are chosen on chamber boundaries.",
+      "impact": "None. Lemma 7.2 is formalized as stated once #8910 merges.",
+      "plan": "Merge #8910. The protocol of Proposition 7.1 is separate work."
     },
     {
       "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",
