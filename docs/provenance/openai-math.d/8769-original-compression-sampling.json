@@ -519,26 +519,27 @@
       "notices": [],
       "changes": [
         "Independently formalized from the manuscript; no upstream Lean proof text reused.",
-        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate."
+        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate.",
+        "Refreshed exact-byte evidence after correcting the registered paper-gap filename in the module comment; mathematical tokens are unchanged."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "3a0472ab259c7aec88fb5699f776eaf6f02c9160",
+        "revision": "98d16bce7908740fa90676f850ce7d399dda1230",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-original-compression-sampling/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean TNLean/PEPS/Approximation/DistributedConstruction.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean -i /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.ilean TNLean/PEPS/Approximation/DistributedConstruction.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/direct-build.log",
-            "sha256": "4068428a362e0e561e89f6e50ce08b605d87b3632745d5efef33a5e52d8133e2"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/strict.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Audit.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/axioms.log",
-            "sha256": "1d9fac4494ef8568f8318d6f1dc71c43a9eb9d56a125fdfa22dab6979cd49e7c"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/axioms.log",
+            "sha256": "ebc4f89e4f6fe07561ae30c55e0e603649ef45b3c2f079eca292427042473717"
           }
         ]
       },
@@ -568,26 +569,27 @@
       "notices": [],
       "changes": [
         "Independently formalized from the manuscript; no upstream Lean proof text reused.",
-        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate."
+        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate.",
+        "Refreshed exact-byte evidence after correcting the registered paper-gap filename in the module comment; mathematical tokens are unchanged."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "3a0472ab259c7aec88fb5699f776eaf6f02c9160",
+        "revision": "98d16bce7908740fa90676f850ce7d399dda1230",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-original-compression-sampling/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean TNLean/PEPS/Approximation/DistributedConstruction.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean -i /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.ilean TNLean/PEPS/Approximation/DistributedConstruction.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/direct-build.log",
-            "sha256": "4068428a362e0e561e89f6e50ce08b605d87b3632745d5efef33a5e52d8133e2"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/strict.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Audit.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/axioms.log",
-            "sha256": "1d9fac4494ef8568f8318d6f1dc71c43a9eb9d56a125fdfa22dab6979cd49e7c"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/axioms.log",
+            "sha256": "ebc4f89e4f6fe07561ae30c55e0e603649ef45b3c2f079eca292427042473717"
           }
         ]
       },
@@ -617,26 +619,27 @@
       "notices": [],
       "changes": [
         "Independently formalized from the manuscript; no upstream Lean proof text reused.",
-        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate."
+        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate.",
+        "Refreshed exact-byte evidence after correcting the registered paper-gap filename in the module comment; mathematical tokens are unchanged."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "3a0472ab259c7aec88fb5699f776eaf6f02c9160",
+        "revision": "98d16bce7908740fa90676f850ce7d399dda1230",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-original-compression-sampling/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean TNLean/PEPS/Approximation/DistributedConstruction.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean -i /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.ilean TNLean/PEPS/Approximation/DistributedConstruction.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/direct-build.log",
-            "sha256": "4068428a362e0e561e89f6e50ce08b605d87b3632745d5efef33a5e52d8133e2"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/strict.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Audit.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/axioms.log",
-            "sha256": "1d9fac4494ef8568f8318d6f1dc71c43a9eb9d56a125fdfa22dab6979cd49e7c"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/axioms.log",
+            "sha256": "ebc4f89e4f6fe07561ae30c55e0e603649ef45b3c2f079eca292427042473717"
           }
         ]
       },
@@ -666,26 +669,27 @@
       "notices": [],
       "changes": [
         "Independently formalized from the manuscript; no upstream Lean proof text reused.",
-        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate."
+        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate.",
+        "Refreshed exact-byte evidence after correcting the registered paper-gap filename in the module comment; mathematical tokens are unchanged."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "3a0472ab259c7aec88fb5699f776eaf6f02c9160",
+        "revision": "98d16bce7908740fa90676f850ce7d399dda1230",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-original-compression-sampling/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean TNLean/PEPS/Approximation/DistributedConstruction.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean -i /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.ilean TNLean/PEPS/Approximation/DistributedConstruction.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/direct-build.log",
-            "sha256": "4068428a362e0e561e89f6e50ce08b605d87b3632745d5efef33a5e52d8133e2"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/strict.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Audit.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/axioms.log",
-            "sha256": "1d9fac4494ef8568f8318d6f1dc71c43a9eb9d56a125fdfa22dab6979cd49e7c"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/axioms.log",
+            "sha256": "ebc4f89e4f6fe07561ae30c55e0e603649ef45b3c2f079eca292427042473717"
           }
         ]
       },
@@ -715,26 +719,27 @@
       "notices": [],
       "changes": [
         "Independently formalized from the manuscript; no upstream Lean proof text reused.",
-        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate."
+        "Constructs the original distributed data and its positive subnormalized physical density. Derives fixed approximation budgets and positive coefficient majorants from the original bounds, then constructs an actual source sample approximating the original contraction circuit or original approximate gate maps. Bounds the actual link alphabets polynomially. The sampled physical operator need not be positive; its equality with a contraction of local tensors remains separate.",
+        "Refreshed exact-byte evidence after correcting the registered paper-gap filename in the module comment; mathematical tokens are unchanged."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "3a0472ab259c7aec88fb5699f776eaf6f02c9160",
+        "revision": "98d16bce7908740fa90676f850ce7d399dda1230",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-original-compression-sampling/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean TNLean/PEPS/Approximation/DistributedConstruction.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean -i /private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.ilean TNLean/PEPS/Approximation/DistributedConstruction.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/direct-build.log",
-            "sha256": "4068428a362e0e561e89f6e50ce08b605d87b3632745d5efef33a5e52d8133e2"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/strict.log",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Audit.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-original-compression-sampling/axioms.log",
-            "sha256": "1d9fac4494ef8568f8318d6f1dc71c43a9eb9d56a125fdfa22dab6979cd49e7c"
+            "log": "docs/provenance/evidence/8769-original-construction-reference-refresh/axioms.log",
+            "sha256": "ebc4f89e4f6fe07561ae30c55e0e603649ef45b3c2f079eca292427042473717"
           }
         ]
       },

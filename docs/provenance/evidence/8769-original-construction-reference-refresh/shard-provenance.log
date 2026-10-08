@@ -1,0 +1,2 @@
+PASS: all 15 entries of the original-compression shard, including five refreshed exact-source entries.
+Scope: canonical schema, exact committed source bytes, manuscript labels, legal notices, evidence hashes, and stock-axiom reports; no repository-wide notice scan or Lean invocation.

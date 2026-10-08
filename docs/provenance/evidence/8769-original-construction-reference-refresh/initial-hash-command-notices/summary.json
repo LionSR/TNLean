@@ -1,0 +1,56 @@
+{
+  "source_revision": "98d16bce7908740fa90676f850ce7d399dda1230",
+  "source_sha256": "4edf8d2f8042e7dc3a66b7660838ad2346fa360e0fd25fd7e703546c2d200a1d",
+  "public_names": [
+    "TNLean.PEPS.PairEffect.DistributedConstruction",
+    "TNLean.PEPS.PairEffect.DistributedConstruction.input",
+    "TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity",
+    "TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef",
+    "TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one"
+  ],
+  "checks": [
+    {
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.olean",
+        "-i",
+        "/private/tmp/tnlean-convention-reference-refresh/artifacts/TNLean/PEPS/Approximation/DistributedConstruction.ilean",
+        "TNLean/PEPS/Approximation/DistributedConstruction.lean"
+      ],
+      "cwd": "/private/tmp/tnlean-convention-reference-refresh/src",
+      "returncode": 0,
+      "seconds": 14.214855665981304,
+      "source_revision": "98d16bce7908740fa90676f850ce7d399dda1230",
+      "source_path": "TNLean/PEPS/Approximation/DistributedConstruction.lean",
+      "source_sha256": "4edf8d2f8042e7dc3a66b7660838ad2346fa360e0fd25fd7e703546c2d200a1d",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-j1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "Audit.lean"
+      ],
+      "cwd": "/private/tmp/tnlean-convention-reference-refresh/src",
+      "returncode": 0,
+      "seconds": 3.1845504169759806,
+      "source_revision": "98d16bce7908740fa90676f850ce7d399dda1230",
+      "source_path": "TNLean/PEPS/Approximation/DistributedConstruction.lean",
+      "source_sha256": "4edf8d2f8042e7dc3a66b7660838ad2346fa360e0fd25fd7e703546c2d200a1d",
+      "log_sha256": "8bb75a160f9a3c4437e9d8ac4db15ad639435240116a61bf6f1b806c67ea7e32"
+    }
+  ],
+  "artifact_snapshots_deferred": true
+}

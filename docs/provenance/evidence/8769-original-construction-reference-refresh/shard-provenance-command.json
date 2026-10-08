@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/tmp/check-8924-refreshed-provenance.py"
+  ],
+  "returncode": 0,
+  "seconds": 1.048038084001746,
+  "checked_entries": 15,
+  "log_sha256": "cecad80dd252eafcb2e009c420de41fd771d64a05fe546ded6856d3055395480"
+}

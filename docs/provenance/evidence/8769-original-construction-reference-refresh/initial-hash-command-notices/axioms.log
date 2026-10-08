@@ -1,0 +1,16 @@
+'TNLean.PEPS.PairEffect.DistributedConstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.PairEffect.DistributedConstruction.input' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]

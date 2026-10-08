@@ -1,0 +1,27 @@
+{
+  "TNLean.PEPS.PairEffect.DistributedConstruction": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.DistributedConstruction.input": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ]
+}
