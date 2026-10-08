@@ -1,0 +1,202 @@
+\section{Dyadic routing of a party network into a square-lattice PEPS}
+\label{sec:peps_dyadic_routing}
+This section treats the routing step of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{07-assembly.tex}, lines 102--177: the links of a finite tensor network
+whose parties sit at anchors of dyadic blocks are routed on the square grid with
+constant edge congestion, folded into the genuine $L\times L$ square, and the
+routed network is contracted into a PEPS on that square. The source derives the
+needed properties of its party network (boundedly many parties per block,
+bounded degree, link separation bounded by a fixed multiple of the endpoint
+scales) from its earlier construction; here these three properties are the
+hypotheses. The source also records that the two endpoint scales of every link
+are equal or adjacent; the congestion bound below does not use this, so it is
+not assumed.
+
+\begin{definition}[Padded side and dyadic anchors]
+    \label{def:peps_dyadic_anchor}
+    \lean{TNLean.PEPS.Approximation.paddedSide, TNLean.PEPS.Approximation.dyadicAnchor}
+    \leanok
+    For $L\ge1$ let $N=2^{\lceil\log_2L\rceil}$ be the least power of two with
+    $N\ge L$. A dyadic block of side $2^j$ with block index $r$ in one coordinate
+    has anchor coordinate
+    \[
+        a_j(r)=\begin{cases}2^jr+2^{j-1},&j\ge1,\\ r,&j=0.\end{cases}
+    \]
+    A party attached to the block of scale $j$ and block indices $(r,s)$ sits at
+    the anchor $(a_j(r),a_j(s))$.
+\end{definition}
+
+\begin{lemma}[Padded side]
+    \label{lem:peps_dyadic_padded_side}
+    \lean{TNLean.PEPS.Approximation.le_paddedSide, TNLean.PEPS.Approximation.paddedSide_lt_two_mul}
+    \leanok
+    \uses{def:peps_dyadic_anchor}
+    For $L\ge1$ one has $L\le N<2L$.
+\end{lemma}
+
+\begin{proof}\leanok
+    By minimality of the exponent, $2^{\lceil\log_2L\rceil-1}<L$ whenever the
+    exponent is positive, so $N<2L$; the case $L=1$ gives $N=1$.
+\end{proof}
+
+\begin{lemma}[Anchor rows determine their scale]
+    \label{lem:peps_dyadic_anchor_valuation}
+    \lean{TNLean.PEPS.Approximation.padicValNat_two_dyadicAnchor, TNLean.PEPS.Approximation.dyadicAnchor_inj}
+    \leanok
+    \uses{def:peps_dyadic_anchor}
+    For $j\ge1$ the two-adic valuation of $a_j(r)=2^{j-1}(2r+1)$ is exactly
+    $j-1$. Consequently, if $j,j'\ge1$ and $a_j(r)=a_{j'}(r')$, then $j=j'$ and
+    $r=r'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The factor $2r+1$ is odd, so the valuation of $2^{j-1}(2r+1)$ is $j-1$.
+    Equal anchors therefore have equal scales, and dividing by $2^j$ recovers the
+    block index.
+\end{proof}
+
+\begin{definition}[Reflection fold]
+    \label{def:peps_dyadic_fold}
+    \lean{TNLean.PEPS.Approximation.foldCoord}
+    \leanok
+    On padded coordinates define $f(x)=x$ for $0\le x\le L-1$ and
+    $f(x)=2(L-1)-x$ for $x\ge L$.
+\end{definition}
+
+\begin{lemma}[Properties of the fold]
+    \label{lem:peps_dyadic_fold}
+    \lean{TNLean.PEPS.Approximation.foldCoord_of_lt, TNLean.PEPS.Approximation.foldCoord_lt, TNLean.PEPS.Approximation.foldCoord_succ, TNLean.PEPS.Approximation.eq_or_eq_of_foldCoord_eq, TNLean.PEPS.Approximation.eq_or_eq_of_foldCoord_interval}
+    \leanok
+    \uses{def:peps_dyadic_fold}
+    Let $L\ge1$. The fold fixes $\{0,\ldots,L-1\}$ and takes values there. For
+    $x+2<2L$ the coordinates $f(x)$ and $f(x+1)$ are adjacent. For $x+1<2L$ every
+    value $u=f(x)$ forces $x\in\{u,\,2(L-1)-u\}$, and for $x+2<2L$ every unit
+    interval $\{u,u+1\}$ that is the image of $\{x,x+1\}$ forces
+    $x\in\{u,\,2L-3-u\}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each statement is a case distinction on whether $x$ and $x+1$ lie below $L$,
+    followed by linear arithmetic.
+\end{proof}
+
+\begin{definition}[Party network and routing]
+    \label{def:peps_party_network_routing}
+    \lean{TNLean.PEPS.Approximation.PartyNetwork, TNLean.PEPS.Approximation.PartyNetwork.coeff, TNLean.PEPS.Approximation.Routing}
+    \leanok
+    A party network with physical dimension $d$ consists of finite sets of
+    parties and links, a dimension $D_\ell$ for each link $\ell$, two endpoint
+    parties for each link, and for each party $p$ a tensor reading one label of
+    every link incident to $p$ and one physical index. When the physical index of
+    party $p$ is read at a site $\iota(p)$ of a finite simple graph $G$, the
+    coefficient at a physical configuration $\sigma$ is the sum over all link
+    labellings of the product of the party tensors evaluated at
+    $\sigma(\iota(p))$. A routing of the network through $G$ assigns to every
+    link a walk in $G$ from the site of its first party to the site of its second
+    party.
+\end{definition}
+
+\begin{theorem}[Routed contraction]
+    \label{thm:peps_routed_contraction}
+    \lean{TNLean.PEPS.Approximation.Routing.toTensor_stateCoeff, TNLean.PEPS.Approximation.Routing.toTensor_bondDim_le, TNLean.PEPS.Approximation.Routing.exists_tensor_of_congestion_le}
+    \leanok
+    \uses{def:peps_party_network_routing}
+    Let a party network be routed through a finite simple graph $G$. If every link
+    has dimension at most $D$ and every edge of $G$ is traversed at most $\chi$
+    times by the walks, counted with repetition, then there is a PEPS on $G$ with
+    exactly the coefficients of the party network and every bond dimension at
+    most ${\max(D,1)}^\chi$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every step of a walk carries an identity tensor on the label of its link. At
+    a vertex, the labels of all walks passing through it are kept independently,
+    so crossings are permitted, and the party tensors located there are
+    multiplied; zero-length links and coincident parties are contracted inside
+    the vertex tensor. All traversals of one edge are grouped into a product
+    alphabet, whose size is the product of the link dimensions, hence at most
+    $D^m$ for $m$ traversals. Consistent configurations of the routed network are
+    in bijection with link labellings, since the identity tensors force one label
+    along each walk, so the contraction reproduces the coefficients of the party
+    network.
+\end{proof}
+
+\begin{definition}[Horizontal-then-vertical routing on anchors]
+    \label{def:peps_dyadic_hv_routing}
+    \lean{TNLean.PEPS.Approximation.DyadicPlacement, TNLean.PEPS.Approximation.DyadicPlacement.anchor, TNLean.PEPS.Approximation.DyadicPlacement.linkRoute, TNLean.PEPS.Approximation.DyadicPlacement.load}
+    \leanok
+    \uses{def:peps_dyadic_anchor}
+    Attach every party to a dyadic block, and so to its anchor. Each link,
+    oriented arbitrarily, is routed from the anchor of its first party
+    horizontally to the column of the anchor of its second party, then vertically
+    to that anchor. The load of a unit edge of the padded square is the number of
+    steps of all these walks that traverse it, counted with repetition.
+\end{definition}
+
+\begin{theorem}[Constant congestion on the padded square]
+    \label{thm:peps_dyadic_padded_congestion}
+    \lean{TNLean.PEPS.Approximation.DyadicPlacement.load_horizontal_le, TNLean.PEPS.Approximation.DyadicPlacement.load_vertical_le}
+    \leanok
+    \uses{def:peps_dyadic_hv_routing}
+    Suppose at most $B$ parties are attached to any dyadic block, every party has
+    at most $\Delta$ incident links, and the two anchors of every link differ in
+    each coordinate by at most $c$ times the side of either endpoint block. Then
+    every horizontal and every vertical unit edge of the padded square has load
+    at most $2(2c+1)B\Delta$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_anchor_valuation}
+    A horizontal step lies on the row of the anchor of the first party of its
+    link, and each link traverses a given edge at most once. For a scale $j\ge1$
+    the row $2^{j-1}(2s+1)$ determines $j$ and $s$ by its two-adic valuation.
+    Anchors of one scale on one row are $2^j$ apart, so at most $2c+1$ blocks of
+    that scale lie within horizontal distance $c2^j$ of the edge; scale zero gives
+    a second bound of the same form. Each block carries at most $B$ parties, each
+    the first endpoint of at most $\Delta$ links. Vertical steps are treated in
+    the same way using the column of the second party.
+\end{proof}
+
+\begin{theorem}[Folded congestion]
+    \label{thm:peps_dyadic_folded_congestion}
+    \lean{TNLean.PEPS.Approximation.foldedRouting, TNLean.PEPS.Approximation.foldedRouting_card_traversal_le}
+    \leanok
+    \uses{thm:peps_dyadic_padded_congestion, lem:peps_dyadic_fold, lem:peps_dyadic_padded_side}
+    Let $L\ge1$ and let every dyadic block lie in the padded square of side $N$.
+    Under the hypotheses of the previous theorem, applying the fold in both
+    coordinates turns the padded walks into walks of the open $L\times L$ square
+    lattice, the party at an anchor is placed at its fold, and every edge of the
+    genuine square is traversed at most $8(2c+1)B\Delta$ times, counted with
+    repetition. This is the congestion part of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEPS}
+    under the three hypotheses stated above.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $N<2L$, every padded walk point has coordinates below $2L-1$, so
+    adjacent padded points fold to adjacent genuine points. A horizontal edge of
+    the genuine square has at most two padded preimages in each coordinate, hence
+    at most four padded unit-edge preimages, and likewise for vertical edges.
+    Summing the padded bound over these preimages gives
+    $4\cdot2(2c+1)B\Delta$.
+\end{proof}
+
+\begin{theorem}[Dyadic routing yields a square-lattice PEPS]
+    \label{thm:peps_dyadic_routing_peps}
+    \lean{TNLean.PEPS.Approximation.exists_squarePEPS_of_dyadicRouting}
+    \leanok
+    \uses{thm:peps_dyadic_folded_congestion, thm:peps_routed_contraction}
+    Let $L\ge1$ and consider a party network on dyadic anchors of the padded
+    square with at most $B$ parties per block, at most $\Delta$ links per party,
+    link separation at most $c$ times either endpoint scale, and link dimensions
+    at most $D$. Then there is a PEPS on the open $L\times L$ square lattice whose
+    coefficients equal those of the party network, with the physical index of
+    each party read at the fold of its anchor, and whose bond dimensions are all
+    at most ${\max(D,1)}^{\chi}$ with $\chi=8(2c+1)B\Delta$. The exponent $\chi$
+    depends neither on $L$ nor on the number of dyadic scales.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the routed contraction to the folded routing, whose congestion is at
+    most $\chi$ by the previous theorem. The fold fixes genuine coordinates, so a
+    party whose anchor is a genuine site is read at that site.
+\end{proof}

@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+\input{command}
+\title{Ground-Space Subtraction in the Infinite-Volume Gap Argument}
+\author{}
+\date{2026-10-02}
+\begin{document}
+\maketitle
+\gapnote{open-gap}{wip}
+
+\section{The source conclusion}
+Nachtergaele's gap theorem \cite{Nachtergaele1996Spectral} includes an
+infinite-volume conclusion. Its hypotheses include a positive finite-range
+interaction, equality of its zero-energy state face with the prescribed
+GVBS face, and equality of the open-chain kernel with the prescribed
+local support space at every sufficiently large length. The interaction
+range need not exceed a separately supplied injectivity length.
+For each pure GVBS ground state $\eta$ and local observable $X$ with $\eta(X)=0$, the uniform finite-volume gap
+$\gamma>0$ also satisfies
+\begin{align}
+    \lim_{M\to-\infty,\,N\to+\infty}
+        \eta\bigl(X^*[H_{[M,N]},X]\bigr)
+        &\geq\gamma\eta(X^*X).
+    \label{eq:infinite_gap_source}
+\end{align}
+The local source is \path{References/cond-mat_9410110/main.tex},
+lines 933--947. Its final proof, at lines 2649--2675, uses convergence
+of finite-volume pure ground-state expectations to those of one pure
+infinite-volume sector.
+
+\section{The finite-volume estimate}
+Let $H\geq0$ act on a finite-dimensional Hilbert space, let
+$K=\ker H$, and suppose $H\geq\gamma P_{K^\perp}$. For every vector
+$v$, orthogonal decomposition gives
+\begin{align}
+    \langle Hv,v\rangle
+        &\geq\gamma\bigl(\|v\|^2-\|P_Kv\|^2\bigr).
+    \label{eq:infinite_gap_subtraction}
+\end{align}
+If $\psi\in K$, then
+$\langle\psi,X^*[H,X]\psi\rangle=\langle HX\psi,X\psi\rangle$.
+Consequently
+\begin{align}
+    \langle\psi,X^*[H,X]\psi\rangle
+        &\geq\gamma\bigl(\|X\psi\|^2-\|P_KX\psi\|^2\bigr).
+    \label{eq:infinite_gap_commutator}
+\end{align}
+These assertions are proved in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/GroundExpectationGap.lean}.
+
+The projection in (\ref{eq:infinite_gap_commutator}) is onto the entire
+ground space. For a normalized ground vector $\psi$, the condition
+$\langle\psi,X\psi\rangle=0$ removes the component along $\psi$;
+it does not remove components along other vectors in $K$. Thus scalar
+centering alone does not justify replacing the projection term by zero
+in a degenerate finite volume.
+
+\section{The proved limiting implication}
+Consider Hilbert spaces and operators indexed by expanding volumes $n$.
+Suppose their Hamiltonians have the same gap $\gamma$ for all sufficiently
+large $n$, and let $\psi_n\in\ker H_n$. If
+\begin{align}
+    \|X_n\psi_n\|^2&\longrightarrow a,
+    \label{eq:infinite_gap_norm_limit}\\
+    \|P_{\ker H_n}X_n\psi_n\|^2&\longrightarrow0,
+    \label{eq:infinite_gap_projection_limit}\\
+    \langle\psi_n,X_n^*[H_n,X_n]\psi_n\rangle&\longrightarrow e,
+    \label{eq:infinite_gap_energy_limit}
+\end{align}
+then (\ref{eq:infinite_gap_commutator}) implies $e\geq\gamma a$.
+The formal limiting assertion permits the Hilbert space to vary with $n$.
+Its projection-decay hypothesis is explicit; it is not counted as a
+formalization of (\ref{eq:infinite_gap_source}).
+
+When $\ker H_n=\mathbb C\psi_n$ and $\|\psi_n\|=1$ for all sufficiently
+large $n$, one has
+\begin{align}
+    \|P_{\ker H_n}X_n\psi_n\|^2
+        &=|\langle\psi_n,X_n\psi_n\rangle|^2.
+    \label{eq:infinite_gap_rank_one_projection}
+\end{align}
+Thus convergence of the scalar mean to zero suffices in this case.
+The corresponding finite-volume estimate and limiting implication are
+also proved in the cited module. Finite-volume uniqueness is an explicit
+hypothesis; it is not inferred from purity of the limiting state.
+
+\section{Faithful generating data and finite supports}
+
+Let $A$ be a tensor of positive bond dimension and let $\rho>0$. For a
+$k$-site matrix $X$, put
+\[
+ \eta_{A,\rho}(X)=\frac{1}{\operatorname{tr}\rho}
+   \sum_{\sigma,\tau}X_{\sigma\tau}
+       \operatorname{tr}(A^\tau\rho(A^\sigma)^*).
+\]
+No stationarity or normalization is required for the following equivalence:
+\[
+ \eta_{A,\rho}(X^*X)=0\quad\Longleftrightarrow\quad
+ G_A(k)\subseteq\ker X.
+\]
+Indeed, writing $C_b=\sum_\sigma X_{b\sigma}A^\sigma$, one has
+\[
+ (\operatorname{tr}\rho)\eta_{A,\rho}(X^*X)
+   =\operatorname{tr}\!\left(\rho\sum_b C_b^*C_b\right).
+\]
+Faithfulness of $\rho$ makes this trace zero precisely when every $C_b$ is
+zero. The identity
+$(X\Gamma_k(Y))_b=\operatorname{tr}(C_bY)$ and the nondegeneracy of the
+trace pairing finish the argument. This is proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalFaithfulSupport.lean}.
+The argument applies also at $k=0$.
+
+If $\sum_iA_i^*A_i=I$, the functional is positive and normalized.
+It therefore has a positive representing matrix $\sigma_k$ with trace one:
+\[
+ \eta_{A,\rho}(X)=\operatorname{tr}(\sigma_kX),
+ \qquad \operatorname{ran}\sigma_k=G_A(k).
+\]
+The range equality follows by comparing the vanishing conditions for
+$\eta_{A,\rho}(X^*X)$ and
+$\operatorname{tr}(\sigma_kX^*X)$, then testing the orthogonal-complement
+projections of the two subspaces. The result is proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalDensitySupport.lean}.
+Stationarity is unnecessary for these finite densities. Without stationarity
+the conclusion does not assert consistency across intervals.
+
+These finite-volume statements take the faithful generating data as given.
+Nachtergaele passes from an arbitrary GVBS presentation to faithful minimal
+generating data \cite{Nachtergaele1996Spectral}, local source lines 1724--1738.
+That passage is not formalized here; the support results therefore carry the
+faithful generators as an explicit hypothesis. Removing it requires
+formalizing the minimal-data construction from a general presentation.
+Likewise, results stated for a primitive tensor with canonical data, for a
+normalized periodic tensor, or for a finite periodic family take that tensor
+presentation as given. Deriving such a presentation from a general GVBS
+boundary-limit presentation is part of the same unformalized passage, and the
+same elimination plan applies.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

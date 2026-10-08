@@ -137,6 +137,7 @@ import TNLean.MPS.MPU.ParityConditioning
 import TNLean.MPS.MPU.PauliControlObstruction
 import TNLean.MPS.MPU.PeriodicOperatorCutRank
 import TNLean.MPS.MPU.PermutedEncodedMergingCircuit
+import TNLean.MPS.MPU.PhaseSelectorRows
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.PhysicalCutConfigurations
@@ -218,6 +219,7 @@ import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
+import TNLean.MPS.MPU.UnitCircleRankTwo
 import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPU.VirtualSandwichBlocking
 import TNLean.MPS.MPU.VirtualSourceFactorTransport
