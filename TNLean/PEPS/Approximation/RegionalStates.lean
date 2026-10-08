@@ -92,7 +92,7 @@ theorem graphBondDim_forall (D : ForwardEdge L → ℕ) (P : ℕ → Prop) :
   · intro h e
     exact h ((forwardSquareEdgeEquiv L).symm e)
 
-/-- The virtual-first adapter preserves the required positivity on every native edge. -/
+/-- The virtual-first transport preserves the required positivity on every native edge. -/
 theorem vectorTensorToGraphTensor_bondDim_pos (P : Vector.Tensor q L)
     (e : Edge (squareLatticeGraph L L)) :
     0 < (vectorTensorToGraphTensor P).bondDim e :=
@@ -193,7 +193,9 @@ theorem regionReducedDensity_vectorTensorToGraphTensor (P : Vector.Tensor q L)
   have h := funext (stateCoeff_vectorTensorToGraphTensor P)
   simp only [regionReducedDensity, h]
 
-/-- The canonical entropy of the physical-first regional contraction is unchanged.
+/-- The von Neumann entropy of the unnormalized regional density of the physical-first
+contraction is unchanged. The density has trace `‖Φ‖ ^ 2`, so this is the entanglement
+entropy of the region only for a unit vector.
 This applies QICLean's entropy congruence; it introduces no separate entropy definition. -/
 theorem entropy_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) (R : Finset (Vertex L)) :
@@ -204,7 +206,8 @@ theorem entropy_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
         (Matrix.posSemidef_vecMulVec_self_star f).partialTraceRight.isHermitian := by
   exact vonNeumannEntropy_congr (regionReducedDensity_pinnedTensorToGraphTensor D A R) _ _
 
-/-- Canonical regional entropy is also unchanged for the virtual-first presentation. -/
+/-- The von Neumann entropy of the unnormalized regional density is also unchanged for the
+virtual-first presentation; as above, it is the entanglement entropy only for a unit vector. -/
 theorem entropy_vectorTensorToGraphTensor (P : Vector.Tensor q L) (R : Finset (Vertex L)) :
     let f := P.contract ∘ (regionConfigEquiv (d := q) R).symm
     vonNeumannEntropy (regionReducedDensity (vectorTensorToGraphTensor P) R)

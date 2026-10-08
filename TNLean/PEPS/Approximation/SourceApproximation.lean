@@ -5,7 +5,7 @@ Authors: TNLean contributors
 
 Adapted predicates from openai/math (Apache-2.0), revision
 adc7f1241b42e322a6451854ab7e4b4c146bf78a, PEPSFilters/Basic.lean and
-TensorNetwork/VectorColumn.lean. The phase and normalization helper definitions
+TensorNetwork/VectorColumn.lean. The auxiliary phase and normalization definitions
 are unfolded; both original error conventions are retained. The native target
 is the independently written predicate in Approximation/Basic.lean. Transfer proofs are original.
 -/
@@ -25,7 +25,8 @@ namespace TNLean.PEPS.Approximation
 namespace Pinned
 
 /-- Adapted from `OAI.PolynomialPEPS.PinnedEntropy.HasPEPSApproximation`,
-Basic.lean lines 88–95, with `phase` unfolded. -/
+Basic.lean lines 88–95, with `phase` unfolded. The bound keeps the source's explicit
+`Real.rpow` spelling, which is definitionally `(L : ℝ) ^ c`. -/
 def HasPEPSApproximation {L q : ℕ} (Ω : State L q) (C c : ℝ) : Prop :=
   ∃ (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor q D v),
     (∀ e, 0 < D e) ∧
