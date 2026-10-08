@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.MarginalTails
+import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
 import QICLean.Entropy.ConditionalMovementRegional
 import QICLean.Representation.ReplicaEtaForms
 
@@ -19,14 +19,11 @@ Hamiltonian or the gap. The entropy exponent is written with the regional entrop
 finite-domain model, `η = S(x|P) + S(x|Y) = I(x:F|P) = I(x:F|Y)`.
 
 The finite-dimensional statements are proved in QICLean on an arbitrary finite set of sites
-with arbitrary local dimensions. This module identifies the regional states, entropies and
-placements of the finite-domain model with those of QICLean and specializes the regional
-forms to the lattice.
+with arbitrary local dimensions; `RegionalEntropyBridge` identifies the regional data of the
+finite-domain model with those of QICLean.
 
 ## Main results
 
-* `reducedState_eq_regionState`, `regionalEntropy_eq_regionEntropy`,
-  `localLift_eq_entropyLocalLift`: the lattice regional data are the QICLean regional data.
 * `movementEta_eq_condMutualInfo_left`, `movementEta_eq_condMutualInfo_right`,
   `movementEta_nonneg`: the two conditional-mutual-information forms of `η`, and `η ≥ 0`.
 * `exists_norm_movement_le`: Lemma 5.1 (`lem:movement`) on lattice regions.
@@ -49,38 +46,6 @@ open scoped ComplexOrder MatrixOrder
 namespace TNLean.PEPS.AreaLaw
 
 variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
-
-/-! ### The lattice regional data are the QICLean regional data -/
-
-/-- The regional state of the finite-domain model is the QICLean regional state for constant
-local dimension `q`. -/
-theorem reducedState_eq_regionState (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    reducedState Λ q Ω A = Entropy.regionState (n := fun _ ↦ q) A Ω :=
-  (partialTraceRight_cutVector Ω A).symm
-
-/-- The regional entropy of the finite-domain model is the QICLean regional entropy. -/
-theorem regionalEntropy_eq_regionEntropy (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    regionalEntropy Λ q Ω A = Entropy.regionEntropy (n := fun _ ↦ q) A Ω :=
-  vonNeumannEntropy_congr (reducedState_eq_regionState Ω A) _ _
-
-/-- The placement of a local matrix in the finite-domain model is the QICLean local lift. -/
-theorem localLift_eq_entropyLocalLift (A : Finset (Site Λ))
-    (K : Matrix (↥A → Fin q) (↥A → Fin q) ℂ) :
-    localLift Λ q A K = Entropy.localLift (n := fun _ ↦ q) A K := by
-  ext σ τ
-  rw [Entropy.localLift_apply, localLift, QuantumCircuit.embedOp_apply]
-  congr 1
-  simp only [QuantumCircuit.AgreeOff, eq_iff_iff]
-  constructor
-  · intro h v hv
-    exact h v fun w hw ↦ hv (hw ▸ w.2)
-  · intro h v hv
-    exact h v fun hvA ↦ hv ⟨v, hvA⟩ rfl
-
-/-- The number of configurations of a region is `q ^ |A|`. -/
-theorem card_regionConfig (A : Finset (Site Λ)) :
-    Fintype.card (Entropy.RegionConfig (fun _ : Site Λ ↦ q) A) = q ^ A.card := by
-  simp [Entropy.RegionConfig]
 
 /-! ### The entropy exponent -/
 
