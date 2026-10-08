@@ -22,10 +22,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
+import TNLean.PEPS.AreaLaw.Geometry.FanRegularity
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
-import Mathlib.Analysis.Normed.Affine.AddTorsorBases
-import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
-import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
 
 /-!
 # Regularity of initial birth regions
@@ -51,60 +49,6 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- A nonzero planar determinant gives nonempty interior of the triangle hull.
-Auxiliary to Section 11, `prop:two-families`, lines 308–316. -/
-private theorem triangle_interior_nonempty (a b c : ℝ × ℝ)
-    (hdet : (b.1 - a.1) * (c.2 - a.2) - (b.2 - a.2) * (c.1 - a.1) ≠ 0) :
-    (interior (convexHull ℝ {a, b, c})).Nonempty := by
-  have hli : LinearIndependent ℝ ![b - a, c - a] := by
-    apply LinearIndependent.pair_iff.mpr
-    intro r s hrs
-    have h₁ := congrArg Prod.fst hrs
-    have h₂ := congrArg Prod.snd hrs
-    change r * (b.1 - a.1) + s * (c.1 - a.1) = 0 at h₁
-    change r * (b.2 - a.2) + s * (c.2 - a.2) = 0 at h₂
-    have hr : r * ((b.1 - a.1) * (c.2 - a.2) -
-        (b.2 - a.2) * (c.1 - a.1)) = 0 := by
-      linear_combination (c.2 - a.2) * h₁ - (c.1 - a.1) * h₂
-    have hs : s * ((b.1 - a.1) * (c.2 - a.2) -
-        (b.2 - a.2) * (c.1 - a.1)) = 0 := by
-      linear_combination -(b.2 - a.2) * h₁ + (b.1 - a.1) * h₂
-    exact ⟨(mul_eq_zero.mp hr).resolve_right hdet,
-      (mul_eq_zero.mp hs).resolve_right hdet⟩
-  have hspan : Submodule.span ℝ ({b - a, c - a} : Set (ℝ × ℝ)) = ⊤ := by
-    simpa only [Matrix.range_cons_cons_empty] using
-      hli.span_eq_top_of_card_eq_finrank' (by norm_num)
-  have haff := affineSpan_singleton_union_vadd_eq_top_of_span_eq_top (k := ℝ) a
-    (s := ({b - a, c - a} : Set (ℝ × ℝ)))
-    (by simpa only [Subtype.range_coe_subtype, Set.ofPred_mem_eq] using hspan)
-  apply interior_convexHull_nonempty_iff_affineSpan_eq_top.mpr
-  simpa only [Set.image_pair, vadd_eq_add, sub_add_cancel, Set.singleton_union] using haff
-
-/-- An actual fan triangle has nonempty interior and is its closure.
-Auxiliary to Section 11, `prop:two-families`, lines 308–316. -/
-private theorem fan_triangle_regular (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
-    (split : Fin 4 → Bool) (i : CellFanSlot split) :
-    (interior (cellFanPolygon o ℓ z split i).region).Nonempty ∧
-      closure (interior (cellFanPolygon o ℓ z split i).region) =
-        (cellFanPolygon o ℓ z split i).region := by
-  have h (P : TemplatePolygon) :
-      match P with
-      | .triangle a b c _ _ _ _ =>
-          (interior (convexHull ℝ {a, b, c})).Nonempty ∧
-            closure (interior (convexHull ℝ {a, b, c})) = convexHull ℝ {a, b, c}
-      | .rectangle _ _ _ _ _ _ _ _ => True := by
-    cases P with
-    | triangle a b c hd _ _ _ =>
-      have hn := triangle_interior_nonempty a b c hd
-      have hf : ({a, b, c} : Set (ℝ × ℝ)).Finite :=
-        ((Set.finite_singleton c).insert b).insert a
-      have hconv := convex_convexHull ℝ ({a, b, c} : Set (ℝ × ℝ))
-      refine ⟨hn, ?_⟩
-      simpa only [(hf.isClosed_convexHull ℝ).closure_eq] using
-        hconv.closure_interior_eq_closure_of_nonempty_interior hn
-    | rectangle => trivial
-  exact h (cellFanPolygon o ℓ z split i)
-
 /-- A closed dyadic square is the closure of its interior, which contains
 the interior of an actual fan triangle.
 Auxiliary to Section 11, `prop:two-families`, lines 154–177 and 299–310. -/
@@ -112,7 +56,7 @@ private theorem closed_cell_regular (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ
     closure (interior (closure (dyadicCell o ℓ z))) = closure (dyadicCell o ℓ z) := by
   let split : Fin 4 → Bool := fun _ ↦ false
   let i : CellFanSlot split := ⟨0, 0⟩
-  have hn := (fan_triangle_regular o ℓ z split i).1
+  have hn := (cellFanPolygon_interior_nonempty_and_closure_eq o ℓ z split i).1
   have hsub : (cellFanPolygon o ℓ z split i).region ⊆
       closure (dyadicCell o ℓ z) := by
     intro x hx
@@ -188,7 +132,7 @@ theorem initialBirthRegion_eq_closure_initialOpenRegion
     exact (finite_biUnion_regular R.supp R.supp.toFinite
       (fun j ↦ (cellFanPolygon o (fineScaleIndex k.val) z.val
         (fineLayerSplitMask o k₀ k.val Z C z.val) j).region)
-      (fun j _ ↦ (fan_triangle_regular o (fineScaleIndex k.val) z.val
+      (fun j _ ↦ (cellFanPolygon_interior_nonempty_and_closure_eq o (fineScaleIndex k.val) z.val
         (fineLayerSplitMask o k₀ k.val Z C z.val) j).2)).symm
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -1,4 +1,24 @@
 /-
+Original formalization from the cited manuscript;
+no upstream Lean proof text reused.
+Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
+September 24, 2026.
+Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
+Manuscript path:
+preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+build/sections/10-geometry.tex
+
+Provenance-ID: 8758-tnlean.peps.arealaw.geometry.fan_base_radius
+Downstream declaration:
+TNLean.PEPS.AreaLaw.Geometry.norm_sub_cellFanCenter_of_mem_base
+Source labels: prop:two-families, geometry:initial-stars
+Source: Section 11, prop:two-families, lines 299–323, especially 308–316; geometry:initial-stars,
+lines 333–370, especially 352–363.
+Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719
+
+OpenAI Codex (GPT-6) assistance was used in this formalization.
+-/
+/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
@@ -145,7 +165,11 @@ private theorem norm_sidePoint_sub (c : ℝ × ℝ) {r : ℝ} (hr : 0 < r)
     ‖sidePoint c r side w - c‖ = r := by
   simp [sidePoint, norm_smul, norm_sideVector side hw, Real.norm_eq_abs, abs_of_pos hr]
 
-private theorem outerSegment_norm (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+/-- Every point on the actual outer base of a fan triangle lies at the
+half-side distance from its center in the maximum norm.
+Source: Section 11, `prop:two-families`, lines 299–323, especially 308–316,
+and `geometry:initial-stars`, lines 352–363. -/
+theorem norm_sub_cellFanCenter_of_mem_base (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split) {x : ℝ × ℝ}
     (hx : x ∈ segment ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i)) :
     ‖x - cellFanCenter o ℓ z‖ = (2 : ℝ) ^ ℓ / 2 := by
@@ -200,7 +224,7 @@ private theorem outerSegments_cover (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ
   constructor
   · intro hx
     obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
-    exact outerSegment_norm o ℓ z split i hi
+    exact norm_sub_cellFanCenter_of_mem_base o ℓ z split i hi
   · intro hx
     obtain ⟨side, w, hw, rfl⟩ := sidePoint_of_sphere (cellFanCenter o ℓ z)
       (div_pos (pow_pos zero_lt_two ℓ) (by norm_num)) x hx
@@ -405,8 +429,8 @@ theorem cellFanPolygons_inter_eq (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
   rw [polygon_region_eq, polygon_region_eq]
   apply radial_join_inter (cellFanCenter o ℓ z)
     (r := (2 : ℝ) ^ ℓ / 2) (div_pos (pow_pos zero_lt_two ℓ) (by norm_num))
-  · exact fun _ hx => outerSegment_norm o ℓ z split i hx
-  · exact fun _ hx => outerSegment_norm o ℓ z split j hx
+  · exact fun _ hx => norm_sub_cellFanCenter_of_mem_base o ℓ z split i hx
+  · exact fun _ hx => norm_sub_cellFanCenter_of_mem_base o ℓ z split j hx
   · exact ⟨_, left_mem_segment ℝ _ _⟩
   · exact ⟨_, left_mem_segment ℝ _ _⟩
 

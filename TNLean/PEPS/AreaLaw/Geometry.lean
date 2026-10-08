@@ -15,8 +15,10 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
+import TNLean.PEPS.AreaLaw.Geometry.ConcentricFans
 import TNLean.PEPS.AreaLaw.Geometry.DistanceLayers
 import TNLean.PEPS.AreaLaw.Geometry.DummyContacts
 import TNLean.PEPS.AreaLaw.Geometry.DummyCorners
@@ -32,6 +34,7 @@ import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.FanRegularity
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts

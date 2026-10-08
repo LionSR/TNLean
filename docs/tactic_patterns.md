@@ -5759,3 +5759,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   removed from the nearby-frontier proof. Its radial point belongs to the
   closed defining cell by the actual fan cover and closure monotonicity;
   the existing segment-containment candidates remain at two old instances.
+
+- **Promoted: actual fan interiors and base distance.**
+  `cellFanPolygon_interior_nonempty_and_closure_eq` in
+  `PEPS/AreaLaw/Geometry/FanRegularity.lean` shares the existing determinant
+  proof of nonempty triangle interior and its closure equality. Both old
+  initial-regularity callers use it. The existing base-distance proof in
+  CellFans is public as `norm_sub_cellFanCenter_of_mem_base`, so concentric
+  restriction uses the same actual base without another coordinate argument.
+  The three existing callers are renamed; both complete proofs are unchanged.

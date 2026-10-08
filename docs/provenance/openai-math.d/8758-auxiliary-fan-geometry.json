@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.fan_triangle_regularity",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FanRegularity.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_nonempty_and_closure_eq",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "An actual fan triangle has nonempty interior and equals the closure of that interior, for arbitrary origin, natural exponent, signed cell index and optional midpoint choices. The existing determinant and actual fan-regularity proofs move unchanged from InitialRegionRegularity; the actual fan theorem changes only its name and visibility.",
+        "Section 11, prop:two-families, lines 299\u2013323, especially 308\u2013316; geometry:initial-stars, lines 333\u2013370, especially 352\u2013363. Complete independent mathematical review approves the visible statement and proof at raw SHA-256 2e1c30f312f7bb1e5866bb80e4fcf143d075d6eef9946ad0703d98b96e06e131. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. At preparation the published completed parent, measured capture and exact source freeze are unbound. Canonical verification is pending and is intended to be the first compiler check at these prepared sources; no direct log or timing is asserted. Nine existing CellFans records and one existing InitialRegionRegularity record require fresh whole-file evidence, with their identities and public signatures preserved. The other 301 expected parent records, all historical evidence, policies and pins remain immutable. Actual sector assignment, active rays, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.fan_base_radius",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.norm_sub_cellFanCenter_of_mem_base",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Every point of an actual elementary base has maximum-norm distance 2^ell/2 from the cell center, for arbitrary origin, natural exponent, signed index and optional midpoint choices. The former private outerSegment_norm statement and proof become public unchanged after only name and visibility changes; exactly three existing calls are renamed.",
+        "Section 11, prop:two-families, lines 299\u2013323, especially 308\u2013316; geometry:initial-stars, lines 333\u2013370, especially 352\u2013363. Complete independent mathematical review approves the visible statement and proof at raw SHA-256 63618634a67ec019d5801334b39ecbd90bbe10db814d0b15cd3363724c1c7ae6. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. At preparation the published completed parent, measured capture and exact source freeze are unbound. Canonical verification is pending and is intended to be the first compiler check at these prepared sources; no direct log or timing is asserted. Nine existing CellFans records and one existing InitialRegionRegularity record require fresh whole-file evidence, with their identities and public signatures preserved. The other 301 expected parent records, all historical evidence, policies and pins remain immutable. Actual sector assignment, active rays, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.fan_sector_directions",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellFanSectors.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_not_isAllowedSlope_sub_center",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For the actual fan with every side divided at its midpoint, no interior point of any of its eight triangles has an allowed direction from the center. The origin, natural exponent and signed index are arbitrary. One surjective-functional half-plane argument and actual endpoints derive the exclusion; no initial-region, mesh, late-scale or sector assignment hypothesis is supplied.",
+        "Section 11, prop:two-families, lines 299\u2013323, especially 308\u2013316; geometry:initial-stars, lines 333\u2013370, especially 352\u2013363. Complete independent mathematical review approves the visible statement and proof at raw SHA-256 a32a8080a27aefc575e0be86641fbc2311cc20d673b6916f13451ca6a903930f. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. At preparation the published completed parent, measured capture and exact source freeze are unbound. Canonical verification is pending and is intended to be the first compiler check at these prepared sources; no direct log or timing is asserted. Nine existing CellFans records and one existing InitialRegionRegularity record require fresh whole-file evidence, with their identities and public signatures preserved. The other 301 expected parent records, all historical evidence, policies and pins remain immutable. Actual sector assignment, active rays, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.concentric_fan_restriction",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/ConcentricFans.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_succ_inter_closedBall",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For two actual dyadic fans with common center c, exponents ell and ell+1, cell index zero and origins c-r(1,1) and c-2r(1,1), where r=2^ell/2, each larger triangle intersected with the closed maximum-norm ball of radius r is its corresponding smaller triangle. The optional midpoint choices and dependent elementary position agree and are otherwise arbitrary. Homothety and the actual base radius prove the identity without a clipping certificate.",
+        "Section 11, prop:two-families, lines 299\u2013323, especially 308\u2013316; geometry:initial-stars, lines 333\u2013370, especially 352\u2013363. Complete independent mathematical review approves the visible statement and proof at raw SHA-256 21aa1955d8d36644ead4217b00c3b833fefb643d2380c6dec74feed6c763419b. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. At preparation the published completed parent, measured capture and exact source freeze are unbound. Canonical verification is pending and is intended to be the first compiler check at these prepared sources; no direct log or timing is asserted. Nine existing CellFans records and one existing InitialRegionRegularity record require fresh whole-file evidence, with their identities and public signatures preserved. The other 301 expected parent records, all historical evidence, policies and pins remain immutable. Actual sector assignment, active rays, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

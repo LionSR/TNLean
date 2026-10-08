@@ -161,3 +161,30 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     an interior point would belong to both. Their positive same-layer
     separation rules this out.
 \end{proof}
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% especially 308--316, and geometry:initial-stars, lines 352--363;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% The final formalization markers require the frozen canonical check.
+
+\begin{theorem}[Constant radius of an elementary base]
+    \label{thm:area_law_cell_fan_base_radius}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.norm_sub_cellFanCenter_of_mem_base}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    For any origin, natural exponent $\ell$, integer cell index and
+    optional midpoint subdivisions, let $c$ be the cell center and
+    $e=[a_e,b_e]$ an actual elementary base. Every $x\in e$ satisfies
+    \begin{align}
+        \|x-c\|_\infty & =\frac{2^\ell}{2}.
+    \end{align}
+    This is the actual base-radius identity in the fan construction
+    of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    In the affine parametrization of a side, one relative coordinate
+    is $\pm2^\ell/2$ and the other is $(2^\ell/2)u$ with $|u|\le1$.
+    The whole side and either midpoint half all satisfy this bound.
+    The maximum of the two absolute coordinates is therefore $2^\ell/2$.
+\end{proof}

@@ -1,0 +1,50 @@
+\section{Allowed lines and the eight open fan triangles}
+\label{sec:area_law_cell_fan_sectors}
+
+Fix an arbitrary origin, natural dyadic exponent and integer cell index.
+Split every side of the actual square at its midpoint, giving eight
+triangles $P_e$ with common center $c$. These are the elementary open
+sectors used in the local construction of
+\cite[Section~11]{OpenAI2026AreaLaw}. Put
+$\pi_1(x)=x_1$, $\pi_2(x)=x_2$ and
+$\Phi=\{\pi_1,\pi_2,\pi_1+\pi_2,\pi_1-\pi_2\}$.
+The level lines $\phi(x)=\phi(c)$ are exactly the four allowed lines
+through $c$.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--310,
+% and geometry:initial-stars, lines 352--363;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is the actual single-fan assertion, without a region assignment.
+% The final formalization markers require the frozen canonical check.
+
+\begin{theorem}[Allowed lines miss open fan triangles]
+    \label{thm:area_law_cell_fan_sector_directions}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_not_isAllowedSlope_sub_center}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_template}
+    Every one of the eight actual triangles satisfies
+    \begin{align}
+        \operatorname{int}(P_e)\cap
+        \bigcup_{\phi\in\Phi}\{x\in\mathbb R^2:\phi(x)=\phi(c)\}
+         & =\varnothing.
+    \end{align}
+    Equivalently, the vector $x-c$ has none of the slopes
+    $0,\infty,1,-1$ whenever $x\in\operatorname{int}(P_e)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unsplit_side_endpoints,
+        thm:area_law_elementary_side_geometry}
+    Let $\phi$ be any of the four surjective linear functionals.
+    The whole-side coordinates and midpoint-half descriptions show
+    that the two perimeter vertices $a_e,b_e$ lie in one weak half-plane
+    through $c$: either both functional values are at least $\phi(c)$,
+    or both are at most $\phi(c)$.
+
+    In the first case, convexity places $P_e$ in
+    $\phi^{-1}([\phi(c),\infty))$. Since a surjective continuous linear
+    functional is open, the interior of this half-plane is
+    $\phi^{-1}((\phi(c),\infty))$. Hence
+    $\phi(x)>\phi(c)$ for every $x\in\operatorname{int}(P_e)$.
+    Applying the same argument to $-\phi$ handles the other weak side.
+    Thus none of the four level equations can hold in the interior.
+\end{proof}
