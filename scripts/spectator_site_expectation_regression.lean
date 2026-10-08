@@ -108,53 +108,68 @@ example (B : Matrix ((Unit → Fin 2) × Fin 0) ((Unit → Fin 2) × Fin 0) ℂ)
 
 section AxiomChecks
 
-set_option linter.hashCommand false
 
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation_kronecker'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation_kronecker
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation_eq_average'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation_eq_average
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation_commute'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation_commute
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation_one_kronecker'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation_one_kronecker
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation_univ'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation_univ
 /--
 info: 'QuantumCircuit.norm_spectatorSiteExpectation_le'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms norm_spectatorSiteExpectation_le
 /--
 info: 'QuantumCircuit.norm_sub_spectatorSiteExpectation_le'
 depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms norm_sub_spectatorSiteExpectation_le

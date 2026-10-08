@@ -67,11 +67,12 @@ example {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
     siteOscillation q y ((1 : Matrix (ι → Fin q) (ι → Fin q) ℂ) ⊗ₖ C) = 0 :=
   siteOscillation_one_kronecker y C
 
-set_option linter.hashCommand false
 
 /--
 info: 'QuantumCircuit.siteOscillation' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation
@@ -79,6 +80,8 @@ info: 'QuantumCircuit.siteOscillation' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_bddAbove' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_bddAbove
@@ -86,6 +89,8 @@ info: 'QuantumCircuit.siteOscillation_bddAbove' depends on axioms:
 /--
 info: 'QuantumCircuit.norm_commutator_le_siteOscillation' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.norm_commutator_le_siteOscillation
@@ -93,6 +98,8 @@ info: 'QuantumCircuit.norm_commutator_le_siteOscillation' depends on axioms:
 /--
 info: 'QuantumCircuit.norm_commutator_le_siteOscillation_right' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.norm_commutator_le_siteOscillation_right
@@ -100,6 +107,8 @@ info: 'QuantumCircuit.norm_commutator_le_siteOscillation_right' depends on axiom
 /--
 info: 'QuantumCircuit.siteOscillation_nonneg' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_nonneg
@@ -107,6 +116,8 @@ info: 'QuantumCircuit.siteOscillation_nonneg' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_le' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_le
@@ -114,6 +125,8 @@ info: 'QuantumCircuit.siteOscillation_le' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_le_two_mul_norm' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_le_two_mul_norm
@@ -121,6 +134,8 @@ info: 'QuantumCircuit.siteOscillation_le_two_mul_norm' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_add_le' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_add_le
@@ -128,6 +143,8 @@ info: 'QuantumCircuit.siteOscillation_add_le' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_eq_zero_of_commute' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_eq_zero_of_commute
@@ -135,6 +152,8 @@ info: 'QuantumCircuit.siteOscillation_eq_zero_of_commute' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_zero' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_zero
@@ -142,6 +161,8 @@ info: 'QuantumCircuit.siteOscillation_zero' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_one_kronecker' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_one_kronecker
@@ -149,6 +170,8 @@ info: 'QuantumCircuit.siteOscillation_one_kronecker' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_smul' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_smul
@@ -156,6 +179,8 @@ info: 'QuantumCircuit.siteOscillation_smul' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_neg' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_neg
@@ -163,6 +188,8 @@ info: 'QuantumCircuit.siteOscillation_neg' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_sub_le' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_sub_le
@@ -170,6 +197,8 @@ info: 'QuantumCircuit.siteOscillation_sub_le' depends on axioms:
 /--
 info: 'QuantumCircuit.siteOscillation_sum_le' depends on axioms:
 [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.siteOscillation_sum_le

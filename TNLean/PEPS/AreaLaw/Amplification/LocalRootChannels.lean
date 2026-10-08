@@ -190,10 +190,11 @@ theorem norm_localRootChannel_sub_self_le [NeZero q] (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannel K k B - B‖ ≤ 2 * ‖B‖ := by
+  have h := norm_localRootChannel_le (q := q) K hk₀ hk₁ B
   calc
     ‖localRootChannel K k B - B‖ ≤ ‖localRootChannel K k B‖ + ‖B‖ := norm_sub_le _ _
-    _ ≤ ‖B‖ + ‖B‖ := add_le_add_right (norm_localRootChannel_le K hk₀ hk₁ B) _
-    _ = 2 * ‖B‖ := by ring
+    _ ≤ ‖B‖ + ‖B‖ := add_le_add h le_rfl
+    _ = 2 * ‖B‖ := (two_mul _).symm
 
 /-- Two local channels are close by their actual expectation errors from the same `k`.
 The estimate holds without nesting the regions (`09-amplification.tex`, lines 101–106). -/

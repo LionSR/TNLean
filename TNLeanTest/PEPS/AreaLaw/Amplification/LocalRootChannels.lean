@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
 
+/-! # Regression consumers for actual local root channels with spectators -/
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
@@ -22,13 +24,11 @@ example (K : Finset ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × A
     localRootChannel K 0 B = B := by
   have hzero : siteExpectation q K (0 : Matrix (ι → Fin q) (ι → Fin q) ℂ) = 0 := by
     simpa only [siteExpectationLM_apply] using (siteExpectationLM q K).map_zero
-  simp [localRootChannel, spectatorRootChannel, rootChannel, hzero,
-    Matrix.one_kronecker_one]
+  simp [localRootChannel, spectatorRootChannel, rootChannel, hzero]
 
 example (K : Finset ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     localRootChannel K 1 B = B := by
-  simp [localRootChannel, spectatorRootChannel, rootChannel, siteExpectation_one,
-    Matrix.one_kronecker_one]
+  simp [localRootChannel, spectatorRootChannel, rootChannel, siteExpectation_one]
 
 -- Consecutive equal regions have literally zero shell, without positivity assumptions.
 example (K : Finset ι) (k : Matrix (ι → Fin q) (ι → Fin q) ℂ) (l : ℕ)

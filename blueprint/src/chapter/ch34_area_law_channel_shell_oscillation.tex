@@ -1,0 +1,319 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 101--139,
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This leaf proves the local-channel and physical shell-oscillation steps.
+% It does not assert Lemma 10.1, a one-event increment, or clock propagation.
+% Public declarations: LocalRootChannels and ChannelShellOscillation.
+
+\section{Local root channels and physical shell oscillations}
+\label{sec:al_channel_shell_oscillation}
+
+Use the physical space $\mathcal H=(\C^q)^{\otimes I}$, the finite
+spectator $\mathcal K=\C^J$, and the algebras $\mathcal A_K$ of
+Section~\ref{sec:qc_site_oscillation}, with $q>0$. The dimension of
+$\mathcal K$ may be zero. Let $k$ be a positive contraction on
+$\mathcal H$, so $0\le k\le\mathbb 1$.
+Write $\widehat A=A\otimes\mathbb 1_{\mathcal K}$ for a physical
+operator $A$. All operators $B,C$ on $\mathcal H\otimes\mathcal K$
+are arbitrary complex matrices, with the Euclidean operator norm.
+For $K\subseteq I$, the expectation $E_K$ retains exactly the sites
+in $K$ and averages the sites in $I\setminus K$.
+
+\subsection{Localized square-root channels}
+
+\begin{definition}[Root channels with a spectator]
+    \label{def:al_local_root_channel}
+    \uses{def:qc_site_expectation}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannel,
+        TNLean.PEPS.AreaLaw.localRootChannel,
+        TNLean.PEPS.AreaLaw.spectatorRootChannel_sub,
+        TNLean.PEPS.AreaLaw.localRootChannel_sub}
+    \leanok
+    Set $k_K=E_K(k)$, and define the positive square roots
+    \begin{align}
+        G&=(\mathbb 1-k)^{1/2}, & R&=k^{1/2},
+        \label{eq:al_shell_full_roots}\\
+        G_K&=(\mathbb 1-k_K)^{1/2}, & R_K&=k_K^{1/2}.
+        \label{eq:al_shell_local_roots}
+    \end{align}
+    The full and localized channels are
+    \begin{align}
+        \mathcal E(B)&=\widehat G B\widehat G+\widehat R B\widehat R,
+        \label{eq:al_shell_full_channel}\\
+        \mathcal E_K(B)&=\widehat G_K B\widehat G_K
+            +\widehat R_K B\widehat R_K.
+        \label{eq:al_shell_local_channel}
+    \end{align}
+    In particular, $\mathcal E(B-C)=\mathcal E(B)-\mathcal E(C)$
+    and $\mathcal E_K(B-C)=\mathcal E_K(B)-\mathcal E_K(C)$ by
+    distributivity. These are the localized channels of
+    \cite[Section~10]{OpenAI2026AreaLaw}, extended by the identity on
+    the spectator.
+\end{definition}
+
+\begin{theorem}[Contraction of the root channels]
+    \label{thm:al_root_channel_contraction}
+    \uses{def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_le,
+        TNLean.PEPS.AreaLaw.norm_localRootChannel_le,
+        TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_self_le}
+    \leanok
+    The full and localized channels satisfy
+    \begin{align}
+        \|\mathcal E(B)\|&\le\|B\|,
+        \label{eq:al_shell_full_contraction}\\
+        \|\mathcal E_K(B)\|&\le\|B\|,
+        \label{eq:al_shell_local_contraction}\\
+        \|\mathcal E_K(B)-B\|&\le2\|B\|.
+        \label{eq:al_shell_identity_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_site_expectation_order,def:al_local_root_channel}
+    The expectation preserves the interval $[0,\mathbb 1]$.
+    Thus the roots are self-adjoint and
+    $G^2+R^2=\mathbb 1=G_K^2+R_K^2$.
+    The map $V\psi=\widehat G\psi\oplus\widehat R\psi$ is an
+    isometry and $\mathcal E(B)=V^\dagger(B\oplus B)V$, giving
+    (\ref{eq:al_shell_full_contraction}). The same argument for
+    $G_K,R_K$ gives~(\ref{eq:al_shell_local_contraction}). Finally,
+    $\|\mathcal E_K(B)-B\|\le\|\mathcal E_K(B)\|+\|B\|$.
+\end{proof}
+
+\begin{theorem}[Channel error from localization of the constraint]
+    \label{thm:al_root_channel_error}
+    \uses{def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_sub_localRootChannel_le,
+        TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_localRootChannel_le}
+    \leanok
+    Suppose $\|k-E_K(k)\|\le\varepsilon_K$ for a real number
+    $\varepsilon_K$. Then
+    \begin{align}
+        \|\mathcal E(B)-\mathcal E_K(B)\|
+        &\le4\sqrt{\varepsilon_K}\,\|B\|.
+        \label{eq:al_shell_localization_error}
+    \end{align}
+    If also $\|k-E_L(k)\|\le\varepsilon_L$, then
+    \begin{align}
+        \|\mathcal E_K(B)-\mathcal E_L(B)\|
+        &\le4\bigl(\sqrt{\varepsilon_K}+\sqrt{\varepsilon_L}\bigr)\|B\|.
+        \label{eq:al_shell_two_region_error}
+    \end{align}
+    The sets $K,L$ need not be nested. Both bounds are uniform over
+    all finite spectator spaces.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_site_expectation_order,def:al_local_root_channel}
+    All four roots in~(\ref{eq:al_shell_full_roots}) and
+    (\ref{eq:al_shell_local_roots}) have norm at most one.
+    The square-root H\"older inequality gives
+    $\|G-G_K\|\le\sqrt{\varepsilon_K}$ and
+    $\|R-R_K\|\le\sqrt{\varepsilon_K}$.
+    For physical operators $A,A'$, expand
+    \begin{align}
+        \widehat A B\widehat A-\widehat A'B\widehat A'
+        &=(\widehat A-\widehat A')B\widehat A
+            +\widehat A'B(\widehat A-\widehat A'),
+        \label{eq:al_shell_root_difference}\\
+        \|\widehat A B\widehat A-\widehat A'B\widehat A'\|
+        &\le(\|A\|+\|A'\|)\|A-A'\|\,\|B\|.
+        \label{eq:al_shell_root_bound}
+    \end{align}
+    Apply~(\ref{eq:al_shell_root_bound}) to $(G,G_K)$ and $(R,R_K)$
+    to obtain~(\ref{eq:al_shell_localization_error}). The triangle
+    inequality through $\mathcal E(B)$ gives
+    (\ref{eq:al_shell_two_region_error}). The hypotheses themselves
+    imply $\varepsilon_K,\varepsilon_L\ge0$.
+\end{proof}
+
+\begin{theorem}[Fixing the regional commutant and intertwining commutators]
+    \label{thm:al_root_channel_commutant}
+    \uses{def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.localRootChannel_eq_self_of_forall_commute,
+        TNLean.PEPS.AreaLaw.localRootChannel_commutator_of_forall_commute,
+        TNLean.PEPS.AreaLaw.localRootChannel_commutator}
+    \leanok
+    If $B$ commutes with every $\widehat C$ for $C\in\mathcal A_K$,
+    then $\mathcal E_K(B)=B$. If an operator $A$ on
+    $\mathcal H\otimes\mathcal K$ commutes with every such
+    $\widehat C$, then
+    \begin{align}
+        [A,\mathcal E_K(B)]&=\mathcal E_K([A,B]).
+        \label{eq:al_shell_commutator}
+    \end{align}
+    In particular, every physical $U\in\mathcal A_{I\setminus K}$
+    satisfies $[\widehat U,\mathcal E_K(B)]
+    =\mathcal E_K([\widehat U,B])$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_site_expectation_order,def:al_local_root_channel}
+    The operator $k_K$ belongs to $\mathcal A_K$. Functional calculus
+    preserves commutation with the complementary algebra, so both
+    $G_K,R_K$ belong to $\mathcal A_K$ as well. Under the first
+    hypothesis,
+    \begin{align}
+        \mathcal E_K(B)
+        &=B(\widehat G_K^{\,2}+\widehat R_K^{\,2})=B.
+        \label{eq:al_shell_commutant_fixed}
+    \end{align}
+    Under the second hypothesis, move $A$ past each root to obtain
+    $[A,\widehat G_K B\widehat G_K]=\widehat G_K[A,B]\widehat G_K$
+    and the same identity for $R_K$; their sum proves
+    (\ref{eq:al_shell_commutator}). Operators supported on disjoint
+    physical regions commute, which gives the final assertion.
+\end{proof}
+
+\begin{theorem}[Oscillation outside the channel region]
+    \label{thm:al_root_channel_outside_oscillation}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_of_notMem}
+    \leanok
+    If $y\notin K$, then $d_y(\mathcal E_K(B))\le d_y(B)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_root_channel_commutant,thm:al_root_channel_contraction,
+        thm:qc_site_oscillation_bounds}
+    For every unitary $U\in\mathcal A_{\{y\}}$,
+    \begin{align}
+        \|[\widehat U,\mathcal E_K(B)]\|
+        &=\|\mathcal E_K([\widehat U,B])\|
+        \le\|[\widehat U,B]\|\le d_y(B).
+        \label{eq:al_shell_outside_commutator}
+    \end{align}
+    Taking the supremum over $U$ proves the assertion, as in
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{proof}
+
+\subsection{Differences of successive local channels}
+
+\begin{definition}[Local channel shells]
+    \label{def:al_local_channel_shell}
+    \uses{def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.localRootChannelShell,
+        TNLean.PEPS.AreaLaw.localRootChannelShell_sub}
+    \leanok
+    Let $(K_l)_{l\ge0}$ be any sequence of physical regions and put
+    $\mathcal E_l=\mathcal E_{K_l}$. Define
+    \begin{align}
+        \Delta_0(B)&=\mathcal E_0(B)-B,
+        \label{eq:al_shell_zero}\\
+        \Delta_{l+1}(B)&=\mathcal E_{l+1}(B)-\mathcal E_l(B).
+        \label{eq:al_shell_successor}
+    \end{align}
+    Equivalently, take $\mathcal E_{-1}=\mathrm{id}$ and
+    $\Delta_l=\mathcal E_l-\mathcal E_{l-1}$, as in
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+    Distributivity gives $\Delta_l(B-C)=\Delta_l(B)-\Delta_l(C)$.
+\end{definition}
+
+\begin{theorem}[Norm bounds for the channel shells]
+    \label{thm:al_channel_shell_norm}
+    \uses{def:al_local_channel_shell}
+    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_zero_le,
+        TNLean.PEPS.AreaLaw.norm_localRootChannelShell_succ_le}
+    \leanok
+    For every sequence of regions, $\|\Delta_0(B)\|\le2\|B\|$.
+    Fix $l\ge0$ and real numbers $\varepsilon_{\rm next},
+    \varepsilon_{\rm prev}$ such that
+    \begin{align}
+        \|k-E_{K_{l+1}}(k)\|&\le\varepsilon_{\rm next},
+        \label{eq:al_shell_next_error}\\
+        \|k-E_{K_l}(k)\|&\le\varepsilon_{\rm prev}.
+        \label{eq:al_shell_previous_error}
+    \end{align}
+    Then
+    \begin{align}
+        \|\Delta_{l+1}(B)\|
+        &\le4\bigl(\sqrt{\varepsilon_{\rm next}}
+            +\sqrt{\varepsilon_{\rm prev}}\bigr)\|B\|.
+        \label{eq:al_shell_successor_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_root_channel_contraction,thm:al_root_channel_error}
+    Apply~(\ref{eq:al_shell_identity_bound}) to $K_0$ for the
+    zeroth shell and~(\ref{eq:al_shell_two_region_error}) to
+    $K_{l+1},K_l$ for the successor shell.
+\end{proof}
+
+\begin{theorem}[Shells vanish on the physical regional commutant]
+    \label{thm:al_channel_shell_commutant}
+    \uses{def:al_local_channel_shell}
+    \lean{TNLean.PEPS.AreaLaw.localRootChannelShell_eq_zero_of_forall_commute}
+    \leanok
+    Suppose the regions are increasing: $K_l\subseteq K_m$ whenever
+    $l\le m$. If $B$ commutes with $\widehat A$ for every
+    $A\in\mathcal A_{K_l}$, then $\Delta_l(B)=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_root_channel_commutant,def:al_local_channel_shell}
+    For $l=0$, the commutant-fixing identity gives
+    $\Delta_0(B)=B-B=0$. For $l=m+1$, the inclusion
+    $\mathcal A_{K_m}\subseteq\mathcal A_{K_{m+1}}$ implies
+    that both $\mathcal E_m$ and $\mathcal E_{m+1}$ fix $B$.
+    Their difference therefore vanishes.
+\end{proof}
+
+\begin{theorem}[Physical-site oscillation bound for channel shells]
+    \label{thm:al_channel_shell_oscillation}
+    \uses{def:al_local_channel_shell,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_zero_le_sum_siteOscillation,
+        TNLean.PEPS.AreaLaw.norm_localRootChannelShell_succ_le_sum_siteOscillation}
+    \leanok
+    Suppose $(K_l)_{l\ge0}$ is increasing. Then
+    \begin{align}
+        \|\Delta_0(B)\|&\le2\sum_{y\in K_0}d_y(B).
+        \label{eq:al_shell_zero_oscillation}
+    \end{align}
+    Fix $l\ge0$ and real numbers $\varepsilon_{\rm next},
+    \varepsilon_{\rm prev}$ satisfying~(\ref{eq:al_shell_next_error})
+    and~(\ref{eq:al_shell_previous_error}). Then
+    \begin{align}
+        \|\Delta_{l+1}(B)\|
+        &\le4\bigl(\sqrt{\varepsilon_{\rm next}}
+            +\sqrt{\varepsilon_{\rm prev}}\bigr)
+            \sum_{y\in K_{l+1}}d_y(B).
+        \label{eq:al_shell_successor_oscillation}
+    \end{align}
+    These bounds hold for every finite spectator and every complex
+    operator $B$, without a Hermiticity assumption.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_shell_norm,thm:al_channel_shell_commutant,
+        def:al_local_channel_shell,thm:qc_spectator_commutant,
+        thm:qc_spectator_error,thm:qc_site_oscillation_bounds}
+    Fix a shell index $m$ and a nonnegative coefficient $\eta$ from
+    Theorem~\ref{thm:al_channel_shell_norm}, so
+    $\|\Delta_m(C)\|\le\eta\|C\|$ for every $C$.
+    Average precisely the physical sites in $K_m$, leaving the
+    spectator untouched, by setting
+    $\overline B=E_{I\setminus K_m}^{\mathcal K}(B)$.
+    Theorems~\ref{thm:qc_spectator_commutant} and
+    \ref{thm:qc_spectator_error} give, for every
+    $A\in\mathcal A_{K_m}$,
+    \begin{align}
+        [\overline B,\widehat A]&=0,
+        \label{eq:al_shell_averaged_commutant}\\
+        \|B-\overline B\|&\le\sum_{y\in K_m}d_y(B).
+        \label{eq:al_shell_averaging_error}
+    \end{align}
+    Hence $\Delta_m(\overline B)=0$, and subtraction yields
+    \begin{align}
+        \|\Delta_m(B)\|
+        &=\|\Delta_m(B-\overline B)\|
+        \le\eta\|B-\overline B\|
+        \le\eta\sum_{y\in K_m}d_y(B).
+        \label{eq:al_shell_oscillation_bound}
+    \end{align}
+    For $m=0$ use $\eta=2$. For $m=l+1$ use
+    $\eta=4(\sqrt{\varepsilon_{\rm next}}
+    +\sqrt{\varepsilon_{\rm prev}})$, which is nonnegative.
+    This is the commutant-averaging argument for the channel-shell
+    estimate in \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{proof}

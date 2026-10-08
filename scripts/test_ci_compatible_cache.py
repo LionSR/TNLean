@@ -704,6 +704,30 @@ class WorkflowTests(unittest.TestCase):
                         'import TNLean.PEPS.TorusDualRectangleFlux',
                         'import TNLean.PEPS.TorusDualWinding',
                     ])
+                elif step.get('name') == 'Check labelled open coefficients early':
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    run = step['run']
+                    target = 'lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean'
+                    self.assertIn('python3 scripts/check_collared_open_axioms.py', run)
+                    self.assertIn('tee -a "$RUNNER_TEMP/collared-open-check.log"', run)
+                    self.assertLess(run.index('test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'), run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean'))
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true']:
+                        self.assertIn(flag, run)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLeanTest/LabelledOpenCoefficient.lean',
+                        'TNLean/PEPS/LabelledOpenCoefficient.lean',
+                        'TNLean/PEPS/TorusLabelledOpenCoefficient.lean',
+                        'TNLean/PEPS/TorusDualCollar.lean',
+                        'TNLean/PEPS/TorusDualOpenDeformation.lean'])
+                    imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')],
+                                     ['import TNLean.PEPS.TorusDualOpenDeformation'])
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')

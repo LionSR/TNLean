@@ -499,6 +499,23 @@ jobs:
               "$source"
           done
 
+      - name: Check labelled open coefficients early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          : > "$RUNNER_TEMP/collared-open-check.log"
+          for source in TNLeanTest/LabelledOpenCoefficient.lean \
+              TNLean/PEPS/LabelledOpenCoefficient.lean TNLean/PEPS/TorusLabelledOpenCoefficient.lean \
+              TNLean/PEPS/TorusDualCollar.lean TNLean/PEPS/TorusDualOpenDeformation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/collared-open-check.log"
+          done
+          python3 scripts/check_collared_open_axioms.py "$RUNNER_TEMP/collared-open-check.log"
+
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
       # Export only the explicit QIC allowlist and hashes, never the whole workspace.
@@ -560,6 +577,12 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build capped dyadic partition early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build rectangular local-window preparation targets early
         run: |
           set -eo pipefail
@@ -568,6 +591,20 @@ jobs:
             +TNLean.MPS.Preparation.InhomogeneousChoiResidual:olean \
             +TNLean.MPS.Preparation.WindowMixingPreparation:olean \
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build template layers early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build template mixed-square estimates early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
@@ -581,6 +618,20 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test capped dyadic partition strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CappedDyadicPartition.lean
+
+      - name: Test template mixed-square counts strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateMixedSquares.lean
 
       - name: Test concrete hole encoder and standard axioms strictly
         run: |
@@ -599,6 +650,14 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
 
+      - name: Test square-grid vector, regional and approximation transport
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/SquareGridRegionalStates.lean
+
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -612,6 +671,20 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/NestedCylinderCounterexamples.lean
+
+      - name: Check conditional two-family entropy integration strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ConditionalTwoFamilyEntropy.lean
+
+      - name: Check two-family entropy integration strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TwoFamilyEntropy.lean
 
       - name: Test actual regularized patch minimum regressions strictly
         run: |
@@ -644,6 +717,14 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/RectangularWindowMixing.lean
+
+      - name: Test template rows strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateRows.lean
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
@@ -745,6 +826,17 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Build continuous physical string-order targets
+        run: lake build TNLean.MPS.Symmetry.ContinuousStringOrder
+
+      - name: Test continuous physical string order strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ContinuousStringOrder.lean
+
       - name: Test example physical states and operators
         timeout-minutes: 5
         run: |
@@ -810,6 +902,18 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test exact square-grid PEPS representations and finite exceptions
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in ExactTreeRepresentation SquareLatticeConnectivity \
+              ExactTreeRepresentationAxioms ExactSmallSizeApproximation ExactFiniteException; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/PEPS/Approximation/$example.lean"
+          done
+
       - name: Test algebraic preparation import boundary
         timeout-minutes: 2
         run: >
@@ -818,7 +922,7 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
 
-      - name: Test area-law graph interaction foundations
+      - name: Test area-law foundations and physical oscillations
         timeout-minutes: 2
         run: |
           set -e
@@ -828,6 +932,16 @@ jobs:
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
+          done
+          for file in scripts/spectator_site_expectation_regression.lean \
+              TNLeanTest/SiteOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannels.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannelsAxioms.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelShellOscillation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
           done
 
       - name: Check changed Lean compilation times

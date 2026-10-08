@@ -34,6 +34,25 @@ namespace TNLean.PEPS.AreaLaw
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] [NeZero q]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+/-- A channel localized away from a physical site cannot increase its
+oscillation, even for an operator acting on a spectator. Source: area law,
+`09-amplification.tex`, lines 124–127. -/
+theorem siteOscillation_localRootChannel_le_of_notMem (K : Finset ι)
+    {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
+    (y : ι) (hy : y ∉ K)
+    (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
+    siteOscillation q y (localRootChannel K k B) ≤ siteOscillation q y B := by
+  apply siteOscillation_le
+  intro U hU hunitary
+  have hUK : U ∈ supportedOperators q ((K : Set ι)ᶜ) := by
+    apply supportedOperators_mono _ hU
+    intro z hz
+    have hzy : z = y := Set.mem_singleton_iff.mp hz
+    simpa only [Set.mem_compl_iff, Finset.mem_coe, hzy] using hy
+  rw [localRootChannel_commutator K hk₀ hk₁ hUK B]
+  exact (norm_localRootChannel_le K hk₀ hk₁ _).trans
+    (norm_commutator_le_siteOscillation y B hU hunitary)
+
 private theorem norm_shell_le_sum_oscillation
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
@@ -52,7 +71,7 @@ private theorem norm_shell_le_sum_oscillation
     have h := norm_sub_spectatorSiteExpectation_le (regions l)ᶜ B
       (fun y => siteOscillation q y B) (fun y _ U hU hunitary =>
         norm_commutator_le_siteOscillation_right y B hU hunitary)
-    simpa only [Finset.compl_compl] using h
+    simpa only [compl_compl] using h
   have heq : localRootChannelShell regions k l (B - E) =
       localRootChannelShell regions k l B := by
     rw [localRootChannelShell_sub, hzero, sub_zero]
