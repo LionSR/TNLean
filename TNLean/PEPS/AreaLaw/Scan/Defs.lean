@@ -257,6 +257,7 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   It is part of the scan at scale `n`, not a fixed exponent: the source later takes `W = n^ω`
   (`scanner:final-parameters`, line 843), so no constant may depend on it. -/
   W : ℝ
+  /-- `W ≥ 1` (`scanner:scales`, line 41). -/
   one_le_W : 1 ≤ W
   /- Truncated Hamiltonian (Proposition 4.5 as used in lines 49–59). -/
   /-- Ground energy `\widetilde E_0`. -/
