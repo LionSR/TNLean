@@ -99,8 +99,8 @@ The five ownership leaves cover all 55 public declarations exactly once.
 Their combined nineteen-page PDF was rendered and visually inspected, and
 the actual pinned strict web renderer passed a focused combined document.
 Source/reverse declaration synchronization, generated imports, module-size,
-proof-token, YAML, formatting and whitespace checks passed. Full exact-head
-repository CI and final review remain required.
+proof-token, YAML, formatting and whitespace checks passed. The complete
+production and regression checkpoint below records the exact-head run.
 
 The initially checked production hashes were:
 
@@ -113,8 +113,8 @@ The initially checked production hashes were:
 - `TriangularBoundaryDecomposition`: `033ce5352b9286137a48355b978b203006bc25c1ee2bac2f7cfb58b7c72b8950`
 
 All Lean checking uses the one canonical cloud checkout. Source worktrees
-perform no independent cache mutation. The PR remains a draft while the
-source-derived capstone and its guarded axiom reports are unverified.
+perform no independent cache mutation. The source-derived capstone and its
+guarded axiom reports were checked by the complete run below.
 
 ## Complete production and regression checkpoint
 
