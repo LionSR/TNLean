@@ -36,10 +36,11 @@ admissible supports $X$ that meet both $A$ and its complement.
     $\log\mathbb E\,\mathrm e^{uK}\le uS_\Omega(A)+512\mathrm e\vartheta
         \mathcal B_Au^2$ for $|u|\le1/(32\sqrt{(1+\vartheta)\mathcal B_A})$, and
     for every real $w$
-    \[
-        \Pr\{|K-S_\Omega(A)|>w\}\le\min\Bigl\{1,\,2\mathrm e^{\mathrm e/2}
+    \begin{align}
+        \Pr\{|K-S_\Omega(A)|>w\} & \le\min\Bigl\{1,\,2\mathrm e^{\mathrm e/2}
         \exp\Bigl(-\frac{w}{32\sqrt{(1+\vartheta)\mathcal B_A}}\Bigr)\Bigr\}.
-    \]
+        \label{eq:area_law_marginal_tail}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     The regional state is the marginal of $\Omega$ across the cut $A\sqcup
@@ -48,8 +49,8 @@ admissible supports $X$ that meet both $A$ and its complement.
     lemma applies.
 \end{proof}
 
-\begin{corollary}[Typical marginal spectrum]
-    \label{cor:area_law_typical_spectrum}
+\begin{theorem}[Typical marginal spectrum]
+    \label{thm:area_law_typical_spectrum}
     \lean{TNLean.PEPS.AreaLaw.concentrationWidth,
         TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState}
     \leanok
@@ -58,9 +59,11 @@ admissible supports $X$ that meet both $A$ and its complement.
     $w=32\sqrt{(1+\vartheta)\mathcal B_A}\,(M\log(n+2)+\mathrm e/2+\log2)$.
     The positive eigenvalues $p_j$ of $\rho_A$ with
     $|-\log p_j-S_\Omega(A)|\le w$ carry total mass at least $1-(n+2)^{-M}$.
-\end{corollary}
+\end{theorem}
 \begin{proof}\leanok
-    At this width the tail bound of Theorem~\ref{thm:area_law_marginal_tails}
-    equals $(n+2)^{-M}$, and the indices of positive weight outside the
+    At this width the second argument of the minimum in
+    (\ref{eq:area_law_marginal_tail}) equals $(n+2)^{-M}$, so the tail
+    probability is at most $(n+2)^{-M}$; for $M<0$ this bound exceeds one and
+    the conclusion is trivial. The indices of positive weight outside the
     typical set are exactly those of the tail event.
 \end{proof}
