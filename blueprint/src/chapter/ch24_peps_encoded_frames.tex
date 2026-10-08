@@ -463,11 +463,146 @@ norm of matrices, rectangular ones included.
     specialization, $L^{-60}\le L^{-30}$.
 \end{proof}
 
+\begin{lemma}[Chains of rank-one site operators as networks]
+    \label{lem:peps_frame_chain_network}
+    \lean{TNLean.PEPS.SiteChain.Step,
+        TNLean.PEPS.SiteChain.chainOp,
+        TNLean.PEPS.SiteChain.tensor,
+        TNLean.PEPS.SiteChain.list_ofFn_prod_apply,
+        TNLean.PEPS.SiteChain.chainOp_apply}
+    \leanok
+    Let $L_0,\dots,L_{n-1}$ be operators
+    $L_j=\ket{k_j}\bra{b_j}_{S_j}\otimes\id$ on the raw registers, where each
+    $k_j$ and $b_j$ is a vector on the configurations of the finite set $S_j$
+    or the product zero vector. Form the network whose vertices are the bras
+    $\bra{b_j}$ and the kets $\ket{k_j}$, kept distinct, and whose internal
+    edges join the output of a ket at a site to the input of the next bra
+    containing that site, in the order $L_{n-1},\dots,L_0$ of application.
+    The input of a bra at a site contained in no earlier factor is an open
+    input leg, and the output of a ket at a site contained in no later factor
+    is an open output leg, except that the legs of a product zero vector are
+    fixed to $0$. Then the entry of $L_0\cdots L_{n-1}$ at output
+    configuration $\sigma$ and input configuration $\tau$ vanishes unless
+    $\sigma$ and $\tau$ agree at the sites contained in no factor and carry
+    $0$ at the fixed legs, and otherwise equals the contraction of the network
+    evaluated at the open legs read off from $\sigma$ and $\tau$. No edge
+    joins a vertex to itself (\texttt{05-frames.tex}, lines 274--281).
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the product as a sum over paths of intermediate configurations.
+    A path of nonzero weight keeps the value of a site across factors that do
+    not contain it, so it is determined by the values on the internal edges,
+    and conversely every labelling of the internal edges determines such a
+    path; along it the weight is the product of the vertex tensors.
+\end{proof}
+
+\begin{lemma}[Whole-group truncation of a chain]
+    \label{lem:peps_frame_chain_truncation}
+    \lean{TNLean.PEPS.SiteChain.l2_opNorm_le_of_blocks,
+        TNLean.PEPS.SiteChain.vertexNormSq_tensor_le_one,
+        TNLean.PEPS.SiteChain.approxOp,
+        TNLean.PEPS.SiteChain.norm_approxOp_le,
+        TNLean.PEPS.SiteChain.termOp,
+        TNLean.PEPS.SiteChain.exists_chainOp_truncation}
+    \leanok
+    \uses{lem:peps_frame_chain_network,thm:peps_group_tensor}
+    In the setting of the previous lemma, let every $k_j$ and $b_j$ have norm
+    at most one, and let $G$ be a set of vertices containing every vertex
+    with an open leg. For every $k\ge1$ there are orthonormal families of at
+    most $k$ vectors on the open-leg groups and coefficients of modulus at
+    most one such that $L_0\cdots L_{n-1}$ differs in operator norm by at most
+    $|G|/\sqrt k$ from the sum of the corresponding product terms, of which
+    there are at most $k^{|G|}$. Each product term is the tensor product of
+    one normalized vector on the open output legs of each ket, one
+    normalized covector on the open input legs of each bra, the product zero
+    vectors at the fixed legs, and the identity on the sites contained in no
+    factor. No constant depends on the dimensions of the sites
+    (\texttt{05-frames.tex}, lines 306--329).
+\end{lemma}
+
+\begin{proof}\leanok
+    The vertex tensors are normalized, so the whole-group truncation lemma
+    applies to the contraction $Z$. An operator read off from a tensor $W$ on
+    the open legs is $W$, reshaped as a matrix from inputs to outputs,
+    tensored with the identity on the remaining sites, so its operator norm is
+    at most the largest Hilbert--Schmidt norm of its diagonal blocks, hence
+    at most $\lVert W\rVert$. Apply this to $W=Z-Z_k$.
+\end{proof}
+
+\begin{lemma}[Network of a branch]
+    \label{lem:peps_frame_branch_network}
+    \lean{TNLean.PEPS.EncodedFrame.SquarePatch.tagVec,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.branchSteps,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.branchRaw_eq_chainOp,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.patchVertices,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_patchVertices_le,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.mem_patchVertices_of_isOpen,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_owners_of_isOpen_inl,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_owners_of_isOpen_inr}
+    \leanok
+    \uses{lem:peps_frame_branches,lem:peps_frame_wires,
+        lem:peps_frame_chain_network}
+    Assume the four conditions and fix a branch $(a,s,b)$. Its raw operator
+    $B_aC_sA_b^\dagger$ is the ordered product of the factors
+    $\ket0\bra{u'_r}$ of the affected new holes, $\ket{w_i}\bra{w_i}$ of the
+    patch terms, and $\ket{u_t}\bra0$ of the affected old holes. In its
+    network only the bras and kets of the patch terms have open legs, so at
+    most $2m$ vertices do; the open input legs of a patch bra have at most
+    two old owners, the open output legs of a patch ket have at most two new
+    owners, and all these owners belong to the specified list
+    (\texttt{05-frames.tex}, lines 257--305).
+\end{lemma}
+
+\begin{proof}\leanok
+    The factorization follows from the definitions of the hole encodings and
+    the cylinder projectors. A decoded old-hole ket meets a later patch bra
+    at every site of its square, and a new-hole bra meets an earlier patch
+    ket at every site of its square, by the wire classification; the zero
+    vectors carry no open legs. An open input of a patch bra is consumed by
+    no selected old-hole square, so the wire classification bounds its old
+    owners; the output case is symmetric.
+\end{proof}
+
+\begin{theorem}[Small-patch rewrite: approximation by product terms]
+    \label{thm:peps_frame_small_rewrite_product_terms}
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}
+    \leanok
+    \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,
+        lem:peps_frame_rescale}
+    Assume the four conditions, and let $N$ be the number of branches and
+    $k=\lceil(4Nm/\delta)^2\rceil+1$ for $\delta>0$, for instance
+    $\delta=L^{-a}$. Every branch is approximated in operator norm within
+    $2m/\sqrt k$ by at most $k^{2m}$ product terms with coefficients of
+    modulus at most one, and the rescaled sum
+    $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
+        \bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)$, extended by the identity on
+    the untouched tags, is a contraction with $\lVert M_\delta-M\rVert\le
+        \delta$. Each product term $T_{\beta,i}$ is the tensor product of
+    normalized vectors on the open output groups of the patch kets, normalized
+    covectors on the open input groups of the patch bras, each group on at
+    most two parties of the specified list, product zero vectors on the
+    selected hole squares, and identities. This is the second assertion of
+    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS} with the product terms written
+    as explicit tensor products; that each of them is an allowed monomial of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} is not asserted here
+    \cite{gap:polypeps_small_rewrite_monomials}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the truncation of a chain to the network of each branch with the
+    patch vertices as groups, and assemble with the rescaling lemma, using
+    $N\cdot 2m/\sqrt k\le\tfrac12\delta$.
+\end{proof}
+
 \begin{theorem}[Small-patch rewrite: polynomial approximation]
     \label{thm:peps_frame_small_rewrite_polynomial}
     \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,
         lem:peps_frame_wires,lem:peps_frame_rescale,
-        lem:peps_frame_approx_reference,thm:peps_group_tensor}
+        lem:peps_frame_approx_reference,thm:peps_group_tensor,
+        thm:peps_frame_small_rewrite_product_terms}
     Under the four conditions, for every fixed $a>0$ the canonical map $M$
     admits a contractive approximation $M_a$ with $\lVert M_a-M\rVert\le
         L^{-a}$ and a polynomial sum expansion into monomials allowed by
@@ -511,7 +646,9 @@ norm of matrices, rectangular ones included.
     terms with coefficients of modulus at most one, each an allowed
     monomial, and the Hilbert-space error bounds the operator error of the
     branch. The rescaling lemma assembles $M_a$, and the reference estimate
-    with $a=30$ gives the final assertion. The construction of the branch
-    network and the reading of its terms as allowed monomials are not yet
-    formalized; see \cite{gap:polypeps_small_rewrite_monomials}.
+    with $a=30$ gives the final assertion. The branch network, its truncation
+    and the assembly are formalized in the approximation by product terms
+    (Theorem~\ref{thm:peps_frame_small_rewrite_product_terms}); the reading of
+    each product term as an allowed monomial on the registers of the frame is
+    not yet formalized; see \cite{gap:polypeps_small_rewrite_monomials}.
 \end{proof}

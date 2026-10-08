@@ -54,34 +54,64 @@ condition~(i).\footnote{%
 arbitrary tag orderings,
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}.}
 For the second assertion the following steps of the proof
-(\path{05-frames.tex}, lines~254--344) are formalized: the exact expansion of
+(\path{05-frames.tex}, lines~254--341) are formalized: the exact expansion of
 $M$ into complete branches and the count of branches; the site-level wire
 classification of every branch, for every choice of cylinder terms, including
 unequal radii, holes and patches with empty outer sample (whose identity term
-selects the empty square), and overlapping patches and holes (decoded old-hole kets have no open
-output legs, new-hole bras have no open input legs, the open inputs of a patch
-bra have at most two old owners and the open outputs of a patch ket at most two
-new owners, direct wires keep their owner, and all involved owners lie in the
-specified list); the summation of branchwise errors; the choice of the
-truncation rank $k$; and the final rescaling by $1+\tfrac12L^{-a}$.
+selects the empty square), and overlapping patches and holes; the summation of
+branchwise errors; the choice of the truncation rank $k$; and the final
+rescaling by $1+\tfrac12L^{-a}$.
 
-Not formalized is the passage from one branch to a residual tensor network of
-normalized bras and kets, the application of the whole-group truncation of
-Lemma~6.2 to that network with the dimension-free branch error $g/\sqrt k$, and
-the reading of every product term as an allowed monomial of Theorem~5.2.
-Allowed monomials are now available on party layouts: compositions of
-contractions on registers of one party, normalized pair sources and normalized
-pair effects on registers of two named parties, and exchanges of tensor
-factors, as used for Lemma~5.1 and for the bounded-change clauses of
+The residual network of a branch is also formalized. For a branch $(a,s,b)$,
+the raw operator $B_aC_sA_b^\dagger$ is an ordered product of rank-one
+operators $\ket{k}\bra{b}_S\otimes\mathbb{1}$: the encodings $\ket0\bra{u'_r}$ of the
+affected new holes, the patch terms $\ket{w_i}\bra{w_i}$, and the decodings
+$\ket{u_t}\bra0$ of the affected old holes. Every such product is the
+contraction of the network whose vertices are the bras and the kets of the
+factors, kept distinct, and whose wires join the output of a ket at a site to
+the next bra containing that site; open input legs are those of bras at sites
+reached by no earlier ket, open output legs those of kets at sites met by no
+later bra, the legs of the product zero vectors are fixed to $0$, and sites in
+no factor are passed through.\footnote{%
+\leanid{TNLean.PEPS.SiteChain.chainOp_apply}.}
+No wire joins a vertex to itself and every vertex tensor is normalized, so
+Lemma~6.2 applies with one group per vertex. An operator read off from a tensor
+on the open-leg groups is that tensor, reshaped as a matrix, tensored with the
+identity on the untouched sites, so its operator norm is at most the
+Hilbert--Schmidt norm of the tensor, with no factor depending on the site
+dimensions.\footnote{%
+\leanid{TNLean.PEPS.SiteChain.norm_approxOp_le},
+\leanid{TNLean.PEPS.SiteChain.exists_chainOp_truncation}.}
+Under the four conditions only the patch bras and kets have open legs, so there
+are at most $g=2m$ groups; the open inputs of a patch bra have at most two old
+owners and the open outputs of a patch ket at most two new owners, all in the
+specified list. Hence every branch is approximated within $2m/\sqrt k$ by at most
+$k^{2m}$ product terms with coefficients of modulus at most one, and for every
+$\delta>0$ (for instance $\delta=L^{-a}$) the rescaled sum
+$M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
+\bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\mathbb{1}$ is a contraction with
+$\|M_\delta-M\|\le\delta$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation},
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}.}
+Each product term $T_{\beta,i}$ is an explicit tensor product of normalized
+vectors on the open output groups of the patch kets, normalized covectors on the
+open input groups of the patch bras, product zero vectors on the selected hole
+squares, and identities.
+
+Not formalized is the last reading of the proof (lines~306--316): that each
+product term, together with the tag basis vectors, is the operator of a monomial
+allowed by Theorem~5.2. Allowed monomials are available on party layouts:
+compositions of contractions on registers of one party, normalized pair sources
+and normalized pair effects on registers of two named parties, and exchanges of
+tensor factors, as used for Lemma~5.1 and for the bounded-change clauses of
 Lemmas~6.5 and~6.6 (\path{polypeps_ownership_change_monomials.tex}). What is
-missing for this lemma is the residual network itself: its vertices, the site
-wires followed in chronological order through the selected actions, the
-identification of the branch operator with the contraction of the network
-composed with the factored private maps and the direct identities, and a list
-of registers of the frame by owner on which each product term acts. Without
-these, the existence of a contraction $M_a$ with $\|M_a-M\|\le L^{-a}$ is
-trivial ($M_a=M$), so no statement of that form is offered as the second
-assertion.
+missing is a layout of the frame's registers by owner, with one register per site
+and per tag, and the identification of each product term with an allowed party
+chain on it: the open-leg group vectors as normalized pair sources and effects
+(or private maps), the zero vectors and tag vectors as private maps, and the
+identities as untouched registers. The approximation statement is therefore
+formalized with the product terms in explicit tensor form, and the clause ``a
+polynomial expansion into allowed monomials'' is stated only through that form.
 
 The formal frames record the pairwise disjointness of the physical outer
 footprints of holes rather than of the outer squares in the plane; the source
@@ -96,21 +126,15 @@ of tag orderings of Definition~6.1, and it is formalized.
 
 \section{Elimination plan}
 
-For one branch, build the residual network whose vertices are the decoded kets,
-the encoding bras and the patch bras and kets, and whose internal edges are the
-site wires followed in chronological order, and prove that the branch operator
-is the contraction of this network composed with the factored tag maps,
-zero-state maps and direct identities. The wire classification proved here
-shows that each open leg group is wholly input or wholly output and belongs to
-at most two parties. Lemma~6.2, whose simultaneous truncation of a finite
-tensor graph is formalized,\footnote{%
-\leanid{TNLean.PEPS.WholeGroup.exists_simultaneous_group_truncation}.}
-then gives the truncation with error $g/\sqrt k$. Each product term is a
-product of normalized group covectors followed by normalized group vectors,
-each on the registers of at most two parties; on a list of the frame's
-registers by owner it is an allowed monomial of the party layout, with the
-factored maps as private contractions. Combined with the branch expansion, the
-error summation and the rescaling already formalized, this yields the second
-assertion.
+Construct the register layout of an encoded frame by owner, with one register
+per site and one per tag, and its identification with the canonical
+coordinates in which the rewrite acts. On that layout, write each product term
+of the branch truncation as an allowed party chain: first the normalized group
+covectors on the open input groups (pair effects on the two old owners, or
+private maps for one owner), the zero bras and tag bras as private maps, then
+the zero kets and tag kets and the normalized group vectors on the open output
+groups (pair sources on the two new owners, or private maps), framed by the
+untouched registers. The approximation theorem above then yields the second
+assertion of Lemma~6.3 with allowed monomials.
 
 \end{document}
