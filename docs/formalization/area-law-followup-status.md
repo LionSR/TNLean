@@ -424,12 +424,39 @@ matrix may be correlated; the joint trace is not asserted to factor. The
 six exact standard-kernel reports, original provenance, complete 9,793-job
 library build, 448-page PDF and complete web/native checks passed.
 
+[QICLean #656](https://github.com/LionSR/QICLean/pull/656), at checked head
+`3652227d`, constructs the actual common good-copy density in the full
+physical space Q tensor Y tensor V. It retains Q,C,V,R and traces every Y
+coordinate. Both regional auxiliary partial traces and the original
+component's squared trace mass are proved without normalization or symmetry
+premises. Its source is `f5877818`, independent evidence `127e81f0`, and exact
+two-line inclusion `fa392bef`. The full 9,734-job library build, four fresh
+standard-kernel reports, original provenance, the 438-page PDF and complete
+web/native checks passed. The complete manifest has 111 source/evidence
+bindings and preserves every parent file except those inclusion lines.
+The historical bipartite source is retained; its four statements are replaced
+by the full QYV construction, with no parallel bipartite definitions.
+
+[QICLean #658](https://github.com/LionSR/QICLean/pull/658), at checked head
+`f675fee8`, proves positivity of the actual merge deficit for commuting
+permutation actions and their pointwise product, then specializes it to the
+literal paired-copy actions. It also proves that the closed nonnegative
+spectral projection of a positive semidefinite matrix is the identity and
+that an arbitrary Hermitian intertwiner into such a matrix's spectrum is
+fixed by that projection. No injectivity or nonzero range is assumed.
+The source is `a9415ed9`, independent evidence `7c3842d2`, and exact two-line
+inclusion `7f93d770`. The full 9,823-job build, four original and four fresh
+standard-kernel reports, original provenance, 471-page PDF and complete
+web/native checks passed. The 175-file manifest preserves all 4,454 parent
+files, with only the two inclusion lines changed. Four preliminary metadata
+check failures and their successful corrections are retained explicitly.
+
 The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
 bad physical and auxiliary copies. The local QC theorem above accommodates
 this by taking the physical complement to be YV. The common-density
-identities, the actual two-deficit moment and the compatible physical
-projection argument are being proved separately. In particular,
+identities are now proved as above. The actual two-deficit moment and the
+compatible physical projection argument remain separate contributions. In particular,
 \(F_Q+F_V-F_Y\) cannot be identified globally with the QV merge deficit.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
@@ -560,9 +587,12 @@ module checks, 86 selected standard-kernel reports, all 20,983 compiled
 blueprint names, 691 canonical provenance entries and focused rendering of
 the 45-page mathematical supplement. These are narrow checks; a complete
 library build is not claimed for this contribution. The separately used
-QICLean #650 dependency has passed its full remote CI. The actual Schmidt
-output substitution, physical frame identities, complete source-error
-estimate and sampled local tensor network remain to be assembled.
+QICLean #650 dependency has passed its full remote CI. The coordinator subsequently reports that the actual Schmidt input/output
+substitutions and physical frame identities are proved and the resulting
+actual correction-term integral estimate has passed strict checking. The
+common-sample error estimate and sampled operator network remain under
+construction; these later proofs are not assigned the earlier contribution's
+verification records.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
