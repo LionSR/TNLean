@@ -33,7 +33,7 @@ namespace TNLean.PEPS.Approximation
 
 /-- The least power of two which is at least `L`.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:104–105`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:103`. -/
 def paddedSide (L : ℕ) : ℕ := 2 ^ Nat.clog 2 L
 
 /-- The padded side is at least the genuine side. -/
@@ -46,7 +46,7 @@ theorem paddedSide_le_of_le_pow {L k : ℕ} (h : L ≤ 2 ^ k) : paddedSide L ≤
 
 /-- The padded side is less than twice the genuine side.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:104`:
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:103`:
 “Let `N` be the least power of two with `N ≥ L`, so `N < 2L`.” -/
 theorem paddedSide_lt_two_mul {L : ℕ} (hL : 0 < L) : paddedSide L < 2 * L := by
   rcases Nat.lt_or_ge 1 L with h | h
