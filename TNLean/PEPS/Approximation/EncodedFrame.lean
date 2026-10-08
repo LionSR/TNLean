@@ -56,7 +56,7 @@ encoders; its reference vector is `Ω_F = K_F Ω`. Disjoint holes commute, so
   `‖K_{c,h}‖ ≤ 1` (`eq:encoder-contraction`).
 * `EncodedFrame.frameEncoder_conjTranspose_mul_self`: `K_Fᴴ K_F = ∏_a P_a`.
 * `EncodedFrame.Frame.norm_refVec_eq`, `EncodedFrame.Frame.one_sub_mul_le_norm_refVec`,
-  `EncodedFrame.Frame.norm_refVec_le_one`: `eq:frame-norm`.
+  `EncodedFrame.Frame.norm_refVec_le`: `eq:frame-norm`.
 
 ## References
 

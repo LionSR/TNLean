@@ -15,8 +15,10 @@ affected old hole. This file proves:
 
 * the exact branch expansion `M = ∑_β M_β`, and the count of branches: if every hole and patch
   has at most `D` cylinder terms, there are at most `D ^ (r_new + m + r_old)` branches;
-* the site-level wire classification of every branch, for every choice of tags: every site of
-  a selected old-hole square and of a selected new-hole square lies in a selected patch square;
+* the site-level wire classification of every branch `(a, s, b)`, with the selected squares
+  read off from the tags themselves, position by position, so that a patch listed twice may
+  carry two different terms: every site of a selected old-hole square and of a selected
+  new-hole square lies in a selected patch square;
   the sites of a selected patch square that no selected old-hole square consumes have at most
   two old owners, and dually for new owners; a site in no selected patch square keeps its
   owner; and all these owners belong to the specified list of parties;
@@ -41,6 +43,8 @@ assembles `M_a` from any branchwise approximations. Documented in
   patches and the corresponding ordered product of cylinder projectors.
 * `EncodedFrame.SmallPatchRewrite.Branch`, `EncodedFrame.SmallPatchRewrite.branchOp`: complete
   branches and their operators.
+* `EncodedFrame.patchSquares`, `EncodedFrame.holeSquares`: the selected squares of a list of
+  patches or holes, for a choice of one term at every position of the list.
 
 ## Main results
 
@@ -121,6 +125,35 @@ theorem card_patchTags_le {D : ℕ} :
     exact Nat.mul_le_mul (card_patchTags_le l fun p' hp' => h p' (List.mem_cons_of_mem _ hp'))
       (h p List.mem_cons_self)
 
+/-- The union of the selected squares of a list of patches, for a choice `s` of one cylinder term
+of every entry of the list. The selected square of a tag `(j, ℓ)` is `D_j`, and that of the
+identity tag of a patch with empty outer sample is empty. Since `s` chooses a term for every
+position of the list, a patch listed twice may carry two different terms. -/
+def patchSquares : (l : List (SquarePatch pos q)) → PatchTags l → Set ι
+  | [], _ => ∅
+  | p :: l, s => (p.tagSample s.1 : Set ι) ∪ patchSquares l s.2
+
+theorem innerUnion_subset_patchSquares :
+    (l : List (SquarePatch pos q)) → (s : PatchTags l) → innerUnion l ⊆ patchSquares l s
+  | [], _ => by
+    rintro x ⟨p, hp, -⟩
+    exact absurd hp List.not_mem_nil
+  | p :: l, s => by
+    rintro x ⟨p', hp', hx⟩
+    rcases List.mem_cons.mp hp' with rfl | hp'
+    · exact Or.inl (p'.inner_subset_tagSample s.1 hx)
+    · exact Or.inr (innerUnion_subset_patchSquares l s.2 ⟨p', hp', hx⟩)
+
+theorem exists_mem_tagSample_of_mem_patchSquares {x : ι} :
+    (l : List (SquarePatch pos q)) → (s : PatchTags l) → x ∈ patchSquares l s →
+      ∃ p ∈ l, ∃ j : p.Tag, x ∈ p.tagSample j
+  | [], _, hx => absurd hx (Set.notMem_empty x)
+  | p :: l, s, hx => by
+    rcases hx with hx | hx
+    · exact ⟨p, List.mem_cons_self, s.1, hx⟩
+    · obtain ⟨p', hp', j, hj⟩ := exists_mem_tagSample_of_mem_patchSquares l s.2 hx
+      exact ⟨p', List.mem_cons_of_mem _ hp', j, hj⟩
+
 variable {Party : Type*}
 
 theorem card_tagSpace_le {D : ℕ} :
@@ -134,6 +167,31 @@ theorem card_tagSpace_le {D : ℕ} :
     rw [Fintype.card_prod, pow_succ, mul_comm]
     exact Nat.mul_le_mul (card_tagSpace_le l fun h' hh' => hD h' (List.mem_cons_of_mem _ hh'))
       (hD h List.mem_cons_self)
+
+/-- The union of the selected squares of a list of holes, for a tag `t` of every entry of the
+list. -/
+def holeSquares : (l : List (Hole pos q Party)) → TagSpace l → Set ι
+  | [], _ => ∅
+  | h :: l, t => (h.patch.tagSample t.1 : Set ι) ∪ holeSquares l t.2
+
+theorem inner_subset_holeSquares {h : Hole pos q Party} :
+    (l : List (Hole pos q Party)) → h ∈ l → (t : TagSpace l) →
+      (h.patch.inner : Set ι) ⊆ holeSquares l t
+  | [], hh, _ => absurd hh List.not_mem_nil
+  | h' :: l, hh, t => by
+    rcases List.mem_cons.mp hh with rfl | hh
+    · exact fun x hx => Or.inl (h.patch.inner_subset_tagSample t.1 hx)
+    · exact fun x hx => Or.inr (inner_subset_holeSquares l hh t.2 hx)
+
+theorem holeSquares_subset_footprint :
+    (l : List (Hole pos q Party)) → (t : TagSpace l) →
+      holeSquares l t ⊆ {x | ∃ h ∈ l, x ∈ h.patch.outer}
+  | [], _ => fun x hx => absurd hx (Set.notMem_empty x)
+  | h :: l, t => by
+    rintro x (hx | hx)
+    · exact ⟨h, List.mem_cons_self, h.patch.tagSample_subset_outer t.1 hx⟩
+    · obtain ⟨h', hh', hx'⟩ := holeSquares_subset_footprint l t.2 hx
+      exact ⟨h', List.mem_cons_of_mem _ hh', hx'⟩
 
 /-- The entries of `stack B * X * (stack A)ᴴ`. -/
 theorem stack_mul_mul_stack_conjTranspose_apply {S T m : Type*} [Fintype m]
@@ -202,40 +260,29 @@ theorem card_branch_le {D : ℕ} (hnew : ∀ h ∈ R.newAffected, Fintype.card h
 
 /-! ### Wire classification of a branch -/
 
-/-- The union of the selected patch squares of a branch, for a choice `jP` of a cylinder term of
-every patch. The selected square of a tag `(j, ℓ)` is `D_j`, and that of the identity tag of a
-patch with empty outer sample is empty, so no radius is required for such a patch. -/
-def patchSquares (jP : ∀ P ∈ R.patches, P.Tag) : Set ι :=
-  {x | ∃ P, ∃ hP : P ∈ R.patches, x ∈ P.tagSample (jP P hP)}
-
-theorem innerUnion_subset_patchSquares (jP : ∀ P ∈ R.patches, P.Tag) :
-    innerUnion R.patches ⊆ R.patchSquares jP := by
-  rintro x ⟨P, hP, hx⟩
-  exact ⟨P, hP, P.inner_subset_tagSample _ hx⟩
-
-/-- **Decoded old-hole kets have no open output legs.** Under condition (ii), for every choice
-of tags, every site of the selected square of an affected old hole lies in a selected patch
-square, so each of its output legs meets a later patch bra.
+/-- **Decoded old-hole kets have no open output legs.** Under condition (ii), in every branch
+`(a, s, b)`, every site of the selected squares of the affected old holes lies in the selected
+patch squares, so each output leg of a decoded ket meets a later patch bra.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 285–288. -/
-theorem oldSample_subset_patchSquares (hR : R.Conditions) (jP : ∀ P ∈ R.patches, P.Tag)
-    {h : Hole pos q Party} (hh : h ∈ R.oldAffected) (j : h.patch.Tag) :
-    (h.patch.tagSample j : Set ι) ⊆ R.patchSquares jP :=
-  (Finset.coe_subset.mpr (h.patch.tagSample_subset_outer j)).trans
-    ((hR.affected_subset h (List.mem_append_left _ hh)).trans
-      (R.innerUnion_subset_patchSquares jP))
+theorem oldSample_subset_patchSquares (hR : R.Conditions) (s : PatchTags R.patches)
+    (b : TagSpace R.oldAffected) :
+    holeSquares R.oldAffected b ⊆ patchSquares R.patches s := fun x hx => by
+  obtain ⟨h, hh, hxh⟩ := holeSquares_subset_footprint _ b hx
+  exact innerUnion_subset_patchSquares _ s
+    (hR.affected_subset h (List.mem_append_left _ hh) hxh)
 
-/-- **New-hole encoding bras have no open input legs.** Under condition (ii), for every choice
-of tags, every site of the selected square of an affected new hole lies in a selected patch
-square, so each of its input legs meets an earlier patch ket.
+/-- **New-hole encoding bras have no open input legs.** Under condition (ii), in every branch
+`(a, s, b)`, every site of the selected squares of the affected new holes lies in the selected
+patch squares, so each input leg of an encoding bra meets an earlier patch ket.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 288–291. -/
-theorem newSample_subset_patchSquares (hR : R.Conditions) (jP : ∀ P ∈ R.patches, P.Tag)
-    {h : Hole pos q Party} (hh : h ∈ R.newAffected) (j : h.patch.Tag) :
-    (h.patch.tagSample j : Set ι) ⊆ R.patchSquares jP :=
-  (Finset.coe_subset.mpr (h.patch.tagSample_subset_outer j)).trans
-    ((hR.affected_subset h (List.mem_append_right _ hh)).trans
-      (R.innerUnion_subset_patchSquares jP))
+theorem newSample_subset_patchSquares (hR : R.Conditions) (s : PatchTags R.patches)
+    (a : TagSpace R.newAffected) :
+    holeSquares R.newAffected a ⊆ patchSquares R.patches s := fun x hx => by
+  obtain ⟨h, hh, hxh⟩ := holeSquares_subset_footprint _ a hx
+  exact innerUnion_subset_patchSquares _ s
+    (hR.affected_subset h (List.mem_append_right _ hh) hxh)
 
 /-- A site of a patch outer square inside `H^-(F_old)` lies in the inner square of an affected
 old hole: by condition (i) it is not in an untouched hole. -/
@@ -260,45 +307,47 @@ theorem mem_newAffected_inner_of_mem_innerHoles (hR : R.Conditions) {P : SquareP
       (Set.disjoint_left.mp (hR.patch_avoid P hP) hx)
   · exact ⟨h, ha, hxp⟩
 
-/-- **Open inputs of a patch bra have at most two old owners.** For every choice of tags of
-the affected old holes, the sites of a selected patch square that no selected old-hole square
-consumes lie outside `H^-(F_old)` in the patch outer square, so by condition (iii) their old
-owners form a set of at most two parties.
+/-- **Open inputs of a patch bra have at most two old owners.** Let `P` be a patch of the list
+and `j` any of its cylinder terms, so that `P.tagSample j` is the selected square of any entry of
+the list equal to `P` in any branch. For every tag `b` of the affected old holes, the sites of
+`P.tagSample j` outside the selected old-hole squares lie outside `H^-(F_old)` in the patch
+outer square, so by condition (iii) their old owners form a set of at most two parties.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 293–300. -/
 theorem exists_old_owners_of_patch_input (hR : R.Conditions) {P : SquarePatch pos q}
-    (hP : P ∈ R.patches) (j : P.Tag) (jO : ∀ h ∈ R.oldAffected, h.patch.Tag) :
+    (hP : P ∈ R.patches) (j : P.Tag) (b : TagSpace R.oldAffected) :
     ∃ S : Finset Party, S.card ≤ 2 ∧ ∀ x ∈ P.tagSample j,
-      (∀ h, ∀ hh : h ∈ R.oldAffected, x ∉ h.patch.tagSample (jO h hh)) → R.ownerOld x ∈ S := by
+      x ∉ holeSquares R.oldAffected b → R.ownerOld x ∈ S := by
   obtain ⟨S, hS, hown⟩ := hR.old_owners P hP
   refine ⟨S, hS, fun x hx hfree => hown x (P.tagSample_subset_outer j hx) fun hH => ?_⟩
   obtain ⟨h, hh, hxh⟩ := R.mem_oldAffected_inner_of_mem_innerHoles hR hP
     (P.tagSample_subset_outer j hx) hH
-  exact hfree h hh (h.patch.inner_subset_tagSample _ hxh)
+  exact hfree (inner_subset_holeSquares _ hh b hxh)
 
-/-- **Open outputs of a patch ket have at most two new owners.** For every choice of tags of
-the affected new holes, the sites of a selected patch square that no selected new-hole square
-receives have at most two new owners, by condition (iii).
+/-- **Open outputs of a patch ket have at most two new owners.** For every cylinder term `j` of
+a patch `P` of the list and every tag `a` of the affected new holes, the sites of
+`P.tagSample j` outside the selected new-hole squares have at most two new owners, by
+condition (iii).
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 300–302. -/
 theorem exists_new_owners_of_patch_output (hR : R.Conditions) {P : SquarePatch pos q}
-    (hP : P ∈ R.patches) (j : P.Tag) (jN : ∀ h ∈ R.newAffected, h.patch.Tag) :
+    (hP : P ∈ R.patches) (j : P.Tag) (a : TagSpace R.newAffected) :
     ∃ S : Finset Party, S.card ≤ 2 ∧ ∀ x ∈ P.tagSample j,
-      (∀ h, ∀ hh : h ∈ R.newAffected, x ∉ h.patch.tagSample (jN h hh)) → R.ownerNew x ∈ S := by
+      x ∉ holeSquares R.newAffected a → R.ownerNew x ∈ S := by
   obtain ⟨S, hS, hown⟩ := hR.new_owners P hP
   refine ⟨S, hS, fun x hx hfree => hown x (P.tagSample_subset_outer j hx) fun hH => ?_⟩
   obtain ⟨h, hh, hxh⟩ := R.mem_newAffected_inner_of_mem_innerHoles hR hP
     (P.tagSample_subset_outer j hx) hH
-  exact hfree h hh (h.patch.inner_subset_tagSample _ hxh)
+  exact hfree (inner_subset_holeSquares _ hh a hxh)
 
-/-- **Direct wires keep their owner.** For every choice of patch tags, a raw site in no
-selected patch square has equal old and new owners, by condition (ii).
+/-- **Direct wires keep their owner.** In every branch `(a, s, b)`, a raw site in no selected
+patch square has equal old and new owners, by condition (ii).
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 267–273. -/
-theorem ownerOld_eq_ownerNew_of_direct (hR : R.Conditions) (jP : ∀ P ∈ R.patches, P.Tag)
-    {x : ι} (hx : x ∉ R.patchSquares jP) : R.ownerOld x = R.ownerNew x := by
+theorem ownerOld_eq_ownerNew_of_direct (hR : R.Conditions) (s : PatchTags R.patches)
+    {x : ι} (hx : x ∉ patchSquares R.patches s) : R.ownerOld x = R.ownerNew x := by
   by_contra hne
-  exact hx (R.innerUnion_subset_patchSquares jP (hR.changed_mem x hne))
+  exact hx (innerUnion_subset_patchSquares _ s (hR.changed_mem x hne))
 
 /-- **Only the specified parties participate.** Every old and new raw owner of a site of a
 selected patch square or of a selected affected-hole square belongs to the specified list of
