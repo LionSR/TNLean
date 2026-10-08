@@ -1117,7 +1117,7 @@ past operations on other registers remains open.
 
 ### Two-dimensional area law: the scanner estimate
 
-[oai_area_law_scanner_inputs.tex](oai_area_law_scanner_inputs.tex) records that
+[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) records that
 Proposition 9.2 of the September 24, 2026 two-dimensional area-law manuscript
 is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
 Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the

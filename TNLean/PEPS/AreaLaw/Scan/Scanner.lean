@@ -21,7 +21,7 @@ comparator budgets.
 scan are the fields of `ScanData`; this module proves the step of the source from those
 conclusions to Proposition 9.2. The theorem becomes the source statement once a `ScanData` is
 constructed from the scan geometry and the transported states. Documented in
-`docs/paper-gaps/oai_area_law_scanner_inputs.tex`.
+`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Main results
 
