@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Nondegenerate Rectangles and Triangles in Area-Law Templates}
+\author{}
+\date{2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source definition}
+
+Definition~9.3 of the two-dimensional area-law manuscript of September~24,
+2026~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~546--564) defines
+a template with parameters $(n,s_0)$ as a nonempty finite set
+$T\subset\mathbb Z^2$ of the form
+\[
+  T=\bigcup_{a=1}^{N_0}(P_a\cap\mathbb Z^2),
+  \qquad n\ge C_{\rm tpl}N_0(s_0+1),
+  \qquad \operatorname{diam}_\infty T\le n,
+\]
+with $N_0\ge1$, where each $P_a$ is a closed convex rectangle or triangle of
+sup-norm diameter at most $s_0$, all of whose sides have slope
+$0,\infty,1$ or $-1$.
+
+\section{The convention}
+
+The words rectangle and triangle are read in their ordinary sense: a triangle
+has three noncollinear vertices, and a rectangle has two nonzero orthogonal
+adjacent sides. A literal reading that also admitted a segment or a point as a
+degenerate rectangle or triangle is not intended by the source. Its remark
+after the definition (lines~566--569) states that the estimates use the
+pieces only through their number $N_0$ and their sizes. The nonemptiness of
+$T$ and the bound $N_0\ge1$ are printed in the source and are not part of the
+convention.
+
+The convention is built into the definition of the permitted
+polygons.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon}.}
+No downstream statement carries a separate nondegeneracy hypothesis.
+
+\section{Effect}
+
+The convention is a reading of the source's words, not an additional
+hypothesis on any theorem, and no elimination is planned.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
