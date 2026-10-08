@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
+import TNLean.MPS.ParentHamiltonian.Martingale.AlignedResidueCoverGapLimit
 import TNLean.MPS.ParentHamiltonian.Martingale.AnalyticBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockDiagonalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockGapAtSimultaneousInjectivity
@@ -73,6 +74,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockUniformGap
 import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
 import TNLean.MPS.ParentHamiltonian.Martingale.QuadraticFormGap
 import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
+import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion
+import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapLimit
 import TNLean.MPS.ParentHamiltonian.Martingale.SparseGroupedOpenGap
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport

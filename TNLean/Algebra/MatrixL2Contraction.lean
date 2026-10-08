@@ -22,6 +22,8 @@ contraction, and products of contractions are contractions.
 * `Matrix.IsIsometry.l2_opNorm_le_one`: an isometry is a contraction.
 * `Matrix.l2_opNorm_mul_le_one`, `Matrix.l2_opNorm_list_prod_le_one`: products of contractions.
 * `Matrix.l2_opNorm_conjTranspose_mul_mul_le_one`: `‖Aᴴ F A‖ ≤ 1` for contractions `A` and `F`.
+* `Matrix.l2_opNorm_le_of_blocks`: the operator norm of a block-diagonal matrix is at most the
+  largest Hilbert--Schmidt norm of its diagonal blocks.
 * `Matrix.kronecker_one_mul_apply`: the entries of `(N ⊗ 1) C` on one identity slice.
 -/
 
@@ -85,6 +87,54 @@ theorem l2_opNorm_list_prod_le_one :
     rw [List.prod_cons]
     exact l2_opNorm_mul_le_one (h A List.mem_cons_self)
       (l2_opNorm_list_prod_le_one l fun B hB => h B (List.mem_cons_of_mem _ hB))
+
+/-- **Block-diagonal operator norm.** If `Y a b` vanishes unless the labels `u a` and `u' b`
+agree, then the operator norm of `Y` is at most the largest Hilbert--Schmidt norm of its diagonal
+blocks. -/
+theorem l2_opNorm_le_of_blocks {α β U : Type*} [Fintype α] [Fintype β] [DecidableEq β]
+    [Finite U] [DecidableEq U] (Y : Matrix α β ℂ) (u : α → U) (u' : β → U)
+    (hY : ∀ a b, u a ≠ u' b → Y a b = 0) {c : ℝ} (hc : 0 ≤ c)
+    (hblock : ∀ z, ∑ a ∈ Finset.univ.filter (u · = z),
+      ∑ b ∈ Finset.univ.filter (u' · = z), ‖Y a b‖ ^ 2 ≤ c ^ 2) :
+    ‖Y‖ ≤ c := by
+  have := Fintype.ofFinite U
+  refine l2_opNorm_le_of_forall hc fun v => ?_
+  set F : U → ℝ := fun z => ∑ b ∈ Finset.univ.filter (u' · = z), ‖v b‖ ^ 2
+  have hrow : ∀ a, ‖(Y *ᵥ v) a‖ ^ 2 ≤
+      (∑ b ∈ Finset.univ.filter (u' · = u a), ‖Y a b‖ ^ 2) * F (u a) := by
+    intro a
+    have hsum : (Y *ᵥ v) a = ∑ b ∈ Finset.univ.filter (u' · = u a), Y a b * v b := by
+      rw [mulVec, dotProduct, Finset.sum_filter]
+      refine Finset.sum_congr rfl fun b _ => ?_
+      split_ifs with h
+      · rfl
+      · rw [hY a b (Ne.symm h), zero_mul]
+    rw [hsum]
+    calc ‖∑ b ∈ Finset.univ.filter (u' · = u a), Y a b * v b‖ ^ 2
+        ≤ (∑ b ∈ Finset.univ.filter (u' · = u a), ‖Y a b‖ * ‖v b‖) ^ 2 := by
+          gcongr
+          exact (norm_sum_le _ _).trans_eq (Finset.sum_congr rfl fun b _ => norm_mul _ _)
+      _ ≤ _ := Finset.sum_mul_sq_le_sq_mul_sq _ _ _
+  have hv : ‖(EuclideanSpace.equiv β ℂ).symm v‖ ^ 2 = ∑ z, F z := by
+    rw [EuclideanSpace.norm_sq_eq, Finset.sum_fiberwise]
+    rfl
+  have hYv : ‖(EuclideanSpace.equiv α ℂ).symm (Y *ᵥ v)‖ ^ 2 ≤
+      (c * ‖(EuclideanSpace.equiv β ℂ).symm v‖) ^ 2 := by
+    rw [mul_pow, hv, Finset.mul_sum, EuclideanSpace.norm_sq_eq]
+    calc ∑ a, ‖(EuclideanSpace.equiv α ℂ).symm (Y *ᵥ v) a‖ ^ 2
+        ≤ ∑ a, (∑ b ∈ Finset.univ.filter (u' · = u a), ‖Y a b‖ ^ 2) * F (u a) :=
+          Finset.sum_le_sum fun a _ => hrow a
+      _ = ∑ z, ∑ a ∈ Finset.univ.filter (u · = z),
+            (∑ b ∈ Finset.univ.filter (u' · = z), ‖Y a b‖ ^ 2) * F z := by
+          rw [← Finset.sum_fiberwise Finset.univ u]
+          refine Finset.sum_congr rfl fun z _ => Finset.sum_congr rfl fun a ha => ?_
+          rw [(Finset.mem_filter.mp ha).2]
+      _ ≤ ∑ z, c ^ 2 * F z := by
+          refine Finset.sum_le_sum fun z _ => ?_
+          rw [← Finset.sum_mul]
+          exact mul_le_mul_of_nonneg_right (hblock z)
+            (Finset.sum_nonneg fun b _ => sq_nonneg _)
+  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (by positivity) two_ne_zero).mp hYv
 
 end Matrix
 

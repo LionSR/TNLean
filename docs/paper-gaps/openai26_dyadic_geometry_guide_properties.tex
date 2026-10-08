@@ -9,11 +9,11 @@
 
 \title{Guide Properties in the Angular Separation of Dyadic Repaintings}
 \author{}
-\date{2026-10-07}
+\date{2026-10-07; resolved 2026-10-08; interface labels 2026-10-08}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -24,23 +24,27 @@ repaints an aligned square $S=(nr,ns)+[0,n]^2$ of the dyadic hierarchy from its
 old label $A$ to its final label $B$. Along each edge it uses the normal ratio
 $x=d/w(s)$ with $w(s)=10^{-3}\min(s,n-s)$, and it runs a central birth, seven
 elementary births and deaths per edge, and one lens exchange per edge. Lemma~7.2
-asserts that there is one constant $a_0>0$ such that, for every one of these
-operations and for every point $y$ of the closure of its changed region,
+asserts that there is one constant $a_0>0$ such that, for every birth or death
+among these operations and for every point $y$ of the closure of its changed
+region,
 \begin{align}
-    \operatorname{dist}(y,\{f\ne P_\circ\})
+    \operatorname{dist}\bigl(y,\overline{\{f\ne P_\circ\}}\bigr)
         &\ge a_0\min\{n,d_{\mathcal V}(y)\},
     \label{eq:openai26_dyadic_geometry_guide_properties_clearance}
 \end{align}
 where $f$ is the surrounding guide of the schedule, $P_\circ$ the surrounding
-label, and $d_{\mathcal V}$ the distance from the marked points; for the exchange
-the obstructing set is the boundary of the lens $Y=\{-7<x<-7/2\}$.
+label, and $d_{\mathcal V}$ the distance from the marked points. For a lens
+exchange the point $y$ ranges instead over the closure of the positions that are
+not common $C$ on the two guides before the exchange, and the obstructing set is
+the boundary of the lens $Y=\{-7<x<-7/2\}$:
+$\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$.
 
-\section{The formal statement}
+\section{The earlier formal statement}
 
-The schedule of guides is not constructed in the formal development. The
-estimate~(\ref{eq:openai26_dyadic_geometry_guide_properties_clearance}) is
-instead proved with $a_0=1/5000$ for every guide having the properties that the
-source's proof uses:
+Initially the schedule of guides was not constructed. The
+estimate~(\ref{eq:openai26_dyadic_geometry_guide_properties_clearance}) was
+proved with $a_0=1/5000$ for every guide having the properties that the source's
+proof uses:
 \begin{itemize}
     \item for an edge birth or death, the guides before, after and surrounding
     the operation carry the source's normal words on the band $\{-8<x<2\}$, and
@@ -65,11 +69,122 @@ therefore cover the source's operations once the guides are built, and no
 hypothesis absent from the source's argument is used. A translate of $S$ only
 translates the coordinates, and sup distances are translation invariant.
 
-\section{Elimination}
+\section{Resolution}
 
-Construct the schedule of guides of the large-scale repainting, prove from the
-band disjointness that each of its guides has the listed properties, and
-transport the three estimates along the translation to $(nr,ns)+[0,n]^2$. This
-belongs to the formalization of Proposition~7.1 in Section~7 of the manuscript.
+The schedule of guides is now constructed, and Lemma~7.2 is proved for it on
+every square of the hierarchy, with $a_0=1/5000$.
+
+The starting guide of a repainting of $S=[0,n]^2$ is any labelling of the plane
+that is $A$ on the open square and carries one label $C_e$ on the open exterior
+neighboring square across each edge~$e$. The guide after the central birth is
+$B$ on the central region. The guide after the edges of a list $E$ have been
+completed replaces the band $\{-8<x<2\}$ of each completed edge by the word
+$C_e\mid B$ at $0$. During the construction along an edge~$e$, the main and
+auxiliary guides are the completed guide and the uniform guide $C_e$ with the
+band $\{-8<x<2\}$ of $e$ replaced by the current normal word. These are the
+declarations \leanid{TNLean.PEPS.Approximation.RepaintingBaseline},
+\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide},
+\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide} and
+\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide}.
+
+The derivation of the guide properties at lines 227--241 is proved: by the
+band disjointness, on the band of an edge not yet completed the completed guide
+carries $C_e\mid A\mid B$ at $0,1$
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_edgeStartWord});
+the lens exchange produces the main word
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_mainGuide});
+consecutive elementary operations on one sheet match; and after the four edges
+the open square carries $B$ while every point outside the closed square keeps
+its starting label. The estimates are transported to the translate
+$(nr,ns)+[0,n]^2$ of the square, whose starting guide is uniform on $n$-blocks,
+and stated in the source's form with closures:
+\leanid{TNLean.PEPS.Approximation.blockRepainting_central},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep} and
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange}. Their only
+hypothesis is $n>0$; the block labels and the final label are arbitrary.
+
+One convention remains, and it follows the source's own. A guide of the source
+is specified by its open polygonal chambers, and its labels are read at the
+lattice sites, the cell centers $(i+\tfrac12,j+\tfrac12)$, after one small
+generic displacement (lines 62--80). A formal guide is a labelling of the whole
+plane, and the estimates are proved for the labellings that the schedule
+specifies at each operation; within one edge construction consecutive labellings
+match exactly. Twice the schedule passes to a labelling that agrees with the one
+reached only off finitely many curves. At the start of the construction along an
+edge~$e$, the completed guide is replaced by the main guide with the starting
+word $C_e\mid A\mid B$, which agrees with it off the curves $x=0$ and $x=1$ of
+the band of $e$
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start}).
+At the end of a repainting, the final guide is replaced by the block guide of
+the next repainting, which agrees with it off the boundary of the repainted
+square (\leanid{TNLean.PEPS.Approximation.blockRepainting_final}).
+
+These replacements matter for the formal changed regions: the set where two
+labellings differ is sensitive to their values on a curve, and if the labelling
+reached at the start of an edge were carried through the operations unchanged,
+the curve $x=1$ would enter the changed region of a main death and the estimate
+would fail there. The estimates are therefore not claimed for every labelling
+that agrees with the schedule's off these curves. The replacements do not matter
+for the source: the labellings represent the same partition into open chambers,
+and no lattice site lies on the curves. A cell center is never on the boundary
+of an aligned square of integer side, and never on the curves $x=0$ or $x=1$ of
+the band of one of its edges: there $d$ is a half-odd integer, so $d\ne0$ and
+$1000d$ is an integer, while $1000\,w(s)=\min(s,n-s)$ is a half-odd integer
+(\leanid{TNLean.PEPS.Approximation.IsCellCenter.mem_openSquare_or_notMem_closedSquare},
+\leanid{TNLean.PEPS.Approximation.IsCellCenter.notMem_edgeInterface}). Hence the
+labels at every lattice site are unchanged by both replacements
+(\leanid{TNLean.PEPS.Approximation.blockRepainting_start_site},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_final_site}). This is the
+source's sampling convention, not a hypothesis of the formal statements.
+
+\section{Labels on the interface curves}
+
+On an interface curve $x=t$ of a band the formal words take the label for
+$x\ge t$. The source reads a guide on a boundary after one small generic
+displacement $v$ into an incident chamber. The normal coordinate $d$ points into
+the square, and the curves have slopes at most $8/1000$ in the edge coordinates.
+So a displacement whose two components are not small relative to each other
+crosses to the side $x>t$ along two edges of a square and to the side $x<t$ along
+the other two, and the formal labellings and the source's sampled guides differ on
+the interface curves of two edges.
+
+The estimates do not depend on this difference. Say that a labelling $f'$ reads
+$f$ after the displacement $v$ if $f'(p)=f(p+\varepsilon v)$ for every point $p$ and
+all sufficiently small $\varepsilon>0$. If $f_1'$, $f_2'$ read $f_1$, $f_2$ after the
+same $v$ and $f_1=f_2$ near $p$, then $f_1'(p)=f_2'(p)$. Hence the set where
+$f_1'\ne f_2'$ lies in the closure of the set where $f_1\ne f_2$, the set where
+$f'\ne c$ lies in the closure of the set where $f\ne c$, and the same holds for the
+positions that are not common $C$. Every estimate of Lemma~7.2 is stated for these
+closures, so each passes from the formal labellings to every reading of them, for
+every displacement $v$
+(\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.closure_ne_subset},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange_of_reading}).
+
+Readings of the formal labellings exist and are unique, for every displacement.
+Along a ray $p+\varepsilon v$ the coordinates, the band width and the normal
+coordinates agree for small $\varepsilon>0$ with affine functions of $\varepsilon$,
+whose signs are then eventually constant; the bands, the central region, the sup
+squares and the blocks are finite combinations of strict inequalities and floors of
+such functions, so every formal labelling, and every one homogenized on finitely many
+open squares, is eventually constant along every ray
+(\leanid{TNLean.PEPS.Approximation.isRayConstant_blockSchedule},
+\leanid{TNLean.PEPS.Approximation.IsRayConstant.exists_isDisplacedReading},
+\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.unique}). The region of a label
+in a reading lies in the closure of its region in the labelling, so a true vertex of a
+reading is a true vertex of the labelling, and the outer holes of the readings of the
+temporary guides are disjoint
+(\leanid{TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}).
+
+Two facts remain unformalized: that the source's open chambers are the open sets on
+which the formal labellings are constant, off a locally finite family of segments,
+and that the source's generic displacement is parallel to none of these segments, so
+that a ray $p+\varepsilon v$ leaves them at once. Together they identify each sampled
+guide of the source with the reading of the corresponding formal labelling. The
+uniform footprint ratios of the point treatment and of the block guides are proved for
+the formal labellings, not for their readings.
 
 \end{document}
