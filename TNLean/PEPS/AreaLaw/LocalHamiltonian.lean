@@ -32,41 +32,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped BigOperators Matrix Matrix.Norms.L2Operator ComplexOrder
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: eq:hamiltonian.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:area.
-Provenance-ID: 8738-tnlean.peps.arealaw.statespace
-Downstream declaration: TNLean.PEPS.AreaLaw.StateSpace
-Provenance-ID: 8738-tnlean.peps.arealaw.localhamiltonian
-Downstream declaration: TNLean.PEPS.AreaLaw.LocalHamiltonian
-Provenance-ID: 8738-tnlean.peps.arealaw.localhamiltonian.operator
-Downstream declaration: TNLean.PEPS.AreaLaw.LocalHamiltonian.operator
-Provenance-ID: 8738-tnlean.peps.arealaw.localhamiltonian.operator_ishermitian
-Downstream declaration: TNLean.PEPS.AreaLaw.LocalHamiltonian.operator_isHermitian
-Provenance-ID: 8738-tnlean.peps.arealaw.localhamiltonian.zero
-Downstream declaration: TNLean.PEPS.AreaLaw.LocalHamiltonian.zero
-Provenance-ID: 8738-tnlean.peps.arealaw.locallift
-Downstream declaration: TNLean.PEPS.AreaLaw.localLift
-Provenance-ID: 8738-tnlean.peps.arealaw.locallift_mem_supportedoperators
-Downstream declaration: TNLean.PEPS.AreaLaw.localLift_mem_supportedOperators
-Provenance-ID: 8738-tnlean.peps.arealaw.isgappedgroundstate
-Downstream declaration: TNLean.PEPS.AreaLaw.IsGappedGroundState
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The physical Hilbert space in configuration coordinates.
