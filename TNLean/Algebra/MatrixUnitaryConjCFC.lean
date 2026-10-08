@@ -16,7 +16,7 @@ same way. These identities compare the normalization matrices of two compact dec
 one matrix (arXiv:1703.09188, lines 479--502).
 -/
 
-open scoped Matrix
+open scoped Matrix ComplexOrder
 
 namespace Matrix
 

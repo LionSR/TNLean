@@ -409,7 +409,7 @@ theorem blockTensor_czTensor_two_isMPUSimple : IsMPUSimple (blockTensor czTensor
 printed in the chapter). The first cut factors through the pairs `(i, β₁)`, and the rows
 `(i, (b, i))` with the columns `((0, b), i)` form an identity submatrix. -/
 theorem rightRank_czTensor : r[czTensor] = 4 := by
-  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one _
+  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one (k := Fin 2 × Fin 2) _
     (Matrix.of fun iβ ib ↦ if iβ.1 = ib.1 ∧ czBond.symm iβ.2 = (ib.2, ib.1) then 1 else 0)
     (Matrix.of fun ib αj ↦ if ib.1 = αj.2 ∧ (czBond.symm αj.1).2 = ib.2 then
       (-1 : ℂ) ^ (((czBond.symm αj.1).1 : ℕ) * (αj.2 : ℕ)) else 0) ?_
@@ -429,7 +429,7 @@ theorem rightRank_czTensor : r[czTensor] = 4 := by
 printed in the chapter). The second cut factors through the pairs `(i, α₂)`, and the rows
 `((0, b), i)` with the columns `(i, (b, i))` form an identity submatrix. -/
 theorem leftRank_czTensor : ℓ[czTensor] = 4 := by
-  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one _
+  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one (k := Fin 2 × Fin 2) _
     (Matrix.of fun αi ib ↦ if αi.2 = ib.1 ∧ (czBond.symm αi.1).2 = ib.2 then
       (-1 : ℂ) ^ (((czBond.symm αi.1).1 : ℕ) * (αi.2 : ℕ)) else 0)
     (Matrix.of fun ib jβ ↦ if ib.1 = jβ.1 ∧ czBond.symm jβ.2 = (ib.2, ib.1) then 1 else 0) ?_
