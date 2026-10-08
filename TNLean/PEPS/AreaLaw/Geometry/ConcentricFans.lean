@@ -160,6 +160,10 @@ theorem cellFanPolygon_succ_inter_closedBall (c : ℝ × ℝ) (ℓ : ℕ)
   have hr : 0 < r := div_pos (pow_pos zero_lt_two ℓ) (by norm_num)
   obtain ⟨hs, hl⟩ := concentric_centers c ℓ
   obtain ⟨ha, hb⟩ := concentric_endpoints c ℓ split i
+  change AffineMap.homothety c (1 / 2 : ℝ)
+    (cellFanStart oLarge (ℓ + 1) (0, 0) split i) = cellFanStart oSmall ℓ (0, 0) split i at ha
+  change AffineMap.homothety c (1 / 2 : ℝ)
+    (cellFanEnd oLarge (ℓ + 1) (0, 0) split i) = cellFanEnd oSmall ℓ (0, 0) split i at hb
   have hbase : ∀ y ∈ segment ℝ (cellFanStart oLarge (ℓ + 1) (0, 0) split i)
       (cellFanEnd oLarge (ℓ + 1) (0, 0) split i), dist c y = 2 * r := by
     intro y hy
