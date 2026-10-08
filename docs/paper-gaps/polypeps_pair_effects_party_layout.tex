@@ -146,11 +146,17 @@ Every conclusion of Lemma~5.1 is retained, with exactly the same monomials,
 coefficients and common output registers. No adjacency, endpoint-order,
 Schmidt-rank or additional norm hypothesis is introduced.
 
-This resolves the restriction recorded in this note. The later proof of
-Theorem~5.2, in particular the tensor product of one aggregate map per party
-and the common source spaces across different monomials
-(\path{04-compression.tex}, lines~233--270), requires further results; it is
-not a conclusion of the pair-effect lemma.
+This resolves the restriction recorded in this note. The subsequent
+collection into one contraction per party is proved by
+\leanid{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps_parties}.
+For a prescribed finite gate party set,
+\leanid{TNLean.PEPS.PairEffect.Word.exists_prepared_tensorPartyMaps}
+combines it with the grouped preparation. These results use canonical
+identifications determined by the register owners and retain scalar local
+operations on empty memories. Common source spaces across different
+monomials and one-dimensional sources on unused pairs
+(\path{04-compression.tex}, lines~242--267), followed by sampling and the
+remaining compression argument, still require further results.
 
 \bibliographystyle{alpha}
 \bibliography{references}

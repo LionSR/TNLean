@@ -412,9 +412,14 @@ normalizations.
   normalized `G` with one source for each unordered pair occurring in `S`.
   `Word.exists_grouped_source_preparation` gives the resulting exact
   factorization of an arbitrary allowed composition.
-- **Caveat:** the remaining operations are local contractions and exchanges;
-  collecting them into one tensor product of maps indexed by parties is a
-  separate assertion needed later in Theorem 5.2.
+- **Further consequence:** `Word.exists_tensorPartyMaps_parties` collects the
+  remaining operations into one contraction per party under canonical register
+  identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
+  grouped preparation for a prescribed finite gate party type.
+- **Caveat:** in the latter theorem the finite type is the party set of the
+  gate, not necessarily all parties in a larger construction. A bound on its
+  cardinality, common source spaces across branches and unused-pair padding
+  are separate data or constructions.
 
 #### `TNLean.PEPS.IsVertexInjective`
 
@@ -3065,6 +3070,24 @@ involve no boundary.
   the same maps into a complete zipper family after a derived common blocking.
   `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
   of multiplicities under positive dimensions and injective block separation.
+
+## Finite-domain area law and open-grid PEPS approximation
+
+The September 24, 2026 OpenAI manuscripts use two different Hamiltonian
+classes. Their precise hypothesis comparison and present proof status are
+recorded in [the finite-domain and PEPS statement audit](formalization/openai-area-law-peps.md).
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `TNLean.PEPS.AreaLaw.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
+| `TNLean.PEPS.AreaLaw.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
+| `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
+| `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
+| `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
+| `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
+| `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
+| `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
