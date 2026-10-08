@@ -7,11 +7,11 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
 
 /-!
-# Rounded row bounds from actual template polygons
+# Rounded row bounds from template polygons
 
 The supporting-strip characterization gives integer affine endpoint formulas.
 Consequently nonempty sampled rows are consecutive, and their endpoints move
-by at most one between consecutive rows. These are consequences of the actual
+by at most one between consecutive rows. These are consequences of the
 polygon model, including exact sampling, rather than additional assumptions.
 
 Original formalization of the geometric argument in manuscript Lemma 9.4;
@@ -56,7 +56,7 @@ theorem Template.exists_latticeRow_profile {Ctpl : ℝ} {n s₀ : ℕ}
     · intro hx
       exact (Finset.notMem_empty x hx).elim
 
-/-- Nonempty rows of an actual sampled polygon form an integer interval. -/
+/-- Nonempty rows of a sampled polygon form an integer interval. -/
 theorem Template.latticeRow_nonempty_between {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (i : Fin T.pieceCount) {a b y : ℤ}
     (ha : (latticeRow (T.sample i) a).Nonempty)
