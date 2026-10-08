@@ -17,8 +17,8 @@ superpositions of source and physical inputs.
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 383–468, in particular the free-input contractions
 used to separate the corrected source coefficients.
--/
 
+<<<<<<< HEAD
 /-!
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-block-contraction.
@@ -46,6 +46,10 @@ Downstream declaration: TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_con
 Provenance-ID: 8769-free-input-matrix-word.trace_prepareddensitycoefficient_eq_freesourcematrix
 Downstream declaration:
 TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix
+=======
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
+>>>>>>> 2249b41b02fb067a36b5aaab231ad5eff12159b9
 -/
 
 noncomputable section

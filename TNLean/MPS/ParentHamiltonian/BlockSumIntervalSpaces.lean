@@ -38,6 +38,16 @@ theorem groundSpaceES_toTensorFromBlocks_eq_iSup
   simp only [groundSpaceES, groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
     Submodule.map_iSup]
 
+/-- Each block ground space is contained in the joint ground space of a weighted
+block sum with nonzero coefficients. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2444--2463. -/
+theorem groundSpaceES_block_le_toTensorFromBlocks
+    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j, μ j ≠ 0) (α : Fin r) (L : ℕ) :
+    groundSpaceES (A α) L ≤ groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) L := by
+  simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ] using
+    (le_iSup (fun β ↦ groundSpaceES (A β) L) α)
+
 private theorem leftBoundaryMap_range_toTensorFromBlocks
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (K L : ℕ) :

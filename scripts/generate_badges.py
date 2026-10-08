@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Shields.io endpoint JSON for Lean repository badges.
+r"""Generate Shields.io endpoint JSON for Lean repository badges.
 
 Badges
 ------
@@ -166,7 +166,7 @@ _SKIP_ENV_TYPES: frozenset[str] = frozenset({"remark", "example"})
 def _blueprint_badge_counts(
     entries: list,
 ) -> tuple[int, int]:
-    """Return (no_leanok_count, not_ready_count) for **unique declarations**.
+    r"""Return (no_leanok_count, not_ready_count) for **unique declarations**.
 
     The caller must pass a list of objects with attributes lean_decl,
     has_leanok, proof_has_leanok, and env_type (a protocol — see source for the expected attributes).
@@ -244,7 +244,7 @@ def main() -> None:
         help=(
             "Path to blueprint/src directory.  When provided, also emit "
             "blueprint_no_leanok.json and blueprint_not_ready.json badges "
-            "by parsing \lean{} and \leanok annotations in the chapter "
+            r"by parsing \lean{} and \leanok annotations in the chapter "
             ".tex files."
         ),
     )
