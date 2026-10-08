@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteSetTruncation
+import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.TruncationRadius
 
 /-!
@@ -114,7 +114,10 @@ theorem kernelExponent_one : SpectralFilter.kernelExponent 1 = 1 / 2 := by
 `03-quasilocal.tex`, lines 405–433): Proposition 4.3 with `p = 1` followed by
 `exists_finiteSetTruncation`. The graph carries the hypotheses of Proposition 4.3 and the
 ball and anchor-multiplicity counts `K_b (d + 1)²`, `μ` of the source's Section 2. The
-constant `C₁` depends only on `R, v_R, b₀, K_g, k_g, J, Δ, K_b, μ, C₀`. -/
+constant `C₁` depends only on `R, v_R, b₀, K_g, k_g, J, Δ, K_b, μ, C₀`. In addition, each
+truncated term acts on its designated support (the ball `N_{rᵢ}(aᵢ)`, or the component of
+`aᵢ` when `d_Λ(aᵢ, S₀) = ∞`), so the crossing counts of `CrossingBudget.lean` bound the actual
+supports of the terms of `H'`. -/
 theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ) {J Δ Kb μ C₀ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ) (hC₀ : 0 ≤ C₀) :
     ∃ C₁ : ℝ, 0 < C₁ ∧
@@ -143,6 +146,8 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
         let r₀ := ⌈C₁ * Real.log n ^ 2⌉₊
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+        (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
+          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set ι)) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧
@@ -162,7 +167,7 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
   refine ⟨C₁, hC₁, ?_⟩
   intro q _ ι _ _ κ _ G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hBall hMult hJh
     E₀ Ω hΩ hHΩ hgap n hn S₀ hS₀ hS₀n
-  obtain ⟨hk, hsum, hgapk, htail, -⟩ := hpos G X a ha h hHerm hSupport hDiam hCard hBudget
+  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := hpos G X a ha h hHerm hSupport hDiam hCard hBudget
     hGrowth hJh E₀ Ω hΩ hHΩ hgap
   have hgapF : ((∑ i, SpectralFilter.positiveConstraint cs
       (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i))) -
@@ -177,6 +182,7 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
     intro i l
     have := (htail i l).2.2
     rwa [kernelExponent_one] at this
-  exact htr G a _ Ω hΩ hk hgapF htail' hBall hMult n hn S₀ hS₀ hS₀n
+  exact ⟨fun i => truncatedConstraint_mem_supportedOperators G S₀ _ (a i) (hcomp i),
+    htr G a _ Ω hΩ hk hgapF htail' hBall hMult n hn S₀ hS₀ hS₀n⟩
 
 end TNLean.PEPS.AreaLaw

@@ -194,10 +194,12 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
         TNLean.PEPS.AreaLaw.cutBudget_le, TNLean.PEPS.AreaLaw.le_of_cutBudget_le,
         TNLean.PEPS.AreaLaw.truncatedConstraint_empty,
         TNLean.PEPS.AreaLaw.crossingLabels_empty,
-        TNLean.PEPS.AreaLaw.truncatedConstraint_of_setDist_eq_top}
+        TNLean.PEPS.AreaLaw.truncatedConstraint_of_setDist_eq_top,
+        TNLean.PEPS.AreaLaw.truncatedConstraint_mem_supportedOperators}
     \leanok
     \uses{thm:al_truncation}
-    Every support in $\mathcal C_X$ is a ball of radius exactly $r_0$,
+    Each truncated term $\widetilde h_i$ acts on its designated support
+    $\widetilde X_i$. Every support in $\mathcal C_X$ is a ball of radius exactly $r_0$,
     $|\mathcal C_X|\le2\mu K_b(r_0+1)^2b_X$, $\log d_i\le K_b(r_0+1)^2\log q$
     for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If moreover
     $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, then
