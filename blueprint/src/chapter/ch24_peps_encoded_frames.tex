@@ -382,7 +382,8 @@ norm of matrices, rectangular ones included.
 \begin{lemma}[Wire classification of a branch]
     \label{lem:peps_frame_wires}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.tagSample,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.patchSquares,
+        TNLean.PEPS.EncodedFrame.patchSquares,
+        TNLean.PEPS.EncodedFrame.holeSquares,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.oldSample_subset_patchSquares,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.newSample_subset_patchSquares,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_old_owners_of_patch_input,
@@ -391,10 +392,12 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.owners_mem_parties_of_mem_sample}
     \leanok
     \uses{def:peps_frame_rewrite_data}
-    Assume the four conditions and fix any cylinder terms of the holes and
-    patches in a branch. The selected square of a term $(j,\ell)$ is $D_j$,
-    and that of the identity term of a square with empty outer sample is
-    empty. Every site of a selected affected old-hole square, and of a
+    Assume the four conditions and fix a branch $(a,s,b)$. The selected
+    square of a term $(j,\ell)$ is $D_j$, and that of the identity term of a
+    square with empty outer sample is empty; the selected squares are read
+    off from the terms of the branch position by position in the lists, so a
+    patch listed twice may carry two different terms. Every site of a
+    selected affected old-hole square, and of a
     selected affected new-hole square, lies in a selected patch square. The
     sites of a selected patch square not consumed by a selected old-hole
     square have at most two old owners, and those not received by a selected
@@ -475,11 +478,34 @@ norm of matrices, rectangular ones included.
 \end{theorem}
 
 \begin{proof}
-    Expand $M$ into its polynomially many branches. In one branch, factor out
-    the tag maps, the zero-state maps and the direct wires; the remaining
-    normalized bras and kets form a tensor network without self-contractions
-    whose open-leg groups are wholly input or wholly output and belong to at
-    most two parties, by the wire classification. The whole-group truncation
+    Expand $M$ into its polynomially many branches. In a branch
+    $\beta=(a,s,b)$, let the old affected holes carry the terms with selected
+    squares $D^{\rm old}_t$ and unit vectors $u_t$, the new affected holes
+    the terms with selected squares $D^{\rm new}_r$ and unit vectors $u'_r$,
+    and the patches the terms with selected squares $E_i$ and unit vectors
+    $w_i$. Then $M_\beta=\ket a\bra b\otimes B_aC_sA_b^\dagger$ with
+    \[
+        A_b^\dagger=\prod_t\bigl(\ket{u_t}\bra0^{\otimes D^{\rm old}_t}
+        \bigr)_{D^{\rm old}_t}\otimes\id,\quad
+        C_s=\prod_i\bigl(\ket{w_i}\bra{w_i}\bigr)_{E_i}\otimes\id,\quad
+        B_a=\prod_r\bigl(\ket0^{\otimes D^{\rm new}_r}\bra{u'_r}
+        \bigr)_{D^{\rm new}_r}\otimes\id,
+    \]
+    the factors of $C_s$ taken in the order of the patches. Factor out the
+    tag ket $\ket a$ and bra $\bra b$, the zero bras on the squares
+    $D^{\rm old}_t$, the zero kets on the squares $D^{\rm new}_r$, and the
+    identity on the sites outside $\bigcup_iE_i$, whose old and new owners
+    agree. The residual network $Z$ has the vertices $\ket{u_t}$,
+    $\bra{w_i}$, $\ket{w_i}$ and $\bra{u'_r}$, the bra and the ket of each
+    patch term being distinct vertices; each site wire joins a ket to the
+    next bra containing that site, so there are no self-contractions. By the
+    wire classification, $\ket{u_t}$ has no open output legs and
+    $\bra{u'_r}$ has no open input legs. The open legs of $Z$ are the input
+    legs of $\bra{w_i}$ at sites of $E_i$ outside $\bigcup_tD^{\rm old}_t$
+    not reached by an earlier ket, which have at most two old owners, and
+    the output legs of $\ket{w_i}$ at sites of $E_i$ outside
+    $\bigcup_rD^{\rm new}_r$ not met by a later bra, which have at most two
+    new owners. The whole-group truncation
     lemma (Theorem~\ref{thm:peps_group_tensor}) approximates its tensor
     within $g/\sqrt k$ by at most $k^g$ product
     terms with coefficients of modulus at most one, each an allowed
