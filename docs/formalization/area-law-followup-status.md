@@ -316,8 +316,33 @@ is its own auxiliary marginal. The ground-state contraction gives the same
 auxiliary matrix. Only the prescribed one-copy ground vector is unit; zero
 components and zero copies are included. The complete 9,690-job library build,
 two fresh standard-kernel reports, exact provenance and complete PDF/web/native
-checks passed. The physical regional restriction and good-auxiliary symmetry
-are being established separately before applying the merge-moment theorem.
+checks passed. The physical regional restriction is established below. Good-auxiliary
+symmetry and the application of the merge-moment theorem remain separate.
+
+
+[QICLean #639](https://github.com/LionSR/QICLean/pull/639), at checked head
+`41c946d4`, instantiates the repeated Bell contraction with the actual
+selected Schmidt vector and derives the common-label prevector sequence.
+Positive selected mass suffices for the contraction, including zero copies
+and selected indices of zero eigenvalue. The sequence additionally assumes
+the original ground vector is unit and satisfies its ground-state equation.
+The complete 9,719-job library build, two fresh standard-kernel reports,
+exact provenance and complete PDF/web/native checks passed. The physical
+Schmidt window and the inverse metric comparison remain separate.
+
+[QICLean #640](https://github.com/LionSR/QICLean/pull/640), at checked head
+`551f1cd4`, restricts the good physical copies to a region \(Q\).
+For \(m=|B^c|\), its literal reduced matrix is
+\[
+ \rho_Q(\Omega)^{\otimes m}\otimes\rho_{\mathcal K}(w),
+\]
+after the specified chosen enumeration of the good copies. Only the
+one-copy ground vector is unit; the excitation component \(w\) may vanish.
+The complete 9,714-job library build, one fresh standard-kernel report,
+exact provenance and complete PDF/web/native checks passed. Tracing to the
+good auxiliary copies and applying their permutation invariance to the
+merge-moment estimate are being established separately. Neither result
+asserts the complete inverse-compression inequality.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
