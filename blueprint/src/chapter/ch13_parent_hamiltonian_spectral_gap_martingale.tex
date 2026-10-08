@@ -9553,6 +9553,321 @@ shorter interaction range.
     gives one constant for every volume.
 \end{proof}
 
+\begin{theorem}[Open MPS spaces from an isometric sector resolution]
+    \label{thm:isometric_sector_ground_space_resolution}
+    \lean{MPSTensor.groundSpace_eq_iSup_of_isometric_sector_resolution,
+        MPSTensor.groundSpaceES_eq_iSup_of_isometric_sector_resolution}
+    \leanok
+    Let $C$ be an MPS tensor of bond dimension $D$, and let
+    $(B_j)_{j\in J}$ be a finite family of tensors with the same physical
+    dimension and bond dimensions $D_j$. Suppose that
+    $V_j:\C^{D_j}\to\C^D$ satisfy $V_j^\dagger V_j=\Id_{D_j}$,
+    $\sum_jV_jV_j^\dagger=\Id_D$, and $C^iV_j=V_jB_j^i$.
+    Then $G_N(C)=\bigvee_jG_N(B_j)$ for every $N\ge0$, both in
+    computational coordinates and in the physical Hilbert space.
+\end{theorem}
+\begin{proof}\leanok
+    The letterwise intertwining implies $C^wV_j=V_jB_j^w$ for every word,
+    including the empty word. Trace cyclicity gives
+    \begin{align}
+        \Gamma_N^C(V_jYV_j^\dagger) & =\Gamma_N^{B_j}(Y),\notag                      \\
+        \Gamma_N^C(X)               & =\sum_j\Gamma_N^{B_j}(V_j^\dagger XV_j).\notag
+    \end{align}
+    The first identity includes each sector space in the ambient space;
+    the second gives the reverse inclusion in their sum.
+\end{proof}
+
+\begin{theorem}[Open MPS spaces under prescribed periodic blocking]
+    \label{thm:periodic_blocked_ground_space}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_groundSpaceDecomposition}
+    \leanok
+    Suppose that $A$ is periodic of period $m$ and $p>0$.
+    Put $r=\gcd(m,p)$. There are nonzero cyclic projections $P_u$ with
+    $\sum_uP_u=\Id_D$ and $P_uA^i=A^iP_{u+1}$, positive dimensions
+    $D_\alpha$ with $\sum_\alpha D_\alpha=D$, and left-canonical tensors
+    $B_\alpha$ indexed by $\alpha\in\{0,\ldots,r-1\}$.
+    Their support isometries satisfy
+    \begin{align}
+        V_\alpha^\dagger V_\alpha & =\Id_{D_\alpha},\notag                      \\
+        V_\alpha V_\alpha^\dagger & =
+        \sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m},\notag                              \\
+        B_\alpha^I                & =V_\alpha^\dagger(A^{[p]})^IV_\alpha,\notag \\
+        (A^{[p]})^IV_\alpha       & =V_\alpha B_\alpha^I.\notag
+    \end{align}
+    Every $B_\alpha$ is periodic of period $m/r$, and for every $N\ge0$,
+    \begin{align}
+        G_N(A^{[p]}) & =G_N\left(\bigoplus_\alpha B_\alpha\right).\notag
+    \end{align}
+    The cyclic compression is that of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}; the local-space equality
+    is its supported word contraction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_prescribed_blocking_compression,
+        thm:isometric_sector_ground_space_resolution,
+        thm:block_sum_local_ground_space}
+    The step-orbit projections commute with every blocked letter and resolve
+    the virtual identity. The displayed compression therefore intertwines
+    letters. Apply the isometric sector resolution to obtain
+    $G_N(A^{[p]})=\bigvee_\alpha G_N(B_\alpha)$, and identify the latter
+    with the open MPS space of the direct-sum tensor.
+\end{proof}
+
+\begin{theorem}[Primitive sectors after blocking by a multiple of the period]
+    \label{thm:periodic_primitive_ground_space}
+    \lean{MPSTensor.IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd}
+    \leanok
+    Let $A$ be periodic of period $m$, and let $p>0$ satisfy $m\mid p$.
+    Put $r=\gcd(m,p)=m$. There are positive bond dimensions $D_j$ with
+    $\sum_{j=0}^{r-1}D_j=D$, tensors $B_j$ on the blocked physical alphabet,
+    and positive definite matrices $\rho_j$, such that each pair
+    $(B_j,\rho_j)$ has primitive fixed-point data. In particular,
+    \begin{align}
+        \sum_I(B_j^I)^\dagger B_j^I & =\Id_{D_j},
+                                    & \E_{B_j}(\rho_j) & =\rho_j,
+    \end{align}
+    and for every $N\geq0$,
+    \begin{align}
+        G_N(A^{[p]})=G_N\left(\bigoplus_{j=0}^{r-1}B_j\right).
+    \end{align}
+    No inequivalence assumption is imposed on the sector family.
+    This combines the periodic blocking of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible} with the primitive normalization
+    used in \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
+    The peripheral period is the corrected $m/\gcd(m,p)$ of
+    \cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_blocked_ground_space,
+        lem:periodic_scale_of_irreducible, def:primitive_mps}
+    The compressed sectors have period $m/\gcd(m,p)=1$, hence are
+    irreducible, trace preserving, and peripheral primitive.
+    Finite-dimensional Perron--Frobenius theory supplies their primitive
+    fixed-point data, and irreducibility makes each invariant matrix positive
+    definite. Retain the compressed tensors themselves, so the exact
+    direct-sum support identity is unchanged at every length.
+\end{proof}
+
+\begin{theorem}[Primitive sectors after blocking by the period]
+    \label{thm:periodic_primitive_ground_space_at_period}
+    \lean{MPSTensor.IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition}
+    \leanok
+    A periodic tensor of period $m$ admits $m$ positive-dimensional
+    primitive sectors after blocking by $m$. Their bond dimensions sum to
+    $D$, they have faithful invariant matrices, and
+    \begin{align}
+        \forall\,N\geq0:\ G_N(A^{[m]})=G_N\left(\bigoplus_{j=0}^{m-1}B_j\right).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_primitive_ground_space}
+    Take $p=m$ and use $m>0$ and $\gcd(m,m)=m$.
+\end{proof}
+
+\begin{theorem}[Exact open-boundary support under gauge and phase equivalence]
+    \label{thm:primitive_representative_support_gauge}
+    \lean{MPSTensor.GaugePhaseEquiv.groundSpaceES_eq,
+        MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor}
+    \leanok
+    Gauge-equivalent MPS tensors, including a common nonzero scalar factor
+    on every physical matrix, have the same open-boundary MPS space at every
+    length. More generally, normalized normal tensors whose periodic vectors
+    differ by powers of one nonzero scalar have identical open-boundary
+    spaces at every length, even when their bond dimensions are initially
+    allowed to differ. The latter assertion uses the dimension equality and
+    invertible gauge supplied by the fundamental theorem
+    \cite[Proposition~2.7, Theorem~2.10]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    An invertible similarity is absorbed into the boundary matrix, while
+    a nonzero length-dependent scalar is absorbed into its normalization.
+    For normalized normal tensors, the periodic phase relation first gives
+    equal bond dimensions and a gauge relation. Apply the first assertion.
+\end{proof}
+
+\begin{theorem}[Primitive representatives preserve the joint MPS spaces]
+    \label{thm:primitive_sector_representatives_exact_support}
+    \lean{MPSTensor.MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives,
+        MPSTensor.exists_primitive_sector_representatives}
+    \leanok
+    Let $(A_j)_{j=0}^{r-1}$ be a finite family of normalized primitive tensors
+    of positive bond dimensions, with faithful fixed-point witnesses
+    $\rho_j$. Let $\mu_j\neq0$. There is an injective selection of original
+    indices $s:\{0,\ldots,g-1\}\to\{0,\ldots,r-1\}$ such that the tensors
+    $B_k=A_{s(k)}$ retain the supplied primitive and faithful witnesses,
+    and distinct $B_k$ are not gauge-phase equivalent after any equality
+    of their bond dimensions. Every $A_j$ is gauge-phase equivalent to
+    one $B_k$, with the required bond-dimension equality supplied.
+    For every $N\geq0$,
+    \begin{align}
+        \mathcal G_{\bigoplus_j\mu_jA_j}(N)
+        =\mathcal G_{\bigoplus_k B_k}(N).
+        \notag
+    \end{align}
+    The finite family may be empty. This is the exact local-support
+    consequence of selecting phase-class representatives in
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, used for the
+    inequivalent primitive sectors of \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_representative_support_gauge}
+    Select one original index from each periodic phase class. Distinct
+    selections are gauge-phase inequivalent. Primitivity and faithfulness
+    imply normalized normality, so each original tensor has exactly the
+    same local MPS spaces as its selected representative. The local space
+    of a weighted direct sum with nonzero weights is the sum of the block
+    spaces. Replacing repeated summands by their representatives therefore
+    preserves that sum at every length. The witnesses are inherited because
+    the representatives are selected original tensors.
+\end{proof}
+
+\begin{theorem}[Inequivalent primitive presentation after periodic blocking]
+    \label{thm:periodic_ground_state_presentation}
+    \lean{MPSTensor.IsPeriodic.exists_inequivalent_primitive_groundStatePresentation_of_dvd}
+    \leanok
+    Let $A$ be periodic of period $m$, and let $p>0$ satisfy $m\mid p$.
+    There is a nonempty finite family $(B_j)_{j=0}^{g-1}$, with positive
+    bond dimensions and faithful invariant matrices $\rho_j$, such that
+    each $(B_j,\rho_j)$ has normalized primitive fixed-point data, distinct
+    sectors are gauge-phase inequivalent after any equality of their bond
+    dimensions, and
+    \begin{align}
+        \forall\,N\geq0:\ G_N(A^{[p]})=G_N\left(\bigoplus_{j=0}^{g-1}B_j\right).
+    \end{align}
+    The tensors and matrices are selected from the compressed primitive
+    family. Inequivalence is derived, rather than assumed.
+    This is a finite local-support consequence of the periodic blocking in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible} and the representative selection
+    in \cite[Proposition~2.7, Theorem~2.10]{Cirac2016MPDO_arXiv}.
+    The compressed peripheral period uses the correction in
+    \cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_primitive_ground_space,
+        thm:primitive_sector_representatives_exact_support}
+    Obtain primitive compressed sectors with their exact joint local space.
+    Select one representative of each gauge-phase class. The supplied
+    primitive and faithful witnesses are inherited, and the joint support
+    is preserved at every length. Since the original period is positive,
+    the compressed family is nonempty; the gauge cover therefore contains
+    at least one selected representative.
+\end{proof}
+
+\begin{theorem}[Inequivalent primitive presentation at the period]
+    \label{thm:periodic_ground_state_presentation_at_period}
+    \lean{MPSTensor.IsPeriodic.exists_inequivalent_primitive_groundStatePresentation}
+    \leanok
+    Blocking a periodic tensor by its period gives a nonempty finite
+    pairwise gauge-phase inequivalent primitive family with faithful
+    invariant matrices and
+    \begin{align}
+        \forall\,N\geq0:\ G_N(A^{[m]})=G_N\left(\bigoplus_jB_j\right).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_ground_state_presentation}
+    Apply the theorem with $p=m$, using positivity of the period.
+\end{proof}
+
+\begin{theorem}[Blocking distributes over the joint boundary space]
+    \label{thm:blocking_joint_boundary_space}
+    \lean{MPSTensor.groundSpaceES_blockTensor_toTensorFromBlocks_eq_iSup}
+    \leanok
+    Let $A_j$ be a finite family of tensors and let $\mu_j\neq0$.
+    For all integers $L,N\geq0$, the open-boundary space of the blocked
+    weighted sum satisfies
+    \begin{align}
+        \mathcal G_{(\bigoplus_j\mu_jA_j)^{(L)}}(N)
+        =\sum_j\mathcal G_{A_j^{(L)}}(N).
+    \end{align}
+    No periodicity, positivity, or nonempty-family assumption is required.
+    These are the boundary spaces of
+    \cite[Section~3]{Nachtergaele1996Spectral} under the blocking coordinates
+    of \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    The configuration isometry identifies each blocked boundary space
+    with the original boundary space at length $NL$. Under this isometry,
+    the space of the weighted sum is the sum of the original block spaces.
+    A linear isomorphism preserves sums of subspaces, giving the asserted
+    identity in the blocked coordinates.
+\end{proof}
+
+\begin{theorem}[Primitive presentation of a finite collection of families]
+    \label{thm:primitive_nested_family_presentation}
+    \lean{MPSTensor.exists_primitive_nestedFamilyPresentation}
+    \leanok
+    Let $(B_{j,a})_a$ be finitely many finite families of primitive tensors
+    of positive bond dimensions, with faithful invariant matrices.
+    There is a finite pairwise gauge-phase inequivalent primitive faithful
+    family $(C_b)_b$ such that, for every $N\geq0$,
+    \begin{align}
+        \sum_j\sum_a\mathcal G_{B_{j,a}}(N)
+        =\mathcal G_{\bigoplus_b C_b}(N).
+    \end{align}
+    Any of the families may be empty. This is representative selection
+    in \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}
+    applied to a finite union of primitive families.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_sector_representatives_exact_support}
+    Index all pairs $(j,a)$ by one finite set and apply primitive
+    representative selection. A sum over a dependent finite index set
+    is the iterated sum over its two indices, so the selected family
+    retains the asserted boundary space at every length.
+\end{proof}
+
+\begin{theorem}[Primitive presentation at a common period multiple]
+    \label{thm:periodic_block_family_primitive_presentation}
+    \lean{MPSTensor.exists_primitive_blockFamilyPresentation_of_period_dvd}
+    \leanok
+    Let $A_j$ be a finite family of normalized periodic tensors with periods
+    $m_j$, and let $\mu_j\neq0$. Suppose $L>0$ and $m_j\mid L$ for every $j$.
+    There are finitely many primitive tensors $B_k$ of positive bond
+    dimensions, with faithful invariant matrices $\rho_k$, such that
+    distinct $B_k$ are not gauge-phase equivalent after any equality of
+    their bond dimensions. For every $N\geq0$,
+    \begin{align}
+        \mathcal G_{(\bigoplus_j\mu_jA_j)^{(L)}}(N)
+        =\mathcal G_{\bigoplus_k B_k}(N).
+    \end{align}
+    The original family may be empty, and the representative family may
+    consequently be empty. This is the finite-family support consequence
+    of \cite[Lemma~6]{DeLasCuevas2017Irreducible}
+    and representative selection in
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocking_joint_boundary_space,
+        thm:periodic_primitive_ground_space,
+        thm:primitive_nested_family_presentation}
+    The cyclic-sector decomposition of $A_j^{(L)}$ has compressed period
+    $m_j/\gcd(m_j,L)=1$, so each compressed tensor is primitive and has a
+    faithful invariant matrix. Flatten these finitely many sector families.
+    The joint boundary-space identity identifies their sum with the
+    blocked original space. Selecting one representative from each
+    gauge-phase class preserves this sum at every length and inherits
+    the primitive and faithful witnesses.
+\end{proof}
+
+\begin{theorem}[Existence of a primitive presentation after blocking]
+    \label{thm:periodic_block_family_primitive_presentation_exists}
+    \lean{MPSTensor.exists_primitive_blockFamilyPresentation_of_isPeriodic}
+    \leanok
+    Every finite weighted family of normalized periodic tensors with
+    nonzero weights admits a positive blocking length and an inequivalent
+    primitive faithful family with identical open-boundary spaces at
+    every blocked length. No original inequivalence or nonempty-family
+    assumption is required. This is the common-period consequence of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_block_family_primitive_presentation}
+    Take $L=\prod_jm_j$. Every period is positive, and every $m_j$ divides
+    this product. For an empty family, the product equals one. Apply the
+    common-multiple presentation theorem.
+\end{proof}
+
 \begin{theorem}[A vanishing square annihilates left multiples]
     \label{thm:positive_functional_vanishing_square}
     \lean{PositiveLinearMap.apply_mul_star_mul_self_eq_zero}
@@ -9601,6 +9916,851 @@ shorter interaction range.
     monotonicity of $f$ proves (\ref{eq:ph_positive_commutator_comparison}).
 \end{proof}
 
+\begin{theorem}[Sector separation in identified bond spaces]
+    \label{thm:sector_separation_bond_transport}
+    \lean{MPSTensor.BlocksNotGaugePhaseEquiv.forall_ne_transport}
+    \leanok
+    Let $(A_j)$ be a finite family of pairwise gauge-phase inequivalent
+    tensors, of bond dimensions $D_j$. If $i\neq j$ and $D_j=D_i$, then
+    the tensor $A_j$, transported by this bond-space identification, is
+    not gauge-phase equivalent to $A_i$. No normalization, positive
+    dimension, or nonempty-family assumption is required. This is the
+    separation condition of
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}
+    written in the bond-space orientation used by the sector support
+    and gap arguments.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the separation condition to the ordered pair $(j,i)$ and the
+    supplied dimension equality. The two descriptions of the bond-space
+    identification are identical.
+\end{proof}
+
+\begin{definition}[Residual boundary contraction after blocking]
+    \label{def:blocked_residual_boundary_map}
+    \lean{MPSTensor.blockedResidualBoundaryMap,
+        MPSTensor.blockedResidualBoundaryMapES,
+        MPSTensor.blockedResidualBoundaryMapES_frobeniusEquivEuclidean_apply}
+    \leanok
+    Let $A$ have physical dimension $d$ and bond dimension $D$, let $B$
+    have blocked physical dimension $d^L$ and bond dimension $E$, and let
+    $V\colon\C^E\to\C^D$. For $N,r\geq0$, define a linear boundary map
+    on $M_{D\times E}(\C)$ by
+    \begin{align}
+        \mathcal F_{A,B,V}^{N,r}(Y)(u,\tau)
+        =\tr(B^u V^\dagger A^\tau Y),
+    \end{align}
+    where $u$ is the $N$-letter blocked prefix and $\tau$ is the
+    $r$-letter original tail. Its physical realization lies on $NL+r$
+    original sites. The Euclidean realization uses Hilbert--Schmidt
+    virtual coordinates, with the column index preceding the row index.
+    All dimensions and lengths may be zero. These are the residual
+    word contractions under the compression in
+    \cite[Lemma~\texttt{blocking-arbitrary}]{DeLasCuevas2017Irreducible}
+    and the local supports of
+    \cite[Section~3, lines~1504--1538]{Nachtergaele1996Spectral}.
+\end{definition}
+\begin{proof}\leanok
+    Linearity follows from matrix multiplication and trace. Frobenius
+    vectorization and the physical $\ell^2$ identification preserve
+    the resulting vector.
+\end{proof}
+
+\begin{theorem}[Residual contraction as an original boundary vector]
+    \label{thm:blocked_residual_boundary_identity}
+    \lean{MPSTensor.blockedResidualBoundaryMap_eq_groundSpaceMap_mul_conjTranspose}
+    \leanok
+    If $V^\dagger(A^{[L]})^i=B^iV^\dagger$ for every blocked letter $i$,
+    then every $N,r\geq0$ and $Y\in M_{D\times E}(\C)$ satisfy
+    \begin{align}
+        \mathcal F_{A,B,V}^{N,r}(Y)
+        =\Gamma_{NL+r}^A(YV^\dagger).
+    \end{align}
+    This is the literal boundary-vector identity from compressed words,
+    including empty prefixes and tails.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:blocked_residual_boundary_map, lem:eval_word_block,
+        thm:left_boundary_map_factorization}
+    The letter intertwiner extends to every blocked word, so
+    $B^uV^\dagger=V^\dagger A^{\widetilde u}$. Word concatenation and
+    cyclicity of the rectangular trace give
+    $\tr(B^uV^\dagger A^\tau Y)
+        =\tr(A^{\widetilde u}A^\tau YV^\dagger)$.
+\end{proof}
+
+\begin{theorem}[Residual sector resolution of local support]
+    \label{thm:blocked_residual_ground_space_resolution}
+    \lean{MPSTensor.groundSpace_eq_iSup_range_blockedResidualBoundaryMap,
+        MPSTensor.groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES}
+    \leanok
+    Let $B_a,V_a$ be a finite family satisfying
+    $\sum_aV_aV_a^\dagger=I$ and
+    $V_a^\dagger(A^{[L]})^i=B_a^iV_a^\dagger$ for every $a,i$.
+    Then, for every $N,r\geq0$,
+    \begin{align}
+        \mathcal G_{NL+r}(A)
+        =\sum_a\operatorname{ran}\mathcal F_{A,B_a,V_a}^{N,r}.
+    \end{align}
+    The same equality holds in the physical Euclidean space. No
+    orthogonality or injectivity of the residual ranges is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_residual_boundary_identity, def:ground_space_parent,
+        def:ground_space_es}
+    Resolving the right virtual boundary gives
+    $\Gamma^A_{NL+r}(X)=\sum_a\mathcal F_{A,B_a,V_a}^{N,r}(XV_a)$.
+    Conversely, each residual vector is the original boundary vector
+    $\Gamma^A_{NL+r}(YV_a^\dagger)$. The Euclidean identifications
+    transport ranges and their finite sum.
+\end{proof}
+
+\begin{theorem}[Periodic residual support decomposition]
+    \label{thm:periodic_residual_ground_space}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_residualGroundSpaceDecomposition}
+    \leanok
+    Let $A$ be a normalized irreducible tensor of period $m$ and let $L>0$.
+    There exist sector dimensions $D_a>0$, tensors $B_a$ on $d^L$ spins,
+    and isometries $V_a\colon\C^{D_a}\to\C^D$, indexed by
+    $a\in\{0,\ldots,\gcd(m,L)-1\}$, such that $\sum_aD_a=D$,
+    $\sum_aV_aV_a^\dagger=I$, and each $B_a$ is trace-preserving with
+    period $m/\gcd(m,L)$. Both letter intertwinings hold:
+    \begin{align}
+        (A^{[L]})^iV_a         & =V_aB_a^i,         \\
+        V_a^\dagger(A^{[L]})^i & =B_a^iV_a^\dagger.
+    \end{align}
+    For every $N,r\geq0$, including zero,
+    $\mathcal G_{NL+r}(A)=\sum_a\operatorname{ran}
+        \mathcal F_{A,B_a,V_a}^{N,r}$.
+    This extends the finite support decomposition in
+    \cite[Lemma~\texttt{blocking-arbitrary}]{DeLasCuevas2017Irreducible}
+    to an ungrouped terminal interval. The period formula includes the
+    peripheral-root correction in
+    \cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_blocked_ground_space,
+        thm:blocked_residual_ground_space_resolution}
+    Step-orbit compression gives the normalized tensors, support isometries,
+    resolution, and right intertwining. The orbit projections commute
+    with every blocked letter. Using $V_a^\dagger V_a=I$ gives the left
+    intertwining. Apply the residual range resolution to this derived data.
+\end{proof}
+
+\begin{theorem}[Correlated residual overlap]
+    \label{thm:correlated_residual_overlap}
+    \lean{MPSTensor.norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound}
+    \leanok
+    Let $B$ and $C$ be blocked-prefix tensors, and form their residual boundary
+    ranges using arbitrary original tails and rectangular support maps. If
+    $\lvert\langle u,v\rangle\rvert\leq\varepsilon\lVert u\rVert\lVert v\rVert$
+    for $u\in\mathcal G_N(B)$ and $v\in\mathcal G_N(C)$, with $\varepsilon\geq0$,
+    the same bound holds between their residual ranges at length $NL+r$,
+    for every $r\geq0$.
+    \uses{def:blocked_residual_boundary_map}
+\end{theorem}
+\begin{proof}\leanok
+    Fixing a tail configuration gives a prefix ground vector with boundary
+    $V^*A^\tau Y$. Sum the prefix inner products over the tail configurations
+    and apply Cauchy--Schwarz. The sums of the squared fiber norms are exactly
+    the squared norms of the full vectors.
+\end{proof}
+
+\begin{theorem}[Residual-sector overlap decay]
+    \label{thm:residual_sector_overlap_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent}
+    \leanok
+    For two inequivalent normalized primitive blocked-prefix tensors of
+    positive bond dimensions with faithful invariant matrices, their correlated residual ranges become
+    uniformly orthogonal as $N\to\infty$. The estimate is uniform in the
+    original tail length $r$; the original tensors supplying the tails need
+    no normalization assumption.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:correlated_residual_overlap,thm:inequivalent_block_ground_space_overlap_decay}
+    Apply primitive prefix-space overlap decay and the preceding fiberwise
+    estimate, which preserves the overlap coefficient.
+\end{proof}
+
+\begin{theorem}[Residual-sector projection sum]
+    \label{thm:residual_sector_projection_sum}
+    \lean{MPSTensor.tendsto_norm_residual_sector_projection_sum_sub_iSup_zero}
+    \leanok
+    Let $B_j$ be a finite family of pairwise gauge-phase inequivalent normalized
+    primitive blocked-prefix tensors of positive bond dimensions with
+    faithful invariant matrices.
+    Let $F_j(N,r)$ be their correlated residual ranges. Along any filter for
+    which $N\to\infty$, and with arbitrary varying $r$, one has
+    \begin{align}
+        \left\lVert\sum_jP_{F_j(N,r)}-P_{\sum_jF_j(N,r)}\right\rVert\longrightarrow0.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_sector_overlap_decay,thm:sector_projection_sum_error_decay}
+    The finite family of residual ranges is asymptotically orthogonal by the
+    uniform overlap estimate. Apply the finite-family projection comparison.
+\end{proof}
+
+\begin{theorem}[Periodic residual projection comparison]
+    \label{thm:periodic_residual_projection_sum}
+    \lean{MPSTensor.IsPeriodic.exists_residual_primitive_projection_sum}
+    \leanok
+    Let $A$ be periodic with period $m$. There are $m$ primitive normalized
+    compressed tensors $B_j$, positive virtual dimensions $D_j$, support
+    isometries $V_j$, and faithful invariant matrices $\rho_j$. The tensors
+    $B_j$ are pairwise gauge-phase inequivalent and satisfy
+    \begin{align}
+        V_j^*V_j=I,\qquad \sum_jV_jV_j^*=I,\qquad
+        V_j^*A^{(m),i}=B_j^iV_j^*.
+        \notag
+    \end{align}
+    Let $F_j(N,r)$ be the correlated rectangular boundary range with
+    coefficient $\operatorname{tr}(B_j^uV_j^*A^\tau Y)$. Then
+    \begin{align}
+        \mathcal G_{Nm+r}(A)=\sum_jF_j(N,r)
+        \notag
+    \end{align}
+    for every $N,r\geq0$. For every function $r:\mathbb N\to\mathbb N$,
+    \begin{align}
+        \left\lVert\sum_jP_{F_j(N,r(N))}-P_{\mathcal G_{Nm+r(N)}(A)}\right\rVert
+        \longrightarrow0 \qquad(N\to\infty).
+        \notag
+    \end{align}
+    All primitive normalization and separation data are derived from
+    periodicity; none are assumed separately. This comparison does not assert
+    an overlapping-window defect estimate or a gap at all residue lengths.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cyclic_primitive_sector_resolution,thm:blocked_residual_ground_space_resolution,thm:residual_sector_projection_sum}
+    Choose the primitive cyclic sector resolution, including its faithful
+    invariant matrices, pairwise separation, and both intertwiners. The support
+    projections resolve the virtual identity, which gives the exact residual
+    support decomposition. Apply the residual-sector projection-sum limit and
+    substitute this decomposition.
+\end{proof}
+
+\begin{theorem}[Residual boundary inner products]
+    \label{thm:residual_boundary_inner_fibers}
+    \lean{MPSTensor.inner_blockedResidualBoundaryMapES_eq_sum_groundSpaceMapES}
+    \leanok
+    For residual boundary vectors $\Gamma_{N,r}^{A,B,V}(Y)$ and
+    $\Gamma_{N,r}^{A,B,V}(Z)$, one has
+    \begin{align}
+        \langle\Gamma_{N,r}^{A,B,V}(Y),\Gamma_{N,r}^{A,B,V}(Z)\rangle
+        =\sum_{\tau\in[d]^r}
+        \langle\Gamma_N^B(V^*A^\tau Y),\Gamma_N^B(V^*A^\tau Z)\rangle.
+        \notag
+    \end{align}
+    This includes zero prefix and tail lengths and requires no normalization
+    or letter intertwining.
+    \uses{def:blocked_residual_boundary_map}
+\end{theorem}
+\begin{proof}\leanok
+    Decode the blocked prefix and split the physical configuration into prefix
+    and tail. Fixing the tail gives exactly the displayed prefix contraction;
+    sum the resulting scalar inner products over both configurations.
+\end{proof}
+
+\begin{theorem}[Supported Gram inverses and range projections]
+    \label{thm:supported_gram_projector_cancellation}
+    \lean{ContinuousLinearMap.comp_supportedGramInverse_adjoint_eq_starProjection}
+    \lean{ContinuousLinearMap.starProjection_comp_sub_of_supportedGramFactorizations}
+    \leanok
+    Let $T:E\to\mathcal H$ be a continuous linear map from a finite-dimensional
+    Hilbert space to a complete Hilbert space. Suppose $Q=Q^*$, $TQ=T$, and
+    $(T^*T)H=Q$. Then $P_{\operatorname{ran}T}=THT^*$.
+
+    More generally, let $T:E\to\mathcal H$, $L:F\to\mathcal H$, and
+    $C:G\to\mathcal H$ have finite-dimensional domains and a common
+    factorization $C=TJ_1=LJ_2$. For $S\in\{T,L,C\}$, suppose
+    $Q_S=Q_S^*$, $SQ_S=S$, and $(S^*S)H_S=Q_S$. If also $H_T=H_T^*$, then
+    \begin{align}
+        P_{\operatorname{ran}T}P_{\operatorname{ran}L}-P_{\operatorname{ran}C}
+         & =TH_T\bigl[T^*L-(T^*T)J_1H_CJ_2^*(L^*L)\bigr]H_LL^*.
+        \label{eq:ph_supported_gram_residual}
+    \end{align}
+    This is the supported-boundary algebra for the interval projector
+    comparison in \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    The vector $THT^*x$ lies in $\operatorname{ran}T$. Taking adjoints of
+    $TQ=T$ gives $QT^*=T^*$, so
+    $T^*(x-THT^*x)=T^*x-QT^*x=0$. Thus $THT^*$ is the orthogonal range
+    projection. For the three-map identity, self-adjointness of $H_T$ gives
+    $H_T(T^*T)=Q_T$. Consequently
+    $TH_T(T^*T)=T$ and $(L^*L)H_LL^*=L^*$.
+    Expanding the right-hand side of~(\ref{eq:ph_supported_gram_residual})
+    and using $TJ_1=C$ and $J_2^*L^*=C^*$ gives
+    $P_{\operatorname{ran}T}P_{\operatorname{ran}L}-CH_CC^*$.
+\end{proof}
+
+\begin{definition}[Opposite cyclic boundary degree]
+    \label{def:cyclic_boundary_degree}
+    \lean{MPSTensor.cyclicBoundarySpace,
+        MPSTensor.cyclicBoundarySpace_mul_left,
+        MPSTensor.cyclicBoundarySpace_mul_right,
+        MPSTensor.conjTranspose_mem_cyclicMatrixSubspace_of_cyclicBoundary}
+    \leanok
+    For matrices $P_u$ indexed by $\mathbb Z/m\mathbb Z$, define
+    \begin{align}
+        V_n=\{X:\ P_{u+n}X=XP_u\text{ for every }u\}.
+        \notag
+    \end{align}
+    If $P_uA_i=A_iP_{u+1}$, both $A_iX$ and $XA_i$ belong
+    to $V_n$ whenever $X\in V_{n+1}$.
+    When the $P_u$ are Hermitian, $X\in V_n$ implies that
+    $X^*$ has the word degree $n$, namely $P_uX^*=X^*P_{u+n}$.
+    These are the cyclic coordinates of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible}.
+\end{definition}
+\begin{proof}\leanok
+    Substitute the cyclic letter identity in each product. For the right
+    product, use the boundary relation at $u-1$. Taking adjoints
+    exchanges the two degree conventions.
+\end{proof}
+
+\begin{theorem}[Compression of a cyclic boundary]
+    \label{thm:cyclic_boundary_compression}
+    \lean{MPSTensor.sum_cyclicBoundary_mem,
+        MPSTensor.groundSpaceMap_sum_cyclicBoundary,
+        MPSTensor.exists_cyclicBoundary_of_mem_groundSpace}
+    \leanok
+    Let $m>0$, let $P_uP_v=\delta_{uv}P_u$, and assume
+    $\sum_uP_u=I$. If every length-$n$ word satisfies
+    $P_uA^\sigma=A^\sigma P_{u+n}$, then
+    \begin{align}
+        C_n(X)=\sum_uP_{u+n}XP_u\in V_n,
+        \qquad \Gamma_n(C_n(X))=\Gamma_n(X).
+        \notag
+    \end{align}
+    In particular every vector in $G_n(A)$ has a representative in $V_n$.
+    This is the cyclic-boundary preparation for the intersection
+    property in \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_boundary_degree}
+    Orthogonality gives both sides of the boundary relation for $C_n(X)$.
+    Cycle $P_u$ through the trace, use the word relation and idempotence,
+    and sum the resulting terms with $\sum_uP_u=I$.
+\end{proof}
+
+\begin{theorem}[Restricted injectivity of the boundary map]
+    \label{thm:boundary_injectivity_adjoint_span}
+    \lean{MPSTensor.groundSpaceMap_injOn_of_adjoint_mem_wordSpan}
+    \leanok
+    Let $S\subseteq\mathcal M_D$ be a complex linear subspace.
+    If $X^*$ belongs to the span of the length-$n$ words for every
+    $X\in S$, then $\Gamma_n$ is injective on $S$.
+\end{theorem}
+\begin{proof}\leanok
+    For $X,Y\in S$ with $\Gamma_n(X)=\Gamma_n(Y)$, the trace pairing
+    of $X-Y$ with every length-$n$ word vanishes. Test against
+    $(X-Y)^*$; then $\operatorname{tr}((X-Y)^*(X-Y))=0$, so $X=Y$.
+\end{proof}
+
+\begin{theorem}[The graded one-step intersection]
+    \label{thm:cyclic_boundary_intersection}
+    \lean{MPSTensor.mem_groundSpace_of_cyclicBoundary_restrictions,
+        MPSTensor.groundSpace_eq_restriction_intersection_of_cyclicBoundary,
+        MPSTensor.groundSpace_eq_restriction_intersection_of_cyclic_wordSpan}
+    \leanok
+    Suppose $P_uA_i=A_iP_{u+1}$ and $\sum_iA_i^*A_i=I$.
+    If every vector of $G_{n+1}(A)$ has a boundary representative in
+    $V_{n+1}$, and $\Gamma_n$ is injective on $V_n$, then
+    \begin{align}
+        G_{n+2}(A)
+        =(G_{n+1}(A)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes G_{n+1}(A)).
+        \notag
+    \end{align}
+    In particular these hypotheses follow when $m>0$, the $P_u$
+    are Hermitian orthogonal projections summing to $I$, and
+    the length-$n$ word span equals
+    $\{Z:\ P_uZ=ZP_{u+n}\text{ for every }u\}$.
+    This is an algebraic criterion for
+    \cite[equations (3.10)--(3.11) and Lemma existenceinteraction]
+    {Nachtergaele1996Spectral}; eventual spanning for a periodic tensor
+    is a separate step.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_boundary_degree,thm:cyclic_boundary_compression,
+        thm:boundary_injectivity_adjoint_span,
+        thm:ground_space_restriction_overlap,thm:ground_space_grow_back}
+    Write the two sets of one-site restrictions with boundaries $Y_i,Z_j$
+    in $V_{n+1}$. Their overlap gives
+    $\Gamma_n(A_jY_i)=\Gamma_n(Z_jA_i)$.
+    Both boundaries belong to $V_n$, hence $A_jY_i=Z_jA_i$.
+    The left-canonical identity reconstructs the enlarged boundary as
+    $\sum_jA_j^*Z_j$.
+    Under the stated spanning condition, cyclic compression supplies
+    the representatives, and the adjoint-span criterion supplies injectivity.
+\end{proof}
+
+\begin{definition}[Cyclic matrix degrees]
+    \label{def:cyclic_word_degree}
+    \lean{MPSTensor.cyclicMatrixSubspace,
+        MPSTensor.evalWord_mem_cyclicMatrixSubspace,
+        MPSTensor.wordSpan_le_cyclicMatrixSubspace}
+    \leanok
+    For a family $(P_u)_{u\in\mathbb Z/m\mathbb Z}$, set
+    \begin{align}
+        W_n=\{X:\ P_uX=XP_{u+n}\text{ for every }u\}.
+        \notag
+    \end{align}
+    If $P_uA_i=A_iP_{u+1}$, every word of length $n$ belongs
+    to $W_n$. The family need not consist of projections for this conclusion.
+    These degrees describe the cyclic sectors of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible}.
+\end{definition}
+\begin{proof}\leanok
+    Induct on the word length and move each $P_u$ through the first letter.
+\end{proof}
+
+\begin{theorem}[Subtraction of an adjoint degree]
+    \label{thm:cyclic_adjoint_degree}
+    \lean{MPSTensor.mul_conjTranspose_mem_cyclicMatrixSubspace}
+    \leanok
+    Suppose every $P_u$ is Hermitian. If $X\in W_{q+r}$ and
+    $Y\in W_r$, then $XY^*\in W_q$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_word_degree}
+    Take the adjoint of the relation for $Y$ at $u+q$ and multiply
+    it by $X$, using the relation for $X$ at $u$.
+\end{proof}
+
+\begin{theorem}[Propagation of cyclic word spanning]
+    \label{thm:cyclic_word_span_propagation}
+    \lean{MPSTensor.wordSpan_eq_cyclicMatrixSubspace_add,
+        MPSTensor.wordSpan_eq_cyclicMatrixSubspace_of_ge}
+    \leanok
+    Suppose that every $P_u$ is Hermitian,
+    $P_uA_i=A_iP_{u+1}$, and $\sum_iA_i^*A_i=I$.
+    If the words of length $q$ span $W_q$, then the words of
+    length $N$ span $W_N$ for every $N\ge q$.
+    This algebraic implication supplies the later lengths in the
+    intersection argument of
+    \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral};
+    the initial spanning equality is assumed here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_word_degree,thm:cyclic_adjoint_degree}
+    Write $N=q+r$. The left-canonical identity implies
+    $\sum_{|w|=r}A_w^*A_w=I$. For $X\in W_{q+r}$, reconstruct
+    \begin{align}
+        X=\sum_{|w|=r}(XA_w^*)A_w.
+        \notag
+    \end{align}
+    Every coefficient $XA_w^*$ belongs to $W_q$, hence is a
+    combination of words of length $q$. The displayed sum is therefore
+    a combination of words of length $q+r$. The reverse inclusion
+    follows from the cyclic degree of each word.
+\end{proof}
+
+\begin{definition}[Sector matrix embedding]
+    \label{def:sector_matrix_embedding}
+    \lean{MPSTensor.sectorMatrixEmbedding}
+    \leanok
+    For rectangular matrices $V_j$ with a common row space, the sector
+    embedding sends a family $M=(M_j)_j$ of square matrices to
+    $\mathcal E(M)=\sum_jV_jM_jV_j^*$.
+\end{definition}
+
+\begin{theorem}[Word spans under an isometric sector resolution]
+    \label{thm:embedded_sector_word_span}
+    \lean{MPSTensor.sectorMatrixEmbedding_wordTuple,
+        MPSTensor.sectorMatrixEmbedding_range_le_wordSpan,
+        MPSTensor.sectorMatrixEmbedding_compress_eq,
+        MPSTensor.mem_wordSpan_of_sector_wordTupleSpanTop}
+    \leanok
+    \uses{def:sector_matrix_embedding}
+    Let $C,B_j$ be tensors on the same physical alphabet and let
+    $V_j$ be rectangular matrices satisfying
+    $\sum_jV_jV_j^*=I$ and $C_iV_j=V_jB_{j,i}$.
+    Let $\mathcal E$ be the sector embedding of
+    Definition~\ref{def:sector_matrix_embedding}.
+    Then every simultaneous word tuple maps to the corresponding word of $C$.
+    If the length-$q$ simultaneous word span is the full product matrix algebra,
+    $\operatorname{ran}\mathcal E$ is contained in the length-$q$ word span of $C$.
+    If also $V_j^*V_j=I$, every matrix $X$ commuting with all
+    $V_jV_j^*$ satisfies
+    \begin{align}
+        X=\mathcal E\bigl((V_j^*XV_j)_j\bigr)
+        \notag
+    \end{align}
+    and hence belongs to that word span.
+    No positivity of the sector dimensions or tensor normalization is assumed.
+    These are the embedded cyclic-sector identities of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    Intertwining propagates along words. Resolve the virtual identity to
+    identify the image of every word tuple. Taking linear spans gives
+    the range inclusion. For a commuting matrix, each compressed term
+    equals $XV_jV_j^*$; summing reconstructs $X$.
+\end{proof}
+
+\begin{theorem}[Initial spanning of cyclic corners]
+    \label{thm:cyclic_blocked_initial_word_span}
+    \lean{MPSTensor.wordSpan_eq_cyclicMatrixSubspace_of_blocked_sector_span}
+    \leanok
+    Let $m>0$, let $P_uA_i=A_iP_{u+1}$, and suppose that the tensor
+    $A^{[m]}$ has an isometric sector resolution $B_j,V_j$, with
+    $j\in\{0,\ldots,m-1\}$, satisfying
+    \begin{align}
+        V_j^*V_j=I,\qquad \sum_jV_jV_j^*=I,\qquad
+        A^{[m]}_iV_j=V_jB_{j,i}.
+        \notag
+    \end{align}
+    Suppose each support $V_jV_j^*$ is one of the matrices $P_u$;
+    their cyclic labels need not be prescribed.
+    If the length-$q$ simultaneous word span of $B_j$ is full, then
+    \begin{align}
+        \operatorname{span}\{A^\sigma:|\sigma|=qm\}
+        =\{X:\ P_uX=XP_{u+qm}\text{ for every }u\}.
+        \notag
+    \end{align}
+    This supplies the initial graded spanning step for the intersection
+    construction in \cite[equations (3.10)--(3.11) and Section~6]
+    {Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:embedded_sector_word_span}
+    Every original word has its length as cyclic degree. Conversely $qm$
+    is zero modulo $m$, so a matrix of this degree commutes with every
+    sector support. Apply the embedded-sector lemma, then identify the
+    length-$q$ blocked word span with the original length-$qm$ span.
+\end{proof}
+
+\begin{theorem}[Faithful primitive witness at period one]
+    \label{thm:period_one_primitive_witness}
+    \lean{MPSTensor.exists_isPrimitiveMPS_of_isPeriodic_one}
+    \leanok
+    \uses{def:primitive_mps}
+    Let $A$ be a normalized irreducible tensor of period one with positive
+    bond dimension. There is a positive-definite matrix $\rho$ such that
+    $A$ and $\rho$ form a primitive normalized MPS pair.
+    This is the Perron--Frobenius normalization used in
+    \cite[Equations~(3.1)--(3.2b)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Period one gives a primitive trace-preserving transfer map and
+    irreducibility of its Kraus family. The primitive Perron--Frobenius
+    theorem supplies an invariant matrix $\rho$; irreducibility makes it
+    positive definite.
+\end{proof}
+
+\begin{theorem}[Norm control from supported projector cancellation]
+    \label{thm:supported_gram_projector_norm}
+    \lean{ContinuousLinearMap.norm_starProjection_comp_sub_le_of_supported_factorization,
+        ContinuousLinearMap.tendsto_norm_starProjection_comp_sub_zero_of_supported_factorizations}
+    \leanok
+    Let $T:E\to F$, $L:G\to F$, and $C:W\to F$ be bounded
+    maps, with finite-dimensional virtual spaces and a complete physical
+    Hilbert space. Suppose
+    \begin{align}
+        P_TP_L-P_C=T H_T R H_L L^*.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \|P_TP_L-P_C\|
+        \le \|T\|\|H_T\|\|H_L\|\|L\|\|R\|.
+        \notag
+    \end{align}
+    For a family along any filter, assume this factorization eventually
+    holds, the product $\|T\|\|H_T\|\|H_L\|\|L\|$ is eventually
+    bounded, and $\|R\|\to0$. Then $\|P_TP_L-P_C\|\to0$.
+    The spaces may vary with the index. This implication supplies the
+    norm comparison in \cite[Lemma commutation (ii)]{Nachtergaele1996Spectral};
+    the factorization, inverse bounds, and residual decay are explicit
+    hypotheses here.
+\end{theorem}
+\begin{proof}\leanok
+    Apply submultiplicativity of the operator norm and $\|L^*\|=\|L\|$.
+    The eventual bound then gives a constant multiple of $\|R\|$;
+    squeeze the nonnegative projection norm between zero and this quantity.
+\end{proof}
+
+\begin{definition}[Correlated virtual tail and residual limiting metric]
+    \label{def:correlated_residual_gram_metric}
+    \lean{MPSTensor.correlatedTailMapES,
+        MPSTensor.boundaryFamilyEquiv_correlatedTailMapES_apply,
+        MPSTensor.correlatedTailMapES_adjoint_apply,
+        MPSTensor.inner_correlatedTailMapES,
+        MPSTensor.residualBoundaryGramLimit,
+        MPSTensor.residualBoundaryGramLimit_frobeniusEquivEuclidean_apply,
+        MPSTensor.blockedResidualBoundaryMapES_adjoint_comp_self}
+    \leanok
+    Let $Y\in M_{D\times E}(\C)$, let $V\colon\C^E\to\C^D$, and let
+    $A$ be an original tensor. Define $C_rY=(V^\dagger A^\tau Y)_\tau$,
+    where $\tau$ runs over the original words of length $r$. For
+    $\tr\rho\ne0$, set $K_\rho Z=Z\rho/\tr\rho$ on the square prefix
+    boundary space. The residual limiting metric is
+    $K_{\infty,r}=C_r^\dagger(\bigoplus_\tau K_\rho)C_r$. If
+    $Q_r=\sum_\tau A^{\tau\dagger}VV^\dagger A^\tau$, then
+    \begin{align}
+        \langle C_rY,C_rZ\rangle & =\tr(Y^\dagger Q_rZ),                  &
+        C_r^\dagger(x_\tau)_\tau & =\sum_\tau A^{\tau\dagger}Vx_\tau,       \\
+        K_{\infty,r}Y            & =Q_rY\rho/\tr\rho,                     &
+        (\Gamma_{N,r}^{A,B,V})^\dagger\Gamma_{N,r}^{A,B,V}
+                                 & =C_r^\dagger(\bigoplus_\tau K_N^B)C_r.
+    \end{align}
+    Here $K_N^B=(\Gamma_N^B)^\dagger\Gamma_N^B$. The rectangular
+    coordinates place the column index before the row index. All lengths
+    may be zero. No letter intertwining or normalization is assumed.
+    \uses{def:blocked_residual_boundary_map,thm:residual_boundary_inner_fibers}
+\end{definition}
+\begin{proof}\leanok
+    Expand the Hilbert--Schmidt inner products and sum the trace pairings.
+    The residual physical inner product splits into the same prefix fibers.
+    The primitive limiting metric acts by right multiplication, giving the
+    stated pullback formula.
+\end{proof}
+
+\begin{theorem}[Cyclic row corner of a correlated tail]
+    \label{thm:correlated_residual_cyclic_corner}
+    \lean{MPSTensor.sum_word_conjTranspose_cyclic_projection_mul_word,
+        MPSTensor.norm_correlatedTailMapES_le_one_of_wordGram_eq_projection,
+        MPSTensor.norm_correlatedTailMapES_le_one_of_cyclic_support,
+        MPSTensor.residualBoundaryGramLimit_apply_of_cyclic_support,
+        MPSTensor.stepOrbitProjection_self}
+    \leanok
+    Suppose that $\sum_iA_i^\dagger A_i=I$, that the $P_a$ are orthogonal
+    projections, and that $P_aA_i=A_iP_{a+1}$ on a positive cyclic index.
+    If $VV^\dagger=P_a$ and $\operatorname{tr}\rho\neq0$, then every
+    $r\geq0$ satisfies
+    \begin{align}
+        \sum_{\tau\in[d]^r} A^{\tau\dagger}P_aA^\tau & =P_{a+r}, &
+        \|C_r\|                                      & \leq1,    & K_{\infty,r}Y & =P_{a+r}Y\rho/\tr\rho.
+    \end{align}
+    More generally, $C_r$ is contractive whenever its exact Gram matrix
+    $Q_r$ is an orthogonal projection. Blocking by the period itself leaves
+    each cyclic projection as its own step-orbit projection.
+    These are the cyclic word consequences of
+    \cite[Lemma~\texttt{blocking-arbitrary}]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:correlated_residual_gram_metric}
+    Transport $P_a$ through each word, then use
+    $\sum_\tau A^{\tau\dagger}A^\tau=I$. The complement $I-Q_r$ is
+    positive, so $\tr(Y^\dagger Q_rY)\leq\|Y\|_{\rm HS}^2$.
+    The limiting action follows from the exact pullback metric.
+\end{proof}
+
+\begin{theorem}[Residual Gram error uniformly in the tail length]
+    \label{thm:correlated_residual_gram_error}
+    \lean{MPSTensor.norm_blockedResidualBoundaryMapES_gram_sub_limit_le,
+        MPSTensor.IsPrimitiveMPS.residualBoundaryGram_sub_limit_norm_sq_le_geometric}
+    \leanok
+    Whenever $\|C_r\|\leq1$,
+    \begin{align}
+        \|(\Gamma_{N,r}^{A,B,V})^\dagger\Gamma_{N,r}^{A,B,V}-K_{\infty,r}\|
+        \leq\|K_N^B-K_\rho\|.
+    \end{align}
+    Under the cyclic hypotheses of
+    Theorem~\ref{thm:correlated_residual_cyclic_corner}, if the positive-dimensional
+    prefix tensor $B$ is primitive with invariant matrix $\rho$, there are
+    $C>0$ and $0<q<1$ such that every $N\geq1$ and every $r\geq0$ satisfy
+    \begin{align}
+        \|(\Gamma_{N,r}^{A,B,V})^\dagger\Gamma_{N,r}^{A,B,V}-K_{\infty,r}\|^2
+        \leq E^3(Cq^N)^2.
+    \end{align}
+    No independent tail condition is assumed. This is an intermediate Gram
+    estimate for the projection comparison in
+    \cite[Lemma~commutation(i), lines~2442--2531]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:correlated_residual_gram_metric,thm:correlated_residual_cyclic_corner,thm:boundary_fiberwise_map_norm,thm:primitive_ground_space_gram_geometric_fixed_point}
+    Subtract the two correlated pullback forms. The fiberwise difference has
+    norm at most $\|K_N^B-K_\rho\|$, and the two outer correlated maps
+    have norm at most one. Apply the primitive prefix Gram bound.
+\end{proof}
+
+\begin{theorem}[Derived residual Gram bounds for a periodic tensor]
+    \label{thm:periodic_correlated_residual_gram}
+    \lean{MPSTensor.IsPeriodic.exists_cyclic_residualBoundaryGram_bound}
+    \leanok
+    A normalized irreducible periodic tensor $A$ of positive period $m$
+    admits cyclic projections $P_a$, positive sector dimensions $D_a$ summing
+    to $D$, support isometries $V_a$, primitive compressed tensors $B_a$,
+    and faithful invariant matrices $\rho_a$. They satisfy
+    $V_aV_a^\dagger=P_a$, $P_aA_i=A_iP_{a+1}$,
+    $B_a^i=V_a^\dagger(A^{[m]})^iV_a$, and
+    $(A^{[m]})^iV_a=V_aB_a^i$. The blocked MPS ground space agrees with
+    the joint compressed-sector space at every length, including zero.
+    For each sector, the limiting residual Gram metric is
+    $Y\mapsto P_{a+r}Y\rho_a/\tr\rho_a$, and the geometric estimate of
+    Theorem~\ref{thm:correlated_residual_gram_error} holds uniformly over
+    all original tail lengths $r$. The primitive sectors, faithful matrices,
+    and row corners are derived from periodicity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:correlated_residual_gram_error,thm:correlated_residual_cyclic_corner,thm:periodic_blocked_ground_space,thm:period_one_primitive_witness}
+    Compress the step-orbit sectors after blocking by $m$. Their period is
+    one, so irreducibility and trace-preserving normalization give faithful
+    primitive fixed points. Each step orbit consists of its individual cyclic
+    projection. Apply the cyclic limiting-action identity and the uniform
+    primitive residual Gram estimate.
+\end{proof}
+
+\begin{definition}[Residual window coordinates]
+    \label{def:residual_window_coordinates}
+    \lean{MPSTensor.rectangularBoundaryFamilyFiberₗ,
+        MPSTensor.residualWindowRightVirtualMapES,
+        MPSTensor.residualWindowRightMapES,
+        MPSTensor.residualWindowLeftMapES,
+        MPSTensor.residualWindowMapES,
+        MPSTensor.residualWindowConfigEquiv}
+    \leanok
+    Let $A$ have physical dimension $d$ and bond dimension $D$, let $B$ have
+    physical dimension $d^L$ and bond dimension $E$, and let $V\in\C^{D\times E}$.
+    For nonnegative integers $K,M,r$, use physical configurations $(u,v,\tau)$
+    of respective lengths $K,M,r$, with the first two in the blocked alphabet.
+    Write $\mathbf x=(X_u)_u$ for a family in $\C^{D\times E}$ and
+    $\mathbf y=(Y_\tau)_\tau$ for a family in $\MN{E}$. Define
+    \begin{align}
+        (J_1Y)_u                  & =YB^u,                           &
+        (T\mathbf x)_{u,v,\tau}   & =\tr(B^vV^*A^\tau X_u),\nonumber   \\
+        (L_1\mathbf y)_{u,v,\tau} & =\tr(B^uB^vY_\tau),              &
+        (CY)_{u,v,\tau}           & =\tr(B^uB^vV^*A^\tau Y).
+        \label{eq:ph_residual_window_maps}
+    \end{align}
+    The family coordinates are ordered as $(u,\text{column},\text{row})$.
+    Decoding the blocked letters and concatenating $u,v,\tau$ gives a bijection
+    with the original configurations of length $(K+M)L+r$, including zero lengths.
+    These are the residual coordinates for the overlap argument in
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
+    \uses{def:blocked_residual_boundary_map}
+\end{definition}
+
+\begin{theorem}[Residual window factorizations]
+    \label{thm:residual_window_factorizations}
+    \lean{MPSTensor.residualWindowRightMapES_comp_rightVirtualMapES,
+        MPSTensor.residualWindowLeftMapES_correlatedTailFamily,
+        MPSTensor.residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES}
+    \leanok
+    With the coordinates of Definition~\ref{def:residual_window_coordinates},
+    put $(J_2Y)_\tau=V^*A^\tau Y$. Then $TJ_1=C=L_1J_2$.
+    $C$ is the residual boundary map at prefix length $K+M$ and tail
+    length $r$, transported by the physical configuration bijection.
+    No injectivity, normalization, or intertwining hypothesis is required.
+    \uses{def:residual_window_coordinates,def:blocked_residual_boundary_map}
+\end{theorem}
+\begin{proof}\leanok
+    Trace cyclicity gives
+    $\tr(B^vV^*A^\tau YB^u)=\tr(B^uB^vV^*A^\tau Y)$;
+    associativity gives the second factorization.
+    The physical-coordinate identity follows from the word product under
+    concatenation.
+\end{proof}
+
+\begin{theorem}[Residual window mixed Gram]
+    \label{thm:residual_window_mixed_gram}
+    \lean{MPSTensor.inner_residualWindowRightMapES_leftMapES}
+    \leanok
+    In the same coordinates, let $G_B(M)=\Gamma_B(M)^*\Gamma_B(M)$ be the
+    ordinary prefix Gram. With the Frobenius inner product on virtual matrices,
+    \begin{align}
+        \langle T\mathbf x,L_1\mathbf y\rangle
+         & =\sum_u\sum_\tau
+        \big\langle V^*A^\tau X_u,\,
+        G_B(M)(Y_\tau B^u)\big\rangle.
+        \label{eq:ph_residual_mixed_gram}
+    \end{align}
+    This identity is exact at every nonnegative length; it asserts no limiting
+    metric or quantitative decay.
+    \uses{def:residual_window_coordinates,def:ground_space_gram}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:ground_space_gram}
+    Expand the physical inner product over $(u,v,\tau)$ and interchange the
+    $v$ and $\tau$ sums. Trace cyclicity rewrites the left-window coefficient
+    as $\tr(B^vY_\tau B^u)$. The $v$ sum is then the Gram pairing of
+    $\Gamma_B(M)$.
+\end{proof}
+
+\begin{theorem}[Primitive cyclic sector resolution]
+    \label{thm:cyclic_primitive_sector_resolution}
+    \lean{MPSTensor.IsPeriodic.exists_cyclic_primitive_sector_resolution}
+    \leanok
+    Let $A$ be a normalized irreducible periodic tensor of period $m$.
+    There are positive sector dimensions, primitive normalized tensors $B_j$
+    on blocks of $m$ sites, faithful invariant matrices $\rho_j$, and isometries
+    $V_j$ whose mutually orthogonal support projections sum to the identity.
+    Distinct $B_j$ are inequivalent up to similarity and phase. In the inverse
+    cyclic labelling, the projections satisfy $P_{j+1}A_i=A_iP_j$.
+    Both rectangular intertwiners hold:
+    $A^{[m]}_iV_j=V_jB_{j,i}$ and
+    $V_j^*A^{[m]}_i=B_{j,i}V_j^*$.
+    This retains the cyclic coordinates of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible} used in the grouping argument of
+    \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Take the cyclic isometric resolution of the periodic tensor.
+    Each compressed blocked sector has period one, hence admits a faithful
+    primitive invariant matrix. The cyclic sector separation theorem gives
+    pairwise inequivalence. Multiplying the corner identity by the isometry
+    and its adjoint gives the two intertwiners.
+\end{proof}
+
+\begin{theorem}[Eventual cyclic spanning and original intersection]
+    \label{thm:periodic_original_intersection}
+    \lean{MPSTensor.IsPeriodic.exists_eventually_cyclic_wordSpan,
+        MPSTensor.IsPeriodic.exists_eventually_groundSpace_restriction_intersection}
+    \leanok
+    Let $A$ be a normalized irreducible periodic tensor of period $m$.
+    There is an orthogonal resolution $\{P_u\}_{u\in\Z/m\Z}$ satisfying
+    $P_uA_i=A_iP_{u+1}$, and a threshold $n_0$, such that for every $n\ge n_0$
+    the length-$n$ words span precisely
+    $\{X:P_uX=XP_{u+n}\text{ for all }u\}$.
+    Consequently,
+    \begin{align}
+        \forall\,n\ge n_0:\ (G_{n+1}(A)\otimes\C^d)\cap(\C^d\otimes G_{n+1}(A))=G_{n+2}(A).
+        \notag
+    \end{align}
+    The lengths here count original sites, with no divisibility requirement.
+    This is the cyclic-sector form of the intersection argument in
+    \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cyclic_primitive_sector_resolution,thm:ph_primitive_blocks_word_span,thm:cyclic_blocked_initial_word_span,thm:cyclic_word_span_propagation,thm:cyclic_boundary_intersection}
+    Simultaneous spanning of the primitive blocked sectors gives spanning of
+    one degree-zero cyclic corner algebra. Negating the cyclic labels puts the
+    projections in the word-degree convention. The adjoint-word resolution
+    propagates this span to all later lengths. Restricted boundary injectivity
+    then gives the intersection identity.
+\end{proof}
+
+\begin{theorem}[Canonical original-chain interaction for a periodic tensor]
+    \label{thm:periodic_original_parent_interaction}
+    \lean{MPSTensor.IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES,
+        MPSTensor.IsPeriodic.exists_positive_parent_interaction}
+    \leanok
+    For the same tensor $A$, there is $R_0>0$ such that, for every $R\ge R_0$
+    and every $N\ge R$, the canonical range-$R$ open parent Hamiltonian has
+    kernel exactly $G_N(A)$. In particular, there exists a positive interaction
+    $h$ of some range $R>0$ with this kernel identity at every $N\ge R$.
+    No faithful invariant matrix, cyclic resolution, or short-range intersection
+    is supplied as a hypothesis.
+    This concerns the explicit normalized periodic tensor presentation; it does
+    not assert a presentation theorem for arbitrary GVBS states.
+    It implements the finite-support interaction construction of
+    \cite[Lemma existenceinteraction and Theorem~1.1]{Nachtergaele1996Spectral}
+    in this tensor setting.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_original_intersection}
+    Choose the interaction range beyond the intersection threshold.
+    Iteration over contiguous intervals identifies the simultaneous local
+    constraints with the full boundary-condition space. Positivity of the
+    local complementary projection identifies these constraints with the open
+    Hamiltonian kernel, including the single-window volume $N=R$.
+    Writing that projection in physical matrix coordinates gives $h$.
+\end{proof}
+
 \begin{definition}[Matrix of the canonical parent interaction]
     \label{def:canonical_parent_interaction_matrix}
     \lean{MPSTensor.canonicalParentInteractionMatrix,
@@ -9618,6 +10778,1165 @@ shorter interaction range.
     Under this identification, matrix positive semidefiniteness is equivalent
     to positivity of the represented operator. Orthogonal projections are
     positive.
+\end{proof}
+
+\begin{definition}[Finite Euclidean direct-sum operators]
+    \label{def:euclidean_fiberwise_operator}
+    \lean{EuclideanSpace.fiberₗ,EuclideanSpace.fiberwiseMap,
+        EuclideanSpace.fiberₗ_apply,EuclideanSpace.fiberwiseMap_apply,
+        EuclideanSpace.fiberₗ_fiberwiseMap}
+    \leanok
+    Let $S,I,J$ be finite sets and let the scalar field be $\R$ or $\C$.
+    For a vector $x\in\ell^2(S\times I)$, its $s$th fiber is
+    $x_s=(x_{s,i})_{i\in I}$. For a linear operator
+    $G:\ell^2(I)\to\ell^2(J)$, define $G^{\oplus S}$ by
+    $(G^{\oplus S}x)_s=Gx_s$.
+    The fiber projection itself is defined without a finiteness assumption.
+\end{definition}
+
+\begin{theorem}[Finite direct-sum operator identities]
+    \label{thm:euclidean_fiberwise_operator}
+    \lean{EuclideanSpace.norm_fiberwiseMap_le,
+        EuclideanSpace.inner_fiberwiseMap,
+        EuclideanSpace.fiberwiseMap_adjoint,
+        EuclideanSpace.fiberwiseMap_comp,
+        EuclideanSpace.fiberwiseMap_id,
+        EuclideanSpace.fiberwiseMap_sub}
+    \leanok
+    Finite direct sums preserve adjoints, composition, identity operators, and
+    operator differences. They satisfy
+    $\lVert G^{\oplus S}\rVert\leq\lVert G\rVert$ and
+    $\langle y,G^{\oplus S}x\rangle=\sum_s\langle y_s,Gx_s\rangle$.
+    These statements include empty coordinate sets.
+    \uses{def:euclidean_fiberwise_operator}
+\end{theorem}
+\begin{proof}\leanok
+    The squared norm is the sum of the squared fiber norms. Applying
+    $\lVert Gx_s\rVert\leq\lVert G\rVert\lVert x_s\rVert$ to every fiber gives
+    the norm bound. The inner-product identity follows by splitting the sum
+    over $S\times I$. Apply the adjoint identity in each fiber to obtain the
+    adjoint formula. Composition, identity, and subtraction hold coordinatewise.
+\end{proof}
+
+\begin{theorem}[Residual window Grams and boundary norms]
+    \label{thm:residual_window_grams}
+    \lean{MPSTensor.residualWindowRightMapES_adjoint_comp_self,
+        MPSTensor.residualWindowLeftMapES_adjoint_comp_self,
+        MPSTensor.norm_residualWindowRightMapES_le,
+        MPSTensor.norm_residualWindowLeftMapES_le}
+    \leanok
+    Use the residual windows $T,L_1$ at full length $(K+M)L+r$ from
+    Definition~\ref{def:residual_window_coordinates}. Write $\Gamma_{M,r}$
+    for the correlated residual boundary map and $G_B(n)$ for the ordinary
+    blocked-prefix Gram. Then
+    \begin{align}
+        T^*T     & =(\Gamma_{M,r}^*\Gamma_{M,r})^{\oplus u}, &
+        L_1^*L_1 & =G_B(K+M)^{\oplus\tau}.
+        \label{eq:ph_residual_window_grams}
+    \end{align}
+    Consequently $\lVert T\rVert\leq\lVert\Gamma_{M,r}\rVert$ and
+    $\lVert L_1\rVert\leq\lVert\Gamma_B(K+M)\rVert$.
+    These identities require no normalization or injectivity and include
+    zero lengths and empty configuration sets.
+    \uses{def:residual_window_coordinates,def:euclidean_fiberwise_operator,
+        def:ground_space_gram}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_boundary_inner_fibers,thm:euclidean_fiberwise_operator}
+    Expand the physical inner products over $(u,v,\tau)$.
+    For the right Gram, first sum over the residual physical variables
+    $(v,\tau)$, retaining $u$ as a spectator.
+    For the left Gram, concatenate $u,v$ and retain $\tau$ as a spectator.
+    Apply the finite direct-sum norm bound to each Gram and use
+    $\lVert F^*F\rVert=\lVert F\rVert^2$.
+\end{proof}
+
+\begin{theorem}[Correlated residual window factorization]
+    \label{thm:residual_window_correlated_factorization}
+    \lean{MPSTensor.residualWindowLeftMapES_comp_correlatedTailMapES}
+    \leanok
+    The full residual contraction satisfies $L_1C_r=C$, where
+    $(C_rY)_\tau=V^*A^\tau Y$ is the correlated tail map.
+    This is an operator identity, without injectivity or normalization.
+    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_factorizations}
+    Identify each correlated tail fiber and apply the left window factorization.
+\end{proof}
+
+\begin{theorem}[Residual window Gram errors]
+    \label{thm:residual_window_gram_errors}
+    \lean{MPSTensor.norm_residualWindowRightMapES_gram_sub_limit_le,
+        MPSTensor.norm_residualWindowLeftMapES_gram_sub_limit_le}
+    \leanok
+    \uses{def:correlated_residual_gram_metric}
+    Let $\rho\in\MN{E}$ have nonzero trace, put
+    $G_\infty=\operatorname{gramReshuffle}(\mathcal P_\rho)$, and let
+    $K_r=C_r^*G_\infty^{\oplus\tau}C_r$.
+    If $\lVert C_r\rVert\leq1$, then
+    \begin{align}
+        \lVert T^*T-K_r^{\oplus u}\rVert
+         & \leq\lVert G_B(M)-G_\infty\rVert,\nonumber \\
+        \lVert L_1^*L_1-G_\infty^{\oplus\tau}\rVert
+         & \leq\lVert G_B(K+M)-G_\infty\rVert.
+        \label{eq:ph_residual_window_errors}
+    \end{align}
+    The second bound does not require the contractivity assumption. Neither
+    bound requires primitivity or a fixed-point equation. Both coefficients
+    are one and are independent of the spectator lengths.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:euclidean_fiberwise_operator,thm:correlated_residual_gram_error,thm:residual_window_grams}
+    Finite direct sums preserve differences and do not increase operator norm.
+    For the right window also apply the coefficient-one correlated Gram bound.
+\end{proof}
+
+\begin{definition}[Fixed rectangular metric and row projection]
+    \label{def:residual_fixed_metric_row_projection}
+    \lean{MPSTensor.rectangularRightGramMetric,
+        MPSTensor.rectangularRightGramMetric_apply,
+        MPSTensor.rectangularRightGramMetric_isUnit,
+        MPSTensor.rectangularRightGramMetric_inverse_apply,
+        MPSTensor.rectangularRightGramMetric_commute_rowProjection,
+        MPSTensor.rectangularRightGramMetric_isSelfAdjoint,
+        MPSTensor.rectangularRowProjection,
+        MPSTensor.rectangularRowProjection_apply,
+        MPSTensor.rectangularRowProjection_isStarProjection}
+    \leanok
+    On $M_{D\times E}(\C)$ with its Hilbert--Schmidt inner product, define
+    $R_\rho Y=Y\rho/\tr\rho$ and $\mathcal QY=QY$.
+    If $E>0$ and $\rho>0$, then $R_\rho$ is self-adjoint and invertible,
+    with $R_\rho^{-1}Y=(\tr\rho)Y\rho^{-1}$.
+    If $Q$ is an orthogonal projection, then so is $\mathcal Q$.
+    Right multiplication commutes with every row operator $\mathcal Q$.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:correlated_residual_gram_metric}
+    In column-first rectangular coordinates the operators are
+    $(\tr\rho)^{-1}(\rho^{\mathsf T}\otimes I_D)$ and $I_E\otimes Q$.
+    Positivity of $\rho$ gives the first operator's invertibility and
+    self-adjointness. The remaining assertions follow from multiplication
+    of rectangular matrices.
+\end{proof}
+
+\begin{theorem}[Exact residual row support]
+    \label{thm:residual_exact_row_support}
+    \lean{MPSTensor.correlatedTailMapES_adjoint_comp_apply,
+        MPSTensor.correlatedTailMapES_adjoint_comp_eq_rowProjection,
+        MPSTensor.correlatedTailMapES_comp_rowProjection,
+        MPSTensor.blockedResidualBoundaryMapES_comp_rowProjection,
+        MPSTensor.residualBoundaryGramLimit_eq_rightMetric_comp_rowProjection}
+    \leanok
+    Let $C_rY=(V^\dagger A^\tau Y)_\tau$ and suppose that
+    $Q_r=\sum_\tau A^{\tau\dagger}VV^\dagger A^\tau$ is an orthogonal
+    projection. Write $\mathcal Q_rY=Q_rY$. For every prefix length $N$,
+    \begin{align}
+        C_r^\dagger C_r          & =\mathcal Q_r,       &
+        C_r\mathcal Q_r          & =C_r,                &
+        \Gamma_{N,r}\mathcal Q_r & =\Gamma_{N,r},       &
+        K_{\infty,r}             & =R_\rho\mathcal Q_r.
+    \end{align}
+    The last identity requires $\tr\rho\ne0$. No positivity or
+    injectivity of the prefix tensor is required for these identities.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:residual_fixed_metric_row_projection,def:correlated_residual_gram_metric}
+    The exact tail Gram form is $\tr(Y^\dagger Q_rZ)$.
+    A boundary map whose Gram operator vanishes on a vector also vanishes
+    on that vector. Applying this fact to $I-\mathcal Q_r$ proves the two
+    support identities. The residual Gram factorization and the limiting
+    right-multiplication formula give the remaining identities.
+\end{proof}
+
+\begin{definition}[Extended Gram operator and supported inverse]
+    \label{def:residual_extended_gram_supported_inverse}
+    \lean{MPSTensor.residualBoundaryGramExtension,
+        MPSTensor.residualBoundaryGramInverse,
+        MPSTensor.residualBoundaryGramExtension_sub_rightMetric}
+    \leanok
+    With $G_{N,r}=\Gamma_{N,r}^\dagger\Gamma_{N,r}$, define
+    \begin{align}
+        F_{N,r} & =G_{N,r}+R_\rho(I-\mathcal Q_r), &
+        H_{N,r} & =\mathcal Q_rF_{N,r}^{-1}.
+    \end{align}
+    Whenever $Q_r$ is the exact tail Gram matrix,
+    $F_{N,r}-R_\rho=G_{N,r}-K_{\infty,r}$.
+    The inverse equations for $H_{N,r}$ hold under the hypotheses of the
+    following theorem.
+\end{definition}
+\begin{proof}\leanok
+    \uses{thm:residual_exact_row_support}
+    Substitute $K_{\infty,r}=R_\rho\mathcal Q_r$ and expand the complementary
+    term.
+\end{proof}
+
+\begin{theorem}[Quantitative supported residual inverse]
+    \label{thm:residual_supported_inverse_small_error}
+    \lean{MPSTensor.residualBoundaryGramInverse_properties_of_small_error,
+        MPSTensor.norm_blockedResidualBoundaryMapES_sq_le_rightMetric_add_gram_error}
+    \leanok
+    Assume $D,E>0$, $\rho>0$, and that $Q_r$ is an orthogonal projection
+    equal to the exact tail Gram matrix. Let
+    $\delta_N=\|K_N^B-K_\rho\|$ and $u=\|R_\rho^{-1}\|$.
+    If $u\delta_N\leq a<1$, then $F_{N,r}$ is invertible, $H_{N,r}$ is
+    self-adjoint, and
+    \begin{align}
+        \Gamma_{N,r}\mathcal Q_r & =\Gamma_{N,r},   &
+        G_{N,r}H_{N,r}           & =\mathcal Q_r,   &
+        \|H_{N,r}\|              & \leq(1-a)^{-1}u.
+    \end{align}
+    Without the small-error condition,
+    $\|\Gamma_{N,r}\|^2\leq\|R_\rho\|+\delta_N$.
+    These are intermediate estimates for
+    \cite[Lemma~commutation(ii)]{Nachtergaele1996Spectral},
+    rather than an assertion of the three-interval projection estimate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:residual_extended_gram_supported_inverse,thm:correlated_residual_gram_error}
+    The extended error is at most $\delta_N$, so the Neumann estimate
+    at the fixed invertible operator $R_\rho$ bounds $F_{N,r}^{-1}$.
+    The exact support identity gives
+    $F_{N,r}\mathcal Q_r=\mathcal Q_rF_{N,r}=G_{N,r}$.
+    Thus its inverse commutes with $\mathcal Q_r$, proving self-adjointness
+    and the supported inverse equation. Finally,
+    $\|G_{N,r}\|=\|\Gamma_{N,r}\|^2$ and
+    $\|R_\rho\mathcal Q_r\|\leq\|R_\rho\|$ give the boundary-map bound.
+\end{proof}
+
+\begin{theorem}[Uniform supported inverse convergence]
+    \label{thm:residual_supported_inverse_uniform_tail}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_residualBoundaryGramInverse_properties,
+        MPSTensor.norm_residualBoundaryGramInverse_sub_limit_le,
+        MPSTensor.IsPrimitiveMPS.residualBoundaryGramInverse_sub_limit_tendsto_zero}
+    \leanok
+    Assume $D>0$, and let the positive-dimensional prefix tensor $B$ be
+    primitive with faithful invariant matrix $\rho$. Suppose that every exact tail Gram matrix $Q_r$
+    is an orthogonal projection. For all sufficiently large prefix lengths,
+    uniformly over every $r\geq0$, the preceding inverse and support equations
+    hold and
+    \begin{align}
+        \|H_{N,r}\|      & \leq2u,           &
+        \|\Gamma_{N,r}\| & \leq\|R_\rho\|+2.
+    \end{align}
+    Whenever $u\delta_N\leq\tfrac12$,
+    \begin{align}
+        \|H_{N,r}-\mathcal Q_rR_\rho^{-1}\|\leq2u^2\delta_N.
+    \end{align}
+    Consequently this inverse error tends to zero along every diverging
+    prefix length, with arbitrary tail lengths. Under the cyclic hypotheses
+    of Theorem~\ref{thm:correlated_residual_cyclic_corner}, the exact projections
+    are $Q_r=P_{a+r}$; no restriction on the tail length is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_supported_inverse_small_error,thm:primitive_ground_space_gram_geometric_fixed_point,thm:correlated_residual_cyclic_corner}
+    Primitive prefix convergence gives $\delta_N\to0$, so eventually
+    $u\delta_N\leq\tfrac12$ and $\delta_N\leq1$.
+    The resolvent identity bounds the inverse displacement by
+    $\|F_{N,r}^{-1}\|\,\|F_{N,r}-R_\rho\|\,u$.
+    Multiplication by the contractive row projection preserves this bound.
+    The estimates are independent of $r$, so the same convergence holds
+    for every choice of tails and every filter along which the prefix
+    diverges.
+\end{proof}
+
+\begin{theorem}[Uniform virtual prefix bound]
+    \label{thm:residual_window_virtual_norm}
+    \lean{MPSTensor.sum_evalWord_frobenius_norm_sq_of_leftCanonical,
+        MPSTensor.norm_residualWindowRightVirtualMapES_le_sqrt}
+    \leanok
+    Let $B$ have bond dimension $E$ and satisfy $\sum_i B_i^*B_i=I$.
+    For every prefix length $K\geq0$,
+    \begin{align}
+        \sum_{|u|=K}\|B^u\|_{\mathrm F}^2=E.
+        \notag
+    \end{align}
+    Consequently, the map $J_1$ of
+    Definition~\ref{def:residual_window_coordinates} satisfies
+    $\|J_1\|\leq\sqrt E$, independently of $K$.
+    This is the prefix bound in the overlapping-window argument of
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
+    \uses{def:residual_window_coordinates}
+\end{theorem}
+\begin{proof}\leanok
+    Taking the trace of $\sum_{|u|=K}(B^u)^*B^u=I$ gives the first identity.
+    For a rectangular matrix $Y$, Frobenius submultiplicativity then gives
+    \begin{align}
+        \|J_1Y\|^2=\sum_{|u|=K}\|YB^u\|_{\mathrm F}^2
+        \leq E\|Y\|_{\mathrm F}^2.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Cross-sector residual window pairing]
+    \label{thm:residual_window_cross_sector_pairing}
+    \lean{MPSTensor.inner_residualWindowRightMapES_leftMapES_cross_sector,
+        MPSTensor.norm_inner_residualWindowRightMapES_leftMapES_le_of_prefix_bound,
+        MPSTensor.norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le}
+    \leanok
+    Let $T_i$ be the right residual window formed from $A,B_i,V_i$, and
+    let $L_j$ be the left window formed from $B_j$, in the coordinates of
+    Definition~\ref{def:residual_window_coordinates}.
+    Their middle interval has length $M$, the outer blocked prefix has length
+    $K$, and the original tail has length $r$. For rectangular boundary fibers
+    $x_u$ and square boundary fibers $y_\tau$,
+    \begin{align}
+        \langle T_ix,L_jy\rangle
+        =\sum_{u,\tau}\left\langle
+        \Gamma_M^{B_i}(V_i^\dagger A^\tau x_u),
+        \Gamma_M^{B_j}(y_\tau B_j^u)\right\rangle.
+    \end{align}
+    The two sector bond dimensions may differ, and every length may be zero.
+    If $\varepsilon\geq0$ and
+    $|\langle v,w\rangle|\leq\varepsilon\|v\|\|w\|$ for every
+    $v\in\mathcal G_M(B_i)$ and $w\in\mathcal G_M(B_j)$, then
+    \begin{align}
+        |\langle x',y'\rangle|                                 & \leq\varepsilon\|x'\|\|y'\|,
+                                                               &                              & x'\in\operatorname{ran}T_i,\quad y'\in\operatorname{ran}L_j, \\
+        \|P_{\operatorname{ran}T_i}P_{\operatorname{ran}L_j}\| & \leq\varepsilon.
+    \end{align}
+    No normalization, injectivity, intertwining, or boundary inverse is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:residual_window_coordinates}
+    Fix $(u,\tau)$ and sum over the middle configuration. Trace cyclicity
+    moves the blocked prefix word to the right boundary of the left window.
+    Both resulting fibers lie in the stated middle ground spaces.
+    The sums of their squared norms are exactly the squared norms of the
+    full window vectors. The triangle inequality and finite
+    Cauchy--Schwarz therefore preserve the coefficient $\varepsilon$.
+    The relative overlap estimate gives the projection-product bound.
+\end{proof}
+
+\begin{theorem}[Uniform cross-sector residual window decay]
+    \label{thm:residual_window_cross_sector_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_residualWindow_cross_projection_le_of_inequivalent,
+        MPSTensor.IsPrimitiveMPS.residualWindow_cross_projection_tendsto_zero_of_inequivalent}
+    \leanok
+    Suppose $B_i$ and $B_j$ are inequivalent normalized primitive tensors
+    with positive bond dimensions and faithful invariant matrices.
+    For every $\varepsilon>0$, all sufficiently large middle lengths $M$ satisfy, for every $K,r\geq0$,
+    \begin{align}
+        \|P_{\operatorname{ran}T_i(K,M,r)}
+        P_{\operatorname{ran}L_j(K,M,r)}\|\leq\varepsilon.
+        \notag
+    \end{align}
+    Thus the projection product tends to zero along every diverging
+    middle length, while both outer lengths may vary arbitrarily.
+    The original tensor $A$ and support matrix $V_i$ require no
+    normalization or intertwining hypothesis for this conclusion.
+    This is the cross-sector part of the projection comparison in
+    \cite[Lemmas~disjoint and commutation(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_cross_sector_pairing,thm:inequivalent_block_ground_space_overlap_decay}
+    Primitive inequivalence makes the middle ground-space angle arbitrarily
+    small. The preceding comparison transfers that bound uniformly over
+    both outer lengths. Apply it with half the desired tolerance to obtain
+    convergence along any filter with diverging middle length.
+\end{proof}
+
+\begin{theorem}[Finite sector projection estimate]
+    \label{thm:finite_sector_projection_estimate}
+    \lean{Submodule.norm_starProjection_comp_sub_le_sector_errors}
+    \leanok
+    Let $U,V,W$ and $S_i,T_i,C_i$ be subspaces of a finite-dimensional
+    real or complex Hilbert space, with $i$ ranging over a finite set $I$.
+    Write $P_Z$ for the orthogonal projection onto $Z$, and set
+    $e_U=\|P_U-\sum_iP_{S_i}\|$,
+    $e_V=\|P_V-\sum_iP_{T_i}\|$, and
+    $e_W=\|\sum_iP_{C_i}-P_W\|$. Then
+    \begin{align}
+        \|P_UP_V-P_W\|
+        \leq e_U+|I|e_V+
+        \sum_{i,j\in I}\|P_{S_i}P_{T_j}-\delta_{ij}P_{C_i}\|+e_W.
+    \end{align}
+    No orthogonality of the sector subspaces is required.
+    This finite-sum estimate assembles the projection comparisons in
+    \cite[Lemmas~commutation(ii) and disjoint]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Put $P=\sum_iP_{S_i}$, $Q=\sum_iP_{T_i}$, and $Z=\sum_iP_{C_i}$.
+    Expand
+    $P_UP_V-P_W=(P_U-P)P_V+P(P_V-Q)+(PQ-Z)+(Z-P_W)$.
+    Every orthogonal projection has norm at most one, so $\|P\|\leq|I|$.
+    Expand $PQ-Z$ as the stated double sum and apply the triangle inequality.
+\end{proof}
+
+\begin{theorem}[Vanishing sector defects give a vanishing joint projection defect]
+    \label{thm:sector_projection_defect_limit}
+    \lean{Submodule.tendsto_norm_starProjection_comp_sub_zero_of_sector_errors}
+    \leanok
+    Let the subspaces in the preceding theorem vary along an arbitrary
+    filter, allowing the finite-dimensional ambient Hilbert spaces to vary.
+    Suppose the three projection-sum errors tend to zero, and suppose
+    $\|P_{S_i}P_{T_i}-P_{C_i}\|\to0$ for each $i$, while
+    $\|P_{S_i}P_{T_j}\|\to0$ for each $i\ne j$.
+    Then $\|P_UP_V-P_W\|\to0$.
+    The finite index set is fixed and may be empty.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:finite_sector_projection_estimate}
+    The finite double sum of sector errors tends to zero.
+    Apply the finite sector projection estimate and squeeze the nonnegative
+    joint defect between zero and its vanishing upper bound.
+\end{proof}
+
+\begin{theorem}[Limiting residual mixed-Gram cancellation]
+    \label{thm:residual_window_limiting_cancellation}
+    \lean{MPSTensor.rectangularRightGramMetric_inverse_comp_correlatedTailMapES_adjoint,
+        MPSTensor.inner_residualWindow_limitingMixedGramIntertwining}
+    \leanok
+    Let the virtual dimension $E$ be positive and let $\rho\in\MN{E}$ be
+    positive definite. Put $G_\infty=\operatorname{gramReshuffle}(\mathcal P_\rho)$
+    and $R_\rho Y=Y\rho/\tr\rho$. For the correlated tail map $C_r$,
+    \begin{align}
+        R_\rho^{-1}C_r^*G_\infty^{\oplus\tau} & =C_r^*.
+        \label{eq:ph_residual_metric_cancel}
+    \end{align}
+    Suppose the exact tail Gram matrix is an orthogonal projection $Q$, so that
+    $C_r^*C_r=\mathcal Q$ with $\mathcal QY=QY$. Set
+    $K_r=C_r^*G_\infty^{\oplus\tau}C_r$ and $I_r=\mathcal Q R_\rho^{-1}$.
+    With the residual window coordinates,
+    \begin{align}
+        \big\langle \mathbf x,
+        K_r^{\oplus u}J_1I_rC_r^*G_\infty^{\oplus\tau}\mathbf y\big\rangle
+         & =\sum_u\sum_\tau
+        \big\langle V^*A^\tau X_u,\,G_\infty(Y_\tau B^u)\big\rangle.
+        \label{eq:ph_residual_mixed_limit}
+    \end{align}
+    No transfer fixed-point equation, injectivity, or normalization is required
+    for these identities.
+    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric,
+        def:residual_fixed_metric_row_projection}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_exact_row_support,def:residual_fixed_metric_row_projection,def:correlated_residual_gram_metric,thm:euclidean_fiberwise_operator}
+    The adjoint is $C_r^*\mathbf y=\sum_\tau A^{\tau*}VY_\tau$.
+    Right multiplication by $\rho/\tr\rho$ commutes with this recombination,
+    and $R_\rho^{-1}$ cancels it, giving~(\ref{eq:ph_residual_metric_cancel}).
+    The projected tail Gram gives $C_r\mathcal Q=C_r$ and hence
+    $\mathcal Q C_r^*=C_r^*$. Thus $QZ=Z$ for
+    $Z=\sum_\tau A^{\tau*}VY_\tau$.
+    Now $J_1Z=(ZB^u)_u$ and $K_r(ZB^u)=ZB^u\rho/\tr\rho$.
+    Expand the resulting Frobenius pairing over $\tau$ to obtain
+    (\ref{eq:ph_residual_mixed_limit}).
+\end{proof}
+
+\begin{theorem}[Centered residual mixed-Gram error]
+    \label{thm:residual_window_centered_gram_error}
+    \lean{MPSTensor.inner_residualWindow_centeredMixedGram_eq_gramError}
+    \leanok
+    Under the hypotheses of Theorem~\ref{thm:residual_window_limiting_cancellation},
+    define
+    $D_M=T^*L_1-K_r^{\oplus u}J_1I_rC_r^*G_\infty^{\oplus\tau}$.
+    Then
+    \begin{align}
+        \langle\mathbf x,D_M\mathbf y\rangle
+         & =\sum_u\sum_\tau
+        \big\langle V^*A^\tau X_u,\,
+        (G_B(M)-G_\infty)(Y_\tau B^u)\big\rangle.
+        \label{eq:ph_residual_centered_gram}
+    \end{align}
+    This is an exact finite-volume identity. A quantitative bound or a limiting
+    projection estimate requires further hypotheses on the prefix Gram.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_limiting_cancellation,thm:residual_window_mixed_gram}
+    Subtract the limiting mixed-Gram identity from the exact mixed-Gram
+    pairing, and distribute subtraction through the two finite sums.
+\end{proof}
+
+\begin{definition}[Residual configuration bijection]
+    \label{def:residual_boundary_config_equiv}
+    \lean{MPSTensor.residualBoundaryConfigEquiv}
+    \leanok
+    Decode a blocked configuration $v$ of length $M$ into its $ML$ original
+    sites and append an original tail $\tau$ of length $r$. This gives a
+    bijection $e_{M,r}$ from the pairs $(v,\tau)$ to the original configurations
+    of length $ML+r$, including zero lengths.
+    \uses{def:residual_window_coordinates}
+\end{definition}
+
+\begin{theorem}[Right window as a finite family]
+    \label{thm:residual_window_right_fiberwise}
+    \lean{MPSTensor.residualWindowRightMapES_eq_fiberwise}
+    \leanok
+    Let $\Gamma_{B,V}(M,r)$ be the residual boundary map and let $U_{M,r}$
+    be physical reindexing through $e_{M,r}$. The right window map is the
+    finite direct sum of $U_{M,r}\Gamma_{B,V}(M,r)$ over the blocked prefix
+    configurations $u$ of length $K$.
+    No normalization or intertwining hypothesis is required.
+    \uses{def:residual_boundary_config_equiv,def:blocked_residual_boundary_map,
+        def:residual_window_coordinates}
+\end{theorem}
+\begin{proof}\leanok
+    Both maps have coefficient $\tr(B^vV^*A^\tau X_u)$ at $(u,v,\tau)$.
+\end{proof}
+
+\begin{theorem}[Right residual sector projection approximation]
+    \label{thm:residual_window_right_sector_sum}
+    \lean{MPSTensor.tendsto_norm_isometric_residual_sector_projection_sum_sub_iSup_zero,
+        MPSTensor.tendsto_norm_residualWindowRight_sector_projection_sum_sub_iSup_zero}
+    \leanok
+    Let $(B_j)_j$ be a finite family of pairwise gauge-phase inequivalent
+    primitive tensors with faithful invariant densities, and let $V_j$ be
+    arbitrary rectangular embeddings. Write $S_j(K,M,r)$ for the range of the
+    right window map of sector $j$. As $M\to\infty$,
+    \begin{align}
+        \left\|\sum_jP_{S_j(K,M,r)}-P_{\sum_jS_j(K,M,r)}\right\|\longrightarrow0,
+        \notag
+    \end{align}
+    uniformly in arbitrary varying prefix lengths $K$ and original-tail
+    lengths $r$. The assertion holds along any filter on which $M$ tends to
+    infinity. Residual-sector projection-sum decay also persists under any
+    varying physical configuration isometry before adding the spectator.
+    This is the right-window comparison in
+    \cite[Lemma~6.1(i)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_right_fiberwise}
+    Physical isometries preserve the relative angles between residual sectors.
+    The resulting projection-sum error tends to zero by primitive sector
+    separation. The right window acts independently on each prefix fiber,
+    and for such fiberwise maps the error between the sum of the sector
+    range projections and the joint range projection is at most the error
+    of a single fiber. Hence adding the prefix spectator does not increase
+    the operator-norm error.
+\end{proof}
+
+\begin{theorem}[Orthogonal projections on finite Euclidean families]
+    \label{thm:euclidean_fiberwise_projection}
+    \lean{EuclideanSpace.mem_range_fiberwiseMap_iff,
+        EuclideanSpace.mem_orthogonal_range_fiberwiseMap_iff,
+        EuclideanSpace.fiberwiseMap_range_starProjection,
+        EuclideanSpace.iSup_range_fiberwiseMap_eq,
+        EuclideanSpace.fiberwiseMap_iSup_range_starProjection,
+        EuclideanSpace.fiberwiseMap_sum,
+        EuclideanSpace.norm_sum_fiberwiseMap_range_starProjection_sub_iSup_le}
+    \leanok
+    \uses{def:euclidean_fiberwise_operator}
+    Let $S,I,J$ be finite coordinate sets and let $T\colon\C^I\to\C^J$.
+    Write $\mathcal F_S(T)$ for the operator applying $T$ to every fiber
+    of $\C^{S\times I}$. Then
+    \begin{align}
+        x\in\operatorname{ran}\mathcal F_S(T)
+         & \Longleftrightarrow \forall s,\ x_s\in\operatorname{ran}T,         \\
+        x\in(\operatorname{ran}\mathcal F_S(T))^\perp
+         & \Longleftrightarrow \forall s,\ x_s\in(\operatorname{ran}T)^\perp, \\
+        P_{\operatorname{ran}\mathcal F_S(T)}
+         & =\mathcal F_S(P_{\operatorname{ran}T}).
+    \end{align}
+    For any sector family $T_j\colon\C^{I_j}\to\C^J$ with varying finite
+    domains and common finite target, the joint-range projection satisfies
+    \begin{align}
+        P_{\sum_j\operatorname{ran}\mathcal F_S(T_j)}
+         & =\mathcal F_S(P_{\sum_j\operatorname{ran}T_j}).
+    \end{align}
+    The sector index in this identity may be infinite, with each sum
+    interpreted as the linear span. For a finite sector family,
+    $\mathcal F_S$ preserves operator sums and
+    \begin{align}
+        \left\|\sum_jP_{\operatorname{ran}\mathcal F_S(T_j)}
+        -P_{\sum_j\operatorname{ran}\mathcal F_S(T_j)}\right\|
+        \leq
+        \left\|\sum_jP_{\operatorname{ran}T_j}
+        -P_{\sum_j\operatorname{ran}T_j}\right\|.
+    \end{align}
+    Empty spectator sets and empty sector families are included. These
+    finite-dimensional identities supply the spectator projection transport
+    used in \cite[Lemma~commutation(i)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:euclidean_fiberwise_operator}
+    Choose a preimage independently in each fiber to characterize the range.
+    The adjoint acts fiberwise, which gives the orthogonal-range criterion.
+    The orthogonal projection is characterized by its range and orthogonal
+    complement. For a joint span, orthogonality to every sector and membership
+    of every fiber commute as universal quantifiers. Taking orthogonal
+    complements again proves the joint-range identity. The final estimate
+    follows from linearity of $\mathcal F_S$ and its norm bound.
+\end{proof}
+
+\begin{definition}[Left-window coordinate bijection]
+    \label{def:residual_window_left_config_equiv}
+    \lean{MPSTensor.residualWindowLeftConfigEquiv}
+    \leanok
+    For lengths $K,M,r\geq0$, the left-window coordinate bijection sends a
+    pair $(\tau,\sigma)$ of an original tail $\tau$ of length $r$ and a
+    blocked configuration $\sigma=u\mathbin{\frown}v$ of length $K+M$ to
+    $(u,(v,\tau))$.
+\end{definition}
+
+\begin{theorem}[The aligned left window as a finite family of prefix boundaries]
+    \label{thm:residual_window_left_fiberwise_coordinates}
+    \lean{MPSTensor.residualWindowLeftMapES_eq_fiberwise}
+    \leanok
+    Let $L_B(K,M,r)$ denote the left residual window of
+    Definition~\ref{def:residual_window_coordinates}.
+    The coordinate bijection of
+    Definition~\ref{def:residual_window_left_config_equiv},
+    \begin{align}
+        (\tau,\sigma)\longmapsto(u,(v,\tau)),\qquad
+        \sigma=u\mathbin{\frown}v,
+        \notag
+    \end{align}
+    splits the blocked configuration into lengths $K,M$ and moves the
+    original tail to the last coordinate. If $U_{K,M,r}$ is the associated
+    unitary permutation, then
+    \begin{align}
+        L_B(K,M,r)=U_{K,M,r}\mathcal F_{[d]^r}(\Gamma_B(K+M)).
+        \notag
+    \end{align}
+    All lengths may be zero. No normalization or injectivity is assumed.
+    \uses{def:residual_window_coordinates,def:euclidean_fiberwise_operator,
+        def:residual_window_left_config_equiv}
+\end{theorem}
+\begin{proof}\leanok
+    The coefficient of the left side is $\tr(B^uB^v y_\tau)$.
+    Concatenating the blocked words gives the same coefficient for the
+    ordinary prefix boundary map applied to the tail fiber $y_\tau$.
+\end{proof}
+
+\begin{theorem}[Uniform left-window sector projection-sum approximation]
+    \label{thm:residual_window_left_sector_sum}
+    \lean{MPSTensor.norm_residualWindowLeft_sector_projection_sum_sub_iSup_le,
+        MPSTensor.eventually_norm_residualWindowLeft_sector_projection_sum_sub_iSup_le,
+        MPSTensor.tendsto_norm_residualWindowLeft_sector_projection_sum_sub_iSup_zero}
+    \leanok
+    For every finite sector family $(B_j)_j$ with possibly different bond
+    dimensions,
+    \begin{align}
+         & \left\|\sum_jP_{\operatorname{ran}L_{B_j}(K,M,r)}
+        -P_{\sum_j\operatorname{ran}L_{B_j}(K,M,r)}\right\|  \\
+         & \qquad\leq
+        \left\|\sum_jP_{\mathcal G_{K+M}(B_j)}
+        -P_{\sum_j\mathcal G_{K+M}(B_j)}\right\|.
+    \end{align}
+    This comparison includes empty families and requires no normalization.
+    Suppose in addition that the sectors are pairwise inequivalent normalized
+    primitive tensors with positive bond dimensions and faithful invariant
+    matrices. Then for every $\varepsilon>0$, all sufficiently large $M$ satisfy, for every $K,r\geq0$,
+    \begin{align}
+        \left\|\sum_jP_{\operatorname{ran}L_{B_j}(K,M,r)}
+        -P_{\sum_j\operatorname{ran}L_{B_j}(K,M,r)}\right\|\leq\varepsilon.
+        \notag
+    \end{align}
+    Consequently the left-window projection-sum error tends to zero along
+    every diverging middle interval, with arbitrary outer-prefix and
+    original-tail lengths. This is the aligned left-sector comparison for
+    \cite[Lemma~commutation(i)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_left_fiberwise_coordinates,thm:euclidean_fiberwise_projection,thm:sector_projection_sum_error_decay,thm:inequivalent_block_ground_space_overlap_decay}
+    A unitary permutation transports orthogonal projections and preserves
+    the operator norm. The finite-family projection identity then bounds
+    the spectator projection-sum error by the ordinary prefix error.
+    Primitive inequivalence makes that prefix error arbitrarily small at
+    all sufficiently large lengths. Since $K+M\geq M$, the threshold is
+    uniform in $K$, and the comparison is independent of $r$.
+\end{proof}
+
+\begin{definition}[Residual overlap factors]
+    \label{def:residual_window_overlap_factors}
+    \lean{MPSTensor.residualWindowLeftOverlapFactorES,
+        MPSTensor.residualWindowRightOverlapFactorES}
+    \leanok
+    The two maps to the common family of square virtual boundaries have fibers
+    $\mathcal A\mathbf x=(V^*A^\tau X_u)_{u,\tau}$ and
+    $\mathcal B\mathbf y=(Y_\tau B^u)_{u,\tau}$.
+    They are finite direct sums followed by isometric coordinate rearrangements.
+    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric,
+        def:euclidean_fiberwise_operator}
+\end{definition}
+
+\begin{theorem}[Residual overlap factor estimates]
+    \label{thm:residual_window_overlap_factors}
+    \lean{MPSTensor.boundaryFamilyEquiv_residualWindowLeftOverlapFactorES_apply,
+        MPSTensor.boundaryFamilyEquiv_residualWindowRightOverlapFactorES_apply,
+        MPSTensor.norm_residualWindowLeftOverlapFactorES_le,
+        MPSTensor.norm_residualWindowRightOverlapFactorES_le,
+        MPSTensor.residualWindow_centeredMixedGram_eq_overlapFactors,
+        MPSTensor.norm_residualWindow_centeredMixedGram_le}
+    \leanok
+    \uses{def:residual_window_overlap_factors}
+    The fibers are the matrices in Definition~\ref{def:residual_window_overlap_factors},
+    and $\|\mathcal A\|\le\|C_r\|$, $\|\mathcal B\|\le\|J_1\|$.
+    Under the hypotheses of Theorem~\ref{thm:residual_window_limiting_cancellation},
+    \begin{align}
+        D_M=\mathcal A^*(G_B(M)-G_\infty)^{\oplus(u,\tau)}\mathcal B,
+        \qquad
+        \|D_M\|\le\|C_r\|\,\|J_1\|\,\|G_B(M)-G_\infty\|.
+        \notag
+    \end{align}
+    These are finite-dimensional estimates underlying the mixed-pairing step
+    of Nachtergaele's commutation lemma~\cite{Nachtergaele1996Spectral}; no transfer
+    normalization or injectivity is assumed here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:euclidean_fiberwise_operator,thm:residual_window_centered_gram_error}
+    The coordinate rearrangements preserve norms, and finite direct sums do not
+    increase operator norms. The fiber formulas identify the centered pairing
+    with $\mathcal A^*(G_B(M)-G_\infty)^{\oplus(u,\tau)}\mathcal B$.
+    The norm bound follows from submultiplicativity.
+\end{proof}
+
+\begin{theorem}[Full residual window sector projection sum]
+    \label{thm:residual_window_full_sector_sum}
+    \lean{MPSTensor.tendsto_norm_residualWindow_sector_projection_sum_sub_iSup_zero}
+    \leanok
+    Let $B_j$ be a fixed finite family of pairwise inequivalent normalized
+    primitive tensors with positive bond dimensions and faithful invariant
+    matrices. Let $A$ and the rectangular matrices $V_j$ be arbitrary.
+    For the full residual window maps $C_j(K,M,r)$, if $M$ tends to infinity
+    along an arbitrary filter, then
+    \begin{align}
+        \left\|\sum_jP_{\operatorname{ran}C_j(K,M,r)}
+        -P_{\sum_j\operatorname{ran}C_j(K,M,r)}\right\|\longrightarrow0.
+    \end{align}
+    The prefix $K$ and tail $r$ may vary arbitrarily.
+    No normalization or intertwining is required for $A$ or $V_j$.
+    This is the full-window sector sum in the projection comparison of
+    \cite[Lemma~commutation(i)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_factorizations,thm:residual_window_right_sector_sum}
+    The physical configuration isometry identifies $C_j(K,M,r)$ with
+    the residual boundary map at prefix length $K+M$ and tail length $r$.
+    Since $K+M\geq M$, the total prefix tends to infinity.
+    Apply the isometric residual-sector projection-sum limit.
+\end{proof}
+
+\begin{theorem}[Joint full residual window range]
+    \label{thm:residual_window_full_joint_range}
+    \lean{MPSTensor.iSup_range_residualWindowMapES_eq_reindex_groundSpaceES}
+    \leanok
+    Suppose $\sum_jV_jV_j^*=1$ and
+    $V_j^*A^{(L)}_i=(B_j)_iV_j^*$.
+    Let $U$ be the physical configuration isometry from the original
+    $(K+M)L+r$ sites to the three-window coordinates. Then
+    $\sum_j\operatorname{ran}C_j(K,M,r)=U G_A((K+M)L+r)$.
+    This includes zero lengths and requires no primitivity or injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_factorizations,thm:blocked_residual_ground_space_resolution}
+    Transport the exact residual-sector ground-space decomposition by $U$.
+    A linear map preserves sums of subspaces, and the range of a composite
+    is the image of the original range.
+\end{proof}
+
+\begin{theorem}[Full residual window Gram]
+    \label{thm:residual_full_window_gram}
+    \lean{MPSTensor.residualWindowMapES_adjoint_comp_self}
+    \leanok
+    Physical reindexing identifies the full window map $C$ with the residual
+    boundary map on $K+M$ blocked sites and an original tail of length $r$.
+    Consequently,
+    \begin{align}
+        C^*C=\Gamma_{K+M,r}^*\Gamma_{K+M,r}.
+    \end{align}
+    This holds for all lengths, including zero, without injectivity or
+    normalization hypotheses.
+
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_factorizations}
+    The configuration reindexing is an isometry. In $C^*C$, its adjoint times
+    itself is the identity, leaving the residual Gram.
+\end{proof}
+
+\begin{definition}[Finite residual mixed Gram]
+    \label{def:residual_window_mixed_gram_residual}
+    \lean{MPSTensor.residualWindowMixedGramResidualES}
+    \leanok
+    For the right, left, and full window maps $T,L_1,C$ and the two virtual
+    factors $J_1,C_r$, set
+    \begin{align}
+        \mathcal D_{K,M,r}
+        =T^*L_1-(T^*T)J_1H_{K+M,r}C_r^*(L_1^*L_1),
+    \end{align}
+    where $H_{K+M,r}$ is the supported full-boundary Gram inverse.
+    \uses{def:residual_window_coordinates,def:residual_extended_gram_supported_inverse}
+\end{definition}
+
+\begin{theorem}[Primitive residual mixed-Gram decay]
+    \label{thm:residual_window_mixed_gram_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.residualWindowMixedGramResidual_tendsto_zero}
+    \leanok
+    Let $D,E>0$, and let the blocked tensor $B$ be primitive with a faithful
+    invariant matrix $\rho$. Suppose the correlated tail Gram is an orthogonal
+    projection $Q_r$ for every tail length $r$.
+    Along any filter with $M\to\infty$, and with arbitrary $K,r$,
+    \begin{align}
+        \|\mathcal D_{K,M,r}\|\longrightarrow0.
+    \end{align}
+    This is the same-sector mixed-Gram estimate used in commutation (ii),
+    equation (3.15), of~\cite{Nachtergaele1996Spectral}; the algebraic
+    row-support hypotheses are stated explicitly here.
+    \uses{def:residual_window_mixed_gram_residual}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_overlap_factors,
+        thm:residual_supported_inverse_uniform_tail,
+        thm:residual_window_gram_errors,
+        thm:residual_window_virtual_norm,
+        thm:three_operator_perturbation_limit}
+    The centered limiting mixed Gram is bounded by the common-prefix Gram error
+    and hence tends to zero. Replace successively the right-window Gram, the
+    supported full-boundary inverse, and the left-window Gram by their limits.
+    Their errors tend to zero, since $K+M\ge M$, and the remaining products have
+    uniform bounds. Apply the three-operator perturbation estimate and then
+    the triangle inequality.
+\end{proof}
+
+\begin{theorem}[Three-operator perturbation estimate]
+    \label{thm:three_operator_perturbation}
+    \lean{ContinuousLinearMap.norm_comp_three_sub_le}
+    \leanok
+    For bounded linear operators $A,a:G\to W$, $B,b:F\to G$, and
+    $C,c:E\to F$ between normed spaces,
+    \begin{align}
+        \|ABC-abc\|\le
+        \|A-a\|\|B\|\|C\|+
+        \|a\|\|B-b\|\|C\|+
+        \|a\|\|b\|\|C-c\|.
+    \end{align}
+    No finite-dimensional or completeness hypothesis is required.
+\end{theorem}
+\begin{proof}\leanok
+    Use $ABC-abc=(A-a)BC+a(B-b)C+ab(C-c)$, the triangle inequality,
+    and submultiplicativity of the operator norm.
+\end{proof}
+
+\begin{theorem}[Vanishing three-operator perturbations]
+    \label{thm:three_operator_perturbation_limit}
+    \lean{ContinuousLinearMap.tendsto_norm_comp_three_sub_zero_of_bounds}
+    \leanok
+    Let the normed spaces and operators in Lemma~\ref{thm:three_operator_perturbation}
+    vary along an arbitrary filter. Suppose the three individual differences
+    tend to zero in norm, and the products $\|B\|\|C\|$, $\|a\|\|C\|$,
+    and $\|a\|\|b\|$ have a common eventual upper bound.
+    Then $\|ABC-abc\|\to0$.
+
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:three_operator_perturbation}
+    Bound the product difference by the common bound times the sum of the
+    three individual norm differences, and apply the squeeze theorem.
+\end{proof}
+
+\begin{definition}[Physical cover coordinates]
+    \label{def:residual_cover_coordinates}
+    \lean{MPSTensor.residualCoverConfigEquiv,MPSTensor.residualCoverConfigEquiv_apply}
+    \leanok
+    Decode the blocked prefix $u$ of length $K$ and blocked middle $v$
+    of length $M$ into configurations of lengths $KL$ and $ML$.
+    Concatenation with the original tail $\tau$ gives a configuration on
+    $KL+ML+r$ sites. This bijection is the full residual-window configuration
+    bijection followed by the identification $(K+M)L=KL+ML$, and it sends
+    $(u,v,\tau)$ to the concatenation of the three configurations in that order.
+    All zero lengths are included.
+    These are the physical covering coordinates of
+    \cite[Section~6]{Nachtergaele1996Spectral}.
+    \uses{def:residual_window_coordinates}
+\end{definition}
+
+\begin{theorem}[Joint right residual window range]
+    \label{thm:residual_window_right_joint_range}
+    \lean{MPSTensor.iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES}
+    \leanok
+    Let $A$, $B_j$, and $V_j$ satisfy
+    $\sum_jV_jV_j^*=1$ and $V_j^*A^{(L)}_i=(B_j)_iV_j^*$.
+    Let $U$ be the configuration isometry from the original $KL+ML+r$
+    sites to the physical cover coordinates. Then
+    \begin{align}
+        \sum_j\operatorname{ran}T_j(K,M,r)
+        =U\operatorname{ran}\Gamma^{\mathrm{tail}}_{KL,ML,r}.
+    \end{align}
+    Here the terminal boundary map leaves the first $KL$ sites free and
+    places the original ground space on the last $ML+r$ sites.
+    No primitivity, injectivity, or isometry of the virtual embeddings is required.
+    This is the right joint-window identification in the projection comparison of
+    \cite[Lemma~commutation(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:residual_cover_coordinates,thm:residual_window_right_fiberwise,thm:blocked_residual_ground_space_resolution}
+    Each right residual window is the direct sum, over prefix configurations,
+    of its physically reindexed residual boundary map.
+    The exact residual-sector decomposition identifies the joint fiber range
+    with the original ground space on $ML+r$ sites.
+    Taking finite direct sums preserves the joint range.
+    In the physical cover coordinates, the terminal boundary map is the same
+    direct sum of ordinary boundary maps, after a bijection of its prefix
+    boundary coordinates. That bijection is surjective, so it does not change
+    the range.
+\end{proof}
+
+\begin{theorem}[Original ground space of the aligned left residual window]
+    \label{thm:residual_window_left_original_ground_space}
+    \lean{MPSTensor.residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES,
+        MPSTensor.iSup_range_residualWindowLeftMapES_eq_of_groundSpaceES_eq_iSup,
+        MPSTensor.iSup_range_residualWindowLeftMapES_eq_reindex_leftBoundaryMapES}
+    \leanok
+    Let $A$ be an MPS tensor and let $U_{K,M,r}$ be the unitary from original
+    configurations to the three-window coordinates of
+    Definition~\ref{def:residual_window_coordinates}. Then
+    \begin{align}
+        L_{\operatorname{block}_L A}(K,M,r)
+        =U_{K,M,r}\Gamma^{\mathrm{left},A}_{(K+M)L,r}.
+    \end{align}
+    Suppose a family $(B_j)_j$ presents the blocked prefix ground space exactly:
+    \begin{align}
+        \mathcal G_{K+M}(\operatorname{block}_L A)
+        =\bigvee_j\mathcal G_{K+M}(B_j).
+    \end{align}
+    Then its joint left-window range is the original aligned prefix ground space,
+    with the tail unconstrained:
+    \begin{align}
+        \bigvee_j\operatorname{ran}L_{B_j}(K,M,r)
+        =U_{K,M,r}\operatorname{ran}\Gamma^{\mathrm{left},A}_{(K+M)L,r}.
+    \end{align}
+    In particular, this equality follows for a finite family with an isometric
+    virtual resolution satisfying
+    \begin{align}
+        V_j^\dagger V_j=\Id_{D_j},\qquad
+        \sum_jV_jV_j^\dagger=\Id_D,\qquad
+        (\operatorname{block}_L A)^iV_j=V_jB_j^i.
+    \end{align}
+    All lengths may be zero. No primitivity, normalization, or injectivity is
+    assumed. This is the exact left-window identification used in the
+    three-interval comparison of
+    \cite[Lemma~commutation(ii)]{Nachtergaele1996Spectral}.
+    \uses{def:residual_window_coordinates}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_left_fiberwise_coordinates,
+        thm:euclidean_fiberwise_projection,
+        thm:isometric_sector_ground_space_resolution}
+    Concatenating the two blocked words and decoding their physical letters
+    identifies the blocked left map with the original prefix boundary map.
+    Each tail configuration contributes an independent copy of the prefix
+    space. The joint span of these finite families is therefore obtained by
+    applying the joint prefix-space projection independently on each tail
+    fiber. The isometric virtual resolution supplies the stated prefix
+    presentation by trace cyclicity.
+\end{proof}
+
+\begin{theorem}[Full joint range in physical cover coordinates]
+    \label{thm:residual_window_full_joint_range_cover}
+    \lean{MPSTensor.iSup_range_residualWindowMapES_eq_reindex_groundSpaceES_cover}
+    \leanok
+    Under the virtual resolution and blocked cointertwining hypotheses of
+    Theorem~\ref{thm:residual_window_full_joint_range}, let $U$ be the
+    configuration isometry from the original $KL+ML+r$ sites to the
+    physical cover coordinates. Then
+    $\sum_j\operatorname{ran}C_j(K,M,r)=U G_A(KL+ML+r)$.
+    The statement includes zero lengths and requires no primitivity or injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_full_joint_range,def:residual_cover_coordinates}
+    Apply the exact full-window joint-range identity and transport it through
+    $(K+M)L+r=KL+ML+r$. The cover configuration bijection is precisely the
+    full-window bijection followed by this arithmetic identification.
+\end{proof}
+
+\begin{theorem}[Isometric transport of a projection defect]
+    \label{thm:isometric_projection_defect_transport}
+    \lean{Submodule.norm_map_starProjection_comp_sub_eq}
+    \leanok
+    Let $U,V,W$ be closed subspaces of a Hilbert space and let $F$ be a
+    surjective linear isometry to another Hilbert space. Then
+    \begin{align}
+        \|P_{FU}P_{FV}-P_{FW}\|=\|P_W-P_VP_U\|.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Orthogonal projections are conjugated by $F$, and conjugation by a
+    surjective isometry preserves the operator norm. Taking the adjoint
+    reverses the order of the two projections and preserves the norm.
+\end{proof}
+
+\begin{theorem}[The joint left window in the original covering intervals]
+    \label{thm:residual_window_left_joint_range_cover}
+    \lean{MPSTensor.iSup_range_residualWindowLeftMapES_eq_reindex_cover_leftBoundaryMapES}
+    \leanok
+    Under the isometric virtual resolution and blocked letter intertwining of
+    Theorem~\ref{thm:residual_window_left_original_ground_space}, let
+    $U^{\mathrm{cover}}_{K,M,r}$ be the unitary from original configurations
+    of length $KL+ML+r$ to the three-window coordinates of
+    Definition~\ref{def:residual_cover_coordinates}. Then
+    \begin{align}
+        \bigvee_j\operatorname{ran}L_{B_j}(K,M,r)
+        =U^{\mathrm{cover}}_{K,M,r}\operatorname{ran}
+        \Gamma^{\mathrm{left},A}_{KL+ML,r}.
+    \end{align}
+    All lengths may be zero. This is the same physical coordinate isometry
+    used for the right and full windows; no additional tensor hypothesis
+    is imposed. The equality supplies the aligned prefix space in
+    \cite[Lemma~commutation(ii)]{Nachtergaele1996Spectral}.
+    \uses{def:residual_cover_coordinates}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_left_original_ground_space}
+    Transport the previous left-window equality along the arithmetic
+    identification $(K+M)L=KL+ML$. By its definition, the cover bijection is
+    exactly the previous configuration bijection followed by this identification.
+\end{proof}
+
+\begin{theorem}[Supported residual window cancellation]
+    \label{thm:residual_window_supported_projector_cancellation}
+    \lean{MPSTensor.residualWindow_supported_projector_factorization}
+    \leanok
+    Let $T,L_1,C$ denote the right, left, and full window maps. Suppose that
+    $Q_r$ is the exact correlated-tail Gram projection, that the right and full
+    supported Gram inverses satisfy $G_{M,r}H_{M,r}=Q_r$ and
+    $G_{K+M,r}H_{K+M,r}=Q_r$, with $H_{M,r}$ self-adjoint, and that the ordinary
+    Gram $G_B(K+M)$ is invertible. Then
+    \begin{align}
+        P_{\operatorname{ran}T}P_{\operatorname{ran}L_1}-P_{\operatorname{ran}C}
+        =T\widehat H_{M,r}\mathcal D_{K,M,r}
+        \widehat {G_B(K+M)^{-1}}L_1^*.
+    \end{align}
+    Here the hats denote the direct sums over the corresponding exterior
+    configurations. This is the supported-boundary cancellation in
+    commutation (ii), equation (3.15), of~\cite{Nachtergaele1996Spectral}.
+    \uses{def:residual_window_coordinates,def:residual_window_mixed_gram_residual}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_full_window_gram,
+        thm:supported_gram_projector_cancellation,
+        thm:residual_window_grams}
+    The right Gram and its supported inverse act independently on prefix
+    configurations. The left Gram and its inverse act independently on tail
+    configurations. Both factorizations of the full boundary map have the exact
+    row support $Q_r$. Substitute these identities into the supported
+    range-projection cancellation formula.
+\end{proof}
+
+\begin{theorem}[Primitive residual window projection decay]
+    \label{thm:residual_window_primitive_projection_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.residualWindow_projection_comp_sub_tendsto_zero}
+    \leanok
+    Let $D,E>0$, and let $B$ be primitive with a faithful invariant matrix
+    $\rho$. Suppose the exact correlated-tail Gram is an orthogonal projection
+    $Q_r$ for every $r$. Along any filter with $M\to\infty$ and arbitrary
+    exterior lengths $K,r$,
+    \begin{align}
+        \|P_{\operatorname{ran}T}P_{\operatorname{ran}L_1}
+        -P_{\operatorname{ran}C}\|\longrightarrow0.
+    \end{align}
+    This is the same-sector part of commutation (ii)
+    in~\cite{Nachtergaele1996Spectral}; the tail support is retained explicitly.
+
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_supported_projector_cancellation,
+        thm:residual_window_mixed_gram_decay,
+        thm:residual_supported_inverse_uniform_tail,
+        thm:supported_gram_projector_norm}
+    The primitive supported-inverse estimates supply the inverse identities
+    and uniform bounds at lengths $M$ and $K+M$. The ordinary primitive Gram
+    inverse is uniformly bounded at length $K+M$. The window maps are uniformly
+    bounded by their boundary-map norms. Apply the norm estimate for the
+    supported cancellation formula to the vanishing mixed residual.
+\end{proof}
+
+\begin{theorem}[Joint residual window projection decay]
+    \label{thm:residual_window_joint_projection_decay}
+    \lean{MPSTensor.tendsto_norm_residualWindow_joint_projection_comp_sub_zero}
+    \leanok
+    Let $D>0$, and let $(B_j)_{j\in J}$ be a finite family of positive-dimensional
+    primitive tensors with faithful invariant matrices, pairwise inequivalent
+    up to similarity and phase. Let $T_j,L_j,C_j$ be the right, left, and full
+    window maps arising from an original tensor and rectangular embeddings $V_j$.
+    Suppose that each correlated-tail Gram is an orthogonal projection at every
+    tail length. Write $\mathcal T=\sum_j\operatorname{ran}T_j$,
+    $\mathcal L=\sum_j\operatorname{ran}L_j$ and
+    $\mathcal C=\sum_j\operatorname{ran}C_j$. Along any filter with $M\to\infty$
+    and arbitrary exterior lengths $K,r$,
+    \begin{align}
+        \|P_{\mathcal T}P_{\mathcal L}-P_{\mathcal C}\|\longrightarrow0.
+    \end{align}
+
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:residual_window_primitive_projection_decay,
+        thm:residual_window_cross_sector_decay,
+        thm:residual_window_left_sector_sum,
+        thm:residual_window_right_sector_sum,
+        thm:residual_window_full_sector_sum,
+        thm:sector_projection_defect_limit}
+    Replace each joint projection by the sum of its sector projections.
+    The three replacement errors vanish. The paired sector defects vanish
+    by the supported same-sector cancellation, and the different-sector
+    projection products vanish by primitive inequivalence. The finite-sector
+    projection estimate combines these limits.
+\end{proof}
+
+\begin{theorem}[Periodic residual window projection decay]
+    \label{thm:periodic_residual_window_joint_projection_decay}
+    \lean{MPSTensor.IsPeriodic.exists_residualWindow_joint_projection_comp_sub_tendsto_zero}
+    \leanok
+    Let $A$ be a normalized periodic tensor of period $m$. There exist
+    positive-dimensional blocked sectors $B_j$, indexed by $j\in\mathbb Z/m\mathbb Z$,
+    and rectangular isometries $V_j$ such that
+    \begin{align}
+        \sum_jV_jV_j^*=I,\qquad A^{(m)}_iV_j=V_j(B_j)_i,
+        \qquad V_j^*A^{(m)}_i=(B_j)_iV_j^*,
+    \end{align}
+    and, for every pair of sequences of exterior lengths $K(M),r(M)$,
+    \begin{align}
+        \|P_{\mathcal T_{K(M),M,r(M)}}P_{\mathcal L_{K(M),M,r(M)}}
+        -P_{\mathcal C_{K(M),M,r(M)}}\|\longrightarrow0.
+    \end{align}
+    The spaces are the joint residual window ranges in the triple configuration
+    coordinates. This establishes their projection comparison from periodicity
+    alone; identifying them with original physical interval spaces is a separate
+    isometric transport. The estimate is the residual-coordinate form of
+    commutation (ii) in~\cite{Nachtergaele1996Spectral}.
+    \uses{def:residual_window_coordinates}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cyclic_primitive_sector_resolution,
+        thm:residual_window_joint_projection_decay,
+        thm:correlated_residual_cyclic_corner}
+    Choose the faithful primitive, inequivalent cyclic sector resolution.
+    Its cyclic shift is $P_{j+1}A_i=A_iP_j$. Reversing the labels permits the
+    word shift formula to show that the correlated-tail Gram is precisely
+    $P_{j-r}$, an orthogonal projection. Apply joint residual window projection
+    decay and retain the two intertwiner identities of the same resolution.
+\end{proof}
+
+\begin{theorem}[Physical cover projection decay for a periodic tensor]
+    \label{thm:periodic_physical_cover_projection_decay}
+    \lean{MPSTensor.IsPeriodic.residual_cover_projection_defect_tendsto_zero}
+    \leanok
+
+    Let $A$ be a normalized periodic tensor of period $m$. For arbitrary
+    sequences $K_M,r_M\in\mathbb N$, put $N_M=K_Mm+Mm+r_M$.
+    Let $P_{\mathrm L,M}$ and $P_{\mathrm R,M}$ be the ground-space
+    projections for the prefix of length $(K_M+M)m$ and the suffix of length
+    $Mm+r_M$, extended to the full interval. Then
+    \begin{align}
+        \|P_{\mathcal G_A(N_M)}-P_{\mathrm L,M}P_{\mathrm R,M}\|
+        \longrightarrow 0 \qquad (M\longrightarrow\infty).
+    \end{align}
+    This is the explicit periodic tensor form of the cover estimate used in
+    \cite[Lemma commutation (ii) and Section 6]{Nachtergaele1996Spectral}.
+    The passage from a general GVBS presentation to this tensor presentation
+    remains separate; see \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_residual_window_joint_projection_decay,
+        thm:isometric_projection_defect_transport,
+        thm:residual_window_right_joint_range,
+        thm:residual_window_left_joint_range_cover,
+        thm:residual_window_full_joint_range_cover}
+    The cyclic primitive sector resolution gives the joint three-window
+    projection limit. The right, left, and full joint ranges are the images
+    of the corresponding original interval spaces under one physical isometry.
+    Isometric conjugation preserves the norm; taking adjoints reverses the
+    projection order and gives the displayed defect.
 \end{proof}
 
 \begin{theorem}[Faithful finite MPS support]
@@ -9656,6 +11975,121 @@ shorter interaction range.
     $(X\Gamma_k(Y))_b=\operatorname{tr}(C_bY)$ for every boundary matrix
     $Y$, nondegeneracy of the trace pairing is equivalent to
     $X\Gamma_k=0$. The range of $\Gamma_k$ is $G_A(k)$.
+\end{proof}
+
+\begin{theorem}[Periodic phase relations preserve open-boundary support]
+    \label{thm:periodic_phase_relation_support}
+    \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic,
+        MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isPeriodic}
+    \leanok
+    Let $A$ and $B$ be normalized periodic tensors. Suppose that there is
+    $z\ne0$ such that their periodic vectors satisfy
+    $\ket{V^{(N)}(B)}=z^N\ket{V^{(N)}(A)}$ for every $N>0$.
+    Then their bond dimensions agree, they are gauge and phase equivalent,
+    and $\mathcal G_A(N)=\mathcal G_B(N)$ for every $N\ge0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto,
+        thm:primitive_representative_support_gauge}
+    Along common multiples of the two periods, the self-overlaps tend to
+    the positive periods. Proportionality gives the exact identity
+    $|\braket{V^{(N)}(A)}{V^{(N)}(B)}|^2
+        =\braket{V^{(N)}(A)}{V^{(N)}(A)}\braket{V^{(N)}(B)}{V^{(N)}(B)}$.
+    Thus the mixed overlap cannot tend to zero. The periodic overlap
+    dichotomy supplies the gauge relation. Gauge transformations and nonzero
+    scalar rescaling preserve all open-boundary spaces.
+\end{proof}
+
+\begin{theorem}[Periodic representatives with exact joint support]
+    \label{thm:periodic_sector_representatives_exact_support}
+    \lean{MPSTensor.MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives_of_isPeriodic,
+        MPSTensor.exists_periodic_sector_representatives}
+    \leanok
+    Let $(A_j)_{j=0}^{b-1}$ be a finite family of normalized periodic tensors,
+    with arbitrary periods, and let $\mu_j\ne0$.
+    There is a subfamily selected by an injective map
+    $s:\{0,\ldots,g-1\}\to\{0,\ldots,b-1\}$ such that its members are pairwise
+    inequivalent under gauge and phase transformations. Every original
+    member is gauge and phase equivalent to a selected member, after the
+    corresponding bond-dimension identification. \begin{align}
+        \forall\,N\ge0:\ \mathcal G_{\bigoplus_j\mu_jA_j}(N)
+        =\mathcal G_{\bigoplus_k A_{s(k)}}(N).
+    \end{align}
+    The selected family inherits the original periods and positive bond
+    dimensions. The statement also allows an empty original family.
+    This is an algebraic support identity; it does not assert the joint
+    intersection property or automatic existence of a parent interaction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_phase_relation_support}
+    Select one member from each periodic-vector phase class. The preceding
+    lemma identifies the open-boundary spaces of all members of a class.
+    Taking their sums proves the displayed identity. The phase-class
+    separation gives pairwise gauge and phase inequivalence.
+\end{proof}
+
+\begin{theorem}[Trace preservation of an isometric corner]
+    \label{thm:trace_preserving_isometric_corner}
+    \lean{MPSTensor.IsLeftCanonical.of_isometry_intertwine}
+    \leanok
+    Let $A$ be trace preserving, let $V^*V=I$, and suppose
+    $A_iV=VB_i$ for every letter $i$. Then $B$ is trace preserving.
+    This is the normalization identity used in the compressed periodic
+    sectors of \cite[Section~2.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:left_canonical_tensor}
+    Taking products of adjoints in $A_iV=VB_i$ and summing gives
+    \begin{align}
+        \sum_i B_i^*B_i
+        =V^*\left(\sum_i A_i^*A_i\right)V
+        =V^*V=I.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Periodic support presentation of faithful normalized generators]
+    \label{thm:faithful_periodic_ground_space_presentation}
+    \lean{MPSTensor.exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint}
+    \leanok
+    Let $A$ have positive bond dimension, assume
+    $\sum_iA_i^*A_i=I$, and let $\rho>0$ satisfy $E_A(\rho)=\rho$.
+    There exist a nonempty finite family of positive-dimensional periodic
+    tensors $B_j$ with periods $m_j\geq1$ and support isometries $V_j$ such
+    that
+    \begin{align}
+        V_j^*V_j                    & =I,                &
+        \sum_jV_jV_j^*              & =I,                &
+        \forall\,i\neq j:\ V_i^*V_j & =0,\notag            \\
+        B_j^i                       & =V_j^*A_iV_j,      &
+        A_iV_j                      & =V_jB_j^i,         &
+        V_j^*A_i                    & =B_j^iV_j^*.\notag
+    \end{align}
+    For every $N\geq0$,
+    \begin{align}
+        G_A(N)=\bigvee_jG_{B_j}(N)
+        =G_{\bigoplus_jB_j}(N).
+        \label{eq:faithful_periodic_support_presentation}
+    \end{align}
+    This is a consequence for supplied normalized faithful generating data
+    in \cite[Section~3]{Nachtergaele1996Spectral}. It does not construct
+    such data from a general GVBS boundary limit or impose minimality;
+    that passage remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:faithful_stationary_projector_closure,
+        thm:projector_closure_irreducible_corners,
+        thm:trace_preserving_isometric_corner,
+        thm:irreducible_left_canonical_periodic,
+        thm:isometric_sector_ground_space_resolution,
+        thm:block_sum_local_ground_space}
+    Faithful stationarity makes every invariant projection reducing.
+    Decompose into irreducible isometric corners; the identity resolution
+    and positive ambient bond dimension imply that the family is nonempty.
+    Trace preservation passes to each corner. Each normalized irreducible
+    corner therefore has a finite period. The letterwise intertwining
+    identifies the MPS boundary spaces at every length, and the unit-weight
+    direct sum has their joint space.
 \end{proof}
 
 \begin{theorem}[Finite MPS densities and their ranges]
@@ -9697,6 +12131,154 @@ shorter interaction range.
     the two subspaces.
 \end{proof}
 
+\begin{theorem}[Independence from an overlap matrix]
+    \label{thm:subspace_independence_overlap_matrix}
+    \lean{Submodule.iSupIndep_of_overlapMatrix}
+    \leanok
+    Let $(V_i)_{i\in I}$ be finitely many subspaces of a complex Hilbert
+    space, and let $B$ be a real matrix with zero diagonal and $\|B\|<1$.
+    Suppose that, for $i\ne j$, $x\in V_i$, and $y\in V_j$,
+    \begin{align}
+        |\langle x,y\rangle|\le B_{ij}\|x\|\|y\|.
+    \end{align}
+    Then the family $(V_i)$ is independent: a vanishing sum of vectors,
+    one from each subspace, has every component zero.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:subspace_overlap_lower_gram}
+    The lower Gram estimate gives
+    \begin{align}
+        (1-\|B\|)\sum_i\|x_i\|^2
+        \le\left\|\sum_i x_i\right\|^2.
+    \end{align}
+    A zero sum therefore makes every summand zero.
+\end{proof}
+
+\begin{theorem}[Eventual independence of asymptotically orthogonal subspaces]
+    \label{thm:asymptotic_subspace_independence}
+    \lean{Submodule.eventually_iSupIndep_of_pairwise_overlap}
+    \leanok
+    Let $V_i(n)$ be a finite family of subspaces of Hilbert spaces that
+    may depend on $n$. Suppose that for every $\varepsilon>0$, eventually
+    \begin{align}
+        \forall\,i\ne j,\ x\in V_i(n),\ y\in V_j(n):\ |\langle x,y\rangle|\le\varepsilon\|x\|\|y\|.
+    \end{align}
+    Then the family $(V_i(n))_i$ is eventually independent.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:subspace_independence_overlap_matrix}
+    Let $C$ have zero diagonal and all off-diagonal entries equal to one.
+    Choose $\varepsilon=(1+\|C\|)^{-1}$. Then
+    $\|\varepsilon C\|<1$, and the preceding lemma applies whenever
+    the stated pairwise estimate holds.
+\end{proof}
+
+\begin{theorem}[Eventual independence of primitive boundary spaces]
+    \label{thm:primitive_ground_space_eventual_independence}
+    \lean{MPSTensor.eventually_groundSpaceES_iSupIndep_of_primitive}
+    \leanok
+    \uses{def:primitive_mps, def:ground_space_es}
+    A finite family of pairwise gauge and phase inequivalent primitive
+    tensors, with faithful invariant matrices, has independent boundary
+    spaces $G_{B_i}(N)$ for every sufficiently large $N$.
+    This is the consequence of the overlap estimates in
+    \cite[Lemmas disjoint and overlapestimate]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:inequivalent_block_ground_space_overlap_decay,
+        thm:asymptotic_subspace_independence}
+    Inequivalence gives uniformly vanishing pairwise ground-space
+    overlaps. Finiteness makes the bounds simultaneous, so the preceding
+    theorem proves independence.
+\end{proof}
+
+\begin{theorem}[Independent ambient sums and middle restrictions]
+    \label{thm:independent_ambient_sum_intersection}
+    \lean{Submodule.iSup_inf_iSup_eq_of_le_independent,
+        Submodule.iSupIndep_iInf_comap_of_separating,
+        MPSTensor.iSupIndep_middleRestriction_comap,
+        MPSTensor.groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep}
+    \leanok
+    Let $(W_i)_{i\in I}$ be an independent family of subspaces, with $I$
+    finite, and let $U_i,V_i\subseteq W_i$. Then
+    \begin{align}
+        \Bigl(\sum_i U_i\Bigr)\cap\Bigl(\sum_i V_i\Bigr)
+        =\sum_i(U_i\cap V_i).
+    \end{align}
+    More generally, suppose a family of linear restrictions $f_t:E\to F$
+    determines every vector of $E$. For any independent family $(G_i)$ in
+    $F$, the subspaces $\bigcap_t f_t^{-1}(G_i)$ are independent in $E$.
+    In particular, adjoining the first and last physical indices preserves
+    independence of middle support spaces. Independence is also unchanged
+    by passing from the coefficient functions to their Euclidean realization.
+\end{theorem}
+\begin{proof}\leanok
+    Independence makes the decomposition into the ambient subspaces unique,
+    so the decompositions from the two sums agree term by term.
+    For the restriction assertion, apply independence after every
+    restriction, then use that the restrictions determine the original vector.
+    The first and last physical restrictions determine all coefficients.
+    The Euclidean realization is a linear isomorphism.
+\end{proof}
+
+\begin{theorem}[Joint intersection from independent middle spaces]
+    \label{thm:joint_restriction_intersection_middle_independence}
+    \lean{MPSTensor.restriction_intersection_iSup_eq_of_middle_independent}
+    \leanok
+    Let $G_i\subseteq(\mathbb C^d)^{\otimes n}$ and
+    $H_i\subseteq(\mathbb C^d)^{\otimes(n+1)}$ be finite families.
+    Assume that the $G_i$ are independent and that every restriction of a
+    vector in $H_i$, obtained by fixing either the first or last physical
+    index, lies in $G_i$. Write
+    $L_i=H_i\otimes\mathbb C^d$ and $R_i=\mathbb C^d\otimes H_i$.
+    Then
+    \begin{align}
+        \Bigl(\sum_iL_i\Bigr)\cap\Bigl(\sum_iR_i\Bigr)
+        =\sum_i(L_i\cap R_i).
+    \end{align}
+    This is the geometric step of Nachtergaele,
+    arXiv:cond-mat/9410110, the proposition and equivalence lemma of Section 4; no tensor representation
+    is assumed in this statement.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:independent_ambient_sum_intersection}
+    Both $L_i$ and $R_i$ lie in
+    $\mathbb C^d\otimes G_i\otimes\mathbb C^d$.
+    These ambient spaces are independent by the preceding lemma.
+    Finite sums commute with adjoining an exterior physical index, as is
+    seen by decomposing each fixed-index coefficient separately.
+    Apply the independent ambient-sum intersection identity.
+\end{proof}
+
+\begin{theorem}[One-step joint ground-space intersection criterion]
+    \label{thm:joint_ground_space_intersection_middle_independence}
+    \lean{MPSTensor.iSup_groundSpace_eq_restriction_intersection_of_middle_independent}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of tensors, possibly empty.
+    Suppose that their ground spaces $\mathcal G_i(n)$ are independent
+    and that each tensor satisfies
+    \begin{align}
+        (\mathcal G_i(n+1)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G_i(n+1))
+        =\mathcal G_i(n+2).
+    \end{align}
+    Then the sums $\mathcal G(q)=\sum_i\mathcal G_i(q)$ satisfy
+    \begin{align}
+        (\mathcal G(n+1)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G(n+1))
+        =\mathcal G(n+2).
+    \end{align}
+    The individual intersection identities and middle independence remain
+    explicit hypotheses. This criterion does not by itself assert the
+    unrestricted intersection theorem for periodic tensor families.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:joint_restriction_intersection_middle_independence}
+    Ground-space vectors restrict into the corresponding ground spaces
+    on the shorter interval. Apply the preceding geometric lemma, then
+    substitute the assumed individual intersection identities.
+\end{proof}
+
 \begin{theorem}[Positive physical dimension of a normalized tensor]
     \label{thm:left_canonical_physical_dimension}
     \lean{MPSTensor.IsLeftCanonical.physDim_ne_zero}
@@ -9710,6 +12292,274 @@ shorter interaction range.
     \uses{def:left_canonical_tensor}
     An empty physical alphabet would make the sum zero, contradicting the
     nonzero identity on the bond space.
+\end{proof}
+
+\begin{theorem}[Bounded preimages on a finite sum of subspaces]
+    \label{thm:sector_bounded_preimages}
+    \lean{Submodule.exists_norm_le_preimage_of_mem_iSup_of_lower_gram}
+    \leanok
+    Let $T:E\to F$ be a complex linear map from a normed space to an
+    inner-product space, and let $(W_i)_{i\in I}$ be a finite family of
+    subspaces of $F$. Suppose $C_i\geq0$ and
+    \begin{align}
+        \forall\,x_i\in W_i:\ \frac12\sum_i\|x_i\|^2\leq\Bigl\|\sum_i x_i\Bigr\|^2.
+    \end{align}
+    Suppose also that each $x_i\in W_i$ admits a preimage $u_i$ with
+    $Tu_i=x_i$ and $\|u_i\|\leq C_i\|x_i\|$.
+    Every $x\in\sum_iW_i$ then admits a preimage $u$ satisfying
+    \begin{align}
+        Tu=x,\qquad \|u\|\leq2\Bigl(\sum_iC_i\Bigr)\|x\|.
+    \end{align}
+    This is a consequence of the supplied lower Gram bound, of the form
+    used in the overlap estimate in
+    \cite[Section~4]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a decomposition $x=\sum_i x_i$ with $x_i\in W_i$.
+    The lower Gram bound gives $\|x_i\|\leq2\|x\|$ for every $i$.
+    Choose the stated preimages and put $u=\sum_i u_i$.
+    Linearity and the triangle inequality give the conclusion.
+\end{proof}
+
+\begin{theorem}[Canonical open kernels from eventual intersections]
+    \label{thm:canonical_open_kernel_from_eventual_intersection}
+    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_restriction_intersection,
+        MPSTensor.exists_ker_openParentHamiltonianES_eq_groundSpaceES_of_eventually_restriction_intersection}
+    \leanok
+    Let $d\ge1$ and let $A$ be any tensor. Suppose that, for every $q\ge R$,
+    \begin{align}
+        (\mathcal G_A(q)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G_A(q))=\mathcal G_A(q+1).
+    \end{align}
+    If $R>0$, the canonical open Hamiltonian of range $R$ has kernel
+    $\mathcal G_A(N)$ for every $N\ge R$.
+    Consequently, if the one-step identity holds at every sufficiently
+    large length, there is $R_0>0$ such that the same kernel identity holds
+    for every $N\ge R\ge R_0$.
+    The intersection identity is an explicit hypothesis of this criterion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mem_ground_space_es,lem:open_chain_iteration_subspace_sequence,thm:open_parent_hamiltonian_window_ground_space,thm:open_ground_space_le_hamiltonian_kernel,rem:cyclic_window_operators}
+    A vector in the Hamiltonian kernel satisfies every contiguous local
+    ground-space constraint. Iterating the one-step intersections enlarges
+    these local spaces to the whole interval. Conversely, every
+    open-boundary vector satisfies every local constraint.
+\end{proof}
+
+\begin{theorem}[Eventual joint intersection for primitive sectors]
+    \label{thm:primitive_joint_intersection_from_overlap}
+    \lean{MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_independent_middle,
+        MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_isPrimitiveMPS}
+    \leanok
+    For a finite tensor family, eventual independence of the middle ground
+    spaces and the individual eventual one-step intersection identities
+    imply the eventual joint one-step intersection identity.
+    In particular, this applies to any finite family of pairwise gauge and
+    phase inequivalent normalized primitive tensors with positive bond
+    dimensions and faithful invariant matrices. Thus, writing
+    $\mathcal G(q)=\sum_j\mathcal G_j(q)$, for all sufficiently large $n$,
+    \begin{align}
+        (\mathcal G(n+1)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G(n+1))
+        =\mathcal G(n+2).
+    \end{align}
+    The family may be empty. The primitive assertion concerns the supplied
+    generating tensors, rather than an arbitrary GVBS presentation.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:joint_ground_space_intersection_middle_independence,
+        thm:primitive_ground_space_eventual_independence,
+        thm:periodic_original_intersection}
+    Finiteness gives one eventual set on which all individual identities
+    hold. Apply the middle-independence criterion on its intersection with
+    the eventual independence set. For primitive tensors, overlap decay
+    supplies that independence, and period-one periodicity supplies the
+    individual intersections.
+\end{proof}
+
+\begin{theorem}[Canonical primitive-family interaction from overlap]
+    \label{thm:primitive_parent_interaction_from_overlap}
+    \lean{MPSTensor.exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_primitive_overlap,
+        MPSTensor.exists_positive_parent_interaction_of_primitive_overlap}
+    \leanok
+    Let $d\ge1$, let $(A_j)$ be a finite family of pairwise gauge and phase
+    inequivalent normalized primitive tensors with positive bond dimensions
+    and faithful invariant matrices, and let $\mu_j\ne0$.
+    For $T=\bigoplus_j\mu_jA_j$, there exists $R_0>0$ such that
+    \begin{align}
+        \forall\,N\ge R\ge R_0:\ \ker H_{R,N}^{\mathrm{open}}(T)=\mathcal G_T(N).
+    \end{align}
+    In particular, the canonical local projection of range $R_0$ is a
+    positive parent interaction with this exact kernel at every $N\ge R_0$.
+    No simultaneous word span is supplied in this assertion or used in the
+    family intersection argument.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_joint_intersection_from_overlap,
+        thm:canonical_open_kernel_from_eventual_intersection}
+    Nonzero weights preserve the joint open-boundary space. Substitute
+    the eventual joint intersection into the canonical kernel criterion.
+    The orthogonal projection onto the local ground-space complement is
+    positive, so choosing that projection gives the interaction.
+\end{proof}
+
+\begin{theorem}[Observable insertions under a virtual intertwiner]
+    \label{thm:observable_insertion_isometric_intertwiner}
+    \lean{MPSTensor.physicalObservableTransfer_intertwine}
+    \lean{MPSTensor.observableInsertionExpectation_eq_of_isometric_intertwine}
+    \leanok
+    Suppose $A_iV=VB_i$ for every letter $i$. For every virtual matrix
+    $\sigma$ and every observable $X$ on $k\geq0$ sites,
+    \begin{align}
+        E_{A,X}(V\sigma V^*)=V E_{B,X}(\sigma)V^*.
+        \label{eq:observable_insertion_intertwiner}
+    \end{align}
+    If additionally $V^*V=I$, $\rho=V\sigma V^*$, and
+    $\operatorname{tr}\sigma\neq0$, then $\operatorname{tr}\rho=\operatorname{tr}\sigma$ and
+    $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$.
+    No normalization, stationarity, or positivity is needed for these
+    identities. This concerns the finite insertion formula in
+    \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:physical_observable_transfer,def:primitive_insertion_expectation}
+    Letter intertwining gives $A^\tau V=VB^\tau$ for every word $\tau$.
+    Expanding the insertion as a sum over words proves
+    (\ref{eq:observable_insertion_intertwiner}). When $V^*V=I$, cyclicity
+    gives $\operatorname{Tr}(VZV^*)=\operatorname{Tr}Z$; apply this to both
+    the inserted matrix and the normalization denominator.
+\end{proof}
+
+\begin{theorem}[Faithful compression of stationary generating data]
+    \label{thm:stationary_support_faithful_generators}
+    \lean{MPSTensor.exists_faithful_stationary_supportCompression_of_leftCanonical}
+    \leanok
+    Let $A$ satisfy $\sum_iA_i^*A_i=I$, and let $\rho\geq0$ have nonzero
+    trace with $E_A(\rho)=\rho$. There exist a positive dimension $E$, an
+    isometry $V$, a tensor $B$, and a faithful matrix $\sigma>0$ such that
+    \begin{align}
+        V^*V                    & =I,                           & VV^*   & =\operatorname{supp}\rho, &
+        B_i                     & =V^*A_iV,                     & \sigma & =V^*\rho V,\notag           \\
+        \sum_iB_i^*B_i          & =I,                           & A_iV   & =VB_i,                    &
+        E_B(\sigma)             & =\sigma,                      &
+        \operatorname{Tr}\sigma & =\operatorname{Tr}\rho.\notag
+    \end{align}
+    $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$ for every observable
+    on every finite interval, including length zero.
+    This is a restriction of supplied stationary generating data to their
+    support, as in \cite{Wolf2012Quantum}, restriction to full-rank fixed
+    points, and the normalized generating representation of
+    \cite[Section~3]{Nachtergaele1996Spectral}. Constructing generating
+    data from an arbitrary GVBS boundary limit remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fp_inv_proj,thm:trace_preserving_isometric_corner,
+        thm:observable_insertion_isometric_intertwiner}
+    The stationary support projection $P$ obeys $(I-P)A_iP=0$.
+    Choose $V$ with $V^*V=I$ and $VV^*=P$. Then $PV=V$ gives
+    $A_iV=V(V^*A_iV)$. Compression preserves trace preservation and the
+    stationary equation. Since $P\rho P=\rho$, the compressed matrix is
+    positive definite and expands as $\rho=V\sigma V^*$.
+    Cyclicity gives $\operatorname{Tr}\sigma=\operatorname{Tr}\rho$,
+    whose nonvanishing forces $E>0$. Apply the insertion intertwiner to
+    obtain all finite expectation identities.
+\end{proof}
+
+\begin{definition}[Embedding a residual boundary]
+    \label{def:residual_boundary_embedding}
+    \lean{MPSTensor.residualBoundaryEmbeddingES,
+        MPSTensor.residualBoundaryEmbeddingES_apply,
+        MPSTensor.blockedResidualBoundaryMapES_eq_groundSpaceMapES_comp}
+    \leanok
+    For a rectangular map $V:\mathbb C^E\to\mathbb C^D$, let
+    $J_V(Y)=YV^*$ on the Hilbert space of rectangular matrices, with the
+    Hilbert--Schmidt norm. Suppose that
+    $V^*(A^{[L]})^i=B^iV^*$ for every blocked letter $i$.
+    Then the residual boundary map satisfies
+    $\mathcal F^{N,r}_{A,B,V}=\Gamma^A_{NL+r}J_V$ for every $N,r\geq0$.
+    In particular, the boundary trace uses $YV^*$ in the original site order.
+\end{definition}
+\begin{proof}\leanok
+    \uses{thm:blocked_residual_boundary_identity}
+    The rectangular intertwiner moves $V^*$ through each blocked letter.
+    Thus the residual coefficient is
+    $\operatorname{tr}(A^{\widetilde u}A^\tau YV^*)$, which is the original
+    boundary coefficient at $YV^*$.
+\end{proof}
+
+\begin{theorem}[Uniform boundary lifts for a periodic tensor]
+    \label{thm:periodic_boundary_uniform_lifts}
+    \lean{MPSTensor.IsPeriodic.exists_eventually_groundSpaceMapES_preimage_norm_le}
+    \leanok
+    Let $A$ be a normalized irreducible periodic tensor. There are $C>0$
+    and $n_0$ such that every $n\geq n_0$ and $x\in\mathcal G_n(A)$ have
+    a virtual boundary $u$ with $\Gamma^A_n(u)=x$ and
+    $\|u\|\leq C\|x\|$. The bound includes every residue length.
+    This is the boundary normalization step in the mixed-transfer argument
+    of \cite[Lemma disjoint]{Nachtergaele1996Spectral}, applied to
+    periodic generating tensors using
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cyclic_primitive_sector_resolution,
+        thm:blocked_residual_ground_space_resolution,
+        thm:residual_supported_inverse_uniform_tail,
+        thm:residual_sector_overlap_decay,
+        thm:subspace_overlap_lower_gram,thm:sector_bounded_preimages,
+        def:residual_boundary_embedding}
+    Write $n=Nm+r$ using the tensor's period $m$. Its primitive cyclic
+    sectors give residual maps $S_j$ and supported inverses $H_j$ with
+    $S_jH_jS_j^*=P_{\operatorname{ran}S_j}$ and uniformly bounded
+    $\|H_j\|\|S_j\|$, independently of $r$.
+    The original lift of a sector vector $x_j$ is $J_{V_j}H_jS_j^*x_j$.
+    Small pairwise residual overlaps give
+    $\tfrac12\sum_j\|x_j\|^2\leq\|\sum_jx_j\|^2$.
+    The finite sum of these bounded lifts therefore has norm at most
+    $2(\sum_jc_j)\|x\|$, where
+    $c_j$ bounds $\|J_{V_j}\|\|H_j\|\|S_j\|$.
+    Enlarging this constant makes it positive. Since $N=\lfloor n/m\rfloor$
+    tends to infinity, the estimate holds at every sufficiently large $n$.
+\end{proof}
+
+\begin{theorem}[Vanishing overlap of inequivalent periodic boundary spaces]
+    \label{thm:periodic_boundary_overlap_decay}
+    \lean{MPSTensor.IsPeriodic.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
+    \leanok
+    Let $A,B$ be normalized irreducible periodic tensors, possibly of
+    different periods and bond dimensions. Suppose that whenever their
+    bond dimensions agree, they are inequivalent up to similarity and phase.
+    For every $\varepsilon>0$, all sufficiently large $n$ satisfy
+    $|\langle x,y\rangle|\leq\varepsilon\|x\|\|y\|$ for every
+    $x\in\mathcal G_n(A)$ and $y\in\mathcal G_n(B)$.
+    The statement concerns boundary spaces of generating tensors and does
+    not assert purity of their associated states.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_boundary_uniform_lifts,thm:mixed_boundary_gram_decay,
+        thm:transfer_operator_gap_irr_tp,thm:transfer_operator_gap_rect_irr_tp}
+    Irreducibility, normalization and inequivalence give a strict spectral
+    radius bound for the original mixed transfer operator. Consequently
+    $\|\Gamma^A_n{}^*\Gamma^B_n\|\to0$.
+    Choose boundary lifts $u,v$ with
+    $\|u\|\leq C_A\|x\|$ and $\|v\|\leq C_B\|y\|$. Then
+    $|\langle x,y\rangle|
+        \leq C_AC_B\|\Gamma^A_n{}^*\Gamma^B_n\|\|x\|\|y\|$.
+\end{proof}
+
+\begin{theorem}[Eventual independence of periodic boundary spaces]
+    \label{thm:periodic_ground_space_eventual_independence}
+    \lean{MPSTensor.eventually_groundSpaceES_iSupIndep_of_isPeriodic}
+    \leanok
+    A finite family of pairwise gauge and phase inequivalent normalized
+    irreducible periodic tensors has independent original-chain boundary
+    spaces at every sufficiently large length. No common period is prescribed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_boundary_overlap_decay,thm:asymptotic_subspace_independence}
+    Finitely many pairwise overlap bounds hold simultaneously at all
+    sufficiently large lengths. Apply the finite lower Gram criterion
+    for independence.
 \end{proof}
 
 \begin{lemma}[Canonical interactions depend only on local support]
@@ -9729,6 +12579,137 @@ shorter interaction range.
     as in \cite[Lemma \texttt{existenceinteraction}]{Nachtergaele1996Spectral}.
 \end{proof}
 
+\begin{theorem}[Boundary-space inclusion under an isometric intertwiner]
+    \label{thm:isometric_cointertwiner_ground_space_inclusion}
+    \lean{MPSTensor.groundSpaceES_le_of_isometric_cointertwiner}
+    \leanok
+    Suppose that $V^*V=I$ and $V^*A_i=B_iV^*$ for every physical letter.
+    Then $\mathcal G_N(B)\subseteq\mathcal G_N(A)$ for every $N\geq0$.
+    No normalization or injectivity assumption is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:ground_space_es}
+    The letter relation extends to words. Trace cyclicity gives
+    $\Gamma^A_N(VYV^*)=\Gamma^B_N(Y)$, proving the range inclusion.
+\end{proof}
+
+\begin{theorem}[Separation of corners from distinct periodic tensors]
+    \label{thm:distinct_periodic_corner_separation}
+    \lean{MPSTensor.IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners}
+    \leanok
+    Let $A,A'$ be gauge and phase inequivalent normalized irreducible
+    periodic tensors, with possibly different periods and bond dimensions.
+    Fix $L>0$ and tensors $B,C$ on $L$-site blocks, together with isometries
+    $V,W$ satisfying
+    $V^*(A^{[L]})_i=B_iV^*$ and
+    $W^*(A'^{[L]})_i=C_iW^*$ for every blocked letter.
+    Suppose that $B$ is a primitive normalized tensor of positive bond
+    dimension with a faithful invariant matrix. Then $B,C$ are inequivalent
+    up to similarity and phase whenever their bond dimensions agree.
+    The conclusion follows from original-chain separation; separation of
+    compressed corners is not assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:isometric_cointertwiner_ground_space_inclusion,
+        thm:periodic_boundary_overlap_decay,
+        thm:blocked_local_ground_space_transport,
+        thm:primitive_representative_support_gauge,
+        thm:primitive_ground_space_map_eventual_inverse_gram_bound}
+    A hypothetical corner gauge relation gives
+    $\mathcal G_N(B)=\mathcal G_N(C)$ at every $N$.
+    For large $N$, primitivity and faithfulness make $\Gamma^B_N$ injective,
+    so $x=\Gamma^B_N(I)$ is nonzero. The two isometries place $x$ in both
+    blocked original spaces. The common physical blocking isometry gives a
+    nonzero $y\in\mathcal G_{NL}(A)\cap\mathcal G_{NL}(A')$.
+    Original-chain overlap decay at coefficient $1/2$ implies
+    $\|y\|^2\leq\tfrac12\|y\|^2$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Preservation of a primitive stationary witness]
+    \label{thm:primitive_stationary_witness_transport}
+    \lean{MPSTensor.IsPrimitiveMPS.blockTensor,
+        MPSTensor.IsPrimitiveMPS.reindexPhysical}
+    \leanok
+    Let $A$ be a normalized primitive tensor of positive bond dimension with
+    stationary matrix $\rho$. If $\rho$ is positive definite, then blocking by any positive length
+    retains primitivity with the same stationary matrix $\rho$.
+    A bijective relabelling of the physical letters also preserves the
+    primitive witness with the same $\rho$; this second assertion requires
+    only the original primitive fixed-point data.
+\end{theorem}
+\begin{proof}\leanok
+    Positive blocking preserves trace preservation, irreducibility, and
+    peripheral primitivity. The same $\rho$ is stationary for every
+    positive power of the transfer map. The complementary fixed-point
+    spectral gap therefore holds at this supplied stationary matrix.
+    Under a bijective physical relabelling, both the normalization sum
+    and the transfer map are unchanged.
+\end{proof}
+
+\begin{theorem}[Coordinate resolution of a finite direct sum]
+    \label{thm:block_inclusion_coordinate_resolution}
+    \lean{MPSTensor.sum_blockInclusion_mul_conjTranspose,MPSTensor.blockInclusion_conjTranspose_mul_toTensorFromBlocks}
+    \leanok
+    Let $J_j$ be the coordinate inclusion of the $j$th summand of a finite
+    direct sum, and let $T_i=\bigoplus_j\mu_j A_j^i$. Then
+    \begin{align}
+        \sum_jJ_jJ_j^*=I,\qquad J_j^*T_i=\mu_jA_j^iJ_j^*.
+    \end{align}
+    The statements permit summands of dimension zero and an empty family.
+    They are the coordinate identities underlying the canonical direct-sum
+    decomposition in \cite{Cirac2016MPDO_arXiv}, Section~II.
+\end{theorem}
+\begin{proof}\leanok
+    The unflattened coordinate inclusions resolve the identity of the dependent
+    direct sum and intertwine every block diagonal matrix with its selected
+    block. Transport these identities through the common coordinate equivalence.
+\end{proof}
+
+\begin{theorem}[Cyclic word Gram in the inverse convention]
+    \label{thm:inverse_cyclic_word_gram}
+    \lean{MPSTensor.sum_word_conjTranspose_inverseCyclic_projection_mul_word}
+    \leanok
+    Suppose $\sum_i A_i^*A_i=\mathbf1$ and
+    $P_{j+1}A_i=A_iP_j$, with labels in $\mathbb Z/m\mathbb Z$ for some
+    $m>0$.
+    Then, for every $r\geq0$,
+    \begin{align}
+        \sum_{|\tau|=r}A_\tau^*P_jA_\tau=P_{j-r}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Replace the label $j$ by $-j$ and apply the forward cyclic word identity.
+\end{proof}
+
+\begin{theorem}[Literal cyclic sectors at a common blocking length]
+    \label{thm:powered_cyclic_primitive_resolution}
+    \lean{MPSTensor.IsPeriodic.exists_powered_cyclic_primitive_sector_resolution}
+    \leanok
+    Let $A$ be a normalized irreducible periodic tensor of period $m$, and let
+    $L>0$ be divisible by $m$. There are positive-dimensional primitive tensors
+    $B_j$ on the $L$-site alphabet, faithful stationary matrices $\rho_j$,
+    cyclic projections $P_j$, and isometries $V_j$ such that
+    \begin{align}
+        V_jV_j^*=P_j,\qquad \sum_jP_j=\mathbf1,\qquad
+        P_{j+1}A_i=A_iP_j,
+    \end{align}
+    \begin{align}
+        A^{[L]}_iV_j=V_j(B_j)_i,\qquad
+        V_j^*A^{[L]}_i=(B_j)_iV_j^*.
+    \end{align}
+    The tensors $B_j$ are pairwise inequivalent up to similarity and phase.
+    For every tail length $r$, their literal support projections satisfy
+    $\sum_{|\tau|=r}A_\tau^*V_jV_j^*A_\tau=P_{j-r}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cyclic_primitive_sector_resolution,thm:distinct_periodic_corner_separation,thm:primitive_stationary_witness_transport,thm:inverse_cyclic_word_gram}
+    Write $L=mq$. Power each minimum-period primitive sector by $q$ and identify
+    the iterated physical alphabet with the $L$-site alphabet. This preserves
+    the stationary matrices and both intertwiners. Separation of the powered
+    sectors follows by applying original-chain separation to the distinct
+    period-one sectors. The last identity follows from the cyclic word Gram.
+\end{proof}
+
 \begin{theorem}[Two representations of the open interaction sum]
     \label{thm:all_length_open_interaction_matrix}
     \lean{MPSTensor.openInteractionMatrix_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all}
@@ -9745,6 +12726,41 @@ shorter interaction range.
     For $N<R$ there is no nonwrapping window of length $R$, so both sums
     are empty. For $N\geq R$, the coordinate representation intertwines
     each local term, and linearity identifies their sums.
+\end{proof}
+
+\begin{theorem}[Literal primitive resolution of a periodic family]
+    \label{thm:periodic_family_literal_primitive_resolution}
+    \lean{MPSTensor.exists_commonBlock_primitive_sector_resolution_of_isPeriodic}
+    \leanok
+    Let $(A_j)$ be a finite family of pairwise inequivalent normalized
+    irreducible periodic tensors, with periods $m_j$, and let $L>0$ be divisible
+    by every $m_j$. Put $\Phi_i=\bigoplus_j(A_j)_i$. There is a family of
+    positive-dimensional primitive tensors $(B_s)$ on the $L$-site alphabet,
+    indexed by pairs $s=(j,a)$ with $a\in\mathbb Z/m_j\mathbb Z$, with faithful
+    stationary matrices $\rho_s$ and isometries $V_s$ into the original direct sum,
+    such that
+    \begin{align}
+        \sum_sV_sV_s^*=\mathbf1,\qquad
+        \Phi^{[L]}_iV_s=V_s(B_s)_i,\qquad
+        V_s^*\Phi^{[L]}_i=(B_s)_iV_s^*.
+    \end{align}
+    The tensors $B_s$ are pairwise inequivalent up to similarity and phase.
+    For every $s$ and every tail length $r\geq0$, the matrix
+    \begin{align}
+        Q_s(r)=\sum_{|\tau|=r}\Phi_\tau^*V_sV_s^*\Phi_\tau
+    \end{align}
+    is an orthogonal projection. The family may be empty.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:powered_cyclic_primitive_resolution,thm:distinct_periodic_corner_separation,thm:block_inclusion_coordinate_resolution}
+    Choose the literal powered cyclic resolution of each original tensor and
+    compose its isometries with the coordinate inclusions of the direct sum.
+    The inclusions resolve the identity and preserve both intertwiners.
+    Within one original tensor, separation is part of the powered resolution;
+    between different original tensors, it follows from original-chain angle
+    decay. Finally, if $s=(j,a)$, the word identity gives
+    $Q_s(r)=J_jP_{j,a-r}J_j^*$. This is an orthogonal projection because $J_j$
+    is an isometry and $P_{j,a-r}$ is a cyclic projection.
 \end{proof}
 
 \begin{lemma}[Positive canonical interaction from exact open kernels]
