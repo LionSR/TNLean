@@ -15,10 +15,12 @@ fixed number of patches covers the changed region and the affected outer holes, 
 patches avoid every untouched hole. This file proves the geometric facts behind these hypotheses
 and behind the choice of the constants `K₀` and `ε₀`:
 
-* the compactness observation: if no three closed label regions with the inner holes removed meet,
-  there is a positive footprint radius below which no footprint meets three of them, uniformly
-  over a compact parameter set; for a guide whose true vertices lie in open inner holes this is the
-  two-owner condition;
+* the abstract compactness argument: if no three closed label regions with the inner holes
+  removed meet, there is a positive footprint radius below which no footprint meets three of them,
+  uniformly over a parameter set when the joint sets are compact; for one guide whose true vertices
+  lie in open inner holes this is the two-owner condition. The instantiation on the scaled guide
+  families of the protocol, which makes the footprint radius uniform in the scale, is not proved
+  here;
 * square nets: a net of mesh `u` covers a bounded set by a number of patches bounded in terms of
   its radius over `u`, with outer patches within `3u` of the set;
 * the hole radius `h_n / n` of a direct repainting lies in `[ε₀ / max(K₀, 1), ε₀]`, and the two
@@ -26,11 +28,12 @@ and behind the choice of the constants `K₀` and `ε₀`:
 * the true vertices of a guide that is uniform on `n`-blocks are grid corners, a direct repainting
   of one block changes the true-vertex status and the incident labels only at its four corners,
   and every other grid corner is at sup distance at least `n` from the block;
-* the choice of `K₀`: distinct grid corners are at sup distance at least `n`, so for `n > 20 t`
-  the tenfold enlargements of the treated squares are disjoint and contain no other grid corner,
-  and lie in the charts where the band interfaces are straight rays; a ray of the edge construction
-  meets the rim of a treated square in one point, and distinct rays meet it at points at distance
-  at least `t / 2000`;
+* toward the choice of `K₀`: distinct grid corners are at sup distance at least `n`, so for
+  `n > 20 t` the tenfold enlargements of the treated squares are disjoint and contain no other grid
+  corner, and lie in the charts about either endpoint of an edge where the band interfaces are
+  straight rays; a ray of the edge construction meets the rim of the treated square about either
+  endpoint in one point, and rays of normal ratios at least `1/2` apart meet it at points at
+  distance at least `t / 2000`;
 * at level `n = 1` with `ε₀ < 1/4`, an outer hole about a grid corner contains no lattice site.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
@@ -74,9 +77,9 @@ theorem exists_pos_le_max_dist_of_inter_eq_empty {X : Type*} [MetricSpace X] {F�
     rw [h] at this
     exact this
 
-/-- **The compactness observation.** Let finitely many compact sets `F c` be such that no three
-with distinct labels have a common point. Then there is a footprint radius `δ > 0` such that no
-closed ball of radius `δ` meets three of them with distinct labels.
+/-- **The abstract compactness argument.** Let finitely many compact sets `F c` be such that no
+three with distinct labels have a common point. Then there is a footprint radius `δ > 0` such that
+no closed ball of radius `δ` meets three of them with distinct labels.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:453–462`. -/
 theorem exists_footprint_two_owners {X ι : Type*} [MetricSpace X] [Finite ι] {F : ι → Set X}
@@ -109,12 +112,13 @@ theorem exists_footprint_two_owners {X ι : Type*} [MetricSpace X] [Finite ι] {
   have h13' : dist y₁ y₃ < m := by linarith [dist_triangle_right y₁ y₃ x]
   exact absurd hle (not_le.2 (max_lt h12' h13'))
 
-/-- **The compactness observation with parameters.** If the joint sets `F c` of a parameter and a
+/-- **The compactness argument with parameters.** If the joint sets `F c` of a parameter and a
 point are compact, and no three with distinct labels have a common point, then one footprint
 radius `δ > 0` works for every value of the parameter: no closed ball of radius `δ` meets three
-slices with distinct labels at the same parameter.
+slices with distinct labels at the same parameter. The compactness of the joint sets is a
+hypothesis here; the source derives it for its radius parameters at lines 465–468.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–473`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–469`. -/
 theorem exists_footprint_two_owners_param {Λ X ι : Type*} [MetricSpace Λ] [MetricSpace X]
     [Finite ι] {F : ι → Set (Λ × X)} (hF : ∀ c, IsCompact (F c))
     (h3 : ∀ c₁ c₂ c₃, c₁ ≠ c₂ → c₁ ≠ c₃ → c₂ ≠ c₃ → F c₁ ∩ F c₂ ∩ F c₃ = ∅) :
@@ -130,6 +134,9 @@ theorem exists_footprint_two_owners_param {Λ X ι : Type*} [MetricSpace Λ] [Me
 true vertex of it in the compact working neighborhood `W` lie in an open inner hole square
 `ball h r` with `h ∈ H`. Then there is a footprint radius `δ > 0` such that every closed footprint
 of radius `δ` meets at most two labels at its points of `W` outside the open inner holes.
+
+This is the test for one fixed guide and one working neighborhood; its uniformity over the scaled
+guide families of the protocol is not proved here.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:453–462, 475–479`. -/
 theorem exists_footprint_two_owners_guide {ι : Type*} {f : ℝ × ℝ → ι} (hfin : (range f).Finite)
@@ -227,8 +234,8 @@ theorem exists_finset_blockCorner_dist_le {u : ℝ} (hu : 0 < u) (o : ℝ × ℝ
 
 /-- **A net of small patches.** A set `K` inside the closed sup ball of radius `ρ` about `o` is
 covered by the inner squares of radius `u` of at most `(2 (ρ + u) / u + 1) ^ 2` patches centered
-on the net `u ℤ²`, all centers within `u` of `K`. With `u = ν t` and `ρ = O(t)` the number of
-patches is a fixed constant.
+on the net `u ℤ²`, all centers within `u` of `K`. For a fixed ratio `ν`, with `u = ν t` and
+`ρ = O(t)`, the number of patches is bounded independently of `t`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:491–499, 520–521`. -/
 theorem exists_netCover {u : ℝ} (hu : 0 < u) {K : Set (ℝ × ℝ)} {o : ℝ × ℝ} {ρ : ℝ}
@@ -250,21 +257,21 @@ theorem exists_netCover {u : ℝ} (hu : 0 < u) {K : Set (ℝ × ℝ)} {o : ℝ �
 neighborhood of radius `3 u` of `K`; so it avoids every hole at distance at least `3 u` from `K`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:494–497, 521–525`. -/
-theorem closedBall_subset_thickening {X : Type*} [PseudoMetricSpace X] {K : Set X} {x y : X}
-    {u : ℝ} (hy : y ∈ K) (hxy : dist x y < u) : closedBall x (2 * u) ⊆ thickening (3 * u) K :=
+theorem closedBall_two_mul_subset_thickening_three_mul {X : Type*} [PseudoMetricSpace X]
+    {K : Set X} {x y : X} {u : ℝ} (hy : y ∈ K) (hxy : dist x y < u) :
+    closedBall x (2 * u) ⊆ thickening (3 * u) K :=
   fun z hz => mem_thickening_iff.2 ⟨y, hy, by
     linarith [dist_triangle z x y, mem_closedBall.1 hz]⟩
 
 /-! ### Hole radii -/
 
 /-- **The hole radius of a direct repainting** `eq:geometry-small-radius`. For `0 < n ≤ K₀ t` the
-ratio `h_n / n` lies between `ε₀ / max(K₀, 1)` and `ε₀`.
+ratio `h_n / n` lies in the interval `[ε₀ / max(K₀, 1), ε₀]`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-small-radius`,
 `06-geometry.tex:511–516`. -/
-theorem holeRadius_div_mem {ε₀ n t K₀ : ℝ} (hε : 0 ≤ ε₀) (hn : 0 < n) (ht : 0 < t)
-    (hK : n ≤ K₀ * t) :
-    ε₀ / max K₀ 1 ≤ holeRadius ε₀ n t / n ∧ holeRadius ε₀ n t / n ≤ ε₀ := by
+theorem holeRadius_div_mem_Icc {ε₀ n t K₀ : ℝ} (hε : 0 ≤ ε₀) (hn : 0 < n) (ht : 0 < t)
+    (hK : n ≤ K₀ * t) : holeRadius ε₀ n t / n ∈ Icc (ε₀ / max K₀ 1) ε₀ := by
   have hK0 : 0 < K₀ := by
     by_contra h
     push Not at h
@@ -506,10 +513,14 @@ theorem disjoint_ball_blockCorner {n t : ℝ} (hn : 0 < n) (ht : 20 * t < n) {Q 
 theorem bandWidth_of_le_half {n s : ℝ} (hs : s ≤ n / 2) : bandWidth n s = s / 1000 := by
   rw [bandWidth, min_eq_left (by linarith)]
 
-/-- **Straight-ray charts.** In the open sup square of radius `n / 2` about the first endpoint of
-an edge, a band `α < x < β` is the cone `α s / 1000 < d < β s / 1000` with `s > 0`: its interfaces
-are straight rays from the endpoint. In particular this holds in the tenfold enlargement of the
-treated square once `20 t ≤ n`.
+/-- On the half of an edge next to its second endpoint, the band width is `(n - s) / 1000`. -/
+theorem bandWidth_of_half_le {n s : ℝ} (hs : n / 2 ≤ s) : bandWidth n s = (n - s) / 1000 := by
+  rw [bandWidth, min_eq_right (by linarith)]
+
+/-- **Straight-ray charts at the first endpoint.** In the open sup square of radius `n / 2` about
+the first endpoint `s = 0` of an edge, a band `α < x < β` is the cone
+`α s / 1000 < d < β s / 1000` with `s > 0`: its interfaces are straight rays from the endpoint.
+In particular this holds in the tenfold enlargement of the treated square once `20 t ≤ n`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:301–302, 341–343`. -/
 theorem mem_edgeBand_iff_of_mem_ball {n : ℝ} {e : SquareEdge} {α β : ℝ} {p : ℝ × ℝ}
@@ -529,10 +540,33 @@ theorem mem_edgeBand_iff_of_mem_ball {n : ℝ} {e : SquareEdge} {α β : ℝ} {p
   · rintro ⟨h1, h3, h4⟩
     exact ⟨h1, by linarith, by rw [hw]; exact h3, by rw [hw]; exact h4⟩
 
-/-- **A ray meets the treated rim in one point.** A point of the curve `x = α`, `|α| ≤ 8`, on the
-half of an edge next to its first endpoint and on the rim of the sup square of radius `t` about
-that endpoint is the point with coordinates `s = t`, `d = α t / 1000`. So the possible rim
-intersection points form a finite pattern after scaling by `t`.
+/-- **Straight-ray charts at the second endpoint.** In the open sup square of radius `n / 2` about
+the second endpoint `s = n` of an edge, a band `α < x < β` is the cone
+`α (n - s) / 1000 < d < β (n - s) / 1000` with `s < n`: its interfaces are straight rays from the
+endpoint.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:301–302, 341–343`. -/
+theorem mem_edgeBand_iff_of_mem_ball_end {n : ℝ} {e : SquareEdge} {α β : ℝ} {p : ℝ × ℝ}
+    (hp : p ∈ ball (e.point n n 0) (n / 2)) :
+    p ∈ edgeBand n e α β ↔ e.par p < n ∧ α * ((n - e.par p) / 1000) < e.nor n p ∧
+      e.nor n p < β * ((n - e.par p) / 1000) := by
+  have hs : |e.par p - n| < n / 2 := by
+    have := e.abs_par_sub_le n p (e.point n n 0)
+    rw [par_point] at this
+    exact this.trans_lt (mem_ball.1 hp)
+  rw [abs_lt] at hs
+  have hw := bandWidth_of_half_le (n := n) (s := e.par p) (by linarith)
+  constructor
+  · rintro ⟨-, h2, h3, h4⟩
+    rw [hw] at h3 h4
+    exact ⟨h2, h3, h4⟩
+  · rintro ⟨h2, h3, h4⟩
+    exact ⟨by linarith, h2, by rw [hw]; exact h3, by rw [hw]; exact h4⟩
+
+/-- **A ray meets the treated rim in one point, first endpoint.** A point of the curve `x = α`,
+`|α| ≤ 8`, on the half of an edge next to its first endpoint and on the rim of the sup square of
+radius `t` about that endpoint is the point with coordinates `s = t`, `d = α t / 1000`. So the
+possible rim intersection points form a finite pattern after scaling by `t`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:344–347`. -/
 theorem eq_point_of_mem_rim {n t α : ℝ} {e : SquareEdge} (hα : |α| ≤ 8) {p : ℝ × ℝ}
@@ -547,18 +581,37 @@ theorem eq_point_of_mem_rim {n t α : ℝ} {e : SquareEdge} (hα : |α| ≤ 8) {
   rw [← point_par_nor n e p, hcurve, hrim]
   ring_nf
 
-/-- **Separation of the rim pattern.** Two rays `x = α` and `x = α'` of normal ratios at least
-`1/2` apart meet the rim of the treated square of radius `t ≥ 0` at points at sup distance at
-least `t / 2000`. So the outer holes of radius `2 ε₀ t` about them are disjoint once
-`ε₀ < 1/8000`.
+/-- **A ray meets the treated rim in one point, second endpoint.** A point of the curve `x = α`,
+`|α| ≤ 8`, on the half of an edge next to its second endpoint and on the rim of the sup square of
+radius `t` about that endpoint is the point with coordinates `s = n - t`, `d = α t / 1000`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:344–347`. -/
+theorem eq_point_of_mem_rim_end {n t α : ℝ} {e : SquareEdge} (hα : |α| ≤ 8) {p : ℝ × ℝ}
+    (hlt : e.par p < n) (hhalf : n / 2 ≤ e.par p)
+    (hcurve : e.nor n p = α * bandWidth n (e.par p)) (hrim : dist p (e.point n n 0) = t) :
+    p = e.point n (n - t) (α * t / 1000) := by
+  rw [bandWidth_of_half_le hhalf] at hcurve
+  have hpos : 0 < n - e.par p := by linarith
+  have hd : |e.nor n p| < n - e.par p := by
+    rw [hcurve, abs_mul, abs_div, abs_of_pos hpos, abs_of_pos (by norm_num : (0 : ℝ) < 1000)]
+    nlinarith [abs_nonneg α]
+  rw [dist_point_end, abs_sub_comm, abs_of_pos hpos, max_eq_left (le_of_lt hd)] at hrim
+  rw [← point_par_nor n e p, hcurve, ← hrim]
+  ring_nf
+
+/-- **Separation of the rim pattern of one edge.** Two rays `x = α` and `x = α'` of normal ratios
+at least `1/2` apart meet the rim of the treated square of radius `t > 0` about an endpoint of the
+edge at points with the same parallel coordinate `s` (`s = t` at the first endpoint, `s = n - t` at
+the second) and at sup distance at least `t / 2000`. So the outer holes of radius `2 ε₀ t` about
+them are disjoint once `ε₀ < 1/8000`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:346–351`. -/
-theorem rim_separation {n t α α' : ℝ} (e : SquareEdge) (ht : 0 < t) (hαα' : 1 / 2 ≤ |α - α'|)
+theorem rim_separation {n s t α α' : ℝ} (e : SquareEdge) (ht : 0 < t) (hαα' : 1 / 2 ≤ |α - α'|)
     {ε₀ : ℝ} (hε : ε₀ < 1 / 8000) :
-    t / 2000 ≤ dist (e.point n t (α * t / 1000)) (e.point n t (α' * t / 1000)) ∧
-      Disjoint (closedBall (e.point n t (α * t / 1000)) (2 * ε₀ * t))
-        (closedBall (e.point n t (α' * t / 1000)) (2 * ε₀ * t)) := by
-  have hdist : dist (e.point n t (α * t / 1000)) (e.point n t (α' * t / 1000)) =
+    t / 2000 ≤ dist (e.point n s (α * t / 1000)) (e.point n s (α' * t / 1000)) ∧
+      Disjoint (closedBall (e.point n s (α * t / 1000)) (2 * ε₀ * t))
+        (closedBall (e.point n s (α' * t / 1000)) (2 * ε₀ * t)) := by
+  have hdist : dist (e.point n s (α * t / 1000)) (e.point n s (α' * t / 1000)) =
       |α - α'| * t / 1000 := by
     rw [dist_eq n e, par_point, par_point, nor_point, nor_point, sub_self, abs_zero,
       max_eq_right (abs_nonneg _),

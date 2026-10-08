@@ -126,11 +126,8 @@ theorem isTrueVertex_iff_of_two_labels {U : Set X} (hU : IsOpen U)
     (IsTrueVertex f c ↔ IsTrueVertex g c) ∧
       (IsTrueVertex f c → c ∉ U ∧ incidentLabels f c = incidentLabels g c) := by
   rcases incidentLabels_eq_or_subset_pair hU hR hf hg c with h | ⟨hc, h1, h2⟩
-  · refine ⟨isTrueVertex_congr h, fun hv => ⟨fun hc => ?_, h⟩⟩
-    rcases incidentLabels_eq_or_subset_pair hU hR hf hg c with - | ⟨-, h1, -⟩
-    · exact not_isTrueVertex_of_subset_pair
-        (incidentLabels_subset (hU.mem_nhds hc) hf) hv
-    · exact not_isTrueVertex_of_subset_pair h1 hv
+  · exact ⟨isTrueVertex_congr h, fun hv => ⟨fun hc =>
+      not_isTrueVertex_of_subset_pair (incidentLabels_subset (hU.mem_nhds hc) hf) hv, h⟩⟩
   · exact ⟨iff_of_false (not_isTrueVertex_of_subset_pair h1) (not_isTrueVertex_of_subset_pair h2),
       fun hv => absurd hv (not_isTrueVertex_of_subset_pair h1)⟩
 
@@ -251,6 +248,23 @@ end Homogenize
 
 /-! ### Births and deaths after the point treatment -/
 
+/-- The logarithmic floor `a₀ max(t, m)` is at least `a₀ t`. -/
+theorem angularConstant_mul_le_mul_max (t m : ℝ) :
+    angularConstant * t ≤ angularConstant * max t m :=
+  mul_le_mul_of_nonneg_left (le_max_left _ _) angularConstant_pos.le
+
+/-- **Retained outer holes.** If a point `c` is at distance at least `a` from every point of `Z`,
+the closed square of radius `r < a` about `c` misses `Z`. With `a = a₀ t` and `r = 2 ε₀ t`, the
+outer hole square of a retained true vertex misses the closed change once `2 ε₀ < a₀`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:380–382`. -/
+theorem disjoint_closedBall_of_forall_le_dist {X : Type*} [PseudoMetricSpace X] {Z : Set X}
+    {c : X} {a r : ℝ} (hr : r < a) (h : ∀ y ∈ Z, a ≤ dist c y) : Disjoint (closedBall c r) Z :=
+  Set.disjoint_left.2 fun z hz hzZ => by
+    have := h z hzZ
+    rw [mem_closedBall, dist_comm] at hz
+    linarith
+
 section BandOperations
 
 variable {ι : Type*}
@@ -306,18 +320,17 @@ theorem BandOperation.treated_surrounding_eq (op : BandOperation ι) {n t : ℝ}
   obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
   by_contra hne
   have h := op.floor_bandUpdate htn e g (subset_closure hy) hne
-  have : angularConstant * t ≤ angularConstant * max t (min n (edgeMarkDist n e y)) :=
-    mul_le_mul_of_nonneg_left (le_max_left _ _) angularConstant_pos.le
   rw [dist_comm] at h
-  linarith
+  linarith [angularConstant_mul_le_mul_max t (min n (edgeMarkDist n e y))]
 
 /-- **No changed true vertex in a treated birth or death.** Homogenize the before and after guides
 of an elementary birth or death that introduces a single label to the surrounding label on the
 treated squares of radius `0 < t ≤ n`. The two homogenized guides have the same true vertices.
 Each of them lies at distance at least `a₀ t` from the closure of the remaining changed region,
-and has the same incident labels in both guides, so it keeps its hole and its tag holder.
+and has the same incident labels in both guides, so it keeps its tag holder; its outer hole misses
+the closed change once `2 ε₀ < a₀` (`disjoint_closedBall_of_forall_le_dist`).
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:375–387`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:375–382`. -/
 theorem BandOperation.isTrueVertex_treated {op : BandOperation ι} {Q : ι} (hop : op.InsertsOne Q)
     {n t : ℝ} (ht : 0 < t) (htn : t ≤ n) (e : SquareEdge) (g : ℝ × ℝ → ι) (c : ℝ × ℝ) :
     (IsTrueVertex (homogenize (edgeTreated n e t) op.label (bandUpdate n e op.before g)) c ↔
@@ -380,7 +393,7 @@ corners. The two homogenized guides have the same true vertices, each at distanc
 from the closure of the remaining changed region and with the same incident labels in both
 guides.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:375–387`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:375–382`. -/
 theorem isTrueVertex_central_treated {t : ℝ} (ht : 0 < t) (htn : t ≤ R.n) (c : ℝ × ℝ) :
     (IsTrueVertex (homogenize (cornerTreated R.n t) R.oldLabel R.guide) c ↔
         IsTrueVertex (homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide) c) ∧
@@ -401,10 +414,8 @@ theorem isTrueVertex_central_treated {t : ℝ} (ht : 0 < t) (htn : t ≤ R.n) (c
     obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
     by_contra hne
     have h := R.floor_central htn (subset_closure hy) hne
-    have : angularConstant * t ≤ angularConstant * max t (min R.n (cornerMarkDist R.n y)) :=
-      mul_le_mul_of_nonneg_left (le_max_left _ _) angularConstant_pos.le
     rw [dist_comm] at h
-    linarith
+    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
   have hmem : ∀ p ∈ U, fb p ∈ ({R.oldLabel, R.finalLabel} : Set ι) ∧
       fa p ∈ ({R.oldLabel, R.finalLabel} : Set ι) := by
     intro p hp
@@ -457,9 +468,7 @@ theorem exchange_corridor {t : ℝ} (htn : t ≤ R.n) (E : List SquareEdge) (e :
   have hmem : p ∈ {p | R.treatedStartMain t E e p ≠ R.nbrLabel e ∨
       R.treatedAux t e p ≠ R.nbrLabel e} := not_and_or.1 hne
   have h := R.floor_exchange htn E e (subset_closure hmem) hz
-  have : angularConstant * t ≤ angularConstant * max t (min R.n (edgeMarkDist R.n e p)) :=
-    mul_le_mul_of_nonneg_left (le_max_left _ _) angularConstant_pos.le
-  linarith
+  linarith [angularConstant_mul_le_mul_max t (min R.n (edgeMarkDist R.n e p))]
 
 open Classical in
 /-- **No new true vertex in the treated exchange.** Exchange the two treated sheets of the
@@ -499,6 +508,27 @@ theorem isTrueVertex_exchange_treated {t : ℝ} (ht : 0 < t) (htn : t ≤ R.n)
     isTrueVertex_piecewise_iff isOpen_thickening hU
       (fun p hp => (R.exchange_corridor htn E e hp).2)
       (fun p hp => (R.exchange_corridor htn E e hp).1) c⟩
+
+/-- **Auxiliary initialization reads the current main guide.** During the edge construction along
+`e`, after the edges of `E` and with any normal word `W` on the band of `e`, the label `C_e` is a
+value of the current main guide: it is taken just outside the middle of the edge, away from the
+square and from the band.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:625–627`. -/
+theorem nbrLabel_mem_range_mainGuide (E : List SquareEdge) (e : SquareEdge) (W : ℝ → ι) :
+    R.nbrLabel e ∈ range (R.mainGuide E e W) := by
+  have hn := R.n_pos
+  set p := e.point R.n (R.n / 2) (-(R.n / 2))
+  have hpN : p ∈ edgeNeighbor R.n e := by
+    refine ⟨?_, ?_, ?_, ?_⟩ <;> simp only [p, par_point, nor_point] <;> linarith
+  have hpS : p ∉ closedSquare R.n := fun h => by
+    obtain ⟨h1, h2, h3, h4⟩ := mem_closedSquare.1 h
+    cases e <;> simp only [p, SquareEdge.point] at h1 h2 h3 h4 <;> linarith
+  have hpB : p ∉ edgeBand R.n e (-8) 0 := fun h => by
+    obtain ⟨-, -, h3, -⟩ := h
+    simp only [p, par_point, nor_point] at h3
+    linarith [bandWidth_le_left R.n (R.n / 2)]
+  exact ⟨p, (R.mainGuide_of_notMem E e W hpS hpB).trans (R.guide_edgeNeighbor e p hpN)⟩
 
 end RepaintingBaseline
 
@@ -562,7 +592,8 @@ theorem isTagHolder_levelStart {n : ℝ} {c : ℝ × ℝ} {l : ι}
     (h : IsTagHolder (blockGuide n (levelLabels M old new ph ∅)) ph c l) : l ∈ range old :=
   h.mem_of_forall fun _ => levelLabels_empty_mem M old new ph _
 
-/-- **Tags during a level.** During the pass to level `n` only old and new labels hold tags.
+/-- **Tags between repaintings of a level.** At a repainting boundary during the pass to level
+`n`, only old and new labels hold tags.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-active-labels`,
 `06-geometry.tex:601–610`. -/
@@ -581,6 +612,26 @@ theorem isTagHolder_levelEnd {n : ℝ} {done : Set (ℤ × ℤ)} (hd : {Q | InRo
     {c : ℝ × ℝ} {l : ι}
     (h : IsTagHolder (blockGuide n (levelLabels M old new ph done)) ph c l) : l ∈ range new :=
   h.mem_of_forall fun _ => levelLabels_mem_of_subset M old new ph hd _
+
+/-- **Tags during a repainting.** While a block of the root square is repainted at level `n`, a
+tag holder of the main guide after the central birth and any completed edges, or of a main or
+auxiliary guide of an edge construction with any of its normal words, is an old or a new label.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-active-labels`,
+`06-geometry.tex:601–610`. -/
+theorem isTagHolder_blockRepainting {n : ℝ} (hn : 0 < n) (done : Set (ℤ × ℤ)) (S : ℤ × ℤ)
+    (E : List SquareEdge) (e : SquareEdge) {W : ℝ → ι}
+    (hW : W ∈ edgeWords (levelLabels M old new ph done S) (new S)
+      (levelLabels M old new ph done (e.nbrBlock S))) {c : ℝ × ℝ} {l : ι} :
+    (IsTagHolder ((blockBaseline hn (levelLabels M old new ph done) S (new S)).completedGuide E)
+        ph c l → l ∈ range old ∪ range new) ∧
+      (IsTagHolder ((blockBaseline hn (levelLabels M old new ph done) S (new S)).mainGuide E e W)
+        ph c l → l ∈ range old ∪ range new) ∧
+      (IsTagHolder ((blockBaseline hn (levelLabels M old new ph done) S (new S)).auxGuide e W)
+        ph c l → l ∈ range old ∪ range new) :=
+  ⟨fun h => h.mem_of_forall fun p => (blockRepainting_labels M old new ph hn done S E e hW p).1,
+    fun h => h.mem_of_forall fun p => (blockRepainting_labels M old new ph hn done S E e hW p).2.1,
+    fun h => h.mem_of_forall fun p => (blockRepainting_labels M old new ph hn done S E e hW p).2.2⟩
 
 end LevelTags
 

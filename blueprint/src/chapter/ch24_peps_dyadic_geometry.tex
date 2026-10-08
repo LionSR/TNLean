@@ -5,8 +5,8 @@ September 24, 2026, \texttt{06-geometry.tex}: the bands along the edges of a
 repainted dyadic square, the angular separation of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}
 (lines 254--319), the point-treatment estimates (lines 357--415), the absence of
 changed true vertices in the bulk operations and the tags (lines 375--398 and
-610--631), the geometry of the small-patch covers, of the direct repaintings and of
-the hole resizings (lines 341--351 and 447--570), and the counts of the padded
+610--631), and parts of the geometry of the small-patch covers, of the direct
+repaintings and of the hole resizings (lines 341--351 and 447--533), and the counts of the padded
 dyadic hierarchy behind items 1--3
 of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (lines 12--53 and 633--652).
 The protocol of Proposition~7.1 itself, whose changes are implemented by the
@@ -534,7 +534,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{theorem}[No changed true vertex in the bulk operations]
     \label{thm:peps_dyadic_no_changed_vertex}
-    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
+    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
     \leanok
     \uses{lem:peps_dyadic_floor, lem:peps_dyadic_incident_change, def:peps_dyadic_schedule}
     Let $0<t\le n$. Each of the seven births and deaths of an edge construction
@@ -544,12 +544,13 @@ $A$, $B$, $C$ below are permitted to coincide.
     surrounding label on the treated squares of radius $t$. Then the guides before
     and after have the same true vertices, each at distance at least $a_0t$ from the
     closure of the remaining changed region and with the same incident labels, so
-    with the same holes and tag holders. Homogenize both sheets of a lens exchange to
+    with the same tag holders; its outer hole square, of radius $2\epsilon_0t$, misses
+    the closed change once $2\epsilon_0<a_0$. Homogenize both sheets of a lens exchange to
     $C_e$ on the treated squares. Both are $C_e$ on the open neighborhood of radius
     $a_0t$ of $\partial Y$, and each exchanged guide has inside $Y$ exactly the true
     vertices and incident labels of the sheet it takes there, and outside $Y$ those
     of the other sheet. These are the statements
-    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 375--387 and 389--398.
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 375--382 and 389--398.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -561,35 +562,52 @@ $A$, $B$, $C$ below are permitted to coincide.
     treated squares. Apply the first part of
     Lemma~\ref{lem:peps_dyadic_incident_change}. For the exchange, a point within
     $a_0t$ of $\partial Y$ that is not common $C_e$ would contradict the floor;
-    apply the second part.
+    apply the second part. A point within $2\epsilon_0t<a_0t$ of a retained true
+    vertex is closer to it than any point of the closed change.
 \end{proof}
+
+The source's further conclusions at lines 383--387, that the raw target of the
+bulk change lies outside all holes, satisfies the tapering hypothesis and leaves a
+single-owner raw buffer, so that the birth lemma implements it, belong to the
+protocol and are not formalized here.
 
 \begin{lemma}[Tags and active labels]
     \label{lem:peps_dyadic_tags}
-    \lean{TNLean.PEPS.Approximation.IsTrueVertex.exists_isTagHolder, TNLean.PEPS.Approximation.isTagHolder_congr, TNLean.PEPS.Approximation.IsTagHolder.mem_of_forall, TNLean.PEPS.Approximation.isTagHolder_levelStart, TNLean.PEPS.Approximation.isTagHolder_level, TNLean.PEPS.Approximation.isTagHolder_levelEnd, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem}
+    \lean{TNLean.PEPS.Approximation.IsTrueVertex.exists_isTagHolder, TNLean.PEPS.Approximation.isTagHolder_congr, TNLean.PEPS.Approximation.IsTagHolder.mem_of_forall, TNLean.PEPS.Approximation.isTagHolder_levelStart, TNLean.PEPS.Approximation.isTagHolder_level, TNLean.PEPS.Approximation.isTagHolder_blockRepainting, TNLean.PEPS.Approximation.isTagHolder_levelEnd, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_range_mainGuide}
     \leanok
     \uses{def:peps_dyadic_incident_labels, lem:peps_dyadic_active_labels, thm:peps_dyadic_no_changed_vertex}
     A true vertex has at least two incident labels other than the placeholder, so a
     tag holder exists, and guides with the same incident labels at a point have the
     same tag holders there. Tag holders are values of the guide other than the
     placeholder. Hence at the start of the pass to level $n$ only labels of
-    $2n$-blocks hold main tags, during it only labels of $2n$- and $n$-blocks, and at
-    its end only labels of $n$-blocks: a party of side $2n$ has disappeared from every
-    main tag by the end of level $n$. The initial label $C_e$ of an auxiliary sheet
-    is a value of the current main guide, so no auxiliary initialization uses a
-    frozen label. These are the tag part of the invariant on active labels and the
-    statement on frozen auxiliary frames
-    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 610--614 and 625--627.
+    $2n$-blocks hold main tags; at every repainting boundary during it, and in every
+    main or auxiliary guide of a repainting, only labels of $2n$- and $n$-blocks do;
+    and at its end only labels of $n$-blocks: a party of side $2n$ has disappeared
+    from every main tag by the end of level $n$. During the edge construction along
+    an edge $e$, the label $C_e$ with which its auxiliary sheet is initialized is a
+    value of the main guide at that moment. These are the tag part of the invariant
+    on active labels, with a tag held by an incident label other than the
+    placeholder, and the selection of $C$ in the statement on frozen auxiliary
+    frames, of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 610--612 and
+    625--627.
 \end{lemma}
 
 \begin{proof}\leanok
     Of three distinct incident labels at most one is the placeholder. An incident
     label is a value of the guide, and the block labels of a level are described by
-    Lemma~\ref{lem:peps_dyadic_active_labels}. The label $C_e$ is the value of the
-    starting guide on the neighboring block.
+    Lemma~\ref{lem:peps_dyadic_active_labels}. The current main guide agrees with the
+    starting guide outside the closed square and outside the outer band of $e$, and
+    the starting guide is $C_e$ on the neighboring block across $e$, which reaches
+    outside that band.
 \end{proof}
 
-\begin{lemma}[The compactness observation]
+Here the tag of a true vertex is identified with an incident label other than the
+placeholder chosen by a tag rule. The source's statement that the protocol updates
+the stored tag at a junction by the corner rewrite of its last incident child square
+(lines 613--614), and the retirement of frozen frames (lines 620--631), concern the
+registers of the protocol of Proposition~7.1 and are not formalized here.
+
+\begin{lemma}[The compactness argument]
     \label{lem:peps_dyadic_footprint}
     \lean{TNLean.PEPS.Approximation.exists_pos_le_max_dist_of_inter_eq_empty, TNLean.PEPS.Approximation.exists_footprint_two_owners, TNLean.PEPS.Approximation.exists_footprint_two_owners_param, TNLean.PEPS.Approximation.exists_footprint_two_owners_guide}
     \leanok
@@ -602,8 +620,9 @@ $A$, $B$, $C$ below are permitted to coincide.
     values, let $W$ be a compact working neighborhood, and let every true vertex in
     $W$ lie in one of the open inner hole squares. Then there is $\delta>0$ such that
     every closed footprint of radius $\delta$ meets at most two labels at its points
-    of $W$ outside the open inner holes. This is the compactness observation
-    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 453--479.
+    of $W$ outside the open inner holes. This is the abstract compactness argument
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 453--462 and 475--479, and
+    its parametric form, lines 464--469, for compact joint sets.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -616,18 +635,25 @@ $A$, $B$, $C$ below are permitted to coincide.
     a common point of three of them would be a true vertex outside every inner hole.
 \end{proof}
 
+The source applies this argument to the scaled old and new guides near a mark, at a
+direct repainting and at a resizing. That these form finitely many label-equality
+types (lines 469--471), that the joint sets of a radius parameter and a point are
+closed (lines 465--468), and hence that the footprint ratio $\nu$ is bounded below independently
+of the scale, are not formalized here.
+
 \begin{lemma}[Square nets of patches]
     \label{lem:peps_dyadic_nets}
-    \lean{TNLean.PEPS.Approximation.exists_blockCorner_dist_lt, TNLean.PEPS.Approximation.exists_finset_blockCorner_dist_le, TNLean.PEPS.Approximation.exists_netCover, TNLean.PEPS.Approximation.closedBall_subset_thickening}
+    \lean{TNLean.PEPS.Approximation.exists_blockCorner_dist_lt, TNLean.PEPS.Approximation.exists_finset_blockCorner_dist_le, TNLean.PEPS.Approximation.exists_netCover, TNLean.PEPS.Approximation.closedBall_two_mul_subset_thickening_three_mul}
     \leanok
     \uses{def:peps_dyadic_block_guide}
     Let $u>0$. Every point is within distance less than $u$ of the net $u\mathbb Z^2$.
     A set inside a closed ball of radius $\rho$ is covered by the inner squares of
     radius $u$ about at most $(2(\rho+u)/u+1)^2$ net points, each within $u$ of
     the set, and the outer square of radius $2u$ about such a net point lies within
-    $3u$ of the set. With $u=\nu t$ and $\rho=O(t)$, or $u=\nu n$ and
-    $\rho=O(n)$, this is the fixed number of patches
-    in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 491--499 and 520--525.
+    $3u$ of the set. For a fixed ratio $\nu>0$, with $u=\nu t$ and $\rho=O(t)$, or
+    $u=\nu n$ and $\rho=O(n)$, the number of patches is bounded independently of the
+    scale, as in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 491--499 and
+    520--525.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -637,7 +663,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{lemma}[Hole radii of direct repaintings and resizings]
     \label{lem:peps_dyadic_small_radius}
-    \lean{TNLean.PEPS.Approximation.holeRadius_div_mem, TNLean.PEPS.Approximation.holeRadius_resize}
+    \lean{TNLean.PEPS.Approximation.holeRadius_div_mem_Icc, TNLean.PEPS.Approximation.holeRadius_resize}
     \leanok
     \uses{lem:peps_dyadic_floor}
     Let $\epsilon_0\ge0$ and $h_n=\epsilon_0\min(n,t)$. If $0<n\le K_0t$ with $t>0$,
@@ -676,34 +702,38 @@ $A$, $B$, $C$ below are permitted to coincide.
     is at distance at least $n$ in that coordinate.
 \end{proof}
 
-\begin{lemma}[Separations behind the choice of $K_0$]
+\begin{lemma}[Grid-corner and ray separations toward the choice of $K_0$]
     \label{lem:peps_dyadic_choice_K0}
-    \lean{TNLean.PEPS.Approximation.le_dist_blockCorner_of_ne, TNLean.PEPS.Approximation.disjoint_ball_blockCorner, TNLean.PEPS.Approximation.bandWidth_of_le_half, TNLean.PEPS.Approximation.mem_edgeBand_iff_of_mem_ball, TNLean.PEPS.Approximation.eq_point_of_mem_rim, TNLean.PEPS.Approximation.rim_separation}
+    \lean{TNLean.PEPS.Approximation.le_dist_blockCorner_of_ne, TNLean.PEPS.Approximation.disjoint_ball_blockCorner, TNLean.PEPS.Approximation.bandWidth_of_le_half, TNLean.PEPS.Approximation.bandWidth_of_half_le, TNLean.PEPS.Approximation.mem_edgeBand_iff_of_mem_ball, TNLean.PEPS.Approximation.mem_edgeBand_iff_of_mem_ball_end, TNLean.PEPS.Approximation.eq_point_of_mem_rim, TNLean.PEPS.Approximation.eq_point_of_mem_rim_end, TNLean.PEPS.Approximation.rim_separation}
     \leanok
     \uses{def:peps_dyadic_edge_band, lem:peps_dyadic_direct_repainting}
     Distinct grid corners are at distance at least $n$. Hence for $n>20t$ the
     squares of radius $10t$ about distinct grid corners are disjoint and contain no
-    other grid corner. In the open square of radius $n/2$ about an endpoint of an
-    edge, a band $\{\alpha<x<\beta\}$ is the cone
-    $\{s>0,\ \alpha s/1000<d<\beta s/1000\}$, so its interfaces are straight rays. A
-    point of the curve $x=\alpha$, $|\alpha|\le8$, with $0<s\le n/2$, on the rim of
-    the square of radius $t$ about the endpoint is the point $s=t$,
-    $d=\alpha t/1000$; rays with $|\alpha-\alpha'|\ge1/2$ meet the rim at points at
-    distance at least $t/2000$, and the closed squares of radius $2\epsilon_0t$
-    about them are disjoint once $\epsilon_0<1/8000$. These are part of the choice
-    of $K_0$ and $\epsilon_0$ in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines
-    341--351. The source's further claims there, that the enlargements contain no
-    true vertex on the band interfaces other than the marked point, and that the rim
-    points of the rays of both bands at a corner and of the grid lines are separated,
-    are not formalized here.
+    other grid corner. Let $\sigma$ be the parallel distance from an endpoint of an
+    edge, so $\sigma=s$ at the first endpoint and $\sigma=n-s$ at the second. In the
+    open square of radius $n/2$ about the endpoint, a band $\{\alpha<x<\beta\}$ is the
+    cone $\{\sigma>0,\ \alpha\sigma/1000<d<\beta\sigma/1000\}$, so its interfaces
+    are straight rays. A point of the curve $x=\alpha$, $|\alpha|\le8$, with
+    $0<\sigma\le n/2$, on the rim of the square of radius $t$ about the endpoint is
+    the point $\sigma=t$, $d=\alpha t/1000$; rays of one edge with
+    $|\alpha-\alpha'|\ge1/2$ meet that rim at points at distance at least
+    $t/2000$, and the closed squares of radius $2\epsilon_0t$ about them are
+    disjoint once $\epsilon_0<1/8000$. These are among the separations used for the
+    choice of $K_0$ and $\epsilon_0$ in~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    lines 341--351.
 \end{lemma}
 
 \begin{proof}\leanok
     Distinct grid corners differ by at least $1$ in some block index. On
-    $0\le s\le n/2$ one has $w(s)=s/1000$. On the curve $|d|=|\alpha|s/1000<s$, so the
-    distance from the endpoint is $s$. The two rim points differ only in $d$, by
-    $|\alpha-\alpha'|t/1000$.
+    $\sigma\le n/2$ one has $w=\sigma/1000$. On the curve
+    $|d|=|\alpha|\sigma/1000<\sigma$, so the distance from the endpoint is $\sigma$.
+    The two rim points differ only in $d$, by $|\alpha-\alpha'|t/1000$.
 \end{proof}
+
+The source's further claims in lines 341--351, that the tenfold enlargements
+contain no true vertex on the band interfaces other than the marked point, and that
+at a corner the rim points of the rays of both adjacent edges and of the grid lines
+are separated, are not formalized here.
 
 \begin{lemma}[Trivial holes at the last level]
     \label{lem:peps_dyadic_last_level}
