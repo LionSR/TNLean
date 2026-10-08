@@ -132,7 +132,7 @@ theorem LocalHamiltonian.surprisalTail_reducedState_le (h : LocalHamiltonian Λ 
     (reducedState_isHermitian Λ q Ω A) w
 
 /-- The concentration width `32 √((1 + J/Δ) ℬ_A) (M log (n + 2) + e/2 + log 2)` at which
-the marginal tail of Lemma 3.1 drops to `(n + 2)^{-M}`. -/
+the marginal tail of Lemma 3.1 drops to `(n + 2)^{-M}`, for `M ≥ 0`. -/
 noncomputable def concentrationWidth (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (J Δ : ℝ)
     (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) : ℝ :=
   32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A) *
