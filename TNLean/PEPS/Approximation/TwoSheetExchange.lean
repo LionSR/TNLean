@@ -149,7 +149,7 @@ def liftTags {l₁ l₂ : List (Hole pos q Party)}
 theorem norm_liftTags_le {l₁ l₂ : List (Hole pos q Party)}
     (G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ) :
     ‖liftTags (l₁ := l₁) (l₂ := l₂) G‖ ≤ ‖G‖ :=
-  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_le G)
+  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_rect_le G)
 
 /-- A two-sheet raw operator commuting with every product of raw parts of the two encodings
 passes through the product `K₁ ⊗ K₂` of the encodings. -/
