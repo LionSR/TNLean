@@ -51,6 +51,7 @@ import TNLean.MPS.Symmetry.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousSpectralCorner
 import TNLean.MPS.Symmetry.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.DualRepresentationParentHamiltonian
 import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath

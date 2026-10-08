@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BlockBoundarySelector
+import TNLean.MPS.MPDO.BoundaryAdjointClosed
 import TNLean.MPS.MPDO.NormalAdjointBoundary
 import TNLean.MPS.SharedInfra.BoundaryDecomposition
 
@@ -102,13 +103,6 @@ def blockSumAdjointBoundary (dual : Fin r → Fin r)
     Matrix (Fin (∑ a, dim a)) (Fin (∑ a, dim a)) ℂ :=
   ∑ a, embedBlockBoundary dim (dual a)
     (V a * (Matrix.finSigmaDiagonalBlock X a).map (starRingEnd ℂ) * W a)
-
-/-- Arbitrary-boundary adjoint closure asks for one output boundary valid
-simultaneously at all positive lengths. -/
-def IsBoundaryAdjointClosed {D : ℕ} (T : MPOTensor d D) : Prop :=
-  ∀ X : Matrix (Fin D) (Fin D) ℂ,
-    ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-      ∀ N : ℕ, 0 < N → (mpoWithBoundary T X N)ᴴ = mpoWithBoundary T Y N
 
 /-- Normality and periodic physical adjoint duality construct exact block
 gauges and a single boundary transport for the literal block sum.

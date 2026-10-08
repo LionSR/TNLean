@@ -81,6 +81,7 @@ import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.MPDO.BoundaryActionComparison
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
 import TNLean.MPS.MPDO.BoundaryActionTrees
+import TNLean.MPS.MPDO.BoundaryAdjointClosed
 import TNLean.MPS.MPDO.BoundaryAdjointCounterexample
 import TNLean.MPS.MPDO.BoundaryBiorthogonal
 import TNLean.MPS.MPDO.BoundaryBlockAction
@@ -187,6 +188,7 @@ import TNLean.MPS.MPDO.DiagonalCutRank
 import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.DirectSum
+import TNLean.MPS.MPDO.DualRepresentationAdjointBoundary
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.EtaPreparation
