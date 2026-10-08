@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.ClusterReview
-import TNLean.MPS.Symmetry.TimeReversalIndex
+import QICLean.Algebra.SpinCover.Basic
 
 /-!
 # Physical string order in the cluster state
@@ -91,26 +91,26 @@ theorem clusterTensorRMP_maximallyMixed_posDef_trace :
 /-- The virtual matrix `σy` is fixed by the physical twist `-σx`.
 Source: arXiv:0802.0447, Example 2. -/
 theorem clusterTensorRMP_twistedTransferMap_pauliY :
-    twistedTransferMap clusterTensorRMP (-pauliX) pauliY = pauliY := by
+    twistedTransferMap clusterTensorRMP (-pauliX) (SpinCover.pauli 1) = SpinCover.pauli 1 := by
   rw [clusterTensorRMP_twistedTransferMap]
   ext i j
-  fin_cases i <;> fin_cases j <;> norm_num [pauliX, pauliY]
+  fin_cases i <;> fin_cases j <;> norm_num [pauliX, SpinCover.pauli]
 
 /-- The physical twist `-σx` is implemented on the printed cluster tensor
 by the virtual Pauli matrix `σy`. Source: arXiv:0802.0447, Example 2. -/
 theorem clusterTensorRMP_pauliY_intertwine (i : Fin 2) :
-    (∑ j : Fin 2, (-pauliX) i j • clusterTensorRMP j) * pauliY =
-      pauliY * clusterTensorRMP i := by
+    (∑ j : Fin 2, (-pauliX) i j • clusterTensorRMP j) * SpinCover.pauli 1 =
+      SpinCover.pauli 1 * clusterTensorRMP i := by
   fin_cases i <;> ext a b <;> fin_cases a <;> fin_cases b <;>
-    simp [clusterTensorRMP, pauliX, pauliY, Matrix.mul_apply, Fin.sum_univ_two] <;> ring
+    simp [clusterTensorRMP, pauliX, SpinCover.pauli, Matrix.mul_apply, Fin.sum_univ_two] <;> ring
 
 /-- The one-site endpoint trace in Example 2 of arXiv:0802.0447 vanishes
 for every pair of physical indices, with normalized `Λ = 1/2`. -/
 theorem clusterTensorRMP_trace_pauliY_mul_letter_mul_conjTranspose (n j : Fin 2) :
-    Matrix.trace (pauliY * ((1 / 2 : ℂ) • 1) *
+    Matrix.trace (SpinCover.pauli 1 * ((1 / 2 : ℂ) • 1) *
       clusterTensorRMP n * (clusterTensorRMP j)ᴴ) = 0 := by
   fin_cases n <;> fin_cases j <;>
-    simp [clusterTensorRMP, pauliY, Matrix.trace, Fin.sum_univ_two,
+    simp [clusterTensorRMP, SpinCover.pauli, Matrix.trace, Fin.sum_univ_two,
       Matrix.vecMul, dotProduct, Matrix.conjTranspose_apply]
 
 /-- Every one-site physical endpoint is killed by two applications of the twist.
@@ -175,13 +175,13 @@ Source: arXiv:0802.0447, Example 2. -/
 def clusterStringLeft : Matrix (Fin 4) (Fin 4) ℂ :=
   fun i j =>
     pauliZ (Fin.modNat (m := 2) (n := 2) i) (Fin.modNat (m := 2) (n := 2) j) *
-      pauliY (Fin.divNat (m := 2) (n := 2) i) (Fin.divNat (m := 2) (n := 2) j)
+      SpinCover.pauli 1 (Fin.divNat (m := 2) (n := 2) i) (Fin.divNat (m := 2) (n := 2) j)
 
 /-- The two-site physical endpoint `σy ⊗ σz`, in the same blocked basis.
 Source: arXiv:0802.0447, Example 2. -/
 def clusterStringRight : Matrix (Fin 4) (Fin 4) ℂ :=
   fun i j =>
-    pauliY (Fin.modNat (m := 2) (n := 2) i) (Fin.modNat (m := 2) (n := 2) j) *
+    SpinCover.pauli 1 (Fin.modNat (m := 2) (n := 2) i) (Fin.modNat (m := 2) (n := 2) j) *
       pauliZ (Fin.divNat (m := 2) (n := 2) i) (Fin.divNat (m := 2) (n := 2) j)
 
 /-- The two-site physical twist `(-σx) ⊗ (-σx)`, in the same blocked basis.
@@ -197,7 +197,7 @@ lemma clusterStringLeft_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
     clusterStringLeft i j =
       pauliZ (decodeBlock 2 2 (Fin.cast h.symm i) 0)
           (decodeBlock 2 2 (Fin.cast h.symm j) 0) *
-        pauliY (decodeBlock 2 2 (Fin.cast h.symm i) 1)
+        SpinCover.pauli 1 (decodeBlock 2 2 (Fin.cast h.symm i) 1)
           (decodeBlock 2 2 (Fin.cast h.symm j) 1) := by
   simp [decodeBlock, clusterString_decodeBlock h i, clusterString_decodeBlock h j,
     clusterStringLeft]
@@ -206,7 +206,7 @@ lemma clusterStringLeft_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
 Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterStringRight_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
     clusterStringRight i j =
-      pauliY (decodeBlock 2 2 (Fin.cast h.symm i) 0)
+      SpinCover.pauli 1 (decodeBlock 2 2 (Fin.cast h.symm i) 0)
           (decodeBlock 2 2 (Fin.cast h.symm j) 0) *
         pauliZ (decodeBlock 2 2 (Fin.cast h.symm i) 1)
           (decodeBlock 2 2 (Fin.cast h.symm j) 1) := by
@@ -225,22 +225,22 @@ lemma clusterStringTwist_eq_blockKron (h : blockPhysDim 2 2 = 4) :
 /-- The right two-site physical endpoint produces `-σy` on the bond space.
 Source: arXiv:0802.0447, Example 2. -/
 lemma clusterBlockedRMP_twistedTransferMap_right :
-    twistedTransferMap clusterBlockedRMP clusterStringRight 1 = -pauliY := by
+    twistedTransferMap clusterBlockedRMP clusterStringRight 1 = -(SpinCover.pauli 1) := by
   ext i j
   fin_cases i <;> fin_cases j <;>
     norm_num [twistedTransferMap_apply, Fin.sum_univ_four, clusterStringRight,
-      pauliY, pauliZ, Matrix.mul_apply, Matrix.vecMul, dotProduct,
+      SpinCover.pauli, pauliZ, Matrix.mul_apply, Matrix.vecMul, dotProduct,
       Matrix.conjTranspose_apply, Fin.sum_univ_two, Fin.divNat, Fin.modNat, map_ofNat] <;>
     ring_nf
 
 /-- The left two-site physical endpoint sends `σy` to `-1`.
 Source: arXiv:0802.0447, Example 2. -/
 lemma clusterBlockedRMP_twistedTransferMap_left :
-    twistedTransferMap clusterBlockedRMP clusterStringLeft pauliY = -1 := by
+    twistedTransferMap clusterBlockedRMP clusterStringLeft (SpinCover.pauli 1) = -1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
     norm_num [twistedTransferMap_apply, Fin.sum_univ_four, clusterStringLeft,
-      pauliY, pauliZ, Matrix.mul_apply, Matrix.vecMul, dotProduct,
+      SpinCover.pauli, pauliZ, Matrix.mul_apply, Matrix.vecMul, dotProduct,
       Matrix.conjTranspose_apply, Fin.sum_univ_two, Fin.divNat, Fin.modNat, map_ofNat] <;>
     ring_nf <;> norm_num
 
@@ -253,7 +253,8 @@ theorem clusterTensorRMP_twoSite_physicalStringOrderParam (N : ℕ) :
       twistedTransferMap clusterBlockedRMP clusterStringLeft
         (twistedTransferIter clusterTensorRMP (-pauliX) N
           (twistedTransferMap clusterBlockedRMP clusterStringRight 1))) = 1 := by
-  have hN : twistedTransferIter clusterTensorRMP (-pauliX) N pauliY = pauliY := by
+  have hN : twistedTransferIter clusterTensorRMP (-pauliX) N (SpinCover.pauli 1) =
+      SpinCover.pauli 1 := by
     simpa only [twistedTransferIter, Module.End.pow_apply] using
       Function.iterate_fixed clusterTensorRMP_twistedTransferMap_pauliY N
   rw [clusterBlockedRMP_twistedTransferMap_right, map_neg, hN, map_neg,
@@ -264,11 +265,12 @@ theorem clusterTensorRMP_twoSite_physicalStringOrderParam (N : ℕ) :
 /-- The blocked twist fixes the same virtual eigenmatrix `σy`.
 Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterBlockedRMP_twistedTransferMap_pauliY :
-    twistedTransferMap clusterBlockedRMP clusterStringTwist pauliY = pauliY := by
+    twistedTransferMap clusterBlockedRMP clusterStringTwist (SpinCover.pauli 1) =
+      SpinCover.pauli 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
     norm_num [twistedTransferMap_apply, Fin.sum_univ_four, clusterStringTwist,
-      pauliY, pauliX, Matrix.mul_apply, Matrix.vecMul, dotProduct,
+      SpinCover.pauli, pauliX, Matrix.mul_apply, Matrix.vecMul, dotProduct,
       Matrix.conjTranspose_apply, Fin.sum_univ_two, Fin.divNat, Fin.modNat, map_ofNat] <;>
     ring_nf
 
@@ -278,7 +280,8 @@ Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 theorem clusterBlockedRMP_physicalStringOrderParam (N : ℕ) :
     physicalStringOrderParam clusterBlockedRMP ((1 / 2 : ℂ) • 1)
       clusterStringLeft clusterStringRight clusterStringTwist N = 1 := by
-  have hN : twistedTransferIter clusterBlockedRMP clusterStringTwist N pauliY = pauliY := by
+  have hN : twistedTransferIter clusterBlockedRMP clusterStringTwist N (SpinCover.pauli 1) =
+      SpinCover.pauli 1 := by
     simpa only [twistedTransferIter, Module.End.pow_apply] using
       Function.iterate_fixed clusterBlockedRMP_twistedTransferMap_pauliY N
   rw [physicalStringOrderParam, clusterBlockedRMP_twistedTransferMap_right,
@@ -296,7 +299,7 @@ theorem clusterBlockedRMP_hasPhysicalStringOrderWith :
     (tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => (1 : ℝ)) Filter.atTop (nhds 1))
 
 /-- The two-site blocked cluster state has physical string order under the
-nontrivial unitary `(-σx) ⊗ (-σx)`.
+nonscalar unitary `(-σx) ⊗ (-σx)`.
 Source: arXiv:0802.0447, Example 2. -/
 theorem clusterBlockedRMP_hasPhysicalStringOrder :
     HasPhysicalStringOrder clusterBlockedRMP ((1 / 2 : ℂ) • 1) := by
@@ -306,7 +309,7 @@ theorem clusterBlockedRMP_hasPhysicalStringOrder :
     fin_cases i <;> fin_cases j <;>
       norm_num [clusterStringTwist, pauliX, Matrix.mul_apply,
         Fin.sum_univ_four, Fin.divNat, Fin.modNat]
-  · intro h
+  · intro c h
     have h03 := congrArg (fun M : Matrix (Fin 4) (Fin 4) ℂ => M 0 3) h
     norm_num [clusterStringTwist, pauliX, Fin.divNat, Fin.modNat] at h03
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Circuit.GHZState
 import TNLean.Circuit.Measurement.Protocol
 import TNLean.Circuit.Gates.Permutation
 
@@ -72,32 +73,6 @@ open scoped BigOperators
 
 namespace QuantumCircuit
 
-/-! ### The GHZ-type state -/
-
-section State
-
-variable {b : ℕ}
-
-/-- The GHZ-like state `|χ_M⟩ = ∑ⱼ αⱼ |j⟩^{⊗M}` on `M` sites of dimension `b`
-(arXiv:2307.01696, the paragraph after eq. (19)): its amplitude at `s` is `∑ⱼ αⱼ`
-times the product of the coordinates `s k` of the basis vector `|j⟩`. -/
-def ghzState {M : ℕ} (α : Fin b → ℂ) (s : Fin M → Fin b) : ℂ :=
-  ∑ j, α j * ∏ k, (Pi.single j 1 : Fin b → ℂ) (s k)
-
-/-- The amplitude of `|χ_M⟩` at `s` is `α (s 0)` if all the values `s k` are equal, and `0`
-otherwise. -/
-theorem ghzState_apply {M : ℕ} [NeZero M] (α : Fin b → ℂ) (s : Fin M → Fin b) :
-    ghzState α s = if ∀ k, s k = s 0 then α (s 0) else 0 := by
-  classical
-  simp only [ghzState, Pi.single_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
-  rw [Finset.sum_eq_single (s 0)]
-  · split_ifs <;> simp
-  · intro j _ hj
-    rw [ite_eq_right fun h => hj (h 0).symm, mul_zero]
-  · simp
-
-end State
-
 variable {b M : ℕ} [NeZero b]
 
 /-! ### Sites -/
@@ -149,13 +124,13 @@ private theorem add_one_ne_self (k : Fin (M * 2)) : k + 1 ≠ k := by
   · have : k.val + 1 = M * 2 := by have := k.isLt; omega
     simp_all
 
-private theorem bond_ghzSite_zero (n : Fin M) : bond (ghzSite n 0) =
+private theorem bond_ghzSite_zero (n : Fin M) : ringBond (ghzSite n 0) =
     {ghzSite n 0, ghzSite n 1} := by
-  rw [bond, ghzSite_zero_add_one]
+  rw [ringBond, ghzSite_zero_add_one]
 
 private theorem bond_ghzSite_one (n : Fin M) (h : n.val + 1 < M) :
-    bond (ghzSite n 1) = {ghzSite n 1, ghzSite ⟨n.val + 1, h⟩ 0} := by
-  rw [bond, ghzSite_one_add_one n h]
+    ringBond (ghzSite n 1) = {ghzSite n 1, ghzSite ⟨n.val + 1, h⟩ 0} := by
+  rw [ringBond, ghzSite_one_add_one n h]
 
 /-! ### The layers -/
 
@@ -179,22 +154,22 @@ private theorem mem_secondBonds {k : Fin (M * 2)} :
   simp [secondBonds]
 
 private theorem firstBonds_pairwiseDisjoint :
-    ((firstBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint bond := by
+    ((firstBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint ringBond := by
   intro k hk k' hk' hkk'
   obtain ⟨n, -, rfl⟩ := mem_firstBonds.mp hk
   obtain ⟨n', -, rfl⟩ := mem_firstBonds.mp hk'
   have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
-  change Disjoint (bond _) (bond _)
+  change Disjoint (ringBond _) (ringBond _)
   rw [bond_ghzSite_zero, bond_ghzSite_zero, Set.disjoint_left]
   rintro i (rfl | rfl) (h | h) <;> exact hn (ghzSite_injective h).1
 
 private theorem secondBonds_pairwiseDisjoint :
-    ((secondBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint bond := by
+    ((secondBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint ringBond := by
   intro k hk k' hk' hkk'
   obtain ⟨n, hn1, rfl⟩ := mem_secondBonds.mp hk
   obtain ⟨n', hn1', rfl⟩ := mem_secondBonds.mp hk'
   have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
-  change Disjoint (bond _) (bond _)
+  change Disjoint (ringBond _) (ringBond _)
   rw [bond_ghzSite_one n hn1, bond_ghzSite_one n' hn1', Set.disjoint_left]
   rintro i (rfl | rfl) (h | h)
   · exact hn (ghzSite_injective h).1
@@ -223,13 +198,13 @@ private def secondShift (k : Fin (M * 2)) : Equiv.Perm (Fin (M * 2) → Fin b) :
   shiftPerm k (fun x => x (k + 1)) (secondShift_aux k)
 
 private theorem isLocalPerm_firstShift (k : Fin (M * 2)) :
-    IsLocalPerm (bond k) (firstShift (b := b) k) :=
-  isLocalPerm_shiftPerm (S := bond k) (Or.inr rfl) _ _ fun x y h => by
+    IsLocalPerm (ringBond k) (firstShift (b := b) k) :=
+  isLocalPerm_shiftPerm (S := ringBond k) (Or.inr rfl) _ _ fun x y h => by
     rw [h k (Or.inl rfl)]
 
 private theorem isLocalPerm_secondShift (k : Fin (M * 2)) :
-    IsLocalPerm (bond k) (secondShift (b := b) k) :=
-  isLocalPerm_shiftPerm (S := bond k) (Or.inl rfl) _ _ fun x y h => by
+    IsLocalPerm (ringBond k) (secondShift (b := b) k) :=
+  isLocalPerm_shiftPerm (S := ringBond k) (Or.inl rfl) _ _ fun x y h => by
     rw [h (k + 1) (Or.inr rfl)]
 
 /-- The first layer of controlled shifts. -/

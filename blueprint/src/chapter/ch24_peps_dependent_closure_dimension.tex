@@ -1,0 +1,212 @@
+\subsection{Independent four-block closure classes}
+\label{sec:peps_dependent_closure_dimension}
+
+Retain the four blocks, eight separately represented bonds, and actual cut
+spaces of Definition~\ref{def:peps_full_four_cut_space}. Write
+$p^{g,h}$ for the standard seam labels and $A^0$ for the four incident
+averaging tensors. Let $K$ be the number of simultaneous conjugacy classes
+of commuting pairs in $G$. The independence argument of
+\cite[Theorem~5.9]{Schuch2010PEPS} gives an exact dimension for this
+four-block intersection. The identification with a microscopic parent
+kernel is a separate geometric assertion.
+% Scope: this fragment proves closure independence and four-cut dimension.
+% It must not replace the unrestricted microscopic source-labelled theorem.
+% Source: Papers/1001.3807/paper_v3.tex:1560--1621.
+
+\begin{theorem}[Synchronization of closure gauges]%
+    \label{thm:peps_dependent_closure_gauge}
+    \lean{TNLean.PEPS.DependentTorus.closureLabels_conjugate,
+        TNLean.PEPS.DependentTorus.nonseamCompatible_of_closureLabels_eq,
+        TNLean.PEPS.DependentTorus.closureLabels_eq_iff}
+    \leanok
+    \uses{def:peps_labelled_closure}
+    For any $x,g,h\in G$, one has
+    $p^{xgx^{-1},xhx^{-1}}_e=xp^{g,h}_ex^{-1}$ on every bond.
+    Given pairs $(a,b),(g,h)$ and vertex labels $q$, the identities
+    \begin{align}
+        p^{a,b}_e=q_{\operatorname{head}(e)}p^{g,h}_e
+        q_{\operatorname{tail}(e)}^{-1}
+        \label{eq:peps_dependent_closure_gauge}
+    \end{align}
+    hold on all eight bonds if and only if $q$ is constant, with value
+    $x=q_{(0,0)}$, and $a=xgx^{-1}$ and $b=xhx^{-1}$.
+    Commutation is unnecessary here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_torus_nonseam_connectivity}
+    Both standard closures equal $1$ off their seams. On those bonds the
+    asserted identities give equality of neighboring vertex labels.
+    Nonseam connectivity implies $q_v=q_{(0,0)}$ at all four vertices.
+    Reading the vertical bond based at $(0,-1)$ and the horizontal bond
+    based at $(-1,0)$ gives $a=xgx^{-1}$ and $b=xhx^{-1}$.
+    Conversely, these equalities give the seam identities, while constant
+    conjugation fixes the identity labels on the other bonds.
+\end{proof}
+
+\begin{theorem}[Exact trace-dual closure coefficients]%
+    \label{thm:peps_dependent_closure_extraction}
+    \lean{TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure,
+        TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure_eq_zero_of_class_ne,
+        TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure_self,
+        TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure_self_ne_zero}
+    \leanok
+    \uses{def:peps_dependent_bond_coefficient, def:peps_full_four_cut_canonical,
+        def:peps_pair_conjugacy, def:peps_semiregular}
+    Suppose $G$ is finite and every $U_e$ is semi-regular. Let
+    $E_{a,b}=c_{p^{a,b}}$ be the product of the actual eight bond
+    trace-dual functionals. Then
+    \begin{align}
+        E_{a,b}\bigl(\zeta_{A^0}(g,h)\bigr)
+         & = |G|^{-4}\sum_{x\in G}
+        \mathbf 1_{a=xgx^{-1},\,b=xhx^{-1}},
+        \label{eq:peps_dependent_closure_extract} \\
+        E_{g,h}\bigl(\zeta_{A^0}(g,h)\bigr)
+         & = |G|^{-4}|C_G(g,h)|\ne0.
+        \label{eq:peps_dependent_closure_diagonal}
+    \end{align}
+    Here $C_G(g,h)=\{x\in G:xg=gx,\ xh=hx\}$ is the common centralizer.
+    In particular, the coefficient is zero for different simultaneous
+    conjugacy classes. These formulas hold even for noncommuting pairs.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_closure_gauge, thm:peps_dependent_canonical_bond_sum}
+    Expanding the four normalized local averages and applying the eight
+    trace-dual functionals gives
+    \begin{align}
+        E_{a,b}\bigl(\zeta_{A^0}(g,h)\bigr)
+        = |G|^{-4}\sum_{q\in G^\Lambda}
+        \prod_e\mathbf 1_{p^{a,b}_e
+                =q_{\operatorname{head}(e)}p^{g,h}_e
+                q_{\operatorname{tail}(e)}^{-1}}.
+        \label{eq:peps_dependent_closure_gauge_sum}
+    \end{align}
+    Theorem~\ref{thm:peps_dependent_closure_gauge} identifies the surviving
+    labels with constant functions $q_v=x$, proving
+    (\ref{eq:peps_dependent_closure_extract}). On the diagonal the surviving
+    $x$ are precisely the common centralizer. It contains the identity,
+    so (\ref{eq:peps_dependent_closure_diagonal}) is nonzero.
+\end{proof}
+
+\begin{theorem}[Conjugacy invariance of the actual closures]%
+    \label{thm:peps_dependent_closure_invariant}
+    \lean{TNLean.PEPS.DependentTorus.closure_conjugate,
+        TNLean.PEPS.DependentTorus.closure_eq_of_pairConjugacyClass_eq}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_pair_conjugacy}
+    For a finite group and locally invariant tensors $A_v$, one has
+    $\zeta_A(xgx^{-1},xhx^{-1})=\zeta_A(g,h)$ for all $x,g,h$.
+    Thus closures depend only on their simultaneous conjugacy class.
+    Neither semi-regularity nor injectivity is needed for this assertion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_closure_gauge, thm:peps_dependent_vertex_gauge,
+        thm:peps_full_four_cut_transport}
+    A constant vertex gauge transforms the two canonical seam labels by
+    simultaneous conjugation and leaves the canonical network unchanged.
+    Writing $T_v$ for the original site maps, local invariance gives
+    $T_vP_v=T_v$. Hence $\zeta_A(g,h)=(\bigotimes_vT_v)\zeta_{A^0}(g,h)$,
+    which transports the equality to the original physical tensors.
+\end{proof}
+
+\begin{definition}[Class-labelled four-block closures]%
+    \label{def:peps_dependent_closure_class}
+    \lean{TNLean.PEPS.DependentTorus.closureClass,
+        TNLean.PEPS.DependentTorus.closureClass_pairConjugacyClass,
+        TNLean.PEPS.DependentTorus.range_closure_commuting_eq_range_closureClass}
+    \leanok
+    \uses{thm:peps_dependent_closure_invariant}
+    For a simultaneous conjugacy class $C=[(g,h)]$, define
+    $\zeta_A(C)=\zeta_A(g,h)$. This does not depend on the representative.
+    The set of closures indexed by commuting pairs equals the set indexed
+    by commuting pair-conjugacy classes.
+\end{definition}
+
+\begin{theorem}[Independent classes for independent physical blocks]%
+    \label{thm:peps_dependent_closure_independent}
+    \lean{TNLean.PEPS.DependentTorus.linearIndependent_closureClass_canonical,
+        TNLean.PEPS.DependentTorus.linearIndependent_closureClass,
+        TNLean.PEPS.DependentTorus.linearIndependent_closureClass_commuting}
+    \leanok
+    \uses{def:peps_dependent_closure_class, def:peps_g_injective,
+        def:peps_semiregular}
+    Suppose each of the eight actual bond representations is semi-regular
+    and every physical tensor is $G$-injective for its own incident action.
+    Then the vectors $\zeta_A(C)$ are linearly independent as $C$ ranges
+    over all pair-conjugacy classes. In particular, the commuting classes
+    give a linearly independent family. The four physical alphabets and
+    all eight virtual alphabets may differ independently.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_closure_extraction, thm:peps_dependent_common_inverse,
+        thm:peps_full_four_cut_transport}
+    First take the canonical tensors. Apply $E_{g,h}$, for a representative
+    of any fixed class $C$, to a relation $\sum_{C'}\lambda_{C'}
+        \zeta_{A^0}(C')=0$. The off-class coefficients vanish, and the remaining
+    equation is $\lambda_C|G|^{-4}|C_G(g,h)|=0$.
+    Thus every $\lambda_C=0$.
+    For the actual tensors, choose their genuine local inverses with
+    $L_vT_v=P_v$. Physical contraction gives
+    $(\bigotimes_vL_v)\zeta_A(C)=\zeta_{A^0}(C)$ for every class $C$.
+    Applying this same linear map to a relation proves the result for $A$.
+    The inverse and scalar extraction are depicted below. Each vertical
+    leg denotes a complete configuration, retaining its independently
+    typed component indices; $\mathcal L=\bigotimes_vL_v$.
+    % Formula/source: E_{a,b} (tensor_v L_v) zeta_A(g,h)
+    % = E_{a,b} zeta_{A^0}(g,h), SCP10 paper_v3.tex:1590--1610,
+    % the boundary-lin-indep diagram, with the eight actual trace-dual
+    % factors of Lemma 4.6 applied after the four genuine local inverses.
+    % Ink-to-index: bottom ket is the actual four-tensor closure zeta_A;
+    % the middle box is tensor_v L_v; the top covector is E_{a,b}.
+    % First contracted leg is s=(s_v)_v, s_v in Y_v. Second is the
+    % complete incidence tuple sigma=(sigma_v)_v, sigma_v in X_v.
+    % Right-hand leg is that same tuple sigma. Each X_v is the product
+    % of its four separate incidence alphabets; no common bond type is used.
+    % All legs are contracted, so the boundary signature is scalar on
+    % both sides: zero virtual open indices and zero physical open indices.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={bra,op,ket}, cols=1, bonds=none]
+            \tn[at=(1,1), name=extractActual, size=l,
+                ports={270:physical}]{E_{a,b}}
+            \tn[at=(2,1), name=inverseActual, skin=mpo, size=l,
+                ports={90:physical,270:physical}]{\mathcal L}
+            \tn[at=(3,1), name=closureActual, size=l,
+                ports={90:physical}]{\zeta_A(g,h)}
+            \tnwire[name=extractedIncidences]{extractActual.270}{inverseActual.90}
+            \tnmark[form=label, label pos=e]{on extractedIncidences .5}{$\sigma$}
+            \tnwire[name=originalPhysical]{inverseActual.270}{closureActual.90}
+            \tnmark[form=label, label pos=e]{on originalPhysical .5}{$s$}
+        \end{tenkz}
+        \quad$=$\quad
+        \begin{tenkz}[rows={bra,ket}, cols=1, bonds=none]
+            \tn[at=(1,1), name=extractCanonical, size=l,
+                ports={270:physical}]{E_{a,b}}
+            \tn[at=(2,1), name=closureCanonical, size=l,
+                ports={90:physical}]{\zeta_{A^0}(g,h)}
+            \tnwire[name=canonicalIncidences]{extractCanonical.270}{closureCanonical.90}
+            \tnmark[form=label, label pos=e]{on canonicalIncidences .5}{$\sigma$}
+        \end{tenkz}
+        \quad$\displaystyle=|G|^{-4}
+            \sum_{x\in G}\mathbf 1_{a=xgx^{-1},\,b=xhx^{-1}}$.
+    \end{center}
+\end{proof}
+
+\begin{theorem}[Exact dimension of the four-cut intersection]%
+    \label{thm:peps_dependent_four_cut_dimension}
+    \lean{TNLean.PEPS.DependentTorus.finrank_commutingClosureSpan,
+        TNLean.PEPS.DependentTorus.finrank_fourCutSpace}
+    \leanok
+    \uses{def:peps_full_four_cut_space, def:peps_dependent_closure_class}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_dependent_closure_independent}, the commuting
+    class-labelled closures form a basis of $\mathcal I_A=\mathcal Z_A$.
+    Both spaces have complex dimension $K$, the number of simultaneous
+    conjugacy classes of commuting pairs in $G$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_four_cut_closure, thm:peps_dependent_closure_independent}
+    The four-cut closure theorem gives
+    $\mathcal I_A=\mathcal Z_A=\spn_{\C}\{\zeta_A(C):C\text{ commuting}\}$.
+    The stated family is linearly independent, so the dimension of its
+    span is its cardinality $K$.
+\end{proof}

@@ -6,6 +6,28 @@ open Matrix MPSTensor MPSPreparation QuantumCircuit
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
   Matrix.Norms.L2Operator
 
+/-! The Gram bound is uniform before choosing the physical dimension, tensor, or PSD reference.
+The separate zero-reference check excludes an accidental trace-one or faithfulness requirement. -/
+
+example (D : ℕ) :
+    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+      (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
+      ‖(physicalMatrix A)ᴴ * physicalMatrix A -
+          σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
+        K * ‖transferMatrix (Kraus.transferMap A) -
+          transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := by
+  obtain ⟨K, hK, h⟩ := exists_norm_gram_transferMatrix_sub_le D
+  exact ⟨K, hK, fun A σ hσ => (h A σ hσ).1⟩
+
+example (D : ℕ) :
+    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D),
+      ‖transferMatrix (Kraus.transferMap A) -
+          transferMatrix (Kraus.transferMap (fixedPointTensor (0 : Matrix (Fin D) (Fin D) ℂ)))‖ ≤
+        K * ‖(physicalMatrix A)ᴴ * physicalMatrix A‖ := by
+  obtain ⟨K, hK, h⟩ := exists_norm_gram_transferMatrix_sub_le D
+  refine ⟨K, hK, fun A => ?_⟩
+  simpa using (h A 0 Matrix.PosSemidef.zero).2
+
 example {D d N M : ℕ} [NeZero M] {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (A : MPSChainTensor d D N)
     (ℓ : Fin M → ℕ) (hN : ∑ j, ℓ j = N)

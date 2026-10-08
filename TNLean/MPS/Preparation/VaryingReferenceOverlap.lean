@@ -14,8 +14,9 @@ The pair on the bond leaving block `j` uses the reference of the following block
 
 **Scope restriction (ordered mixing):** these are quantitative sufficient conditions for
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS". They assume
-ordered-product estimates on a fixed square bond space; they do not infer those estimates
-from qualitative finite correlation. See `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+ordered-product estimates on a fixed square bond space; the corner extension is in
+`CornerReferenceOverlap`. They do not infer those estimates from qualitative finite
+correlation. See `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## References
 
@@ -29,6 +30,29 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
 
 namespace MPSPreparation
 
+/-- The positive-polar error is bounded by the square root of the transfer error whenever
+its reference positive matrix squares to the reshuffled reference map. This is the global
+Hölder estimate of arXiv:2103.13367, Supplemental Material, eq. (26). -/
+theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square (D : ℕ) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+      (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
+      (H : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ), H.PosSemidef →
+      (∀ a b, (H * H) a b = T (Matrix.single b.2 a.2 1) b.1 a.1) →
+      ‖Matrix.polarPos (physicalMatrix A) - H‖ ≤
+        K * Real.sqrt ‖transferMatrix (Kraus.transferMap A) - transferMatrix T‖ := by
+  obtain ⟨K, hK, hgram⟩ := exists_norm_gram_transferMatrix_sub_le_of_entries D
+  refine ⟨Real.sqrt K, Real.sqrt_nonneg _, fun {d} A T H hH hsq => ?_⟩
+  have hHH : (H * H).PosSemidef := by
+    simpa only [hH.isHermitian.eq] using Matrix.posSemidef_conjTranspose_mul_self H
+  have hsqrt := CFC.norm_sqrt_sub_sqrt_le
+    (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix A)).nonneg hHH.nonneg
+  rw [CFC.sqrt_mul_self H hH.nonneg] at hsqrt
+  refine hsqrt.trans ?_
+  calc Real.sqrt ‖(physicalMatrix A)ᴴ * physicalMatrix A - H * H‖
+      ≤ Real.sqrt (K * ‖transferMatrix (Kraus.transferMap A) - transferMatrix T‖) :=
+        Real.sqrt_le_sqrt (hgram A T (H * H) hsq).1
+    _ = _ := Real.sqrt_mul hK.le _
+
 /-- The positive-polar error has a uniform square-root bound over all positive semidefinite
 references, including singular ones. The constant depends only on the bond dimension. -/
 theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix (D : ℕ) :
@@ -38,35 +62,14 @@ theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix (D : ℕ) :
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         K * Real.sqrt ‖transferMatrix (Kraus.transferMap A) -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := by
-  classical
-  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
-      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl }
-  let Rc := LinearMap.toContinuousLinearMap R
-  refine ⟨Real.sqrt ‖Rc‖, Real.sqrt_nonneg _, fun {d} A σ hσ => ?_⟩
-  have hgram : (physicalMatrix A)ᴴ * physicalMatrix A -
-      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      Rc (transferMatrix (Kraus.transferMap A) -
-        transferMatrix (Kraus.transferMap (fixedPointTensor σ))) := by
-    ext a b
-    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply,
-      transpose_kronecker_one_apply]
-    change _ = Kraus.transferMap A (Matrix.single b.2 a.2 1) b.1 a.1 -
-      Kraus.transferMap (fixedPointTensor σ) (Matrix.single b.2 a.2 1) b.1 a.1
-    rw [transferMap_fixedPointTensor_apply hσ]
-  have hsqrt := CFC.norm_sqrt_sub_sqrt_le
-    (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix A)).nonneg
-    (hσ.transpose.kronecker Matrix.PosSemidef.one).nonneg
-  rw [sqrt_transpose_kronecker_one hσ, hgram] at hsqrt
-  refine hsqrt.trans ?_
-  calc Real.sqrt ‖Rc (transferMatrix (Kraus.transferMap A) -
-          transferMatrix (Kraus.transferMap (fixedPointTensor σ)))‖
-      ≤ Real.sqrt (‖Rc‖ * ‖transferMatrix (Kraus.transferMap A) -
-          transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖) :=
-        Real.sqrt_le_sqrt (Rc.le_opNorm _)
-    _ = _ := Real.sqrt_mul (norm_nonneg _) _
+  obtain ⟨K, hK, h⟩ := exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square D
+  refine ⟨K, hK, fun {d} A σ hσ => h A _ _ ?_ ?_⟩
+  · exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg σ)).transpose.kronecker
+      Matrix.PosSemidef.one
+  · intro a b
+    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, ← Matrix.transpose_mul,
+      CFC.sqrt_mul_sqrt_self σ hσ.nonneg, transpose_kronecker_one_apply,
+      transferMap_fixedPointTensor_apply hσ]
 
 /-- Site-dependent fixed-point tensors give the nearest-neighbor pair of the *following*
 site on each outgoing bond. This cyclic shift is invisible in the constant-reference case. -/
@@ -124,7 +127,9 @@ theorem sum_mpvFamily_mul_star_mpvFamily {D M κ : ℕ} [NeZero M]
   rw [star_prod, ← Finset.prod_mul_distrib]
   rfl
 
-private theorem exists_uniform_reference_bounds (D : ℕ) :
+/-- Transfer matrices of density reset maps and the linear mixed-transfer maps against
+their positive tensors have bounds depending only on the ambient bond dimension. -/
+theorem exists_uniform_reference_bounds (D : ℕ) :
     ∃ c : ℝ, 1 ≤ c ∧ ∀ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosSemidef → σ.trace = 1 →
       ‖transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ c ∧
@@ -220,6 +225,43 @@ private theorem prod_range_transferMatrix_fixedPointTensor {D : ℕ}
       List.prod_singleton, ih]
     exact transferMatrix_fixedPointTensor_mul (hσ _) (hσ _) (htr _)
 
+/-- Bounded reference products and square-root local errors give a uniform exponential
+trace bound. This is the ordered telescoping argument of arXiv:2103.13367, Supplemental
+Material, proof of Theorem MPS_classification, followed by the matrix trace bound. -/
+theorem exists_norm_trace_prod_sub_one_le_of_reference_bounds (D : ℕ) (c L : ℝ)
+    (hc : 1 ≤ c) (hL : 0 ≤ L) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (X Y : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
+      {δ : ℝ}, 0 ≤ δ →
+      (∀ a n : ℕ, ‖((List.range n).map (fun j => Y (a + j))).prod‖ ≤ c) →
+      (∀ j, ‖X j - Y j‖ ≤ L * Real.sqrt δ) → ∀ M : ℕ,
+      Matrix.trace ((List.range M).map Y).prod = 1 →
+      ‖Matrix.trace ((List.range M).map X).prod - 1‖ ≤
+        C * (M * Real.sqrt δ) * Real.exp (C * (M * Real.sqrt δ)) := by
+  let trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
+  let K := c * L
+  have hc0 : 0 ≤ c := by linarith
+  have hK : 0 ≤ K := mul_nonneg hc0 hL
+  let C := ‖trL‖ * c * K + K + 1
+  refine ⟨C, by dsimp [C]; positivity, fun X Y δ hδ hY hXY M htrace => ?_⟩
+  have ht := norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le hY hXY M
+  have hgeom := one_add_pow_sub_one_le_mul_exp
+    (show 0 ≤ c * (L * Real.sqrt δ) by positivity) M
+  rw [← htrace, ← Matrix.trace_sub]
+  change ‖trL _‖ ≤ _
+  calc ‖trL _‖ ≤ ‖trL‖ * ‖((List.range M).map X).prod - ((List.range M).map Y).prod‖ :=
+        trL.le_opNorm _
+    _ ≤ ‖trL‖ * (c * ((1 + c * (L * Real.sqrt δ)) ^ M - 1)) := by gcongr
+    _ ≤ ‖trL‖ * (c * (M * (c * (L * Real.sqrt δ)) *
+        Real.exp (M * (c * (L * Real.sqrt δ))))) := by gcongr
+    _ = ‖trL‖ * c * K * (M * Real.sqrt δ) * Real.exp (K * (M * Real.sqrt δ)) := by
+        dsimp [K]; ring_nf
+    _ ≤ C * (M * Real.sqrt δ) * Real.exp (C * (M * Real.sqrt δ)) := by
+        have hKC : K ≤ C := by
+          dsimp [C]
+          nlinarith [mul_nonneg (mul_nonneg (norm_nonneg trL) hc0) hK]
+        have hKC' : ‖trL‖ * c * K ≤ C := by dsimp [C]; linarith
+        gcongr
+
 /-- Uniform overlap control for singular, site-dependent density references. The square-root
 loss comes from the global Hölder estimate; no minimum eigenvalue is assumed. -/
 theorem exists_norm_trace_prod_polarPos_sub_one_le_varying_reference (D : ℕ) :
@@ -234,12 +276,10 @@ theorem exists_norm_trace_prod_polarPos_sub_one_le_varying_reference (D : ℕ) :
   classical
   obtain ⟨Kp, hKp, hp⟩ := exists_norm_polarPos_sub_le_sqrt_transferMatrix D
   obtain ⟨c, hc, hb⟩ := exists_uniform_reference_bounds D
-  let trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
-  let K := c * (c * Kp)
   have hc0 : 0 ≤ c := by linarith
-  have hK : 0 ≤ K := by dsimp [K]; positivity
-  let C := ‖trL‖ * c * K + K + 1
-  refine ⟨C, by dsimp [C]; positivity, fun {M} _ d A σ hσ htr δ hδ hA => ?_⟩
+  obtain ⟨C, hC, hbound⟩ := exists_norm_trace_prod_sub_one_le_of_reference_bounds D c
+    (c * Kp) hc (mul_nonneg hc0 hKp)
+  refine ⟨C, hC, fun {M} _ d A σ hσ htr δ hδ hA => ?_⟩
   have := Matrix.neZero_of_trace_eq_one (htr 0)
   let ρ : ℕ → Matrix (Fin D) (Fin D) ℂ := fun j =>
     if h : j < M then σ ⟨j, h⟩ else σ 0
@@ -282,9 +322,6 @@ theorem exists_norm_trace_prod_polarPos_sub_one_le_varying_reference (D : ℕ) :
         ((hp _ _ (hσ _)).trans (mul_le_mul_of_nonneg_left
           (Real.sqrt_le_sqrt (hA _)) hKp)) (norm_nonneg _) hc0)
     · rw [sub_self, norm_zero]; positivity
-  have ht := norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le hY hXY M
-  have hgeom := one_add_pow_sub_one_le_mul_exp
-    (show 0 ≤ c * (c * Kp * Real.sqrt δ) by positivity) M
   have htrace : Matrix.trace ((List.range M).map Y).prod = 1 := by
     obtain ⟨m, hm⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne M)
     rw [hm]
@@ -302,20 +339,7 @@ theorem exists_norm_trace_prod_polarPos_sub_one_le_varying_reference (D : ℕ) :
     simp only [List.getElem_ofFn, List.getElem_map, List.getElem_range]
     dsimp [X]
     rw [dite_eq_left hjM]
-  rw [hprod, ← htrace, ← Matrix.trace_sub]
-  change ‖trL _‖ ≤ _
-  calc ‖trL _‖ ≤ ‖trL‖ * ‖((List.range M).map X).prod - ((List.range M).map Y).prod‖ :=
-        trL.le_opNorm _
-    _ ≤ ‖trL‖ * (c * ((1 + c * (c * Kp * Real.sqrt δ)) ^ M - 1)) := by gcongr
-    _ ≤ ‖trL‖ * (c * (M * (c * (c * Kp * Real.sqrt δ)) *
-        Real.exp (M * (c * (c * Kp * Real.sqrt δ))))) := by gcongr
-    _ = ‖trL‖ * c * K * (M * Real.sqrt δ) * Real.exp (K * (M * Real.sqrt δ)) := by
-        dsimp [K]; ring_nf
-    _ ≤ C * (M * Real.sqrt δ) * Real.exp (C * (M * Real.sqrt δ)) := by
-        have hKC : K ≤ C := by
-          dsimp [C]
-          nlinarith [mul_nonneg (mul_nonneg (norm_nonneg trL) hc0) hK]
-        have hKC' : ‖trL‖ * c * K ≤ C := by dsimp [C]; linarith
-        gcongr
+  rw [hprod]
+  exact hbound X Y hδ hY hXY M htrace
 
 end MPSPreparation

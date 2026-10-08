@@ -24,6 +24,133 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
+
+- **Pattern:** Rewrite the quasi-local MPS expectation of an interval
+  observable by unfolding the interval inclusion, applying the interval
+  formula, and cancelling the coordinate equivalence.
+- **Seen:** Six parent-Hamiltonian modules repeated the same three-step
+  rewrite.
+- **Abstraction:** `MPSTensor.quasiLocalExpectation_quasiLocalIntervalObservable`
+  in `LocalObservableQuasiLocalState`, next to the interval formula it uses.
+- **Refactor:** All known callers use the lemma.
+
+### A positive binary measurement from an orthogonal projector — promoted (2026-10-03)
+
+- **Pattern:** Derive Hermiticity, positivity, idempotence, orthogonality and
+  completeness for a projector and its complement.
+- **Occurrences:** The return measurement in `PEPS/RegularChargePair.lean`,
+  the physical charge measurement in `PEPS/RegularTwoSitePhysicalChargeMeasurement.lean`,
+  and the physical transport in `Algebra/ScaledProjectionTransport.lean`.
+- **Abstraction:** `Matrix.binaryProjectionFamily_complete` in
+  `Algebra/BinaryProjectionFamily.lean`; all three calculations use this lemma.
+- **Related reuse:** `Matrix.scaledProjectionTransport_properties` replaces the
+  private transported-projection calculation in the two-site charge measurements.
+  It proves positivity and the coefficient-map intertwiner from the explicit
+  scaled Gram identity, support identity and commuting virtual projector.
+
+### Absorption of the regional regular projector — promoted (2026-10-03)
+
+- **Pattern:** Expand the product physical map, apply local absorption of the
+  regular averaging projector, and reassemble the product to obtain AP=A.
+- **Abstraction:** `regionPhysicalProductMatrix_mul_regularLocalProjector` in
+  `PEPS/RegularPhysicalUnitaryTransport.lean` states this regional identity once.
+- **Reuse:** The physical charge-pair image proof and original-spin return
+  measurement use it directly. The two-site local data calculation already uses
+  `regularSiteMap_projector_coefficients`, the same underlying local identity.
+  The return measurement also uses `Matrix.exists_binaryProjectionFamily_transport`
+  for the complete positive measurement on the full physical space.
+
+### Column selection identified with a fixed-input contraction — promoted (2026-10-07)
+
+- **Pattern:** Select a nonzero column with
+  `exists_column_ne_zero_of_traceNorm_sub_pure_le`, rewrite it as the
+  contraction of the network with the input fixed, and repackage.
+- **Seen:** Two sites in `TNLean/PEPS/Approximation/VectorColumn.lean` and two
+  in `TNLean/PEPS/Approximation/SquareGridColumn.lean`.
+- **Abstraction:** `exists_eq_column_ne_zero_of_traceNorm_sub_pure_le` in
+  `ColumnSelection`, taking a family `ψ z` identified with the columns `σ|z⟩`.
+- **Refactor:** Both square-grid sites use it. The two `VectorColumn` sites
+  already state their conclusion for the column itself and take the base lemma
+  directly, with no rewrite step.
+
+### Periodic norm as transfer trace — promoted (2026-10-06)
+
+- **Pattern:** Apply the physical expectation trace identity to the identity
+  observable and simplify its action to obtain the periodic squared norm.
+- **Seen:** The canonical norm limit and two finite full-ring proofs repeated
+  the same calculation, in addition to the existing `WindowClustering` lemma.
+- **Abstraction:** The existing public
+  `MPSTensor.inner_mpvState_self_eq_trace` is moved unchanged to its lower owner
+  `WindowCorrelator`; no alias or second declaration is added.
+- **Refactor:** All three new callers use the existing identity. The clustering
+  owner still imports it transitively through `WindowOperatorSupport`.
+
+
+### Canonical purity consequences — promoted (2026-10-05)
+
+- **Pattern:** From a faithful canonical stationary density and the simple
+  peripheral eigenspace property, derive irreducibility and peripheral
+  primitivity before applying a twisted-transfer theorem.
+- **Seen:** The source spectral theorem and physical selection rule repeated
+  this reduction; finite physical endpoints need the same consequences.
+- **Abstraction:** `MPSTensor.pureCanonical_isIrreducibleMap_and_isPrimitive`
+  in `PureTwistedSpectrum`; the existing two consumers and the new canonical
+  endpoint theorem use it without altering their mathematical hypotheses.
+- **Notes:** Actual-import validation of the combined analytic refactor is
+  recorded separately in the String Order integration audit.
+
+
+### Logarithmic normalization cutoff — promoted (2026-10-05)
+
+- **Pattern:** Turn `(log K - log ε) / r ≤ x` into `K exp(-rx) ≤ ε`.
+- **Seen:** The three eventual-nonvanishing proofs in
+  `InhomogeneousMixingPreparation`, `VaryingReferencePreparation`, and
+  `RectangularPreparation`.
+- **Abstraction:** `mul_exp_neg_mul_le_of_div_log_le` in
+  `InjectivityCutoff`, using the existing exponential threshold theorem.
+- **Refactor:** Three copied arithmetic blocks become calls to the shared bound.
+
+
+### Sites in a one-block partition — promoted (2026-10-05)
+
+- **Pattern:** Proving that the site map of a singleton partition is the identity
+  by finite-index extensionality and unfolding the block offset.
+- **Seen:** Five uses in `RectangularPreparation`, `VaryingReferencePreparation`,
+  `InhomogeneousMixingPreparation`, and `OrderedMixingPairRate`.
+- **Abstraction:** `MPSPreparation.blockSite_singleton` in `BlockSites`.
+- **Refactor:** All five consumers use the shared identity.
+
+
+### Uniform Gram/transfer reshuffling — promoted (2026-10-05)
+
+- **Pattern:** Reshuffle the transfer-matrix error into the physical Gram
+  error, bound the reshuffling by its operator norm, and reverse the same
+  involution when starting from a Gram estimate.
+- **Seen:** `InhomogeneousOverlap`, `VaryingReferenceOverlap`, and
+  `InhomogeneousChoiResidual` repeated this fixed-dimensional argument.
+- **Abstraction:** `MPSTensor.exists_norm_gram_transferMatrix_sub_le` in
+  `PositivePartRate` proves both directions with one constant chosen before
+  the physical dimension, tensor, and positive semidefinite reference.
+- **Notes:** Both polar estimates and the actual-site/window Choi consumers
+  use the same comparison; the fixed-reference inverse wrapper is removed.
+  No generic channel definition or new import is introduced.
+
+
+### Transported-reference Choi residual estimate — promoted (2026-10-05)
+
+- **Pattern:** Subtract trace-preparation terms from actual block channels,
+  compose the completely positive residuals, and bound their normalized Choi
+  traces before reshuffling to the physical Gram matrix.
+- **Seen:** `InhomogeneousPositivePartRate` and `WindowMixing` previously needed
+  the same residual/trace bookkeeping with different reference hypotheses.
+- **Abstraction:**
+  `MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination`
+  in `InhomogeneousChoiResidual` handles varying strengths and minorizers.
+- **Notes:** This is a substantive transported-reference estimate, not a new
+  tactic. The common faithful theorem preserves its signature and exponent;
+  the new fixed-window consumer supplies its own compatible references.
+
 ### Simultaneous permutation invariance of matrix entries — promoted (2026-10-03)
 
 - **Pattern:** Convert simultaneous invariance of matrix entries into commutation
@@ -852,7 +979,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
+  `trace_rectKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
   and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
 - **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
@@ -2675,6 +2802,10 @@ three-plaquette output measurement, and the routed reunion measurement.
   captured rather than threaded through the lemma signature.
   `neighboringOperator_entry_eq_of_heq` stays: its conclusion is indexed by a
   sector pair, not a single index family.
+- **Upstream reuse (2026-10-05):** the unchanged generic `Matrix.entry_eq_of_heq`
+  now belongs to `QICLean/Algebra/MatrixDependentEntries.lean`. The original MPDO
+  module imports it, preserving the same name and binders for every existing consumer.
+  Actual varying-bond interval identification uses the same coordinate transport.
 
 ### MPDO pair-trace separation duality
 - **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
@@ -5489,3 +5620,79 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The dependent projection identification is separately shared as
   `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; both joint edge consumers
   use that theorem instead of repeating the orthogonal-projection proof.
+
+### Finite periodic quotient error — candidate (2026-10-06)
+
+- **Pattern:** Bound a normalized periodic expectation by rewriting
+  `a / b - s = ((a - s) + s * (1 - b)) / b` and using `‖b‖ ≥ 1/2`.
+- **Seen:** The fixed-support quantitative expectation proof and its simpler
+  full-ring contracting case in `MPS/Symmetry/PeriodicStringBounds`.
+- **Abstraction:** None yet. The fixed-support proof bounds a centered
+  numerator, while the full-ring proof has target zero. Existing norm and
+  division inequalities keep both arguments short.
+- **Notes:** The two occurrences do not justify another exported quotient
+  wrapper; the underlying estimates stay with the actual periodic observables.
+
+### Bilinear identities for two pair sources — candidate (2026-10-07)
+
+- **Pattern:** Reduce an identity involving two arbitrary bipartite source
+  vectors to pure tensors by two tensor-product inductions. Linearity handles
+  the additive cases; tensor associators and exchanges then evaluate explicitly.
+- **Seen:** `eval_combineSources` in
+  `TNLean/PEPS/Approximation/PartyLayout.lean` and
+  `eval_expandCombinedPair` in
+  `TNLean/PEPS/Approximation/PairSourceExpansion.lean` (two occurrences).
+- **Abstraction:** At the next occurrence, consider a bilinear extensionality
+  lemma for maps on two tensor products. The existing `clm_ext_tmul` and
+  `clm_ext_tmul₃` already handle identities between continuous linear maps
+  with one tensor-product input; use those whenever the map has that form.
+- **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
+  complete source blocks reuses the preparation tensor identity and the
+  register-block exchange theorem. Neither requires another double induction.
+
+### Tensor maps under equal filtered layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify equal owner-filtered memories, transport their tensor
+  maps, and compare the resulting operators or their values on vectors.
+- **Seen:** `PartyTensorMaps.mapL_heq` and
+  `PartyFactorization.mapL_apply_heq` under `PEPS/Approximation` (two local
+  helpers across two files).
+- **Abstraction:** Canonical conjugation already uses the shared
+  `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
+  `Layout.eq_conj_memCongr_of_heq`. The remaining two helpers distinguish
+  equality of tensor maps from equality after evaluation. A further occurrence
+  should use one tensor-map equality lemma followed by evaluation.
+- **Notes:** Associator and exchange identities use the existing
+  `clm_ext_tmul₃`; no additional tactic is needed.
+- **Scan:** The focused approximation scan also found five instances of
+  eliminating the two layout equalities by `cases` and closing by reflexivity,
+  all in `WordRestriction.lean`. These express the defining equations of the
+  equality transport; there is no repeated proof argument across files.
+
+### Complementary-slice reconstruction — candidate (2026-10-07)
+
+- **Pattern:** Choose one inside vector for each outside configuration and
+  reconstruct the global vector by composing with the regional configuration
+  equivalence. Applying a slice reduces to the equivalence's inverse law.
+- **Seen:** `range_dependentRegionOperatorLift` and the two summands in
+  `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Cylinder`.
+- **Abstraction:** None yet; these three occurrences are in one file. Reuse the
+  existing configuration equivalence before introducing another reconstruction
+  map if a second file needs the same argument.
+- **Notes:** This argument permits an empty complementary configuration type;
+  it never cancels an identity extension or assumes that the outside factor is
+  nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
+  its default thresholds.
+
+### Ordered regularized regional filters — candidate (2026-10-07)
+
+- **Pattern:** Use a coordinate isometry to transport a regional matrix action to
+  a Kronecker product with the identity, then apply the existing Euclidean bound.
+  Obtain the lower bound by cancelling the filter with its positive power.
+- **Seen:** The lifted regional bound and local inverse-cancellation argument in
+  `PEPS/AreaLaw/RegularizedPatchMinimum`; scalar shifted-density power bounds are
+  supplied by `QICLean.Analysis.ShiftedDensityPowers`.
+- **Abstraction:** The native lift estimate is factored once. Product bounds use
+  a private list induction; there is no new optimizer or contraction-chain type.
+- **Notes:** These are distinct uses of existing isometry and CFC results, below
+  the threshold for any additional tactic or general framework.

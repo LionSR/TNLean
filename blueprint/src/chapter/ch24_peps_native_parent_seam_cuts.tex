@@ -1,0 +1,185 @@
+\subsection{Microscopic parent constraints and native seam boundaries}
+\label{sec:peps_native_parent_seam_cuts}
+
+The parent-Hamiltonian argument in \cite{Schuch2010PEPS} uses the regional
+intersection and closure statements of Theorems~5.4 and~5.5. The auxiliary
+results below pass directly from microscopic plaquette constraints to
+boundary tensors on the original lattice.
+% Scope: native simple tori, both periods at least three. No identification
+% with the separate four-block closure space is claimed in this subsection.
+
+\begin{definition}[Regional cuts in the original graph]%
+    \label{def:peps_native_regional_cut}
+    \lean{TNLean.PEPS.graphEdgeTail,TNLean.PEPS.graphEdgeHead,
+        TNLean.PEPS.graphBondAlphabet,TNLean.PEPS.graphIncidentEndpoint,
+        TNLean.PEPS.graphDependentTensor,TNLean.PEPS.regionExteriorCut,
+        TNLean.PEPS.regionCutBoundaryLabel,TNLean.PEPS.graphDependentTensor_diagonal,
+        TNLean.PEPS.network_graphDependentTensor_one,TNLean.PEPS.mem_regionExteriorCut_of_boundary,
+        TNLean.PEPS.mem_regionExteriorCut_of_outside,TNLean.PEPS.regionCutBoundaryLabel_diagonal,
+        TNLean.PEPS.graphEndpointIncident,TNLean.PEPS.graphIncidentEndpoint_endpointIncident}
+    \leanok
+    Let $\Gamma=(V,E)$ be a finite simple graph with ordered vertices.
+    An edge $e$ has tail $t(e)<h(e)$ and alphabet
+    $X_e=\{0,\ldots,D_e-1\}$. Each site has its own tensor $A_v$,
+    with common physical codomain $\mathbb C^d$ until the final theorem.
+    For $R\subseteq V$, define
+    $C_R=\{e:\{t(e),h(e)\}\not\subseteq R\}$.
+    Replacing an incident edge by its unique endpoint at $v$ identifies
+    the original tensor coordinates with the independent endpoint coordinates.
+    Thus contracting identity bonds gives exactly the original PEPS vector,
+    and a diagonal endpoint assignment restricts to its original crossing labels.
+    Write $\mathcal S_{A,C}$ for the range of the actual cut contraction
+    against one arbitrary joint boundary on the two incidences of each $e\in C$.
+\end{definition}
+
+\begin{theorem}[Actual parent constraints supply regional cut boundaries]%
+    \label{thm:peps_native_parent_regional_cut}
+    \lean{TNLean.PEPS.regionParentGroundSpace_le_iInf_cutSpace,
+        TNLean.PEPS.exists_cutBoundary_of_mem_regionParentKernel,
+        TNLean.PEPS.DependentBondNetwork.headTailConfigEquiv,
+        TNLean.PEPS.DependentBondNetwork.diagonalEndpointConfig,
+        TNLean.PEPS.DependentBondNetwork.sum_identityWeight_mul,
+        TNLean.PEPS.DependentBondNetwork.cutIdentityWeight,
+        TNLean.PEPS.DependentBondNetwork.cutIdentityWeight_mul_interior,
+        TNLean.PEPS.DependentBondNetwork.sum_cutIdentityWeight_mul,
+        TNLean.PEPS.sum_regionBoundaryLabel_mul_eq_openRegionMap,
+        TNLean.PEPS.outsidePhysicalToComplement,TNLean.PEPS.graphRegionalCutBoundary,
+        TNLean.PEPS.liftedCutMap_graphRegionalCutBoundary,
+        TNLean.PEPS.mem_liftedCutSpace_of_region_slices,
+        TNLean.PEPS.regionParentGroundSpace_le_iInf_liftedCutSpace}
+    \leanok
+    \uses{def:peps_native_regional_cut}
+    Suppose $D_e>0$ for every bond and that the finite family of regions $(R_i)_i$ covers
+    $V$. Let $H_i\geq0$ have kernel equal to the genuine open-region
+    range on $R_i$, and let $H=\sum_i H_i\otimes I_{V\setminus R_i}$.
+    Every $\psi\in\ker H$ belongs to $\bigcap_i\mathcal S_{A,C_{R_i}}$.
+    Neither injectivity nor a common bond dimension is required.
+\end{theorem}
+\begin{proof}\leanok
+    Positivity gives every regional slice in the corresponding open-region
+    range. Select its virtual boundary jointly with the omitted physical
+    coordinates. Close both endpoints of each additional cut bond by an
+    identity matrix. The endpoint sum is exactly the original graph sum;
+    its exterior factor is $\prod_{e\cap R_i=\varnothing}D_e$, which is
+    nonzero and can be divided out. The resulting vector lies in the literal
+    lifted regional range. Coverage forces every physical site slice into
+    its tensor image. Independent local linear retractions then absorb the
+    omitted physical factors into the same joint virtual boundary.
+\end{proof}
+
+\begin{theorem}[Coherent coefficients from the physical parent]%
+    \label{thm:peps_native_parent_coefficients}
+    \lean{TNLean.PEPS.exists_regionParent_commonInverse,
+        TNLean.PEPS.exists_regionParent_bondCoefficients,
+        TNLean.PEPS.bondDim_ne_zero_of_isSemiRegular}
+    \leanok
+    \uses{thm:peps_native_parent_regional_cut}
+    Let $G$ be finite. Give each bond a matching semi-regular
+    representation $U_e$, and suppose each $A_v$ is $G$-injective for
+    its incident action. Suppose also that the covering region family is
+    nonempty and covers every edge internally. Every physical parent vector admits canonical coordinates
+    $\xi$ recovered by $\psi=(\bigotimes_v A_v)\xi$, with
+    \begin{align}
+        \xi          & =\sum_{p:E\to G}c_p(\xi)b_p,\nonumber \\
+        c_p(\xi)\ne0 & \ \Longrightarrow
+        \forall i\ \exists q_i:V\to G\ \forall e\notin C_{R_i},\quad
+        p_e=q_i(h(e))q_i(t(e))^{-1}.
+        \label{eq:peps_native_parent_coefficients}
+    \end{align}
+    Here $b_p$ is the product of the matrices $U_e(p_e)$ and $c_p$ is
+    the product trace-dual coefficient. One family of local inverses
+    supplies $\xi$ and all its regional cut conditions simultaneously.
+\end{theorem}
+\begin{proof}\leanok
+    Semi-regularity gives a nonzero invariant vector on each bond, so every
+    bond alphabet is nonempty. Apply the genuine local inverses to the boundaries obtained in
+    Theorem~\ref{thm:peps_native_parent_regional_cut}. Every uncut bond
+    has representation-matrix support. Edge coverage and the product-range
+    characterization give one coherent bond expansion. The trace-dual
+    identities extract its coefficients. A nonzero extracted coefficient
+    of a regional cut must have one vertex-label realization on all its
+    internal bonds. Applying the original invariant tensors recovers $\psi$.
+\end{proof}
+
+\begin{definition}[Native graph seams]%
+    \label{def:peps_native_graph_seams}
+    \lean{TNLean.PEPS.torusGraphSeamCut,
+        TNLean.PEPS.torusRightEdge_mem_graphSeamCut,
+        TNLean.PEPS.torusUpEdge_mem_graphSeamCut}
+    \leanok
+    Let $V=\mathbb Z_w\times\mathbb Z_h$ with $w,h\geq3$.
+    The cut $C_{c,r}$ consists exactly of the horizontal bonds from
+    $(x,y)$ to $(x+1,y)$ with $x+1=c$, and the vertical bonds from
+    $(x,y)$ to $(x,y+1)$ with $y+1=r$.
+\end{definition}
+
+\begin{theorem}[Microscopic plaquette parents have every native seam boundary]%
+    \label{thm:peps_native_parent_seam_boundary}
+    \lean{TNLean.PEPS.torusPlaquetteParentGroundSpace_le_graphSeamCut,
+        TNLean.PEPS.exists_graphSeamBoundary_of_mem_torusPlaquetteParentKernel,
+        TNLean.PEPS.regularWalkHolonomy_eq_relative_of_region,
+        TNLean.PEPS.regularWalkHolonomy_eq_one_of_region,TNLean.PEPS.IsTorusFlat.translate,
+        TNLean.PEPS.exists_vertexGauge_off_torusGraphSeamCut,
+        TNLean.PEPS.averagingProjector_bondProduct_mem_graphSeamCut}
+    \leanok
+    \uses{thm:peps_native_parent_coefficients,def:peps_native_graph_seams}
+    On this torus, let every $U_e$ be semi-regular and every $A_v$ be
+    independently $G$-injective. Let $H$ be any positive microscopic
+    plaquette parent with the exact open-region kernels. Then
+    $\ker H\subseteq\mathcal S_{A,C_{c,r}}$ for every $c,r$.
+    The boundary correlates all exposed incidences, and the physical
+    vector retains every original site.
+\end{theorem}
+\begin{proof}\leanok
+    The plaquettes cover all vertices and edges. For each nonzero coefficient
+    in (\ref{eq:peps_native_parent_coefficients}), regional vertex labels
+    telescope around every plaquette, giving identity holonomy.
+    Translate the tree gauge to the chosen origin $(c,r)$; it sends all
+    labels outside $C_{c,r}$ to the identity. Applying the product of
+    the local averages therefore turns each supported bond product into
+    an actual cut contraction. The coherent sum lies in the same cut
+    range. Finally the original site maps recover the physical vector.
+\end{proof}
+
+\begin{theorem}[Independent physical dimensions and the entire ambient kernel]%
+    \label{thm:peps_nonuniform_parent_seam_boundary}
+    \lean{TNLean.PEPS.exists_nonuniform_seamBoundaries_of_mem_torusPlaquetteParentKernel,
+        TNLean.PEPS.physicalPaddingEmbedding,TNLean.PEPS.graphPhysicalPaddingTensor,
+        TNLean.PEPS.physicalRestrictionProduct_padding,
+        TNLean.PEPS.padding_restriction_eq_self_of_mem_regionParentGroundSpace,
+        TNLean.PEPS.nonuniform_physicalRepresentative_unique,
+        TNLean.PEPS.physicalPaddingDimension,TNLean.PEPS.physicalPaddingMatrix,
+        TNLean.PEPS.physicalRestrictionMatrix,TNLean.PEPS.physicalRestrictionMatrix_mul_padding,
+        TNLean.PEPS.physicalPaddingMatrix_injective,TNLean.PEPS.physicalPaddingProduct_injective,
+        TNLean.PEPS.graphDependentTensor_physicalPadding,
+        TNLean.PEPS.physicalMapSite_restrict_graphPhysicalPaddingTensor,
+        TNLean.PEPS.isGInjective_graphPhysicalPaddingTensor,
+        TNLean.PEPS.cutSpace_graphPhysicalPaddingTensor,
+        TNLean.PEPS.restriction_cutMap_graphPhysicalPaddingTensor}
+    \leanok
+    \uses{thm:peps_native_parent_seam_boundary}
+    Allow arbitrary finite physical alphabets $Y_v$. Embed their tagged
+    disjoint union in a common alphabet and let
+    $E_v:\mathbb C^{Y_v}\to\mathbb C^{\sum_w|Y_w|}$ be coordinate
+    zero extension, with coordinate restriction $R_vE_v=I$.
+    Form the ordinary graph tensors $B_v=E_vA_v$ and their positive
+    plaquette parent $H_B$. Every vector $\Psi$ in the full ambient
+    kernel has a unique original physical representative $\psi$ satisfying
+    \begin{align}
+        \Psi & =(\bigotimes_v E_v)\psi,
+             & \psi                                    & =(\bigotimes_v R_v)\Psi,\nonumber \\
+        \psi & \in\bigcap_{c,r}\mathcal S_{A,C_{c,r}}.
+        \label{eq:peps_nonuniform_parent_recovery}
+    \end{align}
+    No restriction to the site images is imposed on $\Psi$ beforehand.
+\end{theorem}
+\begin{proof}\leanok
+    Zero extension is injective and preserves $G$-injectivity.
+    Each cut contraction commutes with the product of the physical
+    extensions and restrictions. Vertex-covering parent constraints
+    supply an actual cut representation of every ambient kernel vector;
+    hence it lies in the product extension range. The product left
+    inverse gives recovery and uniqueness. Apply
+    Theorem~\ref{thm:peps_native_parent_seam_boundary} to $B$ and restrict
+    its boundary witnesses to the original independent physical spaces.
+\end{proof}

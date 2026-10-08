@@ -95,6 +95,15 @@ theorem mul_mul_exp_neg_le_of_log_le {K M ε x : ℝ} (hK : 0 < K) (hM : 0 < M) 
     _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
     _ = ε := Real.exp_log hε
 
+/-- A divided logarithmic threshold gives the exponential error bound used to choose
+one normalization cutoff before the ring length. -/
+theorem mul_exp_neg_mul_le_of_div_log_le {K r ε x : ℝ}
+    (hK : 0 < K) (hr : 0 < r) (hε : 0 < ε)
+    (h : (Real.log K - Real.log ε) / r ≤ x) : K * Real.exp (-(r * x)) ≤ ε := by
+  have ht : Real.log K + Real.log 1 - Real.log ε ≤ r * x := by
+    simpa only [Real.log_one, add_zero, mul_comm] using (div_le_iff₀ hr).mp h
+  simpa only [one_mul] using mul_mul_exp_neg_le_of_log_le hK zero_lt_one hε ht
+
 /-- **From a block-length threshold to the error.** For `K, a, ε > 0`, `M, q ≥ 1` and
 `b ≥ a max(log K, 0)`, if `a log(M q/ε) + b ≤ q` then `K (M e^{-q/a}) ≤ ε`. This is the last
 step of the error bounds of arXiv:2307.01696 for a block length `q` of `M` blocks with

@@ -14,6 +14,7 @@ import socketserver
 import threading
 import time
 import urllib.request
+from urllib.parse import quote
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -310,14 +311,24 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
             return rect.left >= wrapperAtStart.left - 1
               && rect.right <= wrapperAtStart.right + 1;
           });
+          // A single diagram may be wider than the local viewport. Its left
+          // edge must be reachable at the start; a fitting element must be
+          // wholly visible. Requiring both edges of an oversized SVG at once
+          // incorrectly rejects the intentional horizontal-scrolling layout.
           const firstReachable = firstAtStart.left >= wrapperAtStart.left - 1
-            && firstAtStart.right <= wrapperAtStart.right + 1;
+            && firstAtStart.left <= wrapperAtStart.right + 1
+            && (firstAtStart.width > wrapper.clientWidth + 1
+              || firstAtStart.right <= wrapperAtStart.right + 1);
           wrapper.scrollLeft = wrapper.scrollWidth;
           const wrapperAtEnd = wrapper.getBoundingClientRect();
           const lastAtEnd = last.getBoundingClientRect();
-          const lastReachable = lastAtEnd.left >= wrapperAtEnd.left - 1
-            && lastAtEnd.right <= wrapperAtEnd.right + 1;
+          const lastReachable = lastAtEnd.right <= wrapperAtEnd.right + 1
+            && lastAtEnd.right >= wrapperAtEnd.left - 1
+            && (lastAtEnd.width > wrapper.clientWidth + 1
+              || lastAtEnd.left >= wrapperAtEnd.left - 1);
           const localScroll = wrapper.scrollWidth > wrapper.clientWidth + 1;
+          const userScrollable = ['auto', 'scroll'].includes(
+            getComputedStyle(wrapper).overflowX);
           const contained = wrapperAtStart.left >= -1
             && wrapperAtStart.right <= documentWidth + 1
             && wrapper.clientWidth <= documentWidth + 1
@@ -332,8 +343,10 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
             pictureCount: pictures.length,
             contained,
             localScroll,
+            userScrollable,
             firstReachable,
             lastReachable,
+            pictureSources: pictures.map(picture => picture.getAttribute('src')),
             allVisibleAtStart,
             wrapperLeft: round(wrapperAtStart.left),
             wrapperRight: round(wrapperAtStart.right),
@@ -349,17 +362,20 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
           };
         })"""
     )
-    assert all(fact["contained"] for fact in facts), facts
-    assert not any(fact["figureScroll"] for fact in facts), facts
+    assert all(fact["contained"] for fact in facts), (page.url, facts)
+    assert not any(fact["figureScroll"] for fact in facts), (page.url, facts)
+    assert all(
+        not fact["localScroll"] or fact["userScrollable"] for fact in facts
+    ), (page.url, facts)
     assert all(
         fact["localScroll"] or fact["allVisibleAtStart"] for fact in facts
-    ), facts
+    ), (page.url, facts)
     assert all(
         fact["firstReachable"] and fact["lastReachable"]
         if fact["localScroll"]
         else fact["allVisibleAtStart"]
         for fact in facts
-    ), facts
+    ), (page.url, facts)
     document_facts = page.evaluate(
         """() => ({
           scrollWidth: document.documentElement.scrollWidth,
@@ -370,6 +386,71 @@ def _assert_mobile_scroll(page: Page) -> list[dict[str, object]]:
         document_facts["scrollWidth"] <= document_facts["clientWidth"] + 1
     ), document_facts
     return facts
+
+
+def _assert_oversized_picture_scrolling(page: Page, repo_root: Path) -> None:
+    """Exercise readable wide SVGs and reject genuinely unreachable edges."""
+    css = (repo_root / "blueprint/src/extra_styles.css").read_text(encoding="utf-8")
+
+    def picture(width: int, height: int) -> str:
+        svg = (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" '
+            f'height="{height}" viewBox="0 0 {width} {height}">'
+            f'<rect x="1" y="1" width="{width - 2}" height="{height - 2}" '
+            'fill="white" stroke="black"/>'
+            f'<text x="8" y="24">LEFT</text><text x="{width - 60}" '
+            'y="24">RIGHT</text></svg>'
+        )
+        return '<img class="tenkz-pic" src="data:image/svg+xml,' + quote(svg) + '">'
+
+    def equation(contents: str) -> str:
+        return ('<div class="tenkz-equation"><div class="tenkz-equation-row">'
+                + contents + '</div></div>')
+
+    for width in (360, 480, 1440):
+        for font_size in (16, 24):
+            page.set_viewport_size({"width": width, "height": 800})
+            page.set_content(
+                '<style>' + css
+                + f'html {{font-size:{font_size}px}} body {{margin:8px}}'
+                + '.theorem_thmcontent {padding:0 8px; margin-left:16px}'
+                + '</style><div class="content-wrapper"><div class="main-text">'
+                + '<div class="theorem_thmcontent">'
+                + equation(picture(900, 120))
+                + equation(picture(600, 120) + '<span>=</span>' + picture(800, 160))
+                + equation(picture(80, 40))
+                + '</div></div></div>'
+            )
+            page.wait_for_function(
+                "[...document.querySelectorAll('img')].every(x => x.complete)"
+            )
+            _assert_desktop_rows(page)
+            _assert_mobile_scroll(page)
+            _assert_chapter_picture_layout(page, "oversized-picture-fixture")
+
+    # A passing wide-image case must not mask a clipped/offscreen row, or a
+    # programmatically scrollable box that a reader cannot actually scroll.
+    mutations = (
+        "document.querySelector('.tenkz-equation-row').style.transform='translateX(-30px)'",
+        "document.querySelector('.tenkz-equation-row').style.position='fixed';"
+        "document.querySelector('.tenkz-equation-row').style.left='100%'",
+        "document.querySelector('.tenkz-equation').style.overflowX='hidden'",
+    )
+    for mutation in mutations:
+        page.evaluate(mutation)
+        try:
+            _assert_mobile_scroll(page)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError(f"Unreachable-edge mutation escaped: {mutation}")
+        page.evaluate(
+            "document.querySelector('.tenkz-equation-row').style.transform='';"
+            "document.querySelector('.tenkz-equation-row').style.position='';"
+            "document.querySelector('.tenkz-equation-row').style.left='';"
+            "document.querySelector('.tenkz-equation').style.overflowX=''"
+        )
+    page.set_viewport_size({"width": 1440, "height": 1000})
 
 
 def _assert_font_relative_reading_width(page: Page) -> None:
@@ -546,6 +627,7 @@ def main() -> int:
     with serve(root) as base_url, sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1000})
+        _assert_oversized_picture_scrolling(page, repo_root)
         page.route(mathjax_cdn_glob, _fulfill_mathjax)
         for filename in chapters:
             # The MPDO-RFP page is large; do not wait for every unrelated asset.

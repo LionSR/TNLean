@@ -2,16 +2,17 @@
 
 \begin{theorem}[A coherent circuit for all encoded sectors]
     \label{thm:ldp_coherent_sector_circuit}
-    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn,
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported,
+        MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn,
         MPSPreparation.mulVec_windowGHZState_of_registerCfg}
     \leanok
     Fix $d\geq1$, $D\geq1$, a register length $r\geq2$, and injective
     encodings of the $D$ bond values and $b$ sector labels in $r$ physical
     sites. There is a constant $C$ with the following property. Let $A$ be
     a tensor, let $S$ be a set of bond pairs, and let $\omega_j$ be
-    orthonormal pair vectors whose cyclic products vanish outside $S$ at
-    each site. Cut a positive ring into positive many blocks with
-    $3r\leq\ell_k\leq L$. Assume each blocked tensor is injective on the
+    orthonormal pair vectors. Cut a positive ring into $M\ge1$ blocks with
+    $3r\leq\ell_k\leq L$. Assume the cyclic product of each pair vector
+    is supported on $S^M$ for this $M$, and each blocked tensor is injective on the
     coordinate subspace spanned by $S$. There is a local circuit $U$ of
     depth at most $CL$, simultaneously satisfying
     \begin{align}

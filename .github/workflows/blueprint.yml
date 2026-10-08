@@ -36,9 +36,12 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_mixed_action.py'
       - 'scripts/test_tenkz_isometric_gap_transport.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
+      - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
@@ -77,6 +80,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install system dependencies
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           # texlive-fonts-extra supplies dsfont, which paper-gap notes load;
@@ -92,6 +96,9 @@ jobs:
       - name: Fetch pinned tenkz package
         run: python3 scripts/fetch_tenkz.py
 
+      - name: Test blueprint PDF string-pool capacity
+        run: python3 scripts/test_blueprint_pdf_capacity.py
+
       - name: Check native tenkz sources and picture pipeline
         run: |
           python3 .deps/tenkz/scripts/tenkz_lint.py \
@@ -101,6 +108,8 @@ jobs:
           python3 scripts/test_tenkz_ordered_mixing.py
           python3 scripts/test_tenkz_mixed_action.py
           python3 scripts/test_tenkz_isometric_gap_transport.py
+          python3 scripts/test_tenkz_quantum_double_source_construction.py
+          python3 scripts/test_sector_encoder_diagram.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check
@@ -172,6 +181,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Install system dependencies
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3

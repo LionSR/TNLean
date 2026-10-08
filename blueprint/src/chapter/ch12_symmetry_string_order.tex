@@ -59,10 +59,10 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     In tensor-network notation this is the length-$L$ doubled chain with a
     copy of $u$ inserted on each physical rung:
-    % Formula/source: Papers/0802.0447/StringOrder-v10.tex,
-    % lines 380--385 explicitly define R_L; equations EU and SOPMP,
-    % lines 164--181, give the constituent transfer/MPS expressions. The
-    % displayed transfer formula follows after canonical fixed-point/unital reduction.
+    % Formula/source: Papers/0802.0447/StringOrder-v10.tex, EU and SOPMP,
+    % lines 164--181. This is the stationary infinite-chain expression with
+    % identity endpoints. It is not the periodic full-ring closure RL,
+    % whose physical support grows with the ambient ring length.
     % Ink-to-index map: each ket physical index contracts into u and each
     % output of u contracts into the matching bra index; no physical leg is free.
     % Contraction set: all on-site ket--u--bra rungs, all horizontal
@@ -104,9 +104,40 @@ virtual-boundary nondecay and virtual local covariance.
         R_L(u) & :=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
         \label{eq:symmetry_source_periodic_RL}
     \end{align}
-    Under thermodynamic-boundary and normalization hypotheses, the normalized
-    stationary-boundary functional $T_L(A,u,\Lambda)$ corresponds to this
-    periodic overlap.
+    For the raw periodic matrix product vector, this overlap is
+    $\operatorname{Tr}(\mathcal E_u^L)$. Dividing by its squared norm gives
+    $\operatorname{Tr}(\mathcal E_u^L)/\operatorname{Tr}(\mathcal E^L)$ at
+    nonzero lengths. The stationary-boundary functional is instead a
+    fixed-support thermodynamic limit with an untwisted exterior; the full-ring
+    support grows with the ambient ring length.
+    The numerator has two separately closed virtual rings:
+    \begin{center}
+        % TENKZ-PERIODIC-STRING-BEGIN
+        % Formula: <Phi_L|u^{tensor L}|Phi_L> = Tr_End(E_u^L).
+        % Source: PGWSVC08, MPS/EU/RL; this is a derived contraction schematic.
+        % The upper and lower virtual return paths close within their own rows.
+        % Each physical ket index enters u and its output enters the conjugate bra.
+        % No Lambda boundary cup is present. Every visible cell, and the omitted
+        % repeated cells indicated by dots, carries the same physical insertion.
+        % Boundary signature: virtual-west=0 | virtual-east=0 |
+        % physical-up=0 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=4, boundary=periodic]
+            \tn[label pos=n]{A} & \tn[label pos=n]{A} & \tn[skin=dots]{} &
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline A} &
+            \tn[label pos=s, conjugate]{\overline A} & \tn[skin=dots]{} &
+            \tn[label pos=s, conjugate]{\overline A}
+            \tn[species=operator, label pos=e, at=on bond-1-1-2-1 0.5]{u}
+            \tn[species=operator, label pos=e, at=on bond-1-2-2-2 0.5]{u}
+            \tn[species=operator, label pos=e, at=on bond-1-4-2-4 0.5]{u}
+            \tnmark[form=label]{3 s of midway (2,2) and (2,3)}{$L\text{ sites}$}
+        \end{tenkz}
+        % TENKZ-PERIODIC-STRING-END
+    \end{center}
+    The two return paths differ from the stationary $\Lambda$-cup closure
+    in Definition~\ref{def:string_order_param}. The identity insertion gives
+    the same periodic closure for $Z_L$.
 \end{definition}
 
 \begin{definition}[Physical string correlator]\label{def:physical_string_order_param}
@@ -125,6 +156,8 @@ virtual-boundary nondecay and virtual local covariance.
     $\langle \Psi|\,x \otimes u^{\otimes N} \otimes y\,|\Psi\rangle$.
 \end{definition}
 
+\input{chapter/ch12_symmetry_string_order_periodic}
+
 \begin{definition}[Fixed-endpoint physical string order]
     \label{def:has_physical_string_order_with}
     \lean{MPSTensor.HasPhysicalStringOrderWith}
@@ -139,11 +172,41 @@ virtual-boundary nondecay and virtual local covariance.
     \lean{MPSTensor.HasPhysicalStringOrder}
     \leanok
     \uses{def:has_physical_string_order_with}
-    A tensor has physical string order in the sense of
-    \cite[display~SOP, lines~112--122]{PerezGarcia2008StringOrder} if there
-    exist a unitary $u\ne\Id$ and physical endpoint operators $x,y$ for which
+    A tensor has physical string order if there exist a unitary
+    $u\notin\C\Id$ and physical endpoint operators $x,y$ for which
     Definition~\ref{def:has_physical_string_order_with} holds.
+    The nonscalar requirement is an explicit projective correction to
+    \cite[display~SOP, lines~114--121]{PerezGarcia2008StringOrder}, which
+    prints only $u\ne\Id$. A scalar twist $u=-\Id$ with identity endpoints
+    gives $S_N=(-1)^N$ for every normalized unital tensor. The correction
+    and the distinction from the literal source condition are recorded in
+    \cite{gap:pgwsvc08_string_order_virtual_boundary}.
 \end{definition}
+
+\begin{lemma}[Scalar phases in the physical string correlator]
+    \label{lem:physical_string_scalar_phases}
+    \lean{MPSTensor.twistedTransferMap_smul_twist,
+        MPSTensor.physicalStringOrderParam_smul_twist,
+        MPSTensor.hasPhysicalStringOrderWith_smul_twist_iff,
+        MPSTensor.physicalStringOrderParam_scalar_twist,
+        MPSTensor.exists_nonidentity_physicalStringOrderWith_of_unital,
+        MPSTensor.scalar_twist_eq_one_of_nonzero_fixed}
+    \leanok
+    \uses{def:physical_string_order_param}
+    Scalar rephasing obeys
+    \begin{align}
+        \E_{\mu u} & =\mu\E_u,
+                   & S_N(x,y,\mu u) & =\mu^N S_N(x,y,u).
+        \notag
+    \end{align}
+    Hence $|\mu|=1$ preserves the fixed-endpoint positive-limit condition.
+    If $\E_A(\Id)=\Id$ and $\tr\Lambda=1$, then
+    $S_N(\Id,\Id,\mu\Id)=\mu^N$. Thus $u=-\Id$ satisfies the literal
+    nonidentity-twist condition whenever $d>0$.
+    Under the simple-peripheral purity property, a scalar unitary twist
+    possessing a nonzero fixed twisted eigenmatrix must instead be the
+    identity.
+\end{lemma}
 
 \begin{lemma}[Twisted spectral-radius bound and peripheral rigidity]
     \label{lem:pgwsvc08_twisted_spectral_radius}
@@ -209,24 +272,30 @@ virtual-boundary nondecay and virtual local covariance.
     eigenvalue and its eigendirection.
 \end{proof}
 
-\begin{theorem}[Physical endpoint criterion for string order]
+\begin{theorem}[Printed physical endpoint criterion for string order]
     \label{thm:pgwsvc08_physical_string_order}
+    % False as printed: this is a source quotation, not a future proof target.
     \notready
     \uses{def:has_physical_string_order, lem:pgwsvc08_twisted_spectral_radius}
-    This is Theorem~1 of~\cite{PerezGarcia2008StringOrder}.  A pure finitely
-    correlated state has physical string order if and only if
-    there exist a unitary $\widetilde u\ne\Id$, a unitary virtual matrix $V$,
+    Theorem~1 of~\cite{PerezGarcia2008StringOrder} states the following with
+    the literal source condition $u\ne\Id$ on the string-order side.
+    A pure finitely correlated state has such string order if and only if
+    there exist a unitary $\widetilde u\ne\Id$, a virtual matrix $V$,
     and physical indices $n,m$ such that
     \begin{align}
         \E_{\widetilde u}(V) & =V,
                              & \tr(V\Lambda A_nA_m^\dagger) & \ne0.
         \label{eq:pgwsvc08_theorem1}
     \end{align}
-    For an injective tensor, sufficiently long physical endpoint operators realize
-    the corresponding virtual boundary matrices.
+    This printed assertion is distinct from the explicitly projective
+    convention in Definition~\ref{def:has_physical_string_order}.
+    The literal assertion is false: Example~\ref{ex:string_order_scalar_phase_tensor}
+    satisfies its string-order condition but has no nonidentity fixed twist.
+    The scalar-phase obstruction and the explicit counterexample are recorded
+    in~\cite{gap:pgwsvc08_string_order_scalar_phase}.
 \end{theorem}
 
-\begin{proof}
+\begin{remark}[The failure of phase removal]
     Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius} shows that a nonzero
     limit requires a unique peripheral eigenvalue $e^{i\theta}$.  If $V$ and
     $Y$ are the corresponding right and left eigenmatrices, then
@@ -254,8 +323,45 @@ virtual-boundary nondecay and virtual local covariance.
     Then $\E_{\widetilde u}(V)=V$.  Choosing
     $y=x^\dagger\widetilde u$ reduces nonvanishing to the second condition
     in (\ref{eq:pgwsvc08_theorem1}); if it holds for $n,m$, take
-    $x=|n\rangle\langle m|$.  The reverse implication follows from the same
-    phase-retaining factorization and the endpoint-realizability hypothesis.
+    $x=|n\rangle\langle m|$. However, $u\ne\Id$ does not imply
+    $\widetilde u\ne\Id$: the original $u$ may itself be a scalar phase.
+    Thus this calculation does not establish the printed nonidentity
+    conclusion. The projective correction below states the stable
+    nontriviality condition explicitly.
+\end{remark}
+
+\begin{theorem}[Projective physical endpoint criterion]
+    \label{thm:projective_physical_string_order}
+    \lean{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}
+    \leanok
+    \uses{def:has_physical_string_order}
+    Let $A$ have the faithful normalized canonical density and the
+    simple-peripheral purity property of
+    Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius}.
+    Then physical string order in the projective sense is equivalent to
+    the existence of a nonscalar unitary $u_0$, a virtual matrix $V$,
+    and physical indices $n,m$ such that
+    \begin{align}
+        \E_{u_0}(V) & =V,
+                    & \tr(V\Lambda A_nA_m^\dagger) & \ne0.
+        \label{eq:projective_physical_string_order}
+    \end{align}
+    This is the explicitly corrected criterion, rather than the
+    unchanged printed assertion above.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_string_peripheral_letter_criterion,
+        lem:physical_string_scalar_phases, lem:physical_string_endpoint_pairing}
+    At a fixed unitary $u$, physical endpoints have positive limiting
+    string magnitude exactly when there are $V$, $|\mu|=1$, and $n,m$
+    with $\E_u(V)=\mu V$ and a nonzero displayed trace coefficient.
+    Positive limiting magnitude excludes spectral radius below one;
+    peripheral rigidity and the physical endpoint selection rule give
+    this equivalence. The trace coefficient also implies $V\ne0$.
+    Set $u_0=\mu^{-1}u$. This is unitary and remains nonscalar, since
+    $u_0=c\Id$ would imply $u=(\mu c)\Id$. Its eigenmatrix is fixed.
+    Conversely a fixed eigenmatrix is a peripheral eigenmatrix with
+    $\mu=1$, so the same endpoint criterion supplies the endpoints.
 \end{proof}
 
 \begin{theorem}[Physical state symmetry and twisted spectral radius]
@@ -842,5 +948,9 @@ virtual-boundary nondecay and virtual local covariance.
 \input{chapter/ch12_symmetry_string_order_spectrum}
 
 \input{chapter/ch12_symmetry_string_order_asymptotics}
+
+\input{chapter/ch12_symmetry_string_order_bounds}
+
+\input{chapter/ch12_symmetry_string_order_finite_endpoints}
 
 \input{chapter/ch12_symmetry_string_order_examples}

@@ -29,8 +29,18 @@ EXPECTED_PANELS = [
     ("phys:n, phys:n, phys:n", 10, 13),
     ("phys:n, phys:n, phys:n, phys:n", 6, 10),
     ("phys:n, phys:n, phys:n, phys:n", 2, 4),
+    ("open:w", 3, 3),
+    ("open:w", 1, 1),
+    ("open:w", 4, 4),
+    ("open:w", 4, 4),
 ]
 EXPECTED_WIRES = {
+    "RECTANGULAR": {
+        ("rfb.0", "rffirst.180"), ("rffirst.0", "rfsecond.180"),
+        ("rfsecond.0", "rfx.180"), ("rrb.0", "rrfirst.180"),
+        ("rrfirst.0", "rrsecond.180"), ("rrsecond.0", "rrx.180"),
+    },
+    "WINDOW": {("wa.0", "wb.180"), ("wb.0", "wrho.180")},
     "VARYING": {
         ("vpzero.0", "vpone.180"),
         ("vpzero.180", "vleft.0"),
@@ -69,10 +79,18 @@ def main() -> int:
     chapter += (ROOT / "blueprint/src/chapter/ch32_log_depth_varying_reference.tex").read_text(
         encoding="utf-8"
     )
-    order = ["BLOCK", "OVERLAP", "PREPARATION", "VARYING"]
+    chapter += (ROOT / "blueprint/src/chapter/ch32_log_depth_window_mixing.tex").read_text(
+        encoding="utf-8"
+    )
+    chapter += (ROOT / "blueprint/src/chapter/ch32_log_depth_rectangular_windows.tex").read_text(
+        encoding="utf-8"
+    )
+    order = ["BLOCK", "OVERLAP", "PREPARATION", "VARYING", "WINDOW", "RECTANGULAR"]
     for name in order:
         expected = EXPECTED_WIRES[name]
-        tag = f"TENKZ-ORDERED-MIXING-{name}"
+        tag = "TENKZ-WINDOW-MIXING-TRANSPORT" if name == "WINDOW" else f"TENKZ-ORDERED-MIXING-{name}"
+        if name == "RECTANGULAR":
+            tag = "TENKZ-RECTANGULAR-WINDOW-RESIDUAL"
         begin, end = f"% {tag}-BEGIN", f"% {tag}-END"
         assert chapter.count(begin) == chapter.count(end) == 1
         body = chapter.split(begin, 1)[1].split(end, 1)[0]
@@ -80,9 +98,18 @@ def main() -> int:
             r"\\tnwire(?:\[[^]]*\])?\s*\{([^}]+)\}\s*\{([^}]+)\}", body
         )
         assert len(wires) == len(expected) and set(wires) == expected, name
-        if name in {"BLOCK", "VARYING"}:
+        if name in {"BLOCK", "VARYING", "WINDOW", "RECTANGULAR"}:
             assert r"\begin{tenkzequation}" in body
             assert r"\begin{tenkzeq}" not in body
+        if name == "RECTANGULAR":
+            assert body.count("180:virtual:$x_a$") == 2
+            assert body.count("{B}") == body.count("{X}") == 2
+            assert r"{F_{c,c+s}}" in body and r"{F_{c+s,b}}" in body
+            assert r"{R_c}" in body and r"{R_{c+s}}" in body
+        if name == "WINDOW":
+            assert r"{F_a}" in body and r"{F_{a+s}}" in body
+            assert r"{\sigma_{a+2s}}" in body and r"{\sigma_a}" in body
+            assert body.count("180:virtual:$x$") == 2
         if name == "VARYING":
             assert body.count("skin=none") == 4
             assert r"{\sqrt{\sigma_1}}" in body
@@ -139,7 +166,7 @@ def main() -> int:
                             if w.attrs.get("origin") == "port-open"] == ["I_0", "I_1", "I_2"]
                 atoms, wires = [], []
         assert panels == EXPECTED_PANELS, panels
-    print("PASS: seven panels retain block indices, overlap, and the varying-reference cyclic shift")
+    print("PASS: eleven panels retain block indices, cyclic pairing, and rectangular right-to-left residual transport")
     return 0
 
 

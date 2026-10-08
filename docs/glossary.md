@@ -389,6 +389,42 @@ normalizations.
 
 ### PEPS predicates
 
+#### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
+
+- **Defined in:** `TNLean/PEPS/Approximation/SourcePreparation.lean`.
+- **Meaning:** every recorded pair-source vector has norm one. The list records
+  source occurrences separately, including repeated pairs of parties.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
+  `04-compression.tex`, lines 53–70 and 125–127.
+- **Sanctioned bridges:** `SourceInventory.isAllowed_prepare_iff` and
+  `Word.isNormalized_sources` identify normalization with allowed preparation
+  and derive it from an allowed composition.
+
+#### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
+
+- **Defined in:** `TNLean/PEPS/Approximation/PairSourceGrouping.lean`.
+- **Meaning:** `G.Expands S` means that, beside any spectator registers,
+  allowed local operations and register exchanges containing no pair-source
+  preparations take the preparation of `G` exactly to the preparation of `S`.
+- **Source:** the same Lemma 5.1, lines 125–127; the fresh-register argument
+  in Theorem 5.2, `eq:compression-source-gate`, lines 233–251.
+- **Sanctioned bridges:** `SourceInventory.exists_grouped` constructs a
+  normalized `G` with one source for each unordered pair occurring in `S`.
+  `Word.exists_grouped_source_preparation` gives the resulting exact
+  factorization of an arbitrary allowed composition.
+- **Further consequence:** `Word.exists_tensorPartyMaps_parties` collects the
+  remaining operations into one contraction per party under canonical register
+  identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
+  grouped preparation for a prescribed finite gate party type.
+- **All pair slots:** `Word.exists_complete_prepared_tensorPartyMaps` also
+  supplies a source on every unordered pair of distinct gate parties. Sources
+  on pairs absent from the original monomial have one-dimensional halves.
+  `SourceInventory.exists_complete_extension` retains the original inventory
+  verbatim and supplies an allowed recovery of its preparation.
+- **Caveat:** the finite type is the party set of the gate, not necessarily all
+  parties in a larger construction. A bound on its cardinality and common
+  source spaces across different monomials remain separate data or constructions.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.
@@ -743,6 +779,35 @@ normalizations.
   `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
 - **Caveat:** nearness includes diagonal contact, so it is not the
   four-neighbor adjacency of the square lattice.
+
+#### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean`.
+- **Meaning:** the domain consists of independent positive semidefinite
+  trace-one matrices on the physical spaces of a finite family of regions.
+  For shift `b > 0`, the objective is the norm of the reverse index-ordered
+  product of the identity-extended powers `(xⱼ + bI)^(-aⱼ/2)` applied to a
+  unit global Euclidean vector. The minimum is the infimum of this actual
+  objective image.
+- **Source:** September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 68–99](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L68-L99),
+  `eq:patch-variational-problem` and `eq:patch-elementary-norm-bounds`.
+- **Sanctioned consequences:** compactness, nonemptiness derived from the unit
+  vector, continuity, and `exists_isMinOn_regularizedPatchObjective` for
+  arbitrary real weights. For nonnegative weights,
+  `regularizedPatchObjective_bounds` applies to every feasible tuple;
+  `regularizedPatchObjective_eq_minimum` identifies every feasible minimizer
+  with the common value, and positivity permits unit normalization.
+- **Caveats:** repeated regions retain independent variables; singular
+  densities are shifted on the full regional space. No nestedness,
+  inter-factor commutation, uniqueness, or smooth optimizer is assumed.
+  Stationarity, energy, later regulator-growth and retained-rank estimates,
+  and the full adaptive patch constraint are outside this result.
+- **Verification boundary:** the minimum module passed a strict local check
+  with the accepted QICLean shifted-density dependency. The original-proof
+  ledger remains planned pending immutable native source/evidence publication;
+  full-build and exact-head CI gates remain separate. See
+  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
 
 #### `TNLean.PEPS.IsRegionParentInteraction`
 
@@ -1209,6 +1274,30 @@ The following notions use different transfer objects and are not interchangeable
   CZX four-domain instance are recorded in
   `docs/paper-gaps/fbc25_state_level_gauging_covariance.tex`.
 
+## States of the quasi-local algebra
+
+### `SpinChain.IsPureQuasiLocalState`
+
+- **Declaration:** `SpinChain.IsPureQuasiLocalState d ω : Prop`, for a continuous
+  complex-linear functional `ω` on `SpinChain.QuasiLocalAlgebra d` with `d > 0`.
+- **Defined in:** `TNLean/QCA/StateSpace.lean`.
+- **Meaning:** `ω` is an extreme point, over the real numbers, of
+  `SpinChain.quasiLocalStateSpace d`: the functionals of norm one with
+  $\omega(I)=1$ and $\omega(X^*X)\geq0$ for every quasi-local observable $X$.
+- **Source:** Nachtergaele, Commun. Math. Phys. 175 (1996),
+  arXiv:cond-mat/9410110, lines 854--887 and 1469--1482.
+- **Sanctioned bridges:**
+  `SpinChain.isPureQuasiLocalState_of_unique_supported_state` proves purity from
+  unique determination by expectation-one projections;
+  `SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition` reads off
+  a constituent of a finite convex decomposition; and
+  `SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff` and
+  `SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff` transport
+  purity along star-algebra isomorphisms and site grouping.
+- **Caveat:** purity is extremality among all states, not among
+  translation-invariant states; a state that is extremal only among
+  translation-invariant states need not satisfy this predicate.
+
 ## Gauge relations between blocks
 
 ### `MPSTensor.IsGaugeRelated`
@@ -1454,9 +1543,14 @@ The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
 from `TNLean/MPS/`. Its local labels are `Fin d`. The notions that involve no
 geometry (operators acting on a set of sites, expectations, product vectors,
 placed operators, permutations of configurations and of sites, onsite
-channels) are stated for any finite type of sites `ι`; layers, circuits,
-neighbourhoods and light cones use the sites `Fin N`, closed into a ring by
-addition modulo `N`. The blueprint chapter is
+channels) are stated for any finite type of sites `ι`. Layers, circuits and
+light cones are stated for a bond geometry `bond : β → Set ι` on such a type
+(`TNLean/Circuit/Geometry.lean`), with the ring `ringBond k = {k, k + 1}` on
+`Fin N` (addition modulo `N`), the open chain `openBond`, and the edges of a
+simple graph `edgeBond G` as instances; the ring-facing names (`Layer`,
+`IsLocalCircuitOfDepth`, `IsPreparedInDepth`, `IsCircuitOn`, `ChannelLayer`,
+`IsChannelPreparedInDepth`) abbreviate the general notions for `ringBond`.
+Measurement protocols and teleportation remain stated on the ring. The blueprint chapter is
 `ch33_local_quantum_circuits.tex`; the preparation of matrix product states
 in `MPS/Preparation/` uses it.
 
@@ -1486,26 +1580,50 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** membership says nothing about unitarity; for `S = ∅` the
   submodule consists of the scalar multiples of the identity.
 
-#### `QuantumCircuit.Layer`
+#### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
 
-- **Declaration:** `structure QuantumCircuit.Layer (d N : ℕ) [NeZero N]`, with
-  fields `bonds : Finset (Fin N)` (the left sites `k` of the pairs
-  `{k, k + 1}`), `gate : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ`,
+- **Declarations:**
+  `QuantumCircuit.bondNeighbourhood {ι β : Type*} (bond : β → Set ι) (X : Set ι) : Set ι`
+  and `QuantumCircuit.lightCone (bond : β → Set ι) (X : Set ι) : ℕ → Set ι`.
+- **Defined in:** `TNLean/Circuit/Geometry.lean`.
+- **Meaning:** `X` together with every bond meeting `X`, and its `r`-fold
+  iterate.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
+  light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
+  LOCC" (gates on nearest-neighbour pairs of a lattice) and the graph
+  distance before Proposition `propQCA2`.
+- **Sanctioned bridges:** `QuantumCircuit.lightCone_ringBond` (on the ring,
+  the light cone of radius `r` is `neighbourhood X r`, the sites within ring
+  distance `r`, for every `N`), `QuantumCircuit.lightCone_openBond_subset`,
+  `QuantumCircuit.lightCone_edgeBond_subset` and
+  `QuantumCircuit.lightCone_edgeBond_subset_dist` (graph distance), with the
+  disjointness criteria `disjoint_lightCone_ringBond_of_isSeparatedBy`,
+  `disjoint_lightCone_openBond`, `disjoint_lightCone_edgeBond` and
+  `disjoint_lightCone_edgeBond_of_dist`.
+- **Caveat:** for the open chain and graphs only the inclusion in the metric
+  ball is proved; on the ring the equality holds.
+
+#### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
+
+- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
+  with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and lies in
-  `supportedOperators d (bond k)`, and that the pairs `bond k` of distinct
-  bonds are disjoint.
+  `supportedOperators d (bond b)`, and that the bonds carrying gates are
+  pairwise disjoint; `QuantumCircuit.Layer (d N : ℕ) [NeZero N]` abbreviates
+  `BondLayer d ringBond` on `Fin N`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** one layer of a local circuit on the ring of `N` sites:
-  unitaries on pairwise disjoint pairs of neighbouring sites. Its operator
-  `Layer.op` is the product of its gates, which commute.
+- **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
+  bonds; on the ring, pairs of neighbouring sites. Its operator
+  `BondLayer.op` is the product of its gates, which commute.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
-  quantum circuits").
-- **Sanctioned bridges:** `Layer.op_mem_unitary`,
-  `Layer.conj_op_mem_supportedOperators` (the light cone of one layer), and
-  `Layer.adjoint` with `Layer.adjoint_op` (the layer of the adjoint gates
-  implements the adjoint).
-- **Caveat:** the pairs are taken modulo `N`, so for `N ≤ 2` they degenerate;
-  a circuit on the open chain is one whose bonds avoid the pair `{N - 1, 0}`.
+  quantum circuits"); arXiv:2103.13367, main text, paragraph "Quantum circuits
+  and LOCC".
+- **Sanctioned bridges:** `BondLayer.op_mem_unitary`,
+  `BondLayer.conj_op_mem_supportedOperators` (the light cone of one layer),
+  and `BondLayer.adjoint` with `BondLayer.adjoint_op` (the layer of the adjoint
+  gates implements the adjoint).
+- **Caveat:** on the ring the pairs are taken modulo `N`, so for `N ≤ 2` they
+  degenerate; the open chain is the separate geometry `openBond`.
 
 #### `QuantumCircuit.IsLocalCircuitOfDepth`
 
@@ -1516,13 +1634,16 @@ in `MPS/Preparation/` uses it.
   head of the list applied first.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits").
-- **Sanctioned bridges:** `IsLocalCircuitOfDepth.mem_unitary`,
-  `IsLocalCircuitOfDepth.star`, `IsLocalCircuitOfDepth.mul` (depths add),
-  `QuantumCircuit.conj_circuitOp_mem_supportedOperators` (the light cone of
-  radius `T`), `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site
-  unitaries in depth `2`), and `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`.
+- **Sanctioned bridges:** it abbreviates `IsBondCircuitOfDepth ringBond U T`;
+  `IsBondCircuitOfDepth.mem_unitary`, `IsBondCircuitOfDepth.star`,
+  `IsBondCircuitOfDepth.mul` (depths add),
+  `IsBondCircuitOfDepth.conj_mem_supportedOperators` (the light cone of radius
+  `T` for any bond geometry), `QuantumCircuit.conj_circuitOp_mem_supportedOperators`
+  (on the ring, within ring distance `T`),
+  `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site unitaries in
+  depth `2`), and `QuantumCircuit.IsBondCircuitOn.isBondCircuitOfDepth`.
 - **Caveat:** the depth is exact in the definition; a smaller depth is padded
-  with empty layers, as in `IsCircuitOn.mono`.
+  with empty layers, as in `IsBondCircuitOn.mono`.
 
 #### `QuantumCircuit.IsPreparedInDepth`
 
@@ -1533,10 +1654,12 @@ in `MPS/Preparation/` uses it.
   and a product vector `productVector v = ⊗ᵢ vᵢ`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
   obtained from depth-`T` local quantum circuits applied to product states").
-- **Sanctioned bridges:** `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
+- **Sanctioned bridges:** it abbreviates `IsBondPreparedInDepth ringBond T ψ`;
+  `IsBondPreparedInDepth.expect_mul_eq` (vanishing connected correlations of
+  operators on sets with disjoint light cones, for any bond geometry),
+  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
   and `QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth`
-  (vanishing connected correlations of operators at ring distance larger than
-  `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
+  (on the ring, operators at ring distance larger than `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
   (a nonzero prepared vector is a multiple of a local circuit of depth `T + 2`
   applied to `|0⋯0⟩`), and
   `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`.
@@ -1565,39 +1688,44 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
-#### `QuantumCircuit.Layer.IsIn`
+#### `QuantumCircuit.BondLayer.IsIn`
 
 - **Declaration:**
-  `QuantumCircuit.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
+  `QuantumCircuit.BondLayer.IsIn (L : BondLayer d bond) (R : Set ι) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** every gate of the layer `L` acts on a bond `{k, k+1}` contained
-  in the set of sites `R`.
+- **Meaning:** every gate of the layer `L` acts on a bond contained in the set
+  of sites `R`.
 - **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
   the block unitaries act in parallel on disjoint blocks of sites; the source
   has no separate name for this support condition.
-- **Sanctioned bridges:** `Layer.IsIn.mono` enlarges `R`;
-  `Layer.op_mem_supportedOperators` places the layer operator among the
-  operators supported on `R`; `Layer.union` and `Layer.union_op` merge layers
-  acting in disjoint sets; `Layer.empty_isIn` covers the empty layer.
+- **Sanctioned bridges:** `BondLayer.IsIn.mono` enlarges `R`;
+  `BondLayer.op_mem_supportedOperators` places the layer operator among the
+  operators supported on `R`; `BondLayer.union` and `BondLayer.union_op`
+  merge layers acting in disjoint sets; `BondLayer.empty_isIn` covers the
+  empty layer.
 - **Caveat:** the condition is on the bonds of the layer, not on its operator;
-  it is the per-layer ingredient of `IsCircuitOn`.
+  it is the per-layer ingredient of `IsBondCircuitOn`. `BondLayer.union_op`
+  needs every bond to be nonempty, as the ring bonds are.
 
-#### `QuantumCircuit.IsCircuitOn`
+#### `QuantumCircuit.IsBondCircuitOn` and `QuantumCircuit.IsCircuitOn`
 
-- **Declaration:**
+- **Declarations:**
+  `QuantumCircuit.IsBondCircuitOn (bond : β → Set ι) (R : Set ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fin d) ℂ) : Prop`
+  and its ring abbreviation
   `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
-  each of whose gates acts inside the set of sites `R`.
+- **Meaning:** `U` is the operator of a list of exactly `T` layers, each of
+  whose gates acts inside the set of sites `R`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits"), restricted to gates inside `R` as in the parallel
   application of block unitaries in the paragraph "The sequential-RG circuit".
-- **Sanctioned bridges:** `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`
-  forgets the support; `IsCircuitOn.mul` composes in series (depths add), and
-  `IsCircuitOn.par` runs two circuits of the same depth on disjoint sets of
+- **Sanctioned bridges:** `IsBondCircuitOn.isBondCircuitOfDepth` forgets the
+  support; `IsBondCircuitOn.mul` composes in series (depths add), and
+  `IsBondCircuitOn.par` (for nonempty bonds) and its ring form
+  `IsCircuitOn.par` run two circuits of the same depth on disjoint sets of
   sites in parallel.
-- **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
-  with empty layers.
+- **Caveat:** the depth is exact in the definition; `IsBondCircuitOn.mono`
+  pads it with empty layers.
 
 #### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
@@ -1986,6 +2114,77 @@ in `MPS/Preparation/` uses it.
   feedforward differ from the source model; no inclusion in its phase
   relation or source `QCcc` classification is asserted. See
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+
+### Lieb–Robinson propagation on finite graphs
+
+#### `QuantumCircuit.heisenbergCommutatorNorm`
+
+- **Declaration:**
+  `QuantumCircuit.heisenbergCommutatorNorm (H B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (X : Set ι) (t : ℝ) : ℝ`,
+  with `QuantumCircuit.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
+- **Defined in:** `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Meaning:** the operator norm of `A ↦ [τ_t(A), B]` restricted to
+  `supportedOperators q X`, for any finite type of sites `ι`.
+- **Source:** Hastings–Koma, arXiv:math-ph/0507008, Appendix A, (A.13); the
+  function `F(X, t)` of OpenAI, *A two-dimensional area law from a global
+  spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 70–74).
+- **Sanctioned bridges:**
+  `QuantumCircuit.heisenbergCommutatorNorm_le_integral` (the local commutator
+  recursion for an arbitrary finite interaction family),
+  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance` and
+  `QuantumCircuit.exists_graph_lieb_robinson` (graph-distance propagation with
+  constants depending only on the support diameter, support size and per-site
+  interaction budget), and
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
+  vanishing between connected components). The finite-ring estimate
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
+  nearest-neighbor ring consumer of the same recursion.
+- **Caveat:** the graph theorems take the per-support size bound and the
+  per-site norm budget as hypotheses; deriving them from the one-term-per-support
+  convention on an induced square-lattice domain is a separate step.
+
+#### `QuantumCircuit.siteExpectation`
+
+- **Declaration:**
+  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
+  with the linear map `QuantumCircuit.siteExpectationLM`.
+- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+- **Meaning:** the normalized partial trace
+  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  original sites.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
+- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
+  average over products of on-site Weyl operators outside `K`),
+  `siteExpectation_mem_supportedOperators`,
+  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
+  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
+  `norm_sub_siteExpectation_le` (error through on-site commutators), and
+  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
+  dynamics onto graph balls under a sphere-growth hypothesis).
+- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+
+#### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
+  constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
+  from QICLean and their ball expectations
+  `QuantumCircuit.siteExpectation q (QuantumCircuit.graphBall G aᵢ l) kᵢ`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
+- **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
+  centered at the ground vector; the positive contractions annihilate `Ω`, their sum
+  dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
+  `e^{-c l^{p/(p+1)}}`.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Proposition 4.3 (`prop:positive`) and Lemma 4.4 (`lem:quasilocal-roots`),
+  `03-quasilocal.tex`, lines 220–389.
+- **Sanctioned bridges:** `SpectralFilter.positive_replacement`,
+  `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` (QICLean),
+  `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
+- **Caveat:** stated for a general finite graph with the support, multiplicity and
+  sphere-growth hypotheses of the propagation estimate; the specialization to the induced
+  lattice domains is a separate step.
 
 ## Inhomogeneous short-range correlated chains
 
@@ -2875,3 +3074,149 @@ involve no boundary.
   the same maps into a complete zipper family after a derived common blocking.
   `IsBiorthogonalDecomposition.multiplicity_eq_of_isInjective` proves uniqueness
   of multiplicities under positive dimensions and injective block separation.
+
+## Finite-domain area law and open-grid PEPS approximation
+
+The September 24, 2026 OpenAI manuscripts use two different Hamiltonian
+classes. Their precise hypothesis comparison and present proof status are
+recorded in [the finite-domain and PEPS statement audit](formalization/openai-area-law-peps.md).
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `TNLean.PEPS.AreaLaw.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
+| `TNLean.PEPS.AreaLaw.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
+| `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
+| `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
+| `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
+| `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
+| `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
+| `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
+
+## Distributed PEPS compression: finite incidence and choice costs
+
+### Corrected source positions and whole-lifetime gate participation
+
+- **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
+  `incidentGates` and `gatesTouching` in the same namespace.
+- **Defined in:** `TNLean/PEPS/Approximation/DistributedLifetime.lean`.
+- **Meaning:** A source position has two party endpoints. For a finite set `S`
+  of corrected positions, `correctedParties` is their endpoint union. The gate
+  identifiers distinguish occurrences; repeated uses of an identical operation
+  remain distinct. `incidentGates` filters the entire finite nonprivate gate
+  list by party participation. `gatesTouching` includes every gate meeting the
+  corrected party set, including gates with no corrected source of their own.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2, corrected-position expansion,
+  `04-compression.tex:342–381`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L342-L381).
+- **Sanctioned bridges:** `card_correctedParties_le` gives at most `2 * S.card`
+  parties. `card_gatesTouching_correctedParties_le` gives at most
+  `2 * b * S.card` affected gates from the actual whole-lifetime bound of `b`
+  gates per corrected party. `owner_mem_gatesTouching_correctedParties` uses
+  explicit slot-owner incidence; `disjoint_participants_of_not_mem_gatesTouching`
+  proves exterior gates contain no corrected party.
+- **Caveat:** These are finite incidence statements, not a distributed quantum
+  circuit model or a density expansion. Coincident endpoints are permitted by
+  the counting lemmas. The eventual source-position model must supply its
+  owner/endpoint incidence, and the gate list must use occurrence identifiers.
+  No private-memory or source-Schmidt-rank bound is imposed.
+
+### Star and pair-sample virtual links
+
+- **Declarations:** `TNLean.PEPS.Approximation.pairSampleLabels`, `gateLinkLabels`,
+  `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
+  `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
+- **Defined in:** `TNLean/PEPS/Approximation/DistributedLinks.lean`.
+- **Meaning:** Each gate has a star rooted at a chosen participant and a sample
+  link for every unordered pair of distinct participants. Summand tags keep
+  star and sample links distinct, while gate-occurrence tags preserve parallel
+  links from different gates. Endpoint sets and incidence lists are derived
+  from this actual construction.
+- **Source:** The same September 24 manuscript, proof of Theorem 5.2,
+  `04-compression.tex:565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L565-L588).
+- **Sanctioned bridges:** `card_pairSampleLabels` gives `choose n 2` sample
+  links at a gate of arity `n`; `card_gateLinkLabels` gives `n - 1 + choose n 2`
+  total labels when the star root participates. `card_distributedLinkParties`
+  proves two distinct endpoints. `distributedLinkParties_subset` and
+  `exists_common_gate_of_mem_distributedLinkParties` derive original-gate
+  locality. `card_incidentDistributedLinks_le` gives degree at most
+  `2 * b * (b - 1)` from gate arity at most `b` and whole-lifetime participation
+  at most `b`.
+- **Caveat:** Star-root membership is explicit and must come from a chosen
+  participant of a nonprivate gate. This family has no local tensors, virtual
+  dimensions or evaluation map. Contraction and parallel-link combination
+  remain separate results; these links alone do not represent the compressed
+  density operator.
+
+### Weighted cost of affected coefficient and physical-entry choices
+
+- **Declarations:** `TNLean.PEPS.Approximation.ketBraCoefficientCost` and
+  `correctedPositionChoiceCost`.
+- **Defined in:** `TNLean/PEPS/Approximation/CorrectedPositionCost.lean`.
+- **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative
+  absolute coefficient weights. `correctedPositionChoiceCost` multiplies these
+  quantities over affected gates and the squares of intended physical
+  dimensions over corrected parties. Exterior coefficients and dimensions
+  do not occur in these products.
+- **Source:** The same September 24 manuscript, `eq:compression-polynomial-bounds`
+  and `eq:compression-choice-cost`, `04-compression.tex:269–277,356–381`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L356-L381).
+- **Sanctioned bridges:** `ketBraCoefficientCost_eq_sum` identifies the square
+  with the double ket/bra coefficient sum. For `B,d ≥ 1`, actual coefficient
+  sums at affected gates at most `B`, physical dimensions at corrected parties
+  at most `d`, and lifetime participation at most `b`,
+  `correctedPositionChoiceCost_le` proves the bound `(B^(4*b) * d^4)^S.card`.
+  `compressionChoiceBase_le_of_monomial_bounds` gives
+  `Q ≤ C^(4*b) * D^4 * L^(4*b*a + 4*c)` when `B ≤ C*L^a` and `d ≤ D*L^c`.
+- **Caveat:** Coefficients are supplied as nonnegative weights; the circuit
+  expansion must identify them with actual complex coefficient norms. The
+  theorem bounds a finite choice cost, not an expected trace error. The full
+  circuit expansion, local tensor evaluation, virtual dimension estimates,
+  approximate-expansion case and composition with the quantum/sampling results
+  remain open in [#8769](https://github.com/LionSR/TNLean/issues/8769).
+
+## Nested regional cylinders
+
+### `TNLean.PEPS.dependentRegionCylinder`
+
+- **Declaration:** `dependentRegionCylinder R S`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Cylinder.lean`.
+- **Meaning:** the global vectors all of whose complementary coordinate slices
+  lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
+- **Source:** the September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
+- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+  the range of an identity extension with a cylinder;
+  `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
+  projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,
+  containing-region, and image identities in the existing physical coordinates.
+- **Caveat:** inside rank means `dim S`, not the global dimension of the
+  cylinder. No cancellation of a possibly zero-dimensional outside factor
+  is used. The empty region still has inside Hilbert space `ℂ`.
+
+### `TNLean.PEPS.nestedCylinderInnovation`
+
+- **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
+  that the finite family of regions is monotone.
+- **Defined in:** `TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean`.
+- **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
+  `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
+  inside projectors into the current region and taking the sum of their ranges.
+- **Source:** the variable-radius orthogonalization at the manuscript passage
+  linked above.
+- **Sanctioned consequences:** `nestedCylinderInnovation_prefix_span` and
+  `nestedCylinderInnovation_span` identify all prefix and total spans;
+  `nestedCylinderInnovation_pairwise_orthogonal` proves orthogonality in the
+  actual global Hilbert space; `nestedCylinderInnovation_projector_sum` gives
+  the sum of the lifted inside projectors. The individual and summed
+  `finrank` bounds compare inside dimensions directly, in natural and integer
+  form. `nestedCylinder_projector_supported` gives support on any containing
+  region, and that support result does not require nesting.
+- **Caveat:** the image need not equal `Sⱼ ∩ Wⱼ⊥`; the sandwich
+  `(I − P_(Wⱼ)) P_(Sⱼ) (I − P_(Wⱼ))` need not be a projector. Neither
+  commutation of the original projectors nor a spectral rank estimate is
+  assumed. This is the orthogonalization step, not the approximation-error
+  or full adaptive-patch theorem. See
+  [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).

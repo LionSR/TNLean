@@ -3,10 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.InhomogeneousDoeblin
-import TNLean.MPS.Preparation.BlockIsometryState
+import TNLean.MPS.Preparation.InhomogeneousChoiResidual
 import TNLean.MPS.Preparation.SecondOrderOverlap
-import QICLean.Channel.Semigroup.CPClosure
 
 /-!
 # Uniform positive-part rates from Choi domination
@@ -40,21 +38,6 @@ open scoped BigOperators ComplexOrder MatrixOrder Kronecker Matrix.Norms.L2Opera
 
 namespace MPSPreparation
 
-/-- The physical Gram matrix is the bond dimension times the transpose of the normalized
-Choi matrix of the transfer map, with both indexed by the ordered pair of bond indices. -/
-theorem gram_eq_smul_choi_transpose {d D : ℕ} [NeZero D] (A : MPSTensor d D) :
-    (physicalMatrix A)ᴴ * physicalMatrix A =
-      (D : ℂ) • (ChoiRectangular.choiMatrix (Kraus.transferMap A)).transpose := by
-  ext a b
-  rw [conjTranspose_physicalMatrix_mul_apply, Matrix.smul_apply, Matrix.transpose_apply,
-    ChoiRectangular.choiMatrix_apply, MaximallyEntangled.omegaSlice_eq_single,
-    MaximallyEntangled.omegaCoeff_eq_inv (Nat.pos_of_ne_zero (NeZero.ne D))]
-  rw [show Matrix.single b.2 a.2 (1 / (D : ℂ)) =
-      (1 / (D : ℂ)) • Matrix.single b.2 a.2 1 by simp,
-    map_smul, Matrix.smul_apply]
-  simp only [smul_eq_mul]
-  field_simp [NeZero.ne D]
-
 /-- **Uniform Gram and positive-part rates for an inhomogeneous chain.** Fix a faithful
 state `σ` of trace one. There is `K`, depending only on `D` and `σ`, such that for any chain
 partitioned into contiguous blocks of lengths at most `s > 0`, if those actual block maps
@@ -86,163 +69,32 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
   refine ⟨L * (2 * D), by positivity,
     fun {d N M} A ℓ hN s hs hℓ ε hε hε1 hA hfix hchoi => ?_⟩
   let E : Fin M → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) :=
-    fun k => Kraus.transferMap (chainBlockTensor A hN k)
+    fun j => Kraus.transferMap (chainBlockTensor A hN j)
   have hwhole : Kraus.transferMap (MPSChainTensor.blockTensor A) = (List.ofFn E).prod := by
     rw [MPSChainTensor.transferMap_blockTensor]
     change (List.ofFn fun i => Kraus.transferMap (A i)).prod =
-      (List.ofFn fun k => Kraus.transferMap (chainBlockTensor A hN k)).prod
+      (List.ofFn fun j => Kraus.transferMap (chainBlockTensor A hN j)).prod
     simp only [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
     exact prod_ofFn_blockSite ℓ hN (fun i => Kraus.transferMap (A i))
-  let P := Matrix.tracePrepareMap (α := Fin D) σ
-  let r : ℝ := 1 - ε
-  let R (B : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) := B - (ε : ℂ) • P
-  have hPtr : ∀ X, (P X).trace = X.trace := by
-    intro X
-    simp [P, htr]
-  have hRtr (B : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) (hB : IsTracePreservingMap B)
-      (X : Matrix (Fin D) (Fin D) ℂ) : (R B X).trace = (r : ℂ) * X.trace := by
-    simp only [R, LinearMap.sub_apply, LinearMap.smul_apply, Matrix.trace_sub,
-      Matrix.trace_smul, smul_eq_mul, hB X, hPtr]
-    simp only [r, Complex.ofReal_sub, Complex.ofReal_one]
-    ring
-  have hRprodtr : ∀ m (B : Fin m → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
-      (∀ i, IsTracePreservingMap (B i)) →
-      ∀ X, (((List.ofFn fun i => R (B i)).prod) X).trace = (r : ℂ) ^ m * X.trace := by
-    intro m
-    induction m with
-    | zero => intro B hB X; simp
-    | succ m ih =>
-      intro B hB X
-      rw [List.ofFn_succ, List.prod_cons]
-      change (R (B 0) (((List.ofFn fun i => R (B i.succ)).prod) X)).trace = _
-      rw [hRtr _ (hB 0), ih _ (fun i => hB i.succ), pow_succ]
-      ring
-  have hdec : ∀ m (B : Fin m → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
-      (∀ i, IsTracePreservingMap (B i)) →
-      (∀ i, B i σ = σ) → ∀ X,
-      ((List.ofFn fun i => B i).prod) X =
-        ((1 - r ^ m : ℝ) : ℂ) • (X.trace • σ) +
-          ((List.ofFn fun i => R (B i)).prod) X := by
-    intro m
-    induction m with
-    | zero => intro B hB hBfix X; simp
-    | succ m ih =>
-      intro B hB hBfix X
-      rw [List.ofFn_succ, List.ofFn_succ, List.prod_cons, List.prod_cons]
-      change B 0
-        (((List.ofFn fun i => B i.succ).prod) X) =
-          _ + R (B 0) (((List.ofFn fun i => R (B i.succ)).prod) X)
-      rw [ih _ (fun i => hB i.succ) (fun i => hBfix i.succ)]
-      simp only [map_add, map_smul, hBfix]
-      simp only [R, LinearMap.sub_apply, LinearMap.smul_apply, P, Matrix.tracePrepareMap_apply]
-      rw [hRprodtr _ _ (fun i => hB i.succ)]
-      ext i j
-      simp only [Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply, smul_eq_mul]
-      push_cast
-      simp only [pow_succ, r, Complex.ofReal_sub, Complex.ofReal_one]
-      ring
-  have hRcp : ∀ i, IsCPMap (R (E i)) := by
-    intro i
-    apply (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef _).2
-    have hC : ChoiRectangular.choiMatrix (R (E i)) =
-        ChoiRectangular.choiMatrix (E i) -
-          ((ε : ℂ) / D) • (σ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-      have hsub : ChoiRectangular.choiMatrix (E i - (ε : ℂ) • P) =
-          ChoiRectangular.choiMatrix (E i) -
-            ChoiRectangular.choiMatrix ((ε : ℂ) • P) :=
-        (ChoiRectangular.choiMatrixLinearMap (d := D) (d' := D)).map_sub (E i) ((ε : ℂ) • P)
-      rw [show R (E i) = E i - (ε : ℂ) • P from rfl, hsub,
-        ChoiRectangular.choiMatrix_smul]
-      dsimp only [P]
-      rw [Matrix.choiMatrix_tracePrepareMap, smul_smul]
-      congr 2
-      ring
-    rw [hC]
-    exact Matrix.le_iff.mp (hchoi i)
-  have hprodcp : ∀ Ts : List (Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
-      (∀ T ∈ Ts, IsCPMap T) → IsCPMap Ts.prod := by
-    intro Ts
-    induction Ts with
-    | nil => intro h; exact isCPMap_id
-    | cons T Ts ih =>
-      intro h
-      exact (h T (by simp)).comp (ih fun S hS => h S (by simp [hS]))
-  let Q := (List.ofFn fun i => R (E i)).prod
-  have hQcp : IsCPMap Q := hprodcp _ fun T hT => by
-    obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hT
-    exact hRcp i
-  have htc : ∀ (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) (c : ℂ),
-      (∀ X, (T X).trace = c * X.trace) → (ChoiRectangular.choiMatrix T).trace = c := by
-    intro T c hT
-    rw [ChoiRectangular.trace_choiMatrix]
-    have ht := Matrix.trace_traceAdjointMap_mul T 1 1
-    simp only [Matrix.mul_one, Matrix.one_mul] at ht
-    rw [ht, hT, Matrix.trace_one, Fintype.card_fin]
-    field_simp [NeZero.ne D]
-  have hQtr : (ChoiRectangular.choiMatrix Q).trace = (r : ℂ) ^ M :=
-    htc Q _ (hRprodtr M E hA)
-  have hPctr : (ChoiRectangular.choiMatrix P).trace = 1 :=
-    htc P 1 (fun X => by simpa using hPtr X)
-  have hPcpos : (ChoiRectangular.choiMatrix P).PosSemidef := by
-    dsimp only [P]
-    rw [Matrix.choiMatrix_tracePrepareMap]
-    exact (hσ.posSemidef.kronecker Matrix.PosSemidef.one).smul (by positivity)
-  have hQcpos : (ChoiRectangular.choiMatrix Q).PosSemidef :=
-    (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef Q).1 hQcp
-  have hnorm : ∀ {X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ},
-      X.PosSemidef → ‖X‖ ≤ X.trace.re := by
-    intro X hX
-    have ht : X.trace.re = ∑ i, hX.isHermitian.eigenvalues i := by
-      rw [hX.isHermitian.trace_eq_sum_eigenvalues]
-      simp
-    conv_lhs => rw [hX.isHermitian.spectral_theorem]
-    simp only [Unitary.conjStarAlgAut_apply, ← Unitary.coe_star,
-      CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul,
-      Matrix.l2_opNorm_diagonal]
-    rw [ht]
-    refine (pi_norm_le_iff_of_nonneg
-      (Finset.sum_nonneg fun i _ => hX.eigenvalues_nonneg i)).2 ?_
-    intro i
-    simp only [Function.comp_apply, RCLike.norm_ofReal, abs_of_nonneg (hX.eigenvalues_nonneg i)]
-    exact Finset.single_le_sum (fun j _ => hX.eigenvalues_nonneg j) (Finset.mem_univ i)
-  have hQnorm : ‖(ChoiRectangular.choiMatrix Q).transpose‖ ≤ r ^ M := by
-    simpa only [Matrix.trace_transpose, hQtr, ← Complex.ofReal_pow, Complex.ofReal_re]
-      using hnorm hQcpos.transpose
-  have hPnorm : ‖(ChoiRectangular.choiMatrix P).transpose‖ ≤ 1 := by
-    simpa [Matrix.trace_transpose, hPctr] using hnorm hPcpos.transpose
-  have hmaps : Kraus.transferMap (MPSChainTensor.blockTensor A) =
-      ((1 - r ^ M : ℝ) : ℂ) • P + Q := by
+  have hfixed : Kraus.transferMap (MPSChainTensor.blockTensor A) σ = σ := by
     rw [hwhole]
-    ext X : 1
-    simpa only [LinearMap.add_apply, LinearMap.smul_apply, P, Matrix.tracePrepareMap_apply]
-      using hdec M E hA hfix X
-  have hlim : (D : ℂ) • (ChoiRectangular.choiMatrix P).transpose =
-      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    dsimp only [P]
-    rw [Matrix.choiMatrix_tracePrepareMap, Matrix.transpose_smul,
-      ← Matrix.kroneckerMap_transpose, Matrix.transpose_one, smul_smul]
-    simp [NeZero.ne D]
-  have hgram : (physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
-      physicalMatrix (MPSChainTensor.blockTensor A) - σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      (D : ℂ) • ((ChoiRectangular.choiMatrix Q).transpose -
-        ((r ^ M : ℝ) : ℂ) • (ChoiRectangular.choiMatrix P).transpose) := by
-    rw [gram_eq_smul_choi_transpose, hmaps, ChoiRectangular.choiMatrix_add,
-      ChoiRectangular.choiMatrix_smul, Matrix.transpose_add, Matrix.transpose_smul, ← hlim]
-    ext i j
-    simp only [Matrix.sub_apply, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul]
-    push_cast
-    ring
-  have hbound : ‖(physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
-      physicalMatrix (MPSChainTensor.blockTensor A) - σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
-      2 * D * r ^ M := by
-    rw [hgram, norm_smul, Complex.norm_natCast]
-    have hp : ‖((r ^ M : ℝ) : ℂ) • (ChoiRectangular.choiMatrix P).transpose‖ ≤ r ^ M := by
-      rw [norm_smul, Complex.norm_real, Real.norm_of_nonneg (pow_nonneg (sub_nonneg.mpr hε1) M)]
-      exact (mul_le_mul_of_nonneg_left hPnorm (pow_nonneg (sub_nonneg.mpr hε1) M)).trans_eq
-        (mul_one _)
-    have hb := norm_sub_le (ChoiRectangular.choiMatrix Q).transpose
-      (((r ^ M : ℝ) : ℂ) • (ChoiRectangular.choiMatrix P).transpose)
-    nlinarith [Nat.cast_nonneg (α := ℝ) D]
+    have hp : ∀ Ts : List (Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
+        (∀ T ∈ Ts, T σ = σ) → Ts.prod σ = σ := by
+      intro Ts
+      induction Ts with
+      | nil => intro h; rfl
+      | cons T Ts ih =>
+        intro h
+        change T (Ts.prod σ) = σ
+        rw [ih fun S hS => h S (by simp [hS])]
+        exact h T (by simp)
+    exact hp _ fun T hT => by
+      obtain ⟨j, rfl⟩ := List.mem_ofFn.mp hT
+      exact hfix j
+  let r : ℝ := 1 - ε
+  have hbound := norm_gram_blockTensor_sub_transport_le_of_choi_domination A ℓ hN
+    (fun _ => ε) (fun _ => σ) (fun _ => htr) hA hchoi σ hσ.posSemidef htr
+  rw [hfixed, Fin.prod_const] at hbound
   have hNs : N ≤ M * s := by
     rw [← hN]
     calc ∑ k, ℓ k ≤ ∑ _ : Fin M, s := Finset.sum_le_sum (fun k _ => hℓ k)

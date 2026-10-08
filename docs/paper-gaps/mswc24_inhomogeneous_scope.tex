@@ -109,11 +109,13 @@ zeros to $D\times D$ matrices\footnote{Formal declarations:
 The padded chain has the same state, which is proved. For a block of at least
 one site, its blocked tensor $B_k$ vanishes outside the upper-left corner
 $[0,D_{o_k})\times[0,D_{o_{k+1}})$, which is also proved, and its entries on
-that corner are those of the rectangular blocked tensor. That last
-identification is not formalized: the injectivity hypothesis of the statement
-for injective blocked tensors is stated directly for $B_k$, as spanning every
-matrix unit in the corner, and its reading as injectivity of the rectangular
-blocked tensor is the observation just made. For a block of length zero the
+that corner are those of the rectangular blocked tensor. This identification
+is proved by
+\leanid{VaryingBondChain.zeroPad_rectangularBlockTensor} in
+\doclink{TNLean/MPS/Preparation/RectangularBlocks}, together with the ordered
+composition formula for the actual rectangular site transfer maps.
+The injectivity hypothesis of the statement for injective blocked tensors
+is stated directly for $B_k$, as spanning every matrix unit in the corner. For a block of length zero the
 two readings differ, since $B_k$ is then the identity matrix of size $D$; the
 statement using the hypothesis assumes blocks of at least one site. Under the hypothesis, the
 support projector of the polar decomposition $B_k=V_kP_k$ is the coordinate
@@ -334,6 +336,17 @@ with $K,r>0$ independent of all intervals and rings. There is no separate
 transport or stationarity hypothesis: the global estimate is proved directly
 from these quantitative tensor-product bounds.
 
+The tensor-level comparison
+\leanid{MPSTensor.exists_norm_gram_transferMatrix_sub_le} in
+\doclink{TNLean/MPS/Preparation/PositivePartRate} uses one constant $K_D>0$
+chosen before the physical dimension, tensor, and positive semidefinite
+reference. It bounds the Gram error by the transfer-matrix error and
+conversely, both in the $L^2$ operator norm. No trace-one, stationarity, or
+faithfulness assumption is needed for this comparison. Positivity is
+needed only to identify the fixed-point tensor's transfer map with the
+algebraic trace-reset map. This finite-dimensional norm comparison
+supplies no mixing rate by itself.
+
 The global square-root H\"older bound replaces a reference-dependent
 Lipschitz constant by a dimension-dependent factor and halves the exponential
 rate. Compactness of the set of density matrices makes the mixed-transfer
@@ -362,6 +375,107 @@ rate from the paper's qualitative finite-correlation definition. Rectangular
 bonds require the corresponding corner-supported reset maps; zero-padded
 rectangular site maps are not generally trace preserving on the full square
 space, so the square-space hypotheses are not silently applied to them.
+
+\section{A local window criterion with derived references}
+A quantitative sufficient condition is now proved for actual square-bond
+chains whose site transfer maps are trace preserving. Fix an integer
+$s\ge1$ and a strength $\eta>0$ uniformly across the family. Every actual
+nonwrapping $s$-window must satisfy the normalized output-first Choi bound
+$J(F)\ge(\eta/D)(\tau\otimes I)$ for some density matrix $\tau$.
+The minorizer can depend on the ring and window and can be singular.
+The actual window at $N=s$ implies $\eta\le1$ internally.
+
+The proof constructs a fixed density of the whole-ring channel and
+propagates it through ordered suffixes, deriving compatible references
+$\sigma_N=\sigma_0$ and
+$E_{[a,a+n)}(\sigma_{a+n})=\sigma_a$. These references need not equal
+the local Choi minorizers. Subtracting each reset contribution leaves
+completely positive residual maps with trace scales $1-\eta$.
+Their ordered product yields Gram error
+$2D(1-\eta)^{\lfloor n/s\rfloor}$, and a fixed-dimensional reshuffling
+converts it to the required transfer operator norm. The shorter final
+window uses only complete positivity and trace preservation.
+
+Weakening to $\eta/2$ before the logarithm covers the original
+$\eta=1$ endpoint with a finite positive rate. The resulting theorem
+\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domination}.}
+gives physical logarithmic-depth preparation of the original family above
+a uniform cutoff $N_0\ge s$. Global mixing, a compatible reference family,
+faithfulness, a common stationary state, and short-ring nonvanishing
+are derived or unnecessary, rather than additional input hypotheses.
+
+A concrete two-dimensional alternating unitary/reset family satisfies the
+criterion with $s=2$ and $\eta=1$, with distinct singular minorizers.
+The regression includes a three-site remainder and a zero one-site
+periodic vector with no available two-site window. This tests the
+necessity of the eventual conclusion without patching the family.
+
+This establishes a useful local sufficient criterion. It does not prove
+that the source's qualitative finite-correlation definition implies
+uniform window minorization. Rectangular varying bonds remain outside
+this theorem: zero-padding does not preserve full-space trace preservation.
+
+\section{Actual rectangular transfer rates}
+The rectangular dimensions need not be replaced by a fixed square-bond
+hypothesis. For $F_{a:b}:M_{D_b}\to M_{D_a}$, use the Hilbert--Schmidt
+induced operator norm in the matrix-unit bases and assume a uniform rate
+$\|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|\le Ke^{-r(b-a)}$
+for every nonempty block of every partition, with $K,r>0$ chosen before
+the ring length. The references $\sigma_a$ are positive semidefinite of
+trace one on the actual bonds and may be singular.
+
+The padded reference is
+$X\mapsto\operatorname{Tr}(P_bX)J_a\sigma_aJ_a^\dagger$,
+where $J_a$ is the coordinate isometry and $P_b=J_bJ_b^\dagger$.
+The full-space trace reset would be incorrect on inputs outside the
+outgoing corner. Its Gram reference is
+$(J_a\sigma_aJ_a^\dagger)^{\mathsf T}\otimes P_b$.
+The shared square-root and ordered-product estimates give pair error
+$C_D\sqrt K\,N e^{-rq/2}$ for blocks of lengths between $q$ and $2q$.
+Whole-ring mixing supplies nonvanishing beyond a fixed cutoff.
+The theorem
+\leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
+in \doclink{TNLean/MPS/Preparation/RectangularPreparation}
+therefore gives physical depth $C\log(N/\varepsilon)$ for all
+$N\ge N_0$ and $0<\varepsilon\le1$, with $N_0,C$ selected first.
+This is a quantitative sufficient condition, and does not derive the
+required rate from qualitative convergence alone.
+
+Dimension-one bonds are included. Equation (S39) concerns the paper's
+numerical open-boundary study; the formal physical circuit conclusion
+uses ring adjacency. It does not assert open-line locality without a
+proof that the wrap-around edge is unused.
+
+\section{Rectangular local-window criterion}
+The preceding actual rectangular rate can be derived from a local condition.
+Fix $s\ge1$ and $\eta>0$, uniformly across a family with $1\le D_i\le D$.
+Require every available window $F_{a:a+s}:M_{D_{a+s}}\to M_{D_a}$ to satisfy
+\[
+    J(F_{a:a+s})\ge\frac{\eta}{D_{a+s}}(\tau_a\otimes I_{D_{a+s}}),
+\]
+where the normalized output-first Choi convention includes the actual input
+dimension, and $\tau_a$ is a density that may be singular and vary with the window.
+The original rectangular site maps must be completely positive and trace preserving.
+No full-space trace-preservation claim is made about zero-padding.
+
+A fixed density of the full-cycle channel and suffix transport derive compatible
+cyclic references. Subtracting the local trace-prepare contributions gives completely
+positive residual maps. Peeling complete windows from the right leaves a shorter
+left remainder. The residual product has trace scale
+$t=(1-\eta)^{\lfloor n/s\rfloor}$ and unnormalized Choi trace $D_{a+n}t$.
+This bounds the actual Hilbert--Schmidt induced interval error by $2Dt$ directly,
+without introducing a common enlarged channel or changing the physical tensors.
+
+The family window at $N=s$ gives $\eta\le1$. Weakening to $\eta/2$ yields
+$K=4D$ and $r=-\log(1-\eta/2)/s>0$. The theorem
+\leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
+in \doclink{TNLean/MPS/Preparation/RectangularWindowPreparation}
+then gives the original physical ring preparation conclusion with $N_0\ge s$
+and $C$ chosen before $N,\varepsilon$. Dimension-one bonds and singular references
+are included. This local condition remains additional quantitative input;
+the paper's qualitative finite-correlation discussion does not provide its uniform
+window length and strength.
 
 \bibliography{references}
 \end{document}

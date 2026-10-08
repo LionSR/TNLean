@@ -1,0 +1,819 @@
+{
+  "status": "passed focused PDF and static HTML verification",
+  "source_revision": "d975c515fdebefb092325f9fe6c4d7b50dc9daac",
+  "source_tree": "0d2adb1616c74a2ceacf3628ce409897b0d2fb3f",
+  "source_inputs": {
+    "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean": "ed037f6191d7918925da238ccefdf8ee80217c82b80b749409d4510fae85ca2f",
+    "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean": "d67e2447c40c4de50e98a460187f81248cbc47a225a6024d0597886b6da4600f",
+    "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean": "352196742a8758afbda2cf372bb812072ffa0fb9276b13e1f825a6ec4f0bae72",
+    "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean": "b93ffe00ce63feaa8b748ae0dc87372bf7dbdaebed0ec743e1f1d794ba3934e6",
+    "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean": "f8438b2d4cdf4153454ab1d44af887cb692255803837efcb7f73430c932745e6",
+    "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean": "784d80a809b845d87f488d4fc3c6f83b776b8725b270e93fea79e7116ba751a5",
+    "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean": "36354daf31023bb9b21de5182b35ed808592628c9c3d90e64ecab3ac6a3a78ab",
+    "blueprint/src/chapter/ch34_area_law_graph_foundations.tex": "bfec2f497c67636862630e90d4fdfb55d23c154f995c1af6a0326d52a88a661f",
+    "blueprint/src/chapter/ch34_area_law_diamond_counting.tex": "3b2b2fd38fb1e08b0f098eb74b38bc54e3762aca56505e61aeb454ed993c9634"
+  },
+  "immutable_snapshot_files_checked": 634,
+  "focus_manifest_sha256": "52ec0df18987ad0fbbbfbf23e1c398a15781ccd2a627c462eb6325b0a7c2e502",
+  "public_declarations": [
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 68,
+      "fqn": "TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase",
+      "kind": "theorem",
+      "short_name": "card_supportFamily_le_pow_card_erase",
+      "end_line": 91,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 92,
+      "fqn": "TNLean.PEPS.AreaLaw.card_supportFamily_le_pow",
+      "kind": "theorem",
+      "short_name": "card_supportFamily_le_pow",
+      "end_line": 101,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 102,
+      "fqn": "TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le",
+      "kind": "theorem",
+      "short_name": "sum_supportWeights_containing_le",
+      "end_line": 123,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 124,
+      "fqn": "TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights",
+      "kind": "theorem",
+      "short_name": "sum_supportWeights_meeting_le_sum_siteWeights",
+      "end_line": 152,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 153,
+      "fqn": "TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le",
+      "kind": "theorem",
+      "short_name": "sum_supportWeights_meeting_le",
+      "end_line": 166,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 167,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainWeightSum",
+      "kind": "def",
+      "short_name": "interactionChainWeightSum",
+      "end_line": 175,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionBudget.lean",
+      "line": 176,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow",
+      "kind": "theorem",
+      "short_name": "interactionChainWeightSum_le_pow",
+      "end_line": 207,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 73,
+      "fqn": "TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain",
+      "kind": "theorem",
+      "short_name": "exists_walk_length_le_sum_of_isChain",
+      "end_line": 95,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 96,
+      "fqn": "TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain",
+      "kind": "theorem",
+      "short_name": "exists_walk_length_le_mul_of_isChain",
+      "end_line": 108,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 109,
+      "fqn": "TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain",
+      "kind": "theorem",
+      "short_name": "edist_le_mul_of_isChain",
+      "end_line": 122,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 123,
+      "fqn": "TNLean.PEPS.AreaLaw.reachable_of_isChain",
+      "kind": "theorem",
+      "short_name": "reachable_of_isChain",
+      "end_line": 134,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 135,
+      "fqn": "TNLean.PEPS.AreaLaw.connectedComponent_eq_of_isChain",
+      "kind": "theorem",
+      "short_name": "connectedComponent_eq_of_isChain",
+      "end_line": 145,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 146,
+      "fqn": "TNLean.PEPS.AreaLaw.not_isChain_of_connectedComponent_ne",
+      "kind": "theorem",
+      "short_name": "not_isChain_of_connectedComponent_ne",
+      "end_line": 156,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 157,
+      "fqn": "TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top",
+      "kind": "theorem",
+      "short_name": "not_isChain_of_edist_eq_top",
+      "end_line": 171,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionChain.lean",
+      "line": 172,
+      "fqn": "TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist",
+      "kind": "theorem",
+      "short_name": "not_isChain_of_mul_lt_edist",
+      "end_line": 180,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "line": 63,
+      "fqn": "TNLean.PEPS.AreaLaw.card_support_le_diamond",
+      "kind": "theorem",
+      "short_name": "card_support_le_diamond",
+      "end_line": 77,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "line": 78,
+      "fqn": "TNLean.PEPS.AreaLaw.card_supports_containing_le_diamond",
+      "kind": "theorem",
+      "short_name": "card_supports_containing_le_diamond",
+      "end_line": 108,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "line": 109,
+      "fqn": "TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond",
+      "kind": "theorem",
+      "short_name": "sum_supportWeights_containing_le_diamond",
+      "end_line": 128,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "line": 129,
+      "fqn": "TNLean.PEPS.AreaLaw.sum_supportNorms_containing_le_diamond",
+      "kind": "theorem",
+      "short_name": "sum_supportNorms_containing_le_diamond",
+      "end_line": 142,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "line": 143,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow",
+      "kind": "theorem",
+      "short_name": "interactionChainWeightSum_le_diamond_pow",
+      "end_line": 163,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionDiamondCounting.lean",
+      "line": 164,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow",
+      "kind": "theorem",
+      "short_name": "interactionChainWeightSum_norm_le_diamond_pow",
+      "end_line": 177,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "line": 66,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_le_exponential",
+      "end_line": 93,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "line": 94,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainPropagationSeries",
+      "kind": "def",
+      "short_name": "interactionChainPropagationSeries",
+      "end_line": 100,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "line": 101,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le",
+      "kind": "theorem",
+      "short_name": "interactionChainPropagationSeries_summable_and_le",
+      "end_line": 138,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "line": 139,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top",
+      "kind": "theorem",
+      "short_name": "interactionChainPropagationSeries_eq_zero_of_edist_eq_top",
+      "end_line": 149,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 54,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum",
+      "kind": "def",
+      "short_name": "interactionChainTargetWeightSum",
+      "end_line": 60,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 61,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_nonneg",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_nonneg",
+      "end_line": 71,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 72,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_le",
+      "end_line": 84,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 85,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_no_walk",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_eq_zero_of_no_walk",
+      "end_line": 117,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 118,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_lt_edist",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_eq_zero_of_lt_edist",
+      "end_line": 128,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 129,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_edist_eq_top",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_eq_zero_of_edist_eq_top",
+      "end_line": 139,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionTarget.lean",
+      "line": 140,
+      "fqn": "TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_indicator_pow",
+      "kind": "theorem",
+      "short_name": "interactionChainTargetWeightSum_le_indicator_pow",
+      "end_line": 156,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 155,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeDiamond",
+      "kind": "def",
+      "short_name": "latticeDiamond",
+      "end_line": 160,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 161,
+      "fqn": "TNLean.PEPS.AreaLaw.mem_latticeDiamond",
+      "kind": "theorem",
+      "short_name": "mem_latticeDiamond",
+      "end_line": 175,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 176,
+      "fqn": "TNLean.PEPS.AreaLaw.card_latticeDiamond",
+      "kind": "theorem",
+      "short_name": "card_latticeDiamond",
+      "end_line": 188,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 189,
+      "fqn": "TNLean.PEPS.AreaLaw.card_le_diamond_of_latticeL1Distance_le",
+      "kind": "theorem",
+      "short_name": "card_le_diamond_of_latticeL1Distance_le",
+      "end_line": 202,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 203,
+      "fqn": "TNLean.PEPS.AreaLaw.card_le_diamond_of_walks",
+      "kind": "theorem",
+      "short_name": "card_le_diamond_of_walks",
+      "end_line": 214,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 215,
+      "fqn": "TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le",
+      "kind": "theorem",
+      "short_name": "card_le_diamond_of_edist_le",
+      "end_line": 223,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
+      "line": 56,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeL1Distance",
+      "kind": "def",
+      "short_name": "latticeL1Distance",
+      "end_line": 60,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
+      "line": 61,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeL1Distance_self",
+      "kind": "theorem",
+      "short_name": "latticeL1Distance_self",
+      "end_line": 64,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
+      "line": 65,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeL1Distance_triangle",
+      "kind": "theorem",
+      "short_name": "latticeL1Distance_triangle",
+      "end_line": 82,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
+      "line": 83,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length",
+      "kind": "theorem",
+      "short_name": "latticeL1Distance_le_walk_length",
+      "end_line": 99,
+      "is_private": false
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDistance.lean",
+      "line": 100,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le",
+      "kind": "theorem",
+      "short_name": "latticeL1Distance_le_of_edist_le",
+      "end_line": 110,
+      "is_private": false
+    }
+  ],
+  "private_helpers": [
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphInteractionSeries.lean",
+      "line": 49,
+      "fqn": "TNLean.PEPS.AreaLaw.exponential_chain_factor",
+      "kind": "theorem",
+      "short_name": "exponential_chain_factor",
+      "end_line": 65,
+      "is_private": true
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 61,
+      "fqn": "TNLean.PEPS.AreaLaw.latticeDiamondRows",
+      "kind": "def",
+      "short_name": "latticeDiamondRows",
+      "end_line": 64,
+      "is_private": true
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 65,
+      "fqn": "TNLean.PEPS.AreaLaw.mem_latticeDiamondRows",
+      "kind": "theorem",
+      "short_name": "mem_latticeDiamondRows",
+      "end_line": 93,
+      "is_private": true
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 94,
+      "fqn": "TNLean.PEPS.AreaLaw.sum_latticeDiamond_rows",
+      "kind": "theorem",
+      "short_name": "sum_latticeDiamond_rows",
+      "end_line": 127,
+      "is_private": true
+    },
+    {
+      "file": "TNLean/PEPS/AreaLaw/GraphLatticeDiamond.lean",
+      "line": 128,
+      "fqn": "TNLean.PEPS.AreaLaw.card_latticeDiamondRows",
+      "kind": "theorem",
+      "short_name": "card_latticeDiamondRows",
+      "end_line": 154,
+      "is_private": true
+    }
+  ],
+  "coverage": {
+    "production_modules": 7,
+    "production_lines": 1202,
+    "public_declarations": 43,
+    "unique_global_tag_owners": 43,
+    "reverse_coverage_missing": [],
+    "retired_declaration_tags": [],
+    "retired_labels_or_references": [],
+    "entries": 20,
+    "proofs": 15,
+    "checked_markers": 35,
+    "generated_lean_decls": 43,
+    "pdf_declaration_links": 43,
+    "html_declaration_links": 43,
+    "source_labels": 34,
+    "local_text_references": 22,
+    "uses_edges": 39,
+    "indicator_proof_dependencies": [
+      "thm:area_target_domination",
+      "thm:area_target_zero",
+      "thm:area_chain_growth"
+    ]
+  },
+  "retired_declarations_checked": [
+    "card_le_square_of_latticeL1Distance_le",
+    "card_le_square_of_walks",
+    "card_le_square_of_edist_le",
+    "card_support_le_square",
+    "card_supports_containing_le_square",
+    "sum_supportWeights_containing_le_square",
+    "interactionChainWeightSum_le_lattice_pow"
+  ],
+  "retired_labels_checked": [
+    "thm:area_square_count",
+    "thm:area_lattice_budget"
+  ],
+  "pdf_pages": 8,
+  "pdf_labels": {
+    "ch:area_graph_foundations": {
+      "number": "1",
+      "printed_page": 2,
+      "destination": "chapter.1"
+    },
+    "thm:area_chain_walk": {
+      "number": "1.1.1",
+      "printed_page": 2,
+      "destination": "theorem.1.1.1"
+    },
+    "thm:area_chain_components": {
+      "number": "1.1.2",
+      "printed_page": 2,
+      "destination": "theorem.1.1.2"
+    },
+    "def:area_lattice_displacement": {
+      "number": "1.2.1",
+      "printed_page": 2,
+      "destination": "theorem.1.2.1"
+    },
+    "thm:area_walk_displacement": {
+      "number": "1.2.2",
+      "printed_page": 2,
+      "destination": "theorem.1.2.2"
+    },
+    "thm:area_support_count": {
+      "number": "1.3.1",
+      "printed_page": 3,
+      "destination": "theorem.1.3.1"
+    },
+    "thm:area_site_weight": {
+      "number": "1.3.2",
+      "printed_page": 3,
+      "destination": "theorem.1.3.2"
+    },
+    "thm:area_region_weight": {
+      "number": "1.3.3",
+      "printed_page": 3,
+      "destination": "theorem.1.3.3"
+    },
+    "eq:area_region_weight": {
+      "number": "1.1",
+      "printed_page": 3,
+      "destination": "equation.1.1"
+    },
+    "def:area_chain_weight": {
+      "number": "1.3.4",
+      "printed_page": 3,
+      "destination": "theorem.1.3.4"
+    },
+    "eq:area_chain_initial": {
+      "number": "1.2",
+      "printed_page": 3,
+      "destination": "equation.1.2"
+    },
+    "eq:area_chain_step": {
+      "number": "1.3",
+      "printed_page": 3,
+      "destination": "equation.1.3"
+    },
+    "thm:area_chain_growth": {
+      "number": "1.3.5",
+      "printed_page": 3,
+      "destination": "theorem.1.3.5"
+    },
+    "def:area_lattice_diamond": {
+      "number": "1.4.1",
+      "printed_page": 4,
+      "destination": "theorem.1.4.1"
+    },
+    "thm:area_diamond_count": {
+      "number": "1.4.2",
+      "printed_page": 4,
+      "destination": "theorem.1.4.2"
+    },
+    "eq:area_diamond_rows": {
+      "number": "1.4",
+      "printed_page": 4,
+      "destination": "equation.1.4"
+    },
+    "thm:area_diamond_budget": {
+      "number": "1.4.3",
+      "printed_page": 4,
+      "destination": "theorem.1.4.3"
+    },
+    "eq:area_diamond_site": {
+      "number": "1.5",
+      "printed_page": 4,
+      "destination": "equation.1.5"
+    },
+    "eq:area_diamond_chain": {
+      "number": "1.6",
+      "printed_page": 4,
+      "destination": "equation.1.6"
+    },
+    "def:area_target_chain": {
+      "number": "1.5.1",
+      "printed_page": 5,
+      "destination": "theorem.1.5.1"
+    },
+    "eq:area_target_initial": {
+      "number": "1.7",
+      "printed_page": 5,
+      "destination": "equation.1.7"
+    },
+    "eq:area_target_step": {
+      "number": "1.8",
+      "printed_page": 5,
+      "destination": "equation.1.8"
+    },
+    "thm:area_target_domination": {
+      "number": "1.5.2",
+      "printed_page": 5,
+      "destination": "theorem.1.5.2"
+    },
+    "thm:area_target_zero": {
+      "number": "1.5.3",
+      "printed_page": 5,
+      "destination": "theorem.1.5.3"
+    },
+    "thm:area_target_indicator": {
+      "number": "1.5.4",
+      "printed_page": 5,
+      "destination": "theorem.1.5.4"
+    },
+    "eq:area_target_indicator": {
+      "number": "1.9",
+      "printed_page": 5,
+      "destination": "equation.1.9"
+    },
+    "thm:area_chain_exponential": {
+      "number": "1.6.1",
+      "printed_page": 5,
+      "destination": "theorem.1.6.1"
+    },
+    "eq:area_chain_exponential": {
+      "number": "1.10",
+      "printed_page": 5,
+      "destination": "equation.1.10"
+    },
+    "def:area_chain_series": {
+      "number": "1.6.2",
+      "printed_page": 6,
+      "destination": "theorem.1.6.2"
+    },
+    "eq:area_chain_series": {
+      "number": "1.11",
+      "printed_page": 6,
+      "destination": "equation.1.11"
+    },
+    "thm:area_chain_series_bound": {
+      "number": "1.6.3",
+      "printed_page": 6,
+      "destination": "theorem.1.6.3"
+    },
+    "eq:area_chain_series_bound": {
+      "number": "1.12",
+      "printed_page": 6,
+      "destination": "equation.1.12"
+    },
+    "eq:area_series_comparison": {
+      "number": "1.13",
+      "printed_page": 6,
+      "destination": "equation.1.13"
+    },
+    "thm:area_chain_series_zero": {
+      "number": "1.6.4",
+      "printed_page": 6,
+      "destination": "theorem.1.6.4"
+    }
+  },
+  "missing_html_anchors": [],
+  "duplicate_html_ids": [],
+  "html_error_sentinels": [],
+  "pdf_log_problems": [],
+  "dependency_graph_edges": {
+    "dep_graph_chapter_1.html": 25,
+    "dep_graph_document.html": 25
+  },
+  "stale_diamond_to_indicator_graph_edge": false,
+  "diagrams": 0,
+  "tenkz_sweep": "not applicable: neither leaf contains a picture",
+  "tools": {
+    "texra-blueprint": "0.3.8",
+    "plasTeX": "3.1",
+    "leanblueprint": "0.0.20"
+  },
+  "visual_review": {
+    "status": "passed",
+    "method": "Direct inspection of every final page image at 110 DPI.",
+    "pages_reviewed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "affected_mathematical_pages": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "findings": "No clipping, overlap, missing glyphs or illegible equations. The exact diamond constants, generic indicator specialization, scalar-series citation, title, contents and bibliography are legible.",
+    "page_image_sha256": {
+      "page-1.png": "82bcb3b618e8b9f7069edccfcf2ed7d305f911184547cc759828c909fa5d8002",
+      "page-2.png": "a5a0adc13b33eff6a8b4a85e9fce4ef06e7f7b4053d8a63ef2a382ad8c1cedf8",
+      "page-3.png": "7129bffcef2398532ee1bdc2a44142c2fe4a159ea61bc1e58fe71da5158a7789",
+      "page-4.png": "424d5796f8c439b7ab3ee283c11c87ea7e3784b93ae2c8e51c7c0ac1f35f7d35",
+      "page-5.png": "2916f68848d4a1b03fc668fdd9dc8167a0dfd86412885933e5cedcdc999db673",
+      "page-6.png": "e344fb6c22ccf47bec394eee20d1ae02b43b17e8322d67cf7e1fbe306131e292",
+      "page-7.png": "4601b8cbfb28a7923d62c1d18fcc6f7a2ad71613f7c8374c3d4b62c291f6fb5a",
+      "page-8.png": "46430a14649b2e9731e8d29e0190bab9449e52b816e44027271be3aa4d2952b4"
+    }
+  },
+  "warnings": [
+    "Package hyperref Warning: Rerun to get /PageLabels entry.",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 2 undefined on input line 1",
+    "LaTeX Warning: Reference `thm:area_chain_walk' on page 2 undefined on input lin",
+    "LaTeX Warning: Reference `thm:area_chain_walk' on page 2 undefined on input lin",
+    "LaTeX Warning: Reference `thm:area_chain_walk' on page 2 undefined on input lin",
+    "LaTeX Warning: Reference `def:area_lattice_displacement' on page 2 undefined on",
+    "LaTeX Warning: Reference `thm:area_diamond_count' on page 3 undefined on input ",
+    "LaTeX Warning: Reference `thm:area_support_count' on page 3 undefined on input ",
+    "LaTeX Warning: Reference `thm:area_support_count' on page 3 undefined on input ",
+    "LaTeX Warning: Reference `eq:area_region_weight' on page 3 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_region_weight' on page 3 undefined on input ",
+    "LaTeX Warning: Reference `def:area_chain_weight' on page 3 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_region_weight' on page 3 undefined on input ",
+    "LaTeX Warning: Reference `def:area_chain_weight' on page 3 undefined on input l",
+    "LaTeX Warning: Reference `eq:area_chain_step' on page 3 undefined on input line",
+    "LaTeX Warning: Reference `def:area_lattice_displacement' on page 3 undefined on",
+    "LaTeX Warning: Reference `def:area_lattice_diamond' on page 3 undefined on inpu",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 3 undefined on input line 3",
+    "LaTeX Warning: Reference `def:area_lattice_diamond' on page 4 undefined on inpu",
+    "LaTeX Warning: Reference `thm:area_walk_displacement' on page 4 undefined on in",
+    "LaTeX Warning: Reference `eq:area_diamond_rows' on page 4 undefined on input li",
+    "LaTeX Warning: Reference `def:area_chain_weight' on page 4 undefined on input l",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 4 undefined on input line 8",
+    "LaTeX Warning: Reference `thm:area_diamond_count' on page 4 undefined on input ",
+    "LaTeX Warning: Reference `thm:area_support_count' on page 4 undefined on input ",
+    "LaTeX Warning: Reference `thm:area_chain_growth' on page 4 undefined on input l",
+    "LaTeX Warning: Reference `eq:area_diamond_site' on page 4 undefined on input li",
+    "LaTeX Warning: Reference `eq:area_diamond_chain' on page 4 undefined on input l",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `def:area_chain_weight' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `def:area_chain_weight' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `eq:area_target_step' on page 5 undefined on input lin",
+    "LaTeX Warning: Reference `eq:area_chain_step' on page 5 undefined on input line",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `eq:area_target_step' on page 5 undefined on input lin",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 5 undefined on input li",
+    "LaTeX Warning: Reference `thm:area_diamond_budget' on page 5 undefined on input",
+    "LaTeX Warning: Reference `thm:area_target_domination' on page 5 undefined on in",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 5 undefined on input li",
+    "LaTeX Warning: Reference `thm:area_chain_growth' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 5 undefined on input li",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_target_indicator' on page 5 undefined on inp",
+    "LaTeX Warning: Reference `thm:area_target_domination' on page 5 undefined on in",
+    "LaTeX Warning: Reference `thm:area_chain_growth' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 5 undefined on input li",
+    "LaTeX Warning: Reference `eq:area_chain_exponential' on page 5 undefined on inp",
+    "LaTeX Warning: Reference `def:area_target_chain' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `def:area_chain_series' on page 5 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_chain_exponential' on page 6 undefined on in",
+    "LaTeX Warning: Reference `eq:area_chain_series' on page 6 undefined on input li",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 6 undefined on input line 2",
+    "LaTeX Warning: Reference `thm:area_chain_exponential' on page 6 undefined on in",
+    "LaTeX Warning: Reference `thm:area_target_domination' on page 6 undefined on in",
+    "LaTeX Warning: Reference `def:area_chain_series' on page 6 undefined on input l",
+    "LaTeX Warning: Reference `eq:area_series_comparison' on page 6 undefined on inp",
+    "LaTeX Warning: Reference `eq:area_chain_series_bound' on page 6 undefined on in",
+    "LaTeX Warning: Reference `def:area_chain_series' on page 6 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 6 undefined on input li",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 6 undefined on input li",
+    "LaTeX Warning: Reference `def:area_chain_series' on page 6 undefined on input l",
+    "LaTeX Warning: Reference `thm:area_target_zero' on page 6 undefined on input li",
+    "LaTeX Warning: Reference `eq:area_chain_series' on page 6 undefined on input li",
+    "LaTeX Warning: There were undefined references.",
+    "LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.",
+    "Package rerunfilecheck Warning: File `print.out' has changed.",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 2 undefined on input line 1",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 3 undefined on input line 3",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 4 undefined on input line 8",
+    "LaTeX Warning: Citation `OpenAI2026AreaLaw' on page 6 undefined on input line 2",
+    "LaTeX Warning: There were undefined references.",
+    "LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.",
+    "xdvipdfmx:warning: Couldn't open font map file \"pdftex.map\".",
+    "xdvipdfmx:warning: Couldn't open font map file \"kanjix.map\".",
+    "xdvipdfmx:warning: Object @page.1 already defined.",
+    "WARNING: Could not find a valid vector imager in the list: pdf2svg,"
+  ],
+  "limits": [
+    "Focused chapter PDF and static HTML only; no full-book, browser, MathJax runtime or mobile check.",
+    "No Lean/Lake execution or cache mutation. Native and axiom checks are recorded separately.",
+    "Declaration links have the exact source identifiers; remote URL availability was not checked.",
+    "No physical commutator propagation, full Lemma 4.1, area law or PEPS approximation is certified.",
+    "No remote publication, CI, review resolution or merge action was performed by this renderer."
+  ],
+  "artifacts": {
+    "blueprint/src/print.pdf": "7d3838060c1e15e12a07e51cf5ff7f911d15a39780ba4eefb60aa0ab7678248c",
+    "blueprint/web/ch-area_graph_foundations.html": "e60066c4d405a1452730f7df10487e1b68c22981f94abbff07d25dd5a3acf9a4",
+    "blueprint/web/dep_graph_chapter_1.html": "32632f718c81e92eb2aa3d1051f4fdf09501d3418c71f6740fe0069d0d02b7d1",
+    "blueprint/web/dep_graph_document.html": "80e84ec4f34c2679284cc91fde7e98a04546dc8c6227af5f3cb28305133f16b8",
+    "blueprint/web/dep_graphs.html": "a84cf02948bcb0ef617b8006f836aca0f34f25c1835a11f057d1b0d34131efff",
+    "blueprint/web/index.html": "5fa8bae1f49e65a7f51c8871027866ffe587c7a111041de279d02c5c8b8e87fc",
+    "blueprint/web/sect0001.html": "f26038ebf406803584eeceb6c650877c51efe5b394476dccc840f34457a6697f",
+    "pdf-pages/page-1.png": "82bcb3b618e8b9f7069edccfcf2ed7d305f911184547cc759828c909fa5d8002",
+    "pdf-pages/page-2.png": "a5a0adc13b33eff6a8b4a85e9fce4ef06e7f7b4053d8a63ef2a382ad8c1cedf8",
+    "pdf-pages/page-3.png": "7129bffcef2398532ee1bdc2a44142c2fe4a159ea61bc1e58fe71da5158a7789",
+    "pdf-pages/page-4.png": "424d5796f8c439b7ab3ee283c11c87ea7e3784b93ae2c8e51c7c0ac1f35f7d35",
+    "pdf-pages/page-5.png": "2916f68848d4a1b03fc668fdd9dc8167a0dfd86412885933e5cedcdc999db673",
+    "pdf-pages/page-6.png": "e344fb6c22ccf47bec394eee20d1ae02b43b17e8322d67cf7e1fbe306131e292",
+    "pdf-pages/page-7.png": "4601b8cbfb28a7923d62c1d18fcc6f7a2ad71613f7c8374c3d4b62c291f6fb5a",
+    "pdf-pages/page-8.png": "46430a14649b2e9731e8d29e0190bab9449e52b816e44027271be3aa4d2952b4",
+    "pdf-build.log": "4cf33af54ab030e49a13025df99a57d69fa50eb71d637397a74d6901c7064541",
+    "web-build.log": "8f748f749c13fd4a2a11e08e2924d7a41ad44e10a0b7b62ecb35a3c8fbdbe8dd",
+    "print.txt": "762d82c15922b70a728000a9f34945f0ab9823893da44ac5ef166675a66e5eb9"
+  }
+}

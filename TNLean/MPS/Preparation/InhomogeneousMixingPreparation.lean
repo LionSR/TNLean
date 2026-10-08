@@ -128,19 +128,11 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixi
   have hL : 0 < L := by dsimp [L]; positivity
   obtain ⟨N₀, hN₀⟩ := exists_nat_ge ((Real.log L - Real.log (1 / 2 : ℝ)) / r)
   have hne (N : ℕ) [NeZero N] (hcut : N₀ ≤ N) : chainState (A N) ≠ 0 := by
-    have hthreshold : Real.log L - Real.log (1 / 2 : ℝ) ≤ r * N := by
-      have hle := hN₀.trans (Nat.cast_le.mpr hcut)
-      simpa only [mul_comm] using (div_le_iff₀ hr).mp hle
-    have hsmall : L * Real.exp (-(r * N)) ≤ 1 / 2 := by
-      have h := mul_mul_exp_neg_le_of_log_le hL zero_lt_one
-        (by norm_num : 0 < (1 / 2 : ℝ))
-        (by simpa only [Real.log_one, add_zero] using hthreshold)
-      simpa only [one_mul] using h
+    have hsmall : L * Real.exp (-(r * N)) ≤ 1 / 2 :=
+      mul_exp_neg_mul_le_of_div_log_le hL hr (by norm_num)
+        (hN₀.trans (Nat.cast_le.mpr hcut))
     have hsingle : ∑ _ : Fin 1, N = N := by simp
-    have hi : ∀ i : Fin N, blockSite hsingle 0 i = i := by
-      intro i
-      apply Fin.ext
-      simp [blockSite, blockOffset]
+    have hi := blockSite_singleton hsingle
     have ht := hmix N (fun _ : Fin 1 => N) hsingle 0
       (Nat.pos_of_ne_zero (NeZero.ne N))
     simp only [hi] at ht

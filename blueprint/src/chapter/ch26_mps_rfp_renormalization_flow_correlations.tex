@@ -295,7 +295,8 @@ produce the dyadic powers $\E_B^{2^n}$.
 
 \begin{definition}[Physical observable transfer]
     \label{def:physical_observable_transfer}
-    \lean{MPSTensor.physicalObservableTransfer}
+    \lean{MPSTensor.physicalObservableTransfer, MPSTensor.physicalObservableTransferₗ,
+        MPSTensor.physicalObservableTransferₗ_apply}
     \leanok
     \uses{def:eval_word}
     For an observable $O$ on a block of $L$ physical spins, define the linear
@@ -307,6 +308,7 @@ produce the dyadic powers $\E_B^{2^n}$.
         A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
         \notag
     \end{align}
+    This transfer map also depends linearly on the observable $O$.
     Diagrammatically, $O$ is inserted between the two layers of the doubled
     chain on its $L$ sites:
     \begin{center}

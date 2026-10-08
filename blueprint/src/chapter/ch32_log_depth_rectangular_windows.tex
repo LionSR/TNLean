@@ -1,0 +1,120 @@
+\subsection{Local windows on varying bond spaces}
+
+The local criterion also applies directly to the rectangular site maps of a ring.
+Let $1\le D_i\le D$, with $D_N=D_0$, and let
+$E_i:M_{D_{i+1}}\to M_{D_i}$ be the completely positive, trace-preserving
+map of the original site tensor. Write $F_{a,b}=E_a\circ\cdots\circ E_{b-1}$.
+The norm below is the operator norm induced by the Hilbert--Schmidt norms
+on these actual matrix spaces, represented in their matrix-unit bases.
+
+\begin{definition}[Actual rectangular cut and block channels]
+    \label{def:ldp_rectangular_cut_channels}
+    \lean{VaryingBondChain.bondDimAt,VaryingBondChain.siteTensorAt,
+        VaryingBondChain.siteTransferAt,
+        VaryingBondChain.siteTransferAt_isKrausCPTP,
+        VaryingBondChain.rectangularBlockSites_eq_siteTensorAt,
+        VaryingBondChain.rectangularTransfer_block_eq_channelInterval,
+        VaryingBondChain.rectangularKrausMap_blockTensor_cast_eq_channelInterval}
+    \leanok
+    Natural-number cuts carry the actual cyclic bond dimensions. The rectangular
+    channel of a partition block is $F_{a,b}$, after equality-based identification
+    of its final bond. Its physical indices are those of the original site tensors.
+\end{definition}
+
+\begin{theorem}[Derived rectangular references and window rate]
+    \label{thm:ldp_rectangular_window_rate}
+    \lean{VaryingBondChain.exists_compatible_actual_densities,
+        VaryingBondChain.exists_rectangular_block_mixing_of_window_domination}
+    \leanok
+    Fix $s\ge1$ and $\eta\le1$. Suppose that every available length-$s$ window
+    admits a density $\tau_a$, possibly singular, such that its normalized,
+    output-first Choi matrix satisfies
+    \[
+        J(F_{a,a+s})\ge\frac{\eta}{D_{a+s}}(\tau_a\otimes I_{D_{a+s}}).
+    \]
+    There are cyclic densities $\sigma_i$ with
+    $F_{a,b}(\sigma_b)=\sigma_a$. Every nonempty partition block satisfies
+    \[
+        \|F_{a,b}-\operatorname{Tr}(\,\cdot\,)\sigma_a\|_{2\to2}
+        \le 2D(1-\eta)^{\lfloor(b-a)/s\rfloor}.
+    \]
+    Neither compatible references nor an interval convergence rate are hypotheses.
+\end{theorem}
+\begin{proof}\leanok
+    A fixed density of the actual full-cycle channel, transported along suffixes,
+    supplies the references. Subtract the trace-prepare minorizer from each complete
+    window. The residual is completely positive and scales trace by $1-\eta$.
+    Peeling complete windows from the right leaves one shorter interval on the left.
+    Their residual product $Q$ agrees with $F_{a,b}$ on traceless inputs and scales
+    trace by $t=(1-\eta)^{\lfloor(b-a)/s\rfloor}$.
+    Its unnormalized Choi matrix is positive with trace $D_b t$, which gives
+    $\|Q\|_{2\to2}\le D_b t$. The same bound holds for
+    $X\mapsto\operatorname{Tr}(X)Q(\sigma_b)$. Their difference is
+    $F_{a,b}-\operatorname{Tr}(\,\cdot\,)\sigma_a$.
+\end{proof}
+
+For example, let $c-a<s$ and $b=c+2s$, set $B=F_{a,c}$ and
+$R_u=F_{u,u+s}-\eta\operatorname{Tr}(\,\cdot\,)\tau_u$.
+For every traceless $X\in M_{D_b}$ the following equality holds.
+The channels act from right to left. Internal matrix-entry indices have dimensions
+$D_c^2$, $D_{c+s}^2$ and $D_b^2$; the open output index has dimension $D_a^2$.
+These need not be equal, and none is a physical spin index.
+% TENKZ-RECTANGULAR-WINDOW-RESIDUAL-BEGIN
+\begin{center}
+    \tenkzkernel
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire}, cols=7, bonds=none]
+            \tn[at=(1,1), name=rfb, skin=box,
+                ports={180:virtual:$x_a$, 0:virtual}]{B}
+            \tn[at=(1,2), name=rffirst, skin=box,
+                ports={180:virtual, 0:virtual}]{F_{c,c+s}}
+            \tn[at=(1,4), name=rfsecond, skin=box,
+                ports={180:virtual, 0:virtual}]{F_{c+s,b}}
+            \tn[at=(1,6), name=rfx, skin=box,
+                ports={180:virtual}]{X}
+            \tnwire{rfb.0}{rffirst.180}
+            \tnwire{rffirst.0}{rfsecond.180}
+            \tnwire{rfsecond.0}{rfx.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=7, bonds=none]
+            \tn[at=(1,1), name=rrb, skin=box,
+                ports={180:virtual:$x_a$, 0:virtual}]{B}
+            \tn[at=(1,2), name=rrfirst, skin=box,
+                ports={180:virtual, 0:virtual}]{R_c}
+            \tn[at=(1,4), name=rrsecond, skin=box,
+                ports={180:virtual, 0:virtual}]{R_{c+s}}
+            \tn[at=(1,6), name=rrx, skin=box,
+                ports={180:virtual}]{X}
+            \tnwire{rrb.0}{rrfirst.180}
+            \tnwire{rrfirst.0}{rrsecond.180}
+            \tnwire{rrsecond.0}{rrx.180}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{center}
+% TENKZ-RECTANGULAR-WINDOW-RESIDUAL-END
+
+\begin{theorem}[Physical preparation from rectangular local windows]
+    \label{thm:ldp_rectangular_window_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
+    \leanok
+    Let $d>0$, and fix $D$, $s\ge1$ and $\eta>0$. Suppose a family of original
+    varying-bond rings satisfies the preceding positive-dimension, channel and local
+    minorization conditions with these same constants. There are $N_0\ge s$ and $C$,
+    chosen before $N$ and $\varepsilon$, such that every $N\ge N_0$ and
+    $0<\varepsilon\le1$ admits a unit vector of physical ring preparation depth
+    at most $C\log(N/\varepsilon)$ and normalized overlap error at most
+    $\varepsilon$ against the original MPS.
+\end{theorem}
+\begin{proof}\leanok
+    The window on the ring of length $s$ forces $\eta\le1$. Weaken the minorization
+    to $\eta/2$ and put $r=-\log(1-\eta/2)/s>0$. Since
+    $1-\eta/2\ge1/2$, the preceding bound is at most $4D e^{-r(b-a)}$.
+    The rectangular preparation theorem applies with $K=4D$ and this $r$.
+    Enlarge its cutoff to at least $s$. All reference densities may remain singular.
+\end{proof}
+
+This is an additional quantitative sufficient criterion for the inhomogeneous
+paragraph of arXiv:2307.01696v2. Qualitative finite correlation alone does not imply
+a uniform window strength or an exponential accuracy rate. The resulting circuit
+uses ring adjacency; the statement does not assert an open-line locality bound.

@@ -85,14 +85,8 @@ theorem regularChargePairOpenRegionMatrix_eq_image
         smul_eq_mul, T]
       rfl
     · simp only [Matrix.mulVec_zero, Pi.zero_apply]
-  have hTP : T * P = T := by
-    dsimp only [T, P]
-    rw [regionPhysicalProductMatrix_mul (Mid := fun v => IncidentEdge Γ v → G)]
-    apply congrArg (regionPhysicalProductMatrix R)
-    funext v
-    ext s η
-    simpa only [Matrix.mul_apply, Matrix.of_apply] using
-      (ha v).regularSiteMap_projector_coefficients s η
+  have hTP : T * P = T :=
+    regionPhysicalProductMatrix_mul_regularLocalProjector a ha R
   rw [← hP, Matrix.mulVec_mulVec, hTP]
   exact hT
 
