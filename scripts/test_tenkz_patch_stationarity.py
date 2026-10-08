@@ -52,7 +52,7 @@ def main() -> int:
         atom = rf"\\tn\[[^]]*name={name},[^]]*\]\{{{re.escape(label)}\}}"
         assert re.search(atom, unit, re.S), (name, "wrong ordered-factor label")
     for source in [
-        r"D_j=\iota_{X_j}(BK_j-K_jB)",
+        r"D_j=\widehat{BK_j-K_jB}_{X_j}",
         r"\Delta_j=P_j^+D_jP_j^-\Omega",
         "carries the full space", "need not be supported on",
         "Starting at", "acts first", "second", "last",
