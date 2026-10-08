@@ -35,16 +35,13 @@ import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
-<<<<<<< HEAD
-import TNLean.PEPS.Approximation.LayoutOwnerMap
-import TNLean.PEPS.Approximation.LocalPairSource
-=======
 import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.PEPS.Approximation.LayoutOwnerMap
+import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.OwnershipMonomials
->>>>>>> 2249b41b02fb067a36b5aaab231ad5eff12159b9
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PairEffectSourcePreparation
 import TNLean.PEPS.Approximation.PairSourceCombination
@@ -52,11 +49,8 @@ import TNLean.PEPS.Approximation.PairSourceCompletion
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
 import TNLean.PEPS.Approximation.PairSourceOrdering
-<<<<<<< HEAD
-import TNLean.PEPS.Approximation.PartyCoarseningFactorization
-=======
 import TNLean.PEPS.Approximation.PartyChain
->>>>>>> 2249b41b02fb067a36b5aaab231ad5eff12159b9
+import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyLayout
@@ -89,12 +83,9 @@ import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.UnitPairSource
-<<<<<<< HEAD
-import TNLean.PEPS.Approximation.WordOwnerMap
-=======
 import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
->>>>>>> 2249b41b02fb067a36b5aaab231ad5eff12159b9
+import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
