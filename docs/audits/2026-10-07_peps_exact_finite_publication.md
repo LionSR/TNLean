@@ -35,35 +35,6 @@ the existing TNLean/Mathlib/QICLean APIs is by import. The checked production
 proof and statement bytes are unchanged; provenance comments already present
 in the 655-line tree package are retained.
 
-## Source identity and checks
-
-The exact tree package comes from local snapshot
-`f7b46ce60c2469ffce1d8c0f56766a0cb6d30732`, checked source
-`c9ded2f36083c837bc884ad9d7d475f9e81a514e`. The small-size source was checked at
-`6b194ffc9ce8d8ab5b39b9be31cc0c489d01e41d`; its sanitized snapshot is
-`e9e35bf68d6d11763940b2100a8021a4ffd1ed5e`. Finite-exception source was checked
-at `38ca555c8152093bfa06f066a84e5e98d4a02f3e`, with final evidence snapshot
-`b4a4b35653b6ac69a0b64fa4c362ea1208fdaaea`.
-
-Those historical local commits are evidence identifiers, not claimed published
-commits. Publication uses one new clean commit atop #8788, so earlier local
-history is not uploaded. The source hashes in
-`docs/provenance/evidence/8773/publication-source-map.json` identify the exact
-published files independently of commit metadata.
-
-Retained checks cover linter-bearing target builds, strict production checks,
-23 consumer examples and all 45 guarded/raw axiom queries. Reported closures
-use only `propext`, `Classical.choice`, and `Quot.sound`. The combined seven-page
-focused PDF and static HTML were rendered and inspected; all 45 declaration
-links passed. Live browser verification was blocked by a Chromium socket
-permission error, so live MathJax behavior remains unverified. No generated
-PDF, image, build cache, or LFS asset is included.
-
-Generated imports, all three chapter registrations, and the regression workflow
-are integrated additively on the live model base. Existing dependency imports,
-blueprint content and CI steps remain present. The regression step exercises
-all five consumer/axiom-guard files under the package's strict options.
-
 ## Review boundaries
 
 The retained component reports describe the local stage when they were written.
