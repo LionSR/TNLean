@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CorrectedPositionCost
 import TNLean.PEPS.Approximation.DistributedLifetime
