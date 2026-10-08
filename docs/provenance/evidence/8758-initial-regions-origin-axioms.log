@@ -1,0 +1,16 @@
+Command: lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean
+Revision: afb83051377658183c94673c0c2bd5a2f508a4d3
+Elapsed seconds: 4.483
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.InitialRegionIndex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialRegionColor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_beltRun_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialBirthRegions_cover' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_nonintegral' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_supporting_lines_avoid_lattice' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

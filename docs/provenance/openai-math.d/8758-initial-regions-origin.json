@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8758-tnlean.peps.arealaw.geometry.initial_region_index",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.InitialRegionIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -30,23 +30,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "The actual sum of a dummy identifier, retained primary layer/pitch indices and actual belt layer/cell/connected-component indices, for arbitrary origin and dependent residues, C at least two and k0 at least 50000000. Equal colors do not identify distinct runs. No representative component, coloring certificate, desired-property field, nonempty endpoint-set or finiteness premise is introduced.",
-        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 299\u2013323. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 299\u2013323. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.initial_birth_region",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -62,23 +80,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "The actual closed birth region of an initial identifier: the dummy closure, the specified retained primary birth region, or the specified actual belt-run region before repairs. The layer, primary index and cell/component data are retained; disconnected primary pieces are permitted.",
-        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 308\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 308\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.initial_open_region",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -94,23 +130,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "The interior of the actual closed birth region for an initial identifier. This definition does not assert coverage of the plane by open interiors, pairwise disjointness, coverage of lattice sites or absence of lattice points on boundaries.",
-        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 313\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 313\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.initial_region_color",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialRegionColor",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -126,23 +180,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "The prescribed dummy parity k0 minus one, primary layer parity and actual belt-run color. The run color descends through the existing connected-component quotient by its actual constant triangle colors, without choosing a representative.",
-        "Section 11, prop:two-families, lines 172\u2013174, 212\u2013218 and 299\u2013323. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 172\u2013174, 212\u2013218 and 299\u2013323. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.initial_region_color_belt_run",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_beltRun_eq",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -158,23 +230,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For an actual belt cell above k0 and every actual fan slot in an actual run support, the run identifier color equals that slot color. C at least two, k0 at least 50000000 and arbitrary dependent residues are retained; no same-color or representative certificate is supplied.",
-        "Section 11, prop:two-families, lines 313\u2013318. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 313\u2013318. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.initial_birth_regions_cover",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegions.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialBirthRegions_cover",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -190,23 +280,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For a nonempty finite endpoint set, arbitrary common origin and dependent residues, C at least two and k0 at least 50000000, the union of all actual closed birth regions is the plane. The proof uses actual fine-cell exhaustion, actual run cover and retained nonbelt primary containment. The nonempty endpoint hypothesis is explicit and source lines169\u2013170 require it. No open-plane cover, pairwise disjointness, global finite identifier family or completed two-family partition is asserted.",
-        "Section 11, prop:two-families, lines 154\u2013177, 212\u2013218 and 299\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 154\u2013177, 212\u2013218 and 299\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 42.39 seconds wall, 2.55 seconds user and 25.62 seconds system time, at raw SHA-256 63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadic_origin",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicOrigin.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -222,23 +330,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "The actual prescribed translated origin is (sqrt two, sqrt three), without a supplied origin or nonintegrality certificate.",
-        "Section 11, prop:two-families, lines 150\u2013154. The released complete package-option direct check passed exit zero without diagnostics in 9.44 seconds wall, 2.14 seconds user and 5.05 seconds system time, at raw SHA-256 b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 150\u2013154. The released complete package-option direct check passed exit zero without diagnostics in 9.44 seconds wall, 2.14 seconds user and 5.05 seconds system time, at raw SHA-256 b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadic_origin_nonintegral",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicOrigin.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_nonintegral",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -254,23 +380,41 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For every signed integer m, each coordinate of the actual prescribed origin, their sum and their difference differs from m. Rational strict square-root bounds give consecutive-integer intervals; stronger irrationality is not needed.",
-        "Section 11, prop:two-families, lines 150\u2013154. The released complete package-option direct check passed exit zero without diagnostics in 9.44 seconds wall, 2.14 seconds user and 5.05 seconds system time, at raw SHA-256 b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 150\u2013154. The released complete package-option direct check passed exit zero without diagnostics in 9.44 seconds wall, 2.14 seconds user and 5.05 seconds system time, at raw SHA-256 b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8758-tnlean.peps.arealaw.geometry.dyadic_origin_lattice_avoidance",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/DyadicOrigin.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_supporting_lines_avoid_lattice",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -286,10 +430,28 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For every signed integer lattice pair z and signed integer translate m, none of the four equations x1=o1+m, x2=o2+m, x1+x2=o1+o2+m and x1-x2=o1-o2+m holds at z. Actual initial or repaired edge containment in these supporting-line families is a separate unproved geometric assertion.",
-        "Section 11, prop:two-families, lines 545\u2013559. The released complete package-option direct check passed exit zero without diagnostics in 9.44 seconds wall, 2.14 seconds user and 5.05 seconds system time, at raw SHA-256 b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. Source freeze and canonical verification remain pending. These nine original declarations do not establish the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 545\u2013559. The released complete package-option direct check passed exit zero without diagnostics in 9.44 seconds wall, 2.14 seconds user and 5.05 seconds system time, at raw SHA-256 b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9. Independent mathematical review approves the released statements and arguments. Completed parent draft #8902 at aeae9a15b7d6a745676b04fda477e36e671e1cc2, with verified proof d5463154269cf320c7a176349b64589388220a0e, has an immutable capture of all 289 records in 24 ledgers and all 140 recursive tracked historical evidence files. No prior declaration is reverified; every parent row, shard, historical file, policy and dependency pin remains immutable. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These nine original declarations do not establish the full two-family proposition or either headline theorem."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "afb83051377658183c94673c0c2bd5a2f508a4d3",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-build.log",
+            "sha256": "b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean docs/provenance/evidence/8758-initial-regions-origin-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8758-initial-regions-origin-axioms.log",
+            "sha256": "e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }

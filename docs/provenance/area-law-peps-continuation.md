@@ -2,17 +2,18 @@
 
 This record supports the [continuing goal](area-law-peps-goal.md).
 The goal remains active. Both source-faithful headline theorems remain unproved.
-Twenty geometric contributions contain **128 canonically verified original
-declarations**. The twentieth adds three dummy-interface results at frozen
-source `d5463154269cf320c7a176349b64589388220a0e`. Its canonical build,
-seven-name imported report, strict promotion and unchanged normal policy all
-passed. Guarded evidence finalization passed; its three finalized new rows and all
-three refreshed old shards are byte-identical to the normal-policy production
-copies. The four retained statements refreshed for changed whole files do
-not add to the original declaration count.
-The preceding contributions and peer observations retain their historical
-states below. Full CI and compiled book results remain separate from local
-source synchronization. Both headline theorems remain open.
+Twenty-one geometric contributions contain **137 canonically verified
+original declarations**. The twenty-first adds the actual initial-region
+identifiers, closed coverage and translated-origin arithmetic at exact source
+`afb83051377658183c94673c0c2bd5a2f508a4d3`. Its single Geometry build
+and nine-name imported report passed without diagnostics. Strict promotion passed exactly nine new originals; the unchanged normal
+policy passed all 298 rows once. Guarded evidence finalization also passed. Independent read-only review
+confirms the actual logs, finalized rows and preserved evidence.
+All 289 completed parent records and all 140 historical evidence files are
+immutable; no old declaration is reverified. Preceding contribution and peer
+observations retain their historical states below. Full CI and compiled book
+results remain separate from local source synchronization. Both headline
+theorems remain open.
 
 ## Geometric contributions and exact sources
 
@@ -37,7 +38,8 @@ source synchronization. Both headline theorems remain open.
 | Within-fan contacts and finite fine-cell cover of primaries | [#8897](https://github.com/LionSR/TNLean/pull/8897), evidence `a4833852f7e6dbee5930b1c983fff39e3a74daa7` | `26dbf77709501643284144f4294c4d768966958b` | [combined fan/primary evidence](evidence/8758-fan-primary-contacts.md) |
 | Boundary contacts of actual fan triangles | [#8899](https://github.com/LionSR/TNLean/pull/8899), evidence `3847e691d456f820d306b3b58fdfa575f64d75f1` | `9dce097b1d70dff4a59a8a3ed0fb035c725166ac` | [fan-side evidence](evidence/8758-fan-side-contacts.md) |
 | Positive-length interfaces of belt runs with primaries and other belt runs | [#8901](https://github.com/LionSR/TNLean/pull/8901), evidence `d6f8fca2f3420463d833fe2b21918edf64a6c677` | `3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a` | [belt-run interface evidence](evidence/8758-belt-run-interfaces.md) |
-| Dummy interfaces of actual fan triangles and belt runs | Successor to [#8901](https://github.com/LionSR/TNLean/pull/8901), on `feat/area-law-dummy-run-interfaces`; verified, publication unassigned | `d5463154269cf320c7a176349b64589388220a0e` | [dummy-run interface evidence](evidence/8758-dummy-run-interfaces.md) |
+| Dummy interfaces of actual fan triangles and belt runs | [#8902](https://github.com/LionSR/TNLean/pull/8902), evidence `aeae9a15b7d6a745676b04fda477e36e671e1cc2` | `d5463154269cf320c7a176349b64589388220a0e` | [dummy-run interface evidence](evidence/8758-dummy-run-interfaces.md) |
+| Actual initial-region identifiers, closed coverage and translated origin | Successor to [#8902](https://github.com/LionSR/TNLean/pull/8902), on `feat/area-law-initial-regions-origin`; canonical verification, strict promotion, normal policy and guarded finalization passed | `afb83051377658183c94673c0c2bd5a2f508a4d3` | [initial regions and origin](evidence/8758-initial-regions-origin.md) |
 
 ## Completed eighteenth source and preceding parent
 
@@ -346,24 +348,150 @@ isolated stars, recursive repairs and descendants remain further obligations.
 Both headline theorems remain open. QICLean stays pinned to
 `8d5389d23c8e675a0117442e1a0d2c683a4bad41`.
 
+## Current twenty-first contribution
+
+The actual identifier construction and translated-origin arithmetic are
+assigned at
+[#8758, comment 6049638844](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049638844)
+and [#8758, comment 6049666385](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049666385).
+The completed dummy contribution is published as draft
+[#8902](https://github.com/LionSR/TNLean/pull/8902), evidence
+`aeae9a15b7d6a745676b04fda477e36e671e1cc2`, proof
+`d5463154269cf320c7a176349b64589388220a0e`. Its handoffs are
+[#8758, comment 6049867219](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049867219)
+and [#8733, comment 6049868433](https://github.com/LionSR/TNLean/issues/8733#issuecomment-6049868433).
+The new complete immutable capture measures **289 parent rows**, **24 ledger
+files** and **140 recursive historical evidence files**. Every parent row and
+shard and all historical, policy, license and dependency bytes remain unchanged.
+No old source is edited and no old declaration is reverified. Nine new original
+rows give a validated normal total of **298**.
+
+The actual initial identifier is the sum of the dummy, retained primary
+layer/pitch indices and actual belt layer/cell/connected runs. Birth regions,
+open interiors and colors retain these data, including disconnected primaries
+and distinct same-colored runs. Component color descends without a selected
+representative and agrees with every constituent triangle. With arbitrary
+origin and dependent residue functions, C ≥ 2, k₀ ≥ 50,000,000 and Z nonempty,
+the actual closed birth regions cover the plane by fine-cell exhaustion,
+run cover and unique nonbelt primary containment. Definitions permit empty Z.
+Closed coverage asserts neither an open-plane cover nor pairwise interior
+disjointness, lattice coverage, global finiteness or the full two-family
+partition.
+
+The actual prescribed origin (√2,√3) has coordinates in (1,2), sum in (3,4)
+and difference in (−1,0). These strict intervals give the four nonintegrality
+assertions. Every signed integer translate of the four prescribed supporting-
+line families therefore avoids integer lattice points. Actual initial or
+repaired edge containment in those line families remains separate. No
+nonintegrality or boundary-avoidance certificate is supplied.
+
+The released source and complete direct checks are:
+
+| Module | Released SHA-256 | Wall / user / system |
+|---|---|---|
+| InitialRegions.lean | `63933f675dabbe34a0045fc763c40136df0c7378a9c1a9d839f4f0328207d88f` | 42.39 / 2.55 / 25.62 s |
+| DyadicOrigin.lean | `b39ce4624a3e9063fa56897d0648aaf0c08156529c0484289cd1827a4e2e00b9` | 9.44 / 2.14 / 5.05 s |
+
+Both checks exited zero without diagnostics; complete independent source and
+chapter reviews approve the released arguments. The exact frozen source is
+`afb83051377658183c94673c0c2bd5a2f508a4d3`. The final nine-row planned
+master remains unchanged at SHA-256
+`a0b9d2d5a0e71c1b4b2d0faf53a74e637773f0022342a6a7ab8ce9b5903a247d`.
+The seven-file manifest binds the two new Lean modules, Geometry.lean,
+the nine-name imported report, two mathematical chapters and their router.
+One locked canonical Geometry build passed in **14.208 seconds** and the
+nine-name imported report in **4.483 seconds**, exit zero without diagnostics.
+All nine actual reports contain exactly `propext`, `Classical.choice` and
+`Quot.sound`. The guard permits only the actual subset of these foundations,
+including an empty subset, rather than inferring all three for a definition.
+No timing warning occurs: the new modules take **7.1** and **7.6 seconds**, and
+the aggregator **2.8 seconds**. No compiler check is repeated.
+
+Strict promotion passed exactly nine originals, giving a validated normal total of
+**298** while preserving all 289 parent rows across 24 ledgers, all 140
+historical files and the seven frozen files. The raw strict output is retained.
+Only the nine new historical preparation descriptions were independently
+derived from the finalizer constants for one unchanged normal-policy run,
+which passed all **298** rows once. Guarded finalization passed. Independent
+read-only review confirms all four outputs, exact command headers and log hashes,
+the nine actual foundation sets, all 289 parent rows and 24 shard bytes, all 140
+historical files and all seven frozen source files. The finalized new shard
+is byte-identical to the production shard validated by the unchanged normal
+policy. The actual normal output reads “Provenance valid:
+298 entries. Recorded evidence checked; no Lean build performed.”
+An auxiliary assertion initially expected the word “passed” and left the
+confirmed normal status pending, so the first finalizer correctly rejected
+that status before any outputs. Root retained `finalization-1.log`, confirmed
+the four outputs absent, recorded the actual valid result and restarted
+metadata finalization with unchanged guards. No policy or compiler check
+was repeated. The actual build
+log SHA-256 is `b3cda2e083a926119c33f59227ad52690641efb026389bfc3be3f57b1e881e1c`,
+and the imported report SHA-256 is
+`e8b16b608d539c4ab2215be51dd7d455683aa1774242c057ffc6ae24cf00f39c`.
+The timing analyzer returns zero without warnings. No successor PR number
+or evidence commit is invented.
+
+Actual pre-freeze synchronization passes **20,246** theorem-like blueprint
+entries and **20,252** flat references, with complete reverse coverage.
+Generated imports cover **2,861** production modules in **75** files. The two
+chapters have five definitions, four theorems, four proofs, nine tags and
+thirteen completion markers. All three changed LaTeX chapters are formatter-
+idempotent and all dependency labels resolve. Reader and module guards pass
+at **2,935** production and **3,058** total files. Three overlapping short
+proof fragments occur only in DyadicOrigin; its four integer-translation
+branches are recorded as a candidate below the two-file promotion threshold.
+No repeated coordinate table or parallel model is introduced.
+
+The latest analytic status relays are
+[#8753, comment 6049868644](https://github.com/LionSR/TNLean/issues/8753#issuecomment-6049868644)
+and [#8758, comment 6049868839](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049868839).
+They remain separate from this group's fixed source and QICLean pin. Earlier
+owner reports are preserved verbatim below; no new peer proof, physical
+producer or dependency integration is inferred here.
+
+Disjoint initial open interiors, actual supporting-line containment for birth
+boundaries, lattice coverage by open regions, global positive-length interfaces,
+local sectors, isolated stars and recursive repairs remain separate obligations.
+The initial-interior contribution is now publicly assigned at
+[#8758, comment 6049915425](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049915425).
+Its author polynomial_provenance_review has released the complete two-theorem
+source at raw SHA-256
+`0300fc627381bfef6000e929c2d8f88cd17d69bd8a14fccaec44191774525b1b`.
+The third complete package-option direct check passed without diagnostics in
+15.08 seconds wall, 3.11 seconds user and 7.08 seconds system. The two earlier
+failed logs are retained; corrections concerned local elaboration, with no
+heartbeat override or mathematical change. Root and a complete independent
+read-only review approve the final argument. Canonical verification remains
+pending. The initial-boundary contribution is publicly assigned at
+[#8758, comment 6049955038](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049955038);
+its author adjacent_scales has completed the separate proof text and now
+holds the exclusive direct compiler slot for its first complete check.
+Root has released the slot after the interior author's completed check. Root also owns the subsequent lattice-cover consumer under
+[#8758, comment 6049997774](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049997774),
+with the single planned result `exists_unique_initialOpenRegion_integerPoint`
+in InitialLatticePartition.lean. Its source combines the actual closed cover
+with the claimed birth/interior equivalence at lattice sites and pairwise
+disjoint interiors. Its check awaits both supporting authors; none of those
+facts is replaced by an assumption. All three successors remain outside this
+freeze and nine-name report.
+No successful direct or canonical result for them is inferred. Both headline theorems remain
+open; QICLean remains at `8d5389d23c8e675a0117442e1a0d2c683a4bad41`.
+
 ## Worktrees and verification discipline
 
 - `worktrees/area-law-peps-models` is the sole warm worktree on
-  `feat/area-law-dummy-run-interfaces` at frozen source
-  `d5463154269cf320c7a176349b64589388220a0e`. The single canonical Geometry
-  build and seven-name report have passed. Preserve the seven frozen files
-  and cached dependencies. InitialRegions and then DyadicOrigin
-  passed their separate direct checks and released the compiler slot. Both
-  successor files remain outside the current freeze. No compiler rerun is
-  made for the timing warning.
-- `worktrees/area-law-source-preparation` has no `.lake`. The completed
-  parent is evidence `d6f8fca2f3420463d833fe2b21918edf64a6c677`; independently
-  owned InitialRegions and DyadicOrigin sources are outside the current
-  freeze. Root owns branch advances and integration. No build, cache fetch
-  or seeding is performed there.
+  `feat/area-law-initial-regions-origin`, with proof frozen at
+  `afb83051377658183c94673c0c2bd5a2f508a4d3`. Its one Geometry build and
+  nine-name report have passed. Preserve all seven frozen files and the
+  compiled dependencies; source-writing successors do not overlap this
+  contribution's verification.
+- `worktrees/area-law-source-preparation` has no `.lake`; its completed
+  parent is evidence `aeae9a15b7d6a745676b04fda477e36e671e1cc2`. Root owns
+  branch advances, source integration and compilation. No build, cache
+  fetch or cache seeding is performed there.
 - Canonical builds and cache mutations use the warm worktree's own locked
   wrapper. The shared lock waits without consuming CPU. Direct source checks
-  use the warm environment and package options, with one process at a time.
+  use that environment and package options, with one process at a time.
   Do not repeat successful checks without a new change or unresolved issue.
 - Hot-main and dependency integration remain with their coordinating owners.
   No peer worktree is reset, no build interrupted and no dependency pin changed.
