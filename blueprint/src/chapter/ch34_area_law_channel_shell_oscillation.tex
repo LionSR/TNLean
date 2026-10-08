@@ -31,14 +31,18 @@ in $K$ and averages the sites in $I\setminus K$.
     Set $k_K=E_K(k)$, and define the positive square roots
     \begin{align}
         G&=(\mathbb 1-k)^{1/2}, & R&=k^{1/2},
-        \label{eq:al_shell_full_roots}\\
+        \label{eq:al_shell_full_roots}
+    \end{align}
+    \begin{align}
         G_K&=(\mathbb 1-k_K)^{1/2}, & R_K&=k_K^{1/2}.
         \label{eq:al_shell_local_roots}
     \end{align}
     The full and localized channels are
     \begin{align}
         \mathcal E(B)&=\widehat G B\widehat G+\widehat R B\widehat R,
-        \label{eq:al_shell_full_channel}\\
+        \label{eq:al_shell_full_channel}
+    \end{align}
+    \begin{align}
         \mathcal E_K(B)&=\widehat G_K B\widehat G_K
             +\widehat R_K B\widehat R_K.
         \label{eq:al_shell_local_channel}
@@ -60,9 +64,13 @@ in $K$ and averages the sites in $I\setminus K$.
     The full and localized channels satisfy
     \begin{align}
         \|\mathcal E(B)\|&\le\|B\|,
-        \label{eq:al_shell_full_contraction}\\
+        \label{eq:al_shell_full_contraction}
+    \end{align}
+    \begin{align}
         \|\mathcal E_K(B)\|&\le\|B\|,
-        \label{eq:al_shell_local_contraction}\\
+        \label{eq:al_shell_local_contraction}
+    \end{align}
+    \begin{align}
         \|\mathcal E_K(B)-B\|&\le2\|B\|.
         \label{eq:al_shell_identity_bound}
     \end{align}
@@ -115,7 +123,9 @@ in $K$ and averages the sites in $I\setminus K$.
         \widehat A B\widehat A-\widehat A'B\widehat A'
         &=(\widehat A-\widehat A')B\widehat A
             +\widehat A'B(\widehat A-\widehat A'),
-        \label{eq:al_shell_root_difference}\\
+        \label{eq:al_shell_root_difference}
+    \end{align}
+    \begin{align}
         \|\widehat A B\widehat A-\widehat A'B\widehat A'\|
         &\le(\|A\|+\|A'\|)\|A-A'\|\,\|B\|.
         \label{eq:al_shell_root_bound}
@@ -159,13 +169,16 @@ in $K$ and averages the sites in $I\setminus K$.
         \label{eq:al_shell_commutant_fixed}
     \end{align}
     Under the second hypothesis, move $A$ past each root to obtain
-    $[A,\widehat G_K B\widehat G_K]=\widehat G_K[A,B]\widehat G_K$
-    and the same identity for $R_K$; their sum proves
+    \begin{align}
+        [A,\widehat G_K B\widehat G_K]
+        &=\widehat G_K[A,B]\widehat G_K. \notag
+    \end{align}
+    The same identity holds for $R_K$; their sum proves
     (\ref{eq:al_shell_commutator}). Operators supported on disjoint
     physical regions commute, which gives the final assertion.
 \end{proof}
 
-\begin{theorem}[Oscillation outside the channel region]
+\begin{theorem}[Oscillation outside the region]
     \label{thm:al_root_channel_outside_oscillation}
     \uses{def:al_local_root_channel,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_of_notMem}
@@ -199,7 +212,9 @@ in $K$ and averages the sites in $I\setminus K$.
     $\mathcal E_l=\mathcal E_{K_l}$. Define
     \begin{align}
         \Delta_0(B)&=\mathcal E_0(B)-B,
-        \label{eq:al_shell_zero}\\
+        \label{eq:al_shell_zero}
+    \end{align}
+    \begin{align}
         \Delta_{l+1}(B)&=\mathcal E_{l+1}(B)-\mathcal E_l(B).
         \label{eq:al_shell_successor}
     \end{align}
@@ -220,7 +235,9 @@ in $K$ and averages the sites in $I\setminus K$.
     \varepsilon_{\rm prev}$ such that
     \begin{align}
         \|k-E_{K_{l+1}}(k)\|&\le\varepsilon_{\rm next},
-        \label{eq:al_shell_next_error}\\
+        \label{eq:al_shell_next_error}
+    \end{align}
+    \begin{align}
         \|k-E_{K_l}(k)\|&\le\varepsilon_{\rm prev}.
         \label{eq:al_shell_previous_error}
     \end{align}
@@ -299,7 +316,9 @@ in $K$ and averages the sites in $I\setminus K$.
     $A\in\mathcal A_{K_m}$,
     \begin{align}
         [\overline B,\widehat A]&=0,
-        \label{eq:al_shell_averaged_commutant}\\
+        \label{eq:al_shell_averaged_commutant}
+    \end{align}
+    \begin{align}
         \|B-\overline B\|&\le\sum_{y\in K_m}d_y(B).
         \label{eq:al_shell_averaging_error}
     \end{align}
