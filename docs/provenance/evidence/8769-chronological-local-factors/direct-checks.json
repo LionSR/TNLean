@@ -1,0 +1,402 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "dd33dc9888a91c630d177f38f800b4215b6e24b1",
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "public_export_count": 72,
+  "module_count": 20,
+  "modules": [
+    {
+      "module": "ChronologicalLocality",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ChronologicalLocality.lean",
+      "frozen_source_sha256": "31aa2aab4c88312c76d95031c674a1692a845989ef6bc0fcaa0f2abc794eede6",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ChronologicalLocality.lean",
+      "checked_source_sha256": "e699b5dd8bc0342ab031eddbaf301e86b572561f0d5457056afb067bfa2bd2f0",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ChronologicalLocality.lean",
+      "production_source_sha256": "e699b5dd8bc0342ab031eddbaf301e86b572561f0d5457056afb067bfa2bd2f0",
+      "artifact_sha256": "6e13637cfd10a8488019726e1239c533422763db4c2357fc3e0289862b379155",
+      "strict_log": "ChronologicalLocality.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.FullLabels",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choicesOfFullLabels",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choicesOfFullLabels_eq_of_agree",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfFullLabels",
+        "TNLean.PEPS.PairEffect.SourceCircuit.partySelector",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choicesOfFullLabels_party_eq_of_agree"
+      ]
+    },
+    {
+      "module": "UntouchedResidual",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/UntouchedResidual.lean",
+      "frozen_source_sha256": "6e4133a82ec5161d1287b06134e7c7a4f6eb322a53d0dd989bfd42cad77df905",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/UntouchedResidual.lean",
+      "checked_source_sha256": "c5aab1b8c89edf5e0b821122bb0da7084f70311db984f5278ea32a9b6db6ac83",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/UntouchedResidual.lean",
+      "production_source_sha256": "b8407cfa57bec22167109485995db167900160f6ab440507e6268cb8af942910",
+      "artifact_sha256": "3d9d63c2b78ee92b521d2ba7f997c46b82d1299096016a1379360525307e5535",
+      "strict_log": "UntouchedResidual.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil",
+        "TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint"
+      ]
+    },
+    {
+      "module": "InvisibleRestriction",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/InvisibleRestriction.lean",
+      "frozen_source_sha256": "c3b11eb1fd9fb50c9a65638f4615809dd67bff8105ea22cd13ecec775550c1bc",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/InvisibleRestriction.lean",
+      "checked_source_sha256": "08054c516a6ea6b7a0f1bfb93ccc56d6b05b85b6888e3a5a688a0fe15fbabacc",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/InvisibleRestriction.lean",
+      "production_source_sha256": "08199beb18fa3837957b9007cd6af93c997d26b1016f569989733a636dd75686",
+      "artifact_sha256": "fe7ddcf4bbd014e995461858d0d5d3d5faacb40a32bb9cc3ea8ecc92ac3ce4f1",
+      "strict_log": "InvisibleRestriction.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Word.restrict_mapOwner_appendTail_eval_eq_id_of_disjoint",
+        "TNLean.PEPS.PairEffect.PreparedSourceGate.restrict_remaining_appendTail_eval_eq_id_of_not_participating",
+        "TNLean.PEPS.PairEffect.PreparedSourceGate.restrict_remaining_appendTail_eq_of_not_participating"
+      ]
+    },
+    {
+      "module": "FullResidualLocality",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/FullResidualLocality.lean",
+      "frozen_source_sha256": "da5247ea8d4e45df5b38368a5555f39491fc13d50c2f7f3326fb918fe9d900d4",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/FullResidualLocality.lean",
+      "checked_source_sha256": "9bf376f3f433d1d4be5158451bbd91ee524555d24e8293168817d0778febd204",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/FullResidualLocality.lean",
+      "production_source_sha256": "fa861a612c6f624c8a7e8af7a136f17e0f8fd8763e18a38dac266d52bc4d1c78",
+      "artifact_sha256": "4104037532e4fb6033c84ac38c513d2a3696a9fee106cb5b140ae9b64c655f2f",
+      "strict_log": "FullResidualLocality.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.fixedSourceLayout",
+        "TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sources_fullRemainingWord",
+        "TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_fullRemainingWord",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_fullRemainingWord_eq_of_agree",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_fullRemainingWord_eq_of_choices_eq",
+        "TNLean.PEPS.PairEffect.SourceCircuit.localRemainingMap",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_fullRemainingWord_eq_localRemainingMap",
+        "TNLean.PEPS.PairEffect.SourceCircuit.norm_localRemainingMap_le_one"
+      ]
+    },
+    {
+      "module": "FullBranchPreparation",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/FullBranchPreparation.lean",
+      "frozen_source_sha256": "33b32be9c85a0f8cb73ca19d899ec55b34c7c636e1979c95277a7162adc60acf",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/FullBranchPreparation.lean",
+      "checked_source_sha256": "414d1f4fb0d3b1d08a73fc67fa5aaa863e211d6863be1e25f5d599c36f72f289",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/FullBranchPreparation.lean",
+      "production_source_sha256": "76ccfb8b5356f0ee90f9d4ad0394578e48c9a80c85a61c76f1048a315a61adc4",
+      "artifact_sha256": "233cf16cc2f406dfca8d3bb153efedf4a217fb1d558fea394ea280ab4cc29c8f",
+      "strict_log": "FullBranchPreparation.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.fullBranchWord",
+        "TNLean.PEPS.PairEffect.SourceCircuit.fullSourceVector",
+        "TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord_gate_prepare_tmul"
+      ]
+    },
+    {
+      "module": "FullChronologicalPreparation",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/FullChronologicalPreparation.lean",
+      "frozen_source_sha256": "116c2bf2f8320d63717dc7d5fb3af892a1b6ea7436734484b0be50061e67e127",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/FullChronologicalPreparation.lean",
+      "checked_source_sha256": "133a80fd45ca689b2ebfb3e08b4a7a4adab72e9e3eb3c2a3d60ee277832ae6bc",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/FullChronologicalPreparation.lean",
+      "production_source_sha256": "175b654feb3bda8f73756a4f28df97c7b30f39a73c0d07f4f428f833ac0cc14c",
+      "artifact_sha256": "b532fef0e5338f188a14c882bdb2d1b8f544a6c8738238b4c269bb5ae0822a5b",
+      "strict_log": "FullChronologicalPreparation.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord_gate_prepare",
+        "TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord_prepare",
+        "TNLean.PEPS.PairEffect.SourceCircuit.eval_fullBranchWord_eq_fullRemainingWord"
+      ]
+    },
+    {
+      "module": "AbsorbedRestriction",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/AbsorbedRestriction.lean",
+      "frozen_source_sha256": "9c9e058783ab917c0fff29f387d281561e01055e249870a5b386cd4f62828702",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/AbsorbedRestriction.lean",
+      "checked_source_sha256": "1046c55a18f8590c53136b2ba7cebcd1a96b9fe10a7d19549caf4e772bdb3f3d",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/AbsorbedRestriction.lean",
+      "production_source_sha256": "79feae8b6a443ad1ce27577e2de2bce0a768ca55253b587a20ef846b74c28590",
+      "artifact_sha256": "c8350525057dad1024313ae5869811e551af7a76557cb7e8b0ed5ab8e6b54649",
+      "strict_log": "AbsorbedRestriction.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Word.restrict_restrict_heq_of_implies",
+        "TNLean.PEPS.PairEffect.Word.restrict_restrict_eval_heq_of_implies",
+        "TNLean.PEPS.PairEffect.Word.restrict_withoutParty_atParty_eval_heq"
+      ]
+    },
+    {
+      "module": "CanonicalPartyFactorization",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/CanonicalPartyFactorization.lean",
+      "frozen_source_sha256": "a7332257f1692df445a75c22d09abbda0a5ba9816840b9cdfcde121719c48c06",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/CanonicalPartyFactorization.lean",
+      "checked_source_sha256": "182528688aed93eed6004ff1d359ba67dbe8f76aa5eeff9466b75f1c0e94bab7",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/CanonicalPartyFactorization.lean",
+      "production_source_sha256": "5d0ab1822205a881e9bdef2a397e8fcaeb47614dcb1cbf01920617493370e1b8",
+      "artifact_sha256": "8a04a84759f7924f7078c24ce833049886dab60e5ba765791de349a7d76397fe",
+      "strict_log": "CanonicalPartyFactorization.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions"
+      ]
+    },
+    {
+      "module": "ChronologicalPartyFactorization",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ChronologicalPartyFactorization.lean",
+      "frozen_source_sha256": "c0a7e3253e39bc97111757cc91b2165ee5e81829ccb1b405f2628b3efc562602",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ChronologicalPartyFactorization.lean",
+      "checked_source_sha256": "0a4b3911b5bc69fe6504ff73270a0a1fb2fcd7371be9ccdabb199fd11f5a7d8b",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ChronologicalPartyFactorization.lean",
+      "production_source_sha256": "07eb3d9e72b447cf463335d1a5153f6f7d7b2697585c1c946576fe9f826f01ec",
+      "artifact_sha256": "eeebe252b97900a13fae8a98e1bc3e91301d6016fa08c0a582a2d49909a8313b",
+      "strict_log": "ChronologicalPartyFactorization.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_fullRemainingWord_eq_tensorLocalRemainingMaps",
+        "TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_fullBranchWord_eq_tensorLocalRemainingMaps"
+      ]
+    },
+    {
+      "module": "SourcefulInvisibleRestriction",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/SourcefulInvisibleRestriction.lean",
+      "frozen_source_sha256": "5a32829e6cdcabcb9188deada992f572646b6a67f78cd749173428b237cb2e56",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/SourcefulInvisibleRestriction.lean",
+      "checked_source_sha256": "4a171e83be1a127fd56a02a76a5348f5ee0cf41dd5428b64d051c6145ac11ffb",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/SourcefulInvisibleRestriction.lean",
+      "production_source_sha256": "7cbfcf4c534c05ae2bf0f9b3020ddeb4162723bd270e15c153ebdef3346b60a6",
+      "artifact_sha256": "db5c285b703c164402e665a0c604b96c71c1100b1857c262a276f358a57199d2",
+      "strict_log": "SourcefulInvisibleRestriction.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_appendTail_mapOwner_eval_eq_id_of_disjoint"
+      ]
+    },
+    {
+      "module": "ResidualRestrictionCongruence",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ResidualRestrictionCongruence.lean",
+      "frozen_source_sha256": "d09228bb4dc4634153f8773c44203409a466e9d817baf65b0a83d33973b0497d",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ResidualRestrictionCongruence.lean",
+      "checked_source_sha256": "7affb6e36e52ca049fc32b9f6c67e0608c7bbb1ad10ed48510751ad3a8b0f22a",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ResidualRestrictionCongruence.lean",
+      "production_source_sha256": "0b702aadc35146bdd7f50adb902afb389cacf48419414b375dbd3040b5adf5b9",
+      "artifact_sha256": "c9850b880a0c5e01632b5cae949dbf88d2dd7796436869ef68e459b35516b30a",
+      "strict_log": "ResidualRestrictionCongruence.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Word.restrict_castInput_eval_heq",
+        "TNLean.PEPS.PairEffect.Word.restrict_comp_eval_heq",
+        "TNLean.PEPS.PairEffect.Word.restrict_frame_eval_heq",
+        "TNLean.PEPS.PairEffect.Word.restrict_frameList_eval_heq",
+        "TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_eval_heq",
+        "TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq",
+        "TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_eval_heq"
+      ]
+    },
+    {
+      "module": "AllChoicesProjection",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/AllChoicesProjection.lean",
+      "frozen_source_sha256": "bcbc3d7f420e9e4b8975bf6688bddbf91e29502c297866008ea13b60663148d3",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/AllChoicesProjection.lean",
+      "checked_source_sha256": "684367467128648e717e78d77e74d840d1b3652bfa0f0bd1ddaf981f9d73c245",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/AllChoicesProjection.lean",
+      "production_source_sha256": "e299f8f87ea400d6be8f5ce8b673e5b625ffd70eb8b5d447365f55c988c0ed5d",
+      "artifact_sha256": "a5876080e638e4da783386fa736c6120d93b2ad8f2c441cfa73321ba1e43900c",
+      "strict_log": "AllChoicesProjection.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.projectAllChoices",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_projectAllChoices"
+      ]
+    },
+    {
+      "module": "AllPartialGate",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/AllPartialGate.lean",
+      "frozen_source_sha256": "b8cb42b0c72b4631a79f66d3a3c1f5aee776507305903fabd4cb8f06f044217d",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/AllPartialGate.lean",
+      "checked_source_sha256": "2f584cd7494fc94f2980f3f109e78d28cd3d47907ff85402f2f2529ab3a250b6",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/AllPartialGate.lean",
+      "production_source_sha256": "ca6836630b733fe891613e46bcd6549235cb1233de56ba917f3366c2de419578",
+      "artifact_sha256": "e9417fc38a04aac1cb63c2e903a0ce4d6f52b8e8af94c90b053e4bf409c856c0",
+      "strict_log": "AllPartialGate.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.partialWord_all_gate_eq_of_touched",
+        "TNLean.PEPS.PairEffect.SourceCircuit.partialWord_all_gate_eq_of_untouched",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id_of_disjoint"
+      ]
+    },
+    {
+      "module": "PartialResidualLocality",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/PartialResidualLocality.lean",
+      "frozen_source_sha256": "6d3152d2a48fcac519ea31479a2457e8c73a99b40b5277fbbbf0e773d17dae5f",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/PartialResidualLocality.lean",
+      "checked_source_sha256": "ec964c1c44b9d7a6a2c4977400e8272d75f7be8901ebb0ce52afb8e01ee93aad",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/PartialResidualLocality.lean",
+      "production_source_sha256": "870d4b4f6cf1f357c19dc207000dfc3a753c3f773766b170c00b7ccc5388d0f0",
+      "artifact_sha256": "77cf7fdd890b66c33d47c7e7bf4f6440d02eb470589f872171cfebbc1e89a800",
+      "strict_log": "PartialResidualLocality.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_eval_heq_of_projectAllChoices_eq",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_eval_eq_of_projectAllChoices_eq"
+      ]
+    },
+    {
+      "module": "TouchedLabels",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/TouchedLabels.lean",
+      "frozen_source_sha256": "22c173370c394e82ef77091b2428c4c20c51b0c2c91dc5bafb1daf2450b02722",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/TouchedLabels.lean",
+      "checked_source_sha256": "f8a5538beb3d8430dcb1e07b474f365ebfcbd4032be7f2f26fe7ee446f7a92e7",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/TouchedLabels.lean",
+      "production_source_sha256": "ceba496415cd9db063c5154bd2dff39b6f4a284466dc4b06d7185abc0ac42167",
+      "artifact_sha256": "bc976e8529db97fa17b016ff2877ab626b9b24245640edb59cf0f26713bf5497",
+      "strict_log": "TouchedLabels.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.TouchedLabels",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfTouchedLabels",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels_choiceAt",
+        "TNLean.PEPS.PairEffect.SourceCircuit.choicesTouchedLabelsEquiv"
+      ]
+    },
+    {
+      "module": "NonemptyGateLabels",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/NonemptyGateLabels.lean",
+      "frozen_source_sha256": "bc73ae27d985cdeeba45ac6bb333b2ec3a1fc1fc86f9fd4c2f62f1a473ab28cb",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/NonemptyGateLabels.lean",
+      "checked_source_sha256": "8447f662c75175bae010e55bd2f7d81a8fb123d6d2d9bec8fb6ab0939e7e427e",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/NonemptyGateLabels.lean",
+      "production_source_sha256": "0336457504e50ad069902bfeb9cd92f45bde609ba9036ea88f7a44e1a4d7d42f",
+      "artifact_sha256": "b0a7c14492279fc186e684eaa7577e8ea3effa689be2ac3b5da097042e6197c3",
+      "strict_log": "NonemptyGateLabels.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.isTouched_all_iff",
+        "TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocations",
+        "TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocationsFintype",
+        "TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply"
+      ]
+    },
+    {
+      "module": "PointwiseChoiceCoefficient",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/PointwiseChoiceCoefficient.lean",
+      "frozen_source_sha256": "1531baff3252e7df574f4b51b1a3d70942cd4782fca29c885e0b85245c93de19",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/PointwiseChoiceCoefficient.lean",
+      "checked_source_sha256": "ec06dcb08db144ed814130d8ef8b5fc21bb49f3602f8638516a9902d6c8a1047",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/PointwiseChoiceCoefficient.lean",
+      "production_source_sha256": "361004de31e247ea53e04ddfdf5400bb48382ab0abd0c2fe3642f980830b7877",
+      "artifact_sha256": "58432b384e523a8a4ec0735aa5ef6b73d1895cc802cd725260ad1494f5d2de9c",
+      "strict_log": "PointwiseChoiceCoefficient.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.coefficient_eq_prod_dite",
+        "TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations"
+      ]
+    },
+    {
+      "module": "ActualPartialLocalMaps",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ActualPartialLocalMaps.lean",
+      "frozen_source_sha256": "e670bcc6bc912d5ebf2ca257c1cd09a556e3fc0eef2e5daeac132a3eb1f7cfe1",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ActualPartialLocalMaps.lean",
+      "checked_source_sha256": "53d7a102c6181284c906a42e9015f6ec90078aa6074c98a34b13eedd224f3bf9",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ActualPartialLocalMaps.lean",
+      "production_source_sha256": "0c5c3f37a4458988ce6aefe31e4c2a65fdb80728e78da3109e1f8095e5b7071c",
+      "artifact_sha256": "0f14e6d719ab45d4066aa3b2925963632676134c8d9aeddaaa1102b5bd149288",
+      "strict_log": "ActualPartialLocalMaps.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.allResidualInput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.partialLocalRemainingMap",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_eq_partialLocalRemainingMap",
+        "TNLean.PEPS.PairEffect.SourceCircuit.norm_partialLocalRemainingMap_le_one"
+      ]
+    },
+    {
+      "module": "ActualPartialPartyFactorization",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ActualPartialPartyFactorization.lean",
+      "frozen_source_sha256": "5bc31891bb916d30bc61a2c87d9c34a6a8f835b5dee2766d11e5a4ddcf587702",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ActualPartialPartyFactorization.lean",
+      "checked_source_sha256": "e21283741b968d683980db264415de9dc311d405bf82db0cc9c5b6372a41e395",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ActualPartialPartyFactorization.lean",
+      "production_source_sha256": "01265acf65f94311979b6bc5809c412585d66b6b0d5f7b0bfc75f9b9fc634697",
+      "artifact_sha256": "611db8240387eb309268c2d60571d7dd850bbd3a6576e65d70294a800725ca7d",
+      "strict_log": "ActualPartialPartyFactorization.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_partialResidual_eq_tensorPartialLocalRemainingMaps"
+      ]
+    },
+    {
+      "module": "ActualSourceLocalMaps",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ActualSourceLocalMaps.lean",
+      "frozen_source_sha256": "45109f3b7845bc1c403be58311f0f6c5242b83056bf26b1c14967fc6fde44a54",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ActualSourceLocalMaps.lean",
+      "checked_source_sha256": "7f1a67bc83e85da15db5558306a87c1ec7b6d2329adf90ff174cd3748cb50919",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ActualSourceLocalMaps.lean",
+      "production_source_sha256": "3741850dddbaaeee59d10f1be8fa14dc41017d75abcadf9f42d28a9067f1119e",
+      "artifact_sha256": "088b3c1716ddc8e80ae782622a694b527bb86703645da06d8ba3f7c39116f62e",
+      "strict_log": "ActualSourceLocalMaps.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceLayout",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sourcePrivatePreparation",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation",
+        "TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord",
+        "TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalMap",
+        "TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialSourceWord_eq_partialSourceLocalMap",
+        "TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_partialSourceWord_eq_tensorPartialSourceLocalMaps"
+      ]
+    }
+  ],
+  "all_public_audit_source": "AllPublicAxioms72.lean",
+  "all_public_audit_log": "all-public-axioms72.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "49a571018643882d2db29a3cff247e841323b0914c12b4a8f735c75ae54bdcbf",
+  "tactic_pattern_scan": "tactic-pattern-scan.txt.gz",
+  "tactic_pattern_scan_uncompressed_sha256": "18cdfd2afc6d04c256199429f71bb303ac91b4a12b6281fabf16fd8c1add5a06",
+  "unperformed_checks": "Canonical integration verification belongs to the coordinating branch."
+}
