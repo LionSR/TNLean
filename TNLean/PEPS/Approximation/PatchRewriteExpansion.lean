@@ -26,16 +26,8 @@ affected old hole. This file proves:
   dividing by `1 + δ / 2` gives a contraction within `δ` of `M`, and the integer `k` of the
   whole-group truncation can be chosen so that `N g / √k ≤ δ / 2`.
 
-**Scope restriction (monomial structure):** the step of the proof of Lemma 6.3 that turns one
-branch into a residual tensor network of normalized bras and kets, applies the whole-group
-truncation of Lemma 6.2 to it, and reads every product term as an allowed monomial of
-Theorem 5.2 is not formalized here (`05-frames.tex`, lines 254–330). Allowed monomials exist on
-party layouts (`PairEffect.PartyChain`), but the residual network of a branch, the identification
-of the branch operator with its contraction and the factored private maps, and a layout of the
-frame's registers by owner are not constructed. Consequently the clause "`M_a` has a polynomial
-expansion into allowed monomials using only the specified parties" of Lemma 6.3 is not
-formalized; `norm_rescale_sum_le_of_branches` assembles `M_a` from any branchwise
-approximations. Documented in `docs/paper-gaps/polypeps_small_rewrite_monomials.tex`.
+The network of a branch, its truncation by Lemma 6.2 and the assembly of `M_a` are in
+`TNLean.PEPS.Approximation.PatchRewriteTruncation`.
 
 ## Main definitions
 
