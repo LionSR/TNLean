@@ -400,6 +400,38 @@ the complete 50-page web reader, one fresh standard-kernel report, original
 provenance and 138 portable artifact bindings passed. The QC moment alone
 does not combine the two regional deficits or prove inverse compression.
 
+[QICLean #654](https://github.com/LionSR/QICLean/pull/654), at checked head
+`2c3b04b6`, proves an auxiliary arithmetic-mean estimate for a positive weight
+and two commuting Hermitian matrices:
+\[
+ \operatorname{Re}\operatorname{Tr}(\rho e^{a(A+B)})
+ \le \tfrac12\left(
+  \operatorname{Re}\operatorname{Tr}(\rho e^{2aA})+
+  \operatorname{Re}\operatorname{Tr}(\rho e^{2aB})\right).
+\]
+The weight need not be normalized or commute with either matrix. This is a
+separate sufficient estimate for doubled polynomial moments; it is not
+identified with the Cauchy--Schwarz inequality printed in the paper. The
+complete 9,793-job library build, one fresh standard-kernel report, original
+provenance, the 447-page PDF and complete web/native checks passed.
+
+[QICLean #655](https://github.com/LionSR/QICLean/pull/655), at checked head
+`038138a0`, defines the actual paired merge deficit and places the QC and VR
+deficits on a common product copy space. Their identity lifts commute,
+their joint exponential factors as an operator, and each individual complex
+trace pairing is the pairing with its actual partial trace. The common
+matrix may be correlated; the joint trace is not asserted to factor. The
+six exact standard-kernel reports, original provenance, complete 9,793-job
+library build, 448-page PDF and complete web/native checks passed.
+
+The source physical space has independent regions Q, Y and V. A common
+component density for QC and VR must trace every Y copy, in addition to the
+bad physical and auxiliary copies. The local QC theorem above accommodates
+this by taking the physical complement to be YV. The common-density
+identities, the actual two-deficit moment and the compatible physical
+projection argument are being proved separately. In particular,
+\(F_Q+F_V-F_Y\) cannot be identified globally with the QV merge deficit.
+
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
 Lemma 6.1. Their application to the actual good-copy component and the
@@ -507,12 +539,30 @@ for physical partial traces in orthonormal coordinates, including block
 and integrability consequences. The coordinator reports six strict checks,
 ten standard-kernel reports, focused PDF/web inspection and preservation
 of 958 source files. These are narrow checks, not a complete library build.
-The latest TNLean heads are `429d55a3` for #8896, `1d718899` for #8900 and
+The dependency-update TNLean heads were `429d55a3` for #8896, `1d718899` for #8900 and
 `f96e06dc` for #8903. They synchronize the dependency with #650; the
 mathematical source `25892537` and the Gaussian/Schmidt evidence at
 `70e23f40` remain unchanged. The earlier checks described above retain
 their original revisions and are not claimed as fresh checks of these
 later dependency updates.
+
+The later evidence-only packaging correction advances #8896 to `fa9aa3ee`,
+#8900 to `1704ccd4`, and #8903 to `ba981227`. It retains the exact bytes of
+an overlength archived kernel-audit script as a compressed artifact with its
+uncompressed hash. The proof sources and dependency pins remain unchanged;
+the coordinator reports the historical validators and module policy passed.
+
+[TNLean #8908](https://github.com/LionSR/TNLean/pull/8908), at head
+`456204230ab8548568dbbccdac39b894d1539ff5`, adds physical Gaussian source
+estimates at mathematical source
+`5547d32efa79b3b18150eb07be2bfcda4a68f79a`. The coordinator reports 27 strict
+module checks, 86 selected standard-kernel reports, all 20,983 compiled
+blueprint names, 691 canonical provenance entries and focused rendering of
+the 45-page mathematical supplement. These are narrow checks; a complete
+library build is not claimed for this contribution. The separately used
+QICLean #650 dependency has passed its full remote CI. The actual Schmidt
+output substitution, physical frame identities, complete source-error
+estimate and sampled local tensor network remain to be assembled.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
