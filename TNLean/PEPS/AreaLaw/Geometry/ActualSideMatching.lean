@@ -24,13 +24,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-private def sideVector (s : Fin 4) (u : ℝ) : ℝ × ℝ :=
-  match s.val with
-  | 0 => (1, u)
-  | 1 => (-u, 1)
-  | 2 => (-1, -u)
-  | _ => (u, -1)
-
 private def tangent (s : Fin 4) : (ℝ × ℝ) →ᵃ[ℝ] ℝ :=
   match s.val with
   | 0 => AffineMap.snd
@@ -44,12 +37,12 @@ private def normal (s : Fin 4) : (ℝ × ℝ) →ᵃ[ℝ] ℝ :=
 private def normalSign (s : Fin 4) : ℝ := if s.val < 2 then 1 else -1
 
 private theorem tangent_sidePoint (c : ℝ × ℝ) (r : ℝ) (s : Fin 4) (u : ℝ) :
-    tangent s (c + r • sideVector s u) = tangent s c + r * u := by
-  fin_cases s <;> norm_num [tangent, sideVector] <;> ring
+    tangent s (c + r • cellFanSideVector s u) = tangent s c + r * u := by
+  fin_cases s <;> norm_num [tangent, cellFanSideVector] <;> ring
 
 private theorem normal_sidePoint (c : ℝ × ℝ) (r : ℝ) (s : Fin 4) (u : ℝ) :
-    normal s (c + r • sideVector s u) = normal s c + r * normalSign s := by
-  fin_cases s <;> norm_num [normal, normalSign, sideVector]
+    normal s (c + r • cellFanSideVector s u) = normal s c + r * normalSign s := by
+  fin_cases s <;> norm_num [normal, normalSign, cellFanSideVector]
 
 private theorem tangent_normal_injective (s : Fin 4) {x y : ℝ × ℝ}
     (hn : normal s x = normal s y) (ht : tangent s x = tangent s y) : x = y := by
@@ -66,10 +59,10 @@ private theorem normal_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
         normal i.1 (cellFanCenter o ℓ z) + (2 : ℝ) ^ ℓ / 2 * normalSign i.1 := by
   constructor
   · change normal i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector i.1 (if split i.1 then (i.2.val : ℝ) - 1 else -1)) = _
+      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) - 1 else -1)) = _
     exact normal_sidePoint _ _ _ _
   · change normal i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector i.1 (if split i.1 then (i.2.val : ℝ) else 1)) = _
+      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) else 1)) = _
     exact normal_sidePoint _ _ _ _
 
 private theorem tangent_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
@@ -80,10 +73,10 @@ private theorem tangent_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
         (2 : ℝ) ^ ℓ / 2 * (if split i.1 then (i.2.val : ℝ) else 1) := by
   constructor
   · change tangent i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector i.1 (if split i.1 then (i.2.val : ℝ) - 1 else -1)) = _
+      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) - 1 else -1)) = _
     exact tangent_sidePoint _ _ _ _
   · change tangent i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector i.1 (if split i.1 then (i.2.val : ℝ) else 1)) = _
+      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) else 1)) = _
     exact tangent_sidePoint _ _ _ _
 
 private theorem tangent_start_lt_end (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
@@ -216,14 +209,14 @@ private theorem endpoints_change_mask (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
         cellFanEnd o ℓ z split' ⟨s, ⟨v, hv'⟩⟩ := by
   constructor
   · change cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector s (if split s then (v : ℝ) - 1 else -1) =
+      cellFanSideVector s (if split s then (v : ℝ) - 1 else -1) =
       cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector s (if split' s then (v : ℝ) - 1 else -1)
+      cellFanSideVector s (if split' s then (v : ℝ) - 1 else -1)
     rw [hs]
   · change cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector s (if split s then (v : ℝ) else 1) =
+      cellFanSideVector s (if split s then (v : ℝ) else 1) =
       cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector s (if split' s then (v : ℝ) else 1)
+      cellFanSideVector s (if split' s then (v : ℝ) else 1)
     rw [hs]
 
 private theorem true_slot (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
@@ -263,14 +256,14 @@ private theorem full_midpoint_halves (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
   have h₀ : cellFanStart o ℓ z (fun _ ↦ true) ⟨s, 0⟩ =
       cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩ := by
     change cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector s (((0 : Fin 2).val : ℝ) - 1) =
-      cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) • sideVector s (-1)
+      cellFanSideVector s (((0 : Fin 2).val : ℝ) - 1) =
+      cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) • cellFanSideVector s (-1)
     norm_num
   have h₁ : cellFanEnd o ℓ z (fun _ ↦ true) ⟨s, 1⟩ =
       cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩ := by
     change cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      sideVector s (((1 : Fin 2).val : ℝ)) =
-      cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) • sideVector s 1
+      cellFanSideVector s (((1 : Fin 2).val : ℝ)) =
+      cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) • cellFanSideVector s 1
     norm_num
   have hne := whole_endpoints_ne o ℓ z s
   constructor

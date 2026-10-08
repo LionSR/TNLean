@@ -5757,6 +5757,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   side, while uniqueness compares three rectangles. Their common elementary
   boundary geometry has already been promoted separately.
 
+### Cell-side parametrization — promoted (2026-10-08)
+
+- **Pattern:** Parametrize the four sides of an axis-parallel square by the
+  match `(1, w)`, `(-w, 1)`, `(-1, -w)`, `(w, -1)` scaled about its center.
+- **Seen:** A private `sideVector` in `Geometry/CellFans.lean`, a second private
+  copy in `Geometry/ActualSideMatching.lean`, and the same match written out
+  three times in the statement of `side_interpolation` in
+  `Geometry/SideSubdivisionMask.lean`.
+- **Abstraction:** `cellFanSideVector` in `Geometry/CellFans.lean` is now public.
+  The side-matching module uses it in place of its private copy, and
+  `side_interpolation` states the whole-side interpolation in terms of it.
+- **Notes:** The tangent and normal coordinates in `ActualSideMatching.lean`
+  remain private to that module; no second consumer needs them.
+
 ### Marked-endpoint segment containment — candidate (2026-10-07)
 
 - **Pattern:** Put two marked endpoints in a closed dyadic square and use

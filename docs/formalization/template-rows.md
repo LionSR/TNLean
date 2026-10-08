@@ -1,16 +1,12 @@
 # Template depth rows
 
-This is the geometric slice of [#8754](https://github.com/LionSR/TNLean/issues/8754),
-on `codex/area-law-template-rows`, stacked on the model PR
-[#8788](https://github.com/LionSR/TNLean/pull/8788) at
-`158bc6bb178ee53a2c981ba751fadf6e7a3ff0a2`. The model files are unchanged.
+This is the geometric slice of [#8754](https://github.com/LionSR/TNLean/issues/8754).
 The source is Lemma 9.4 of the September 24, 2026 area-law manuscript,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`,
 `preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex`,
-lines 571–629. All new proof text is original; none is copied or adapted from
-upstream Lean code.
+lines 571–629.
 
-## Implemented argument and validation status
+## Implemented argument
 
 The compiled theorem `Geometry.template_layer_card_le` states that, for an
 actual `Template Ctpl n s₀`, `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` imply
@@ -32,13 +28,8 @@ The supporting code is split into four modules:
   by at most two per radius step, the single-piece layer count, and the scale
   argument for arbitrary unions.
 
-All four production modules and the full library build passed at
-`ada3ccb6dfe231695676953030a4333d36997f8c` in
-[PR CI run 37616454111](https://github.com/LionSR/TNLean/actions/runs/37616454111).
-The strict actual-model regression, all 42 axiom audits, style lint, compiled
-blueprint declaration checks, full blueprint job, and compilation-time checks
-also passed. Every export depends only on `propext`, `Classical.choice`, and
-`Quot.sound`. The observed outputs are now guarded in the regression file.
+The regression file `TNLeanTest/TemplateRows.lean` checks the exported
+statements on actual template models.
 
 ## Mathematical derivation
 
@@ -83,18 +74,7 @@ Union-layer subadditivity sums this bound over all pieces, allowing overlaps
 and disconnected unions. The actual template scale field and `Ctpl ≥ 24`
 then give the requested bound by n.
 
-## Validation procedure and scope
-
-The pinned Lean release was installed from its official release asset.
-`lake exe cache get` was attempted before any library build, with a writable
-`XDG_CACHE_HOME`. Cache downloads failed with HTTP 403; the missing
-`Mathlib.olean` guard prevented a local library build. Only the cache retrieval
-executable was built, not Mathlib proof sources. Normal PR CI is the required
-fallback. `TNLeanTest/TemplateRows.lean` is registered in that workflow with
-strict options, warnings as errors, actual-model examples, and axiom audits
-for all 42 exported declarations.
+## Scope
 
 No entropy, edge-boundary, repaired-family, or physical area-law theorem is
-claimed. This advances only the geometric slice of #8754. OpenAI Codex (GPT-6)
-assisted the original proofs and documentation; maintainer mathematical review
-is pending.
+claimed. This advances only the geometric slice of #8754.

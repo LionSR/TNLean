@@ -17,11 +17,4 @@ separate; the native four-entropy statement is independently meaningful now.
 This is only the entropy step in the proof of the PEPS cell-information lemma.
 It proves no collars, geometric partition, dimension/site-count transport or
 polylogarithmic cell estimate. Its blueprint label is separate from the full
-source lemma. All code is independently written from the paper and existing APIs.
-
-The companion pin is the accepted QICLean PR 566 merge
-`826a56f5d2a3d0c5b5027c4ab536d24feadbdbb6`. All five root/docbuild pin fields
-agree. This accepted revision has the exact reviewed companion tree, including
-the generic conditional theorem. Local strict validation uses a source- and
-artifact-audited private overlay; full Lake/CI and blueprint declaration checks
-remain separate publication gates.
+source lemma.

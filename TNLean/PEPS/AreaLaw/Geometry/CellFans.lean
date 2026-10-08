@@ -37,7 +37,11 @@ def cellFanCenter (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) : ℝ × ℝ :=
   (o.1 + (2 : ℝ) ^ ℓ * z.1 + (2 : ℝ) ^ ℓ / 2,
     o.2 + (2 : ℝ) ^ ℓ * z.2 + (2 : ℝ) ^ ℓ / 2)
 
-private def sideVector (side : Fin 4) (w : ℝ) : ℝ × ℝ :=
+/-- The point at tangent parameter `w` on side `side` of the square of
+half-side one centered at the origin, with sides listed counterclockwise from
+the right side; `w ∈ [-1, 1]` traverses the side counterclockwise.
+Source: area-law Section 11, lines 299–310. -/
+def cellFanSideVector (side : Fin 4) (w : ℝ) : ℝ × ℝ :=
   match side.val with
   | 0 => (1, w)
   | 1 => (-w, 1)
@@ -45,7 +49,7 @@ private def sideVector (side : Fin 4) (w : ℝ) : ℝ × ℝ :=
   | _ => (w, -1)
 
 private def sidePoint (c : ℝ × ℝ) (r : ℝ) (side : Fin 4) (w : ℝ) : ℝ × ℝ :=
-  c + r • sideVector side w
+  c + r • cellFanSideVector side w
 
 private def fanLower (split : Fin 4 → Bool) (i : CellFanSlot split) : ℝ :=
   if split i.1 then (i.2.val : ℝ) - 1 else -1
@@ -82,7 +86,7 @@ private theorem sidePoint_segment (c : ℝ × ℝ) (r : ℝ) (side : Fin 4)
       sidePoint c r side '' Set.Icc u v := by
   have haff (a : ℝ) : sidePoint c r side (u + a * (v - u)) =
       sidePoint c r side u + a • (sidePoint c r side v - sidePoint c r side u) := by
-    apply Prod.ext <;> fin_cases side <;> simp [sidePoint, sideVector, smul_eq_mul] <;> ring
+    apply Prod.ext <;> fin_cases side <;> simp [sidePoint, cellFanSideVector, smul_eq_mul] <;> ring
   rw [segment_eq_image']
   ext x
   constructor
@@ -103,9 +107,9 @@ private theorem sidePoint_segment (c : ℝ × ℝ) (r : ℝ) (side : Fin 4)
       ring
 
 private theorem norm_sideVector (side : Fin 4) {w : ℝ} (hw : w ∈ Set.Icc (-1) 1) :
-    ‖sideVector side w‖ = 1 := by
+    ‖cellFanSideVector side w‖ = 1 := by
   have habs : |w| ≤ 1 := abs_le.mpr hw
-  fin_cases side <;> simp [sideVector, Prod.norm_def, Real.norm_eq_abs,
+  fin_cases side <;> simp [cellFanSideVector, Prod.norm_def, Real.norm_eq_abs,
     max_eq_left habs, max_eq_right habs]
 
 private theorem norm_sidePoint_sub (c : ℝ × ℝ) {r : ℝ} (hr : 0 < r)
@@ -146,21 +150,21 @@ private theorem sidePoint_of_sphere (c : ℝ × ℝ) {r : ℝ} (hr : 0 < r)
     by_cases hs : 0 ≤ x.1 - c.1
     · have he' : x.1 - c.1 = r := by rwa [abs_of_nonneg hs] at he
       refine ⟨0, (x.2 - c.2) / r, hparam hsnd, ?_⟩
-      apply Prod.ext <;> simp [sidePoint, sideVector, smul_eq_mul, hcancel]
+      apply Prod.ext <;> simp [sidePoint, cellFanSideVector, smul_eq_mul, hcancel]
       all_goals linarith
     · have he' : -(x.1 - c.1) = r := by rwa [abs_of_neg (lt_of_not_ge hs)] at he
       refine ⟨2, -(x.2 - c.2) / r, hparam (by simpa only [abs_neg] using hsnd), ?_⟩
-      apply Prod.ext <;> simp [sidePoint, sideVector, smul_eq_mul, hcancel]
+      apply Prod.ext <;> simp [sidePoint, cellFanSideVector, smul_eq_mul, hcancel]
       all_goals linarith
   · have he : |x.2 - c.2| = r := by rwa [max_eq_right (le_of_not_ge hd)] at hmax
     by_cases hs : 0 ≤ x.2 - c.2
     · have he' : x.2 - c.2 = r := by rwa [abs_of_nonneg hs] at he
       refine ⟨1, -(x.1 - c.1) / r, hparam (by simpa only [abs_neg] using hfst), ?_⟩
-      apply Prod.ext <;> simp [sidePoint, sideVector, smul_eq_mul, hcancel]
+      apply Prod.ext <;> simp [sidePoint, cellFanSideVector, smul_eq_mul, hcancel]
       all_goals linarith
     · have he' : -(x.2 - c.2) = r := by rwa [abs_of_neg (lt_of_not_ge hs)] at he
       refine ⟨3, (x.1 - c.1) / r, hparam hfst, ?_⟩
-      apply Prod.ext <;> simp [sidePoint, sideVector, smul_eq_mul, hcancel]
+      apply Prod.ext <;> simp [sidePoint, cellFanSideVector, smul_eq_mul, hcancel]
       all_goals linarith
 
 private theorem outerSegments_cover (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
@@ -287,7 +291,7 @@ private theorem sidePoint_noncollinear (c : ℝ × ℝ) {r : ℝ} (hr : 0 < r)
   have he : ((sidePoint c r side u).1 - c.1) * ((sidePoint c r side v).2 - c.2) -
       ((sidePoint c r side u).2 - c.2) * ((sidePoint c r side v).1 - c.1) =
       r ^ 2 * (v - u) := by
-    fin_cases side <;> simp [sidePoint, sideVector, smul_eq_mul] <;> ring
+    fin_cases side <;> simp [sidePoint, cellFanSideVector, smul_eq_mul] <;> ring
   rw [he]
   exact mul_ne_zero (pow_ne_zero _ hr.ne') (sub_ne_zero.mpr huv.ne')
 
@@ -296,11 +300,11 @@ private theorem sidePoint_radial_allowed (c : ℝ × ℝ) (r : ℝ) (side : Fin 
     IsAllowedSlope (sidePoint c r side w - c) ∧
       IsAllowedSlope (c - sidePoint c r side w) := by
   rcases hw with rfl | rfl | rfl <;> fin_cases side <;>
-    simp [sidePoint, sideVector, IsAllowedSlope, smul_eq_mul]
+    simp [sidePoint, cellFanSideVector, IsAllowedSlope, smul_eq_mul]
 
 private theorem sidePoint_edge_allowed (c : ℝ × ℝ) (r : ℝ) (side : Fin 4) (u v : ℝ) :
     IsAllowedSlope (sidePoint c r side v - sidePoint c r side u) := by
-  fin_cases side <;> simp [sidePoint, sideVector, IsAllowedSlope]
+  fin_cases side <;> simp [sidePoint, cellFanSideVector, IsAllowedSlope]
 
 /-- The actual triangle joining the cell center to one elementary side segment.
 All three edges have horizontal, vertical or diagonal slope.
@@ -397,7 +401,7 @@ private theorem sidePoint_mem_beltCellMarks (o : ℝ × ℝ) (ℓ : ℕ) (z : �
     apply Finset.mem_image.mpr
     refine ⟨p, Finset.mem_univ _, ?_⟩
     fin_cases side <;> fin_cases m <;> apply Prod.ext <;>
-      norm_num [p, sidePoint, sideVector, cellFanCenter, smul_eq_mul] <;> ring
+      norm_num [p, sidePoint, cellFanSideVector, cellFanCenter, smul_eq_mul] <;> ring
   rcases hw with rfl | rfl | rfl
   · simpa using hmark 0
   · simpa using hmark 1

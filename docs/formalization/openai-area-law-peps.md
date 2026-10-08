@@ -166,14 +166,14 @@ unproved. In particular, these auxiliary results do not prove the full
 | Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
 | Area-law `thm:area` | Target proposition defined | Faithful full proof, #8759 and its prerequisites. |
 | Area-law `cor:rectangles` | Graph and configuration identification proved | Hamiltonian and entropy transport and the boundary estimates. |
-| Area-law `scanner:template` | Template data defined | Geometric and entropy bounds, #8754 and #8758. |
-| Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
+| Area-law `scanner:template` | Template area bound, depth-layer bound, and mixed dyadic-square counts proved for the actual polygon model | Entropy bounds, #8758. |
+| Area-law `geometry:cancellation` | Proved for a pure state on any finite tensor product, with its finite-domain lattice specialization | None. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
 | Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, sparse-belt decay, and polynomial-factor absorption proved | Primary-tile geometry, contacts, repairs, and birth separation. |
 | Area-law `geometry:total-repairs` | Polynomial absorption, summability, and a uniform numerical bound on finite scale sums proved as auxiliary results | Descendant bounds, the repair construction, and comparison of actual repairs with this series. |
 | Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
 | Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
-| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, and nonadjacent-layer separation proved | Contacts, simultaneous repairs, birth separation, and the full partition. |
+| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, nonadjacent-layer separation, primary regions, belts, cell contacts, side matching, cell fans, and initial regions proved | Simultaneous repairs, birth separation, and the full partition. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
 
 Defining a target proposition does not prove the corresponding theorem. The

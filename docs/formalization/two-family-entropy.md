@@ -1,38 +1,24 @@
 # Two-family entropy integration
 
 The generic theorem and physical regional-density proofs belong to QICLean.
-This consumer builds on the finite-domain/model branch from issue 8738, reviewed
-at `158bc6bb178ee53a2c981ba751fadf6e7a3ff0a2` (PR 8788), and uses its existing
+This consumer uses the existing finite-domain model data
 `OrderedTwoFamilyPartition`, `earlierSameFamily`, `reducedState`, and `regionalEntropy`.
 
-`regionalEntropy_le_residual_add_half_sum` formalizes the exact source
-[area-law Lemma 11.1](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex#L26-L69).
-It takes a normalized pure state, the existing labelled disjoint partition and
-one information bound per piece, against the entire exterior-plus-earlier-same-
-family region. Its conclusion is `S(A) ≤ S(D) + (1/2) ∑ i, ε i`.
-No Hamiltonian, gap, geometry, nonempty-set or error-sign hypothesis is added.
+The generic adapter `Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`
+formalizes
+[area-law Lemma 11.1](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex#L26-L69)
+for a pure state on an arbitrary finite tensor product, with site-dependent
+local dimensions. It takes a normalized pure state, the existing labelled
+disjoint partition and one information bound per piece, against the entire
+exterior-plus-earlier-same-family region. Its conclusion is
+`S(A) ≤ S(D) + (1/2) ∑ i, ε i`. No Hamiltonian, gap, geometry, nonempty-set or
+error-sign hypothesis is added.
 
-The generic adapter `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`
-also accepts dependent local dimensions. The finite-domain specialization then
-identifies the already-defined regional entropy with QICLean's construction.
-Neither model data nor generic entropy proofs are duplicated.
-
-All source code is independently written from the paper and existing library
-APIs. QICLean owns its own source and verification evidence.
+`regionalEntropy_le_residual_add_half_sum` is its specialization to a finite
+domain in `ℤ × ℤ` with one local dimension `q`. It identifies the
+already-defined regional entropy with QICLean's construction. Neither model data
+nor generic entropy proofs are duplicated.
 
 The shuffled-label regression uses three singleton pieces in a four-site system,
 with family labels `1,0,1`, a nonempty exterior, and the true same-family past
 `{0}` for piece `2`. It exercises the full exterior-plus-past estimate.
-
-Publication requires the reviewed companion QICLean revision to be available and
-pinned together with the consumer. The local verification uses a source-audited
-private artifact overlay; it is not a substitute for the registered linter-bearing
-Lake targets, complete repository CI, or full blueprint `checkdecls`.
-
-The companion pin is the accepted QICLean PR 566 merge
-`826a56f5d2a3d0c5b5027c4ab536d24feadbdbb6`, which includes accepted PR 560.
-Root and docbuild manifests use the same revision. The original two-family
-entropy modules and imported proof-source closure are unchanged. The companion
-also provides the conditional two-family theorem used by the PEPS approximation
-consumer; the original issue 8760 evidence continues to identify its own exact
-published source snapshot.

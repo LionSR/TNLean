@@ -27,8 +27,7 @@ S_\Omega(A)
 These are the dimension estimate and the final numerical implication in the
 [proof of Theorem 1.1](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex#L846-L857)
 of OpenAI's *A two-dimensional area law from a global spectral gap*
-(September 24, 2026). Both proofs are independently written. No upstream Lean
-proof text is copied or adapted.
+(September 24, 2026).
 
 The numerical implication does not construct the decomposition or establish
 its estimates. It also does not show that \(c_D\) and \(c_E\) can be chosen
@@ -40,13 +39,3 @@ Implementation: `TNLean/PEPS/AreaLaw/EntropyDimension.lean` and
 `TNLean/PEPS/AreaLaw/BoundaryEntropyAssembly.lean`. The existing finite-domain
 regional entropy is identified with the QICLean finite-product entropy; no
 additional state, density matrix, partition, or entropy definition is introduced.
-
-The two modules passed their linter-bearing builds and strict kernel dependency
-checks.
-The complete TNLean root build and blueprint declaration check also passed.
-The complete PDF and web builds passed, and the new statements were inspected
-on printed PDF pages 1696–1697. The full verification records are in the
-`full-verification/` subdirectory of the same evidence collection.
-
-Assisted by OpenAI Codex. Human mathematical review remains separate from these
-formal checks.

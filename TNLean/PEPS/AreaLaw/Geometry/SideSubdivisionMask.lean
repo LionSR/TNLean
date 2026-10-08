@@ -54,24 +54,11 @@ theorem fineLayerSplitMask_eq_true_iff (o : ℝ × ℝ) (k₀ k : ℕ)
   simp [fineLayerSplitMask]
 
 private theorem side_interpolation (c : ℝ × ℝ) (r : ℝ) (s : Fin 4) (u : ℝ) :
-    c + r • (match s.val with
-      | 0 => (1, u)
-      | 1 => (-u, 1)
-      | 2 => (-1, -u)
-      | _ => (u, -1)) =
-    AffineMap.lineMap
-      (c + r • (match s.val with
-        | 0 => (1, -1)
-        | 1 => (-(-1), 1)
-        | 2 => (-1, -(-1))
-        | _ => (-1, -1)))
-      (c + r • (match s.val with
-        | 0 => (1, 1)
-        | 1 => (-1, 1)
-        | 2 => (-1, -1)
-        | _ => (1, -1))) ((u + 1) / 2) := by
+    c + r • cellFanSideVector s u =
+    AffineMap.lineMap (c + r • cellFanSideVector s (-1)) (c + r • cellFanSideVector s 1)
+      ((u + 1) / 2) := by
   rw [AffineMap.lineMap_apply_module]
-  fin_cases s <;> apply Prod.ext <;> dsimp <;> norm_num <;> ring
+  fin_cases s <;> apply Prod.ext <;> simp [cellFanSideVector] <;> ring
 
 /-- The indexed elementary endpoints are the whole-side affine parametrization
 at the corresponding subdivision parameters. Source: Section 11,
