@@ -87,6 +87,7 @@ on:
       - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_isometric_gap_transport.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_mixed_action.py'
@@ -169,6 +170,7 @@ on:
       - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_isometric_gap_transport.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_mixed_action.py'
@@ -268,6 +270,7 @@ jobs:
               - 'scripts/check_peps_four_cut_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_tenkz_isometric_gap_transport.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_mixed_action.py'
@@ -446,7 +449,9 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          for example in MixedEndpointComparison MixedEndpointPhase; do
+          for example in MixedEndpointComparison MixedEndpointPhase \
+              MixedEndpointOpenGap MixedEndpointUniformPathGap \
+              PhysicalIsometricGapTransport ArbitraryPhysicalMixedPathGap; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -811,7 +816,9 @@ jobs:
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_index_routing.py
+        run: |
+          python3 scripts/test_tenkz_index_routing.py
+          python3 scripts/test_tenkz_isometric_gap_transport.py
 
       - name: Test ordered mixing contraction diagrams
         if: env.TEX_CHANGED == 'true'

@@ -1,0 +1,490 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1690--1692.
+% Lean build and guarded regressions passed at 0c51478b87ef.
+% Checkpoint: CI run 37398080332, build 112058990825.
+
+\subsection{Open gaps from changes at the two boundary sites}
+
+For $p\in\{0,1\}$, let $A_p$ consist of $D_p^2$ matrices in
+$\MN{D_p}$, where $D_p\geq0$. These are the given endpoint tensors
+in their square physical-support coordinates. The mixed physical space
+at length $N$ is $(\C^{(D_0+D_1)^2})^{\otimes N}$.
+Write $H'^{\mathrm{open}}_{\gamma,N}$ for the nonwrapping sum of the
+extended two-site interaction of Definition~\ref{def:mpo_mixed_extended_support}.
+A norm gap $\eta$ above the kernel of a positive operator $H$ means
+$\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
+
+\begin{theorem}[Active and inactive endpoint sectors]
+    \label{thm:mpo_mixed_open_active_sectors}
+    \lean{MPSTensor.periodicLocalInteractionES_apply_fiber,
+        MPSTensor.periodicLocalInteractionES_commute_siteDiagonal,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty_le_twice,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerViolationCount,
+        MPSTensor.MPOSymmetry.MixedEndpointOpenInnerActive,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerViolationCount_eq_zero_iff,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty_apply,
+        MPSTensor.MPOSymmetry.mem_ker_mixedEndpointOpenInnerPenalty_iff,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.range_mixedEndpointOpenActiveProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_eq_starProjection,
+        MPSTensor.MPOSymmetry.one_sub_mixedEndpointOpenActiveProjection_le,
+        MPSTensor.MPOSymmetry.one_sub_mixedEndpointOpenActiveProjection_le_twice,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerActive_iff,
+        MPSTensor.MPOSymmetry.mixedEndpointOpen_inactive_energy_lower_bound,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_commute_parentInteraction_zero,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_commute_parentInteraction_zero,
+        MPSTensor.MPOSymmetry.mixedEndpointChainRowSector,
+        MPSTensor.MPOSymmetry.mixedEndpointChainColumnSector,
+        MPSTensor.MPOSymmetry.mixedEndpointChainRowSector_commute_openInteractionHamiltonianES,
+        MPSTensor.MPOSymmetry.mixedEndpointChainColumnSector_commute_openInteractionHamiltonianES,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty_commute_openInteractionHamiltonianES,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_commute_openInteractionHamiltonianES,
+        MPSTensor.MPOSymmetry.mixedEndpointActivePhysicalCfg_injective,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerActive_activePhysicalCfg,
+        MPSTensor.MPOSymmetry.mem_range_mixedEndpointActivePhysicalCfg_iff,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveConfigEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveConfigEquiv_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveConfigEmbedding,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveInclusion,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveInclusion_apply_active,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveInclusion_apply_inactive,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveInclusion_inner,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry_toLinearMap,
+        MPSTensor.MPOSymmetry.range_mixedEndpointActiveInclusion,
+        MPSTensor.MPOSymmetry.range_mixedEndpointActiveLinearIsometry,
+        MPSTensor.MPOSymmetry.mixedEndpointChainRowSector_commute_localInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointChainColumnSector_commute_localInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty_commute_localInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_commute_localInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointLocalInteraction_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveSpace,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry_adjoint_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry_adjoint_comp,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry_comp_adjoint,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_activeLinearIsometry,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveCompression,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction_intertwines,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointActiveLocalInteraction,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointActiveLocalInteraction_eq_map_adjoint,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction_eq_restrictedKernel_projection,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_eq_compression,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_isPositive,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_intertwines,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointActiveHamiltonian,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_eq_self_of_mem_kernel,
+        MPSTensor.MPOSymmetry.map_ker_mixedEndpointActiveHamiltonian,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointActiveHamiltonian_eq_iInf,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveWindowFiber,
+        MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveLocalInteraction_iff_fibers,
+        MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveHamiltonian_iff_fibers,
+        MPSTensor.MPOSymmetry.mixedEndpoint_open_norm_gap_of_active_norm_gap}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_physical_sectors}
+    Let $Q_N$ select the configurations for which every column register
+    except the last and every row register except the first lies in
+    the first sector. For $N\geq2$, set
+    $H_N=H'^{\mathrm{open}}_{0,N}$. This endpoint Hamiltonian satisfies
+    \begin{align}
+        [Q_N,H_N] & =0,
+                  & I-Q_N & \leq2H_N.
+        \label{eq:mpo_mixed_open_sectors}
+    \end{align}
+    The active coordinates retain two unrestricted exterior registers,
+    two first-sector inner boundary registers, and $N-2$ bulk sites.
+    Let $J_N$ denote zero extension from these coordinates and
+    $K_N=J_N^*H_NJ_N$. Then $J_N^*J_N=I$, $J_NJ_N^*=Q_N$, and
+    $J_N(\ker K_N)=\ker H_N$. A gap $\eta\geq0$ of $K_N$ gives
+    a gap $\min\{\eta,1/2\}$ of $H_N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_endpoint_projector_comparison,
+        thm:mpo_mixed_reducing_sectors,
+        thm:periodic-fixed-interaction-order}
+    Sum the inner row and column penalties over all nonwrapping bonds.
+    Each violated register contributes one, while each interaction bounds
+    the two penalties assigned to it. This gives
+    (\ref{eq:mpo_mixed_open_sectors}). Every row and column selector
+    reduces each overlapping interaction, so their active product also
+    commutes with the sum. The orthogonal decomposition
+    $v=J_Nx+y$, $Q_Ny=0$, gives
+    \begin{align}
+        \langle H_Nv,v\rangle
+         & =\langle K_Nx,x\rangle+\langle H_Ny,y\rangle,
+         & \|v\|^2                                       & =\|x\|^2+\|y\|^2.
+    \end{align}
+    Positivity converts the active norm gap into its quadratic-form
+    lower bound. The inactive estimate excludes inactive ground vectors
+    and gives the stated gap comparison.
+\end{proof}
+
+\begin{theorem}[Uniformly bounded boundary normalization]
+    \label{thm:mpo_mixed_open_boundary_normalization}
+    \lean{MPSTensor.MPOSymmetry.insertedEvalWord_factor_boundary,
+        MPSTensor.MPOSymmetry.mixedEndpointPhysicalIndex,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstPhysicalIndex,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstBoundaryLetter,
+        MPSTensor.MPOSymmetry.mixedEndpointLastBoundaryLetter,
+        MPSTensor.MPOSymmetry.mixedEndpointBase_mul_firstInclusion,
+        MPSTensor.MPOSymmetry.firstInclusion_conjTranspose_mul_mixedEndpointBase,
+        MPSTensor.MPOSymmetry.mixedEndpoint_insertedEvalWord_boundaryFactors,
+        MPSTensor.MPOSymmetry.mixedEndpointLeftTensor_firstPhysicalIndex,
+        MPSTensor.MPOSymmetry.evalWord_mixedEndpointLeftTensor_firstPhysicalIndex,
+        MPSTensor.MPOSymmetry.mixedEndpoint_insertedEvalWord_sectorFactors,
+        MPSTensor.MPOSymmetry.mixedEndpoint_insertedGroundSpaceMap_sectorFactors,
+        MPSTensor.MPOSymmetry.mixedEndpoint_insertedGroundSpaceMap_outerSpectators,
+        MPSTensor.matrixUnitPhysicalTensor,
+        MPSTensor.squarePhysicalCoordinates,
+        MPSTensor.isInjective_matrixUnitPhysicalTensor,
+        MPSTensor.rotatePhysical_squarePhysicalCoordinates,
+        MPSTensor.isUnit_squarePhysicalCoordinates,
+        MPSTensor.rotatePhysical_inv_squarePhysicalCoordinates,
+        MPSTensor.MPOSymmetry.inv_squarePhysicalCoordinates_firstBoundaryLetter,
+        MPSTensor.MPOSymmetry.inv_squarePhysicalCoordinates_lastBoundaryLetter,
+        MPSTensor.MPOSymmetry.endpointCoreCfg,
+        MPSTensor.MPOSymmetry.endpointActiveCfg,
+        MPSTensor.MPOSymmetry.endpointCoreVector,
+        MPSTensor.MPOSymmetry.endpointCoreSpectatorMap,
+        MPSTensor.MPOSymmetry.mem_range_endpointCoreSpectatorMap_iff,
+        MPSTensor.MPOSymmetry.firstBoundaryCoordinateMap,
+        MPSTensor.MPOSymmetry.lastBoundaryCoordinateMap,
+        MPSTensor.MPOSymmetry.firstBoundaryCoordinateMap_map,
+        MPSTensor.MPOSymmetry.lastBoundaryCoordinateMap_map,
+        MPSTensor.MPOSymmetry.firstBoundaryCoordinateMap_one,
+        MPSTensor.MPOSymmetry.lastBoundaryCoordinateMap_one,
+        MPSTensor.MPOSymmetry.firstBoundaryCoordinateMap_mul,
+        MPSTensor.MPOSymmetry.lastBoundaryCoordinateMap_mul,
+        MPSTensor.MPOSymmetry.firstBoundaryCoordinateEquiv,
+        MPSTensor.MPOSymmetry.lastBoundaryCoordinateEquiv,
+        MPSTensor.MPOSymmetry.firstBoundaryNormalizationEquiv,
+        MPSTensor.MPOSymmetry.lastBoundaryNormalizationEquiv,
+        MPSTensor.MPOSymmetry.firstBoundaryNormalizationEquiv_toLinearMap,
+        MPSTensor.MPOSymmetry.firstBoundaryNormalizationEquiv_symm_toLinearMap,
+        MPSTensor.MPOSymmetry.lastBoundaryNormalizationEquiv_toLinearMap,
+        MPSTensor.MPOSymmetry.lastBoundaryNormalizationEquiv_symm_toLinearMap,
+        MPSTensor.MPOSymmetry.firstBoundaryNormalizationEquivES,
+        MPSTensor.MPOSymmetry.lastBoundaryNormalizationEquivES,
+        MPSTensor.MPOSymmetry.firstBoundaryCoordinateMap_inv_actual_letters,
+        MPSTensor.MPOSymmetry.lastBoundaryCoordinateMap_inv_actual_letters,
+        MPSTensor.MPOSymmetry.activeFirstBoundaryMap,
+        MPSTensor.MPOSymmetry.activeLastBoundaryMap,
+        MPSTensor.MPOSymmetry.activeFirstBoundaryMap_one,
+        MPSTensor.MPOSymmetry.activeLastBoundaryMap_one,
+        MPSTensor.MPOSymmetry.activeFirstBoundaryMap_mul,
+        MPSTensor.MPOSymmetry.activeLastBoundaryMap_mul,
+        MPSTensor.MPOSymmetry.activeFirstBoundaryEquiv,
+        MPSTensor.MPOSymmetry.activeLastBoundaryEquiv,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalizationEquiv,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalizationEquiv_toLinearMap,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalizationEquiv_symm_toLinearMap,
+        MPSTensor.MPOSymmetry.endpointBoundaryTracePairing,
+        MPSTensor.MPOSymmetry.mixedEndpointActivePhysicalCfg,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveRestriction,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveBoundaryMap,
+        MPSTensor.MPOSymmetry.range_mixedEndpointActiveBoundaryMap,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveBoundaryMap_apply,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalization_comp_actual_eq_coreSpectator,
+        MPSTensor.MPOSymmetry.map_range_activeBoundaryNormalization_eq_coreSpectator,
+        MPSTensor.MPOSymmetry.map_range_activeBoundaryNormalizationEquiv_eq_coreSpectator,
+        MPSTensor.MPOSymmetry.mem_range_actualActive_iff_normalized_spectatorFactorization,
+        MPSTensor.MPOSymmetry.normalized_groundSpaceMap_eq_coreSpectator,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeCfg,
+        MPSTensor.MPOSymmetry.endpointLastEdgeCfg,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeCoreMap,
+        MPSTensor.MPOSymmetry.endpointLastEdgeCoreMap,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstEdgeBoundaryMap,
+        MPSTensor.MPOSymmetry.mixedEndpointLastEdgeBoundaryMap,
+        MPSTensor.MPOSymmetry.firstEdgePhysicalMap,
+        MPSTensor.MPOSymmetry.lastEdgePhysicalMap,
+        MPSTensor.MPOSymmetry.firstEdgePhysicalMap_actual_apply,
+        MPSTensor.MPOSymmetry.lastEdgePhysicalMap_actual_apply,
+        MPSTensor.MPOSymmetry.map_range_firstEdgePhysicalMap_actual_eq_core,
+        MPSTensor.MPOSymmetry.map_range_lastEdgePhysicalMap_actual_eq_core,
+        MPSTensor.MPOSymmetry.normalized_groundSpaceMap_firstEdge,
+        MPSTensor.MPOSymmetry.normalized_groundSpaceMap_lastEdge,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeBoundaryMap,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeBoundaryMap_apply,
+        MPSTensor.MPOSymmetry.range_mixedEndpointInteriorEdgeBoundaryMap,
+        MPSTensor.MPOSymmetry.firstEdgePhysicalMap_one,
+        MPSTensor.MPOSymmetry.lastEdgePhysicalMap_one,
+        MPSTensor.MPOSymmetry.firstEdgePhysicalMap_mul,
+        MPSTensor.MPOSymmetry.lastEdgePhysicalMap_mul,
+        MPSTensor.MPOSymmetry.firstEdgePhysicalEquiv,
+        MPSTensor.MPOSymmetry.lastEdgePhysicalEquiv,
+        MPSTensor.MPOSymmetry.firstEdgeNormalizationEquiv,
+        MPSTensor.MPOSymmetry.lastEdgeNormalizationEquiv,
+        MPSTensor.MPOSymmetry.firstEdgeNormalizationEquivES,
+        MPSTensor.MPOSymmetry.lastEdgeNormalizationEquivES,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstEdgeSupportES,
+        MPSTensor.MPOSymmetry.mixedEndpointLastEdgeSupportES,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeCoreSupportES,
+        MPSTensor.MPOSymmetry.endpointLastEdgeCoreSupportES,
+        MPSTensor.MPOSymmetry.map_firstEdgeNormalizationEquivES_actualSupport,
+        MPSTensor.MPOSymmetry.map_lastEdgeNormalizationEquivES_actualSupport,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstEdgeConstraintES,
+        MPSTensor.MPOSymmetry.mixedEndpointLastEdgeConstraintES,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeCoreConstraintES,
+        MPSTensor.MPOSymmetry.endpointLastEdgeCoreConstraintES,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstEdgeConstraintES_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointLastEdgeConstraintES_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointFirstEdgeConstraintES,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointLastEdgeConstraintES,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeCoreConstraintES_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.endpointLastEdgeCoreConstraintES_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.firstEdgeNormalization_symm_deformed_actualConstraint_eq_core,
+        MPSTensor.MPOSymmetry.lastEdgeNormalization_symm_deformed_actualConstraint_eq_core,
+        MPSTensor.MPOSymmetry.firstEdgeNormalization_deformed_coreConstraint_eq_actual,
+        MPSTensor.MPOSymmetry.lastEdgeNormalization_deformed_coreConstraint_eq_actual,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeSupportES,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeSupportES_eq_groundSpaceES,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeConstraintES,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeConstraintES_eq_parentInteractionES,
+        MPSTensor.MPOSymmetry.MixedEndpointEdgePosition,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeCfg,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgePhysicalCfg,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgePhysicalCfg_injective,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeConfigEmbedding,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeLinearIsometry,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeLinearIsometry_adjoint_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeLinearIsometry_apply_active,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeLinearIsometry_apply_of_not_mem_range,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeLinearIsometry_adjoint_comp,
+        MPSTensor.MPOSymmetry.mem_range_mixedEndpointEdgePhysicalCfg_iff,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeSectorProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeLinearIsometry_comp_adjoint,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeSectorProjection_commute_actualInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeBoundaryMap,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeSupportES,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeConstraintES,
+        MPSTensor.MPOSymmetry.map_actualSupport_edgeAdjoint_eq_edgeSupport,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeSectorProjection_invariant_actualSupport,
+        MPSTensor.MPOSymmetry.map_actualSupport_edgeAdjoint_eq_comap,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeSupportES_eq_comap_actualSupport,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeCompression,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeCompression_intertwines,
+        MPSTensor.MPOSymmetry.mixedEndpointEdgeCompression_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointEdgeCompression,
+        MPSTensor.MPOSymmetry.mixedEndpointEdge_compression_eq_constraint,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstEdge_compression_eq_constraint,
+        MPSTensor.MPOSymmetry.mixedEndpointLastEdge_compression_eq_constraint,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdge_compression_eq_parentInteractionES,
+        MPSTensor.rightFiberwiseLinearEquiv,
+        MPSTensor.norm_rightFiberwiseLinearEquiv_apply_le,
+        MPSTensor.norm_rightFiberwiseLinearEquiv_symm_apply_le,
+        MPSTensor.localPhysicalLinearEquivES,
+        MPSTensor.norm_localPhysicalLinearEquivES_apply_le,
+        MPSTensor.norm_localPhysicalLinearEquivES_symm_apply_le,
+        MPSTensor.norm_two_localPhysicalLinearEquivES_apply_le,
+        MPSTensor.norm_two_localPhysicalLinearEquivES_symm_apply_le,
+        MPSTensor.MPOSymmetry.activeFirstBoundaryConfigEquiv,
+        MPSTensor.MPOSymmetry.activeLastBoundaryConfigEquiv,
+        MPSTensor.MPOSymmetry.activeFirstBoundaryNormalizationEquivES,
+        MPSTensor.MPOSymmetry.activeLastBoundaryNormalizationEquivES,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalizationEquivES,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalizationEquivES_eq_trans,
+        MPSTensor.MPOSymmetry.norm_activeFirstBoundaryNormalizationEquivES_apply_le,
+        MPSTensor.MPOSymmetry.norm_activeFirstBoundaryNormalizationEquivES_symm_apply_le,
+        MPSTensor.MPOSymmetry.norm_activeLastBoundaryNormalizationEquivES_apply_le,
+        MPSTensor.MPOSymmetry.norm_activeLastBoundaryNormalizationEquivES_symm_apply_le,
+        MPSTensor.MPOSymmetry.mixedEndpointBoundaryForwardBound,
+        MPSTensor.MPOSymmetry.mixedEndpointBoundaryInverseBound,
+        MPSTensor.MPOSymmetry.mixedEndpointBoundaryForwardBound_pos,
+        MPSTensor.MPOSymmetry.mixedEndpointBoundaryInverseBound_pos,
+        MPSTensor.MPOSymmetry.norm_activeBoundaryNormalizationEquivES_apply_le,
+        MPSTensor.MPOSymmetry.norm_activeBoundaryNormalizationEquivES_symm_apply_le,
+        MPSTensor.MPOSymmetry.MixedEndpointActiveEdgeSite,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgePosition,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeStart,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeStart_surjective,
+        MPSTensor.MPOSymmetry.mixedEndpointFirstEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointLastEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointInteriorEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeSpectator,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeLinearIsometryEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeFiber,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgePlacement,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgePlacement_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointActivePhysicalCfg_edgeReplacement,
+        MPSTensor.MPOSymmetry.extractWindow_mixedEndpointActivePhysicalCfg,
+        MPSTensor.MPOSymmetry.not_active_edgeReplacement_of_not_mem_range,
+        MPSTensor.MPOSymmetry.mixedEndpointActive_edgeFiber_eq_edgeIsometry,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction_apply_edgeFiber,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLocalInteraction_eq_edgePlacement,
+        MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveLocalInteraction_iff_edgeFibers,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveFirstBoundaryMapES,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLastBoundaryMapES,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveFirstEdgePlacement_commute_lastBoundaryMap,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLastEdgePlacement_commute_firstBoundaryMap,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps,
+        MPSTensor.MPOSymmetry.mixedEndpointNormalizedEdgeConstraint,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedLocalInteraction,
+        MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveLocalInteraction_iff_normalized,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedLocalInteraction_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointActiveLocalInteraction_eq_comap_normalized,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalization_symm_deformed_actualLocal_eq_normalized,
+        MPSTensor.MPOSymmetry.activeBoundaryNormalization_deformed_normalizedLocal_eq_actual,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeStart_injective,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveEdgeStartEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_eq_sum_edges,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_eq_sum_deformed,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_eq_sum_deformed_normalized,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_isPositive,
+        MPSTensor.MPOSymmetry.ker_mixedEndpointActiveHamiltonian_eq_comap_normalized,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeSpectatorEquiv,
+        MPSTensor.MPOSymmetry.endpointLastEdgeSpectatorEquiv,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeSpectatorIsometry,
+        MPSTensor.MPOSymmetry.endpointLastEdgeSpectatorIsometry,
+        MPSTensor.MPOSymmetry.mem_endpointFirstEdgeCoreSupportES_iff_fibers,
+        MPSTensor.MPOSymmetry.mem_endpointLastEdgeCoreSupportES_iff_fibers,
+        MPSTensor.MPOSymmetry.endpointFirstEdgeCoreConstraintES_conj_spectator,
+        MPSTensor.MPOSymmetry.endpointLastEdgeCoreConstraintES_conj_spectator,
+        ContinuousLinearMap.mem_orthogonal_ker_rightFiberwiseMap_iff,
+        ContinuousLinearMap.norm_sq_eq_sum_norm_sq_rightFiber,
+        ContinuousLinearMap.rightFiber_singleRightFiber,
+        ContinuousLinearMap.rightFiberwiseMap_singleRightFiber,
+        ContinuousLinearMap.singleRightFiber_mem_orthogonal_ker_rightFiberwiseMap_iff,
+        ContinuousLinearMap.norm_gap_rightFiberwiseMap,
+        ContinuousLinearMap.norm_gap_rightFiberwiseMap_iff,
+        ContinuousLinearMap.norm_gap_rightFiberwiseMap_iff_rightFiberwiseMap,
+        MPSTensor.MPOSymmetry.endpointCoreSpectatorConfigEquiv,
+        MPSTensor.MPOSymmetry.endpointCoreSpectatorIsometry,
+        MPSTensor.MPOSymmetry.endpointExteriorFiber,
+        MPSTensor.MPOSymmetry.endpointCoreFirstEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.endpointCoreLastEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.endpointCoreInteriorEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.endpointCoreEdgeCfg,
+        MPSTensor.MPOSymmetry.endpointCoreEdgeSpectator,
+        MPSTensor.MPOSymmetry.endpointCoreEdgeConfigEquiv,
+        MPSTensor.MPOSymmetry.endpointCoreEdgeIsometry,
+        MPSTensor.MPOSymmetry.endpointCoreEdgeConstraint,
+        MPSTensor.MPOSymmetry.endpointCoreEdgeFiber,
+        MPSTensor.MPOSymmetry.endpointCoreLocalInteraction,
+        MPSTensor.MPOSymmetry.endpointCoreLocalInteraction_apply,
+        MPSTensor.MPOSymmetry.endpointCoreHamiltonian,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedLocalInteraction_apply_exteriorFiber,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedLocalInteraction_intertwines_coreSpectators,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedLocalInteraction_conj_coreSpectators,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_core,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_zeroSector}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_physical_sectors,def:injective}
+    Suppose $A_0$ is one-site injective and $N\geq3$. Changing
+    the physical coordinates at only the first and last active sites
+    yields an invertible map $F_N$. There are constants $B,C>0$,
+    independent of $N$, such that
+    $\|F_Nv\|\leq B\|v\|$ and $\|F_N^{-1}v\|\leq C\|v\|$.
+    Each actual compressed local kernel is carried by $F_N$ to the
+    corresponding normalized local kernel. The normalized Hamiltonian
+    acts on the interior coordinates independently of the two free
+    exterior registers.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_open_active_sectors}
+    The $D_0^2$ endpoint letters form a basis of $M_{D_0}$, so their
+    physical coefficient matrix is invertible. Its inverse changes
+    each diagonal boundary letter into a matrix unit, leaving the mixed
+    boundary letters and all interior $A_0$ letters unchanged. The
+    first and last normalized local ranges are respectively
+    $Y\mapsto A_0^qY$ and $Y\mapsto YA_0^q$.
+    Their exterior columns and rows are independent spectators.
+    The coordinate inclusions of these smaller edges have range
+    projections equal to products of the reducing sector selectors.
+    Thus cropping a boundary range equals pulling it back under the
+    inclusion, and its complement projection is the actual compressed
+    interaction. Extending either fixed boundary change by exterior
+    identities leaves its operator norm bound unchanged; composing the
+    two changes gives $B$ and $C$ independent of the number of bulk sites.
+\end{proof}
+
+\begin{theorem}[Uniform open gaps at both endpoints]
+    \label{thm:mpo_mixed_open_endpoint_gaps}
+    \lean{LinearEquiv.ker_adjoint_congruence,
+        LinearMap.IsPositive.norm_gap_adjoint_congruence_of_inverse_bound,
+        LinearMap.IsPositive.bounded_congruence_gap,
+        LinearEquiv.deformedConstraintProjection,
+        LinearEquiv.deformedConstraintProjection_isSymmetricProjection,
+        LinearEquiv.ker_deformedConstraintProjection,
+        LinearEquiv.adjoint_congruence_sum,
+        LinearEquiv.ker_sum_deformedConstraintProjection,
+        LinearMap.IsSymmetricProjection.deformedConstraintProjection_comparison,
+        LinearEquiv.sum_deformedConstraintProjection_comparison,
+        LinearEquiv.norm_gap_sum_deformedConstraintProjection,
+        MPSTensor.MPOSymmetry.emptyEndpointTensor,
+        MPSTensor.MPOSymmetry.mixedEndpointBase_emptyEndpointTensor,
+        MPSTensor.MPOSymmetry.bondInterpolationWeight_zeroSector,
+        MPSTensor.MPOSymmetry.bondInterpolationMatrix_zeroSector,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES,
+        MPSTensor.MPOSymmetry.openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerActive_zeroSector,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_zeroSector,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry_zeroSector_surjective,
+        MPSTensor.MPOSymmetry.mixedEndpointZeroSectorActiveEquiv,
+        MPSTensor.MPOSymmetry.mixedEndpointZeroSectorActiveEquiv_toLinearMap,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_zeroSector_intertwines,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_zeroSector_eq_conjugate_openParent,
+        MPSTensor.MPOSymmetry.exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap,
+        MPSTensor.MPOSymmetry.mixedEndpointBoundaryCondition,
+        MPSTensor.MPOSymmetry.mixedEndpointBoundaryCondition_pos,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveNormalizedHamiltonian_norm_gap_of_actual,
+        MPSTensor.MPOSymmetry.mixedEndpointActiveHamiltonian_norm_gap_of_normalized,
+        MPSTensor.MPOSymmetry.exists_mixedEndpointActiveHamiltonian_uniform_gap,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_zero_gap,
+        MPSTensor.reindex_cyclicCfg,
+        MPSTensor.cyclicRestrictES_physicalReindex,
+        MPSTensor.periodicLocalInteractionES_physicalReindex_apply,
+        MPSTensor.periodicLocalInteractionES_physicalReindex_conj,
+        MPSTensor.openInteractionHamiltonianES_physicalReindex_conj,
+        MPSTensor.MPOSymmetry.mixedEndpoint_localInteraction_one_eq_conj_swap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonian_one_eq_conj_swap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonian_one_apply_swap,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_one_gap,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_endpoints_gap}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:injective}
+    If both given endpoint tensors are one-site injective, there exist $W\geq3$ and
+    $\delta>0$ such that, for $p\in\{0,1\}$, $N\geq W$, and
+    $v\perp\ker H'^{\mathrm{open}}_{p,N}$,
+    \begin{align}
+        \delta\|v\|\leq\|H'^{\mathrm{open}}_{p,N}v\|.
+    \end{align}
+    The kernels are the actual extended open kernels with free
+    exterior registers.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_open_boundary_normalization,
+        thm:mpo_mixed_open_active_sectors,
+        thm:mpo_mixed_second_endpoint_comparison,
+        thm:injective_strict_knabe_window}
+    For orthogonal projections $P_i$ and an invertible $F$, let $Q_i$
+    project onto $(F^{-1}\ker P_i)^\perp$. Positive forward and inverse
+    norm bounds $B,C$ give
+    \begin{align}
+        C^{-2}\sum_iQ_i\leq F^*\Bigl(\sum_iP_i\Bigr)F
+        \leq B^2\sum_iQ_i.
+    \end{align}
+    Hence a gap $\eta$ of $\sum_iP_i$ gives a gap
+    $\eta/(B^2C^2)$ of $\sum_iQ_i$.
+    If $D_0=0$, the active space is zero. Otherwise first take the
+    second-sector dimension to be zero. The actual
+    interaction is then the ordinary injective $A_0$ parent interaction,
+    whose open gap is uniform at all sufficiently large lengths.
+    Normalize its two boundaries, replace its free exterior registers
+    by the enlarged registers, and undo the boundary normalization.
+    The middle step preserves the gap exactly, since the same interior
+    operator acts independently on each exterior fiber. Both normalization
+    losses are independent of volume. Apply the inactive-sector bound
+    and then exchange the endpoint sectors. The smaller of the two
+    positive constants and the larger starting length give the conclusion.
+\end{proof}
