@@ -2,7 +2,7 @@
 
 ## Scope and mathematical source
 
-This packet implements the finite-size construction in the September 24, 2026
+This note describes the finite-size construction in the September 24, 2026
 manuscript *Polynomial PEPS Approximation of Gapped Square-Grid Ground States*.
 It is the exact small-size slice of TNLean issue #8773, within the PEPS
 approximation tracker #8736. It does not prove the large-size analytic or routing
@@ -75,5 +75,5 @@ The outer-power statement retains an arbitrary positive real exponent `χ`:
 `D ≤ (C' L^r)^χ`, including `0 < χ < 1`. It does not assume that the source's
 congestion parameter was explicitly declared to be a natural number.
 
-The final `HasPEPSApproximation` corollary awaits the model interface from
-#8788. No replacement approximation predicate or duplicate model is introduced.
+The `HasPEPSApproximation` corollaries are proved against the existing model
+interface; no replacement approximation predicate or duplicate model is introduced.
