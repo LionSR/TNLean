@@ -1,0 +1,1 @@
+TNLean/PEPS/Approximation/AngularResetWidth.lean:38:7: error(lean.unknownIdentifier): Unknown constant `Real.isLittleO_log_rpow_rpow_atTop`

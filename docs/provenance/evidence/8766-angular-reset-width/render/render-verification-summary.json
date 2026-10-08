@@ -1,0 +1,31 @@
+{
+  "verification_record": "<workspace>/8766-angular-reset-width-focused/automated-verification.json",
+  "verification_record_sha256": "8f47b9f6f38ae2f6c52d9a7ab2310f2a3d0f596d5c2457056d2a2b21a8635fd9",
+  "pdf": "<workspace>/8766-angular-reset-width-focused/blueprint/src/print.pdf",
+  "pdf_sha256": "3827151dcc134acf95938cd072f13560f51dd841a29bbf41cd1d8eaf141153bd",
+  "static_html": "<workspace>/8766-angular-reset-width-focused/blueprint/web/sect0001.html",
+  "static_html_sha256": "a0ff1b8f0b6b34d5d41b4d5b574d4b7be48bc5b870f1c9e324788b2f4ec494a0",
+  "source_leaf_sha256": "3b697e79d91e91b0f3757b1b47842e671e2c261863818a57f285de7c8de9c1ae",
+  "source_lean_sha256": "439c805928d772b2d415369e3dab2b539222c6e68cd9304dd5e9d9aa54b46587",
+  "source_paper_sha256": "b88596a7f6f4f0e6b49a030f27ca9ca64aa669941d8393070fddfe49b08e9cab",
+  "pdf_pages": 5,
+  "valid_pdf_declaration_links": 4,
+  "valid_html_declaration_links": 4,
+  "equation_anchors": 3,
+  "all_source_labels": 7,
+  "internal_html_links_checked": 45,
+  "layout_errors": 0,
+  "unresolved_static_anchors": 0,
+  "visual_review": "passed",
+  "tools": {
+    "texra-blueprint": "0.3.8",
+    "plasTeX": "3.1",
+    "leanblueprint": "0.0.20"
+  },
+  "limitations": [
+    "No interactive browser check: prior browser EPERM was not bypassed.",
+    "MathJax payloads and static anchors inspected; live MathJax JavaScript execution was not tested.",
+    "Lean documentation destination names verified against production source; remote documentation deployment was not checked.",
+    "Five-page PDF retains repository title page, contents page, and empty bibliography page."
+  ]
+}

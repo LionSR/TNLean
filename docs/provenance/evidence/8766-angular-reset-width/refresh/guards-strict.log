@@ -1,0 +1,6 @@
+# Command: lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean
+# Recorded local source revision: a506d572c05ef07a7d1c748c214f73b7b00603bc
+# Byte-identical public source revision: b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca
+# Elapsed seconds: 2.149630199011881
+# Exit code: 0
+# Captured stdout/stderr follows verbatim, including all diagnostics:

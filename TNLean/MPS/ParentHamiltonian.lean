@@ -163,9 +163,15 @@ import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
 import TNLean.MPS.ParentHamiltonian.PeriodicBlockFamilyPresentation
 import TNLean.MPS.ParentHamiltonian.PeriodicBlockedGroundSpace
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
+import TNLean.MPS.ParentHamiltonian.PeriodicCornerSeparation
+import TNLean.MPS.ParentHamiltonian.PeriodicFamilyPrimitiveResolution
+import TNLean.MPS.ParentHamiltonian.PeriodicGroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.PeriodicGroundStatePresentation
+import TNLean.MPS.ParentHamiltonian.PeriodicInverseProjectionSum
 import TNLean.MPS.ParentHamiltonian.PeriodicOriginalIntersection
 import TNLean.MPS.ParentHamiltonian.PeriodicPrimitiveGroundSpace
+import TNLean.MPS.ParentHamiltonian.PeriodicResidualGroundSpace
+import TNLean.MPS.ParentHamiltonian.PeriodicResidualProjectionSum
 import TNLean.MPS.ParentHamiltonian.PeriodicSectorRepresentatives
 import TNLean.MPS.ParentHamiltonian.PeriodicShortGapContinuity
 import TNLean.MPS.ParentHamiltonian.PhysicalActionWordTupleSpan
@@ -173,6 +179,7 @@ import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
+import TNLean.MPS.ParentHamiltonian.PoweredCyclicPrimitiveResolution
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace
@@ -183,8 +190,13 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 import TNLean.MPS.ParentHamiltonian.PrimitiveLocalCommutatorGap
 import TNLean.MPS.ParentHamiltonian.PrimitiveLocalParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.PrimitiveSectorRepresentatives
+import TNLean.MPS.ParentHamiltonian.PrimitiveWitnessTransport
 import TNLean.MPS.ParentHamiltonian.ProjectorCancellation
+import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGram
+import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGramInverse
+import TNLean.MPS.ParentHamiltonian.ResidualBoundaryOverlap
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
+import TNLean.MPS.ParentHamiltonian.SectorBoundedLifts
 import TNLean.MPS.ParentHamiltonian.ShiftedParentHamiltonian
 import TNLean.MPS.ParentHamiltonian.ShortRangeHeisenbergGap
 import TNLean.MPS.ParentHamiltonian.ShortRangeHeisenbergTensor
