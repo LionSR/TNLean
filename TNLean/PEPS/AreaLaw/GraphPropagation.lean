@@ -17,7 +17,8 @@ a site `y` and an on-site operator `B` at `y`,
 `‖[τ_t(A), B]‖ ≤ C ‖A‖ ‖B‖ e^{v|t| - c d_Λ(a, y)}`, the commutator vanishes when
 `d_Λ(a, y) = ∞`, and the normalized partial-trace expectation onto the graph ball
 `N_l(a)` satisfies `‖τ_t(A) - E_{N_l(a)}(τ_t(A))‖ ≤ ‖A‖ min(2, C e^{v|t| - c l})`. The
-constants `C, v, c` are chosen from `q, R, J` before the domain and the interaction.
+constants `C, v, c` are chosen from `R` and `J` alone, before the domain and the
+interaction; the source allows dependence on `q, R, J`.
 
 The proof instantiates the general graph estimates of `QuantumCircuit` on the induced
 nearest-neighbor graph `domainGraph Λ`. The support diameter comes from the walk condition
@@ -36,13 +37,13 @@ graph; sites joined only through a hole are far apart.
 * `TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le`: the explicit
   graph-ball localization bound.
 * `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson`: Lemma 4.1 of the source, with
-  constants depending only on `q, R, J`.
+  constants depending only on `R` and `J`.
 
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*, September 24, 2026,
   Lemma 4.1 (`lem:quasilocal-lr`), `03-quasilocal.tex`, lines 52–128, with the budget
-  `eq:quasilocal-budget` (lines 31–41) and the counts of `01-preliminaries.tex`,
+  `eq:quasilocal-budget` (lines 31–39) and the counts of `01-preliminaries.tex`,
   lines 81–102. Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
@@ -103,8 +104,10 @@ namespace LocalHamiltonian
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
-/-- The term-norm bound is nonnegative as soon as one support exists. -/
-theorem nonneg_of_support (h : LocalHamiltonian Λ q R J) (X : AdmissibleSupport Λ R) :
+/-- The term-norm bound `J` is nonnegative as soon as one support exists, since the term at
+that support has norm at most `J`. Source: area law, `eq:hamiltonian`
+(`00-introduction.tex`, lines 19–25). -/
+theorem normBound_nonneg (h : LocalHamiltonian Λ q R J) (X : AdmissibleSupport Λ R) :
     0 ≤ J :=
   (norm_nonneg _).trans (h.norm_le X)
 
@@ -159,6 +162,8 @@ private theorem anchors_self (X : AdmissibleSupport Λ R) (a : Site Λ) :
 With `v_R = 1 + 2R(R + 1)` and `μ_R = 2^{v_R - 1}`, for every `μ ≥ 0` and every integer
 `n ≤ d_Λ(a, y)`,
 `‖[τ_t(A), B]‖ ≤ 2 e^{μR} ‖A‖ ‖B‖ exp(2 v_R μ_R J e^{2μR} |t| - μ n)`.
+The velocity factor `e^{2μR}` is coarser than the factor `e^{μR}` of the source's chain
+bound; only the existence of uniform constants is used downstream.
 
 Source: OpenAI area law, Lemma 4.1, `eq:quasilocal-lr` (`03-quasilocal.tex`,
 lines 52–64 and 70–112), with the budget `eq:quasilocal-budget` (lines 31–39). -/
@@ -175,7 +180,7 @@ theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
   QuantumCircuit.norm_heisenberg_commutator_le_graphDistance (domainGraph Λ) Subtype.val
     (anchors X a) (anchors_mem ha) h.term h.hermitian h.supported R
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
-    (h.sum_norm_term_containing_le (h.nonneg_of_support X)) X hA y hB μ hμ n
+    (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X hA y hB μ hμ n
     (by rwa [anchors_self]) t
 
 /-- **Exact vanishing between components.** If the anchor `a` and the site `y` lie in
@@ -218,7 +223,7 @@ theorem norm_sub_siteExpectation_graphBall_le [NeZero q] (h : LocalHamiltonian �
   have hBound := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le
     (domainGraph Λ) Subtype.val (anchors X a) (anchors_mem ha) h.term h.hermitian h.supported
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
-    (h.sum_norm_term_containing_le (h.nonneg_of_support X)) 2 2
+    (h.sum_norm_term_containing_le (h.normBound_nonneg X)) 2 2
     (fun x d => card_domainGraph_sphere_le Λ x d) X hA l t
   rwa [anchors_self] at hBound
 
@@ -269,7 +274,7 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   refine ⟨max C₁ C₂, max v₁ v₂, min c₁ (1 / 2), lt_max_of_lt_left hC₁,
     lt_max_of_lt_left hv₁, lt_min hc₁ one_half_pos, ?_⟩
   intro Λ h X a ha A hA t
-  have hJ := h.nonneg_of_support X
+  have hJ := h.normBound_nonneg X
   refine ⟨fun y B hB => ?_, fun l => ?_⟩
   · have hXY := hLR (domainGraph Λ) Subtype.val (LocalHamiltonian.anchors X a)
       (LocalHamiltonian.anchors_mem ha) h.term h.hermitian h.supported
