@@ -131,17 +131,21 @@ original open square. We state the two models separately, following
     For a unit vector $\Omega$, a real $E_0$, and $\Delta>0$, the eigenvector and
     full-system projector-gap conditions are
     \begin{align}
+        \label{eq:area_law_ground_vector}
         H\Omega & =E_0\Omega,
-        \label{eq:area_law_ground_vector}                    \\
-        H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
+    \end{align}
+    \begin{align}
         \label{eq:area_law_projector_gap}
+        H-E_0I & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
     For $A\subseteq\Lambda$, put
     \begin{align}
-        \rho_A      & =\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|,
-        \label{eq:area_law_reduced_state}                                                  \\
-        S_\Omega(A) & =-\operatorname{Tr}\rho_A\log\rho_A.
+        \label{eq:area_law_reduced_state}
+        \rho_A & =\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|,
+    \end{align}
+    \begin{align}
         \label{eq:area_law_regional_entropy}
+        S_\Omega(A) & =-\operatorname{Tr}\rho_A\log\rho_A.
     \end{align}
     All logarithms are natural, with $0\log0=0$. The reduced matrix is Hermitian,
     including when its spectrum contains zero. No condition is imposed on the
