@@ -1,0 +1,20 @@
+import TNLeanRelayScalar.EmptyGateScalar
+import TNLeanRelayScalar.NoneResidualScalar
+import TNLeanRelayMatrix.NetworkScalarAbsorption
+/-! # Axiom audit of the scalar restrictions -/
+set_option linter.hashCommand false
+namespace TNLean.PEPS.PairEffect.SourceCircuit
+#print axioms emptyGateScalar
+#print axioms emptyGateScalar_gate_of_isEmpty
+#print axioms norm_emptyGateScalar_le_one
+#print axioms eval_heq_emptyGateScalar_smul_id_of_isEmpty
+#print axioms restrict_sources_partialWord_all_eq_nil
+#print axioms restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
+#print axioms restrict_partialWord_all_localPart_eval_heq_emptyGateScalar
+#print axioms restrict_partialResidual_all_eval_heq_emptyGateScalar
+end TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.PEPS.PairEffect.Word
+#print axioms restrict_localPart_comp_scalar
+#print axioms restrict_localPart_frame_scalar
+end TNLean.PEPS.PairEffect.Word
+#print axioms TNLean.PEPS.DependentBondNetwork.network_mul_at_vertex

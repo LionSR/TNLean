@@ -1,0 +1,91 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "55910f823",
+  "modules": [
+    {
+      "module": "EmptyGateScalar",
+      "checked_source": "/tmp/tnlean-empty-gate-canonical/TNLeanRelayScalar/EmptyGateScalar.lean",
+      "checked_source_sha256": "1f54aba8305ae7259db34b26e2182f00bd235c9ca6e70e40fbc2be18c705e334",
+      "original_frozen_source": "/tmp/tnlean-empty-gate-scalar/EmptyGateScalar.lean",
+      "original_frozen_source_sha256": "7ba36ace84852d81b9a50141e21f94a733ce777985f0054ab99893a369aa6c9c",
+      "production_source": "TNLean/PEPS/Approximation/EmptyGateScalar.lean",
+      "production_source_sha256": "7c5646733dc6bd10d17fbe773bb1520a3684e383c8707e4353e3a40d3e95593e",
+      "artifact_sha256": "695a5d1f48c383cc2e060cc1880edc66afc71c9e215232fbe64f266789024fd1",
+      "strict_log": "EmptyGateScalar.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "NoneResidualGate",
+      "checked_source": "/tmp/tnlean-empty-gate-canonical/TNLeanRelayScalar/NoneResidualGate.lean",
+      "checked_source_sha256": "60eccd2863b69ff2bf7c8a4335f090633f2ccb79cefe60f2e3c8523c6e87cc43",
+      "original_frozen_source": "/tmp/tnlean-none-residual-check/TNLeanRelayNone/NoneResidualGate.lean",
+      "original_frozen_source_sha256": "c811885ca03dd270b722889d3a5b98b7c671f9b0a412dac818bd4e9abab439bb",
+      "production_source": "TNLean/PEPS/Approximation/NoneResidualGate.lean",
+      "production_source_sha256": "aed622d4f1d9ee21b8db407c0823faa17bf8a910373ce874619ac28625f0b9c5",
+      "artifact_sha256": "291bd4adf2155236f61445be75cd32c8bc50f1ec21f6ede47f44dd98c0b5d954",
+      "strict_log": "NoneResidualGate.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "NoneResidualOperations",
+      "checked_source": "/tmp/tnlean-empty-gate-canonical/TNLeanRelayScalar/NoneResidualOperations.lean",
+      "checked_source_sha256": "bac32e0e7750d950ec0af4bd3284b0b792e09527d4ced99d5ffc27db92d035ed",
+      "original_frozen_source": "/tmp/tnlean-none-residual-check/TNLeanRelayNone/NoneResidualOperations.lean",
+      "original_frozen_source_sha256": "bac32e0e7750d950ec0af4bd3284b0b792e09527d4ced99d5ffc27db92d035ed",
+      "production_source": "TNLean/PEPS/Approximation/NoneResidualOperations.lean",
+      "production_source_sha256": "f56c45f9dcfff81b6eccdfc39a26cb307eb3d87ab0313eb9706ffd0a107a226d",
+      "artifact_sha256": "5f1111c038adabfd68a08cba0a45be50d9aa38cc7ee62cb64cb23cd0d127e2b3",
+      "strict_log": "NoneResidualOperations.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "NoneResidualScalar",
+      "checked_source": "/tmp/tnlean-empty-gate-canonical/TNLeanRelayScalar/NoneResidualScalar.lean",
+      "checked_source_sha256": "8832230e928e16696f83b1f9be918c238fd38e4a7f875e08bc634a171b6777b9",
+      "original_frozen_source": "/tmp/tnlean-none-residual-check/TNLeanRelayNone/NoneResidualScalar.lean",
+      "original_frozen_source_sha256": "efba26cea92f7a3d2191c6d7ef16fc6b9d31ef85144a736d8398cc97eac46d7e",
+      "production_source": "TNLean/PEPS/Approximation/NoneResidualScalar.lean",
+      "production_source_sha256": "517125924a82abc53ecd18d2244f0289cfb1e0f52533704ec4c7a5994b84ba34",
+      "artifact_sha256": "d12065fe789e0493d456b61990340546cc83c4ff999328ba2357126cd497bb48",
+      "strict_log": "NoneResidualScalar.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "NetworkScalarAbsorption",
+      "checked_source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/NetworkScalarAbsorption.lean",
+      "checked_source_sha256": "eb2dfe99f442566b67cdc209dc99650964ff6cea5741c387c26c86d7727a1a34",
+      "original_frozen_source": null,
+      "original_frozen_source_sha256": null,
+      "production_source": "TNLean/PEPS/Approximation/NetworkScalarAbsorption.lean",
+      "production_source_sha256": "eb2dfe99f442566b67cdc209dc99650964ff6cea5741c387c26c86d7727a1a34",
+      "artifact_sha256": "1b156d475b460a6ea18d5a56ee9d7cf40ea853132269e18c5559e79a96cf9b3c",
+      "strict_log": "NetworkScalarAbsorption.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "module_count": 5,
+  "public_export_count": 11,
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "all_public_audit_source": "ScalarAllPublicAudit.lean",
+  "all_public_audit_log": "ScalarAllPublicAudit.strict.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "1e9413e8a7a37538d6b44e134e7bf3b32f5934123dc395bef86fa634e7e96adf",
+  "prerequisites": [
+    "dd33dc9888a91c630d177f38f800b4215b6e24b1",
+    "f15416476c61b343f79d19602dffe8b5489a49f0"
+  ]
+}
