@@ -1,19 +1,16 @@
 \section{Entropy cost of a partial depth row}
 
-\begin{theorem}[Regional dimension and increment bounds]
+\begin{theorem}[Regional increment bound]
     \label{thm:area_partial_row_increment}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log,TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le}
+    \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le}
     Let $\Omega$ be a unit vector on a finite lattice domain with local dimension
     $q$. For disjoint regions $R,B$, one has
     \begin{align}
-        S_\Omega(B)                     & \le |B|\log q,   \\
         |S_\Omega(R\cup B)-S_\Omega(R)| & \le S_\Omega(B).
     \end{align}
 \end{theorem}
 \begin{proof}
-    The first inequality follows from the logarithmic rank bound and
-    $\operatorname{rank}\rho_B\le q^{|B|}$. Subadditivity gives the upper
-    increment bound. Applying it to $(R\cup B)^c$ and $B$, then using purity,
+    Subadditivity gives the upper increment bound. Applying it to $(R\cup B)^c$ and $B$, then using purity,
     gives $S_\Omega(R)\le S_\Omega(R\cup B)+S_\Omega(B)$.
 \end{proof}
 
@@ -32,8 +29,9 @@
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
-    \uses{thm:area_partial_row_increment,lem:area_law_template_depth_layers}
+    \uses{thm:area_partial_row_increment,thm:area_law_entropy_dimension,lem:area_law_template_depth_layers}
     Set $R=A\cap(T_{j-1}\setminus T)$ and $B=A\cap Y$.
     These regions are disjoint and $|B|\le |Y|\le n$.
-    The regional increment bound gives the claim since $\log q\ge0$.
+    The regional increment bound and $S_\Omega(B)\le|B|\log q$
+    (Theorem~\ref{thm:area_law_entropy_dimension}) give the claim since $\log q\ge0$.
 \end{proof}

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
-import TNLean.PEPS.AreaLaw.TwoFamilies
+import TNLean.PEPS.AreaLaw.EntropyDimension
 
 /-!
 # Entropy cost of a partial template depth row
@@ -22,41 +22,7 @@ at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/08-scanner.tex
-Labels: scanner:templates.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8754-partial-row-dimension
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log
-Provenance-ID: 8754-partial-row-increment
-Downstream declaration: TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le
-Provenance-ID: 8754-partial-row-template
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le
--/
-
 namespace TNLean.PEPS.AreaLaw
-
-/-- The log-dimension estimate for the actual regional density of a unit vector.
-Source: Lemma 9.4, the dimension estimate in the partial-row step. -/
-theorem regionalEntropy_le_card_mul_log (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (R : Finset (Site Λ)) :
-    regionalEntropy Λ q Ω R ≤ R.card * Real.log q := by
-  classical
-  rw [regionalEntropy_eq_finiteProduct]
-  let β := fun _ : Site Λ ↦ Fin q
-  have hρ := FiniteProduct.reducedPure_posSemidef β Ω R
-  have htr := FiniteProduct.trace_reducedPure β Ω hΩ R
-  calc
-    FiniteProduct.entropy β Ω R ≤ Real.log (FiniteProduct.reducedPure β Ω R).rank :=
-      vonNeumannEntropy_le_log_rank hρ htr
-    _ ≤ Real.log (Fintype.card (FiniteProduct.Configuration β R)) := by
-      apply Real.log_le_log
-      · exact_mod_cast hρ.rank_pos_of_trace_one htr
-      · exact_mod_cast Matrix.rank_le_card_width (FiniteProduct.reducedPure β Ω R)
-    _ = R.card * Real.log q := by
-      simp [FiniteProduct.Configuration, β, Fintype.card_fun, Nat.cast_pow, Real.log_pow]
 
 /-- Adding a disjoint region changes entropy by at most its entropy.
 Source: Lemma 9.4, partial-row step; both signs follow from subadditivity and

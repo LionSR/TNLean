@@ -16,21 +16,9 @@ from the actual `Template`, with `Ctpl ≥ 24` and `1 ≤ j ≤ s₀`.
 
 The two local auxiliary bounds use the actual normalized physical vector and
 canonical regional entropy. They specialize existing accepted QIC finite-product
-subadditivity, complementary entropy and log-rank results. The bridge
-`regionalEntropy_eq_finiteProduct` is consumed unchanged from #8800.
+subadditivity, complementary entropy and log-rank results. The dimension bound is `regionalEntropy_le_card_mul_log` from
+`EntropyDimension`.
 No entropy assumptions, extra Hamiltonian assumptions, or new density definitions
 are introduced. Normalization handles the empty tensor product, and `q ≥ 1`
 makes multiplication by `log q` monotone. The dimension helper even allows q=0
 when a normalized vector exists (for example, an empty domain).
-
-Dependencies: corrected model #8788 at `162fa69a`, geometry #8798 at `a8da4372`,
-and entropy consumer #8800 at `55ec6dcd`, with its accepted QIC pin `826a56f5`.
-Dependency merges preserve production source and regenerate aggregators.
-#8797/#8803 remain owned separately and are not modified. Full safe-box,
-dyadic-cover and shell entropy results remain open.
-
-Validation: production proof and regressions await normal CI. Local Lean release
-installation succeeded, but the Mathlib cache endpoint returned HTTP 403; no
-Mathlib proof sources were rebuilt. Strict test and axiom-print commands are
-registered after the full build; the production target runs early. No `leanok`
-marks are applied before successful kernel validation.
