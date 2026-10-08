@@ -1,7 +1,0 @@
-Source: https://github.com/LionSR/TNLean/actions/runs/37608201285/job/112748797262
-Revision: 73f37d596041194bdf6c722ac32edc4e4a9325f0
-GitHub step 20, Test template rows strictly and audit axioms: success.
-The actual thin-polygon Template regression and 23 guarded axiom checks passed.
-Each guard required exactly [propext, Classical.choice, Quot.sound].
-The candidate polygon and row-bound modules introduced after this revision are not covered.
-2026-10-07T11:08:50.2483529Z ##[group]Run lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean

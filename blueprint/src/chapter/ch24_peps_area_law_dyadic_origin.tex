@@ -1,0 +1,54 @@
+\section{The translated origin and integer lattice points}
+\label{sec:area_law_dyadic_origin}
+
+The geometric construction in \cite[Section~11]{OpenAI2026AreaLaw}
+uses a translated origin whose coordinates, sum and difference are
+nonintegral.
+
+% Source: 10-geometry.tex, prop:two-families, lines 150--154 and 545--559,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Actual edge containment in these four line families is a separate result.
+
+\begin{definition}[The prescribed origin]
+    \label{def:area_law_dyadic_origin}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin}
+    \leanok
+    Set $o=(\sqrt 2,\sqrt 3)\in\mathbb R^2$.
+\end{definition}
+
+\begin{theorem}[Four nonintegrality assertions]
+    \label{thm:area_law_dyadic_origin_nonintegral}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_nonintegral}
+    \leanok
+    \uses{def:area_law_dyadic_origin}
+    None of $o_1$, $o_2$, $o_1+o_2$ and $o_1-o_2$ is an integer.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_dyadic_origin}
+    Squaring positive rational bounds gives
+    $4/3<\sqrt 2<2$ and $5/3<\sqrt 3<2$; also
+    $\sqrt 2<\sqrt 3$. Thus $o_1,o_2\in(1,2)$,
+    $o_1+o_2\in(3,4)$ and $o_1-o_2\in(-1,0)$.
+    No integer lies strictly between consecutive integers.
+\end{proof}
+
+\begin{theorem}[Integer-translated supporting lines avoid the lattice]
+    \label{thm:area_law_dyadic_origin_lines}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_supporting_lines_avoid_lattice}
+    \leanok
+    \uses{def:area_law_dyadic_origin}
+    For every $m\in\mathbb Z$, none of the four lines
+    \begin{align}
+        x_1     & =o_1+m,     \\
+        x_2     & =o_2+m,     \\
+        x_1+x_2 & =o_1+o_2+m, \\
+        x_1-x_2 & =o_1-o_2+m
+    \end{align}
+    contains a point of $\mathbb Z^2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_origin_nonintegral}
+    If $x\in\mathbb Z^2$ satisfies one of these equations, subtracting
+    $m$ expresses the corresponding coordinate, sum or difference of
+    $o$ as an integer. Each possibility contradicts nonintegrality.
+\end{proof}

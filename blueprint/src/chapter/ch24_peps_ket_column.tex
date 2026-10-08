@@ -1,0 +1,296 @@
+\section{Extracting one ket column from an operator network}
+\label{sec:peps_ket_column}
+The statements below formalize \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
+September 24, 2026, \texttt{07-assembly.tex}, lines 67--94 (statement
+lines 67--78, proof lines 79--94). Throughout, $\Omega$ is a unit vector in a
+finite-dimensional space with a distinguished orthonormal basis
+$\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space; neither
+positivity nor Hermiticity of $\sigma$ is assumed. The trace norm is
+independent of the order in which the basis is enumerated, so it may be
+evaluated along any enumeration.
+
+\begin{lemma}[Columns of an operator and the trace norm]
+    \label{lem:peps_ket_column_hilbert_schmidt}
+    \lean{TNLean.PEPS.Approximation.sum_norm_sq_le_traceNorm_reindex_sq}
+    \leanok
+    For every operator $E$ on a finite-dimensional space with orthonormal
+    basis $\{\ket z\}$,
+    \[
+        \sum_z \lVert E\ket z\rVert^2 \le \lVert E\rVert_1^2 .
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    The left side is the sum of the squared moduli of all matrix entries of
+    $E$, which is the squared Hilbert--Schmidt norm $\lVert E\rVert_2^2$.
+    The Hilbert--Schmidt norm is at most the trace norm.
+\end{proof}
+
+\begin{lemma}[Selection of one index]
+    \label{lem:peps_ket_column_selection}
+    \lean{TNLean.PEPS.Approximation.exists_ne_zero_norm_sq_le_of_sum}
+    \leanok
+    Let $f_z$ be vectors and $a_z$ complex numbers indexed by a finite set,
+    with $\sum_z\lVert f_z\rVert^2\le\eta^2$ and $\sum_z|a_z|^2=1$. Then some
+    index $z$ has $a_z\ne0$ and $\lVert f_z\rVert^2\le\eta^2|a_z|^2$. No
+    lower bound on $|a_z|$ is required, and $\eta=0$ is allowed.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $S$ be the set of indices with $a_z\ne0$; it is nonempty and
+    $\sum_{z\in S}|a_z|^2=1$. If every $z\in S$ had
+    $\lVert f_z\rVert^2>\eta^2|a_z|^2$, summing over $S$ would give
+    $\eta^2<\sum_{z\in S}\lVert f_z\rVert^2\le\eta^2$, a contradiction.
+\end{proof}
+
+\begin{lemma}[Normalization within twice the error]
+    \label{lem:peps_ket_column_normalization}
+    \lean{TNLean.PEPS.Approximation.normalize_sub_le_two_mul,
+        TNLean.PEPS.Approximation.exists_phase_normalize_sub_le}
+    \leanok
+    Let $\lVert\Omega\rVert=1$ and $\eta<1$. If $\lVert w-\Omega\rVert\le\eta$,
+    then $w\ne0$ and $\lVert w/\lVert w\rVert-\Omega\rVert\le2\eta$.
+    Consequently, if $v=f+a\Omega$ with $a\ne0$ and
+    $\lVert f\rVert\le\eta|a|$, then $v\ne0$ and some real $\theta$ satisfies
+    $\lVert v/\lVert v\rVert-e^{i\theta}\Omega\rVert\le2\eta$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The reverse triangle inequality gives $|\lVert w\rVert-1|\le\eta<1$, so
+    $w\ne0$. Then
+    $\lVert w/\lVert w\rVert-w\rVert=|1-\lVert w\rVert|\le\eta$, and the
+    triangle inequality through $w$ gives the bound $2\eta$. For the second
+    statement put $w=v/a$, so that $w-\Omega=f/a$ has norm at most $\eta$.
+    Since $v/\lVert v\rVert=(a/|a|)\,w/\lVert w\rVert$, the phase
+    $e^{i\theta}=a/|a|$ transfers the bound.
+\end{proof}
+
+\begin{theorem}[Nonzero column close to a pure state]
+    \label{thm:peps_ket_column_vector}
+    \lean{TNLean.PEPS.Approximation.exists_column_ne_zero_of_traceNorm_sub_pure_le,
+        TNLean.PEPS.Approximation.exists_eq_column_ne_zero_of_traceNorm_sub_pure_le,
+        Matrix.toEuclideanLin_single_one_apply}
+    \leanok
+    Let $\Omega$ be a unit vector and let $\sigma$ be an operator with
+    $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$. Then some basis
+    column $v=\sigma\ket z$ is nonzero, and some real $\theta$ satisfies
+    \[
+        \Big\lVert\frac{v}{\lVert v\rVert}-e^{i\theta}\Omega\Big\rVert\le2\eta .
+    \]
+    This is the vector part of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
+    with exactly its hypotheses. The source bounds the minimum over
+    $\theta$; an explicit $\theta$ is equivalent, since the minimum over the
+    circle is attained.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_ket_column_hilbert_schmidt,lem:peps_ket_column_selection,
+        lem:peps_ket_column_normalization}
+    Put $E=\sigma-\ket\Omega\langle\Omega|$, $f_z=E\ket z$ and
+    $a_z=\braket{\Omega}{z}$. By the first lemma
+    $\sum_z\lVert f_z\rVert^2\le\eta^2$, and $\sum_z|a_z|^2=\lVert\Omega\rVert^2=1$.
+    The selection lemma gives $z$ with $a_z\ne0$ and
+    $\lVert f_z\rVert\le\eta|a_z|$. The column satisfies
+    $\sigma\ket z=f_z+a_z\Omega$, and the normalization lemma concludes.
+\end{proof}
+
+\begin{definition}[Operator networks and fixed inputs on directed multigraphs]
+    \label{def:peps_ket_column_dependent_fix_input}
+    \lean{TNLean.PEPS.Approximation.operatorNetworkMatrix,
+        TNLean.PEPS.Approximation.fixInput,
+        TNLean.PEPS.Approximation.network_fixInput,
+        TNLean.PEPS.Approximation.operatorNetworkMatrix_mulVec_single}
+    \leanok
+    \uses{def:peps_dependent_network}
+    Consider a contraction on a directed multigraph with edge-dependent
+    virtual alphabets $X_e$ and bond matrices $B_e$, whose physical index at
+    each vertex $v$ is an output-input pair $(s_v,r_v)$. Its contraction
+    defines an operator $\sigma$ with entries $\sigma_{\tau\rho}$ indexed by
+    output and input configurations. For an input configuration $z$, the
+    fixed-input network has, at each vertex $v$, the tensor
+    $(\eta,s)\mapsto A_v(\eta,(s,z_v))$, on the same multigraph with the same
+    alphabets and bond matrices. Its contraction at $\tau$ equals
+    $\sigma_{\tau z}$, so its contracted vector is the column $\sigma\ket z$.
+\end{definition}
+
+\begin{theorem}[Ket column of an operator network on a directed multigraph]
+    \label{thm:peps_ket_column_dependent}
+    \lean{TNLean.PEPS.Approximation.exists_fixInput_network_of_traceNorm_sub_pure_le}
+    \leanok
+    \uses{def:peps_ket_column_dependent_fix_input}
+    Let $\sigma$ be the operator contracted from an operator network as in
+    the preceding definition, with the same local physical space for output
+    and input at each vertex, and let $\Omega$ be a unit vector with
+    $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$. Then for some
+    product-basis input $z$ the fixed-input network, on the same multigraph
+    with the same virtual alphabets and bond matrices, contracts to the
+    column $\psi=\sigma\ket z$, which is nonzero and satisfies
+    $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some
+    real $\theta$. This is \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS} for
+    this network model.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ket_column_vector,def:peps_ket_column_dependent_fix_input}
+    Apply the vector statement to $\sigma$ and identify the selected column
+    with the fixed-input contraction, coordinate by coordinate.
+\end{proof}
+
+\begin{definition}[Operator tensors and fixed inputs on a simple graph]
+    \label{def:peps_ket_column_tensor_fix_input}
+    \lean{TNLean.PEPS.Approximation.operatorCoeff,
+        TNLean.PEPS.Tensor.fixInput,
+        TNLean.PEPS.Tensor.bondDim_fixInput,
+        TNLean.PEPS.Approximation.stateCoeff_fixInput,
+        TNLean.PEPS.Approximation.operatorCoeff_mulVec_single}
+    \leanok
+    \uses{def:peps_tensor,def:peps_stateCoeff}
+    Let $A$ be a tensor on a finite simple graph with physical dimension
+    $d^2$, each physical index read as an output-input pair in
+    $\{0,\dots,d-1\}^2$. Its coefficients define an operator $\sigma$ on
+    $(\C^d)^{\otimes V}$. For an input configuration $z$, the fixed-input
+    tensor has physical dimension $d$ and, at each vertex $v$, the components
+    of $A$ with input index $z_v$. Its bond dimensions are those of $A$ on
+    every edge, and its state is the column $\sigma\ket z$.
+\end{definition}
+
+\begin{theorem}[Ket column of an operator tensor on a simple graph]
+    \label{thm:peps_ket_column_tensor}
+    \lean{TNLean.PEPS.Approximation.exists_fixInput_stateCoeff_of_traceNorm_sub_pure_le}
+    \leanok
+    \uses{def:peps_ket_column_tensor_fix_input}
+    Let $\sigma$ be the operator of an operator tensor $A$ on a finite simple
+    graph, and let $\Omega$ be a unit vector with
+    $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$. Then for some
+    product-basis input $z$ the fixed-input tensor has the bond dimensions
+    of $A$, and its state $\psi=\sigma\ket z$ is nonzero and satisfies
+    $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some
+    real $\theta$. This is \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS} for
+    this tensor model.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ket_column_vector,def:peps_ket_column_tensor_fix_input}
+    Apply the vector statement to $\sigma$; fixing inputs leaves every bond
+    dimension unchanged, and the state of the fixed-input tensor is the
+    selected column.
+\end{proof}
+
+The assembly of \cite[\S8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
+lines 9--99) applies the column lemma to an operator network and then
+realizes the resulting ket network as a PEPS on the open $L\times L$ square
+in the sense of \cite[\S1.1]{OpenAI2026PolynomialPEPS}
+(\texttt{00-introduction.tex}, lines 20--34). The statements below
+instantiate the column lemma on both presentations of square-grid tensors
+from the exact square-grid contraction. An operator tensor on the open
+square is a square-grid tensor with physical dimension $q^2$, each physical
+index read as an output-input pair in $\{0,\dots,q-1\}^2$.
+
+\begin{definition}[Fixed inputs on the open square]
+    \label{def:peps_ket_column_square_fix_input}
+    \lean{TNLean.PEPS.Approximation.Pinned.operatorMatrix,
+        TNLean.PEPS.Approximation.Pinned.fixInput,
+        TNLean.PEPS.Approximation.Pinned.contractPEPS_fixInput_apply,
+        TNLean.PEPS.Approximation.Pinned.contractPEPS_fixInput,
+        TNLean.PEPS.Approximation.Vector.Tensor.operatorMatrix,
+        TNLean.PEPS.Approximation.Vector.Tensor.fixInput,
+        TNLean.PEPS.Approximation.Vector.Tensor.bondDim_fixInput,
+        TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim_fixInput,
+        TNLean.PEPS.Approximation.Vector.Tensor.contract_fixInput_apply,
+        TNLean.PEPS.Approximation.Vector.Tensor.contract_fixInput}
+    \leanok
+    \uses{def:peps_square_local_presentations}
+    Let $A_v$ be operator tensors on the open square with edge dimensions
+    $D_e$. Their contraction defines an operator $\sigma$ with entries
+    $\sigma_{\tau\rho}$ indexed by output and input configurations. For an
+    input configuration $z$, the fixed-input tensors are
+    $A_v((s,z_v),\,\cdot\,)$ in the physical-first presentation and
+    $A_v(\,\cdot\,,(s,z_v))$ in the virtual-first presentation, with the
+    same edge dimensions $D_e$ (in the virtual-first presentation, the same
+    positive dimensions and hence the same maximum bond dimension). Their contraction is exactly the column
+    $\sigma\ket z$.
+\end{definition}
+
+\begin{lemma}[Fixed inputs and the native square-grid tensor]
+    \label{lem:peps_ket_column_square_transport}
+    \lean{TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_fixInput,
+        TNLean.PEPS.Approximation.vectorTensorToGraphTensor_fixInput,
+        TNLean.PEPS.Approximation.operatorCoeff_pinnedTensorToGraphTensor,
+        TNLean.PEPS.Approximation.operatorCoeff_vectorTensorToGraphTensor}
+    \leanok
+    \uses{def:peps_ket_column_square_fix_input,thm:peps_square_grid_contraction,
+        def:peps_ket_column_tensor_fix_input}
+    Fixing the inputs commutes with the transport of square-grid tensors to
+    tensors on the open square graph, and the operator of a square-grid
+    operator network equals the operator of its transported graph tensor.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_square_grid_contraction}
+    Both sides of the first identity have the same dimension on every edge
+    and the same components, coordinate by coordinate. The second identity
+    is the equality of square-grid contractions applied at each pair of
+    output and input configurations.
+\end{proof}
+
+\begin{theorem}[Ket column of an operator network on the open square]
+    \label{thm:peps_ket_column_square}
+    \lean{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le,
+        TNLean.PEPS.Approximation.Vector.Tensor.exists_fixInput_contract_of_traceNorm_sub_pure_le}
+    \leanok
+    \uses{def:peps_ket_column_square_fix_input}
+    Let $\sigma$ be the operator of an operator network on the open
+    $L\times L$ square with edge dimensions $D_e$, and let $\Omega$ be a unit
+    vector with $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$.
+    Then for some product-basis input $z$ the fixed-input tensors, with the
+    same edge dimensions $D_e$, contract to the column $\Phi=\sigma\ket z$,
+    which is nonzero and satisfies
+    $\lVert\Phi/\lVert\Phi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some
+    real $\theta$. This is \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS} on the
+    open square, with exactly its hypotheses; $\sigma$ need not be positive
+    or Hermitian.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ket_column_vector}
+    Apply the vector statement to $\sigma$ and identify the selected column
+    with the contraction of the fixed-input tensors.
+\end{proof}
+
+\begin{corollary}[Column extraction for the main theorem]
+    \label{cor:peps_ket_column_square_main}
+    \lean{TNLean.PEPS.Approximation.Pinned.pos_of_contractPEPS_ne_zero,
+        TNLean.PEPS.Approximation.Pinned.exists_peps_of_traceNorm_sub_pure_le,
+        TNLean.PEPS.Approximation.Vector.Tensor.exists_peps_of_traceNorm_sub_pure_le}
+    \leanok
+    \uses{def:peps_ket_column_square_fix_input}
+    Let an operator network on the open $L\times L$ square have edge
+    dimensions $D_e\le B$, and let its operator $\sigma$ satisfy
+    $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$ for a unit
+    vector $\Omega$. Then for every $\varepsilon\ge2\eta$ there is a nonzero
+    PEPS $\Phi$ on the same grid with edge dimensions $0<D_e\le B$ and
+    \begin{align}
+        \min_{\theta}\Big\lVert\frac{\Phi}{\lVert\Phi\rVert}
+        -e^{i\theta}\Omega\Big\rVert\le\varepsilon .
+    \end{align}
+    With $B=CL^c$ and $\varepsilon=L^{-1}$ the conclusion is that of
+    \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
+    (\texttt{00-introduction.tex}, lines 36--57) for one lattice size.
+    The source applies the column lemma on the party graph and then routes
+    the ket network onto the grid (\texttt{07-assembly.tex}, lines
+    96--177). To use the corollary instead, the routing must be applied to
+    the operator network before the column is fixed. The two steps commute:
+    fixing the inputs acts site by site on physical indices, and the
+    routing leaves physical coordinates unchanged (\texttt{07-assembly.tex},
+    lines 125--126 and 159--160). Sizes $L<L_0$ are treated separately in
+    the source by an exact spanning-tree PEPS (\texttt{07-assembly.tex},
+    lines 205--212) and do not pass through the corollary.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ket_column_square}
+    Take the fixed-input tensors of the preceding theorem; their edge
+    dimensions are those of the operator network. These dimensions are
+    positive because the column is nonzero: if some $D_e$ vanished, the
+    contraction would be an empty sum.
+\end{proof}

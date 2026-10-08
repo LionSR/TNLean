@@ -53,8 +53,9 @@ verification.
 
 ## Serialize local builds
 
-The seed command and the build wrapper use the standard macOS `lockf` utility
-with one lock file in Git's common directory. This serializes cooperating
+The seed command and the build wrapper acquire a blocking BSD file lock through
+Python 3's `fcntl.flock`, using one lock file in Git's common directory. Descriptor
+9 remains open in the command and its children. This serializes cooperating
 commands across TNLean worktrees without sharing writable package checkouts:
 
 ```bash
@@ -104,6 +105,20 @@ because it exercises the APFS clone operation, so run it manually on macOS:
 python3 scripts/test_lake_build_hotspots.py
 scripts/test_seed_lake_build.sh
 ```
+
+## Main CI cache production
+
+`pr-ci.yml` keeps one running workflow and at most one pending workflow per ref.
+New pushes to `main` replace the pending run without cancelling the running
+one, allowing it to reach the successful-build cache save despite frequent
+merges. Manual dispatches on `main` share this policy and group. Pull requests
+and dispatches on other refs still cancel superseded running workflows.
+
+This can delay checks for the latest main commit until the running workflow
+finishes; it does not guarantee a build for every intermediate commit or make
+a failing build save a cache. Cache keys still identify the built commit and
+all three root inputs. The cache guards and full build requirements below are
+unchanged.
 
 ## Narrow compatible-main CI seed
 
@@ -187,3 +202,15 @@ It creates disposable tiny projects and serializes targets to check unchanged
 reuse, upstream/dependent invalidation, independent reuse, missing traces, broken
 source rejection, and refusal of removed modules with surviving artifacts. It
 never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
+
+### Focused rectangular PEPS regression before the root build
+
+The finite rectangular dual-path CI check runs after cache setup and provenance
+pruning. It first requires the prebuilt `Mathlib.olean`, then runs Lake's
+fail-fast build on `TorusDualRectangleFlux` and `TorusDualWinding`, which are
+exactly the regression file's imports. Only after these complete import
+closures are rebuilt does it elaborate `TNLeanTest/TorusDualRectangle.lean`
+with strict options and warnings as errors. The workflow guard tests check
+this narrow exception's order, module targets, regression path, imports, and
+failure behavior. All other direct Lean regressions remain after the full
+root build. No dependency pin or artifact provenance rule changes.

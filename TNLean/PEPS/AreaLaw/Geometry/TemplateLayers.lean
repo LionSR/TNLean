@@ -17,28 +17,6 @@ Original formalization of manuscript Lemma 9.4; no upstream Lean proof text
 is reused. The template model has no additional regularity fields.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_of_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_eq_icc
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_succ_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_latticerow_layer_le_four
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_latticerow_dilation_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_dilation_row_domain
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_dilation_layer_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template_layer_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open scoped BigOperators

@@ -1,0 +1,269 @@
+\section{Tag encodings with regional zero resets}
+\label{sec:peps_hole_encoder}
+
+Let $V$ be a finite set of sites, with finite coordinate sets $A_v$, and
+choose a configuration $z\in\prod_{v\in V}A_v$. Write
+$\mathcal H_R=\C^{\prod_{v\in R}A_v}$ and
+$\ket{0_R}=\bigotimes_{v\in R}\ket{z_v}$.
+For nested regions $R_0\subseteq\cdots\subseteq R_{n-1}$ and subspaces
+$S_j\subseteq\mathcal H_{R_j}$, let $\widetilde S_j$ be the projected images
+of Definition~\ref{def:peps_nested_cylinder_images}, and put
+$\mathcal E=\sum_{j<n}\mathcal C_{R_j}(S_j)$.
+The tag and zero-reset construction is the linear map appearing in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/05-frames.tex\#L50-L69}{adaptive hole encoding}
+of the September 24, 2026 polynomial-PEPS manuscript.
+% Source: 05-frames.tex, lines 13--97, at
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a; eq:hole-projector,
+% eq:hole-encoder, eq:encoder-contraction, and the empty-outer convention.
+% These entries concern one hole's finite-dimensional encoder only.
+% They do not assert the geometric approximation input, ownership changes,
+% the multi-hole frame estimate, or the full source Lemma 6.3.
+
+\begin{definition}[Coordinate reset]
+    \label{def:peps_coordinate_reset}
+    \lean{TNLean.PEPS.coordinateResetMatrix}
+    \leanok
+    For a finite coordinate set $A$, a coordinate $a_0\in A$, and an
+    arbitrary vector $v\in\C^A$, define
+    $Z_{a_0}(v)=\ket{a_0}\bra v$.
+    Its entry at $(a,b)$ is $\overline{v(b)}$ if $a=a_0$, and zero otherwise.
+\end{definition}
+
+\begin{theorem}[Reset Gram operators and basis projectors]
+    \label{thm:peps_coordinate_reset_gram}
+    \lean{
+        TNLean.PEPS.coordinateResetMatrix_gram,
+        TNLean.PEPS.coordinateRangeProjector_eq_sum_basis
+    }
+    \leanok
+    \uses{def:peps_coordinate_reset}
+    For any $v\in\C^A$ and any orthonormal basis $(b_k)_{k\in B}$ of a
+    subspace $S\subseteq\C^A$,
+    \begin{align}
+        Z_{a_0}(v)^\dagger Z_{a_0}(v) & =\ketbra v v,
+        \label{eq:peps_reset_gram}
+    \end{align}
+    and
+    \begin{align}
+        P_S & =\sum_{k\in B}\ketbra{b_k}{b_k}.
+        \label{eq:peps_inside_basis_projector}
+    \end{align}
+    The reset identity does not require $v$ to be normalized.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The only nonzero output coordinate of $Z_{a_0}(v)$ is $a_0$.
+    Its contribution to the Gram entry at $(a,b)$ is
+    $v(a)\overline{v(b)}$. Expansion in an orthonormal basis gives
+    $P_S\psi=\sum_k b_k\langle b_k,\psi\rangle$.
+\end{proof}
+
+\begin{definition}[Tag register and zero-reset encoding]
+    \label{def:peps_hole_encoder}
+    \lean{
+        TNLean.PEPS.HoleEncoderTag,
+        TNLean.PEPS.holeEncoderBasis,
+        TNLean.PEPS.holeEncoder,
+        TNLean.PEPS.holeEncoder_apply,
+        TNLean.PEPS.holeEncoder_eq_zero_of_not_reset,
+        TNLean.PEPS.holeEncoder_eq_zero_of_complement_ne
+    }
+    \leanok
+    \uses{def:peps_nested_cylinder_images,def:peps_coordinate_reset}
+    Set $d_j=\dim\widetilde S_j$ and choose an orthonormal basis
+    $(v_{j\ell})_{0\leq\ell<d_j}$ of each $\widetilde S_j$.
+    Define the tag set $T=\{(j,\ell):0\leq j<n,\ 0\leq\ell<d_j\}$
+    and the tag space $\mathcal J=\C^T$. The encoding
+    $K\colon\mathcal H_V\to\mathcal J\otimes\mathcal H_V$ is
+    \begin{align}
+        K & =\sum_{j<n}\sum_{\ell<d_j}\ket{j,\ell}\otimes
+        \left[(\ket{0_{R_j}}\bra{v_{j\ell}})_{R_j}
+            \otimes I_{V\setminus R_j}\right].
+        \label{eq:peps_hole_encoder}
+    \end{align}
+    In particular, the output retains one raw register at every site.
+    For input and output configurations $y,x\in\prod_{v\in V}A_v$,
+    its matrix coefficient is
+    \begin{align}
+        K_{((j,\ell),x),y}
+        \label{eq:peps_hole_encoder_coefficient}
+         & =
+        \begin{cases}
+            \overline{v_{j\ell}(y\vert_{R_j})},
+               & x\vert_{R_j}=z\vert_{R_j},\quad
+            x\vert_{V\setminus R_j}=y\vert_{V\setminus R_j}, \\
+            0, & \text{otherwise}.
+        \end{cases}
+    \end{align}
+    The reset region in this formula is $R_j$, determined by the tag.
+    At a fixed tag $t=(j,\ell)$, the following tensor product depicts its summand.
+    % Formula: |j,l> tensor (|0_Rj><v_jl| tensor I_(V\Rj)).
+    % Ink-to-index: the top row is the inside covector and reset ket;
+    % the middle row is the tag ket; the bottom box is the complement identity.
+    % No legs are contracted internally. The left ports are y|Rj and y|Rc;
+    % the right ports are x|Rj, (j,l), and x|Rc, all physical coordinates.
+    % Boundary signature: zero virtual ports and five physical ports,
+    % comprising two input and three output bundles. The two output raw
+    % bundles regroup to one full configuration x. The tag sum is external.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+            \tn[at=(1,1), name=holeInsideBra, skin=box,
+                ports={180:physical:$y\vert_{R_j}$}]{\bra{v_{j\ell}}}
+            \tn[at=3 e of holeInsideBra, name=holeResetKet, skin=box,
+                ports={0:physical:$x\vert_{R_j}$}]{\ket{0_{R_j}}}
+            \tn[at=2 s of holeResetKet, name=holeTagKet, skin=box,
+                ports={0:physical:$t$}]{\ket{j,\ell}}
+            \tn[at=4 s of holeInsideBra, name=holeComplement, skin=box,
+                ports={180:physical:$y\vert_{V\setminus R_j}$,
+                        0:physical:$x\vert_{V\setminus R_j}$}]{I_{V\setminus R_j}}
+        \end{tenkz}
+    \end{center}
+\end{definition}
+
+\begin{theorem}[Dimension of the tag register]
+    \label{thm:peps_hole_encoder_tag_dimension}
+    \lean{
+        TNLean.PEPS.finrank_coordinateSubspaceES,
+        TNLean.PEPS.card_holeEncoderTag,
+        TNLean.PEPS.card_holeEncoderTag_le
+    }
+    \leanok
+    \uses{def:peps_hole_encoder}
+    Identifying coordinate vectors with their Euclidean Hilbert space
+    preserves the dimension of every inside subspace.
+    The tag dimension satisfies
+    \begin{align}
+        \dim\mathcal J=|T|
+         & =\sum_{j<n}\dim\widetilde S_j
+        \leq\sum_{j<n}\dim S_j.
+        \label{eq:peps_hole_encoder_tag_dimension}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_nested_cylinder_orthogonalization}
+    The tags form a disjoint union of sets of cardinality $d_j$.
+    Sum the inside-dimension inequalities
+    $\dim\widetilde S_j\leq\dim S_j$.
+\end{proof}
+
+\begin{theorem}[The Gram operator of the encoding]
+    \label{thm:peps_hole_encoder_gram}
+    \lean{TNLean.PEPS.holeEncoder_gram}
+    \leanok
+    \uses{def:peps_hole_encoder}
+    The encoding has Gram operator
+    \begin{align}
+        K^\dagger K
+         & =\sum_{j<n}P_{\widetilde S_j}\otimes I_{V\setminus R_j}
+        =P_{\mathcal E}.
+        \label{eq:peps_hole_encoder_gram}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_coordinate_reset_gram,thm:peps_nested_cylinder_projector_sum}
+    Orthogonality of the tag vectors removes all products between distinct
+    summands of~(\ref{eq:peps_hole_encoder}). For each remaining summand,
+    $\braket{0_{R_j}}{0_{R_j}}=1$, so its Gram operator is
+    $\ketbra{v_{j\ell}}{v_{j\ell}}\otimes I_{V\setminus R_j}$.
+    Summing over the orthonormal basis of $\widetilde S_j$ gives
+    $P_{\widetilde S_j}\otimes I_{V\setminus R_j}$.
+    Theorem~\ref{thm:peps_nested_cylinder_projector_sum} identifies the sum
+    over $j$ with $P_{\mathcal E}$.
+\end{proof}
+
+\begin{theorem}[Contraction and projected norm]
+    \label{thm:peps_hole_encoder_norm}
+    \lean{
+        TNLean.PEPS.holeEncoder_opNorm_le_one,
+        TNLean.PEPS.holeEncoder_norm_le,
+        TNLean.PEPS.holeEncoder_norm_eq_projector
+    }
+    \leanok
+    \uses{def:peps_hole_encoder}
+    For every $\psi\in\mathcal H_V$,
+    \begin{align}
+        \|K\psi\| & =\|P_{\mathcal E}\psi\|\leq\|\psi\|.
+        \label{eq:peps_hole_encoder_norm}
+    \end{align}
+    Thus $\|K\|\leq1$, and $K$ preserves the norm on $\mathcal E$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_hole_encoder_gram}
+    Since $P_{\mathcal E}$ is an orthogonal projector, the $C^*$-identity gives
+    $\|K\|^2=\|K^\dagger K\|=\|P_{\mathcal E}\|\leq1$.
+    Also,
+    \begin{align}
+        \|K\psi\|^2
+         & =\langle\psi,K^\dagger K\psi\rangle
+        =\langle\psi,P_{\mathcal E}\psi\rangle
+        =\|P_{\mathcal E}\psi\|^2.
+    \end{align}
+    Taking nonnegative square roots gives the norm equality, and
+    $\|K\psi\|\leq\|K\|\|\psi\|\leq\|\psi\|$ gives the inequality.
+    For $\psi\in\mathcal E$, we have $P_{\mathcal E}\psi=\psi$.
+\end{proof}
+
+\begin{definition}[Identity encoding]
+    \label{def:peps_identity_hole_encoder}
+    \lean{
+        TNLean.PEPS.identityHoleEncoder,
+        TNLean.PEPS.identityHoleEncoder_mulVec
+    }
+    \leanok
+    With a singleton tag set $\{\ast\}$, define
+    $K_{\mathrm{id}}\psi=\ket{\ast}\otimes\psi$.
+    This is the encoding used when an outer square has empty physical sample.
+\end{definition}
+
+\begin{theorem}[Identity Gram operator and norm]
+    \label{thm:peps_identity_hole_encoder}
+    \lean{
+        TNLean.PEPS.identityHoleEncoder_gram,
+        TNLean.PEPS.identityHoleEncoder_norm
+    }
+    \leanok
+    \uses{def:peps_identity_hole_encoder}
+    The identity encoding satisfies $K_{\mathrm{id}}^\dagger K_{\mathrm{id}}=I$.
+    For every $\psi\in\mathcal H_V$,
+    $\|K_{\mathrm{id}}\psi\|=\|\psi\|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The sum over the singleton tag has one term, and the raw matrix is $I$.
+    Thus the Gram matrix is $I^\dagger I=I$.
+    Equality of Gram matrices gives equality of the vector norms.
+\end{proof}
+
+\begin{theorem}[Zero encodings]
+    \label{thm:peps_hole_encoder_zero}
+    \lean{
+        TNLean.PEPS.holeEncoder_empty,
+        TNLean.PEPS.holeEncoder_zero_spaces
+    }
+    \leanok
+    \uses{def:peps_hole_encoder}
+    If $n=0$ or every $S_j=0$, then $T$ is empty and $K=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_hole_encoder_tag_dimension}
+    An empty family has no branch index. If every $S_j=0$, the tag
+    dimension bound gives $|T|\leq\sum_{j<n}\dim(0)=0$.
+    Hence $T$ is empty. In either case there are no tag coordinates,
+    so the matrix is zero.
+\end{proof}
+
+\begin{remark}[Empty families and empty regions]
+    If $n=0$, the tag set $T$ is empty and $K=0$;
+    also $\mathcal E=0$, in agreement with~(\ref{eq:peps_hole_encoder_gram}).
+    More generally, a zero-dimensional projected image contributes no tags.
+    For an empty region $R_j$, the inside configuration set is a singleton
+    and $\mathcal H_{R_j}=\C$; the reset condition is automatic and the
+    complement is all of $V$.
+    The separate choice $K_{\mathrm{id}}$ has one tag and retains every
+    raw configuration.
+\end{remark}
