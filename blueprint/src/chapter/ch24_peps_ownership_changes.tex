@@ -253,6 +253,41 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     along the composition.
 \end{definition}
 
+\begin{theorem}[Composition without additional pair effects]
+    \label{thm:peps_monomial_composition_counts}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.precomp_props,
+        TNLean.PEPS.PairEffect.PartyChain.postcomp_props,
+        TNLean.PEPS.PairEffect.PartyChain.precomp,
+        TNLean.PEPS.PairEffect.PartyChain.postcomp,
+        TNLean.PEPS.PairEffect.PartyChain.eval_precomp,
+        TNLean.PEPS.PairEffect.PartyChain.eval_postcomp}
+    \leanok
+    \uses{def:peps_monomial_parties}
+    Let $M$ be an allowed monomial using only parties in $S$. Let $W_0$ and
+    $W_1$ be allowed compositions containing no pair effects, also using only
+    parties in $S$, whose output and input registers respectively match the
+    input and output registers of $M$. Let $M_0$ be the monomial formed by
+    preceding $M$ by $W_0$, and $M_1$ the monomial formed by following $M$
+    by $W_1$. Both are allowed and use only parties in $S$. If $F_N$ denotes
+    the operator of a monomial $N$, then $F_{M_0}=F_M\circ F_{W_0}$ and
+    $F_{M_1}=F_{W_1}\circ F_M$. Writing $s(N)$ and $e(N)$ for its numbers
+    of pair sources and pair effects, the counts satisfy
+    \begin{align}
+        s(M_0) & =s(W_0)+s(M),\notag \\
+        s(M_1) & =s(M)+s(W_1),\notag \\
+        e(M_0) & =e(M_1)=e(M).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    For the preceding composition, combine $W_0$ with the first segment
+    containing no pair effects. For the following composition, induct along the
+    effects of $M$ and combine its final segment with $W_1$. The local
+    contraction and normalized-source conditions are preserved by
+    composition, the source counts add, and every original effect is kept
+    exactly once. The operators compose in the stated order.
+\end{proof}
+
 \begin{lemma}[Matrices on registers of one party]
     \label{lem:peps_front_registers}
     \lean{TNLean.PEPS.PairEffect.matL,
@@ -438,7 +473,53 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.tagMerge,
         TNLean.PEPS.EncodedFrame.eval_tagSplit,
         TNLean.PEPS.EncodedFrame.eval_tagMerge,
-        TNLean.PEPS.EncodedFrame.exists_tagWord_of_perm}
+        TNLean.PEPS.EncodedFrame.exists_tagWord_of_perm,
+        TNLean.PEPS.PairEffect.Word.frameList_props,
+        TNLean.PEPS.PairEffect.Word.appendNil_props,
+        TNLean.PEPS.PairEffect.Word.dropNil_props,
+        TNLean.PEPS.EncodedFrame.relabelHead_props,
+        TNLean.PEPS.EncodedFrame.partWordApp_props,
+        TNLean.PEPS.EncodedFrame.unpartWordApp_props,
+        TNLean.PEPS.EncodedFrame.relabelSitesApp_props,
+        TNLean.PEPS.EncodedFrame.relabelSites_props,
+        TNLean.PEPS.PairEffect.Word.assocWord_props,
+        TNLean.PEPS.PairEffect.Word.unassocWord_props,
+        TNLean.PEPS.PairEffect.Word.swapPairs_props,
+        TNLean.PEPS.EncodedFrame.tagSplit_props,
+        TNLean.PEPS.EncodedFrame.tagMerge_props,
+        TNLean.PEPS.PairEffect.Word.isAllowed_frameList_iff,
+        TNLean.PEPS.PairEffect.Word.usesOnly_frameList_iff,
+        TNLean.PEPS.PairEffect.Word.sourceCount_frameList,
+        TNLean.PEPS.PairEffect.Word.isAllowed_assocWord,
+        TNLean.PEPS.PairEffect.Word.usesOnly_assocWord,
+        TNLean.PEPS.PairEffect.Word.sourceCount_assocWord,
+        TNLean.PEPS.PairEffect.Word.isAllowed_unassocWord,
+        TNLean.PEPS.PairEffect.Word.usesOnly_unassocWord,
+        TNLean.PEPS.PairEffect.Word.sourceCount_unassocWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_partWord,
+        TNLean.PEPS.EncodedFrame.usesOnly_partWord,
+        TNLean.PEPS.EncodedFrame.sourceCount_partWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_unpartWord,
+        TNLean.PEPS.EncodedFrame.usesOnly_unpartWord,
+        TNLean.PEPS.EncodedFrame.sourceCount_unpartWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_partWordApp,
+        TNLean.PEPS.EncodedFrame.usesOnly_partWordApp,
+        TNLean.PEPS.EncodedFrame.sourceCount_partWordApp,
+        TNLean.PEPS.EncodedFrame.isAllowed_unpartWordApp,
+        TNLean.PEPS.EncodedFrame.usesOnly_unpartWordApp,
+        TNLean.PEPS.EncodedFrame.sourceCount_unpartWordApp,
+        TNLean.PEPS.EncodedFrame.isAllowed_relabelSites,
+        TNLean.PEPS.EncodedFrame.usesOnly_relabelSites,
+        TNLean.PEPS.EncodedFrame.sourceCount_relabelSites,
+        TNLean.PEPS.EncodedFrame.isAllowed_relabelSitesApp,
+        TNLean.PEPS.EncodedFrame.usesOnly_relabelSitesApp,
+        TNLean.PEPS.EncodedFrame.sourceCount_relabelSitesApp,
+        TNLean.PEPS.EncodedFrame.isAllowed_tagSplit,
+        TNLean.PEPS.EncodedFrame.usesOnly_tagSplit,
+        TNLean.PEPS.EncodedFrame.sourceCount_tagSplit,
+        TNLean.PEPS.EncodedFrame.isAllowed_tagMerge,
+        TNLean.PEPS.EncodedFrame.usesOnly_tagMerge,
+        TNLean.PEPS.EncodedFrame.sourceCount_tagMerge}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         def:peps_monomial_parties}
@@ -449,12 +530,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     keeping the order within both parts, and back; reassociating and
     interchanging blocks of registers; splitting the tag registers of a
     concatenated list of holes into those of the two parts, and merging them.
-    Naming a register with an equal owner label moves nothing. If a second
-    list of holes is a reordering of the first, with pairwise disjoint outer
+    These reorderings may be performed before arbitrary untouched registers.
+    Adjoining or removing an empty trailing list is an identity and uses no
+    party or pair resource. Naming a register with an equal owner label moves
+    nothing. If a second list of holes is a reordering of the first, with
+    pairwise disjoint outer
     footprints, there are a relabelling of the tags that preserves the raw
     part of the encoding and such a composition sending $\ket\tau$ to the
     relabelled $\ket\tau$ (the canonical identification of tag orderings,
     \texttt{05-frames.tex}, lines 84--85).
+
+    More generally, adjoining untouched registers before any composition
+    containing no pair effects preserves whether it is allowed, whether it
+    uses only the parties of a given set, and its number of pair sources.
+    Its operator is the identity on the added registers tensored with the
+    original operator, under the prescribed tensor identifications.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -463,6 +553,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     reordering of the holes, induct on the reordering: an exchange of two
     adjacent holes is an exchange of their tag registers, and the raw parts of
     the encodings of the two holes commute by disjointness of supports.
+    Adjoining untouched registers changes none of the original operations,
+    so induction on the added list preserves each of the stated properties.
 \end{proof}
 
 \begin{lemma}[Grouped monomials on the registers of a frame]
@@ -478,6 +570,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.ungroupWord_props,
         TNLean.PEPS.EncodedFrame.merge,
         TNLean.PEPS.EncodedFrame.relabelRest,
+        TNLean.PEPS.EncodedFrame.relabelRest_props,
         TNLean.PEPS.EncodedFrame.eval_place,
         TNLean.PEPS.EncodedFrame.sheetPlace,
         TNLean.PEPS.EncodedFrame.sum_single_merge,
@@ -491,8 +584,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     and similarly after it. Moving the raw registers of $T$ and of $U$ in
     front by exchanges of tensor factors and grouping each block into one
     register by a unitary at its owner is an allowed monomial using only
-    these owners. If a map acts on the two grouped registers, followed by the
-    tag registers and the raw registers of $E$, as $M\otimes\id$, then
+    these owners and no pair resource; ungrouping has the same properties.
+    Naming the untouched raw registers of $E$ by their equal owner labels
+    also uses no party or pair resource. If a map acts on the two grouped
+    registers, followed by the tag registers and the raw registers of $E$,
+    as $M\otimes\id$, then
     grouping at the owners before, applying it, and ungrouping at the owners
     after acts on the registers of the frame, in canonical coordinates, as
     $\id_{\rm tags}\otimes(\id_E\otimes M)$.
@@ -510,11 +606,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
-        TNLean.PEPS.EncodedFrame.Frame.death_bounded,
-        TNLean.PEPS.PairEffect.PartyChain.precomp,
-        TNLean.PEPS.PairEffect.PartyChain.postcomp,
-        TNLean.PEPS.PairEffect.PartyChain.eval_precomp,
-        TNLean.PEPS.PairEffect.PartyChain.eval_postcomp}
+        TNLean.PEPS.EncodedFrame.Frame.death_bounded}
     \leanok
     \uses{thm:peps_frame_birth,def:peps_frame_registers,
         lem:peps_frame_registers_coordinates,def:peps_monomial_parties}
@@ -538,7 +630,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
-        thm:peps_frame_birth_bounded_grouped,lem:peps_grouped_monomial_placement}
+        thm:peps_frame_birth_bounded_grouped,lem:peps_grouped_monomial_placement,
+        thm:peps_monomial_composition_counts}
     Take the splitting data of Theorem~\ref{thm:peps_frame_birth}. The
     registers of $T$ and $U$ are held by $P_\circ$ before the birth, and those
     of $T$ by $Q_\circ$ and those of $U$ by $P_\circ$ after it; the owners on
