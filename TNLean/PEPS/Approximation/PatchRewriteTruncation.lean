@@ -32,14 +32,17 @@ is not formalized. `exists_contractive_approx` gives the product terms as explic
 of normalized vectors and covectors on the open-leg groups of the patch vertices (each group on at
 most two parties of the specified list), of product zero vectors on the selected hole squares, of
 tag basis vectors, and of identities (`SiteChain.termOp_apply`); their identification with the
-operators of allowed monomials (`PairEffect.PartyChain`) on a layout of the frame's registers by
-owner, with one register per site and per tag, is not constructed. The number of terms is
+operators of allowed monomials (`PairEffect.PartyChain`) on the registers of the frames, one per
+site and per tag (`EncodedFrame.layoutRegs`, `EncodedFrame.layoutIso` in
+`TNLean.PEPS.Approximation.FrameRegisters`), is not constructed. The number of terms is
 bounded through the number `N` of branches only (`card_branch_le`); it becomes polynomial in `L`
 with the cylinder-term bound of Proposition 4.1, which the patch data do not record, and bounded
 numbers of patches and affected holes. Documented in
-`docs/paper-gaps/polypeps_small_rewrite_monomials.tex`. Elimination: construct that register
-layout, write each product term as an allowed party chain on it with the front-register calculus
-(`PairEffect.eval_localMap`), and carry the cylinder-term bound.
+`docs/paper-gaps/polypeps_small_rewrite_monomials.tex`. Elimination: write each product term as
+an allowed party chain on the registers of the frames, moving the registers of each open-leg group
+in front with the reordering words of `TNLean.PEPS.Approximation.SiteRegisters` and reading the
+explicit matrices with the front-register calculus (`PairEffect.eval_localMap`), and carry the
+cylinder-term bound.
 
 ## Main definitions
 
@@ -627,9 +630,9 @@ specified list (`exists_owners_of_isOpen_inl`, `exists_owners_of_isOpen_inr`), o
 zero vectors of the hole encodings, and of the identity on the sites outside the selected patch
 squares (`termOp_apply`).
 
-The reading of each product term as an allowed monomial of Theorem 5.2 on a layout of the
-frame's registers, and a polynomial bound on `N`, are not part of this statement; see the scope
-restriction in the module docstring.
+The reading of each product term as an allowed monomial of Theorem 5.2 on the registers of the
+frames, and a polynomial bound on `N`, are not part of this statement; see the scope restriction
+in the module docstring.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
 proof lines 254–341. -/
