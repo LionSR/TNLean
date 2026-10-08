@@ -1,0 +1,23 @@
+Command: lake env lean docs/provenance/evidence/8758-fan-frontiers-near-mark-axioms.lean
+Revision: 8f86fd6d2e20a77f6c130274cbaad6c5b9f3a60e
+Elapsed seconds: 5.261
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_frontier_subset_outer_and_radials' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.fineLayer_near_mark_quarter_mesh' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer_fineScale' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_avoid_lattice' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion_frontier_avoid_lattice' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_lattice_mem_iff_initialOpenRegion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
