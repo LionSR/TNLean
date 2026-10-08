@@ -1,0 +1,498 @@
+{
+  "original-sources/GaussianSourceIntegrability.lean.gz": {
+    "uncompressed_sha256": "5cacb8725ffda72f0461f370aed5fc81c5f4d3dfd9f34f98b8ce6e1a8b04cd41",
+    "uncompressed_bytes": 3715
+  },
+  "original-sources/SourceGaussianBranchDensity.lean.gz": {
+    "uncompressed_sha256": "1f7d46e0ace2fafb2f054d3ca8fa226f983795cbbb996e6a427072cac4e96dd6",
+    "uncompressed_bytes": 8131
+  },
+  "original-sources/SourceGaussianBranchReindex.lean.gz": {
+    "uncompressed_sha256": "27486b9b8a2b6210b8bd29938ad424b732049008b4063d747fa1b85d23fede14",
+    "uncompressed_bytes": 2838
+  },
+  "original-sources/PhysicalOutputContraction.lean.gz": {
+    "uncompressed_sha256": "881a4a6648d32da00d3171cb1e36eb662af31ccd4dec4e30ed0086d966f51249",
+    "uncompressed_bytes": 13726
+  },
+  "original-sources/SourceGaussianMoments.lean.gz": {
+    "uncompressed_sha256": "f431ec3a05d030663473b27adfc2d8c506ee5baec764aaafe28e5b5cd0801873",
+    "uncompressed_bytes": 5906
+  },
+  "original-sources/SourceGaussianVectorDensity.lean.gz": {
+    "uncompressed_sha256": "40753eefe6a4caad727c6a9388d6efdb8cfb3d65e35a0a6e33748d7cbb3831c7",
+    "uncompressed_bytes": 4506
+  },
+  "original-sources/SourcePhysicalBasisInvariance.lean.gz": {
+    "uncompressed_sha256": "849d9c0bf31d323d46537787f450049b3499158d56f602029214bd29da1017de",
+    "uncompressed_bytes": 4718
+  },
+  "original-sources/GaussianPhysicalSource.lean.gz": {
+    "uncompressed_sha256": "b8dc95b5256df3be162e0477d7e3873c9f485ffc5389948c8cac5a1c568cf459",
+    "uncompressed_bytes": 6670
+  },
+  "original-sources/SourceGaussianPhysicalIntegrability.lean.gz": {
+    "uncompressed_sha256": "e2750e8d0cf601620dae0ffe1054c63ad5a14b86cdcb0274b88b32f4f9e2b60e",
+    "uncompressed_bytes": 8829
+  },
+  "original-sources/SeparatedPhysicalDensity.lean.gz": {
+    "uncompressed_sha256": "1b8c3d11a0b2bc23d2bc18981c4b5e31ef923a83e626e26cfc0288209401f6a0",
+    "uncompressed_bytes": 4464
+  },
+  "original-sources/PhysicalBasisInvariance.lean.gz": {
+    "uncompressed_sha256": "f11729d9bcfeb4ae3fc284a657eeea525153c005ea7628bea6c6744371531cb3",
+    "uncompressed_bytes": 4783
+  },
+  "original-sources/GaussianSeparatedPhysicalDensity.lean.gz": {
+    "uncompressed_sha256": "24e8984ed699eee6dea7c6cfd9a6081d3e657d8f179e13f61dbf50577d260728",
+    "uncompressed_bytes": 5909
+  },
+  "original-sources/SourceCircuitLifetime.lean.gz": {
+    "uncompressed_sha256": "f270552a8407514061cb34d8f917265c868b21ddeb14de9fa8c8594e745376ca",
+    "uncompressed_bytes": 7198
+  },
+  "original-sources/CorrectedSourcePartition.lean.gz": {
+    "uncompressed_sha256": "a41cbf1189f4c324dc39244ce166e7057ddcb026f1e337346358ddaa760eac29",
+    "uncompressed_bytes": 8164
+  },
+  "original-sources/SeparatedSchmidtOutput.lean.gz": {
+    "uncompressed_sha256": "2c713cdad1ec034ea611b2966a74fccca15d4bc1d260b4899f4b54c9598da5ab",
+    "uncompressed_bytes": 8101
+  },
+  "original-sources/ExteriorSourceContraction.lean.gz": {
+    "uncompressed_sha256": "943c6c653b5c4fb065948a63e447788cd67a378ac20e67c7842a7d9721f8199c",
+    "uncompressed_bytes": 3544
+  },
+  "original-sources/SourceSamplingCount.lean.gz": {
+    "uncompressed_sha256": "2480e46f81835e89bcba17c30893766237e7231a4d1d16ae1cf5debb99e2ccea",
+    "uncompressed_bytes": 5758
+  },
+  "original-sources/PhysicalBlockTraceNorm.lean.gz": {
+    "uncompressed_sha256": "8a4dd353f0c52c4c19ffe3daf9d02aa51f2c3b0f6c6916cf3a2db791a87b6d86",
+    "uncompressed_bytes": 4158
+  },
+  "original-sources/PartyPartitionAppend.lean.gz": {
+    "uncompressed_sha256": "014a45f22955c82327b17abaf62735f288b0ecc7db652fd92286ef5f27402ae8",
+    "uncompressed_bytes": 8712
+  },
+  "original-sources/PreparedSourceVectorDensity.lean.gz": {
+    "uncompressed_sha256": "2f5c31275bf7ae1c1b8ac35f635bed7b7e3e76c80b709e93372cc8d7830574f7",
+    "uncompressed_bytes": 3193
+  },
+  "original-sources/WeightedPhysicalSource.lean.gz": {
+    "uncompressed_sha256": "d1a1b036a1fd2f8e2254769039489eafb802cb5e21e4d2de6f0ce3b8a254d8eb",
+    "uncompressed_bytes": 15780
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitLifetime.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourcePhysicalBasisInvariance.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceSamplingCount.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PhysicalOutputContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceBlockMatrix.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceGaussianMoments.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ExteriorSourceContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SeparatedPhysicalDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PreparedMatrixNorm.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GaussianPhysicalSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceGaussianPhysicalIntegrability.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceGaussianBranchReindex.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GaussianSourceIntegrability.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PartyPartitionAppend.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WeightedPhysicalSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.QICLeanInterface.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SeparatedSchmidtOutput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PreparedSourceVectorDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceGaussianBranchDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GaussianSeparatedPhysicalDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceGaussianVectorDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceFrameMatrix.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedSourcePartition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourceGateDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "611aa58d4ad1b7240452b1f31bc5a6f31a0e7619bbce2a6954b3ccc13f639f58",
+    "uncompressed_bytes": 600987
+  },
+  "imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "75253061fe01df96c95b9e38052967366e59074b8320e6e7042d0372ca197494",
+    "uncompressed_bytes": 6429453
+  },
+  "declaration-check/lean_declarations.txt.gz": {
+    "uncompressed_sha256": "50d6ccade1c984c8b3eadedafde653f30636362cd9020c3090b21507fa826f5b",
+    "uncompressed_bytes": 1052824
+  },
+  "tactic-pattern-scan.log.gz": {
+    "uncompressed_sha256": "684d6c9c5ac362c68028d1c0ee8d80587a6f11d6c88b54ac4539b385f56e56b8",
+    "uncompressed_bytes": 373
+  },
+  "initial-checks/initial-checks/ordinary-comment-line-length/diagnostics.log.gz": {
+    "uncompressed_sha256": "dffdfde3baeee23c91addf6d491bccd76df91d153dec0d09492bbbde64b6ca06",
+    "uncompressed_bytes": 450
+  },
+  "initial-checks/initial-checks/ordinary-comment-line-length/SourceGaussianPhysicalIntegrability.lean.gz": {
+    "uncompressed_sha256": "c6b0c6d88c4b3035b741fe76f07297b03608e9c53134321daa2af7695f8956d4",
+    "uncompressed_bytes": 9652
+  },
+  "initial-checks/initial-checks/ordinary-comment-line-length/build-commands.json.gz": {
+    "uncompressed_sha256": "148c093b9bbf20d400771e3136e70e1f872f022175cc0ea4dda300f22f4fd173",
+    "uncompressed_bytes": 26128
+  },
+  "initial-checks/initial-checks/provenance-line-length/diagnostics.log.gz": {
+    "uncompressed_sha256": "dffdfde3baeee23c91addf6d491bccd76df91d153dec0d09492bbbde64b6ca06",
+    "uncompressed_bytes": 450
+  },
+  "initial-checks/initial-checks/provenance-line-length/SourceGaussianPhysicalIntegrability.lean.gz": {
+    "uncompressed_sha256": "7e6c444ac0ce948b1b1ccc83d408f00115bca60e23502d71278b9f183b19ffda",
+    "uncompressed_bytes": 9653
+  },
+  "initial-checks/initial-checks/provenance-line-length/build-commands.json.gz": {
+    "uncompressed_sha256": "a66e4374bcd21fa90d77be4e412f24cb0275823bcfb173a91ba950cdf94a633b",
+    "uncompressed_bytes": 23237
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/build-commands.json.gz": {
+    "uncompressed_sha256": "f78bd905ba912346fa28d7ba89b613f7cb79325d2a1627e9675aceda3b6c3384",
+    "uncompressed_bytes": 14081
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean.lean.gz": {
+    "uncompressed_sha256": "9ab4dd293ef89b70bc7d650db97440837a42c4852f1fb5282925372e551f754a",
+    "uncompressed_bytes": 599
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/build-commands.json.gz": {
+    "uncompressed_sha256": "53841c11da04337270c3fd577d72dbfc18f04aaad4eb914a539dfa20bed702fe",
+    "uncompressed_bytes": 5213
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean.lean.gz": {
+    "uncompressed_sha256": "9ab4dd293ef89b70bc7d650db97440837a42c4852f1fb5282925372e551f754a",
+    "uncompressed_bytes": 599
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean/PEPS.lean.gz": {
+    "uncompressed_sha256": "55514d8b59105f8da498f59432ef8dfcbe9e9817a8208b14457fade89da7f9dc",
+    "uncompressed_bytes": 24782
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean/PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/imported-audit/axiom-dependencies.json.gz": {
+    "uncompressed_sha256": "61005151981ae5dba1479b37471dc887b81e785d8dea698701169f1b23cb9fb0",
+    "uncompressed_bytes": 11476
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "611aa58d4ad1b7240452b1f31bc5a6f31a0e7619bbce2a6954b3ccc13f639f58",
+    "uncompressed_bytes": 600987
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/imported-audit/audit-command.json.gz": {
+    "uncompressed_sha256": "bf90eeb62fe4cce763164bd9275bd6d77161e90cbaf2f1518c14d8ac7731fbda",
+    "uncompressed_bytes": 984
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/imported-audit/axioms.log.gz": {
+    "uncompressed_sha256": "b1f62751cc1aad57ea44dcb7ed442857036a01c9e09bb6eb61b9f06c5decbc99",
+    "uncompressed_bytes": 10959
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "9c8c7b9029b9dd58da7ab1d56946fa63ca727c76571b0c70ddd232e32598d3be",
+    "uncompressed_bytes": 11104
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "b375cbf14f7472a67c2b69d470c4c21fd75abddf218dd03e43836372179edca8",
+    "uncompressed_bytes": 6429453
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean/PEPS/Approximation.lean.gz": {
+    "uncompressed_sha256": "88d076a93ae0c0f40f49501c360e4677d8af6d323049993d02d95129ca947bee",
+    "uncompressed_bytes": 6703
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean/PEPS/Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean/PEPS/Approximation/PartyPartitionAppend.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-extensionality-refactor/TNLean/PEPS/Approximation/PartyPartitionAppend.lean.gz": {
+    "uncompressed_sha256": "70b5742627b5d09b4c908bce6f29800603fab6abcf4c876de61ffb1e8d3b89f6",
+    "uncompressed_bytes": 9364
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS.lean.gz": {
+    "uncompressed_sha256": "55514d8b59105f8da498f59432ef8dfcbe9e9817a8208b14457fade89da7f9dc",
+    "uncompressed_bytes": 24782
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/imported-audit/axiom-dependencies.json.gz": {
+    "uncompressed_sha256": "61005151981ae5dba1479b37471dc887b81e785d8dea698701169f1b23cb9fb0",
+    "uncompressed_bytes": 11476
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "611aa58d4ad1b7240452b1f31bc5a6f31a0e7619bbce2a6954b3ccc13f639f58",
+    "uncompressed_bytes": 600987
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/imported-audit/audit-command.json.gz": {
+    "uncompressed_sha256": "eac1d7cb179f0a90c46f9f32a9d1fb5e64dc5f4566e999ee7eb7fcff10403e87",
+    "uncompressed_bytes": 983
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/imported-audit/axioms.log.gz": {
+    "uncompressed_sha256": "b1f62751cc1aad57ea44dcb7ed442857036a01c9e09bb6eb61b9f06c5decbc99",
+    "uncompressed_bytes": 10959
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "9c8c7b9029b9dd58da7ab1d56946fa63ca727c76571b0c70ddd232e32598d3be",
+    "uncompressed_bytes": 11104
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "75253061fe01df96c95b9e38052967366e59074b8320e6e7042d0372ca197494",
+    "uncompressed_bytes": 6429453
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation.lean.gz": {
+    "uncompressed_sha256": "88d076a93ae0c0f40f49501c360e4677d8af6d323049993d02d95129ca947bee",
+    "uncompressed_bytes": 6703
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/GaussianPhysicalSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/PhysicalOutputContraction.lean.gz": {
+    "uncompressed_sha256": "63d272fa9fc4d7720fadc1cdd07b0cba65d72631e9247855e8c2abcdee69d4b2",
+    "uncompressed_bytes": 16083
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/GaussianPhysicalSource.lean.gz": {
+    "uncompressed_sha256": "5021a8b7672c54b5180787ae482730cca650d589e28ba3c583abf4db6af4f20c",
+    "uncompressed_bytes": 7238
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/SeparatedPhysicalDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/WeightedPhysicalSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/SeparatedPhysicalDensity.lean.gz": {
+    "uncompressed_sha256": "fdfa07daa9aa8adbadca417a8112c25f8126e2805da16f61531c1ec204cc54a8",
+    "uncompressed_bytes": 5129
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/GaussianSeparatedPhysicalDensity.lean.gz": {
+    "uncompressed_sha256": "9697eb2c9117bed7d5dbc5bcf8c858aec5746733d953c146be61c2c168c688c5",
+    "uncompressed_bytes": 6356
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/ExteriorSourceContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/SeparatedSchmidtOutput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/PhysicalOutputContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/GaussianSeparatedPhysicalDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/SeparatedSchmidtOutput.lean.gz": {
+    "uncompressed_sha256": "c7f1e2c98e855cc97a69ab4ee29e3651541757e8cb0aa20c011467c23f2bc0f3",
+    "uncompressed_bytes": 8795
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/ExteriorSourceContraction.lean.gz": {
+    "uncompressed_sha256": "fcc08bc8d4c52e8e0689f2566c393cb9ae984fd2faa50fb073272f65ab746745",
+    "uncompressed_bytes": 4117
+  },
+  "initial-checks/initial-checks/pre-eof-normalization/TNLean/PEPS/Approximation/WeightedPhysicalSource.lean.gz": {
+    "uncompressed_sha256": "74693d7684d5a3e67642e6a55e2b99f90cd2c246e0f3100228fa1f917453e5dc",
+    "uncompressed_bytes": 17926
+  },
+  "blueprint/TNLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "984edbebd0ce1f02f9ad53538c7f9abd65be62336fe1acac6f8fb8f15962bb79",
+    "uncompressed_bytes": 366783
+  },
+  "blueprint/QICLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "0d1e16a1a888d76396d5ab263d202b23d9653cebb131f550ac0f748bcd84f3b1",
+    "uncompressed_bytes": 98317
+  },
+  "blueprint/blueprint-source-sha256.json.gz": {
+    "uncompressed_sha256": "a10ef57de91862454ad1900eebe57df65cbcc823f32513c2e5a4a361f5872937",
+    "uncompressed_bytes": 85061
+  },
+  "blueprint/snapshot-commit-check.json.gz": {
+    "uncompressed_sha256": "8228b56dfd2bc3e0276e9f2d49ec959e283c66f4a7221180b6865f48b6979cd5",
+    "uncompressed_bytes": 459425
+  },
+  "blueprint/qic-snapshot-check.json.gz": {
+    "uncompressed_sha256": "421764fbbd87009679bf7ac3ab42bc30c2c214995133e68a5e43e300eca67cc8",
+    "uncompressed_bytes": 120
+  },
+  "blueprint/dependency-graph.json.gz": {
+    "uncompressed_sha256": "446e6fedd3d4032d64cd416a27ad9f77f3d5dc0d4dbd49b999b7faa3b4f8e3b1",
+    "uncompressed_bytes": 80
+  },
+  "blueprint/sync.json.gz": {
+    "uncompressed_sha256": "856c406875f1892d44f48de932ee0336c4688e997f7d4349b04af1c8f57fb43f",
+    "uncompressed_bytes": 92521
+  },
+  "blueprint/sync-final.json.gz": {
+    "uncompressed_sha256": "856c406875f1892d44f48de932ee0336c4688e997f7d4349b04af1c8f57fb43f",
+    "uncompressed_bytes": 92521
+  },
+  "blueprint/full-lean-decls.txt.gz": {
+    "uncompressed_sha256": "50d6ccade1c984c8b3eadedafde653f30636362cd9020c3090b21507fa826f5b",
+    "uncompressed_bytes": 1052824
+  },
+  "blueprint/initial-browser.log.gz": {
+    "uncompressed_sha256": "c25b6ec72ed32ab262e6d49c53f6f7baff51c2a2c36c292b0991f32811496e87",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/pdf.log.gz": {
+    "uncompressed_sha256": "c83dbae56beb231590886f72a36dbea30ea838463651da2b81c57c60ca203f6c",
+    "uncompressed_bytes": 22469
+  },
+  "blueprint/browser.log.gz": {
+    "uncompressed_sha256": "016394ff4615598da2ea484151aae6fc65fa28790a4bc7a60547e725f7597e50",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/bbl.log.gz": {
+    "uncompressed_sha256": "7aca6db159132bffde21f5e7912621bc56c80573e20aee1fee1221d6aeeb57c6",
+    "uncompressed_bytes": 131
+  },
+  "blueprint/initial-tex.log.gz": {
+    "uncompressed_sha256": "e1347e82316fb99de0af58f217d03297634d763a172c8c1a00962a9fd6bd1ed5",
+    "uncompressed_bytes": 71879
+  },
+  "blueprint/sync-final.log.gz": {
+    "uncompressed_sha256": "8f22827e06a5e12bd549b3e8108504be4ce54fd7e79a599e98d65884758a1de1",
+    "uncompressed_bytes": 43425
+  },
+  "blueprint/web.log.gz": {
+    "uncompressed_sha256": "8331116e717d13417b435d73da14470819e7c129e2499e91f4c6309733efde09",
+    "uncompressed_bytes": 4239
+  },
+  "blueprint/sync.log.gz": {
+    "uncompressed_sha256": "3bd5c4c981426eec5be55dfd5cb9c4b364292f634aeb61f2cbeb5aac457fc2c5",
+    "uncompressed_bytes": 43419
+  },
+  "blueprint/initial-web.log.gz": {
+    "uncompressed_sha256": "8331116e717d13417b435d73da14470819e7c129e2499e91f4c6309733efde09",
+    "uncompressed_bytes": 4239
+  },
+  "blueprint/initial-pdf.log.gz": {
+    "uncompressed_sha256": "3eeb580851579022e1b42f6bbc185506ca2dbd6bd8dcd6a141d3cfa6c2b4fcda",
+    "uncompressed_bytes": 121172
+  },
+  "blueprint/final-tex.log.gz": {
+    "uncompressed_sha256": "1508a0782b5402554a94040fdbd6a6db0caad34599cf21d64cc3bfdf018d1045",
+    "uncompressed_bytes": 71879
+  },
+  "blueprint/render-inputs/focused.tex.gz": {
+    "uncompressed_sha256": "ded944d2ec6ae4115aa78abff3031693353aefbdd8ebf1e295b31582341fb3a2",
+    "uncompressed_bytes": 53
+  },
+  "blueprint/render-inputs/content-focused.tex.gz": {
+    "uncompressed_sha256": "d1207b443fe4f743baba00a02a6a2d97bdffb5eee25dadac71597b83762e0cda",
+    "uncompressed_bytes": 714
+  },
+  "blueprint/render-inputs/web.tex.gz": {
+    "uncompressed_sha256": "e03e5b81dbdd3c9fc7b5276d3dc79ede8176423a04155813ed4860500f3d5a73",
+    "uncompressed_bytes": 830
+  },
+  "party-partition-extensionality.patch.gz": {
+    "uncompressed_sha256": "09fa49bf49c7fbc732e611ab179c797647f1003b8627eea3fde0e1629feb0c74",
+    "uncompressed_bytes": 4411
+  }
+}

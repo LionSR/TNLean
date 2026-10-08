@@ -671,21 +671,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
-            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
-            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -720,21 +720,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/PreparedMatrixNorm.olean TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
-            "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
-            "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },

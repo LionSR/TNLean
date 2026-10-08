@@ -230,21 +230,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -279,21 +279,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -328,21 +328,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -377,21 +377,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -426,21 +426,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -475,21 +475,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },
@@ -524,21 +524,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "b4255389867855a1d06df5247542da6eec19ef66",
+        "revision": "5547d32efa79b3b18150eb07be2bfcda4a68f79a",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-sourceblock-style-recheck/TNLean/PEPS/Approximation/SourceBlockMatrix.olean /private/tmp/tnlean-sourceblock-style-recheck/src/TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-physical/artifacts/TNLean/PEPS/Approximation/SourceBlockMatrix.olean TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/build.log",
-            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            "log": "docs/provenance/evidence/8769-source-physical/direct-build.log",
+            "sha256": "8326b194c9300fad95867d41d39d422e33a9540da606cf11db662821f34fdf36"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /private/tmp/tnlean-sourceblock-style-recheck/StyleAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/style-recheck/axioms.log",
-            "sha256": "efd81a4607b45dc7c89dc6fecde4a2590027800ba7e49d22d91e763d45ff1bb0"
+            "log": "docs/provenance/evidence/8769-source-physical/axioms.log",
+            "sha256": "1be7ff322a981154d4d4a82b93880bfe5cfe1821f7edbf60d949ef906d3debc2"
           }
         ]
       },

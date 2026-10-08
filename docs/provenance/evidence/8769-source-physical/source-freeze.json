@@ -1,0 +1,117 @@
+{
+  "base_revision": "f96e06dc01118fd3778b58f197ac3dcb14c37e48",
+  "files": [
+    {
+      "path": "TNLean/PEPS/Approximation.lean",
+      "sha256": "88d076a93ae0c0f40f49501c360e4677d8af6d323049993d02d95129ca947bee"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CorrectedSourcePartition.lean",
+      "sha256": "d491065c28dfedd59d4ae6d7e0452b9f5ef88334114fac7557de56607a376773"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ExteriorSourceContraction.lean",
+      "sha256": "fcc08bc8d4c52e8e0689f2566c393cb9ae984fd2faa50fb073272f65ab746745"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/GaussianPhysicalSource.lean",
+      "sha256": "5021a8b7672c54b5180787ae482730cca650d589e28ba3c583abf4db6af4f20c"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/GaussianSeparatedPhysicalDensity.lean",
+      "sha256": "9697eb2c9117bed7d5dbc5bcf8c858aec5746733d953c146be61c2c168c688c5"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/GaussianSourceIntegrability.lean",
+      "sha256": "6b7b8883b7b6c6731c98b18afa210244135cdfddadcc37c807f2b2da2a147879"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PartyPartitionAppend.lean",
+      "sha256": "2c3807aab3bb15021f7ce4911c0004eceb5d7bcc49953cde990cad9f985e5279"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+      "sha256": "54ed5ca9ec33b6551929d1e81acda6c5636883e73b78b07fc2d1751323a46180"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PreparedMatrixNorm.lean",
+      "sha256": "129f64acdbdd479474d901313b08f71d9ae2ef15e30602f903065bebdf865819"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PreparedSourceVectorDensity.lean",
+      "sha256": "ed43c92f067acfec73f034d98b5f4bd3f9cfcbc81fd6adb6066ccb1988a64255"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SeparatedPhysicalDensity.lean",
+      "sha256": "fdfa07daa9aa8adbadca417a8112c25f8126e2805da16f61531c1ec204cc54a8"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SeparatedSchmidtOutput.lean",
+      "sha256": "c7f1e2c98e855cc97a69ab4ee29e3651541757e8cb0aa20c011467c23f2bc0f3"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceBlockMatrix.lean",
+      "sha256": "68e1bd54c200e5cb73c7e4aacb349f6c6d03c4e4bdec94739705ba1a96fb53de"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceCircuitLifetime.lean",
+      "sha256": "1fe762e5f3896e107a9089e3c92124a54ad643c20b28f94909721422065f91ea"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianBranchDensity.lean",
+      "sha256": "c1d1bd1e524fde2cbfd7e687136e5471b72fd505628e871a6ba937403868dcea"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianBranchReindex.lean",
+      "sha256": "40845e88c1554378adf4e0288e910c783d2871fc9a530cc4fc12c4e9fbd292d0"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianMoments.lean",
+      "sha256": "f00d8f1e7a4c460c288c8631398fa272c6da9c5667a58bbef1246c7b9b317c3f"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianPhysicalIntegrability.lean",
+      "sha256": "19598f5b367b35d8ecf348adb958f381b38f34976405758f54d4bd9c8a114840"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianVectorDensity.lean",
+      "sha256": "41077668cfca54b49e676b4935e2493f34be44cb039b41ce7045c36a016b0e3c"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourcePhysicalBasisInvariance.lean",
+      "sha256": "ed200b777d386f70d72f0d82d5984a9c51191fa7a7cc5bbf4ff5a1ba87a4f3d7"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceSamplingCount.lean",
+      "sha256": "245fade61f80db0c9cd8da2db733d2905f2b16ba852d52bcdd2507af50e5308e"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/WeightedPhysicalSource.lean",
+      "sha256": "74693d7684d5a3e67642e6a55e2b99f90cd2c246e0f3100228fa1f917453e5dc"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_source_physical.tex",
+      "sha256": "bc0a41550985aba7085b5071e7a7e86e7f1084e29453f763d3db2bab1b225d48"
+    },
+    {
+      "path": "blueprint/src/content.tex",
+      "sha256": "5c99b2b9d3557941ebecbe298c31f23958c973c85d3af9faa0fbe8839733097b"
+    },
+    {
+      "path": "docbuild/lake-manifest.json",
+      "sha256": "a32ce11b97d5c83981c3437d05ada60775404981a009b0aa08aadcb0ede57a1a"
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "sha256": "4d2d791f8b8caf8f2324a0d62f1cd9f45eacfef6fcde8fe330c8bd59f1cc795d"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "088ee46812917bf97e84b2239ac5da50ba00cd18d1e762ab1615a3c1c2aad267"
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "2c577734f8aca839117a9d29a85fd7ae5ca310aa35dbbd2f118654b2920e25af"
+    }
+  ]
+}

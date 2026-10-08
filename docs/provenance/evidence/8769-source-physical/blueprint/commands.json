@@ -1,0 +1,137 @@
+[
+  {
+    "name": "sync",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/sync.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-physical",
+    "seconds": 2.761,
+    "returncode": 0,
+    "log_sha256": "3bd5c4c981426eec5be55dfd5cb9c4b364292f634aeb61f2cbeb5aac457fc2c5"
+  },
+  {
+    "name": "initial-pdf",
+    "command": [
+      "latexmk",
+      "-g",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/blueprint/src",
+    "seconds": 12.604,
+    "returncode": 0,
+    "log_sha256": "3eeb580851579022e1b42f6bbc185506ca2dbd6bd8dcd6a141d3cfa6c2b4fcda"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+    "seconds": 0.263,
+    "returncode": 0,
+    "log_sha256": "7aca6db159132bffde21f5e7912621bc56c80573e20aee1fee1221d6aeeb57c6"
+  },
+  {
+    "name": "initial-web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/blueprint",
+    "seconds": 6.326,
+    "returncode": 0,
+    "log_sha256": "8331116e717d13417b435d73da14470819e7c129e2499e91f4c6309733efde09"
+  },
+  {
+    "name": "initial-browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+    "seconds": 8.418,
+    "returncode": 0,
+    "log_sha256": "c25b6ec72ed32ab262e6d49c53f6f7baff51c2a2c36c292b0991f32811496e87"
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "latexmk",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/blueprint/src",
+    "seconds": 4.483,
+    "returncode": 0,
+    "log_sha256": "c83dbae56beb231590886f72a36dbea30ea838463651da2b81c57c60ca203f6c"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+    "seconds": 0.231,
+    "returncode": 0,
+    "log_sha256": "7aca6db159132bffde21f5e7912621bc56c80573e20aee1fee1221d6aeeb57c6"
+  },
+  {
+    "name": "web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/blueprint",
+    "seconds": 6.43,
+    "returncode": 0,
+    "log_sha256": "8331116e717d13417b435d73da14470819e7c129e2499e91f4c6309733efde09"
+  },
+  {
+    "name": "browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+    "seconds": 8.884,
+    "returncode": 0,
+    "log_sha256": "016394ff4615598da2ea484151aae6fc65fa28790a4bc7a60547e725f7597e50"
+  },
+  {
+    "name": "sync-final",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-physical-blueprint-u86juzgm/sync-final.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-physical",
+    "seconds": 6.312,
+    "returncode": 0,
+    "log_sha256": "8f22827e06a5e12bd549b3e8108504be4ce54fd7e79a599e98d65884758a1de1"
+  }
+]

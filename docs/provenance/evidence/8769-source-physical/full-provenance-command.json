@@ -1,0 +1,19 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "jsonschema==4.26.0",
+    "python",
+    "scripts/check_openai_provenance.py",
+    "--root",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-physical",
+    "--upstream-root",
+    "/private/tmp/tnlean-openai-math-audit.git"
+  ],
+  "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-physical",
+  "returncode": 0,
+  "seconds": 91.954,
+  "log_sha256": "a80e2fd9b4285945f39c0e64b55ae3d17f1484df1d65399fa6b7c7a08aa6100d"
+}
