@@ -1,0 +1,73 @@
+\section{Cardinality of the distinct active directed rays}
+\label{sec:area_law_initial_active_ray_cardinality}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, a natural width $C\ge2$, and an initial layer
+$k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at every
+layer. Let $\mathcal I$ be the resulting actual initial identifiers, and write
+$X_i^0$ for their closed birth regions.
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+and let $v$ be one of the nine marks of its defining cell.
+Put $\ell=\ell_k-5$ and $r=2^\ell/2=t_k/64$.
+
+Use the all-midpoint fan of $v+[-r,r]^2$, with its eight-element
+index set $\mathcal J$ and counterclockwise successor $\tau$.
+Let $\sigma:\mathcal J\to\mathcal I$ be the unique actual assignment
+of Theorem~\ref{thm:area_law_actual_sector_assignment}.
+Write $P_s$ for the final endpoint of elementary base $s$, and write
+$[P_s-v]_+$ for its directed ray. The endpoint vector is nonzero;
+opposite vectors determine different directed rays. Define
+\begin{align}
+    A          & =\{s\in\mathcal J:\sigma(s)\ne\sigma(\tau(s))\}, \\
+    \mathcal D & =\{[P_s-v]_+:s\in A\}.
+\end{align}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially the opposite labels and single counting in lines 366--370;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Even cardinality of the distinct active directed rays]
+    \label{thm:area_law_initial_active_rays_cardinality}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_active_rays_card_even_and_le_eight}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_cell_fan_successor,def:area_law_cell_fan_ray}
+    The set of distinct directed rays at changes of the actual initial
+    identifier has even cardinality at most eight:
+    \begin{align}
+        |\mathcal D| & \in2\mathbb N, & |\mathcal D| & \le8.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_ray_injective,
+        thm:area_law_initial_sector_changes_even,def:area_law_cell_fan}
+    Injectivity of the fan's directed rays gives $|\mathcal D|=|A|$.
+    The parity theorem gives $|A|\in2\mathbb N$.
+    Since $A\subseteq\mathcal J$ and $|\mathcal J|=8$,
+    one also has $|\mathcal D|\le8$.
+\end{proof}
+
+\begin{theorem}[Actual frontier at changes of successive identifiers]
+    \label{thm:area_law_initial_active_successor}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_near_mark_iff_active_successor}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_cell_fan_successor}
+    For every $x\in B_\infty(v,r)$, one has
+    \begin{align}
+        x\in\bigcup_{i\in\mathcal I}\partial X_i^0
+         & \quad\Longleftrightarrow\quad
+        \exists s\in A,\quad x\in[v,P_s].
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_active_radial,
+        thm:area_law_cell_fan_successor_iff}
+    The actual radial-frontier characterization gives two neighboring
+    fan members $s,t$ whose common endpoint is $P_s$, whose assigned
+    identifiers differ, and whose shared radial segment contains $x$.
+    Endpoint adjacency is equivalent to $t=\tau(s)$.
+    Thus these two members give precisely $s\in A$ and $x\in[v,P_s]$.
+    Conversely, $s\in A$ and $x\in[v,P_s]$ give the neighboring pair
+    $s,\tau(s)$ in the radial-frontier characterization.
+\end{proof}
