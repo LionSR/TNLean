@@ -1,0 +1,183 @@
+\section{Exact finite-size PEPS representations}
+\label{sec:peps_exact_tree}
+
+The finite-size argument in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+(\texttt{07-assembly.tex}, lines 203--214)
+uses a spanning tree to represent every vector exactly. Let $G=(V,E)$ be a
+finite connected graph, let $q\ge 1$, and put
+$\Sigma=\{0,\ldots,q-1\}^{V}$ and $N=|\Sigma|=q^{|V|}$.
+
+\begin{definition}[Configuration-copy tensors]
+    \label{def:peps_configuration_copy}
+    \lean{TNLean.PEPS.ExactTreeRepresentation.configurationEquiv,TNLean.PEPS.ExactTreeRepresentation.bondDim,TNLean.PEPS.ExactTreeRepresentation.decode,TNLean.PEPS.ExactTreeRepresentation.encode,TNLean.PEPS.ExactTreeRepresentation.Ports,TNLean.PEPS.ExactTreeRepresentation.Ports.ofConnected,TNLean.PEPS.ExactTreeRepresentation.localLabel,TNLean.PEPS.ExactTreeRepresentation.IsConsistent,TNLean.PEPS.ExactTreeRepresentation.tensor}
+    \leanok
+    Suppose $|V|\ge2$. Choose a connected spanning subgraph $T\subseteq G$, a
+    root $r\in V$, and, at every vertex $v$, an incident edge $p(v)$ of $T$.
+    For $\psi\colon\Sigma\to\C$, assign bond dimensions
+    $D_e=N$ when $e\in T$ and $D_e=1$ otherwise. Decode each active edge index
+    as a configuration $\tau_e\in\Sigma$, and define
+    \begin{align}
+        A_v((\tau_e)_{e\ni v},i)
+         & = a_v(\tau_{p(v)})\,
+        \delta_{i,\tau_{p(v)}(v)}
+        \prod_{\substack{e\ni v     \\e\in T}}
+        \delta_{\tau_e,\tau_{p(v)}},
+         & a_v(\tau)            & =
+        \begin{cases}\psi(\tau),&v=r,\\1,&v\ne r.\end{cases}
+        \label{eq:peps_configuration_copy}
+    \end{align}
+    The one-dimensional indices on $E\setminus T$ do not enter the components.
+\end{definition}
+
+% Three-vertex path specialization of (eq:peps_configuration_copy).
+% Ink-to-index: the two joined virtual wires each carry one Sigma index;
+% the three open physical legs are the three local basis indices.
+% Boundary signature: no open virtual indices and three open physical indices.
+% No conjugation, trace, or normalization factor is present. Only the root
+% tensor contains psi; all other tensors have entries zero or one.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=exactRoot, label pos=270,
+            ports={0:virtual, 90:physical:$i_r$}]{A_r}
+        \tn[at=(1,2), name=exactMiddle, label pos=270,
+            ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A_2}
+        \tn[at=(1,3), name=exactLast, label pos=270,
+            ports={180:virtual, 90:physical:$i_3$}]{A_3}
+        \tnwire[name=exactFirstBond]{exactRoot.0}{exactMiddle.180}
+        \tnmark[form=label, label pos=n]{on exactFirstBond 0.5}{$\tau_{r2}$}
+        \tnwire[name=exactSecondBond]{exactMiddle.0}{exactLast.180}
+        \tnmark[form=label, label pos=n]{on exactSecondBond 0.5}{$\tau_{23}$}
+    \end{tenkz}
+\end{center}
+For a three-vertex path, $\tau_{r2},\tau_{23}\in\Sigma$ are the two
+contracted configuration indices; the open legs carry $i_r,i_2,i_3$.
+Only $A_r$ contains the coefficient $\psi$. The same definition applies
+to a vertex of any degree.
+
+\begin{theorem}[Uniqueness of the contributing configuration]
+    \label{thm:peps_copy_unique}
+    \lean{TNLean.PEPS.ExactTreeRepresentation.decode_encode,TNLean.PEPS.ExactTreeRepresentation.decode_injective,TNLean.PEPS.ExactTreeRepresentation.localLabel_encode,TNLean.PEPS.ExactTreeRepresentation.isConsistent_encode,TNLean.PEPS.ExactTreeRepresentation.tensor_component_encode,TNLean.PEPS.ExactTreeRepresentation.isConsistent_of_component_ne_zero,TNLean.PEPS.ExactTreeRepresentation.localLabel_eq_of_adj,TNLean.PEPS.ExactTreeRepresentation.localLabel_eq_of_consistent,TNLean.PEPS.ExactTreeRepresentation.eq_encode_of_consistent,TNLean.PEPS.ExactTreeRepresentation.tensor_product_eq_zero}
+    \leanok
+    \uses{def:peps_configuration_copy}
+    Fix $\sigma\in\Sigma$. If all factors in
+    $\prod_{v\in V}A_v((\tau_e)_{e\ni v},\sigma(v))$ are nonzero, then
+    $\tau_e=\sigma$ for every $e\in T$. Conversely, this virtual assignment
+    satisfies all equality constraints.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For an active edge $e=\{u,v\}$, the local constraints give
+    $\tau_{p(u)}=\tau_e=\tau_{p(v)}$. Connectivity propagates these equalities
+    along a walk between any two vertices. Hence there is one common
+    configuration $\tau$. The physical constraint at each $v$ gives
+    $\tau(v)=\sigma(v)$, so $\tau=\sigma$. The inactive edges have a unique
+    index because their dimension is one. Substituting $\tau_e=\sigma$
+    verifies the converse directly.
+\end{proof}
+
+\begin{theorem}[Exact contraction on a spanning tree]
+    \label{thm:peps_exact_tree}
+    \lean{TNLean.PEPS.ExactTreeRepresentation.stateCoeff_tensor,TNLean.PEPS.ExactTreeRepresentation.stateCoeff_tensor_eq,TNLean.PEPS.ExactTreeRepresentation.stateCoeff_tensor_ne_zero,TNLean.PEPS.ExactTreeRepresentation.bondDim_pos,TNLean.PEPS.ExactTreeRepresentation.bondDim_le,TNLean.PEPS.ExactTreeRepresentation.exists_exact_tree_tensor}
+    \leanok
+    \uses{def:peps_configuration_copy}
+    For every finite connected graph with $|V|\ge2$ and every
+    $\psi\colon\Sigma\to\C$, there are a spanning tree $T\subseteq G$ and
+    tensors with dimensions $D_e=N$ on $T$ and $D_e=1$ off $T$ such that
+    \begin{align}
+        c_A(\sigma)
+         & =\sum_{\eta}\prod_{v\in V} A_v(\eta_v,\sigma(v))
+        =\psi(\sigma).
+        \label{eq:peps_exact_tree_contraction}
+    \end{align}
+    Every bond is positive and at most $q^{|V|}$. If $\psi\ne0$, then $c_A\ne0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_copy_unique}
+    Choose a spanning tree of $G$. Its connectedness and $|V|\ge2$ provide
+    an incident tree edge at each vertex. By
+    Theorem~\ref{thm:peps_copy_unique}, all terms of the contraction vanish
+    except the assignment $\tau_e=\sigma$. Its root factor is $\psi(\sigma)$
+    and every other factor is one, giving
+    (\ref{eq:peps_exact_tree_contraction}). Since $q\ge1$, both possible bond
+    dimensions are positive and at most $N$.
+\end{proof}
+
+\begin{theorem}[Singleton and empty vertex sets]
+    \label{thm:peps_exact_degenerate}
+    \lean{TNLean.PEPS.ExactTreeRepresentation.singletonTensor,TNLean.PEPS.ExactTreeRepresentation.stateCoeff_singletonTensor,TNLean.PEPS.ExactTreeRepresentation.exists_exact_tensor,TNLean.PEPS.ExactTreeRepresentation.stateCoeff_of_isEmpty}
+    \leanok
+    \uses{thm:peps_exact_tree}
+    A connected graph with one vertex represents every coefficient function by
+    its single physical tensor. Thus every finite connected graph admits the
+    exact representation with positive bonds bounded by $q^{|V|}$.
+    For an empty vertex set, however, the contraction is the scalar one for
+    every tensor family.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_tree}
+    For one vertex $v$, set $A_v(i)=\psi(\sigma_i)$, where
+    $\sigma_i(v)=i$. The graph has no edges, so the contraction is
+    $A_v(\sigma(v))=\psi(\sigma)$. For no vertices there is one empty virtual
+    assignment, and its empty product is one.
+\end{proof}
+
+\begin{theorem}[Connectivity of the open square grid]
+    \label{thm:peps_square_connected}
+    \lean{TNLean.PEPS.squareLatticeGraph_eq_boxProd,TNLean.PEPS.squareLatticeGraph_preconnected,TNLean.PEPS.squareLatticeGraph_connected,TNLean.PEPS.squareLatticeGraph_connected_iff,TNLean.PEPS.squareLatticeVertex_nontrivial}
+    \leanok
+    The open $w\times h$ nearest-neighbor grid is the Cartesian product of the
+    path graphs on $w$ and $h$ vertices. It is connected exactly when $w,h>0$.
+    If $L\ge2$, its $L\times L$ vertex set has at least two elements.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The product adjacency condition says that one coordinate agrees and the
+    other differs by one. Each coordinate path is preconnected, and
+    preconnectedness is preserved by the Cartesian product. The vertex set is
+    nonempty exactly when both side lengths are positive. For $L\ge2$, the
+    vertices $(0,0)$ and $(1,0)$ are distinct.
+\end{proof}
+
+\begin{theorem}[Exact square-grid tensors and normalization]
+    \label{thm:peps_exact_square}
+    \lean{TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor,TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tree_tensor,TNLean.PEPS.ExactTreeRepresentation.exists_exact_unit_square_tensor}
+    \leanok
+    \uses{thm:peps_exact_degenerate,thm:peps_square_connected}
+    For $q,L\ge1$, every vector $\psi$ on the open $L\times L$ square grid
+    has an exact PEPS with $1\le D_e\le q^{L^2}$. For $L\ge2$, the dimensions
+    can be chosen as $q^{L^2}$ on a spanning tree and one off that tree.
+    If $\|\psi\|=1$, its contraction $\Phi$ satisfies
+    $\Phi=\psi$, $\|\Phi\|=1$, and
+    $\|\|\Phi\|^{-1}\Phi-1\cdot\psi\|=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_tree,thm:peps_exact_degenerate,thm:peps_square_connected}
+    The grid has $L^2$ vertices. Apply the connected-graph result and identify
+    equal coefficient functions with equal vectors in the physical Hilbert
+    space. For a unit input the normalization scalar is one.
+\end{proof}
+
+\begin{theorem}[One prefactor for all small square sizes]
+    \label{thm:peps_exact_small_sizes}
+    \lean{TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_bounded,TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_polynomial,TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_outer_power}
+    \leanok
+    \uses{thm:peps_exact_square}
+    Fix $q\ge1$ and $L_0\in\N$. For every $0<L\le L_0$, every vector on the
+    open $L\times L$ square grid has an exact PEPS with positive bonds at most
+    $C_0=q^{L_0^2}$. This bound is independent of the vector and any Hamiltonian. For any $C\in\R$ and $r\ge0$, the enlarged prefactor $\max\{C,C_0\}$ gives $D_e\le\max\{C,C_0\}L^r$ throughout the same range. If $\chi>0$, then
+    $C_\chi=\max\{C,C_0^{1/\chi}\}$ gives
+    $D_e\le(C_\chi L^r)^\chi$ on this range as well.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_square}
+    Since $L^2\le L_0^2$ and $q\ge1$, the bound
+    $D_e\le q^{L^2}\le q^{L_0^2}$ follows. In particular the same constant
+    covers the manuscript's finite range $2\le L<L_0$. Since $L^r\ge1$, multiplying the enlarged nonnegative prefactor by $L^r$ preserves the bound. For the outer
+    power, $C_\chi L^r\ge C_0^{1/\chi}$; raising both nonnegative sides to
+    $\chi>0$ gives $(C_\chi L^r)^\chi\ge C_0$.
+\end{proof}

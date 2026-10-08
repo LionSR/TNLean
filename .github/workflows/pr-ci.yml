@@ -866,6 +866,18 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test exact square-grid PEPS representations and finite exceptions
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in ExactTreeRepresentation SquareLatticeConnectivity \
+              ExactTreeRepresentationAxioms ExactSmallSizeApproximation ExactFiniteException; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/PEPS/Approximation/$example.lean"
+          done
+
       - name: Test algebraic preparation import boundary
         timeout-minutes: 2
         run: >
