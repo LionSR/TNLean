@@ -12,13 +12,12 @@
     }
     \leanok
     \uses{thm:area_law_exponent_gaps}
-    For $e_0\in\mathbb R$, set $e_*=2\cdot10^{-6}$ and define the parameters
-    used in the proof of
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw} are
+    For $e_0\in\mathbb R$, set $e_*=2\cdot10^{-6}$; the parameters used in
+    the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw} are
     \begin{align}
-        g_0  & =\frac{1-e_0}{2}, & \mu    & =1-g_0,                                 & \nu & =\frac{g_0}{1000},
-        \label{eq:area_law_bootstrap_parameters}                                                               \\
-        \ell & =\frac{\nu}{100}, & \kappa & =\min\left\{\ell,\frac{e_*}{4}\right\}.
+        g_0  & =\frac{1-e_0}{2}, & \mu    & =1-g_0,              & \nu & =\frac{g_0}{1000},
+        \label{eq:area_law_bootstrap_parameters}                                            \\
+        \ell & =\frac{\nu}{100}, & \kappa & =\min\{\ell,e_*/4\}.
         \label{eq:area_law_bootstrap_separation}
     \end{align}
     These parameters remain fixed as the entropy exponent decreases.
@@ -55,6 +54,8 @@
     $g_0-\ell-\nu/4<1$.
 \end{theorem}
 \begin{proof}\leanok
+    If $0<e_0<1$, then $g_0=(1-e_0)/2$ lies in $(0,1/2)$. Hence
+    $\ell=g_0/100000$ lies in $(0,1)$, and $\kappa=\min\{\ell,e_*/4\}>0$.
     Substituting (\ref{eq:area_law_bootstrap_parameters}) and
     (\ref{eq:area_law_bootstrap_separation}) gives
     (\ref{eq:area_law_bootstrap_density_values}). Since $g_0>0$ when $e_0<1$,
