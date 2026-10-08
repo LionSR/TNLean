@@ -4,14 +4,16 @@ This section treats the routing step of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEP
 \texttt{07-assembly.tex}, lines 102--177: the links of a finite tensor network
 whose parties sit at anchors of dyadic blocks are routed on the square grid with
 constant edge congestion, folded into the genuine $L\times L$ square, and the
-routed network is contracted into a PEPS on that square. The source derives the
-needed properties of its party network (boundedly many parties per block,
+routed network is contracted into a PEPS on that square. The source derives
+three properties of its party network (boundedly many parties per block,
 bounded degree, link separation bounded by a fixed multiple of the endpoint
-scales, all anchors in the padded square) from the distribution protocol
-of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, and its lemma has no
-hypotheses. Here these properties are hypotheses on an arbitrary party
-network, so the results below are a conditional form of the lemma; the lemma
-for the network of the source follows once the protocol is shown to have these
+scales) from the distribution protocol
+of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, and a fourth (all anchors
+in the padded square) from attaching each party to the anchor of its dyadic
+block; its lemma has no hypotheses. Here these four properties are hypotheses
+on an arbitrary party network, so the results below are a conditional form of
+the lemma; the lemma for the network of the source follows once the protocol
+and the attachment are shown to give these
 properties~\cite{gap:polypeps_routing_network_bounds}.
 % Status: that the protocol has these properties is not yet formalized.
 The source also records that the two endpoint scales of every link
