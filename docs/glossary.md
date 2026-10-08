@@ -3268,6 +3268,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - `TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect` interprets an existing
   lattice dyadic cell as the native `IntRect`, with the same sites and size `2^k`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.clearance_ambientDilation`
+  proves ambient clearance for real `D₀ ≥ 1`, without an integrality assumption.
 - `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation`
   derives native rectangle safety from actual template separation, containment
   in `T_j`, `j ≤ s₀`, and rectangle size at most `s₀`, for `D₀ ≥ 1`.

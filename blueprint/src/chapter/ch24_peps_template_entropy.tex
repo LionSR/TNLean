@@ -66,6 +66,20 @@
     Each coordinate interval contains exactly $2^k$ sites.
 \end{proof}
 
+\begin{theorem}[Real-parameter clearance]
+    \label{thm:area_template_dilation_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.clearance_ambientDilation}
+    \uses{def:area_law_template}
+    For a real constant $D_0\ge1$, a template separated from $Z$, and
+    $0\le j\le s_0$, every $x\in T_j$ and $z\in Z$ satisfy
+    $D_0s_0<\|x-z\|_\infty$.
+\end{theorem}
+\begin{proof}
+    Choose $p\in T$ with $\|p-x\|_\infty\le j$. Then
+    $4D_0s_0<\|p-z\|_\infty\le j+\|x-z\|_\infty$,
+    and use $j\le s_0\le D_0s_0$.
+\end{proof}
+
 \begin{theorem}[Safety from template separation]
     \label{thm:area_template_safe_rectangles}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
@@ -81,13 +95,8 @@
     This is the clearance step of~\cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
-    For $x\in Q\subseteq T_j$, choose $p\in T$ with
-    $\|p-x\|_\infty\le j$. For every cut endpoint $z$,
-    \[
-        4D_0s_0<\|p-z\|_\infty
-        \le j+\|x-z\|_\infty.
-    \]
-    Since $j\le s_0\le D_0s_0$, this gives
+    \uses{thm:area_template_dilation_clearance}
+    Apply the clearance theorem to each $x\in Q\subseteq T_j$ and cut endpoint $z$:
     $D_0\operatorname{size}(Q)\le D_0s_0<\|x-z\|_\infty$.
     Selected cells are contained in the partitioned set, and their sizes
     satisfy $2^k\le2^K\le s_0$.
