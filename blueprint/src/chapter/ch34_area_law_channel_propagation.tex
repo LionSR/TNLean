@@ -189,7 +189,7 @@ $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     \begin{align}
         \label{eq:al_propagation_finite_increment}
         d_y(\mathcal E_n(B))
-         & \le d_y(B)+2\sum_{\substack{0\le l\le n \\y\in K_l}}
+         & \le d_y(B)+2\sum_{0\le l\le n,\ y\in K_l}
         \eta_l\sum_{z\in K_l}d_z(B).
     \end{align}
     Every regional sum is evaluated on the original operator $B$.
@@ -316,7 +316,7 @@ $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     \begin{align}
         \label{eq:al_propagation_exp_increment}
         d_y(\mathcal E_n(B))
-         & \le d_y(B)+2\sum_{\substack{0\le l\le n \\y\in K_l}}
+         & \le d_y(B)+2\sum_{0\le l\le n,\ y\in K_l}
         A\exp(-bl^\alpha)\sum_{z\in K_l}d_z(B).
     \end{align}
     The estimate holds uniformly over all finite spectators and all
@@ -359,7 +359,7 @@ in~(\ref{eq:qc_component_root_channel}).
     \begin{align}
         \label{eq:al_propagation_graph_increment}
         d_y(\mathcal E_k(B))
-         & \le d_y(B)+2\sum_{\substack{0\le l\le n \\d_G(a,y)\le l}}
+         & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
         A\exp(-bl^\alpha)\sum_{z\in N_l(a)}d_z(B).
     \end{align}
     All regional sums use the original operator $B$.
