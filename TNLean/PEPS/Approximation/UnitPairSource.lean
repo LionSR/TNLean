@@ -22,28 +22,6 @@ the one-dimensional sources for unused pairs at lines 243–245.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-unusedpair-unitpairsource-pairsource.unit
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.unit
-
-Provenance-ID: 8769-unusedpair-unitpairsource-pairsource.partypair_unit
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.partyPair_unit
-
-Provenance-ID: 8769-unusedpair-unitpairsource-pairsource.norm_unit_vector
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.norm_unit_vector
-
-Provenance-ID: 8769-unusedpair-unitpairsource-pairsource.finrank_unit_spaces
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.finrank_unit_spaces
-
-Provenance-ID: 8769-unusedpair-unitpairsource-word.eraseunitpair
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eraseUnitPair
-
-Provenance-ID: 8769-unusedpair-unitpairsource-word.eraseunitpair_spec
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eraseUnitPair_spec
-
-Provenance-ID: 8769-unusedpair-unitpairsource-sourceinventory.expands.unit_cons
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.Expands.unit_cons
 -/
 
 noncomputable section

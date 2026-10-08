@@ -19,34 +19,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-block-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwner
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowner_nil
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwner_nil
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowner_cons
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwner_cons
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowner_append
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwner_append
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowneriso
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwnerIso
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowneriso_nil_apply
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwnerIso_nil_apply
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowneriso_cons_tmul
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwnerIso_cons_tmul
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowneriso_append_tmul
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append_tmul
-
-Provenance-ID: 8769-party-coarsening-layout-layout.mapowneriso_append
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append
 -/
 
 noncomputable section

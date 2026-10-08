@@ -23,16 +23,6 @@ lines 279–299 and 383–427.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-block-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-free-input-frame-word.sourceframematrix
-Downstream declaration: TNLean.PEPS.PairEffect.Word.sourceFrameMatrix
-
-Provenance-ID: 8769-free-input-frame-word.sourceframematrix_eq_freesourcematrix
-Downstream declaration: TNLean.PEPS.PairEffect.Word.sourceFrameMatrix_eq_freeSourceMatrix
-
-Provenance-ID: 8769-free-input-frame-word.norm_sourceframematrix_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.Word.norm_sourceFrameMatrix_le_one
 -/
 
 noncomputable section

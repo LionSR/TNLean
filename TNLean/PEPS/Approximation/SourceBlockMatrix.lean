@@ -23,29 +23,6 @@ used to separate the corrected source coefficients.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-block-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-free-input-matrix-word.freesourcematrix
-Downstream declaration: TNLean.PEPS.PairEffect.Word.freeSourceMatrix
-
-Provenance-ID: 8769-free-input-matrix-word.freesourcematrix_apply
-Downstream declaration: TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply
-
-Provenance-ID: 8769-free-input-matrix-word.norm_freesourcematrix_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one
-
-Provenance-ID: 8769-free-input-matrix-word.freesourcematrix_conjtranspose_mul_apply
-Downstream declaration: TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply
-
-Provenance-ID: 8769-free-input-matrix-word.norm_freesourcematrix_conjtranspose_mul_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one
-
-Provenance-ID: 8769-free-input-matrix-word.trace_preparedmatrix_mul_conjtranspose_eq
-Downstream declaration: TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq
-
-Provenance-ID: 8769-free-input-matrix-word.trace_prepareddensitycoefficient_eq_freesourcematrix
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix
 -/
 
 noncomputable section

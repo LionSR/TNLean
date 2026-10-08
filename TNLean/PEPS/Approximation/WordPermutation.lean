@@ -22,28 +22,6 @@ lines 68–70 and 125–127. The proof is independent of the source vectors.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 lem:effects.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8768-wordpermutation-appendiso_symm_cons_tmul
-Downstream declaration: TNLean.PEPS.PairEffect.appendIso_symm_cons_tmul
-
-Provenance-ID: 8768-wordpermutation-word.movehead
-Downstream declaration: TNLean.PEPS.PairEffect.Word.moveHead
-
-Provenance-ID: 8768-wordpermutation-word.isallowed_movehead
-Downstream declaration: TNLean.PEPS.PairEffect.Word.isAllowed_moveHead
-
-Provenance-ID: 8768-wordpermutation-word.eval_movehead_appendiso_symm
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_moveHead_appendIso_symm
-
-Provenance-ID: 8768-wordpermutation-word.exchangeblocks
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exchangeBlocks
-
-Provenance-ID: 8768-wordpermutation-word.isallowed_exchangeblocks
-Downstream declaration: TNLean.PEPS.PairEffect.Word.isAllowed_exchangeBlocks
-
-Provenance-ID: 8768-wordpermutation-word.eval_exchangeblocks_appendiso_symm
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_exchangeBlocks_appendIso_symm
 -/
 
 noncomputable section

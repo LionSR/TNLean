@@ -19,34 +19,6 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–417.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-subset-expansion.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.sourceorder
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.mem_sourceorder
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceOrder
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.nodup_sourceorder
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.nodup_sourceOrder
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.sourcedims
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceDims
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.sourceat
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceAt
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.sourceat_issome_iff
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_isSome_iff
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.sourceat_eq_some_spec
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_some_spec
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.sources_partialword_eq_filtermap
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sources_partialWord_eq_filterMap
-
-Provenance-ID: 8769-chronological-order-sourcecircuit.layout_sources_partialword
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWord
 -/
 
 noncomputable section

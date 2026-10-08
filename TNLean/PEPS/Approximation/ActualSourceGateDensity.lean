@@ -28,10 +28,6 @@ expansion, lines 233–355.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-density-actualgate-word.exists_finite_density_expansion
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_finite_density_expansion
 -/
 
 noncomputable section

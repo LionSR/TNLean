@@ -23,31 +23,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.commonspace
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.commonSpace
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.commoninclusion
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.commonInclusion
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.commonprojection
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.commonProjection
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.commonprojection_commoninclusion
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.commonProjection_commonInclusion
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.norm_commonprojection_le
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.norm_commonProjection_le
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.commonvector
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.commonVector
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.norm_commonvector
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.norm_commonVector
-
-Provenance-ID: 8769-commonsource-pairspaces-pairsource.mapl_commonprojection_commonvector
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.mapL_commonProjection_commonVector
 -/
 
 noncomputable section

@@ -29,16 +29,6 @@ Schmidt decompositions, lines 233–299.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-finitegate-word.exists_finite_source_preparation
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_finite_source_preparation
-
-Provenance-ID: 8769-commonsource-finitegate-word.exists_finite_prepared_tensorpartymaps
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_finite_prepared_tensorPartyMaps
-
-Provenance-ID: 8769-commonsource-finitegate-word.exists_finite_source_gate
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_finite_source_gate
 -/
 
 noncomputable section

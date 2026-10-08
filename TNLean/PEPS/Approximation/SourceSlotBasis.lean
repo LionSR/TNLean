@@ -22,19 +22,6 @@ lines 279–355 and 409–427.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-block-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-free-input-basis-sourceinventory.slotbasis
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.slotBasis
-
-Provenance-ID: 8769-free-input-basis-sourceinventory.slotbasis_apply
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.slotBasis_apply
-
-Provenance-ID: 8769-free-input-basis-sourceinventory.preparedinputbasis
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis
-
-Provenance-ID: 8769-free-input-basis-sourceinventory.preparedinputbasis_apply
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis_apply
 -/
 
 noncomputable section

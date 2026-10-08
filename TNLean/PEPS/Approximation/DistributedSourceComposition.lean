@@ -23,31 +23,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.eval
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.eval
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.isallowed
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.IsAllowed
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.norm_eval_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_le_one
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.choices
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.Choices
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.choicesfintype
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.choicesFintype
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.partialword
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialWord
-
-Provenance-ID: 8769-chronological-circuit-sourcecircuit.coefficient
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.coefficient
 -/
 
 noncomputable section

@@ -22,31 +22,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026),
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.ofslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.ofSlots
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.ofslots_nil
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.ofSlots_nil
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.ofslots_cons
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.ofSlots_cons
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.isnormalized_ofslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.isNormalized_ofSlots
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.layout_ofslots_eq
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.layout_ofSlots_eq
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.partypairs_ofslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.partyPairs_ofSlots
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.expands.of_perm
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.Expands.of_perm
-
-Provenance-ID: 8769-commonsource-ordering-sourceinventory.exists_ofslots_expands
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.exists_ofSlots_expands
 -/
 
 noncomputable section

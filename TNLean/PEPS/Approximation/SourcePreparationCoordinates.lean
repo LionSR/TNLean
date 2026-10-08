@@ -22,25 +22,6 @@ and the source-entry expansion at lines 279–355.
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-density-coordinates-sourceinventory.slotlayout_cons
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.slotLayout_cons
-
-Provenance-ID: 8769-source-density-coordinates-sourceinventory.slotvector
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.slotVector
-
-Provenance-ID: 8769-source-density-coordinates-sourceinventory.slotvector_eq_vector
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_vector
-
-Provenance-ID: 8769-source-density-coordinates-sourceinventory.eval_prepareslots_eq_appendiso_symm
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_appendIso_symm
-
-Provenance-ID: 8769-source-density-coordinates-sourceinventory.eval_prepareslots_sum_smul
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_sum_smul
-
-Provenance-ID: 8769-source-density-coordinates-sourceinventory.eval_prepareslots_eq_sum_basis
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_sum_basis
 -/
 
 noncomputable section

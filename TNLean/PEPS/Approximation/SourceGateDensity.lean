@@ -25,28 +25,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-source-gate.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-density-density-word.preparedmatrix
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedMatrix
-
-Provenance-ID: 8769-source-density-density-word.preparedmatrix_sum_smul
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedMatrix_sum_smul
-
-Provenance-ID: 8769-source-density-density-word.preparedmatrix_eq_sum_basis
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedMatrix_eq_sum_basis
-
-Provenance-ID: 8769-source-density-density-word.prepareddensitycoefficient
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient
-
-Provenance-ID: 8769-source-density-density-word.preparedmatrix_density_sum_smul
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedMatrix_density_sum_smul
-
-Provenance-ID: 8769-source-density-density-word.preparedmatrix_density_eq_sum_basis
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedMatrix_density_eq_sum_basis
-
-Provenance-ID: 8769-source-density-density-word.preparedmatrix_gate_density_eq_sum_basis
-Downstream declaration: TNLean.PEPS.PairEffect.Word.preparedMatrix_gate_density_eq_sum_basis
 -/
 
 noncomputable section
