@@ -8,12 +8,19 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
+import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.PEPS.AreaLaw.FiniteSetTruncation
+import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
+import TNLean.PEPS.AreaLaw.PositiveConstraints
+import TNLean.PEPS.AreaLaw.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.TheoremStatements
+import TNLean.PEPS.AreaLaw.TruncationRadius
+import TNLean.PEPS.AreaLaw.TruncationSeries

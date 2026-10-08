@@ -28,45 +28,6 @@ labels, and an order. It contains no spectral or information estimate.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  08-scanner.tex
-Labels: scanner:template.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: geometry:cancellation.
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.isallowedslope
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.IsAllowedSlope
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.templatepolygon
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.templatepolygon.region
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.integerpoint
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.integerPoint
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.template
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.template.isseparated
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.template.core
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.core
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.template.collar
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.collar
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.orderedtwofamilypartition
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition
-Provenance-ID: 8738-tnlean.peps.arealaw.geometry.orderedtwofamilypartition.earliersamefamily
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A side direction of slope `0`, `∞`, `1`, or `-1`.
