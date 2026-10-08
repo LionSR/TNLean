@@ -1,0 +1,92 @@
+% Source: OpenAI, "A two-dimensional area law from a global spectral gap"
+% (September 24, 2026, openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a),
+% build/sections/03-quasilocal.tex, lines 14--41 and 52--128 (Lemma 4.1,
+% label lem:quasilocal-lr). The general graph estimates are in the chapter on
+% local quantum circuits; this section specializes them to lattice domains.
+
+\section{Graph-distance propagation in lattice domains}
+
+Let $\Lambda\subseteq\Z^2$ be a finite domain with induced graph distance
+$d_\Lambda$, and let $H=\sum_Xh_X$ be a finite-range Hamiltonian on $\Lambda$
+with range $R$ and term-norm bound $J$, as in
+Definition~\ref{def:area_law_hamiltonian}. Put $v_R=1+2R(R+1)$ and
+$\mu_R=2^{v_R-1}$, let $\tau_t(B)=e^{itH}Be^{-itH}$, and let
+$N_l(a)=\{x\in\Lambda:d_\Lambda(a,x)\le l\}$. For a set $K$ of sites, $E_K$ is
+the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
+
+\begin{lemma}[Lattice-domain counts]
+    \label{lem:area_domain_graph_counts}
+    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_domainGraph_adj,
+        TNLean.PEPS.AreaLaw.card_domainGraph_sphere_le,
+        TNLean.PEPS.AreaLaw.IsAdmissibleSupport.edist_le,
+        TNLean.PEPS.AreaLaw.IsAdmissibleSupport.card_le,
+        TNLean.PEPS.AreaLaw.LocalHamiltonian.nonneg_of_support,
+        TNLean.PEPS.AreaLaw.LocalHamiltonian.sum_norm_term_containing_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,thm:area_diamond_count,
+        thm:area_diamond_budget}
+    Adjacent sites of $\Lambda$ have ambient displacement one, and at most
+    $2(d+1)^2$ sites lie at distance exactly $d$ from any site. Every
+    original support has $d_\Lambda$-diameter at most $R$ and at most $v_R$
+    sites, and for every site $x$,
+    \begin{align}
+        \sum_{X\ni x}\|h_X\| & \le\mu_RJ.
+        \label{eq:area_domain_site_budget}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:area_diamond_count,thm:area_diamond_budget}
+    A nearest-neighbor edge changes one coordinate by one. The sphere of
+    radius $d$ lies in the diamond of radius $d$, which has
+    $1+2d(d+1)\le2(d+1)^2$ sites. The remaining bounds are the diamond
+    support and multiplicity counts applied to the family of original
+    supports, with every term norm at most $J$; one support exists, so
+    $J\ge0$.
+\end{proof}
+
+\begin{lemma}[Graph-distance propagation]
+    \label{lem:quasilocal-lr}
+    \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson,
+        TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_commutator_le_graphDistance,
+        TNLean.PEPS.AreaLaw.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top,
+        TNLean.PEPS.AreaLaw.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le}
+    \leanok
+    \uses{def:area_law_hamiltonian,lem:area_domain_graph_counts,
+        thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,
+        thm:qc_graph_ball_localization,def:qc_site_expectation}
+    Let $q\ge1$. There are positive constants $C,v,c$, depending only on
+    $q,R,J$, with the following property. For every domain $\Lambda$, every
+    Hamiltonian $H$ as above, every original support $X$ with anchor
+    $a\in X$, every operator $A$ supported in $X$, every site $y$, every
+    on-site operator $B_y$ at $y$, and every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B_y]\| & \le C\|A\|\|B_y\|e^{v|t|-cd_\Lambda(a,y)}
+        \label{eq:area_quasilocal_lr}
+    \end{align}
+    when $d_\Lambda(a,y)<\infty$, and the commutator is zero when
+    $d_\Lambda(a,y)=\infty$. Moreover, for every integer $l\ge0$,
+    \begin{align}
+        \|\tau_t(A)-E_{N_l(a)}(\tau_t(A))\| & \le
+        \|A\|\min\{2,Ce^{v|t|-cl}\}.
+        \label{eq:area_quasilocal_lr_ce}
+    \end{align}
+    This is \cite[Lemma~4.1]{OpenAI2026AreaLaw}. Explicitly, for every
+    $\mu\ge0$ and every integer $n\le d_\Lambda(a,y)$,
+    $\|[\tau_t(A),B_y]\|\le2e^{\mu R}\|A\|\|B_y\|
+        \exp(2v_R\mu_RJe^{2\mu R}|t|-\mu n)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:area_domain_graph_counts,thm:qc_graph_lieb_robinson,
+        thm:qc_graph_lieb_robinson_zero,thm:qc_graph_ball_localization}
+    Apply Theorem~\ref{thm:qc_graph_lieb_robinson} and
+    Lemma~\ref{thm:qc_graph_lieb_robinson_zero} on the induced graph of
+    $\Lambda$, with an anchor family taking the value $a$ at $X$, support
+    diameter $R$, support size $v_R$ and site budget $b_0=\mu_RJ$ from
+    Lemma~\ref{lem:area_domain_graph_counts}. Apply
+    Theorem~\ref{thm:qc_graph_ball_localization} with sphere growth
+    $2(d+1)^2$. Both estimates have constants determined by $R$ and $J$.
+    Take the larger of the two prefactors and of the two velocities, and the
+    smaller of the two decay rates.
+\end{proof}

@@ -239,7 +239,7 @@ operator `A` acting on `X` and every time `t`:
 Source: OpenAI area law, `03-quasilocal.tex`, lines 52–68 (statement), 70–128 (proof),
 with the constants independent of `Λ` as stated at lines 40–41 and `q ≥ 1` from
 `00-introduction.tex`, line 25. -/
-theorem exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ) :
+lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ) :
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (X : AdmissibleSupport Λ R)
         (a : Site Λ), a ∈ X.1 →
