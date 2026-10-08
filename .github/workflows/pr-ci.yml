@@ -97,6 +97,7 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_quantum_double_local_terms.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -196,6 +197,7 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_quantum_double_local_terms.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -338,6 +340,7 @@ jobs:
               - 'scripts/test_tenkz_peps_three_block.py'
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
+              - 'scripts/test_tenkz_quantum_double_local_terms.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -729,6 +732,24 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test PEPS dual flux paths and quantum-double local terms
+        timeout-minutes: 3
+        run: |
+          set -e
+          # TorusDualFluxParent imports the preceding test's fixtures. Keep
+          # their objects in a fresh overlay outside the production cache.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
+          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Test physical-port channel compilation
         timeout-minutes: 5
         run: |
@@ -761,6 +782,18 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
+
+      - name: Test area-law graph interaction foundations
+        timeout-minutes: 2
+        run: |
+          set -e
+          for example in AreaLawGraphFoundations AreaLawLatticeDiamond \
+              AreaLawInteractionDiamond AreaLawInteractionTarget AreaLawInteractionSeries; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -1114,6 +1147,10 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test quantum-double local-term diagrams and nonabelian formulas
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_quantum_double_local_terms.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
