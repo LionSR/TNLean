@@ -301,7 +301,7 @@ def blueprint_status(cfg: dict, checkouts: dict[str, Checkout], cites: re.Patter
                     count["notready"] += 1
                 elif "\\leanok" not in statement:
                     count["unformalized"] += 1
-                elif kind == "definition" or not proof or "\\leanok" in proof:
+                elif kind == "definition" or (proof and "\\leanok" in proof):
                     count["proved"] += 1
                 else:
                     count["stated"] += 1

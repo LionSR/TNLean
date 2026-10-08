@@ -7,9 +7,9 @@
   const C = D.config;
 
   /* ---------- vocabulary ---------- */
-  const STATUS = { done: "Closed", landed: "Partly landed", review: "In review", draft: "Draft PR", ready: "Unblocked, no PR", blocked: "Blocked" };
+  const STATUS = { done: "Closed", landed: "Partly landed", review: "In review", draft: "Draft PR", ready: "Unblocked, no PR", blocked: "Blocked", untracked: "No tracked issue" };
   const ORDER = ["done", "landed", "review", "draft", "ready", "blocked"];
-  const RANK = { blocked: 0, ready: 1, draft: 2, review: 3, landed: 4, done: 5 };
+  const RANK = { untracked: -1, blocked: 0, ready: 1, draft: 2, review: 3, landed: 4, done: 5 };
   const GAP_KIND = {
     error: ["Error in the paper", "A printed claim fails as stated. It needs a correction and possibly a new argument."],
     "missing-step": ["Missing step", "The paper omits a nontrivial step. The claim may hold, but the argument is incomplete."],
@@ -77,7 +77,11 @@
     else i.status = "blocked";
   }
   const leaves = D.issues.filter(i => i.stream);
-  const leastStatus = nums => nums.map(n => byNum.get(n)).filter(Boolean).reduce((a, i) => RANK[i.status] < RANK[a] ? i.status : a, "done");
+  /** Least advanced status among the issues; a result or stage with no collected issue is untracked, never done. */
+  const leastStatus = nums => {
+    const known = nums.map(n => byNum.get(n)).filter(Boolean);
+    return known.length ? known.reduce((a, i) => RANK[i.status] < RANK[a] ? i.status : a, "done") : "untracked";
+  };
 
   /* ---------- blocking graph ---------- */
   const preds = n => ((byNum.get(n) || {}).blockedBy || []).filter(b => byNum.has(b));

@@ -92,7 +92,7 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .st-ready { color: var(--s-ready); background: var(--s-ready-bg); border-color: var(--s-ready); }
 .st-blocked { color: var(--s-blocked); background: var(--s-blocked-bg); border-color: var(--s-blocked); }
 .st-bad { color: var(--s-bad); background: var(--s-bad-bg); border-color: var(--s-bad); }
-.st-closed { color: var(--muted); background: var(--soft); border-color: var(--line); }
+.st-closed, .st-untracked { color: var(--muted); background: var(--soft); border-color: var(--line); }
 
 /* proof stages */
 .route { display: grid; gap: 0; counter-reset: stage; }
