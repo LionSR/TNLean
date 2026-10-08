@@ -2,15 +2,19 @@
 
 This record supports the [continuing goal](area-law-peps-goal.md).
 The goal remains active. Both source-faithful headline theorems remain unproved.
-Twenty-two geometric contributions contain **143 canonically verified original
-declarations**. The twenty-second adds pairwise disjoint initial interiors,
-initial boundary avoidance and the unique initial open region at every integer
-lattice point, at exact source `ff3ac34d661f011020c566dff01eed0fb6454881`.
-The one canonical Geometry build, six-name imported report, strict promotion,
-unchanged 304-record normal policy and guarded finalization all pass. All 298 completed parent rows, 25 ledgers and 144 historical evidence
-files remain immutable; no old declaration is reverified. Prior observations
-retain their historical states below. Full CI and compiled book checking remain
-separate. Both headline theorems remain open.
+Twenty-three geometric contributions contain **145 canonically verified original
+declarations**. The latest two interface and regularity statements pass at
+exact source `eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac`: one Geometry build
+and the two-name imported report pass without diagnostics. Strict promotion, the unchanged **306-record** normal policy and guarded
+finalization also pass. The two new finalized records are byte-identical to
+the normal-policy production shard. The completed
+parent is draft [#8906](https://github.com/LionSR/TNLean/pull/8906), evidence
+`aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03`, proof
+`ff3ac34d661f011020c566dff01eed0fb6454881`. All 304 parent rows, 26 ledgers
+and 148 historical evidence files remain immutable; no old declaration is
+reverified. Prior observations retain their explicitly historical states
+below. Full CI and compiled book checking remain separate. Both headline
+theorems remain open.
 
 ## Geometric contributions and exact sources
 
@@ -37,7 +41,8 @@ separate. Both headline theorems remain open.
 | Positive-length interfaces of belt runs with primaries and other belt runs | [#8901](https://github.com/LionSR/TNLean/pull/8901), evidence `d6f8fca2f3420463d833fe2b21918edf64a6c677` | `3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a` | [belt-run interface evidence](evidence/8758-belt-run-interfaces.md) |
 | Dummy interfaces of actual fan triangles and belt runs | [#8902](https://github.com/LionSR/TNLean/pull/8902), evidence `aeae9a15b7d6a745676b04fda477e36e671e1cc2` | `d5463154269cf320c7a176349b64589388220a0e` | [dummy-run interface evidence](evidence/8758-dummy-run-interfaces.md) |
 | Actual initial-region identifiers, closed coverage and translated origin | [#8904](https://github.com/LionSR/TNLean/pull/8904), evidence `f93aec9cd0c6ae5dd399f44edd0d0d1e69d364e1` | `afb83051377658183c94673c0c2bd5a2f508a4d3` | [initial regions and origin](evidence/8758-initial-regions-origin.md) |
-| Disjoint initial interiors, lattice-free boundaries and unique initial lattice assignment | Successor to [#8904](https://github.com/LionSR/TNLean/pull/8904), on `feat/area-law-initial-lattice-partition`; canonical verification, strict promotion, 304-record normal policy and guarded finalization passed | `ff3ac34d661f011020c566dff01eed0fb6454881` | [initial lattice partition](evidence/8758-initial-lattice-partition.md) |
+| Disjoint initial interiors, lattice-free boundaries and unique initial lattice assignment | [#8906](https://github.com/LionSR/TNLean/pull/8906), evidence `aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03` | `ff3ac34d661f011020c566dff01eed0fb6454881` | [initial lattice partition](evidence/8758-initial-lattice-partition.md) |
+| Colors and regularity of actual initial regions | Successor to [#8906](https://github.com/LionSR/TNLean/pull/8906); canonical verification, strict promotion, normal306 and guarded finalization passed | `eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac` | [initial interfaces and regularity](evidence/8758-initial-interfaces-regularity.md) |
 
 ## Completed eighteenth source and preceding parent
 
@@ -613,15 +618,109 @@ empty endpoint sets. No completed compiler result for regularity is inferred. Lo
 boundary, earlier same-label clearance, finite sampled restriction and the
 uniform final summed bound remain further obligations.
 
+## Frozen twenty-third contribution and next ownership
+
+The completed parent is draft [#8906](https://github.com/LionSR/TNLean/pull/8906),
+evidence `aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03`, proof
+`ff3ac34d661f011020c566dff01eed0fb6454881`. Its actual public handoffs are
+[#8758, comment 6050300202](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050300202)
+and [#8733, comment 6050300360](https://github.com/LionSR/TNLean/issues/8733#issuecomment-6050300360).
+The root agent's complete immutable capture measures **304 parent rows**,
+**26 ledgers** and **148 recursive historical evidence files**. All these
+bytes, policies, licenses and dependency pins remain unchanged; no old result
+is reverified.
+
+The successor contains exactly two original theorems. For arbitrary origin,
+finite endpoint set, valid dependent residues, C ≥ 2 and k₀ ≥ 50,000,000,
+distinct actual initial identifiers have opposite colors whenever an entire
+nondegenerate closed segment lies in both birth regions. It assumes no
+regularity certificate. Each actual initial birth region also equals the
+closure of its open interior. Actual triangle determinants and exact finite
+cell and fan covers prove this identity, including empty unions and
+disconnected primaries. Neither result requires a nonempty endpoint set,
+sparse shifts or a globally finite family. The two assertions concern the
+actual initial construction before stars and repairs.
+
+| Released module | Raw source SHA-256 | Direct wall / user / system |
+|---|---|---|
+| InitialRegionInterfaces.lean | `9afa8cbd355e36c4c3091016598cd99fc7f65c4e1780e771f264011fe149c688` | 4.79 / 2.32 / 2.70 s |
+| InitialRegionRegularity.lean | `61e4dfe5bf66b6fe0a8a96d41f87de4eaf22180fc58dba55fad8805483dbd626` | 13.27 / 2.44 / 4.65 s |
+
+Both complete package-option direct checks passed without diagnostics; complete
+independent mathematical reviews approve both exact final hashes. Their
+released manifests retain successful log hashes and earlier diagnostics.
+The two planned records, notices and imported report have independent review
+approval. The fixed master retains SHA-256
+`be0c55ff70f12f8a5b55f848bfc826004d74b9f7c21df00a6807611e611d18aa`.
+
+Exact source `eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac` freezes seven files:
+the two modules, Geometry.lean, the two-import/two-name report, two mathematical
+chapters and their router. One shared canonical Geometry build passed in **20.802 seconds**, and its
+two-name imported report in **5.721 seconds**, exit zero without diagnostics.
+Both actual foundation sets are exactly `propext`, `Classical.choice` and
+`Quot.sound`. Their raw log SHA-256 values are
+`ef2790841130c1b6a1c286f23fbd4ee48b717e5c3b805e8ece6493fb13380f9b`
+and `e0223b964a5f1f8360789247c3dd8f1486a0857a0ec0da8f838aebea309b654f`.
+Strict promotion, the one unchanged normal policy and guarded finalization
+pass all **306** records. Raw strict promotion is retained; only the two new
+historical preparation sentences were clarified before the single normal pass.
+Independent final-output review confirms exact notice-plus-raw sources, all
+304 old records and 26 shard bytes, all 148 historical files and policy bytes,
+all seven frozen files, exact actual command headers and log hashes, and
+raw-versus-derived record equality. Only the two new historical descriptions
+change; the finalized rows are byte-identical to normal-policy production.
+No discrepancy is found, and no policy or compiler check was repeated.
+The mathematical evidence and publication information are recorded by branch
+and exact source; no successor PR number or evidence head is invented.
+
+Actual static checks pass at this freeze: **20,254** theorem-like blueprint
+entries and **20,260** flat references, **2,866** generated modules in **75**
+aggregate files, two theorems, two proofs, two tags and four completion markers.
+Three changed LaTeX files are formatter-idempotent. Reader and module guards
+pass at **2,940** production and **3,065** total files. All dependency labels
+resolve and the scoped proof scan finds no repeated pattern. Both auxiliary
+helpers are bound to the exact source once; numeric tokens alone were adapted,
+with decimal `[0-9]` and hexadecimal character classes preserved. No source,
+master or capture byte changed during helper binding.
+
+The latest exact analytic coordination reply is
+[#8753, comment 6050425143](https://github.com/LionSR/TNLean/issues/8753#issuecomment-6050425143),
+recorded in `/tmp/tnlean-8758-geometry-analytic-status-0141.md`. It distinguishes
+the published #8906/aa2/ff3 parent from this successor's exact eb7 freeze,
+canonical 20.802/5.721 checks and normal306 with publication pending. It also
+distinguishes confirmed QICLean draft heads from their owners' build evidence.
+The unchanged dependency pin and disjoint analytic ownership remain explicit.
+
+The latest peer report concerns [QICLean #651](https://github.com/LionSR/QICLean/pull/651),
+with the actual joint density checked at owner-reported source
+`771e955ae728db3e88af04114b5773843fc04eef`, and
+[QICLean #652](https://github.com/LionSR/QICLean/pull/652), with the local
+component moment checked at owner-reported source
+`b5ba8ae27c0a86858a02e62337cf66a343a9d6ad`. Root's read-only GitHub query
+confirms published draft heads and those body reports. Their builds and books
+remain owner evidence; geometry has not repeated them or adopted dependencies.
+The actual QC/VR same-component marginal consumer is reported strictly checked
+and undergoing its production freeze. Positivity and projector comparison
+retain their analytic owner. No completed headline theorem is inferred.
+
+The subsequent fan-frontier construction is publicly claimed at
+[#8758, comment 6050315669](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050315669),
+and near-mark geometry at
+[#8758, comment 6050341951](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050341951).
+Both remain outside this frozen contribution. No direct or canonical outcome
+for either successor is asserted. Local sectors, isolated stars, simultaneous
+repairs, residual exceptional descendants, earlier same-label clearance,
+finite sampled restriction and the uniform final sum remain open. No
+zero-boundary geometric reduction or headline conclusion is supplied.
+
 ## Worktrees and verification discipline
 
-- `worktrees/area-law-peps-models` is the sole warm worktree on
-  `feat/area-law-initial-lattice-partition`, with proof frozen at
-  `ff3ac34d661f011020c566dff01eed0fb6454881`. Its one Geometry build and
-  six-name report, normal304 and guarded finalization have passed.
-  Metadata publication remains pending. Preserve all nine frozen files and the
-  compiled dependencies; source-writing successors do not overlap this
-  contribution's verification.
+- `worktrees/area-law-peps-models` is the sole warm worktree, with the current
+  seven-file proof freeze at `eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac`.
+  Its one shared Geometry build and two-name report, strict promotion,
+  normal306 and guarded finalization have passed. Metadata publication
+  remains pending. The completed parent is
+  #8906/aa2. Source-writing successors remain outside this verification.
 - `worktrees/area-law-source-preparation` has no `.lake`; its completed
   preparation HEAD remains `3847e691d456f820d306b3b58fdfa575f64d75f1`;
   released successor sources coexist there. Root owns
