@@ -1,0 +1,69 @@
+\section{Interfaces of belt runs with primary regions and other belt runs}
+\label{sec:area_law_belt_run_interfaces}
+
+The local perimeter labels in \cite[Section~11]{OpenAI2026AreaLaw}
+determine the labels along positive-length interfaces of the resulting
+regions. A shared nondegenerate segment is retained as the geometric
+hypothesis, since two isolated common points of disconnected regions
+need not lie on a common interface.
+
+% Source: 10-geometry.tex, prop:two-families, lines 212--218 and 299--323,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These interface results do not assemble the global two-family partition.
+
+\begin{theorem}[A belt run meets a retained primary with opposite label]
+    \label{thm:area_law_belt_run_primary_interface}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_primary_interface}
+    \leanok
+    \uses{def:area_law_belt_fan_color,def:area_law_fan_runs,
+        def:area_law_primary_regions}
+    Fix a common origin, finite endpoint set, width $C\ge 2$ and
+    initial layer $k_0\ge 50{,}000{,}000$, with arbitrary residue choices
+    in every layer. Let $R$ be an actual run of the labelled fan in an
+    actual belt cell of layer $k\ge k_0$. For any $h\ge k_0$ and
+    signed pitch index $J$, suppose a closed segment $[u,v]$, with
+    $u\ne v$, lies in both the run region and the primary birth region
+    of index $J$ at layer $h$. Then $J$ is retained, and every triangle
+    of $R$ has label $h+1\ne h$ modulo two.
+    Retention is a conclusion; the primary region need not be connected.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_primary_fine_cell_cover,
+        thm:area_law_fan_other_cell_contact,
+        thm:area_law_belt_fan_nonbelt_color,thm:area_law_fan_run_color}
+    The primary is a finite union of closed actual non-belt fine cells.
+    The run is a finite union of its fan triangles. Their constituent
+    intersections cover the infinite segment $[u,v]$, so at least one
+    contains two distinct points. The belt cell and the selected non-belt
+    cell have distinct indexed identifiers. The triangle/base contact
+    equality transfers this contact to the elementary base. The local
+    non-belt opponent rule then identifies its pitch index as a retained
+    primary and assigns the opposite primary label. Constancy on the run
+    gives that same label for every constituent triangle.
+\end{proof}
+
+\begin{theorem}[Opposite labels across an interface of distinct belt cells]
+    \label{thm:area_law_belt_runs_interface_colors}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRuns_interface_colors_ne}
+    \leanok
+    \uses{def:area_law_belt_fan_color,def:area_law_fan_runs}
+    Under the same common data and scale bounds, let $R$ and $T$ be
+    actual runs in actual belt cells of layers $k,h\ge k_0$, whose
+    indexed cell identifiers are distinct. If a nondegenerate closed
+    segment belongs to both run regions, then every triangle of $R$
+    has a label different from every triangle of $T$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fan_other_cell_contact,
+        thm:area_law_belt_fan_contact_colors,thm:area_law_fan_run_color}
+    The segment is covered by finitely many pairs of constituent
+    triangles. Infinitude again yields a pair with two distinct common
+    points. Each triangle lies in its own closed cell. Applying the
+    triangle/base equality in both directions places these two points
+    on both elementary bases. The local belt-contact rule gives opposite
+    labels for that pair. Constancy on each run extends the conclusion
+    to all of their triangles.
+\end{proof}
+
+Dummy-region interfaces, global region identifiers, isolated contact stars
+and the subsequent repairs remain separate steps of the two-family argument.
