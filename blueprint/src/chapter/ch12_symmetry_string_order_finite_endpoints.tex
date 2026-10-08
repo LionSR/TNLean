@@ -1,0 +1,179 @@
+\subsection{Physical endpoints on dimension-bounded blocks}
+
+For an observable $O$ on $q$ physical sites, write
+\begin{align}
+    \E_O^{[q]}(Z)
+     & :=\sum_{\sigma,\tau\in\{0,\ldots,d-1\}^q}
+    O_{\tau,\sigma}\,A^\sigma Z(A^\tau)^\dagger,
+     & A^\sigma                                  & :=A_{\sigma_0}\cdots A_{\sigma_{q-1}}.
+    \label{eq:physical_block_transfer}
+\end{align}
+The middle twist below still acts on individual sites. In particular its
+length is an arbitrary $N\in\N$, not a multiple of the endpoint support.
+
+\begin{theorem}[Stationary virtual boundaries from $D^2$ physical sites]
+    \label{thm:physical_endpoint_stationary_span}
+    \lean{MPSTensor.exists_physicalObservableTransfer_eq_at_stationary,
+        MPSTensor.exists_physicalObservableTransfer_one_eq}
+    \leanok
+    \uses{def:normal}
+    Let $A$ be normal and let $\Omega\in\MN{D}$ be invertible with
+    $\E_A(\Omega)=\Omega$. Every $Y\in\MN{D}$ has a physical representative
+    $O$ on $q=D^2$ sites satisfying $\E_O^{[q]}(\Omega)=Y$.
+    In particular, when $\E_A(\Id)=\Id$, every right virtual boundary is
+    $\E_O^{[q]}(\Id)$ for such an $O$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_observable_word_span_mul}
+    Consider the increasing spaces
+    \begin{align}
+        S_\ell(\Omega)
+         & :=\operatorname{span}_{\C}
+        \{A^\sigma\Omega(A^\tau)^\dagger:|\sigma|=|\tau|=\ell\}.
+        \notag
+    \end{align}
+    Stationarity gives $S_\ell\subseteq S_{\ell+1}$. Equality at one step
+    propagates through the recurrence
+    $S_{\ell+1}=\sum_{i,j}A_iS_\ell A_j^\dagger$.
+    By Theorem~\ref{thm:physical_observable_word_span_mul}, normality and
+    invertibility of $\Omega$ make one of these spaces all of $\MN{D}$. A dimension argument therefore gives $S_{D^2}=\MN{D}$.
+    The coefficients of a spanning expansion are the entries of $O$ in
+    (\ref{eq:physical_block_transfer}).
+\end{proof}
+
+\begin{theorem}[Block injectivity under adjoints]
+    \label{thm:block_injectivity_adjoint_reverse}
+    \lean{Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose}
+    \leanok
+    If the length-$L$ words of the family $(A_i^\dagger)_i$ span $\MN{D}$,
+    then the length-$L$ words of $A$ also span $\MN{D}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Conjugate transposition reverses the order of the letters and maps one
+    word span bijectively onto the other.
+\end{proof}
+
+\begin{theorem}[Exact realization of both physical endpoints]
+    \label{thm:physical_block_endpoints_exact}
+    \lean{MPSTensor.exists_physicalObservableTransfer_trace_eq,
+        MPSTensor.exists_physicalStringBlockEndpoints}
+    \leanok
+    \uses{thm:physical_endpoint_stationary_span,
+        thm:block_injectivity_adjoint_reverse, def:string_order_boundary_param}
+    Let $A$ be normal and unital, and let $\Lambda$ be invertible with
+    $\E_A^*(\Lambda)=\Lambda$. For all virtual matrices $X,Y$, there are
+    physical operators $x,y$ on $q=D^2$ sites such that, for every physical
+    twist $u$ and every individual middle length $N$,
+    \begin{align}
+        S_N^{[q]}(x,y,u)
+         & :=\tr\!\left[\Lambda\E_x^{[q]}
+            \E_u^N\bigl(\E_y^{[q]}(\Id)\bigr)\right]
+        =\tr\!\left[\Lambda X\E_u^N(Y)\right].
+        \label{eq:physical_block_endpoints_exact}
+    \end{align}
+    Neither endpoint nor its support depends on $u$ or $N$.
+
+    % Formula/source: arXiv:0802.0447, SOPMP, lines 176--181, with
+    % the two endpoint blocks of lines 278--291; q = D^2.
+    % Ink-to-index map: the endpoint A^[q] nodes carry grouped physical
+    % words sigma,tau; x_(tau,sigma) and y_(tau,sigma) contract their rungs.
+    % Each middle ket--u--bra rung is one ordinary physical site.
+    % Contraction set: every physical rung, both horizontal virtual rows,
+    % the west Lambda cup, and the east identity cup are contracted.
+    % Boundary signature: virtual-west=0 | virtual-east=0 |
+    % physical-up=0 | physical-down=0. The result is a scalar.
+    % TENKZ-STRING-BLOCK-ENDPOINTS-BEGIN
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=5, west={cup=$\Lambda$}, east=cup]
+            \tn[label pos=n]{A^{[q]}} & \tn[label pos=n]{A} &
+            \tn[skin=dots]{} & \tn[label pos=n]{A} & \tn[label pos=n]{A^{[q]}} \\
+            \tn[label pos=s, conjugate]{\overline{A^{[q]}}} &
+            \tn[label pos=s, conjugate]{\overline{A}} & \tn[skin=dots]{} &
+            \tn[label pos=s, conjugate]{\overline{A}} &
+            \tn[label pos=s, conjugate]{\overline{A^{[q]}}}
+            \tn[species=operator, label pos=e, at=on bond-1-1-2-1 0.5]{x}
+            \tn[species=operator, label pos=e, at=on bond-1-2-2-2 0.5]{u}
+            \tn[species=operator, label pos=e, at=on bond-1-4-2-4 0.5]{u}
+            \tn[species=operator, label pos=e, at=on bond-1-5-2-5 0.5]{y}
+            \tnmark[form=label]{2 s of (2,1)}{$q\text{ sites}$}
+            \tnmark[form=label]{2 s of (2,3)}{$N\text{ sites}$}
+            \tnmark[form=label]{2 s of (2,5)}{$q\text{ sites}$}
+        \end{tenkz}
+    \end{center}
+    % TENKZ-STRING-BLOCK-ENDPOINTS-END
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_endpoint_stationary_span}
+    Apply stationary endpoint realization to $A$ at $\Id$ to obtain
+    $\E_y^{[q]}(\Id)=Y$. Apply it to the adjoint letters at the stationary
+    matrix $\Lambda$ to represent $\Lambda X$. Reversing both physical
+    words and using trace cyclicity gives
+    $\tr[\Lambda\E_x^{[q]}(Z)]=\tr(\Lambda XZ)$ for every $Z$.
+    These identities prove (\ref{eq:physical_block_endpoints_exact}) for
+    every $N$ without blocking the middle string.
+\end{proof}
+
+\begin{theorem}[Hermitian product endpoints with nonzero coefficients]
+    \label{thm:physical_block_product_coefficients}
+    \lean{MPSTensor.exists_isHermitian_physicalStringProductEndpoints}
+    \leanok
+    \uses{thm:physical_block_endpoints_exact}
+    Assume in addition that $\tr\Lambda=1$, and let $V$ be unitary.
+    There are Hermitian one-site matrices $x_j,y_j$, $0\le j<q=D^2$,
+    for which the product observables
+    $x=\bigotimes_{j=0}^{q-1}x_j$ and $y=\bigotimes_{j=0}^{q-1}y_j$ satisfy
+    \begin{align}
+        \tr\!\left[\Lambda\E_x^{[q]}(V)\right] & \ne0,
+                                               & \tr\!\left[\Lambda V^\dagger\E_y^{[q]}(\Id)\right] & \ne0.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Exact realization first supplies arbitrary block observables for which
+    each coefficient is $\tr\Lambda=1$. Matrix units span the block
+    observable space, so each nonzero coefficient is nonzero on some tensor
+    product of one-site matrix units. Decompose each factor as $H+iK$ with
+    $H,K$ Hermitian. Multilinearity lets one choose either $H$ or $K$ at each
+    site while retaining a nonzero coefficient. Exact realization of
+    arbitrary virtual boundaries does not require those representatives
+    themselves to be Hermitian products.
+\end{proof}
+
+\begin{theorem}[Physical string order with $D^2$-site Hermitian endpoints]
+    \label{thm:physical_block_order_pure_canonical}
+    \lean{MPSTensor.pureCanonical_isIrreducibleMap_and_isPrimitive,
+        MPSTensor.isNormal_of_pureCanonical,
+        MPSTensor.pureCanonical_exists_physicalStringBlockEndpoints,
+        MPSTensor.physicalStringBlock_norm_tendsto,
+        MPSTensor.pureCanonical_exists_isHermitian_physicalStringProductOrder}
+    \leanok
+    \uses{lem:pgwsvc08_twisted_spectral_radius,
+        thm:physical_block_product_coefficients,
+        thm:physical_string_phase_retaining_asymptotics}
+    Let $A$ have faithful normalized canonical density $\Lambda$ and the
+    source's simple-peripheral purity property. For every unitary $u$ with
+    $\rho(\E_u)=1$, there are Hermitian one-site endpoint factors supported
+    on $D^2$ sites at each end for which
+    \begin{align}
+        \lim_{N\to\infty}\left|S_N^{[D^2]}(x,y,u)\right| & >0.
+        \notag
+    \end{align}
+    The twist remains the supplied $u$, and $N$ counts individual middle
+    sites. No one-site injectivity assumption is imposed. An existential
+    claim of nontrivial physical action separately requires the projective
+    convention of Definition~\ref{def:has_physical_string_order}.
+\end{theorem}
+\begin{proof}\leanok
+    Canonical purity gives irreducibility and peripheral primitivity.
+    Apply primitive-channel word-span fullness to the adjoint family and
+    reverse words to obtain normality. Peripheral rigidity supplies a
+    unitary $V$ and a phase $\mu$. The preceding theorem gives nonzero
+    endpoint coefficients $\alpha_y,\beta_x$ for Hermitian product
+    endpoints. The demodulated virtual transfer limit yields
+    $|S_N^{[D^2]}|\to|\alpha_y|\,|\beta_x|>0$.
+\end{proof}

@@ -61,7 +61,7 @@ theorems.
         \label{eq:aklt_physical_string_order_value}
     \end{align}
     Thus the actual unblocked physical endpoints witness string order with
-    limiting absolute value $4/9$ and a nonidentity physical unitary.
+    limiting absolute value $4/9$ and a nonscalar physical unitary.
     The same value holds for the existing representative $A$ of
     Definition~\ref{def:aklt_tensor}.
 \end{theorem}
@@ -75,7 +75,8 @@ theorems.
         \notag
     \end{align}
     Iteration and the normalized trace give $-4/9$. The positive limit is
-    constant, so no asymptotic approximation is needed.
+    constant, so no asymptotic approximation is needed. The twist has
+    distinct diagonal entries and is therefore nonscalar.
 \end{proof}
 
 \begin{remark}[Normalization in the printed AKLT example]
@@ -171,7 +172,7 @@ theorems.
     \end{align}
     Odd middle lengths are included. The two-site blocked tensor also has
     physical string-order parameter one and satisfies the positive-limit
-    predicate with the nonidentity unitary $u\otimes u$.
+    projective predicate with the nonscalar unitary $u\otimes u$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:cluster_one_site_physical_string_obstruction}
@@ -180,5 +181,146 @@ theorems.
     $\mathcal E_x^{(2)}(\sigma_y)=-\Id$, while
     $\mathcal E_{-\sigma_x}(\sigma_y)=\sigma_y$. Both minus signs cancel,
     and the normalized trace is one. The same fixed-point calculation applies
-    to the blocked twist.
+    to the blocked twist, whose nonzero off-diagonal entry makes it
+    nonscalar.
+\end{proof}
+
+\subsection{A canonical tensor testing the scalar-phase convention}
+
+\begin{example}[Four independent quarter-turn letters]
+    \label{ex:string_order_scalar_phase_tensor}
+    \lean{MPSTensor.stringPhaseTensor,
+        MPSTensor.stringPhaseTensor_linearIndependent,
+        MPSTensor.stringPhaseTensor_isInjective,
+        MPSTensor.stringPhaseTensor_unital,
+        MPSTensor.stringPhaseTensor_isTP,
+        MPSTensor.stringPhaseTensor_canonical,
+        MPSTensor.stringPhaseTensor_pure,
+        MPSTensor.stringPhaseTensor_conjugation_eq_of_condC2,
+        MPSTensor.stringPhaseTensor_twist_eq_one_of_nonzero_fixed,
+        MPSTensor.stringPhaseTensor_literal_criterion_counterexample,
+        MPSTensor.stringPhaseTensor_not_hasPhysicalStringOrder}
+    \leanok
+    \uses{lem:physical_string_scalar_phases, thm:projective_physical_string_order,
+        lem:irreducible_twisted_transfer_reduction,
+        thm:twisted_peripheral_eigendirection_unique, thm:condC1_imp_condC2}
+    Take $D=2$, $d=4$, $\Lambda=\Id/2$, and
+    \begin{align}
+        A_j & =\sqrt{p_j}\,U_j,
+            & (p_0,p_x,p_y,p_z) & =(1/2,1/4,1/6,1/12),\notag             \\
+        U_0 & =\Id,
+            & U_k               & =(\Id-i\sigma_k)/\sqrt2\quad(k=x,y,z).
+        \notag
+    \end{align}
+    The four letters span $\MN{2}$, and the transfer map is unital and
+    trace preserving. On the Pauli basis of traceless matrices its matrix is
+    \begin{align}
+        T & =\begin{pmatrix}
+                 3/4  & -1/12 & 1/6  \\
+                 1/12 & 2/3   & -1/4 \\
+                 -1/6 & 1/4   & 7/12
+             \end{pmatrix}.
+        \notag
+    \end{align}
+    Its symmetric part has distinct diagonal entries, and all its skew
+    off-diagonal entries are nonzero. A conjugation symmetry has an
+    orthogonal Pauli matrix $R$ commuting with $T$ and $T^{\mathsf T}$,
+    forcing $R=c\Id$. Preservation of
+    $\sigma_x\sigma_y=i\sigma_z$ forces $c=1$.
+    Every unitary physical twist with a nonzero fixed eigenmatrix is therefore
+    the identity. Yet $x=y=\Id$ and $u=-\Id$ give $S_N=(-1)^N$.
+    The nonzero letter-trace condition forces its eigenmatrix to be nonzero,
+    so this tensor refutes the full existential criterion printed in
+    Theorem~1 of~\cite{PerezGarcia2008StringOrder}. It has no physical
+    string order under the explicit projective convention.
+    See~\cite{gap:pgwsvc08_string_order_scalar_phase}.
+
+    On the actual normalized periodic ring, the scalar twist $i\Id$ gives
+    $\langle(i\Id)^{\otimes L}\rangle_L=i^L$ whenever the periodic vector
+    is nonzero. The twist $-\Id$ has no complex full-ring limit, despite
+    unit magnitude on the eventual nonzero tail. These phase-sensitive
+    statements use the same tensor and the periodic closure of
+    Theorem~\ref{thm:periodic_string_exact_phase}; the qualification of
+    display RL is recorded in~\cite{gap:pgwsvc08_string_order_virtual_boundary}.
+    \lean{MPSTensor.stringPhaseTensor_fullRing_I_eq_pow,
+        MPSTensor.stringPhaseTensor_fullRing_neg_one_not_tendsto}
+\end{example}
+\subsection{Exact periodic symmetry overlaps in the AKLT and cluster states}
+
+The periodic examples in~\cite[lines~392--411]{PerezGarcia2008StringOrder}
+concern the full-ring observable of
+Definition~\ref{def:source_periodic_string_overlap}. The following formulas
+include the short lengths under the trace convention for the periodic vector.
+
+\begin{theorem}[Exact periodic AKLT normalization and symmetry overlap]
+    \label{thm:aklt_periodic_string_exact}
+    \lean{MPSTensor.akltPGWSVC08_transferMap_pow,
+        MPSTensor.akltPGWSVC08_mpvState_inner_self,
+        MPSTensor.akltPGWSVC08_mpvState_one,
+        MPSTensor.akltPGWSVC08_mpvState_ne_zero_iff,
+        MPSTensor.akltPGWSVC08_fullRing}
+    \leanok
+    \uses{def:aklt_physical_string_data, def:source_periodic_string_overlap}
+    Let $A$ be the printed AKLT tensor and let $u=e^{i\pi S_z}$.
+    For every $L\geq0$ and $X\in M_2(\C)$,
+    \begin{align}
+        \E_A^L(X)
+         & =\left(-\frac13\right)^L X
+        +\left[1-\left(-\frac13\right)^L\right]
+        \frac{\tr X}{2}\Id,\label{eq:aklt_periodic_transfer_power}            \\
+        Z_L=\|\Phi_L(A)\|^2
+         & =1+3\left(-\frac13\right)^L,\label{eq:aklt_periodic_normalization} \\
+        \langle u^{\otimes L}\rangle_L
+         & =\begin{cases}0,&L=1,\\1,&L\ne1.\end{cases}
+        \label{eq:aklt_periodic_full_ring}
+    \end{align}
+    Thus $L=1$ is exactly the zero-vector exception. Length zero has
+    coefficient two, and every length at least two has positive squared norm.
+    This makes explicit the admissible lengths in the value $R_L(u)=1$
+    stated in~\cite[line~399]{PerezGarcia2008StringOrder}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:aklt_physical_string_order_value, thm:periodic_string_exact_phase,
+        thm:periodic_string_trace_ratio}
+    The transfer map fixes the scalar matrices and multiplies traceless
+    matrices by $-1/3$. Induction proves
+    (\ref{eq:aklt_periodic_transfer_power}), whose endomorphism trace is
+    (\ref{eq:aklt_periodic_normalization}). For $L\geq2$, the absolute value
+    of the correction to one is at most $1/3$, so the norm is nonzero.
+    Direct substitution gives $Z_0=4$ and $Z_1=0$.
+    The virtual symmetry $V=\sigma_z$ has phase one, so
+    Theorem~\ref{thm:periodic_string_exact_phase} applies at all the nonzero
+    lengths. At length one the normalized expectation is zero.
+\end{proof}
+
+\begin{theorem}[Exact periodic cluster normalization and symmetry overlap]
+    \label{thm:cluster_periodic_string_exact}
+    \lean{MPSTensor.clusterTensorRMP_mpvState_norm_sq,
+        MPSTensor.clusterTensorRMP_mpvState_ne_zero,
+        MPSTensor.clusterTensorRMP_fullRing}
+    \leanok
+    \uses{def:cluster_tensor_review, def:source_periodic_string_overlap}
+    Let $A^0=\ket0\bra+$ and $A^1=\ket1\bra-$ be the printed cluster tensor,
+    and let $u=-\sigma_x$. The periodic vector is nonzero for every
+    $L\geq0$, with
+    \begin{align}
+        Z_L=\|\Phi_L(A)\|^2
+                                       & =\begin{cases}4,&L=0,\\1,&L\geq1,\end{cases}
+        \label{eq:cluster_periodic_normalization}                                     \\
+        \langle u^{\otimes L}\rangle_L & =1.
+        \label{eq:cluster_periodic_full_ring}
+    \end{align}
+    At positive lengths the vector is the cyclic product of controlled-$Z$
+    gates applied to $\ket+^{\otimes L}$. This convention gives $\ket-$ at
+    length one and $\ket+\otimes\ket+$ at length two.
+    The overlap is the value stated in~\cite[line~411]{PerezGarcia2008StringOrder}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:cluster_one_site_physical_string_obstruction,
+        thm:periodic_string_exact_phase}
+    Every positive-length coefficient of the controlled-$Z$ state has
+    squared modulus $2^{-L}$, and there are $2^L$ such coefficients.
+    The empty product has trace two. The virtual symmetry $V=\sigma_y$
+    implements $u=-\sigma_x$ with phase one, so
+    Theorem~\ref{thm:periodic_string_exact_phase} gives the overlap.
 \end{proof}

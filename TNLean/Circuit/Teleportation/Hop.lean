@@ -332,8 +332,8 @@ structure TeleportHop (N : ℕ) [NeZero N] where
   k₁ : Fin N
   /-- The left site of the pair `{c, e}`. -/
   k₂ : Fin N
-  bond_k₁ : bond k₁ = {e, f}
-  bond_k₂ : bond k₂ = {c, e}
+  bond_k₁ : ringBond k₁ = {e, f}
+  bond_k₂ : ringBond k₂ = {c, e}
   c_ne_e : c ≠ e
   c_ne_f : c ≠ f
   e_ne_f : e ≠ f

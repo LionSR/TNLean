@@ -1,0 +1,277 @@
+\subsection{Nonuniform native parent classification}
+\label{sec:peps_nonuniform_native_classification}
+
+Let $\Lambda=\mathbb Z_w\times\mathbb Z_h$ with $w,h\geq3$, and let $E$
+be the ordered edges of its native torus graph. Each edge $e$ has its own
+finite virtual alphabet $D_e$ and representation $U_e$ of a finite group
+$G$. Each vertex $v$ has its own physical alphabet $Y_v$ and tensor $A_v$.
+The conclusions below give the native-simple-torus form of
+\cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}, with no requirement that the
+representations, dimensions, or tensors be uniform.
+% Scope: both periods are at least three. Do not replace an unrestricted
+% source label covering smaller labelled tori with this restricted statement.
+% Source: Papers/1001.3807/paper_v3.tex:1515--1621.
+
+\begin{definition}[Native dependent-dimensional closures]%
+    \label{def:peps_nonuniform_native_closure}
+    \lean{TNLean.PEPS.NativeTorus.LocalConfig,
+        TNLean.PEPS.NativeTorus.closure,
+        TNLean.PEPS.NativeTorus.commutingClosureSpan,
+        TNLean.PEPS.NativeTorus.canonicalSites,
+        TNLean.PEPS.NativeTorus.canonicalProjector}
+    \leanok
+    Let $\mathcal N_A(B)$ denote the actual contraction with bond matrices
+    $B_e$, acting from the tail index to the head index. Write $p^{g,k}_e$
+    for the native closure labels: the ordered horizontal wrapping edges
+    carry $k^{-1}$, the ordered vertical wrapping edges carry $g$, and
+    other edges carry $1$. Define
+    \begin{align}
+        \zeta_A(g,k) & =\mathcal N_A\bigl((U_e(p^{g,k}_e))_{e\in E}\bigr),
+                     & \mathcal Z_A                                        & =\operatorname{span}\{\zeta_A(g,k):gk=kg\}.
+        \label{eq:peps_nonuniform_native_closure}
+    \end{align}
+    The local virtual alphabet is the product of the incident $D_e$.
+    The canonical tensor at $v$ is the averaging projector $P_v$ for its
+    incident representation; write $A^0_v=P_v$ and $P=\bigotimes_vP_v$.
+\end{definition}
+
+\begin{theorem}[Physical transport of native closures]%
+    \label{thm:peps_nonuniform_native_transport}
+    \lean{TNLean.PEPS.NativeTorus.physicalMap_closure,
+        TNLean.PEPS.NativeTorus.map_commutingClosureSpan,
+        TNLean.PEPS.NativeTorus.map_commutingClosureSpan_recover}
+    \leanok
+    \uses{def:peps_nonuniform_native_closure}
+    Given independent physical maps $F_v$, finite physical alphabets give
+    $\zeta_{FA}(g,k)=(\bigotimes_vF_v)\zeta_A(g,k)$ and
+    $\mathcal Z_{FA}=(\bigotimes_vF_v)\mathcal Z_A$.
+    If the original site maps $T_v$ are invariant, $T_vP_v=T_v$, so
+    $\mathcal Z_A=(\bigotimes_vT_v)\mathcal Z_{A^0}$.
+\end{theorem}
+\begin{proof}\leanok
+    Interchange the finite physical sums with the bond contraction.
+    The identity $T_vP_v=T_v$ then recovers every original site coefficient.
+\end{proof}
+
+For the next regional-parent statements, take the physical alphabets to be
+a common finite alphabet. Independent physical alphabets are treated by
+Theorem~\ref{thm:peps_nonuniform_native_padded_kernel}.
+
+\begin{theorem}[Local support of inserted dependent bonds]%
+    \label{thm:peps_nonuniform_inserted_region}
+    \lean{TNLean.PEPS.graphDependentNetwork_slice_mem_regionGroundSpace_of_internal_eq_one,
+        TNLean.PEPS.DependentBondNetwork.network_vertexGauge_of_invariant}
+    \leanok
+    On any finite ordered graph, suppose $B_e=1$ for every edge internal
+    to a region $R$. Every exterior physical slice of $\mathcal N_A(B)$
+    lies in the actual open-region range $\mathcal S_{A,R}$.
+    Moreover, invariant tensors satisfy
+    \begin{align}
+        \mathcal N_A\bigl((U_e(q_{\mathrm{head}(e)}p_eq_{\mathrm{tail}(e)}^{-1}))_e\bigr)
+         & =\mathcal N_A\bigl((U_e(p_e))_e\bigr).
+        \label{eq:peps_nonuniform_native_gauge}
+    \end{align}
+    Neither assertion assumes semi-regularity or injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    Split the endpoint indices into internal and noninternal edges.
+    The internal identities identify their two endpoints, leaving the
+    open-region contraction. Summing the noninternal indices supplies its
+    boundary coefficient. For (\ref{eq:peps_nonuniform_native_gauge}),
+    first average the site representations and change the vertex labels
+    in the finite gauge sum; then use $T_vP_v=T_v$.
+\end{proof}
+
+\begin{theorem}[Commuting closures satisfy the plaquette parents]%
+    \label{thm:peps_nonuniform_native_membership}
+    \lean{TNLean.PEPS.torusPlaquette_internal_not_mem_shiftedGraphSeamCut,
+        TNLean.PEPS.isTorusFlat_nativeClosure,
+        TNLean.PEPS.nativeClosure_slice_mem_torusPlaquetteGroundSpace,
+        TNLean.PEPS.nativeClosure_mem_torusPlaquetteParentGroundSpace,
+        TNLean.PEPS.nativeCommutingClosureSpan_le_torusPlaquetteParentGroundSpace}
+    \leanok
+    \uses{def:peps_nonuniform_native_closure,def:peps_native_graph_seams}
+    If each $A_v$ is invariant, every commuting closure lies in every
+    microscopic plaquette parent space. For the plaquette based at
+    $v=(x,y)$, the seams at $x+2$ and $y+2$ meet no internal edge.
+    Consequently $\mathcal Z_A\subseteq\bigcap_v\mathcal S_{A,R_v}^{\mathrm{ext}}$,
+    where $R_v=\{x,x+1\}\times\{y,y+1\}$ and the superscript denotes all
+    exterior physical slices.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_nonuniform_inserted_region}
+    The native rightward transport is $k$ on its seam; upward transport is
+    $g^{-1}$ on its seam. Their square holonomy is identity when $gk=kg$.
+    The translated tree gauge moves both seams to $x+2,y+2$.
+    Since neither coordinate equals either coordinate of the plaquette,
+    all internal bond matrices become identities. Apply local regional
+    support and then take linear combinations.
+\end{proof}
+
+\begin{theorem}[Every microscopic parent vector is a closure sum]%
+    \label{thm:peps_nonuniform_native_spanning}
+    \lean{TNLean.PEPS.averagingProjector_flat_bondProduct_eq_nativeClosure,
+        TNLean.PEPS.torusPlaquetteParentGroundSpace_le_nativeCommutingClosureSpan}
+    \leanok
+    \uses{thm:peps_native_parent_coefficients,def:peps_nonuniform_native_closure}
+    Suppose every $U_e$ is semi-regular and every $A_v$ is $G$-injective.
+    Then $\bigcap_v\mathcal S_{A,R_v}^{\mathrm{ext}}\subseteq\mathcal Z_A$.
+    More precisely, for every flat bond assignment $p$ there is a commuting
+    pair $(g,k)$ such that $PB(p)=\zeta_{A^0}(g,k)$, where $B(p)$ is the
+    product of the actual represented bond entries.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_native_parent_coefficients,thm:peps_nonuniform_native_transport}
+    For a parent vector $\psi$, the common local inverses give $\xi$ with
+    $P\xi=\xi$, $(\bigotimes_vT_v)\xi=\psi$, and
+    $\xi=\sum_pc_pB(p)$. Regional trace-dual support makes every $p$ with
+    $c_p\ne0$ a vertex coboundary on each plaquette, hence flat.
+    Its tree gauge leaves precisely two commuting seam holonomies.
+    Gauge invariance of the actual average gives
+    \begin{align}
+        \psi=(\bigotimes_vT_v)P\xi
+        =\sum_{p:c_p\ne0}c_p\zeta_A(g_p,k_p)\in\mathcal Z_A.
+        \label{eq:peps_nonuniform_native_span}
+    \end{align}
+\end{proof}
+
+For closure extraction and independence, allow independent physical
+alphabets $Y_v$ again. These assertions concern the literal dependent
+contractions and do not require a new parent definition.
+
+\begin{theorem}[Conjugacy and exact native extraction]%
+    \label{thm:peps_nonuniform_native_extraction}
+    \lean{TNLean.PEPS.NativeTorus.closureLabels_conjugate,
+        TNLean.PEPS.NativeTorus.closureLabels_eq_iff,
+        TNLean.PEPS.NativeTorus.bondCoefficientExtraction_closure,
+        TNLean.PEPS.NativeTorus.bondCoefficientExtraction_closure_eq_zero_of_class_ne,
+        TNLean.PEPS.NativeTorus.bondCoefficientExtraction_closure_self,
+        TNLean.PEPS.NativeTorus.bondCoefficientExtraction_closure_self_ne_zero,
+        TNLean.PEPS.NativeTorus.closure_conjugate,
+        TNLean.PEPS.NativeTorus.closure_eq_of_pairConjugacyClass_eq}
+    \leanok
+    \uses{def:peps_nonuniform_native_closure,def:peps_dependent_bond_coefficient}
+    Local invariance gives $\zeta_A(xgx^{-1},xkx^{-1})=\zeta_A(g,k)$.
+    If all $U_e$ are semi-regular, the native product trace-dual functional
+    $E_{a,b}$ satisfies
+    \begin{align}
+        E_{a,b}(\zeta_{A^0}(g,k))
+         & =|G|^{-|\Lambda|}\sum_{x\in G}
+        \mathbf1_{a=xgx^{-1},\ b=xkx^{-1}},
+        \label{eq:peps_nonuniform_native_extract} \\
+        E_{g,k}(\zeta_{A^0}(g,k))
+         & =|G|^{-|\Lambda|}|C_G(g,k)|\ne0.
+        \label{eq:peps_nonuniform_native_diagonal}
+    \end{align}
+    These equalities do not require $g$ and $k$ to commute.
+\end{theorem}
+\begin{proof}\leanok
+    The trace-dual pairings convert the local average into a sum over
+    vertex labels $q$, supported on
+    $p^{a,b}_e=q_{\mathrm{head}(e)}p^{g,k}_eq_{\mathrm{tail}(e)}^{-1}$.
+    Off the seams these equations force neighboring $q_v$ to coincide;
+    nonseam connectivity therefore gives $q_v=x$ everywhere. The two
+    wrapping edges give $a=xgx^{-1}$ and $b=xkx^{-1}$, proving
+    (\ref{eq:peps_nonuniform_native_extract}). On the diagonal the allowed
+    $x$ form the common centralizer, which contains identity.
+    Constant gauge transformations and physical recovery prove the
+    conjugacy invariance for the original tensors.
+\end{proof}
+
+\begin{definition}[Class-labelled native closures]%
+    \label{def:peps_nonuniform_native_classes}
+    \lean{TNLean.PEPS.NativeTorus.closureClass,
+        TNLean.PEPS.NativeTorus.closureClass_pairConjugacyClass,
+        TNLean.PEPS.NativeTorus.range_closure_commuting_eq_range_closureClass}
+    \leanok
+    \uses{thm:peps_nonuniform_native_extraction}
+    For a simultaneous-conjugacy class $C=[(g,k)]$, put
+    $\zeta_A(C)=\zeta_A(g,k)$. This is well-defined. The set of closures
+    indexed by commuting pairs equals the set indexed by commuting
+    pair-conjugacy classes.
+\end{definition}
+
+\begin{theorem}[Independent native closure classes]%
+    \label{thm:peps_nonuniform_native_independence}
+    \lean{TNLean.PEPS.NativeTorus.linearIndependent_closureClass_canonical,
+        TNLean.PEPS.NativeTorus.linearIndependent_closureClass,
+        TNLean.PEPS.NativeTorus.linearIndependent_closureClass_commuting,
+        TNLean.PEPS.NativeTorus.finrank_commutingClosureSpan}
+    \leanok
+    \uses{def:peps_nonuniform_native_classes}
+    Suppose every $U_e$ is semi-regular, all $Y_v$ are finite, and every
+    $A_v$ is $G$-injective. The actual closure vectors belonging to
+    distinct pair-conjugacy classes are linearly independent. In
+    particular, $\dim\mathcal Z_A=K$, where $K$ is the number of
+    simultaneous-conjugacy classes of commuting pairs.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_nonuniform_native_extraction,thm:peps_nonuniform_native_transport}
+    Each functional in (\ref{eq:peps_nonuniform_native_extract}) vanishes
+    on the other classes and is nonzero on its own class. Thus the
+    canonical class vectors are independent. The product of genuine
+    local $G$-injective inverses takes each original closure to its
+    canonical closure, transferring independence. Restrict to commuting
+    classes and count this independent spanning family.
+\end{proof}
+
+\begin{theorem}[The actual native microscopic parent kernel]%
+    \label{thm:peps_nonuniform_native_kernel}
+    \lean{TNLean.PEPS.torusPlaquetteParentGroundSpace_eq_nativeCommutingClosureSpan,
+        TNLean.PEPS.ker_torusPlaquetteParentHamiltonian_eq_nativeCommutingClosureSpan,
+        TNLean.PEPS.finrank_ker_torusPlaquetteParentHamiltonian}
+    \leanok
+    \uses{thm:peps_nonuniform_native_independence}
+    Take the physical alphabets to be a common finite alphabet.
+    For each plaquette choose any positive interaction $H_v$ with kernel
+    exactly its actual open-region range, and extend it by identity to
+    the other sites. Under the preceding semi-regularity and
+    $G$-injectivity assumptions, the genuine microscopic Hamiltonian
+    $H=\sum_vH_v^{\mathrm{ext}}$ satisfies $\ker H=\mathcal Z_A$ and
+    $\dim\ker H=K$. This includes the canonical orthogonal-complement
+    interactions of \cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_nonuniform_native_membership,thm:peps_nonuniform_native_spanning,
+        thm:peps_nonuniform_native_independence}
+    Positivity identifies $\ker H$ with the intersection of the local
+    parent spaces. The two inclusions identify that intersection with
+    $\mathcal Z_A$, whose dimension was calculated above.
+\end{proof}
+
+\begin{theorem}[Faithful classification on independent physical alphabets]%
+    \label{thm:peps_nonuniform_native_padded_kernel}
+    \lean{TNLean.PEPS.ker_nonuniformTorusPlaquetteParent_eq_map_nativeCommutingClosureSpan,
+        TNLean.PEPS.nonuniformNativeParentEquiv,
+        TNLean.PEPS.nonuniformNativeParentEquiv_apply,
+        TNLean.PEPS.nonuniformNativeParentEquiv_symm_apply,
+        TNLean.PEPS.existsUnique_nativeClosureRepresentative_of_mem_nonuniformParentKernel,
+        TNLean.PEPS.finrank_ker_nonuniformTorusPlaquetteParentHamiltonian}
+    \leanok
+    \uses{thm:peps_nonuniform_native_kernel,thm:peps_nonuniform_parent_seam_boundary}
+    Now allow arbitrary finite $Y_v$. Let $E_v$ be the zero extension of
+    $Y_v$ into the common tagged alphabet $\coprod_vY_v$, and let $R_v$
+    restrict to its tagged coordinates. Put $E=\bigotimes_vE_v$,
+    $R=\bigotimes_vR_v$, and $\widetilde A_v=E_vA_v$.
+    Every positive microscopic parent $\widetilde H$ of these padded
+    tensors has full ambient kernel
+    \begin{align}
+        \ker\widetilde H=E\mathcal Z_A,
+        \qquad E:\mathcal Z_A\xrightarrow{\ \cong\ }\ker\widetilde H,
+        \qquad E^{-1}=R|_{\ker\widetilde H}.
+        \label{eq:peps_nonuniform_native_padded}
+    \end{align}
+    Every ambient kernel vector $\Psi$ therefore has a unique original
+    representative $\psi\in\mathcal Z_A$ with $E\psi=\Psi$, and
+    $\dim\ker\widetilde H=K$. No support restriction is imposed on $\Psi$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_nonuniform_native_transport,thm:peps_nonuniform_native_kernel}
+    Zero extension preserves $G$-injectivity and commutes with every
+    native closure, so $\mathcal Z_{\widetilde A}=E\mathcal Z_A$.
+    Apply the native kernel theorem to the existing padded graph tensor.
+    Since $RE=1$ on the full original physical space, $E$ is injective.
+    The kernel equality makes it surjective onto the full ambient
+    kernel, where $ER=1$. These are the asserted inverse maps, and the
+    dimension is preserved.
+\end{proof}

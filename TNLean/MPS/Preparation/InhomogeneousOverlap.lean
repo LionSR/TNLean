@@ -48,33 +48,15 @@ theorem exists_norm_polarPos_sub_le_transferMatrix
         K * ‖transferMatrix (Kraus.transferMap A) -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := by
   classical
-  let R : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ]
-      Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
-    { toFun := fun T a b => T (a.1, b.1) (a.2, b.2)
-      map_add' := fun _ _ => rfl
-      map_smul' := fun _ _ => rfl }
-  let Rc := LinearMap.toContinuousLinearMap R
+  obtain ⟨K, hK, hgram⟩ := exists_norm_gram_transferMatrix_sub_le D
   have hpd : (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)).PosDef :=
     (Matrix.PosDef.transpose_iff.2 hσ).kronecker Matrix.PosDef.one
   obtain ⟨L, hL, hlip⟩ := hpd.isStrictlyPositive.exists_norm_sqrt_sub_sqrt_le
-  refine ⟨L * ‖Rc‖, by positivity, fun {d} A => ?_⟩
-  have hgram : (physicalMatrix A)ᴴ * physicalMatrix A -
-      σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) =
-      Rc (transferMatrix (Kraus.transferMap A) -
-        transferMatrix (Kraus.transferMap (fixedPointTensor σ))) := by
-    ext a b
-    rw [Matrix.sub_apply, conjTranspose_physicalMatrix_mul_apply,
-      transpose_kronecker_one_apply]
-    change _ = Kraus.transferMap A (Matrix.single b.2 a.2 1) b.1 a.1 -
-      Kraus.transferMap (fixedPointTensor σ) (Matrix.single b.2 a.2 1) b.1 a.1
-    rw [transferMap_fixedPointTensor_apply hσ.posSemidef]
+  refine ⟨L * K, by positivity, fun {d} A => ?_⟩
   have hsqrt := hlip _ (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix A)).nonneg
-  rw [sqrt_transpose_kronecker_one hσ.posSemidef, hgram] at hsqrt
-  have hnorm := Rc.le_opNorm (transferMatrix (Kraus.transferMap A) -
-    transferMatrix (Kraus.transferMap (fixedPointTensor σ)))
-  have hbound := mul_le_mul_of_nonneg_left hnorm hL
-  rw [← mul_assoc] at hbound
-  exact hsqrt.trans hbound
+  rw [sqrt_transpose_kronecker_one hσ.posSemidef] at hsqrt
+  rw [mul_assoc]
+  exact hsqrt.trans (mul_le_mul_of_nonneg_left (hgram A σ hσ.posSemidef).1 hL)
 
 /-- The ordered mixed-transfer product of positive parts is close to trace one when each
 actual tensor has transfer matrix close to the common rank-one fixed point. No equality

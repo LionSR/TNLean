@@ -16741,3 +16741,399 @@ completion from compatible forward and inverse finite-local actions.
     while the unit-translation formula supplies translation covariance.  These
     are exactly the two defining properties of a one-dimensional QCA.
 \end{proof}
+
+\begin{definition}[Coordinates on a consecutive integer interval]
+    \label{def:local_interval_coordinates}
+    \lean{SpinChain.intervalCoordinates, SpinChain.intervalCoordinates_apply}
+    \leanok
+    \uses{def:mpu_finite_chain_realization}
+    For $a\in\mathbb Z$ and $N\geq0$, put
+    $I(a,N)=\{a,a+1,\ldots,a+N-1\}$. The site numbering $i\mapsto a+i$
+    identifies configurations on $I(a,N)$ with length-$N$ configurations.
+    Reindexing both matrix coordinates gives a star-algebra equivalence
+    $C_{a,N}:\mathcal A_{I(a,N)}\to M_{d^N}(\mathbb C)$.
+    Explicitly, $C_{a,N}(X)_{\sigma\tau}=X_{\widetilde\sigma\widetilde\tau}$,
+    where $\widetilde\sigma(a+i)=\sigma_i$.
+    This includes $N=0$ and the one-dimensional algebra on the empty interval.
+\end{definition}
+
+\begin{theorem}[Local inclusions in interval coordinates]
+    \label{thm:local_interval_coordinate_inclusion}
+    \lean{SpinChain.finiteChainRegion_subset_expanded,
+        SpinChain.intervalCoordinates_localInclusion_apply}
+    \leanok
+    Let $b,c\geq0$, $I=I(a,N)$ and $J=I(a-b,b+N+c)$. Then $I\subseteq J$.
+    For configurations $\sigma,\tau$ on $b+N+c$ consecutive sites,
+    \begin{align}
+        C_{a-b,b+N+c}(\iota_{I,J}(X))_{\sigma\tau}
+         & =C_{a,N}(X)_{\sigma|_M\,\tau|_M}
+        \prod_{i\notin M}\delta_{\sigma_i,\tau_i},
+    \end{align}
+    where $M=\{b,b+1,\ldots,b+N-1\}$ and $\sigma|_M$ denotes the
+    configuration $i\mapsto\sigma_{b+i}$ on $N$ sites.
+    This is the identity-tensor inclusion of \cite[Appendix]{Cirac2017MPU}
+    expressed in increasing integer-site coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates, def:qca_local_inclusion}
+    Restriction to $I$ selects the middle $N$ coordinates. Equality of the
+    two configurations on $J\setminus I$ is equality on all added sites.
+    Substitute these identifications into the local inclusion formula.
+\end{proof}
+
+\begin{theorem}[Consecutive observables in the quasi-local algebra]
+    \label{thm:quasi_local_interval_observable}
+    \lean{SpinChain.quasiLocalIntervalObservable,
+        SpinChain.quasiLocalIntervalObservable_apply,
+        SpinChain.norm_quasiLocalIntervalObservable}
+    \leanok
+    For $d>0$ and $a\in\mathbb Z$, coordinate transport and the finite-region
+    inclusion give a star-algebra inclusion
+    $j_{a,k}:M_{d^k}(\mathbb C)\to\mathcal A$, including $k=0$.
+    It preserves the matrix operator norm: $\|j_{a,k}(X)\|=\|X\|$.
+    This is the interval observable convention in
+    \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates, def:qca_quasi_local_observable}
+    The coordinate equivalence is isometric between the finite matrix
+    algebras, and the finite-region inclusion preserves norm in the completion.
+\end{proof}
+
+\begin{definition}[Compatible finite-region states]
+    \label{def:qca_compatible_local_state}
+    \lean{SpinChain.CompatibleLocalState,
+        SpinChain.CompatibleLocalState.functional,
+        SpinChain.CompatibleLocalState.compatible,
+        SpinChain.CompatibleLocalState.norm_le,
+        SpinChain.CompatibleLocalState.map_one,
+        SpinChain.CompatibleLocalState.nonneg_star_mul_self}
+    \leanok
+    \uses{def:qca_local_algebra}
+    A compatible family of finite-region states consists of complex-linear
+    functionals $f_\Lambda\colon\mathcal A_\Lambda\to\C$, indexed by finite
+    regions $\Lambda\Subset\Z$, such that, for every inclusion
+    $\Lambda\subseteq\Gamma$ and every $X\in\mathcal A_\Lambda$,
+    \begin{align}
+        f_\Gamma(\iota_{\Lambda,\Gamma}(X)) & =f_\Lambda(X),
+                                            & |f_\Lambda(X)|         & \leq\lVert X\rVert, \\
+        f_\Lambda(I)                        & =1,
+                                            & f_\Lambda(X^\dagger X) & \geq0.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Algebraic extension of compatible states]
+    \label{def:qca_compatible_state_algebraic_extension}
+    \lean{SpinChain.CompatibleLocalState.algebraicFunctional,
+        SpinChain.CompatibleLocalState.algebraicContinuousFunctional}
+    \leanok
+    \uses{def:qca_compatible_local_state, def:qca_algebraic_local_algebra,
+        def:qca_algebraic_local_normed_star_algebra}
+    Compatibility determines a complex-linear functional
+    $f_{\mathrm{loc}}\colon\mathcal A_{\mathrm{loc}}\to\C$ by
+    $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
+    For $d>0$, this functional is continuous in the operator-norm topology.
+\end{definition}
+
+\begin{theorem}[Contractivity of the algebraic extension]
+    \label{thm:qca_compatible_state_algebraic_bound}
+    \lean{SpinChain.CompatibleLocalState.algebraicFunctional_localObservable,
+        SpinChain.CompatibleLocalState.algebraicFunctional_norm_le}
+    \leanok
+    \uses{def:qca_compatible_state_algebraic_extension}
+    For every finite region $\Lambda$ and $X\in\mathcal A_\Lambda$,
+    $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
+    If $d>0$, then $|f_{\mathrm{loc}}(A)|\leq\lVert A\rVert$ for every
+    $A\in\mathcal A_{\mathrm{loc}}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:qca_compatible_state_algebraic_extension,
+        def:qca_algebraic_local_operator_norm}
+    The direct-limit property gives the stated values. Every algebraic local
+    observable has a finite-region representative, and its norm is the norm
+    of that representative. Thus
+    $|f_{\mathrm{loc}}(\iota_\Lambda(X))|
+        =|f_\Lambda(X)|\leq\lVert X\rVert=\lVert\iota_\Lambda(X)\rVert$.
+\end{proof}
+
+\begin{definition}[Continuous extension to the quasi-local algebra]
+    \label{def:qca_compatible_state_completion}
+    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional}
+    \leanok
+    \uses{def:qca_quasi_local_algebra,
+        thm:qca_compatible_state_algebraic_bound}
+    For $d>0$, let $\omega\colon\mathcal A\to\C$ be the continuous linear
+    extension of $f_{\mathrm{loc}}$ to the operator-norm completion.
+\end{definition}
+
+\begin{theorem}[Evaluation of the continuous extension]
+    \label{thm:qca_compatible_state_evaluation}
+    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_algebraicToQuasiLocal,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_quasiLocalObservable}
+    \leanok
+    \uses{def:qca_compatible_state_completion, def:qca_quasi_local_observable}
+    For every algebraic local observable $A$, one has
+    $\omega(j(A))=f_{\mathrm{loc}}(A)$. For every finite region $\Lambda$ and
+    $X\in\mathcal A_\Lambda$, one has $\omega(j_\Lambda(X))=f_\Lambda(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:qca_compatible_state_completion,
+        thm:qca_compatible_state_algebraic_bound}
+    Continuous extension preserves the values on the original normed space.
+    Apply this to $A=\iota_\Lambda(X)$ for the finite-region formula.
+\end{proof}
+
+\begin{theorem}[Unique positive normalized extension]
+    \label{thm:qca_compatible_state_extension}
+    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_nonneg_star_mul_self,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_one,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_norm_le,
+        SpinChain.CompatibleLocalState.norm_quasiLocalFunctional,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_unique,
+        SpinChain.CompatibleLocalState.existsUnique_quasiLocalFunctional}
+    \leanok
+    \uses{def:qca_compatible_state_completion}
+    Every compatible family of finite-region states, with $d>0$, has a unique
+    continuous complex-linear extension $\omega\colon\mathcal A\to\C$
+    with the prescribed finite-region values. It satisfies
+    $\omega(I)=1$, $\lVert\omega\rVert=1$, and, for every $A\in\mathcal A$,
+    $|\omega(A)|\leq\lVert A\rVert$ and $\omega(A^\dagger A)\geq0$.
+    Compatibility of the finite-region functionals is an explicit hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:qca_compatible_state_evaluation,
+        thm:qca_compatible_state_algebraic_bound,
+        def:qca_quasi_local_algebra,
+        def:qca_algebraic_local_algebra}
+    The sets defined by $|\omega(A)|\leq\lVert A\rVert$ and
+    $\omega(A^\dagger A)\geq0$ are closed, since multiplication, involution,
+    and $\omega$ are continuous. These inequalities hold on the dense
+    algebraic local subalgebra, hence on its completion. Evaluation at a
+    finite-region identity gives $\omega(I)=1$ and
+    $1\leq\lVert\omega\rVert$; contractivity gives the reverse inequality.
+    Two continuous extensions agree on all finite-region observables,
+    then on the algebraic local algebra, and therefore on its completion.
+\end{proof}
+
+\begin{definition}[States and pure states of the quasi-local algebra]
+    \label{def:qca_state_space_purity}
+    \lean{SpinChain.quasiLocalStateSpace, SpinChain.IsPureQuasiLocalState}
+    \leanok
+    Let $d>0$, and let $\mathcal A_d$ denote the quasi-local observable algebra.
+    Its state space consists of all continuous complex-linear functionals
+    $\omega$ such that $\|\omega\|=1$, $\omega(I)=1$, and
+    $\omega(X^*X)\ge0$ for every $X\in\mathcal A_d$.
+    A state is pure if it is an extreme point of this set, viewed as a real
+    convex set. Translation invariance is not required of these functionals.
+    These are the state and purity conventions in
+    \cite[Section~1 and Section~3]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Support in convex constituents]
+    \label{thm:qca_state_convex_support}
+    \lean{SpinChain.quasiLocalState_left_apply_eq_zero_of_convex_decomposition,
+        SpinChain.quasiLocalState_left_projection_eq_one_of_convex_decomposition}
+    \leanok
+    Let $\phi,\psi$ be states, let $0<t<1$, and set
+    $\omega=(1-t)\phi+t\psi$.
+    If $\omega(X^*X)=0$, then $\phi(X^*X)=0$.
+    If $\omega$ is a state, $P=P^*=P^2$, and $\omega(P)=1$, then
+    $\phi(P)=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:qca_state_space_purity}
+    Positivity gives two nonnegative real numbers whose strictly positive
+    weighted sum is zero, so both numbers vanish. Apply this to $I-P$;
+    $(I-P)^*(I-P)=I-P$ and normalization gives the projection assertion.
+\end{proof}
+
+\begin{theorem}[Purity from unique supported-state determination]
+    \label{thm:qca_purity_of_supported_uniqueness}
+    \lean{SpinChain.isPureQuasiLocalState_of_unique_supported_state}
+    \leanok
+    Let $\omega$ be a state, and let $(P_i)_{i\in J}$ be any family of
+    self-adjoint projections with $\omega(P_i)=1$.
+    Suppose every state $\phi$ satisfying $\phi(P_i)=1$ for every $i\in J$
+    equals $\omega$. Then $\omega$ is pure.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:qca_state_convex_support, def:qca_state_space_purity}
+    In a nontrivial convex decomposition of $\omega$, each constituent
+    has expectation one on every $P_i$. The uniqueness hypothesis forces
+    the left constituent to equal $\omega$, which is the extreme-point
+    condition.
+\end{proof}
+
+\begin{theorem}[Convexity of the quasi-local state space]
+    \label{thm:quasi_local_state_space_convex}
+    \lean{SpinChain.convex_quasiLocalStateSpace}
+    \leanok
+    The normalized positive continuous functionals on the quasi-local algebra
+    form a convex set over the real numbers.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qca_state_space_purity}
+    If $\varphi,\psi$ are states and $a,b\geq0$ satisfy $a+b=1$, then
+    $\|a\varphi+b\psi\|\leq a+b=1$ and $(a\varphi+b\psi)(I)=1$.
+    Since $\|I\|=1$, evaluation at the identity gives the reverse norm bound.
+    Positivity follows by taking the same convex combination of their
+    nonnegative values on adjoint squares.
+\end{proof}
+
+\begin{theorem}[Pure states in finite convex decompositions]
+    \label{thm:finite_pure_state_decomposition}
+    \lean{SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition}
+    \leanok
+    Let $\varphi$ be pure among all states of the quasi-local algebra.
+    Suppose that $\omega_i$ are states indexed by a finite set, that
+    $w_i\geq0$ and $\sum_iw_i=1$, and that
+    $\varphi=\sum_iw_i\omega_i$. Then $\varphi=\omega_i$ for some $i$.
+    No translation-invariance condition is imposed on these states.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_state_space_convex, def:qca_state_space_purity}
+    The state $\varphi$ belongs to the convex hull of the $\omega_i$.
+    This hull is contained in the full state space, so extremality in the
+    state space implies extremality in the smaller hull. Every extreme
+    point of the convex hull of a finite set belongs to that set.
+\end{proof}
+
+\begin{lemma}[Expansion of a consecutive blocked interval]
+    \label{lem:qca_blocking_interval_region}
+    \lean{SpinChain.expandedRegion_finiteChainRegion}
+    \leanok
+    For $L>0$, $a\in\mathbb Z$ and $N\geq0$, the expansion of the
+    blocked interval $I(a,N)$ is
+    \begin{align}
+        \widehat{I(a,N)}_L=I(aL,NL).
+    \end{align}
+    Negative starts and the empty interval are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates, def:qca_expanded_region}
+    Euclidean division by $L$ shows that the quotient $q=\lfloor z/L\rfloor$ of an integer $z$
+    satisfies $a\leq q<a+N$ exactly when $aL\leq z<(a+N)L$.
+\end{proof}
+
+\begin{theorem}[Finite blocking in consecutive matrix coordinates]
+    \label{thm:qca_blocking_interval_coordinates}
+    \lean{SpinChain.intervalCoordinates_localBlocking}
+    \leanok
+    Let $L>0$, $d\geq0$, $a\in\mathbb Z$ and $N\geq0$.
+    Let $e_{N,L}$ decode the $N$ blocked spins into $NL$ consecutive
+    spins, placing residue $r$ of blocked site $i$ at site $Li+r$.
+    Define the matrix reindexing
+    $\mathcal R_{N,L}(X)_{\sigma\tau}
+        =X_{e_{N,L}^{-1}(\sigma),e_{N,L}^{-1}(\tau)}$.
+    Then
+    \begin{align}
+        C^{(d)}_{aL,NL}\,\mathcal B_L
+        \bigl((C^{(d^L)}_{a,N})^{-1}(X)\bigr)
+        =\mathcal R_{N,L}(X).
+    \end{align}
+    Here the target region is identified using
+    $\widehat{I(a,N)}_L=I(aL,NL)$. This expresses the site grouping of
+    \cite[Appendix, lines~2308 and 2313--2320]{Cirac2017MPU}
+    in consecutive interval coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qca_blocking_interval_region, def:local_interval_coordinates,
+        def:qca_configuration_blocking, thm:qca_local_blocking_formulas}
+    The site $L(a+i)+r$ has interval coordinate $Li+r$ relative to $aL$.
+    Thus decoding followed by consecutive numbering agrees with flattening
+    the blocked configurations. Apply this identity to both matrix indices.
+\end{proof}
+
+\begin{theorem}[Blocking of quasi-local interval observables]
+    \label{thm:qca_blocking_quasi_local_interval}
+    \lean{SpinChain.quasiLocalBlocking_quasiLocalIntervalObservable}
+    \leanok
+    For $d>0$, $L>0$, $a\in\mathbb Z$, $N\geq0$ and
+    $X\in M_{(d^L)^N}(\mathbb C)$,
+    \begin{align}
+        \overline{\mathcal B}_L
+        \bigl(j^{(d^L)}_{a,N}(X)\bigr)
+        =j^{(d)}_{aL,NL}\bigl(\mathcal R_{N,L}(X)\bigr).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qca_blocking_interval_coordinates,
+        lem:qca_quasi_local_blocking_formulas,
+        thm:quasi_local_interval_observable}
+    Evaluate the completed blocking equivalence on the finite interval
+    representative, then apply the finite coordinate identity.
+\end{proof}
+\begin{definition}[Transport of functionals by a star-algebra equivalence]
+    \label{def:qca_functional_star_equivalence}
+    \lean{SpinChain.quasiLocalFunctionalCongr,
+        SpinChain.quasiLocalFunctionalCongr_apply}
+    \leanok
+    Let $d_1,d_2>0$ and let
+    $e:\mathcal A_{d_1}\to\mathcal A_{d_2}$ be a star-algebra isomorphism.
+    The induced continuous complex-linear equivalence between functional
+    spaces is $T_e\omega=\omega\circ e^{-1}$; thus
+    $(T_e\omega)(X)=\omega(e^{-1}X)$.
+\end{definition}
+
+\begin{theorem}[Star-algebra equivalence preserves states and purity]
+    \label{thm:qca_state_purity_star_equivalence}
+    \lean{SpinChain.norm_quasiLocalFunctionalCongr,
+        SpinChain.quasiLocalFunctionalCongr_mem_stateSpace_iff,
+        SpinChain.quasiLocalFunctionalCongr_image_stateSpace,
+        SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff}
+    \leanok
+    Under the preceding hypotheses, $\|T_e\omega\|=\|\omega\|$.
+    Moreover, $T_e$ maps the entire state space of $\mathcal A_{d_1}$ onto
+    the entire state space of $\mathcal A_{d_2}$, and $T_e\omega$ is pure
+    if and only if $\omega$ is pure. No translation invariance is assumed.
+    Purity has the meaning used in
+    \cite[Section~3, lines~1469--1482]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qca_functional_star_equivalence,def:qca_state_space_purity}
+    A star-algebra isomorphism of complex C-star algebras is isometric.
+    Inverse precomposition therefore preserves the dual norm. It also
+    preserves the identity and adjoint squares, so it maps the state spaces
+    onto one another. Its restriction to real scalars is a linear
+    equivalence, and linear equivalences carry extreme points to extreme
+    points.
+\end{proof}
+
+\begin{definition}[A blocked-chain functional on the original lattice]
+    \label{def:qca_blocking_functional}
+    \lean{SpinChain.quasiLocalBlockingFunctional,
+        SpinChain.quasiLocalBlockingFunctional_apply}
+    \leanok
+    Let $d,L>0$ and let
+    $\mathcal B_L:\mathcal A_{d^L}\to\mathcal A_d$ be the site-blocking
+    isomorphism. A continuous functional $\omega$ on the blocked chain
+    defines the original-lattice functional
+    $T_L\omega=\omega\circ\mathcal B_L^{-1}$.
+    This is the state transport associated with the regrouping of sites in
+    \cite[lines~825--836]{Nachtergaele1996Spectral}.
+    \uses{def:qca_functional_star_equivalence,def:qca_quasi_local_blocking}
+\end{definition}
+
+\begin{theorem}[Site grouping preserves states and purity]
+    \label{thm:qca_blocking_state_purity}
+    \lean{SpinChain.norm_quasiLocalBlockingFunctional,
+        SpinChain.quasiLocalBlockingFunctional_mem_stateSpace_iff,
+        SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff}
+    \leanok
+    The functional $T_L\omega$ has the same norm as $\omega$, is a state
+    exactly when $\omega$ is a state, and is pure exactly when $\omega$ is
+    pure. This applies to all state functionals, without an invariance
+    condition under translations.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qca_blocking_functional,thm:qca_state_purity_star_equivalence}
+    Apply the star-algebra equivalence theorem to $\mathcal B_L$.
+\end{proof}

@@ -35,19 +35,23 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-/-- The unital canonical transfer powers converge to the faithful stationary
-trace functional. The proof reuses the FNW complementary-remainder machinery
-on the conjugate-transposed family; no diagonalizability is assumed.
-Supporting result for arXiv:0802.0447, lines 241–255. -/
-theorem canonical_transfer_pow_tendsto_stationary_trace
+/-- Canonical transfer powers approach the stationary rank-one map at a
+geometric rate, uniformly on virtual inputs, in the endomorphism norm induced
+by the row-sum matrix norm. The faithful
+canonical hypotheses imply the complementary spectral gap; no diagonalizability
+or geometric bound is assumed. Positive lengths exclude the exceptional
+zeroth-power identity. Source: arXiv:0802.0447, lines 241–255, using the
+complementary remainder from FNW 1992, Lemma 5.2. -/
+theorem canonical_transfer_pow_sub_stationary_le_geometric
     [NeZero D] (A : MPSTensor d D)
     (hIrr : IsIrreducibleMap (Kraus.transferMap A))
     (hPrim : IsPrimitive (Kraus.transferMap A))
     (Λ : Mat) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
-    (hNorm : Kraus.transferMap A 1 = 1) (X : Mat) :
-    Tendsto (fun N : ℕ => (Kraus.transferMap A ^ N) X) atTop
-      (nhds (Matrix.trace (Λ * X) • (1 : Mat))) := by
+    (hNorm : Kraus.transferMap A 1 = 1) :
+    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ N : ℕ, 1 ≤ N →
+      ‖Module.End.toContinuousLinearMap Mat
+        (Kraus.transferMap A ^ N - fnwLimitMap Λ (by simp [hΛtr]))‖ ≤ C * r ^ N := by
   let B : MPSTensor d D := fun i => (A i)ᴴ
   have hBnorm : ∑ i, (B i)ᴴ * B i = 1 := by
     simpa [B, Kraus.transferMap_apply] using hNorm
@@ -75,29 +79,38 @@ theorem canonical_transfer_pow_tendsto_stationary_trace
     apply spectralRadius_lt_one_of_eigenvalues_lt_one
     intro ν hν
     exact hP.fnwRemainder_eigenvalue_norm_lt_one ν (by simpa [hFnw] using hν)
-  have hpow := pow_tendsto_zero_of_spectralRadius_lt_one _ hR
-  have hRlim : Tendsto (fun N : ℕ => ((Kraus.transferMap A - P) ^ N) X)
-      atTop (nhds 0) := by
-    have h := ((ContinuousLinearMap.apply ℂ _ X).continuous.tendsto 0).comp hpow
-    convert h using 1
-    · funext N
-      simp only [Function.comp_apply, ContinuousLinearMap.apply_apply, ← map_pow]
-      rfl
-    · simp only [map_zero]
-      rfl
-  have hlim : Tendsto
-      (fun N : ℕ => P X + ((Kraus.transferMap A - P) ^ N) X) atTop (nhds (P X)) := by
-    simpa using (tendsto_const_nhds (x := P X)).add hRlim
-  have hresult : Tendsto (fun N : ℕ => (Kraus.transferMap A ^ N) X)
-      atTop (nhds (P X)) := hlim.congr' (by
-    filter_upwards [eventually_ge_atTop 1] with N hN
-    have hid := hP.fnwTransferMap_sub_fnwLimitMap_pow hN
-    rw [hFnw] at hid
-    change P X + ((Kraus.transferMap A - P) ^ N) X = (Kraus.transferMap A ^ N) X
-    rw [hid]
-    simp only [LinearMap.sub_apply]
-    abel)
-  simpa [P, fnwLimitMap, hΛtr] using hresult
+  obtain ⟨C, r, hC, hr, hr1, hbound⟩ :=
+    geometric_bound_of_spectralRadius_lt_one _ hR
+  refine ⟨C, r, hC, hr, hr1, fun N hN => ?_⟩
+  have hid := hP.fnwTransferMap_sub_fnwLimitMap_pow hN
+  rw [hFnw] at hid
+  simpa only [← map_pow, hid, P] using hbound N
+
+/-- The unital canonical transfer powers converge to the faithful stationary
+trace functional. This follows from the operator-norm geometric estimate,
+without diagonalizability. Source: arXiv:0802.0447, lines 241–255. -/
+theorem canonical_transfer_pow_tendsto_stationary_trace
+    [NeZero D] (A : MPSTensor d D)
+    (hIrr : IsIrreducibleMap (Kraus.transferMap A))
+    (hPrim : IsPrimitive (Kraus.transferMap A))
+    (Λ : Mat) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1) (X : Mat) :
+    Tendsto (fun N : ℕ => (Kraus.transferMap A ^ N) X) atTop
+      (nhds (Matrix.trace (Λ * X) • (1 : Mat))) := by
+  obtain ⟨C, r, hC, hr, hr1, hbound⟩ :=
+    canonical_transfer_pow_sub_stationary_le_geometric
+      A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm
+  apply tendsto_iff_norm_sub_tendsto_zero.mpr
+  apply squeeze_zero' (Eventually.of_forall fun N => norm_nonneg _) ?_
+    (by simpa using ((tendsto_const_nhds (x := C)).mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hr.le hr1)).mul_const ‖X‖)
+  filter_upwards [eventually_ge_atTop 1] with N hN
+  have h := (Module.End.toContinuousLinearMap Mat
+    (Kraus.transferMap A ^ N - fnwLimitMap Λ (by simp [hΛtr]))).le_of_opNorm_le
+      (hbound N hN) X
+  change ‖(Kraus.transferMap A ^ N) X - fnwLimitMap Λ _ X‖ ≤ C * r ^ N * ‖X‖ at h
+  simpa only [fnwLimitMap_apply_of_trace_eq_one Λ X hΛtr] using h
 
 /-- The exact iterate identity behind the physical asymptotic formula.
 It holds also at zero length and keeps the full phase `μ^N`.
@@ -117,6 +130,35 @@ theorem twistedTransferIter_eq_phase_mul_transfer_pow
     rw [ih, map_smul, twistedTransfer_eq_phase_mul_transfer A u V μ hInter]
     simp [← Matrix.mul_assoc, hV', pow_succ', Module.End.mul_apply, smul_smul, mul_comm μ]
 
+/-- After removing its peripheral phase, the twisted transfer iterate converges
+on every virtual input to the rank-one stationary projection. Composing this
+limit with physical endpoint maps covers endpoints of any finite support.
+
+Source: arXiv:0802.0447, lines 241–255, with the peripheral phase retained. -/
+theorem twistedTransferIter_phase_adjusted_tendsto
+    [NeZero D] (A : MPSTensor d D)
+    (hIrr : IsIrreducibleMap (Kraus.transferMap A))
+    (hPrim : IsPrimitive (Kraus.transferMap A))
+    (Λ : Mat) (hΛpos : Λ.PosDef) (hΛtr : Matrix.trace Λ = 1)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (u : Matrix (Fin d) (Fin d) ℂ) (V : Mat) (μ : ℂ)
+    (hV : V * Vᴴ = 1) (hμ : ‖μ‖ = 1)
+    (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ)) (Y : Mat) :
+    Tendsto (fun N : ℕ => (μ ^ N)⁻¹ • twistedTransferIter A u N Y) atTop
+      (nhds (Matrix.trace (Λ * Vᴴ * Y) • V)) := by
+  have hμne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
+  have hphase (N : ℕ) : (μ ^ N)⁻¹ • twistedTransferIter A u N Y =
+      V * (Kraus.transferMap A ^ N) (Vᴴ * Y) := by
+    rw [twistedTransferIter_eq_phase_mul_transfer_pow A u V μ hV hInter]
+    rw [smul_smul, inv_mul_cancel₀ (pow_ne_zero N hμne), one_smul]
+  have hlim := canonical_transfer_pow_tendsto_stationary_trace
+    A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm (Vᴴ * Y)
+  have h : Tendsto (fun N : ℕ => V * (Kraus.transferMap A ^ N) (Vᴴ * Y))
+      atTop (nhds (V * (Matrix.trace (Λ * (Vᴴ * Y)) • (1 : Mat)))) :=
+    ((LinearMap.toContinuousLinearMap (LinearMap.mulLeft ℂ V)).continuous.tendsto _).comp hlim
+  simpa only [Matrix.mul_smul, Matrix.mul_one, ← hphase, Matrix.mul_assoc] using h
+
 /-- The source physical correlator has a phase-retaining asymptotic coefficient.
 The factor `(μ^N)⁻¹` is essential: the complex correlator itself need not converge.
 Supporting result for arXiv:0802.0447, lines 241–255. -/
@@ -134,31 +176,17 @@ theorem physicalStringOrderParam_phase_adjusted_tendsto
       (nhds (Matrix.trace (Λ * Vᴴ * twistedTransferMap A y 1) *
         Matrix.trace (Λ * twistedTransferMap A x V))) := by
   let Φ : Mat →ₗ[ℂ] ℂ := (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
-    ((LinearMap.mulLeft ℂ Λ).comp
-      ((twistedTransferMap A x).comp (LinearMap.mulLeft ℂ V)))
-  have hμne : μ ≠ 0 := Complex.ne_zero_of_norm_eq_one hμ
-  have hphase (N : ℕ) : (μ ^ N)⁻¹ * physicalStringOrderParam A Λ x y u N =
-      Φ ((Kraus.transferMap A ^ N) (Vᴴ * twistedTransferMap A y 1)) := by
-    rw [physicalStringOrderParam,
-      twistedTransferIter_eq_phase_mul_transfer_pow A u V μ hV hInter]
-    simp only [map_smul, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
-    rw [← mul_assoc, inv_mul_cancel₀ (pow_ne_zero N hμne), one_mul]
-    rfl
-  have hTransfer := canonical_transfer_pow_tendsto_stationary_trace
-    A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm (Vᴴ * twistedTransferMap A y 1)
-  have hlim := ((LinearMap.toContinuousLinearMap Φ).continuous.tendsto _).comp hTransfer
-  have hFinal : Tendsto
-      (fun N : ℕ => (μ ^ N)⁻¹ * physicalStringOrderParam A Λ x y u N) atTop
-      (nhds (Φ (Matrix.trace (Λ * (Vᴴ * twistedTransferMap A y 1)) • (1 : Mat)))) := by
-    apply hlim.congr'
-    exact Filter.Eventually.of_forall fun N => (hphase N).symm
-  have hvalue (c : ℂ) : Φ (c • (1 : Mat)) =
-      c * Matrix.trace (Λ * twistedTransferMap A x V) := by
-    change Matrix.trace (Λ * twistedTransferMap A x (V * (c • (1 : Mat)))) = _
-    rw [Matrix.mul_smul, Matrix.mul_one, map_smul, Matrix.mul_smul, Matrix.trace_smul]
-    rfl
-  rw [hvalue] at hFinal
-  simpa only [Matrix.mul_assoc] using hFinal
+    ((LinearMap.mulLeft ℂ Λ).comp (twistedTransferMap A x))
+  have hlim := twistedTransferIter_phase_adjusted_tendsto
+    A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm u V μ hV hμ hInter
+    (twistedTransferMap A y 1)
+  have hΦ (Z : Mat) : Φ Z = Matrix.trace (Λ * twistedTransferMap A x Z) := rfl
+  have h : Tendsto
+      (fun N : ℕ => Φ ((μ ^ N)⁻¹ • twistedTransferIter A u N (twistedTransferMap A y 1)))
+      atTop (nhds (Φ (Matrix.trace (Λ * Vᴴ * twistedTransferMap A y 1) • V))) :=
+    ((LinearMap.toContinuousLinearMap Φ).continuous.tendsto _).comp hlim
+  simp only [map_smul] at h
+  simpa only [hΦ, physicalStringOrderParam, smul_eq_mul] using h
 
 /-- The limiting magnitude of the actual physical string correlator is the
 product of the two endpoint coefficient magnitudes. This retains arbitrary

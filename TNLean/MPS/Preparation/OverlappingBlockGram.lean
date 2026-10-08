@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.PositivePartRate
+import QICLean.Analysis.MatrixFramePerturbation
 
 /-!
 # The positive part of a direct sum of blocks with overlapping states
@@ -354,16 +355,6 @@ private theorem blockSumGramLimit_smul (c : Fin b → ℂ)
         (pairEmbedding (ι j))ᴴ) := by
   simp only [blockSumGramLimit, Matrix.transpose_smul, Matrix.smul_kronecker, Matrix.mul_smul,
     Matrix.smul_mul]
-
-open scoped Matrix.Norms.L2Operator in
-/-- A matrix with `Lᴴ L = 1` has operator norm at most one. -/
-theorem _root_.Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one {m n : Type*}
-    [Fintype m] [Fintype n] [DecidableEq n] {L : Matrix m n ℂ} (h : Lᴴ * L = 1) : ‖L‖ ≤ 1 := by
-  have h1 : ‖(1 : Matrix n n ℂ)‖ ≤ 1 := by
-    rw [← Matrix.diagonal_one, Matrix.l2_opNorm_diagonal]
-    exact (pi_norm_le_iff_of_nonneg zero_le_one).2 fun _ => by simp
-  have h2 : ‖L‖ * ‖L‖ ≤ 1 := by rw [← Matrix.l2_opNorm_conjTranspose_mul_self, h]; exact h1
-  nlinarith [norm_nonneg L]
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Rate of the Gram matrices of a sum along embeddings.** Let the blocks `A_j` be normal in

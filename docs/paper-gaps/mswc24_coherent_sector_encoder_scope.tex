@@ -1,0 +1,145 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Coherent Canonical Sector Encoders}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{Source and precise interpretation}
+The discussion and outlook of~\cite{Malz2024Preparation} proposes
+logarithmic-depth conversion of matrix product states in the same phase.
+Equation (25) and the paragraph ``Long-range MPS using measurements''
+provide the simultaneous sector construction relevant to that claim.
+They do not specify a canonical logical basis of the whole sector span,
+an operator-norm conversion bound, or an external-reference statement.
+The operator-norm and all-accuracy results here give a precise whole-encoding
+enhancement of that discussion, not a formalization of a new phase predicate.
+
+For an explicitly labelled family of $b$ retained sectors, define the actual
+column matrix and its fixed polar encoder by
+\begin{align}
+    V_{A,N}e_j & =|\phi_N(A_j)\rangle,                     &
+    F_{A,N}    & =V_{A,N}(V_{A,N}^\dagger V_{A,N})^{-1/2}.
+\end{align}
+The inverse is taken on the support. The endpoint depends on the family and
+ring length, and is independent of the requested accuracy or the partition
+used to approximate it. Its range is exactly the original periodic-sector
+span, and independent columns make it an isometry.
+
+\section{Proved finite-length bounds}
+The QICLean companion owns the generic estimates. If $W$ is an isometry,
+$\eta=\|V^\dagger V-I\|$ and $\zeta=\|W^\dagger V-I\|$, then
+$\|V-W\|^2\le\eta+2\zeta$. Writing $F$ for the polar isometry of $V$, the square-root bound at the
+identity and the polar factorization give
+\begin{align}
+    \|F-W\|\le\sqrt{\eta+2\zeta}+\eta
+\end{align}
+for injective $V$. The cross matrix is complex; replacing its entries by
+absolute overlaps would discard the relative logical phases.
+
+One register encoding $J$ is an isometry on the logical space. The existing
+simultaneous block-unitary construction gives $U_XJ=W_X$ as a whole matrix,
+with $W_X$ isometric and depth at most a constant times the maximum block
+length. The same chosen circuit acts on all logical amplitudes. For two
+such physical unitaries, $U=U_BU_A^\dagger$ has depth $T_A+T_B$ and
+\begin{align}
+    \|UF_{A,N}-F_{B,N}\|
+     & \le\|F_{A,N}-W_A\|+\|F_{B,N}-W_B\|.
+\end{align}
+There is no cost for producing the common seed from a product state: it
+cancels algebraically. A measurement protocol is never inverted.
+
+For every finite reference space and every input $\xi$, the same operator
+bound $\delta$ yields a vector error at most $\delta\|\xi\|$ after tensoring
+with the reference identity. The proof sums squared norms of reference
+slices, with no reference-dimension factor. No channel diamond-norm theorem
+is asserted by this statement.
+
+\section{Proved exact construction through a fixed virtual space}
+For injective virtual placements with disjoint ranges, let $B=\bigoplus_jA_j$
+be the unweighted direct sum of bond dimension $D$. Let $C_N$ be its
+blocked physical matrix on configurations, $S_N$ its polar partial
+isometry, $P_N=(C_N^\dagger C_N)^{1/2}$, and $T$ the sector-trace selector.
+The identity $C_NT=V_{A,N}$ gives, with $R_N=P_NT$,
+\begin{align}
+    V_{A,N}=S_NR_N,\qquad F_{A,N}=S_NQ_N,
+\end{align}
+where $Q_N$ is the polar partial isometry of $R_N$. The intermediate
+space is $\mathbb C^{D^2}$, with dimension independent of the ring length.
+
+If the blocked sum is injective on its sector-pair support and all sector
+bond dimensions are positive, the trace selectors show directly that
+$V_{A,N}$ is injective. Then $Q_N$ is an isometry supported on that same
+virtual set. Its columns, with the one-block cyclic pair orientation,
+form an orthonormal family to which the simultaneous genuine-unitary
+compiler applies. For fixed encodings into registers of width $r\ge2$,
+a constant $C$ is chosen before the tensors and $N$. At any supported-
+injective length $N\ge3r$, one circuit satisfies $U_NJ_N=F_{A,N}$ exactly
+and has depth at most $CN$. Pair support is needed only at the actual
+single block. The whole logical encoder is transported; the construction
+uses fixed-width pair synthesis and sequential blocked-polar unitaries.
+
+\section{Proved uniform logarithmic-depth conversion}
+Fix two explicitly matched families of $b>0$ distinct normal sectors with
+common physical dimension $d\ge2$. Each sector is left canonical and has
+a faithful stationary density of trace one; mixed-transfer spectral radii
+within each family are strictly less than one. The formal theorem chooses
+$C>0$ and $N_0\ge2$ before the ring length and accuracy. For every
+$N\ge N_0$, the fixed encoders are isometries, and for every
+$\varepsilon\in(0,1]$ one genuine nearest-neighbor circuit $U$ satisfies
+\begin{align}
+    \operatorname{depth}(U) & \le C\log(N/\varepsilon), \\
+    \|UF_{A,N}-F_{B,N}\|    & \le\varepsilon.
+\end{align}
+The same chosen $U$ satisfies, for every finite reference space $\mathcal R$
+and every logical-reference vector $\xi$,
+\begin{align}
+    \|[(UF_{A,N}-F_{B,N})\otimes I_{\mathcal R}]\xi\|
+    \le\varepsilon\|\xi\|.
+\end{align}
+The endpoints remain independent of accuracy and of the selected partition.
+\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_log_depth_coherent_sectorEncoder_conversion}.}
+
+The proof first obtains Gram and complex cross-matrix estimates with sums
+over the fixed logical dimension. One common decay rate, register width
+and eventual support-injectivity cutoff serve both families. If the common
+block scale $q$ fits inside the ring, one partition has block lengths between
+$q$ and $2q$. The two genuine encoders share its logical seed, so their
+relative unitary has the sum of their depths and endpoint errors.
+The choice $q=\lceil(2/r)\log(N/\varepsilon)+c_0\rceil$ accounts for the
+square root in the endpoint estimate. If $q>N$, the exact fixed-width
+whole-encoder construction above has depth $O(N)\le O(q)$ and gives the
+same logarithmic bound. No product-state preparation of the logical seed
+is charged, and no measurement protocol is inverted.
+
+\section{Parent kernels at a valid interaction range}
+For supplied canonical data of a tensor with physical and bond dimensions
+$d,D\ge1$, the encoder of its retained normal representatives has range
+exactly equal to the kernel of the range-$L$ parent Hamiltonian whenever
+$3D^5\le L\le N$, including $N=L$.
+\footnote{Formal declaration:
+    \leanid{MPSTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian}.}
+This is an identity of the actual periodic-sector span. Applying the
+conversion theorem to such representatives still requires its explicit
+canonical hypotheses and a matching of the labels; no additional gauge
+substitution or column rescaling is implicit.
+
+\section{Chosen vectors and boundaries}
+Transporting a fixed logical basis does not equate the normalized periodic
+amplitudes of two tensors. The biased-versus-balanced ferromagnetic example
+and its chosen-vector obstruction in
+\cite{gap:mswc24_same_phase_compatible_seed} remain applicable. No
+symmetry-preserving conversion, arbitrary-small-$N$ claim, or implicit
+transport through a canonical-gauge normalization is asserted here.
+The physical gate model consists of genuine nearest-neighbor unitaries
+with unrestricted gate parameters.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

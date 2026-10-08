@@ -1,0 +1,111 @@
+{
+  "base": "8fd2b5d70fe39dd8aa464d13fd68a15f58472323",
+  "toolchain": "lean-4.35.0-rc3-linux",
+  "flags": [
+    "-j",
+    "1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dweak.linter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "closure_audit": "/workspace/shared/finite-endpoints-light-closure.json",
+  "actual_modules": {
+    "TNLean.MPS.Core.ObservableTransfer": {
+      "source_sha256": "217f942ae4b5d26df8d1f69f1b20adff15e26ac10c839c4f70a12930cce575f4",
+      "artifact_sha256": "f482a96db72514e22227aff58d6f7829c15e04f8444d3ecfdd775872662478b0",
+      "log": "/workspace/shared/finite-endpoints-observable.log",
+      "exit_code": 0,
+      "current_source_sha256": "61d4d28031daec5a0c01ccb8162d896ca8a8bf7d2f77abd5347e124ca25c3072",
+      "post_check_change": "Module-header References section only; checked source retained separately; theorem/proof text unchanged."
+    },
+    "TNLean.MPS.Symmetry.PhysicalStringEndpointSpan": {
+      "source_sha256": "d77ff064f0b177fdf2ed1d02505a8363ec0d192ff2199efd10af8fbcd561e420",
+      "artifact_sha256": "d269eaf111c9c6ab37cc326080dfa0ec174799a0d452db27876fa4e895d46982",
+      "log": "/workspace/shared/finite-endpoints-span3.log",
+      "exit_code": 0,
+      "current_source_sha256": "4c418a465f8a6481434aa5949b556e61e84ee0554e299464a11b4d0df3168baa",
+      "post_check_change": "Module-header References section only; checked source retained separately; theorem/proof text unchanged."
+    },
+    "TNLean.MPS.Core.Blocking": {
+      "source_sha256": "cc09be466aa6b84a90ea72aae82137a5154662b90ea8eb44b9c36126b386a889",
+      "artifact_sha256": "4b9c3e0c32884a5c02ba86850857a8f46b6199c393197f553ae0dfd430d31037",
+      "log": "finite-endpoints-blocking.log",
+      "exit_code": 0
+    },
+    "TNLean.MPS.Symmetry.PhysicalStringBlockEndpoints": {
+      "source_sha256": "5ec5d0808e455c0ce48611b2469534fcf61c3439520fc10d47d60939ea34d036",
+      "artifact_sha256": "8996d584fece51ddaa1bafaea94e57c6c91e594c00def80ff8e89237a049399e",
+      "log": "finite-endpoints-both3.log",
+      "exit_code": 0,
+      "current_source_sha256": "5a9f6c0c93e70f7899d611388e175458a454e7d9e4a6856e26901d76a277ad66",
+      "post_check_change": "Module-header References section only; checked source retained separately; theorem/proof text unchanged."
+    }
+  },
+  "algebra_closure_audit": "finite-endpoints-algebra-closure.json",
+  "integration_dependency": {
+    "module": "TNLean.MPS.Symmetry.StringOrderDefs",
+    "source_owner": "peer phase checkpoint 66cc696d78ec5788b18e32b53ccae244433635fb",
+    "source_sha256": "9181ad337e2271408dbe8809a24fd14d762e259c1a04b8e95d5bf3b688d55e35",
+    "artifact_sha256": "8c8b7a58032dcc17aed879e7a9abd233604c9e00b999f0ee45687817930eb04b"
+  },
+  "not_checked": [
+    "TNLean.MPS.Symmetry.PureTwistedSpectrum",
+    "TNLean.MPS.Symmetry.PhysicalStringAsymptotics",
+    "TNLean.MPS.Symmetry.PhysicalStringSelectionRule",
+    "TNLean.MPS.Symmetry.PhysicalStringBlockOrder",
+    "reverse consumers and root aggregate",
+    "blueprint/checkdecls"
+  ],
+  "preservation": {
+    "observable_declarations_byte_preserved": true,
+    "observable_body_sha256": "b86187656db065b4c134c7823b39bf5ebea10d170634c867b4ee5673aff62c69",
+    "adjoint_declaration_byte_preserved": true,
+    "adjoint_declaration_sha256": "9bffea10c1c96e077ada56455ee2608c026430f8e6be778e4a326be672a8d67b",
+    "tnlean_import_cycles": [],
+    "observable_definition_count": 1,
+    "adjoint_theorem_definition_count": 1,
+    "observable_consumers": [
+      "TNLean.Spectral.PhysicalCorrelationDecay",
+      "TNLean.Spectral.PhysicalCorrelationBinomial",
+      "TNLean.MPS.RFP.CPSVCIDNotRFPExample",
+      "TNLean.MPS.RFP.ZeroCorrelationLength",
+      "TNLean.MPS.RFP.BellPairCIDObstruction",
+      "TNLean.MPS.RFP.BNTWeightCounterexample",
+      "TNLean.MPS.RFP.ZCLReverse",
+      "TNLean.MPS.RFP.PhysicalObservableRealization",
+      "TNLean.MPS.Symmetry.PhysicalStringEndpointSpan",
+      "TNLean.MPS.Symmetry.PhysicalStringBlockEndpoints",
+      "TNLean.MPS.SharedInfra.PhysicalObservableGauge",
+      "TNLean.MPS.Preparation.ObservableTransferBound",
+      "TNLean.MPS.Preparation.CorrelatorFiniteSize",
+      "TNLean.MPS.Preparation.WindowClustering",
+      "TNLean.MPS.Preparation.DecayingCorrelations",
+      "TNLean.MPS.Preparation.WindowCorrelator",
+      "TNLean.MPS.Preparation.DecayingCorrelationBound"
+    ],
+    "adjoint_word_consumers": [
+      "TNLean.MPS.Symmetry.PhysicalStringBlockEndpoints",
+      "TNLean.MPS.Examples.WStateCanonicalBound"
+    ]
+  },
+  "single_slot": true,
+  "cold_builds": false,
+  "axiom_audit": {
+    "exit_code": 0,
+    "declarations": [
+      "MPSTensor.exists_physicalObservableTransfer_eq_at_stationary",
+      "MPSTensor.exists_physicalObservableTransfer_trace_eq",
+      "MPSTensor.exists_physicalStringBlockEndpoints",
+      "MPSTensor.exists_isHermitian_physicalStringProductEndpoints"
+    ],
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "log": "/workspace/shared/finite-endpoints-axioms.log",
+    "note": "Intentional #print notices only; analytic capstone not covered."
+  }
+}
