@@ -13,7 +13,7 @@ test
 
 noncomputable section
 
-open scoped InnerProductSpace TensorProduct Kronecker
+open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
 /-! ### Reassociating blocks of registers -/
 
@@ -359,6 +359,59 @@ theorem eval_relabelSitesApp (own own' : ι → Party) (tail : Layout Party) (c 
         (siteRegs q own' S ++ tail) T
       exact ⟨⟨h₁, g₁⟩, ⟨h₂, g₂⟩, congrArg₂ (· + ·) h₃ g₃⟩
 
+section Simp
+
+variable (own own' : ι → Party) (p : ι → Bool) (tail : Layout Party) (S : List ι)
+  (T : Set Party)
+
+@[simp] theorem isAllowed_partWord : (partWord (q := q) own p S).IsAllowed :=
+  (partWord_props own p ∅ S).1
+@[simp] theorem usesOnly_partWord : (partWord (q := q) own p S).UsesOnly T :=
+  (partWord_props own p T S).2.1
+@[simp] theorem sourceCount_partWord : (partWord (q := q) own p S).sourceCount = 0 :=
+  (partWord_props own p ∅ S).2.2
+@[simp] theorem isAllowed_unpartWord : (unpartWord (q := q) own p S).IsAllowed :=
+  (unpartWord_props own p ∅ S).1
+@[simp] theorem usesOnly_unpartWord : (unpartWord (q := q) own p S).UsesOnly T :=
+  (unpartWord_props own p T S).2.1
+@[simp] theorem sourceCount_unpartWord : (unpartWord (q := q) own p S).sourceCount = 0 :=
+  (unpartWord_props own p ∅ S).2.2
+@[simp] theorem isAllowed_partWordApp : (partWordApp (q := q) own p tail S).IsAllowed :=
+  (partWordApp_props own p tail ∅ S).1
+@[simp] theorem usesOnly_partWordApp : (partWordApp (q := q) own p tail S).UsesOnly T :=
+  (partWordApp_props own p tail T S).2.1
+@[simp] theorem sourceCount_partWordApp :
+    (partWordApp (q := q) own p tail S).sourceCount = 0 :=
+  (partWordApp_props own p tail ∅ S).2.2
+@[simp] theorem isAllowed_unpartWordApp : (unpartWordApp (q := q) own p tail S).IsAllowed :=
+  (unpartWordApp_props own p tail ∅ S).1
+@[simp] theorem usesOnly_unpartWordApp : (unpartWordApp (q := q) own p tail S).UsesOnly T :=
+  (unpartWordApp_props own p tail T S).2.1
+@[simp] theorem sourceCount_unpartWordApp :
+    (unpartWordApp (q := q) own p tail S).sourceCount = 0 :=
+  (unpartWordApp_props own p tail ∅ S).2.2
+
+variable (h : ∀ x ∈ S, own x = own' x)
+
+@[simp] theorem isAllowed_relabelSites : (relabelSites (q := q) own own' S h).IsAllowed :=
+  (relabelSites_props own own' ∅ S h).1
+@[simp] theorem usesOnly_relabelSites : (relabelSites (q := q) own own' S h).UsesOnly T :=
+  (relabelSites_props own own' T S h).2.1
+@[simp] theorem sourceCount_relabelSites :
+    (relabelSites (q := q) own own' S h).sourceCount = 0 :=
+  (relabelSites_props own own' ∅ S h).2.2
+@[simp] theorem isAllowed_relabelSitesApp :
+    (relabelSitesApp (q := q) own own' tail S h).IsAllowed :=
+  (relabelSitesApp_props own own' tail ∅ S h).1
+@[simp] theorem usesOnly_relabelSitesApp :
+    (relabelSitesApp (q := q) own own' tail S h).UsesOnly T :=
+  (relabelSitesApp_props own own' tail T S h).2.1
+@[simp] theorem sourceCount_relabelSitesApp :
+    (relabelSitesApp (q := q) own own' tail S h).sourceCount = 0 :=
+  (relabelSitesApp_props own own' tail ∅ S h).2.2
+
+end Simp
+
 /-! ### Splitting and merging tag registers -/
 
 section TagSplit
@@ -424,7 +477,92 @@ theorem eval_tagMerge (tail : Layout Party) (y : Mem tail) :
   | [], _ => ⟨trivial, trivial, rfl⟩
   | _ :: l₁, l₂ => tagMerge_props S tail l₁ l₂
 
+section
+
+variable (S : Set Party) (tail : Layout Party) (l₁ l₂ : List (Hole pos q Party))
+
+@[simp] theorem isAllowed_tagSplit : (tagSplit l₁ l₂ tail).IsAllowed :=
+  (tagSplit_props ∅ tail l₁ l₂).1
+@[simp] theorem usesOnly_tagSplit : (tagSplit l₁ l₂ tail).UsesOnly S :=
+  (tagSplit_props S tail l₁ l₂).2.1
+@[simp] theorem sourceCount_tagSplit : (tagSplit l₁ l₂ tail).sourceCount = 0 :=
+  (tagSplit_props ∅ tail l₁ l₂).2.2
+@[simp] theorem isAllowed_tagMerge : (tagMerge l₁ l₂ tail).IsAllowed :=
+  (tagMerge_props ∅ tail l₁ l₂).1
+@[simp] theorem usesOnly_tagMerge : (tagMerge l₁ l₂ tail).UsesOnly S :=
+  (tagMerge_props S tail l₁ l₂).2.1
+@[simp] theorem sourceCount_tagMerge : (tagMerge l₁ l₂ tail).sourceCount = 0 :=
+  (tagMerge_props ∅ tail l₁ l₂).2.2
+
+end
+
 end TagSplit
+
+/-! ### The registers of two frames in canonical coordinates -/
+
+section TwoLayout
+
+variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ}
+
+/-- The registers of two frames, those of the first followed by those of the second, identified
+with the product `ℂ^{L₁ × L₂}` of their canonical coordinates. -/
+def twoLayoutIso (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party) :
+    Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q))) :=
+  (appendIso _ _).trans ((((layoutIso l₁ own₁).rTensor _).trans
+    ((layoutIso l₂ own₂).lTensor _)).trans (pairIso _ _))
+
+theorem twoLayoutIso_symm_single (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
+    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
+    (twoLayoutIso l₁ l₂ own₁ own₂).symm (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)) =
+      (appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂) := by
+  rw [LinearIsometryEquiv.symm_apply_eq]
+  change _ = pairIso _ _ ((layoutIso l₂ own₂).lTensor _ ((layoutIso l₁ own₁).rTensor _
+    (appendIso _ _ ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ
+      layoutVec l₂ own₂ τ₂ c₂)))))
+  rw [LinearIsometryEquiv.apply_symm_apply, iso_rTensor_tmul, iso_lTensor_tmul,
+    layoutIso_layoutVec, layoutIso_layoutVec, pairIso_single_tmul_single]
+
+theorem twoLayoutIso_basis (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
+    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
+    twoLayoutIso l₁ l₂ own₁ own₂
+        ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂)) =
+      EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ) := by
+  rw [← twoLayoutIso_symm_single, LinearIsometryEquiv.apply_symm_apply]
+
+/-- Two operators on the registers of two frames agree in canonical coordinates as soon as they
+agree on the basis vectors. -/
+theorem twoLayoutIso_eq_act_of_basis (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
+    (l₁' l₂' : List (Hole pos q Party)) (own₁' own₂' : ι → Party)
+    (f : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂) →L[ℂ]
+      Mem (layoutRegs q l₁' own₁' ++ layoutRegs q l₂' own₂'))
+    (A : Matrix ((TagSpace l₁' × (ι → Fin q)) × (TagSpace l₂' × (ι → Fin q)))
+      ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q))) ℂ)
+    (hf : ∀ τ₁ c₁ τ₂ c₂, twoLayoutIso l₁' l₂' own₁' own₂'
+      (f ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂))) =
+        act A (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)))
+    (z : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)) :
+    twoLayoutIso l₁' l₂' own₁' own₂' (f z) = act A (twoLayoutIso l₁ l₂ own₁ own₂ z) := by
+  obtain ⟨y, rfl⟩ : ∃ y, z = (twoLayoutIso l₁ l₂ own₁ own₂).symm y :=
+    ⟨twoLayoutIso l₁ l₂ own₁ own₂ z, by simp⟩
+  rw [LinearIsometryEquiv.apply_symm_apply, act_eq_matL]
+  conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
+  conv_rhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
+  simp only [map_sum, map_smul]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  obtain ⟨⟨τ₁, c₁⟩, ⟨τ₂, c₂⟩⟩ := i
+  rw [EuclideanSpace.basisFun_apply, twoLayoutIso_symm_single, hf, act_eq_matL]
+
+theorem act_toMatrix_symm_single {α β : Type} [Fintype α] [Fintype β] [DecidableEq α]
+    [DecidableEq β] (e : α ≃ β) (i : α) :
+    act (e.symm.toPEquiv.toMatrix : Matrix β α ℂ) (EuclideanSpace.single i (1 : ℂ)) =
+      EuclideanSpace.single (e i) (1 : ℂ) := by
+  ext j
+  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, Matrix.col_apply, PEquiv.toMatrix_apply,
+    Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq, PiLp.single_apply,
+    Equiv.symm_apply_eq]
+
+end TwoLayout
 
 /-! ### A private contraction on the raw registers of `U` on two sheets -/
 
@@ -575,6 +713,112 @@ theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos
     Word.eval_exchangeBlocks_appendIso_symm, Word.eval_unassocWord_appendIso_symm,
     eval_unpartWord, eval_unpartWordApp]
 
+theorem threeSplit_fst (h : Disjoint T E) (c : ι → Fin q) :
+    (threeSplit q T E h c).1 = ((fun x : T => c x), (fun x : E => c x)) :=
+  rfl
+
+theorem threeSplit_snd (h : Disjoint T E) (c : ι → Fin q) :
+    (threeSplit q T E h c).2 = fun x : ↥(T ∪ E)ᶜ => c x :=
+  rfl
+
+/-- The operator `W` on the two copies of `U = (T ∪ E)ᶜ`, tensored with the identity on the
+two copies of `T` and `E`, on the raw registers of two sheets. -/
+abbrev twoSheetPlace (h : Disjoint T E)
+    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ :=
+  (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
+      (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ W).submatrix
+    (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _)).submatrix
+    (threeSplit₂ h) (threeSplit₂ h)
+
+theorem sum_single_merge₂ (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
+    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
+    ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
+        (EuclideanSpace.single ((τ₁, merge h ((fun x : T => c₁ x), u.1) c₁),
+          (τ₂, merge h ((fun x : T => c₂ x), u.2) c₂)) (1 : ℂ) :
+          EuclideanSpace ℂ ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q)))) =
+      act (liftTags (l₁ := l₁) (l₂ := l₂) (twoSheetPlace h W))
+        (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)) := by
+  ext ⟨⟨τ₁', c₁'⟩, ⟨τ₂', c₂'⟩⟩
+  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, WithLp.ofLp_sum, WithLp.ofLp_smul,
+    Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, liftTags,
+    Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
+    Equiv.prodProdProdComm_apply, Equiv.prodCongr_apply, Prod.map]
+  set u₀ : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q) :=
+    ((fun x : ↥(T ∪ E)ᶜ => c₁' x), (fun x : ↥(T ∪ E)ᶜ => c₂' x))
+  set B : Prop := τ₁' = τ₁ ∧ τ₂' = τ₂
+  set A : Prop := (((fun x : T => c₁ x) = fun x : T => c₁' x) ∧
+      (fun x : E => c₁' x) = fun x : E => c₁ x) ∧
+    (((fun x : T => c₂ x) = fun x : T => c₂' x) ∧ (fun x : E => c₂' x) = fun x : E => c₂ x)
+  have key : ∀ u : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q),
+      (Pi.single ((τ₁, merge h ((fun x : T => c₁ x), u.1) c₁),
+        (τ₂, merge h ((fun x : T => c₂ x), u.2) c₂)) (1 : ℂ) :
+          (TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q)) → ℂ)
+          ((τ₁', c₁'), (τ₂', c₂')) =
+        if u = u₀ then (if B then 1 else 0) * (if A then 1 else 0) else 0 := by
+    intro u
+    rw [Pi.single_apply, ite_zero_mul_ite_zero, mul_one, ← ite_and]
+    congr 1
+    simp only [Prod.mk.injEq, merge_eq_iff, u₀, A, B, Prod.ext_iff]
+    exact propext (by tauto)
+  simp_rw [key, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+  have hB : (if (τ₁', τ₂') = (τ₁, τ₂) then (1 : ℂ) else 0) = if B then 1 else 0 := by
+    congr 1
+    simp [B]
+  have hA : (if (((threeSplit q T E h c₁').1, (threeSplit q T E h c₂').1) =
+      ((threeSplit q T E h c₁).1, (threeSplit q T E h c₂).1)) then (1 : ℂ) else 0) =
+        if A then 1 else 0 := by
+    congr 1
+    simp only [A, Prod.mk.injEq, threeSplit_fst]
+    exact propext (by tauto)
+  rw [hB, hA]
+  simp only [threeSplit_snd, u₀]
+  split_ifs <;> ring
+
+/-- **The corrections in canonical coordinates.** The correction word acts on the registers of
+the two frames as `1_tags ⊗ (1_{T E} ⊗ W)`. -/
+theorem twoLayoutIso_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
+    (own₁ own₂ : ι → Party) {P : Party}
+    (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
+    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (z : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)) :
+    twoLayoutIso l₁ l₂ own₁ own₂ ((correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).eval z) =
+      act (liftTags (l₁ := l₁) (l₂ := l₂) (twoSheetPlace h W)) (twoLayoutIso l₁ l₂ own₁ own₂ z) :=
+  twoLayoutIso_eq_act_of_basis l₁ l₂ own₁ own₂ l₁ l₂ own₁ own₂ _ _ (fun τ₁ c₁ τ₂ c₂ => by
+    rw [eval_correctionLayoutWord h, map_sum, ← sum_single_merge₂]
+    refine Finset.sum_congr rfl fun u _ => ?_
+    rw [LinearIsometryEquiv.map_smul, twoLayoutIso_basis]) z
+
+theorem correctionLayoutWord_props (l₁ l₂ : List (Hole pos q Party))
+    (own₁ own₂ : ι → Party) {P : Party}
+    (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
+    {W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ} (hW : ‖W‖ ≤ 1) :
+    (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).IsAllowed ∧
+      (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).UsesOnly {P} ∧
+      (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).sourceCount = 0 := by
+  obtain ⟨a₁, a₂, a₃⟩ := partWordApp_props (q := q) own₁ (fun x => decide (x ∈ (T ∪ E)ᶜ))
+    (layoutRegs q l₂ own₂) {P} (sites ι)
+  obtain ⟨b₁, b₂, b₃⟩ := partWord_props (q := q) own₂ (fun x => decide (x ∈ (T ∪ E)ᶜ)) {P}
+    (sites ι)
+  obtain ⟨c₁, c₂, c₃⟩ := unpartWordApp_props (q := q) own₁ (fun x => decide (x ∈ (T ∪ E)ᶜ))
+    (layoutRegs q l₂ own₂) {P} (sites ι)
+  obtain ⟨d₁, d₂, d₃⟩ := unpartWord_props (q := q) own₂ (fun x => decide (x ∈ (T ∪ E)ᶜ)) {P}
+    (sites ι)
+  have hloc : ‖isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L matL W ∘L
+      isoL (pairUIso own₁ own₂)‖ ≤ 1 :=
+    (norm_comp_isoL_le _ _ _).trans ((norm_matL W).le.trans hW)
+  simp only [correctionLayoutWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,
+    Word.isAllowed_frameList_iff, Word.usesOnly_frameList_iff, Word.sourceCount_frameList,
+    Word.isAllowed_assocWord, Word.usesOnly_assocWord, Word.sourceCount_assocWord,
+    Word.isAllowed_unassocWord, Word.usesOnly_unassocWord, Word.sourceCount_unassocWord,
+    Word.isAllowed_exchangeBlocks, Word.usesOnly_exchangeBlocks, Word.sourceCount_exchangeBlocks,
+    a₁, a₂, a₃, b₁, b₂, b₃, c₁, c₂, c₃, d₁, d₂, d₃, hloc, Set.mem_singleton_iff, and_self]
+
 end Correction
 
 /-! ### The renaming of a two-sheet exchange -/
@@ -680,6 +924,22 @@ theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → 
   simp only [Word.eval_frameList_appendIso_symm, eval_partWord, hY₂, hN₂, Word.eval_swapPairs,
     eval_relabelSitesApp, eval_relabelSites, eval_unpartWord, eval_tagMerge, eval_unpartWordApp,
     Word.eval_unassocWord_appendIso_symm]
+
+/-- **The renaming in canonical coordinates** is the renaming `ℛ` of `TwoSheetExchange.rename`. -/
+theorem twoLayoutIso_renameWord
+    (z : Mem (X.frame₁.regs ++ X.frame₂.regs)) :
+    twoLayoutIso (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁) X.newFrame₁.owner X.newFrame₂.owner
+        (X.renameWord.eval z) =
+      act X.rename (twoLayoutIso (X.out₁ ++ X.in₁) (X.out₂ ++ X.in₂) X.owner₁ X.owner₂ z) :=
+  twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ (fun τ₁ c₁ τ₂ c₂ => by
+    rw [eval_renameWord, twoLayoutIso_basis, rename, act_toMatrix_symm_single]
+    rfl) z
+
+theorem renameWord_props (S : Set Party) :
+    X.renameWord.IsAllowed ∧ X.renameWord.UsesOnly S ∧ X.renameWord.sourceCount = 0 := by
+  simp [renameWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,
+    (Word.swapPairs_props S _ _ _ _ _ _ _).1, (Word.swapPairs_props S _ _ _ _ _ _ _).2.1,
+    (Word.swapPairs_props S _ _ _ _ _ _ _).2.2]
 
 end TwoSheetExchange
 

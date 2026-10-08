@@ -238,4 +238,77 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
 
 end Frame
 
+namespace TwoSheetExchange
+
+open EuclideanSpace (vecKron)
+
+variable (X : TwoSheetExchange pos q Party) (P : Party)
+
+/-- **Lemma 6.6 (two-sheet exchange): the exchange is implemented by private contractions and a
+register renaming.** Consider two encoded frames and a region `Y` such that every hole's outer
+square lies on one side of `∂Y`, with the holes of each frame listed as those outside `Y`
+followed by those inside. Let `P∘` be a party and `Z`, `T`, `E`, `U` as in `eq:exchange-Z` and
+`eq:exchange-partition`. If `I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting data
+and an allowed monomial `w` from the registers of the two frames (one per site and per tag on
+each sheet, each held by its owner) to the registers of the two frames after the exchange, such
+that:
+
+* `w` is the renaming `ℛ`, a word of exchanges of tensor factors that keeps every register at its
+  party, followed by one private contraction at `P∘` on the raw registers of `U` of both sheets
+  (the corrections `D_U F_A`); it uses only `P∘` and no pair resource;
+* in canonical coordinates its operator is the map `C = D_U F_A ℛ`, with
+  `C (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`;
+* the reference-vector error is at most `4 L^{-30}`:
+  `‖w (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`, read on the registers of the frames.
+
+Hence the exchange is a bounded change in the sense of Theorem 5.2.
+
+Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479; proof
+lines 481–561; bounded changes, lines 99–105. -/
+theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
+    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (X.tSet P) (X.eSet P) ≤
+      L ^ (-60 : ℤ)) :
+    ∃ σ : SplittingData q (X.tSet P) (X.eSet P),
+      σ.error (X.disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
+      X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
+        (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
+          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P)) ∧
+      ∃ w : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs ++ X.newFrame₂.regs),
+        w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
+        (∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner (w.eval z) =
+          act (X.exchangeOp P σ) (twoLayoutIso _ _ X.owner₁ X.owner₂ z)) ∧
+        ‖w.eval ((twoLayoutIso _ _ X.owner₁ X.owner₂).symm
+            (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω))) -
+          (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).symm
+            (vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω))‖ ≤ 4 * L ^ (-30 : ℤ) := by
+  obtain ⟨σ, hσ, -, hK, herr⟩ := X.exchange P hΩ hI
+  set h := X.disjoint_tSet_eSet P
+  have hU : ∀ x ∈ (X.tSet P ∪ X.eSet P)ᶜ,
+      X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P := fun x hx =>
+    X.newOwner_eq_of_notMem_exchangeEnv P (by
+      rw [← X.tSet_union_eSet P]
+      exact Finset.mem_compl.mp hx)
+  have heval : ∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner
+      ((X.renameWord.comp (correctionLayoutWord (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁)
+        X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2)
+        (correctionMatrix σ (X.aSet P)))).eval z) =
+      act (X.exchangeOp P σ) (twoLayoutIso _ _ X.owner₁ X.owner₂ z) := by
+    intro z
+    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
+      twoLayoutIso_renameWord, ← act_mul, exchangeOp,
+      sheetBufferCorrection_mul_sheetSwapOp_eq h σ (X.aSet_subset_compl P)]
+  obtain ⟨r₁, r₂, r₃⟩ := X.renameWord_props {P}
+  obtain ⟨c₁, c₂, c₃⟩ := correctionLayoutWord_props (q := q) (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁)
+    X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2)
+    (norm_correctionMatrix_le_one σ (X.aSet P))
+  refine ⟨σ, hσ, hK, X.renameWord.comp (correctionLayoutWord (X.out₁ ++ X.in₂)
+    (X.out₂ ++ X.in₁) X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1)
+    (fun x hx => (hU x hx).2) (correctionMatrix σ (X.aSet P))), ⟨r₁, c₁⟩, ⟨r₂, c₂⟩,
+    congrArg₂ (· + ·) r₃ c₃, heval, ?_⟩
+  rw [← (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).norm_map, map_sub,
+    LinearIsometryEquiv.apply_symm_apply, heval, LinearIsometryEquiv.apply_symm_apply]
+  exact herr
+
+end TwoSheetExchange
+
 end TNLean.PEPS.EncodedFrame
