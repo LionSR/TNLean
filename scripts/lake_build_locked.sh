@@ -27,7 +27,7 @@ if test "${1:-}" = "-h" || test "${1:-}" = "--help"; then
 fi
 
 test "$(/usr/bin/uname -s)" = "Darwin" || {
-  echo "lake-build-locked: requires macOS lockf" >&2
+  echo "lake-build-locked: requires macOS" >&2
   exit 1
 }
 
@@ -51,7 +51,8 @@ if test "${TNLEAN_LAKE_LOCK_HELD:-}" != "1"; then
   )")"
   # Keep the locked file description in the final Lake process and its children.
   exec 9<>"$COMMON_DIR/tnlean-lake-cache.lock"
-  /usr/bin/lockf 9
+  # macOS lockf polls in descriptor mode; flock waits in the kernel instead.
+  python3 -c 'import fcntl; fcntl.flock(9, fcntl.LOCK_EX)'
   export TNLEAN_LAKE_LOCK_HELD=1
 fi
 

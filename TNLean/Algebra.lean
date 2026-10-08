@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Algebra.AnticommutingEvenDimension
 import TNLean.Algebra.BinaryCharacterSum
+import TNLean.Algebra.BinaryProjectionFamily
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
@@ -155,6 +156,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.ScalarThreeCocycleTimeReversal
+import TNLean.Algebra.ScaledProjectionTransport
 import TNLean.Algebra.SemiRegularDimension
 import TNLean.Algebra.SemiRegularEquiv
 import TNLean.Algebra.SemiRegularGroupAlgebra
