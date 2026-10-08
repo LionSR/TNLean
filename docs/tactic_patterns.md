@@ -24,6 +24,37 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
+
+- **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with
+  `B * A = 1` and telescope, so that the word evaluation is `A * evalWord U is js * B`.
+- **Seen:** `evalWord_padBond` (an isometry and its adjoint) and `evalWord_virtualSandwich`
+  (a bond similarity) in `TNLean/MPS/MPU/`, beside the Kraus form
+  `Kraus.evalWord_compress_of_left_absorb`.
+- **Abstraction:** `MPOTensor.evalWord_sandwich` in `TNLean/MPS/MPU/WordSandwich.lean`, for
+  rectangular `A` and `B`.
+- **Refactor:** `evalWord_padBond` and `evalWord_virtualSandwich` are one-line instances.
+
+### Rank from a factorization and an identity minor — promoted (2026-10-08)
+
+- **Pattern:** prove `rank M = k` from `M = P * Q` through `k` (upper bound) and a `k × k`
+  submatrix equal to the identity (lower bound).
+- **Seen:** four cut-rank proofs in `TNLean/MPS/MPU/Examples/ControlledZ.lean` and
+  `leftRank_oddRingTensor` in `TNLean/MPS/MPU/Examples/OddRing.lean`.
+- **Abstraction:** `Matrix.rank_eq_card_of_eq_mul_of_submatrix_eq_one` in
+  `TNLean/Algebra/MatrixRankOfFactor.lean`.
+- **Refactor:** all five call sites use the lemma; the private helpers are deleted.
+
+### Functional calculus under a unitary conjugation — promoted (2026-10-08)
+
+- **Pattern:** `f (x * A * xᴴ) = x * f A * xᴴ` for a unitary `x` and Hermitian `A`, and the same
+  for `PosSemidef.supportInvSqrt`.
+- **Seen:** general `Matrix` lemmas that had been placed in `TNLean/MPS/MPU/SourceFactorChoice.lean`.
+- **Abstraction:** `Matrix.IsHermitian.cfc_eq_of_eq_unitary_conj`,
+  `Matrix.PosSemidef.supportInvSqrt_eq_of_eq_unitary_conj` and
+  `Matrix.conjTranspose_mul_unitary` in `TNLean/Algebra/MatrixUnitaryConjCFC.lean`.
+- **Refactor:** the MPU module imports the algebra module.
+
 ### Connectivity from two run-support memberships — promoted (2026-10-08)
 
 - **Pattern:** Convert membership of two fan slots in one run's support into
@@ -3543,6 +3574,19 @@ three-plaquette output measurement, and the routed reunion measurement.
   comparison matrix is not needed.
 
 ## Candidates
+
+### sitewise Kronecker power in configuration coordinates — candidate
+- **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
+  identity, conjugate-transpose and unitarity lemmas.
+- **Seen:** two copies (2026-10-06): `siteProduct` (index `Fin ℓ × Fin r`) in
+  `TNLean/MPS/MPU/FundamentalTheoremGates.lean` and the private `chainPower` (index `Fin d`) in
+  `TNLean/MPS/MPU/Examples/ShiftStrictEquivalence.lean`.
+- **Abstraction:** one definition over an arbitrary fintype; a third copy promotes it.
+
+### simplicity of a tensor with diagonal rank-one double-layer letters — candidate
+- **Pattern:** `isMPUSimple_of_rankOne_diagonal` (`TNLean/MPS/MPU/SimpleRankOne.lean`,
+  2026-10-06) proves simplicity from three scalar pairings; the shift's own simplicity proof
+  (`rightShiftTensor_isMPUSimple`) has this form and could be replaced by it.
 
 ### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
 
