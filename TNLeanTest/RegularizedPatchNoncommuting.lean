@@ -8,8 +8,6 @@ open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 private def firstDensity : Matrix (Fin 2) (Fin 2) ℂ := !![1, 0; 0, 0]
 
-private noncomputable def secondDensity : Matrix (Fin 2) (Fin 2) ℂ := !![1 / 2, 1 / 2; 1 / 2, 1 / 2]
-
 private theorem firstDensity_psd : firstDensity.PosSemidef := by
   have h : firstDensity = diagonal ![1, 0] := by ext i j; fin_cases i <;> fin_cases j <;> rfl
   rw [h]
@@ -17,35 +15,28 @@ private theorem firstDensity_psd : firstDensity.PosSemidef := by
   intro i
   fin_cases i <;> norm_num
 
-private theorem secondDensity_psd : secondDensity.PosSemidef := by
-  have h : secondDensity = (1 / 2 : ℝ) • Matrix.vecMulVec ![1, 1] (star ![1, 1]) := by
-    ext i j
-    fin_cases i <;> fin_cases j <;> norm_num [secondDensity, Matrix.vecMulVec]
-  rw [h]
-  exact (Matrix.posSemidef_vecMulVec_self_star ![1, 1]).smul (by norm_num : (0 : ℝ) ≤ 1 / 2)
-
 private noncomputable def densities (j : Fin 2) : Matrix Config Config ℂ :=
-  Matrix.reindex configEquiv configEquiv (if j = 0 then firstDensity else secondDensity)
+  Matrix.reindex configEquiv configEquiv (if j = 0 then firstDensity else plusDensity)
 
 private theorem densities_feasible :
     densities ∈ regularizedPatchDomain (Out := fun _ : Unit ↦ Fin 2)
       (fun _ : Fin 2 ↦ Finset.univ) := by
   intro j
   constructor
-  · change ((if j = 0 then firstDensity else secondDensity).submatrix
+  · change ((if j = 0 then firstDensity else plusDensity).submatrix
       configEquiv.symm configEquiv.symm).PosSemidef
     apply Matrix.PosSemidef.submatrix
     split_ifs
     · exact firstDensity_psd
-    · exact secondDensity_psd
-  · change (∑ i, (if j = 0 then firstDensity else secondDensity)
+    · exact plusDensity_posSemidef
+  · change (∑ i, (if j = 0 then firstDensity else plusDensity)
       (configEquiv.symm i) (configEquiv.symm i)) = 1
     refine (configEquiv.symm.sum_comp
-      (fun i ↦ (if j = 0 then firstDensity else secondDensity) i i)).trans ?_
-    split_ifs <;> norm_num [firstDensity, secondDensity, Fin.sum_univ_two]
+      (fun i ↦ (if j = 0 then firstDensity else plusDensity) i i)).trans ?_
+    split_ifs <;> norm_num [firstDensity, plusDensity, Fin.sum_univ_two]
 
-example : firstDensity.det = 0 ∧ secondDensity.det = 0 := by
-  norm_num [firstDensity, secondDensity, Matrix.det_fin_two]
+example : firstDensity.det = 0 ∧ plusDensity.det = 0 := by
+  norm_num [firstDensity, plusDensity, Matrix.det_fin_two]
 
 open Classical in
 private theorem filter_eq_inverse (j : Fin 2) :
@@ -67,11 +58,11 @@ private theorem first_inverse : (firstDensity + 1)⁻¹ = !![1 / 2, 0; 0, 1] := 
   fin_cases i <;> fin_cases j <;>
     norm_num [firstDensity, Matrix.mul_apply, Fin.sum_univ_two, Matrix.one_apply]
 
-private theorem second_inverse : (secondDensity + 1)⁻¹ = !![3 / 4, -(1 / 4); -(1 / 4), 3 / 4] := by
+private theorem second_inverse : (plusDensity + 1)⁻¹ = !![3 / 4, -(1 / 4); -(1 / 4), 3 / 4] := by
   apply Matrix.inv_eq_left_inv
   ext i j
   fin_cases i <;> fin_cases j <;>
-    norm_num [secondDensity, Matrix.mul_apply, Fin.sum_univ_two, Matrix.one_apply]
+    norm_num [plusDensity, Matrix.mul_apply, Fin.sum_univ_two, Matrix.one_apply]
 
 private theorem filters_not_commute : ¬ Commute
     (regularizedPatchFilter (Out := fun _ : Unit ↦ Fin 2) (fun _ ↦ Finset.univ)
@@ -84,7 +75,7 @@ private theorem filters_not_commute : ¬ Commute
         Matrix.reindex configEquiv configEquiv (A + 1) := by
     simp [Matrix.reindex_apply, Matrix.submatrix_add]
   change ¬ Commute ((Matrix.reindex configEquiv configEquiv firstDensity + 1)⁻¹)
-    ((Matrix.reindex configEquiv configEquiv secondDensity + 1)⁻¹)
+    ((Matrix.reindex configEquiv configEquiv plusDensity + 1)⁻¹)
   rw [he, he, Matrix.inv_reindex, Matrix.inv_reindex, first_inverse, second_inverse]
   intro h
   have hm : Commute (!![1 / 2, 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℂ)

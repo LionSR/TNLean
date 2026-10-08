@@ -4,14 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
+import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
 # Single-qubit configuration coordinates
 
 The two basis states identify with configurations on one vertex. Extending an
-operator on this full region leaves it unchanged.
+operator on this full region leaves it unchanged. The plus-state density is
+positive semidefinite as a positive scalar multiple of an outer product.
 -/
 
+open scoped Matrix ComplexOrder
 open TNLean.PEPS
 
 namespace TNLeanTest.SingleQubitConfig
@@ -31,5 +34,18 @@ theorem lift_univ (K : Matrix Config Config ℂ) :
     dependentRegionOperatorLift (Out := fun _ : Unit ↦ Fin 2) Finset.univ K = K := by
   ext α β
   simp [dependentRegionOperatorLift_apply]
+
+/-- The density matrix of the single-qubit plus state. -/
+noncomputable def plusDensity : Matrix (Fin 2) (Fin 2) ℂ :=
+  !![1 / 2, 1 / 2; 1 / 2, 1 / 2]
+
+/-- The plus-state density is a positive scalar multiple of an outer product. -/
+theorem plusDensity_posSemidef : plusDensity.PosSemidef := by
+  have h : plusDensity = (1 / 2 : ℝ) • Matrix.vecMulVec ![1, 1] (star ![1, 1]) := by
+    ext i j
+    fin_cases i <;> fin_cases j <;> norm_num [plusDensity, Matrix.vecMulVec]
+  rw [h]
+  exact (Matrix.posSemidef_vecMulVec_self_star ![1, 1]).smul
+    (by norm_num : (0 : ℝ) ≤ 1 / 2)
 
 end TNLeanTest.SingleQubitConfig

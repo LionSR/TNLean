@@ -8,16 +8,13 @@ open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 noncomputable local instance : DecidableEq Config := Classical.typeDecidableEq _
 
-private noncomputable def density : Matrix (Fin 2) (Fin 2) ℂ :=
-  !![1 / 2, 1 / 2; 1 / 2, 1 / 2]
-
 private def generator : Matrix (Fin 2) (Fin 2) ℂ := !![0, -1; 1, 0]
 
 private noncomputable def localFilter : Matrix (Fin 2) (Fin 2) ℂ :=
   !![3 / 4, -(1 / 4); -(1 / 4), 3 / 4]
 
 private noncomputable def x (_ : Fin 1) : Matrix Config Config ℂ :=
-  Matrix.reindex configEquiv configEquiv density
+  Matrix.reindex configEquiv configEquiv plusDensity
 
 private noncomputable def B : Matrix Config Config ℂ :=
   Matrix.reindex configEquiv configEquiv generator
@@ -25,21 +22,14 @@ private noncomputable def B : Matrix Config Config ℂ :=
 private noncomputable def Ω : EuclideanSpace ℂ Config :=
   WithLp.toLp 2 (fun σ ↦ ![1, 0] (configEquiv.symm σ))
 
-private theorem density_psd : density.PosSemidef := by
-  have h : density = (1 / 2 : ℝ) • Matrix.vecMulVec ![1, 1] (star ![1, 1]) := by
-    ext i j
-    fin_cases i <;> fin_cases j <;> norm_num [density, Matrix.vecMulVec]
-  rw [h]
-  exact (Matrix.posSemidef_vecMulVec_self_star ![1, 1]).smul (by norm_num : (0 : ℝ) ≤ 1 / 2)
-
 private theorem feasible :
     x ∈ regularizedPatchDomain (Out := fun _ : Unit ↦ Fin 2) (fun _ : Fin 1 ↦ Finset.univ) := by
   intro j
   constructor
-  · exact density_psd.submatrix configEquiv.symm
-  · change (∑ i, density (configEquiv.symm i) (configEquiv.symm i)) = 1
-    refine (configEquiv.symm.sum_comp (fun i ↦ density i i)).trans ?_
-    norm_num [density, Fin.sum_univ_two]
+  · exact plusDensity_posSemidef.submatrix configEquiv.symm
+  · change (∑ i, plusDensity (configEquiv.symm i) (configEquiv.symm i)) = 1
+    refine (configEquiv.symm.sum_comp (fun i ↦ plusDensity i i)).trans ?_
+    norm_num [plusDensity, Fin.sum_univ_two]
 
 private theorem B_skew : star B = -B := by
   ext σ τ
@@ -48,8 +38,8 @@ private theorem B_skew : star B = -B := by
   fin_cases i <;> fin_cases j <;>
     norm_num [B, generator, Matrix.reindex_apply, Matrix.conjTranspose_apply]
 
-example : density.det = 0 := by
-  norm_num [density, Matrix.det_fin_two]
+example : plusDensity.det = 0 := by
+  norm_num [plusDensity, Matrix.det_fin_two]
 
 /-- Repeated copies of one region remain independent coordinates. -/
 example (z : Fin 2 → Matrix Config Config ℂ) (U : Matrix Config Config ℂ) :
@@ -86,17 +76,17 @@ private theorem shifted_power :
   have hp : IsStrictlyPositive (x 0 + 1) := by
     simpa only [one_smul] using ((feasible 0).1.add_smul_one_posDef
       (b := 1) zero_lt_one).isStrictlyPositive
-  have hinv : (density + 1)⁻¹ = localFilter := by
+  have hinv : (plusDensity + 1)⁻¹ = localFilter := by
     apply Matrix.inv_eq_left_inv
     ext i j
     fin_cases i <;> fin_cases j <;>
-      norm_num [density, localFilter, Matrix.mul_apply, Fin.sum_univ_two, Matrix.one_apply]
+      norm_num [plusDensity, localFilter, Matrix.mul_apply, Fin.sum_univ_two, Matrix.one_apply]
   norm_num only [one_smul, show -(2 : ℝ) / 2 = -1 by norm_num]
   have hpow : (x 0 + 1) ^ (-1 : ℝ) = (x 0 + 1)⁻¹ := by
     rw [Matrix.nonsing_inv_eq_ringInverse]
     convert! (CFC.inverse_eq_rpow_neg_one hp).symm using 2
   rw [hpow]
-  have he : x 0 + 1 = Matrix.reindex configEquiv configEquiv (density + 1) := by
+  have he : x 0 + 1 = Matrix.reindex configEquiv configEquiv (plusDensity + 1) := by
     simp [x, Matrix.reindex_apply, Matrix.submatrix_add]
   rw [he, Matrix.inv_reindex, hinv]
 

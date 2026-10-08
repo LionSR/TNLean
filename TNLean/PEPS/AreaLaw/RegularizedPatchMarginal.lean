@@ -51,7 +51,8 @@ theorem dependentGlobalConfigIsometry_apply
     (σ : (v : V) → Out v) :
     dependentGlobalConfigIsometry ξ σ = ξ (fun v ↦ σ v.1) := rfl
 
-/-- The actual regional lift pairs with the canonical finite-product marginal.
+/-- The regional identity extension pairs with the canonical finite-product
+marginal of the same vector.
 This equality is complex-valued and requires no Hermiticity assumption on the
 regional matrix. -/
 theorem inner_dependentRegionOperatorLift_eq_trace_reducedPure (R : Finset V)
