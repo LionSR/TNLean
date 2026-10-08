@@ -106,6 +106,11 @@ def IsChargeRound (r : ℕ) : Prop := r % 2 = 1
 
 instance (r : ℕ) : Decidable (IsChargeRound r) := inferInstanceAs (Decidable (_ = _))
 
+/-- The `nm` charge rounds among the `2nm` rounds. -/
+noncomputable def ScannerExponents.chargeRounds (X : ScannerExponents) (n : ℕ) :
+    Finset (Fin (X.rounds n)) :=
+  Finset.univ.filter fun r ↦ IsChargeRound r
+
 /-- Constants of the cited inputs, fixed before the scale `n`. They depend only on the fixed
 exponents, the entropy-input constant `C_e` (line 396) and the Hamiltonian parameters
 (local dimension `q`, gap `g`); never on the domain. A single `C ≥ 1` and a single logarithmic
@@ -229,7 +234,8 @@ structure ScaleFacts (X : ScannerExponents) (n : ℕ) (C₁ : ℝ) : Prop where
   D_le : (X.D n : ℝ) ≤ C₁ * (n : ℝ) ^ X.e
   /-- `W² n D² / (m K) ≤ C₁ W² n^ℓ D²` (lines 519–520). -/
   coefficient_le :
-    X.W ^ 2 * n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n) ≤ C₁ * X.W ^ 2 * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2
+    X.W ^ 2 * n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n) ≤
+      C₁ * X.W ^ 2 * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2
 
 open Classical in
 /-- The finite data of the collar scan at scale `n`, for all replica counts `k`, together with
@@ -399,9 +405,15 @@ noncomputable def terminalBound : ℝ :=
 noncomputable def defectEnergy (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) : ℝ :=
   ((S.round r).meanEnergy k p - S.E0) / S.gap
 
-/-- The charge rounds, as a finset of rounds. -/
-noncomputable def chargeRounds : Finset (Fin (X.rounds n)) :=
-  Finset.univ.filter fun r ↦ IsChargeRound r
+/-- The integrated entropy inequality at replica count `k`: the entropy gains of
+`scanner:charge-gain` integrated over every full round, with the charge integrals restricted to
+`[ε/2, ε]`, the telescoped left side bounded by the initial floor and the terminal rough upper
+comparison (lines 457–475), before normalization. -/
+def IntegratedChargeBound (k : ℕ) : Prop :=
+  k * X.a n * (κ.c / (n * X.D n)) *
+      ∑ r ∈ X.chargeRounds n, ∫ p in (X.eps n / 2)..(X.eps n), (S.round r).chargeDefect k p ≤
+    S.β k + k * (S.terminalBound + S.rem k) +
+      X.rounds n * (κ.C * k * X.a n * X.K n * X.a n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k)
 
 end ScanData
 
