@@ -29,15 +29,6 @@ open scoped ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- Regional reductions of a pure vector are positive semidefinite.
-Source: area-law `sec:prelim`, lines 10–25, normalized density operators
-and partial trace; the positivity statement does not require normalization. -/
-theorem reducedState_posSemidef (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    (reducedState Λ q Ω A).PosSemidef :=
-  ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
-    (configurationSplit Λ q A).symm).partialTraceRight
-
 /-- The trace of a reduced pure-state matrix is the squared norm of its vector.
 Source: area-law `sec:prelim`, lines 10–25, normalization of density operators
 and the one-dimensional empty tensor product. -/
