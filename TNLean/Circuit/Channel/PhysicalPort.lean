@@ -85,7 +85,7 @@ theorem conjTranspose {P : PhysicalPortLayout N W} {T : ℕ} {U}
     exact .onsitePermutation π.symm (fun x => by simpa using (hπ (π.symm x)).symm)
   | layer L =>
     have h := IsPhysicalPortUnitary.layer (P := P) L.adjoint
-    simpa only [Layer.adjoint_op, star_eq_conjTranspose, embedOp_conjTranspose] using h
+    simpa only [BondLayer.adjoint_op, star_eq_conjTranspose, embedOp_conjTranspose] using h
   | mul _ _ ihU ihV => simpa only [conjTranspose_mul, Nat.add_comm] using ihV.mul ihU
   | mono _ hTS ih => exact ih.mono hTS
 
