@@ -1,0 +1,305 @@
+\section{Approximate original gate expansions}
+\label{sec:peps_approximate_original_gates}
+
+The final paragraph of the proof of
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} permits approximate
+monomial expansions. We retain the original gate occurrences and rescale
+only their scalar coefficients. The resulting operator and physical
+trace-norm estimates do not involve private dimensions.
+
+\begin{definition}[Original operators on a fixed chronology]
+    \label{def:peps_approximate_original_operators}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.GateMaps}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation}
+    \leanok
+    Fix a chronological circuit whose gate occurrence $g$ carries an
+    ordered expansion $T_g=\sum_j c_{g,j}M_{g,j}$. Assign an original
+    operator $G_g$ on the same local input and output memories to every
+    occurrence. Let $W_G$ be their chronological composition, with the
+    prescribed private operations and spectator identities.
+    For $\delta\ge0$, require all private operators and all $G_g$ to be
+    contractions, every listed monomial to be allowed, and
+    $\|T_g-G_g\|\le\delta$. Retain the convention that a nonprivate
+    occurrence has a participating set of cardinality different from one;
+    the empty participating set is permitted.
+\end{definition}
+
+\begin{theorem}[Contractivity of the original chronology]
+    \label{thm:peps_original_operator_contraction}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_evalWithGateMaps_le_one}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_one}
+    \leanok
+    \uses{def:peps_approximate_original_operators}
+    Under these local hypotheses, $\|W_G\|\le1$. The same assertion
+    holds for every original contraction circuit.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Induct on the chronology. Composition multiplies operator norms,
+    and tensoring with a spectator identity does not increase the norm.
+    The prescribed owner and register identifications are isometries.
+\end{proof}
+
+\begin{definition}[Rescaling an approximate expansion]
+    \label{def:peps_rescaled_original}
+    \lean{TNLean.PEPS.PairEffect.rescalePartyGate}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rescaledOriginal}
+    \leanok
+    \uses{def:peps_approximate_original_operators}
+    Replace each coefficient $c_{g,j}$ by $c_{g,j}/(1+\delta)$.
+    Write $\widetilde W_\delta$ for the chronological circuit with these
+    new expansions and the original private operations. Thus its local
+    operator at $g$ is $\widetilde T_g=T_g/(1+\delta)$.
+\end{definition}
+\begin{proof}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.monomials_rescalePartyGate}
+    \lean{TNLean.PEPS.PairEffect.gate_rescalePartyGate}
+    \lean{TNLean.PEPS.PairEffect.sum_norm_rescalePartyGate_le}
+    \lean{TNLean.PEPS.PairEffect.isAllowed_rescalePartyGate}
+    The ordered monomial list is unchanged. Linearity gives the displayed
+    local operator, and $\|T_g\|\le\|G_g\|+\delta\le1+\delta$
+    proves its contractivity. Each monomial remains allowed, while
+    \begin{align}
+        \sum_j\left|\frac{c_{g,j}}{1+\delta}\right|
+        \le\sum_j|c_{g,j}|.
+        \label{eq:peps_rescaled_coefficient_sum}
+    \end{align}
+\end{proof}
+
+\begin{definition}[Occurrences and monomial counts after rescaling]
+    \label{def:peps_rescaled_occurrences}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rescaledLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount}
+    \leanok
+    \uses{def:peps_rescaled_original}
+    Match every gate of $\widetilde W_\delta$ to the same original
+    occurrence, and let $k_g$ be the length of its prescribed monomial
+    list. Repeated occurrences remain distinct in this correspondence.
+\end{definition}
+
+\begin{theorem}[Preservation of the original resource bounds]
+    \label{thm:peps_rescaled_resources}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.nonprivateCount_rescaledOriginal}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_rescaledOriginal}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participationCount_rescaledOriginal}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isExpansionBounded_rescaledOriginal}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isMonomialBounded_rescaledOriginal}
+    \leanok
+    \uses{def:peps_rescaled_occurrences}
+    Rescaling preserves the number $N$ of nonprivate occurrences, their
+    participating sets, and each party's number of participations.
+    If each monomial has at most $r$ pair effects, each gate has
+    absolute coefficient sum at most $S$, and $k_g\le K$, the same
+    three bounds hold for $\widetilde W_\delta$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_rescaled_original}
+    The occurrence correspondence preserves each participating set.
+    The monomials and their pair effects are identical, and
+    (\ref{eq:peps_rescaled_coefficient_sum}) bounds the new coefficient sums.
+\end{proof}
+
+\begin{theorem}[Two-factor telescoping estimate]
+    \label{thm:peps_contraction_composition_error}
+    \lean{TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one}
+    \leanok
+    Let $A,C:E\to F$ and $B,D:F\to G$ be bounded linear maps between
+    complex inner-product spaces. If $\|B\|,\|C\|\le1$, then
+    $\|BA-DC\|\le\|A-C\|+\|B-D\|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use $BA-DC=B(A-C)+(B-D)C$, the triangle inequality, and
+    submultiplicativity of the operator norm.
+\end{proof}
+
+\begin{theorem}[Chronological operator error]
+    \label{thm:peps_approximate_chronological_error}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_rescaledOriginal_sub_evalWithGateMaps_le}
+    \leanok
+    \uses{def:peps_rescaled_original}
+    If the local approximation error is at most $\delta\ge0$ and the
+    original chronology has $N$ nonprivate occurrences, then
+    $\|\widetilde W_\delta-W_G\|\le2\delta N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_original_operator_contraction,thm:peps_contraction_composition_error}
+    The local error satisfies
+    \begin{align}
+        \|\widetilde T_g-G_g\|
+        \le \frac{\|T_g-G_g\|+\delta\|G_g\|}{1+\delta}
+        \le2\delta.
+        \label{eq:peps_rescaled_local_error}
+    \end{align}
+    Apply the two-factor estimate at every composition. Private maps and
+    register permutations add no error; spectator identities preserve
+    the local bound. Induction adds one contribution for each gate.
+\end{proof}
+
+\begin{definition}[Physical output of the original operators]
+    \label{def:peps_original_gate_density}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalDensityWithGateMaps}
+    \leanok
+    \uses{def:peps_approximate_original_operators}
+    Choose an isometric identification $K$ of the final memory with
+    finite physical and discarded coordinate spaces. For an input $x$, set
+    $\rho_G(x)=\operatorname{Tr}_{\rm discard}|KW_Gx\rangle\langle KW_Gx|$.
+    Define $\widetilde\rho_\delta(x)$ by the same formula with
+    $\widetilde W_\delta$. These operators are not normalized by their trace.
+\end{definition}
+
+\begin{theorem}[Physical error of approximate original gates]
+    \label{thm:peps_approximate_physical_error}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_budget}
+    \leanok
+    \uses{def:peps_original_gate_density}
+    If $\|x\|\le1$, then
+    $\|\widetilde\rho_\delta(x)-\rho_G(x)\|_1\le4\delta N$.
+    In particular, for $\varepsilon>0$ and $N\le M$, taking
+    $\delta=\varepsilon/(8\max\{1,M\})$ gives error at most
+    $\varepsilon/2$. Replacing this budget parameter by
+    $\varepsilon/2$ reserves $\varepsilon/4$ for this step.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_approximate_chronological_error,thm:peps_original_operator_contraction}
+    Both output vectors have norm at most one. Their reduced pure
+    densities differ in trace norm by at most twice their vector distance.
+    Apply the operator error to $x$ and then the stated scalar budget.
+\end{proof}
+
+\begin{theorem}[Natural inverse-power accuracy]
+    \label{thm:peps_approximate_natural_accuracy}
+    \lean{TNLean.PEPS.PairEffect.gateApproximation_error_inv_pow_le}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow}
+    \leanok
+    Let $N\le CL^n$, where $n,p$ are nonnegative integers and
+    $L\ge\max\{1,16C\}$. Local accuracy
+    $\delta=L^{-(n+p+1)}$ gives
+    $\|\widetilde\rho_\delta(x)-\rho_G(x)\|_1\le L^{-p}/4$
+    for $\|x\|\le1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_approximate_physical_error}
+    The scalar estimate is
+    $4L^{-(n+p+1)}N\le(16C/L)L^{-p}/4\le L^{-p}/4$.
+\end{proof}
+
+\begin{theorem}[One fixed accuracy exponent for approximate gates]
+    \label{thm:peps_approximate_gate_real_accuracy}
+    \lean{TNLean.PEPS.PairEffect.gateApproximation_error_real_pow_le}
+    \leanok
+    Let $L\ge2$, let $N,n$ be nonnegative integers, and suppose
+    $N\le C L^n$. For a real target exponent $p$, set
+    \begin{align}
+        q=n+\lceil p\rceil_++\lceil16C\rceil_+,
+        \qquad \lceil x\rceil_+=\max(0,\lceil x\rceil).
+    \end{align}
+    Then
+    \begin{align}
+        4L^{-q}N\le \frac14L^{-p}.
+    \end{align}
+    In particular, $q$ depends on the fixed polynomial bound and on $p$,
+    but not on $L$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $s=\lceil16C\rceil_+$. The elementary inequalities
+    $16C\le s\le2^s\le L^s$ imply
+    \begin{align}
+        4L^{-q}N\le \frac{16C}{L^s}\,
+        \frac{L^{-\lceil p\rceil_+}}4
+        \le \frac{L^{-p}}4.
+    \end{align}
+    The argument includes $N=0$ and requires no further size threshold.
+\end{proof}
+
+\begin{theorem}[Approximate original gates at real inverse-power accuracy]
+    \label{thm:peps_approximate_original_real_accuracy}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_real_pow}
+    \leanok
+    Suppose a chronological contraction circuit has $N\le C L^n$ nonprivate
+    gate occurrences, where $L\ge2$. Fix a real exponent $p$, and choose $q$
+    as in Theorem~\ref{thm:peps_approximate_gate_real_accuracy}.
+    At every original gate, let an allowed monomial expansion approximate
+    that gate in operator norm to accuracy $L^{-q}$. Divide all coefficients
+    of this expansion by $1+L^{-q}$. For an input vector of norm at most one,
+    the physical output of the resulting contraction circuit differs from
+    the original physical density by at most $L^{-p}/4$ in trace norm.
+    The output density is not normalized; all private registers are traced out.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_approximate_gate_real_accuracy,thm:peps_approximate_physical_error}
+    The chronological physical-density estimate is $4L^{-q}N$.
+    Apply Theorem~\ref{thm:peps_approximate_gate_real_accuracy}. The comparison uses the actual original gate
+    operators, the same private operations and the same physical readout.
+\end{proof}
+
+\begin{definition}[Termwise bounds on the original gate expansions]
+    \label{def:peps_original_termwise_bounds}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsTermwiseBounded}
+    \leanok
+    An original contraction circuit has termwise bounds $(r,C)$ if, at
+    every nonprivate gate occurrence, each monomial in its prescribed
+    expansion contains at most $r$ pair effects and has scalar coefficient
+    of modulus at most $C$. These conditions concern the actual ordered
+    expansions. They do not impose a bound on the sum of the moduli.
+    The constituent local maps already satisfy the contraction conditions
+    of the original circuit.
+\end{definition}
+
+\begin{theorem}[Coefficient sums of the actual gate lists]
+    \label{thm:peps_gate_coefficient_sum}
+    \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le}
+    \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le_of_power_bounds}
+    \leanok
+    Write a prescribed gate expansion as $\sum_{j=1}^{k}c_jM_j$.
+    If $|c_j|\leq C$ for every listed term, then
+    $\sum_{j=1}^{k}|c_j|\leq kC$.
+    In particular, if $L\geq0$, $C_C\geq0$, $u,v$ are nonnegative integers,
+    $k\leq C_KL^u$, and $|c_j|\leq C_CL^v$ for every listed term, then
+    \begin{align}
+        \sum_{j=1}^{k}|c_j|\leq C_KC_CL^{u+v}.
+        \label{eq:peps_termwise_polynomial_sum}
+    \end{align}
+    Both statements include the empty expansion. This is the coefficient
+    estimate used in Theorem~5.2, assumption~3, and the opening reduction
+    in its proof.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Sum the individual inequalities over the ordered list. For the
+    polynomial estimate, multiply its length bound by the nonnegative
+    number $C_CL^v$ and combine the powers of $L$.
+\end{proof}
+
+\begin{theorem}[Uniform coefficient sums for the original circuit]
+    \label{thm:peps_original_coefficient_sum}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds}
+    \leanok
+    Suppose an original circuit has at most $K$ monomials at each
+    nonprivate gate occurrence and has termwise bounds $(r,C)$, where
+    $C\geq0$. Then every such gate has absolute coefficient sum at most
+    $KC$, or at most any $S\geq KC$, and each monomial still has at most
+    $r$ pair effects.
+    Consequently, if $K\leq C_KL^u$ and the termwise bounds are
+    $(r,C_CL^v)$, with $L,C_C\geq0$, the uniform coefficient-sum bound is
+    $C_KC_CL^{u+v}$. No nonemptiness of the expansion or participating
+    set is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_original_termwise_bounds,thm:peps_gate_coefficient_sum}
+    Apply the preceding list estimate at each original gate occurrence.
+    Composition and addition of spectator registers retain these same
+    local conditions; private operations and register permutations add
+    no nonprivate gate expansions. The effect count is unchanged.
+\end{proof}

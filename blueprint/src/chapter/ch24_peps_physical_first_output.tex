@@ -1,0 +1,168 @@
+\section{Physical output after exchanging auxiliary registers}
+\label{sec:peps_physical_first_output}
+
+The source replacement of
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 199--227, has output memory
+$\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, where $\mathcal A$
+contains the retained auxiliary registers, $\mathcal H$ contains the
+original physical registers, and $\mathcal E$ contains the original
+discarded private registers. Write $\tau$ for the canonical isometry
+from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
+
+\begin{definition}[Physical-first replacement]
+    \label{def:peps_physical_first_replacement}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstOutput}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalFirstReplacement}
+    \leanok
+    If $R$ is the constructed source-only replacement, define
+    $R_{\rm phys}=\tau R$. The exchange acts on pure tensors by
+    \begin{align}
+        \tau\bigl(u\otimes(p\otimes v)\bigr)
+        =p\otimes(u\otimes v).
+        \label{eq:peps_physical_first_exchange}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Preservation of gate and source occurrences]
+    \label{thm:peps_physical_first_occurrences}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_physicalFirstOutput}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstSourcesEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_physicalFirstLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints_physicalFirstSourcesEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount_physicalFirstOutput}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_physicalFirstOutput}
+    \leanok
+    \uses{def:peps_physical_first_replacement}
+    Appending $\tau$ preserves the gate occurrences, source occurrences,
+    participating sets, branch-label types, branch coefficients, endpoint spaces and source
+    vectors of $R$. It preserves source order, each party's total number
+    of participating occurrences, and the bounds on monomial counts and
+    coefficient sums.
+\end{theorem}
+
+\begin{proof}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchLabels_physicalFirstLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_gateLocations_physicalFirstOutput}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_physicalFirstOutput}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_operator}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_threeFactors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_triple_tmul}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_physicalFirstOutput}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstParticipationEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount_physicalFirstLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceDims_physicalFirstSourcesEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_exchangeBlocks}
+    \leanok
+    The exchange consists only of permutations of register order and
+    introduces no gate or source occurrence. Include each occurrence of
+    $R$ into the first part of the composition. The defining data at
+    these occurrences are unchanged, and the second part contributes
+    empty occurrence sets. The gate and source cardinalities are therefore unchanged,
+    and allowedness is equivalent before and after the exchange. Its three-factor
+    tensor identity extends by linearity to the full operator identity.
+\end{proof}
+
+\begin{theorem}[Finite-dimensional discarded registers]
+    \label{thm:peps_auxiliary_register_finiteness}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_registers}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem}
+    \leanok
+    Every auxiliary register constructed by the source replacement is
+    finite-dimensional. If every original discarded private register is
+    finite-dimensional, the same holds for every register of
+    $\mathcal A\otimes\mathcal E$ and for their tensor product. No
+    numerical bound on private dimensions is required.
+\end{theorem}
+
+\begin{proof}
+    \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_append}
+    \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_mapOwner}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_registers_sources_prepStack}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_comp}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepGate}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepWord}
+    \leanok
+    A prepared pair stack consists of finitely many finite-dimensional
+    Euclidean registers. Induction on the stack length, on the monomial,
+    on the gate expansion, and on the original chronology proves the
+    assertion for each auxiliary register. Changing an owner leaves the
+    register space unchanged, and concatenation preserves this assertion.
+    Finally, a finite tensor product of finite-dimensional spaces is
+    finite-dimensional.
+\end{proof}
+
+\begin{theorem}[Physical partial trace after the exchange]
+    \label{thm:peps_physical_first_trace}
+    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_apply}
+    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_outerProduct}
+    \lean{TNLean.PEPS.PairEffect.partialTrace_physicalFirstReadout_exchange}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_physicalFirstOutput}
+    \leanok
+    \uses{def:peps_physical_first_replacement}
+    Choose orthonormal coordinates indexed by $U$, $X$ and $V$ on
+    $\mathcal A$, $\mathcal H$ and $\mathcal E$, respectively. For
+    $z\in\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, let
+    $z_{i,(k,j)}$ denote its coordinates when the physical coordinate
+    precedes the private and auxiliary coordinates. The coordinates of
+    $\tau z$ are $(\tau z)_{i,(j,k)}=z_{i,(k,j)}$. Consequently,
+    \begin{align}
+        \operatorname{Tr}_{\mathcal A\otimes\mathcal E}
+        |\tau z\rangle\langle\tau z|
+        =\operatorname{Tr}_{\mathcal E\otimes\mathcal A}
+        |z\rangle\langle z|.
+        \label{eq:peps_physical_first_trace}
+    \end{align}
+    This identity holds for every vector, without a normalization premise.
+\end{theorem}
+
+\begin{proof}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_pure_input}
+    \lean{TNLean.PEPS.PairEffect.exchangedGarbageBasis}
+    \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout_triple_tmul}
+    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout}
+    \lean{TNLean.PEPS.PairEffect.physicalFirstReadout_tmul}
+    \leanok
+    Formula~(\ref{eq:peps_physical_first_exchange}) gives the coordinate
+    identity on pure tensors. Tensor-product induction extends it to
+    arbitrary vectors. Their outer-product matrices are related by the
+    simultaneous reindexing $(i,(j,k))\mapsto(i,(k,j))$. Reindexing the
+    traced coordinate by the bijection $U\times V\to V\times U$
+    preserves the partial trace. The physical-first coordinate isometry uses the
+    tensor product of the physical basis and the auxiliary--private basis.
+    Evaluation of a pure input has density equal to the outer product of its
+    evaluated vector in these coordinates. Applying this to the output vector of
+    the composed circuit proves the final assertion.
+\end{proof}
+
+\begin{theorem}[Exact sources recover the replacement physical state]
+    \label{thm:peps_physical_first_exact_sources}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalDensity_physicalFirstReplacement}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half}
+    \leanok
+    \uses{thm:peps_physical_first_trace,thm:peps_source_only_density_error}
+    Let $W$ be an original circuit with at most $M$ nonprivate gates,
+    satisfying the original expansion bounds. Set
+    $\delta=\varepsilon/(8\max\{1,M\})$ for $\varepsilon>0$, and
+    construct its replacement $R$ using this budget. For a pure input
+    $\psi$ with $\|\psi\|\le1$, let $\rho_W$ be the original physical
+    output state. In the source-replacement expression for $R_{\rm phys}$,
+    insert the exact operator of each original pair source. The resulting
+    physical operator is the replacement state $\rho_R$, and
+    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$.
+    The physical coordinates may be the labelled tensor coordinates with
+    an arbitrary original local dimension $d_p$ at each party $p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Exact source operators recover the output operator of the source-only
+    circuit. Formula~(\ref{eq:peps_physical_first_trace}) identifies its
+    physical partial trace with $\rho_R$. Apply
+    Theorem~\ref{thm:peps_source_only_density_error} at the original
+    gate-count bound $M$.
+\end{proof}

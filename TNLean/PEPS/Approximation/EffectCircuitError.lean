@@ -17,6 +17,17 @@ Source: polynomial-PEPS, `04-compression.tex`, revision
 
 /-!
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
+thm:compression; Theorem 5.2 and its proof.
+Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+Independently formalized; no upstream Lean proof text reused.
+
+Provenance-ID: 8769-approximate-physical-effectcircuiterror-01
+TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one
+-/
+
+
+/-!
+Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
@@ -215,7 +226,9 @@ theorem gateMemoryMap_auxiliary_identity {C : Type} [Fintype C]
   simpa only [comp_apply, isoL_apply, LinearIsometryEquiv.symm_apply_apply] using
     DFunLike.congr_fun he (appendIso (Layout.mapOwner owner a) tail z)
 
-private theorem norm_comp_sub_comp_le_one (E F G : HSpace)
+/-- The two-factor telescoping inequality for contractions.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 590–600. -/
+theorem norm_comp_sub_comp_le_one (E F G : HSpace)
     (A C : E →L[ℂ] F) (B D : F →L[ℂ] G) (hB : ‖B‖ ≤ 1) (hC : ‖C‖ ≤ 1) :
     ‖B ∘L A - D ∘L C‖ ≤ ‖A - C‖ + ‖B - D‖ := by
   have he : B ∘L A - D ∘L C = B ∘L (A - C) + (B - D) ∘L C := by
