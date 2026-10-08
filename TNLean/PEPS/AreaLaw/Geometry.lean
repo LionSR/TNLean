@@ -61,6 +61,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
+import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
@@ -73,4 +74,10 @@ import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
+import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
+import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
+import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
+import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
+import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
+import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.Templates

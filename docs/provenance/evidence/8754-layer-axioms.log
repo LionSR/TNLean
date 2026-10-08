@@ -1,0 +1,98 @@
+Source: https://github.com/LionSR/TNLean/actions/runs/37616454111/job/112776148232
+Revision: ada3ccb6dfe231695676953030a4333d36997f8c
+GitHub build job conclusion: success.
+GitHub step 20, Test template rows strictly and audit axioms: success.
+The complete actual thin-diagonal Template exercises template_layer_card_le. The first 23 exports passed exact guarded checks; the remaining 19 outputs are reproduced below. All 42 depend only on propext, Classical.choice, Quot.sound.
+Command: lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Historical raw output for the first 23 declarations (CI timestamps removed only):
+Source: https://github.com/LionSR/TNLean/actions/runs/37598629129/job/112717609265
+Revision: 18883e6cf8cb616e1f2bb6ae40d269317f0774b9
+Observed #print axioms output from the strict regression command.
+The enclosing command failed on separate test errors; this is not a passing regression log.
+'TNLean.PEPS.AreaLaw.mem_ambientDilation_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientDilation_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientDilation_mono_radius' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.latticeRow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.template_card_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.floor_affine_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.ambientDilation_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+
+The historical enclosing regression failed, as stated above. These are not claimed as raw output from ada3ccb6. The TemplateRows.lean production file is byte-identical at the historical and verified revisions; all 23 exact output guards passed at ada3ccb6 in the successful command recorded at the start of this log.

@@ -1,0 +1,2067 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8754-tnlean.peps.arealaw.mem_ambientdilation_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.mem_ambientDilation_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_mono",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_mono",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_mono_radius",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_mono_radius",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_biunion_sdiff_subset",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.card_ambientdilation_biunion_sdiff_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.latticerow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeRow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_latticerow",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.convex_region",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_region",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.horizontal_mem_of_mem_of_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.iscompact_horizontalsection",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.horizontalsection_eq_icc",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc_ceil_floor",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.mem_sample_of_row_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_eq_icc",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.sample_subset_box",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_sample_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template_card_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_card_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.ceil_affine_row",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.floor_affine_row",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.floor_affine_row",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.mem_latticerow_ambientdilation",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.ambientdilation_add",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.ambientDilation_add",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_iff",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives compact sampled sections, exact rounding, area bounds, and ambient dilation identities used by the geometric depth-layer theorem."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.vertices",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.region_eq_convexhull_vertices",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.mem_region_iff_normal_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.templatepolygon.exists_four_strip_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplatePolygons.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives supporting slabs and the four-strip description directly from actual real-vertex triangle and rectangle constructors."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_sample_four_strip_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_latticerow_profile",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_nonempty_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_min_step",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_max_step",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_sample_in_window_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_nearby_sample_in_row",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateRowBounds.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives exact rounded row profiles, occupied-row and window-column intervals, and adjacent-row transport from actual polygon sampling."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.mem_latticerow_dilation_of_between",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_eq_icc",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.latticerow_dilation_succ_bounds",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_latticerow_layer_le_four",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_latticerow_dilation_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.exists_dilation_row_domain",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template.card_dilation_layer_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8754-tnlean.peps.arealaw.geometry.template_layer_card_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/TemplateLayers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex",
+          "labels": [
+            "scanner:templates"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Original formalization from the mathematical manuscript; no upstream Lean proof text reused.",
+        "Derives dilated interval rows and single-piece layer counts, then the actual-template bound by n for Ctpl >= 24 and 1 <= j <= s0; handles empty pieces and arbitrary unions."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "ada3ccb6dfe231695676953030a4333d36997f8c",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-build.log",
+            "sha256": "92a2107857d876b6770878bb01f61d36f5ccd8bd083b85b75b9d590d88a3f377"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/TemplateRows.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-layer-axioms.log",
+            "sha256": "69a3caa4b40a6092a65d304d74efaf2c13446669b7dbb6715db1e18ce999cb77"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
