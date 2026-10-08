@@ -328,6 +328,24 @@ def branch [NeZero q] : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
   | .inr s => siteLift (p.sample s.1.1)
       (vecMulVec (zeroVec (p.sample s.1.1)) (star ⇑(p.vec s.1.1 s.1.2)))
 
+/-- The selected square of a tag: the sample `D_j` at a tag `(j, ℓ)`, and the empty set at the
+identity tag of an empty outer sample. -/
+def tagSample : p.Tag → Finset ι
+  | .inl _ => ∅
+  | .inr s => p.sample s.1.1
+
+theorem tagSample_subset_outer (s : p.Tag) : p.tagSample s ⊆ p.outer := by
+  rcases s with s | s
+  · exact Finset.empty_subset _
+  · exact p.sample_subset_outer s.1.1
+
+theorem inner_subset_tagSample (s : p.Tag) : p.inner ⊆ p.tagSample s := by
+  rcases s with s | s
+  · change p.inner ⊆ ∅
+    rw [← s.2]
+    exact p.inner_subset_outer
+  · exact p.inner_subset_sample s.1.1
+
 /-- A patch with empty outer sample has exactly one tag. -/
 theorem card_tag_of_outer_eq_empty (h : p.outer = ∅) : Fintype.card p.Tag = 1 := by
   simp [Fintype.card_sum, Fintype.card_subtype, h]
