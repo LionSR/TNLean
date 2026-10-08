@@ -36,6 +36,15 @@ def sourceOrder : {a b : Layout P} → (w : SourceCircuit a b) → List (sourceL
   | _, _, .swap .. => []
   | _, _, .frame _ w => sourceOrder w
 
+/-- The ordered positions of a gate are its slots in their original order.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–355. -/
+theorem sourceOrder_gate {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
+    {a b : Layout C} {c : ι → ℂ} (G : PreparedSourceGate c a b) (tail : Layout P) :
+    sourceOrder (.gate owner G tail) =
+      (List.finRange G.slots.length).map (β := sourceLocations (.gate owner G tail))
+        (fun i ↦ ⟨(), i⟩) :=
+  List.ofFn_eq_map
+
 /-- Each original source position occurs in the ordered list.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–355. -/
 theorem mem_sourceOrder {a b : Layout P} (w : SourceCircuit a b)
@@ -123,6 +132,27 @@ def sourceAt (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) →
   | _, _, .swap .., _ => fun e ↦ nomatch e.1
   | _, _, .frame _ w, ξ => sourceAt A w ξ
 
+/-- At a composition, the surviving records of the later circuit precede those of
+the earlier circuit. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 351–355. -/
+theorem filterMap_sourceAt_comp (A : P → Bool) {a b c : Layout P} (w : SourceCircuit a b)
+    (v : SourceCircuit b c) (ξ : Choices A (.comp w v)) :
+    (sourceOrder (.comp w v)).filterMap (sourceAt A (.comp w v) ξ) =
+      (sourceOrder v).filterMap (sourceAt A v ξ.2) ++
+        (sourceOrder w).filterMap (sourceAt A w ξ.1) :=
+  (List.filterMap_append ..).trans
+    (congrArg₂ (· ++ ·) (List.filterMap_map ..) (List.filterMap_map ..))
+
+/-- At a gate, the surviving records are read off the slots in their original order.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–355. -/
+theorem filterMap_sourceAt_gate (A : P → Bool) {C ι : Type} [Fintype C] [Fintype ι]
+    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ} (G : PreparedSourceGate c a b)
+    (tail : Layout P) (ξ : Choices A (.gate owner G tail)) :
+    (sourceOrder (.gate owner G tail)).filterMap (sourceAt A (.gate owner G tail) ξ) =
+      (List.finRange G.slots.length).filterMap
+        (fun i ↦ sourceAt A (.gate owner G tail) ξ ⟨(), i⟩) :=
+  (congrArg _ (sourceOrder_gate owner G tail)).trans (List.filterMap_map ..)
+
 /-- A position survives exactly when at least one of its original endpoints is
 affected. This criterion does not depend on the monomial choices. Source:
 polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–417. -/
@@ -191,18 +221,17 @@ theorem sources_partialWord_eq_filterMap (A : P → Bool) {a b : Layout P}
   induction w with
   | id => rfl
   | comp w v ihw ihv =>
-      simp only [partialWord, Word.sources, sourceOrder, ihw, ihv]
-      erw [List.filterMap_append, List.filterMap_map, List.filterMap_map]
-      rfl
+      rw [filterMap_sourceAt_comp]
+      simp only [partialWord, Word.sources, ihw, ihv]
   | localMap => simp [partialWord, Word.sources_mapOwner, Word.sources, sourceOrder]
   | @gate C ι _ _ owner a b c G tail =>
       classical
       by_cases ht : ∃ p : C, A (owner p) = true
-      · simp only [partialWord, dite_eq_left ht, Word.sources_mapOwner,
-          Word.sources_appendTail, G.sources_branchWord, sourceOrder,
+      · rw [filterMap_sourceAt_gate]
+        simp only [partialWord, dite_eq_left ht, Word.sources_mapOwner,
+          Word.sources_appendTail, G.sources_branchWord,
           SourceInventory.ofSlots, SourceInventory.mapOwner, List.ofFn_eq_map,
           List.filterMap_map, List.filterMap_filterMap]
-        erw [List.ofFn_eq_map, List.filterMap_map]
         apply List.filterMap_congr
         intro i hi
         simp only [Function.comp_apply, PairSource.mapOwner]
