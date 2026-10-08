@@ -8,9 +8,18 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.AbsorbedRestriction
+import TNLean.PEPS.Approximation.ActualPartialLocalMaps
+import TNLean.PEPS.Approximation.ActualPartialPartyFactorization
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
+import TNLean.PEPS.Approximation.ActualSourceLocalMaps
 import TNLean.PEPS.Approximation.AffectedOwners
+import TNLean.PEPS.Approximation.AllChoicesProjection
+import TNLean.PEPS.Approximation.AllPartialGate
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
+import TNLean.PEPS.Approximation.CanonicalPartyFactorization
+import TNLean.PEPS.Approximation.ChronologicalLocality
+import TNLean.PEPS.Approximation.ChronologicalPartyFactorization
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
@@ -40,11 +49,16 @@ import TNLean.PEPS.Approximation.FamilySourceOnlyReduction
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
+import TNLean.PEPS.Approximation.FullBranchPreparation
+import TNLean.PEPS.Approximation.FullChronologicalPreparation
+import TNLean.PEPS.Approximation.FullResidualLocality
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
+import TNLean.PEPS.Approximation.InvisibleRestriction
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
+import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PairEffectSourcePreparation
@@ -52,6 +66,7 @@ import TNLean.PEPS.Approximation.PairSourceCompletion
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
 import TNLean.PEPS.Approximation.PairSourceOrdering
+import TNLean.PEPS.Approximation.PartialResidualLocality
 import TNLean.PEPS.Approximation.PartialSourceDensity
 import TNLean.PEPS.Approximation.PartialSourceEvaluation
 import TNLean.PEPS.Approximation.PartialSourceInventory
@@ -68,9 +83,11 @@ import TNLean.PEPS.Approximation.PhysicalDensityPureInput
 import TNLean.PEPS.Approximation.PhysicalFirstExchange
 import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalReadout
+import TNLean.PEPS.Approximation.PointwiseChoiceCoefficient
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.PreparedSourceGate
+import TNLean.PEPS.Approximation.ResidualRestrictionCongruence
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SampledSourceNetwork
@@ -92,9 +109,12 @@ import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
+import TNLean.PEPS.Approximation.SourcefulInvisibleRestriction
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
+import TNLean.PEPS.Approximation.TouchedLabels
 import TNLean.PEPS.Approximation.UnitPairSource
+import TNLean.PEPS.Approximation.UntouchedResidual
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
 import TNLean.PEPS.Approximation.WordAppendTail

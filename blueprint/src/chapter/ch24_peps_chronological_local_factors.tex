@@ -1,0 +1,97 @@
+\section{Local factors of the chronological source expansion}
+\label{sec:peps_chronological_local_factors}
+
+\begin{definition}[Labels of participating occurrences]
+    \label{def:peps_nonempty_gate_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocations,
+      TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv}
+    \leanok
+    Let $W$ be a source circuit, and let $\mathcal G_W$ be its ordered
+    gate occurrences. Write $C_g$ for the participants of occurrence $g$
+    and $\Xi_g$ for its monomial labels. Set
+    $\mathcal G_W^+=\{g\in\mathcal G_W:C_g\ne\varnothing\}$.
+    Choices in the expansion over all parties are in bijection with
+    $\prod_{g\in\mathcal G_W^+}\Xi_g$.
+    An occurrence with no participants retains its aggregate operation
+    and requests no monomial label. The bijection includes empty label
+    sets. These are the choices used in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+\end{definition}
+
+\begin{theorem}[Coefficients of chronological choices]
+    \label{thm:peps_chronological_coefficients}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations}
+    \leanok
+    \uses{def:peps_nonempty_gate_labels}
+    For an all-party choice $\xi$, its coefficient is
+    $c(\xi)=\prod_{g\in\mathcal G_W^+}c_g(\xi_g)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_nonempty_gate_labels}
+    Induction on the chronology gives the product of coefficients at
+    exactly the selected occurrences. Unselected occurrences contribute
+    one to this product. Restrict the product to $\mathcal G_W^+$.
+\end{proof}
+
+\begin{theorem}[Incident dependence of the actual residual]
+    \label{thm:peps_incident_residual}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_eval_eq_of_projectAllChoices_eq}
+    \leanok
+    Hoist the sources in each chosen monomial into the fixed common
+    source registers. Retain the auxiliary scalar owner together with
+    the original party owners. For any selected set of owners, the
+    restriction of the resulting actual residual depends only on the
+    monomial labels at occurrences meeting that set.
+    In particular, two all-party choices with the same incident labels
+    give the same restricted linear map. No cancellation of source
+    preparations is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the chronology. At an incident gate the prescribed label
+    identifies the chosen branch. A gate disjoint from the selected
+    owners acts as the identity on their spectator registers, even
+    before its sources are evaluated. An occurrence with no
+    participants is independent of the supplied choice. Composition
+    and the addition of spectator registers preserve the equality.
+    Transport both maps to the fixed common source coordinates.
+\end{proof}
+
+\begin{theorem}[Tensor factorization after the original private preparation]
+    \label{thm:peps_actual_private_factorization}
+    \lean{TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions,
+      TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_partialSourceWord_eq_tensorPartialSourceLocalMaps}
+    \leanok
+    \uses{thm:peps_incident_residual}
+    Let $\psi$ be a recorded product input and $\xi$ an all-party
+    monomial choice. Prepare $\psi$ locally beside the fixed source
+    registers, then apply the actual residual of $\xi$.
+    Let $F_\xi$ be this source-to-output linear map, and let
+    $U_{\rm in},U_{\rm out}$ collect all registers by owner in one
+    exhaustive order without repetitions. Then
+    \begin{align}
+        U_{\rm out}F_\xi
+        &=\left(\bigotimes_q F_{q,\xi|_q}\right)U_{\rm in}.
+        \label{eq:peps_actual_local_factorization}
+    \end{align}
+    Each $F_{q,\xi|_q}$ is the actual singleton restriction after its
+    local input preparation. The auxiliary scalar owner is retained
+    as one factor. Empty original party sets and empty monomial label
+    sets are allowed in this identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_incident_residual}
+    A chronology without source preparations factors into its literal
+    singleton restrictions. To prove this, separate the first owner
+    from all remaining registers, factor the two restricted maps, and
+    induct on the owner order. Apply this identity to the composition
+    of the private preparation and the actual residual. Their
+    singleton restrictions compose; incident dependence identifies
+    the residual restriction with the constructed local map.
+\end{proof}
+
+% These entries establish exact chronological local factors. The sampled
+% endpoint operators and their final physical-network contraction are separate.

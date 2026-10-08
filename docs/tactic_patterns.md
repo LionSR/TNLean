@@ -5728,3 +5728,14 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** This pattern occurs in one file. If another module needs it,
   move the layout lemma to the general layout development before duplicating
   the argument. No cancellation of a complementary tensor factor is used.
+
+### Congruence of restricted source-free words — candidate (2026-10-08)
+
+- **Pattern:** From equality of two words, obtain heterogeneous equality of
+  the evaluations of their source-free local parts restricted to selected owners.
+- **Seen:** The private `localPart_restrict_eval_heq_of_eq` in
+  `PEPS/Approximation/AllPartialGate.lean` and
+  `PEPS/Approximation/PartialResidualLocality.lean` (two occurrences).
+- **Abstraction:** A common word-congruence lemma if a third use appears.
+- **Notes:** The source-layout evidence is dependent on the word. Eliminating
+  the equality first keeps this evidence and the memory types aligned.
