@@ -22,8 +22,6 @@ Independently proved from the manuscript and existing QICLean partial-trace
 and entropy results; no upstream Lean proof text is reused.
 -/
 
-open scoped ComplexOrder
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- Configuration transport along a bijection of the physical sites.
