@@ -87,7 +87,7 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
   obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := @hpos q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _
     (domainGraph Λ) (fun X => X.1) a ha h.term h.hermitian h.supported (fun X => X.2.edist_le)
-    (fun X => X.2.card_le) (h.sum_norm_term_containing_le hJ) card_sphere_domainGraph_le
+    (fun X => X.2.card_le) (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ)
     h.norm_le E₀ Ω hΩ hHΩ hgap
   exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
 
@@ -201,7 +201,7 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
   exact @htr q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _ (domainGraph Λ) (fun X => X.1) a ha
     h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hJ) card_sphere_domainGraph_le card_graphBall_domainGraph_le
+    (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
     hS₀
 

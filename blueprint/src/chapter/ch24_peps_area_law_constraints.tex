@@ -244,17 +244,13 @@ only on the parameters named below.
 
 \begin{lemma}[Counting on an induced lattice domain]
     \label{lem:al_lattice_counts}
-    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
-        TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
-        TNLean.PEPS.AreaLaw.card_sphere_domainGraph_le,
-        TNLean.PEPS.AreaLaw.IsAdmissibleSupport.edist_le,
-        TNLean.PEPS.AreaLaw.IsAdmissibleSupport.card_le,
+    \lean{TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
         TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le,
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
-        TNLean.PEPS.AreaLaw.LocalHamiltonian.sum_norm_term_containing_le,
         TNLean.PEPS.AreaLaw.card_cutEdges_le_card_edgeBoundary}
     \leanok
-    \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget}
+    \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
+        lem:area_domain_graph_counts}
     Graph balls and spheres of radius $d$ in $\Lambda$ have at most
     $1+2d(d+1)\le2(d+1)^2$ sites. Every support has graph diameter at most $R$
     and at most $v_R$ sites, at most $\mu_R$ supports contain a given site, at most
@@ -265,11 +261,12 @@ only on the parameters named below.
 \end{lemma}
 \begin{proof}\leanok
     Adjacent sites are at ambient $\ell^1$ distance one, so a graph ball lies in
-    an ambient lattice ball and the exact diamond count applies; spheres lie in
-    balls. Supports and anchors are counted by the interaction budgets of
-    Theorem~\ref{thm:area_diamond_budget}, and every label anchored at $x$ has a
-    support containing $x$. The map $(u,v)\mapsto\{u,v\}$ is injective on the
-    pairs crossing $X$.
+    an ambient lattice ball and the exact diamond count applies. The sphere,
+    diameter, support-size and site-budget bounds are
+    Lemma~\ref{lem:area_domain_graph_counts}. Supports and anchors are counted
+    by the interaction budgets of Theorem~\ref{thm:area_diamond_budget}, and
+    every label anchored at $x$ has a support containing $x$. The map
+    $(u,v)\mapsto\{u,v\}$ is injective on the pairs crossing $X$.
 \end{proof}
 
 \begin{theorem}[Positive replacement on an induced lattice domain]

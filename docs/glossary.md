@@ -2140,8 +2140,13 @@ in `MPS/Preparation/` uses it.
   `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
   nearest-neighbor ring consumer of the same recursion.
 - **Caveat:** the graph theorems take the per-support size bound and the
-  per-site norm budget as hypotheses; deriving them from the one-term-per-support
-  convention on an induced square-lattice domain is a separate step.
+  per-site norm budget as hypotheses. On a finite induced square-lattice domain
+  they are discharged in `TNLean/PEPS/AreaLaw/GraphPropagation.lean`:
+  `TNLean.PEPS.AreaLaw.IsAdmissibleSupport.card_le` gives the size bound
+  `v_R = 1 + 2R(R + 1)`,
+  `TNLean.PEPS.AreaLaw.LocalHamiltonian.sum_norm_term_containing_le` gives the
+  budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
+  the resulting Lemma 4.1 of the area-law manuscript.
 
 #### `QuantumCircuit.siteExpectation`
 
@@ -2183,8 +2188,11 @@ in `MPS/Preparation/` uses it.
   `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` (QICLean),
   `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
 - **Caveat:** stated for a general finite graph with the support, multiplicity and
-  sphere-growth hypotheses of the propagation estimate; the specialization to the induced
-  lattice domains is a separate step.
+  sphere-growth hypotheses of the propagation estimate. On finite induced square-lattice
+  domains these hypotheses are discharged in `TNLean/PEPS/AreaLaw/LatticeConstraints.lean`:
+  `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` and
+  `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` are Proposition 4.3 and Lemma 4.4
+  there, with constants depending only on `p`, `R`, `J` and `Δ`.
 
 ## Inhomogeneous short-range correlated chains
 
@@ -3085,7 +3093,13 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 |---|---|---|
 | `TNLean.PEPS.AreaLaw.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
 | `TNLean.PEPS.AreaLaw.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
-| `Matrix.IsGappedGroundState` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality | Shared by the area-law and polynomial-PEPS models, which specialize it. |
+| `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` | Positive constants `C, v, c`, chosen before the domain and the Hamiltonian, giving exponential decay in induced-graph distance of commutators of evolved supported operators with on-site operators (exact zero between components), and of their distance from graph-ball partial-trace expectations | Area-law Lemma 4.1 (`lem:quasilocal-lr`); proved with the source's hypotheses, the constants depending only on `R` and `J`. |
+| `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
+| `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` | Square roots `(I - kᵢ)^{1/2}`, `kᵢ^{1/2}` and their graph-ball truncations, with stretched-exponential tails and the induced unital local channels | Area-law Lemma 4.4 (`lem:quasilocal-roots`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
+| `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation` | Constraints truncated near a finite set `S₀` of at most `C₀ n²` sites at radius `⌈C₁ (log n)²⌉`, within `ε_n` of the positive Hamiltonian, with a unit ground vector and gap at least half | Area-law Proposition 4.5 (`prop:truncation`), first part, on induced lattice domains, with `p = 1`; `C₁` depends only on `R, J, Δ, C₀`. |
+| `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
+| `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
+| `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
