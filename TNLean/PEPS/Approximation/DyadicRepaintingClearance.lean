@@ -53,10 +53,11 @@ open Set Metric SquareEdge
 /-! ### Normal words of the edge construction -/
 
 /-- A normal word: label `c` below the first interface, then at each interface `t` the label
-switches to the paired label. On an interface itself the label to its right is taken. The
-source instead samples labels after one generic displacement (`06-geometry.tex:72–77`); the
-two conventions differ only on the interface curves, and no clearance below depends on the
-values there.
+switches to the paired label. On an interface itself the label for `x ≥ t` is taken. The
+source instead reads labels after one small generic displacement (`06-geometry.tex:72–77`),
+which on two of the four edges of a square takes the label for `x < t`. The estimates of
+Lemma 7.2 are stated for closures, and they pass to every reading of these labellings after a
+small displacement in `TNLean.PEPS.Approximation.DyadicGuideReadings`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:161–170, 193–197`. -/
 noncomputable def bandWord {ι : Type*} (c : ι) : List (ℝ × ι) → ℝ → ι
