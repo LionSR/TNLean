@@ -4,11 +4,7 @@
 \begin{definition}[Inner boundary and boundary endpoints]
     \label{def:area_law_vertex_boundaries}
     \lean{TNLean.PEPS.AreaLaw.innerBoundary,
-        TNLean.PEPS.AreaLaw.endpointBoundary,
-        TNLean.PEPS.AreaLaw.innerBoundary_empty,
-        TNLean.PEPS.AreaLaw.innerBoundary_univ,
-        TNLean.PEPS.AreaLaw.endpointBoundary_empty,
-        TNLean.PEPS.AreaLaw.endpointBoundary_univ}
+        TNLean.PEPS.AreaLaw.endpointBoundary}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     For a finite induced domain $\Lambda\subset\mathbb Z^2$ and $A\subseteq\Lambda$,
@@ -21,9 +17,24 @@
         Z_A & =\bigcup_{e\in\partial_\Lambda A}e.
         \label{eq:area_vertex_endpoints}
     \end{align}
-    Both sets are empty when $A=\varnothing$ or $A=\Lambda$.
     These are the conventions of \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
 \end{definition}
+
+\begin{theorem}[Boundaries of the empty and full cuts]
+    \label{thm:area_law_vertex_boundaries_trivial}
+    \lean{TNLean.PEPS.AreaLaw.innerBoundary_empty,
+        TNLean.PEPS.AreaLaw.innerBoundary_univ,
+        TNLean.PEPS.AreaLaw.endpointBoundary_empty,
+        TNLean.PEPS.AreaLaw.endpointBoundary_univ}
+    \leanok
+    \uses{def:area_law_vertex_boundaries}
+    Both $\partial_{\rm in}A$ and $Z_A$ are empty when $A=\varnothing$ or
+    $A=\Lambda$.
+\end{theorem}
+\begin{proof}\leanok
+    In both cases $\partial_\Lambda A=\varnothing$, since no edge joins a site of
+    $A$ to a site of $\Lambda\setminus A$.
+\end{proof}
 
 \begin{theorem}[Degree bound for induced lattice domains]
     \label{thm:area_law_lattice_degree}
