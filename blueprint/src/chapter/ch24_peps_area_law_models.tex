@@ -16,7 +16,8 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.domainGraph,
         TNLean.PEPS.AreaLaw.graphNeighborhood,
         TNLean.PEPS.AreaLaw.configurationSplit,
-        TNLean.PEPS.AreaLaw.card_configuration
+        TNLean.PEPS.AreaLaw.card_configuration,
+        TNLean.PEPS.AreaLaw.card_regionConfig
     }
     \leanok
     Let $\Lambda\subset\mathbb Z^2$ be finite. Join sites at coordinate distance
@@ -38,7 +39,8 @@ original open square. We state the two models separately, following
         \label{eq:area_law_dimension}
     \end{align}
     Restriction to $A$ and $\Lambda\setminus A$ identifies the configuration set
-    with the product of the two regional configuration sets. Empty domains,
+    with the product of the two regional configuration sets. The configuration
+    set of a region $A$ has $q^{|A|}$ elements. Empty domains,
     holes, and disconnected components are permitted.
 \end{definition}
 
@@ -53,6 +55,7 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.LocalHamiltonian.zero,
         TNLean.PEPS.AreaLaw.localLift,
         TNLean.PEPS.AreaLaw.localLift_mem_supportedOperators,
+        TNLean.PEPS.AreaLaw.localLift_eq_entropyLocalLift,
         TNLean.PEPS.AreaLaw.edgeBoundary,
         TNLean.PEPS.AreaLaw.edgeBoundary_empty,
         TNLean.PEPS.AreaLaw.edgeBoundary_univ
@@ -120,6 +123,8 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.reducedState,
         TNLean.PEPS.AreaLaw.reducedState_isHermitian,
         TNLean.PEPS.AreaLaw.regionalEntropy,
+        TNLean.PEPS.AreaLaw.reducedState_eq_regionState,
+        TNLean.PEPS.AreaLaw.regionalEntropy_eq_regionEntropy,
         TNLean.PEPS.AreaLaw.UniformAreaLaw
     }
     \leanok

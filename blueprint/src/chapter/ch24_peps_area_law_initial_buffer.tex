@@ -1,0 +1,115 @@
+\section{Conditional entropy in a buffered rectangle}
+\label{sec:area_law_initial_buffer}
+
+This section formalizes~\cite[Lemma~3.2]{OpenAI2026AreaLaw} on the finite
+domains of Definition~\ref{def:area_law_hamiltonian}. An integer rectangle is
+a product of two finite nonempty integer intervals; its size is the larger
+number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
+
+\begin{definition}[Safe rectangles]
+    \label{def:area_law_safe_rectangle}
+    \lean{TNLean.PEPS.AreaLaw.IntRect,
+        TNLean.PEPS.AreaLaw.IntRect.size,
+        TNLean.PEPS.AreaLaw.IntRect.dilate,
+        TNLean.PEPS.AreaLaw.IsSafe,
+        TNLean.PEPS.AreaLaw.rectRegion,
+        TNLean.PEPS.AreaLaw.supDist,
+        TNLean.PEPS.AreaLaw.IntRect.toFinset,
+        TNLean.PEPS.AreaLaw.IntRect.mem_toFinset,
+        TNLean.PEPS.AreaLaw.IntRect.one_le_size,
+        TNLean.PEPS.AreaLaw.IntRect.width_le_size,
+        TNLean.PEPS.AreaLaw.IntRect.height_le_size,
+        TNLean.PEPS.AreaLaw.IntRect.mem_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.toFinset_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.dilate_zero,
+        TNLean.PEPS.AreaLaw.IntRect.dilate_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.toFinset_dilate_mono,
+        TNLean.PEPS.AreaLaw.IntRect.mem_dilate_of_supDist_le,
+        TNLean.PEPS.AreaLaw.mem_rectRegion,
+        TNLean.PEPS.AreaLaw.rectRegion_dilate_mono}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $A\subseteq\Lambda$ and let $Z$ be the set of endpoints of the edges
+    crossing $A$. For $D_0>2R+10$ a rectangle $Q$ is safe if its sup-norm
+    distance to $Z$ exceeds $D_0\operatorname{size}(Q)$, the distance to the
+    empty set being infinite. The physical region of an ambient rectangle $Q$
+    is $A\cap Q$.
+\end{definition}
+
+\begin{theorem}[Contours around a safe rectangle]
+    \label{thm:area_law_buffer_contours}
+    \lean{TNLean.PEPS.AreaLaw.subset_of_isSafe,
+        TNLean.PEPS.AreaLaw.not_splits_two_contours,
+        TNLean.PEPS.AreaLaw.card_crossingTerms_rectRegion_le}
+    \leanok
+    \uses{def:area_law_safe_rectangle}
+    Let $Q$ be safe and let $Q_0^{+d'}\subseteq Q$. An admissible support with
+    a site of $A$ in $Q$ lies in $A$. If $d+R\le d'$, no admissible support is
+    split by both $A\cap Q_0^{+d}$ and $A\cap Q_0^{+d'}$. If $R+1\le d'$, at most
+    $8(R+1)\mu_R(\operatorname{size}(Q_0)+d')$ admissible supports are split by
+    $A\cap Q_0^{+d'}$, where $\mu_R=2^{2R(R+1)}$ bounds the number of admissible
+    supports containing a site.
+\end{theorem}
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
+        TNLean.PEPS.AreaLaw.supDist_le_latticeL1Distance,
+        TNLean.PEPS.AreaLaw.supDist_le_of_walk,
+        TNLean.PEPS.AreaLaw.Splits,
+        TNLean.PEPS.AreaLaw.exists_of_splits_rectRegion,
+        TNLean.PEPS.AreaLaw.card_dilate_sdiff_le}
+    If a support had a site $x\in A\cap Q$ and a site outside $A$, a walk of
+    length at most $R$ between them would cross an edge of the cut at sup-norm
+    distance at most $R<D_0\operatorname{size}(Q)$ from $Q$. The ambient
+    diameter of a support is at most its graph diameter $R$, so a support split
+    by $A\cap Q_0^{+d}$ lies in $Q_0^{+(d+R)}$ and is not split by
+    $A\cap Q_0^{+d'}$. A support split by $A\cap Q_0^{+d'}$ has a site in the
+    boundary layer $Q_0^{+d'}\setminus Q_0^{+(d'-R-1)}$, which has at most
+    $4(R+1)(\operatorname{size}(Q_0)+2d')$ lattice points.
+\end{proof}
+
+\begin{theorem}[Conditional entropy in a buffered rectangle]
+    \label{thm:area_law_initial_buffer}
+    \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer}
+    \leanok
+    \uses{thm:area_law_buffer_contours, thm:area_law_marginal_tails,
+        def:area_law_ground_entropy}
+    For $q\ge1$, $R$, $J\ge0$ and $\Delta>0$ there are an integer
+    $C_{\mathrm{pad}}\ge1$ and a constant $C_{\mathrm{buf}}$ with the following
+    property. Let $\Omega$ be a unit vector satisfying
+    (\ref{eq:area_law_ground_vector}) and (\ref{eq:area_law_projector_gap}), let
+    $Q$ be safe, let $r\ge1$, and let $Q_0$ be a rectangle of size at most $r$
+    with $Q_0^{+C_{\mathrm{pad}}r}\subseteq Q$. For $X=A\cap Q_0$ and
+    $T=(A\cap Q_0^{+C_{\mathrm{pad}}r})\setminus X$,
+    \begin{align}
+        S_\Omega(X\mid T)\le\frac12S_\Omega(X)+C_{\mathrm{buf}}r.
+    \end{align}
+    This is~\cite[Lemma~3.2]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_buffer_contours}
+    \lean{TNLean.PEPS.AreaLaw.condEntropy_le_initialBuffer_of_constants,
+        TNLean.PEPS.AreaLaw.sum_range_succ_eq_sum_Icc,
+        TNLean.PEPS.AreaLaw.supportDim_le,
+        TNLean.PEPS.AreaLaw.one_le_supportDim,
+        TNLean.PEPS.AreaLaw.cutLogBudget_le_card,
+        TNLean.PEPS.AreaLaw.bufferCrossConst,
+        TNLean.PEPS.AreaLaw.bufferBudgetConst,
+        TNLean.PEPS.AreaLaw.bufferCrossConst_nonneg,
+        TNLean.PEPS.AreaLaw.one_le_bufferBudgetConst,
+        TNLean.PEPS.AreaLaw.harmonic_weight_le_half,
+        TNLean.PEPS.AreaLaw.harmonic_weight_ratio_le,
+        TNLean.PEPS.AreaLaw.le_tailRadius_of_le}
+    Put $D=R+1$, $m=\lfloor(C_{\mathrm{pad}}-1)r/D\rfloor$ and
+    $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
+    Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits
+    at most one $X_j$, and the number of split supports and the parameter
+    $\mathcal B_j$ of Lemma~3.1 are at most a constant times $r+d_j$. The
+    harmonic weights $a_j=2/(Z_r(r+d_j))$ with $Z_r=\sum_j1/(r+d_j)$ have total
+    mass two and quadratic cost $4/Z_r$, and
+    $Z_r\ge D^{-1}\log((C_{\mathrm{pad}}+1)/(2+D))$. Choosing
+    $C_{\mathrm{pad}}$ makes $a_j\le1/2$, the energy of the optimized filters
+    at most $\Delta/2$, and every $a_j/(1-a_j)$ admissible for Lemma~3.1,
+    uniformly in $r$. The comparison of the optimized filter norms with
+    Schmidt pinning then gives
+    $2S(X\mid T)\le S(X)+C+m\log2$, and $m\le C_{\mathrm{pad}}r$.
+\end{proof}

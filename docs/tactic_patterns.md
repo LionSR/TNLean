@@ -6038,3 +6038,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
+
+
+### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
+
+- **Pattern:** apply `Real.sSup_le` with the nonnegativity of the target supremum,
+  unpack a regional-entropy witness, and include its region in the target collection.
+- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`,
+  `boxEntropy_mono` and `boxEntropy_antitone`.
+- **Abstraction:** both proofs already use `Real.sSup_le`. A further helper is deferred
+  until the same inclusion argument occurs in another module.
+- **Notes:** the nonnegativity argument also covers an empty collection; an additional
+  nonemptiness hypothesis would unnecessarily restrict these statements.
