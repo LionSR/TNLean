@@ -18,8 +18,7 @@ identifies the already-defined regional entropy with QICLean's construction.
 Neither model data nor generic entropy proofs are duplicated.
 
 All source code is independently written from the paper and existing library
-APIs. The issue 8760 provenance shard lists only this repository's declarations;
-QICLean owns its own source and verification evidence.
+APIs. QICLean owns its own source and verification evidence.
 
 The shuffled-label regression uses three singleton pieces in a four-site system,
 with family labels `1,0,1`, a nonempty exterior, and the true same-family past

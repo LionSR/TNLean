@@ -42,8 +42,7 @@ regional entropy is identified with the QICLean finite-product entropy; no
 additional state, density matrix, partition, or entropy definition is introduced.
 
 The two modules passed their linter-bearing builds and strict kernel dependency
-checks. The raw reports and immutable source hashes are recorded in
-`docs/provenance/evidence/8759-entropy-dimension/`.
+checks.
 The complete TNLean root build and blueprint declaration check also passed.
 The complete PDF and web builds passed, and the new statements were inspected
 on printed PDF pages 1696–1697. The full verification records are in the

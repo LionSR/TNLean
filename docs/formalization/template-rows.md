@@ -40,13 +40,6 @@ blueprint declaration checks, full blueprint job, and compilation-time checks
 also passed. Every export depends only on `propext`, `Classical.choice`, and
 `Quot.sound`. The observed outputs are now guarded in the regression file.
 
-Evidence is preserved in
-[the build log](../provenance/evidence/8754-layer-build.log),
-[the strict regression and axiom output](../provenance/evidence/8754-layer-axioms.log),
-and [the blueprint log](../provenance/evidence/8754-layer-blueprint.log).
-All 42 provenance entries record this revision and evidence hashes. The earlier
-23-export evidence remains explicitly scoped to its earlier revision.
-
 ## Mathematical derivation
 
 For each actual polygon, take the minimum and maximum of each of the forms

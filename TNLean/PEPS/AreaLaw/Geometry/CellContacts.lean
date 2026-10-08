@@ -20,26 +20,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:initial-stars.
-Source lines: 173–181; 299–306; 352–356.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccellside
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCellSide
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finelayer_cells_disjoint
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineLayer_cells_disjoint
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finelayer_closedcell_contact
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A whole side of the actual translated dyadic cell, oriented by its fan

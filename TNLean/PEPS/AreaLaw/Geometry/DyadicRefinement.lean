@@ -21,38 +21,6 @@ defined by the endpoint neighborhoods, including empty layers.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: geometry:belt-count.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicancestor
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicrefinement
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicRefinement
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.mem_dyadicrefinement_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_dyadicRefinement_iff
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_dyadicrefinement
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_dyadicRefinement
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccellindex_of_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_of_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finelayerindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineLayerIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_eq_iunion_fine
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion_fine
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_finelayerindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_finelayerindices_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_finelayerindices_boundary_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_fineLayerIndices_boundary_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The coarse ancestor of a fine dyadic cell index after the given number

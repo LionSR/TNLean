@@ -21,22 +21,6 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 No upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/08-scanner.tex
-Labels: scanner:template, scanner:mixed-piece, scanner:templates.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_sample_in_row_within
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_row_within
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_dilation_in_row_within
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_in_row_within
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_mixeddyadicindices_sample_dilation_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_sample_dilation_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The four integer supporting strips give a nearby sampled point on any

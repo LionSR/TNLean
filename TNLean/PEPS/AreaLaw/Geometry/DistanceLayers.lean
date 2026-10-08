@@ -31,30 +31,6 @@ also proves that the endpoint set is nonempty.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/10-geometry.tex
-Labels: geometry:layer-distance, geometry:nonadjacent.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccell_dist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccell_dist_lower
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_lower
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_lower
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_lower
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_exists_dist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_exists_dist_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_infdist_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_separation
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_separation
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_dist_nonadjacent
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 private theorem interval_dist_le {o r u v C x y : ℝ} (hr : 0 ≤ r)
     (huv : |u - v| ≤ C)

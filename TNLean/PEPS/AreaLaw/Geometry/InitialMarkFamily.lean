@@ -38,26 +38,6 @@ noncomputable section
 
 open Filter Topology
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:initial-stars; geometry:belt-count; geometry:total-repairs.
-Source lines: 220–233; 325–339; 352–359; 668–692.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_finitely_supported_sparse_belt_shifts
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_finitely_supported_sparse_belt_shifts
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_uniform_initial_mark_bound
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_mark_bound
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_uniform_separated_initial_marks
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem finite_support_of_summable_nat_counts (c : ℕ → ℕ)

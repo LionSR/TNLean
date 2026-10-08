@@ -18,31 +18,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.unsplit_endpoint_coordinates
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_coordinates
-Source labels: prop:two-families
-Source: Section 11, lines 299–306.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.unsplit_endpoint_corners
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_are_corners
-Source labels: prop:two-families
-Source: Section 11, lines 299–306.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The exact oriented endpoint coordinates of each whole dyadic-cell side.

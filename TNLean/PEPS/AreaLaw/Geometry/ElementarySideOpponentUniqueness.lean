@@ -24,25 +24,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.unique_elementary_side_opponent
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent
-Source labels: prop:two-families
-Source: Section 11, lines 299–316.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem interval_disjoint_cases {a b c d : ℝ} (hab : a < b) (hcd : c < d)

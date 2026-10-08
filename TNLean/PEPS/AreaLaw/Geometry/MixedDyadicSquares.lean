@@ -18,28 +18,6 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 No upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/08-scanner.tex
-Labels: scanner:template, scanner:mixed-piece, scanner:templates.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.mem_latticedyadiccell_iff_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_bounds
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.mixeddyadicindices_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_empty
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.mixeddyadicindices_biunion_subset
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_biUnion_subset
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.card_mixeddyadicindices_biunion_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_mixedDyadicIndices_biUnion_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.mixeddyadicindices_sdiff_subset
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_sdiff_subset
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.card_mixeddyadicindices_sdiff_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_mixedDyadicIndices_sdiff_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Integer coordinate bounds for the existing half-open dyadic square. -/

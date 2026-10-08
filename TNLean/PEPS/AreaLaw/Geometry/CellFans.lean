@@ -1,23 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.fan_base_radius
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.norm_sub_cellFanCenter_of_mem_base
-Source labels: prop:two-families, geometry:initial-stars
-Source: Section 11, prop:two-families, lines 299–323, especially 308–316; geometry:initial-stars,
-lines 333–370, especially 352–363.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
@@ -42,38 +23,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
 noncomputable section
-
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:initial-stars.
-Source lines: 299–310; 325–330 for the actual nine-point mark connection.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfanslot
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.CellFanSlot
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfancenter
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFanCenter
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfanstart
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFanStart
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfanend
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFanEnd
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfanpolygon
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_cellfanslot_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_cellFanSlot_bounds
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfanpolygons_cover
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfanpolygons_inter_eq
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_inter_eq
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfan_vertices_mem_beltcellmarks
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks
--/
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

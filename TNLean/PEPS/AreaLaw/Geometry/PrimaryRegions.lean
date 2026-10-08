@@ -26,38 +26,6 @@ and 237–249. Source revision:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: geometry:primary-pieces.
-Source lines: 212–218, 237–249.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.pitchinterior
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.pitchInterior
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primaryfragment
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryFragment
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primaryfragmentindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryFragmentIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarybirthregion
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarybirthregion_subset_closure_pitchinterior
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_subset_closure_pitchInterior
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarybirthregion_dist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarybirthregion_diam_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_diam_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarybirthregion_dist_separation
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_separation
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_primaryfragmentindices_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_primaryFragmentIndices_le
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

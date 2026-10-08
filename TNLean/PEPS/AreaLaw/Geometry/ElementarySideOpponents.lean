@@ -1,22 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dummy_open_elementary_side
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementarySide_subset_dummy_of_mem_openSegment
-Source labels: prop:two-families
-Source: Section 11, lines 154–177 and 299–310.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
@@ -42,44 +24,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, lines 154–181 and 299–310.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
--/
-
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_side_opponent
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent
-Source labels: prop:two-families
-Source: Section 11, lines 154–181 and 299–310.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_geometry
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry
-Source labels: prop:two-families
-Source: Section 11, lines 299–310.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Geometry

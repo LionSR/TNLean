@@ -22,27 +22,6 @@ with the fixed values in `geometry:exponents`, lines 70–78.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Source revision:
-  openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:exponents.
-Source lines: 70–78 and 200–207.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicscale_index_gaps
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicScale_index_gaps
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicscale_side_ratios
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicScale_side_ratios
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_dyadicscale_side_ratios
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

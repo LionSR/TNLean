@@ -23,26 +23,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:primary-pieces.
-Source lines: 212–218; 237–249; 299–305.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.nonbeltpitchindex
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.nonbeltPitchIndex
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.closure_nonbeltcell_subset_primarybirthregion
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.closure_nonbeltCell_subset_primaryBirthRegion
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_unique_primary_of_nonbeltcell
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_unique_primary_of_nonbeltCell
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The pitch-square index of a fine cell, relative to the two selected shifts.

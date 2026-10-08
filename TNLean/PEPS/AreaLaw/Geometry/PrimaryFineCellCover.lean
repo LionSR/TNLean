@@ -5,25 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primary_fine_cell_cover
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_nonbeltCell_closure
-Source labels: prop:two-families
-Source: Section 11, lines 212–218 and 299–323.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
 /-!
 # Fine-cell decomposition of primary birth regions
 

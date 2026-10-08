@@ -30,31 +30,9 @@ open scoped Topology
 
 namespace TNLean.PEPS.AreaLaw.Exponents
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/09-amplification.tex
-Labels: eq:amplification-radius, eq:amplification-exponents.
-Provenance-ID: 8757-tn-radius-scales-01
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Exponents.radiusExponent
--/
-
 /-- The exponent of the amplification radius. Source: Proposition 10.2,
 `eq:amplification-radius`. -/
 def radiusExponent : ℚ := (1 - amplificationEpsilon) / alpha
-
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/09-amplification.tex
-Labels: eq:amplification-radius, eq:amplification-exponents.
-Provenance-ID: 8757-tn-radius-scales-02
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Exponents.radius_exponent_gaps
--/
 
 /-- The fixed parameters leave a strict gap between both collar exponents and
 the geometric separation exponent. Source: the last paragraph of the proof
@@ -72,17 +50,6 @@ private theorem tendsto_powerRatio_zero {a b : ℝ} (hab : a < b) :
   have hn' : 0 < (n : ℝ) := by exact_mod_cast lt_of_lt_of_le Nat.zero_lt_one hn
   simpa only [Function.comp_apply, neg_sub] using Real.rpow_sub hn' a b
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/09-amplification.tex
-Labels: eq:amplification-radius, eq:amplification-exponents.
-Provenance-ID: 8757-tn-radius-scales-03
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Exponents.collar_radius_scale_tendsto_zero
--/
-
 /-- The sum of the collar scale and twice the radius scale is negligible
 relative to the geometric separation scale. Source: Proposition 10.2,
 `eq:amplification-radius`, and the last paragraph of its proof. -/
@@ -97,17 +64,6 @@ theorem collar_radius_scale_tendsto_zero (C : ℝ) :
     exact_mod_cast radius_exponent_gaps.2.2
   simpa only [add_div, mul_div_assoc, mul_zero, add_zero] using
     (tendsto_powerRatio_zero ha).add ((tendsto_powerRatio_zero hg).const_mul (2 * C))
-
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/09-amplification.tex
-Labels: eq:amplification-radius, eq:amplification-exponents.
-Provenance-ID: 8757-tn-radius-scales-04
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Exponents.exists_collar_radius_threshold
--/
 
 /-- One threshold controls the rounded collar width and every radius with the
 given power bound. The threshold depends only on `C` and `η`. Source:
@@ -129,17 +85,6 @@ theorem exists_collar_radius_threshold (C η : ℝ) (hη : 0 < η) :
   have hfloor := Nat.floor_le
     (Real.rpow_nonneg (Nat.cast_nonneg n) (1 - (amplificationEpsilon : ℝ)))
   linarith only [hscale, hfloor, hr]
-
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/09-amplification.tex
-Labels: eq:amplification-radius, eq:amplification-exponents.
-Provenance-ID: 8757-tn-radius-scales-05
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Exponents.collar_add_radius_isLittleO
--/
 
 /-- The rounded collar plus twice any eventually admissible radius is of smaller
 order than the separation scale. Source: Proposition 10.2,

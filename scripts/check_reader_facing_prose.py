@@ -16,10 +16,6 @@ ISSUE_REF_RE = re.compile(
     r"(?i)(?:issues?\s*)?#\d+(?:/#\d+)*|issues?\s*\\#\d+(?:/\\#\d+)*|"
     r"Issue~\\#\d+|https://github\.com/[^\s}]+/issues/\d+"
 )
-PUBLIC_PROVENANCE_CLAIM_RE = re.compile(
-    r"Public claim: https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/"
-    r"issues/[1-9]\d*#issuecomment-[1-9]\d*"
-)
 LEAN_CODE_SPAN_RE = re.compile(r"`([^`\n]+)`")
 LEAN_PATH_LIKE_CODE_SPAN_RE = re.compile(
     r"^(?:\.?/)?(?:TNLean|docs|blueprint|scripts|Papers|Notes|\.github|\.lake)/"
@@ -179,64 +175,17 @@ def blueprint_files(root: Path) -> Iterable[Path]:
     yield from (blueprint_src / "appendix").rglob("*.tex")
 
 
-def original_notice_claim_lines(block: list[str], start_line: int) -> set[int]:
-    """Recognize only the claim field of a complete ordinary original notice."""
-    if block[0].strip() != "/-" or block[-1].strip() != "-/":
-        return set()
-    body = block[1:-1]
-    if body[:2] != [
-        "Original formalization from the cited manuscript;",
-        "no upstream Lean proof text reused.",
-    ]:
-        return set()
-    identifiers = [line for line in body if line.startswith("Provenance-ID:")]
-    if not identifiers or len(identifiers) != len(set(identifiers)) or any(
-        not re.fullmatch(r"Provenance-ID: [a-z0-9][a-z0-9._-]*", line)
-        for line in identifiers
-    ):
-        return set()
-    declarations: list[str] = []
-    for index, line in enumerate(body):
-        if not line.startswith("Downstream declaration:"):
-            continue
-        declaration = line.removeprefix("Downstream declaration:").strip()
-        if not declaration and index + 1 < len(body):
-            declaration = body[index + 1]
-        if not re.fullmatch(LEAN_IDENTIFIER, declaration):
-            return set()
-        declarations.append(declaration)
-    if len(declarations) != len(identifiers) or len(declarations) != len(set(declarations)):
-        return set()
-    if not any(re.fullmatch(r"Source: \S.*", line) for line in body):
-        return set()
-    return {
-        start_line + offset
-        for offset, line in enumerate(block)
-        if PUBLIC_PROVENANCE_CLAIM_RE.fullmatch(line)
-    }
-
-
-def lean_comment_lines(
-    path: Path, *, provenance_claim_lines: set[int] | None = None
-) -> set[int]:
-    """Return comment lines and optionally collect validated original claim fields."""
-    source_lines = path.read_text(encoding="utf-8").splitlines()
+def lean_comment_lines(path: Path) -> set[int]:
+    """Return line numbers lying inside Lean comments or docstrings."""
     comment_lines: set[int] = set()
     depth = 0
-    block_start = 0
-    nested = False
-    for line_no, line in enumerate(source_lines, start=1):
+    for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
         i = 0
         while i < len(line):
             if depth == 0 and line.startswith("--", i):
                 comment_lines.add(line_no)
                 break
             if line.startswith("/-", i):
-                if depth == 0:
-                    block_start = line_no
-                    nested = False
-                else:
-                    nested = True
                 depth += 1
                 comment_lines.add(line_no)
                 i += 2
@@ -245,10 +194,6 @@ def lean_comment_lines(
                 comment_lines.add(line_no)
                 if line.startswith("-/", i):
                     depth -= 1
-                    if depth == 0 and not nested and provenance_claim_lines is not None:
-                        provenance_claim_lines.update(original_notice_claim_lines(
-                            source_lines[block_start - 1:line_no], block_start
-                        ))
                     i += 2
                     continue
             i += 1
@@ -383,19 +328,15 @@ def checks_lean_math_code_spans(path: Path) -> bool:
 
 def check_added_lines(lines: Iterable[AddedLine]) -> list[Finding]:
     findings: list[Finding] = []
-    lean_comment_cache: dict[Path, tuple[set[int], set[int]]] = {}
+    lean_comment_cache: dict[Path, set[int]] = {}
     for added in lines:
         if added.path.suffix == ".lean":
             if "Archive" in added.path.parts:
                 continue
-            if added.path not in lean_comment_cache:
-                claim_lines: set[int] = set()
-                comment_lines = lean_comment_lines(
-                    added.path, provenance_claim_lines=claim_lines
-                )
-                lean_comment_cache[added.path] = (comment_lines, claim_lines)
-            comment_lines, claim_lines = lean_comment_cache[added.path]
-            if added.line_no in comment_lines and added.line_no not in claim_lines:
+            comment_lines = lean_comment_cache.setdefault(
+                added.path, lean_comment_lines(added.path)
+            )
+            if added.line_no in comment_lines:
                 finding = check_lean_line(
                     added.path,
                     added.line_no,
@@ -413,10 +354,9 @@ def check_all(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     for rel_path in lean_files(root):
         path = root / rel_path
-        claim_lines: set[int] = set()
-        comment_lines = lean_comment_lines(path, provenance_claim_lines=claim_lines)
+        comment_lines = lean_comment_lines(path)
         for line_no, text in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-            if line_no in comment_lines and line_no not in claim_lines:
+            if line_no in comment_lines:
                 finding = check_lean_line(
                     rel_path,
                     line_no,

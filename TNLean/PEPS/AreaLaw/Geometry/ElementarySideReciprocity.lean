@@ -26,37 +26,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_choice
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent
-Source labels: prop:two-families
-Source: Section 11, lines 299–316.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_contact
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_eq_some_iff_contact
-Source labels: prop:two-families
-Source: Section 11, lines 299–316.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_side_opponent_reciprocity
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_reciprocal_iff
-Source labels: prop:two-families
-Source: Section 11, lines 299–323.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

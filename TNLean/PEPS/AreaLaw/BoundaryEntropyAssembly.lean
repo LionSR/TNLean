@@ -26,17 +26,6 @@ Theorem 1.1, `10-geometry.tex`, lines 846–857, immutable source
 Independently formalized; no OpenAI Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-Labels: thm:area, sec:geometry.
-Provenance-ID: 8759-tn-boundary-assembly-01
-Downstream declaration:
-TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_partition_estimates
--/
-
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw

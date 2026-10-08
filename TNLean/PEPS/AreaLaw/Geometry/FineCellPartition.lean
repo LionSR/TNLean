@@ -20,24 +20,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/10-geometry.tex
-Labels: prop:two-families.
-Source lines: 154–181 and 200–207.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finecell_assignment
-Downstream declaration:
-  TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finecell_plane_cover
-Downstream declaration:
-  TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Outside the initial neighborhood there is a unique actually indexed fine cell

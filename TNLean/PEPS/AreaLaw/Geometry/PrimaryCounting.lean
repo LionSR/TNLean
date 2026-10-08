@@ -21,28 +21,6 @@ of `prop:two-families`. Source revision:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:primary-pieces.
-Source lines: 212–218, 237–238.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarypitchindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryPitchIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.mem_primarypitchindices_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_primaryPitchIndices_iff
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_primarypitchindices_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_primarypitchindices_boundary_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_boundary_le
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

@@ -20,24 +20,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/10-geometry.tex
-Labels: prop:two-families; geometry:layer-distance.
-Source lines: 160–177, 179–191 and 299–306.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.neighborhood_dist_bound
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_exists_dist_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dummy_layer_separation
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dummy_contact_index
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_contact_layer_eq
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Every point in a closed dyadic neighborhood has an endpoint at distance

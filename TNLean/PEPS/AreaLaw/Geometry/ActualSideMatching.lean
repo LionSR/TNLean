@@ -21,25 +21,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.elementary_contact_match
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementary_contact_match
-Source labels: prop:two-families, geometry:initial-stars
-Source: Section 11, lines 299–306 and 352–356.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private def sideVector (s : Fin 4) (u : ℝ) : ℝ × ℝ :=

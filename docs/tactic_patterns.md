@@ -65,9 +65,8 @@ abstracted — record why, so it is not re-proposed).
   corner witnesses follow from that formula.
 - **Refactor:** All three callers use the shared lemmas. The promotion removes
   38 net lines from `CellContacts`, 30 from `DummyCorners`, and the 25-line
-  private corner table from `ActualSideMatching`; the shared owner has 88 lines
-  before provenance notices. The five older public statements stay unchanged.
-  Their source-bound verification is renewed with the new matching theorem.
+  private corner table from `ActualSideMatching`; the shared owner has 88
+  lines. The five older public statements stay unchanged.
 - **Notes:** A scoped pattern scan of the five completed proof modules finds
   the remaining whole-side and half-side rectangle conversions only within
   `CellContacts`, below the threshold across two files. No new tactic or

@@ -1,24 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.initial_interface_colors
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_ne_of_segment_subset_inter
-Source labels: prop:two-families, geometry:nonadjacent, geometry:primary-pieces,
-geometry:layer-distance
-Source: Section 11, prop:two-families, lines 172–177, 212–218 and 299–323; geometry:nonadjacent,
-lines 193–198; geometry:primary-pieces, lines 246–249; geometry:layer-distance, lines 179–191.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors

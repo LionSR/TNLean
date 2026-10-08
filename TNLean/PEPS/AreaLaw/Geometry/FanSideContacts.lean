@@ -7,31 +7,6 @@ import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import Mathlib.Analysis.Convex.Topology
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cell_fan_polygon_side
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_inter_dyadicCellSide
-Source labels: prop:two-families
-Source: Section 11, lines 299–323.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.fine_layer_fan_cell_contact
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_closedCell_eq
-Source labels: prop:two-families
-Source: Section 11, lines 299–323.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-
 /-!
 # Contacts of fan triangles along cell sides
 

@@ -18,26 +18,6 @@ Original formalization of the geometric argument in manuscript Lemma 9.4;
 no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_sample_four_strip_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_latticerow_profile
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_nonempty_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_min_step
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.latticerow_max_step
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_sample_in_window_between
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.exists_nearby_sample_in_row
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Exact sampling rounds the eight real supporting-strip bounds, including

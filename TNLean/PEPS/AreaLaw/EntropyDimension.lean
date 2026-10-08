@@ -22,17 +22,6 @@ Independently proved from the mathematical argument; no OpenAI Lean proof text
 is reused. This result does not require a Hamiltonian or spectral gap.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-Labels: thm:area, sec:geometry.
-Provenance-ID: 8759-tn-entropy-dimension-01
-Downstream declaration:
-TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- A normalized regional state's entropy is at most its site count times the

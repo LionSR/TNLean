@@ -12,8 +12,7 @@ passed their actual module builds and all seven strict kernel audits. The comple
 TNLean root build and native declaration check for the entire blueprint have
 passed, as have the complete PDF and web builds. The 2085-page PDF has no undefined
 references or citations; its new entropy and collar statements were inspected
-on printed pages 1696–1697. The commands and hashed evidence are recorded in
-`docs/provenance/evidence/8759-entropy-dimension/full-verification/`.
+on printed pages 1696–1697.
 The QICLean
 dependency update remains separate. All manuscript
 references use the September 24, 2026 versions at OpenAI source revision
@@ -40,7 +39,7 @@ selected vector has distance at most \(\sqrt{2\delta}\). These two proofs
 are published in [QICLean #608](https://github.com/LionSR/QICLean/pull/608),
 at mathematical source revision
 `79b9d503971a4ff2409fa557e174b46b13fdbbda`. The complete library build, strict
-kernel and provenance checks, and full blueprint PDF, web and declaration
+kernel checks, and full blueprint PDF, web and declaration
 checks have passed. They assume the tail estimate.
 [QICLean #611](https://github.com/LionSR/QICLean/pull/611) proves its uniform
 numerical specialization: for fixed \(\theta\ge0\) and \(C>0\), there is
@@ -91,9 +90,8 @@ S_\Omega(A)\le\left(c_D\log q+\frac{c_E}{2}\right)b.
 This is the [final numerical implication in the area-law proof](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex#L846-L857),
 conditional on the partition and its stated estimates. It does not establish
 their existence or uniformity. The actual TNLean modules and both strict kernel
-audits have passed; their
-[evidence records](../provenance/openai-math.d/8759-entropy-dimension.json) refer
-to immutable production revision `548f23f7b274af443eb3644d8153f15148565c31`.
+audits have passed at production revision
+`548f23f7b274af443eb3644d8153f15148565c31`.
 
 The proved radius estimate isolates the numerical part of
 [Proposition 10.2](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/09-amplification.tex#L261-L287).
@@ -103,8 +101,7 @@ which \(\lfloor n^{1-\varepsilon}\rfloor+2r<\eta n^\beta\). Hence every
 eventually admissible radius sequence satisfies
 \(\lfloor n^{1-\varepsilon}\rfloor+2r(n)=o(n^\beta)\).
 The exponent gap, rounded threshold and little-o proofs have passed the actual
-TNLean module build and all five strict kernel audits, recorded in the
-[radius evidence](../provenance/openai-math.d/8757-radius-scales.json). This estimate
+TNLean module build and all five strict kernel audits. This estimate
 does not construct an amplification radius or prove a remote-information bound.
 
 The accepted QICLean development now contains marginal moment and tail bounds
@@ -125,7 +122,7 @@ only on the original marginal of the selected region, and every disjoint
 physical region has reduced density bounded above by the original density
 divided by \(z\). For unit input, its entropy is bounded by the original
 regional entropy divided by \(z\). These statements have passed a complete
-library build, all six additional kernel audits, provenance validation and
+library build, all six additional kernel audits and
 blueprint verification; their dependency update into TNLean remains separate.
 
 [QICLean #609](https://github.com/LionSR/QICLean/pull/609) constructs the
@@ -136,7 +133,7 @@ Its actual spectral isometry satisfies \(J^\dagger J=I\) and
 the typical truncation, has diagonal first marginal with entries \(p_i/z\),
 and preserves the complementary marginal. Positive selected mass suffices;
 the original vector need not be unit. The complete library, all eight new
-kernel audits, provenance and full blueprint checks have passed.
+kernel audits and full blueprint checks have passed.
 
 [QICLean #610](https://github.com/LionSR/QICLean/pull/610) proves the actual
 one-copy Bell contraction. With \(d=|E|\), let
@@ -220,8 +217,8 @@ including singular states. Its eventual mass is at least
 For a unit bipartite vector, it also proves the corresponding squared norm
 of the actual central projection of its literal tensor powers, using its
 actual reduced density. All four proofs pass strict Lean checking and exact
-standard-kernel checks. The complete 9,713-job library build, source-bound
-provenance and complete PDF/web/native declaration checks passed. The actual
+standard-kernel checks. The complete 9,713-job library build and
+complete PDF/web/native declaration checks passed. The actual
 pure-vector identities are separately verified in
 [QICLean #628](https://github.com/LionSR/QICLean/pull/628), including zero
 copies and singular marginals. These statements supply the high-label input,
@@ -235,8 +232,8 @@ full representation space,
 \(F_{\mathrm{good}}+F_{\mathrm{bad}}\le F_{\mathrm{whole}}\le
 F_{\mathrm{good}}+F_{\mathrm{bad}}+\log\binom{k}{r}I\).
 Compatibility follows from the actual joint projections. Strict checking,
-the complete 9,707-job library build, the exact standard-kernel audit,
-provenance and complete PDF/web/native declaration checks passed. The occurring bad-copy dimension bound is proved separately below; transfer
+the complete 9,707-job library build, the exact standard-kernel audit
+and complete PDF/web/native declaration checks passed. The occurring bad-copy dimension bound is proved separately below; transfer
 to an actual excitation component remains a further step.
 
 [QICLean #631](https://github.com/LionSR/QICLean/pull/631) has source and
@@ -248,7 +245,7 @@ eventual inverse-polynomial projected mass and entropy asymptotic. A
 positive-mass sector of the actual marginal repairs only finitely many
 initial terms. Strict Lean checking and an independent mathematical review
 passed. The complete 9,716-job library build, two exact standard-kernel
-reports, provenance and complete PDF/web/native declaration checks also
+reports and complete PDF/web/native declaration checks also
 passed. The physical Schmidt-truncation instantiation and later comparator
 estimates remain separate.
 
@@ -263,7 +260,7 @@ the good copies retained as multiplicity. Consequently
 \]
 The statements include empty coordinate sets and zero copy groups, with the
 total real logarithm. The complete 9,709-job library build, three exact
-standard-kernel reports (one inherited and two new), provenance and complete
+standard-kernel reports (one inherited and two new) and complete
 PDF/web/native checks passed. The actual whole-label compression and physical
 component quadratic-form estimate remain separate.
 
@@ -274,15 +271,15 @@ therefore commutes with the component projection, including arbitrary
 disjoint auxiliary operators, and projection preserves the corresponding
 fixed-vector equation. The three identities require no normalization and
 include zero copies. Strict checking, the complete 9,710-job library build,
-three standard-kernel reports, provenance and complete PDF/web/native checks
+three standard-kernel reports and complete PDF/web/native checks
 passed. They do not assert commutation with the band metric.
 
 [QICLean #635](https://github.com/LionSR/QICLean/pull/635), at checked head
 `141ea11e`, transfers simultaneous permutation fixedness to the literal
 auxiliary reduced density of an actual excitation component. Its two results
 require no normalization or independent-copy assumption. The complete
-9,711-job library build, strict checking, two standard-kernel reports,
-provenance and complete PDF/web/native checks passed. Invariance of the
+9,711-job library build, strict checking, two standard-kernel reports
+and complete PDF/web/native checks passed. Invariance of the
 marginal does not imply independence of its copies.
 
 [QICLean #636](https://github.com/LionSR/QICLean/pull/636), with mathematical
@@ -294,7 +291,7 @@ for actual excitation subsets. For \(0\le p\le1/2\) and \(r\le pk\),
 \]
 The corresponding cardinality estimate counts the actual subsets of a finite
 set. Zero copies and both endpoints are included. The complete 9,761-job
-library build, strict checking, four standard-kernel reports, exact provenance
+library build, strict checking, four standard-kernel reports
 and PDF/web/native checks passed; the native list contains 3,381 declarations.
 These scalar bounds supply the counting step, while the inverse-compression
 operator inequality remains separate.
@@ -304,7 +301,7 @@ operator inequality remains separate.
 label and transfers the resulting lower bound to an excitation component.
 The only support premise concerns the original vector's whole auxiliary label;
 component support and the good/bad coordinate split are derived. The complete
-9,727-job library build, two fresh standard-kernel reports, exact provenance
+9,727-job library build, two fresh standard-kernel reports
 and complete PDF/web/native checks passed. The numerical high-label threshold
 and the later inverse metric comparison remain separate.
 
@@ -315,7 +312,7 @@ and the later inverse metric comparison remain separate.
 is its own auxiliary marginal. The ground-state contraction gives the same
 auxiliary matrix. Only the prescribed one-copy ground vector is unit; zero
 components and zero copies are included. The complete 9,690-job library build,
-two fresh standard-kernel reports, exact provenance and complete PDF/web/native
+two fresh standard-kernel reports and complete PDF/web/native
 checks passed. The physical regional restriction is established below. Good-auxiliary
 symmetry and the actual local component moment are established below.
 
@@ -325,8 +322,8 @@ selected Schmidt vector and derives the common-label prevector sequence.
 Positive selected mass suffices for the contraction, including zero copies
 and selected indices of zero eigenvalue. The sequence additionally assumes
 the original ground vector is unit and satisfies its ground-state equation.
-The complete 9,719-job library build, two fresh standard-kernel reports,
-exact provenance and complete PDF/web/native checks passed. The physical
+The complete 9,719-job library build, two fresh standard-kernel reports
+and complete PDF/web/native checks passed. The physical
 Schmidt window and the inverse metric comparison remain separate.
 
 [QICLean #640](https://github.com/LionSR/QICLean/pull/640), at checked head
@@ -337,8 +334,8 @@ For \(m=|B^c|\), its literal reduced matrix is
 \]
 after the specified chosen enumeration of the good copies. Only the
 one-copy ground vector is unit; the excitation component \(w\) may vanish.
-The complete 9,714-job library build, one fresh standard-kernel report,
-exact provenance and complete PDF/web/native checks passed. The joint physical
+The complete 9,714-job library build, one fresh standard-kernel report
+and complete PDF/web/native checks passed. The joint physical
 and good-auxiliary marginal and the local component moment are established
 below. None of these results asserts the complete inverse-compression inequality.
 
@@ -349,7 +346,7 @@ invariance under every good-copy permutation solely from the original
 vector's simultaneous copy fixedness. The ground vector need not be unit;
 zero components, zero copies and empty coordinate sets are included.
 The complete 9,729-job library build, three fresh standard-kernel reports,
-original provenance, the 434-page PDF and complete web/native checks passed.
+the 434-page PDF and complete web/native checks passed.
 The symmetry supplies the auxiliary premise for the merge-moment estimate;
 it imposes no independence assumption on the auxiliary copies.
 
@@ -359,7 +356,7 @@ its actual joint central projections, and the corresponding trace identity
 for an arbitrary matrix. Only the commuting separate actions and their
 simultaneous product are assumed; the exponent is any real number. The
 complete 9,792-job library build, two fresh standard-kernel reports,
-original provenance, the 446-page PDF and complete web/native checks passed.
+the 446-page PDF and complete web/native checks passed.
 
 [QICLean #649](https://github.com/LionSR/QICLean/pull/649), at checked head
 `ef7442f0`, proves the merge-moment estimate on the literal paired copy space.
@@ -368,7 +365,7 @@ moment is bounded by \( (m+1)^{(|Q|\,|C|)^2}\operatorname{Tr}\rho \)
 for every real exponent at most one. The trace-one form is also proved.
 Total normalization includes zero mass, empty bases and zero copies.
 The complete 9,792-job library build, seven fresh standard-kernel reports,
-original provenance, the 447-page PDF and complete web/native checks passed.
+the 447-page PDF and complete web/native checks passed.
 The actual local component application is established below. Identifying
 both regional marginals and merge deficits on a common space remains separate.
 
@@ -378,7 +375,7 @@ and the good auxiliary C copies. For the same selected component, it is the
 product of the one-copy physical marginal tensor power and the actual good
 auxiliary marginal. Only the one-copy vector is unit; no independence of the
 auxiliary copies is assumed. The complete 9,733-job library build, two fresh
-standard-kernel reports, original provenance, the revised 437-page PDF and
+standard-kernel reports, the revised 437-page PDF and
 complete web/native checks passed.
 
 [QICLean #652](https://github.com/LionSR/QICLean/pull/652), at checked head
@@ -396,8 +393,8 @@ Zero components, zero copies and empty good sets are included. The complete
 9,821-job library build passed at `65b283fc`; the later book revision
 `3587609f` adopts the checked #651 exposition without changing Lean sources
 or dependency pins. The revised 469-page PDF, all 3,753 declaration checks,
-the complete 50-page web reader, one fresh standard-kernel report, original
-provenance and 138 portable artifact bindings passed. The QC moment alone
+the complete 50-page web reader, one fresh standard-kernel report and
+138 portable artifact bindings passed. The QC moment alone
 does not combine the two regional deficits or prove inverse compression.
 
 [QICLean #654](https://github.com/LionSR/QICLean/pull/654), at checked head
@@ -412,8 +409,8 @@ and two commuting Hermitian matrices:
 The weight need not be normalized or commute with either matrix. This is a
 separate sufficient estimate for doubled polynomial moments; it is not
 identified with the Cauchy--Schwarz inequality printed in the paper. The
-complete 9,793-job library build, one fresh standard-kernel report, original
-provenance, the 447-page PDF and complete web/native checks passed.
+complete 9,793-job library build, one fresh standard-kernel report,
+the 447-page PDF and complete web/native checks passed.
 
 [QICLean #655](https://github.com/LionSR/QICLean/pull/655), at checked head
 `038138a0`, defines the actual paired merge deficit and places the QC and VR
@@ -421,7 +418,7 @@ deficits on a common product copy space. Their identity lifts commute,
 their joint exponential factors as an operator, and each individual complex
 trace pairing is the pairing with its actual partial trace. The common
 matrix may be correlated; the joint trace is not asserted to factor. The
-six exact standard-kernel reports, original provenance, complete 9,793-job
+six exact standard-kernel reports, complete 9,793-job
 library build, 448-page PDF and complete web/native checks passed.
 
 [QICLean #656](https://github.com/LionSR/QICLean/pull/656), at checked head
@@ -431,7 +428,7 @@ coordinate. Both regional auxiliary partial traces and the original
 component's squared trace mass are proved without normalization or symmetry
 premises. Its source is `f5877818`, independent evidence `127e81f0`, and exact
 two-line inclusion `fa392bef`. The full 9,734-job library build, four fresh
-standard-kernel reports, original provenance, the 438-page PDF and complete
+standard-kernel reports, the 438-page PDF and complete
 web/native checks passed. The complete manifest has 111 source/evidence
 bindings and preserves every parent file except those inclusion lines.
 The historical bipartite source is retained; its four statements are replaced
@@ -446,7 +443,7 @@ by the same component's squared norm. The literal exterior-region exchange
 preserves Y and derives the second ground norm, symmetry and component mass.
 The source is `7c8099cf`, independent evidence `1966e51e`, and exact two-line
 inclusion `589ae558`. The full 9,825-job library build, strict source and fresh
-standard-kernel report, original provenance, 472-page PDF and complete
+standard-kernel report, 472-page PDF and complete
 web/native checks passed. Root independently inspected the proof, exact
 report, 89-file manifest and complete PDF/mobile statements and proofs.
 The arithmetic-mean estimate is an auxiliary polynomial step; physical
@@ -461,7 +458,7 @@ that an arbitrary Hermitian intertwiner into such a matrix's spectrum is
 fixed by that projection. No injectivity or nonzero range is assumed.
 The source is `a9415ed9`, independent evidence `7c3842d2`, and exact two-line
 inclusion `7f93d770`. The full 9,823-job build, four original and four fresh
-standard-kernel reports, original provenance, 471-page PDF and complete
+standard-kernel reports, 471-page PDF and complete
 web/native checks passed. The 175-file manifest preserves all 4,454 parent
 files, with only the two inclusion lines changed. Four preliminary metadata
 check failures and their successful corrections are retained explicitly.
@@ -475,7 +472,7 @@ the auxiliary vector is arbitrary, and zero components and zero good-copy
 counts are included. The mathematical source is `24f1008f`, followed by the
 docstring-only citation revision `eba46627`, independent evidence `6bd427e9`,
 and exact two-line inclusion `9b955ec2`. The full 9,735-job library build,
-strict and fresh standard-kernel checks, original provenance, 438-page PDF
+strict and fresh standard-kernel checks, 438-page PDF
 and complete web/native checks passed. The integration manifest has 106
 bindings and the leaf manifest 116; the complete physical statement and
 proof were inspected in the PDF and mobile reader. Reducing the auxiliary
@@ -491,7 +488,7 @@ complementary physical and exterior coordinates. Only the one-copy ground
 vector is unit; zero copies and zero components are included. The source is
 `fc4db3db`, original evidence `a2b266d6`, and exact inclusion `1dba3aeb`.
 The full 9,826-job build, sole strict and fresh standard-kernel report,
-provenance, 473-page PDF and complete web/native checks passed. The 97-binding
+473-page PDF and complete web/native checks passed. The 97-binding
 manifest and complete PDF/mobile statement, proof and formula endpoint were
 independently inspected. The signed centered analytic rate remains separate.
 
@@ -505,7 +502,7 @@ commutes with the actual QC, VR, C and R label observables and both merge
 deficits. Neither global positivity of G nor preservation of P by a merge
 is assumed. Source `117c20bc`, original evidence `925b12b6` and exact
 inclusion `a31ba42a` remain unchanged. The full 9,824-job build, five fresh
-standard-kernel reports, provenance, 472-page PDF, complete web/native checks
+standard-kernel reports, 472-page PDF, complete web/native checks
 and 68-artifact manifest passed. All 4,553 parent files are preserved, with
 only the stated inclusion and ledger additions. Root read the entire source
 and inspected both complete PDF pages and the mobile section. Application
@@ -519,7 +516,7 @@ gives the genuine fifth-root product required by the sharp component estimate.
 The trace weight need not be normalized or commute with the observables.
 Zero weights and endpoint exponents are included. Two product-resolution
 coordinate identities also remove repeated marginal calculations while
-preserving six existing mathematical signatures and their original provenance.
+preserving six existing mathematical signatures.
 Source `f24f6b07`, original leaf `6c64b654` and unique inclusion `16aa6062`
 remain unchanged. The full 9,824-job build, five new and six refreshed
 standard-kernel reports, 472-page PDF and complete web/declaration checks
@@ -581,8 +578,8 @@ is \(\min(c_0,1)/(2\sqrt{\mathcal B})\). The center is arbitrary;
 deriving the hypothesis at center \(kS(\sigma)\) from a one-copy bound is
 a separate independent-copy theorem. Mathematical source `eedf28aa`, original
 leaf `697aa7c1` and unique inclusion `335adba3` are preserved. The complete
-9,826-job library build, two exact standard-kernel reports, original two
-provenance records, 473-page PDF and complete web/declaration/reader checks
+9,826-job library build, two exact standard-kernel reports,
+473-page PDF and complete web/declaration/reader checks
 passed. The 84-binding integration manifest, original 88-binding leaf,
 complete PDF statement and proof, and desktop/mobile formula endpoints were
 independently reviewed. Earlier audit-helper and packaging diagnostics are
@@ -621,8 +618,8 @@ definite matrix and any nonzero real power have the same commutant. In
 particular, commutation with \((x+bI)^{-a/2}\), for \(x\ge0\) and
 \(a,b>0\), implies commutation with \(x\). This is the functional-calculus
 step after native patch stationarity. It does not establish the preceding
-commutation premise. Its three proofs, complete library build, kernel audits,
-provenance validation and blueprint checks have passed.
+commutation premise. Its three proofs, complete library build, kernel audits
+and blueprint checks have passed.
 
 For PEPS approximation, the separate draft proving attainment of the
 regularized patch minimum does not yet establish
@@ -644,8 +641,8 @@ with mathematical source frozen at
 `cc0a19f9b2f35b5bd843bd82e9b0e2cecbdcdccb`. It retains exterior aggregate
 contractions, original occurrences and source positions, and the full complex
 coefficients in the operator and density identities. Strict checking,
-55 standard-kernel reports, blueprint checks and a canonical provenance
-replay covering 323 declarations passed. These checks are distinguished from
+55 standard-kernel reports, blueprint checks covering 323 declarations
+passed. These checks are distinguished from
 a complete Lake build. The actual corrected-density estimate, source sampling,
 physical protocol and local tensor-network construction remain separate.
 
@@ -665,8 +662,7 @@ of #593. Its final mathematical source is `035e5cc6` and evidence head is
 retain their source text. The complete 9,791-job library build passed, together
 with eight fresh standard-kernel reports, preservation of 1,455 frozen files,
 all 240 source-chapter declaration targets, the 446-page PDF and complete web
-checks. The earlier 21 strict source regressions and 325 provenance mappings
-retain their historical records; they are not described as fresh checks of
+checks. The earlier 21 strict source regressions are not described as fresh checks of
 the entire contribution. The PEPS coordinator is adopting this exact checked
 QICLean revision in the separate TNLean integration. The distributed
 compression and polynomial PEPS theorems remain unfinished.
@@ -683,7 +679,7 @@ compression argument.
 original source positions, above the preceding integration. Its mathematical
 source is `f932b80f`; the exact QICLean dependency remains `4be0ef42`.
 The coordinator reports 67 new and 24 refreshed standard-kernel reports,
-strict checking of 35 affected modules, 585 provenance entries and all
+strict checking of 35 affected modules and all
 20,877 compiled blueprint declaration names. The Gaussian estimates, actual
 frame identifications and complete corrected-density bound remain separate.
 
@@ -692,7 +688,7 @@ frame identifications and complete corrected-density bound remain separate.
 `258925377`. Its dependency is the separately checked QICLean helper
 contribution [#646](https://github.com/LionSR/QICLean/pull/646), at
 `b2521d2a`. The coordinator reports 17 strict checks, 30 standard-kernel
-reports, all 614 provenance entries, all 20,906 blueprint declaration names
+reports, all 20,906 blueprint declaration names
 and focused rendering checks. These are narrow checks, distinct from a
 complete library build. The actual norm integrability and some-sample
 bound are further checked local consequences reported by that coordinator;
@@ -723,7 +719,7 @@ the coordinator reports the historical validators and module policy passed.
 estimates at mathematical source
 `5547d32efa79b3b18150eb07be2bfcda4a68f79a`. The coordinator reports 27 strict
 module checks, 86 selected standard-kernel reports, all 20,983 compiled
-blueprint names, 691 canonical provenance entries and focused rendering of
+blueprint names and focused rendering of
 the 45-page mathematical supplement. These are narrow checks; a complete
 library build is not claimed for this contribution. The separately used
 QICLean #650 dependency has passed its full remote CI. The coordinator subsequently reports that the actual Schmidt input/output
@@ -758,7 +754,7 @@ polynomial bound. This is the sampling step of Theorem 5.2; the actual
 tensor-network contraction and final assembly remain unfinished.
 The coordinator records 13 strict direct checks, 18 standard-kernel reports,
 14,707 imported artifact hashes, direct library-root declaration checking of
-21,301 names, 1,009 provenance entries, and a visually inspected 59-page
+21,301 names, and a visually inspected 59-page
 focused PDF and seven-page web reader. These are direct and focused checks;
 no local full Lake build is claimed.
 

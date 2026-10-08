@@ -19,26 +19,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/10-geometry.tex
-Labels: prop:two-families.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_ambientdilation_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_ambientDilation_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.boundaryendpoints
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.boundaryEndpoints
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_boundaryendpoints_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_boundaryEndpoints_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicchildren
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicChildren
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_dyadicchildren
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_dyadicChildren
--/
-
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw.Geometry

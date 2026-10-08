@@ -25,28 +25,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:initial-stars.
-Source lines: 352–359.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.affinemesh
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.affineMesh
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.beltmarks_subset_affinemesh
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.beltMarks_subset_affineMesh
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.affinemesh_dist_ge
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.affineMesh_dist_ge
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.affinemesh_line_dist_ge
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The translated square mesh with spacing `q`.

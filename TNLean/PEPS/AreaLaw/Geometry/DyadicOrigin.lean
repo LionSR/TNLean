@@ -1,34 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadic_origin
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin
-Source labels: prop:two-families
-Source: Section 11, lines 150–154.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadic_origin_nonintegral
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_nonintegral
-Source labels: prop:two-families
-Source: Section 11, lines 150–154.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadic_origin_lattice_avoidance
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_supporting_lines_avoid_lattice
-Source labels: prop:two-families
-Source: Section 11, lines 545–559.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors

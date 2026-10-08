@@ -20,26 +20,6 @@ spectral gap*, September 24, 2026, at
 No upstream Lean proof text is reused. Safe clearance and entropy are separate.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/08-scanner.tex
-Labels: scanner:template, scanner:mixed-piece, scanner:templates.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_mixeddyadicindices_dilation_piececount_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_pieceCount_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_mixeddyadicindices_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_mixeddyadicindices_dilation_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_mixeddyadicindices_shell_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_shell_le
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.template.card_cappeddyadicpartition_shell_below_cap_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_below_cap_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem template_scale_nat {Ctpl : ℝ} {n s₀ : ℕ}

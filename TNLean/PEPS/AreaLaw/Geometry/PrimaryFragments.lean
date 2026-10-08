@@ -21,30 +21,6 @@ and 237–249. Source revision:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: geometry:primary-pieces.
-Source lines: 212–218, 237–249.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primarybirthregion_eq_iunion_primaryfragment
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_primaryFragment
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primaryfragment_eq_closedrectangle
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryFragment_eq_closedRectangle
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primaryfragment_subset_closure_dyadiccell
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryFragment_subset_closure_dyadicCell
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primaryfragment_dist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryFragment_dist_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.primaryfragment_diam_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.primaryFragment_diam_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem closure_Ico_inter_Ioo_of_nonempty {a b c d : ℝ}

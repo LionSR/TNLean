@@ -1,23 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.initial_frontier_near_mark
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_near_mark_allowed
-Source labels: prop:two-families, geometry:initial-stars
-Source: Section 11, geometry:initial-stars, lines 333–370, especially 352–359; actual construction
-in prop:two-families, lines 154–177, 212–218 and 299–323.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors

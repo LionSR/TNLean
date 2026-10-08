@@ -31,52 +31,6 @@ results; no such property is assumed here.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/10-geometry.tex
-Labels: prop:two-families.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccellindex
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicparent
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicParent
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccell
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCell
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiccellindex_succ
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_succ
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.mem_dyadiccell_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_dyadicCell_iff
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicparent_abs_sub_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicParent_abs_sub_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicparent_mem_ambientdilation_image
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicParent_mem_ambientDilation_image
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.occupiedcellindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.occupiedcellindices_succ
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices_succ
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicneighborhood
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.mem_dyadicneighborhood_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_dyadicNeighborhood_iff
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicneighborhood_subset_succ
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_subset_succ
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.mem_dyadicchildren_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_dyadicChildren_iff
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayerindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayerIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadiclayer_eq_iunion
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_dyadiclayerindices_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_dyadiclayerindices_boundary_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_boundary_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The coordinatewise floor index in the translated half-open dyadic grid.

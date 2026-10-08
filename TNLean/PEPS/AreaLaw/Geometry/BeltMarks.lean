@@ -25,32 +25,6 @@ The minimum incident scale of a coincident mark, the fan coloring and the
 isolated-star properties are not part of these definitions or estimates.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: prop:two-families; geometry:initial-stars; geometry:belt-count.
-Source lines: 325–330, 220–228.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.beltcellmarks
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.beltCellMarks
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.beltmarks
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.beltMarks
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.beltcellmarks_subset_closure_dyadiccell
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.beltCellMarks_subset_closure_dyadicCell
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_beltcellmarks
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_beltCellMarks
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.card_beltmarks_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_sparse_dyadic_belt_marks_shift
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

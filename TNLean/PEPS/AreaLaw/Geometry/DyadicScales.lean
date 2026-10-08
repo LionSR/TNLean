@@ -24,32 +24,6 @@ their sum. These are the arithmetic ingredients in the sparse-belt estimate.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: geometry:belt-count.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finescaleindex
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.pitchscaleindex
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.pitchScaleIndex
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finescaleindex_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.le_pitchscaleindex
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.le_pitchScaleIndex
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finescale_dvd_layerscale
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineScale_dvd_layerScale
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.layerscale_dvd_pitchscale
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.layerScale_dvd_pitchScale
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.layerscale_exponent_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.layerScale_exponent_le
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry

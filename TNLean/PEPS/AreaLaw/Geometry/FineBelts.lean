@@ -25,26 +25,6 @@ The estimate does not require an entropy inequality or an assumed partition.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  10-geometry.tex
-Labels: geometry:belt-count.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.beltcellindices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.beltCellIndices
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_fine_belt_shift
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_fine_belt_shift
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.dyadicscale_ratio_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.dyadicScale_ratio_le
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.exists_sparse_dyadic_belt_shift
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_shift
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem dyadic_scale_ratio (ℓ k p : ℕ) (hℓk : ℓ ≤ k) (hℓp : ℓ ≤ p) :
