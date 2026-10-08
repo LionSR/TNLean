@@ -1,0 +1,247 @@
+{
+  "source_parent": "2f5a2d3f4163dd25caf8c0845bc81b6c5826493f",
+  "parent_source_revision": "33695425897e6f9895884741c0677aa38750361b",
+  "preserved_artifacts": [
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS.olean",
+      "sha256": "c6f79e4a1aaa87e1c579c4c53a2a14562f3e07693b021b1c93d85f7829c8a886"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation.olean",
+      "sha256": "a40f81829cc23f98db145cab84f0247111bafb0ed4acda1b4e5b72915ffbdead"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/PhysicalReadout.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/PhysicalReadout.olean",
+      "sha256": "2a4e0231824004c3814d40f8c17b011b761aa21e25acab470cabfe0daa5fff54"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourcePreparationVectors.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourcePreparationVectors.olean",
+      "sha256": "46ec8ab1417b9ea75128154fb77cdc25c655822938bc7b9464f9d9d1e8403a09"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/WordEvaluationTransport.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/WordEvaluationTransport.olean",
+      "sha256": "cfef6997f74935e2b0a2cadb5188b239aea9a9ea2d5ea55a039cf306857ee6e6"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/WordSelectivePartition.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/WordSelectivePartition.olean",
+      "sha256": "ad11a121f02019def098e8f3af378dcfb28232ead4ebed8562bf67df446bef78"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SeparatedPhysicalDensity.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SeparatedPhysicalDensity.olean",
+      "sha256": "471929259ae1ec20c3bdc0884659be7860dcaa66317c7abbb267f53ca78172e6"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/OutputPartitionCoordinates.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/OutputPartitionCoordinates.olean",
+      "sha256": "30350c5d26bb78a77494981b84f8d867fbc11fa300bbe1e22802ef43fb3e2617"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectReplacementCoefficients.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectReplacementCoefficients.olean",
+      "sha256": "1881e26aa383461d63e185961b3f9343b12aee433f771d428ed2eec840ee34b6"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectReplacementExpansion.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectReplacementExpansion.olean",
+      "sha256": "31255034d088c295340151d8ec1c964fa608bc2b8cd74502792bdb8f10aa5c46"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectCircuitResources.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectCircuitResources.olean",
+      "sha256": "731058ee10b35663954726589c64f038f592154c944626f0c79b4cdffc6207f0"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/PhysicalOutputContraction.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/PhysicalOutputContraction.olean",
+      "sha256": "308fd9044ec4e832d158e43d1e317ec3199cec1bd42d284b48a89933a0b9b745"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceOnlyReduction.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceOnlyReduction.olean",
+      "sha256": "8885051707ace4dc8e5a81eb3e8df7ea68c24d27af2a279aeb4c8ce42d4d85e8"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/GaussianPhysicalSource.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/GaussianPhysicalSource.olean",
+      "sha256": "cb45ca55ca5b79d86383936e3327d15e758b8a1a9b5422949c14f483227d9bb5"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SelectiveSourceFactorization.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SelectiveSourceFactorization.olean",
+      "sha256": "ee688eab964ff3126f748f1368082971a286107440df4a42b6d7696c8b2ea54f"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/ExteriorSourceContraction.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/ExteriorSourceContraction.olean",
+      "sha256": "f598645c73f9e6b57043a5a45489472e00339170739910d71dbfa050705e716a"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/LocalSchmidtOutput.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/LocalSchmidtOutput.olean",
+      "sha256": "9a214794ecaef626060576aa3549a3f54f0dbeadc1e0b7a135961cd2d6f3e53e"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/OriginalCircuit.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/OriginalCircuit.olean",
+      "sha256": "9ecd712005b915d9590aaeec91b5ae898e05c90a702cdc1eb9b59a987b38f1f3"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceRegisterPermutation.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceRegisterPermutation.olean",
+      "sha256": "36613755edcfe8cbedad3959eb281f6e84932efc741088984bae9e1b1523f8f6"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SelectiveSourcePreparation.olean",
+      "sha256": "786199e57bbcbbf0cef80e33d7a95d2faffd8b84f0e93a4709611ebeeef0187d"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedInputVectorIdentity.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedInputVectorIdentity.olean",
+      "sha256": "4b221884d3deffb06970bc26cb2833ca8c44fa4d8010a30814d129677f765b46"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceSlotMaps.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceSlotMaps.olean",
+      "sha256": "5d06b164b14168bbeb6d70fc04ea6d43b223aa7cb20daab9b16571b83cde5b98"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SeparatedOutputCoordinates.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SeparatedOutputCoordinates.olean",
+      "sha256": "f6661a44dce255d0483bd31c88b31d1f01e2265e3eee9735f58808bc7f341fde"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceInputPartition.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceInputPartition.olean",
+      "sha256": "c3085ea59041cf03717499f3242ed3308a9774a7d018d09424d1e56a12292fc7"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/AffectedPhysicalDimension.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/AffectedPhysicalDimension.olean",
+      "sha256": "5269bdb9af496394e71922f265675c94e288655477f6a3bee4f4a8570ba9ec4e"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectCircuitError.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectCircuitError.olean",
+      "sha256": "ca04de95f0bacf7478b40e87dd809d94a579a6f5ce22452e7e526040787221fc"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SeparatedSchmidtOutput.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SeparatedSchmidtOutput.olean",
+      "sha256": "5bbd375c306f5483f44975ad6fd71064356c8aacab4137ca5c498a89b29b85af"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedInputVectors.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedInputVectors.olean",
+      "sha256": "44b29c96df6b96b445f1d969e77e02ec3a442b227b911e5bfa4bd4681d10b8f6"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectCircuitReplacement.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectCircuitReplacement.olean",
+      "sha256": "7361a94cc0577ec10d3cac6205904c28150a93084d5a1bd78768454687500206"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedSchmidtInput.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedSchmidtInput.olean",
+      "sha256": "ca0321ace49c4dbc692a1be767e49acdcefb42eb638285c2d4544bce72513012"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceInputSchmidtFrames.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceInputSchmidtFrames.olean",
+      "sha256": "91586d1439824e04b727f78a41f71df34eaa7be36409bab8da12f8ad05b726ac"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectReplacementSources.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectReplacementSources.olean",
+      "sha256": "87c788e19c2537645b88d17202202dfbdda82dfef7c957ad415e903c42007b51"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedSchmidtOutput.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedSchmidtOutput.olean",
+      "sha256": "c80dbb97512caecb950aa47912f61a9d7cd9a27112c2863c086322bf09efeb24"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectCircuitPreparation.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectCircuitPreparation.olean",
+      "sha256": "34ba12a560764556e1edb4a2add0a265e943027dc00d5cb79361fef802036465"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedInputReordering.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedInputReordering.olean",
+      "sha256": "e55eaec8cbba58233c9ce74bf95ff0328ffd95345f72453ab65c6b0916305b0c"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectCircuitDensity.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectCircuitDensity.olean",
+      "sha256": "e829cd6a3ab542a9ad74c1aa2feb844177878f6da7f7a1ee51b9b1ae86696818"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/FamilyPhysicalReadout.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/FamilyPhysicalReadout.olean",
+      "sha256": "4075bbf4b5bad91ac61374cc44b04bcbd46cadfe4127eb1472cf90f63a0bfe34"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/GaussianSeparatedPhysicalDensity.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/GaussianSeparatedPhysicalDensity.olean",
+      "sha256": "3fbcaddbcea761443b4477e8025c8c6d9f5d7a27bae34e052a13e4f511e64e95"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedSourceFrames.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedSourceFrames.olean",
+      "sha256": "2798f864a3a8a57585159f86a66b27609112c8a498f8a36e29bafd8011d4a5ba"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/WeightedPhysicalSource.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/WeightedPhysicalSource.olean",
+      "sha256": "508cf4ca69b7c866dfa4fd84b73a24d1c9192b641283413ad759e378cedd8281"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceInputFrames.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceInputFrames.olean",
+      "sha256": "599bc85c041cd4d22ee5794b1b020cd8c8c6256e3d6c8dd596ab49f91c6b9143"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/FamilySourceOnlyReduction.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/FamilySourceOnlyReduction.olean",
+      "sha256": "1973d16f7d35c9d67f7c8dd14a5bfd13bb0cddc1da72618b74bf9d4993ddacaa"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceFrameMatrix.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceFrameMatrix.olean",
+      "sha256": "1a8363e35b915f8d2a5e02e7f340a526ccfc0850c7260e06d61f1adfe9883366"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceCircuitResourceBounds.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/SourceCircuitResourceBounds.olean",
+      "sha256": "8743c8ecd6cc3074d17befb68fd578b57ccfb7771fe6e44a5311377ff26dff03"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/EffectCircuitLocations.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/EffectCircuitLocations.olean",
+      "sha256": "d37700a8bdb6ce95458e09e0ff8261654c665decccec2e46419860c511d39eab"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/OwnerOutputCoordinates.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/OwnerOutputCoordinates.olean",
+      "sha256": "0b45fd8765f852e3fa46db77c9275a7fbad447071a2906b5f9fa71832b9f0d9b"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/CorrectedSourcePartition.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean/PEPS/Approximation/CorrectedSourcePartition.olean",
+      "sha256": "91f2bde2d027fb621b97e25b3f47ed6856d29d5136fe62c3ea11f19f20d8b5cd"
+    },
+    {
+      "original": "/private/tmp/tnlean-source-resource-integration/artifacts/TNLean.olean",
+      "frozen": "/private/tmp/tnlean-actual-source-sampling/dependencies/TNLean.olean",
+      "sha256": "13feb03b79b5ffe20ba84f7e204f98432260c51cf4e1022af29b9de224bdd0e4"
+    }
+  ],
+  "readonly_links": 3906
+}

@@ -1,0 +1,57 @@
+{
+  "base_revision": "2f5a2d3f4163dd25caf8c0845bc81b6c5826493f",
+  "files": [
+    {
+      "path": "TNLean/PEPS/Approximation.lean",
+      "sha256": "5b3478be1849b2d40b888481bb7b85a5fed2b48436a87cbc39b30e342c08fa04"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ActualCorrectedSourceBound.lean",
+      "sha256": "d661ea1a9da6aa17153640856ac94df369550ec5c5925016b83373c4e2e4dca7"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ActualGaussianBranch.lean",
+      "sha256": "906b34a27a17edebade647419627e6ac281417aa92465ddad5cb1879b81718ab"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ActualSourceLifetimeBound.lean",
+      "sha256": "e98cad6315590bb4f9a796de1f933c4783093816282573e51c805d06f03564fc"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ActualSourcePolynomial.lean",
+      "sha256": "04960b6b5eaceba63ba75a02e86aea66da2189a5deb07e7b123c9323c7c4a000"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ActualSourceSampling.lean",
+      "sha256": "e12fc884ae7a8fc013a70ab0aba131dccaf4b3e3fa97b29a58e36d2b18b1a996"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean",
+      "sha256": "bfc14983ac095f466aca87a4a4b1a155c6ed7cb21e86a422ca5523e74527cdb1"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ExteriorPhysicalDimension.lean",
+      "sha256": "6218d5fbf66737939df19f41e6619f651e3ee64ba69ecc927efec897a3ae92ec"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/FiniteRegisterMemories.lean",
+      "sha256": "17fe2b97e77c47956ffb748fa3c881077b39c819dd30feb4dceada0c1d2634e1"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceSampleChoice.lean",
+      "sha256": "1b01be171cdc0412c5148b11277d4a182fff6521ae578432163a7a74d721c0c1"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean",
+      "sha256": "77e8ef17b3e1bea2847c5e74a1bb672ade6fe8c216817a80f843eadc970871f2"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_actual_source_sampling.tex",
+      "sha256": "3397594b73b3279938d6696866826dfbe0e2af27085b41da7569488f1420e4e2"
+    },
+    {
+      "path": "blueprint/src/content.tex",
+      "sha256": "f6e98e191397d1d8a7fdff7f3358ad610d4c512a6399a537cc0574e379f03ccd"
+    }
+  ]
+}

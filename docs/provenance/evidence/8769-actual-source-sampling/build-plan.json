@@ -1,0 +1,29 @@
+{
+  "selected_modules": [
+    "TNLean.PEPS.Approximation.ActualGaussianBranch",
+    "TNLean.PEPS.Approximation.ActualCorrectedSourceBound",
+    "TNLean.PEPS.Approximation.ExteriorPhysicalDimension",
+    "TNLean.PEPS.Approximation.FiniteRegisterMemories",
+    "TNLean.PEPS.Approximation.ActualSourceLifetimeBound",
+    "TNLean.PEPS.Approximation.SourceSampleChoice",
+    "TNLean.PEPS.Approximation.ActualSourceSampling",
+    "TNLean.PEPS.Approximation.SourceSamplingPolynomial",
+    "TNLean.PEPS.Approximation.ActualSourcePolynomial",
+    "TNLean.PEPS.Approximation.EffectReplacementPolynomial",
+    "TNLean.PEPS.Approximation",
+    "TNLean.PEPS",
+    "TNLean"
+  ],
+  "changed_modules": [
+    "TNLean.PEPS.Approximation.ActualCorrectedSourceBound",
+    "TNLean.PEPS.Approximation.ActualGaussianBranch",
+    "TNLean.PEPS.Approximation.ActualSourceLifetimeBound",
+    "TNLean.PEPS.Approximation.ActualSourcePolynomial",
+    "TNLean.PEPS.Approximation.ActualSourceSampling",
+    "TNLean.PEPS.Approximation.EffectReplacementPolynomial",
+    "TNLean.PEPS.Approximation.ExteriorPhysicalDimension",
+    "TNLean.PEPS.Approximation.FiniteRegisterMemories",
+    "TNLean.PEPS.Approximation.SourceSampleChoice",
+    "TNLean.PEPS.Approximation.SourceSamplingPolynomial"
+  ]
+}

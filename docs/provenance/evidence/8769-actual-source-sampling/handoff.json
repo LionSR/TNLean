@@ -1,0 +1,86 @@
+{
+  "status": "all sources frozen; strict and stock-axiom checks passed; independently mathematically reviewed",
+  "base_pr": "https://github.com/LionSR/TNLean/pull/8912",
+  "requires": "canonical source/resource/input/output integration currently checked and staged separately",
+  "coherent_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "root_imported_artifacts": "/private/tmp/tnlean-actual-corrected-bound/imported-artifacts.json",
+  "root_checks": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "sources": [
+    {
+      "module": "TNLean.PEPS.Approximation.ActualGaussianBranch",
+      "source": "/tmp/ActualGaussianBranch.lean",
+      "sha256": "4c3158ce5f67ad72d777bf2599798883f46c7a52cbc383a5ee4214afce428f60",
+      "public_declarations": 1
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ExteriorPhysicalDimension",
+      "source": "/tmp/ExteriorPhysicalDimension.lean",
+      "sha256": "06ac9b7ea5443fbf77c32ae636c9fd6ebb5e21abf70f2f405acdc2af7f5fe5f8",
+      "public_declarations": 2
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.FiniteRegisterMemories",
+      "source": "/tmp/FiniteRegisterMemories.lean",
+      "sha256": "681f2df502123c501c05ee6070d1d013db6772ec3d2a01924108910a0b9c8d82",
+      "public_declarations": 3
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.SourceSampleChoice",
+      "source": "/tmp/SourceSampleChoice.lean",
+      "sha256": "a355c34b6d33c7faf82a339c51f82143748396618c457addb6d9771104b549c9",
+      "public_declarations": 1
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.SourceSamplingPolynomial",
+      "source": "/tmp/SourceSamplingPolynomial.lean",
+      "sha256": "aa73247108c50b218f3d934eb41f05c1b585a335f29616cacc4949e1fcdfbfb9",
+      "public_declarations": 3
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ActualCorrectedSourceBound",
+      "source": "/tmp/ActualCorrectedSourceBound.lean",
+      "sha256": "10067a42942bcde4dd80dcefa30514b58cbfcb93cd60c7ae0b22dce3a86445fe",
+      "public_declarations": 1
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ActualSourceLifetimeBound",
+      "source": "/tmp/ActualSourceLifetimeBound.lean",
+      "sha256": "25a5d4c720130088cbfe1799050f9e4975004f287104b2bcbe769c4d30347e88",
+      "public_declarations": 1
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ActualSourceSampling",
+      "source": "/tmp/ActualSourceSampling.lean",
+      "sha256": "1b74d377dc108903436f949407db82a56f00c92d26f750184912457301d32afb",
+      "public_declarations": 1
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ActualSourcePolynomial",
+      "source": "/tmp/ActualSourcePolynomial.lean",
+      "sha256": "319db9aeb441264bc98edc59d472b5af6bb3897d15f6c40fa4ff0f472819cec7",
+      "public_declarations": 1
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.EffectReplacementPolynomial",
+      "source": "/tmp/EffectReplacementPolynomial.lean",
+      "sha256": "c4245d2dc71bff15ab5191cd2e7a791bd9285753e39a87cfe074128e655080c8",
+      "public_declarations": 4
+    }
+  ],
+  "blueprints": [
+    "/tmp/peps_actual_gaussian_branch_blueprint.tex",
+    "/tmp/peps_exterior_physical_dimension_blueprint.tex",
+    "/tmp/peps_actual_corrected_source_bounds_blueprint.tex",
+    "/tmp/peps_actual_source_sampling_blueprint.tex",
+    "/tmp/peps_actual_source_polynomial_blueprint.tex"
+  ],
+  "evidence_directories": [
+    "/private/tmp/tnlean-actual-gaussian-branch/actual-gaussian-branch-checks",
+    "/private/tmp/tnlean-actual-gaussian-branch/exterior-physical-dimension-checks",
+    "/private/tmp/tnlean-actual-corrected-bound",
+    "/private/tmp/tnlean-source-sample-choice/polynomial-verification-20261008",
+    "/private/tmp/tnlean-actual-source-polynomial/actual-source-polynomial-checks",
+    "/private/tmp/tnlean-actual-corrected-bound/effect-replacement-polynomial-checks"
+  ],
+  "base_revision": "2f5a2d3f4163dd25caf8c0845bc81b6c5826493f"
+}

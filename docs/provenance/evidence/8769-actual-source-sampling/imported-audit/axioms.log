@@ -1,0 +1,44 @@
+'TNLean.PEPS.PairEffect.SourceCircuit.integrable_actualGaussianBranch_and_integral_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.exteriorFamilyPhysicalBasis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.finrank_exteriorFamilyPhysicalLayout' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_of_registers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.sourceSamplingCount_lt_inv_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_gate_power_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_power_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_lifetime_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_polynomial_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_replacement_le_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_lt_of_power_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

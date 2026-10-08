@@ -1,0 +1,182 @@
+{
+  "original-sources/ActualSourceSampling.lean.gz": {
+    "uncompressed_sha256": "1b74d377dc108903436f949407db82a56f00c92d26f750184912457301d32afb",
+    "uncompressed_bytes": 4595
+  },
+  "original-sources/ActualSourceLifetimeBound.lean.gz": {
+    "uncompressed_sha256": "25a5d4c720130088cbfe1799050f9e4975004f287104b2bcbe769c4d30347e88",
+    "uncompressed_bytes": 4882
+  },
+  "original-sources/ActualSourcePolynomial.lean.gz": {
+    "uncompressed_sha256": "319db9aeb441264bc98edc59d472b5af6bb3897d15f6c40fa4ff0f472819cec7",
+    "uncompressed_bytes": 4916
+  },
+  "original-sources/ActualGaussianBranch.lean.gz": {
+    "uncompressed_sha256": "4c3158ce5f67ad72d777bf2599798883f46c7a52cbc383a5ee4214afce428f60",
+    "uncompressed_bytes": 6907
+  },
+  "original-sources/ActualCorrectedSourceBound.lean.gz": {
+    "uncompressed_sha256": "10067a42942bcde4dd80dcefa30514b58cbfcb93cd60c7ae0b22dce3a86445fe",
+    "uncompressed_bytes": 5112
+  },
+  "original-sources/EffectReplacementPolynomial.lean.gz": {
+    "uncompressed_sha256": "c4245d2dc71bff15ab5191cd2e7a791bd9285753e39a87cfe074128e655080c8",
+    "uncompressed_bytes": 4667
+  },
+  "original-sources/ExteriorPhysicalDimension.lean.gz": {
+    "uncompressed_sha256": "06ac9b7ea5443fbf77c32ae636c9fd6ebb5e21abf70f2f405acdc2af7f5fe5f8",
+    "uncompressed_bytes": 2669
+  },
+  "original-sources/FiniteRegisterMemories.lean.gz": {
+    "uncompressed_sha256": "681f2df502123c501c05ee6070d1d013db6772ec3d2a01924108910a0b9c8d82",
+    "uncompressed_bytes": 2981
+  },
+  "original-sources/SourceSamplingPolynomial.lean.gz": {
+    "uncompressed_sha256": "aa73247108c50b218f3d934eb41f05c1b585a335f29616cacc4949e1fcdfbfb9",
+    "uncompressed_bytes": 4480
+  },
+  "original-sources/SourceSampleChoice.lean.gz": {
+    "uncompressed_sha256": "a355c34b6d33c7faf82a339c51f82143748396618c457addb6d9771104b549c9",
+    "uncompressed_bytes": 3745
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceSamplingPolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualGaussianBranch.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualCorrectedSourceBound.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FiniteRegisterMemories.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementPolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourceSampling.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourcePolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourceLifetimeBound.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ExteriorPhysicalDimension.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceSampleChoice.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "45dbebded0291ca522e8b7782cd0cd2bed27a3a8440281067f337b821655e383",
+    "uncompressed_bytes": 603152
+  },
+  "imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "b075aad6c7a18e3afaeb1065c5cc043ccf41cd93a9637dd2dabd00281ddc75a8",
+    "uncompressed_bytes": 2653
+  },
+  "imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "00667ef54c4f07e10eea2fb769a2f6597c577520f857325bb404776ff9cfc6e5",
+    "uncompressed_bytes": 6475489
+  },
+  "declaration-check/lean_declarations.txt.gz": {
+    "uncompressed_sha256": "b15c52cd59cf8fe0e2c038adbb94dca5f541814c4099bb704c485dac8f95f95c",
+    "uncompressed_bytes": 1071400
+  },
+  "tactic-pattern-scan.log.gz": {
+    "uncompressed_sha256": "105ee4888a120bfeff773eaf587548b5ec9a763810e7c30933076ad844bb302c",
+    "uncompressed_bytes": 7002
+  },
+  "blueprint/TNLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "a48930934df5d99b6db285c2148c94cf22044006bf63cb650f4939f3fccb6380",
+    "uncompressed_bytes": 372140
+  },
+  "blueprint/QICLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "0d1e16a1a888d76396d5ab263d202b23d9653cebb131f550ac0f748bcd84f3b1",
+    "uncompressed_bytes": 98317
+  },
+  "blueprint/blueprint-source-sha256.json.gz": {
+    "uncompressed_sha256": "a80418eb2569499fa20c6eb34bb7785e5cf409357eae8aa0d774725dfe64809b",
+    "uncompressed_bytes": 85590
+  },
+  "blueprint/snapshot-commit-check.json.gz": {
+    "uncompressed_sha256": "29a861ed213e2ae111d8fa7caa9f9ad3576e0f653e1d40e043e892c5bf5b83b9",
+    "uncompressed_bytes": 465403
+  },
+  "blueprint/qic-snapshot-check.json.gz": {
+    "uncompressed_sha256": "77b999ab1cb8c00566b03e35e7399528a9eb2483998defe8daf4e747009a7014",
+    "uncompressed_bytes": 117
+  },
+  "blueprint/dependency-graph.json.gz": {
+    "uncompressed_sha256": "61faf0577c2e86988b82fdcb15344986a0e6b7f3d1eeef2ad997294296d6524f",
+    "uncompressed_bytes": 80
+  },
+  "blueprint/sync.json.gz": {
+    "uncompressed_sha256": "a82b7e3f2bee5c7948499d49710b6dbd4c3bd052e7d37710c46592ecd7aa9a94",
+    "uncompressed_bytes": 93172
+  },
+  "blueprint/full-lean-decls.txt.gz": {
+    "uncompressed_sha256": "b15c52cd59cf8fe0e2c038adbb94dca5f541814c4099bb704c485dac8f95f95c",
+    "uncompressed_bytes": 1071400
+  },
+  "blueprint/pdf.log.gz": {
+    "uncompressed_sha256": "7d478816d923fadf02ff019e8c7d1cae65a150ec19f9834c78ca798563be8d3a",
+    "uncompressed_bytes": 135622
+  },
+  "blueprint/browser.log.gz": {
+    "uncompressed_sha256": "e2410c6c5a4bfbb3e0c2298d1cfe633aa06927d8fa3dae76ea9a312682191b7b",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/bbl.log.gz": {
+    "uncompressed_sha256": "ec043f64e1d95e502600c20ac0ab2d48cd25db65d87599b2569ea6cd7bc0f4b7",
+    "uncompressed_bytes": 138
+  },
+  "blueprint/web.log.gz": {
+    "uncompressed_sha256": "61b478d25522a90a3c92a5958ee33fdbae963c85d02c2b8808c032189269355b",
+    "uncompressed_bytes": 4626
+  },
+  "blueprint/sync.log.gz": {
+    "uncompressed_sha256": "7e4d452eed03734b1b983caca8d3e3228d2b8d36d25d0ac291090f5e6ec6e02e",
+    "uncompressed_bytes": 43733
+  },
+  "blueprint/final-tex.log.gz": {
+    "uncompressed_sha256": "2d33b1a029f97b2bc626848e34ff3deecd7f2cb4e9743536eb369ee47ea12b9f",
+    "uncompressed_bytes": 72267
+  },
+  "blueprint/render-inputs/focused.tex.gz": {
+    "uncompressed_sha256": "ded944d2ec6ae4115aa78abff3031693353aefbdd8ebf1e295b31582341fb3a2",
+    "uncompressed_bytes": 53
+  },
+  "blueprint/render-inputs/content-focused.tex.gz": {
+    "uncompressed_sha256": "727ec1ba0ae7de6847ca450146fe9743bd114344449f611e0f01c342e0fd06da",
+    "uncompressed_bytes": 913
+  },
+  "blueprint/render-inputs/web.tex.gz": {
+    "uncompressed_sha256": "e03e5b81dbdd3c9fc7b5276d3dc79ede8176423a04155813ed4860500f3d5a73",
+    "uncompressed_bytes": 830
+  }
+}

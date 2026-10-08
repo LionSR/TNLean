@@ -1,0 +1,70 @@
+[
+  {
+    "name": "sync",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg/sync.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling",
+    "seconds": 2.859,
+    "returncode": 0,
+    "log_sha256": "7e4d452eed03734b1b983caca8d3e3228d2b8d36d25d0ac291090f5e6ec6e02e"
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "latexmk",
+      "-g",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg/blueprint/src",
+    "seconds": 14.616,
+    "returncode": 0,
+    "log_sha256": "7d478816d923fadf02ff019e8c7d1cae65a150ec19f9834c78ca798563be8d3a"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg",
+    "seconds": 0.232,
+    "returncode": 0,
+    "log_sha256": "ec043f64e1d95e502600c20ac0ab2d48cd25db65d87599b2569ea6cd7bc0f4b7"
+  },
+  {
+    "name": "web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg/blueprint",
+    "seconds": 7.679,
+    "returncode": 0,
+    "log_sha256": "61b478d25522a90a3c92a5958ee33fdbae963c85d02c2b8808c032189269355b"
+  },
+  {
+    "name": "browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-actual-source-sampling-blueprint-_5_0d5pg",
+    "seconds": 8.481,
+    "returncode": 0,
+    "log_sha256": "e2410c6c5a4bfbb3e0c2298d1cfe633aa06927d8fa3dae76ea9a312682191b7b"
+  }
+]

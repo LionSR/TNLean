@@ -1,0 +1,110 @@
+[
+  {
+    "id": "8769-actual-sampling-actualgaussianbranch-01",
+    "path": "TNLean/PEPS/Approximation/ActualGaussianBranch.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.integrable_actualGaussianBranch_and_integral_le",
+    "paper_label": "eq:compression-one-choice"
+  },
+  {
+    "id": "8769-actual-sampling-exteriorphysicaldimension-01",
+    "path": "TNLean/PEPS/Approximation/ExteriorPhysicalDimension.lean",
+    "declaration": "TNLean.PEPS.PairEffect.exteriorFamilyPhysicalBasis",
+    "paper_label": "eq:compression-exterior-contraction"
+  },
+  {
+    "id": "8769-actual-sampling-exteriorphysicaldimension-02",
+    "path": "TNLean/PEPS/Approximation/ExteriorPhysicalDimension.lean",
+    "declaration": "TNLean.PEPS.PairEffect.finrank_exteriorFamilyPhysicalLayout",
+    "paper_label": "eq:compression-exterior-contraction"
+  },
+  {
+    "id": "8769-actual-sampling-finiteregistermemories-01",
+    "path": "TNLean/PEPS/Approximation/FiniteRegisterMemories.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_of_registers",
+    "paper_label": "sec:compression"
+  },
+  {
+    "id": "8769-actual-sampling-finiteregistermemories-02",
+    "path": "TNLean/PEPS/Approximation/FiniteRegisterMemories.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner",
+    "paper_label": "sec:compression"
+  },
+  {
+    "id": "8769-actual-sampling-finiteregistermemories-03",
+    "path": "TNLean/PEPS/Approximation/FiniteRegisterMemories.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis",
+    "paper_label": "sec:compression"
+  },
+  {
+    "id": "8769-actual-sampling-sourcesamplechoice-01",
+    "path": "TNLean/PEPS/Approximation/SourceSampleChoice.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound",
+    "paper_label": "eq:compression-total-error"
+  },
+  {
+    "id": "8769-actual-sampling-sourcesamplingpolynomial-01",
+    "path": "TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean",
+    "declaration": "TNLean.PEPS.Approximation.sourceSamplingCount_lt_inv_pow",
+    "paper_label": "eq:compression-polynomial-bounds"
+  },
+  {
+    "id": "8769-actual-sampling-sourcesamplingpolynomial-02",
+    "path": "TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean",
+    "declaration": "TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_gate_power_bounds",
+    "paper_label": "eq:compression-polynomial-bounds"
+  },
+  {
+    "id": "8769-actual-sampling-sourcesamplingpolynomial-03",
+    "path": "TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean",
+    "declaration": "TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_power_bounds",
+    "paper_label": "eq:compression-polynomial-bounds"
+  },
+  {
+    "id": "8769-actual-sampling-actualcorrectedsourcebound-01",
+    "path": "TNLean/PEPS/Approximation/ActualCorrectedSourceBound.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le",
+    "paper_label": "eq:compression-one-choice"
+  },
+  {
+    "id": "8769-actual-sampling-actualsourcelifetimebound-01",
+    "path": "TNLean/PEPS/Approximation/ActualSourceLifetimeBound.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime",
+    "paper_label": "eq:compression-total-error"
+  },
+  {
+    "id": "8769-actual-sampling-actualsourcesampling-01",
+    "path": "TNLean/PEPS/Approximation/ActualSourceSampling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_lifetime_error_le",
+    "paper_label": "eq:compression-total-error"
+  },
+  {
+    "id": "8769-actual-sampling-actualsourcepolynomial-01",
+    "path": "TNLean/PEPS/Approximation/ActualSourcePolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_polynomial_error_le",
+    "paper_label": "eq:compression-polynomial-bounds"
+  },
+  {
+    "id": "8769-actual-sampling-effectreplacementpolynomial-01",
+    "path": "TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_replacement_le_power",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-actual-sampling-effectreplacementpolynomial-02",
+    "path": "TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-actual-sampling-effectreplacementpolynomial-03",
+    "path": "TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_eq",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-actual-sampling-effectreplacementpolynomial-04",
+    "path": "TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_lt_of_power_bounds",
+    "paper_label": "eq:compression-effect-circuit-error"
+  }
+]

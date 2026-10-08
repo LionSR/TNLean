@@ -1,0 +1,122 @@
+[
+  {
+    "original_module": "ActualGaussianBranch",
+    "original_path": "/tmp/ActualGaussianBranch.lean",
+    "original_sha256": "4c3158ce5f67ad72d777bf2599798883f46c7a52cbc383a5ee4214afce428f60",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ActualGaussianBranch.lean",
+        "sha256": "906b34a27a17edebade647419627e6ac281417aa92465ddad5cb1879b81718ab"
+      }
+    ]
+  },
+  {
+    "original_module": "ExteriorPhysicalDimension",
+    "original_path": "/tmp/ExteriorPhysicalDimension.lean",
+    "original_sha256": "06ac9b7ea5443fbf77c32ae636c9fd6ebb5e21abf70f2f405acdc2af7f5fe5f8",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ExteriorPhysicalDimension.lean",
+        "sha256": "6218d5fbf66737939df19f41e6619f651e3ee64ba69ecc927efec897a3ae92ec"
+      }
+    ]
+  },
+  {
+    "original_module": "FiniteRegisterMemories",
+    "original_path": "/tmp/FiniteRegisterMemories.lean",
+    "original_sha256": "681f2df502123c501c05ee6070d1d013db6772ec3d2a01924108910a0b9c8d82",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/FiniteRegisterMemories.lean",
+        "sha256": "17fe2b97e77c47956ffb748fa3c881077b39c819dd30feb4dceada0c1d2634e1"
+      }
+    ]
+  },
+  {
+    "original_module": "SourceSampleChoice",
+    "original_path": "/tmp/SourceSampleChoice.lean",
+    "original_sha256": "a355c34b6d33c7faf82a339c51f82143748396618c457addb6d9771104b549c9",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/SourceSampleChoice.lean",
+        "sha256": "1b01be171cdc0412c5148b11277d4a182fff6521ae578432163a7a74d721c0c1"
+      }
+    ]
+  },
+  {
+    "original_module": "SourceSamplingPolynomial",
+    "original_path": "/tmp/SourceSamplingPolynomial.lean",
+    "original_sha256": "aa73247108c50b218f3d934eb41f05c1b585a335f29616cacc4949e1fcdfbfb9",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean",
+        "sha256": "77e8ef17b3e1bea2847c5e74a1bb672ade6fe8c216817a80f843eadc970871f2"
+      }
+    ]
+  },
+  {
+    "original_module": "ActualCorrectedSourceBound",
+    "original_path": "/tmp/ActualCorrectedSourceBound.lean",
+    "original_sha256": "10067a42942bcde4dd80dcefa30514b58cbfcb93cd60c7ae0b22dce3a86445fe",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ActualCorrectedSourceBound.lean",
+        "sha256": "d661ea1a9da6aa17153640856ac94df369550ec5c5925016b83373c4e2e4dca7"
+      }
+    ]
+  },
+  {
+    "original_module": "ActualSourceLifetimeBound",
+    "original_path": "/tmp/ActualSourceLifetimeBound.lean",
+    "original_sha256": "25a5d4c720130088cbfe1799050f9e4975004f287104b2bcbe769c4d30347e88",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ActualSourceLifetimeBound.lean",
+        "sha256": "e98cad6315590bb4f9a796de1f933c4783093816282573e51c805d06f03564fc"
+      }
+    ]
+  },
+  {
+    "original_module": "ActualSourceSampling",
+    "original_path": "/tmp/ActualSourceSampling.lean",
+    "original_sha256": "1b74d377dc108903436f949407db82a56f00c92d26f750184912457301d32afb",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ActualSourceSampling.lean",
+        "sha256": "e12fc884ae7a8fc013a70ab0aba131dccaf4b3e3fa97b29a58e36d2b18b1a996"
+      }
+    ]
+  },
+  {
+    "original_module": "ActualSourcePolynomial",
+    "original_path": "/tmp/ActualSourcePolynomial.lean",
+    "original_sha256": "319db9aeb441264bc98edc59d472b5af6bb3897d15f6c40fa4ff0f472819cec7",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ActualSourcePolynomial.lean",
+        "sha256": "04960b6b5eaceba63ba75a02e86aea66da2189a5deb07e7b123c9323c7c4a000"
+      }
+    ]
+  },
+  {
+    "original_module": "EffectReplacementPolynomial",
+    "original_path": "/tmp/EffectReplacementPolynomial.lean",
+    "original_sha256": "c4245d2dc71bff15ab5191cd2e7a791bd9285753e39a87cfe074128e655080c8",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean",
+        "sha256": "bfc14983ac095f466aca87a4a4b1a155c6ed7cb21e86a422ca5523e74527cdb1"
+      }
+    ]
+  }
+]

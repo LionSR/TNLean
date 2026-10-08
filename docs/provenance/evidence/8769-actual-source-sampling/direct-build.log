@@ -1,0 +1,121 @@
+Direct Lean checks with the package options and warnings as errors.
+Source revision: 259f77aa9b246bb561684af69aa4c833aa3f1518
+Scope: complete affected 13-module TNLean import closure; no local Lake build.
+LEAN_PATH=/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean:/private/tmp/tnlean-actual-source-sampling/artifacts:/private/tmp/tnlean-artifact-recovery-20261008/gaussian/artifacts
+
+Source: TNLean/PEPS/Approximation/ActualGaussianBranch.lean
+Source SHA256: 906b34a27a17edebade647419627e6ac281417aa92465ddad5cb1879b81718ab
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/ActualGaussianBranch.olean TNLean/PEPS/Approximation/ActualGaussianBranch.lean
+Exit code: 0
+Elapsed seconds: 7.536
+Artifact SHA256: a53d64be3fc3f3aaa01d8ec9e9cb4bebe0c6968a9617948e7522390ffafb0447
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/ActualCorrectedSourceBound.lean
+Source SHA256: d661ea1a9da6aa17153640856ac94df369550ec5c5925016b83373c4e2e4dca7
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/ActualCorrectedSourceBound.olean TNLean/PEPS/Approximation/ActualCorrectedSourceBound.lean
+Exit code: 0
+Elapsed seconds: 3.612
+Artifact SHA256: da8323d804b04383b3623e984d74d9288c85b3bc569f9b906ff872f1ea8fe67f
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/ExteriorPhysicalDimension.lean
+Source SHA256: 6218d5fbf66737939df19f41e6619f651e3ee64ba69ecc927efec897a3ae92ec
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/ExteriorPhysicalDimension.olean TNLean/PEPS/Approximation/ExteriorPhysicalDimension.lean
+Exit code: 0
+Elapsed seconds: 2.494
+Artifact SHA256: 5ce2eeff2f6b1eeba5a7e63e24936016d1290923611e6bb246ed6ef51158b13d
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/FiniteRegisterMemories.lean
+Source SHA256: 17fe2b97e77c47956ffb748fa3c881077b39c819dd30feb4dceada0c1d2634e1
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/FiniteRegisterMemories.olean TNLean/PEPS/Approximation/FiniteRegisterMemories.lean
+Exit code: 0
+Elapsed seconds: 2.445
+Artifact SHA256: 2a69583d4b4c99a8f66761bdbd3982db664a8a7cab6ee09ce212d7fb6f973e93
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/ActualSourceLifetimeBound.lean
+Source SHA256: e98cad6315590bb4f9a796de1f933c4783093816282573e51c805d06f03564fc
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/ActualSourceLifetimeBound.olean TNLean/PEPS/Approximation/ActualSourceLifetimeBound.lean
+Exit code: 0
+Elapsed seconds: 3.232
+Artifact SHA256: f2bdf0593162378e29fde3b952184282710c68603b791c4cb43932b098bc16a2
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceSampleChoice.lean
+Source SHA256: 1b01be171cdc0412c5148b11277d4a182fff6521ae578432163a7a74d721c0c1
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/SourceSampleChoice.olean TNLean/PEPS/Approximation/SourceSampleChoice.lean
+Exit code: 0
+Elapsed seconds: 3.197
+Artifact SHA256: 68e078fe4f9d395fae157de42b610fe955170acb273fcdc25ec9d4d62f0ffbf8
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/ActualSourceSampling.lean
+Source SHA256: e12fc884ae7a8fc013a70ab0aba131dccaf4b3e3fa97b29a58e36d2b18b1a996
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/ActualSourceSampling.olean TNLean/PEPS/Approximation/ActualSourceSampling.lean
+Exit code: 0
+Elapsed seconds: 3.718
+Artifact SHA256: bde4db6f639c4fc66d1150a2bf153e7731bef3104201cba51202e102215d6888
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean
+Source SHA256: 77e8ef17b3e1bea2847c5e74a1bb672ade6fe8c216817a80f843eadc970871f2
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/SourceSamplingPolynomial.olean TNLean/PEPS/Approximation/SourceSamplingPolynomial.lean
+Exit code: 0
+Elapsed seconds: 3.263
+Artifact SHA256: 084e0783a32bc4ff5695df05c739c68bc333ba453fc500b6df128f1315272c10
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/ActualSourcePolynomial.lean
+Source SHA256: 04960b6b5eaceba63ba75a02e86aea66da2189a5deb07e7b123c9323c7c4a000
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/ActualSourcePolynomial.olean TNLean/PEPS/Approximation/ActualSourcePolynomial.lean
+Exit code: 0
+Elapsed seconds: 3.828
+Artifact SHA256: f2bb94d06e751c4b02b505455dd2d594f6a7035dc032f49a84853c5b6251326e
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean
+Source SHA256: bfc14983ac095f466aca87a4a4b1a155c6ed7cb21e86a422ca5523e74527cdb1
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation/EffectReplacementPolynomial.olean TNLean/PEPS/Approximation/EffectReplacementPolynomial.lean
+Exit code: 0
+Elapsed seconds: 3.188
+Artifact SHA256: 683003727425788ed60709b80d30f328e41809158ab6b34682046190cd94ce4c
+Diagnostics: none.
+
+Source: TNLean/PEPS/Approximation.lean
+Source SHA256: 5b3478be1849b2d40b888481bb7b85a5fed2b48436a87cbc39b30e342c08fa04
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS/Approximation.olean TNLean/PEPS/Approximation.lean
+Exit code: 0
+Elapsed seconds: 4.035
+Artifact SHA256: c459791a3be69a09fad11d3106a876cd81ad0305f4d22282f9d8e70ed6ead1c5
+Diagnostics: none.
+
+Source: TNLean/PEPS.lean
+Source SHA256: 55514d8b59105f8da498f59432ef8dfcbe9e9817a8208b14457fade89da7f9dc
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean/PEPS.olean TNLean/PEPS.lean
+Exit code: 0
+Elapsed seconds: 20.327
+Artifact SHA256: c6f79e4a1aaa87e1c579c4c53a2a14562f3e07693b021b1c93d85f7829c8a886
+Diagnostics: none.
+
+Source: TNLean.lean
+Source SHA256: 9ab4dd293ef89b70bc7d650db97440837a42c4852f1fb5282925372e551f754a
+Working directory: /Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-actual-source-sampling
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-actual-source-sampling/artifacts/TNLean.olean TNLean.lean
+Exit code: 0
+Elapsed seconds: 10.076
+Artifact SHA256: 13feb03b79b5ffe20ba84f7e204f98432260c51cf4e1022af29b9de224bdd0e4
+Diagnostics: none.

@@ -1,0 +1,20 @@
+{
+  "TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_of_registers": 1,
+  "TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner": 1,
+  "TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis": 1,
+  "TNLean.PEPS.PairEffect.exteriorFamilyPhysicalBasis": 1,
+  "TNLean.PEPS.PairEffect.finrank_exteriorFamilyPhysicalLayout": 1,
+  "TNLean.PEPS.PairEffect.SourceCircuit.integrable_actualGaussianBranch_and_integral_le": 1,
+  "TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le": 1,
+  "TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime": 1,
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound": 1,
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_lifetime_error_le": 1,
+  "TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_power_bounds": 1,
+  "TNLean.PEPS.Approximation.sourceSamplingCount_lt_inv_pow": 1,
+  "TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_gate_power_bounds": 1,
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_polynomial_error_le": 1,
+  "TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_eq": 1,
+  "TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_lt_of_power_bounds": 1,
+  "TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_replacement_le_power": 1
+}
