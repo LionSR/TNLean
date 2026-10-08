@@ -90,6 +90,7 @@ import TNLean.MPS.Symmetry.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.PhysicalInteractionGap
 import TNLean.MPS.Symmetry.PhysicalInteractionGroundSpace
+import TNLean.MPS.Symmetry.PhysicalIsometricGapTransport
 import TNLean.MPS.Symmetry.PhysicalMatrixBondCovariance
 import TNLean.MPS.Symmetry.PhysicalSchmidtSupport
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondExtension

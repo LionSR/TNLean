@@ -116,6 +116,20 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
     simp only [cyclicBondProjectionFactor]
     rw [ite_eq_right (by omega), Matrix.one_apply, ite_eq_right (Ne.symm hστ)]
 
+/-- Translates of a tensor-square one-site operator commute. The one-site
+operator need not be a projection: at each position the two factors are
+copies of that same operator or the identity. -/
+theorem embed_twoSiteSectorProjection_commute
+    (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
+    Commute (embedLocalOperator 2 N hN i (twoSiteSectorProjection P))
+      (embedLocalOperator 2 N hN j (twoSiteSectorProjection P)) := by
+  unfold Commute SemiconjBy
+  simp only [embed_twoSiteSectorProjection_eq_finKronecker, Matrix.finKronecker_mul]
+  congr 1
+  funext n
+  simp only [cyclicBondProjectionFactor]
+  split_ifs <;> simp
+
 private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
     (l : List (Fin N → Matrix (Fin d) (Fin d) ℂ)) (hl : l ≠ []) :
     (l.map Matrix.finKronecker).prod =

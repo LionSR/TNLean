@@ -20,12 +20,15 @@ from pathlib import Path
 from playwright.sync_api import Page, Route, sync_playwright
 
 
-EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3]
-PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
+EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3] + [2, 2]
+PAGES = (
+    "ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html", "ch-mpo_symmetry_basics.html"
+)
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 8,
     "ch-mpdo.html": 4,
     "ch-mpdo_rfp.html": 7,
+    "ch-mpo_symmetry_basics.html": 2,
 }
 
 
