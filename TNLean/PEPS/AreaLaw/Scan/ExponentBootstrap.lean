@@ -29,16 +29,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026, OpenAI, A two-dimensional area law from a global spectral gap.
-Manuscript section: 08-scanner.tex.
-Labels: prop:small-box; scanner:bootstrap-parameters; scanner:bootstrap-energy.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.exists_uniform_boxerror_bound_of_eventual_improvement
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement
--/
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {ι : Type*} {F : ι → ℕ → ℝ}

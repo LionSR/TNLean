@@ -29,31 +29,6 @@ no upstream Lean proof text is reused.
 
 noncomputable section
 
-/-
-Source: September 24, 2026, OpenAI, A two-dimensional area law from a global spectral gap.
-Manuscript section: 08-scanner.tex.
-Labels: prop:small-box; scanner:bootstrap-parameters; scanner:bootstrap-energy.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.g0
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.mu
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.mu
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.nu
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.nu
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.ell
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.ell
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.kappa
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.kappa
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.parameter_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.density_exponents
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.density_exponents
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.energy_exponents
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.energy_exponents
-Provenance-ID: 8756-tnlean.peps.arealaw.scan.bootstrapparameters.comparison_exponents
-Downstream declaration: TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.comparison_exponents
--/
-
 namespace TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 
 /-- The fixed gap `g₀ = (1 - e₀) / 2` from `scanner:bootstrap-parameters`. -/
