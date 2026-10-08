@@ -55,6 +55,67 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.conjTranspose_mul_unitary` in `TNLean/Algebra/MatrixUnitaryConjCFC.lean`.
 - **Refactor:** the MPU module imports the algebra module.
 
+### Connectivity from two run-support memberships — promoted (2026-10-08)
+
+- **Pattern:** Convert membership of two fan slots in one run's support into
+  equality of their connected-component identifiers before applying colour
+  constancy.
+- **Seen:** Three transfers in `BeltRunInterfaces.lean` and one in
+  `DummyRunInterfaces.lean`.
+- **Abstraction:** Mathlib already provides
+  `SimpleGraph.ConnectedComponent.reachable_of_mem_supp` and
+  `SimpleGraph.ConnectedComponent.eq`. Their composition replaces all four
+  manual pairs of support-membership equalities. No additional theorem or
+  tactic is needed.
+- **Notes:** The two existing belt-interface statements are unchanged. Both
+  receive fresh whole-file verification with the dummy-interface contribution.
+
+### Boundary geometry of an elementary side — promoted (2026-10-07)
+
+- **Pattern:** Derive nondegeneracy and the constant square-boundary coordinate
+  of an elementary side, allowing arbitrary midpoint subdivisions.
+- **Seen:** The two opposing-region existence cases in
+  `ElementarySideOpponents.lean` and the opposing-region uniqueness proof in
+  `ElementarySideOpponentUniqueness.lean`.
+- **Abstraction:** `cellFan_elementary_geometry` promotes the existing private
+  statement and proof unchanged in `ElementarySideOpponents.lean`. The two
+  existing callers and the new uniqueness proof use this common theorem.
+- **Notes:** No compatibility alias or additional hypothesis is introduced.
+  The existing existence statement is unchanged; its complete source file
+  receives fresh verification with the two new declarations.
+
+### Four orientations of fine-cell endpoints — promoted (2026-10-07)
+
+- **Pattern:** Identify the ordered whole-side endpoints from the cell center
+  and side vectors, then recognize the two endpoints as binary cell corners.
+- **Seen:** The coordinate calculation in `CellContacts`, the full-mesh
+  witnesses in `DummyCorners`, and the corner witnesses in `ActualSideMatching`.
+- **Abstraction:** `cellFan_unsplit_endpoints_coordinates` and
+  `cellFan_unsplit_endpoints_are_corners` in `SideEndpoints.lean`. The existing
+  coordinate statement and proof move unchanged to their shared owner; the
+  corner witnesses follow from that formula.
+- **Refactor:** All three callers use the shared lemmas. The promotion removes
+  38 net lines from `CellContacts`, 30 from `DummyCorners`, and the 25-line
+  private corner table from `ActualSideMatching`; the shared owner has 88
+  lines. The five older public statements stay unchanged.
+- **Notes:** A scoped pattern scan of the five completed proof modules finds
+  the remaining whole-side and half-side rectangle conversions only within
+  `CellContacts`, below the threshold across two files. No new tactic or
+  compatibility alias is introduced.
+
+### Actual fine-cell containment in a layer — promoted (2026-10-07)
+
+- **Pattern:** Rewrite the exact union over actual fine-layer indices and insert
+  the indexed cell as one summand.
+- **Seen:** Three copies in `NonbeltPrimaries.lean`,
+  `FineMarkSeparation.lean` and `SideSubdivision.lean`.
+- **Abstraction:**
+  `TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices`
+  in `LayerPartition.lean`. It requires only the aligned exponents and actual
+  index membership, including empty layers and arbitrary origins and radii.
+- **Refactor:** All three callers use the lemma. The closure callers apply
+  `closure_mono` to the same containment conclusion. No theorem statement changes.
+
 ### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
 
 - **Pattern:** Rewrite the quasi-local MPS expectation of an interval
@@ -3527,6 +3588,21 @@ three-plaquette output measurement, and the routed reunion measurement.
   2026-10-06) proves simplicity from three scalar pairings; the shift's own simplicity proof
   (`rightShiftTensor_isMPUSimple`) has this form and could be replaced by it.
 
+### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
+
+- **Pattern:** Choose one cell in the finite closed neighborhood union, then
+  an endpoint in its occupied neighboring cell, and apply the closed-cell
+  distance bound.
+- **Seen:** The private neighborhood witness in `DistanceLayers.lean` and
+  the public `dyadicNeighborhood_exists_dist_le` in `DummyContacts.lean`.
+- **Current reuse:** New consumers use the public theorem. The earlier verified
+  module is preserved; this is the second occurrence, below the promotion
+  threshold.
+- **Promotion trigger:** If a third occurrence is needed, use the public
+  theorem and replace the earlier private copy in one separately verified
+  contribution.
+
+
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
 - **Sites:** `ThetaBondCoordinates` and `ThetaBondOrthonormalCoordinates`.
@@ -5682,6 +5758,173 @@ spectral split → block extraction → MPV calculation → strict bounds
   it never cancels an identity extension or assumes that the outside factor is
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
+
+### Dyadic refinement cardinality bounds — candidate (2026-10-07)
+
+- **Pattern:** Rewrite an exact refined-cell cardinality as the coarse count
+  times the number of descendants, multiply a coarse-cell bound by that
+  nonnegative factor, and rearrange the scalar factors.
+- **Seen:** `card_fineLayerIndices_le` and
+  `card_fineLayerIndices_boundary_le` in
+  `PEPS/AreaLaw/Geometry/DyadicRefinement.lean` (two occurrences).
+- **Abstraction:** `card_fineLayerIndices` already contains the exact
+  subdivision formula. The two inequalities use the existing coarse bounds
+  and `Nat.mul_le_mul_left`; no further helper is needed at present.
+- **Notes:** Both occurrences lie in one file, below the promotion threshold.
+  The proof-session scan reports no exact repeated block in the three new
+  fine-belt modules at its default thresholds.
+
+
+### Normalizing the three nonvertical allowed slopes — candidate (2026-10-07)
+
+- **Pattern:** After specializing an integer line slope to zero, one or minus one,
+  unfold the coordinate equality and close the scalar equation with
+  `dsimp at hs; norm_num; linarith`.
+- **Seen:** Three occurrences in `Geometry/MeshGeometry.lean`, in the horizontal
+  and two diagonal cases of `affineMesh_line_dist_ge`.
+- **Abstraction:** The shared line-distance argument already uses
+  `nonvertical_mesh_line_dist_ge`. Consider consolidating the remaining slope
+  normalization if it recurs in another file; the current occurrences are in
+  one file and do not meet the two-file promotion condition.
+- **Notes:** The October 7 Geometry scan detected these three short blocks.
+
+### Rectangle corners and elementary midpoints — candidate (2026-10-07)
+
+- **Pattern:** Express the four corners of a rectangle and the two coordinates
+  of the midpoint of an elementary side to compare open and closed rectangles.
+- **Seen:** The private `rectangleCorner` and `midpoint_coordinates` helpers in
+  `ElementarySideOpponents.lean` and `ElementarySideOpponentUniqueness.lean`.
+- **Abstraction:** Two occurrences across two files, below the promotion
+  threshold. Reuse a shared geometric statement if a third proof needs these
+  calculations; do not copy the coordinate table again.
+- **Notes:** The existence proof extends midpoint containment to an entire
+  side, while uniqueness compares three rectangles. Their common elementary
+  boundary geometry has already been promoted separately.
+
+### Cell-side parametrization — promoted (2026-10-08)
+
+- **Pattern:** Parametrize the four sides of an axis-parallel square by the
+  match `(1, w)`, `(-w, 1)`, `(-1, -w)`, `(w, -1)` scaled about its center.
+- **Seen:** A private `sideVector` in `Geometry/CellFans.lean`, a second private
+  copy in `Geometry/ActualSideMatching.lean`, and the same match written out
+  three times in the statement of `side_interpolation` in
+  `Geometry/SideSubdivisionMask.lean`.
+- **Abstraction:** `cellFanSideVector` in `Geometry/CellFans.lean` is now public.
+  The side-matching module uses it in place of its private copy, and
+  `side_interpolation` states the whole-side interpolation in terms of it.
+- **Notes:** The tangent and normal coordinates in `ActualSideMatching.lean`
+  remain private to that module; no second consumer needs them.
+
+### Marked-endpoint segment containment — candidate (2026-10-07)
+
+- **Pattern:** Put two marked endpoints in a closed dyadic square and use
+  `Convex.segment_subset` to contain their segment in that square.
+- **Seen:** The private whole-side containment in `SideSubdivision.lean` and
+  `segment_contact_of_marks` in `ElementarySideReciprocity.lean`.
+- **Abstraction:** Two computations across two files, below the promotion
+  threshold. The reciprocal module shares its one private helper across
+  three uses, adding nontrivial contact when the endpoints are distinct.
+- **Notes:** Mathlib supplies the interval and product convexity statements.
+  Future fan-base containment can instead follow directly from the actual
+  triangle's convex hull and the existing fan-cover theorem. Do not copy the
+  marked-endpoint calculation into a third file.
+
+### First and last elementary endpoints — promoted (2026-10-08)
+
+- **Pattern:** Identify the first and last half-slot endpoints by specializing
+  the indexed affine parameters of a whole side.
+- **Seen:** `first_half_endpoints` and `last_half_endpoints` in
+  `Geometry/FanRunContacts.lean`, and the two successor endpoint cases in
+  `Geometry/CellFanCycle.lean`.
+- **Abstraction:** `cellFan_elementary_endpoints_lineMap` in
+  `Geometry/SideSubdivisionMask.lean` exposes the existing full parameter
+  statement and proof unchanged. Both old private endpoint proofs and the
+  new successor proof specialize this pair. Their signatures and existing
+  callers are unchanged; no second scalar calculation is copied.
+- **Notes:** The related midpoint reachability step in `FanRuns.lean` has
+  a different conclusion and remains unchanged. The successor proof also
+  uses the existing whole-side coordinates at consecutive corners.
+
+### Infinitude of a nondegenerate real segment — candidate (2026-10-08)
+
+- **Pattern:** Express a real segment as the affine image of $[0,1]$;
+  distinct endpoints make the affine map injective and preserve infinitude.
+- **Seen:** The private `segment_infinite` in `BeltRunInterfaces.lean` and
+  the local infinitude argument in `DummyRunInterfaces.lean`.
+- **Abstraction:** Two instances in two files are below the promotion
+  threshold. A third consumer should first search Mathlib for a direct
+  infinitude lemma, then share the minimal geometric consequence if needed.
+- **Notes:** The interface proofs require an actual nondegenerate segment;
+  two isolated points of a disconnected intersection are insufficient.
+
+
+### Excluding integer-translated scalar equalities — candidate (2026-10-08)
+
+- **Pattern:** Subtract the integer translation from a coordinate equality,
+  convert the resulting integer expression to a real expression, and apply
+  the established nonintegrality assertion.
+- **Seen:** Four branches of
+  `dyadicOrigin_supporting_lines_avoid_lattice` in `Geometry/DyadicOrigin.lean`.
+- **Abstraction:** These branches occur in one file and do not meet the
+  two-file promotion condition. They share the existing four-part
+  nonintegrality theorem; no additional exported theorem is needed here.
+- **Notes:** The four equations concern the two coordinates, their sum and
+  their difference. They establish line avoidance; classifying actual edges
+  remains a separate geometric argument.
+
+### Single-cell specializations of the quarter mesh — promoted (2026-10-08)
+
+- **Pattern:** Pass from marks in one cell to the quarter mesh, either pointwise
+  or as a set inclusion, including the unit-spacing specialization.
+- **Seen:** The private helpers `cellMark_mem_quarter_mesh` in
+  `FineMarkSeparation.lean`, `mark_mem_unitMesh` in
+  `InitialRegionBoundaries.lean`, and `cellMarks_subset_quarter_mesh` in
+  `NearMarkGeometry.lean`.
+- **Abstraction:** All three already use the public
+  `beltMarks_subset_affineMesh` in `MeshGeometry.lean`. The new set-level
+  application uses Mathlib's `Finset.singleton_biUnion` to specialize the
+  finite-family theorem. The coordinate argument remains in its existing
+  shared owner.
+- **Notes:** These are short pointwise or set-level applications of the same
+  theorem. No coordinate table is copied, and no further export or tactic is
+  needed. The existing pointwise applications remain unchanged.
+
+### Square-frontier whole-side extraction — promoted (2026-10-08)
+
+- **Pattern:** Pass from a boundary point of a half-open dyadic square to
+  one of its four closed whole sides.
+- **Seen:** The dummy-contact proof in `DummyRunInterfaces.lean` and the
+  actual nearby-frontier proof in `InitialStarFrontiers.lean`.
+- **Abstraction:** `exists_dyadicCellSide_of_mem_frontier` in `CellSides.lean`
+  shares the original product-frontier proof unchanged. The consumers use
+  the actual side endpoints and the slopes already carried by the triangles.
+- **Notes:** The proposed third marked-endpoint containment calculation was
+  removed from the nearby-frontier proof. Its radial point belongs to the
+  closed defining cell by the actual fan cover and closure monotonicity;
+  the existing segment-containment candidates remain at two old instances.
+
+- **Promoted: actual fan interiors and base distance.**
+  `cellFanPolygon_interior_nonempty_and_closure_eq` in
+  `PEPS/AreaLaw/Geometry/FanRegularity.lean` shares the existing determinant
+  proof of nonempty triangle interior and its closure equality. Both old
+  initial-regularity callers use it. The existing base-distance proof in
+  CellFans is public as `norm_sub_cellFanCenter_of_mem_base`, so concentric
+  restriction uses the same actual base without another coordinate argument.
+  The three existing callers are renamed; both complete proofs are unchanged.
+
+### Radial membership from triangle contact — candidate (2026-10-08)
+
+- **Pattern:** Transport membership in two intersecting fan triangles through
+  their contact equality, with an explicit radial-segment type, before
+  identifying the fan center with the marked point.
+- **Seen:** The two contact orientations in
+  `initialRegion_frontier_near_mark_iff_active_radial` in
+  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`.
+- **Abstraction:** Two branches in one file are below the promotion threshold.
+  The explicit intermediate statements keep the geometric argument readable.
+  A further consumer should first seek a shared contact-membership lemma.
+- **Notes:** The two branches use the existing intersection classification;
+  neither repeats a coordinate calculation.
 
 ### Ordered regularized regional filters — candidate (2026-10-07)
 

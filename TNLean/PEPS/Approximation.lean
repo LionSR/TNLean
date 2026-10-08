@@ -12,6 +12,7 @@ import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CompletePartyMaps
+import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.Approximation.CorrectedPositionCost
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
@@ -61,12 +62,15 @@ import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PreparedPartyMaps
+import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
+import TNLean.PEPS.Approximation.SourceApproximation
 import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction

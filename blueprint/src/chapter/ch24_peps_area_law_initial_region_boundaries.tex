@@ -1,0 +1,91 @@
+\section{Initial boundaries and lattice membership}
+\label{sec:area_law_initial_region_boundaries}
+
+Use the prescribed origin $o=(\sqrt2,\sqrt3)$ and the actual initial
+birth regions $X_i^0$ of \cite[Section~11]{OpenAI2026AreaLaw}. Fix a
+finite endpoint set, integer width $C\ge 2$ and initial layer
+$k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
+
+% Source: 10-geometry.tex, prop:two-families, lines 154--177,
+% 212--218, 299--323 and 545--559,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These entries concern initial boundaries, without a nonempty endpoint premise.
+
+\begin{theorem}[Initial birth boundaries avoid the lattice]
+    \label{thm:area_law_initial_birth_boundary_lattice}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_avoid_lattice}
+    \leanok
+    \uses{def:area_law_initial_birth_regions,def:area_law_dyadic_origin}
+    For every actual initial identifier $i$,
+    $\partial X_i^0\cap\mathbb Z^2=\varnothing$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_cover,thm:area_law_fan_triangle_contact,
+        thm:area_law_cell_fan_intersections,thm:area_law_cell_fan_mark_vertices,
+        thm:area_law_belt_marks_quarter_mesh,thm:area_law_primary_fine_cell_cover,
+        thm:area_law_dyadic_origin_lines,def:area_law_initial_birth_regions}
+    First allow an arbitrary origin. Every dyadic square boundary lies
+    on a line $x_1=o_1+m$ or $x_2=o_2+m$ with $m\in\mathbb Z$,
+    since its side length is an integer power of two. The boundary of
+    a finite union is contained in the union of its members' boundaries,
+    and $\partial\overline E\subseteq\partial E$. The dummy region and
+    the exact finite closed-cell decomposition of each primary therefore
+    have boundaries on these coordinate lines.
+
+    For a fan triangle $P_e$ in a square $Q$, its boundary satisfies
+    \begin{align}
+        \partial P_e
+         & \subseteq\partial Q\cup\bigcup_{f\ne e}(P_e\cap P_f).
+    \end{align}
+    Indeed, the finite closed fan covers $\overline Q$. A boundary
+    point of $P_e$ away from $\partial Q$ and all other triangles
+    would have an open neighborhood in $\operatorname{int}(Q)$
+    contained in $P_e$, a contradiction. Each intersection with another
+    triangle is a radial segment or the common center. At every actual
+    layer $k\ge k_0$, the fine exponent $\ell_k$ is at least one.
+    The center and elementary endpoints are marks, and the mark-mesh
+    theorem with spacing one places them in $o+\mathbb Z^2$.
+    Each radial direction has an allowed slope. Thus its segment lies
+    on an integer translate of one of the four lines with linear forms
+    $x_1$, $x_2$, $x_1+x_2$ and $x_1-x_2$.
+
+    A run has finitely many triangles, so its boundary is contained in
+    their boundary union. This gives the four supporting-line forms for
+    every initial birth boundary; no finiteness of the ambient identifier
+    family is used. At $o=(\sqrt2,\sqrt3)$, every such integer-translated
+    line avoids $\mathbb Z^2$, proving the assertion.
+\end{proof}
+
+\begin{theorem}[Initial open boundaries avoid the lattice]
+    \label{thm:area_law_initial_open_boundary_lattice}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion_frontier_avoid_lattice}
+    \leanok
+    \uses{def:area_law_initial_open_regions,def:area_law_dyadic_origin}
+    Every actual initial identifier $i$ satisfies
+    $\partial\operatorname{int}(X_i^0)\cap\mathbb Z^2=\varnothing$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_birth_boundary_lattice,
+        def:area_law_initial_open_regions}
+    The inclusion
+    $\partial\operatorname{int}(X_i^0)\subseteq\partial X_i^0$
+    transfers the birth-boundary avoidance to the open region.
+\end{proof}
+
+\begin{theorem}[Closed and open membership agree at lattice points]
+    \label{thm:area_law_initial_lattice_membership}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_lattice_mem_iff_initialOpenRegion}
+    \leanok
+    \uses{def:area_law_initial_birth_regions,def:area_law_initial_open_regions,
+        def:area_law_dyadic_origin}
+    For every identifier $i$ and every $v\in\mathbb Z^2$,
+    $v\in X_i^0$ if and only if $v\in\operatorname{int}(X_i^0)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_birth_boundary_lattice,
+        def:area_law_initial_open_regions}
+    A point in $X_i^0$ outside its boundary is an interior point.
+    Birth-boundary avoidance gives this implication at every lattice
+    point. The converse is the inclusion
+    $\operatorname{int}(X_i^0)\subseteq X_i^0$.
+\end{proof}
