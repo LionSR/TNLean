@@ -143,7 +143,8 @@ DRY_RUN="false"
 if test "${TNLEAN_LAKE_LOCK_HELD:-}" != "1"; then
   # Keep the locked file description through cache fetch and APFS cloning.
   exec 9<>"$REPO_COMMON_DIR/tnlean-lake-cache.lock"
-  /usr/bin/lockf 9
+  # macOS lockf polls in descriptor mode; flock waits in the kernel instead.
+  python3 -c 'import fcntl; fcntl.flock(9, fcntl.LOCK_EX)'
   export TNLEAN_LAKE_LOCK_HELD=1
 fi
 
