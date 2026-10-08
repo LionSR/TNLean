@@ -5812,3 +5812,29 @@ spectral split → block extraction → MPV calculation → strict bounds
   and `sub_add_sub_cancel`. Before a third independent use, look for a public
   rectangular trace-norm difference estimate in QICLean; if none exists, promote
   the short estimate there and replace both calculations. No new tactic is needed.
+
+
+### Evaluation with spectator registers — promoted (2026-10-08)
+
+- **Pattern:** Induct on the retained register list and then on its tensor vector
+  to identify evaluation with the identity on the retained memory.
+- **Seen:** `SourceCircuit.eval_frameList_tmul` in `EffectCircuitPreparation`,
+  the private copy in `FullChronologicalPreparation`, and
+  `Word.eval_frameList_tmul` in `SourcePrivatePreparation`.
+- **Reuse:** Move the existing public word theorem, with its unchanged proof, to
+  `WordFrameList`. The full chronological preparation uses it directly, and the
+  private-input preparation continues to use the same public name. Remove the
+  private duplicate from `FullChronologicalPreparation`.
+- **Notes:** The inherited source-circuit theorem concerns a different recursive
+  construction and is unchanged. The word identity now has one proof and two
+  consumers. Its induction uses the existing tensor induction and linear-map
+  laws; no new tactic is introduced.
+
+- **Further source scan:** Four repeated decompositions of membership in an
+  owner-mapped register list, in `InvisibleRestriction` and
+  `SourcefulInvisibleRestriction`, are replaced by the existing
+  `List.forall_mem_map`. An unused private copy of the empty restricted-layout
+  lemma is removed. The remaining two filter proofs have different hypotheses
+  (all original owners versus owners of the given registers). Short equality
+  eliminations follow the existing congruence-after-identifying-memories entry;
+  they express defining equations of distinct constructions.

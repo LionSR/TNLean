@@ -1,0 +1,102 @@
+\section{Sampled source factors on participant pairs}
+\label{sec:peps_sampled_source_factors}
+
+We retain the original source occurrence $e=(g,i)$, its ordered ket--bra
+labels, and the common sample index in each pair of local source factors.
+This is the source representation used in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+The formulas below identify the source factors and their actual labels;
+the equality of the resulting network contraction with the sampled
+physical operator is a separate assertion.
+
+\begin{definition}[The two factors of a sampled source]
+    \label{def:peps_sampled_endpoint_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft,
+        TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight,
+        TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average}
+    \leanok
+    \uses{def:peps_source_gaussian_law}
+    Fix arbitrary real weights $\lambda_{e,\xi}$ and endpoint matrices
+    $E_{e,\xi},F_{e,\xi}$ in the original finite halfspaces. For each ordered
+    label pair $(\xi,\zeta)$, sample number $j<k$, and Gaussian array $\omega$,
+    let $U_{e,\xi,\zeta,j}(\omega)$ and
+    $V_{e,\xi,\zeta,j}(\omega)$ be the corresponding ambient left and right
+    source factors. They use the same array $\omega_{e,\xi,\zeta}$ and the same
+    $j$, with the prescribed conjugation on the right factor. The actual sampled
+    source matrix is
+    \begin{align}
+        \widehat X_{e,\xi,\zeta}(\omega)
+        =k^{-1}\sum_{j<k}U_{e,\xi,\zeta,j}(\omega)
+        \otimes V_{e,\xi,\zeta,j}(\omega).
+        \label{eq:peps_sampled_endpoint_average}
+    \end{align}
+    For this algebraic formula alone no isometry or probability-weight condition
+    is required. The convention at $k=0$ gives the zero matrix.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Expand the definition of the actual sampled source matrix. Its two ambient
+    factors are precisely the displayed matrices, retaining the same occurrence,
+    ordered labels, and sample index.
+\end{proof}
+
+\begin{definition}[Original sources as gate-labelled pair edges]
+    \label{def:peps_original_source_pair_edges}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt_injective,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_gate,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_parties,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices_apply,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv_endpoints,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair_bijective}
+    \leanok
+    \uses{def:compression_operator_samples,thm:peps_source_only_resources,thm:compression_pair_label_count}
+    At a gate occurrence $g$, send source position $i$ to the unordered pair of
+    its actual endpoints $\{p_{g,i},q_{g,i}\}$. This gives a bijection between
+    its source positions and the unordered pairs of distinct members of $P_g$.
+    Taking the disjoint union over original occurrences gives
+    \begin{align}
+        \{(g,i):i\text{ is a source position of }g\}
+        \simeq\{(g,\{p,q\}):p,q\in P_g,\ p\ne q\}.
+        \label{eq:peps_original_source_pairs}
+    \end{align}
+    The bijection preserves the gate occurrence and the exact unordered endpoint
+    set. A sample assignment $j$ on the left becomes its precomposition with the
+    inverse bijection on the right; at the edge of an original source $e$ its
+    value remains exactly $j(e)$. No star root is chosen.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    The prepared gate's distinct pair keys and injective owner map give
+    injectivity. Both finite sets have cardinality $\binom{|P_g|}{2}$, hence the
+    map is bijective. The disjoint-union bijection retains the gate coordinate,
+    and the endpoint and sample assertions follow from its construction.
+\end{proof}
+
+\begin{theorem}[Cardinality of the actual virtual alphabets]
+    \label{thm:peps_original_source_alphabet}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels_le,
+        TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le}
+    \leanok
+    \uses{thm:compression_operator_alphabet_bound,def:peps_original_source_pair_edges}
+    At occurrence $g$, the ordered density labels have cardinality $|\Xi_g|^2$.
+    Choose any finite set of occurrences and a star root for each, and suppose
+    $|\Xi_g|\le M$ on this set. Every constructed virtual alphabet then has
+    cardinality at most $\max(M^2,k)$: a star carries an ordered ket--bra label,
+    and a source-pair edge carries one of the $k$ sample labels. Neither private
+    memory dimensions nor Schmidt ranks enter this bound.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The ordered branch-pair cardinality is the product $|\Xi_g|\,|\Xi_g|$.
+    Apply the existing alphabet cardinality formula separately to its star and
+    sample cases.
+\end{proof}

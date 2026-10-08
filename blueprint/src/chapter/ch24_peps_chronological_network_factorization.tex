@@ -1,0 +1,817 @@
+\section{Chronological local factors}
+\label{sec:peps_chronological_network}
+
+Fix a chronological composition $W:\mathcal H_a\to\mathcal H_b$ as in
+Definition~\ref{def:peps_source_circuit}. Let $G(W)$ be its finite set of gate
+occurrences. At occurrence $g$, write $P_g\subseteq P$ for the actual
+participants, $\Xi_g$ for its branch labels, and $c_g(\xi)$ for its original
+coefficient. Equal gates at different times give different occurrences.
+For a selection $A\subseteq P$, put
+$T_A(W)=\{g:P_g\cap A\ne\varnothing\}$.
+We use the restriction of a source-free composition to a set of owners and
+the canonical grouping isometries of
+Theorem~\ref{thm:peps_party_restriction} and
+Definition~\ref{def:peps_party_partition}.
+These are the local-factor identities used in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+
+% This chapter does not assert the final equality between the sampled physical
+% operator and a contraction of the party tensors. That identity is separate.
+
+\begin{definition}[Full labels and their restrictions]
+    \label{def:peps_chrono_full_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_projectAllChoices,
+        TNLean.PEPS.PairEffect.SourceCircuit.projectAllChoices,
+        TNLean.PEPS.PairEffect.SourceCircuit.FullLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfFullLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfFullLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfFullLabels_eq_of_agree,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfFullLabels_party_eq_of_agree,
+        TNLean.PEPS.PairEffect.SourceCircuit.partySelector}
+    \leanok
+    \uses{def:peps_partial_source_choices}
+    A full label is $\lambda\in\Lambda(W):=\prod_{g\in G(W)}\Xi_g$.
+    Restricting it to the touched occurrences gives a partial choice
+    $\pi_A\lambda\in\mathcal C_A(W)$. At every $g\in T_A(W)$, its recovered
+    label is exactly $\lambda_g$. Thus $\pi_A\lambda=\pi_A\mu$ whenever
+    $\lambda_g=\mu_g$ at all touched occurrences. In particular, the choice at
+    one party $p$ depends only on the labels with $p\in P_g$.
+    There is also a restriction $\pi_A^P:\mathcal C_P(W)\to\mathcal C_A(W)$
+    from the actual all-party partial choices; it preserves the recovered label
+    at every touched occurrence. These maps do not select labels at untouched
+    occurrences.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Define the maps by following the chronology. Composition splits its occurrence
+    set into the two original occurrence sets. At a gate, retain its given label
+    if it is touched and the unique empty choice otherwise. Induction verifies
+    the recovered labels and the asserted dependence.
+\end{proof}
+
+\begin{definition}[Labels at precisely the touched occurrences]
+    \label{def:peps_chrono_touched_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv,
+        TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply,
+        TNLean.PEPS.PairEffect.SourceCircuit.isTouched_all_iff,
+        TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocations,
+        TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocationsFintype,
+        TNLean.PEPS.PairEffect.SourceCircuit.TouchedLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfTouchedLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels_choiceAt,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesTouchedLabelsEquiv}
+    \leanok
+    \uses{def:peps_chrono_full_labels}
+    The actual partial choices have the canonical description
+    \begin{align}
+        \mathcal C_A(W)\simeq\prod_{g\in T_A(W)}\Xi_g.
+        \label{eq:peps_chrono_touched_labels}
+    \end{align}
+    The forward map recovers each original occurrence label, and the inverse
+    inserts exactly these labels in the chronology. Write
+    $G_+(W)=\{g:P_g\ne\varnothing\}$. This set is finite, and for the all-party
+    selection, (\ref{eq:peps_chrono_touched_labels}) becomes
+    $\mathcal C_P(W)\simeq\prod_{g\in G_+(W)}\Xi_g$.
+    Empty-participant gates request no label, including when their branch set
+    is empty.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    The two maps are inverse by induction on the chronology. A gate is touched
+    by the all-party selection exactly when it has a participant. Restricting
+    the recovered labels to these occurrences gives the second equivalence.
+\end{proof}
+
+\begin{theorem}[The coefficient of an actual partial choice]
+    \label{thm:peps_chrono_coefficient}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations,
+        TNLean.PEPS.PairEffect.SourceCircuit.coefficient_eq_prod_dite}
+    \leanok
+    \uses{def:peps_chrono_touched_labels}
+    For every $\xi\in\mathcal C_A(W)$, with recovered labels $\xi_g$,
+    \begin{align}
+        c_A(\xi) & =\prod_{g\in T_A(W)}c_g(\xi_g), &
+        c_P(\xi) & =\prod_{g\in G_+(W)}c_g(\xi_g).
+        \label{eq:peps_chrono_coefficient}
+    \end{align}
+    Each gate coefficient occurs once. The aggregate scalars of empty-participant
+    gates belong to the actual residual, rather than to this product.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the chronology. Composition multiplies the two coefficient products;
+    a touched gate contributes its original coefficient and an untouched gate
+    contributes $1$. For the second identity, retain precisely the nonempty
+    participant occurrences in the finite product.
+\end{proof}
+
+\begin{theorem}[Compatibility of owner restrictions]
+    \label{thm:peps_chrono_restriction}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_restrict_eval_heq_of_implies,
+        TNLean.PEPS.PairEffect.Word.restrict_restrict_heq_of_implies,
+        TNLean.PEPS.PairEffect.Word.restrict_withoutParty_atParty_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_castInput_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_comp_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_frameList_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_frame_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_castLayouts_eval_heq}
+    \leanok
+    \uses{thm:peps_party_restriction}
+    Let $U$ be a source-free composition. If $B\subseteq A$, successive restriction
+    first to $A$ and then to $B$ gives the same composition as direct restriction
+    to $B$, under the canonical identifications of the register lists. In
+    particular, removing a party other than $p$ does not change the operator at
+    $p$. Restriction and evaluation respect these identifications.
+
+    Equality of restricted evaluations is preserved by composition, by adjoining
+    the same spectator registers, and by the permutations that move one register
+    past a fixed list. The same assertion holds for the source-free residuals of
+    compositions with pair preparations, provided that the corresponding source
+    register lists agree. The residual of a composition retains the later source
+    registers as spectators while evaluating the earlier residual.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the composition. A local map is kept precisely when its owner is
+    selected. For a register exchange, inspect the membership of its two owners.
+    This proves the equality of the restricted compositions themselves. The
+    remaining assertions follow by composition of the restricted evaluations
+    and by tensoring with the identity on the retained spectator memories.
+    Identifying equal register lists leaves these operations unchanged.
+\end{proof}
+
+\begin{theorem}[Operations away from the selected parties]
+    \label{thm:peps_chrono_disjoint}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWord_all_gate_eq_of_touched,
+        TNLean.PEPS.PairEffect.SourceCircuit.partialWord_all_gate_eq_of_untouched,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id_of_disjoint,
+        TNLean.PEPS.PairEffect.PreparedSourceGate.restrict_remaining_appendTail_eq_of_not_participating,
+        TNLean.PEPS.PairEffect.PreparedSourceGate.restrict_remaining_appendTail_eval_eq_id_of_not_participating,
+        TNLean.PEPS.PairEffect.Word.restrict_mapOwner_appendTail_eval_eq_id_of_disjoint,
+        TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_appendTail_mapOwner_eval_eq_id_of_disjoint,
+        TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil,
+        TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
+    \leanok
+    \uses{thm:peps_chrono_restriction,def:peps_prepared_source_gate}
+    Relabelling the owners of a source-free composition sends its set of
+    participating parties to their image. If every relabelled owner lies outside
+    $A$, its restriction to $A$ is the identity on the empty memory.
+    After adjoining any spectator list, the restriction is the identity on the
+    selected spectator memory. The same statement holds after a further
+    relabelling and after moving all pair preparations to the beginning: source
+    vectors may be arbitrary.
+
+    Consequently, the residual of a prepared gate not incident to $p$ acts as
+    the identity on the registers of $p$, independently of its branch label.
+    At a nonempty-participant gate, the all-party partial choice selects exactly
+    the corresponding prepared branch. At an empty-participant gate it retains
+    the original aggregate operator, independently of the unique partial choice.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Inspect the local maps, exchanges, and preparations in the composition.
+    Every operation away from the selected owners restricts to the identity;
+    the canonical permutations preserve the selected spectator order. The
+    same induction after moving sources to the beginning proves the statement
+    for the actual residual. The gate assertions then follow from the definition
+    of the partial expansion and its touched-occurrence test.
+\end{proof}
+
+\begin{definition}[Complete chronological branches and their free sources]
+    \label{def:peps_chrono_complete_branch}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.fullBranchWord,
+        TNLean.PEPS.PairEffect.SourceCircuit.fullSourceVector,
+        TNLean.PEPS.PairEffect.SourceCircuit.fixedSourceLayout,
+        TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord}
+    \leanok
+    \uses{def:peps_chrono_full_labels,def:peps_canonical_source_residual}
+    For $\lambda\in\Lambda(W)$, replace every prepared gate by its indicated
+    branch and write $W_\lambda$ for the resulting composition. Let $\mathcal S_W$
+    be the ordered register list of all its pair preparations, with later
+    preparations first, and let $s_\lambda\in\mathcal H_{\mathcal S_W}$ be their
+    ordered product vector. The list $\mathcal S_W$ is independent of $\lambda$.
+    There is an actual source-free composition
+    $V_\lambda:\mathcal H_{\mathcal S_W\mathbin{+}a}\to\mathcal H_b$ obtained
+    by moving these source registers to the beginning. In a composition of two
+    chronological pieces, retain the later source registers while applying the
+    earlier residual. A register retained as a spectator is moved past the
+    free-source list before the residual acts.
+\end{definition}
+
+\begin{theorem}[Exact preparation of a complete branch]
+    \label{thm:peps_chrono_complete_preparation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord_gate_prepare_tmul,
+        TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_fullRemainingWord,
+        TNLean.PEPS.PairEffect.SourceCircuit.sources_fullRemainingWord,
+        TNLean.PEPS.PairEffect.SourceCircuit.eval_fullBranchWord_eq_fullRemainingWord,
+        TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord_gate_prepare,
+        TNLean.PEPS.PairEffect.SourceCircuit.fullRemainingWord_prepare}
+    \leanok
+    \uses{def:peps_chrono_complete_branch,thm:peps_chrono_spectators}
+    The composition $V_\lambda$ contains no pair preparation. If $W$ is allowed,
+    then $V_\lambda$ is allowed. For every input vector $x$,
+    \begin{align}
+        W_\lambda x=V_\lambda(s_\lambda\otimes x),
+        \label{eq:peps_chrono_complete_preparation}
+    \end{align}
+    where concatenated register memories are identified by the canonical
+    associating isometry. This is an operator identity, and at a single gate
+    it holds with arbitrary spectator input.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For one gate use its exact prepared-branch identity and the compatibility of
+    owner relabelling with concatenation. Elementary tensors span the gate and
+    spectator memory. Induction on the chronology then proves
+    (\ref{eq:peps_chrono_complete_preparation}); the composition step uses the
+    later-first order of the source registers and the spectator identity. The
+    source-free and allowedness assertions follow from the same construction.
+\end{proof}
+
+\begin{theorem}[Dependence of complete residuals on incident labels]
+    \label{thm:peps_chrono_complete_locality}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_fullRemainingWord_eq_of_agree,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_fullRemainingWord_eq_of_choices_eq}
+    \leanok
+    \uses{thm:peps_chrono_disjoint,thm:peps_chrono_restriction,def:peps_chrono_full_labels}
+    If two full labels $\lambda,\mu$ agree at every occurrence incident to $p$,
+    then $V_\lambda|_p=V_\mu|_p$. Equivalently, equality of
+    $\pi_{\{p\}}\lambda$ and $\pi_{\{p\}}\mu$ implies this equality of actual
+    restricted operators.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the chronology. At an incident gate the labels agree. At any other
+    gate, Theorem~\ref{thm:peps_chrono_disjoint} identifies both restrictions with
+    the spectator identity. Composition and retained registers respect these
+    equalities by Theorem~\ref{thm:peps_chrono_restriction}. Recovering individual
+    labels from the partial choice gives the equivalent formulation.
+\end{proof}
+
+\begin{definition}[Complete local residual maps]
+    \label{def:peps_chrono_complete_local_maps}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.localRemainingMap,
+        TNLean.PEPS.PairEffect.SourceCircuit.norm_localRemainingMap_le_one,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_fullRemainingWord_eq_localRemainingMap}
+    \leanok
+    \uses{thm:peps_chrono_complete_locality,thm:peps_chrono_complete_preparation}
+    For a party $p$ and an incident choice $\eta\in\mathcal C_{\{p\}}(W)$,
+    define $L_p(\eta)$ by restricting $V_\lambda$ for any full label extending
+    $\eta$. If no such extension exists, set $L_p(\eta)=0$.
+    Theorem~\ref{thm:peps_chrono_complete_locality} makes the extending case
+    independent of the extension. For every genuine full label,
+    $V_\lambda|_p=L_p(\pi_{\{p\}}\lambda)$.
+    If $W$ is allowed, every $L_p(\eta)$ has norm at most $1$, including the
+    zero value at an unextendable choice.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Use the incident-label dependence to compare any two extending full labels.
+    For an extending choice, restriction preserves allowedness, hence gives a
+    contraction; the other case is the zero map.
+\end{proof}
+
+\begin{theorem}[Canonical factors are the actual singleton restrictions]
+    \label{thm:peps_chrono_canonical_factors}
+    \lean{TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions}
+    \leanok
+    \uses{thm:peps_party_binary_factorization,thm:peps_chrono_restriction}
+    Let $U:\mathcal H_a\to\mathcal H_b$ be a source-free composition, and let
+    $\mathbf p$ be a list of distinct parties containing every party occurring
+    in $U$, including parties named by scalar local maps. For the canonical
+    grouping isometries $J_a,J_b$ associated with this order,
+    \begin{align}
+        J_b U=\left(\bigotimes_{p\in\mathbf p}U|_p\right)J_a.
+        \label{eq:peps_chrono_canonical_factors}
+    \end{align}
+    The factors are the actual restrictions of $U$. Zero local maps are permitted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the party list. Split off its first party using the binary
+    factorization theorem, and apply induction to the complementary restriction.
+    Theorem~\ref{thm:peps_chrono_restriction} identifies the remaining singleton
+    factors with the original restrictions. With an empty party list there are
+    no participating operations, so the composition is the scalar identity.
+\end{proof}
+
+\begin{theorem}[Complete chronological factorization]
+    \label{thm:peps_chrono_complete_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_fullBranchWord_eq_tensorLocalRemainingMaps,
+        TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_fullRemainingWord_eq_tensorLocalRemainingMaps}
+    \leanok
+    \uses{thm:peps_chrono_canonical_factors,def:peps_chrono_complete_local_maps,thm:peps_chrono_complete_preparation}
+    Suppose $\mathbf p$ lists all parties exactly once. Then
+    \begin{align}
+        J_b V_\lambda
+         & =\left(\bigotimes_{p\in\mathbf p}L_p(\pi_{\{p\}}\lambda)\right)
+        J_{\mathcal S_W\mathbin{+}a},
+        \label{eq:peps_chrono_complete_factors}                            \\
+        J_b W_\lambda x
+         & =\left(\bigotimes_{p\in\mathbf p}L_p(\pi_{\{p\}}\lambda)\right)
+        J_{\mathcal S_W\mathbin{+}a}(s_\lambda\otimes x).
+        \label{eq:peps_chrono_complete_vectors}
+    \end{align}
+    No allowedness assumption is needed for these algebraic identities.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply (\ref{eq:peps_chrono_canonical_factors}) to the source-free residual,
+    substitute the defining local maps, and then use
+    (\ref{eq:peps_chrono_complete_preparation}).
+\end{proof}
+
+\subsection{The actual all-party partial expansion}
+
+The all-party partial expansion differs from a full label assignment at
+empty-participant gates: it retains each such gate as its original aggregate
+operator. Denote its actual fixed-source residual by $R_\xi$, for
+$\xi\in\mathcal C_P(W)$. Its owners are the original parties together with
+one auxiliary exterior owner $\ast$. Every original register is owned by
+its original party, and no original register is owned by $\ast$.
+Let $\mathcal S$ be its fixed free-source list, so its input is
+$\mathcal S\mathbin{+}a$ after this owner relabelling.
+
+\begin{theorem}[Incident choices determine the actual partial residual]
+    \label{thm:peps_chrono_partial_locality}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_eval_eq_of_projectAllChoices_eq,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_eval_heq_of_projectAllChoices_eq}
+    \leanok
+    \uses{thm:peps_chrono_disjoint,thm:peps_chrono_restriction,def:peps_chrono_full_labels}
+    Choose any subset $A^+$ of the enlarged owner set, and let $A$ be its inverse
+    image in the original parties. If
+    $\pi_A^P\xi=\pi_A^P\zeta$, then $R_\xi|_{A^+}=R_\zeta|_{A^+}$.
+    The same equality holds before the final identification with the fixed
+    source registers, for the actual source-free parts of the partial branches.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the original chronology. At a touched gate the selected labels
+    are equal. A gate disjoint from $A$ restricts to the identity on its selected
+    spectators, even after moving sources to the beginning. An empty-participant
+    gate has the same aggregate operator in both branches. The restriction
+    identities propagate these equalities through compositions, spectators, and
+    the final fixed-source identifications.
+\end{proof}
+
+\begin{definition}[Actual partial local residuals]
+    \label{def:peps_chrono_partial_local_maps}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualInput,
+        TNLean.PEPS.PairEffect.SourceCircuit.norm_partialLocalRemainingMap_le_one,
+        TNLean.PEPS.PairEffect.SourceCircuit.partialLocalRemainingMap,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_eq_partialLocalRemainingMap}
+    \leanok
+    \uses{thm:peps_chrono_partial_locality,def:peps_canonical_source_residual}
+    For $\eta\in\mathcal C_A(W)$ define $B_{A^+}(\eta)$ by restricting
+    $R_\xi$ for an all-party partial choice extending $\eta$, and set it to zero
+    if no extension exists. The common domain is the restriction of the fixed
+    input $\mathcal S\mathbin{+}a$. Theorem~\ref{thm:peps_chrono_partial_locality}
+    gives
+    $R_\xi|_{A^+}=B_{A^+}(\pi_A^P\xi)$ for every actual $\xi$.
+    If $W$ is allowed, then $\|B_{A^+}(\eta)\|\le1$ for every $\eta$.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Any two extending choices have identical restricted evaluations. Allowedness
+    of the actual residual and of its restriction gives the norm bound; the
+    unextendable case is the zero map.
+\end{proof}
+
+\begin{theorem}[Factorization of the actual partial residual]
+    \label{thm:peps_chrono_partial_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_partialResidual_eq_tensorPartialLocalRemainingMaps}
+    \leanok
+    \uses{thm:peps_chrono_canonical_factors,def:peps_chrono_partial_local_maps}
+    Let $\mathbf q$ list all enlarged owners exactly once, including $\ast$.
+    For the induced singleton choices $\xi_q$,
+    \begin{align}
+        J_b R_\xi=\left(\bigotimes_{q\in\mathbf q}B_{\{q\}}(\xi_q)\right)
+        J_{\mathcal S\mathbin{+}a}.
+        \label{eq:peps_chrono_partial_factors}
+    \end{align}
+    The auxiliary scalar factor remains present. The identity also permits an
+    empty original party set.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the canonical singleton-restriction factorization to $R_\xi$ and use
+    the equality defining its actual partial local maps.
+\end{proof}
+
+\begin{theorem}[Evaluation with spectator registers]
+    \label{thm:peps_chrono_spectators}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_frameList_tmul}
+    \leanok
+    Let $U:\mathcal H_a\to\mathcal H_b$ be a composition and let $r$ be any
+    ordered spectator list. Retaining these registers gives
+    $(I_r\otimes U)(x\otimes y)=x\otimes Uy$ for every
+    $x\in\mathcal H_r$ and $y\in\mathcal H_a$, under the canonical
+    concatenation isometries.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the spectator list. The empty list is the scalar factor and the
+    assertion is linearity. For a nonempty list, elementary tensors span its
+    memory; tensoring the induction hypothesis with the first register proves
+    the assertion.
+\end{proof}
+
+\begin{definition}[Preparing the original private input]
+    \label{def:peps_chrono_private_input}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceLayout,
+        TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord,
+        TNLean.PEPS.PairEffect.SourceCircuit.sourcePrivatePreparation,
+        TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord,
+        TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation,
+        TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul,
+        TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul}
+    \leanok
+    \uses{thm:peps_chrono_spectators,def:peps_chrono_partial_local_maps}
+    Fix the original normalized private product input $\psi\in\mathcal H_a$.
+    Its local preparation, retaining every source register, is a source-free
+    composition $P_\psi:\mathcal H_{\mathcal S}\to
+        \mathcal H_{\mathcal S\mathbin{+}a}$ satisfying
+    $P_\psi y=y\otimes\psi$ for arbitrary $y$.
+    Define $D_\xi=R_\xi P_\psi$. It is an actual source-free composition and
+    \begin{align}
+        D_\xi y=R_\xi(y\otimes\psi).
+        \label{eq:peps_chrono_private_input}
+    \end{align}
+    The scalar terminal factor of the empty input is $1$. All owner and
+    concatenation identifications in this formula are canonical.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Prepare the original private product vector by its recorded local maps and
+    retain the source registers as spectators. Use the spectator evaluation
+    identity and owner-relabelling naturality. Neither this preparation nor the
+    actual residual introduces a pair source.
+\end{proof}
+
+\begin{definition}[The actual local source-to-output maps]
+    \label{def:peps_chrono_source_local_maps}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalMap,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialSourceWord_eq_partialSourceLocalMap}
+    \leanok
+    \uses{def:peps_chrono_private_input,def:peps_chrono_partial_local_maps}
+    For a selected owner set $A^+$ and its induced original party set $A$, put
+    $D_{A^+}(\eta)=B_{A^+}(\eta)(P_\psi|_{A^+})$.
+    Then $D_\xi|_{A^+}=D_{A^+}(\pi_A^P\xi)$.
+    Thus the actual map from the source registers of these owners to their
+    output depends only on the incident chronological choices.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Restrict the composition $R_\xi P_\psi$ and substitute the incident-choice
+    identity for the first factor. The private preparation is fixed independently
+    of the chronological labels.
+\end{proof}
+
+\begin{theorem}[The actual local maps factor the prepared chronology]
+    \label{thm:peps_chrono_source_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.groupByPartyIso_partialSourceWord_eq_tensorPartialSourceLocalMaps}
+    \leanok
+    \uses{thm:peps_chrono_canonical_factors,def:peps_chrono_source_local_maps}
+    With the same exhaustive distinct order $\mathbf q$ of enlarged owners,
+    \begin{align}
+        J_b D_\xi=\left(\bigotimes_{q\in\mathbf q}D_{\{q\}}(\xi_q)\right)J_{\mathcal S}.
+        \label{eq:peps_chrono_source_factors}
+    \end{align}
+    The factor for $\ast$ is included. This is an identity for every free source
+    input, before replacing the source operators or tracing private outputs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the canonical singleton-restriction factorization to the source-free
+    composition $D_\xi$, and identify each restriction with its actual local map.
+\end{proof}
+
+\begin{definition}[Incident labels carried by the gate stars]
+    \label{def:peps_chrono_incident_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.OriginalGateLabelsAt,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt,
+        TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices,
+        TNLean.PEPS.PairEffect.SourceCircuit.isTouched_groupedParty_iff,
+        TNLean.PEPS.PairEffect.SourceCircuit.originalGateLabelsAtOfAllChoices,
+        TNLean.PEPS.PairEffect.SourceCircuit.partySelector_affectedOwner_all_apply}
+    \leanok
+    \uses{def:peps_chrono_touched_labels,def:peps_chrono_full_labels,def:compression_operator_gate_labels}
+    At an original party $p$, the incident labels are precisely
+    $(\xi_g)_{g\in G_+(W),\ p\in P_g}$.
+    Selecting the enlarged owner corresponding to $p$ touches exactly these
+    original occurrences. The incident labels therefore reconstruct a partial
+    choice at $p$. For an actual all-party choice, restricting its labels to these
+    stars and reconstructing the partial choice returns $\pi_{\{p\}}^P\xi$.
+    No unused gate label is chosen.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    The owner relabelling preserves the original party label, so its singleton
+    selector touches a gate exactly when that party participates. Apply the
+    inverse of (\ref{eq:peps_chrono_touched_labels}) and the label-recovery
+    identity of the all-party projection.
+\end{proof}
+
+\begin{definition}[Local source matrices and private traces]
+    \label{def:peps_chrono_local_matrices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalMatrix,
+        TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalMatrix_eq_actual_restriction,
+        TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalPhysicalMatrix}
+    \leanok
+    \uses{def:peps_chrono_source_local_maps}
+    Choose finite orthonormal bases $b_i$ of the selected source memory and
+    $c_j$ of the selected output memory. The actual local source matrix is
+    $K_\eta(j,i)=\langle c_j,D_{A^+}(\eta)b_i\rangle$.
+    For an incident choice obtained from a genuine all-party choice, these are
+    exactly the coordinates of $D_\xi|_{A^+}$.
+    If the output basis is indexed by physical and private coordinates
+    $(x,e)$, its mixed local physical matrix for any source matrix $X$ is
+    \begin{align}
+        M_{\eta,\zeta}(X)=\operatorname{Tr}_{\mathrm{priv}}
+        (K_\eta X K_\zeta^\dagger).
+        \label{eq:peps_chrono_local_matrices}
+    \end{align}
+    The source matrix and the two incident choices are arbitrary; positivity
+    is not asserted.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Take matrix coordinates of the actual restricted map equality. The physical
+    matrix is its stated partial trace, with the ket map on the left and the
+    adjoint bra map on the right.
+\end{proof}
+
+\subsection{Empty-participant gates and their scalar factor}
+\begin{theorem}[A gate with no participants]
+    \label{thm:peps_chrono_empty_gate}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty,
+        TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty,
+        TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_eq_coeffSum_smul_id_of_isEmpty,
+        TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_heq_coeffSum_smul_id_of_participants_eq_empty}
+    \leanok
+    \uses{def:peps_prepared_source_gate}
+    If a prepared gate has no participants, its actual aggregate map is
+    $\sigma_g I$, where $\sigma_g=\sum_{\xi\in\Xi_g}c_g(\xi)$ and
+    $|\sigma_g|\le1$. This holds beside arbitrary spectator registers.
+    The same conclusion follows when the literal participant set of the placed
+    gate is empty. An empty branch set gives the zero scalar.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A source-free word on an empty party set contains no local map, source, or
+    register exchange and evaluates to the scalar identity. Apply this to every
+    prepared branch and sum its original coefficients. The allowed aggregate
+    gate gives the modulus bound. Injectivity of its owner map identifies an
+    empty literal participant set with an empty local party type.
+\end{proof}
+
+\begin{definition}[The product of empty-participant gate scalars]
+    \label{def:peps_chrono_empty_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar,
+        TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar_gate_of_isEmpty,
+        TNLean.PEPS.PairEffect.SourceCircuit.eval_heq_emptyGateScalar_smul_id_of_isEmpty,
+        TNLean.PEPS.PairEffect.SourceCircuit.norm_emptyGateScalar_le_one}
+    \leanok
+    \uses{thm:peps_chrono_empty_gate}
+    Define
+    \begin{align}
+        \sigma(W)=\prod_{g\in G(W),\ P_g=\varnothing}
+        \left(\sum_{\xi\in\Xi_g}c_g(\xi)\right).
+        \label{eq:peps_chrono_empty_scalar}
+    \end{align}
+    Equivalently, identity, private-map, and exchange operations contribute $1$;
+    composition multiplies the scalars, and adjoining a spectator leaves them
+    unchanged. A gate contributes its coefficient sum exactly when its participant
+    type is empty. Every chronological composition satisfies $|\sigma(W)|\le1$.
+    If the original party set is empty, its actual evaluation is $\sigma(W)I$.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Induct on the chronology. The only nontrivial factor is the single empty gate
+    of Theorem~\ref{thm:peps_chrono_empty_gate}. Multiplication preserves the
+    modulus bound. On an empty party set all remaining possible operations are
+    identities and compositions of these scalar gates.
+\end{proof}
+
+\begin{theorem}[The actual exterior scalar in the all-party expansion]
+    \label{thm:peps_chrono_none_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_sources_partialWord_all_eq_nil,
+        TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_scalar,
+        TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_scalar,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_all_eval_heq_emptyGateScalar,
+        TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_emptyGateScalar}
+    \leanok
+    \uses{def:peps_chrono_empty_scalar,thm:peps_chrono_disjoint,thm:peps_chrono_restriction}
+    No source register of an all-party partial branch has the auxiliary owner
+    $\ast$. Restricting either its source-free part or its fixed-source residual
+    to this owner gives
+    \begin{align}
+        R_\xi|_{\{\ast\}}=\sigma(W)I_{\mathbb C}.
+        \label{eq:peps_chrono_none_scalar}
+    \end{align}
+    At a single empty-participant gate the scalar is its original coefficient
+    sum. Under composition the two scalars multiply. Retaining a register outside
+    a selected owner set leaves its restricted scalar unchanged, provided the
+    selected input and source register lists are empty.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every all-party relabelled register belongs to an original party, and every
+    retained source has such owners. Induct on the actual chronology. Nonempty
+    gates restrict to the identity at $\ast$; empty gates contribute their original
+    coefficient sum. The restriction identities prove the composition and
+    spectator steps, including the identifications with the fixed source list.
+\end{proof}
+
+\begin{theorem}[Absorbing a scalar at an existing party]
+    \label{thm:peps_chrono_scalar_absorption}
+    \lean{TNLean.PEPS.DependentBondNetwork.network_mul_at_vertex}
+    \leanok
+    Let a finite tensor network have a specified vertex $p$ and local tensors
+    $T_q$. Replacing $T_p$ by $sT_p$ and keeping every other tensor and every
+    bond space unchanged multiplies its contraction by $s$.
+    There is no requirement that $s$ be nonzero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For each bond assignment, its local product contains the factor at $p$
+    once. Extract $s$ from that finite product and then from the sum over bond
+    assignments.
+\end{proof}
+
+\subsection{Operations on the actual source registers}
+\begin{definition}[Separate operations on each source half]
+    \label{def:peps_chrono_endpoint_word}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointWord,
+        TNLean.PEPS.PairEffect.SourceInventory.sources_endpointWord,
+        TNLean.PEPS.PairEffect.Word.localEndpoint,
+        TNLean.PEPS.PairEffect.Word.sources_localEndpoint,
+        TNLean.PEPS.PairEffect.Word.eval_localEndpoint_tmul}
+    \leanok
+    Let $R$ be an ordered pair-source list with halfspaces $U_i,V_i$ and actual
+    owners $p_i,q_i$. For arbitrary continuous linear maps
+    $A_i:U_i\to U_i$ and $B_i:V_i\to V_i$, form the actual source-free word that
+    applies $A_i$ at $p_i$ and $B_i$ at $q_i$, in the original register order.
+    A single register operation acts by $x\otimes y\mapsto A_i x\otimes y$,
+    retaining the other registers as spectators. These operations introduce no
+    pair source.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Use the local map on a singleton register and the identity on its remaining
+    memory. Recursing over the pair list applies the two halfspace maps and then
+    the remaining pairs, preserving their owners and order.
+\end{proof}
+
+\begin{theorem}[Local dependence of the source-half operations]
+    \label{thm:peps_chrono_endpoint_locality}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointWord_eval_eq_of_agree,
+        TNLean.PEPS.PairEffect.Word.restrict_localEndpoint_eval_eq_of_agree}
+    \leanok
+    \uses{def:peps_chrono_endpoint_word,thm:peps_chrono_restriction}
+    Fix selected parties $A$. If $A_i=A_i'$ whenever $p_i\in A$, and
+    $B_i=B_i'$ whenever $q_i\in A$, then the two source-half words have equal
+    restricted evaluations on $A$. No equality is required for operators on
+    unselected halves.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For a singleton register, its operation is retained precisely when its owner
+    is selected; otherwise its restriction is the identity. Induct on the pair
+    list and use the composition and spectator restriction identities. The
+    canonical register-list identifications preserve these equalities.
+\end{proof}
+
+\subsection{Coordinates of the party tensor product}
+\label{sec:party-tensor-coordinates}
+
+The coordinate identities below describe the local tensors and the local
+summation over discarded registers in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+
+\begin{definition}[Ordered tensor bases]
+    \label{def:party-list-basis}
+    \lean{TNLean.PEPS.PairEffect.partyListBasis,
+        TNLean.PEPS.PairEffect.partyListBasis_nil_apply,
+        TNLean.PEPS.PairEffect.partyListBasis_repr_nil,
+        TNLean.PEPS.PairEffect.partyListBasis_cons_apply,
+        TNLean.PEPS.PairEffect.partyListBasis_repr_cons_tmul,
+        TNLean.PEPS.PairEffect.partyListBasis_repr_tensorPartyMaps}
+    \leanok
+    For every party $p$, let $H_p$ and $K_p$ be complex Hilbert spaces with
+    finite orthonormal bases $(b_{p,i})_{i\in I_p}$ and
+    $(c_{p,j})_{j\in J_p}$. Fix a finite ordered list
+    $\mathbf p=(p_0,\ldots,p_{m-1})$, allowing repeated parties. For $\mathbf i\in\prod_{0\le r<m}I_{p_r}$, its tensor basis is
+    \begin{align}
+        b_{\mathbf p,\mathbf i}
+        =b_{p_0,i_0}\otimes\cdots\otimes b_{p_{m-1},i_{m-1}},
+    \end{align}
+    with the prescribed order and association of the tensor factors. The empty
+    product is $\mathbb C$ with its basis vector $1$; the coordinate of a scalar
+    $z$ in this basis is $z$. Adjoining a first party adjoins its basis vector as
+    the first tensor factor. The coordinate of a simple tensor $u\otimes v$
+    is the product of its two coordinates.
+
+    For arbitrary continuous complex-linear maps $B_p:H_p\to K_p$, the matrix
+    of their ordered tensor product satisfies
+    \begin{align}
+        \left[\left(\bigotimes_{0\le r<m} B_{p_r}\right)
+            b_{\mathbf p,\mathbf i}\right]_{\mathbf j}
+        =\prod_{0\le r<m} [B_{p_r}b_{p_r,i_r}]_{j_r}.
+    \end{align}
+    There is one factor for each occurrence in the list; equal party labels do
+    not identify distinct positions.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    Construct the basis by adjoining the first orthonormal basis to the tensor
+    basis of the remaining list. The empty basis has the stated scalar
+    coordinates. The coordinate identity for a simple tensor and the action of
+    a tensor product of maps then give the product formula by induction on the
+    length of the list.
+\end{proof}
+
+\begin{definition}[Coordinates indexed by the original parties]
+    \label{def:party-labelled-tensor-coordinates}
+    \lean{TNLean.PEPS.PairEffect.partyLabelledBasis,
+        TNLean.PEPS.PairEffect.partyLabelledBasis_apply,
+        TNLean.PEPS.PairEffect.partyLabelledBasis_repr_tensorPartyMaps}
+    \uses{def:party-list-basis}
+    \leanok
+    Suppose the party set $P$ is finite and the ordered list $\mathbf p$
+    contains every party exactly once. The preceding basis is then indexed by
+    assignments $i\in\prod_{p\in P}I_p$: its vector at $i$ is the ordered tensor
+    of the vectors $b_{p,i(p)}$. In the analogous output basis, for every
+    $j\in\prod_{p\in P}J_p$,
+    \begin{align}
+        \left[\left(\bigotimes_{p\in\mathbf p}B_p\right)b_i\right]_j
+        =\prod_{p\in P}[B_pb_{p,i(p)}]_{j(p)}.
+    \end{align}
+    The assertion includes the empty party set.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    The position-to-party map of the exhaustive list is a bijection. Use it to
+    relabel both tensor bases, then change the index in the finite product of
+    local matrix entries.
+\end{proof}
+
+\begin{theorem}[Local summation of discarded coordinates]
+    \label{thm:party-product-partial-trace}
+    \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix}
+    \leanok
+    Let $P$ be finite, let $X_p$ be sets, and let $E_p$ be finite sets. For
+    arbitrary complex matrices $M_p$ indexed by $X_p\times E_p$, define the
+    matrix $M$ indexed by
+    $(\prod_p X_p)\times(\prod_p E_p)$ by
+    \begin{align}
+        M((x,e),(y,f))=\prod_{p\in P}M_p((x_p,e_p),(y_p,f_p)).
+    \end{align}
+    Tracing all discarded coordinates gives the product of the local partial
+    traces:
+    \begin{align}
+        (\operatorname{Tr}_{\prod_p E_p}M)(x,y)
+        =\prod_{p\in P}\left(\sum_{e_p\in E_p}
+        M_p((x_p,e_p),(y_p,e_p))\right).
+    \end{align}
+    No positivity or trace normalization is required. Each discarded coordinate
+    is summed within its own party.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the partial trace as a sum over $e\in\prod_pE_p$ and distribute the
+    finite product of sums. The empty-set cases follow from the same identity.
+\end{proof}
