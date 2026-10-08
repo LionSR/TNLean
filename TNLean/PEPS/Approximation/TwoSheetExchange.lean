@@ -49,10 +49,12 @@ registers and tags, and is therefore a bounded change in the sense of Theorem 5.
 `C = D_U F_A ℛ` is constructed; the corrections `D_U F_A` are proved to be one private contraction
 at `P∘` on the registers of `U`, which `P∘` holds on both sheets before and after the exchange
 (`TwoSheetExchange.exchange_correction_monomial` in
-`TNLean.PEPS.Approximation.OwnershipMonomials`), and `ℛ` is the identification of tensor factors
-`renameEquiv`, which keeps every register at its party. Writing `ℛ` as a word of exchanges of
-tensor factors needs a layout with one register per site and per tag, which is not formalized.
-Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+`TNLean.PEPS.Approximation.OwnershipMonomials`, on a layout grouping the raw registers of `U` on
+each sheet into one register), and `ℛ` is the identification of tensor factors `renameEquiv`,
+which keeps every register at its party. Writing `ℛ` as a word of exchanges of tensor factors,
+and placing the corrections on the frames' registers, needs a layout with one register per site
+and per tag identified with the canonical coordinates, which is not formalized. Documented in
+`docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 The source condition that every hole's outer square lies on one side of `∂Y` enters through the
 classification of the holes as outside or inside `Y`, which is part of the data, and through its
@@ -494,10 +496,8 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
   set ω : EuclideanSpace ℂ _ := WithLp.toLp 2 (splitVec h Ω)
   have hω : (WithLp.toLp 2 (⇑(vecKron Ω Ω) ∘ (threeSplit₂ h).symm) : EuclideanSpace ℂ _) =
       vecKron ω ω := rfl
-  have hω1 : ‖ω‖ = 1 := by
-    have h2 := norm_toLp_sq (splitVec h Ω)
-    rw [star_splitVec_dotProduct_splitVec h hΩ, Complex.one_re] at h2
-    nlinarith [norm_nonneg ω]
+  have hω1 : ‖ω‖ = 1 :=
+    norm_toLp_eq_one_of_star_dotProduct (star_splitVec_dotProduct_splitVec h hΩ)
   rw [hω]
   refine (norm_act_bufferCorrection_mul_tSwap_sub_le σ.isIsometry σ.star_s σ.star_s' hω1).trans ?_
   have he : ‖act ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ω - WithLp.toLp 2 (tensorPurification σ.s σ.s')‖ =

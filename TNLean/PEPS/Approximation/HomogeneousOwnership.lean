@@ -39,11 +39,14 @@ vectors.
 
 ## Scope
 
-The bounded-change clause of Lemma 6.5, that the birth is a private contraction at `P∘`, one
-normalized pair source between `Q∘` and `P∘` and a private contraction at `P∘`, and the death the
-same with one normalized pair effect, is proved on a party layout from the factorization
-`B = (𝒱ᴴ S) (Sᴴ 𝒱)` in `TNLean.PEPS.Approximation.OwnershipMonomials` (`Frame.birth_monomial`,
-`Frame.death_monomial`).
+**Scope restriction (register grouping):** the bounded-change clause of Lemma 6.5, that the
+birth is a private contraction at `P∘`, one normalized pair source between `Q∘` and `P∘` and a
+private contraction at `P∘`, and the death the same with one normalized pair effect, is not
+proved in this file.  It is proved in `TNLean.PEPS.Approximation.OwnershipMonomials`
+(`Frame.birth_monomial`, `Frame.death_monomial`) on a layout in which the raw registers of `T`,
+and those of `U`, are grouped into one register each, whereas the source has one raw register
+per site; the identification of that layout with the frame's registers and canonical coordinates
+is not formalized.  Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 ## References
 
@@ -62,6 +65,13 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+
+/-- A coordinate vector `v` with `star v ⬝ᵥ v = 1` is a unit vector. -/
+theorem norm_toLp_eq_one_of_star_dotProduct {ι : Type*} [Fintype ι] {v : ι → ℂ}
+    (hv : star v ⬝ᵥ v = 1) : ‖(WithLp.toLp 2 v : EuclideanSpace ℂ ι)‖ = 1 := by
+  have h2 := norm_toLp_sq v
+  rw [hv, Complex.one_re] at h2
+  nlinarith [norm_nonneg (WithLp.toLp 2 v : EuclideanSpace ℂ ι)]
 
 /-! ### The canonical map for abstract systems -/
 
@@ -161,9 +171,7 @@ theorem norm_pairSource_le_one {s : T × BT → ℂ} (hs : star s ⬝ᵥ s = 1) 
 omit [DecidableEq BT] [DecidableEq BE] in
 theorem norm_one_kronecker_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry) :
     ‖(1 : Matrix (T × E) (T × E) ℂ) ⊗ₖ V‖ ≤ 1 :=
-  l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
-    rw [IsIsometry.kronecker (1 : Matrix (T × E) (T × E) ℂ) V (by simp [IsIsometry]) hV]
-    exact (IsStarProjection.one _).norm_le)
+  (IsIsometry.kronecker (1 : Matrix (T × E) (T × E) ℂ) V (by simp [IsIsometry]) hV).l2_opNorm_le_one
 
 omit [DecidableEq BT] in
 theorem norm_birthEffect_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry)
@@ -389,8 +397,8 @@ by `P∘` before the birth and by `P∘` or `Q∘` after it (`owner_eq_of_notMem
 The frames `F` and `F'` differ only in raw owners, and the encoding and the reference vector do
 not depend on raw owners (Definition 6.1, `05-frames.tex`, lines 71–82), so `K_{F'} = K_F` and
 `Ω_{F'} = Ω_F`; the identity `(1 ⊗ B) K_F = K_{F'} B` says that `B` commutes with the encoding.
-The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause, proved in
-`Frame.birth_monomial`.
+The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause, proved on
+grouped registers in `Frame.birth_monomial` (see the module docstring).
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437. -/

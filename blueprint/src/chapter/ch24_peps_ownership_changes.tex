@@ -3,13 +3,14 @@
 The statements below formalize Lemmas~6.5 and~6.6 of
 \cite{OpenAI2026PolynomialPEPS}, September 24, 2026, \texttt{05-frames.tex},
 lines 347--570, for the canonical maps constructed in their proofs, with the
-information bounds kept as hypotheses, and their reading as bounded changes,
-that is, as allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
-on the registers of the parties (Section~\ref{sec:peps_pair_effects}). The
-renaming of the two-sheet exchange is formalized as an identification of tensor
-factors that keeps every register at its party; its reading as a composition of
-reorderings of tensor factors is recorded in
-\cite{gap:polypeps_ownership_change_monomials}.
+information bounds kept as hypotheses. Their reading as bounded changes, that
+is, as allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(Section~\ref{sec:peps_pair_effects}), is formalized only on registers in
+which the raw registers of a region held by one party are grouped into one
+register. The source has one raw register per site; identifying the grouped
+registers with the registers of a frame, and writing the renaming of the
+two-sheet exchange as a composition of reorderings of tensor factors, are
+recorded in \cite{gap:polypeps_ownership_change_monomials}.
 
 We keep the setting of Section~\ref{sec:peps_encoded_frames}. For a set
 $S\subseteq\Lambda$ write $\mathcal H_S=\bigotimes_{x\in S}\C^q$. For a vector
@@ -265,7 +266,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.PairEffect.twoIso,
         TNLean.PEPS.PairEffect.pairHeadIso_eq,
         TNLean.PEPS.PairEffect.appendIso_one_symm,
-        TNLean.PEPS.PairEffect.appendIso_two_symm,
+        TNLean.PEPS.PairEffect.pairHeadIso_appendIso_symm,
         TNLean.PEPS.PairEffect.matLocal₂₁,
         TNLean.PEPS.PairEffect.matLocal₁₂,
         TNLean.PEPS.PairEffect.matLocal₂₂,
@@ -328,8 +329,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.effectNext_apply,
         TNLean.PEPS.EncodedFrame.effectNext_matL,
         TNLean.PEPS.EncodedFrame.norm_birthKernel_le_one,
-        TNLean.PEPS.EncodedFrame.norm_le_one_of_isIsometry,
-        TNLean.PEPS.EncodedFrame.norm_toLp_of_star_dotProduct,
+        Matrix.IsIsometry.l2_opNorm_le_one,
+        TNLean.PEPS.EncodedFrame.norm_toLp_eq_one_of_star_dotProduct,
         TNLean.PEPS.EncodedFrame.isAllowed_birthWord,
         TNLean.PEPS.EncodedFrame.isAllowed_birthPrivateWord,
         TNLean.PEPS.EncodedFrame.isAllowed_deathChain,
@@ -338,7 +339,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.usesOnly_birthPrivateWord,
         TNLean.PEPS.EncodedFrame.sourceCount_birthPrivateWord,
         TNLean.PEPS.EncodedFrame.usesOnly_deathChain,
-        TNLean.PEPS.EncodedFrame.counts_deathChain,
+        TNLean.PEPS.EncodedFrame.sourceCount_deathChain,
+        TNLean.PEPS.EncodedFrame.effectCount_deathChain,
         TNLean.PEPS.EncodedFrame.sheetBirthOp_eq_submatrix}
     \leanok
     \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,
@@ -362,8 +364,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         b\rangle e=K(t\otimes u)$, after which $K^\dagger$ is applied.
 \end{proof}
 
-\begin{theorem}[Homogeneous birth and death: bounded change]
-    \label{thm:peps_frame_birth_bounded}
+\begin{theorem}[Homogeneous birth and death on grouped registers]
+    \label{thm:peps_frame_birth_bounded_grouped}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_monomial,
         TNLean.PEPS.EncodedFrame.Frame.death_monomial,
         TNLean.PEPS.EncodedFrame.Frame.exists_birthWord,
@@ -371,17 +373,24 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
-    In the setting of the canonical birth map, the birth is a bounded change
-    involving only $P_\circ$ and $Q_\circ$: a private contraction at $P_\circ$,
-    one normalized pair source between $Q_\circ$ and $P_\circ$, and a private
-    contraction at $P_\circ$; the death uses one normalized pair effect
-    instead. Here the raw registers of $T$, owned by $P_\circ$ before the birth
-    and by $Q_\circ$ after it, and those of $U$, owned by $P_\circ$ throughout,
-    are written as one register each, which is a private identification at
-    their owner; all other registers are untouched. The operator of the
-    monomial is the canonical map $B$, with the reference error of
-    Theorem~\ref{thm:peps_frame_birth}. This is the remaining assertion of
-    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, with its hypotheses.
+    In the setting of the canonical birth map, with its hypotheses, there are
+    splitting data with the reference error of Theorem~\ref{thm:peps_frame_birth}
+    such that $B=\id_E\otimes K^\dagger K$ with $K=\bra s(\id_T\otimes V)$, the
+    registers of $U$ are owned by $P_\circ$ before and after the birth, and
+    those of $T$ by $P_\circ$ before and by $Q_\circ$ after it. Group the raw
+    registers of $T$ into one register $\mathcal H_T$ and those of $U$ into one
+    register $\mathcal H_U$, followed by an arbitrary list of further registers.
+    On these registers there is an allowed monomial using only $P_\circ$ and
+    $Q_\circ$, with at most one normalized pair source, from $\mathcal H_T$ held
+    by $P_\circ$ to $\mathcal H_T$ held by $Q_\circ$, whose operator is
+    $K^\dagger K\otimes\id$; for $Q_\circ\neq P_\circ$ it is a private
+    contraction at $P_\circ$, one pair source between $Q_\circ$ and $P_\circ$,
+    and a private contraction at $P_\circ$. The death is the same with no pair
+    source and at most one normalized pair effect. This is a restricted form of
+    the bounded-change assertion of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}:
+    the source has one raw register per site, and these grouped registers are
+    not identified with the registers of the frame
+    \cite{gap:polypeps_ownership_change_monomials}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -392,6 +401,28 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     and after, and those of $T$ are owned by $P_\circ$ before and by $Q_\circ$
     after. The birth and death monomials have operator $K^\dagger K$ on
     $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
+\end{proof}
+
+\begin{theorem}[Homogeneous birth and death: bounded change]
+    \label{thm:peps_frame_birth_bounded}
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
+        thm:peps_frame_birth_bounded_grouped}
+    The birth is a bounded change involving only $P_\circ$ and $Q_\circ$: a
+    private contraction at $P_\circ$, one normalized pair source between
+    $Q_\circ$ and $P_\circ$, and a private contraction at $P_\circ$; the death
+    uses one normalized pair effect instead. This is the remaining assertion
+    of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}
+    Theorem~\ref{thm:peps_frame_birth_bounded_grouped} gives the monomial on
+    registers in which the raw registers of $T$, and those of $U$, are grouped
+    into one register each. Each group has a single owner before and a single
+    owner after the change, so grouping is a private unitary at that owner.
+    Placing the monomial on the registers of the frame, one per site and per
+    tag, and identifying their tensor product with the canonical coordinates in
+    which $\id\otimes B$ acts, is not formalized; see
+    \cite{gap:polypeps_ownership_change_monomials}.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
@@ -691,11 +722,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\mathcal H_T\otimes\mathcal H_E$ come first, where
     $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on the two
     copies of $\mathcal H_U$ and $\lVert W\rVert\le1$. The registers of $U$ are
-    held by $P_\circ$ on both sheets before and after the exchange, and, with
-    the raw registers of $U$ on each sheet written as one register,
-    $W\otimes\id$ is the operator of one allowed private contraction at
-    $P_\circ$ that leaves all other registers untouched
-    (\texttt{05-frames.tex}, lines 503--515).
+    held by $P_\circ$ on both sheets before and after the exchange. On two
+    registers of $P_\circ$, each grouping the raw registers of $U$ on one sheet,
+    followed by an arbitrary list of further registers, $W\otimes\id$ is the
+    operator of one allowed private contraction at $P_\circ$
+    (\texttt{05-frames.tex}, lines 503--515). These grouped registers are not
+    identified with the registers of the two frames
+    \cite{gap:polypeps_ownership_change_monomials}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -721,6 +754,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     The corrections are one private contraction at $P_\circ$ by
     Lemma~\ref{lem:peps_frame_exchange_correction_monomial}, and the renaming
     keeps every register at its party. Writing the renaming as a composition
-    of reorderings of tensor factors needs one register per site and per tag;
-    see \cite{gap:polypeps_ownership_change_monomials}.
+    of reorderings of tensor factors, and placing the corrections on the
+    registers of the frames, needs one register per site and per tag; see
+    \cite{gap:polypeps_ownership_change_monomials}.
 \end{proof}

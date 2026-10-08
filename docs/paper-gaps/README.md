@@ -1100,12 +1100,14 @@ residual tensor network of a branch.
 [polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
 records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
 manuscript are formalized with their source hypotheses, including the canonical
-maps, both reference-error bounds and the bounded-change clauses on the party
-layout of Theorem 5.2: the birth and the death as a private contraction, one
-normalized pair source or pair effect and a private contraction, and the
-exchange corrections as one private contraction. Writing the renaming of the
-exchange as a composition of reorderings of tensor factors awaits a layout with
-one register per site and per tag.
+maps and both reference-error bounds. The bounded-change clauses are formalized
+on the party layout of Theorem 5.2 only with the raw registers of each region
+held by one party grouped into one register: the birth and the death as a
+private contraction, one normalized pair source or pair effect and a private
+contraction, and the exchange corrections as one private contraction. Placing
+these monomials on the registers of a frame, one per site and per tag, and
+writing the renaming of the exchange as a composition of reorderings of tensor
+factors, await that list of registers.
 
 ### Polynomial PEPS approximation: elimination of pair effects
 

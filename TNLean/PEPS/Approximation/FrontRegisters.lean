@@ -109,10 +109,12 @@ variable {α β γ δ : Type} [Fintype α] [Fintype β] [Fintype γ] [Fintype δ
 def matL [DecidableEq β] (A : Matrix α β ℂ) : EuclideanSpace ℂ β →L[ℂ] EuclideanSpace ℂ α :=
   (Matrix.toEuclideanLin.trans LinearMap.toContinuousLinearMap) A
 
+/-- The coordinates of `matL A x` are `A *ᵥ x`. -/
 theorem ofLp_matL [DecidableEq β] (A : Matrix α β ℂ) (x : EuclideanSpace ℂ β) :
     (matL A x).ofLp = A *ᵥ x.ofLp :=
   rfl
 
+/-- The entries of `matL A x` are those of `A *ᵥ x`. -/
 theorem matL_apply [DecidableEq β] (A : Matrix α β ℂ) (x : EuclideanSpace ℂ β) (i : α) :
     matL A x i = (A *ᵥ x.ofLp) i :=
   rfl
@@ -121,9 +123,11 @@ theorem matL_apply [DecidableEq β] (A : Matrix α β ℂ) (x : EuclideanSpace �
 theorem norm_matL [DecidableEq β] (A : Matrix α β ℂ) : ‖matL A‖ = ‖A‖ :=
   rfl
 
+/-- `matL` is additive. -/
 theorem matL_add [DecidableEq β] (A B : Matrix α β ℂ) : matL (A + B) = matL A + matL B :=
   map_add _ _ _
 
+/-- `matL` turns matrix products into composition. -/
 theorem matL_mul [DecidableEq β] [DecidableEq γ] (A : Matrix α β ℂ) (B : Matrix β γ ℂ)
     (x : EuclideanSpace ℂ γ) : matL (A * B) x = matL A (matL B x) := by
   ext i
@@ -133,11 +137,13 @@ theorem matL_mul [DecidableEq β] [DecidableEq γ] (A : Matrix α β ℂ) (B : M
 def oneIso (p : P) (α : Type) [Fintype α] : Mem [⟨p, euc α⟩] ≃ₗᵢ[ℂ] EuclideanSpace ℂ α :=
   TensorProduct.ridIsometry ℂ (EuclideanSpace ℂ α)
 
+/-- `oneIso` on a pure tensor. -/
 @[simp]
 theorem oneIso_tmul (p : P) (x : EuclideanSpace ℂ α) (c : ℂ) :
     oneIso p α (x ⊗ₜ c) = c • x := by
   simp [oneIso]
 
+/-- The inverse of `oneIso` adjoins the scalar `1`. -/
 theorem oneIso_symm_apply (p : P) (x : EuclideanSpace ℂ α) :
     (oneIso p α).symm x = (x ⊗ₜ (1 : ℂ) : Mem [⟨p, euc α⟩]) := by
   rw [LinearIsometryEquiv.symm_apply_eq, oneIso_tmul, one_smul]
@@ -148,11 +154,13 @@ def twoIso (p p' : P) (α β : Type) [Fintype α] [Fintype β] :
   ((TensorProduct.ridIsometry ℂ (EuclideanSpace ℂ β)).lTensor (EuclideanSpace ℂ α)).trans
     (pairIso α β)
 
+/-- `twoIso` on a pure tensor. -/
 @[simp]
 theorem twoIso_tmul (p p' : P) (x : EuclideanSpace ℂ α) (y : EuclideanSpace ℂ β) (c : ℂ) :
     twoIso p p' α β (x ⊗ₜ (y ⊗ₜ c)) = c • pairIso α β (x ⊗ₜ y) := by
   simp [twoIso, LinearIsometryEquiv.lTensor, TensorProduct.tmul_smul]
 
+/-- The inverse of `twoIso` on a product vector. -/
 theorem twoIso_symm_pairIso (p p' : P) (x : EuclideanSpace ℂ α) (y : EuclideanSpace ℂ β) :
     (twoIso p p' α β).symm (pairIso α β (x ⊗ₜ y)) =
       (x ⊗ₜ (y ⊗ₜ (1 : ℂ)) : Mem [⟨p, euc α⟩, ⟨p', euc β⟩]) := by
@@ -160,14 +168,17 @@ theorem twoIso_symm_pairIso (p p' : P) (x : EuclideanSpace ℂ α) (y : Euclidea
 
 /-! ### The concatenation identification on pure tensors -/
 
+/-- Concatenating the empty layout adjoins the scalar `1`. -/
 theorem appendIso_nil_apply (ℓ : Layout P) (w : Mem ℓ) :
     appendIso ([] : Layout P) ℓ w = (1 : ℂ) ⊗ₜ w :=
   rfl
 
+/-- Concatenation of one register on pure tensors. -/
 theorem appendIso_one_tmul (r : Reg P) (ℓ : Layout P) (x : r.space) (w : Mem ℓ) :
     appendIso [r] ℓ (x ⊗ₜ w) = (x ⊗ₜ (1 : ℂ)) ⊗ₜ w := by
   simp [appendIso, LinearIsometryEquiv.lTensor]
 
+/-- Concatenation of two registers on pure tensors. -/
 theorem appendIso_two_tmul (r r' : Reg P) (ℓ : Layout P) (x : r.space) (y : r'.space)
     (w : Mem ℓ) :
     appendIso [r, r'] ℓ (x ⊗ₜ (y ⊗ₜ w)) = (x ⊗ₜ (y ⊗ₜ (1 : ℂ))) ⊗ₜ w := by
@@ -190,7 +201,10 @@ theorem pairHeadIso_eq {p q : P} (ℓ : Layout P) (z : Mem (⟨p, euc α⟩ :: �
       rw [rTensor_tmul, isoL_apply, twoIso_tmul, one_smul]
   | add a b ha hb => simp only [map_add, ha, hb]
 
-theorem appendIso_two_symm {p q : P} (ℓ : Layout P) (v : EuclideanSpace ℂ (α × β)) (w : Mem ℓ) :
+/-- A front pair register given through `twoIso` and the concatenation identification is read
+back by `pairHeadIso`. -/
+theorem pairHeadIso_appendIso_symm {p q : P} (ℓ : Layout P) (v : EuclideanSpace ℂ (α × β))
+    (w : Mem ℓ) :
     pairHeadIso ℓ ((appendIso [⟨p, euc α⟩, ⟨q, euc β⟩] ℓ).symm ((twoIso p q α β).symm v ⊗ₜ w)) =
       v ⊗ₜ w := by
   rw [pairHeadIso_eq]
@@ -216,6 +230,7 @@ def matLocal₂₂ [DecidableEq α] [DecidableEq β] (p : P) (A : Matrix (γ × 
     Mem [⟨p, euc α⟩, ⟨p, euc β⟩] →L[ℂ] Mem [⟨p, euc γ⟩, ⟨p, euc δ⟩] :=
   isoL (twoIso p p γ δ).symm ∘L matL A ∘L isoL (twoIso p p α β)
 
+/-- Composing with linear isometric equivalences on both sides does not increase the norm. -/
 theorem norm_comp_isoL_le {E F G H : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] (e : G ≃ₗᵢ[ℂ] H) (f : F →L[ℂ] G)
@@ -226,14 +241,17 @@ theorem norm_comp_isoL_le {E F G H : Type*} [NormedAddCommGroup E] [InnerProduct
   refine (opNorm_comp_le _ _).trans ?_
   exact mul_le_of_le_one_right (norm_nonneg _) (LinearIsometry.norm_toContinuousLinearMap_le _)
 
+/-- `‖matLocal₂₁ p A‖ ≤ ‖A‖`. -/
 theorem norm_matLocal₂₁_le [DecidableEq α] [DecidableEq β] (p : P) (A : Matrix γ (α × β) ℂ) :
     ‖matLocal₂₁ p A‖ ≤ ‖A‖ :=
   norm_comp_isoL_le _ _ _
 
+/-- `‖matLocal₁₂ p A‖ ≤ ‖A‖`. -/
 theorem norm_matLocal₁₂_le [DecidableEq γ] (p : P) (A : Matrix (α × β) γ ℂ) :
     ‖matLocal₁₂ p A‖ ≤ ‖A‖ :=
   norm_comp_isoL_le _ _ _
 
+/-- `‖matLocal₂₂ p A‖ ≤ ‖A‖`. -/
 theorem norm_matLocal₂₂_le [DecidableEq α] [DecidableEq β] (p : P)
     (A : Matrix (γ × δ) (α × β) ℂ) : ‖matLocal₂₂ p A‖ ≤ ‖A‖ :=
   norm_comp_isoL_le _ _ _
@@ -307,8 +325,9 @@ theorem pairHeadIso_eval_localMap₂₂ (p : P) (A : Matrix (γ × δ) (α × β
   | tmul v w =>
       have hz : (pairHeadIso (p := p) (q := p) ℓ).symm (v ⊗ₜ w) =
           (appendIso [⟨p, euc α⟩, ⟨p, euc β⟩] ℓ).symm ((twoIso p p α β).symm v ⊗ₜ w) := by
-        rw [LinearIsometryEquiv.symm_apply_eq, appendIso_two_symm]
-      rw [hz, eval_localMap, rTensor_tmul, ← appendIso_two_symm (p := p) (q := p) ℓ (matL A v) w]
+        rw [LinearIsometryEquiv.symm_apply_eq, pairHeadIso_appendIso_symm]
+      rw [hz, eval_localMap, rTensor_tmul,
+        ← pairHeadIso_appendIso_symm (p := p) (q := p) ℓ (matL A v) w]
       simp [matLocal₂₂]
   | add a b ha hb => simp only [map_add, ha, hb]
 
