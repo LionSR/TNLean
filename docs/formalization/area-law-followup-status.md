@@ -511,6 +511,36 @@ only the stated inclusion and ledger additions. Root read the entire source
 and inspected both complete PDF pages and the mobile section. Application
 to the literal five-factor good-copy density remains subsequent work.
 
+[QICLean #668](https://github.com/LionSR/QICLean/pull/668), at checked head
+`d21af4657ca03bf6a71aa738d72efd71f5eb7521`, proves weighted exponential
+trace Hölder and its nonempty finite-family form. For commuting Hermitian
+matrices and an arbitrary positive semidefinite trace weight, the latter
+gives the genuine fifth-root product required by the sharp component estimate.
+The trace weight need not be normalized or commute with the observables.
+Zero weights and endpoint exponents are included. Two product-resolution
+coordinate identities also remove repeated marginal calculations while
+preserving six existing mathematical signatures and their original provenance.
+Source `f24f6b07`, original leaf `6c64b654` and unique inclusion `16aa6062`
+remain unchanged. The full 9,824-job build, five new and six refreshed
+standard-kernel reports, 472-page PDF and complete web/declaration checks
+passed. The 87-binding manifest, whole proofs and complete PDF/mobile
+entries were independently reviewed. The actual five-operator application
+and centered rate estimates remain separate contributions.
+
+[QICLean #669](https://github.com/LionSR/QICLean/pull/669), at checked head
+`0ae2eb8365e172875381cabbcc87af6ff9cc6c17`, constructs the literal excitation
+density retaining every good Q, Y, V, C and R coordinate and tracing only bad
+physical and auxiliary copies. It derives physical-only symmetric support
+from the unit ground vector, with arbitrary original vector and no supplied
+symmetry, support or marginal certificate. Source `8c8fb43a`, original leaf
+`e62dbf11` and unique inclusion `1f350a6e` remain unchanged. The full
+9,736-job build, three fresh standard-kernel reports, 440-page PDF and complete
+web/declaration checks passed. The 75-binding leaf and 113-binding integration
+manifests, proof and complete PDF/mobile entries were independently reviewed.
+The compatible physical spectral support and the reduction tracing good Y
+coordinates are assigned as subsequent proofs, with this final source held
+unchanged.
+
 The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
 bad physical and auxiliary copies. The local QC theorem above accommodates
