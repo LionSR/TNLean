@@ -1,0 +1,17 @@
+{
+  "TNLean.PEPS.PairEffect.DistributedConstruction": 1,
+  "TNLean.PEPS.PairEffect.DistributedConstruction.input": 1,
+  "TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity": 1,
+  "TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef": 1,
+  "TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one": 1,
+  "TNLean.PEPS.PairEffect.inversePower_le_sourceGateBudget_half": 1,
+  "TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation.mono": 1,
+  "TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_budget_of_power_bound": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_mono": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.exists_isMonomialBounded": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le": 1,
+  "TNLean.PEPS.PairEffect.EffectCircuit.exists_sourceSample_approximate_error_le": 1,
+  "TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power": 1
+}

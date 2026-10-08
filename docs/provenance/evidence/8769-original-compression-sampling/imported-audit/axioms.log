@@ -1,0 +1,41 @@
+'TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation.mono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_budget_of_power_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.inversePower_le_sourceGateBudget_half' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.exists_isMonomialBounded' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_mono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.exists_sourceSample_approximate_error_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.DistributedConstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.DistributedConstruction.input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

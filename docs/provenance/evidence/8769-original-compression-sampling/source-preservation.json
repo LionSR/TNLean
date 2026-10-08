@@ -1,0 +1,74 @@
+[
+  {
+    "original_module": "ApproximateCircuitBudget",
+    "original_path": "/tmp/ApproximateCircuitBudget.lean",
+    "original_sha256": "b5d9a65cdd0d2161edc09c88a7732b1f0a8ffdfaa1ee1e369a67fb11103d8360",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateCircuitBudget.lean",
+        "sha256": "3628fcf5bda8abdbd596dde4a221fbf5244df254b6ae01e2864d386ae5462afb"
+      }
+    ]
+  },
+  {
+    "original_module": "SampledOriginalCircuit",
+    "original_path": "/tmp/SampledOriginalCircuit.lean",
+    "original_sha256": "de41e21740168642951d22e13b3ce040222c37ab3683b20997573819127e0bf2",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/SampledOriginalCircuit.lean",
+        "sha256": "6c561b4d72db8a0cbaa6ce1bb34aec21db7252cb84ea46073b788f3ce227ad3e"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateSourceSampling",
+    "original_path": "/tmp/ApproximateSourceSampling.lean",
+    "original_sha256": "f975342afe2f9c13388617fa4054d3e9457a825fe872bd35bb9584e8a7091daa",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateSourceSampling.lean",
+        "sha256": "9bd8f11d9629a8f4c283f38ed621e8df5e9f8b2596b80dc45a66f1e390a07089"
+      }
+    ]
+  },
+  {
+    "original_module": "PhysicalFirstLinkPolynomial",
+    "original_path": "/tmp/PhysicalFirstLinkPolynomial.lean",
+    "original_sha256": "9369f05d9f3d5d512464a8373a5b41a5dc71cdca322ab6c7ca265ad069f4dfba",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstLinkPolynomial.lean",
+        "sha256": "987b80db604c3163887100ee0eaac44a26abd19399b328bc2eebc35cab4509f6"
+      }
+    ]
+  },
+  {
+    "original_module": "OriginalCoefficientMajorant",
+    "original_path": "/tmp/OriginalCoefficientMajorant.lean",
+    "original_sha256": "6954c1237a2ec9ee563fcf7eec5b7c823aa5db07352fa0cbb82919d0db5503bb",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/OriginalCoefficientMajorant.lean",
+        "sha256": "2737e45462caa6fc609bf7c981c33d41d0dbff545eafdf0f231b4c39f3c43d01"
+      }
+    ]
+  },
+  {
+    "original_module": "DistributedConstruction",
+    "original_path": "/tmp/DistributedConstruction.lean",
+    "original_sha256": "a8e123c8f72534534c86d359ea54ee12a5fd2b68bec313a4dedc576b04878366",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/DistributedConstruction.lean",
+        "sha256": "2164ffde59694900d2495686c37691426cbc73db615bcc88e21e7d62aa91a249"
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "source_revision": "3a0472ab259c7aec88fb5699f776eaf6f02c9160",
+  "reviewer": "area_law_survey",
+  "result": "pass",
+  "scope": "Read-only mathematical and verification-scope review; no builds or edits.",
+  "findings": [
+    "Original positive subnormalized density is separated from the possibly nonpositive sampled operator.",
+    "The nonempty-party convention is stated once and does not alter empty-participant gates.",
+    "Actual local-accuracy and resource hypotheses are retained.",
+    "The 3\u03b5/4 exact-circuit and \u03b5 approximate-original error bounds are accurately described.",
+    "Equality with a local tensor contraction remains explicitly separate."
+  ],
+  "publication_condition": "Confirm successful exit of the full canonical provenance check before stating that it passed.",
+  "publication_condition_satisfied": true
+}

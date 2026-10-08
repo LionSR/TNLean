@@ -1,0 +1,55 @@
+{
+  "base_revision": "a2cb859ca1ce60c154d58e9fdce20c2fec278fb8",
+  "files": [
+    {
+      "path": "TNLean/PEPS/Approximation.lean",
+      "sha256": "f3d7be6f36f0ddb2bb4b944a401968d59d2e7ec48df02b08369181d29ee7a8ee"
+    },
+    {
+      "path": "blueprint/src/content.tex",
+      "sha256": "b7c4f917f2aa753aea210b5a3a04acca08706b43853273b072448f02fbd3144c"
+    },
+    {
+      "path": "blueprint/src/references.bib",
+      "sha256": "d2a403e04e65071f77718111cc141159c46b480cd72acfb4841f5dbeeee56cb2"
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "sha256": "eefdb574a784352369472cc6b657ac3f8717fc7b34dc2272337653f64223ecdb"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ApproximateCircuitBudget.lean",
+      "sha256": "3628fcf5bda8abdbd596dde4a221fbf5244df254b6ae01e2864d386ae5462afb"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/ApproximateSourceSampling.lean",
+      "sha256": "9bd8f11d9629a8f4c283f38ed621e8df5e9f8b2596b80dc45a66f1e390a07089"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/DistributedConstruction.lean",
+      "sha256": "2164ffde59694900d2495686c37691426cbc73db615bcc88e21e7d62aa91a249"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/OriginalCoefficientMajorant.lean",
+      "sha256": "2737e45462caa6fc609bf7c981c33d41d0dbff545eafdf0f231b4c39f3c43d01"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PhysicalFirstLinkPolynomial.lean",
+      "sha256": "987b80db604c3163887100ee0eaac44a26abd19399b328bc2eebc35cab4509f6"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SampledOriginalCircuit.lean",
+      "sha256": "6c561b4d72db8a0cbaa6ce1bb34aec21db7252cb84ea46073b788f3ce227ad3e"
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_original_compression_sampling.tex",
+      "sha256": "de5e94e2eb1de5e662d907e3cd1dbea6d87cfbb38398a71b2878675bb5055adf"
+    },
+    {
+      "path": "docs/paper-gaps/poly_peps_nonempty_parties.tex",
+      "sha256": "e7ddeedf174f33baea2cad18393e3cd0f60cae1dbaa8125e42e8c1ff5d3e4209"
+    }
+  ],
+  "proof_modules": 6,
+  "public_declarations": 15
+}

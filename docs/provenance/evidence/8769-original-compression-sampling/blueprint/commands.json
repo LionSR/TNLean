@@ -1,0 +1,70 @@
+[
+  {
+    "name": "sync",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361/sync.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-original-compression-sampling",
+    "seconds": 3.024,
+    "returncode": 0,
+    "log_sha256": "1863fb77d463757ed50628ac3163acfc5f916614c9bab70db674eff4fc4a7f1b"
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "latexmk",
+      "-g",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361/blueprint/src",
+    "seconds": 19.301,
+    "returncode": 0,
+    "log_sha256": "a9dbb379c322f8568ffec59b6f70e5579a3722a8496601ff43181a4510806c89"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361",
+    "seconds": 0.417,
+    "returncode": 0,
+    "log_sha256": "943c2689c25b5491183b9b8a07d389ac69e7388464115577c4329602a4410034"
+  },
+  {
+    "name": "web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361/blueprint",
+    "seconds": 12.309,
+    "returncode": 0,
+    "log_sha256": "e6f6362ae5b9576f6dd820d48fa91f2cf094d99cfd7953236996ec41b0241655"
+  },
+  {
+    "name": "browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-original-compression-sampling-blueprint-zp1k4361",
+    "seconds": 11.413,
+    "returncode": 0,
+    "log_sha256": "af502c6b0367cfba6bb9cde842998e72ef4ea33cc699c5700a48f8ac7654b070"
+  }
+]
