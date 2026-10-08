@@ -1,8 +1,0 @@
-Actual local run revision: d975c515fdebefb092325f9fe6c4d7b50dc9daac
-Published source binding: f100492e57388eacc0eb3a02ba6482183e9cf4b0
-Command: lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/AreaLawLatticeDiamond.lean
-Exit code: 0
-Elapsed seconds: 2.479584471002454
-Warning diagnostics: 0
-Informational hash-command diagnostics: 0
-Binding: checked source and dependency-pin files are byte-identical; this is not a claim of a rerun at the published revision.
