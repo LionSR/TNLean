@@ -67,7 +67,7 @@
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "resolved-pending",
+      "status": "open",
       "paper": "peps",
       "result": "Lemma 7.2",
       "title": "Clearance during the dyadic repainting",
@@ -75,13 +75,14 @@
       "prs": {
         "TNLean": [
           8836,
-          8910
+          8910,
+          8935
         ]
       },
       "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
-      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that represent the paper's open chambers, and the estimates are proved for the labellings the schedule specifies. At the start of each edge and at the end of each repainting the schedule passes to a labelling that agrees with the one reached only off a few curves; no lattice site lies on those curves, so the labels at the sites are unchanged, matching the paper's sampling convention.",
-      "impact": "No problem with the paper. Lemma 7.2 is formalized with the paper's hypotheses once #8910 merges, for guides represented by labellings that are read at the lattice sites.",
-      "plan": "Merge #8910. The protocol of Proposition 7.1 is separate work."
+      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that represent the paper's open chambers, and the estimates are proved for the labellings the schedule specifies. At the start of each edge and at the end of each repainting the schedule passes to a labelling that agrees with the one reached only off a few curves; no lattice site lies on those curves, so the labels at the sites are unchanged, matching the paper's sampling convention. On an interface curve the formal words take the label on one fixed side, while the paper's displacement takes the other side along two edges of each square. #8935 proves that the estimates, which are stated for closures, hold on all four edges for every guide read after one small displacement, and that such readings of the schedule's guides exist for every displacement. That the paper's sampled guides are these readings rests on the identification of the paper's open chambers with the formal labellings off a locally finite family of segments and on the genericity of the displacement, neither of which is formalized.",
+      "impact": "No problem with the paper. The clearance estimates of Lemma 7.2 are proved for every reading of the schedule's guides after a small displacement (#8910, #8935). Lemma 7.2 for the paper's chamber-sampled guides is established only conditionally: identifying those guides with the readings needs two facts not yet proved (the chambers are the open sets where the formal labellings are constant, off a locally finite family of segments, and the generic displacement is parallel to none of these segments).",
+      "plan": "Prove the two identification facts: describe the paper's open chambers as the constancy sets of the formal labellings off a locally finite family of segments, and show a generic displacement is parallel to none of them, so each sampled guide equals a reading. The protocol of Proposition 7.1 is separate work."
     },
     {
       "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",
