@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true",
+    "-o",
+    "ApproximateGateRegression.olean",
+    "ApproximateGateRegression.lean"
+  ],
+  "cwd": "/private/tmp/tnlean-approximate-physical-output/regression",
+  "LEAN_PATH": "/private/tmp/tnlean-approximate-physical-output/regression:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean:/private/tmp/tnlean-approximate-physical-output/artifacts:/private/tmp/tnlean-artifact-recovery-20261008/gaussian/artifacts",
+  "returncode": 0,
+  "seconds": 4.788,
+  "source_sha256": "148e04f25e522caa137fadcf4aa285e59c6bdedb91557991b9150d049fbaf59b",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifact_sha256": "73380981f0d6b6410cb157cb756b21a73b05a2ec6c4ca00c24a37a278486c1ca",
+  "source_revision": "1213a68ed511bf20c357b72f4ac5a03078b7c677"
+}

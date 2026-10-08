@@ -1,0 +1,33 @@
+{
+  "chapters": [
+    {
+      "command": [
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approximate-physical-output/scripts/latexindent",
+        "-l",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approximate-physical-output/blueprint/latexindent.yaml",
+        "-w",
+        "-s",
+        "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/approximate-physical-format-wchcu_00/ch24_peps_approximate_original_gates.tex"
+      ],
+      "returncode": 0,
+      "idempotent": true,
+      "source_path": "blueprint/src/chapter/ch24_peps_approximate_original_gates.tex",
+      "source_sha256": "df9648ee4ba0f513f8b8e88c167669779923acad942374c86026d68a82b7eb68"
+    },
+    {
+      "command": [
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approximate-physical-output/scripts/latexindent",
+        "-l",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approximate-physical-output/blueprint/latexindent.yaml",
+        "-w",
+        "-s",
+        "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/approximate-physical-format-faj52isc/ch24_peps_physical_first_output.tex"
+      ],
+      "returncode": 0,
+      "idempotent": true,
+      "source_path": "blueprint/src/chapter/ch24_peps_physical_first_output.tex",
+      "source_sha256": "ec1404b7769518bb69f2830413ec670b77171c3430faa46c63bb80c3101b71b3"
+    }
+  ],
+  "new_tags": 75
+}

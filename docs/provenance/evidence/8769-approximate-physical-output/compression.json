@@ -1,0 +1,430 @@
+{
+  "original-sources/ApproximateCircuitRealAccuracy.lean.gz": {
+    "uncompressed_sha256": "76641c9cd539eb171f474f6488c030cd84e7d8cf4673d61c8b23f2da54d4e057",
+    "uncompressed_bytes": 3593
+  },
+  "original-sources/GateCoefficientBounds.lean.gz": {
+    "uncompressed_sha256": "183d23466b35df786cd531ab42f2c0fa10d51f8af8b14f4db08f7eba4cae2df9",
+    "uncompressed_bytes": 4910
+  },
+  "original-sources/PhysicalFirstReadout.lean.gz": {
+    "uncompressed_sha256": "608e62050f51c19542a86991d5eac5a8ed7503ac4d3555d04793be507b3a9699",
+    "uncompressed_bytes": 15941
+  },
+  "original-sources/ApproximateCircuitError.lean.gz": {
+    "uncompressed_sha256": "ec2db6a775b019831fe9b8242d92e0880a1dae598a2d2df3adf392a102290a5e",
+    "uncompressed_bytes": 4144
+  },
+  "original-sources/PhysicalFirstExchange.lean.gz": {
+    "uncompressed_sha256": "fbc730dc615e00d34c36ebb5cdfc500b4544a9f989362de9f73955d93d95f30e",
+    "uncompressed_bytes": 11054
+  },
+  "original-sources/ApproximateGateRescaling.lean.gz": {
+    "uncompressed_sha256": "7e5dd6819b3534a59287203ec2c95c3ebe9f432ea6f242fa9099ebbdbd2e45cb",
+    "uncompressed_bytes": 4117
+  },
+  "original-sources/ApproximateCircuitDensity.lean.gz": {
+    "uncompressed_sha256": "fbbb961c5d38a6e45fe17bae8c308eb4792e81c3cf54a333c4fdbaf0ffda1dce",
+    "uncompressed_bytes": 4403
+  },
+  "original-sources/PhysicalDensityPureInput.lean.gz": {
+    "uncompressed_sha256": "87dbcb738b2460d8fd60956d2013cac3bca14623df386b1a635aa90ce3a21f8c",
+    "uncompressed_bytes": 2662
+  },
+  "original-sources/AuxiliaryRegisterFiniteness.lean.gz": {
+    "uncompressed_sha256": "1e5f6ba694f8258f5d8c6b1185df76e42d28a21725877c437b39eb918201a83d",
+    "uncompressed_bytes": 6790
+  },
+  "original-sources/ApproximateGateEvaluation.lean.gz": {
+    "uncompressed_sha256": "9ae6d14101c6bc4083a7edb3ac339cbeb1524b798e85700d46d56316c085ca16",
+    "uncompressed_bytes": 3700
+  },
+  "original-sources/ApproximateCircuitPolynomial.lean.gz": {
+    "uncompressed_sha256": "526e5032f44efa75b8ab395a25349c81e23e446da5b4e5b8b350acaf1c05e71e",
+    "uncompressed_bytes": 2848
+  },
+  "original-sources/ApproximateCircuitResources.lean.gz": {
+    "uncompressed_sha256": "916aae7ce31c6f3d4f311af7bd77f8ff69268b90a2cf69954cb5a4253dbe9182",
+    "uncompressed_bytes": 5271
+  },
+  "original-sources/EffectCircuitError.lean.gz": {
+    "uncompressed_sha256": "de756e5f665f59678c9e6a61ee75f410bc8b16f05b09161823ecee9bdac1945f",
+    "uncompressed_bytes": 20362
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PhysicalFirstReadout.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateCircuitRealAccuracy.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PhysicalFirstExchange.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceOnlyReduction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitResources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitError.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FamilySourceOnlyReduction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PhysicalDensityPureInput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GateCoefficientBounds.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementPolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourceSampling.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementSources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourcePolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateCircuitError.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ActualSourceLifetimeBound.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitResourceBounds.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateGateRescaling.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementCoefficients.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateCircuitDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateGateEvaluation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateCircuitPolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementExpansion.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ApproximateCircuitResources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "9e70cc8643d3adc9a497d282f42015c13de4c7228a92776cab473db7bc225128",
+    "uncompressed_bytes": 603795
+  },
+  "imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "e60be11d17d17234369bb6eb12cdc6b7a07ccc665e7cc46996929871dd3b4411",
+    "uncompressed_bytes": 11372
+  },
+  "imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "92fcd6879e300b55c220d7410950bf427236564ae550c793824381903f0607d8",
+    "uncompressed_bytes": 6500644
+  },
+  "declaration-check/lean_declarations.txt.gz": {
+    "uncompressed_sha256": "7ec497f42da79c816213da1a08ba584006ea56181e8ee5c6a81562ce472e21d5",
+    "uncompressed_bytes": 1076493
+  },
+  "tactic-pattern-scan.log.gz": {
+    "uncompressed_sha256": "105ee4888a120bfeff773eaf587548b5ec9a763810e7c30933076ad844bb302c",
+    "uncompressed_bytes": 7002
+  },
+  "blueprint/TNLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "a31a2cb6e2f5ccb571466376831bc09f53f461cd821d5d9b066c0a0058360ee1",
+    "uncompressed_bytes": 373695
+  },
+  "blueprint/QICLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "0d1e16a1a888d76396d5ab263d202b23d9653cebb131f550ac0f748bcd84f3b1",
+    "uncompressed_bytes": 98317
+  },
+  "blueprint/blueprint-source-sha256.json.gz": {
+    "uncompressed_sha256": "d175ed12a94b0d1712f791daaba5c17780e6cd7661224a25f0291a67ec87cb94",
+    "uncompressed_bytes": 85857
+  },
+  "blueprint/snapshot-commit-check.json.gz": {
+    "uncompressed_sha256": "1cffb553502fb15d18fba4f80fc4f190e2ee18b94ce6de54c0c31f281a01e098",
+    "uncompressed_bytes": 467253
+  },
+  "blueprint/qic-snapshot-check.json.gz": {
+    "uncompressed_sha256": "77b999ab1cb8c00566b03e35e7399528a9eb2483998defe8daf4e747009a7014",
+    "uncompressed_bytes": 117
+  },
+  "blueprint/dependency-graph.json.gz": {
+    "uncompressed_sha256": "4a4f9f881751f0624c28b5919c5d4b7737d1d09a2bcc9ff3c5276825bd9c2cc1",
+    "uncompressed_bytes": 80
+  },
+  "blueprint/sync.json.gz": {
+    "uncompressed_sha256": "9b85be9d348585e2f66fd048b52024e2066f1a62aa57864d8fd4c8eb8f59faef",
+    "uncompressed_bytes": 93499
+  },
+  "blueprint/full-lean-decls.txt.gz": {
+    "uncompressed_sha256": "7ec497f42da79c816213da1a08ba584006ea56181e8ee5c6a81562ce472e21d5",
+    "uncompressed_bytes": 1076493
+  },
+  "blueprint/pdf.log.gz": {
+    "uncompressed_sha256": "5fb8b5d8e6bb4d2e7e24d71d7775583c50affecd28272e9fb390beb50f9cac19",
+    "uncompressed_bytes": 139442
+  },
+  "blueprint/browser.log.gz": {
+    "uncompressed_sha256": "3889b20a264667c291e127bec9f12e1a1e37b324cb41618be3f9e31380c3f01b",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/bbl.log.gz": {
+    "uncompressed_sha256": "2bd71fbfb075fb2ae6c24a215f93def084dbdf1004e80e204c2eea715faf0cb2",
+    "uncompressed_bytes": 143
+  },
+  "blueprint/web.log.gz": {
+    "uncompressed_sha256": "e85d55d457355fdb11958ed96b2a9d67f5f5037215cebcea3a1c7da1bdea4c7d",
+    "uncompressed_bytes": 4814
+  },
+  "blueprint/sync.log.gz": {
+    "uncompressed_sha256": "0f5bf7fb6e7c91f985c1ea7ec1e33ee9706846456905d56a831f1bae146ad2a3",
+    "uncompressed_bytes": 43893
+  },
+  "blueprint/final-tex.log.gz": {
+    "uncompressed_sha256": "21610a14965dbf2aadfef25244ea84cdc98dd06b3e95a16b799fe216c7f4d4da",
+    "uncompressed_bytes": 72478
+  },
+  "blueprint/render-inputs/focused.tex.gz": {
+    "uncompressed_sha256": "ded944d2ec6ae4115aa78abff3031693353aefbdd8ebf1e295b31582341fb3a2",
+    "uncompressed_bytes": 53
+  },
+  "blueprint/render-inputs/content-focused.tex.gz": {
+    "uncompressed_sha256": "8467d5d2351a40a7e138669212d3229bcd452f79728c056c3231a124ce86ff50",
+    "uncompressed_bytes": 1015
+  },
+  "blueprint/render-inputs/web.tex.gz": {
+    "uncompressed_sha256": "e03e5b81dbdd3c9fc7b5276d3dc79ede8176423a04155813ed4860500f3d5a73",
+    "uncompressed_bytes": 830
+  },
+  "regression/imported-modules.json.gz": {
+    "uncompressed_sha256": "5281d2f4429935c593202fd92d06347fd598ad960530a60f34dc00aa7e504aa2",
+    "uncompressed_bytes": 171279
+  },
+  "regression/audit.log.gz": {
+    "uncompressed_sha256": "5acd8dc510df653a21db28b8eae6944ca81334edd623ad68978c261cce90890d",
+    "uncompressed_bytes": 542
+  },
+  "regression/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "d7d937e1d4a5a83d3ba5fc7c4ccea717aa3f33772d1c7434f711a1c65f2f42e4",
+    "uncompressed_bytes": 1316313
+  },
+  "regression/build.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/checked-sources.json.gz": {
+    "uncompressed_sha256": "b81cfdd9c1aecb8bbadb4243136f5fc8e9a1fafc6fd70568df3e1a282b419966",
+    "uncompressed_bytes": 16017
+  },
+  "historical-evidence/approximate-gates/build-records.json.gz": {
+    "uncompressed_sha256": "4bcd1da7da901c8f99cc466b5470bdc058c6b3fb2814d4b6533928f0f92a8d06",
+    "uncompressed_bytes": 8620
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitError-command.json.gz": {
+    "uncompressed_sha256": "f8e7c72f18e0358fb5a57c89f609edb002d1c7d4c50e0b217b66e8c7dd7950bc",
+    "uncompressed_bytes": 1375
+  },
+  "historical-evidence/approximate-gates/imported-modules.json.gz": {
+    "uncompressed_sha256": "160591673ae965a39279be4e5b10ae97baa4e07fc8952ba623130b3e06e6f948",
+    "uncompressed_bytes": 171199
+  },
+  "historical-evidence/approximate-gates/ApproximateGateEvaluation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitResources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/ApproximateGateEvaluation-command.json.gz": {
+    "uncompressed_sha256": "87c649146d534ddfe108f74a054fda3154dc0e4f64cd2827ee832ef4af548251",
+    "uncompressed_bytes": 1387
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitError.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/README.md.gz": {
+    "uncompressed_sha256": "d1357ceb362f16eabfc421e4c41766cf6e89df0b8cbbb0701ea024cdb7be075b",
+    "uncompressed_bytes": 3121
+  },
+  "historical-evidence/approximate-gates/audit.log.gz": {
+    "uncompressed_sha256": "9f6e0845f33a4049f64fb42fde9c31aeb912750c0e0f6393b95404af2f4097d4",
+    "uncompressed_bytes": 3123
+  },
+  "historical-evidence/approximate-gates/ApproximateGateRescaling.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/audit-command.json.gz": {
+    "uncompressed_sha256": "817f91f8180fb9244f94c166bead84cd0bc1c3ba268942de3cd9bc0bf85e25dc",
+    "uncompressed_bytes": 812
+  },
+  "historical-evidence/approximate-gates/ApproximateGateRescaling-command.json.gz": {
+    "uncompressed_sha256": "ad36e916ce716d1a5c8fd995e6c956d9854ae752a213ed5fceb439c1e171d695",
+    "uncompressed_bytes": 1381
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitDensity-command.json.gz": {
+    "uncompressed_sha256": "10e65b8594b08eb0d6a872a63d5751cc0268cb13a293a3d72188339639817867",
+    "uncompressed_bytes": 1388
+  },
+  "historical-evidence/approximate-gates/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "bbfbe816386b27043ccc271c00cd1c90fe487eea1eeec4ac14088941299996bf",
+    "uncompressed_bytes": 1987405
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitPolynomial-command.json.gz": {
+    "uncompressed_sha256": "7fe64dae8bed4916337e3895b950c7f01230de4a036939c2a7776e3cf3f1315d",
+    "uncompressed_bytes": 1405
+  },
+  "historical-evidence/approximate-gates/declarations.json.gz": {
+    "uncompressed_sha256": "45cb38daefad50f2dfae1d5588b34424839581f6a25cbe1ad65bf66e4926b24f",
+    "uncompressed_bytes": 6513
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitResources-command.json.gz": {
+    "uncompressed_sha256": "7c9e23094c357b37d7bc55332637c7249efc4eb423503dce4409359527c04c76",
+    "uncompressed_bytes": 1399
+  },
+  "historical-evidence/approximate-gates/ApproximateCircuitPolynomial.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-gates/ApproximateGatesAudit.lean.gz": {
+    "uncompressed_sha256": "55d5872e5cbde7d2ee3fdb166d14e946e4c7b5c2efa81d759338554abc951c19",
+    "uncompressed_bytes": 3457
+  },
+  "historical-evidence/approximate-regression/checked-sources.json.gz": {
+    "uncompressed_sha256": "e6cf2fb6ca94caff9d6c5f69ed91bfe32ef07c64b327b42d0204afe798fda2fe",
+    "uncompressed_bytes": 2958
+  },
+  "historical-evidence/approximate-regression/build-records.json.gz": {
+    "uncompressed_sha256": "e34d02579927863616621cf0789faf8bd6892bba2926ebec29544b0c496a1d82",
+    "uncompressed_bytes": 1437
+  },
+  "historical-evidence/approximate-regression/ApproximateGateRegression.lean.gz": {
+    "uncompressed_sha256": "148e04f25e522caa137fadcf4aa285e59c6bdedb91557991b9150d049fbaf59b",
+    "uncompressed_bytes": 2437
+  },
+  "historical-evidence/approximate-regression/ApproximateGateRegression-command.json.gz": {
+    "uncompressed_sha256": "523657ff65568c4af77670a8932675808741bc786000e14ac7455fd208356267",
+    "uncompressed_bytes": 1387
+  },
+  "historical-evidence/approximate-regression/imported-modules.json.gz": {
+    "uncompressed_sha256": "334dea7e002b3791d2ea982677aa4e6f9149ef0c38d0ab464a1eb3c1c48b32c2",
+    "uncompressed_bytes": 171253
+  },
+  "historical-evidence/approximate-regression/ApproximateGateRegression.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "historical-evidence/approximate-regression/README.md.gz": {
+    "uncompressed_sha256": "e49acb4f77dd354b66b95406919cb81f18777d6532cc3e0af966cd4e463fd12a",
+    "uncompressed_bytes": 955
+  },
+  "historical-evidence/approximate-regression/audit.log.gz": {
+    "uncompressed_sha256": "5acd8dc510df653a21db28b8eae6944ca81334edd623ad68978c261cce90890d",
+    "uncompressed_bytes": 542
+  },
+  "historical-evidence/approximate-regression/audit-command.json.gz": {
+    "uncompressed_sha256": "e7d0853ae6308933e65e99864cfa1dc2ba55803202e663f62c57d3e73907a615",
+    "uncompressed_bytes": 826
+  },
+  "historical-evidence/approximate-regression/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "37739c0e0d2ff5e03c9a8b00574c8acfc780678eb896db60de6d324dfc444add",
+    "uncompressed_bytes": 1987795
+  },
+  "historical-evidence/approximate-regression/declarations.json.gz": {
+    "uncompressed_sha256": "de232ed29e326783a319d49771595abf37ad734b2c7c3c470dbd11ba13311b9c",
+    "uncompressed_bytes": 1119
+  },
+  "historical-evidence/approximate-regression/ApproximateGateRegressionAudit.lean.gz": {
+    "uncompressed_sha256": "9171fc1482bbeb04a583c6a7580e65947f5633e59241907f48f5a14dab73e30b",
+    "uncompressed_bytes": 952
+  },
+  "historical-evidence/physical-first-output/AuxiliaryRegisterFinitenessAudit.lean.gz": {
+    "uncompressed_sha256": "1c36e970c96da0f1a1a222e135aaca18618cdfa7b643894a064a6c9459535133",
+    "uncompressed_bytes": 1241
+  },
+  "historical-evidence/physical-first-output/direct-checks.json.gz": {
+    "uncompressed_sha256": "60a9ee906128caed4c20d7540f6d52e5b1df37a91e951d29197a815a6b49aff8",
+    "uncompressed_bytes": 9504
+  },
+  "historical-evidence/physical-first-output/README.md.gz": {
+    "uncompressed_sha256": "5fd36829798103dea6d0f78929eb616d838ed3ec451f5426894f328cc0a15be4",
+    "uncompressed_bytes": 1866
+  },
+  "historical-evidence/physical-first-output/PhysicalDensityPureInputAudit.lean.gz": {
+    "uncompressed_sha256": "ac7bbb5662f1a1db6cbc50f1d0f1df33149c729e369d4a0fd87e466481f737c8",
+    "uncompressed_bytes": 223
+  },
+  "historical-evidence/physical-first-output/inventory.sha256.gz": {
+    "uncompressed_sha256": "1c96277e0e0615ae40ed5096f9ac68f86dcbad55f65c2b7c1f32198c949bf984",
+    "uncompressed_bytes": 1506
+  },
+  "historical-evidence/physical-first-output/PhysicalFirstReadoutAudit.lean.gz": {
+    "uncompressed_sha256": "8cf07cfac2321eb755f94407b51e56ff4fa11b344f640f037e047d27ff11e090",
+    "uncompressed_bytes": 1500
+  },
+  "historical-evidence/physical-first-output/PhysicalFirstExchangeAudit.lean.gz": {
+    "uncompressed_sha256": "34877c28c7e7619fa778f2796de9b4e6e1bc0912e3d214a4b8b9ed88f508d07b",
+    "uncompressed_bytes": 2740
+  }
+}

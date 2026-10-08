@@ -1,0 +1,171 @@
+[
+  {
+    "original_module": "ApproximateGateEvaluation",
+    "original_path": "/tmp/ApproximateGateEvaluation.lean",
+    "original_sha256": "9ae6d14101c6bc4083a7edb3ac339cbeb1524b798e85700d46d56316c085ca16",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateGateEvaluation.lean",
+        "sha256": "566395d74b48462b2b449a1e3321d0c130cebf09386d3d945fcbb73a0f2a712c"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateGateRescaling",
+    "original_path": "/tmp/ApproximateGateRescaling.lean",
+    "original_sha256": "7e5dd6819b3534a59287203ec2c95c3ebe9f432ea6f242fa9099ebbdbd2e45cb",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+        "sha256": "9f49c2af7ab7cd8993fba4329b5016b4f29329b53b3a15f4c2bef568ef588a5a"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateCircuitResources",
+    "original_path": "/tmp/ApproximateCircuitResources.lean",
+    "original_sha256": "916aae7ce31c6f3d4f311af7bd77f8ff69268b90a2cf69954cb5a4253dbe9182",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+        "sha256": "0a475818e1050ebd725d27106bcf31134b7cb863ea8dc1de5bd3ad31591d3db5"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateCircuitError",
+    "original_path": "/tmp/ApproximateCircuitError.lean",
+    "original_sha256": "ec2db6a775b019831fe9b8242d92e0880a1dae598a2d2df3adf392a102290a5e",
+    "proof_tokens_preserved": false,
+    "transformation": "remove duplicate of the identical helper promoted in EffectCircuitError",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateCircuitError.lean",
+        "sha256": "9c83ac273997cae44bc880409103ddc3ae8d89624cef92bd9c13904fee1a157a"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateCircuitDensity",
+    "original_path": "/tmp/ApproximateCircuitDensity.lean",
+    "original_sha256": "fbbb961c5d38a6e45fe17bae8c308eb4792e81c3cf54a333c4fdbaf0ffda1dce",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateCircuitDensity.lean",
+        "sha256": "a2abae8e0ed2877162a425c6378606fe972bad567045e0927a78903a3ac58eac"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateCircuitPolynomial",
+    "original_path": "/tmp/ApproximateCircuitPolynomial.lean",
+    "original_sha256": "526e5032f44efa75b8ab395a25349c81e23e446da5b4e5b8b350acaf1c05e71e",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateCircuitPolynomial.lean",
+        "sha256": "81567ac71bd80c5bc0daafb26c3ce3dd729d21480eee8cbec9dc5188507fc5d5"
+      }
+    ]
+  },
+  {
+    "original_module": "ApproximateCircuitRealAccuracy",
+    "original_path": "/tmp/ApproximateCircuitRealAccuracy.lean",
+    "original_sha256": "76641c9cd539eb171f474f6488c030cd84e7d8cf4673d61c8b23f2da54d4e057",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/ApproximateCircuitRealAccuracy.lean",
+        "sha256": "e665900d02b4cc0991911721a5eb832a6c900b66925e977b6734605dcb046530"
+      }
+    ]
+  },
+  {
+    "original_module": "GateCoefficientBounds",
+    "original_path": "/tmp/GateCoefficientBounds.lean",
+    "original_sha256": "183d23466b35df786cd531ab42f2c0fa10d51f8af8b14f4db08f7eba4cae2df9",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/GateCoefficientBounds.lean",
+        "sha256": "bdddfd8eb699c513c77bae28d2f69c8d7d41f280464f7e00acbb058a500abf72"
+      }
+    ]
+  },
+  {
+    "original_module": "AuxiliaryRegisterFiniteness",
+    "original_path": "/private/tmp/tnlean-approximate-physical-output/original-sources/AuxiliaryRegisterFiniteness.lean",
+    "original_sha256": "1e5f6ba694f8258f5d8c6b1185df76e42d28a21725877c437b39eb918201a83d",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+        "sha256": "e02d796c76fd0523b1e27f2b04b0d1dd89f4338c82c2fb331d3e265687cf649b"
+      }
+    ]
+  },
+  {
+    "original_module": "PhysicalDensityPureInput",
+    "original_path": "/private/tmp/tnlean-approximate-physical-output/original-sources/PhysicalDensityPureInput.lean",
+    "original_sha256": "87dbcb738b2460d8fd60956d2013cac3bca14623df386b1a635aa90ce3a21f8c",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PhysicalDensityPureInput.lean",
+        "sha256": "dde3114ea52a7bb0239e34aefe461e333b1c78fe6acf273b5b340ab4c30dbb18"
+      }
+    ]
+  },
+  {
+    "original_module": "PhysicalFirstExchange",
+    "original_path": "/private/tmp/tnlean-approximate-physical-output/original-sources/PhysicalFirstExchange.lean",
+    "original_sha256": "fbc730dc615e00d34c36ebb5cdfc500b4544a9f989362de9f73955d93d95f30e",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+        "sha256": "af8f752a0e07cd2266df0761e8829364e2f1a26cbd83f92f97491b32913ba59e"
+      }
+    ]
+  },
+  {
+    "original_module": "PhysicalFirstReadout",
+    "original_path": "/private/tmp/tnlean-approximate-physical-output/original-sources/PhysicalFirstReadout.lean",
+    "original_sha256": "608e62050f51c19542a86991d5eac5a8ed7503ac4d3555d04793be507b3a9699",
+    "proof_tokens_preserved": true,
+    "transformation": "provenance notice only",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+        "sha256": "95ff50cdfe1284bb2fc5a96a94c9cedd41cf43c8576a9c07c52337b48ca08783"
+      }
+    ]
+  },
+  {
+    "original_module": "EffectCircuitError",
+    "original_path": "/private/tmp/tnlean-approximate-physical-output/original-sources/EffectCircuitError.lean",
+    "original_sha256": "de756e5f665f59678c9e6a61ee75f410bc8b16f05b09161823ecee9bdac1945f",
+    "proof_tokens_preserved": false,
+    "transformation": "promote existing private theorem in place; no signature or proof change",
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+        "sha256": "bfe5b33b90b6298de7db3c8c2bc771e284c3cbd82c03e6ba1d1687d303acaf6e"
+      }
+    ]
+  }
+]

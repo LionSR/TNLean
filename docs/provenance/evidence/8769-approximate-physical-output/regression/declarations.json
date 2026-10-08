@@ -1,0 +1,26 @@
+[
+  {
+    "module": "TNLean.PEPS.Approximation.ApproximateGateRegression",
+    "namespace": "TNLean.PEPS.PairEffect.ApproximateGateRegression",
+    "name": "raw_scalar_norm_two",
+    "declaration": "TNLean.PEPS.PairEffect.ApproximateGateRegression.raw_scalar_norm_two"
+  },
+  {
+    "module": "TNLean.PEPS.Approximation.ApproximateGateRegression",
+    "namespace": "TNLean.PEPS.PairEffect.ApproximateGateRegression",
+    "name": "scalar_isGateApproximation",
+    "declaration": "TNLean.PEPS.PairEffect.ApproximateGateRegression.scalar_isGateApproximation"
+  },
+  {
+    "module": "TNLean.PEPS.Approximation.ApproximateGateRegression",
+    "namespace": "TNLean.PEPS.PairEffect.ApproximateGateRegression",
+    "name": "repeated_scalar_count",
+    "declaration": "TNLean.PEPS.PairEffect.ApproximateGateRegression.repeated_scalar_count"
+  },
+  {
+    "module": "TNLean.PEPS.Approximation.ApproximateGateRegression",
+    "namespace": "TNLean.PEPS.PairEffect.ApproximateGateRegression",
+    "name": "rescaled_scalar_operator",
+    "declaration": "TNLean.PEPS.PairEffect.ApproximateGateRegression.rescaled_scalar_operator"
+  }
+]

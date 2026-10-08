@@ -1,0 +1,68 @@
+[
+  {
+    "id": "8769-source-resource-effectcircuiterror-01",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.norm_referenceEval_le_one",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-02",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.norm_replacement_sub_reference_le",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-03",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.referenceEval",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-04",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.referenceEval_apply",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-05",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exchangeHead_tmul",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-06",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_castLayouts_sub",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-07",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.appendIso_singleton_symm_tmul",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-08",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_identity",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-09",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_tmul",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-10",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gateMemoryMap_tmul",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  },
+  {
+    "id": "8769-source-resource-effectcircuiterror-11",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.preparation_mapOwner_heq",
+    "shard": "docs/provenance/openai-math.d/8769-source-resource-integration.json"
+  }
+]

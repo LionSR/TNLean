@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true",
+    "Axioms.lean"
+  ],
+  "cwd": "/private/tmp/tnlean-approximate-physical-output/imported-audit",
+  "LEAN_PATH": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean:/private/tmp/tnlean-approximate-physical-output/artifacts:/private/tmp/tnlean-artifact-recovery-20261008/gaussian/artifacts",
+  "returncode": 0,
+  "seconds": 8.527,
+  "source_sha256": "e60be11d17d17234369bb6eb12cdc6b7a07ccc665e7cc46996929871dd3b4411",
+  "log_sha256": "900eaf25f7d359b7d1c2f1c7bbba09f1325e710a94f53426e72b3dbc30c2f3c3",
+  "audited_declarations": 86,
+  "new_declarations": 75,
+  "refactored_declarations": 11,
+  "imported_artifacts": 14719,
+  "imported_dependencies_sha256": "92fcd6879e300b55c220d7410950bf427236564ae550c793824381903f0607d8",
+  "source_revision": "1213a68ed511bf20c357b72f4ac5a03078b7c677",
+  "all_source_bytes_match_git_commit": true
+}

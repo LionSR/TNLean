@@ -1,0 +1,20 @@
+{
+  "source_revision": "1213a68ed511bf20c357b72f4ac5a03078b7c677",
+  "command": [
+    "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true",
+    "Declarations.lean"
+  ],
+  "cwd": "/private/tmp/tnlean-approximate-physical-output/declaration-check",
+  "LEAN_PATH": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean:/private/tmp/tnlean-approximate-physical-output/artifacts:/private/tmp/tnlean-artifact-recovery-20261008/gaussian/artifacts",
+  "returncode": 0,
+  "seconds": 28.74,
+  "source_sha256": "07a8b9a813397dcf2410c6b4ec3b06167e93ba3dff07b5e7d35994b8278ad793",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scope": "Direct Lean full-root environment check of the synchronized blueprint declaration names; not a Lake checkdecls invocation.",
+  "checked_count": 21376
+}

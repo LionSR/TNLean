@@ -1,0 +1,452 @@
+[
+  {
+    "id": "8769-approximate-physical-approximategateevaluation-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateEvaluation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.GateMaps",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategateevaluation-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateEvaluation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategateevaluation-03",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateEvaluation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategateevaluation-04",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateEvaluation.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.norm_evalWithGateMaps_le_one",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategaterescaling-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.rescaledOriginal",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategaterescaling-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gate_rescalePartyGate",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategaterescaling-03",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.isAllowed_rescalePartyGate",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategaterescaling-04",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.monomials_rescalePartyGate",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategaterescaling-05",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.rescalePartyGate",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximategaterescaling-06",
+    "path": "TNLean/PEPS/Approximation/ApproximateGateRescaling.lean",
+    "declaration": "TNLean.PEPS.PairEffect.sum_norm_rescalePartyGate_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.isExpansionBounded_rescaledOriginal",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.isMonomialBounded_rescaledOriginal",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-03",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.monomialCount",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-04",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.nonprivateCount_rescaledOriginal",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-05",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.participants_rescaledOriginal",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-06",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.participationCount_rescaledOriginal",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitresources-07",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.rescaledLocationsEquiv",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuiterror-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.norm_rescaledOriginal_sub_evalWithGateMaps_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuiterror-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_one",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitdensity-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitDensity.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.physicalDensityWithGateMaps",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitdensity-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitDensity.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitdensity-03",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitDensity.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_budget",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitpolynomial-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitpolynomial-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gateApproximation_error_inv_pow_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitrealaccuracy-01",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitRealAccuracy.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_real_pow",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-approximatecircuitrealaccuracy-02",
+    "path": "TNLean/PEPS/Approximation/ApproximateCircuitRealAccuracy.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gateApproximation_error_real_pow_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-gatecoefficientbounds-01",
+    "path": "TNLean/PEPS/Approximation/GateCoefficientBounds.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.IsTermwiseBounded",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-gatecoefficientbounds-02",
+    "path": "TNLean/PEPS/Approximation/GateCoefficientBounds.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-gatecoefficientbounds-03",
+    "path": "TNLean/PEPS/Approximation/GateCoefficientBounds.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-gatecoefficientbounds-04",
+    "path": "TNLean/PEPS/Approximation/GateCoefficientBounds.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-gatecoefficientbounds-05",
+    "path": "TNLean/PEPS/Approximation/GateCoefficientBounds.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le_of_power_bounds",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-01",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-02",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-03",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_registers",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-04",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_append",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-05",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_mapOwner",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-06",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_registers_sources_prepStack",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-07",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_comp",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-08",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepGate",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-auxiliaryregisterfiniteness-09",
+    "path": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+    "declaration": "TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepWord",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicaldensitypureinput-01",
+    "path": "TNLean/PEPS/Approximation/PhysicalDensityPureInput.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_pure_input",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-01",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-02",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.branchLabels_physicalFirstLocationsEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-03",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.card_gateLocations_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-04",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-05",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.endpoints_physicalFirstSourcesEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-06",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_operator",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-07",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_threeFactors",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-08",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_triple_tmul",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-09",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-10",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-11",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.participants_physicalFirstLocationsEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-12",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.participationCount_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-13",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstLocationsEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-14",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-15",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstParticipationEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-16",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstSourcesEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-17",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.slotCount_physicalFirstLocationsEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-18",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceDims_physicalFirstSourcesEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-19",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_exchangeBlocks",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-20",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstexchange-21",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-01",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.physicalDensity_physicalFirstReplacement",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-02",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.physicalFirstReplacement",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-03",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-04",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-05",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_physicalFirstOutput",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-06",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.exchangedGarbageBasis",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-07",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.extendedPhysicalReadout_triple_tmul",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-08",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.partialTrace_physicalFirstReadout_exchange",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-09",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.physicalFirstReadout",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-10",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_apply",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-11",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_outerProduct",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-physicalfirstreadout-12",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+    "declaration": "TNLean.PEPS.PairEffect.physicalFirstReadout_tmul",
+    "paper_label": "eq:compression-effect-circuit-error"
+  },
+  {
+    "id": "8769-approximate-physical-effectcircuiterror-01",
+    "path": "TNLean/PEPS/Approximation/EffectCircuitError.lean",
+    "declaration": "TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one",
+    "paper_label": "thm:compression"
+  }
+]
