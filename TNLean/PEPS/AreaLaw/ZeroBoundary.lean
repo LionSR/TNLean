@@ -354,10 +354,8 @@ theorem regionalEntropy_eq_zero_of_card_le_one (Ω : StateSpace Λ q) (hΩ : ‖
     (A : Finset (Site Λ)) (hcard : Fintype.card ({x : Site Λ // x ∈ A} → Fin q) ≤ 1) :
     regionalEntropy Λ q Ω A = 0 := by
   classical
-  have hpsd : (reducedState Λ q Ω A).PosSemidef :=
-    ((posSemidef_vecMulVec_self_star _).submatrix _).partialTraceRight
-  exact vonNeumannEntropy_eq_zero_of_rank_le_one hpsd (trace_reducedState Ω hΩ A)
-    ((rank_le_card_width _).trans hcard)
+  exact vonNeumannEntropy_eq_zero_of_rank_le_one (reducedState_posSemidef Λ q Ω A)
+    (trace_reducedState Ω hΩ A) ((rank_le_card_width _).trans hcard)
 
 /-- **Local dimension one** (area-law preprint, `01-preliminaries.tex`,
 line 116): for `q = 1` every regional entropy of every unit vector vanishes. -/

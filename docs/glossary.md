@@ -3088,6 +3088,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `Matrix.IsGappedGroundState` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
+| `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
+| `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
+| `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. |
 | `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
 | `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
@@ -3101,6 +3104,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.latticeRow` | Horizontal integer coordinates at a fixed vertical coordinate | Lemma 9.4 proof; this is a horizontal section, not a dilation depth layer. |
 | `TNLean.PEPS.AreaLaw.Geometry.template_card_le` | The template area is at most `9*n*s₀` when `Ctpl ≥ 1` | Area part of Lemma 9.4; distinct from the dilation depth-layer bound. |
 | `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
+| `TNLean.PEPS.AreaLaw.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
 
 ## Distributed PEPS compression: finite incidence and choice costs
 

@@ -12,7 +12,7 @@ import Mathlib.Tactic.Linarith
 /-!
 # Supporting slabs of allowed template polygons
 
-The actual triangle and rectangle constructors determine their convex hulls
+The triangle and rectangle constructors determine their convex hulls
 through supporting slabs with the four allowed normal directions. The reverse
 inclusion uses barycentric coordinates and orthogonal side coordinates.
 
@@ -22,12 +22,12 @@ September 24, 2026 area-law manuscript. No upstream Lean proof text is reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- The real vertices appearing in the actual polygon constructor. -/
+/-- The real vertices appearing in the polygon constructor. -/
 def TemplatePolygon.vertices : TemplatePolygon → Set (ℝ × ℝ)
   | .triangle a b c _ _ _ _ => {a, b, c}
   | .rectangle a u v _ _ _ _ _ => {a, a + u, a + u + v, a + v}
 
-/-- The region is the convex hull of its actual vertices. -/
+/-- The region is the convex hull of its vertices. -/
 theorem TemplatePolygon.region_eq_convexHull_vertices (P : TemplatePolygon) :
     P.region = convexHull ℝ P.vertices := by
   cases P <;> rfl
@@ -295,7 +295,7 @@ private theorem scaled_between {a b x c l r : ℝ} (hx : a ≤ x ∧ x ≤ b)
     exact ⟨hb.1.trans (mul_le_mul_of_nonpos_left hx.2 hc'),
       (mul_le_mul_of_nonpos_left hx.1 hc').trans ha.2⟩
 
-/-- The actual polygon admits eight real bounds for the four forms `x`, `y`,
+/-- The polygon admits eight real bounds for the four forms `x`, `y`,
 `x+y`, and `x-y`. No half-plane description is assumed in the model. -/
 theorem TemplatePolygon.exists_four_strip_bounds (P : TemplatePolygon) :
     ∃ lx ux ly uy ls us ld ud : ℝ, ∀ p : ℝ × ℝ,

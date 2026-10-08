@@ -146,6 +146,72 @@ original open square. We state the two models separately, following
     $q,R,J,\Delta$, chosen before every domain, Hamiltonian, ground vector, and cut.
 \end{definition}
 
+\begin{theorem}[Regional reductions of pure vectors]
+    \label{thm:area_law_regional_state_identities}
+    \lean{
+        TNLean.PEPS.AreaLaw.reducedState_posSemidef,
+        TNLean.PEPS.AreaLaw.trace_reducedState_eq_norm_sq,
+        TNLean.PEPS.AreaLaw.trace_reducedState,
+        TNLean.PEPS.AreaLaw.regionalEntropy_nonneg,
+        TNLean.PEPS.AreaLaw.regionalEntropy_empty,
+        TNLean.PEPS.AreaLaw.regionalEntropy_univ
+    }
+    \leanok
+    \uses{def:area_law_domain,def:area_law_ground_entropy}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\ge0$ be an integer,
+    and let $\Omega\in\mathcal H_\Lambda$. For every $A\subseteq\Lambda$,
+    the regional reduction defined in Definition~\ref{def:area_law_ground_entropy}
+    satisfies
+    \begin{align}
+        \rho_A                  & \ge0,
+        \label{eq:area_law_reduced_positive}     \\
+        \operatorname{Tr}\rho_A & =\|\Omega\|^2.
+        \label{eq:area_law_reduced_trace}
+    \end{align}
+    If $\|\Omega\|=1$, then for every $A\subseteq\Lambda$,
+    \begin{align}
+        \operatorname{Tr}\rho_A & =1,
+        \label{eq:area_law_reduced_unit_trace} \\
+        S_\Omega(A)             & \ge0.
+        \label{eq:area_law_entropy_nonnegative}
+    \end{align}
+    If $\|\Omega\|=1$, the empty region and the full region also satisfy
+    \begin{align}
+        S_\Omega(\varnothing) & =0,
+        \label{eq:area_law_empty_entropy} \\
+        S_\Omega(\Lambda)     & =0.
+        \label{eq:area_law_full_entropy}
+    \end{align}
+    No Hamiltonian or spectral-gap hypothesis is required. The identities include
+    empty domains and regions and use the one-dimensional empty tensor product.
+    The site dimension $q$ may here be zero, in which case $\mathcal H_\Lambda$
+    is the zero space for nonempty $\Lambda$; the standing assumption $q\ge1$
+    of Definition~\ref{def:area_law_domain} is not needed.
+    These are the density and entropy conventions of
+    \cite[Section~2]{OpenAI2026AreaLaw}.
+    % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+    % build/sections/01-preliminaries.tex, sec:prelim, lines 10--25.
+    % This entry records regional-state identities only; it does not mark a
+    % source-labelled continuity, gap-equivalence, or area-law theorem complete.
+\end{theorem}
+\begin{proof}\leanok
+    The pure-state matrix $|\Omega\rangle\langle\Omega|$ is positive semidefinite.
+    Restriction of configurations to $A$ and its complement changes only the
+    coordinates, and partial trace preserves positivity and trace. Thus
+    $\operatorname{Tr}\rho_A=\operatorname{Tr}|\Omega\rangle\langle\Omega|
+        =\|\Omega\|^2$. For a unit vector, the reduced matrix is positive with trace
+    one. Its eigenvalues lie in $[0,1]$, so each term $-\lambda\log\lambda$ in
+    its entropy is nonnegative, with $0\log0=0$.
+
+    For the empty region, the reduced matrix acts on a one-dimensional space.
+    For the full region, write $\rho_\Lambda=MM^*$ using the coefficient matrix
+    of the vector under the configuration splitting. The complement has one
+    configuration, so $M$ has one column and $\rho_\Lambda$ has rank at most one.
+    A positive trace-one matrix of rank at most one has one eigenvalue equal to
+    one and all remaining eigenvalues zero. Its entropy therefore vanishes in
+    both cases.
+\end{proof}
+
 \begin{theorem}[Uniform finite-domain area law]
     \label{thm:openai_uniform_area_law}
     \uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
