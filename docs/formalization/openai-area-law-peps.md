@@ -166,7 +166,7 @@ unproved. In particular, these auxiliary results do not prove the full
 | Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
 | Area-law `sec:prelim` | Regional positivity, squared-norm trace, unit trace, entropy nonnegativity, empty/full entropy, and norm/entropy invariance under site relabelling proved | Complementary entropy, continuity conventions, and the native Hamiltonian transport. |
 | Area-law `thm:area` | Target proposition defined | Faithful full proof, #8759 and its prerequisites. |
-| Area-law `cor:rectangles` | Graph and configuration identification proved | Hamiltonian and entropy transport and the boundary estimates. |
+| Area-law `cor:rectangles` | Graph and configuration identification and vertex-boundary comparisons proved; vertex entropy bounds proved assuming the uniform edge area law | Hamiltonian and entropy transport and the unconditional area-law theorem. |
 | Area-law `scanner:template` | Template area bound, depth-layer bound, and mixed dyadic-square counts proved for the actual polygon model | Entropy bounds, #8758. |
 | Area-law `geometry:cancellation` | Proved for a pure state on any finite tensor product, with its finite-domain lattice specialization | None. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |

@@ -39,6 +39,7 @@ on:
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
+      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -146,6 +147,7 @@ on:
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
+      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -304,6 +306,7 @@ jobs:
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
+              - 'scripts/test_ci_fixture_overlay.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -499,6 +502,23 @@ jobs:
               "$source"
           done
 
+      - name: Check labelled open coefficients early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          : > "$RUNNER_TEMP/collared-open-check.log"
+          for source in TNLeanTest/LabelledOpenCoefficient.lean \
+              TNLean/PEPS/LabelledOpenCoefficient.lean TNLean/PEPS/TorusLabelledOpenCoefficient.lean \
+              TNLean/PEPS/TorusDualCollar.lean TNLean/PEPS/TorusDualOpenDeformation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/collared-open-check.log"
+          done
+          python3 scripts/check_collared_open_axioms.py "$RUNNER_TEMP/collared-open-check.log"
+
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
       # Export only the explicit QIC allowlist and hashes, never the whole workspace.
@@ -640,6 +660,14 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridRegionalStates.lean
+
+      - name: Test lattice vertex-boundary conventions strictly
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/AreaLawVertexBoundaries.lean
 
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
@@ -851,9 +879,11 @@ jobs:
           test_root="$(mktemp -d)"
           trap 'rm -rf "$test_root"' EXIT
           mkdir -p "$test_root/TNLeanTest"
-          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
           for example in TorusDualFluxString TorusDualFluxParent TorusDualRectangle QuantumDoublePhysicalTerms; do
-            lake env lean \
+            # Lake prepends package paths. Put the overlay first so an existing
+            # TNLeanTest directory cannot shadow the fresh fixtures.
+            lake env bash -c 'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               -o "$test_root/TNLeanTest/$example.olean" \
@@ -1064,6 +1094,9 @@ jobs:
           python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
           python3 scripts/test_ci_compatible_cache.py
           python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
+
+      - name: Test CI fixture import overlay
+        run: python3 scripts/test_ci_fixture_overlay.py
 
       - name: Check local cache-seeding shell syntax
         run: |
