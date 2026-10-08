@@ -1,0 +1,9 @@
+Source: https://github.com/LionSR/TNLean/actions/runs/37598629129/job/112717609265
+Revision: 18883e6cf8cb616e1f2bb6ae40d269317f0774b9
+Selected successful build output; this is not a claim that the whole job passed.
+The later strict regression command failed at this revision.
+2026-10-07T09:15:11.5070662Z lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateRows:olean \
+2026-10-07T09:15:17.9153833Z ✔ [1686/1686] Built TNLean.PEPS.AreaLaw.Geometry.TemplateRows (2.4s)
+2026-10-07T09:15:17.9188361Z Build completed successfully (1686 jobs).
+2026-10-07T09:21:55.8331734Z Build completed successfully (12460 jobs).
+2026-10-07T09:22:14.8796313Z Build completed successfully (143 jobs).

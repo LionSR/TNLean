@@ -1,0 +1,8 @@
+Source: https://github.com/LionSR/TNLean/actions/runs/37608201285/job/112748797262
+Revision: 73f37d596041194bdf6c722ac32edc4e4a9325f0
+GitHub build job conclusion: success.
+Targeted source build, default project build, style lint, and compiled blueprint declaration checks passed.
+2026-10-07T10:37:28.9943888Z ✔ [1686/1686] Built TNLean.PEPS.AreaLaw.Geometry.TemplateRows (2.8s)
+2026-10-07T10:37:29.0134083Z Build completed successfully (1686 jobs).
+2026-10-07T11:08:10.5814003Z Build completed successfully (12460 jobs).
+2026-10-07T11:08:36.1995526Z Build completed successfully (143 jobs).
