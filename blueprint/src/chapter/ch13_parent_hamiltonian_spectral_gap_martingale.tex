@@ -8664,6 +8664,30 @@ shorter interaction range.
     Take limits in the finite-volume commutator gap inequality.
 \end{proof}
 
+\begin{theorem}[Interval inclusions and interior observable placement]
+    \label{thm:local_interval_bulk_observable}
+    \lean{SpinChain.intervalCoordinates_localInclusion_eq_bulkObservable}
+    \leanok
+    With $I,J$ as above,
+    $C_{a-b,b+N+c}(\iota_{I,J}(X))=I_b\otimes C_{a,N}(X)\otimes I_c$.
+    Thus the integer-interval inclusion agrees with the interior placement
+    used in the local GVBS expectations of
+    \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:local_interval_coordinate_inclusion, def:primitive_bulk_observable}
+    Write $\sigma=(\sigma_1,\sigma_2,\sigma_3)$ and $\tau=(\tau_1,\tau_2,\tau_3)$
+    for the restrictions of configurations to the first $b$ sites, the middle
+    $N$ sites, and the last $c$ sites. The interval inclusion formula gives
+    \begin{align}
+        C_{a-b,b+N+c}(\iota_{I,J}(X))_{\sigma,\tau}
+        =\delta_{\sigma_1,\tau_1}\,C_{a,N}(X)_{\sigma_2,\tau_2}\,
+        \delta_{\sigma_3,\tau_3},
+        \notag
+    \end{align}
+    which is the entry of $I_b\otimes C_{a,N}(X)\otimes I_c$.
+\end{proof}
+
 \begin{theorem}[Norm of a finite local state]
     \label{thm:primitive_insertion_state_norm}
     \lean{MPSTensor.observableInsertionExpectationₗ,
@@ -8963,6 +8987,194 @@ shorter interaction range.
     eventual bounds for the two inverse Gram norms.
 \end{proof}
 
+\begin{definition}[MPS expectations on finite regions]
+    \label{def:mps_finite_region_expectation}
+    \lean{MPSTensor.localObservableExpectation}
+    \leanok
+    For a finite region $\Lambda\subset\mathbb Z$, include an observable
+    $X\in\mathcal A_\Lambda$ into a consecutive interval $I(a,N)$
+    containing $\Lambda$ and put
+    \begin{align}
+        \eta_{A,\Lambda}(X)
+         & =\eta_A\bigl(C_{a,N}(\iota_{\Lambda,I(a,N)}X)\bigr).
+    \end{align}
+    To define the functional before proving independence, one may use
+    $I(-r,2r+1)$ with $r=\max_{x\in\Lambda}|x|$ and $r=0$ when
+    $\Lambda=\varnothing$. This gives a complex-linear functional without
+    a normalization assumption on $A$ or $\rho$.
+\end{definition}
+
+\begin{theorem}[Independence and compatibility of finite-region expectations]
+    \label{thm:mps_finite_region_expectation_compatible}
+    \lean{MPSTensor.localObservableExpectation_eq_of_subset_interval,
+        MPSTensor.localObservableExpectation_localInclusion}
+    \leanok
+    Suppose $\sum_i A_i^\dagger A_i=I$ and $E_A(\rho)=\rho$.
+    Then the preceding definition is independent of the containing interval.
+    For $\Lambda\subseteq\Gamma$ and $X\in\mathcal A_\Lambda$,
+    $\eta_{A,\Gamma}(\iota_{\Lambda,\Gamma}X)=\eta_{A,\Lambda}(X)$.
+    Neither positivity nor nonzero trace of $\rho$ is required for these
+    algebraic compatibility identities.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mps_finite_region_expectation,thm:local_interval_bulk_observable,thm:primitive_insertion_local_state,lem:qca_local_inclusion_trans}
+    Identity extension on the left preserves expectation by trace preservation;
+    identity extension on the right preserves expectation by $E_A(\rho)=\rho$.
+    Include two containing intervals in a common larger interval to compare
+    their values. Composition of local inclusions gives finite-region compatibility.
+\end{proof}
+
+\begin{definition}[The compatible local MPS state]
+    \label{def:mps_compatible_local_state}
+    \lean{MPSTensor.localMPSState, MPSTensor.localMPSState_functional_interval}
+    \leanok
+    Suppose $\sum_i A_i^\dagger A_i=I$, $\rho\geq0$,
+    $E_A(\rho)=\rho$, and $\operatorname{tr}\rho\neq0$.
+    The functionals $\eta_{A,\Lambda}$ form a compatible family of
+    normalized positive contractive local states. In particular,
+    $\eta_{A,I(a,N)}(X)=\eta_A(C_{a,N}X)$ for every $N\geq0$.
+    This is the compatible local interpretation of
+    \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{thm:mps_finite_region_expectation_compatible,thm:primitive_insertion_state_norm,def:qca_compatible_local_state,thm:primitive_insertion_local_state}
+    The inclusion and coordinate maps preserve identities, products, and
+    adjoints. Positivity and normalization therefore follow from their
+    finite-interval counterparts. Star-algebra homomorphisms between
+    complex C$^*$-algebras are contractive, so
+    $|\eta_{A,\Lambda}(X)|\leq\|X\|$.
+\end{proof}
+
+\begin{definition}[The completed quasi-local MPS expectation]
+    \label{def:mps_quasi_local_expectation}
+    \lean{MPSTensor.quasiLocalExpectation}
+    \leanok
+    Under the preceding hypotheses and $d>0$, let $\omega_A$ be the
+    continuous linear extension of the compatible local MPS state to the
+    completed quasi-local observable algebra.
+\end{definition}
+
+\begin{theorem}[Local evaluation and state properties of the MPS extension]
+    \label{thm:mps_quasi_local_expectation_state}
+    \lean{MPSTensor.quasiLocalExpectation_quasiLocalObservable,
+        MPSTensor.quasiLocalExpectation_interval, MPSTensor.quasiLocalExpectation_isState}
+    \leanok
+    Under the hypotheses of the preceding definition, the restriction of
+    $\omega_A$ to $\mathcal A_\Lambda$ is $\eta_{A,\Lambda}$.
+    Thus $\omega_A(X)=\eta_A(C_{a,N}X)$ for an observable on $I(a,N)$,
+    including $N=0$. The extension satisfies
+    $\|\omega_A\|=1$, $\omega_A(I)=1$, and $\omega_A(X^*X)\geq0$
+    for every quasi-local observable $X$. No primitivity or purity is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mps_quasi_local_expectation, def:mps_compatible_local_state,
+        thm:qca_compatible_state_evaluation, thm:qca_compatible_state_extension}
+    Apply the completion theorem for compatible local states. Its finite-region
+    evaluation formula gives the asserted restriction, and interval evaluation
+    gives the original trace insertion formula.
+\end{proof}
+
+\begin{theorem}[Translation preserves interval coordinates]
+    \label{thm:local_interval_translation_coordinates}
+    \lean{SpinChain.translateRegion_finiteChainRegion,
+        SpinChain.intervalCoordinates_localTranslation}
+    \leanok
+    For $a,b\in\mathbb Z$ and $N\geq0$, translation by $b$ sends
+    $I(a,N)$ to $I(a+b,N)$. If $T_b$ denotes the induced local
+    star-algebra equivalence, then
+    $C_{a+b,N}(T_bX)=C_{a,N}(X)$.
+    The equality includes the empty interval.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates,def:qca_finite_local_translation,def:qca_translate_region,def:qca_local_inclusion}
+    The site $a+i$ is sent to $a+b+i$ and retains its numbered coordinate
+    $i$. Hence the two interval coordinate maps give the same configurations
+    and matrix entries. The local inclusion identifying the translated region
+    with $I(a+b,N)$ has empty complement.
+\end{proof}
+
+\begin{theorem}[Translation invariance of finite-region MPS expectations]
+    \label{thm:mps_finite_region_translation_invariance}
+    \lean{MPSTensor.localObservableExpectation_localTranslation}
+    \leanok
+    Suppose $\sum_i A_i^\dagger A_i=I$ and $E_A(\rho)=\rho$.
+    For every finite region $\Lambda\subset\mathbb Z$, displacement
+    $b\in\mathbb Z$, and observable $X\in\mathcal A_\Lambda$,
+    $\eta_{A,\Lambda+b}(T_bX)=\eta_{A,\Lambda}(X)$.
+    Positivity and nonzero trace of $\rho$ are unnecessary for this identity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_finite_region_expectation_compatible,thm:local_interval_translation_coordinates,lem:qca_finite_local_translation_naturality,def:qca_translate_region}
+    Choose an interval containing $\Lambda$. Translation commutes with the
+    local inclusion and preserves numbered interval coordinates. Evaluate
+    the two local expectations in this interval and its translate.
+\end{proof}
+
+\begin{theorem}[Translation invariance of the completed MPS state]
+    \label{thm:mps_quasi_local_translation_invariance}
+    \lean{MPSTensor.quasiLocalExpectation_quasiLocalTranslation}
+    \leanok
+    Suppose $d>0$, $\sum_i A_i^\dagger A_i=I$, $\rho\geq0$,
+    $E_A(\rho)=\rho$, and $\operatorname{tr}\rho\neq0$.
+    For every displacement $b\in\mathbb Z$ and quasi-local observable $X$,
+    the completed state satisfies $\omega_A(T_bX)=\omega_A(X)$.
+    This proves translation invariance of the local GVBS state in
+    \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral};
+    no purity conclusion is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_finite_region_translation_invariance,
+        thm:mps_quasi_local_expectation_state, def:qca_quasi_local_translation}
+    The equality holds on every finite-region algebra. Translation and the
+    completed expectation are continuous, so it extends from the dense
+    algebraic local algebra to its completion.
+\end{proof}
+
+\begin{theorem}[Interval evaluation of the completed MPS state]
+    \label{thm:mps_quasi_local_interval_expectation}
+    \lean{MPSTensor.quasiLocalExpectation_quasiLocalIntervalObservable}
+    \leanok
+    Suppose $d>0$, $\sum_i A_i^\dagger A_i=I$, $\rho\geq0$,
+    $E_A(\rho)=\rho$, and $\operatorname{tr}\rho\neq0$.
+    For every $a\in\mathbb Z$, $k\geq0$, and $X\in M_{d^k}(\mathbb C)$,
+    the completed state satisfies $\omega_A(j_{a,k}(X))=\eta_A(X)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_quasi_local_expectation_state, thm:quasi_local_interval_observable}
+    Apply interval evaluation after transporting the matrix observable to
+    the interval algebra. The inverse coordinate maps cancel.
+\end{proof}
+
+\begin{theorem}[A primitive-sector quasi-local commutator gap]
+    \label{thm:primitive_quasi_local_parent_commutator_gap}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_pos_quasiLocalCommutator_gap_of_isParentInteraction}
+    \leanok
+    Let $d,D>0$, and let $A$ be a normalized primitive tensor with a
+    positive-definite invariant matrix $\rho$. Suppose that $h\geq0$ has
+    kernel $G_R(A)$ and $R\geq D^4+1$. There is a constant $\gamma>0$
+    such that, for every $a\in\mathbb Z$, $k\geq1$, and
+    $X\in M_{d^k}(\mathbb C)$ with $\omega_A(j_{a,k}(X))=0$,
+    \begin{align}
+        \gamma\operatorname{Re}\omega_A\bigl(j_{a,k}(X)^*j_{a,k}(X)\bigr)
+        \leq \operatorname{Re}\omega_A\bigl(j_{a-t,w}(Y)\bigr),
+        \notag
+    \end{align}
+    where $t=R-1$, $w=2t+k$, $B=I_t\otimes X\otimes I_t$, and
+    $Y=B^*[H_w(h),B]$. The constant is independent of $a$, $k$, and $X$.
+    This is the local commutator inequality in the constructed primitive
+    quasi-local state, at sufficient range. Identification of all pure
+    multiblock GVBS states and construction of the GNS Hamiltonian remain
+    separate from this consequence of
+    \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_local_positive_parent_commutator_gap,
+        thm:mps_quasi_local_interval_expectation, thm:quasi_local_interval_observable}
+    The interval inclusion preserves products and adjoints. Evaluate both
+    sides with the trace insertion formula and apply the finite-interval
+    primitive-sector bound.
+\end{proof}
+
 \begin{theorem}[Prefix ground projection]
     \label{thm:ground_prefix_projection_identity}
     \lean{MPSTensor.chainWindowOperator_groundSpaceProjection_comp_groundSpaceProjection}
@@ -9110,6 +9322,32 @@ shorter interaction range.
     observable is centered in sector $\alpha$. Every off-diagonal
     compression tends to zero by prefix locality. Interior placement is
     contractive, so the finite-sector assembly theorem applies.
+\end{proof}
+
+\begin{theorem}[Exact local support of the MPS state]
+    \label{thm:mps_state_local_support}
+    \lean{MPSTensor.observableInsertionExpectation_eq_zero_of_groundSpaceES_le_ker,
+        MPSTensor.quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker,
+        MPSTensor.IsParentInteraction.quasiLocalExpectation_interval_eq_zero}
+    \leanok
+    Let $A$ be an MPS tensor and let $X$ act on $k$ sites. If
+    $G_k(A)\subseteq\ker X$, then $\eta_A(X)=0$ for every virtual
+    matrix $\rho$, without normalization or positivity assumptions.
+    If $d>0$, $\sum_i A_i^\dagger A_i=I$, $\rho\geq0$,
+    $E_A(\rho)=\rho$, and $\operatorname{tr}\rho\neq0$, this gives
+    $\omega_A(j_{a,k}(X))=0$ for every $a\in\mathbb Z$.
+    In particular, the constructed state has expectation zero for every
+    translate of a positive local parent interaction.
+    This is the local support property in
+    \cite[Theorem~1.1 and Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_insertion_boundary_identity,thm:quasi_local_interval_observable,thm:mps_quasi_local_interval_expectation}
+    The hypothesis gives $X\Gamma_k=0$, and hence $\Gamma_k^*X\Gamma_k=0$.
+    The latter operator is the Choi reshuffling of the insertion transfer
+    map. Its matrix-unit coefficients therefore imply that this map is
+    zero. Taking the trace at $\rho$ proves the first assertion; interval
+    evaluation proves the assertions for the completed state.
 \end{proof}
 
 \begin{theorem}[Vanishing full projection of a sector excitation]
@@ -9314,6 +9552,264 @@ shorter interaction range.
     spaces and hence continuous. Apply it to the sandwich limit.
 \end{proof}
 
+\begin{theorem}[Quasi-local images of interior inclusions]
+    \label{thm:quasi_local_bulk_inclusion}
+    \lean{SpinChain.quasiLocalIntervalObservable_bulkObservable, SpinChain.quasiLocalIntervalObservable_chainWindowOperator}
+    \leanok
+    Let $j_{a,k}$ denote inclusion of the interval $[a,a+k)$ into the quasi-local
+    algebra. Then, including empty intervals,
+    \begin{align}
+        j_{a-\ell,\ell+k+r}(I_\ell\otimes X\otimes I_r)=j_{a,k}(X).
+        \notag
+    \end{align}
+    For $k>0$, the nonwrapping inclusion of $X$ at position $b$ in a chain of
+    length $N$, where $b+k\leq N$, has quasi-local image $j_{a+b,k}(X)$ when the
+    chain begins at $a$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:local_interval_bulk_observable,thm:quasi_local_interval_observable,lem:qca_quasi_local_observable}
+    Interval coordinates identify identity extensions with finite-region
+    inclusions. The quasi-local inclusions agree under enlargement of the finite
+    region. The nonwrapping statement is obtained by adjoining the remaining
+    sites on either side.
+\end{proof}
+
+\begin{theorem}[Fixed quasi-local support of commutator energy]
+    \label{thm:quasi_local_commutator_locality}
+    \lean{SpinChain.quasiLocalIntervalObservable_bulkObservable_commutator, SpinChain.quasiLocalIntervalObservable_commutator_locality}
+    \leanok
+    Let $R,k>0$, $t=R-1$, $w=k+2t$, and let $h$ be an arbitrary $R$-site matrix.
+    Write $H_N$ for its open-chain sum and $X_N=I_\ell\otimes X\otimes I_r$, with
+    $\ell,r\geq t$ and $N=\ell+k+r$. Let
+    \begin{align}
+        Y=(I_t\otimes X\otimes I_t)^*
+        [H_w,I_t\otimes X\otimes I_t].
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        j_{a-\ell,N}(X_N^*[H_N,X_N])=j_{a-t,w}(Y).
+        \notag
+    \end{align}
+    Equivalently, putting $x=j_{a,k}(X)$ and
+    $\widehat H_N=j_{a-\ell,N}(H_N)$ gives
+    $x^*[\widehat H_N,x]=j_{a-t,w}(Y)$.
+    Neither positivity nor a state assumption is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:finite_open_commutator_locality,thm:quasi_local_bulk_inclusion}
+    The finite-chain energy is a nonwrapping inclusion of the fixed patch
+    observable $Y$. Its quasi-local image is therefore $j_{a-t,w}(Y)$.
+    The equivalent form follows because the inclusions preserve products and
+    adjoints.
+\end{proof}
+
+\begin{theorem}[Literal finite-volume commutator limit]
+    \label{thm:quasi_local_commutator_energy_limit}
+    \lean{SpinChain.eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq, SpinChain.tendsto_quasiLocalIntervalObservable_bulkObservable_commutator, SpinChain.tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator, SpinChain.tendsto_apply_quasiLocalIntervalObservable_commutator}
+    \leanok
+    Under the preceding assumptions, if $\ell,r\to\infty$ along any common
+    filter, the quasi-local energy is eventually equal to $j_{a-t,w}(Y)$ and
+    hence converges to it in norm. Consequently every functional $\omega$ on the
+    quasi-local algebra satisfies
+    \begin{align}
+        \omega(x^*[\widehat H_N,x])\longrightarrow\omega(j_{a-t,w}(Y)).
+        \notag
+    \end{align}
+    Continuity is unnecessary here because the observable is eventually constant.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_commutator_locality}
+    Both growing margins eventually exceed $t$. Apply the fixed-support identity
+    on that tail; the convergence statements follow from eventual constancy.
+\end{proof}
+
+\begin{definition}[The finite-interval ground projection]
+    \label{def:mps_ground_space_projection_matrix}
+    \lean{MPSTensor.groundSpaceProjectionMatrix,
+        MPSTensor.isStarProjection_groundSpaceProjectionMatrix,
+        MPSTensor.isStarProjection_quasiLocalIntervalObservable_groundSpaceProjectionMatrix}
+    \leanok
+    For an MPS tensor $A$, let $p_A(N)$ be the matrix of the orthogonal
+    projection onto $G_A(N)$ in numbered coordinates on $N$ sites.
+    It is a self-adjoint idempotent. Its inclusion $j_{a,N}(p_A(N))$
+    into the quasi-local algebra on the interval beginning at $a$ is also
+    a self-adjoint idempotent, including when $N=0$.
+    \uses{def:ground_space_es, thm:quasi_local_interval_observable}
+\end{definition}
+\begin{proof}\leanok
+    Coordinate transport and the interval inclusion preserve products
+    and adjoints, hence preserve orthogonal projections.
+\end{proof}
+
+\begin{theorem}[Support compression of a positive functional]
+    \label{thm:positive_functional_support_compression}
+    \lean{PositiveLinearMap.apply_projection_compression_eq,
+        MPSTensor.norm_quasiLocalState_interval_sub_scalar_le_projection_compression}
+    \leanok
+    \uses{def:qca_state_space_purity}
+    Let $f$ be a positive complex-linear functional on a star-ordered
+    complex algebra in which every element admits a decomposition into
+    self-adjoint real and imaginary parts. If $p=p^*=p^2$ and $f(p)=f(1)$,
+    then, for every $X$,
+    \begin{align}
+        f(pXp)=f(X).
+        \notag
+    \end{align}
+    In particular, let $\varphi$ be a normalized positive norm-one state
+    on the quasi-local algebra. For an interval projection $p$ with
+    $\varphi(j_{a,N}(p))=1$, an interval observable $X$, and $c\in\mathbb C$,
+    \begin{align}
+        |\varphi(j_{a,N}(X))-c|\leq\|pXp-cp\|.
+        \notag
+    \end{align}
+    No translation invariance is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_interval_observable}
+    Put $q=1-p$. Then $f(q)=f(q^*q)=0$. Cauchy--Schwarz gives
+    $f(qX)=f(Xq)=0$, which proves the compression identity.
+    Restrict the quasi-local state to the numbered interval matrix algebra,
+    apply this identity, and use its norm-one bound on $pXp-cp$.
+    The interval inclusion preserves the operator norm.
+\end{proof}
+
+\begin{theorem}[Uniqueness of a state with primitive MPS support]
+    \label{thm:primitive_supported_quasi_local_state_unique}
+    \lean{MPSTensor.IsPrimitiveMPS.quasiLocalState_interval_eq_insertion_of_groundSpace_support,
+        MPSTensor.IsPrimitiveMPS.eq_quasiLocalExpectation_of_groundSpace_support}
+    \leanok
+    \uses{def:mps_ground_space_projection_matrix}
+    Let $A$ be a trace-preserving primitive MPS tensor of positive physical
+    and bond dimensions, with positive definite invariant matrix $\rho$. Let $\omega_A$ be its constructed quasi-local state.
+    Suppose that $\varphi$ is any normalized positive norm-one continuous
+    complex-linear state on the quasi-local algebra and that
+    \begin{align}
+        \forall\,a\in\mathbb Z,\ N\geq0:\ \varphi(j_{a,N}(p_A(N)))=1.
+        \notag
+    \end{align}
+    Then every interval observable has the prescribed insertion expectation:
+    \begin{align}
+        \varphi(j_{a,k}(X))=\eta_A(X),
+        \notag
+    \end{align}
+    and consequently $\varphi=\omega_A$. The competing state need not be
+    translation invariant. This uniqueness statement is a consequence of
+    primitive boundary convergence, as used in
+    \cite[Sections~3 and~6]{Nachtergaele1996Spectral}; purity is a separate
+    consequence of uniqueness and inheritance of support in convex
+    decompositions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_functional_support_compression,thm:primitive_bulk_ground_compression,thm:qca_compatible_state_extension,lem:qca_quasi_local_observable}
+    Include a fixed interval observable into intervals expanded by $n$ sites
+    on either side. Write $P_n$ for the ground projection of the expanded
+    interval and $X_n$ for the included observable. The preceding estimate
+    gives
+    \begin{align}
+        |\varphi(j_{a,k}(X))-\eta_A(X)|
+        \leq\|P_nX_nP_n-\eta_A(X)P_n\|.
+        \notag
+    \end{align}
+    Primitive scalar compression makes the right-hand side tend to zero.
+    Thus the states agree on every interval observable. Every finite-region
+    observable embeds into a containing interval, and their union is dense
+    in the quasi-local algebra. Continuity proves equality on the completion.
+\end{proof}
+
+\begin{theorem}[Expectation one of MPS support projections]
+    \label{thm:mps_support_projection_expectation_one}
+    \lean{MPSTensor.quasiLocalExpectation_groundSpaceProjection_eq_one}
+    \leanok
+    Let $d>0$ and let $A$ be trace preserving. Let $\rho\ge0$ be an invariant
+    virtual matrix of nonzero trace. For every $a\in\Z$ and $N\ge0$, the
+    constructed state satisfies
+    $\omega_A(j_{a,N}(P_{G_N(A)}))=1$.
+    Primitivity and faithfulness of $\rho$ are not required.
+\end{theorem}
+\begin{proof}
+    \uses{def:mps_ground_space_projection_matrix,thm:mps_state_local_support,thm:mps_quasi_local_expectation_state}
+    \leanok
+    The matrix $I-P_{G_N(A)}$ annihilates $G_N(A)$, so its translated
+    expectation is zero by the local support theorem. Since $\omega_A(I)=1$,
+    linearity gives expectation one on the projection.
+\end{proof}
+
+\begin{theorem}[Purity of the primitive quasi-local MPS state]
+    \label{thm:primitive_quasi_local_purity}
+    \lean{MPSTensor.IsPrimitiveMPS.isPureQuasiLocalState_quasiLocalExpectation}
+    \leanok
+    Let $d,D>0$, let $A$ be a trace-preserving primitive tensor, and let
+    $\rho>0$ be its invariant virtual matrix. The completed MPS state
+    $\omega_A$ is pure among all states of the quasi-local algebra.
+    The states in a proposed convex decomposition need not be translation
+    invariant. This proves the primitive canonical case of the purity
+    assertion in \cite[Section~3]{Nachtergaele1996Spectral}; no classification
+    of the multiblock ground-state face is asserted here.
+\end{theorem}
+\begin{proof}
+    \uses{thm:qca_purity_of_supported_uniqueness,thm:mps_support_projection_expectation_one,thm:primitive_supported_quasi_local_state_unique,thm:mps_quasi_local_expectation_state,def:mps_ground_space_projection_matrix}
+    \leanok
+    Apply the supported-state extremality criterion to the family of
+    all translated finite-interval MPS projections. They have expectation
+    one in $\omega_A$, and every state satisfying the same support constraints
+    equals $\omega_A$ by primitive supported-state uniqueness.
+\end{proof}
+
+\begin{theorem}[Positivity of a locally supported commutator expectation]
+    \label{thm:local_commutator_expectation_positive}
+    \lean{MPSTensor.observableInsertionExpectation_adjoint_commutator_nonneg}
+    \leanok
+    Let $A$ be a tensor, let $\rho\geq0$ be a virtual matrix, and let $H\geq0$
+    act on $N$ physical sites with $G_N(A)\subseteq\ker H$. For every $N$-site
+    matrix $B$,
+    \begin{align}
+        \eta_{A,\rho}(B^*[H,B])\geq0.
+        \notag
+    \end{align}
+    In particular, the commutator expectation is real. Neither primitivity nor a
+    spectral gap is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_state_local_support,thm:primitive_insertion_local_state}
+    The matrix $B^*BH$ annihilates $G_N(A)$, so its expectation vanishes.
+    The remaining matrix $B^*HB$ is positive, and the insertion expectation is a
+    positive linear functional.
+\end{proof}
+
+\begin{theorem}[Reality and positivity of sector commutator patches]
+    \label{thm:sector_commutator_patch_positive}
+    \lean{MPSTensor.IsParentInteraction.localCommutatorObservable_nonneg, MPSTensor.IsParentInteraction.localCommutatorObservable_im_eq_zero, MPSTensor.IsParentInteraction.quasiLocalExpectation_localCommutatorObservable_nonneg}
+    \leanok
+    Let $T$ be the weighted sum of tensors $A_\alpha$, with nonzero weights.
+    Suppose $h\geq0$ acts on $R>0$ sites and has kernel $G_R(T)$. For a $k$-site
+    matrix $X$ with $k>0$, put $t=R-1$, $w=k+2t$, and
+    \begin{align}
+        Y=(I_t\otimes X\otimes I_t)^*
+        [H_w,I_t\otimes X\otimes I_t],
+        \notag
+    \end{align}
+    where $H_w$ is the open-chain sum of $h$. For every block $\alpha$ and every
+    virtual matrix $\rho_\alpha\geq0$,
+    \begin{align}
+        \eta_{A_\alpha,\rho_\alpha}(Y)\geq0,
+        \qquad \operatorname{Im}\eta_{A_\alpha,\rho_\alpha}(Y)=0.
+        \notag
+    \end{align}
+    If $A_\alpha$ is trace preserving and $\rho_\alpha$ is an invariant matrix
+    of nonzero trace, the corresponding constructed quasi-local state satisfies
+    $\omega_\alpha(j_{a,w}(Y))\geq0$ for every interval position $a$.
+    No simultaneous injectivity bound is imposed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:local_commutator_expectation_positive,thm:open_parent_interaction_kernel_equal,thm:mps_quasi_local_expectation_state,thm:block_ground_space_le_joint,def:finite_open_interaction_matrix,lem:open_local_interaction_sum_properties,thm:open_ground_space_le_hamiltonian_kernel}
+    The positive parent sum and the canonical open Hamiltonian have the same
+    kernel. The canonical open Hamiltonian annihilates $G_w(T)$, which contains
+    $G_w(A_\alpha)$. Apply the preceding lemma to $H_w$ and the padded observable.
+    The quasi-local statement follows from exact local evaluation of the
+    constructed state.
+\end{proof}
+
 \begin{theorem}[Joint compression from sector column limits]
     \label{thm:sector_observable_decomposition_from_columns}
     \lean{Submodule.tendsto_norm_joint_compression_sub_sector_sum_zero}
@@ -9380,6 +9876,187 @@ shorter interaction range.
     $\|\sum_jP_j(n)-P(n)\|\to0$. Interior inclusion gives
     $\|X_n\|\le\|X\|$. Apply the joint-compression theorem with
     $c_j=\eta_{A_j}(X)$ and the sector column limits.
+\end{proof}
+
+\begin{theorem}[Local zero energy and finite open-chain expectations]
+    \label{thm:quasi_local_open_interaction_zero_expectation}
+    \lean{SpinChain.quasiLocalIntervalObservable_openInteractionMatrix, SpinChain.apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero}
+    \leanok
+    Let $h$ be an $R$-site matrix, where $R>0$, and let $H_N$ be its open-chain
+    sum. For every interval position $a$ and every $N\geq0$,
+    \begin{align}
+        j_{a,N}(H_N)=\sum_{i=0}^{N-R}j_{a+i,R}(h),
+        \notag
+    \end{align}
+    with the sum understood as empty when $N<R$.
+    Consequently, any complex-linear functional $\varphi$ satisfying
+    $\varphi(j_{a,R}(h))=0$ for every $a\in\mathbb Z$ also satisfies
+    \begin{align}
+        \varphi(j_{a,N}(H_N))=0
+        \notag
+    \end{align}
+    for every $a$ and $N$. This applies in particular to arbitrary continuous
+    states, without requiring translation invariance.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_bulk_inclusion,def:finite_open_interaction_matrix}
+    Every nonwrapping interaction window has quasi-local image $j_{a+i,R}(h)$.
+    The interval inclusion preserves the finite sum. Apply linearity of
+    $\varphi$ and the vanishing hypothesis to its summands.
+\end{proof}
+
+\begin{definition}[The positive finite-interval restriction]
+    \label{def:positive_interval_state_restriction}
+    \lean{MPSTensor.intervalStateFunctional, MPSTensor.intervalStateFunctional_apply}
+    \leanok
+    Let $\varphi$ be a continuous complex-linear functional on the quasi-local
+    algebra that is nonnegative on every element $Y^*Y$. Its restriction to
+    the numbered matrix algebra on an interval is the positive functional
+    $f_{a,N}(X)=\varphi(j_{a,N}(X))$.
+    \uses{thm:quasi_local_interval_observable}
+\end{definition}
+\begin{proof}\leanok
+    Every positive matrix is a square $Y^*Y$. The interval inclusion preserves
+    products and adjoints, so the restriction is positive.
+\end{proof}
+
+\begin{theorem}[Projection estimates for a finite-interval state]
+    \label{thm:interval_state_projection_estimates}
+    \lean{MPSTensor.intervalStateFunctional_projection_mem_unitInterval,
+        MPSTensor.intervalStateFunctional_projection_eq_ofReal_re,
+        MPSTensor.norm_quasiLocalState_interval_le,
+        MPSTensor.quasiLocalState_interval_projection_compression_eq,
+        MPSTensor.norm_quasiLocalState_interval_sub_le_projection_compression}
+    \leanok
+    \uses{def:positive_interval_state_restriction,def:qca_state_space_purity}
+    Suppose $\varphi$ is a normalized positive norm-one quasi-local state.
+    For an interval projection $p=p^*=p^2$, its expectation
+    $\varphi(j_{a,N}(p))$ is real and belongs to $[0,1]$.
+    Every interval observable satisfies
+    $|\varphi(j_{a,N}(X))|\leq\|X\|$.
+    If $\varphi(j_{a,N}(p))=1$, then
+    \begin{align}
+        \varphi(j_{a,N}(pXp))=\varphi(j_{a,N}(X)),\qquad
+        |\varphi(j_{a,N}(X))-\varphi(j_{a,N}(Y))|
+        \leq\|pXp-Y\|.
+        \notag
+    \end{align}
+    No translation invariance is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_functional_support_compression,thm:quasi_local_interval_observable}
+    Positivity of $p$ and $1-p$ gives the interval bounds and realness.
+    The norm-one condition and the isometric interval inclusion give the
+    operator-norm estimate. The support-compression identity reduces the
+    final difference to the expectation of $pXp-Y$.
+\end{proof}
+
+\begin{definition}[The zero-energy state set of a local interaction]
+    \label{def:quasi_local_parent_ground_state_face}
+    \lean{MPSTensor.parentGroundStateFace}
+    \leanok
+    Let $d>0$ and let $h$ be an observable on $R$ consecutive sites.
+    Define $\mathcal F_h$ to be the set of all states $\phi$ of the
+    quasi-local algebra such that $\phi(j_{a,R}(h))=0$ for every $a\in\Z$.
+    Translation invariance of $\phi$ is not required.
+    For a positive parent interaction, this is its zero-energy state set,
+    as in \cite[Section~1 and Theorem~1.1]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Convexity and the face property]
+    \label{thm:quasi_local_parent_ground_state_face_properties}
+    \lean{MPSTensor.convex_parentGroundStateFace,
+        MPSTensor.isExtreme_parentGroundStateFace}
+    \leanok
+    The set $\mathcal F_h$ is real convex for every local observable $h$.
+    If $h\ge0$, it is a face of the full state space: whenever
+    $\omega=(1-t)\phi+t\psi\in\mathcal F_h$, with $0<t<1$ and
+    $\phi,\psi$ states, both constituents belong to $\mathcal F_h$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:quasi_local_state_space_convex,thm:qca_state_convex_support,def:quasi_local_parent_ground_state_face}
+    \leanok
+    The zero-expectation equations are linear, and the state space is
+    convex. For the face assertion factor $h=Y^*Y$. Each translate is
+    the adjoint square $j_{a,R}(Y)^*j_{a,R}(Y)$. Vanishing of its
+    expectation in a nontrivial convex combination forces vanishing in
+    each constituent, by positivity.
+\end{proof}
+
+\begin{theorem}[Constructed states in the parent zero-energy face]
+    \label{thm:mps_quasi_local_parent_ground_state_face_membership}
+    \lean{MPSTensor.quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker,
+        MPSTensor.quasiLocalExpectation_mem_parentGroundStateFace_toTensorFromBlocks}
+    \leanok
+    Let $A$ be trace preserving and let $\rho\ge0$ be invariant with
+    nonzero trace. If $G_R(A)\subseteq\ker h$, then the constructed
+    state $\omega_A$ belongs to $\mathcal F_h$.
+    Consequently, if $B=\bigoplus_j\mu_jA_j$, with all $\mu_j\ne0$, and
+    $h$ is a positive parent interaction for $B$, every sector for which
+    such trace-preserving and invariant-matrix data are given determines
+    a state in $\mathcal F_h$. Neither primitivity nor faithfulness of
+    the invariant matrix is required.
+\end{theorem}
+\begin{proof}
+    \uses{thm:mps_state_local_support,thm:mps_quasi_local_expectation_state,thm:block_sum_local_ground_space,def:quasi_local_parent_ground_state_face,thm:block_ground_space_le_joint}
+    \leanok
+    Exact local support gives $\omega_A(j_{a,R}(h))=0$ at every position,
+    while normalization and positivity make $\omega_A$ a state.
+    For the weighted block tensor,
+    $G_R(A_j)\subseteq\sum_iG_R(A_i)=G_R(B)=\ker h$.
+    Apply the same support assertion to each sector.
+\end{proof}
+
+\begin{theorem}[Sector zero energy from a finite open kernel]
+    \label{thm:sector_local_zero_from_open_kernel}
+    \lean{MPSTensor.quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker}
+    \leanok
+    Let $T=\bigoplus_j\mu_jA_j$ with every $\mu_j\neq0$, and let $A_\alpha$
+    be a trace-preserving block with positive invariant density
+    $\rho_\alpha$ of nonzero trace, and let $\omega_\alpha$ be its constructed
+    quasi-local state. Let $h$ act on $R>0$ sites. Suppose that, for some
+    $N\geq R$, the joint MPS space $G_N(T)$ is contained in $\ker H_N$, where $H_N$ is
+    the open-chain sum of $h$. Then $\omega_\alpha(j_{a,R}(h))=0$ for every
+    interval position $a$. Positivity of $h$ is unnecessary.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_open_interaction_zero_expectation,thm:mps_state_local_support,thm:block_ground_space_le_joint,thm:mps_quasi_local_interval_expectation}
+    The sector space is contained in the joint MPS space, so
+    $\omega_\alpha(j_{a,N}(H_N))=0$. Exact interval evaluation gives the
+    same expectation $\eta_\alpha(h)$ for each translate of $h$. Thus
+    $(N-R+1)\eta_\alpha(h)=0$. Since $N\geq R$, the coefficient is positive.
+\end{proof}
+
+\begin{theorem}[Block spaces inside the joint space]
+    \label{thm:block_ground_space_le_joint}
+    \lean{MPSTensor.groundSpaceES_block_le_toTensorFromBlocks}
+    \leanok
+    Let $T=\bigoplus_j\mu_jA_j$ with every $\mu_j\neq0$. For every block
+    $\alpha$ and every length $L$, the boundary space $G_L(A_\alpha)$ is
+    contained in $G_L(T)$ \cite[Lemma~commutation~(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_sum_local_ground_space}
+    With nonzero weights, the joint boundary space is the sum of the block
+    boundary spaces.
+\end{proof}
+
+\begin{theorem}[Sector membership from eventual open kernels]
+    \label{thm:sector_local_zero_from_eventual_open_kernel}
+    \lean{MPSTensor.quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel}
+    \leanok
+    Under the same sector-state assumptions, suppose that
+    $\ker H_N=\mathcal G_N$ for every sufficiently large $N$, where
+    $\mathcal G_N$ is the joint open-boundary MPS space. Then
+    $\omega_\alpha(j_{a,R}(h))=0$ for every $a$ and every sector $\alpha$.
+    No injectivity condition at the interaction range is required.
+    This is the sector-membership consequence of the finite-volume kernel
+    hypothesis in \cite[Theorem~1.2]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:sector_local_zero_from_open_kernel,def:finite_open_interaction_matrix}
+    Choose a volume $N\geq R$ at which the kernel equality holds, and apply
+    the finite-volume statement.
 \end{proof}
 
 \begin{lemma}[Subwindows in active-block coordinates]
@@ -12279,6 +12956,35 @@ shorter interaction range.
     substitute the assumed individual intersection identities.
 \end{proof}
 
+\begin{theorem}[Finite restrictions of a faithful MPS state]
+    \label{thm:faithful_quasi_local_state_density_support}
+    \lean{MPSTensor.exists_quasiLocalExpectation_density_range_eq_groundSpaceES}
+    \leanok
+    \uses{def:mps_quasi_local_expectation, def:ground_space_es}
+    Let $A$ have positive bond dimension, assume
+    $\sum_iA_i^*A_i=I$, and let $\rho>0$ satisfy $E_A(\rho)=\rho$.
+    Write $\omega_{A,\rho}$ for the resulting quasi-local state.
+    For every $k\geq0$, there exists a density matrix $\sigma_k\geq0$,
+    of trace one, such that
+    \begin{align}
+        \forall\,a\in\mathbb Z,\ X:\ \omega_{A,\rho}(X_{[a,a+k)})
+                                   & =\operatorname{tr}(\sigma_kX),\notag \\
+        \operatorname{ran}\sigma_k & =G_A(k).\notag
+    \end{align}
+    Thus the same density describes every translated interval of length
+    $k$, and its support is exactly the tensor boundary space.
+    The generating data are supplied, as in
+    \cite[Section~3 and the overlap proof in Section~4]{Nachtergaele1996Spectral};
+    their construction from a general GVBS presentation remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:local_mps_density_support,thm:mps_quasi_local_interval_expectation}
+    The quasi-local state agrees on each consecutive interval with the
+    trace insertion functional. The finite-density support theorem
+    therefore gives the same matrix $\sigma_k$ at every position.
+\end{proof}
+
 \begin{theorem}[Positive physical dimension of a normalized tensor]
     \label{thm:left_canonical_physical_dimension}
     \lean{MPSTensor.IsLeftCanonical.physDim_ne_zero}
@@ -12625,6 +13331,70 @@ shorter interaction range.
     $\|y\|^2\leq\tfrac12\|y\|^2$, a contradiction.
 \end{proof}
 
+\begin{theorem}[Finite density supports of a stationary MPS state]
+    \label{thm:stationary_state_local_density_support}
+    \lean{MPSTensor.exists_faithful_quasiLocalExpectation_density_support_of_leftCanonical}
+    \leanok
+    Let $A$ satisfy $\sum_iA_i^*A_i=I$, and let $\rho\geq0$ have nonzero
+    trace with $E_A(\rho)=\rho$. There exist a positive dimension $E$, an
+    isometry $V$, a normalized tensor $B$, and a faithful stationary matrix
+    $\sigma>0$ such that
+    \begin{align}
+        V^*V                    & =I,                           & VV^*   & =\operatorname{supp}\rho, &
+        B_i                     & =V^*A_iV,                     & \sigma & =V^*\rho V,\notag           \\
+        \sum_iB_i^*B_i          & =I,                           & A_iV   & =VB_i,                    &
+        E_B(\sigma)             & =\sigma,                      &
+        \operatorname{Tr}\sigma & =\operatorname{Tr}\rho.\notag
+    \end{align}
+    Let $\varphi$ be the quasi-local state defined by the original
+    generators $A,\rho$. For every $k\geq0$, there is a matrix
+    $\tau_k\geq0$ of trace one such that, for every translated interval
+    $[a,a+k)$ and every matrix observable $X$ on that interval,
+    \begin{align}
+        \varphi(j_{a,k}(X))      & =\operatorname{Tr}(\tau_kX), &
+        \operatorname{ran}\tau_k & =G_B(k).
+        \label{eq:stationary_state_density_support}
+    \end{align}
+    The physical dimension is derived from the compressed normalization.
+    No faithfulness of $\rho$ or primitivity of the generating tensor is
+    required. This concerns supplied stationary generating data in
+    \cite[Section~3]{Nachtergaele1996Spectral} and its finite support
+    identification in Section~4; constructing such data from an arbitrary
+    GVBS boundary limit remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:stationary_support_faithful_generators,
+        thm:left_canonical_physical_dimension,
+        thm:faithful_quasi_local_state_density_support,
+        thm:mps_quasi_local_interval_expectation}
+    Support compression gives $E>0$, faithful stationary generators
+    $B,\sigma$, and $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$ at every length.
+    Normalization of $B$ implies positive physical dimension. The faithful
+    state has a density $\tau_k$ of range $G_B(k)$ on every translated
+    interval. The interval evaluation formula for the original quasi-local
+    state identifies its restriction with $\eta_{A,\rho}$, proving
+    (\ref{eq:stationary_state_density_support}).
+\end{proof}
+
+\begin{theorem}[The generated state has zero canonical parent energy]
+    \label{thm:canonical_parent_generated_state}
+    \lean{MPSTensor.quasiLocalExpectation_mem_parentGroundStateFace_canonicalParentInteraction}
+    \leanok
+    Let $d\geq1$, let $\sum_iA_i^*A_i=I$, and let $\rho\geq0$ have
+    nonzero trace and satisfy $E_A(\rho)=\rho$. For every range $R\geq0$,
+    the quasi-local state defined by $A,\rho$ belongs to the zero-energy
+    face of the canonical interaction determined by $G_A(R)$.
+    No faithfulness or purity is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:canonical_parent_interaction_matrix,thm:mps_quasi_local_parent_ground_state_face_membership,thm:canonical_parent_interaction_is_parent_interaction}
+    The canonical interaction annihilates $G_A(R)$. The finite insertion
+    expectation of every translate of that interaction is consequently zero,
+    so the generated state is a zero-energy state, as in
+    \cite[Lemma existenceinteraction]{Nachtergaele1996Spectral}.
+\end{proof}
+
 \begin{theorem}[Preservation of a primitive stationary witness]
     \label{thm:primitive_stationary_witness_transport}
     \lean{MPSTensor.IsPrimitiveMPS.blockTensor,
@@ -12644,6 +13414,62 @@ shorter interaction range.
     spectral gap therefore holds at this supplied stationary matrix.
     Under a bijective physical relabelling, both the normalization sum
     and the transfer map are unchanged.
+\end{proof}
+
+\begin{theorem}[Equality of quasi-local MPS expectations]
+    \label{thm:quasi_local_mps_expectation_equality}
+    \lean{MPSTensor.quasiLocalExpectation_eq_of_forall_observableInsertionExpectation_eq}
+    \leanok
+    Let $d>0$, let $A,B$ be trace-preserving tensors with possibly
+    different bond dimensions, and let $\rho,\sigma\geq0$ be stationary
+    matrices of nonzero trace. If
+    $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$ for every observable at every
+    finite length, then their continuous quasi-local expectation
+    functionals satisfy $\omega_{A,\rho}=\omega_{B,\sigma}$.
+    Faithfulness and purity are unnecessary. This concerns the generating
+    expectations in \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mps_finite_region_expectation,def:mps_compatible_local_state,
+        thm:mps_quasi_local_expectation_state,thm:qca_compatible_state_extension}
+    Embed any finite region into its canonical containing interval.
+    Its expectation is the insertion value of that interval observable,
+    so the two finite-region functionals agree. Uniqueness of continuous
+    extension from the finite-region algebras gives equality on the
+    quasi-local algebra.
+\end{proof}
+
+\begin{theorem}[Stationary support compression preserves the quasi-local state]
+    \label{thm:stationary_support_quasi_local_state_equality}
+    \lean{MPSTensor.exists_faithful_quasiLocalExpectation_supportCompression_of_leftCanonical}
+    \leanok
+    Let $A$ satisfy $\sum_iA_i^*A_i=I$, and let $\rho\geq0$ have nonzero
+    trace with $E_A(\rho)=\rho$. There exist a positive dimension $E$,
+    an isometry $V$, a normalized tensor $B$, and a faithful stationary
+    matrix $\sigma>0$ with
+    \begin{align}
+        V^*V                    & =I,                           & VV^*   & =\operatorname{supp}\rho, &
+        B_i                     & =V^*A_iV,                     & \sigma & =V^*\rho V,\notag           \\
+        \sum_iB_i^*B_i          & =I,                           & A_iV   & =VB_i,                    &
+        E_B(\sigma)             & =\sigma,                      &
+        \operatorname{Tr}\sigma & =\operatorname{Tr}\rho.\notag
+    \end{align}
+    The physical dimension is positive, and the actual continuous
+    functionals agree: $\omega_{A,\rho}=\omega_{B,\sigma}$.
+    No purity or minimality is assumed. This is a consequence for supplied
+    stationary generating data in \cite[Section~3]{Nachtergaele1996Spectral}.
+    Their construction from arbitrary GVBS boundary limits remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:stationary_support_faithful_generators,
+        thm:left_canonical_physical_dimension,
+        thm:quasi_local_mps_expectation_equality}
+    Compress the generators and stationary matrix to their stationary
+    support. The compressed bond dimension is positive, and normalization
+    of $B$ implies positive physical dimension. All finite insertion
+    expectations agree under compression. The preceding equality theorem
+    therefore identifies their continuous extensions.
 \end{proof}
 
 \begin{theorem}[Coordinate resolution of a finite direct sum]

@@ -142,6 +142,71 @@ presentation as given. Deriving such a presentation from a general GVBS
 boundary-limit presentation is part of the same unformalized passage, and the
 same elimination plan applies.
 
+\section{The primitive-sector quasi-local inequality}
+For one normalized primitive tensor with a positive-definite invariant
+matrix, the tensor-specific projection decay is now proved. The exact
+boundary compression of an interior observable is the reshuffling of
+$E_A^\ell E_X E_A^r$. When both free intervals tend to infinity, this
+converges to $\eta_A(X)$ times the limiting boundary Gram operator.
+These identities and limits are proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalObservableInsertion.lean}.
+The required general compression inequality is proved in
+\path{TNLean/MPS/ParentHamiltonian/GroundSpaceCompressionNorm.lean}:
+for an injective boundary map $T$, with $K=(T^*T)^{-1}$ and range
+projection $P$, it gives
+\begin{align}
+    \|PXP-cP\|&\leq\|K\|\,\|T^*XT-cT^*T\|.
+    \label{eq:infinite_gap_compression_bound}
+\end{align}
+An eventual uniform bound on $K$ transfers vanishing of the pullback defect
+to vanishing of the full compression defect, even when the Hilbert spaces
+vary. In particular, for $\eta_A(X)=0$, the complete ground-space projection
+of $X\psi_n$ tends to zero uniformly over unit boundary ground vectors.
+This consequence and local expectation convergence are proved in
+\path{TNLean/MPS/ParentHamiltonian/BoundaryObservableCompression.lean}.
+The finite expectations are positive, normalized, complex linear, and
+consistent under adjoining identity sites. Their operator norm is one;
+these state properties are proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalObservableExpectation.lean} and
+\path{TNLean/MPS/ParentHamiltonian/LocalObservableState.lean}.
+
+The fixed local commutator identity is also proved. For an interaction $h$
+of range $R\geq1$ and an observable $X$ on $k\geq1$ sites, put
+$t=R-1$, $w=2t+k$, and $B=I_t\otimes X\otimes I_t$. If both free
+intervals have at least $t$ sites, then $X_n^*[H_n(h),X_n]$ is the
+identity-tensor inclusion of $B^*[H_w(h),B]$. This locality identity is in
+\path{TNLean/MPS/ParentHamiltonian/BulkObservableCommutator.lean}.
+Combining it with the primitive expectation and full projection limits gives
+\begin{align}
+    \gamma\operatorname{Re}\eta_A(X^*X)
+        &\leq\operatorname{Re}\eta_A\bigl(B^*[H_w(h),B]\bigr).
+    \label{eq:primitive_local_commutator_gap}
+\end{align}
+For every positive interaction $h$ with kernel $G_R(A)$, a positive
+$\gamma$ independent of $X$ is derived at every $R\geq D^4+1$, where
+$D>0$ is the bond dimension. Comparison with the canonical interaction
+preserves the open-chain kernel and gives a uniform gap. There is no
+supplied energy-limit assumption and no finite-volume uniqueness assumption.
+The canonical and positive-interaction statements are proved in
+\path{TNLean/MPS/ParentHamiltonian/PrimitiveLocalCommutatorGap.lean} and
+\path{TNLean/MPS/ParentHamiltonian/PrimitiveLocalParentInteractionGap.lean}.
+
+The consistent local expectations now have a continuous positive extension
+$\omega_A$ to the quasi-local algebra, with $\omega_A(I)=\|\omega_A\|=1$.
+Finite-region compatibility, interval evaluation, and translation invariance
+are proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalObservableRegionExpectation.lean},
+\path{TNLean/MPS/ParentHamiltonian/LocalObservableQuasiLocalState.lean}, and
+\path{TNLean/MPS/ParentHamiltonian/LocalObservableTranslationInvariance.lean}.
+If $j_{a,k}$ includes a $k$-site matrix observable at position $a$, then
+$\omega_A(j_{a,k}(X))=\eta_A(X)$. Consequently
+(\ref{eq:primitive_local_commutator_gap}) is also the quasi-local inequality
+$\gamma\operatorname{Re}\omega_A(j_{a,k}(X)^*j_{a,k}(X))
+\leq\operatorname{Re}\omega_A(j_{a-t,w}(B^*[H_w(h),B]))$.
+This formulation is proved in
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalPrimitiveGap.lean}.
+
+\newpage
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
