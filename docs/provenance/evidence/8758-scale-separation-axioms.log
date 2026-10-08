@@ -1,8 +1,0 @@
-Command: lake env lean docs/provenance/evidence/8758-scale-separation-axioms.lean
-Revision: 4be0ad6b5e6bc2d1523ba02b8675377c05549da5
-Elapsed seconds: 2.751
-Exit code: 0
-
-'TNLean.PEPS.AreaLaw.Geometry.dyadicScale_index_gaps' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Geometry.dyadicScale_side_ratios' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios' depends on axioms: [propext, Classical.choice, Quot.sound]

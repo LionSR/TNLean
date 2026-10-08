@@ -1,5 +1,0 @@
-import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
-import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
-
-#print axioms TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_ne_of_segment_subset_inter
-#print axioms TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_eq_closure_initialOpenRegion

@@ -1,9 +1,0 @@
-Command: lake build TNLean.PEPS.AreaLaw.Geometry
-Revision: 5db13f626cbba4ce128e25ddcdb60a00532f0f3a
-Elapsed seconds: 13.186
-Exit code: 0
-
-✔ [2113/2115] Built TNLean.PEPS.AreaLaw.Geometry.LocalLayers (7.3s)
-✔ [2114/2115] Built TNLean.PEPS.AreaLaw.Geometry.MeshGeometry (7.6s)
-✔ [2115/2115] Built TNLean.PEPS.AreaLaw.Geometry (2.6s)
-Build completed successfully (2115 jobs).

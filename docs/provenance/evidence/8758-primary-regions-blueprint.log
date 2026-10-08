@@ -1,7 +1,0 @@
-Command: leanblueprint checkdecls
-Revision: d469be1a0a7799f4613e64e8139893b0fa2ee11d
-Elapsed seconds: 16.950
-Exit code: 255
-
-uncaught exception: object file '/Users/siruilu/Local/agentFormalization/TNLean/worktrees/area-law-peps-models/.lake/build/lib/lean/TNLean/MPS/Examples/Fibonacci.olean' of module TNLean.MPS.Examples.Fibonacci does not exist
-Command 'lake exe checkdecls blueprint/lean_decls' returned non-zero exit status 1.
