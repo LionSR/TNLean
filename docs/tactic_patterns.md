@@ -5679,3 +5679,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** A third consumer should use one public layout-membership
   lemma. The existing `affectedOwner_eq_none` already supplies the pointwise
   fact; no new tactic is needed.
+
+### Empty occurrence sets in circuit replacement — candidate (2026-10-08)
+
+- **Pattern:** In a circuit induction, an identity, a private map, or a register
+  permutation has an empty expanded-gate occurrence type. The occurrence
+  equivalence is reflexive and participant preservation follows by eliminating
+  the impossible occurrence.
+- **Seen:** Three cases of
+  `EffectCircuit.exists_replacementLocationsEquiv` in
+  `PEPS/Approximation/EffectCircuitLocations.lean`.
+- **Abstraction:** No new helper is needed within one induction. Before this
+  argument is repeated in a second file, use an equivalence between empty types
+  and a shared statement that participant preservation is vacuous on an empty
+  domain.
+- **Scan:** The focused approximation scan also found short equality-transport
+  proofs in `EffectCircuitReplacement` and `EffectCircuitError`. These are
+  defining equations of distinct dependent maps; they follow the existing
+  congruence-after-identifying-layout-memories decision above. Tensor calculations
+  reuse `clm_ext_tmul`, `rTensor_tmul`, and the existing preparation identities.

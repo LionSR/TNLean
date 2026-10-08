@@ -26,6 +26,10 @@ import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
+import TNLean.PEPS.Approximation.EffectCircuitDensity
+import TNLean.PEPS.Approximation.EffectCircuitError
+import TNLean.PEPS.Approximation.EffectCircuitLocations
+import TNLean.PEPS.Approximation.EffectCircuitReplacement
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
@@ -34,6 +38,7 @@ import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
+import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PairEffectSourcePreparation
 import TNLean.PEPS.Approximation.PairSourceCompletion
@@ -52,6 +57,7 @@ import TNLean.PEPS.Approximation.PartyLocalMaps
 import TNLean.PEPS.Approximation.PartyPartition
 import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
+import TNLean.PEPS.Approximation.PhysicalReadout
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.PreparedSourceGate
@@ -66,6 +72,7 @@ import TNLean.PEPS.Approximation.SourceCircuitLocations
 import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceGateDensity
+import TNLean.PEPS.Approximation.SourceOnlyReduction
 import TNLean.PEPS.Approximation.SourceOwnerMap
 import TNLean.PEPS.Approximation.SourcePairIndex
 import TNLean.PEPS.Approximation.SourcePairMaps

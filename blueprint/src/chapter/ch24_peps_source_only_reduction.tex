@@ -1,0 +1,174 @@
+\section{Source-only reduction of distributed densities}
+\label{sec:peps_source_only_reduction}
+
+The following estimates give the first reduction in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 199--229. All registers are retained
+until the final partial trace. The Hilbert spaces have arbitrary finite
+dimensions.
+
+\begin{definition}[Original distributed circuits]
+    \label{def:peps_original_circuit}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_party_monomial}
+    An original circuit is an ordered composition of contractions on
+    owned registers. A private operation acts at one party. Every
+    nonprivate operation has a specified participating set and an
+    expansion $G_j=\sum_\xi c_{j,\xi}M_{j,\xi}$ into allowed monomials.
+    Registers outside the participating set are spectators.
+    Let $N$ denote the number of nonprivate occurrences. Fix $r$ and $S$
+    so that each original monomial has at most $r$ pair effects and
+    $\sum_\xi|c_{j,\xi}|\le S$ at every nonprivate occurrence.
+\end{definition}
+
+\begin{theorem}[Common auxiliary vector and operator error]
+    \label{thm:peps_circuit_effect_error}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.referenceEval_apply}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_auxiliaryVector}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_replacement_sub_reference_le}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isAllowed_replacement}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_produce}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.expandedGateCount_produce}
+    \leanok
+    \uses{def:peps_original_circuit,cor:peps_pair_effects_rescaling}
+    Let $T$ be the operator of an original circuit and let $\delta>0$.
+    Choose $m=\lceil(rS/\delta)^2\rceil+1$, using the original expansions.
+    Replacing each nonprivate operation by its rescaled source-only
+    expansion gives a contraction $\widetilde T$ and a normalized
+    auxiliary vector $\Gamma$ such that
+    \begin{align}
+        \|\widetilde T-|\Gamma\rangle\otimes T\|\le 2\delta N.
+        \label{eq:peps_circuit_effect_error}
+    \end{align}
+    Each previously added auxiliary register is a spectator for all
+    subsequent original operations.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:peps_pair_effects_rescaling}
+    Induct on the composition of the original operations. The ideal
+    replacement of each nonprivate gate is its original operator
+    tensored with that gate's fixed normalized auxiliary vector.
+    Their tensor product is $\Gamma$. Private contractions and
+    permutations contribute no error. In a composition, insert the
+    ideal intermediate operator and use contractivity to obtain
+    $e(T_2T_1)\le e(T_1)+e(T_2)$. Each replaced nonprivate occurrence
+    contributes at most $2\delta$, proving
+    (\ref{eq:peps_circuit_effect_error}).
+\end{proof}
+
+\begin{theorem}[Preservation of participating parties]
+    \label{thm:peps_replacement_participants}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_ne_one}
+    \leanok
+    \uses{def:peps_original_circuit}
+    The nonprivate occurrences of the original circuit correspond
+    bijectively to the expanded gates of the replacement. Corresponding
+    occurrences have exactly the same participating parties. Auxiliary
+    preparations and register permutations introduce no additional
+    expanded gate occurrences.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the circuit. An original nonprivate occurrence contributes
+    one replacement gate with the original participating set. Composition
+    joins the two occurrence sets, while spectator registers leave them
+    unchanged. Private operations and permutations contribute empty sets.
+\end{proof}
+
+\begin{theorem}[Physical density error]
+    \label{thm:peps_source_only_density_error}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
+    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_eq_of_pos}
+    \leanok
+    \uses{thm:peps_circuit_effect_error}
+    Fix a decomposition of the original output memory into physical and
+    discarded factors. For an input $x$ with $\|x\|\le1$, let $\rho$ be
+    the original physical density and let $\widetilde\rho$ be the
+    replacement density after also discarding its auxiliary registers.
+    Then
+    \begin{align}
+        \|\widetilde\rho-\rho\|_1\le4\delta N.
+        \label{eq:peps_source_only_density_error}
+    \end{align}
+    If $N\le M$ and $\varepsilon>0$, choose
+    $\delta=\varepsilon/(8\max\{1,M\})$. The density error is at most
+    $\varepsilon/2$. For $M>0$ this is precisely
+    $\delta=\varepsilon/(8M)$. The estimate applies in particular to a
+    tensor product of normalized vectors, one in each party's entire
+    private memory.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_circuit_effect_error}
+    Put $u=\widetilde T x$ and $v=\Gamma\otimes Tx$, expressed in the
+    common physical and discarded coordinates. Both norms are at most
+    one, and (\ref{eq:peps_circuit_effect_error}) gives
+    $\|u-v\|\le2\delta N$. For the final partial trace $\operatorname{Tr}_E$,
+    \begin{align}
+        \|\operatorname{Tr}_E(|u\rangle\langle u|-|v\rangle\langle v|)\|_1
+        \le(\|u\|+\|v\|)\|u-v\|\le4\delta N.
+        \label{eq:peps_source_only_pure_error}
+    \end{align}
+    Discarding the normalized factor $\Gamma$ leaves the original
+    physical density unchanged. This proves
+    (\ref{eq:peps_source_only_density_error}); substituting the chosen
+    budget and $N\le M$ gives the final bound. When $M=0$, one has $N=0$
+    and the error is zero.
+\end{proof}
+
+\begin{definition}[Labelled physical outputs]
+    \label{def:peps_labelled_physical_output}
+    \lean{TNLean.PEPS.PairEffect.physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.physicalOutputLayout}
+    \lean{TNLean.PEPS.PairEffect.labelledPhysicalReadout}
+    \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout}
+    \leanok
+    \uses{def:peps_party_layout}
+    Let every party have physical space $\C^d$. List the parties once
+    and append their actual private registers after these physical
+    registers. The physical coordinates are assignments
+    $\sigma:P\to\{0,\ldots,d-1\}$. For a region $A\subseteq P$, retain
+    $\sigma|_A$ and discard both $\sigma|_{P\setminus A}$ and the
+    private registers. Tensor products of the standard physical bases
+    and an orthonormal basis of the actual private memory give isometric
+    coordinates for this decomposition.
+\end{definition}
+
+\begin{theorem}[Regional physical coordinates]
+    \label{thm:peps_regional_physical_coordinates}
+    \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout_apply}
+    \lean{TNLean.PEPS.PairEffect.card_regionalPhysicalIndex}
+    \lean{TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
+    \leanok
+    \uses{def:peps_labelled_physical_output,thm:peps_source_only_density_error}
+    Regional coordinates are obtained by splitting the same full
+    assignment $\sigma$ into its restrictions to $A$ and its complement.
+    There are exactly $d^{|A|}$ regional physical coordinates. For the
+    original whole-party product input, the source-only replacement
+    has regional physical density error at most $\varepsilon/2$ with
+    the budget of Theorem~\ref{thm:peps_source_only_density_error}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_only_density_error}
+    Reindex the tensor basis by
+    $\sigma\mapsto(\sigma|_A,\sigma|_{P\setminus A})$. An assignment on
+    $A$ has $d$ independent choices at each of its $|A|$ parties, giving
+    $d^{|A|}$ coordinates. The constructed coordinate map is an
+    isometry, so Theorem~\ref{thm:peps_source_only_density_error}
+    applies to the literal regional partial trace.
+\end{proof}
+
+% These statements establish the effect-elimination part of the proof of
+% Theorem 5.2. They do not establish the subsequent sampling construction,
+% uniform polynomial bounds, or the full distributed density-compression theorem.
