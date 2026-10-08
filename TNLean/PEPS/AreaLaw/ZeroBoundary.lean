@@ -47,20 +47,6 @@ vanishes for every unit vector.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  01-preliminaries.tex
-Labels: lem:zero-boundary.
-Provenance-ID: 8742-tnlean.peps.arealaw.regionalentropy_eq_zero_of_edgeboundary_eq_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty
--/
-
 open Matrix
 open scoped ComplexOrder Kronecker
 

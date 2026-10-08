@@ -1,7 +1,0 @@
-'TNLean.PEPS.AreaLaw.exists_eq_mul_of_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]

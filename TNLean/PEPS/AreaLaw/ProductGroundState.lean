@@ -44,22 +44,6 @@ the cut.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  01-preliminaries.tex
-Labels: lem:zero-boundary.
-Provenance-ID: 8742-tnlean.peps.arealaw.exists_eq_mul_of_gap
-Downstream declaration: TNLean.PEPS.AreaLaw.exists_eq_mul_of_gap
-Provenance-ID: 8742-tnlean.peps.arealaw.vonneumannentropy_partialtraceright_eq_zero_of_gap
-Downstream declaration: TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap
--/
-
 open Matrix
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 
