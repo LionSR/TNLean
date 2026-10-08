@@ -446,6 +446,8 @@ jobs:
               MixedEndpointOpenGap MixedEndpointUniformPathGap JointInsertedOpenKernel \
               JointMixedEndpointFamily JointMixedEndpointBoundaryColumns \
               JointMixedEndpointEdgeNormalization \
+              JointMixedEndpointFrameReduction \
+              JointMixedEndpointCoreHamiltonian \
               DependentSpectatorGapEquivalence; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
