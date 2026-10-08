@@ -1,0 +1,33 @@
+import took 1.91s
+'TNLean.PEPS.coordinateResetMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.coordinateResetMatrix_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.finrank_coordinateSubspaceES' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.coordinateRangeProjector_eq_sum_basis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.identityHoleEncoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.identityHoleEncoder_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.identityHoleEncoder_mulVec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.identityHoleEncoder_norm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.HoleEncoderTag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoderBasis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.card_holeEncoderTag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.card_holeEncoderTag_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_gram' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_eq_zero_of_not_reset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_eq_zero_of_complement_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_opNorm_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_norm_eq_projector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_norm_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.holeEncoder_zero_spaces' depends on axioms: [propext, Classical.choice, Quot.sound]
+cumulative profiling times:
+	elaboration 1.71ms
+	import 1.91s
+	initialization 33.8ms
+	interpretation 439ms
+	linting 6.98ms
+	module linting 0.00161ms
+	overlappingInstancesLinter 6.85ms
+	parsing 0.442ms
+	tacticAnalysis 27.1ms

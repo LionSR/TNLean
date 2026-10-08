@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "fixture-existing-library",
+      "status": "planned",
+      "reuse_kind": "existing_library",
+      "upstream": {
+        "repository": "openai/math",
+        "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+        "path": "lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean",
+        "declaration": "OAI.PolynomialPEPS.exists_phase_minimizer",
+        "lines": [
+          114,
+          135
+        ],
+        "url": "https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L114-L135"
+      },
+      "downstream": {
+        "repository": "LionSR/QICLean",
+        "path": "QICLean/Analysis/PhaseError.lean",
+        "declaration": "QuantumState.exists_phase_minimizer",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/00-introduction.tex",
+          "labels": [
+            "eq:target-error"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Proposed: use the companion phase convention and namespace without specializing the generic inner product space.",
+        "Proposed: replace the broad Mathlib import with reviewed direct imports."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "library": {
+        "repository": "LionSR/QICLean",
+        "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "path": "QICLean/Analysis/PhaseError.lean",
+        "declaration": "QuantumState.exists_phase_minimizer",
+        "lines": [
+          114,
+          135
+        ],
+        "url": "https://github.com/LionSR/QICLean/blob/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/QICLean/Analysis/PhaseError.lean#L114-L135"
+      }
+    }
+  ]
+}

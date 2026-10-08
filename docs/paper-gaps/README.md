@@ -82,6 +82,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction) records
+  that preservation of an on-site symmetry along the isometric deformation of
+  arXiv:1010.3732 is formalized for a supplied virtual unitary and for a single
+  injective block, where the fundamental theorem supplies that unitary; the
+  multiblock derivation of a unitary virtual action remains open.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
@@ -617,6 +622,12 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   with constants uniform in the volume and violates the printed bound. The
   note also shows that the vanishing of the martingale differences below the
   threshold is the minimal repair, and that repaired theorem is formalized.
+- `nachtergaele96_infinite_volume_ground_projection.tex` (open gap) records
+  that the finite-volume commutator estimate behind Nachtergaele's
+  infinite-volume gap retains the projection onto the whole finite-volume
+  ground space, so scalar centering of the observable does not by itself
+  remove that term in a degenerate finite volume; the formal limiting
+  statement keeps the projection decay as an explicit hypothesis.
 - `cpgsv21_block_parent_interaction_range.tex` records that the overlap
   argument for block-injective parent Hamiltonians first constructs a gapped
   range chosen by the argument, and the two-range comparison that transfers

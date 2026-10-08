@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
+import QICLean.Analysis.SqrtHolder
 
 /-!
 # Square roots in a C⋆-algebra are `1/2`-Hölder
@@ -23,7 +24,7 @@ Lipschitz bound of `TNLean.Algebra.CStarSqrtLipschitz` uses a positive floor.
 * `IsSelfAdjoint.norm_le_of_le_algebraMap` — `-r ≤ a ≤ r` bounds `‖a‖` by `r`.
 * `CFC.algebraMap_sqrt_le_sqrt` — `c ≤ b` gives `√c ≤ √b`.
 * `CFC.sqrt_sub_sqrt_le_algebraMap_of_le` — `√a - √b ≤ s` from a scalar floor `c ≤ b`.
-* `CFC.norm_sqrt_sub_sqrt_le` — `‖√a - √b‖ ≤ √‖a - b‖` for `a, b ≥ 0`.
+* The Hölder bound `CFC.norm_sqrt_sub_sqrt_le` itself is `QICLean.Analysis.SqrtHolder`.
 -/
 
 /-- A selfadjoint element with `-r ≤ a ≤ r` has norm at most `r`. -/
@@ -95,20 +96,5 @@ theorem sqrt_sub_sqrt_le_algebraMap {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :
     CFC.sqrt a - CFC.sqrt b ≤ algebraMap ℝ A (Real.sqrt ‖a - b‖) :=
   sqrt_sub_sqrt_le_algebraMap_of_le ha hb le_rfl (by rwa [map_zero]) (Real.sqrt_nonneg _)
     (by rw [Real.sqrt_zero, mul_zero, zero_add, Real.mul_self_sqrt (norm_nonneg _)])
-
-/-- **Square roots are `1/2`-Hölder**: for `a, b ≥ 0` in a C⋆-algebra,
-`‖√a - √b‖ ≤ √‖a - b‖`.
-
-arXiv:2103.13367, Supplemental Material, eq. (26) (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for
-`X, Y ≥ 0`, quoted there from Bhatia). -/
-theorem norm_sqrt_sub_sqrt_le {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :
-    ‖CFC.sqrt a - CFC.sqrt b‖ ≤ Real.sqrt ‖a - b‖ := by
-  refine IsSelfAdjoint.norm_le_of_le_algebraMap
-    ((CFC.sqrt_nonneg a).isSelfAdjoint.sub (CFC.sqrt_nonneg b).isSelfAdjoint)
-    (Real.sqrt_nonneg _) (sqrt_sub_sqrt_le_algebraMap ha hb) ?_
-  have h := sqrt_sub_sqrt_le_algebraMap hb ha
-  rw [norm_sub_rev] at h
-  rw [neg_le, neg_sub]
-  exact h
 
 end CFC

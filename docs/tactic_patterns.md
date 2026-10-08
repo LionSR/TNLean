@@ -929,7 +929,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
+  `trace_rectKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
   and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
 - **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
@@ -5537,3 +5537,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   division inequalities keep both arguments short.
 - **Notes:** The two occurrences do not justify another exported quotient
   wrapper; the underlying estimates stay with the actual periodic observables.
+
+### Complementary-slice reconstruction — candidate (2026-10-07)
+
+- **Pattern:** Choose one inside vector for each outside configuration and
+  reconstruct the global vector by composing with the regional configuration
+  equivalence. Applying a slice reduces to the equivalence's inverse law.
+- **Seen:** `range_dependentRegionOperatorLift` and the two summands in
+  `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Cylinder`.
+- **Abstraction:** None yet; these three occurrences are in one file. Reuse the
+  existing configuration equivalence before introducing another reconstruction
+  map if a second file needs the same argument.
+- **Notes:** This argument permits an empty complementary configuration type;
+  it never cancels an identity extension or assumes that the outside factor is
+  nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
+  its default thresholds.

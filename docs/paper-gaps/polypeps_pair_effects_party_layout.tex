@@ -24,17 +24,19 @@
 \section{The source lemma}
 
 Lemma~5.1 of the polynomial PEPS approximation manuscript of September~24,
-2026 (\path{04-compression.tex}, lines~53--71) considers a contraction
+2026~\cite{OpenAI2026PolynomialPEPS} (\path{04-compression.tex},
+lines~53--71) considers a contraction
 $G=\sum_\xi c_\xi M_\xi$ expanded into $K$ allowed monomials, each with at
 most $r$ pair effects. An allowed monomial (lines~32--35) is a composition of
 local contractions, preparations of normalized vectors shared between two
 participating parties, and contractions by normalized bras shared between two
 participating parties. For every $m\ge1$ the lemma produces a gate
 $\widetilde G_m$ and a normalized vector $\Gamma_m$ with
-\[
+\begin{align}
   \bigl\|\widetilde G_m-G\otimes\ket{\Gamma_m}\bigr\|
-  \le\frac{r}{\sqrt m}\sum_\xi|c_\xi|,
-\]
+  &\le\frac{r}{\sqrt m}\sum_\xi|c_\xi|,
+  \label{eq:polypeps_pair_effects_party_layout_error}
+\end{align}
 and asserts four further properties of $\widetilde G_m$: (i) it has an
 expansion using only local contractions and normalized pair sources; (ii) the
 expansion has at most $Km^r$ monomials with absolute coefficient sum at most
@@ -132,5 +134,8 @@ the preparation of all its sources followed by a word without sources, then
 reorder the prepared registers and merge the sources on each pair of parties
 one at a time with the identity above. The inverse merging maps are local
 isometries, so the resulting word stays allowed.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}
