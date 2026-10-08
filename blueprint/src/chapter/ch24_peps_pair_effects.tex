@@ -6,13 +6,15 @@ the choice of the stack length and the rescaling in the proof of
 \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, lines 201--212. The estimates
 are first proved for monomials written as chains of recorded pair effects
 between arbitrary contractions. The statements about parties are then proved
-after assigning every register to a party, except that sources on one pair of
-parties are combined only when they are adjacent; see
-\cite{gap:polypeps_pair_effects_party_layout}.
+after assigning every register to a party. Preparing the sources before the
+local operations and combining them by unordered pairs gives the full
+conclusion of the source lemma.
 
 \begin{lemma}[Elimination of normalized pair effects]
     \label{lem:peps_pair_effects_source}
-    \uses{thm:peps_pair_effects_party,thm:peps_party_combine_sources}
+    \lean{TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources}
+    \leanok
+    \uses{def:peps_party_monomial}
     Let $G$ be a contraction with an expansion $G=\sum_\xi c_\xi M_\xi$ into
     $K$ allowed monomials on a fixed set of parties, each with at most $r$
     pair effects. For every integer $m\ge1$ there are a gate $\widetilde G_m$
@@ -27,17 +29,15 @@ parties are combined only when they are adjacent; see
     \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
 \end{lemma}
 
-\begin{proof}
-    \uses{thm:peps_pair_effects_party,thm:peps_party_combine_sources}
-    All statements except the last are
-    Theorem~\ref{thm:peps_pair_effects_party}. For the last, two pair sources
-    on the same pair of parties prepared one after the other combine into one
-    normalized pair source by Theorem~\ref{thm:peps_party_combine_sources}.
-    Every pair source prepares fresh registers, so it can be moved past the
-    operations acting on other registers; once all sources on one pair of
-    parties are adjacent, they combine one at a time. This rearrangement of
-    the sources is not formalized, see
-    \cite{gap:polypeps_pair_effects_party_layout}.
+\begin{proof}\leanok
+    \uses{thm:peps_pair_effects_party,thm:peps_grouped_sources}
+    The error, normalization, expansion, and ownership conclusions follow
+    from Theorem~\ref{thm:peps_pair_effects_party}. Apply
+    Theorem~\ref{thm:peps_grouped_sources} to each monomial in this expansion.
+    It replaces all sources on a given unordered pair by one normalized
+    source and recovers the original registers by local isometries and
+    exchanges. The operator of each monomial is unchanged, as are the
+    number of monomials, their coefficients, and their common output space.
 \end{proof}
 
 \begin{theorem}[Elimination of pair effects on parties]
