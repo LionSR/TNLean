@@ -416,10 +416,14 @@ normalizations.
   remaining operations into one contraction per party under canonical register
   identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
   grouped preparation for a prescribed finite gate party type.
-- **Caveat:** in the latter theorem the finite type is the party set of the
-  gate, not necessarily all parties in a larger construction. A bound on its
-  cardinality, common source spaces across branches and unused-pair padding
-  are separate data or constructions.
+- **All pair slots:** `Word.exists_complete_prepared_tensorPartyMaps` also
+  supplies a source on every unordered pair of distinct gate parties. Sources
+  on pairs absent from the original monomial have one-dimensional halves.
+  `SourceInventory.exists_complete_extension` retains the original inventory
+  verbatim and supplies an allowed recovery of its preparation.
+- **Caveat:** the finite type is the party set of the gate, not necessarily all
+  parties in a larger construction. A bound on its cardinality and common
+  source spaces across different monomials remain separate data or constructions.
 
 #### `TNLean.PEPS.IsVertexInjective`
 
