@@ -286,5 +286,9 @@
   "blueprint/final-tex.log.gz": {
     "uncompressed_sha256": "306b82c3e72f217e02d487d1330ac7e16ddf0a0042e34911564b38dade1d3dc9",
     "uncompressed_bytes": 71775
+  },
+  "inherited-refactors.patch.gz": {
+    "uncompressed_sha256": "936b6d9371b26b4d5d8400f4251c9907beccd995892d892e768478745ff92763",
+    "uncompressed_bytes": 9069
   }
 }

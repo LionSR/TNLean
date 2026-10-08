@@ -99,3 +99,7 @@ are retained. The final PDF has one inherited 0.99057 pt overfull heading in the
 common-source chapter; the new chapter has none. This verification does not claim
 a full-book render. Source hashes, exact commands, the final PDF and page images
 are recorded under `blueprint/`.
+
+The inherited proof patch is retained as `inherited-refactors.patch.gz`; its
+exact decompressed bytes and hash are unchanged. Compression preserves the
+necessary blank-line context of the patch without treating it as source whitespace.

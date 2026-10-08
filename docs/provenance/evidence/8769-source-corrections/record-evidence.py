@@ -46,7 +46,7 @@ def main():
  for p in (b/'declaration-check').iterdir():
   zipped=p.name=='lean_declarations.txt';cp(p,'declaration-check/'+p.name+('.gz' if zipped else ''),zipped)
  cp(b/'tactic-pattern-scan.log','tactic-pattern-scan.log.gz',True)
- cp(Path('/private/tmp/tnlean-source-reaggregation/inherited-refactors.patch'),'inherited-refactors.patch')
+ cp(Path('/private/tmp/tnlean-source-reaggregation/inherited-refactors.patch'),'inherited-refactors.patch.gz',True)
  for name in ['check-source-corrections.py','audit-source-corrections.py','check-source-corrections-declarations.py','pin-source-corrections.py','check-source-corrections-qic-snapshot.py']:
   cp(Path('/tmp')/name,'verification-scripts/'+name)
  for name in ['commands.json','initial-commands.json','source-revision.json','tag-coverage.json','visual-review.json','scoped_web_check.py']:
