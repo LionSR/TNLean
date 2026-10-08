@@ -39,7 +39,10 @@ import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
+import TNLean.PEPS.Approximation.PairEffectSourcePreparation
 import TNLean.PEPS.Approximation.PairSourceCombination
+import TNLean.PEPS.Approximation.PairSourceExpansion
+import TNLean.PEPS.Approximation.PairSourceGrouping
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyWord
@@ -51,6 +54,7 @@ import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
+import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
@@ -58,3 +62,4 @@ import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
+import TNLean.PEPS.Approximation.WordPermutation

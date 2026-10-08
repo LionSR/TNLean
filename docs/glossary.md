@@ -767,11 +767,8 @@ normalizations.
   inter-factor commutation, uniqueness, or smooth optimizer is assumed.
   Stationarity, energy, later regulator-growth and retained-rank estimates,
   and the full adaptive patch constraint are outside this result.
-- **Verification boundary:** the minimum module passed a strict local check
-  with the accepted QICLean shifted-density dependency. Its original-proof
-  ledger records immutable native source and passing evidence; full-build and
-  exact-head CI gates remain separate. See
-  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
+- **Scope:** see
+  [the formalization scope](formalization/peps-regularized-patch-minimum.md).
 
 #### `TNLean.PEPS.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
 
@@ -807,8 +804,7 @@ normalizations.
 - **Caveats:** the coordinate variable `xⱼ` need not equal `ρ_Xⱼ`. Zero weight
   does not constrain that density to commute with the final marginal.
   No intermediate filtered vector is substituted for the final state.
-- **Verification boundary:** the independent planned provenance shard and
-  acceptance gates are recorded in
+- **Scope:** see
   [the source-facing scope](formalization/peps-regularized-patch-stationarity.md).
 
 #### `TNLean.PEPS.IsRegionParentInteraction`

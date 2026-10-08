@@ -25,16 +25,11 @@ expansion of the replaced gate with source-only words (`termList_toGate`), the c
 vector with a product of pair sources (`gateIso_prepGate`), and the additional registers with
 the stacks (`gateOut_eq`).
 
-**Scope restriction (combining sources):** the last clause of Lemma 5.1, that all sources on
-the same pair of parties in the expansion may be combined into one normalized pair source
-(`04-compression.tex`, lines 68–70), is formalized only for two pair sources prepared one
-after the other (`eval_combineSources`), which is the tensor-product identity the source
-gives as its proof (lines 125–127).  Moving the sources of a word past the operations on
-other registers, so that all sources on one pair of parties become adjacent, is not
-formalized; `partyPairEffectElimination` does not state this clause.  Documented in
-`docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.  Elimination: prove that every
-allowed source-only word equals the preparation of all its sources followed by a word without
-sources, then merge the sources pair by pair with `eval_combineSources`.
+The combination of arbitrary sources on one unordered pair, including sources separated
+by local operations, is proved in `TNLean.PEPS.Approximation.PairEffectSourcePreparation`.
+That module proves `partyPairEffectElimination_with_grouped_sources`, which retains all
+conclusions here and includes the last clause of Lemma 5.1. The earlier restriction and
+its resolution are recorded in `docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.
 
 ## Main definitions
 
@@ -301,9 +296,10 @@ the common garbage vector `Γ_m = inventoryVector`:
 
 The source's participating parties are read as the parties named by the monomials: every
 additional register is owned by an endpoint party of an effect of some monomial.  The clause
-that all sources on one pair of parties may be combined into one is not stated here; only the
-combination of two adjacent sources is formalized (`eval_combineSources`, see the scope
-restriction in the module docstring).  The hypothesis that `G` is a contraction is not needed.
+that all sources on one pair of parties may be combined into one is not stated here: the
+two-source identity is `eval_combineSources`, and the combination of all sources on one pair,
+in any order, is `PairEffect.partyPairEffectElimination_with_grouped_sources`.  The hypothesis
+that `G` is a contraction is not needed.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`,
 `04-compression.tex`, lines 53–127. -/
