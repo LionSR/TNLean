@@ -41,6 +41,9 @@
     and $m=1$.
 \end{proof}
 
+\section{Finite cell counts}
+\label{sec:area_law_finite_cell_counts}
+
 \begin{definition}[Boundary endpoints and dyadic children]
     \label{def:area_law_cell_counts}
     \lean{
@@ -49,7 +52,12 @@
     }
     \leanok
     \uses{def:area_law_hamiltonian}
-    Let $Z$ be the set of integer endpoints of the crossing edges of a cut.
+    For a finite induced domain $\Lambda$ and a cut $A\subseteq\Lambda$, the
+    boundary endpoints are the integer endpoints of the crossing edges,
+    \begin{align}
+        Z & =\bigcup_{\{x,y\}\in\partial_\Lambda A}\{x,y\}\subset\mathbb Z^2.
+        \label{eq:area_law_boundary_endpoints}
+    \end{align}
     For a finite set $P\subset\mathbb Z^2$ of parent indices, its dyadic child
     indices are
     \begin{align}
@@ -68,7 +76,7 @@
         TNLean.PEPS.AreaLaw.Geometry.card_dyadicChildren
     }
     \leanok
-    \uses{def:area_law_cell_counts,def:area_law_template}
+    \uses{def:area_law_cell_counts,def:area_law_template,def:area_law_hamiltonian}
     For every finite $T\subset\mathbb Z^2$, integer $r\ge0$, finite parent
     set $P$, and finite induced domain with cut $A$, one has
     \begin{align}
