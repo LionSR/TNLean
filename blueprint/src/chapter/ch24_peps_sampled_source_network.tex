@@ -1,0 +1,204 @@
+\section{Sampled source factors and participant-pair labels}
+\label{sec:peps_sampled_source_network}
+
+This section records the sampled source factorization and the finite labels
+used in the network construction of
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 233--251, 279--309 and 565--588.
+Let $\mathcal G$ be the nonprivate gate occurrences of a source-only circuit.
+For $g\in\mathcal G$, write $P_g$ for its participating set, $I_g$ for its
+branch set and $n_g$ for its number of common source slots. The source
+occurrences form $\mathcal E=\bigsqcup_{g\in\mathcal G}\{1,\ldots,n_g\}$.
+For $e=(g,i)$, denote its ordered endpoint parties by $(p_e,q_e)$.
+
+\begin{definition}[Two sampled source factors]
+    \label{def:peps_sampled_source_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight}
+    \leanok
+    Fix $k\ge0$, one Gaussian array $g^{e,\xi,\zeta}_{j,a,c}$ at each source
+    occurrence and ordered pair $(\xi,\zeta)\in I_g\times I_g$, and endpoint
+    coordinate matrices $E_{e,\xi},F_{e,\xi}$ with real nonnegative weights
+    $\lambda_{e,\xi,a}$. For $j\in\{1,\ldots,k\}$ define the rectangular
+    matrices $A^{e,\xi,\zeta}_j$ and $B^{e,\xi,\zeta}_j$ by
+    \begin{align}
+        A^{e,\xi,\zeta}_j(a,c)
+        &= (\lambda_{e,\xi,a}\lambda_{e,\zeta,c})^{1/4}
+           g^{e,\xi,\zeta}_{j,a,c}, \\
+        B^{e,\xi,\zeta}_j(a,c)
+        &= (\lambda_{e,\xi,a}\lambda_{e,\zeta,c})^{1/4}
+           \overline{g^{e,\xi,\zeta}_{j,a,c}}.
+    \end{align}
+    Their actual endpoint factors are
+    \begin{align}
+        U^{e,\xi,\zeta}_j
+        &=E_{e,\xi}A^{e,\xi,\zeta}_jE_{e,\zeta}^{*}, \\
+        V^{e,\xi,\zeta}_j
+        &=F_{e,\xi}B^{e,\xi,\zeta}_jF_{e,\zeta}^{*}.
+    \end{align}
+    Both factors use the same array, the same ordered branch pair and the
+    same sample index. Their definitions make sense for each fixed array;
+    no probabilistic assertion is needed here.
+\end{definition}
+
+\begin{theorem}[Actual sampled source factorization]
+    \label{thm:peps_sampled_source_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average}
+    \leanok
+    \uses{def:peps_sampled_source_factors}
+    The sampled source matrix at $e$ and $(\xi,\zeta)$ is
+    \begin{align}
+        \widehat X^{e,\xi,\zeta}
+        =k^{-1}\sum_{j=1}^{k}
+          U^{e,\xi,\zeta}_j\otimes V^{e,\xi,\zeta}_j.
+        \label{eq:peps_sampled_source_factors}
+    \end{align}
+    At $k=0$, both the empty sum and the inverse of zero are taken to be
+    zero, so the identity also covers that case.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_sampled_source_factors}
+    Substitute the two endpoint factors into the definition of the sampled
+    source matrix.
+\end{proof}
+
+\begin{theorem}[Actual source slots and pair-sample edges]
+    \label{thm:peps_sampled_source_pairs}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPair_bijective}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt_injective}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv_endpoints}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_gate}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_parties}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_source_circuit_positions}
+    Let $\binom{P_g}{2}$ denote the unordered pairs of distinct members of
+    $P_g$. The map $i\mapsto\{p_{(g,i)},q_{(g,i)}\}$ is a bijection from
+    the common source slots of $g$ to $\binom{P_g}{2}$. It gives the
+    bijection
+    \begin{align}
+        \Phi:\mathcal E&\longrightarrow
+           \bigsqcup_{g\in\mathcal G}\binom{P_g}{2}, &
+        (g,i)&\longmapsto(g,\{p_{(g,i)},q_{(g,i)}\}).
+        \label{eq:peps_sampled_source_pairs}
+    \end{align}
+    Thus every pair-sample edge retains the original gate occurrence and
+    exactly the two actual source endpoint parties. Empty participating
+    sets have no common source slots and no pair-sample edges.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_only_resources}
+    Induct on the circuit composition. At a prepared gate, the common
+    slot pairs have no repetitions. The injective inclusion of its local
+    parties into the original party set preserves this property. There
+    are $\binom{|P_g|}{2}$ slots and the same number of unordered distinct
+    participant pairs, so the injective map is bijective. Composition
+    takes disjoint unions of these bijections, and spectator registers
+    leave them unchanged.
+\end{proof}
+
+\begin{theorem}[Preservation of the shared sample index]
+    \label{thm:peps_sampled_source_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices_apply}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices}
+    \leanok
+    \uses{thm:peps_sampled_source_pairs}
+    For an assignment $j:\mathcal E\to\{1,\ldots,k\}$, define the
+    edge assignment by $\widetilde j=j\circ\Phi^{-1}$. Then
+    $\widetilde j(\Phi(e))=j(e)$ at every actual source occurrence $e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sampled_source_pairs}
+    The inverse identity $\Phi^{-1}(\Phi(e))=e$ gives the result.
+\end{proof}
+
+\begin{theorem}[Dimensions of the constructed virtual labels]
+    \label{thm:peps_sampled_source_dimensions}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_densityBranchLabels_le}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le}
+    \leanok
+    At a gate $g$, the common density label $(\xi,\zeta)$ has
+    $|I_g|^2$ values. Share this label along its star links and share an
+    index in $\{1,\ldots,k\}$ along each pair-sample edge. If $|I_g|\le M$
+    on the selected gates, every resulting virtual alphabet has
+    cardinality at most $\max\{M^2,k\}$. This bound is independent of
+    private-memory dimensions and source Schmidt ranks.
+\end{theorem}
+
+\begin{proof}\leanok
+    The ordered branch-pair set is $I_g\times I_g$, of cardinality
+    $|I_g|^2\le M^2$. A pair-sample alphabet has exactly $k$ values.
+    Taking the maximum gives the stated bound.
+\end{proof}
+
+\begin{theorem}[Scalar contribution of a gate with no participating parties]
+    \label{thm:peps_empty_party_gate_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_heq_coeffSum_smul_id_of_participants_eq_empty}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_eq_coeffSum_smul_id_of_isEmpty}
+    \leanok
+    Consider a prepared gate $G=\sum_{\xi\in I}c_\xi M_\xi$ on a finite
+    local party set $C$, placed in the original party set by an injective
+    inclusion $\iota:C\to P$. Suppose its actual participating set
+    $\iota(C)$ is empty. Put $s_G=\sum_{\xi\in I}c_\xi$. Its local input
+    and output memories are the scalar space $\C$, and
+    \begin{align}
+        G&=s_G\operatorname{Id}_{\C}, & |s_G|&\le1.
+        \label{eq:peps_empty_gate_scalar}
+    \end{align}
+    Beside any spectator memory $\mathcal H$, the literal placed gate is
+    $s_G\operatorname{Id}_{\mathcal H}$. This includes an empty branch
+    set $I$, when $s_G=0$ and both operators vanish.
+    These are the zero-party gates permitted by the classification in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 24--28 and 233--251.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $q\in C$, then $\iota(q)$ belongs to the participating set, a
+    contradiction. Thus $C$ is empty. Every register must have an owner,
+    so both local layouts are empty. A source-only word on this party
+    set has no local map, source preparation, exchange or framed
+    register, and hence acts as $\operatorname{Id}_{\C}$. Summing the
+    branch coefficients gives $G=s_G\operatorname{Id}_{\C}$. Since
+    $G$ is a contraction and $\|\operatorname{Id}_{\C}\|=1$, one has
+    $|s_G|=\|G\|\le1$. Tensoring with the spectator identity and applying
+    the canonical owner and tensor identifications yields
+    $s_G\operatorname{Id}_{\mathcal H}$.
+\end{proof}
+
+% Remaining chronological contraction identity. No formalization tag is
+% attached to the following requirement.
+\paragraph{Chronological contraction.}
+For the original branch coefficients $c_{g,\xi}$, retain the scalar
+contribution of the gates with no participating parties:
+\begin{align}
+    c_{\rm empty}
+    =\prod_{\substack{g\in\mathcal G\\P_g=\varnothing}}
+      \left(\sum_{\xi\in I_g}c_{g,\xi}\right).
+    \label{eq:peps_sampled_empty_scalar}
+\end{align}
+To identify the sampled physical density for the whole-party normalized
+product input with the operator network, one must construct each party's
+local tensor $T_p(\omega)$ by contracting its input factor, chronological
+local maps, private preparations, intermediate memories and final discarded
+registers. The further identity required, which is not established by the
+results of this section, is
+\begin{align}
+    \widehat\rho(\omega)
+    =|c_{\rm empty}|^2\,
+      \operatorname{Contr}\bigl((T_p(\omega))_{p\in P}\bigr).
+    \label{eq:peps_sampled_chronology_required}
+\end{align}
+Here the contraction uses the common gate labels and shared sample labels
+specified above. The source averaging factors $k^{-1}$ are included once
+per source in the local tensors. Gates with no participating parties
+contribute through (\ref{eq:peps_sampled_empty_scalar}) without introducing
+star or sample links. This requirement also includes $P=\varnothing$,
+with the empty tensor contraction equal to $1$.

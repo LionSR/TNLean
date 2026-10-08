@@ -5714,3 +5714,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Short equality elimination continues the earlier congruence decision.
   A fourth independent property of all gate expansions should be derived from a
   common occurrence-wise description before adding another structural induction.
+
+### Operators on empty party sets — candidate (2026-10-08)
+
+- **Pattern:** Identify a layout with the empty list before comparing the
+  actual memory operator with a scalar identity.
+- **Seen:** Three proofs in `PEPS/Approximation/ZeroPartyGates.lean`: the
+  prepared scalar identity, its norm bound, and the placed-gate identity
+  derived from empty participation.
+- **Abstraction:** The private lemma `Layout.eq_nil_of_isEmpty` gives the
+  common layout identification. The prepared scalar identity is then reused
+  to bound the coefficient sum and compute the spectator-framed operator.
+- **Notes:** This pattern occurs in one file. If another module needs it,
+  move the layout lemma to the general layout development before duplicating
+  the argument. No cancellation of a complementary tensor factor is used.

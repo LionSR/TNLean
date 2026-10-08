@@ -68,6 +68,7 @@ import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.RoutedContraction
+import TNLean.PEPS.Approximation.SampledSourceNetwork
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
@@ -96,3 +97,4 @@ import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
+import TNLean.PEPS.Approximation.ZeroPartyGates
