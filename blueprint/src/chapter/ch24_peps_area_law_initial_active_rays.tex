@@ -1,0 +1,124 @@
+\section{Active radial interfaces near an initial mark}
+\label{sec:area_law_initial_active_rays}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, an integer width $C\ge2$ and an initial layer
+$k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at every
+layer. Let $\mathcal I$ be the actual initial identifiers, let $X_i^0$
+be their closed birth regions, and put $U_i=\operatorname{int}(X_i^0)$.
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+and let $v$ be one of the nine marks of its defining cell.
+Put $\ell=\ell_k-5$ and $r=2^\ell/2=t_k/64$.
+
+Join $v$ to the eight elementary bases of the all-midpoint fan in
+$\overline B_\infty(v,r)$. Let $\mathcal J$ index those bases, write
+$P_s$ for the corresponding closed triangle, and write $b_s^-$ and
+$b_s^+$ for its initial and final base endpoints in the perimeter
+orientation. Let $\sigma:\mathcal J\to\mathcal I$ be the unique actual
+assignment of Theorem~\ref{thm:area_law_actual_sector_assignment}.
+Thus, for every $i\in\mathcal I$,
+\begin{align}
+    X_i^0\cap\overline B_\infty(v,r)
+     & =\bigcup_{\substack{s\in\mathcal J \\\sigma(s)=i}}P_s.
+    \label{eq:active_radial_decomposition}
+\end{align}
+An oriented neighboring pair $(s,t)$ is active when
+$b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$.
+Let $\mathcal A$ be the set of such pairs. This describes the radial
+interfaces in the local construction of
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially 352--370, and prop:two-families, lines 308--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are the open-radius and closed-half-radius local assertions.
+% No full isolated-star theorem or active-ray enumeration is asserted.
+
+\begin{theorem}[Actual frontiers and active radial segments]
+    \label{thm:area_law_initial_active_radial}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_near_mark_iff_active_radial}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_initial_birth_regions,def:area_law_cell_fan}
+    For every $x\in B_\infty(v,r)$,
+    \begin{align}
+        x\in\bigcup_{i\in\mathcal I}\partial X_i^0
+         & \quad\Longleftrightarrow\quad
+        \exists(s,t)\in\mathcal A,\quad x\in[v,b_s^+].
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        thm:area_law_finite_cover_frontier,
+        thm:area_law_cell_fan_regularity,
+        thm:area_law_cell_fan_cover,
+        thm:area_law_centered_dyadic_cell_ball,
+        thm:area_law_initial_birth_regularity,
+        thm:area_law_initial_open_disjoint,
+        thm:area_law_initial_sector_no_active,
+        thm:area_law_fan_triangle_contact,
+        thm:area_law_cell_fan_intersections}
+    Put $K=\sigma(\mathcal J)$ and, for each $i\in K$, put
+    $E_i=\bigcup_{\sigma(s)=i}P_s$.
+    This is a finite closed family covering
+    $\overline B_\infty(v,r)$.
+    By~(\ref{eq:active_radial_decomposition}), $X_i^0$ and $E_i$
+    agree on a neighborhood of every point of $B_\infty(v,r)$.
+    Their interior membership therefore agrees there. An identifier
+    outside $K$ has no birth-region point in this neighborhood.
+
+    Suppose that $x\in\partial X_i^0$ and $x\ne v$.
+    The finite-cover frontier theorem gives a different identifier
+    $j\in K$ with $x\in E_i\cap E_j$; its outer-frontier alternative
+    is excluded by $x\in B_\infty(v,r)$.
+    Choose $s,t\in\mathcal J$ with $\sigma(s)=i$, $\sigma(t)=j$
+    and $x\in P_s\cap P_t$.
+    Both triangles also contain $v$, so their intersection is
+    nontrivial. The actual triangle-contact theorem gives, after
+    interchanging $s$ and $t$ if necessary,
+    $b_s^+=b_t^-$ and $P_s\cap P_t=[v,b_s^+]$.
+    Since $i\ne j$, this pair is active.
+
+    If $x=v$ and no pair is active, every adjacent pair has the same
+    assigned identifier. The no-active theorem then places the smaller
+    closed square in one actual open region $U_j$.
+    A point of $U_j$ is on no birth frontier: it is interior to $X_j^0$,
+    and disjointness of the open regions, together with
+    $X_i^0=\overline{U_i}$, excludes membership in $X_i^0$ for $i\ne j$.
+    Thus a frontier point at $v$ forces an active pair, whose radial
+    segment contains $v$.
+
+    Conversely, let $(s,t)\in\mathcal A$ and $x\in[v,b_s^+]$.
+    The exact fan-intersection formula includes this segment in
+    $P_s\cap P_t$: the common base endpoint belongs to both bases,
+    and its radial join with $v$ belongs to both triangles.
+    By~(\ref{eq:active_radial_decomposition}),
+    $x\in X_{\sigma(s)}^0\cap X_{\sigma(t)}^0$.
+    Since the two identifiers are different,
+    $U_{\sigma(s)}$ is disjoint from
+    $X_{\sigma(t)}^0=\overline{U_{\sigma(t)}}$.
+    Hence $x\notin U_{\sigma(s)}$ and
+    $x\in\partial X_{\sigma(s)}^0$, as required.
+\end{proof}
+
+\begin{theorem}[Active radial description on a smaller closed square]
+    \label{thm:area_law_initial_active_radial_closed}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_radial}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_initial_birth_regions,def:area_law_cell_fan}
+    For every $x\in\overline B_\infty(v,r/2)$,
+    \begin{align}
+        x\in\bigcup_{i\in\mathcal I}\partial X_i^0
+         & \quad\Longleftrightarrow\quad
+        \exists(s,t)\in\mathcal A,\quad x\in[v,b_s^+].
+    \end{align}
+    The closed half-side is $r/2=t_k/128$. If the reference cell
+    realizes the smallest incident side $S_v=t_k$, it is $S_v/128$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_active_radial}
+    The fan radius is positive. Consequently,
+    $\overline B_\infty(v,r/2)\subseteq B_\infty(v,r)$, and the
+    open-square equivalence applies to every point of this closed square.
+\end{proof}

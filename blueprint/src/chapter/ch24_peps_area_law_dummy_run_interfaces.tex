@@ -1,0 +1,95 @@
+\section{Interfaces with the initial dummy region}
+\label{sec:area_law_dummy_run_interfaces}
+
+The initial dummy region has label $k_0-1$ modulo two in
+\cite[Section~11]{OpenAI2026AreaLaw}. The following results pass from
+an actual contact to the elementary perimeter assignment and then to
+the label of an entire belt run. Write $N_0=N_{k_0}$ for the half-open
+initial neighborhood and $\ell_k$ for the fine exponent at layer $k$.
+
+% Source: 10-geometry.tex, prop:two-families, lines 154--177 and 299--323,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These local interfaces do not assemble the full two-family partition.
+
+\begin{theorem}[An interior elementary contact determines the whole dummy side]
+    \label{thm:area_law_elementary_open_dummy_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementarySide_subset_dummy_of_mem_openSegment}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_cell_fan}
+    Fix an arbitrary common origin, finite endpoint set and width $C\ge 2$.
+    Let $k\ge k_0$ and $z\in F_{k,\ell_k}$ be an actual fine-cell index.
+    Choose any optional midpoint subdivision of its sides, and let
+    $e_i=[a_i,b_i]$ be an elementary base of the resulting fan.
+    If $x\in(a_i,b_i)\cap\overline{N_0}$, then
+    $e_i\subseteq\overline{N_0}$.
+    No lower bound on $k_0$ is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dummy_corner_elementary_side,
+        thm:area_law_dummy_layer_disjoint}
+    Choose a coarse cell in the finite dummy union whose closure contains
+    $x$. Its interior is disjoint from the interior of the reference fine
+    cell. After interchanging coordinates if necessary, the elementary side
+    is vertical. Since $x$ lies strictly between its endpoints, disjointness
+    forces its normal coordinate to be a boundary coordinate of the coarse
+    cell. If a tangential boundary coordinate lay strictly between the
+    elementary endpoints, the corresponding coarse-cell corner would lie
+    in the open elementary side. The dummy-corner theorem excludes this.
+    Thus the coarse-cell closure contains the entire elementary segment,
+    and is itself contained in $\overline{N_0}$.
+\end{proof}
+
+\begin{theorem}[A triangle meets the dummy closure through its base]
+    \label{thm:area_law_fan_dummy_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_dummy_eq}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_cell_fan}
+    For arbitrary common origin, finite endpoint set and natural width $C$,
+    let $k\ge k_0$ and $z\in F_{k,\ell_k}$ be an actual fine-cell index.
+    Choose an arbitrary optional midpoint mask. Every resulting fan triangle
+    $P_i$, with elementary base $e_i$, satisfies
+    \begin{align}
+        P_i\cap\overline{N_0}=e_i\cap\overline{N_0}.
+    \end{align}
+    Empty and single-point contacts are included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dummy_layer_disjoint,thm:area_law_cell_fan_cover,
+        thm:area_law_fan_own_side_contact,thm:area_law_unsplit_side_endpoints}
+    The open interior of the reference fine cell is disjoint from the
+    dummy neighborhood and therefore from its closure. A common point
+    belongs to the closed reference square, so it lies on its frontier.
+    The product-interval frontier formula places it on one of the four
+    whole sides. The own-side contact equality then places it on $e_i$.
+    This proves one inclusion; the other follows from $e_i\subseteq P_i$.
+\end{proof}
+
+\begin{theorem}[Opposite dummy parity along an actual run interface]
+    \label{thm:area_law_belt_run_dummy_interface}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_dummy_interface}
+    \leanok
+    \uses{def:area_law_belt_fan_color,def:area_law_fan_runs}
+    Fix a common origin, finite endpoint set, width $C\ge 2$ and
+    initial layer $k_0\ge 50{,}000{,}000$, with arbitrary residue choices
+    in every layer. Let $R$ be an actual run in an actual belt cell of
+    layer $k\ge k_0$. If a closed segment with distinct endpoints lies
+    in both the run region and $\overline{N_0}$, every constituent triangle
+    of $R$ has label $k_0\ne k_0-1$ modulo two.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fan_dummy_contact,
+        thm:area_law_elementary_open_dummy_contact,
+        thm:area_law_belt_fan_dummy_color,thm:area_law_fan_run_color}
+    The shared segment is infinite, whereas the collection of elementary
+    endpoints in the fan is finite. Choose a shared point outside that
+    collection and a constituent triangle containing it. The preceding
+    contact equality puts the point on the triangle's base, away from both
+    endpoints, hence in the open base segment. Open-contact continuation
+    puts the whole base in the dummy closure. The local dummy assignment
+    gives the opposite dummy parity, and constancy on the run transfers
+    this label to every constituent triangle.
+\end{proof}
+
+The whole-run conclusion retains a shared nondegenerate segment. Two isolated
+common points of disconnected unions do not supply this premise. Global
+identifiers, isolated stars and recursive repairs remain further obligations.
