@@ -17,44 +17,6 @@ Original formalization of the geometric argument in manuscript Lemma 9.4;
 no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.latticeneighbors
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeNeighbors
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.mem_latticeneighbors_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.latticeneighbors_symm
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeNeighbors_symm
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.card_latticeneighbors_le
-Downstream declaration: TNLean.PEPS.AreaLaw.card_latticeNeighbors_le
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.neighbor_mem_ambientdilation_succ
-Downstream declaration: TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.ambientboundaryregion
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientBoundaryRegion
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.ambientboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientBoundary
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.card_ambientboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.card_ambientBoundary
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.mem_ambientboundary_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.ambientboundary_orientation_unique
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.ambientboundary_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientBoundary_empty
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.card_ambientboundary_le_of_endpoint_cover
-Downstream declaration: TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.card_ambientboundary_le_outer_layer
-Downstream declaration: TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.card_ambientboundary_dilation_le_layer
-Downstream declaration: TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.ambientboundary_sdiff_subset
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset
-Provenance-ID: 8754-boundary-tnlean.peps.arealaw.card_ambientboundary_sdiff_le
-Downstream declaration: TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The four nearest neighbors of an integer lattice point. -/
