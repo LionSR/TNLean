@@ -23,6 +23,8 @@ import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
+import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
+import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GroupTruncation
