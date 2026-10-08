@@ -24,7 +24,8 @@ example : (∑ k ∈ Finset.range 2, (1 : ℝ) * ((2 : ℝ) ^ k) ^ (1 + (1 : ℝ
       have : k = 0 := by omega
       subst k
       norm_num)
-  convert h using 1 <;> norm_num
+  convert h using 1
+  norm_num
 
 -- Empty weights and an arbitrary positive exponent require no occupied scale.
 example (K : ℕ) {e : ℝ} (he : 0 < e) :
