@@ -1,0 +1,120 @@
+\section{Actual initial identifiers on sector runs}
+\label{sec:area_law_actual_sector_runs}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, an integer width $C\ge2$ and an initial layer
+$k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at every
+layer. Let $\mathcal I$ be the actual initial identifiers, let $X_i^0$
+be their closed birth regions, put $U_i=\operatorname{int}(X_i^0)$,
+and write $\chi(i)\in\{0,1\}$ for their initial colors.
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+and let $v$ be any of the nine marks of its defining cell.
+Put $\ell=\ell_k-5$ and $r=2^\ell/2=t_k/64$.
+
+Use the all-midpoint fans centered at $v$, with origins
+$o_{\rm S}=v-r(1,1)$ and $o_{\rm L}=v-2r(1,1)$, exponents $\ell$
+and $\ell+1$, and cell index $(0,0)$. Let $\mathcal J$ index their
+eight corresponding elementary bases, and write $P_s^{\rm S}$ and
+$P_s^{\rm L}$ for the closed triangles. Let
+$\sigma:\mathcal J\to\mathcal I$ be the unique actual assignment of
+Theorem~\ref{thm:area_law_actual_sector_assignment}.
+For the smaller fan, write $b_s^-$ and $b_s^+$ for the initial and
+final endpoints of the oriented base $s$. Two bases are adjacent when
+$b_s^+=b_t^-$ or $b_t^+=b_s^-$.
+
+Give base $s$ the color $\chi(\sigma(s))$. Form the existing fan graph
+$G$, joining distinct adjacent bases exactly when their colors agree.
+Let $\mathcal R$ be its connected components, and write $[s]$ for the
+component of $s$. For $R\in\mathcal R$, its closed run region is
+$Y_R=\bigcup_{s\in R}P_s^{\rm S}$.
+These local runs occur in \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially 361--370, and prop:two-families, lines 313--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These entries do not assert active-ray enumeration or the full star theorem.
+
+\begin{theorem}[Initial identifiers on cyclic runs]
+    \label{thm:area_law_initial_sector_run_assignment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_run_assignment}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_initial_region_indices,
+        def:area_law_initial_birth_regions,
+        def:area_law_initial_region_colors,def:area_law_fan_runs,
+        def:area_law_cell_fan}
+    There is a unique function $\lambda:\mathcal R\to\mathcal I$
+    satisfying $\lambda([s])=\sigma(s)$ for every $s\in\mathcal J$
+    and the following identity for every $i\in\mathcal I$:
+    \begin{align}
+        X_i^0\cap\overline B_\infty(v,r)
+         & =\bigcup_{\substack{R\in\mathcal R \\\lambda(R)=i}}Y_R.
+    \end{align}
+    Distinct components carrying one identifier remain distinct terms
+    of the union. If no sector has identifier $i$, the union is empty.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_sector_colors,
+        thm:area_law_actual_sector_assignment,def:area_law_fan_runs}
+    An edge of $G$ joins adjacent sectors with equal colors.
+    The adjacent-sector color theorem therefore gives equality of
+    their assigned identifiers. Equality is preserved along paths,
+    so $\sigma$ is constant on every connected component. It thus
+    determines $\lambda([s])=\sigma(s)$. Every component contains a
+    sector, which also makes this function unique.
+
+    The actual closed restriction is
+    $X_i^0\cap\overline B_\infty(v,r)
+        =\bigcup_{\sigma(s)=i}P_s^{\rm S}$.
+    Every sector belongs to its component, and all sectors in a
+    component labeled $i$ have assigned identifier $i$.
+    Grouping the terms by their connected components gives the
+    asserted identity. The grouping retains every separated component
+    carrying the same identifier. When there are no such components,
+    both unions are empty.
+\end{proof}
+
+\begin{theorem}[The case with no change of identifier]
+    \label{thm:area_law_initial_sector_no_active}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_no_active_sector}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_initial_region_indices,
+        def:area_law_initial_open_regions,def:area_law_cell_fan}
+    Suppose that $\sigma(s)=\sigma(t)$ for every adjacent pair
+    $s,t\in\mathcal J$. Then there is a unique identifier
+    $i\in\mathcal I$ such that
+    $\overline B_\infty(v,r)\subseteq U_i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fan_run_monochromatic,
+        thm:area_law_initial_sector_run_assignment,
+        thm:area_law_actual_sector_assignment,
+        thm:area_law_cell_fan_regularity,
+        thm:area_law_initial_birth_regularity,
+        thm:area_law_cell_fan_cover,
+        thm:area_law_centered_dyadic_cell_ball,
+        thm:area_law_initial_open_disjoint,def:area_law_fan_runs}
+    The constant-colored fan graph is connected, including across
+    the last and first bases. The assumption makes it a subgraph of
+    $G$: neighboring equal identifiers have equal initial colors.
+    Hence $G$ has one connected component, and descent shows that
+    $\sigma$ is constant at some actual identifier $i_0$.
+
+    For each working triangle,
+    $\operatorname{int}(P_s^{\rm L})\subseteq U_{i_0}$.
+    Taking closures and using triangle and birth-region regularity
+    gives $P_s^{\rm L}\subseteq X_{i_0}^0$. The actual fan cover and
+    the centered-cell identity therefore yield
+    \begin{align}
+        \overline B_\infty(v,2r)
+         & =\bigcup_{s\in\mathcal J}P_s^{\rm L}
+        \subseteq X_{i_0}^0.
+    \end{align}
+    Taking interiors gives $B_\infty(v,2r)\subseteq U_{i_0}$.
+    Since $r>0$, the smaller closed square lies in this larger open
+    square, and thus $\overline B_\infty(v,r)\subseteq U_{i_0}$.
+    Finally $v$ belongs to the smaller square. Pairwise disjointness
+    of the actual open regions prevents another identifier from
+    containing that square, proving uniqueness.
+\end{proof}

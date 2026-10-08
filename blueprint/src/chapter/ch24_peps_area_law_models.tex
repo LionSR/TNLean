@@ -14,13 +14,22 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.Configuration,
         TNLean.PEPS.AreaLaw.StateSpace,
         TNLean.PEPS.AreaLaw.domainGraph,
+        TNLean.PEPS.AreaLaw.graphNeighborhood,
         TNLean.PEPS.AreaLaw.configurationSplit,
         TNLean.PEPS.AreaLaw.card_configuration
     }
     \leanok
     Let $\Lambda\subset\mathbb Z^2$ be finite. Join sites at coordinate distance
     one, and let $d_\Lambda$ be distance in this induced graph, with value
-    $+\infty$ between distinct components. At every site put $\mathbb C^q$,
+    $+\infty$ between distinct components. For $X\subseteq\Lambda$ and an integer
+    $r\ge0$, the closed graph neighborhood
+    \begin{align}
+        N_r^\Lambda(X) & =\{y\in\Lambda:\ d_\Lambda(x,y)\le r
+        \text{ for some }x\in X\}
+        \label{eq:area_law_graph_neighborhood}
+    \end{align}
+    consists of the sites joined to some site of $X$ by an induced walk of
+    length at most $r$. At every site put $\mathbb C^q$,
     $q\ge1$. In configuration coordinates the physical Hilbert space is
     \begin{align}
         \mathcal H_\Lambda     & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
@@ -86,8 +95,9 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     A pair has induced distance at most $R$ if and only if an induced walk of
-    length at most $R$ joins it. At range zero the admissible supports are
-    exactly the singletons. Adjacent pairs are admissible at range one.
+    length at most $R$ joins it. Every singleton is an admissible support at
+    every range, and at range zero the admissible supports are exactly the
+    singletons. Adjacent pairs are admissible at range one.
     The nearest-neighbor graph on
     $\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ is the induced graph of that
     integer rectangle, with the corresponding identification of configurations
@@ -105,6 +115,7 @@ original open square. We state the two models separately, following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
+        Matrix.IsGappedGroundState,
         TNLean.PEPS.AreaLaw.IsGappedGroundState,
         TNLean.PEPS.AreaLaw.reducedState,
         TNLean.PEPS.AreaLaw.reducedState_isHermitian,
@@ -147,15 +158,94 @@ original open square. We state the two models separately, following
     This is Theorem~1.1 of \cite{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
-    The initial entropy estimate on buffered boxes supplies the input to the
-    collar argument. Spectral filters give positive quasi-local constraints, and
-    a replica argument improves the box exponent until collar information is
-    sublinear. Products of the positive constraints amplify this information
-    bound. The planar construction partitions an arbitrary cut into two ordered
-    families of separated regions and a residual set. Applying the two-family
-    entropy cancellation bounds the residual entropy and the sum of information
-    errors by the number of crossing edges. All these estimates use the gap of
-    the full system and choose their constants before the domain and cut.
+    \uses{def:area_law_template,def:area_law_two_family_partition}
+    For disjoint $B,C\subseteq\Lambda$ write
+    $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$, and let $Z$ be the
+    set of endpoints of the edges in $\partial_\Lambda A$. Empty and full cuts
+    have zero entropy, and so does every cut with $\partial_\Lambda A=\varnothing$.
+    Put $b=|\partial_\Lambda A|>0$.
+
+    The global gap first gives an exponent below volume: for a box $Q$ of side
+    at most $r$, sufficiently far from $Z$,
+    \begin{align}
+        S_\Omega(A\cap Q) & \le Cr^{1+e_0},\qquad e_0<1.
+        \label{eq:area_law_initial_box}
+    \end{align}
+    Spectral filtering replaces $H$ by positive quasi-local constraints that
+    annihilate $\Omega$ and keep a global gap. A replica argument then compares
+    two bounds on a filtered norm while a finite randomized scan moves the
+    partition through a collar. Repeating the comparison improves the exponent
+    in (\ref{eq:area_law_initial_box}) and gives, for a template $T$ at scale
+    $n$ and $L_n=\lfloor n^{1-\varepsilon}\rfloor$,
+    \begin{align}
+        I_\Omega\bigl(A\cap T:\Lambda\setminus(A\cap T_{L_n})\bigr)
+         & \le Cn^{1-\varepsilon}.
+        \label{eq:area_law_collar_information}
+    \end{align}
+    Here $\varepsilon$, $\alpha$ and $\beta$ are the exponents of
+    Theorem~\ref{thm:area_law_exponent_gaps}. Products of the positive
+    constraints amplify this bound. For every $M\ge1$
+    there is a radius $r\le C_Mn^{(1-\varepsilon)/\alpha}$ with
+    $L_n+2r=o(n^\beta)$ such that
+    \begin{align}
+        I_\Omega(A\cap T:J)
+         & \le C_Mn^{-M}
+        \qquad\text{for every }
+        J\subseteq\Lambda\setminus N_{2r}^\Lambda(A\cap T_{L_n}).
+        \label{eq:area_law_amplified_information}
+    \end{align}
+
+    The planar construction partitions $A$ into a residual set $D$ and an
+    ordered family of pieces $X_i\subseteq A\cap T_i$ with labels
+    $f_i\in\{0,1\}$, templates $T_i$ at scales $n_i$, and
+    \begin{align}
+        |D| & \le Cb,
+        \qquad
+        \sum_in_i^{-100}\le Cb,
+        \label{eq:area_law_partition_counts} \\
+        \operatorname{dist}_\infty(T_i,Z)
+            & >2n_i^\beta,
+        \qquad
+        \operatorname{dist}_\infty\Bigl(T_i,
+        \bigcup_{j<i,\,f_j=f_i}X_j\Bigr)>2n_i^\beta.
+        \label{eq:area_law_partition_clearance}
+    \end{align}
+    Put $S_i=A\cap(T_i)_{L_{n_i}}$ and
+    $J_i=(\Lambda\setminus A)\cup\bigcup_{j<i,\,f_j=f_i}X_j$, and let $r_i$ be
+    the radius in (\ref{eq:area_law_amplified_information}) at scale $n_i$, with
+    the scale threshold large enough that $L_{n_i}+2r_i<n_i^\beta$. A walk of
+    length at most $2r_i$ starting in $S_i$ stays within ambient distance
+    $n_i^\beta$ of $T_i$. By (\ref{eq:area_law_partition_clearance}) it meets no
+    earlier piece of the same family, and it cannot leave $A$, since its first
+    step out of $A$ would end at a point of $Z$. Hence
+    $J_i\cap N_{2r_i}^\Lambda(S_i)=\varnothing$. With $M=100$,
+    (\ref{eq:area_law_amplified_information}) and monotonicity of mutual
+    information give
+    \begin{align}
+        I_\Omega(X_i:J_i)\le I_\Omega(A\cap T_i:J_i)
+         & \le Cn_i^{-100}=:\eta_i.
+        \label{eq:area_law_piece_information}
+    \end{align}
+    For one family $f$, with $A_f=\bigcup_{f_i=f}X_i$ and
+    $E_f=\sum_{f_i=f}\eta_i$, the chain rule, purity and subadditivity
+    give
+    \begin{align}
+        S_\Omega(A)+\sum_{f_i=f}S_\Omega(X_i)-E_f
+         & \le S_\Omega\bigl((\Lambda\setminus A)\cup A_f\bigr)
+        =S_\Omega(D\cup A_{1-f})
+        \nonumber                                               \\
+         & \le S_\Omega(D)+\sum_{f_i=1-f}S_\Omega(X_i).
+        \label{eq:area_law_family_chain}
+    \end{align}
+    Adding (\ref{eq:area_law_family_chain}) for $f=0$ and $f=1$ cancels every
+    piece entropy. With (\ref{eq:area_law_partition_counts}),
+    \begin{align}
+        S_\Omega(A)\le S_\Omega(D)+\frac12\sum_i\eta_i
+         & \le|D|\log q+\frac C2\sum_in_i^{-100}\le C'b.
+        \label{eq:area_law_final_bound}
+    \end{align}
+    Every threshold and constant above depends only on $q,R,J,\Delta$, and is
+    chosen before the domain and the cut.
 \end{proof}
 
 \begin{definition}[Open-square Hamiltonian and PEPS approximation]
@@ -181,7 +271,15 @@ original open square. We state the two models separately, following
         \label{eq:polynomial_peps_edge_bound}
     \end{align}
     where terms are supported on their designated sites or edges, and only the
-    total $H$ is assumed Hermitian. A PEPS approximation with parameters $C,c$
+    total $H$ is assumed Hermitian. For a unit vector $\Omega$, a real $E_0$,
+    and $\Delta>0$, the gapped ground-vector condition for this $H$ is
+    \begin{align}
+        H\Omega=E_0\Omega,
+        \qquad
+        H-E_0I & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
+        \label{eq:polynomial_peps_projector_gap}
+    \end{align}
+    A PEPS approximation with parameters $C,c$
     is a tensor family on those same edges with positive dimensions $D_e$
     satisfying $D_e\le CL^c$ for every edge $e$, and a nonzero contracted vector
     $\Phi$ such that, for some $\theta\in\mathbb R$,
@@ -202,7 +300,7 @@ original open square. We state the two models separately, following
     Fix an integer $q\ge2$ and reals $J,\Delta>0$. There are $C,c>0$, depending
     only on these parameters, such that for every $L\ge2$, every Hamiltonian in
     the preceding model with a unique unit ground vector, up to phase, satisfying
-    (\ref{eq:area_law_projector_gap}) has a nonzero PEPS on the original open
+    (\ref{eq:polynomial_peps_projector_gap}) has a nonzero PEPS on the original open
     grid with $D_e\le CL^c$ for every edge $e$ and
     \begin{align}
         \min_{\theta\in\mathbb R}
@@ -212,15 +310,75 @@ original open square. We state the two models separately, following
     This is Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
-    The area-law and collar estimates provide the information bounds for splitting
-    physical registers. Adaptive finite-rank constraints control the sum of the
-    ranks over the resulting patches. The dyadic ownership construction preserves
-    reference vectors while bounding the number of nonprivate operations during
-    each party's whole lifetime. Density compression then gives polynomial link
-    dimensions. A suitable nonzero vector column approximates the pure ground
-    state, and routing the links onto the prescribed square-grid edges preserves
-    the contraction while controlling edge dimensions. The accumulated vector
-    error and the nonzero norm are controlled before the final normalization.
+    \uses{thm:openai_uniform_area_law}
+    Write $\Lambda_L$ for the sites of the grid and $\mathcal H_X$ for the
+    tensor product of the site spaces in $X\subseteq\Lambda_L$. The physical
+    registers are distributed among parties indexed by dyadic squares, starting
+    from one party holding $\Omega$ and ending with one party per site. The
+    area-law and collar estimates make the mutual information across tapered
+    buffers smaller than any fixed inverse power of $L$, which
+    lets an owner split its purification approximately. Near a square of
+    logarithmic size, the ground vector is projected with high accuracy onto a
+    sum of mutually orthogonal subspaces
+    \begin{align}
+        \operatorname{span}\{v_{jk}\}_{k=1}^{d_j}
+        \otimes\mathcal H_{\Lambda_L\setminus X_j},
+        \qquad
+        \sum_jd_j & \le C_0L^{c_0},
+        \label{eq:polynomial_peps_rank_bound}
+    \end{align}
+    with nested square samples $X_j$ and orthonormal vectors
+    $v_{jk}\in\mathcal H_{X_j}$. Each party takes part in boundedly many
+    operations with other parties during its whole lifetime, and each such
+    operation is a sum of polynomially many products of private contractions
+    and bipartite vectors or covectors.
+
+    Telescoping the accumulated errors of these contractions, the final vector
+    $\Psi$ and the final reference vector $\Omega\otimes\Xi$ satisfy
+    \begin{align}
+        \|\Psi-\Omega\otimes\Xi\| & \le CL^{-17},
+        \qquad\|\Psi\|\le1,
+        \qquad 1-CL^{-57}\le\|\Xi\|\le1,
+        \label{eq:polynomial_peps_protocol_error} \\
+        \bigl\|\operatorname{Tr}_{\rm private}|\Psi\rangle\langle\Psi|
+        -|\Omega\rangle\langle\Omega|\bigr\|_1
+                                  & \le CL^{-10}.
+        \label{eq:polynomial_peps_protocol_density}
+    \end{align}
+    Density compression replaces the bipartite resources by polynomial sums of
+    product operators and gives an operator network $\sigma$ on the party graph
+    with polynomial link dimensions and
+    \begin{align}
+        \bigl\|\sigma-|\Omega\rangle\langle\Omega|\bigr\|_1
+         & \le\eta:=CL^{-5}.
+        \label{eq:polynomial_peps_compressed_density}
+    \end{align}
+    If $\eta<1$, write $E=\sigma-|\Omega\rangle\langle\Omega|$ and
+    $a_z=\langle\Omega|z\rangle$ for product basis vectors $|z\rangle$. Since
+    $\sum_z\|E|z\rangle\|^2\le\eta^2$ and $\sum_z|a_z|^2=1$, some $z$ has
+    $a_z\ne0$ and $\|E|z\rangle\|\le\eta|a_z|$. The column $v=\sigma|z\rangle$
+    is then nonzero, has the same virtual dimensions, and satisfies
+    \begin{align}
+        \min_{\theta\in\mathbb R}
+        \left\|\frac{v}{\|v\|}-e^{i\theta}\Omega\right\|
+         & \le2\eta.
+        \label{eq:polynomial_peps_column_error}
+    \end{align}
+    Routing each link horizontally and then vertically through the anchors of
+    the dyadic blocks has edge congestion at most a constant $\chi$, also after
+    folding the padded grid into the $L\times L$ grid. If every link has
+    dimension at most $C_1L^k$, grouping the links crossing each grid edge
+    gives
+    \begin{align}
+        D_e & \le(C_1L^k)^\chi=C_1^\chi L^{k\chi}.
+        \label{eq:polynomial_peps_routed_bond}
+    \end{align}
+    For $L\ge L_0$ the error $2CL^{-5}$ is at most $L^{-1}$, so
+    (\ref{eq:polynomial_peps_column_error}) gives
+    (\ref{eq:polynomial_peps_phase_error}). Each of the finitely many sizes
+    $2\le L<L_0$ has an exact representation with bond dimensions bounded
+    independently of the Hamiltonian, which is absorbed by enlarging the
+    prefactor in (\ref{eq:polynomial_peps_routed_bond}).
 \end{proof}
 
 \begin{definition}[Polygonal lattice templates]
@@ -238,6 +396,7 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.ambientDilation_zero
     }
     \leanok
+    \uses{def:area_law_domain,def:area_law_hamiltonian}
     Fix $D_0>0$ and a sufficiently large positive numerical constant
     $C_{\rm tpl}$ before choosing templates. A template with positive integer
     parameters $n,s_0$ is a nonempty finite
@@ -253,11 +412,15 @@ original open square. We state the two models separately, following
         \label{eq:area_law_template_diameter}
     \end{align}
     Each $P_a$ is a closed convex rectangle or triangle of sup-norm diameter at
-    most $s_0$, with side slopes in $\{0,\infty,1,-1\}$. The union may be
+    most $s_0$, with side slopes in $\{0,\infty,1,-1\}$. Triangles have
+    noncollinear vertices and rectangles have nonzero sides; this ordinary
+    reading of the source's polygons is recorded in
+    \cite{gap:arealaw2d_nondegenerate_templates}. The union may be
     disconnected. Geometric estimates require a uniform lower bound on
     $C_{\rm tpl}$, chosen independently of the template.
     Separation from a fixed cut set $Z$ means
-    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$. Put
+    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$. For the fixed cut
+    $A\subseteq\Lambda$ of (\ref{eq:area_law_boundary}), put
     \begin{align}
         T_j & =T+([-j,j]^2\cap\mathbb Z^2),
         \label{eq:area_law_template_dilation} \\
@@ -266,8 +429,8 @@ original open square. We state the two models separately, following
         Q_j & =A\cap(T_j\setminus T).
         \label{eq:area_law_template_collar}
     \end{align}
-    In particular, $T_0=T$. These are ambient dilations, not induced-graph
-    neighborhoods.
+    In particular, $T_0=T$. These are ambient dilations, not the induced-graph
+    neighborhoods (\ref{eq:area_law_graph_neighborhood}).
     This is Definition~9.3 of \cite{OpenAI2026AreaLaw}.
 \end{definition}
 
@@ -308,20 +471,22 @@ original open square. We state the two models separately, following
     }
     \leanok
     The final box error exponent is $e_*=2\cdot10^{-6}$, and the scanner choices are
-    $(\mu,\nu,\ell,\omega,\kappa)=(1/4,1/1000,1/100000,1/20000,1/1000000)$.
+    $(\mu,\nu,\ell_{\rm sc},\omega,\kappa)=(1/4,1/1000,1/100000,1/20000,1/1000000)$.
     The amplification uses $\varepsilon=10^{-5}$ and $\alpha=p/(p+1)$.
     Set $\beta=1-2\cdot10^{-6}$, $\delta_0=2\cdot10^{-7}$,
-    $\zeta=1-\delta_0/2$, $\rho_0=(1+\beta)/2$, and $\ell=10^{-5}$.
+    $\zeta=1-\delta_0/2$, $\rho_0=(1+\beta)/2$, and $\ell_{\rm geo}=10^{-5}$.
     Then
     \begin{align}
-        (1+2\delta_0)\beta    & <\zeta<1,
-        \label{eq:area_law_zeta_gap}             \\
-        (1+2\delta_0)(1-\ell) & <1,
-        \label{eq:area_law_ell_gap}              \\
-        1-\ell                & <\beta<\rho_0<1.
+        (1+2\delta_0)\beta              & <\zeta<1,
+        \label{eq:area_law_zeta_gap}                       \\
+        (1+2\delta_0)(1-\ell_{\rm geo}) & <1,
+        \label{eq:area_law_ell_gap}                        \\
+        1-\ell_{\rm geo}                & <\beta<\rho_0<1.
         \label{eq:area_law_rho_gap}
     \end{align}
-    The choice $p=10^6$ also satisfies $p/(p+1)>1-10^{-6}$.
+    The choice $p=10^6$ also satisfies $p/(p+1)>1-10^{-6}$. The scanner
+    exponent $\ell_{\rm sc}$ and the geometric exponent $\ell_{\rm geo}$ are
+    separate choices, which happen to have the same value.
 \end{theorem}
 \begin{proof}\leanok
     Substitute the stated rational values and compare integers after multiplying

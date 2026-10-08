@@ -2,7 +2,8 @@
 
 \begin{theorem}[Two-family entropy bound on a finite domain]
     \label{thm:area_law_two_family_entropy}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum,
+        TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum}
     \leanok
     \uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
     Let $\Lambda\subset\mathbb Z^2$ be finite, with local dimension $q$, and let
@@ -17,6 +18,10 @@
     \end{align}
     This is \cite[Lemma~11.1]{OpenAI2026AreaLaw}, with no Hamiltonian or
     geometric hypothesis. Empty pieces, families, and residual sets are allowed.
+    The same bound holds for a unit vector in any finite tensor product of
+    finite-dimensional spaces, with site-dependent local dimensions; this is the
+    generality of the source statement, and the lattice statement above is its
+    specialization to sites in $\mathbb Z^2$ with one local dimension $q$.
 \end{theorem}
 \begin{proof}\leanok
     Restrict the common index order to each family label. Its preceding union is

@@ -21,21 +21,6 @@ geometric decomposition or its polylogarithmic counting estimate. These proofs
 are independently written; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-build/sections/02-information.tex
-Labels: eq:info-tile-cost.
-Provenance-ID: 8765-tn-conditional-01
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.conditionalMutualInformation_le_sum
-Provenance-ID: 8765-tn-conditional-02
-Downstream declaration:
-TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_residual_add_sum
--/
-
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition

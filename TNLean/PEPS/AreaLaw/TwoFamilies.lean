@@ -24,35 +24,6 @@ Lemma 11.1 (`geometry:cancellation`), source revision
 The proofs are independently written; no OpenAI Lean proof code is adapted.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-Labels: geometry:cancellation.
-Provenance-ID: 8760-tn-consumer-01
-Downstream declaration:
-TNLean.PEPS.AreaLaw.reducedState_eq_finiteProduct
-Provenance-ID: 8760-tn-consumer-02
-Downstream declaration:
-TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct
-Provenance-ID: 8760-tn-consumer-03
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.familyIndices
-Provenance-ID: 8760-tn-consumer-04
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.past_familyIndices
-Provenance-ID: 8760-tn-consumer-05
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.union_familyIndices
-Provenance-ID: 8760-tn-consumer-06
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum
-Provenance-ID: 8760-tn-consumer-07
-Downstream declaration:
-TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum
--/
-
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw
