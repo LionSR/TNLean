@@ -23,28 +23,6 @@ revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8773-exists_exact_square_tensor
-Downstream declaration: TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor
-Provenance-ID: 8773-exists_exact_square_tree_tensor
-Downstream declaration: TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tree_tensor
-Provenance-ID: 8773-exists_exact_unit_square_tensor
-Downstream declaration: TNLean.PEPS.ExactTreeRepresentation.exists_exact_unit_square_tensor
-Provenance-ID: 8773-exists_exact_square_tensor_bounded
-Downstream declaration: TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_bounded
-Provenance-ID: 8773-exists_exact_square_tensor_polynomial
-Downstream declaration: TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_polynomial
-Provenance-ID: 8773-exists_exact_square_tensor_outer_power
-Downstream declaration: TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_outer_power
-Source: September 24, 2026, sec:assembly, eq:final-bond.
-The finite-size construction is in lines 203–214 of the cited assembly section.
-<https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/07-assembly.tex>
-Independently formalized; no upstream Lean proof text reused.
-Auxiliary geometry and finite-size exact PEPS results do not establish the large-size theorem.
--/
-
 namespace TNLean.PEPS.ExactTreeRepresentation
 
 /-- Every vector on a nonempty open square grid is a literal native PEPS

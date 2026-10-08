@@ -20,26 +20,6 @@ arXiv:1804.04964, Section 3, Theorem 3. They also supply the connectivity
 hypotheses for exact finite-graph PEPS constructions.
 -/
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8773-squarelatticegraph_eq_boxprod
-Downstream declaration: TNLean.PEPS.squareLatticeGraph_eq_boxProd
-Provenance-ID: 8773-squarelatticegraph_preconnected
-Downstream declaration: TNLean.PEPS.squareLatticeGraph_preconnected
-Provenance-ID: 8773-squarelatticegraph_connected
-Downstream declaration: TNLean.PEPS.squareLatticeGraph_connected
-Provenance-ID: 8773-squarelatticegraph_connected_iff
-Downstream declaration: TNLean.PEPS.squareLatticeGraph_connected_iff
-Provenance-ID: 8773-squarelatticevertex_nontrivial
-Downstream declaration: TNLean.PEPS.squareLatticeVertex_nontrivial
-Source: September 24, 2026, sec:assembly.
-The finite-size construction is in lines 203–214 of the cited assembly section.
-<https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/07-assembly.tex>
-Independently formalized; no upstream Lean proof text reused.
-Auxiliary geometry and finite-size exact PEPS results do not establish the large-size theorem.
--/
-
 namespace TNLean.PEPS
 
 /-- A rectangular nearest-neighbor lattice is the box product of its two
