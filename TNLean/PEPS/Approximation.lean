@@ -23,6 +23,8 @@ import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
+import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
+import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.FrameBoundedChanges
 import TNLean.PEPS.Approximation.FrameRegisters
@@ -33,8 +35,10 @@ import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PairEffectSourcePreparation
+import TNLean.PEPS.Approximation.PairSourceCombination
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
+import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
