@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.ColumnSelection
+import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.Approximation.CorrectedPositionCost
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks

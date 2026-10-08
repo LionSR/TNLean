@@ -31,3 +31,4 @@ import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
+import TNLean.PEPS.AreaLaw.TwoFamilies

@@ -3216,3 +3216,19 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   assumed. This is the orthogonalization step, not the approximation-error
   or full adaptive-patch theorem. See
   [the construction and scope note](formalization/peps-nested-cylinder-orthogonalization.md).
+
+## Two-family regional entropy
+
+- `FiniteProduct.entropy` (QICLean): canonical von Neumann entropy of the
+  regional reduced pure-state matrix, for arbitrary finite dependent local bases.
+- `FiniteProduct.entropy_le_remainder_add_half_sum` (QICLean): exact normalized
+  pure-state two-family cancellation, with coefficient `1/2` and the entire
+  exterior-plus-earlier-same-family mutual-information assumptions.
+- `TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum`: the finite-domain
+  specialization using the existing `OrderedTwoFamilyPartition` and regional
+  entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
+  nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
+- `FiniteProduct.conditionalMutualInformation` (QICLean): the physical regional
+  entropy combination. Generic difference, finite-chain and pure-duality
+  identities are available; canonical tripartite identification, exceptional-site
+  dimension bounds and the full PEPS conditional-cell theorem remain separate.
