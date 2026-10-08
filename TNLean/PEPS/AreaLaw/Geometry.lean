@@ -48,6 +48,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
+import TNLean.PEPS.AreaLaw.Geometry.InitialSectorAssignment
 import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers

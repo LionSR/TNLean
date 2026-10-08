@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.actual_sector_assignment",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_assignment",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:initial-stars",
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For C \u2265 2, initial layer k\u2080 \u2265 50000000, arbitrary valid residue functions, an actual reference fine cell at k \u2265 k\u2080 and any of its actual nine marks v, there is a unique assignment of the eight open all-midpoint working triangles to actual initial identifiers. Each open triangle is contained in its assigned initial open region. For every initial identifier, its birth region in the final closed square is exactly the finite union of the assigned smaller closed triangles, including the empty union. Working and final half-sides are t_k/32 and t_k/64. Nonempty Z and the required lower exponent are derived, not supplied. No active-ray, matching, local boundary or sector certificate is assumed.",
+        "Section 11, geometry:initial-stars, lines 333\u2013370, especially 352\u2013370; actual identifiers in prop:two-families, lines 299\u2013323. Complete independent mathematical review approves the released statement and proof at raw SHA-256 434d5724900a52ade60054a461e2d7248eab9bec0fd8fc7047985bacfc571f09. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6051085776. At preparation the completed prospective parent and exact source freeze are unbound. The intended first compiler check is the combined canonical Geometry build; no direct check, log or timing is asserted. All expected 315 parent records, every parent shard, every recursively tracked historical evidence file and all policy, license and dependency-pin bytes are immutable. The expected parent inventory is 315 records in 30 ledgers and all 164 historical files, subject to root measurement after publication. Active-ray merging, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
