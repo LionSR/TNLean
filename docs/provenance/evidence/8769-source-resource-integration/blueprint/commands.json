@@ -1,0 +1,204 @@
+[
+  {
+    "name": "sync",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/sync.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration",
+    "seconds": 2.888,
+    "returncode": 0,
+    "log_sha256": "fa92097bd563878988c5d75ca6691f7d09719e6900db865958c9867275e8d633"
+  },
+  {
+    "name": "initial-pdf",
+    "command": [
+      "latexmk",
+      "-g",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/blueprint/src",
+    "seconds": 14.458,
+    "returncode": 0,
+    "log_sha256": "499c889395d3056ce6dd609dc91f575f69bcc6d670aab0720de786e6860aa540"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+    "seconds": 0.171,
+    "returncode": 0,
+    "log_sha256": "375abb235af66b3038eeee10fe0c57ad67f0421d5ebd6b788af34cef20a11f35"
+  },
+  {
+    "name": "initial-web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/blueprint",
+    "seconds": 7.161,
+    "returncode": 0,
+    "log_sha256": "588aab98cc31ffaad5cc10ad20780c2cf43657d83a2bc94ea51276b1734e58be"
+  },
+  {
+    "name": "initial-browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+    "seconds": 8.767,
+    "returncode": 0,
+    "log_sha256": "80c916d3af5769039a3a83d46eb37674bc96d030e7b8c82e182f8cce51da4a8d"
+  },
+  {
+    "name": "intermediate-pdf",
+    "command": [
+      "latexmk",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/blueprint/src",
+    "seconds": 5.977,
+    "returncode": 0,
+    "log_sha256": "7c1313de51343955400c7b2b54561156dbe853c1946f5d8c6b8abeeda38464fa"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+    "seconds": 0.334,
+    "returncode": 0,
+    "log_sha256": "375abb235af66b3038eeee10fe0c57ad67f0421d5ebd6b788af34cef20a11f35"
+  },
+  {
+    "name": "intermediate-web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/blueprint",
+    "seconds": 7.942,
+    "returncode": 0,
+    "log_sha256": "588aab98cc31ffaad5cc10ad20780c2cf43657d83a2bc94ea51276b1734e58be"
+  },
+  {
+    "name": "intermediate-browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+    "seconds": 9.295,
+    "returncode": 0,
+    "log_sha256": "80c916d3af5769039a3a83d46eb37674bc96d030e7b8c82e182f8cce51da4a8d"
+  },
+  {
+    "name": "sync-final",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/sync-final.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration",
+    "seconds": 5.087,
+    "returncode": 0,
+    "log_sha256": "80d6e3220fe8720d33ea742a691b8c5d18beb527675cb1cf489f8c56a8c7e0f6"
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "latexmk",
+      "-lualatex",
+      "-interaction=nonstopmode",
+      "-halt-on-error",
+      "focused.tex"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/blueprint/src",
+    "seconds": 18.757,
+    "returncode": 0,
+    "log_sha256": "970f56c3d0c7a7f0b7bac7c8672db61900214996ca075217a2d4185e11ec8682"
+  },
+  {
+    "name": "bbl",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/texra-blueprint",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+      "bbl"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+    "seconds": 0.67,
+    "returncode": 0,
+    "log_sha256": "375abb235af66b3038eeee10fe0c57ad67f0421d5ebd6b788af34cef20a11f35"
+  },
+  {
+    "name": "web",
+    "command": [
+      "/Users/siruilu/.local/share/uv/tools/texra-blueprint/bin/leanblueprint",
+      "web"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/blueprint",
+    "seconds": 13.84,
+    "returncode": 0,
+    "log_sha256": "588aab98cc31ffaad5cc10ad20780c2cf43657d83a2bc94ea51276b1734e58be"
+  },
+  {
+    "name": "browser",
+    "command": [
+      "/tmp/qic-regional-blueprint-env/bin/python",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/scoped_web_check.py"
+    ],
+    "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+    "seconds": 13.341,
+    "returncode": 0,
+    "log_sha256": "4559c3ff5a5e1a50b0a12e83036671b52b73a78b518e5fddad13ff0fcd2f1db3"
+  },
+  {
+    "name": "sync-final",
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--root",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd",
+      "--report",
+      "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-resource-integration-blueprint-m2xc13pd/sync-final.json",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "cwd": "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration",
+    "seconds": 24.137,
+    "returncode": 0,
+    "log_sha256": "80d6e3220fe8720d33ea742a691b8c5d18beb527675cb1cf489f8c56a8c7e0f6"
+  }
+]

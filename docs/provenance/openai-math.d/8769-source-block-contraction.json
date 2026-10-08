@@ -773,21 +773,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "c80913b10d9926f31004705c78f136ade6b8b466",
+        "revision": "33695425897e6f9895884741c0677aa38750361b",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-block-contraction/TNLean/PEPS/Approximation/SourceSlotMaps.olean /private/tmp/tnlean-source-block-contraction/src/TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceSlotMaps.olean TNLean/PEPS/Approximation/SourceSlotMaps.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/direct-build.log",
-            "sha256": "0f2ca5f011669317f272bf8255ad9cad1badb2f3e6637e856ce8ce716a2bd7b2"
+            "log": "docs/provenance/evidence/8769-source-resource-integration/direct-build.log",
+            "sha256": "52755181ebe8a9897614272741183fd08901f74addd4d8f2bb847b1d15a4230a"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-block-contraction/final-verification-20261007/AllAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/axioms.log",
-            "sha256": "960bc4712b063b896f0b69df399c6eda1f43d11c3a29053c914a30a358004906"
+            "log": "docs/provenance/evidence/8769-source-resource-integration/axioms.log",
+            "sha256": "cf3aea968d7f1bd13a57817e7f225939fa372871fc6085df0047bff9e37e4376"
           }
         ]
       },
@@ -822,21 +822,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "c80913b10d9926f31004705c78f136ade6b8b466",
+        "revision": "33695425897e6f9895884741c0677aa38750361b",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-block-contraction/TNLean/PEPS/Approximation/SourceSlotMaps.olean /private/tmp/tnlean-source-block-contraction/src/TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceSlotMaps.olean TNLean/PEPS/Approximation/SourceSlotMaps.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/direct-build.log",
-            "sha256": "0f2ca5f011669317f272bf8255ad9cad1badb2f3e6637e856ce8ce716a2bd7b2"
+            "log": "docs/provenance/evidence/8769-source-resource-integration/direct-build.log",
+            "sha256": "52755181ebe8a9897614272741183fd08901f74addd4d8f2bb847b1d15a4230a"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-block-contraction/final-verification-20261007/AllAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/axioms.log",
-            "sha256": "960bc4712b063b896f0b69df399c6eda1f43d11c3a29053c914a30a358004906"
+            "log": "docs/provenance/evidence/8769-source-resource-integration/axioms.log",
+            "sha256": "cf3aea968d7f1bd13a57817e7f225939fa372871fc6085df0047bff9e37e4376"
           }
         ]
       },
@@ -871,21 +871,21 @@
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "c80913b10d9926f31004705c78f136ade6b8b466",
+        "revision": "33695425897e6f9895884741c0677aa38750361b",
         "commands": [
           {
             "kind": "build",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-block-contraction/TNLean/PEPS/Approximation/SourceSlotMaps.olean /private/tmp/tnlean-source-block-contraction/src/TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-resource-integration/artifacts/TNLean/PEPS/Approximation/SourceSlotMaps.olean TNLean/PEPS/Approximation/SourceSlotMaps.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/direct-build.log",
-            "sha256": "0f2ca5f011669317f272bf8255ad9cad1badb2f3e6637e856ce8ce716a2bd7b2"
+            "log": "docs/provenance/evidence/8769-source-resource-integration/direct-build.log",
+            "sha256": "52755181ebe8a9897614272741183fd08901f74addd4d8f2bb847b1d15a4230a"
           },
           {
             "kind": "axioms",
-            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-block-contraction/final-verification-20261007/AllAxioms.lean",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8769-source-block-contraction/axioms.log",
-            "sha256": "960bc4712b063b896f0b69df399c6eda1f43d11c3a29053c914a30a358004906"
+            "log": "docs/provenance/evidence/8769-source-resource-integration/axioms.log",
+            "sha256": "cf3aea968d7f1bd13a57817e7f225939fa372871fc6085df0047bff9e37e4376"
           }
         ]
       },

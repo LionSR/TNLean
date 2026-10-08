@@ -1,0 +1,47 @@
+{
+  "chapters": [
+    {
+      "command": [
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration/scripts/latexindent",
+        "-l",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration/blueprint/latexindent.yaml",
+        "-w",
+        "-s",
+        "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/source-resource-final-format-w2bh6z53/ch24_peps_source_only_reduction.tex"
+      ],
+      "returncode": 0,
+      "idempotent": true,
+      "source_path": "blueprint/src/chapter/ch24_peps_source_only_reduction.tex",
+      "source_sha256": "a5e885d688f0b30b28d1a7bb1405516db81c4fe1f5972464e05c267fc5272fe9"
+    },
+    {
+      "command": [
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration/scripts/latexindent",
+        "-l",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration/blueprint/latexindent.yaml",
+        "-w",
+        "-s",
+        "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/source-resource-final-format-w2bh6z53/ch24_peps_corrected_input_frames.tex"
+      ],
+      "returncode": 0,
+      "idempotent": true,
+      "source_path": "blueprint/src/chapter/ch24_peps_corrected_input_frames.tex",
+      "source_sha256": "2c7fb73cbb65ea4cce2c66c2a4ed9a0e55fad7a8314532d70c091b286ff7573d"
+    },
+    {
+      "command": [
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration/scripts/latexindent",
+        "-l",
+        "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-resource-integration/blueprint/latexindent.yaml",
+        "-w",
+        "-s",
+        "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/source-resource-final-format-w2bh6z53/ch24_peps_local_output_coordinates.tex"
+      ],
+      "returncode": 0,
+      "idempotent": true,
+      "source_path": "blueprint/src/chapter/ch24_peps_local_output_coordinates.tex",
+      "source_sha256": "0638bc4489778c8ec1e2979c03459e480e7e8e169d464b14f0cb8050c67a5357"
+    }
+  ],
+  "new_tags": 300
+}

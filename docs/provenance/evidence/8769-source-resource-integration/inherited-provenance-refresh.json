@@ -1,0 +1,170 @@
+[
+  {
+    "id": "8769-physical-physicaloutputcontraction-01",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.physicalDiscardIso",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-02",
+    "declaration": "TNLean.PEPS.PairEffect.Layout.physicalDiscardIso_tmul",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-03",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_physicalComponentCoordinates_le_one",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-04",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_physicalComponent_le_one",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-05",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_physicalGramMap_le_one",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-06",
+    "declaration": "TNLean.PEPS.PairEffect.Word.norm_physicalGramMatrix_le_one",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-07",
+    "declaration": "TNLean.PEPS.PairEffect.Word.partialTrace_physicalOutputMatrix_mul_conjTranspose",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-08",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalComponent",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-09",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalComponentCoordinates",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-10",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalGramMap",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-11",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalGramMap_inner",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-12",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalGramMatrix",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-13",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalGramMatrix_apply",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-physical-physicaloutputcontraction-14",
+    "declaration": "TNLean.PEPS.PairEffect.Word.physicalOutputMatrix",
+    "path": "TNLean/PEPS/Approximation/PhysicalOutputContraction.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-physical.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.selectedsources",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.selectedSources",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.layout_selectedsources_eq",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.layout_selectedSources_eq",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.freeslotlayout",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.freeSlotLayout",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.prepareselected",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.prepareSelected",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.preparefreeslots",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.prepareFreeSlots",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.fillsourcevectors",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.fillSourceVectors",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.isallowed_prepareselected",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepareSelected",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.sources_prepareselected",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.sources_prepareSelected",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.eval_prepareselected_preparefreeslots",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.mem_selectedsources",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_selectedSources",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-selective-prep-sourceinventory.mem_sources_prepareselected",
+    "declaration": "TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected",
+    "path": "TNLean/PEPS/Approximation/SelectiveSourcePreparation.lean",
+    "shard": "docs/provenance/openai-math.d/8769-selective-source-preparation.json"
+  },
+  {
+    "id": "8769-free-input-maps-word.mapsourceslots",
+    "declaration": "TNLean.PEPS.PairEffect.Word.mapSourceSlots",
+    "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-block-contraction.json"
+  },
+  {
+    "id": "8769-free-input-maps-word.mapsourceslots_spec",
+    "declaration": "TNLean.PEPS.PairEffect.Word.mapSourceSlots_spec",
+    "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-block-contraction.json"
+  },
+  {
+    "id": "8769-free-input-maps-word.eval_mapsourceslots_prepareslots",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_mapSourceSlots_prepareSlots",
+    "path": "TNLean/PEPS/Approximation/SourceSlotMaps.lean",
+    "shard": "docs/provenance/openai-math.d/8769-source-block-contraction.json"
+  }
+]

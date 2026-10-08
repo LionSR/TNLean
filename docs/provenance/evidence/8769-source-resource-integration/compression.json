@@ -1,0 +1,538 @@
+{
+  "original-sources/CorrectedSchmidtOutput.lean.gz": {
+    "uncompressed_sha256": "2c04701de67987695a56089afe44c2ed1ff587c157cf283d36098da9aab5f882",
+    "uncompressed_bytes": 4555
+  },
+  "original-sources/SourceInputSchmidtFrames.lean.gz": {
+    "uncompressed_sha256": "1e7aa136db2b76e8618986f652f4ac58c5da969a973b1ced2dee245f94df0399",
+    "uncompressed_bytes": 8526
+  },
+  "original-sources/EffectCircuitReplacement.lean.gz": {
+    "uncompressed_sha256": "7c0813e051f8cbedb72908d74289741c971f2fb9d5d713519561427ad40549c3",
+    "uncompressed_bytes": 44210
+  },
+  "original-sources/CorrectedSchmidtInput.lean.gz": {
+    "uncompressed_sha256": "2c17575be4c0928f64d9ebf052d07dfd68270aa4b2d321dfaca6aa4523a0283f",
+    "uncompressed_bytes": 6701
+  },
+  "original-sources/SourceOnlyReduction.lean.gz": {
+    "uncompressed_sha256": "1492269e29cd3aeb9ebe6053530b7772d78bf5858b8583a3a782b397a5e3e689",
+    "uncompressed_bytes": 9320
+  },
+  "original-sources/CorrectedSourceFrames.lean.gz": {
+    "uncompressed_sha256": "13d6cea62af95fcecfdae89d88d8f13a02255de578e9845ac19ac08f8d553a26",
+    "uncompressed_bytes": 10713
+  },
+  "original-sources/SourceInputFrames.lean.gz": {
+    "uncompressed_sha256": "28eb9135606af368a19f8418731c814ca767f4b70f83d23756d9bf7a586c452d",
+    "uncompressed_bytes": 12592
+  },
+  "original-sources/SourceInputPartition.lean.gz": {
+    "uncompressed_sha256": "fe6f2572407e44576273f6a754a30e13c928f03057f6b497b72b2c1239a55832",
+    "uncompressed_bytes": 14579
+  },
+  "original-sources/PhysicalReadout.lean.gz": {
+    "uncompressed_sha256": "ce35e08e0995512b185294cb2274c1b31e96ca47cdf37a3873b367acba09137d",
+    "uncompressed_bytes": 10316
+  },
+  "original-sources/FamilyPhysicalReadout.lean.gz": {
+    "uncompressed_sha256": "a5288f9b3573bde64e4dfe3ae8d08b659158a9d1f4b902d5b2666355f8303304",
+    "uncompressed_bytes": 9838
+  },
+  "original-sources/EffectReplacementCoefficients.lean.gz": {
+    "uncompressed_sha256": "a95ec0756b56e913b913c6c93128b6334d761b7b3524c308b3d3e612da1da2f2",
+    "uncompressed_bytes": 6819
+  },
+  "original-sources/SourceCircuitResourceBounds.lean.gz": {
+    "uncompressed_sha256": "4a34e74e8689d7ee5ebfd95d9fc39a4d8dca68686d18301d4d3a6182c94be59e",
+    "uncompressed_bytes": 2107
+  },
+  "original-sources/SeparatedOutputCoordinates.lean.gz": {
+    "uncompressed_sha256": "4e4e1297edd38470b7636cfc6a54ed581831684dab7ae4151b4b4013e44a3c3a",
+    "uncompressed_bytes": 7059
+  },
+  "original-sources/OutputPartitionCoordinates.lean.gz": {
+    "uncompressed_sha256": "7d846baf4b7abe05bfacb4e449a00a8a0e435a0f3469918092803061a2b9122b",
+    "uncompressed_bytes": 9395
+  },
+  "original-sources/CorrectedInputReordering.lean.gz": {
+    "uncompressed_sha256": "d25628cb6448f8d5cac4c4d7e1950bfe0bbb615ac735ec7e2dc20cc7b5d96d03",
+    "uncompressed_bytes": 6972
+  },
+  "original-sources/EffectCircuitResources.lean.gz": {
+    "uncompressed_sha256": "090d79b5f375d5da5b54a9c0ac4acce422682d83de322c793deaacae7d9df99b",
+    "uncompressed_bytes": 4890
+  },
+  "original-sources/EffectCircuitDensity.lean.gz": {
+    "uncompressed_sha256": "a6679060c88f7f2d3855c8783e4e32316cba02ff3828bb85170d6404010fd1f4",
+    "uncompressed_bytes": 16458
+  },
+  "original-sources/AffectedPhysicalDimension.lean.gz": {
+    "uncompressed_sha256": "f5dc152be633c4ecaaabe53daf3cc85656abc995e042dc6dbf5bc979988bc7a9",
+    "uncompressed_bytes": 4524
+  },
+  "original-sources/OriginalCircuit.lean.gz": {
+    "uncompressed_sha256": "8b96c0b950290bbeba16cf42fc6bbbd5dcdd109513b8455d5c9ce58181588bba",
+    "uncompressed_bytes": 12650
+  },
+  "original-sources/FamilySourceOnlyReduction.lean.gz": {
+    "uncompressed_sha256": "ccf2f276e5e109995806594b5992e4ce85d22a4ebdcee6b7f73f2593c6112b75",
+    "uncompressed_bytes": 2544
+  },
+  "original-sources/EffectReplacementExpansion.lean.gz": {
+    "uncompressed_sha256": "da6dfeb690768391db87170527d0bfef1b9fc1dfa1882da2582b4a92fd6512e3",
+    "uncompressed_bytes": 5266
+  },
+  "original-sources/CorrectedInputVectors.lean.gz": {
+    "uncompressed_sha256": "28f7d609dd8c6edeebc5678d63c701028202982ebf27ee9d35872cd8458dc848",
+    "uncompressed_bytes": 6191
+  },
+  "original-sources/CorrectedInputVectorIdentity.lean.gz": {
+    "uncompressed_sha256": "bad5bfb60161887c76b0dc6ef1b0499922689e4cab2167ae025e32a95fc72a41",
+    "uncompressed_bytes": 3998
+  },
+  "original-sources/EffectReplacementSources.lean.gz": {
+    "uncompressed_sha256": "0a4b3f4c62824a402e54bf0739b8d3401e2322d90ebca9d2a05684259a961246",
+    "uncompressed_bytes": 6140
+  },
+  "original-sources/OwnerOutputCoordinates.lean.gz": {
+    "uncompressed_sha256": "c2fa53fbf7927a15897b70c62dcd47535ed1d06ec8a19c81a91cdeb511aa346f",
+    "uncompressed_bytes": 4298
+  },
+  "original-sources/EffectCircuitError.lean.gz": {
+    "uncompressed_sha256": "d43c941349bb5e28ddaded785f1460a1f6167cd2954c6db9e481b0f856f684b4",
+    "uncompressed_bytes": 18811
+  },
+  "original-sources/EffectCircuitLocations.lean.gz": {
+    "uncompressed_sha256": "f249875cb7545e5296f48687a4f7fbdf0adc68025946d1c556e1889e80f82994",
+    "uncompressed_bytes": 8577
+  },
+  "original-sources/SourceRegisterPermutation.lean.gz": {
+    "uncompressed_sha256": "2cdd16a2cde4c7e23b68967855bd826df37bed4c74fba1cb5218921f0b69550f",
+    "uncompressed_bytes": 13341
+  },
+  "original-sources/LocalSchmidtOutput.lean.gz": {
+    "uncompressed_sha256": "7c69b6c1488c82b65040a5eb3f26ea0a579d53332ca762d6e392cbcaa76ffb6a",
+    "uncompressed_bytes": 6436
+  },
+  "original-sources/SourcePreparationVectors.lean.gz": {
+    "uncompressed_sha256": "5ce2e6fd067d2ee10353a1212c3231267397ecb084da12ee6cc947fa1f6b5323",
+    "uncompressed_bytes": 10321
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceSlotMaps.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedInputReordering.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceRegisterPermutation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedInputVectorIdentity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PhysicalOutputContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceInputPartition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.LocalSchmidtOutput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.ExteriorSourceContraction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SeparatedPhysicalDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SeparatedOutputCoordinates.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GaussianPhysicalSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceOnlyReduction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordSelectivePartition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitResources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedSourceFrames.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SelectiveSourceFactorization.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitError.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitPreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SelectiveSourcePreparation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FamilySourceOnlyReduction.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WeightedPhysicalSource.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.OutputPartitionCoordinates.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.AffectedPhysicalDimension.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourcePreparationVectors.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitReplacement.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedSchmidtOutput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.OriginalCircuit.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SeparatedSchmidtOutput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementSources.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.WordEvaluationTransport.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.FamilyPhysicalReadout.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceCircuitResourceBounds.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementCoefficients.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectCircuitLocations.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedSchmidtInput.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceInputFrames.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedInputVectors.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.EffectReplacementExpansion.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.GaussianSeparatedPhysicalDensity.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceFrameMatrix.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.PhysicalReadout.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.OwnerOutputCoordinates.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.SourceInputSchmidtFrames.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "strict-checks/TNLean.PEPS.Approximation.CorrectedSourcePartition.log.gz": {
+    "uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uncompressed_bytes": 0
+  },
+  "imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "de539e95674843ed8b5ef78abd1498d18d64068174b80b6004be07b4ca5fe5e6",
+    "uncompressed_bytes": 602633
+  },
+  "imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "ff5548c8565952675f2d193273ee6fdc539c0ddc256aacd7476e2a60bca6892d",
+    "uncompressed_bytes": 39339
+  },
+  "imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "a86696a6b1c880f6ee988068e2924e77fe6eb37bb1e7ecaa007514bc4c21225e",
+    "uncompressed_bytes": 6490679
+  },
+  "declaration-check/lean_declarations.txt.gz": {
+    "uncompressed_sha256": "a38cbf882944d8f9f5acbef44159d3bcb823980e77a162963ba7f7de932a9c2f",
+    "uncompressed_bytes": 1070142
+  },
+  "inherited-refactors.patch.gz": {
+    "uncompressed_sha256": "5ff4557b22f7034feb162db8aeb5cd5dbdd839a2a6fc346c034de34908f0c883",
+    "uncompressed_bytes": 6646
+  },
+  "repr-effectMap-promotion.patch.gz": {
+    "uncompressed_sha256": "ef13e2aaf2e5ded9a7e3d790b46748183a30b1b4f76151d3630ec472d9d52e64",
+    "uncompressed_bytes": 1448
+  },
+  "tactic-pattern-scan.log.gz": {
+    "uncompressed_sha256": "0ceae320104e518a16efe46df9a532576f09ec6125959280a3eb1b76ca52f743",
+    "uncompressed_bytes": 1249
+  },
+  "initial-checks/build-history.json.gz": {
+    "uncompressed_sha256": "95d46f0c4982969d6f52638e2fd55abe19b4bd3fa6b0de2fd5961e4e912e186c",
+    "uncompressed_bytes": 74273
+  },
+  "initial-checks/initial-checks/blueprint-sync-error/source-revision.json.gz": {
+    "uncompressed_sha256": "61f303b162aa44f9cf44aa26f3c1e640038f0c40acd3151abc2dc6e9a0999f8d",
+    "uncompressed_bytes": 289
+  },
+  "initial-checks/initial-checks/blueprint-sync-error/sync.json.gz": {
+    "uncompressed_sha256": "6114029d30d94d59f679261c2177130fdac452c8e89fb9a44615d8da924cc9f4",
+    "uncompressed_bytes": 93711
+  },
+  "initial-checks/initial-checks/blueprint-sync-error/sync.log.gz": {
+    "uncompressed_sha256": "dfe16ab758dbff8922b3e86426e021747d904142cb7f9ad0db264ec5349dbaf0",
+    "uncompressed_bytes": 44281
+  },
+  "initial-checks/initial-checks/blueprint-sync-error/commands.json.gz": {
+    "uncompressed_sha256": "ae32ec656ad92cc645f4a35d514cf81e052129b80c810d691dae9e7a088f54de",
+    "uncompressed_bytes": 688
+  },
+  "initial-checks/initial-checks/blueprint-sync-error/EffectCircuitPreparation.lean.gz": {
+    "uncompressed_sha256": "7b7a0f403a08ffffbda405e9121e58314b904d0d41ac29272a153a9691ed7cc4",
+    "uncompressed_bytes": 32756
+  },
+  "initial-checks/initial-checks/blueprint-sync-error/TNLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "1e4a2dc40cf9840f237fe0d5beb16b25a3f7ac537d56c1aa56eee0b2816ae445",
+    "uncompressed_bytes": 370861
+  },
+  "initial-checks/initial-checks/before-transport-promotion/EffectCircuitPreparation.lean.gz": {
+    "uncompressed_sha256": "e968e7f766f849a74f855ded3795d88c265bcb8d60ae39fe176b1a51bd37651e",
+    "uncompressed_bytes": 33333
+  },
+  "initial-checks/initial-checks/before-transport-promotion/build-commands.json.gz": {
+    "uncompressed_sha256": "a34b9aa76ada7a600f3fea594a6836e0086fb75aeb0a531b92f75575abc811a3",
+    "uncompressed_bytes": 61819
+  },
+  "initial-checks/initial-checks/before-transport-promotion/SourceSlotMaps.lean.gz": {
+    "uncompressed_sha256": "1ffa239ec33791054c18e1b4981d6fd1546a35e31291672a208f8d71a3869f3f",
+    "uncompressed_bytes": 8168
+  },
+  "initial-checks/initial-checks/before-transport-promotion/SelectiveSourcePreparation.lean.gz": {
+    "uncompressed_sha256": "420fc5d75363203473f1e6fa30dd0d90850cffd37369aca4eeeaf5ca98bd0f6d",
+    "uncompressed_bytes": 18513
+  },
+  "initial-checks/initial-checks/before-transport-promotion/SourceRegisterPermutation.lean.gz": {
+    "uncompressed_sha256": "9a141addbf9b0b0ee0a12ea65b390f10170366fb72f993cac5c936e5ef15b99b",
+    "uncompressed_bytes": 15321
+  },
+  "initial-checks/initial-checks/transport-removal-error/TNLean.PEPS.Approximation.EffectCircuitPreparation.log.gz": {
+    "uncompressed_sha256": "95fbdddbb3ebf15110db66d8727ce85fbc6b365fc8ba46aa05376221a3baa29f",
+    "uncompressed_bytes": 604
+  },
+  "initial-checks/initial-checks/transport-removal-error/command.json.gz": {
+    "uncompressed_sha256": "675da1de6b2b51d1ebb0d4606a239a30d97a0c3afc8788de48007bbc65064489",
+    "uncompressed_bytes": 1776
+  },
+  "initial-checks/initial-checks/transport-removal-error/EffectCircuitPreparation.lean.gz": {
+    "uncompressed_sha256": "7b7a0f403a08ffffbda405e9121e58314b904d0d41ac29272a153a9691ed7cc4",
+    "uncompressed_bytes": 32756
+  },
+  "initial-checks/initial-checks/before-transport-promotion/imported-audit/axiom-dependencies.json.gz": {
+    "uncompressed_sha256": "035fb8896f9732381cfb4c2c8080b5d77ac81462b2eca4153aa33281690d5f6e",
+    "uncompressed_bytes": 39444
+  },
+  "initial-checks/initial-checks/before-transport-promotion/imported-audit/imported-modules.json.gz": {
+    "uncompressed_sha256": "cc72aeaaeb93c0b586f7d845bb0b7e0b86fcfbe80f9b2de76f2b7229297b7808",
+    "uncompressed_bytes": 602581
+  },
+  "initial-checks/initial-checks/before-transport-promotion/imported-audit/audit-command.json.gz": {
+    "uncompressed_sha256": "d15fcdc8040bc35ce350e612e79bf8560bdc1fe8773f7e7449d1c07a28dcedff",
+    "uncompressed_bytes": 1011
+  },
+  "initial-checks/initial-checks/before-transport-promotion/imported-audit/axioms.log.gz": {
+    "uncompressed_sha256": "baae545e7d849f76cf9e2c203b25c59c345e9bc63a77644e03f2caca919129d2",
+    "uncompressed_bytes": 37475
+  },
+  "initial-checks/initial-checks/before-transport-promotion/imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "9666066ed5c17f1d2d307c9290a4d053ded7dd622279672eb4aca0020bd83afa",
+    "uncompressed_bytes": 37595
+  },
+  "initial-checks/initial-checks/before-transport-promotion/imported-audit/imported-dependencies.json.gz": {
+    "uncompressed_sha256": "0831a310c84934e9eb37630821d8ad1b74005b798f4a69f42d1c8e31b2f6781e",
+    "uncompressed_bytes": 6490259
+  },
+  "blueprint/TNLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "d70375a8aea975760a98cf530ea57aac1da9f25b03f404243651f96df751e653",
+    "uncompressed_bytes": 370861
+  },
+  "blueprint/QICLean-source-sha256.json.gz": {
+    "uncompressed_sha256": "0d1e16a1a888d76396d5ab263d202b23d9653cebb131f550ac0f748bcd84f3b1",
+    "uncompressed_bytes": 98317
+  },
+  "blueprint/blueprint-source-sha256.json.gz": {
+    "uncompressed_sha256": "500fdd8c795b2852a35680232d0abc5a3b620613c1eba30915e12b481d17ba3e",
+    "uncompressed_bytes": 85458
+  },
+  "blueprint/snapshot-commit-check.json.gz": {
+    "uncompressed_sha256": "813ca77162c74f9cdb105558b6b6848386ea9287eb6ee55a04e21dbc4191f965",
+    "uncompressed_bytes": 463970
+  },
+  "blueprint/qic-snapshot-check.json.gz": {
+    "uncompressed_sha256": "77b999ab1cb8c00566b03e35e7399528a9eb2483998defe8daf4e747009a7014",
+    "uncompressed_bytes": 117
+  },
+  "blueprint/dependency-graph.json.gz": {
+    "uncompressed_sha256": "6831ee4b554d9b603a404651c122001bd970da86ea8095060cdf4b47cd45a99e",
+    "uncompressed_bytes": 80
+  },
+  "blueprint/sync.json.gz": {
+    "uncompressed_sha256": "e4635a472a0390de6a392bc626cb4d96ad433e93c7f85ceb927e7a954e09bb20",
+    "uncompressed_bytes": 93010
+  },
+  "blueprint/sync-final.json.gz": {
+    "uncompressed_sha256": "e4635a472a0390de6a392bc626cb4d96ad433e93c7f85ceb927e7a954e09bb20",
+    "uncompressed_bytes": 93010
+  },
+  "blueprint/full-lean-decls.txt.gz": {
+    "uncompressed_sha256": "a38cbf882944d8f9f5acbef44159d3bcb823980e77a162963ba7f7de932a9c2f",
+    "uncompressed_bytes": 1070142
+  },
+  "blueprint/initial-browser.log.gz": {
+    "uncompressed_sha256": "80c916d3af5769039a3a83d46eb37674bc96d030e7b8c82e182f8cce51da4a8d",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/pdf.log.gz": {
+    "uncompressed_sha256": "970f56c3d0c7a7f0b7bac7c8672db61900214996ca075217a2d4185e11ec8682",
+    "uncompressed_bytes": 46004
+  },
+  "blueprint/browser.log.gz": {
+    "uncompressed_sha256": "4559c3ff5a5e1a50b0a12e83036671b52b73a78b518e5fddad13ff0fcd2f1db3",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/bbl.log.gz": {
+    "uncompressed_sha256": "375abb235af66b3038eeee10fe0c57ad67f0421d5ebd6b788af34cef20a11f35",
+    "uncompressed_bytes": 143
+  },
+  "blueprint/initial-tex.log.gz": {
+    "uncompressed_sha256": "b004121839701c2ba5d3350d8d3f0cd698e96abc965ede41c118814c7dcd54fb",
+    "uncompressed_bytes": 73024
+  },
+  "blueprint/intermediate-browser.log.gz": {
+    "uncompressed_sha256": "80c916d3af5769039a3a83d46eb37674bc96d030e7b8c82e182f8cce51da4a8d",
+    "uncompressed_bytes": 30
+  },
+  "blueprint/intermediate-tex.log.gz": {
+    "uncompressed_sha256": "0cfcd1e953934b779826ffaa22b96ce1d592412368507d474e5f19b103cd91da",
+    "uncompressed_bytes": 72597
+  },
+  "blueprint/sync-final.log.gz": {
+    "uncompressed_sha256": "80d6e3220fe8720d33ea742a691b8c5d18beb527675cb1cf489f8c56a8c7e0f6",
+    "uncompressed_bytes": 43674
+  },
+  "blueprint/web.log.gz": {
+    "uncompressed_sha256": "588aab98cc31ffaad5cc10ad20780c2cf43657d83a2bc94ea51276b1734e58be",
+    "uncompressed_bytes": 4560
+  },
+  "blueprint/sync.log.gz": {
+    "uncompressed_sha256": "fa92097bd563878988c5d75ca6691f7d09719e6900db865958c9867275e8d633",
+    "uncompressed_bytes": 43668
+  },
+  "blueprint/intermediate-pdf.log.gz": {
+    "uncompressed_sha256": "7c1313de51343955400c7b2b54561156dbe853c1946f5d8c6b8abeeda38464fa",
+    "uncompressed_bytes": 23245
+  },
+  "blueprint/initial-web.log.gz": {
+    "uncompressed_sha256": "588aab98cc31ffaad5cc10ad20780c2cf43657d83a2bc94ea51276b1734e58be",
+    "uncompressed_bytes": 4560
+  },
+  "blueprint/initial-pdf.log.gz": {
+    "uncompressed_sha256": "499c889395d3056ce6dd609dc91f575f69bcc6d670aab0720de786e6860aa540",
+    "uncompressed_bytes": 134096
+  },
+  "blueprint/intermediate-web.log.gz": {
+    "uncompressed_sha256": "588aab98cc31ffaad5cc10ad20780c2cf43657d83a2bc94ea51276b1734e58be",
+    "uncompressed_bytes": 4560
+  },
+  "blueprint/final-tex.log.gz": {
+    "uncompressed_sha256": "173d6ff90fe9349ee1f06b1f1f4b9223e40267c701d76844d35818215c3467d1",
+    "uncompressed_bytes": 72288
+  },
+  "blueprint/render-inputs/focused.tex.gz": {
+    "uncompressed_sha256": "ded944d2ec6ae4115aa78abff3031693353aefbdd8ebf1e295b31582341fb3a2",
+    "uncompressed_bytes": 53
+  },
+  "blueprint/render-inputs/content-focused.tex.gz": {
+    "uncompressed_sha256": "41c5b51b99cc8516cec6bd2db98f9219dbb8189d45316e81d68c6cc0990505d8",
+    "uncompressed_bytes": 863
+  },
+  "blueprint/render-inputs/web.tex.gz": {
+    "uncompressed_sha256": "e03e5b81dbdd3c9fc7b5276d3dc79ede8176423a04155813ed4860500f3d5a73",
+    "uncompressed_bytes": 830
+  },
+  "historical-relay.tar.gz": {
+    "uncompressed_sha256": "522831f08a9a15bf48d3d52d8b8522addd668eae5798b0e08c21155a3ac70a9c",
+    "uncompressed_bytes": 81920
+  }
+}
