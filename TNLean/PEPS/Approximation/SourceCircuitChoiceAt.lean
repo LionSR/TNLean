@@ -156,6 +156,9 @@ def partialSlotChoice (A : P → Bool) {a b : Layout P} (w : SourceCircuit a b)
     (isTouched_of_source_endpoint A w (partialSlotEquiv A w i).1
       (partialSlotEquiv A w i).2)
 
+/-- Reading the source record at each retained original position, in order, gives the
+actual ordered source list of the partial branch, each entry wrapped in `some`.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–417. -/
 private theorem map_sourceAt_partialPositions (A : P → Bool) {a b : Layout P}
     (w : SourceCircuit a b) (ξ : Choices A w) :
     (partialPositions A w).map (sourceAt A w ξ) =
@@ -177,6 +180,11 @@ def partialSlotVector (A : P → Bool) {a b : Layout P} (w : SourceCircuit a b)
       euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2) :=
   sourceVectorAt w (partialSlotEquiv A w i).1 (partialSlotChoice A w ξ i)
 
+/-- If a family of vectors in the fixed source slots represents the actual ordered source
+list of the partial branch, then the source record at the `i`-th retained original position
+is the `i`-th reference slot (its grouped endpoints and fixed halfspaces) carrying the vector
+`η i`.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–417. -/
 private theorem sourceAt_partialSlot_of_ofSlots_eq (A : P → Bool) {a b : Layout P}
     (w : SourceCircuit a b) (ξ : Choices A w)
     (η : ∀ i : Fin (partialSlots A w).length,
