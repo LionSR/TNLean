@@ -55,30 +55,6 @@ open ContinuousLinearMap
 
 namespace TNLean.PEPS.PairEffect.Word
 
-/-- Orthonormal coordinates preserve the contraction bound of an allowed word. -/
-private theorem norm_toMatrix_eval_le_one {P m n : Type}
-    [Fintype m] [Fintype n] [DecidableEq n]
-    {ℓ ℓ' : Layout P} (v : Word ℓ ℓ') (hv : v.IsAllowed)
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ')) :
-    ‖LinearMap.toMatrix bIn.toBasis bOut.toBasis v.eval.toLinearMap‖ ≤ 1 := by
-  classical
-  rw [Matrix.l2_opNorm_def]
-  apply opNorm_le_bound _ zero_le_one
-  intro x
-  have hcoord : ((Matrix.toEuclideanLin.trans LinearMap.toContinuousLinearMap)
-      (LinearMap.toMatrix bIn.toBasis bOut.toBasis v.eval.toLinearMap)) x =
-      bOut.repr (v.eval (bIn.repr.symm x)) := by
-    ext j
-    have hx : ⇑(bIn.toBasis.repr (bIn.repr.symm x)) = x.ofLp := by
-      funext i
-      exact congrArg (fun y : EuclideanSpace ℂ n ↦ y i) (bIn.repr.apply_symm_apply x)
-    have h := congrFun (LinearMap.toMatrix_mulVec_repr bIn.toBasis bOut.toBasis
-      v.eval.toLinearMap (bIn.repr.symm x)) j
-    simpa [hx] using h
-  rw [hcoord, bOut.repr.norm_map]
-  simpa only [LinearIsometryEquiv.norm_map] using
-    v.eval.le_of_opNorm_le (v.norm_eval_le_one hv) (bIn.repr.symm x)
-
 variable {P m n : Type} [Fintype m] [Fintype n]
     (R : SourceInventory P) (U V : Fin R.length → HSpace)
     {A B : Fin R.length → Type} [∀ i, Fintype (A i)] [∀ i, Fintype (B i)]
@@ -120,8 +96,8 @@ theorem norm_freeSourceMatrix_le_one
     (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ')) :
     ‖v.freeSourceMatrix R U V bU bV ℓ bIn bOut‖ ≤ 1 := by
   classical
-  exact norm_toMatrix_eval_le_one v hv
-    (SourceInventory.preparedInputBasis R U V bU bV ℓ bIn) bOut
+  rw [freeSourceMatrix, ContinuousLinearMap.norm_toMatrix_orthonormal]
+  exact v.norm_eval_le_one hv
 
 section BraKet
 

@@ -3431,26 +3431,26 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
-## Candidates
+### Operator norm in orthonormal coordinates — promoted (2026-10-08)
 
-### Operator norm in orthonormal coordinates — candidate (2026-10-07)
-
-- **Pattern:** Identify matrix multiplication in orthonormal coordinates with
-  the underlying continuous linear map, then use preservation of norms by the
-  coordinate isometries to transfer an operator-norm bound.
-- **Seen:** Two occurrences:
+- **Pattern:** Pass between a continuous linear map and its matrix in arbitrary
+  finite orthonormal input and output bases without changing operator norm.
+- **Helper:** `ContinuousLinearMap.norm_toMatrix_orthonormal` in
+  `QICLean/Analysis/OrthonormalMatrixNorm.lean` (QICLean dependency).
+  The proof uses Mathlib's norm invariance under composition with linear
+  isometric equivalences and its Euclidean matrix norm identification.
+- **Call sites:** `Word.norm_preparedMatrix_le_one` in
   `PEPS/Approximation/PreparedMatrixNorm.lean`,
-  `Word.norm_preparedMatrix_le_one`, and
-  `PEPS/Approximation/SourceBlockMatrix.lean`,
-  the private `Word.norm_toMatrix_eval_le_one`.
-- **Abstraction:** If another independent use arises, first check Mathlib for
-  the corresponding orthonormal-coordinate norm identity, then supply a general
-  lemma if needed. No further copy is currently required: the proper-frame
-  bound uses the complete free-source matrix bound through a fixed map word.
-- **Notes:** The predecessor proof and its exact-source verification remain
-  unchanged. The focused scan of the five new modules and `PreparedMatrixNorm`
-  found these two occurrences and no pattern occurring three times. This entry
-  remains below the promotion threshold.
+  `Word.norm_freeSourceMatrix_le_one` in
+  `PEPS/Approximation/SourceBlockMatrix.lean`, and
+  `Word.norm_physicalOutputMatrix_le_one` in
+  `PEPS/Approximation/ExteriorSourceContraction.lean`.
+- **Decision:** The exterior-word estimate is the third independent application.
+  Replace the two earlier coordinate-vector arguments by this equality; delete
+  the private free-source coordinate-norm helper. All public statements remain
+  unchanged. The general lemma permits rectangular matrices and empty bases.
+
+## Candidates
 
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
@@ -5584,6 +5584,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   lemma for maps on two tensor products. The existing `clm_ext_tmul` and
   `clm_ext_tmul₃` already handle identities between continuous linear maps
   with one tensor-product input; use those whenever the map has that form.
+- **Reuse (2026-10-08):** The two new concatenation-partition coherence
+  proofs in `PartyPartitionAppend.lean` use Mathlib's existing
+  `TensorProduct.ext_fourfold'`. After writing the two operations as linear
+  maps on `(M ⊗ N) ⊗ (P ⊗ Q)`, equality reduces directly to four elementary
+  factors. This removes both proposed additional double inductions. No new
+  theorem or tactic is needed; the older two source-combination calculations
+  remain the two occurrences listed above.
 - **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
   complete source blocks reuses the preparation tensor identity and the
   register-block exchange theorem. Neither requires another double induction.
@@ -5621,6 +5628,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   calculations. A new generic congruence lemma would restate the existing
   equality lemmas, so no additional theorem or tactic is promoted. Previously
   audited source-preparation proofs are unchanged.
+- **Further reuse (2026-10-08):** `PartyPartitionAppend` repeats the two
+  head transports from `PartyPartition`, and transports vector addition.
+  These are again defining equations after identifying layout types, rather
+  than tensor identities. The addition case already uses `congrArg₂`,
+  `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
+  head constructions; a generic lemma would only restate their congruence.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator
