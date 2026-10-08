@@ -482,13 +482,42 @@ proof were inspected in the PDF and mobile reader. Reducing the auxiliary
 systems to their good copies and expressing the density in five-factor
 coordinates are subsequent steps.
 
+[QICLean #662](https://github.com/LionSR/QICLean/pull/662), at checked head
+`ca72e88dd71e5e6c8b6f2f8f2d2df35b1af94ae6`, proves the exact physical
+exponential label moment of the actual excitation component. For every real
+exponent, it is the iid regional-density moment multiplied by the same
+component's squared norm. The literal left-hand pairing retains all
+complementary physical and exterior coordinates. Only the one-copy ground
+vector is unit; zero copies and zero components are included. The source is
+`fc4db3db`, original evidence `a2b266d6`, and exact inclusion `1dba3aeb`.
+The full 9,826-job build, sole strict and fresh standard-kernel report,
+provenance, 473-page PDF and complete web/native checks passed. The 97-binding
+manifest and complete PDF/mobile statement, proof and formula endpoint were
+independently inspected. The signed centered analytic rate remains separate.
+
+[QICLean #663](https://github.com/LionSR/QICLean/pull/663), at checked head
+`1a61097225a153adeb32270edb0778363e2ddfb1`, establishes the actual compatible
+physical projection on the five independent factors Q,Y,V,C,R. With
+\(G=F_Q+F_V-F_Y\), physical symmetric projection P and
+\(J=\mathbf1_{[0,\infty)}(G)\), it proves
+\(GP=P(F_Q+F_V-F_{QV})\) and \(JP=P\). Every real functional calculus of G
+commutes with the actual QC, VR, C and R label observables and both merge
+deficits. Neither global positivity of G nor preservation of P by a merge
+is assumed. Source `117c20bc`, original evidence `925b12b6` and exact
+inclusion `a31ba42a` remain unchanged. The full 9,824-job build, five fresh
+standard-kernel reports, provenance, 472-page PDF, complete web/native checks
+and 68-artifact manifest passed. All 4,553 parent files are preserved, with
+only the stated inclusion and ledger additions. Root read the entire source
+and inspected both complete PDF pages and the mobile section. Application
+to the literal five-factor good-copy density remains subsequent work.
+
 The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
 bad physical and auxiliary copies. The local QC theorem above accommodates
 this by taking the physical complement to be YV. The common-density
 identities are now proved as above. The actual two-deficit moment is the separate auxiliary estimate above.
-The compatible physical projection and its application to the literal
-component density remain subsequent contributions. In particular,
+The compatible physical projection is now established above; its application
+to the literal component density remains a subsequent contribution. In particular,
 \(F_Q+F_V-F_Y\) cannot be identified globally with the QV merge deficit.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
