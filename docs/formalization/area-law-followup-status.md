@@ -572,6 +572,23 @@ serial imported checks with one Lean worker passed without changing the
 mathematical source. Application to the literal excitation density and the
 signed entropy rates remains subsequent work.
 
+[QICLean #676](https://github.com/LionSR/QICLean/pull/676), at checked head
+`877ca3110dd377390a6908e5a7f017222e1997d1`, derives quantitative signed
+Schur-label moments from a bound on the actual centered surprisal moments
+on the copies. The positive coefficient is \(C_0\); the negative coefficient
+is \(2C_0\), with explicit loss \(q^2\log(k+1)/2\). The common interval
+is \(\min(c_0,1)/(2\sqrt{\mathcal B})\). The center is arbitrary;
+deriving the hypothesis at center \(kS(\sigma)\) from a one-copy bound is
+a separate independent-copy theorem. Mathematical source `eedf28aa`, original
+leaf `697aa7c1` and unique inclusion `335adba3` are preserved. The complete
+9,826-job library build, two exact standard-kernel reports, original two
+provenance records, 473-page PDF and complete web/declaration/reader checks
+passed. The 84-binding integration manifest, original 88-binding leaf,
+complete PDF statement and proof, and desktop/mobile formula endpoints were
+independently reviewed. Earlier audit-helper and packaging diagnostics are
+retained separately. This contribution is conditional and does not establish
+the full area-law theorem.
+
 The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
 bad physical and auxiliary copies. The local QC theorem above accommodates
