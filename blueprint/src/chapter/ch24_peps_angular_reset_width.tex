@@ -35,14 +35,13 @@ allow arbitrary fixed real values.
     scales.
 \end{proof}
 
-\begin{theorem}[Uniform width at every processed scale]
+\begin{theorem}[Uniform width at every scale]
     \label{thm:peps_angular_reset_uniform_width}
     \lean{
         TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope,
         TNLean.PEPS.Approximation.exists_angular_reset_width_bound
     }
     \leanok
-    \uses{thm:peps_reset_polylog_width}
     Fix $D>0$ with $D\ge4C_4/c$. There is a real $L_0\ge2$ such that,
     for every real $L\ge L_0$, one has $e^{\max(K,1)}\le D\log L$,
     and for every real $s\ge D\log L$,
@@ -56,6 +55,7 @@ allow arbitrary fixed real values.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_reset_polylog_width}
     Take $S$ from Theorem~\ref{thm:peps_reset_polylog_width}.
     Set $T=\max\{S,e^{\max(K,1)}\}$ and
     $L_0=\max\{2,e^{T/D}\}$. Then $D\log L\ge T$ for all $L\ge L_0$. Then every allowed $s$ is at
@@ -70,16 +70,16 @@ allow arbitrary fixed real values.
     \label{cor:peps_angular_reset_width_fits}
     \lean{TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_slope}
     \leanok
-    \uses{thm:peps_angular_reset_uniform_width}
     With the same fixed constants, any width function bounded above by
     $B(L,s)$ is strictly smaller than $cs$ throughout the stated range.
 \end{corollary}
 \begin{proof}
     \leanok
+    \uses{thm:peps_angular_reset_uniform_width}
     If $w(L,s)\le B(L,s)$, then (\ref{eq:peps_angular_reset_uniform_width})
     gives $w(L,s)\le B(L,s)\le\frac{3c}{4}s<cs$.
 \end{proof}
 
-This establishes the numerical clearance needed at every processed layer.
+This establishes the numerical clearance needed at every annular layer.
 The physical reset theorem, geometric core separation, entropy estimates,
 and annular induction remain separate obligations.
