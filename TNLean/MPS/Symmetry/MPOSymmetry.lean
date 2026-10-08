@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry.MPOSymmetry
 
 import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
+import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalEndpointAttachment
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedPathGap
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
