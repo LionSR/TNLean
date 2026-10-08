@@ -14,7 +14,6 @@ TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_nonempty_and_closure_eq
 Source labels: prop:two-families, geometry:initial-stars
 Source: Section 11, prop:two-families, lines 299–323, especially 308–316; geometry:initial-stars,
 lines 333–370, especially 352–363.
-Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719
 
 OpenAI Codex (GPT-6) assistance was used in this formalization.
 -/
