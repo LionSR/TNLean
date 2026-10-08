@@ -1,0 +1,143 @@
+{
+  "source_freeze": "17af56b27c467ab1f6ea88b5636c9c854b75e052",
+  "resource_source_commit": "62a172732",
+  "family_source_commit": "17af56b27",
+  "upstream_revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "immutable_snapshot_sha256": "a06a282f0c70d28f28ca92a9a1b0ad819b485403b930887c0e3a9f1e10b437ed",
+  "immutable_input_manifest_sha256": "3b2e1394f772a37d848d7437e3278e69f5eace04fd4b1dcc5773ab4df8fa74bc",
+  "validation_baseline": "Recovered immutable published TNLean Gaussian PR #8903 artifact closure. Canonical production-pinned integration verification remains separate.",
+  "strict_options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "modules": [
+    {
+      "module": "TNLean.PEPS.Approximation.EffectCircuitResources",
+      "source_sha256": "090d79b5f375d5da5b54a9c0ac4acce422682d83de322c793deaacae7d9df99b",
+      "checked_module": "TNLeanReduction.EffectCircuitResources",
+      "checked_source_sha256": "bcc82a4e847839b2dc2cd27fc4bb26b62b423815d1a05389d7266f0171fd731b",
+      "artifact_sha256": "0a57f10cf9fb6a5c12e7597ddbc986aa3308d8a44c98fb50af3863219b36a748",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectCircuitResources.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectCircuitResources.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.EffectReplacementCoefficients",
+      "source_sha256": "ddda713a8c2225126d7234ea34e59fa40506c05c6bd1e251c47206d5dde072b5",
+      "checked_module": "TNLeanReduction.EffectReplacementCoefficients",
+      "checked_source_sha256": "b618d9113ef1cdd5be4a9bf2c13e351b72fbbfb9537b96bc06fd3d0754f445a8",
+      "artifact_sha256": "c969a83e6c3c84538812efe04ae33a8b3d78498aef8bd1e02929ee05d337e739",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementCoefficients.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementCoefficients.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.EffectReplacementSources",
+      "source_sha256": "0a4b3f4c62824a402e54bf0739b8d3401e2322d90ebca9d2a05684259a961246",
+      "checked_module": "TNLeanReduction.EffectReplacementSources",
+      "checked_source_sha256": "4a59fca67cfaf29f37a96f2db6a2c3e8577823a119e0d1b0cbcb657113641c55",
+      "artifact_sha256": "ff430337397c752a09b193a7d07275bf142d4bfea640de92c4c0093e94810ad1",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementSources.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementSources.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.EffectReplacementExpansion",
+      "source_sha256": "da6dfeb690768391db87170527d0bfef1b9fc1dfa1882da2582b4a92fd6512e3",
+      "checked_module": "TNLeanReduction.EffectReplacementExpansion",
+      "checked_source_sha256": "7a875531174f3d81b4b2f8a43a97255f1081ac126e0eb7681cdd4b9253e3b1eb",
+      "artifact_sha256": "f2649818f37d5b0f62bcec5e2caef02366683cd396ef3e5ed753eecd27db5263",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementExpansion.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/EffectReplacementExpansion.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.FamilyPhysicalReadout",
+      "source_sha256": "a5288f9b3573bde64e4dfe3ae8d08b659158a9d1f4b902d5b2666355f8303304",
+      "checked_module": "TNLeanReduction.FamilyPhysicalReadout",
+      "checked_source_sha256": "0d1a065762e24075639b314b890f125a9e10d3de3dec5fe3c69442339387e809",
+      "artifact_sha256": "7243e28588c7c180ac0f4fe4731d713852191513bb30a0d99ff8f8391522f548",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/FamilyPhysicalReadout.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/FamilyPhysicalReadout.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.FamilySourceOnlyReduction",
+      "source_sha256": "ccf2f276e5e109995806594b5992e4ce85d22a4ebdcee6b7f73f2593c6112b75",
+      "checked_module": "TNLeanReduction.FamilySourceOnlyReduction",
+      "checked_source_sha256": "3a2e0fee9c4227a20b2b6b1c9809d7cd6f5da24161db0bf562ba4230cf295b51",
+      "artifact_sha256": "86c8c78bd1a4cfc2ccac9bbd24caaacb40d3ba44041940d51f6bd960ddad58d0",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/FamilySourceOnlyReduction.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/FamilySourceOnlyReduction.lean"
+      ]
+    }
+  ],
+  "resource_kernel_reports": 31,
+  "family_kernel_reports": 15,
+  "full_lake_build": false,
+  "blueprint_checkdecls": false,
+  "full_provenance_replay": false
+}

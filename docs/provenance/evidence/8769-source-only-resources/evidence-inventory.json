@@ -1,0 +1,39 @@
+{
+  "files": [
+    {
+      "path": "FamilyAllAxioms.lean",
+      "sha256": "f3240e839a1dbb28187df7498813630da9d8d777c1118a0306aa0bf56ec7516f",
+      "bytes": 889
+    },
+    {
+      "path": "README.md",
+      "sha256": "44344890ba8fdf21cc78226fbcced480714f7d471f8265a1b9bc615592059dd1",
+      "bytes": 2821
+    },
+    {
+      "path": "ResourcesAllAxioms.lean",
+      "sha256": "4dd538a168ee933aee40f2fbea8c9356eb72750d92f9971c0aed22c218c15bbf",
+      "bytes": 1863
+    },
+    {
+      "path": "direct-checks.json",
+      "sha256": "ac1e4f87b9d4ae9c48f16ce37a3569d7d1a7ac423d9842add58cf0e4d613cc8f",
+      "bytes": 6887
+    },
+    {
+      "path": "family-axioms.log",
+      "sha256": "ba2c758dce716616c440d65f8f2b28f8f675f0a5b35d9ddff730a2c68d3dd235",
+      "bytes": 1802
+    },
+    {
+      "path": "resources-axioms.log",
+      "sha256": "9685d956c17b81a25cb8bb7e55a2997b220761b9de48c78535a2abecf0b0e00e",
+      "bytes": 3877
+    },
+    {
+      "path": "tactic-pattern-scan.log",
+      "sha256": "04f27572e81cae76bdf33c60032368d3ff9f8026d84f81b06099c5b5aedf5243",
+      "bytes": 1235
+    }
+  ]
+}

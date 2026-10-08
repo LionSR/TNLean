@@ -1,0 +1,19 @@
+import TNLeanReduction.FamilySourceOnlyReduction
+set_option linter.hashCommand false
+namespace TNLean.PEPS.PairEffect
+#print axioms familyPhysicalListBasis
+#print axioms familyLabelledPhysicalBasis
+#print axioms restrict_familyPhysicalLayout
+#print axioms familyRestrictedPhysicalBasis
+#print axioms finrank_restrict_familyPhysicalLayout
+#print axioms finrank_restrict_familyPhysicalLayout_le
+#print axioms familyLabelledPhysicalReadout
+#print axioms familyRegionalPhysicalIndexEquiv
+#print axioms familyRegionalPhysicalReadout
+#print axioms norm_familyRegionalPhysicalReadout_le_one
+#print axioms familyPhysicalLayout_owners
+#print axioms familyPhysicalLayout_const
+#print axioms familyRegionalPhysicalReadout_apply
+#print axioms card_familyRegionalPhysicalIndex
+#print axioms OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half
+end TNLean.PEPS.PairEffect

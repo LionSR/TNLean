@@ -1,0 +1,36 @@
+import TNLeanReduction.EffectReplacementSources
+import TNLeanReduction.EffectReplacementExpansion
+set_option linter.hashCommand false
+namespace TNLean.PEPS.PairEffect
+#print axioms OriginalCircuit.nonprivateLocationsFintype
+#print axioms OriginalCircuit.natCard_nonprivateLocations
+#print axioms OriginalCircuit.card_nonprivateLocations
+#print axioms OriginalCircuit.participationCount
+#print axioms SourceCircuit.participationCount
+#print axioms OriginalCircuit.participationLocationsEquiv
+#print axioms OriginalCircuit.participationCount_replacement
+#print axioms OriginalCircuit.participationCount_replacement_le
+#print axioms sum_norm_coeff_wordList
+#print axioms length_wordList_le
+#print axioms sum_norm_replacementCoefficients
+#print axioms sum_norm_replacementCoefficients_le
+#print axioms card_replacementLabels_le
+#print axioms exists_prepared_effectReplacement_uniform_resources
+#print axioms stackLength_le
+#print axioms card_replacementLabels_stackLength_le
+#print axioms PreparedSourceGate.length_sources_branchWord
+#print axioms PreparedSourceGate.length_slots
+#print axioms PreparedSourceGate.length_sources_branchWord_eq_choose
+#print axioms PreparedSourceGate.length_sources_branchWord_le_choose
+#print axioms SourceCircuit.slotCount_eq_choose
+#print axioms SourceCircuit.card_sourceLocations_eq_sum_choose
+#print axioms SourceCircuit.card_sourceLocations_le
+#print axioms OriginalCircuit.card_sourceLocations_replacement_le
+#print axioms SourceCircuit.IsExpansionBounded
+#print axioms SourceCircuit.isExpansionBounded_castLayouts
+#print axioms SourceCircuit.isExpansionBounded_frameList
+#print axioms SourceCircuit.isExpansionBounded_ofLocalWord
+#print axioms SourceCircuit.isExpansionBounded_exchangeBlocks
+#print axioms OriginalCircuit.IsMonomialBounded
+#print axioms OriginalCircuit.isExpansionBounded_replacement
+end TNLean.PEPS.PairEffect
