@@ -1,0 +1,70 @@
+\section{Source samples and averaging at nonempty occurrences}
+\label{sec:peps_nonempty_source_samples}
+
+\begin{definition}[Source samples at nonempty gate occurrences]
+    \label{def:peps_nonempty_source_samples}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceLocationsNonemptyEquiv,
+      TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleNonemptyEquiv}
+    \leanok
+    An actual source slot is labelled by its original gate occurrence
+    and its slot within that gate. Its two recorded endpoints witness
+    that the participating set of this occurrence is nonempty. The
+    source slot therefore corresponds to its unordered endpoint pair
+    at this nonempty original occurrence.
+\end{definition}
+
+\begin{theorem}[Preservation of the original occurrence and endpoints]
+    \label{thm:peps_nonempty_source_sample_endpoints}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleNonemptyEquiv_gate,
+      TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleNonemptyEquiv_parties}
+    \leanok
+    \uses{def:peps_nonempty_source_samples}
+    This correspondence is a bijection. It preserves the original
+    gate occurrence and precisely the set of its two recorded endpoints.
+    It introduces no source slot at an empty-participant occurrence.
+\end{theorem}
+
+\begin{proof}\leanok
+    The slot-to-pair correspondence at each original gate is a bijection.
+    Its inverse retains the gate and recovers the actual slot. Restricting
+    the gate index to nonempty participating sets loses no source slot,
+    since its left endpoint is a participating party.
+\end{proof}
+
+\begin{theorem}[Counting the actual source slots]
+    \label{thm:peps_nonempty_source_slot_count}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount_eq_zero_of_not_nonempty,
+      TNLean.PEPS.PairEffect.SourceCircuit.length_partialSlots_all_eq_sum_slotCount,
+      TNLean.PEPS.PairEffect.SourceCircuit.length_partialSlots_all_eq_sum_nonempty_slotCount}
+    \leanok
+    \uses{def:peps_nonempty_source_samples}
+    Let $n_g$ be the source-slot count of original occurrence $g$,
+    and let $N$ be the total all-party source-slot count. An
+    empty-participant occurrence has $n_g=0$, and
+    $N=\sum_g n_g=\sum_{g:\,C_g\ne\varnothing}n_g$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The all-party source slots are in bijection with the pairs consisting
+    of an original occurrence and one of its slots. Count this disjoint
+    union, first over all occurrences and then over the nonempty ones.
+\end{proof}
+
+\begin{theorem}[Product of the averaging weights]
+    \label{thm:peps_source_averaging_product}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.prod_sourceSlotWeight_eq}
+    \leanok
+    \uses{thm:peps_nonempty_source_slot_count}
+    For every $z\in\mathbb C$, including $z=0$,
+    $\prod_{g:\,C_g\ne\varnothing}z^{n_g}=z^N$.
+    Thus the weight $k^{-n_g}$ at each nonempty original occurrence
+    gives exactly the total source averaging factor $k^{-N}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Add the exponents in the finite product and apply the slot-count identity.
+\end{proof}
+
+These correspondences and weights are those in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 342--355 and 565--588.
