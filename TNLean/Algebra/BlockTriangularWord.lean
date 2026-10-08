@@ -36,11 +36,10 @@ Word evaluation on the `Σ k, Fin (n k)` index type is the generic `evalWord` of
   stay block upper triangular.
 * `Matrix.blockDiag'_evalWord` — diagonal blocks of a word evaluation are the word
   evaluations of the diagonal blocks (`eq:p5-triangular-word`).
-* `Matrix.sigmaBlockEmbed`, `Matrix.sigmaBlockProj` — coordinate embedding/projection of a
-  block, with the biorthogonality relations `Matrix.sigmaBlockProj_mul_sigmaBlockEmbed_self`,
-  `Matrix.sigmaBlockProj_mul_sigmaBlockEmbed_of_ne`,
-  `Matrix.sigmaBlockProj_mul_mul_sigmaBlockEmbed`, and the reassembly identity
-  `Matrix.sum_sigmaBlockEmbed_mul_mul_sigmaBlockProj` (`eq:p5-block-biorthogonality`).
+* `Matrix.blockEmbed`, `Matrix.blockProj` — coordinate embedding/projection of a block, with
+  the biorthogonality relations `Matrix.blockProj_mul_blockEmbed_self`,
+  `Matrix.blockProj_mul_blockEmbed_of_ne`, `Matrix.blockProj_mul_mul_blockEmbed`, and the
+  reassembly identity `Matrix.sum_blockEmbed_mul_mul_blockProj` (`eq:p5-block-biorthogonality`).
 * `Matrix.StrictBlockTriangular` and `Matrix.evalWord_eq_zero_of_strictBlockTriangular` — the
   nilpotency count of Theorem 7.7(vi): a product of as many strictly block upper-triangular
   matrices as there are blocks vanishes (`eq:p5-main-nilpotency`).
@@ -108,88 +107,86 @@ end Order
 section Embed
 
 /-- Coordinate embedding of the `k`-th block (`eq:p5-block-biorthogonality`). -/
-def sigmaBlockEmbed (n : o → ℕ) (k : o) : Matrix (Σ k, Fin (n k)) (Fin (n k)) ℂ :=
+def blockEmbed (n : o → ℕ) (k : o) : Matrix (Σ k, Fin (n k)) (Fin (n k)) ℂ :=
   Matrix.of fun x j => if x = ⟨k, j⟩ then 1 else 0
 
 /-- Coordinate projection onto the `k`-th block: the transpose of the embedding. -/
-def sigmaBlockProj (n : o → ℕ) (k : o) : Matrix (Fin (n k)) (Σ k, Fin (n k)) ℂ :=
-  (sigmaBlockEmbed n k).transpose
+def blockProj (n : o → ℕ) (k : o) : Matrix (Fin (n k)) (Σ k, Fin (n k)) ℂ :=
+  (blockEmbed n k).transpose
 
 omit [Fintype o] in
 /-- The block embedding vanishes away from its recorded coordinate. -/
-theorem sigmaBlockEmbed_apply_of_ne {k : o} {x : Σ k, Fin (n k)} {j : Fin (n k)}
-    (h : x ≠ (⟨k, j⟩ : Σ k, Fin (n k))) : sigmaBlockEmbed n k x j = 0 := by
-  simp [sigmaBlockEmbed, Matrix.of_apply, h]
+theorem blockEmbed_apply_of_ne {k : o} {x : Σ k, Fin (n k)} {j : Fin (n k)}
+    (h : x ≠ (⟨k, j⟩ : Σ k, Fin (n k))) : blockEmbed n k x j = 0 := by
+  simp [blockEmbed, Matrix.of_apply, h]
 
 omit [Fintype o] in
 /-- The block embedding vanishes off its own block. -/
-theorem sigmaBlockEmbed_apply_of_fst_ne {k : o} {x : Σ k, Fin (n k)} (h : x.1 ≠ k) (j : Fin (n k)) :
-    sigmaBlockEmbed n k x j = 0 :=
-  sigmaBlockEmbed_apply_of_ne fun heq => h (congrArg Sigma.fst heq)
+theorem blockEmbed_apply_of_fst_ne {k : o} {x : Σ k, Fin (n k)} (h : x.1 ≠ k) (j : Fin (n k)) :
+    blockEmbed n k x j = 0 :=
+  blockEmbed_apply_of_ne fun heq => h (congrArg Sigma.fst heq)
 
 omit [Fintype o] in
 /-- The block projection vanishes off its own block. -/
-theorem sigmaBlockProj_apply_of_fst_ne {k : o} (i : Fin (n k)) {y : Σ k, Fin (n k)} (h : y.1 ≠ k) :
-    sigmaBlockProj n k i y = 0 := by
-  simp only [sigmaBlockProj, Matrix.transpose_apply]
-  exact sigmaBlockEmbed_apply_of_fst_ne h i
+theorem blockProj_apply_of_fst_ne {k : o} (i : Fin (n k)) {y : Σ k, Fin (n k)} (h : y.1 ≠ k) :
+    blockProj n k i y = 0 := by
+  simp only [blockProj, Matrix.transpose_apply]
+  exact blockEmbed_apply_of_fst_ne h i
 
 omit [Fintype o] in
 /-- The block embedding restricted to its own block is the identity indicator. -/
-theorem sigmaBlockEmbed_apply_fst_eq (k : o) (i j : Fin (n k)) :
-    sigmaBlockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = if i = j then 1 else 0 := by
-  simp [sigmaBlockEmbed, Matrix.of_apply, Sigma.mk.injEq]
+theorem blockEmbed_apply_fst_eq (k : o) (i j : Fin (n k)) :
+    blockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = if i = j then 1 else 0 := by
+  simp [blockEmbed, Matrix.of_apply, Sigma.mk.injEq]
 
 omit [Fintype o] in
 /-- The block embedding restricted to its own block vanishes off the matching coordinate. -/
-theorem sigmaBlockEmbed_apply_fst_eq_of_ne {k : o} {i j : Fin (n k)} (h : i ≠ j) :
-    sigmaBlockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = 0 := by
-  rw [sigmaBlockEmbed_apply_fst_eq]; simp [h]
+theorem blockEmbed_apply_fst_eq_of_ne {k : o} {i j : Fin (n k)} (h : i ≠ j) :
+    blockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = 0 := by
+  rw [blockEmbed_apply_fst_eq]; simp [h]
 
-theorem sigmaBlockProj_mul_sigmaBlockEmbed_self (k : o) :
-    sigmaBlockProj n k * sigmaBlockEmbed n k = 1 := by
+theorem blockProj_mul_blockEmbed_self (k : o) : blockProj n k * blockEmbed n k = 1 := by
   ext i j
-  simp only [Matrix.mul_apply, sigmaBlockProj, Matrix.transpose_apply, Matrix.one_apply]
+  simp only [Matrix.mul_apply, blockProj, Matrix.transpose_apply, Matrix.one_apply]
   rw [Finset.sum_eq_single (⟨k, i⟩ : Σ k, Fin (n k))]
-  · rw [sigmaBlockEmbed_apply_fst_eq, sigmaBlockEmbed_apply_fst_eq]
+  · rw [blockEmbed_apply_fst_eq, blockEmbed_apply_fst_eq]
     simp
   · intro x _ hx
-    rw [sigmaBlockEmbed_apply_of_ne hx, zero_mul]
+    rw [blockEmbed_apply_of_ne hx, zero_mul]
   · intro h
     exact absurd (Finset.mem_univ (⟨k, i⟩ : Σ k, Fin (n k))) h
 
-theorem sigmaBlockProj_mul_sigmaBlockEmbed_of_ne {k l : o} (h : k ≠ l) :
-    sigmaBlockProj n k * sigmaBlockEmbed n l = 0 := by
+theorem blockProj_mul_blockEmbed_of_ne {k l : o} (h : k ≠ l) :
+    blockProj n k * blockEmbed n l = 0 := by
   ext i j
-  simp only [Matrix.mul_apply, sigmaBlockProj, Matrix.transpose_apply, Matrix.zero_apply]
+  simp only [Matrix.mul_apply, blockProj, Matrix.transpose_apply, Matrix.zero_apply]
   apply Finset.sum_eq_zero
   intro x _
   rcases eq_or_ne x.1 k with hx | hx
   · have hxne : x.1 ≠ l := hx ▸ h
-    rw [sigmaBlockEmbed_apply_of_fst_ne hxne, mul_zero]
-  · rw [sigmaBlockEmbed_apply_of_fst_ne hx, zero_mul]
+    rw [blockEmbed_apply_of_fst_ne hxne, mul_zero]
+  · rw [blockEmbed_apply_of_fst_ne hx, zero_mul]
 
-theorem sigmaBlockProj_mul_mul_sigmaBlockEmbed
-    (M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) (k : o) :
-    sigmaBlockProj n k * M * sigmaBlockEmbed n k = M.blockDiag' k := by
+theorem blockProj_mul_mul_blockEmbed (M : Matrix (Σ k, Fin (n k)) (Σ k, Fin (n k)) ℂ) (k : o) :
+    blockProj n k * M * blockEmbed n k = M.blockDiag' k := by
   ext i j
   simp only [Matrix.mul_apply, blockDiag'_apply]
   rw [Finset.sum_eq_single (⟨k, j⟩ : Σ k, Fin (n k))]
   · rw [Finset.sum_eq_single (⟨k, i⟩ : Σ k, Fin (n k))]
-    · simp [sigmaBlockProj, Matrix.transpose_apply, sigmaBlockEmbed_apply_fst_eq]
+    · simp [blockProj, Matrix.transpose_apply, blockEmbed_apply_fst_eq]
     · intro y _ hy
-      simp only [sigmaBlockProj, Matrix.transpose_apply]
-      rw [sigmaBlockEmbed_apply_of_ne hy, zero_mul]
+      simp only [blockProj, Matrix.transpose_apply]
+      rw [blockEmbed_apply_of_ne hy, zero_mul]
     · intro h
       exact absurd (Finset.mem_univ (⟨k, i⟩ : Σ k, Fin (n k))) h
   · intro x _ hx
-    rw [sigmaBlockEmbed_apply_of_ne hx, mul_zero]
+    rw [blockEmbed_apply_of_ne hx, mul_zero]
   · intro h
     exact absurd (Finset.mem_univ (⟨k, j⟩ : Σ k, Fin (n k))) h
 
 /-- Reassembling the diagonal blocks: `∑ k, P k * D k * Q k = blockDiagonal' D`. -/
-theorem sum_sigmaBlockEmbed_mul_mul_sigmaBlockProj (D : ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) :
-    ∑ k, sigmaBlockEmbed n k * D k * sigmaBlockProj n k = Matrix.blockDiagonal' D := by
+theorem sum_blockEmbed_mul_mul_blockProj (D : ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) :
+    ∑ k, blockEmbed n k * D k * blockProj n k = Matrix.blockDiagonal' D := by
   ext x y
   obtain ⟨kx, ix⟩ := x
   obtain ⟨ky, iy⟩ := y
@@ -201,14 +198,14 @@ theorem sum_sigmaBlockEmbed_mul_mul_sigmaBlockProj (D : ∀ k, Matrix (Fin (n k)
     · simp only [Matrix.mul_apply]
       rw [Finset.sum_eq_single iy]
       · rw [Finset.sum_eq_single ix]
-        · simp [sigmaBlockProj, Matrix.transpose_apply, sigmaBlockEmbed_apply_fst_eq]
+        · simp [blockProj, Matrix.transpose_apply, blockEmbed_apply_fst_eq]
         · intro b _ hb
-          rw [sigmaBlockEmbed_apply_fst_eq_of_ne hb.symm, zero_mul]
+          rw [blockEmbed_apply_fst_eq_of_ne hb.symm, zero_mul]
         · intro h
           exact absurd (Finset.mem_univ ix) h
       · intro a _ ha
-        simp only [sigmaBlockProj, Matrix.transpose_apply]
-        rw [sigmaBlockEmbed_apply_fst_eq_of_ne ha.symm, mul_zero]
+        simp only [blockProj, Matrix.transpose_apply]
+        rw [blockEmbed_apply_fst_eq_of_ne ha.symm, mul_zero]
       · intro h
         exact absurd (Finset.mem_univ iy) h
     · intro k _ hk
@@ -216,7 +213,7 @@ theorem sum_sigmaBlockEmbed_mul_mul_sigmaBlockProj (D : ∀ k, Matrix (Fin (n k)
       simp only [Matrix.mul_apply]
       apply Finset.sum_eq_zero
       intro a _
-      simp [sigmaBlockEmbed_apply_of_fst_ne (x := (⟨kx, ix⟩ : Σ k, Fin (n k))) hne]
+      simp [blockEmbed_apply_of_fst_ne (x := (⟨kx, ix⟩ : Σ k, Fin (n k))) hne]
     · intro h
       exact absurd (Finset.mem_univ kx) h
   · rw [blockDiagonal'_apply_ne D ix iy hxy]
@@ -227,10 +224,10 @@ theorem sum_sigmaBlockEmbed_mul_mul_sigmaBlockProj (D : ∀ k, Matrix (Fin (n k)
     intro a _
     by_cases hk : kx = k
     · have hne : ky ≠ k := fun heq => hxy (hk.trans heq.symm)
-      simp only [sigmaBlockProj, Matrix.transpose_apply]
-      rw [sigmaBlockEmbed_apply_of_fst_ne (x := (⟨ky, iy⟩ : Σ k, Fin (n k))) hne, mul_zero]
+      simp only [blockProj, Matrix.transpose_apply]
+      rw [blockEmbed_apply_of_fst_ne (x := (⟨ky, iy⟩ : Σ k, Fin (n k))) hne, mul_zero]
     · have hne : kx ≠ k := hk
-      simp [sigmaBlockEmbed_apply_of_fst_ne (x := (⟨kx, ix⟩ : Σ k, Fin (n k))) hne]
+      simp [blockEmbed_apply_of_fst_ne (x := (⟨kx, ix⟩ : Σ k, Fin (n k))) hne]
 
 end Embed
 
