@@ -6,28 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.SquareGridSource
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
 
-/-
-Adapted from OpenAI's openai/math repository (Apache-2.0).
-Upstream revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Changes: namespace and imports narrowed; complement and Gram-matrix conventions retained.
-Provenance-ID: 8740-pinned-regionconfiguration
-Downstream: TNLean.PEPS.Approximation.Pinned.RegionConfiguration
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.RegionConfiguration
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L32-L32
-Provenance-ID: 8740-pinned-joinconfigurations
-Downstream: TNLean.PEPS.Approximation.Pinned.joinConfigurations
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.joinConfigurations
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L109-L109
-Provenance-ID: 8740-pinned-coefficientmatrix
-Downstream: TNLean.PEPS.Approximation.Pinned.coefficientMatrix
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.coefficientMatrix
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L115-L115
-Provenance-ID: 8740-pinned-reduceddensity
-Downstream: TNLean.PEPS.Approximation.Pinned.reducedDensity
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.reducedDensity
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L119-L119
--/
-
 /-!
 # Regional coordinates of the physical-first source presentation
 

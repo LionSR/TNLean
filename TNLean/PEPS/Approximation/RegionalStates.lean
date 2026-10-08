@@ -10,61 +10,6 @@ import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
 import QICLean.Analysis.Entropy
 import Mathlib.Algebra.Order.Floor.Semiring
 
-/-
-Original proofs; no upstream Lean proof text reused.
-September 24, 2026 manuscript, sec:introduction; exact conversion of its PEPS definition.
-Provenance-ID: 8740-squaregridstateisometry
-Downstream: TNLean.PEPS.Approximation.squareGridStateIsometry
-Provenance-ID: 8740-vector-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.vector_pinnedTensorToGraphTensor
-Provenance-ID: 8740-vector-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.vector_vectorTensorToGraphTensor
-Provenance-ID: 8740-norm-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.norm_pinnedTensorToGraphTensor
-Provenance-ID: 8740-nonzero-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.nonzero_pinnedTensorToGraphTensor
-Provenance-ID: 8740-normalized-error-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.normalized_error_pinnedTensorToGraphTensor
-Provenance-ID: 8740-normalized-error-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.normalized_error_vectorTensorToGraphTensor
-Provenance-ID: 8740-graphbonddim-forall
-Downstream: TNLean.PEPS.Approximation.graphBondDim_forall
-Provenance-ID: 8740-vectortensortographtensor-bonddim-pos
-Downstream: TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos
-Provenance-ID: 8740-maxbonddim-le-iff
-Downstream: TNLean.PEPS.Approximation.maxBondDim_le_iff
-Provenance-ID: 8740-forwardsquareboundaryequiv
-Downstream: TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv
-Provenance-ID: 8740-forwardsquareboundary-card
-Downstream: TNLean.PEPS.Approximation.forwardSquareBoundary_card
-Provenance-ID: 8740-squarecomplementconfigequiv
-Downstream: TNLean.PEPS.Approximation.squareComplementConfigEquiv
-Provenance-ID: 8740-regionreduceddensity-eq-pisubtype
-Downstream: TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype
-Provenance-ID: 8740-regionreduceddensity-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor
-Provenance-ID: 8740-regionreduceddensity-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor
-Provenance-ID: 8740-entropy-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor
-Provenance-ID: 8740-entropy-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor
--/
-
-/-
-Original proof; no upstream Lean proof text reused.
-September 24, 2026 manuscript, sec:introduction, regional density of its PEPS definition.
-Provenance-ID: 8740-regionreduceddensity-eq-pinnedreduceddensity
-Downstream: TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity
--/
-
-/-
-Original proofs; no upstream Lean proof text reused.
-September 24, 2026 manuscript, sec:introduction, maximum bond dimension of a PEPS.
-Provenance-ID: 8740-maxbonddim-real-le-iff
-Downstream: TNLean.PEPS.Approximation.maxBondDim_real_le_iff
--/
-
 /-!
 # Vector and regional consequences of exact square-grid conversion
 

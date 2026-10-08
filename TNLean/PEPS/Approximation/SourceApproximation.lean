@@ -11,38 +11,6 @@ is the independently written predicate in Approximation/Basic.lean. Transfer pro
 -/
 import TNLean.PEPS.Approximation.RegionalStates
 
-/-
-Original proofs; no upstream Lean proof text reused.
-September 24, 2026 manuscript, sec:introduction; exact conversion of its PEPS definition.
-Provenance-ID: 8740-phaseerroratmost-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor
-Provenance-ID: 8740-haspepsapproximation-of-pinned
-Downstream: TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned
-Provenance-ID: 8740-haspepsapproximation-of-vector
-Downstream: TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector
--/
-
-/-
-Adapted from OpenAI's openai/math repository (Apache-2.0).
-Upstream revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Changes: namespaces changed; phase and normalization helpers unfolded; source quantifiers retained.
-Provenance-ID: 8740-pinned-haspepsapproximation
-Downstream: TNLean.PEPS.Approximation.Pinned.HasPEPSApproximation
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.HasPEPSApproximation
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L88-L88
-Provenance-ID: 8740-vector-phaseerroratmost
-Downstream: TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost
-Upstream: OAI.PolynomialPEPS.PhaseErrorAtMost
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L91-L91
--/
-
-/-
-Original proofs; no upstream Lean proof text reused.
-September 24, 2026 manuscript, sec:introduction, maximum bond dimension of a PEPS.
-Provenance-ID: 8740-haspepsapproximation-of-vector-max
-Downstream: TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max
--/
-
 /-!
 # Transferring the source approximation constraints
 
