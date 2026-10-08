@@ -8,8 +8,11 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
+import TNLean.PEPS.AreaLaw.Amplification
+import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
+import TNLean.PEPS.AreaLaw.EntropyDimension
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
@@ -32,4 +35,5 @@ import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
+import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.AreaLaw.ZeroBoundary

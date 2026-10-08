@@ -1,0 +1,74 @@
+\section{Directed rays of an elementary fan}
+\label{sec:area_law_cell_fan_rays}
+
+Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
+$Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
+Write $c$ for its center. On each side choose either the whole side or
+its two midpoint halves, and let $\mathcal E$ index the resulting
+ordered elementary bases $[a_i,b_i]$.
+By Theorem~\ref{thm:area_law_cell_fan_base_radius}, every final endpoint
+satisfies $\|b_i-c\|_\infty=2^\ell/2>0$.
+
+For nonzero vectors $u,w\in\R^2$, write $u\sim w$ if
+$w=\lambda u$ for some $\lambda>0$. Let
+$\mathcal R=(\R^2\setminus\{0\})/{\sim}$ be the set of directed rays,
+and write $[u]$ for the class of $u$.
+Thus opposite nonzero vectors represent distinct directed rays.
+These are the directions from a cell center in the fan construction of
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% and geometry:initial-stars, lines 333--370;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+% build/sections/10-geometry.tex.
+
+\begin{theorem}[Equality of endpoint directions]
+    \label{thm:area_law_cell_fan_end_same_ray}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_sameRay_iff}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    For every $i,j\in\mathcal E$,
+    \begin{align}
+        b_i-c\sim b_j-c & \quad\Longleftrightarrow\quad i=j.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_base_radius,
+        thm:area_law_cell_fan_final_endpoint_injective}
+    The two vectors have the same positive norm $r=2^\ell/2$.
+    If $b_j-c=\lambda(b_i-c)$ with $\lambda>0$, homogeneity of the
+    norm gives $r=\lambda r$, hence $\lambda=1$. Thus $b_i=b_j$.
+    Injectivity of final endpoints gives $i=j$.
+    Conversely, equal indices give equal vectors, so the positive
+    multiple $\lambda=1$ proves that they have the same direction.
+\end{proof}
+
+\begin{definition}[Directed ray of an elementary base]
+    \label{def:area_law_cell_fan_ray}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRay}
+    \leanok
+    \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius}
+    Assign to each elementary base its final directed ray from the
+    center:
+    \begin{align}
+        \rho(i) & =[b_i-c]\in\mathcal R.
+    \end{align}
+    The positive common radius makes every vector in this definition
+    nonzero. Only positive multiples are identified: $[u]\ne[-u]$
+    for every $u\ne0$.
+\end{definition}
+
+\begin{theorem}[Injectivity of the directed-ray assignment]
+    \label{thm:area_law_cell_fan_ray_injective}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRay_injective}
+    \leanok
+    \uses{def:area_law_cell_fan_ray}
+    The map $\rho:\mathcal E\to\mathcal R$ is injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan_ray,thm:area_law_cell_fan_end_same_ray}
+    Equality of the two ray classes means that their nonzero
+    representatives have the same direction. The endpoint-direction
+    equivalence then gives equality of their indices.
+\end{proof}
