@@ -25,34 +25,6 @@ of the area law. Empty and disconnected domains are allowed.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/00-introduction.tex
-Labels: cor:rectangles.
-independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8759-tnlean.peps.arealaw.innerboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.innerBoundary
-Provenance-ID: 8759-tnlean.peps.arealaw.endpointboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.endpointBoundary
-Provenance-ID: 8759-tnlean.peps.arealaw.innerboundary_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.innerBoundary_empty
-Provenance-ID: 8759-tnlean.peps.arealaw.innerboundary_univ
-Downstream declaration: TNLean.PEPS.AreaLaw.innerBoundary_univ
-Provenance-ID: 8759-tnlean.peps.arealaw.endpointboundary_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.endpointBoundary_empty
-Provenance-ID: 8759-tnlean.peps.arealaw.endpointboundary_univ
-Downstream declaration: TNLean.PEPS.AreaLaw.endpointBoundary_univ
-Provenance-ID: 8759-tnlean.peps.arealaw.domaingraph_degree_le_four
-Downstream declaration: TNLean.PEPS.AreaLaw.domainGraph_degree_le_four
-Provenance-ID: 8759-tnlean.peps.arealaw.edgeboundary_card_le_four_mul_innerboundary_card
-Downstream declaration: TNLean.PEPS.AreaLaw.edgeBoundary_card_le_four_mul_innerBoundary_card
-Provenance-ID: 8759-tnlean.peps.arealaw.edgeboundary_card_le_two_mul_endpointboundary_card
-Downstream declaration: TNLean.PEPS.AreaLaw.edgeBoundary_card_le_two_mul_endpointBoundary_card
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- Sites of the cut adjacent to its complement.

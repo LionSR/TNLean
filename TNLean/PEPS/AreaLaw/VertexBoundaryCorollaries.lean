@@ -25,22 +25,6 @@ an explicit hypothesis; this module does not prove that theorem.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/00-introduction.tex
-Labels: cor:rectangles.
-independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8759-tnlean.peps.arealaw.regionalentropy_le_four_mul_innerboundary_card
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_le_four_mul_innerBoundary_card
-Provenance-ID: 8759-tnlean.peps.arealaw.regionalentropy_le_two_mul_endpointboundary_card
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_le_two_mul_endpointBoundary_card
-Provenance-ID: 8759-tnlean.peps.arealaw.uniformarealaw.vertex_boundary_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The inner-boundary formulation follows from the edge-boundary inequality.

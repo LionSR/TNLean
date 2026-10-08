@@ -35,55 +35,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: eq:global-gap.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: eq:model.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:main.
-Manuscript:
-  preprints/
-  Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:main, eq:target-error.
-Provenance-ID: 8738-tnlean.peps.approximation.configuration
-Downstream declaration: TNLean.PEPS.Approximation.Configuration
-Provenance-ID: 8738-tnlean.peps.approximation.statespace
-Downstream declaration: TNLean.PEPS.Approximation.StateSpace
-Provenance-ID: 8738-tnlean.peps.approximation.squarehamiltonian
-Downstream declaration: TNLean.PEPS.Approximation.SquareHamiltonian
-Provenance-ID: 8738-tnlean.peps.approximation.squarehamiltonian.operator
-Downstream declaration: TNLean.PEPS.Approximation.SquareHamiltonian.operator
-Provenance-ID: 8738-tnlean.peps.approximation.squarehamiltonian.isgappedgroundstate
-Downstream declaration: TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState
-Provenance-ID: 8738-tnlean.peps.approximation.pepsvector
-Downstream declaration: TNLean.PEPS.Approximation.pepsVector
-Provenance-ID: 8738-tnlean.peps.approximation.haspepsapproximation
-Downstream declaration: TNLean.PEPS.Approximation.HasPEPSApproximation
-Provenance-ID: 8738-tnlean.peps.approximation.polynomialpepsapproximation
-Downstream declaration: TNLean.PEPS.Approximation.PolynomialPEPSApproximation
--/
-
 namespace TNLean.PEPS.Approximation
 
 /-- Configuration coordinates on the original open square.
