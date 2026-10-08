@@ -13,6 +13,36 @@ endpoint.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is a primitive frontier inclusion, not the active-star assertion.
 
+% Source: 10-geometry.tex, prop:two-families, lines 308--323 and 545--559;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Frontiers in a finite closed cover]
+    \label{thm:area_law_finite_cover_frontier}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.finiteCover_frontier_subset}
+    \leanok
+    Let $Q\subseteq\mathbb R^2$, let $\mathcal E$ be a finite index set,
+    and let $P_e$ be closed sets satisfying
+    $\bigcup_{e\in\mathcal E}P_e=\overline Q$.
+    For every $e\in\mathcal E$,
+    \begin{align}
+        \partial P_e
+         & \subseteq\partial Q\cup
+        \bigcup_{\substack{f\in\mathcal E \\f\ne e}}(P_e\cap P_f).
+    \end{align}
+    This finite-cover assertion is used in the local geometric argument
+    of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $x\in\partial P_e$ with $x\notin\partial Q$.
+    Closedness gives $x\in P_e\subseteq\overline Q$, hence
+    $x\in\operatorname{int}(Q)$.
+    If $x$ belonged to no other member, the complement of their finite
+    closed union would be an open neighborhood of $x$.
+    Its intersection with $\operatorname{int}(Q)$ would be contained
+    in $P_e$ by the cover identity. This would put $x$ in
+    $\operatorname{int}(P_e)$, contradicting $x\in\partial P_e$.
+\end{proof}
+
 \begin{theorem}[Fan frontiers lie on outer or radial edges]
     \label{thm:area_law_fan_frontier_primitives}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_frontier_subset_outer_and_radials}
@@ -26,16 +56,12 @@ endpoint.
     No layer, contact or positive-exponent condition is required.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_cell_fan_cover,
+    \uses{thm:area_law_finite_cover_frontier,
+        thm:area_law_cell_fan_cover,
         thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections}
-    A boundary point of a member of a finite closed cover lies on the
-    outer frontier or belongs to another member. Indeed, away from the
-    outer frontier and all other members, the complement of their
-    finite closed union gives an open neighborhood contained in the
-    selected member, contradicting boundary membership.
-
-    Apply this observation to the actual closed fan triangles, whose
-    union is $\overline Q$. A shared point is either the center or,
+    Apply Theorem~\ref{thm:area_law_finite_cover_frontier} to the actual
+    closed fan triangles, whose union is $\overline Q$. A shared point
+    is either the center or,
     together with the center, gives two distinct common points. In the
     latter case the triangle-contact classification places it on an
     actual radial segment. The center itself belongs to every such

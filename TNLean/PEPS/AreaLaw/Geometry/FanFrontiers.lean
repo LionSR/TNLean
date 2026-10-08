@@ -1,23 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.fan_frontier_radials
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_frontier_subset_outer_and_radials
-Source labels: prop:two-families, geometry:initial-stars
-Source: Section 11, prop:two-families, lines 299–323; geometry:initial-stars, lines 333–370,
-especially 352–359.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
@@ -34,10 +15,15 @@ triangle argument are shared with initial lattice boundary avoidance.
 The conclusion retains the actual endpoints and hence their scale; it does
 not impose a late layer, mesh or contact hypothesis.
 
+## References
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `prop:two-families`, lines 299–323,
 and `geometry:initial-stars`, lines 333–370, especially 352–359.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Manuscript file:
+`preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
+`build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
@@ -46,7 +32,7 @@ namespace TNLean.PEPS.AreaLaw.Geometry
 /-- The frontier of a finite closed-cover member lies on the outer boundary
 or meets another member. Auxiliary to area-law Section 11, `prop:two-families`,
 lines 308–323 and 545–559. -/
-private theorem finiteCover_frontier_subset {ι : Type*} [Finite ι]
+theorem finiteCover_frontier_subset {ι : Type*} [Finite ι]
     (Q : Set (ℝ × ℝ)) (P : ι → Set (ℝ × ℝ)) (hclosed : ∀ i, IsClosed (P i))
     (hcover : (⋃ i, P i) = closure Q) (i : ι) :
     frontier (P i) ⊆ frontier Q ∪ ⋃ j : {j : ι // j ≠ i}, P i ∩ P j.val := by
