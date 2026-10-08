@@ -3,7 +3,7 @@
 
 Retain the regions, identity extensions, and ordered product of
 Definition~\ref{def:peps_regularized_patch_objective}.
-Write $K_j=(x_j+bI_{X_j})^{-a_j/2}$, so $L_j=\iota_{X_j}(K_j)$.
+Write $K_j=(x_j+bI_{X_j})^{-a_j/2}$, so $L_j=\widehat{K_j}_{X_j}$.
 The coordinate variation below is the unstripped first variation in the
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L134-L149}{proof of the regularized patch estimate}.
 Its marginals are those of the same final normalized vector defined in
@@ -24,9 +24,9 @@ Its marginals are those of the same final normalized vector defined in
     Define $x^{j,U}$ by replacing $x_j$ with $Ux_jU^*$ and leaving every
     other coordinate unchanged. Put
     \begin{align}
-        P_j^+           & =L_{m-1}\cdots L_{j+1},          &
-        P_j^-           & =L_{j-1}\cdots L_0,\notag          \\
-        \mathcal I_j(K) & =P_j^+\iota_{X_j}(K)P_j^-\Omega.
+        P_j^+           & =L_{m-1}\cdots L_{j+1},            &
+        P_j^-           & =L_{j-1}\cdots L_0,\notag            \\
+        \mathcal I_j(K) & =P_j^+\widehat K_{X_j}P_j^-\Omega.
         \label{eq:peps_coordinate_insertion}
     \end{align}
     Empty products are identities. The map $\mathcal I_j$ is complex linear,
@@ -84,7 +84,7 @@ Its marginals are those of the same final normalized vector defined in
         \label{eq:peps_coordinate_first_variation}
     \end{align}
 
-    Set $D_j=\iota_{X_j}(BK_j-K_jB)$ and
+    Set $D_j=\widehat{BK_j-K_jB}_{X_j}$ and
     $\Delta_j=P_j^+D_jP_j^-\Omega$. Every line in the following diagram
     carries the full space $\mathcal H_V$.
     % Formula: (Delta_j)_sigma = sum_{alpha,beta,gamma}
@@ -172,12 +172,12 @@ Its marginals are those of the same final normalized vector defined in
     For every global vector $\xi$, region $X$, and arbitrary complex
     operator $K$ on $\mathcal H_X$,
     \begin{align}
-        \langle\xi,\iota_X(K)\xi\rangle
+        \langle\xi,\widehat K_X\xi\rangle
          & =\tr\left(\operatorname{Tr}_{V\setminus X}
         \ketbra{J\xi}{J\xi}\,K\right).
         \label{eq:peps_complex_expectation}
     \end{align}
-    In particular, $\langle\phi,\iota_X(K)\phi\rangle=\tr(\rho_XK)$.
+    In particular, $\langle\phi,\widehat K_X\phi\rangle=\tr(\rho_XK)$.
     Each $\rho_X$ is positive semidefinite. If $a_j\ge0$, $b>0$,
     $\|\Omega\|=1$, and $x\in\mathcal D$, then $\tr\rho_X=1$.
     These assertions include the empty region.
@@ -185,7 +185,7 @@ Its marginals are those of the same final normalized vector defined in
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum}
-    In regional coordinates, $\iota_X(K)=K\otimes I$ and the reduced
+    In regional coordinates, $\widehat K_X=K\otimes I$ and the reduced
     matrix is the partial trace of $\ketbra{J\xi}{J\xi}$ over the second
     factor. The partial-trace identity gives
     $\tr(\operatorname{Tr}_{V\setminus X}(P)K)=\tr(P(K\otimes I))$.
