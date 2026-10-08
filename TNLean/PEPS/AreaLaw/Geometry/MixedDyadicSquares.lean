@@ -47,6 +47,7 @@ theorem mem_latticeDyadicCell_iff_bounds (k : ℕ) (z x : ℤ × ℤ) :
     x ∈ latticeDyadicCell k z ↔
       z.1 * 2 ^ k ≤ x.1 ∧ x.1 < z.1 * 2 ^ k + 2 ^ k ∧
       z.2 * 2 ^ k ≤ x.2 ∧ x.2 < z.2 * 2 ^ k + 2 ^ k := by
+  rcases z with ⟨a, b⟩
   rw [mem_latticeDyadicCell]
   simp only [dyadicAncestor, Prod.mk.injEq,
     Int.ediv_eq_iff_of_pos (show (0 : ℤ) < 2 ^ k by positivity)]

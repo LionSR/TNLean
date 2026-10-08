@@ -216,8 +216,8 @@ theorem Template.card_mixedDyadicIndices_sample_dilation_le {Ctpl : ℝ} {n s₀
       intro z hz
       obtain ⟨⟨x, hxcell, hxS⟩, _⟩ := (mem_mixedDyadicIndices _ _ _).mp hz
       have hxidx : x.1 / u = z.1 ∧ x.2 / u = z.2 := by
-        simpa only [dyadicAncestor, Prod.mk.injEq] using
-          (mem_latticeDyadicCell k z x).mp hxcell
+        have h := (mem_latticeDyadicCell k z x).mp hxcell
+        exact ⟨congrArg Prod.fst h, congrArg Prod.snd h⟩
       obtain ⟨q, hq, hqx⟩ := mem_ambientDilation_iff.mp hxS
       have hqbox := T.sample_subset_box i hp hq
       simp only [Finset.product_eq_sprod, Finset.mem_product, Finset.mem_Icc] at hqbox
