@@ -20,20 +20,6 @@ These are original proofs from the geometry used in Lemma 9.4 of the
 September 24, 2026 area-law manuscript. No upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.vertices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.region_eq_convexhull_vertices
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.mem_region_iff_normal_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds
-Provenance-ID: 8754-tnlean.peps.arealaw.geometry.templatepolygon.exists_four_strip_bounds
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The real vertices appearing in the actual polygon constructor. -/
