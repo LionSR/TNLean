@@ -32,7 +32,8 @@ def main() -> int:
     assert r"\begin{tenkzeq}" not in source
     equations = [
         re.sub(r"\$=([^$]*)\$", lambda m: "=" + (f"${m[1]}$" if m[1].strip() else ""),
-               equation.replace("{tenkzequation}", "{tenkzeq}"))
+               equation.replace(r"\begin{tenkzequation}", r"\begin{tenkzeq}[check={signature}]")
+               .replace(r"\end{tenkzequation}", r"\end{tenkzeq}"))
         for equation in equations
     ]
     signatures = [
