@@ -473,6 +473,20 @@ complete library build. The actual norm integrability and some-sample
 bound are further checked local consequences reported by that coordinator;
 the complete physical compression and polynomial PEPS theorem remain open.
 
+The later dependency updates use
+[QICLean #650](https://github.com/LionSR/QICLean/pull/650), at head
+`caac4b54`, source `92b6eea7`. It supplies ten generic identities and bounds
+for physical partial traces in orthonormal coordinates, including block
+and integrability consequences. The coordinator reports six strict checks,
+ten standard-kernel reports, focused PDF/web inspection and preservation
+of 958 source files. These are narrow checks, not a complete library build.
+The latest TNLean heads are `429d55a3` for #8896, `1d718899` for #8900 and
+`f96e06dc` for #8903. They synchronize the dependency with #650; the
+mathematical source `25892537` and the Gaussian/Schmidt evidence at
+`70e23f40` remain unchanged. The earlier checks described above retain
+their original revisions and are not claimed as fresh checks of these
+later dependency updates.
+
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
 commutant and highest-weight development for reuse in subsequent proofs.
