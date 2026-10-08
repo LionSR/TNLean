@@ -9,5 +9,9 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Amplification
 
 import TNLean.PEPS.AreaLaw.Amplification.ChannelShellOscillation
+import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
+import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
+import TNLean.PEPS.AreaLaw.Amplification.GraphChannelOscillation
+import TNLean.PEPS.AreaLaw.Amplification.LocalChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
 import TNLean.PEPS.AreaLaw.Amplification.RadiusScales
