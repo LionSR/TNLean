@@ -34,6 +34,8 @@ import TNLean.PEPS.Approximation.EffectCircuitResources
 import TNLean.PEPS.Approximation.EffectReplacementCoefficients
 import TNLean.PEPS.Approximation.EffectReplacementExpansion
 import TNLean.PEPS.Approximation.EffectReplacementSources
+import TNLean.PEPS.Approximation.FamilyPhysicalReadout
+import TNLean.PEPS.Approximation.FamilySourceOnlyReduction
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
