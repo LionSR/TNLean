@@ -131,6 +131,7 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.physicalOutputLayout}
     \lean{TNLean.PEPS.PairEffect.labelledPhysicalReadout}
     \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout}
+    \lean{TNLean.PEPS.PairEffect.restrictedPhysicalBasis}
     \leanok
     \uses{def:peps_party_layout}
     Let every party have physical space $\C^d$. List the parties once
@@ -148,11 +149,17 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout_apply}
     \lean{TNLean.PEPS.PairEffect.card_regionalPhysicalIndex}
     \lean{TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace}
+    \lean{TNLean.PEPS.PairEffect.restrict_physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.length_filter_region}
+    \lean{TNLean.PEPS.PairEffect.finrank_physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.finrank_restrict_physicalLayout}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
     \uses{def:peps_labelled_physical_output,thm:peps_source_only_density_error}
     Regional coordinates are obtained by splitting the same full
     assignment $\sigma$ into its restrictions to $A$ and its complement.
+    Selecting the physical registers owned by $A$ gives precisely the
+    filtered party ordering, whose tensor memory has dimension $d^{|A|}$.
     There are exactly $d^{|A|}$ regional physical coordinates. For the
     original whole-party product input, the source-only replacement
     has regional physical density error at most $\varepsilon/2$ with
@@ -164,7 +171,10 @@ dimensions.
     Reindex the tensor basis by
     $\sigma\mapsto(\sigma|_A,\sigma|_{P\setminus A})$. An assignment on
     $A$ has $d$ independent choices at each of its $|A|$ parties, giving
-    $d^{|A|}$ coordinates. The constructed coordinate map is an
+    $d^{|A|}$ coordinates. Selecting owned registers filters the original
+    complete ordering without repetitions, so exactly $|A|$ physical
+    factors remain; their tensor basis has the same cardinality.
+    The constructed coordinate map is an
     isometry, so Theorem~\ref{thm:peps_source_only_density_error}
     applies to the literal regional partial trace.
 \end{proof}
