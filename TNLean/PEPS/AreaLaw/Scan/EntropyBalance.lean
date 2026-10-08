@@ -14,6 +14,11 @@ At a charge round every split term of a good old history is sampled with probabi
 `log N²`, and bounding the two ends by the initial floor and the terminal rough upper
 comparison gives `ScanData.IntegratedChargeBound`.
 
+**Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
+are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
+Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
+`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+
 ## Main results
 
 * `TNLean.PEPS.AreaLaw.Scan.sum_integral_le_of_deriv`: telescoped integration of derivative

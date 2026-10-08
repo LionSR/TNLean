@@ -12,6 +12,11 @@ Normalizing the integrated entropy inequality by the `nm` charge rounds and the 
 `ε/2`, and averaging, selects a charge round and a parameter `p_k ∈ [ε/2, ε]` with
 `𝒬(p_k)/(KnD) ≤ δ_n + o_k(1)` (`scanner:selected-density`).
 
+**Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
+are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
+Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
+`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+
 ## Main results
 
 * `TNLean.PEPS.AreaLaw.Scan.exists_mem_Icc_le_of_sum_integral_le`: averaging over finitely many
