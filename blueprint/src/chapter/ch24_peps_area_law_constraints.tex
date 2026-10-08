@@ -1,0 +1,276 @@
+%% =========================================================
+%% Chapter: Positive quasi-local constraints from a global gap
+%% =========================================================
+
+\chapter{Positive quasi-local constraints from a global gap}%
+\label{ch:peps_area_law_constraints}
+
+This chapter follows Section~4 of the two-dimensional area-law manuscript
+(Propositions 4.3 and Lemma 4.4). Let $G$ be a finite graph and
+$H=\sum_i h_i$ a sum of Hermitian terms, where $h_i$ acts on a support $X_i$
+with anchor $a_i\in X_i$, every support has graph diameter at most $R$ and at
+most $v_R$ sites, the norms of the terms meeting a site sum to at most $b_0$,
+$\|h_i\|\le J$, and the spheres of $G$ grow at most polynomially. Suppose that
+$H\Omega=E_0\Omega$ for a unit vector $\Omega$ and that
+$H-E_0I\ge\Delta(I-P_\Omega)$ with $\Delta>0$, where
+$P_\Omega=|\Omega\rangle\langle\Omega|$. Write $E_{i,l}$ for the normalized
+partial-trace expectation onto the graph ball $N_l(a_i)$
+(Definition~\ref{def:qc_site_expectation}) and $\alpha=p/(p+1)$ for a fixed
+integer $p\ge1$.
+
+The construction filters each term with a smooth spectral filter of width
+$\Delta/2$ whose time kernel $f$ decays like $e^{-c|t|^\alpha}$, removes its
+ground expectation, and takes the absolute value:
+\[
+    M_i=\int_{\mathbb R}f(t)e^{itH}h_ie^{-itH}\,dt-\langle\Omega,h_i\Omega\rangle I,
+    \qquad k_i=|M_i|/c_*,\qquad c_*=\max\{1,J(\|f\|_1+1)\}.
+\]
+
+\begin{lemma}[Order and commutant of the ball expectation]
+    \label{lem:al_site_expectation_order}
+    \lean{QuantumCircuit.heisenbergEvolution_eq_hermitianUnitaryPath,
+        QuantumCircuit.siteExpectation_conjTranspose,
+        QuantumCircuit.isHermitian_siteExpectation,
+        QuantumCircuit.siteExpectation_nonneg, QuantumCircuit.siteExpectation_mono,
+        QuantumCircuit.siteExpectation_le_one,
+        QuantumCircuit.siteExpectation_eq_self_of_forall_commute,
+        QuantumCircuit.mem_supportedOperators_of_forall_commute,
+        Commute.cfcAbs_of_isHermitian,
+        QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators}
+    \leanok
+    \uses{lem:qc_site_expectation_average, lem:qc_site_expectation_properties}
+    The expectation $E_K$ onto a set of sites $K$ preserves adjoints and the
+    order, maps $[0,I]$ into $[0,I]$, and fixes every operator commuting with
+    all operators acting outside $K$; such an operator acts on $K$. In
+    particular $E_K$ fixes $|Y|$ for every Hermitian $Y$ acting on $K$.
+\end{lemma}
+\begin{proof}\leanok
+    $E_K$ is the uniform average of the conjugations by products of on-site
+    Weyl operators outside $K$, and its values act on $K$.
+\end{proof}
+
+\begin{theorem}[Positive replacement of the Hamiltonian]
+    \label{thm:al_positive_replacement}
+    \lean{TNLean.PEPS.AreaLaw.commute_filterIntegral_of_forall_commute,
+        TNLean.PEPS.AreaLaw.positiveConstraint_mem_supportedOperators_component,
+        TNLean.PEPS.AreaLaw.localizationPrefactor,
+        TNLean.PEPS.AreaLaw.localizationPrefactor_nonneg,
+        TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints}
+    \leanok
+    \uses{thm:qc_graph_ball_localization, lem:al_site_expectation_order,
+        lem:qc_lr_closed_region}
+    There are constants $C\ge0$ and $c>0$, depending only on
+    $p,R,v_R,b_0,J,\Delta$ and the growth of the spheres, such that
+    \[
+        0\le k_i\le I,\qquad k_i\Omega=0,\qquad
+        \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
+    \]
+    and for every integer $l\ge0$ the operator $k_{i,l}=E_{i,l}(k_i)$ lies in
+    $[0,I]$ and satisfies $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts
+    on the connected component of $a_i$.
+\end{theorem}
+\begin{proof}\leanok
+    The spectral filter multiplies the matrix element of $h_i$ between energies
+    $E$ and $E_0$ by $\chi(E-E_0)$, which vanishes across the gap and equals
+    $1$ at $E=E_0$; hence $M_i\Omega=0$, $\sum_iM_i=H-E_0I$ and
+    $\|M_i\|\le c_*$. Since $M_i\le|M_i|$ and the kernel of $M_i$ lies in that
+    of $|M_i|$, the first display follows. For the tail, the graph-ball
+    localization of the dynamics (Theorem~\ref{thm:qc_graph_ball_localization})
+    is integrated against $|f|$, splitting the time integral at $|t|$ of order
+    $l$; the square-root estimate
+    $\||A|-|B|\|\le((\|A\|+\|B\|)\|A-B\|)^{1/2}$ transfers the bound to the
+    absolute value, because $E_{i,l}$ fixes $|E_{i,l}M_i|$. Finally the
+    Heisenberg evolution of $h_i$ commutes with every operator acting outside
+    the component of $a_i$ (Lemma~\ref{lem:qc_lr_closed_region}), hence so do
+    the filtered term, its centering and its absolute value.
+\end{proof}
+
+\begin{lemma}[Square roots and local channels]
+    \label{lem:al_quasilocal_roots}
+    \lean{TNLean.PEPS.AreaLaw.sqrt_mul_exp_neg, TNLean.PEPS.AreaLaw.quasilocalRoots}
+    \leanok
+    \uses{thm:al_positive_replacement, lem:al_site_expectation_order}
+    Let $G_i=(I-k_i)^{1/2}$, $K_i=k_i^{1/2}$, $G_{i,l}=(I-k_{i,l})^{1/2}$ and
+    $K_{i,l}=k_{i,l}^{1/2}$. These are positive contractions, $G_i\Omega=\Omega$,
+    $K_i\Omega=0$, $G_{i,l}^2+K_{i,l}^2=I$, and
+    $\|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|\le2\|k_i-k_{i,l}\|^{1/2}
+        \le2C^{1/2}e^{-(c/2)l^\alpha}$. The maps
+    $\mathcal E_i(B)=G_iBG_i+K_iBK_i$ and
+    $\mathcal E_{i,l}(B)=G_{i,l}BG_{i,l}+K_{i,l}BK_{i,l}$ are unital and
+    completely positive, contractive after adjoining any auxiliary system, and
+    $\|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le4\|k_i-k_{i,l}\|^{1/2}$
+    uniformly in the auxiliary dimension. The map $\mathcal E_{i,l}$ fixes every
+    operator commuting with all operators acting on $N_l(a_i)$.
+\end{lemma}
+\begin{proof}\leanok
+    The square-root estimate $\|U^{1/2}-V^{1/2}\|\le\|U-V\|^{1/2}$ gives the
+    root tails. The map $v\mapsto Gv\oplus Kv$ is an isometry, and
+    $\mathcal E(B)$ is the compression of $B\oplus B$ by it, also after
+    tensoring with an identity. The difference bound follows from
+    $ABA-A'BA'=(A-A')BA+A'B(A-A')$. An operator commuting with the ball algebra
+    commutes with $k_{i,l}$, hence with both local roots.
+\end{proof}
+
+\section{Truncation near a finite set}
+\label{sec:al_truncation}
+
+Fix a set $S_0$ of sites and an integer $r_0\ge0$. For a label whose
+anchor has finite distance $d_i^0=d(a_i,S_0)$ from $S_0$ put
+$r_i=\max\{r_0,\lfloor d_i^0/2\rfloor\}$, $\widetilde h_i=k_{i,r_i}$ and
+$\widetilde X_i=N_{r_i}(a_i)$; if $d_i^0=\infty$ put $\widetilde h_i=k_i$ and let
+$\widetilde X_i$ be the connected component of $a_i$. Suppose every graph ball
+of radius $d$ has at most $K_b(d+1)^2$ sites and every site anchors at most
+$\mu$ labels.
+
+\begin{lemma}[Volume-free truncation error]
+    \label{lem:al_truncation_error}
+    \lean{TNLean.PEPS.AreaLaw.exists_one_add_pow_mul_exp_neg_rpow_le,
+        TNLean.PEPS.AreaLaw.exists_sum_shell_le, TNLean.PEPS.AreaLaw.setDist,
+        TNLean.PEPS.AreaLaw.exists_mem_edist_eq_setDist,
+        TNLean.PEPS.AreaLaw.truncationRadius, TNLean.PEPS.AreaLaw.truncatedConstraint,
+        TNLean.PEPS.AreaLaw.card_label_shell_le,
+        TNLean.PEPS.AreaLaw.norm_sum_truncatedConstraint_sub_le}
+    \leanok
+    \uses{thm:al_positive_replacement}
+    If $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$ for all $l$, then
+    $\|\sum_i\widetilde h_i-\sum_ik_i\|\le C'|S_0|e^{-(c/2)r_0^\alpha}$ with $C'$
+    depending only on $C,c,\alpha,K_b,\mu$.
+\end{lemma}
+\begin{proof}\leanok
+    At distance $d$ from $S_0$ there are at most $\mu|S_0|K_b(d+1)^2$ labels,
+    and labels at infinite distance have no error. Since
+    $\max\{r_0,u\}^\alpha\ge(r_0^\alpha+u^\alpha)/2$, the series
+    $\sum_d(d+1)^2e^{-c\max\{r_0,\lfloor d/2\rfloor\}^\alpha}$ is at most
+    $e^{-(c/2)r_0^\alpha}\sum_d(d+1)^2e^{-(c/2)\lfloor d/2\rfloor^\alpha}$, and
+    the last series converges because stretched exponentials beat polynomials.
+\end{proof}
+
+\begin{theorem}[Truncation near a finite set]
+    \label{thm:al_truncation}
+    \lean{TNLean.PEPS.AreaLaw.half_le_two_rpow,
+        TNLean.PEPS.AreaLaw.exists_truncationConstant,
+        TNLean.PEPS.AreaLaw.truncatedConstraint_mem_Icc,
+        TNLean.PEPS.AreaLaw.exists_finiteSetTruncation,
+        TNLean.PEPS.AreaLaw.kernelExponent_one,
+        TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_of_gap}
+    \leanok
+    \uses{lem:al_truncation_error, thm:al_positive_replacement}
+    Use Theorem~\ref{thm:al_positive_replacement} with $p=1$, so $\alpha=1/2$,
+    and fix $C_0>0$. There is $C_1$ such that for every real $n\ge2$ and every
+    set $S_0$ with $|S_0|\le C_0n^2$ (the source states this for nonempty $S_0$; for
+    $S_0=\varnothing$ every constraint is retained), with
+    $r_0=\lceil C_1(\log n)^2\rceil$ and
+    $\epsilon_n=\min\{n^{-1000},g/4\}$: the truncated terms are positive
+    contractions, $\|\widetilde H-H_F\|\le\epsilon_n$, the ground energy of
+    $\widetilde H$ lies in $[0,\epsilon_n]$, its ground vector
+    $\widetilde\Omega$ is unique, its gap is at least $g/2$, and after a choice
+    of phase $\|\widetilde\Omega-\Omega\|\le2(\epsilon_n/g)^{1/2}$ and
+    $\frac12\||\widetilde\Omega\rangle\langle\widetilde\Omega|-P_\Omega\|_1
+        \le(2\epsilon_n/g)^{1/2}$.
+\end{theorem}
+\begin{proof}\leanok
+    Lemma~\ref{lem:al_truncation_error} bounds the error by
+    $C'C_0n^2e^{-(c/2)\sqrt{r_0}}\le C'C_0n^{2-(c/2)\sqrt{C_1}}$, and $C_1$ is
+    chosen once to make this at most $\epsilon_n$ for all $n\ge2$. The
+    remaining claims follow from the stability of a global gap under a
+    perturbation of norm at most a quarter of the gap: a minimizer of the
+    energy is an eigenvector, every vector orthogonal to it has energy at
+    least $g-\epsilon_n$, and the gap of $H_F$ at $\widetilde\Omega$ gives
+    $g(1-|\langle\Omega,\widetilde\Omega\rangle|^2)\le2\epsilon_n$.
+\end{proof}
+
+For $X\subseteq S_0$ let $b_X$ be the number of edges with exactly one endpoint
+in $X$, let $\mathcal C_X$ be the labels whose designated support meets both
+$X$ and its complement, and put $d_i=q^{|\widetilde X_i|}$ and
+$\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
+
+\begin{theorem}[Crossing count and cut budget]
+    \label{thm:al_crossing_budget}
+    \lean{TNLean.PEPS.AreaLaw.cutEdges, TNLean.PEPS.AreaLaw.componentFinset,
+        TNLean.PEPS.AreaLaw.designatedSupport, TNLean.PEPS.AreaLaw.crossingLabels,
+        TNLean.PEPS.AreaLaw.exists_cut_edge_near,
+        TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingLabels,
+        TNLean.PEPS.AreaLaw.card_crossingLabels_le, TNLean.PEPS.AreaLaw.cutBudget,
+        TNLean.PEPS.AreaLaw.log_dim_le_of_mem_crossingLabels,
+        TNLean.PEPS.AreaLaw.cutBudget_le, TNLean.PEPS.AreaLaw.le_of_cutBudget_le,
+        TNLean.PEPS.AreaLaw.truncatedConstraint_empty,
+        TNLean.PEPS.AreaLaw.crossingLabels_empty,
+        TNLean.PEPS.AreaLaw.truncatedConstraint_of_setDist_eq_top,
+        TNLean.PEPS.AreaLaw.truncatedConstraint_mem_supportedOperators}
+    \leanok
+    \uses{thm:al_truncation}
+    Each truncated term $\widetilde h_i$ acts on its designated support
+    $\widetilde X_i$. Every support in $\mathcal C_X$ is a ball of radius exactly $r_0$,
+    $|\mathcal C_X|\le2\mu K_b(r_0+1)^2b_X$, $\log d_i\le K_b(r_0+1)^2\log q$
+    for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If moreover
+    $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, then
+    $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every constraint is
+    retained and no label crosses a cut; constraints whose anchors cannot reach
+    $S_0$ are always retained exactly.
+\end{theorem}
+\begin{proof}\leanok
+    A support meeting $X\subseteq S_0$ has an anchor at finite distance; if
+    $r_i>r_0$ then $r_i=\lfloor d_i^0/2\rfloor<d_i^0$ and the ball cannot meet
+    $S_0$. A shortest path from the anchor to a point of the ball on the other
+    side of the cut stays in the ball and contains a cut edge, so the anchor is
+    within $r_0$ of one of the at most $2b_X$ endpoints of cut edges. Each such
+    ball has at most $K_b(r_0+1)^2$ sites and each anchor carries at most $\mu$
+    labels.
+\end{proof}
+
+\section{The scanner estimate from its inputs}
+\label{sec:al_scanner}
+
+Section~9 of the manuscript scans the collar of a square region in rounds and
+selects one charge round and one interpolation parameter at which the
+transported, symmetrized vector has small defect energy (Proposition~9.2). Fix
+exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with $\kappa\le e$,
+$\nu>0$ and $W\ge1$, and put $L=\lfloor n^{1-\ell}\rfloor$,
+$D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
+$\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
+takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
+histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
+(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~2.3); it is
+therefore Proposition~9.2 restricted to those conclusions, not the source
+proposition itself, which remains open until the scan data are constructed.
+
+\begin{theorem}[Scanner estimate from the conclusions of its inputs]
+    \label{thm:al_scanner_from_inputs}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
+        TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts,
+        TNLean.PEPS.AreaLaw.Scan.exists_budgets,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
+        TNLean.PEPS.AreaLaw.Scan.exists_selected_density,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.energySum_le,
+        TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
+        TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
+    \leanok
+    There are constants, depending only on the exponents and on the constants of
+    the inputs, such that for all sufficiently large $n$ and every scan at scale
+    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 2.3 and
+    Propositions~7.4, 8.1, the comparator budgets
+    $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
+    $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
+    round and parameter, such that for every $k\ge1$ some charge round and
+    some $p_k\in[\epsilon/2,\epsilon]$ satisfy
+    $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ and
+    \begin{align}
+        E_{\mathrm{def},k}\le Cn^\ell D^2W^2(\log n)^{C}
+        \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+\rho_k.
+        \label{eq:al_scanner_energy}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Integrating the derivative of the logarithmic norm of each charge round
+    over $p\in[\epsilon/2,\epsilon]$ and summing over rounds bounds the
+    integrated charge defect by the telescoped entropy budget. Averaging over
+    the $nm$ charge rounds and the parameter interval selects a round and a
+    parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$. At that point
+    H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
+    energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and
+    bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
+    weight, and the gap of the copied Hamiltonian converts the energy into the
+    defect energy. The budgets follow from the entropy input, the continuity
+    error $O(n^{-247})$ and the crossing count, which gives the logarithmic
+    power $12$ for the marginal parameter.
+\end{proof}

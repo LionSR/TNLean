@@ -1,0 +1,760 @@
+\section{Changes of ownership in encoded frames}
+\label{sec:peps_ownership_changes}
+The statements below formalize Lemmas~6.5 and~6.6 of
+\cite{OpenAI2026PolynomialPEPS}, September 24, 2026, \texttt{05-frames.tex},
+lines 347--570, for the canonical maps constructed in their proofs, with the
+information bounds kept as hypotheses. Their reading as bounded changes, that
+is, as allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(Section~\ref{sec:peps_pair_effects}), is formalized only on registers in
+which the raw registers of a region held by one party are grouped into one
+register. The source has one raw register per site; identifying the grouped
+registers with the registers of a frame, and writing the renaming of the
+two-sheet exchange as a composition of reorderings of tensor factors, are
+recorded in \cite{gap:polypeps_ownership_change_monomials}.
+
+We keep the setting of Section~\ref{sec:peps_encoded_frames}. For a set
+$S\subseteq\Lambda$ write $\mathcal H_S=\bigotimes_{x\in S}\C^q$. For a vector
+$\Omega\in\mathcal H_\Lambda$ and disjoint sets $T,E\subseteq\Lambda$, the
+mutual information $I_\Omega(T:E)$ is
+$S(\rho_T)+S(\rho_E)-S(\rho_{TE})$ with natural logarithms, where the $\rho$
+are the reduced density matrices of $\ket\Omega\bra\Omega$.
+
+\subsection{Splitting a sheet}
+
+\begin{lemma}[Operators on parts of a sheet]
+    \label{lem:peps_frame_split_forms}
+    \lean{TNLean.PEPS.EncodedFrame.sheetSplit,
+        TNLean.PEPS.EncodedFrame.threeSplit,
+        TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_sheetSplit,
+        TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_threeSplit,
+        TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators,
+        TNLean.PEPS.EncodedFrame.exists_one_kronecker_of_mem_supportedOperators,
+        TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_kronecker_one,
+        TNLean.PEPS.EncodedFrame.exists_threeSplit_eq_one_kronecker_kronecker_one}
+    \leanok
+    Identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal
+        H_{\Lambda\setminus S}$, and, for disjoint $T$ and $E$ with
+    $U=\Lambda\setminus(T\cup E)$, with $\mathcal H_T\otimes\mathcal H_E\otimes
+        \mathcal H_U$. An operator acting on the sites of $S$ is $A'\otimes\id$, an
+    operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
+    acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
+    of $E$ is $\id_T\otimes A'\otimes\id_U$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A product operator $\bigotimes_xm_x$ is, in these coordinates, the tensor
+    product of its restrictions to the parts, and $m_x=\id$ off the support.
+    Both sides are linear in the operator.
+\end{proof}
+
+\begin{lemma}[Splitting consequence on a sheet]
+    \label{lem:peps_frame_splitting}
+    \lean{TNLean.PEPS.EncodedFrame.SplittingData,
+        TNLean.PEPS.EncodedFrame.SplittingData.error,
+        TNLean.PEPS.EncodedFrame.splitVec,
+        TNLean.PEPS.EncodedFrame.partialTraceRight_splitVec,
+        TNLean.PEPS.EncodedFrame.quantumRelativeEntropy_splitVec_eq_mutualInformation,
+        TNLean.PEPS.EncodedFrame.exists_sheetSplitting,
+        TNLean.PEPS.EncodedFrame.exists_sheetSplitting_zpow}
+    \leanok
+    \uses{lem:peps_frame_split_forms}
+    Let $T,E\subseteq\Lambda$ be disjoint, $U=\Lambda\setminus(T\cup E)$,
+    $\lVert\Omega\rVert=1$ and $b=I_\Omega(T:E)$. There are finite-dimensional
+    spaces $\mathcal B_T,\mathcal B_E$, an isometry
+    $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$ and unit vectors
+    $s\in\mathcal H_T\otimes\mathcal B_T$, $s'\in\mathcal H_E\otimes\mathcal
+        B_E$ with
+    \begin{align}
+        \lVert(\id_{TE}\otimes V)\Omega-s\otimes s'\rVert
+        \le\sqrt{2(1-e^{-b/2})}\le\sqrt b .
+    \end{align}
+    In particular, if $b\le L^{-60}$ the error is at most $L^{-30}$. This is
+    \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+    lines 352--368) on the sheet.
+\end{lemma}
+
+\begin{proof}\leanok
+    The relative entropy of $\rho_{TE}$ with respect to $\rho_T\otimes\rho_E$
+    is $b$. The splitting estimate for a unit vector on three systems, with
+    $\mathcal B_T=\mathcal H_T$ and $\mathcal B_E=\mathcal H_E\oplus\mathcal
+        H_U$, applies in the coordinates $\mathcal H_T\otimes\mathcal
+        H_E\otimes\mathcal H_U$.
+\end{proof}
+
+\subsection{Homogeneous birth and death}
+
+\begin{definition}[Canonical birth map]
+    \label{def:peps_frame_birth_map}
+    \lean{TNLean.PEPS.EncodedFrame.pairSource,
+        TNLean.PEPS.EncodedFrame.birthKernel,
+        TNLean.PEPS.EncodedFrame.birthEffect,
+        TNLean.PEPS.EncodedFrame.birthOp,
+        TNLean.PEPS.EncodedFrame.sheetBirthOp,
+        TNLean.PEPS.EncodedFrame.birthOp_eq,
+        TNLean.PEPS.EncodedFrame.pairSource_mul_conjTranspose_apply}
+    \leanok
+    \uses{lem:peps_frame_splitting}
+    With the data of the splitting lemma put $\mathcal V=\id_{TE}\otimes V$ and
+    let $S\colon\mathcal H_E\otimes\mathcal B_E\to\mathcal
+        H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$ insert $s$ on
+    $T\mathcal B_T$. The canonical map of the birth is
+    \begin{align}
+        B=\mathcal V^\dagger SS^\dagger\mathcal V
+        =\mathcal V^\dagger\bigl(\ket s\bra s_{T\mathcal B_T}
+        \otimes\id_{E\mathcal B_E}\bigr)\mathcal V
+    \end{align}
+    (\texttt{05-frames.tex}, equation (birth-map), lines 414--426). It is the
+    effect $S^\dagger\mathcal V$, which applies $V$ on $U$ and contracts
+    $T\mathcal B_T$ with $\bra s$, followed by its adjoint, which supplies
+    $s$ and applies $V^\dagger$.
+\end{definition}
+
+\begin{lemma}[Properties of the birth map]
+    \label{lem:peps_frame_birth_map}
+    \lean{TNLean.PEPS.EncodedFrame.pairSource_conjTranspose_mul_self,
+        TNLean.PEPS.EncodedFrame.pairSource_mulVec,
+        TNLean.PEPS.EncodedFrame.birthOp_isHermitian,
+        TNLean.PEPS.EncodedFrame.norm_birthOp_le_one,
+        TNLean.PEPS.EncodedFrame.norm_act_birthOp_sub_le,
+        TNLean.PEPS.EncodedFrame.birthEffect_eq_submatrix,
+        TNLean.PEPS.EncodedFrame.birthOp_eq_submatrix,
+        TNLean.PEPS.EncodedFrame.commute_birthOp,
+        TNLean.PEPS.EncodedFrame.sheetBirthOp_isHermitian,
+        TNLean.PEPS.EncodedFrame.norm_sheetBirthOp_le_one,
+        TNLean.PEPS.EncodedFrame.norm_act_sheetBirthOp_sub_le,
+        TNLean.PEPS.EncodedFrame.commute_sheetBirthOp}
+    \leanok
+    \uses{def:peps_frame_birth_map}
+    The map $B$ is a Hermitian contraction, it acts as the identity on
+    $\mathcal H_E$, so it commutes with every operator acting on a subset of
+    $E$, and for every vector $\psi$
+    \begin{align}
+        \lVert(B-\id)\psi\rVert\le\lVert\mathcal V\psi-s\otimes s'\rVert .
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $s$ is a unit vector, $S^\dagger S=\id$, so $\Pi=SS^\dagger$ is an
+    orthogonal projection with $\Pi(s\otimes s')=s\otimes s'$. As
+    $\mathcal V^\dagger\mathcal V=\id$,
+    $(B-\id)\psi=\mathcal V^\dagger(\Pi-\id)(\mathcal V\psi-s\otimes s')$, and
+    $\id-\Pi$ is a projection. In the coordinates
+    $\mathcal H_E\otimes(\mathcal H_T\otimes\mathcal H_U)$ the effect
+    $S^\dagger\mathcal V$ is $\id_E\otimes K$ with $K=\bra s(\id_T\otimes V)$,
+    so $B=\id_E\otimes K^\dagger K$.
+\end{proof}
+
+\begin{lemma}[Operators passing through an encoding]
+    \label{lem:peps_frame_pass_encoding}
+    \lean{TNLean.PEPS.EncodedFrame.one_kronecker_mul_stack,
+        TNLean.PEPS.EncodedFrame.one_kronecker_mul_frameEncoder,
+        TNLean.PEPS.EncodedFrame.norm_act_one_kronecker_refVec_sub_le}
+    \leanok
+    \uses{def:peps_frame}
+    If a raw operator $B$ commutes with the raw part of the encoding of a
+    frame on every tag configuration, then $(\id_{\rm tags}\otimes
+        B)K_{\mathcal F}=K_{\mathcal F}B$ and
+    $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F}\rVert
+        \le\lVert B\Omega-\Omega\rVert$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Compare the two sides on each tag; the encoding is a contraction.
+\end{proof}
+
+\begin{definition}[Birth partition]
+    \label{def:peps_frame_birth_partition}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.changeOwner,
+        TNLean.PEPS.EncodedFrame.Frame.birthEnv,
+        TNLean.PEPS.EncodedFrame.Frame.mem_birthEnv,
+        TNLean.PEPS.EncodedFrame.Frame.outerHoles_subset_birthEnv}
+    \leanok
+    \uses{def:peps_frame}
+    For an encoded frame $\mathcal F$, a party $P_\circ$ and a set $T$ of raw
+    sites, let $\mathcal F'$ be the frame in which the raw registers of $T$
+    are owned by $Q_\circ$, with every hole, encoding and tag owner kept, and
+    \begin{align}
+        E=\{x:\text{the raw owner of }x\neq P_\circ\}\cup H^+(\mathcal F),
+        \qquad U=\Lambda\setminus(T\cup E)
+    \end{align}
+    (\texttt{05-frames.tex}, equation (birth-partition), lines 400--405).
+\end{definition}
+
+\begin{lemma}[Owners in the birth partition]
+    \label{lem:peps_frame_birth_partition_owners}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.owner_eq_of_notMem_birthEnv,
+        TNLean.PEPS.EncodedFrame.Frame.changeOwner_owner_of_notMem_birthEnv,
+        TNLean.PEPS.EncodedFrame.Frame.disjoint_birthEnv}
+    \leanok
+    \uses{def:peps_frame_birth_partition}
+    Every register outside $E$ is owned by $P_\circ$ in $\mathcal F$, and by
+    $P_\circ$ or $Q_\circ$ in $\mathcal F'$. If $T$ is owned by $P_\circ$ and
+    avoids every outer hole footprint, then $T$ and $E$ are disjoint
+    (\texttt{05-frames.tex}, lines 397--405).
+\end{lemma}
+
+\begin{proof}\leanok
+    A register outside $E$ has old owner $P_\circ$ by the definition of $E$;
+    in $\mathcal F'$ its owner is $Q_\circ$ if it lies in $T$ and its old
+    owner otherwise. A register of $T$ has old owner $P_\circ$ and lies in no
+    outer hole footprint, so it is in neither part of $E$.
+\end{proof}
+
+\begin{theorem}[Homogeneous birth and death: canonical map]
+    \label{thm:peps_frame_birth}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.birth,
+        TNLean.PEPS.EncodedFrame.Frame.death}
+    \leanok
+    \uses{lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,
+        def:peps_frame_birth_partition,lem:peps_frame_birth_partition_owners}
+    In an encoded frame $\mathcal F$, let $T$ be owned by $P_\circ$ and
+    disjoint from every outer hole footprint, let $E$ be as in the birth
+    partition, and let $\lVert\Omega\rVert=1$. If $I_\Omega(T:E)\le L^{-60}$,
+    the canonical map $B$ of splitting data with error at most $L^{-30}$ is a
+    Hermitian contraction, acts as the identity on $E$ and on all tags,
+    satisfies $(\id\otimes B)K_{\mathcal F}=K_{\mathcal F'}B$, and
+    \begin{align}
+        \lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F'}\rVert
+        \le L^{-30}.
+    \end{align}
+    Since $\mathcal F$ and $\mathcal F'$ differ only in raw owners,
+    $K_{\mathcal F'}=K_{\mathcal F}$ and $\Omega_{\mathcal
+            F'}=\Omega_{\mathcal F}$, so the intertwining identity says that $B$
+    commutes with the encoding; the change of owner is the content of the
+    bounded-change assertion below. The death is the same map with the
+    reverse input and output ownership; its conditions are those of the frame
+    after the death. This is the
+    content of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS} for the canonical
+    map, with its hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
+        lem:peps_frame_pass_encoding,def:peps_frame_birth_partition,
+        lem:peps_frame_birth_partition_owners}
+    Every hole encoder acts on $H^+(\mathcal F)\subseteq E$, so it commutes
+    with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
+            F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
+        s'\rVert\le L^{-30}$, and $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ in
+    canonical coordinates, since only raw owners change.
+\end{proof}
+
+\begin{definition}[Parties used by a monomial]
+    \label{def:peps_monomial_parties}
+    \lean{TNLean.PEPS.PairEffect.Word.UsesOnly,
+        TNLean.PEPS.PairEffect.Word.sourceCount,
+        TNLean.PEPS.PairEffect.PartyChain.UsesOnly,
+        TNLean.PEPS.PairEffect.PartyChain.sourceCount}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_party_monomial}
+    An allowed monomial on parties uses only the parties of a set $S$ when
+    each of its local maps acts at a party of $S$ and each of its pair sources
+    and pair effects joins two parties of $S$; reorderings of tensor factors
+    use no party. Its numbers of pair sources and of pair effects are counted
+    along the composition.
+\end{definition}
+
+\begin{lemma}[Matrices on registers of one party]
+    \label{lem:peps_front_registers}
+    \lean{TNLean.PEPS.PairEffect.matL,
+        TNLean.PEPS.PairEffect.matL_apply,
+        TNLean.PEPS.PairEffect.ofLp_matL,
+        TNLean.PEPS.PairEffect.norm_matL,
+        TNLean.PEPS.PairEffect.matL_add,
+        TNLean.PEPS.PairEffect.matL_mul,
+        TNLean.PEPS.PairEffect.oneIso,
+        TNLean.PEPS.PairEffect.twoIso,
+        TNLean.PEPS.PairEffect.pairHeadIso_eq,
+        TNLean.PEPS.PairEffect.appendIso_one_symm,
+        TNLean.PEPS.PairEffect.pairHeadIso_appendIso_symm,
+        TNLean.PEPS.PairEffect.matLocal₂₁,
+        TNLean.PEPS.PairEffect.matLocal₁₂,
+        TNLean.PEPS.PairEffect.matLocal₂₂,
+        TNLean.PEPS.PairEffect.eval_localMap,
+        TNLean.PEPS.PairEffect.eval_localMap₂₁,
+        TNLean.PEPS.PairEffect.eval_localMap₁₂,
+        TNLean.PEPS.PairEffect.pairHeadIso_eval_localMap₂₂}
+    \leanok
+    \uses{def:peps_party_layout}
+    Identify one register $\C^\alpha$ with $\C^\alpha$, and two registers
+    $\C^\alpha$, $\C^\beta$ with $\C^{\alpha\times\beta}$. A matrix $A$ from
+    $\C^{\alpha\times\beta}$ (or $\C^\alpha$) to $\C^{\gamma\times\delta}$ (or
+    $\C^\gamma$) defines a local map of a party $p$ on registers of $p$ of these
+    dimensions, of norm at most $\lVert A\rVert$. Placed in front of an
+    arbitrary list of further registers, its operator is $A\otimes\id$ in
+    these identifications.
+\end{lemma}
+
+\begin{proof}\leanok
+    Check the identity on pure tensors, using linearity.
+\end{proof}
+
+\begin{definition}[Birth and death monomials]
+    \label{def:peps_frame_birth_monomials}
+    \lean{TNLean.PEPS.EncodedFrame.birthWord,
+        TNLean.PEPS.EncodedFrame.birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.deathChain,
+        TNLean.PEPS.EncodedFrame.deathPrivateChain}
+    \leanok
+    \uses{def:peps_frame_birth_map,def:peps_party_monomial,lem:peps_front_registers}
+    Let $K=\bra s(\id_T\otimes V)\colon\mathcal H_T\otimes\mathcal H_U\to\mathcal
+        B_E$, with the data of the splitting lemma. Consider a register
+    $\mathcal H_U$ of $P_\circ$ and further registers left untouched. For
+    $Q_\circ\neq P_\circ$, the birth monomial starts from a register $\mathcal
+        H_T$ of $P_\circ$: it applies the private contraction $K$ at $P_\circ$ from
+    $\mathcal H_T\otimes\mathcal H_U$ to a register $\mathcal B_E$ of $P_\circ$,
+    prepares the normalized pair vector $s$ on a new register $\mathcal H_T$ of
+    $Q_\circ$ and a new register $\mathcal B_T$ of $P_\circ$, and applies the
+    private contraction $V^\dagger$ at $P_\circ$ from $\mathcal
+        B_T\otimes\mathcal B_E$ to $\mathcal H_U$ (\texttt{05-frames.tex}, lines
+    413--419). The death monomial starts from a register $\mathcal H_T$ of
+    $Q_\circ$: it applies the private isometry $V$ at $P_\circ$ from $\mathcal
+        H_U$ to $\mathcal B_T\otimes\mathcal B_E$, contracts $\mathcal H_T$ and
+    $\mathcal B_T$ with the normalized pair effect $\bra s$, and applies the
+    private contraction $K^\dagger$ at $P_\circ$ from $\mathcal B_E$ to new
+    registers $\mathcal H_T$, $\mathcal H_U$ of $P_\circ$ (lines 439--446). For
+    $Q_\circ=P_\circ$ both are the private contraction $K^\dagger K$ at
+    $P_\circ$ (lines 447--449).
+\end{definition}
+
+\begin{lemma}[Operators of the birth and death monomials]
+    \label{lem:peps_frame_birth_monomial_operators}
+    \lean{TNLean.PEPS.EncodedFrame.pairHeadIso_birthWord_eval,
+        TNLean.PEPS.EncodedFrame.pairHeadIso_deathChain_eval,
+        TNLean.PEPS.EncodedFrame.pairHeadIso_birthPrivateWord_eval,
+        TNLean.PEPS.EncodedFrame.sourceThenAdjoint,
+        TNLean.PEPS.EncodedFrame.sourceThenAdjoint_pairVec,
+        TNLean.PEPS.EncodedFrame.pairHeadIso_frame_localMap_source,
+        TNLean.PEPS.EncodedFrame.effectNext,
+        TNLean.PEPS.EncodedFrame.effectNext_apply,
+        TNLean.PEPS.EncodedFrame.effectNext_matL,
+        TNLean.PEPS.EncodedFrame.norm_birthKernel_le_one,
+        Matrix.IsIsometry.l2_opNorm_le_one,
+        TNLean.PEPS.EncodedFrame.norm_toLp_eq_one_of_star_dotProduct,
+        TNLean.PEPS.EncodedFrame.isAllowed_birthWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_deathChain,
+        TNLean.PEPS.EncodedFrame.usesOnly_birthWord,
+        TNLean.PEPS.EncodedFrame.sourceCount_birthWord,
+        TNLean.PEPS.EncodedFrame.usesOnly_birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.sourceCount_birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.usesOnly_deathChain,
+        TNLean.PEPS.EncodedFrame.sourceCount_deathChain,
+        TNLean.PEPS.EncodedFrame.effectCount_deathChain,
+        TNLean.PEPS.EncodedFrame.sheetBirthOp_eq_submatrix}
+    \leanok
+    \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,
+        lem:peps_frame_birth_map}
+    The birth and death monomials are allowed and use only $P_\circ$ and
+    $Q_\circ$; for $Q_\circ\neq P_\circ$ the birth has one pair source and no
+    pair effect, and the death one pair effect and no pair source. With the
+    registers $\mathcal H_T$ and $\mathcal H_U$ identified with $\mathcal
+        H_T\otimes\mathcal H_U$, the operator of each is $K^\dagger K\otimes\id$ on
+    the untouched registers, and on the sheet $B=\id_E\otimes K^\dagger K$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The contraction $K$ is the effect $S^\dagger\mathcal V$ with $E$ trivial, so
+    $\lVert K\rVert\le1$, and $\lVert V\rVert\le1$. For the birth, on $t\otimes
+        u\otimes w$ the first contraction gives $k=K(t\otimes u)$; preparing
+    $s=\sum t'\otimes b$ and applying $V^\dagger$ to $b\otimes k$ gives
+    $\sum t'\otimes V^\dagger(b\otimes k)=K^\dagger k$, by comparing
+    coordinates and using linearity in the prepared vector. For the death,
+    $V u=\sum b\otimes e$ and the effect gives $\sum\langle s,t\otimes
+        b\rangle e=K(t\otimes u)$, after which $K^\dagger$ is applied.
+\end{proof}
+
+\begin{theorem}[Homogeneous birth and death on grouped registers]
+    \label{thm:peps_frame_birth_bounded_grouped}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.birth_monomial,
+        TNLean.PEPS.EncodedFrame.Frame.death_monomial,
+        TNLean.PEPS.EncodedFrame.Frame.exists_birthWord,
+        TNLean.PEPS.EncodedFrame.Frame.exists_deathChain}
+    \leanok
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
+        lem:peps_frame_birth_monomial_operators}
+    In the setting of the canonical birth map, with its hypotheses, there are
+    splitting data with the reference error of Theorem~\ref{thm:peps_frame_birth}
+    such that $B=\id_E\otimes K^\dagger K$ with $K=\bra s(\id_T\otimes V)$, the
+    registers of $U$ are owned by $P_\circ$ before and after the birth, and
+    those of $T$ by $P_\circ$ before and by $Q_\circ$ after it. Group the raw
+    registers of $T$ into one register $\mathcal H_T$ and those of $U$ into one
+    register $\mathcal H_U$, followed by an arbitrary list of further registers.
+    On these registers there is an allowed monomial using only $P_\circ$ and
+    $Q_\circ$, with at most one normalized pair source, from $\mathcal H_T$ held
+    by $P_\circ$ to $\mathcal H_T$ held by $Q_\circ$, whose operator is
+    $K^\dagger K\otimes\id$; for $Q_\circ\neq P_\circ$ it is a private
+    contraction at $P_\circ$, one pair source between $Q_\circ$ and $P_\circ$,
+    and a private contraction at $P_\circ$. The death is the same with no pair
+    source and at most one normalized pair effect. This is a restricted form of
+    the bounded-change assertion of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}:
+    the source has one raw register per site, and these grouped registers are
+    not identified with the registers of the frame
+    \cite{gap:polypeps_ownership_change_monomials}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
+        lem:peps_frame_birth_partition_owners}
+    Take the splitting data of Theorem~\ref{thm:peps_frame_birth}. The
+    registers of $U$ lie outside $E$, so they are owned by $P_\circ$ before
+    and after, and those of $T$ are owned by $P_\circ$ before and by $Q_\circ$
+    after. The birth and death monomials have operator $K^\dagger K$ on
+    $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
+\end{proof}
+
+\begin{theorem}[Homogeneous birth and death: bounded change]
+    \label{thm:peps_frame_birth_bounded}
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
+        thm:peps_frame_birth_bounded_grouped}
+    The birth is a bounded change involving only $P_\circ$ and $Q_\circ$: a
+    private contraction at $P_\circ$, one normalized pair source between
+    $Q_\circ$ and $P_\circ$, and a private contraction at $P_\circ$; the death
+    uses one normalized pair effect instead. This is the remaining assertion
+    of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}
+    Theorem~\ref{thm:peps_frame_birth_bounded_grouped} gives the monomial on
+    registers in which the raw registers of $T$, and those of $U$, are grouped
+    into one register each. Each group has a single owner before and a single
+    owner after the change, so grouping is a private unitary at that owner.
+    Placing the monomial on the registers of the frame, one per site and per
+    tag, and identifying their tensor product with the canonical coordinates in
+    which $\id\otimes B$ acts, is not formalized; see
+    \cite{gap:polypeps_ownership_change_monomials}.
+\end{proof}
+
+\subsection{Exchanging assignments between two sheets}
+
+\begin{definition}[Swapping two sheets]
+    \label{def:peps_frame_sheet_swap}
+    \lean{TNLean.PEPS.EncodedFrame.sheetSwap,
+        TNLean.PEPS.EncodedFrame.sheetSwapOp}
+    \leanok
+    For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two raw sheets
+    at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
+\end{definition}
+
+\begin{lemma}[Composing and commuting sheet swaps]
+    \label{lem:peps_frame_sheet_swap_compose}
+    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
+        TNLean.PEPS.EncodedFrame.commute_sheetSwapOp_kronecker}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    If $Y$ is the disjoint union of $T$ and $A$, then $F_AF_Y=F_T$. The swap
+    $F_S$ commutes with $R_1\otimes R_2$ whenever $R_1$ and $R_2$ act on a
+    set disjoint from $S$ (\texttt{05-frames.tex}, lines 512--520).
+\end{lemma}
+
+\begin{proof}\leanok
+    The swaps are permutation matrices of the two-sheet configurations. On a
+    configuration, swapping at $Y$ and then at $A\subseteq Y$ swaps exactly
+    at the sites of $Y$ outside $A$, that is, at $T$. For the second claim,
+    $R_1$ and $R_2$ are the identity on $S$ tensored with operators $R_1'$
+    and $R_2'$ on the complement, so in the coordinates splitting off the two
+    copies of $S$ both $F_S$ and $R_1\otimes R_2$ act on different factors.
+\end{proof}
+
+\begin{definition}[Exchange data]
+    \label{def:peps_frame_exchange_data}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.frame₁,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.frame₂,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₁,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₂,
+        TNLean.PEPS.EncodedFrame.pairwiseDisjointOuter_append,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameEquiv,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₁_owner_of_mem,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newFrame₂_owner_of_mem,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.ofFrames,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_footprint_perm,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_ofFrames_exchangeEnv}
+    \leanok
+    \uses{def:peps_frame,def:peps_frame_sheet_swap}
+    Consider two encoded frames $\mathcal F_1,\mathcal F_2$ and the physical
+    sample of a plane region $Y$, such that every hole's outer square lies on
+    one side of $\partial Y$; that side classifies the hole as outside or
+    inside $Y$. The holes of each frame are listed as those outside $Y$
+    followed by those inside $Y$, each in its original order, which differs
+    from the given listing by the canonical identification of tag orderings
+    (\texttt{05-frames.tex}, lines 84--85). The exchanged
+    frames
+    $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the raw ownership
+    assignment and the holes, with their tag owners, of the other frame
+    (\texttt{05-frames.tex}, lines 461--464). The renaming $\mathcal R$
+    exchanges the sheet names of the raw registers inside $Y$ and of the tags
+    of the holes inside $Y$; every register keeps its party.
+\end{definition}
+
+\begin{lemma}[Exact intertwining of the renaming]
+    \label{lem:peps_frame_exchange_intertwining}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.rename_mul_encoder,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_out_form,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_in_form,
+        TNLean.PEPS.EncodedFrame.sheetSplit_sheetSwap_fst,
+        TNLean.PEPS.EncodedFrame.sheetSplit_sheetSwap_snd,
+        TNLean.PEPS.EncodedFrame.mul_submatrix_sheetSplit}
+    \leanok
+    \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,
+        lem:peps_frame_commute}
+    With $K_{\rm in}=K_{\mathcal F_1}\otimes K_{\mathcal F_2}$ and
+    $K_{\rm out}=K_{\mathcal F_1'}\otimes K_{\mathcal F_2'}$,
+    \begin{align}
+        \mathcal RK_{\rm in}=K_{\rm out}F_{Y\cap\Lambda}
+    \end{align}
+    (\texttt{05-frames.tex}, equation (exchange-intertwining), lines
+    490--498).
+\end{lemma}
+
+\begin{proof}\leanok
+    On every pair of tags the raw part of each encoding is the product of an
+    operator acting outside $Y$ and an operator acting on $Y$, which is a
+    tensor product in the coordinates $\mathcal H_Y\otimes\mathcal
+        H_{\Lambda\setminus Y}$. Swapping the sheets at $Y$ exchanges the
+    $Y$-parts, and the four factors match.
+\end{proof}
+
+\begin{definition}[Buffer correction]
+    \label{def:peps_frame_buffer_correction}
+    \lean{TNLean.PEPS.EncodedFrame.tSwap,
+        TNLean.PEPS.EncodedFrame.tSwapW,
+        TNLean.PEPS.EncodedFrame.bufferSwap,
+        TNLean.PEPS.EncodedFrame.tbSwap,
+        TNLean.PEPS.EncodedFrame.bufferCorrection,
+        TNLean.PEPS.EncodedFrame.threeSplit₂,
+        TNLean.PEPS.EncodedFrame.sheetBufferCorrection}
+    \leanok
+    \uses{lem:peps_frame_splitting}
+    With the data of the splitting lemma, the buffer correction on the two
+    copies of $U$ is
+    \begin{align}
+        D_U=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2},
+    \end{align}
+    where $F_{\mathcal B_T}$ swaps the two copies of $\mathcal B_T$
+    (\texttt{05-frames.tex}, equation (exchange-buffer-correction), lines
+    503--510). It acts as the identity on the two copies of $T\cup E$.
+\end{definition}
+
+\begin{lemma}[Net map of the corrections]
+    \label{lem:peps_frame_exchange_net_map}
+    \lean{TNLean.PEPS.EncodedFrame.tSwapW_toMatrix,
+        TNLean.PEPS.EncodedFrame.tbSwap_toMatrix,
+        Matrix.kronecker_kronecker_eq_submatrix,
+        Matrix.toMatrix_toPEquiv_prodCongr,
+        Matrix.toMatrix_toPEquiv_submatrix,
+        TNLean.PEPS.EncodedFrame.bufferCorrection_mul_tSwap,
+        TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.sheetBufferCorrection_mul_sheetSwapOp}
+    \leanok
+    \uses{def:peps_frame_buffer_correction,def:peps_frame_sheet_swap}
+    With $\mathcal V=\id_{TE}\otimes V$,
+    \begin{align}
+        D_UF_T=(\mathcal V^{\otimes2})^\dagger F_{T\mathcal B_T}
+        \mathcal V^{\otimes2}
+    \end{align}
+    (\texttt{05-frames.tex}, equation (exchange-net-map), lines 516--526).
+\end{lemma}
+
+\begin{proof}\leanok
+    In the coordinates in which the two copies of $\mathcal H_T\otimes\mathcal
+        H_E$ come first, $\mathcal V^{\otimes2}=\id\otimes V^{\otimes2}$,
+    $F_{T\mathcal B_T}=F_T\otimes F_{\mathcal B_T}$, $F_T=F_T\otimes\id$ and
+    $D_U=\id\otimes D_U$, so both sides equal $F_T\otimes D_U$.
+\end{proof}
+
+\begin{lemma}[Exchange error on the reference]
+    \label{lem:peps_frame_exchange_error}
+    \lean{EuclideanSpace.vecKron,
+        TNLean.PEPS.EncodedFrame.act_kronecker_vecKron,
+        EuclideanSpace.norm_vecKron,
+        EuclideanSpace.norm_vecKron_self_sub_le,
+        TNLean.PEPS.EncodedFrame.act_tbSwap_vecKron_tensorPurification,
+        TNLean.PEPS.EncodedFrame.norm_toLp_tensorPurification,
+        TNLean.PEPS.EncodedFrame.norm_bufferCorrection_le_one,
+        TNLean.PEPS.EncodedFrame.norm_act_bufferCorrection_mul_tSwap_sub_le}
+    \leanok
+    \uses{lem:peps_frame_exchange_net_map}
+    For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes
+        s'\rVert$,
+    \begin{align}
+        \lVert D_UF_T\,\omega^{\otimes2}-\omega^{\otimes2}\rVert\le4\delta .
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Both $\mathcal V\omega$ and $\zeta=s\otimes s'$ are unit vectors, so
+    $\lVert(\mathcal V\omega)^{\otimes2}-\zeta^{\otimes2}\rVert\le2\delta$.
+    The swap $F_{T\mathcal B_T}$ exchanges the two identical factors $s$ of
+    $\zeta^{\otimes2}$ and fixes it, so by the net map the difference is
+    $(\mathcal V^{\otimes2})^\dagger(F_{T\mathcal
+            B_T}-\id)\bigl((\mathcal V\omega)^{\otimes2}-\zeta^{\otimes2}\bigr)$,
+    of norm at most $2\cdot2\delta$ (\texttt{05-frames.tex}, lines 534--553).
+\end{proof}
+
+\begin{definition}[Exchange partition and implemented map]
+    \label{def:peps_frame_exchange_map}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeEnv,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.tSet,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.eSet,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.aSet,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_exchangeEnv,
+        TNLean.PEPS.EncodedFrame.liftTags,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp}
+    \leanok
+    \uses{def:peps_frame_exchange_data,def:peps_frame_buffer_correction}
+    For a party $P_\circ$ put
+    \begin{align}
+        Z=\{x:\text{the two old raw owners of }x\text{ are not both }P_\circ\}
+        \cup H^+(\mathcal F_1)\cup H^+(\mathcal F_2),
+    \end{align}
+    $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$ and $A=Y\cap U$
+    (\texttt{05-frames.tex}, equations (exchange-Z) and (exchange-partition),
+    lines 466--473). The implemented map is
+    $C=D_UF_A\mathcal R$, with $D_U$ and $F_A$ acting on raw registers and as
+    the identity on all tags.
+\end{definition}
+
+\begin{lemma}[Owners outside the exchange environment]
+    \label{lem:peps_frame_exchange_owners}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.owner_eq_of_notMem_exchangeEnv,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newOwner_eq_of_notMem_exchangeEnv}
+    \leanok
+    \uses{def:peps_frame_exchange_map}
+    Every register of $U$ is raw and held by $P_\circ$ on both sheets,
+    before and after the exchange (\texttt{05-frames.tex}, lines 500--501).
+\end{lemma}
+
+\begin{proof}\leanok
+    A register of $U$ is outside $Z$, so both its old raw owners are
+    $P_\circ$ and it lies in no outer hole footprint. The exchanged frames
+    take their raw owners at each site from one of the two old frames, so
+    both new raw owners are $P_\circ$ as well.
+\end{proof}
+
+\begin{theorem}[Two-sheet exchange: canonical map]
+    \label{thm:peps_frame_exchange}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.commute_correction,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_exchangeOp_le_one,
+        TNLean.PEPS.EncodedFrame.liftTags_mul_kronecker,
+        TNLean.PEPS.EncodedFrame.commute_sheetBufferCorrection}
+    \leanok
+    \uses{lem:peps_frame_exchange_intertwining,lem:peps_frame_exchange_net_map,
+        lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
+        lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_owners}
+    In the setting of the exchange partition, let $\lVert\Omega\rVert=1$. If
+    $I_\Omega(T:E)\le L^{-60}$, then for splitting data with error at most
+    $L^{-30}$ the map $C$ is a contraction,
+    $CK_{\rm in}=K_{\rm out}D_UF_T$, and
+    \begin{align}
+        \lVert C(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
+        -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
+        \le4L^{-30}.
+    \end{align}
+    The encoded reference vectors are not assumed normalized. This is the
+    content of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the implemented
+    map, with its hypotheses, when the holes of each frame are listed as those
+    outside $Y$ followed by those inside $Y$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,
+        def:peps_frame_sheet_swap,lem:peps_frame_sheet_swap_compose,
+        lem:peps_frame_exchange_net_map,lem:peps_frame_exchange_error,
+        def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
+        lem:peps_frame_encoder_contraction}
+    The corrections act on $U$, away from every hole of both sheets, so they
+    commute with $K_{\rm out}$; with $F_AF_Y=F_T$ and the intertwining of the
+    renaming, $CK_{\rm in}=K_{\rm out}D_UF_T$. The encoding $K_{\rm out}$ is a
+    contraction, and the exchange error on the reference with
+    $\delta\le L^{-30}$ gives the bound.
+\end{proof}
+
+\begin{theorem}[Two-sheet exchange: holes listed in any order]
+    \label{thm:peps_frame_exchange_any_order}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.tagReorder,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.tagReorder_mul_kronecker,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_tagReorder_le_one}
+    \leanok
+    \uses{thm:peps_frame_exchange}
+    Let $\mathcal F_1,\mathcal F_2$ be encoded frames whose holes are listed in
+    any order, each hole classified as outside or inside $Y$ as in the
+    exchange data, and let $\lVert\Omega\rVert=1$ and $I_\Omega(T:E)\le
+        L^{-60}$. There are a relabelling $G$ of the tags of both frames with
+    $G(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm in}$, the encodings
+    of the regrouped listings, and splitting data with error at most
+    $L^{-30}$, such that $CG$ is a contraction,
+    $CG(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm out}D_UF_T$, and
+    \begin{align}
+        \lVert CG(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
+        -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
+        \le4L^{-30}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
+        lem:peps_frame_exchange_error}
+    Encodings of distinct holes commute after the canonical identification of
+    tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives $G$.
+    Apply the exchange to the regrouped listings and compose with $G$, a
+    contraction.
+\end{proof}
+
+\begin{lemma}[Exchange corrections as one private contraction]
+    \label{lem:peps_frame_exchange_correction_monomial}
+    \lean{TNLean.PEPS.EncodedFrame.partSwap,
+        TNLean.PEPS.EncodedFrame.correctionMatrix,
+        TNLean.PEPS.EncodedFrame.norm_correctionMatrix_le_one,
+        TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix_of_subset,
+        TNLean.PEPS.EncodedFrame.sheetBufferCorrection_mul_sheetSwapOp_eq,
+        TNLean.PEPS.EncodedFrame.correctionWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_correction_monomial}
+    \leanok
+    \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
+        lem:peps_front_registers,def:peps_monomial_parties}
+    In the setting of the exchange partition, the corrections are
+    $D_UF_A=\id\otimes W$ in the coordinates in which the two copies of
+    $\mathcal H_T\otimes\mathcal H_E$ come first, where
+    $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on the two
+    copies of $\mathcal H_U$ and $\lVert W\rVert\le1$. The registers of $U$ are
+    held by $P_\circ$ on both sheets before and after the exchange. On two
+    registers of $P_\circ$, each grouping the raw registers of $U$ on one sheet,
+    followed by an arbitrary list of further registers, $W\otimes\id$ is the
+    operator of one allowed private contraction at $P_\circ$
+    (\texttt{05-frames.tex}, lines 503--515). These grouped registers are not
+    identified with the registers of the two frames
+    \cite{gap:polypeps_ownership_change_monomials}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $A\subseteq U$, the swap $F_A$ exchanges only the $A$-parts of the
+    two copies of $\mathcal H_U$, so $F_A=\id\otimes F'_A$, and
+    $D_U=\id\otimes(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}$. Each
+    factor of $W$ is a contraction.
+\end{proof}
+
+\begin{theorem}[Two-sheet exchange: bounded change]
+    \label{thm:peps_frame_exchange_bounded}
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
+        lem:peps_frame_exchange_owners,
+        lem:peps_frame_exchange_correction_monomial}
+    The exchange is implemented by private contractions and a register
+    renaming, using $P_\circ$ and the owners of the renamed registers and
+    tags; when these form a bounded list it is a bounded change in the sense
+    of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. This is the remaining
+    assertion of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}
+    The corrections are one private contraction at $P_\circ$ by
+    Lemma~\ref{lem:peps_frame_exchange_correction_monomial}, and the renaming
+    keeps every register at its party. Writing the renaming as a composition
+    of reorderings of tensor factors, and placing the corrections on the
+    registers of the frames, needs one register per site and per tag; see
+    \cite{gap:polypeps_ownership_change_monomials}.
+\end{proof}

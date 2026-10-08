@@ -175,7 +175,7 @@ theorem exists_eq_smul_of_mem_outputs_conj {there back : List (TeleportHop N)}
   have h₁ := isImplementationOn_round (d := d) [] hthere
   have h₂ := isImplementationOn_round [G] hback
   obtain ⟨c, u, hu, rfl⟩ := h₁.exists_mem_outputs (by simpa [circuitOp] using hv) hw
-  have hGv' : (chainPerm there * circuitOp []) *ᵥ v ∈
+  have hGv' : (chainPerm there * circuitOp ([] : List (Layer d N))) *ᵥ v ∈
       {v | IsZeroOn (pairSites back) (circuitOp [G] *ᵥ v)} := by
     simpa [circuitOp] using hGv
   obtain ⟨c', u', hu', rfl⟩ := h₂.exists_mem_outputs hGv' hu
@@ -197,8 +197,8 @@ def chainHop (a : Fin N) (j : ℕ) (hj : j + 2 < N) : TeleportHop N where
   f := a + ((j + 2 : ℕ) : Fin N)
   k₁ := a + ((j + 1 : ℕ) : Fin N)
   k₂ := a + (j : Fin N)
-  bond_k₁ := by rw [bond, add_natCast_succ]
-  bond_k₂ := by rw [bond, add_natCast_succ]
+  bond_k₁ := by rw [ringBond, add_natCast_succ]
+  bond_k₂ := by rw [ringBond, add_natCast_succ]
   c_ne_e h := by have := add_natCast_injective a (by omega) (by omega) h; omega
   c_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
   e_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
@@ -210,8 +210,8 @@ def chainHopBack (a : Fin N) (j : ℕ) (hj : j + 2 < N) : TeleportHop N where
   f := a + (j : Fin N)
   k₁ := a + (j : Fin N)
   k₂ := a + ((j + 1 : ℕ) : Fin N)
-  bond_k₁ := by rw [bond, add_natCast_succ, Set.pair_comm]
-  bond_k₂ := by rw [bond, add_natCast_succ, Set.pair_comm]
+  bond_k₁ := by rw [ringBond, add_natCast_succ, Set.pair_comm]
+  bond_k₂ := by rw [ringBond, add_natCast_succ, Set.pair_comm]
   c_ne_e h := by have := add_natCast_injective a (by omega) (by omega) h; omega
   c_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
   e_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega

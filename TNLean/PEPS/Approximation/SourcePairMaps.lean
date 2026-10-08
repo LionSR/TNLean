@@ -15,25 +15,9 @@ projections from common private source spaces back to one monomial's spaces.
 
 Source: polynomial-PEPS manuscript, September 24, 2026, Theorem 5.2,
 `04-compression.tex`, common private slot spaces, lines 253–267.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-pairmaps-word.mappair
-Downstream declaration: TNLean.PEPS.PairEffect.Word.mapPair
-
-Provenance-ID: 8769-commonsource-pairmaps-word.mappair_spec
-Downstream declaration: TNLean.PEPS.PairEffect.Word.mapPair_spec
-
-Provenance-ID: 8769-commonsource-pairmaps-word.eval_mappair_tmul
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_mapPair_tmul
-
-Provenance-ID: 8769-commonsource-pairmaps-word.eval_mappair_source
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_mapPair_source
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

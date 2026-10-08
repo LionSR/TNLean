@@ -18,19 +18,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026),
 the one-dimensional sources for unused pairs at lines 243–245.
 -/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-unusedpair-pairsourcecompletion-sourceinventory.exists_complete_extension
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.exists_complete_extension
-
-Provenance-ID: 8769-unusedpair-pairsourcecompletion-sourceinventory.exists_complete
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.exists_complete
--/
-
 noncomputable section
 
 namespace TNLean.PEPS.PairEffect.SourceInventory
