@@ -273,7 +273,7 @@ only on the parameters named below.
     \label{thm:al_lattice_positive_replacement}
     \lean{TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints}
     \leanok
-    \uses{thm:al_positive_replacement, lem:al_lattice_counts}
+    \uses{thm:al_positive_replacement, lem:al_lattice_counts, def:area_law_ground_entropy}
     Fix an integer $p\ge1$, put $\alpha=p/(p+1)$, and fix $R\ge0$, $J\ge0$ and
     $\Delta>0$. There are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$,
     such that for every $q\ge1$, every finite domain, interaction, choice of
@@ -320,19 +320,35 @@ only on the parameters named below.
 
 \begin{theorem}[Truncation near a finite set on an induced lattice domain]
     \label{thm:al_lattice_truncation}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation,
-        TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
-        TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
+    \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation}
     \leanok
-    \uses{thm:al_truncation, thm:al_crossing_budget, lem:al_lattice_counts}
+    \uses{thm:al_truncation, lem:al_lattice_counts, def:area_law_ground_entropy}
     Take $p=1$ in Theorem~\ref{thm:al_lattice_positive_replacement}, so
     $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
     $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
     $n\ge2$ and every set $S_0$ of sites with $|S_0|\le C_0n^2$, the truncation
     with $r_0=\lceil C_1(\log n)^2\rceil$ has all conclusions of
     Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$, and each truncated term
-    acts on its designated support. For $q\ge1$ there is moreover $C\ge0$,
-    depending only on $q$ and $R$, such that for every $r_0$ and every
+    acts on its designated support. This is the truncation part of
+    Proposition~4.5 of \cite{OpenAI2026AreaLaw}, which assumes $S_0$ nonempty
+    and $C_0>0$.
+\end{theorem}
+\begin{proof}\leanok
+    The gapped ground vector gives $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-P_\Omega)$. Apply Theorem~\ref{thm:al_truncation} with
+    $v_R$ sites per support, site budget $\mu_RJ$, sphere growth $2(d+1)^2$,
+    ball growth $2(d+1)^2$ and at most $\mu_R$ labels per anchor, all supplied
+    by Lemma~\ref{lem:al_lattice_counts}.
+\end{proof}
+
+\begin{theorem}[Crossing count and cut budget on an induced lattice domain]
+    \label{thm:al_lattice_crossing_budget}
+    \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
+        TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
+    \leanok
+    \uses{thm:al_crossing_budget, lem:al_lattice_counts}
+    For $q\ge1$ there is $C\ge0$, depending only on $q$ and $R$, such that for
+    every finite domain, every choice of anchors, every $S_0$, every $r_0$ and every
     $X\subseteq S_0$, with $b_X=|\partial_\Lambda X|$, every designated support
     meeting both $X$ and its complement is the ball of radius $r_0$ about its
     anchor and
@@ -341,17 +357,17 @@ only on the parameters named below.
         \log d_i\le C(r_0+1)^2\quad(i\in\mathcal C_X),\qquad
         \mathcal B_X\le C(1+b_X)(r_0+1)^6.
     \end{align}
-    Finally, for $C_1,C_2\ge0$ there is $C$, depending only on $q,R,C_1,C_2$,
-    such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and
-    $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This is
-    Proposition~4.5 of \cite{OpenAI2026AreaLaw}, which assumes $S_0$ nonempty
-    and $C_0>0$.
+    Moreover, for $C_1,C_2\ge0$ there is $C$, depending only on
+    $q,R,C_1,C_2$, such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$,
+    $D\ge1$ and $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This
+    is the crossing count and cut budget of Proposition~4.5 of
+    \cite{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    Apply Theorems~\ref{thm:al_truncation} and~\ref{thm:al_crossing_budget}
-    with $K_b=2$ and $\mu=\mu_R$, whose hypotheses are supplied by
-    Lemma~\ref{lem:al_lattice_counts}; the ordered cut edges are counted by
-    $|\partial_\Lambda X|$.
+    Apply Theorem~\ref{thm:al_crossing_budget} with $K_b=2$ and $\mu=\mu_R$,
+    whose hypotheses are supplied by Lemma~\ref{lem:al_lattice_counts}; the
+    ordered cut edges are counted by $|\partial_\Lambda X|$. The second bound
+    inserts $r_0=\lceil C_1(\log n)^2\rceil$ into the third inequality.
 \end{proof}
 
 \section{The scanner estimate from its inputs}
