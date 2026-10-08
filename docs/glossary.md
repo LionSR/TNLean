@@ -389,6 +389,33 @@ normalizations.
 
 ### PEPS predicates
 
+#### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
+
+- **Defined in:** `TNLean/PEPS/Approximation/SourcePreparation.lean`.
+- **Meaning:** every recorded pair-source vector has norm one. The list records
+  source occurrences separately, including repeated pairs of parties.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
+  `04-compression.tex`, lines 53–70 and 125–127.
+- **Sanctioned bridges:** `SourceInventory.isAllowed_prepare_iff` and
+  `Word.isNormalized_sources` identify normalization with allowed preparation
+  and derive it from an allowed composition.
+
+#### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
+
+- **Defined in:** `TNLean/PEPS/Approximation/PairSourceGrouping.lean`.
+- **Meaning:** `G.Expands S` means that, beside any spectator registers,
+  allowed local operations and register exchanges containing no pair-source
+  preparations take the preparation of `G` exactly to the preparation of `S`.
+- **Source:** the same Lemma 5.1, lines 125–127; the fresh-register argument
+  in Theorem 5.2, `eq:compression-source-gate`, lines 233–251.
+- **Sanctioned bridges:** `SourceInventory.exists_grouped` constructs a
+  normalized `G` with one source for each unordered pair occurring in `S`.
+  `Word.exists_grouped_source_preparation` gives the resulting exact
+  factorization of an arbitrary allowed composition.
+- **Caveat:** the remaining operations are local contractions and exchanges;
+  collecting them into one tensor product of maps indexed by parties is a
+  separate assertion needed later in Theorem 5.2.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.
@@ -743,6 +770,35 @@ normalizations.
   `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
 - **Caveat:** nearness includes diagonal contact, so it is not the
   four-neighbor adjacency of the square lattice.
+
+#### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean`.
+- **Meaning:** the domain consists of independent positive semidefinite
+  trace-one matrices on the physical spaces of a finite family of regions.
+  For shift `b > 0`, the objective is the norm of the reverse index-ordered
+  product of the identity-extended powers `(xⱼ + bI)^(-aⱼ/2)` applied to a
+  unit global Euclidean vector. The minimum is the infimum of this actual
+  objective image.
+- **Source:** September 24, 2026 polynomial-PEPS manuscript,
+  [`03-patches.tex`, lines 68–99](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L68-L99),
+  `eq:patch-variational-problem` and `eq:patch-elementary-norm-bounds`.
+- **Sanctioned consequences:** compactness, nonemptiness derived from the unit
+  vector, continuity, and `exists_isMinOn_regularizedPatchObjective` for
+  arbitrary real weights. For nonnegative weights,
+  `regularizedPatchObjective_bounds` applies to every feasible tuple;
+  `regularizedPatchObjective_eq_minimum` identifies every feasible minimizer
+  with the common value, and positivity permits unit normalization.
+- **Caveats:** repeated regions retain independent variables; singular
+  densities are shifted on the full regional space. No nestedness,
+  inter-factor commutation, uniqueness, or smooth optimizer is assumed.
+  Stationarity, energy, later regulator-growth and retained-rank estimates,
+  and the full adaptive patch constraint are outside this result.
+- **Verification boundary:** the minimum module passed a strict local check
+  with the accepted QICLean shifted-density dependency. The original-proof
+  ledger remains planned pending immutable native source/evidence publication;
+  full-build and exact-head CI gates remain separate. See
+  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
 
 #### `TNLean.PEPS.IsRegionParentInteraction`
 
