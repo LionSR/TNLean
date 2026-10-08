@@ -87,6 +87,7 @@ on:
       - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_normal_adjoint_boundary.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
   pull_request:
@@ -168,6 +169,7 @@ on:
       - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_normal_adjoint_boundary.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
   workflow_dispatch:
@@ -266,6 +268,7 @@ jobs:
               - 'scripts/check_peps_four_cut_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_tenkz_normal_adjoint_boundary.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
             # Everything the paper-gap reference check reads: the notes,
@@ -425,6 +428,15 @@ jobs:
           for example in BoundaryTransport GroupNIMAction FibonacciNIMRepDecomposition \
               PiMatrixRepresentation BoundaryReconstruction BoundaryMultiplicity PBCGroupProjector \
               BoundaryDecompositionComparison BoundaryActionLMatrix; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+          for example in BoundaryParentHamiltonian BlockBoundaryParentHamiltonian \
+              BoundaryUnitSupport BoundaryProjectionAverage \
+              NormalAdjointBoundary NormalBlockBoundaryParentHamiltonian \
+              BoundaryAdjointCounterexample; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -797,7 +809,9 @@ jobs:
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_index_routing.py
+        run: |
+          python3 scripts/test_tenkz_index_routing.py
+          python3 scripts/test_tenkz_normal_adjoint_boundary.py
 
       - name: Test ordered mixing contraction diagrams
         if: env.TEX_CHANGED == 'true'
