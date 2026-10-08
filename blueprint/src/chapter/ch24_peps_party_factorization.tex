@@ -83,9 +83,22 @@
 \end{definition}
 
 \begin{proof}\leanok
-    Induct on $\ell$. Its first register belongs to exactly one of the
-    two parts; associativity places it first in that part and an exchange
-    moves it past the other part when necessary. For the second assertion,
+    Induct on $\ell$. For the empty list, $U_{A,\emptyset}(z)=1\otimes z$
+    on $\mathbb C$. Let $r$ be a register with vector $x$, let
+    $y\in\mathcal H_\ell$ with $U_{A,\ell}(y)=a\otimes b$, where
+    $a\in\mathcal H_{\ell|_A}$ and $b\in\mathcal H_{\ell|_{A^c}}$.
+    For the list $(r,\ell)$ consisting of $r$ followed by $\ell$, define
+    $U_{A,(r,\ell)}$ by linearity from
+    \begin{align*}
+        U_{A,(r,\ell)}(x\otimes y)
+        =\begin{cases}
+             (x\otimes a)\otimes b & \text{if the owner of $r$ lies in $A$}, \\
+             a\otimes(x\otimes b)  & \text{otherwise}.
+         \end{cases}
+    \end{align*}
+    The first case is the inverse associativity map and the second the
+    exchange of $x$ past $a$, each applied after
+    $\operatorname{id}_r\otimes U_{A,\ell}$. For the second assertion,
     successively separate the registers of $p_1,\ldots,p_s$.
     Distinctness prevents any register from being repeated, and coverage
     makes the final remaining register list empty.
@@ -111,9 +124,8 @@
     \lean{TNLean.PEPS.PairEffect.Word.restrict_frame_false_eval_heq}
     \lean{TNLean.PEPS.PairEffect.Word.parties_castLayouts}
     \lean{TNLean.PEPS.PairEffect.Word.parties_restrict}
-    \lean{TNLean.PEPS.PairEffect.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
     \leanok
-    \uses{def:peps_party_registers}
+    \uses{def:peps_party_registers,def:peps_party_partition}
     Let $F$ be a composition containing no pair-source preparations.
     For any choice of parties $A$, retaining their registers and local
     operations gives a composition $F_A$ containing no pair-source
@@ -145,9 +157,27 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Induct on the composition. A local operation acts wholly in one part.
-    An exchange either stays within one part or changes only the prescribed
-    ordering between the parts. Tensoring with an untouched register and
+    Induct on the composition. Let a local operation $L$ at party $p$ act
+    on registers $a$, all owned by $p$, in front of a list $\ell$, and let
+    $J_{a,\ell}$ identify the memory of $a$ followed by $\ell$ with
+    $\mathcal H_a\otimes\mathcal H_\ell$. For $s\in\mathcal H_a$,
+    $x\in\mathcal H_{\ell|_A}$, and $y\in\mathcal H_{\ell|_{A^c}}$,
+    \begin{align*}
+        U_{A,(a,\ell)}J_{a,\ell}^{-1}
+        \bigl(s\otimes U_{A,\ell}^{-1}(x\otimes y)\bigr)
+        =\begin{cases}
+             J_{a,\ell|_A}^{-1}(s\otimes x)\otimes y
+              & \text{if $p\in A$},    \\
+             x\otimes J_{a,\ell|_{A^c}}^{-1}(s\otimes y)
+              & \text{if $p\notin A$}.
+         \end{cases}
+    \end{align*}
+    Thus $L$ acts on $s$ inside the first factor when $p\in A$ and inside
+    the second otherwise, while the other restriction is the identity.
+    An exchange of two registers is checked in the same way in the four
+    cases determined by which of the two registers have owners in $A$; it
+    either stays within one part or changes only the prescribed ordering
+    between the parts. Tensoring with an untouched register and
     composition preserve the identity.
 \end{proof}
 
@@ -156,8 +186,9 @@
     \lean{TNLean.PEPS.PairEffect.norm_tensorPartyMaps_le_one}
     \lean{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps}
     \lean{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps_parties}
+    \lean{TNLean.PEPS.PairEffect.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
     \leanok
-    \uses{def:peps_party_registers}
+    \uses{def:peps_party_registers,def:peps_party_partition}
     Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed composition
     containing no pair-source preparations. Let $p_1,\ldots,p_s$ be distinct
     parties containing every party of this composition. There are
@@ -170,7 +201,9 @@
     \end{align}
     The tensor product is itself a contraction. The list of parties may be
     chosen to consist exactly of the parties of $F$. Each map is obtained
-    by composing the local operations at its party.
+    by composing the local operations at its party. A composition without
+    parties has empty input and output register lists and is the identity
+    on $\mathbb C$; this is the case $s=0$.
     This is the collection of local maps in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{04-compression.tex}, lines 233--251.
@@ -190,7 +223,7 @@
     \label{thm:peps_prepared_party_maps}
     \lean{TNLean.PEPS.PairEffect.Word.exists_prepared_tensorPartyMaps}
     \leanok
-    \uses{def:peps_source_inventory,def:peps_party_registers}
+    \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
     Let $P$ be the prescribed finite set of parties of a gate, and use a
     fixed ordering of $P$. Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be
     an allowed composition on registers owned by these parties. There is a
