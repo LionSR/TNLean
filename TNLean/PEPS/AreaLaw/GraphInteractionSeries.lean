@@ -24,24 +24,6 @@ September 24, 2026, Lemma 4.1, `03-quasilocal.tex`, lines 96–113, at source co
 
 open scoped BigOperators
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchaintargetweightsum_le_exponential
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainpropagationseries
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainPropagationSeries
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainpropagationseries_summable_and_le
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainpropagationseries_eq_zero_of_edist_eq_top
-Downstream declaration:
-TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top
-Source: September 24, 2026, lem:quasilocal-lr, eq:quasilocal-lr-recursion.
-<https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex>
-Independently formalized; no upstream Lean proof text reused.
-These are actual interaction-chain series bounds; physical commutator dynamics remain separate.
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [DecidableEq V]

@@ -29,26 +29,6 @@ No upstream Lean proof text is copied or adapted.
 * <https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex#L81-L87>
 -/
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8745-tnlean.peps.arealaw.latticel1distance
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeL1Distance
-Provenance-ID: 8745-tnlean.peps.arealaw.latticel1distance_self
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeL1Distance_self
-Provenance-ID: 8745-tnlean.peps.arealaw.latticel1distance_triangle
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeL1Distance_triangle
-Provenance-ID: 8745-tnlean.peps.arealaw.latticel1distance_le_walk_length
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length
-Provenance-ID: 8745-tnlean.peps.arealaw.latticel1distance_le_of_edist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le
-Source: September 24, 2026.
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex
-Labels: eq:ball-count.
-Independently formalized; no upstream Lean proof text reused.
-These are auxiliary graph and counting results, not the complete propagation or area-law theorem.
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The ambient integer lattice distance, measured by the sum of coordinate displacements.

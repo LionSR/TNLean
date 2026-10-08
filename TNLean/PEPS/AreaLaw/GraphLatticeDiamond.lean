@@ -35,27 +35,6 @@ integer intervals and finite-set counting; no upstream Lean proof text is copied
 
 open scoped BigOperators
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8745-tnlean.peps.arealaw.latticediamond
-Downstream declaration: TNLean.PEPS.AreaLaw.latticeDiamond
-Provenance-ID: 8745-tnlean.peps.arealaw.mem_latticediamond
-Downstream declaration: TNLean.PEPS.AreaLaw.mem_latticeDiamond
-Provenance-ID: 8745-tnlean.peps.arealaw.card_latticediamond
-Downstream declaration: TNLean.PEPS.AreaLaw.card_latticeDiamond
-Provenance-ID: 8745-tnlean.peps.arealaw.card_le_diamond_of_latticel1distance_le
-Downstream declaration: TNLean.PEPS.AreaLaw.card_le_diamond_of_latticeL1Distance_le
-Provenance-ID: 8745-tnlean.peps.arealaw.card_le_diamond_of_walks
-Downstream declaration: TNLean.PEPS.AreaLaw.card_le_diamond_of_walks
-Provenance-ID: 8745-tnlean.peps.arealaw.card_le_diamond_of_edist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le
-Source: September 24, 2026, eq:ball-count.
-<https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex>
-Independently formalized; no upstream Lean proof text reused.
-This module proves graph/counting coefficients, not physical commutator dynamics.
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 private def latticeDiamondRows (R : ℕ) : Finset (ℤ × ℤ) :=

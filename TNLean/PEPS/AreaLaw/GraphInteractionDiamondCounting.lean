@@ -30,29 +30,6 @@ The proofs are independently written; no upstream Lean proof text is copied or a
 
 open scoped BigOperators
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8745-tnlean.peps.arealaw.card_support_le_diamond
-Downstream declaration: TNLean.PEPS.AreaLaw.card_support_le_diamond
-Provenance-ID: 8745-tnlean.peps.arealaw.card_supports_containing_le_diamond
-Downstream declaration: TNLean.PEPS.AreaLaw.card_supports_containing_le_diamond
-Provenance-ID: 8745-tnlean.peps.arealaw.sum_supportweights_containing_le_diamond
-Downstream declaration: TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le_diamond
-Provenance-ID: 8745-tnlean.peps.arealaw.sum_supportnorms_containing_le_diamond
-Downstream declaration: TNLean.PEPS.AreaLaw.sum_supportNorms_containing_le_diamond
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainweightsum_le_diamond_pow
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainweightsum_norm_le_diamond_pow
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow
-Source: September 24, 2026, eq:ball-count.
-<https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex>
-Source: September 24, 2026, eq:quasilocal-budget, lem:quasilocal-lr.
-<https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex>
-Independently formalized; no upstream Lean proof text reused.
-This module proves graph/counting coefficients, not physical commutator dynamics.
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [Finite V] [DecidableEq V] {G : SimpleGraph V}

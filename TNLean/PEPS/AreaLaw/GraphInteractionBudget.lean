@@ -32,33 +32,6 @@ No spectral-gap, entropy, or connectedness assumption is used.
 
 open scoped BigOperators
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8745-tnlean.peps.arealaw.card_supportfamily_le_pow_card_erase
-Downstream declaration: TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase
-Provenance-ID: 8745-tnlean.peps.arealaw.card_supportfamily_le_pow
-Downstream declaration: TNLean.PEPS.AreaLaw.card_supportFamily_le_pow
-Provenance-ID: 8745-tnlean.peps.arealaw.sum_supportweights_containing_le
-Downstream declaration: TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le
-Provenance-ID: 8745-tnlean.peps.arealaw.sum_supportweights_meeting_le_sum_siteweights
-Downstream declaration: TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights
-Provenance-ID: 8745-tnlean.peps.arealaw.sum_supportweights_meeting_le
-Downstream declaration: TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainweightsum
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainWeightSum
-Provenance-ID: 8745-tnlean.peps.arealaw.interactionchainweightsum_le_pow
-Downstream declaration: TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow
-Source: September 24, 2026.
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/01-preliminaries.tex
-Labels: eq:ball-count.
-Source: September 24, 2026.
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex
-Labels: eq:quasilocal-budget, lem:quasilocal-lr.
-Independently formalized; no upstream Lean proof text reused.
-These are auxiliary graph and counting results, not the complete propagation or area-law theorem.
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [DecidableEq V]

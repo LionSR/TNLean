@@ -34,32 +34,6 @@ The proofs below are independently written from the paper's interaction-chain ar
 no Lean declaration or proof is copied or adapted from OpenAI's implementation.
 -/
 
-/-!
-## Declaration provenance
-
-Provenance-ID: 8745-tnlean.peps.arealaw.exists_walk_length_le_sum_of_ischain
-Downstream declaration: TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain
-Provenance-ID: 8745-tnlean.peps.arealaw.exists_walk_length_le_mul_of_ischain
-Downstream declaration: TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain
-Provenance-ID: 8745-tnlean.peps.arealaw.edist_le_mul_of_ischain
-Downstream declaration: TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain
-Provenance-ID: 8745-tnlean.peps.arealaw.reachable_of_ischain
-Downstream declaration: TNLean.PEPS.AreaLaw.reachable_of_isChain
-Provenance-ID: 8745-tnlean.peps.arealaw.connectedcomponent_eq_of_ischain
-Downstream declaration: TNLean.PEPS.AreaLaw.connectedComponent_eq_of_isChain
-Provenance-ID: 8745-tnlean.peps.arealaw.not_ischain_of_connectedcomponent_ne
-Downstream declaration: TNLean.PEPS.AreaLaw.not_isChain_of_connectedComponent_ne
-Provenance-ID: 8745-tnlean.peps.arealaw.not_ischain_of_edist_eq_top
-Downstream declaration: TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top
-Provenance-ID: 8745-tnlean.peps.arealaw.not_ischain_of_mul_lt_edist
-Downstream declaration: TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist
-Source: September 24, 2026.
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/03-quasilocal.tex
-Labels: lem:quasilocal-lr.
-Independently formalized; no upstream Lean proof text reused.
-These are auxiliary graph and counting results, not the complete propagation or area-law theorem.
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} {G : SimpleGraph V} {X : Set V} {supports : List (Set V)}
