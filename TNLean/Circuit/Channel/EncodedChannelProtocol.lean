@@ -33,7 +33,7 @@ namespace FixedRegisterOperation
 /-- The actual channel of one fixed-register operation. -/
 noncomputable def map (op : FixedRegisterOperation q N) :
     Module.End ℂ (Matrix (Fin N → Fin q) (Fin N → Fin q) ℂ) :=
-  op.elim OnsiteChannel.map ChannelLayer.map
+  op.elim OnsiteChannel.map BondChannelLayer.map
 
 /-- Only a pair-channel layer contributes to intersite depth. -/
 def depth (op : FixedRegisterOperation q N) : ℕ := op.elim (fun _ => 0) (fun _ => 1)

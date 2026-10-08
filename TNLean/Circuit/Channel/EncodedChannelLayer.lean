@@ -63,7 +63,7 @@ private def pairEmbedding (hN : 2 ≤ N) (i : Fin N) : Fin 2 ↪ Fin N :=
     omega)⟩
 
 private theorem range_pairEmbedding (hN : 2 ≤ N) (i : Fin N) :
-    Set.range (pairEmbedding hN i) = bond i := range_pairSites i (i + 1)
+    Set.range (pairEmbedding hN i) = ringBond i := range_pairSites i (i + 1)
 
 /-- A native gate's supported global Kraus operators come from normalized two-site
 Kraus operators. Positivity of the local dimension makes placement injective. -/
