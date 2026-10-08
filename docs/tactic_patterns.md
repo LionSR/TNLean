@@ -86,6 +86,56 @@ abstracted — record why, so it is not re-proposed).
 - **Refactor:** All three callers use the lemma. The closure callers apply
   `closure_mono` to the same containment conclusion. No theorem statement changes.
 
+### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
+
+- **Pattern:** Rewrite the quasi-local MPS expectation of an interval
+  observable by unfolding the interval inclusion, applying the interval
+  formula, and cancelling the coordinate equivalence.
+- **Seen:** Six parent-Hamiltonian modules repeated the same three-step
+  rewrite.
+- **Abstraction:** `MPSTensor.quasiLocalExpectation_quasiLocalIntervalObservable`
+  in `LocalObservableQuasiLocalState`, next to the interval formula it uses.
+- **Refactor:** All known callers use the lemma.
+
+### A positive binary measurement from an orthogonal projector — promoted (2026-10-03)
+
+- **Pattern:** Derive Hermiticity, positivity, idempotence, orthogonality and
+  completeness for a projector and its complement.
+- **Occurrences:** The return measurement in `PEPS/RegularChargePair.lean`,
+  the physical charge measurement in `PEPS/RegularTwoSitePhysicalChargeMeasurement.lean`,
+  and the physical transport in `Algebra/ScaledProjectionTransport.lean`.
+- **Abstraction:** `Matrix.binaryProjectionFamily_complete` in
+  `Algebra/BinaryProjectionFamily.lean`; all three calculations use this lemma.
+- **Related reuse:** `Matrix.scaledProjectionTransport_properties` replaces the
+  private transported-projection calculation in the two-site charge measurements.
+  It proves positivity and the coefficient-map intertwiner from the explicit
+  scaled Gram identity, support identity and commuting virtual projector.
+
+### Absorption of the regional regular projector — promoted (2026-10-03)
+
+- **Pattern:** Expand the product physical map, apply local absorption of the
+  regular averaging projector, and reassemble the product to obtain AP=A.
+- **Abstraction:** `regionPhysicalProductMatrix_mul_regularLocalProjector` in
+  `PEPS/RegularPhysicalUnitaryTransport.lean` states this regional identity once.
+- **Reuse:** The physical charge-pair image proof and original-spin return
+  measurement use it directly. The two-site local data calculation already uses
+  `regularSiteMap_projector_coefficients`, the same underlying local identity.
+  The return measurement also uses `Matrix.exists_binaryProjectionFamily_transport`
+  for the complete positive measurement on the full physical space.
+
+### Column selection identified with a fixed-input contraction — promoted (2026-10-07)
+
+- **Pattern:** Select a nonzero column with
+  `exists_column_ne_zero_of_traceNorm_sub_pure_le`, rewrite it as the
+  contraction of the network with the input fixed, and repackage.
+- **Seen:** Two sites in `TNLean/PEPS/Approximation/VectorColumn.lean` and two
+  in `TNLean/PEPS/Approximation/SquareGridColumn.lean`.
+- **Abstraction:** `exists_eq_column_ne_zero_of_traceNorm_sub_pure_le` in
+  `ColumnSelection`, taking a family `ψ z` identified with the columns `σ|z⟩`.
+- **Refactor:** Both square-grid sites use it. The two `VectorColumn` sites
+  already state their conclusion for the column itself and take the base lemma
+  directly, with no rewrite step.
+
 ### Periodic norm as transfer trace — promoted (2026-10-06)
 
 - **Pattern:** Apply the physical expectation trace identity to the identity
@@ -991,7 +1041,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
+  `trace_rectKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
   and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
 - **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
@@ -5615,6 +5665,42 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The two occurrences do not justify another exported quotient
   wrapper; the underlying estimates stay with the actual periodic observables.
 
+### Bilinear identities for two pair sources — candidate (2026-10-07)
+
+- **Pattern:** Reduce an identity involving two arbitrary bipartite source
+  vectors to pure tensors by two tensor-product inductions. Linearity handles
+  the additive cases; tensor associators and exchanges then evaluate explicitly.
+- **Seen:** `eval_combineSources` in
+  `TNLean/PEPS/Approximation/PartyLayout.lean` and
+  `eval_expandCombinedPair` in
+  `TNLean/PEPS/Approximation/PairSourceExpansion.lean` (two occurrences).
+- **Abstraction:** At the next occurrence, consider a bilinear extensionality
+  lemma for maps on two tensor products. The existing `clm_ext_tmul` and
+  `clm_ext_tmul₃` already handle identities between continuous linear maps
+  with one tensor-product input; use those whenever the map has that form.
+- **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
+  complete source blocks reuses the preparation tensor identity and the
+  register-block exchange theorem. Neither requires another double induction.
+
+### Tensor maps under equal filtered layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify equal owner-filtered memories, transport their tensor
+  maps, and compare the resulting operators or their values on vectors.
+- **Seen:** `PartyTensorMaps.mapL_heq` and
+  `PartyFactorization.mapL_apply_heq` under `PEPS/Approximation` (two local
+  helpers across two files).
+- **Abstraction:** Canonical conjugation already uses the shared
+  `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
+  `Layout.eq_conj_memCongr_of_heq`. The remaining two helpers distinguish
+  equality of tensor maps from equality after evaluation. A further occurrence
+  should use one tensor-map equality lemma followed by evaluation.
+- **Notes:** Associator and exchange identities use the existing
+  `clm_ext_tmul₃`; no additional tactic is needed.
+- **Scan:** The focused approximation scan also found five instances of
+  eliminating the two layout equalities by `cases` and closing by reflexivity,
+  all in `WordRestriction.lean`. These express the defining equations of the
+  equality transport; there is no repeated proof argument across files.
+
 ### Complementary-slice reconstruction — candidate (2026-10-07)
 
 - **Pattern:** Choose one inside vector for each outside configuration and
@@ -5782,3 +5868,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   A further consumer should first seek a shared contact-membership lemma.
 - **Notes:** The two branches use the existing intersection classification;
   neither repeats a coordinate calculation.
+
+### Ordered regularized regional filters — candidate (2026-10-07)
+
+- **Pattern:** Use a coordinate isometry to transport a regional matrix action to
+  a Kronecker product with the identity, then apply the existing Euclidean bound.
+  Obtain the lower bound by cancelling the filter with its positive power.
+- **Seen:** The lifted regional bound and local inverse-cancellation argument in
+  `PEPS/AreaLaw/RegularizedPatchMinimum`; scalar shifted-density power bounds are
+  supplied by `QICLean.Analysis.ShiftedDensityPowers`.
+- **Abstraction:** The native lift estimate is factored once. Product bounds use
+  a private list induction; there is no new optimizer or contraction-chain type.
+- **Notes:** These are distinct uses of existing isometry and CFC results, below
+  the threshold for any additional tactic or general framework.

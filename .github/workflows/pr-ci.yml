@@ -86,6 +86,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
@@ -96,6 +97,8 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -184,6 +187,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
@@ -194,6 +198,8 @@ on:
       - 'scripts/test_tenkz_peps_three_block.py'
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
+      - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -208,7 +214,9 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Let main finish and save its build cache even during frequent merges.
+  # Keep only the newest pending main run; PR updates still cancel older runs.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 # Build-cache policy: the cache is saved only from main and restored
 # everywhere. lean-action's built-in GitHub cache is disabled because it
@@ -323,6 +331,7 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
@@ -333,6 +342,8 @@ jobs:
               - 'scripts/test_tenkz_peps_three_block.py'
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
+              - 'scripts/test_tenkz_quantum_double_local_terms.py'
+              - 'scripts/test_tenkz_quantum_double_source_construction.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -575,61 +586,28 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Test capped dyadic partition and audit axioms strictly
-        timeout-minutes: 3
+      - name: Test capped dyadic partition strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CappedDyadicPartition.lean
+
+      - name: Test template mixed-square counts strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateMixedSquares.lean
+
+      - name: Test concrete hole encoder and standard axioms strictly
         run: |
-          set -eo pipefail
-          lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
-            -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
-            -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            TNLeanTest/CappedDyadicPartition.lean
-          lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
-            -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
-            -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            docs/provenance/evidence/8754-capped-dyadic-axioms.lean \
-            2>&1 | tee "$RUNNER_TEMP/capped-dyadic-axioms.log"
-          python3 -m pip install --disable-pip-version-check jsonschema==4.26.0
-          python3 - "$RUNNER_TEMP/capped-dyadic-axioms.log" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-          from scripts.check_openai_provenance import check_axiom_output
-
-          output = Path(sys.argv[1]).read_text()
-          ledger = Path("docs/provenance/openai-math.d/8754-capped-dyadic-partition.json")
-          entries = json.loads(ledger.read_text())["entries"]
-          for entry in entries:
-              check_axiom_output(output, entry["downstream"]["declaration"])
-          print(f"Checked standard logical dependencies for all {len(entries)} exports.")
-          PY
-
-      - name: Test template mixed-square counts and audit axioms strictly
-        timeout-minutes: 3
-        run: |
-          set -eo pipefail
-          lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
-            -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
-            -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            TNLeanTest/TemplateMixedSquares.lean
-          lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false \
-            -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 \
-            -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            docs/provenance/evidence/8754-template-mixed-axioms.lean \
-            2>&1 | tee "$RUNNER_TEMP/template-mixed-axioms.log"
-          python3 -m pip install --disable-pip-version-check jsonschema==4.26.0
-          python3 - "$RUNNER_TEMP/template-mixed-axioms.log" <<'PY'
-          import json
-          import sys
-          from pathlib import Path
-          from scripts.check_openai_provenance import check_axiom_output
-
-          output = Path(sys.argv[1]).read_text()
-          ledger = Path("docs/provenance/openai-math.d/8754-template-mixed-squares.json")
-          entries = json.loads(ledger.read_text())["entries"]
-          for entry in entries:
-              check_axiom_output(output, entry["downstream"]["declaration"])
-          print(f"Checked standard logical dependencies for all {len(entries)} exports.")
-          PY
+          for file in TNLeanTest/HoleEncoder.lean TNLeanTest/HoleEncoderAxioms.lean TNLeanTest/RegionOperatorEmbedding.lean TNLeanTest/RegionOperatorEmbeddingAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test exact square-grid PEPS contraction and audit axioms
         timeout-minutes: 2
@@ -673,12 +651,30 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TwoFamilyEntropy.lean
 
+      - name: Test actual regularized patch minimum regressions strictly
+        run: |
+          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Check QICLean conjugator import compatibility strictly
         run: >
           LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
           -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/QICConjugatorCompatibility.lean
+
+      - name: Test uniform angular reset width and standard axioms strictly
+        run: |
+          for file in TNLeanTest/PEPS/AngularResetWidth.lean TNLeanTest/PEPS/AngularResetWidthAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test actual rectangular local-window regression strictly
         run: >
@@ -817,6 +813,24 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test PEPS dual flux paths and quantum-double local terms
+        timeout-minutes: 3
+        run: |
+          set -e
+          # TorusDualFluxParent imports the preceding test's fixtures. Keep
+          # their objects in a fresh overlay outside the production cache.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
+          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Test physical-port channel compilation
         timeout-minutes: 5
         run: |
@@ -834,7 +848,8 @@ jobs:
         run: |
           set -e
           for example in BoundaryTransport GroupNIMAction FibonacciNIMRepDecomposition \
-              PiMatrixRepresentation BoundaryReconstruction BoundaryMultiplicity PBCGroupProjector; do
+              FibonacciSymmetricFamilyDecomposition PiMatrixRepresentation \
+              BoundaryReconstruction BoundaryMultiplicity PBCGroupProjector; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -848,6 +863,18 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
+
+      - name: Test area-law graph interaction foundations
+        timeout-minutes: 2
+        run: |
+          set -e
+          for example in AreaLawGraphFoundations AreaLawLatticeDiamond \
+              AreaLawInteractionDiamond AreaLawInteractionTarget AreaLawInteractionSeries; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -1061,8 +1088,10 @@ jobs:
         run: python3 scripts/test_tenkz_inline_web.py
 
       - name: Diagnose full TeX system environment
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
+          cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
       - name: Check layout with TeX system dependencies
         run: |
@@ -1153,8 +1182,10 @@ jobs:
 
       - name: Install blueprint system dependencies
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
+          cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
 
       # Also installed for paper-gap-only changes: the reference check
@@ -1186,6 +1217,10 @@ jobs:
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         run: texra-blueprint paper-gaps check
 
+      - name: Test blueprint PDF string-pool capacity
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_blueprint_pdf_capacity.py
+
       # Compile-and-cache smoke test of the tenkz picture pipeline
       # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark
       # units standalone and checks ink, caching, and per-figure
@@ -1193,6 +1228,12 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test quantum-double local-term diagrams and nonabelian formulas
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/test_tenkz_quantum_double_local_terms.py
+          python3 scripts/test_tenkz_quantum_double_source_construction.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'

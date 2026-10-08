@@ -133,7 +133,7 @@ theorem MeasurementRound.adaptive (R : MeasurementRound d N) :
   have hCircuit :
       IsAdaptiveChannelProtocol R.depth (singleKrausMap (circuitOp R.circuit)) := by
     have h := (IsLocalChannelProtocol.onsite (OnsiteChannel.id d (Fin N))).channelCircuitMap_comp
-      (R.circuit.map Layer.toChannelLayer)
+      (R.circuit.map BondLayer.toChannelLayer)
     simpa only [List.length_map, zero_add, OnsiteChannel.id_map, LinearMap.comp_id,
       channelCircuitMap_map_toChannelLayer, MeasurementRound.depth] using h.adaptive
   have hmap : Φ.feedforwardMap Ψ ∘ₗ singleKrausMap (circuitOp R.circuit) = R.map := by

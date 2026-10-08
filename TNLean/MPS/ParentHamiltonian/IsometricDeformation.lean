@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LeftPolar
+import TNLean.MPS.ParentHamiltonian.NormalBlockInjectiveBlocking
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 
 /-!
@@ -196,7 +197,7 @@ theorem exists_uniform_isometricDeformation_interaction_gap
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 
 omit [∀ j, NeZero (dim j)] in
-/-- Pairwise inequivalent normal blocks admit a finite initial blocking
+/-- Pairwise inequivalent normal blocks have a finite initial blocking
 after which their constructed isometric deformation has a uniform positive
 parent-Hamiltonian gap. The blocking length satisfies
 \(L+1\leq3\max(\sum_jD_j,1)^5\).
@@ -215,9 +216,8 @@ theorem exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor
               (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N v‖ := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
-    exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor
-      A (lt_of_lt_of_le zero_lt_one (le_max_right _ _)) (le_max_left _ _) hNormal hDistinct
+    exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct
   exact ⟨L, hL, hBound, exists_uniform_isometricDeformation_parent_gap
-    (fun j => blockTensor (A j) L) (wordTupleSpanTop_blockTensor_one A hSpan)⟩
+    (fun j => blockTensor (A j) L) hSpan⟩
 
 end MPSTensor
