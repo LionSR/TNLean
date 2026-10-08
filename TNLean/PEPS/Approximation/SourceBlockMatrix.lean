@@ -6,52 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.SourceSlotBasis
 
-/-!
-# Joint contraction of free source inputs
-
-The columns associated with all source assignments form one matrix of the
-remaining allowed word. Its operator norm is at most one, independently of the
-number and dimensions of the sources. This bound applies to arbitrary
-superpositions of source and physical inputs.
-
-Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
-`04-compression.tex`, lines 383–468, in particular the free-input contractions
-used to separate the corrected source coefficients.
-
-<<<<<<< HEAD
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-free-input-matrix-word.freesourcematrix
-Downstream declaration: TNLean.PEPS.PairEffect.Word.freeSourceMatrix
-
-Provenance-ID: 8769-free-input-matrix-word.freesourcematrix_apply
-Downstream declaration: TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply
-
-Provenance-ID: 8769-free-input-matrix-word.norm_freesourcematrix_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one
-
-Provenance-ID: 8769-free-input-matrix-word.freesourcematrix_conjtranspose_mul_apply
-Downstream declaration: TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply
-
-Provenance-ID: 8769-free-input-matrix-word.norm_freesourcematrix_conjtranspose_mul_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one
-
-Provenance-ID: 8769-free-input-matrix-word.trace_preparedmatrix_mul_conjtranspose_eq
-Downstream declaration: TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq
-
-Provenance-ID: 8769-free-input-matrix-word.trace_prepareddensitycoefficient_eq_freesourcematrix
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix
-=======
-Independently formalized from the manuscript; no upstream Lean proof text is
-reused.
->>>>>>> 2249b41b02fb067a36b5aaab231ad5eff12159b9
--/
-
 noncomputable section
 
 open scoped ComplexConjugate TensorProduct Matrix Matrix.Norms.L2Operator
