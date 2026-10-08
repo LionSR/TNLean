@@ -42,7 +42,9 @@ starting word `C | A | B`; the two agree only off the curves `x = 0` and `x = 1`
 (`RepaintingBaseline.completedGuide_eq_mainGuide_start`), and no lattice site lies on those curves
 (`IsCellCenter.notMem_edgeInterface` in `TNLean.PEPS.Approximation.DyadicLevelSchedule`). The
 estimates are not claimed for every labelling that agrees with the schedule's off these curves:
-the set where two labellings differ depends on their values on a curve.
+the set where two labellings differ depends on their values on a curve. They are proved, in
+`TNLean.PEPS.Approximation.DyadicGuideReadings`, for the source's own sampled guides, which read
+the schedule's labellings after one small displacement.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 

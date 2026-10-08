@@ -392,6 +392,42 @@ $A$, $B$, $C$ below are permitted to coincide.
     and~\ref{lem:peps_dyadic_active_labels}.
 \end{proof}
 
+\begin{lemma}[Separation for the sampled guides]
+    \label{lem:peps_dyadic_sampled_guides}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading, TNLean.PEPS.Approximation.isDisplacedReading_const, TNLean.PEPS.Approximation.tendsto_add_smul_nhdsGT, TNLean.PEPS.Approximation.IsDisplacedReading.eq_of_eventuallyEq, TNLean.PEPS.Approximation.IsDisplacedReading.ne_subset_closure, TNLean.PEPS.Approximation.IsDisplacedReading.closure_ne_subset, TNLean.PEPS.Approximation.IsDisplacedReading.closure_ne_const_subset, TNLean.PEPS.Approximation.IsDisplacedReading.closure_noncommon_subset, TNLean.PEPS.Approximation.IsDisplacedReading.closure_noncommon_inter_subset, TNLean.PEPS.Approximation.IsDisplacedReading.clearance, TNLean.PEPS.Approximation.IsDisplacedReading.dist_le, TNLean.PEPS.Approximation.blockRepainting_central_of_reading, TNLean.PEPS.Approximation.blockRepainting_auxStep_of_reading, TNLean.PEPS.Approximation.blockRepainting_mainStep_of_reading, TNLean.PEPS.Approximation.blockRepainting_exchange_of_reading}
+    \leanok
+    \uses{thm:peps_dyadic_angular_separation}
+    Say that a labelling $f'$ of the plane reads a labelling $f$ after the
+    displacement $v$ if $f'(p)=f(p+\varepsilon v)$ for every point $p$ and all
+    sufficiently small $\varepsilon>0$. If $f_1'$ and $f_2'$ read $f_1$ and $f_2$
+    after the same $v$, then the set where $f_1'\ne f_2'$ lies in the closure of the
+    set where $f_1\ne f_2$; the set where $f'\ne c$ lies in the closure of the set
+    where $f\ne c$; and the positions, inside an open set or anywhere, that are not
+    common $C$ on $f_1'$ and $f_2'$ lie in the closure of those on $f_1$ and $f_2$.
+    Hence the estimates of Theorem~\ref{thm:peps_dyadic_angular_separation} hold, with
+    the same constant $a_0=1/5000$, for any labellings that read the guides of the
+    schedule after one displacement $v$, whatever $v$ is.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $f_1=f_2$ near $p$, then $f_1(p+\varepsilon v)=f_2(p+\varepsilon v)$ for all
+    small $\varepsilon>0$, so $f_1'(p)=f_2'(p)$. Off the closure of the set where
+    $f_1\ne f_2$ the two labellings agree near every point. A constant labelling reads
+    itself. All estimates of Theorem~\ref{thm:peps_dyadic_angular_separation} are
+    stated for closures, which can only shrink.
+\end{proof}
+
+The source specifies each guide by its open polygonal chambers and reads it at a
+point after one small generic displacement into an incident chamber
+(\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 69--80). The guides of the
+schedule take, on an interface curve $x=t$, the label for $x\ge t$, while a fixed
+displacement crosses to $x<t$ along two edges of a square. They agree with the open
+chambers off finitely many segments, and a displacement parallel to none of them
+leaves those segments at once, so the source's guides read the guides of the
+schedule. Lemma~\ref{lem:peps_dyadic_sampled_guides} therefore gives Lemma~7.2 for
+the source's guides on all four edges; the genericity of the displacement is the
+source's choice and is not formalized.
+
 \begin{lemma}[Logarithmic floor]
     \label{lem:peps_dyadic_floor}
     \lean{TNLean.PEPS.Approximation.holeRadius, TNLean.PEPS.Approximation.holeRadius_of_le, TNLean.PEPS.Approximation.homogenize, TNLean.PEPS.Approximation.edgeTreated, TNLean.PEPS.Approximation.cornerTreated, TNLean.PEPS.Approximation.homogenize_changed_subset, TNLean.PEPS.Approximation.homogenize_ne_subset, TNLean.PEPS.Approximation.homogenize_noncommon_subset, TNLean.PEPS.Approximation.floor_of_subset, TNLean.PEPS.Approximation.le_edgeMarkDist_of_notMem, TNLean.PEPS.Approximation.le_cornerMarkDist_of_notMem, TNLean.PEPS.Approximation.BandOperation.floor_bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.floor_central, TNLean.PEPS.Approximation.RepaintingBaseline.floor_exchange}

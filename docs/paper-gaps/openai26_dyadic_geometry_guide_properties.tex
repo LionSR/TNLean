@@ -9,7 +9,7 @@
 
 \title{Guide Properties in the Angular Separation of Dyadic Repaintings}
 \author{}
-\date{2026-10-07; resolved 2026-10-08}
+\date{2026-10-07; resolved 2026-10-08; interface labels 2026-10-08}
 
 \begin{document}
 \maketitle
@@ -24,16 +24,20 @@ repaints an aligned square $S=(nr,ns)+[0,n]^2$ of the dyadic hierarchy from its
 old label $A$ to its final label $B$. Along each edge it uses the normal ratio
 $x=d/w(s)$ with $w(s)=10^{-3}\min(s,n-s)$, and it runs a central birth, seven
 elementary births and deaths per edge, and one lens exchange per edge. Lemma~7.2
-asserts that there is one constant $a_0>0$ such that, for every one of these
-operations and for every point $y$ of the closure of its changed region,
+asserts that there is one constant $a_0>0$ such that, for every birth or death
+among these operations and for every point $y$ of the closure of its changed
+region,
 \begin{align}
-    \operatorname{dist}(y,\{f\ne P_\circ\})
+    \operatorname{dist}\bigl(y,\overline{\{f\ne P_\circ\}}\bigr)
         &\ge a_0\min\{n,d_{\mathcal V}(y)\},
     \label{eq:openai26_dyadic_geometry_guide_properties_clearance}
 \end{align}
 where $f$ is the surrounding guide of the schedule, $P_\circ$ the surrounding
-label, and $d_{\mathcal V}$ the distance from the marked points; for the exchange
-the obstructing set is the boundary of the lens $Y=\{-7<x<-7/2\}$.
+label, and $d_{\mathcal V}$ the distance from the marked points. For a lens
+exchange the point $y$ ranges instead over the closure of the positions that are
+not common $C$ on the two guides before the exchange, and the obstructing set is
+the boundary of the lens $Y=\{-7<x<-7/2\}$:
+$\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$.
 
 \section{The earlier formal statement}
 
@@ -133,5 +137,36 @@ labels at every lattice site are unchanged by both replacements
 (\leanid{TNLean.PEPS.Approximation.blockRepainting_start_site},
 \leanid{TNLean.PEPS.Approximation.blockRepainting_final_site}). This is the
 source's sampling convention, not a hypothesis of the formal statements.
+
+\section{Labels on the interface curves}
+
+On an interface curve $x=t$ of a band the formal words take the label for
+$x\ge t$. The source reads a guide on a boundary after one small generic
+displacement $v$ into an incident chamber. The normal coordinate $d$ points into
+the square, and the curves have slopes at most $8/1000$ in the edge coordinates.
+So a displacement whose two components are not small relative to each other
+crosses to the side $x>t$ along two edges of a square and to the side $x<t$ along
+the other two, and the formal labellings and the source's sampled guides differ on
+the interface curves of two edges.
+
+The estimates do not depend on this difference. Say that a labelling $f'$ reads
+$f$ after the displacement $v$ if $f'(p)=f(p+\varepsilon v)$ for every point $p$ and
+all sufficiently small $\varepsilon>0$. The formal labellings agree with the
+source's open chambers off finitely many segments, and a ray $p+\varepsilon v$ with
+$v$ parallel to none of them leaves those segments at once; so each sampled guide
+of the source reads the corresponding formal labelling after $v$. If $f_1'$,
+$f_2'$ read $f_1$, $f_2$ after the same $v$ and $f_1=f_2$ near $p$, then
+$f_1'(p)=f_2'(p)$. Hence the set where $f_1'\ne f_2'$ lies in the closure of the
+set where $f_1\ne f_2$, the set where $f'\ne c$ lies in the closure of the set
+where $f\ne c$, and the same holds for the positions that are not common $C$.
+Every estimate of Lemma~7.2 is stated for these closures, so each passes from the
+formal labellings to the sampled guides, for every displacement $v$
+(\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.closure_ne_subset},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange_of_reading}).
+That a generic $v$ is parallel to none of the segments is the source's choice of
+$v$ and is not formalized.
 
 \end{document}
