@@ -36,7 +36,10 @@ import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
 import TNLean.PEPS.AreaLaw.Geometry.FineCellPartition
 import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
+import TNLean.PEPS.AreaLaw.Geometry.InitialLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
+import TNLean.PEPS.AreaLaw.Geometry.InitialRegionBoundaries
+import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
