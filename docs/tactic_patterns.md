@@ -5474,3 +5474,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Kernel and norm-gap transport use the existing affine-kernel
   theorem and QICLean's positive-order gap theorem. No copy of the spectral
   argument or new proof tactic is introduced.
+
+### Norm gaps under isometric conjugacy — promoted (2026-10-06)
+
+- **Pattern:** Derive kernel membership from the conjugacy identity, transport
+  orthogonality by inner-product preservation, and then transport the norm bound.
+- **Abstraction:** `LinearIsometryEquiv.norm_gap_iff_of_conj` and its kernel and
+  intertwining companions in `IsometricConjugationGap.lean`, without
+  finite-dimensionality or sign assumptions.
+- **Consumers:** The joint normalized core comparison now uses the public
+  theorem. The endpoint-swap development uses the same API. The older
+  single-block `MixedEndpointCoreHamiltonianSpectators` still has its private
+  proof; migrating that independent consumer awaits its own focused validation.
+- **Notes:** The dependent projection identification is separately shared as
+  `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; both joint edge consumers
+  use that theorem instead of repeating the orthogonal-projection proof.

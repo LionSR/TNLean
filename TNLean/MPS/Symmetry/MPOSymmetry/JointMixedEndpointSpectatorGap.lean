@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence
+import TNLean.MPS.Overlap.Basic
 
 /-!
 # Dependent spectators for the joint mixed endpoint boundary coordinates
