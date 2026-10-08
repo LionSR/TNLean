@@ -1,10 +1,10 @@
 \subsection{Capped contained dyadic squares}
 
 % Auxiliary finite geometry from scanner:templates, not the complete entropy lemma.
-% Kernel verification is pending; no new leanok tags are asserted yet.
 \begin{definition}[Lattice dyadic squares]
     \label{def:area_law_lattice_dyadic_square}
     \lean{TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell}
+    \leanok
     For $k\in\N$ and $z\in\Z^2$, let $C_{k,z}$ be the integer sites of
     $\lbrack 2^kz_1,2^k(z_1+1))\times\lbrack 2^kz_2,2^k(z_2+1))$.
 \end{definition}
@@ -18,6 +18,7 @@
         TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_zero,
         TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_of_common_mem,
         TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_parent}
+    \leanok
     \uses{def:area_law_lattice_dyadic_square}
     Membership is given by coordinatewise integer division:
     $x\in C_{k,z}$ if and only if $\lfloor x/2^k\rfloor=z$.
@@ -25,7 +26,7 @@
     Two intersecting squares are nested in scale order. In particular,
     $C_{k,z}\subseteq C_{k+1,\lfloor z/2\rfloor}$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement}
     Refine a single index to unit scale. Integer ancestry agrees with the
     floor index at origin zero. Composing ancestry maps shows that all sites
@@ -35,6 +36,7 @@
 \begin{definition}[Capped maximal contained squares]
     \label{def:area_law_capped_dyadic_partition}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition}
+    \leanok
     \uses{def:area_law_lattice_dyadic_square}
     For a finite set $S\subseteq\Z^2$ and $K\in\N$, let $\mathcal P_K(S)$
     consist of the pairs $(k,z)$ with $k\le K$, $C_{k,z}\subseteq S$, and
@@ -54,6 +56,7 @@
         TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_at_cap_le,
         TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_empty,
         TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_zero}
+    \leanok
     \uses{def:area_law_capped_dyadic_partition}
     The squares selected by $\mathcal P_K(S)$ partition $S$. In particular,
     \begin{align}
@@ -64,7 +67,7 @@
     The empty set has an empty partition, and
     $\mathcal P_0(S)=\{(0,x):x\in S\}$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition}
     For each $x\in S$, the unit square is contained. Choose the largest
     contained scale at most $K$. If its parent were contained below the cap,
@@ -79,6 +82,7 @@
 \begin{definition}[Mixed dyadic squares]
     \label{def:area_law_mixed_dyadic_square}
     \lean{TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices}
+    \leanok
     \uses{def:area_law_lattice_dyadic_square}
     Let $M_k(S)$ be the indices $z$ for which $C_{k,z}$ meets both $S$
     and its complement.
@@ -90,6 +94,7 @@
         TNLean.PEPS.AreaLaw.Geometry.parent_mem_mixedDyadicIndices,
         TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_subset_mixed_refinement,
         TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_below_cap_le}
+    \leanok
     \uses{def:area_law_mixed_dyadic_square,def:area_law_capped_dyadic_partition}
     If $(k,z)\in\mathcal P_K(S)$ and $k<K$, then
     $\lfloor z/2\rfloor\in M_{k+1}(S)$. Consequently,
@@ -97,7 +102,7 @@
         \bigl|\{(l,z)\in\mathcal P_K(S):l=k\}\bigr|\le4|M_{k+1}(S)|.
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition,
         thm:area_law_dyadic_refinement}
     A selected square is nonempty and contained in $S$, so its parent has

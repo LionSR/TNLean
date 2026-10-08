@@ -11,95 +11,88 @@ Claims on #8754, #8758 and #8837 were inspected; scope was announced in
 #8754 comment 6044978027 and #8837 comment 6044979072. The separately owned
 #8798/#8826/#8832/#8840 proofs are unchanged.
 
-## Current evidence
+## Successful Lean evidence
 
-The production module compiled successfully at
-`b6f1f462625c3d83074b1c3c1299d6cc30c3b4b2` in both normal CI and the reviewer's
-compatible warmed worktree. CI run
-[37682366487, job 113017568227](https://github.com/LionSR/TNLean/actions/runs/37682366487/job/113017568227)
-completed the 1,150-job production target and the 12,511-job full library build.
-The subsequent strict regression step failed; the strict imported dependency
-command did not run in that job. Therefore overall verification remains
-pending, as do the new provenance records. The separate blueprint entries
-have no `leanok`.
+[CI run 37712363292, build job 113102108581](https://github.com/LionSR/TNLean/actions/runs/37712363292/job/113102108581)
+passed at head `f4593c1e97adacc224a3407c745fb7582d0e6be0`:
 
-The canonical reviewer check and its actual command, revision, timing and
-exit-code logs are in
+- The production target compiled in 1.9 seconds, completing 1,150 jobs.
+- The full library build completed 12,511 jobs.
+- Strict partition regressions and the imported dependency audit both passed
+  with the package options, Mathlib standard linters and warnings as errors.
+- All twenty-three actual exported dependency reports passed the unchanged
+  exact-name policy. Each contained only `propext`, `Classical.choice` and
+  `Quot.sound`.
+- Changed-module timing, the text style linter, compiled blueprint declaration
+  checks and paper-gap declaration checks passed. The separate
+  [timing job 113107041605](https://github.com/LionSR/TNLean/actions/runs/37712363292/job/113107041605)
+  also passed.
+
+CI checked out merge `d180dfbe10e08812adfc10562ca00ef192a517e4`. Its complete
+Git tree and the head's tree are both
+`4047845de5568fc90803c272ae0c9032932b54a2`, verified locally after fetching
+that immutable merge. The production theorem file, regressions and audit
+script have not changed since this successful run.
+
+The two ledger evidence files preserve complete relevant CI step excerpts:
+`8754-capped-dyadic-build-f4593c1e.log` and
+`8754-capped-dyadic-strict-f4593c1e.log`. Only GitHub's timestamp prefixes and
+ANSI color escapes were removed; command text, output order, multiline
+dependency reports and the policy's success message were retained. Exit
+codes are established by the successful step conclusions and the step's
+`set -eo pipefail`. SHA-256 digests bind the recorded excerpts to all
+twenty-three original-proof records. The existing dependency validator was
+also rerun locally on the preserved audit excerpt.
+
+These records now have `ported` status, declared names and passed verification
+at the immutable head above. Completion tags cover only the separate finite
+geometry blueprint entries. They do not mark the manuscript's full entropy
+lemma complete.
+
+## Blueprint correction and rendering
+
+[Blueprint job 113102108505](https://github.com/LionSR/TNLean/actions/runs/37712363292/job/113102108505)
+installed its dependencies successfully, then failed at ChkTeX warning 44
+on the two literal opening brackets of the half-open rectangle. Web rendering
+and subsequent checks were skipped. The correction uses the existing
+`\lbrack` interval notation found elsewhere in the blueprint. It preserves
+both half-open intervals and changes no mathematical or Lean statement.
+No check or warning is suppressed. Local ChkTeX 1.7.9 with the global defaults
+and repository configuration reproduces warning 44 on the original file and
+passes the corrected file. The corrected file also passes pinned latexindent
+3.24.7 and blueprint/source synchronization, including reverse declaration
+coverage. Complete rendering at the corrected head remains pending until its
+new CI run finishes.
+
+## Earlier checks and local limitations
+
+Production compilation already passed at
+`b6f1f462625c3d83074b1c3c1299d6cc30c3b4b2` in both normal CI and a compatible
+warmed review. The latter's actual successful log is preserved verbatim in
+`8754-capped-dyadic-build-b6f1f462.log`, from
 [#8863 comment 6046537485](https://github.com/LionSR/TNLean/pull/8863#issuecomment-6046537485).
-Its successful production log is preserved verbatim in
-`8754-capped-dyadic-build-b6f1f462.log`. The reviewer separately ran the strict
-regression and dependency commands: both exited 1. The twenty-three actual
-dependency reports contained only the three standard logical dependencies,
-and passed the unchanged exact-name policy, but the audit command's lint
-errors prevent treating it as a successful strict audit.
+That revision's strict regressions and audit had concrete diagnostic errors;
+they are superseded by the successful run above, not counted as passing runs.
+The diagnostic repair added module docstrings, explicitly supplied the two
+mixed-scale indices, reused the finite partition equality, used trusted
+`decide +kernel` reduction for the unchanged disconnected cap-three fixture,
+and locally permitted intentional `#print` commands in the audit.
 
 The selected Linux workspace began without Lean or `.lake`. The pinned Lean
 4.35.0-rc3 release was installed from GitHub; all dependency source checkouts
-match `lake-manifest.json`. `lake exe cache get` built only the cache client,
-then the default `cache.mathlib.org` server returned HTTP 403 for the prebuilt
-artifacts. A read of the supported Azure cache endpoint also returned HTTP
-403, including with sandbox escalation. No Mathlib proof source build was
-started. No local Lean proof success is claimed.
+match `lake-manifest.json`. Both supported prebuilt Mathlib endpoints returned
+HTTP 403, including an escalated read attempt. No Mathlib proof source build
+was started. The successful Lean evidence above comes from CI and the
+attributed warmed review, not a local proof build.
 
-Source-only checks passed: complete pinned-source provenance validation
-(205 entries), blueprint/source synchronization and reverse coverage for all
+Source-only checks separately passed: complete pinned-source provenance
+validation, blueprint/source synchronization and reverse coverage for all
 23 public declarations, generated-import completeness, numbered-module and
 file-length policies, new-prose checks, pinned LaTeX formatting, and
 `git diff --check`. The provenance-checker suite passed 52 tests; the
-compatible-cache policy suite passed 51 tests. The tactic-pattern scan found
-no new repeated block in this module among its reported candidates. These
-checks do not replace Lean compilation or the imported dependency audit.
-
-The CI workflow first builds the new production module with package options,
-then retains the full library build and runs strict regressions and all 23
-exported declaration dependency prints. Regressions cover empty sets, zero cap,
-negative coordinates, mixed scales, disconnected sets, holes, and containment
-of parents above the cap. Exact guarded dependency output will be added only after
-observing a successful audit.
+compatible-cache policy suite passed 51 tests. These checks do not replace
+Lean compilation or imported dependency verification.
 
 The mixed-square count for actual templates, safe-square clearance, entropy
 subadditivity and dyadic entropy summation remain separate. This contribution
 does not complete Lemma 9.4, #8754 or either headline manuscript theorem.
-
-## Reviewed source corrections
-
-The reviewer in #8863 comment 6045767900 checked two corrections in a temporary
-copy of source `2b639859360e28322f83702d82a33b1b064a2ab9`, after comparing the
-toolchain, dependency pins and recursive import sources. The reported check
-used TNLean's package options and produced no warnings. The reviewer did not
-modify the production branch or its provenance.
-
-The owner reviewed and applied the explicit search bound `(n := K)` and
-`Nat.lt_succ_self k` in the maximal-scale argument, and removed `not_imp` from
-the mixedness simplification. These preserve the statements and mathematical
-proofs. The later canonical build evidence above supersedes the temporary-copy
-check; regression and strict audit verification remain pending.
-
-The imported dependency script prints all 23 exact export names. CI now saves
-the actual output and applies the existing `check_axiom_output` validator to
-every name in this contribution's ledger. The validator rejects missing or
-malformed records, inconsistent repeated output, and any dependency beyond
-`propext`, `Classical.choice` and `Quot.sound`. This makes successful execution
-alone insufficient for an audit pass. Verification statuses remain pending
-until a successful strict audit and repaired regression run are observed.
-
-## Regression and audit repairs
-
-The failed CI log identifies a missing module docstring, expensive implicit
-index inference in the mixed-scale disjointness example, and elaborator
-recursion depth in the disconnected cap-three computation. The repair adds
-the docstring, supplies the two selected indices explicitly, reuses the
-already checked finite partition equality, and evaluates the unchanged
-cap-three fixture with `decide +kernel`. This uses trusted kernel reduction
-without increasing resource limits. The production theorem file is unchanged.
-
-The diagnostic dependency module now has its required module docstring and
-locally disables `linter.hashCommand`, because its purpose is to print those
-reports. All twenty-three exact declaration names and the dependency policy
-validator are unchanged. Successful compilation of these repaired diagnostic
-files is still pending at publication of this repair.
-
-The previous blueprint job was still installing system dependencies when the
-regression failure was inspected; it had produced no blueprint source
-diagnostic. That infrastructure state is separate from the concrete Lean
-regression failure.

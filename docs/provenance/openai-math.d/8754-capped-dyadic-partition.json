@@ -7,14 +7,14 @@
   "entries": [
     {
       "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -33,20 +33,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.dyadicancestor_eq_cellindex",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor_eq_cellIndex",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -65,20 +83,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mem_latticedyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -97,20 +133,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mem_latticedyadiccell_iff_mem_cell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_mem_cell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -129,20 +183,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.card_latticedyadiccell",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_latticeDyadicCell",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -161,20 +233,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell_zero",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_zero",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -193,20 +283,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell_subset_of_common_mem",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_of_common_mem",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -225,20 +333,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.latticedyadiccell_subset_parent",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_parent",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -257,20 +383,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -289,20 +433,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mem_cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -321,20 +483,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.exists_mem_cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_mem_cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -353,20 +533,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.biunion_cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.biUnion_cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -385,20 +583,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.pairwisedisjoint_cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -417,20 +633,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.sum_card_cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_card_cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -449,20 +683,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.sum_pow_cappeddyadicpartition",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.sum_pow_cappedDyadicPartition",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -481,20 +733,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.card_cappeddyadicpartition_at_cap_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_at_cap_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -513,20 +783,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mixeddyadicindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -545,20 +833,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.mem_mixeddyadicindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.mem_mixedDyadicIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -577,20 +883,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.parent_mem_mixeddyadicindices",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.parent_mem_mixedDyadicIndices",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -609,20 +933,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition_subset_mixed_refinement",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_subset_mixed_refinement",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -641,20 +983,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.card_cappeddyadicpartition_below_cap_le",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_below_cap_le",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -673,20 +1033,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition_empty",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_empty",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -705,20 +1083,38 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     },
     {
       "id": "8754-tnlean.peps.arealaw.geometry.cappeddyadicpartition_zero",
-      "status": "planned",
+      "status": "ported",
       "reuse_kind": "original",
       "upstream": null,
       "downstream": {
         "repository": "LionSR/TNLean",
         "path": "TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartition.lean",
         "declaration": "TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_zero",
-        "name_status": "proposed"
+        "name_status": "declared"
       },
       "paper_sources": [
         {
@@ -737,7 +1133,25 @@
         "Finite capped maximal-contained partition prerequisite only. The mixed-square geometric estimate, safe clearance, entropy application and complete Lemma 9.4 remain separate."
       ],
       "verification": {
-        "result": "pending"
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f4593c1e97adacc224a3407c745fb7582d0e6be0",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-build-f4593c1e.log",
+            "sha256": "97363b83ebf9f4a3b02a31ad5710d0f0f71b4801a709a8553565c347d02426f5"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8754-capped-dyadic-axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8754-capped-dyadic-strict-f4593c1e.log",
+            "sha256": "eee1e92cf1d2e2ba88475a9d3cffb74e21f2a96b181a796c267c4f9ca583b0c1"
+          }
+        ]
       },
       "no_upstream_proof_text_reused": true
     }
