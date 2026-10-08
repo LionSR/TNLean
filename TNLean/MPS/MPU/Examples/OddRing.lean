@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixRankOfFactor
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.Basic
@@ -215,9 +216,6 @@ theorem leftRank_oddRingTensor : ℓ[oddRingTensor] = 3 := by
     · intro k _ hk
       simp [B, hk]
     · simp
-  have hle : ℓ[oddRingTensor] ≤ 3 := by
-    rw [leftRank, hAB]
-    exact (Matrix.rank_mul_le_right A B).trans (by simpa using Matrix.rank_le_card_height B)
   have hsub : (sourceCutM₂ oddRingTensor).submatrix (fun k : Fin 3 ↦ (-k, 0))
       (fun k : Fin 3 ↦ (k, k)) = 1 := by
     ext a b
@@ -225,9 +223,7 @@ theorem leftRank_oddRingTensor : ℓ[oddRingTensor] = 3 := by
     simp only [Matrix.submatrix_apply, sourceCutM₂_apply, oddRingTensor_apply,
       Matrix.one_apply]
     exact if_congr (key a b) rfl rfl
-  have hge := Matrix.rank_submatrix_le (sourceCutM₂ oddRingTensor)
-    (fun k : Fin 3 ↦ (-k, 0)) (fun k : Fin 3 ↦ (k, k))
-  rw [hsub, Matrix.rank_one, Fintype.card_fin] at hge
-  exact le_antisymm hle hge
+  rw [leftRank, Matrix.rank_eq_card_of_eq_mul_of_submatrix_eq_one _ A B hAB _ _ hsub,
+    Fintype.card_fin]
 
 end MPOTensor

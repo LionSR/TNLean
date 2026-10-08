@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixRankOfFactor
 import TNLean.MPS.MPU.SimpleRankOne
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPDO.OperatorCyclicSum
@@ -404,34 +405,16 @@ theorem blockTensor_czTensor_two_isMPUSimple : IsMPUSimple (blockTensor czTensor
 
 /-! ### The cut ranks -/
 
-/-- A matrix that factors through a `k`-dimensional space and has an identity submatrix of
-size `k` has rank `k`. -/
-private theorem rank_eq_card_of_factor {m n k : Type*} [Fintype n] [Fintype k]
-    [DecidableEq k] (M : Matrix m n ℂ) (A : Matrix m k ℂ) (B : Matrix k n ℂ)
-    (hM : M = A * B) (r : k → m) (c : k → n) (hsub : M.submatrix r c = 1) :
-    M.rank = Fintype.card k := by
-  refine le_antisymm ?_ ?_
-  · rw [hM]
-    exact (rank_mul_le_left A B).trans (rank_le_card_width A)
-  · have h := rank_submatrix_le M r c
-    rwa [hsub, rank_one] at h
-
-/-- `rank_eq_card_of_factor` through the pairs `Fin 2 × Fin 2`. -/
-private theorem rank_eq_four_of_factor {m n : Type*} [Fintype n]
-    (M : Matrix m n ℂ) (A : Matrix m (Fin 2 × Fin 2) ℂ) (B : Matrix (Fin 2 × Fin 2) n ℂ)
-    (hM : M = A * B) (r : Fin 2 × Fin 2 → m) (c : Fin 2 × Fin 2 → n)
-    (hsub : M.submatrix r c = 1) : M.rank = 4 :=
-  rank_eq_card_of_factor M A B hM r c hsub
-
 /-- **The right cut rank of the controlled-\(Z\) tensor is `4`** (chapter Example 4.9 (d), not
 printed in the chapter). The first cut factors through the pairs `(i, β₁)`, and the rows
 `(i, (b, i))` with the columns `((0, b), i)` form an identity submatrix. -/
 theorem rightRank_czTensor : r[czTensor] = 4 := by
-  refine rank_eq_four_of_factor _
+  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one _
     (Matrix.of fun iβ ib ↦ if iβ.1 = ib.1 ∧ czBond.symm iβ.2 = (ib.2, ib.1) then 1 else 0)
     (Matrix.of fun ib αj ↦ if ib.1 = αj.2 ∧ (czBond.symm αj.1).2 = ib.2 then
       (-1 : ℂ) ^ (((czBond.symm αj.1).1 : ℕ) * (αj.2 : ℕ)) else 0) ?_
-    (fun ib ↦ (ib.1, czBond (ib.2, ib.1))) (fun ib ↦ (czBond (0, ib.2), ib.1)) ?_
+    (fun ib ↦ (ib.1, czBond (ib.2, ib.1))) (fun ib ↦ (czBond (0, ib.2), ib.1)) ?_).trans
+    (by simp)
   · ext ⟨i, β⟩ ⟨α, j⟩
     obtain ⟨⟨a₁, a₂⟩, rfl⟩ := czBond.surjective α
     obtain ⟨⟨b₁, b₂⟩, rfl⟩ := czBond.surjective β
@@ -446,11 +429,12 @@ theorem rightRank_czTensor : r[czTensor] = 4 := by
 printed in the chapter). The second cut factors through the pairs `(i, α₂)`, and the rows
 `((0, b), i)` with the columns `(i, (b, i))` form an identity submatrix. -/
 theorem leftRank_czTensor : ℓ[czTensor] = 4 := by
-  refine rank_eq_four_of_factor _
+  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one _
     (Matrix.of fun αi ib ↦ if αi.2 = ib.1 ∧ (czBond.symm αi.1).2 = ib.2 then
       (-1 : ℂ) ^ (((czBond.symm αi.1).1 : ℕ) * (αi.2 : ℕ)) else 0)
     (Matrix.of fun ib jβ ↦ if ib.1 = jβ.1 ∧ czBond.symm jβ.2 = (ib.2, ib.1) then 1 else 0) ?_
-    (fun ib ↦ (czBond (0, ib.2), ib.1)) (fun ib ↦ (ib.1, czBond (ib.2, ib.1))) ?_
+    (fun ib ↦ (czBond (0, ib.2), ib.1)) (fun ib ↦ (ib.1, czBond (ib.2, ib.1))) ?_).trans
+    (by simp)
   · ext ⟨α, i⟩ ⟨j, β⟩
     obtain ⟨⟨a₁, a₂⟩, rfl⟩ := czBond.surjective α
     obtain ⟨⟨b₁, b₂⟩, rfl⟩ := czBond.surjective β
@@ -472,7 +456,7 @@ printed in the chapter). The first cut factors through the blocked index, and th
 submatrix. -/
 theorem rightRank_blockTensor_czTensor_two : r[blockTensor czTensor 2] = 4 := by
   rw [rightRank]
-  refine (rank_eq_card_of_factor _
+  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one _
     (Matrix.of fun Iβ K ↦ if Iβ.1 = K ∧ Iβ.2 = czBlockBond K then 1 else 0)
     (Matrix.of fun K αJ ↦ if K = αJ.2 then czBlockVec K αJ.1 else 0) ?_
     (fun K ↦ (K, czBlockBond K)) (fun K ↦ (czBond (0, 0), K)) ?_).trans
@@ -490,7 +474,7 @@ printed in the chapter). The second cut factors through the blocked index, and t
 submatrix. -/
 theorem leftRank_blockTensor_czTensor_two : ℓ[blockTensor czTensor 2] = 4 := by
   rw [leftRank]
-  refine (rank_eq_card_of_factor _
+  refine (rank_eq_card_of_eq_mul_of_submatrix_eq_one _
     (Matrix.of fun αI K ↦ if αI.2 = K then czBlockVec K αI.1 else 0)
     (Matrix.of fun K Jβ ↦ if K = Jβ.1 ∧ Jβ.2 = czBlockBond K then 1 else 0) ?_
     (fun K ↦ (czBond (0, 0), K)) (fun K ↦ (K, czBlockBond K)) ?_).trans

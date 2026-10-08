@@ -1,4 +1,5 @@
 import TNLean.MPS.MPU.RepresentativeIndex
+import TNLean.MPS.MPU.WordSandwich
 
 /-!
 # Unused bond directions
@@ -8,8 +9,7 @@ by placing every letter in the upper left `D × D` corner and zero on the adjoin
 This changes no periodic operator of positive length, hence preserves the MPU property and the
 index. It is the convention under which two tensors of different bond dimensions are compared in
 the definitions of strict equivalence and equivalence (CPSV17, arXiv:1703.09188, Definitions IV.3
-and IV.4, lines 706--724; `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`). Milestone M-B of
-`codex-workflow/projects/mpu-notes/programme/mpu-close/PLAN.md`.
+and IV.4, lines 706--724; `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`).
 -/
 
 open scoped Matrix
@@ -55,24 +55,12 @@ noncomputable def padBond (U : MPOTensor d D) (D' : ℕ) (h : D ≤ D') : MPOTen
   funext i j
   simp [padBond, bondInclusion_self]
 
-/-- Word evaluation of the enlarged tensor on words of equal positive length is the enlarged
-word evaluation. -/
-theorem evalWord_padBond (U : MPOTensor d D) (h : D ≤ D') :
-    ∀ (is js : List (Fin d)), is.length = js.length → is ≠ [] →
-      evalWord (padBond U D' h) is js =
-        bondInclusion D D' h * evalWord U is js * (bondInclusion D D' h)ᴴ
-  | [], _, _, hne => absurd rfl hne
-  | _ :: _, [], hlen, _ => by simp at hlen
-  | [i], [j], _, _ => by
-      simp only [evalWord_cons, evalWord_nil, Matrix.mul_one, padBond]
-  | i :: i' :: is, j :: j' :: js, hlen, _ => by
-      have hlen' : (i' :: is).length = (j' :: js).length := by simpa using hlen
-      have hrec := evalWord_padBond U h (i' :: is) (j' :: js) hlen' (List.cons_ne_nil _ _)
-      rw [evalWord_cons (padBond U D' h) i j (i' :: is) (j' :: js), hrec,
-        evalWord_cons U i j (i' :: is) (j' :: js)]
-      simp only [padBond, Matrix.mul_assoc]
-      rw [← Matrix.mul_assoc (bondInclusion D D' h)ᴴ (bondInclusion D D' h),
-        bondInclusion_conjTranspose_mul, Matrix.one_mul]
+/-- Word evaluation of the enlarged tensor on nonempty words is the enlarged word evaluation. -/
+theorem evalWord_padBond (U : MPOTensor d D) (h : D ≤ D') (is js : List (Fin d))
+    (hne : is ≠ []) :
+    evalWord (padBond U D' h) is js =
+      bondInclusion D D' h * evalWord U is js * (bondInclusion D D' h)ᴴ :=
+  evalWord_sandwich _ U _ (bondInclusion_conjTranspose_mul h) is js hne
 
 /-- Adjoining unused bond directions changes no periodic operator of positive length.
 
@@ -88,7 +76,7 @@ theorem mpo_padBond (U : MPOTensor d D) (h : D ≤ D') (N : ℕ) [NeZero N] :
     have := congrArg List.length hnil
     rw [List.length_ofFn, List.length_nil] at this
     exact NeZero.ne N this
-  rw [evalWord_padBond U h (List.ofFn σ) (List.ofFn τ) (by simp) hne, Matrix.trace_mul_comm,
+  rw [evalWord_padBond U h (List.ofFn σ) (List.ofFn τ) hne, Matrix.trace_mul_comm,
     ← Matrix.mul_assoc, bondInclusion_conjTranspose_mul, Matrix.one_mul]
 
 /-- Adjoining unused bond directions preserves the MPU property. -/

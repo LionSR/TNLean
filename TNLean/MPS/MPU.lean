@@ -224,3 +224,4 @@ import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPU.VirtualSandwichBlocking
 import TNLean.MPS.MPU.VirtualSourceFactorTransport
 import TNLean.MPS.MPU.VirtualUnitaryGauge
+import TNLean.MPS.MPU.WordSandwich

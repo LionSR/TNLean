@@ -17,8 +17,7 @@ the right.
 
 Sources: CPSV17, arXiv:1703.09188, Theorem `FundamentalMPU` (lines 624--648) and the remark that
 $z$ is unitary because both tensors are in canonical form II; Sahinoglu, Shukla, Bi, Chen,
-arXiv:1704.01943, Corollary 1 of section III (pulling through). Milestone M-A of
-`codex-workflow/projects/mpu-notes/programme/mpu-close/PLAN.md`.
+arXiv:1704.01943, Corollary 1 of section III (pulling through).
 -/
 
 open scoped Matrix

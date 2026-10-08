@@ -5090,14 +5090,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_nonzero_weights,gap:mpu_canonical_form_full_support}.
 \end{definition}
 
-\begin{lemma}[Canonical form from canonical form II]
-    \label{lem:mpu_canonical_form_of_cfii}
+\begin{theorem}[Canonical form from canonical form II]
+    \label{thm:mpu_canonical_form_of_cfii}
     \lean{MPOTensor.IsMPUCanonicalFormII.isMPUCanonicalForm}
     \leanok
     \uses{def:mpu_canonical_form, def:cpsv_cfii}
     Let $d\geq1$. A matrix product unitary tensor in canonical form II is in
     canonical form.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Canonical form II gives a block decomposition of $d^{-1/2}\mathcal U$ with
@@ -5106,8 +5106,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     multiplied by $d^{1/2}$ decompose $\mathcal U$ as canonical form requires.
 \end{proof}
 
-\begin{lemma}[Canonical form up to similarity]
-    \label{lem:mpu_canonical_form_similar_cfii}
+\begin{theorem}[Canonical form up to similarity]
+    \label{thm:mpu_canonical_form_similar_cfii}
     \lean{MPOTensor.IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm}
     \leanok
     \uses{def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu}
@@ -5117,7 +5117,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the same operators.
     % Source: paper_v2.tex lines 294 and 356 (a normal tensor can be gauged to
     % canonical form II, assumed without loss of generality).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The normalized tensor $d^{-1/2}\mathcal U$ is normal. The adjoint transfer
@@ -6527,14 +6527,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unblocked all-length wording. Its converse has the odd-length parity
     obstruction of Theorem~\ref{thm:mpu_standard_form_parity_obstruction};
     the blocked-family interpretation is distinguished in
-    \cite{gap:mpu_standard_form_parity_gap}. The formalized form of this
+    \cite{gap:mpu_standard_form_parity_gap}. The correct form of this
     theorem is Theorem~\ref{thm:mpu_fundamental_letters} together with
     Theorems~\ref{thm:mpu_fundamental_gates_necessity}
-    and~\ref{thm:mpu_fundamental_gates_sufficiency}: the equivalence is
-    stated between the operators and a unitary conjugation of the letters,
-    the gate relations follow, and the gate relations give the operators on
-    rings of even length. The source's converse from the half-factor
-    relations alone is not formalized.
+    and~\ref{thm:mpu_fundamental_gates_sufficiency}: equality of the
+    operators at every length is equivalent to a unitary conjugation of the
+    letters, the gate relations follow from it, and the gate relations give
+    equality of the operators on rings of even length only.
+    % The source's converse from the half-factor relations alone has no
+    % formal counterpart; this entry therefore keeps \notready.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
@@ -6867,7 +6868,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \discussion{6014}
     \uses{ThmFund1, thm:mpu_bounded_simple_blocking, def:mpu_canonical_form,
-        lem:mpu_canonical_form_similar_cfii}
+        thm:mpu_canonical_form_similar_cfii}
     Let $\mathcal U$ be a tensor in canonical form generating matrix product
     unitaries, let $k\geq1$ be any blocking length for which $\mathcal U_k$ is
     simple, and let $r$ and $\ell$ be its right and left source-cut ranks. The
@@ -6885,11 +6886,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     This is the definition of \cite[Definition~IV.1]{Cirac2017MPU}, stated there
     for a tensor in canonical form with the ranks of its simple blocking, after
     the source has assumed without loss of generality that the tensor is in
-    canonical form II (lines 294 and 356). The library defines the index of
-    every matrix product unitary through a canonical-form-II representative and
-    proves, for a tensor in canonical form, that this value is the displayed
-    expression in the ranks of its own blocking; the ranks are invariant under
-    the similarity to canonical form II.
+    canonical form II (lines 294 and 356). The index of every matrix product
+    unitary is taken through a canonical-form-II representative; for a tensor in
+    canonical form this value is the displayed expression in the ranks of its
+    own blocking, since these ranks are invariant under the similarity to
+    canonical form II.
     % Source lines: paper_v2.tex 681--688.
 \end{definition}
 
@@ -7042,7 +7043,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.IsMPU.blockTensor_isMPUSimple_of_isMPUCanonicalForm}
     \leanok
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings, lem:mpu_canonical_form_similar_cfii}
+    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings, thm:mpu_canonical_form_similar_cfii}
     Let $\mathcal U$ be a tensor in canonical form generating matrix product
     unitaries. The source index is independent of the chosen simple blocking.
     More precisely, if $k\geq k_0\geq1$ and $\mathcal U_{k_0}$ is simple, then
@@ -7060,7 +7061,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_canonical_form_similar_cfii, lem:mpu_virtual_sandwich_blocking,
+    \uses{thm:mpu_canonical_form_similar_cfii, thm:mpu_virtual_sandwich_blocking,
         prop:mpu_admissible_index_well_defined}
     Pass to the similar tensor in canonical form II, which has the same
     operators, the same simple blockings and the same ranks; for it the
@@ -8654,8 +8655,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
 \end{proof}
 
-\begin{lemma}[Blocking, simplicity and ranks under a bond similarity]
-    \label{lem:mpu_virtual_sandwich_blocking}
+\begin{theorem}[Blocking, simplicity and ranks under a bond similarity]
+    \label{thm:mpu_virtual_sandwich_blocking}
     \lean{MPOTensor.blockTensor_virtualSandwich, MPOTensor.isMPUSimple_virtualSandwich_iff,
         MPOTensor.mpo_virtualSandwich, MPOTensor.IsMPU.virtualSandwich,
         MPOTensor.rightRank_blockTensor_virtualSandwich,
@@ -8667,7 +8668,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     operators as $\mathcal U$, and is simple if and only if $\mathcal U$ is;
     the ranks of its blockings equal those of $\mathcal U$.
     % Source: paper_v2.tex, Proposition IV.5, lines 773--804.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The letters of a blocking are products, and $BA=I$ telescopes; the trace is
@@ -10937,14 +10938,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1988--1995.
 \end{definition}
 
-\begin{proposition}[The shift products $U_2$ and $U_3$ are strictly equivalent]
-    \label{prop:mpu_shift_products_strictly_equivalent}
+\begin{theorem}[The shift products $U_2$ and $U_3$ are strictly equivalent]
+    \label{thm:mpu_shift_products_strictly_equivalent}
     \lean{MPOTensor.shiftExampleU₂_strictlyEquivalent_shiftExampleU₃,
         MPOTensor.shiftExampleU₂_isMPUCanonicalForm,
         MPOTensor.shiftExampleU₃_isMPUCanonicalForm,
         MPOTensor.IsMPU.conjugatePhysical, MPOTensor.IsMPU.bondConj}
     \leanok
-    \uses{threeMPU, def:strictly-equivalent-tensors, lem:mpu_canonical_form_of_cfii,
+    \uses{threeMPU, def:strictly-equivalent-tensors, thm:mpu_canonical_form_of_cfii,
         thm:mpu-continuous-unitary-swap-path}
     For $d\geq1$ the tensors $U_2=T^\dagger\otimes T$ and $U_3=T\otimes T^\dagger$ are in
     canonical form and strictly equivalent, with no bond directions adjoined.
@@ -10953,10 +10954,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source: paper_v2.tex, lines 1980--2001 and 2138--2151, where the source joins
     % the ancilla-dressed $\widetilde U_{2,3}$ by one physical path; here $U_2$ and
     % $U_3$ themselves are joined by a physical path followed by a bond path.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_canonical_form_of_cfii, thm:mpu-continuous-unitary-swap-path}
+    \uses{thm:mpu_canonical_form_of_cfii, thm:mpu-continuous-unitary-swap-path}
     The letter of $U_3$ at the exchanged physical indices is the letter of $U_2$
     conjugated on the bond by the factor exchange $\mathbb S$. Let $\mathbb S(x)$,
     $x\in[0,1]$, be the continuous unitary path from the identity to $\mathbb S$.

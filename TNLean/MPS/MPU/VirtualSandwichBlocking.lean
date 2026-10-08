@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.VirtualSandwich
+import TNLean.MPS.MPU.WordSandwich
 import TNLean.MPS.MPU.SimpleSupportCompression
 import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.PhysicalBlocking
@@ -45,12 +46,7 @@ theorem evalWord_virtualSandwich (A : Matrix (Fin D) (Fin D) ℂ) (U : MPOTensor
       evalWord (virtualSandwich A U B) is js = A * evalWord U is js * B
   | [], [] => by simp [mul_eq_one_comm.mp hBA]
   | [], _ :: _ => by simp [evalWord]
-  | _ :: _, [] => by simp [evalWord]
-  | i :: is, j :: js => by
-    rw [evalWord_cons, evalWord_cons, evalWord_virtualSandwich A U B hBA is js,
-      virtualSandwich_apply]
-    simp only [Matrix.mul_assoc]
-    rw [← Matrix.mul_assoc B A, hBA, Matrix.one_mul]
+  | i :: is, js => evalWord_sandwich A U B hBA (i :: is) js (List.cons_ne_nil _ _)
 
 /-- Blocking commutes with a bond similarity: `(A U B)_L = A U_L B` for every `L`,
 including `L = 0`.

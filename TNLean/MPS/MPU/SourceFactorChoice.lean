@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixUnitaryConjCFC
 import TNLean.MPS.MPU.SourceUV
 
 /-!
@@ -42,40 +43,6 @@ two rank spaces (milestone M-E proposal, `ME.tex`, Lemmas 1.1, 1.2 and Theorem 1
 
 open scoped Matrix Kronecker ComplexOrder
 open Matrix
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- The Hermitian functional calculus commutes with unitary conjugation:
-if $B=xAx^\dagger$ then $f(B)=xf(A)x^\dagger$ (ME.tex, proof of Theorem 1.3). -/
-theorem IsHermitian.cfc_eq_of_eq_unitary_conj {A B : Matrix n n ℂ} (hA : A.IsHermitian)
-    (hB : B.IsHermitian) (x : unitaryGroup n ℂ)
-    (h : B = (x : Matrix n n ℂ) * A * (x : Matrix n n ℂ)ᴴ) (f : ℝ → ℝ) :
-    hB.cfc f = (x : Matrix n n ℂ) * hA.cfc f * (x : Matrix n n ℂ)ᴴ := by
-  rw [← hB.cfc_eq, ← hA.cfc_eq, h]
-  have hφ : Continuous (Unitary.conjStarAlgAut ℂ (Matrix n n ℂ) x) := by
-    change Continuous fun a : Matrix n n ℂ ↦ (x : Matrix n n ℂ) * a * star (x : Matrix n n ℂ)
-    exact (continuous_const.matrix_mul continuous_id).matrix_mul continuous_const
-  have := StarAlgHomClass.map_cfc (Unitary.conjStarAlgAut ℂ (Matrix n n ℂ) x) f A
-    (A.finite_real_spectrum.continuousOn f) hφ hA.isSelfAdjoint
-  simpa [Matrix.star_eq_conjTranspose] using this.symm
-
-/-- The support inverse square root commutes with unitary conjugation
-(ME.tex, proof of Theorem 1.3). -/
-theorem PosSemidef.supportInvSqrt_eq_of_eq_unitary_conj {A B : Matrix n n ℂ}
-    (hA : A.PosSemidef) (hB : B.PosSemidef) (x : unitaryGroup n ℂ)
-    (h : B = (x : Matrix n n ℂ) * A * (x : Matrix n n ℂ)ᴴ) :
-    hB.supportInvSqrt = (x : Matrix n n ℂ) * hA.supportInvSqrt * (x : Matrix n n ℂ)ᴴ :=
-  hA.isHermitian.cfc_eq_of_eq_unitary_conj hB.isHermitian x h _
-
-/-- A unitary satisfies $x^\dagger x=1$. -/
-theorem conjTranspose_mul_unitary (x : unitaryGroup n ℂ) :
-    (x : Matrix n n ℂ)ᴴ * (x : Matrix n n ℂ) = 1 := by
-  rw [← Matrix.star_eq_conjTranspose]
-  exact Matrix.mem_unitaryGroup_iff'.mp x.2
-
-end Matrix
 
 namespace MPOTensor
 
