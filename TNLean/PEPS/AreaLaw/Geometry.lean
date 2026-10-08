@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Geometry.ActualSideMatching
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
+import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
@@ -74,6 +75,7 @@ import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
+import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
