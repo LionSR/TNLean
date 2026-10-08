@@ -38,13 +38,15 @@ ground expectation, and takes the absolute value:
         QuantumCircuit.siteExpectation_eq_self_of_forall_commute,
         QuantumCircuit.mem_supportedOperators_of_forall_commute,
         Commute.cfcAbs_of_isHermitian,
-        QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators}
+        QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators,
+        QuantumCircuit.sqrt_mem_supportedOperators}
     \leanok
     \uses{lem:qc_site_expectation_average, lem:qc_site_expectation_properties}
     The expectation $E_K$ onto a set of sites $K$ preserves adjoints and the
     order, maps $[0,I]$ into $[0,I]$, and fixes every operator commuting with
     all operators acting outside $K$; such an operator acts on $K$. In
-    particular $E_K$ fixes $|Y|$ for every Hermitian $Y$ acting on $K$.
+    particular $E_K$ fixes $|Y|$ for every Hermitian $Y$ acting on $K$, and
+    $Y^{1/2}$ acts on $K$ for every $Y\ge0$ acting on $K$.
 \end{lemma}
 \begin{proof}\leanok
     $E_K$ is the uniform average of the conjugations by products of on-site
@@ -90,7 +92,6 @@ ground expectation, and takes the absolute value:
 \begin{lemma}[Square roots and local channels]
     \label{lem:al_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.sqrt_mul_exp_neg, TNLean.PEPS.AreaLaw.quasilocalRoots,
-        TNLean.PEPS.AreaLaw.sqrt_mem_supportedOperators,
         TNLean.PEPS.AreaLaw.rootChannel_kronecker_eq_self_of_commute}
     \leanok
     \uses{thm:al_positive_replacement, lem:al_site_expectation_order}
@@ -243,8 +244,7 @@ only on the parameters named below.
 
 \begin{lemma}[Counting on an induced lattice domain]
     \label{lem:al_lattice_counts}
-    \lean{Matrix.isGappedGroundState_iff,
-        TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
+    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
         TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
         TNLean.PEPS.AreaLaw.card_sphere_domainGraph_le,
         TNLean.PEPS.AreaLaw.IsAdmissibleSupport.edist_le,
@@ -286,8 +286,11 @@ only on the parameters named below.
         0\le k_i\le I,\qquad k_i\Omega=0,\qquad
         \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
     \]
-    and for every integer $l\ge0$ the operator $k_{i,l}=E_{i,l}(k_i)$ lies in
-    $[0,I]$ and satisfies $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts on
+    so $H_F=\sum_ik_i$ satisfies $H_F\ge g(I-P_\Omega)$ with $g=\Delta/c_*$ and
+    $H_F\Omega=0$: it has the unique ground vector $\Omega$, ground energy zero,
+    and gap at least $g$. For every integer $l\ge0$ the operator
+    $k_{i,l}=E_{i,l}(k_i)$ lies in $[0,I]$ and satisfies
+    $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts on
     the connected component of $a_i$. This is Proposition~4.3 of
     \cite{OpenAI2026AreaLaw}.
 \end{theorem}

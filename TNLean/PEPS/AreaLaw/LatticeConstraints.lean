@@ -54,7 +54,9 @@ open Matrix (rootChannel)
 finite domain `Λ`, every interaction `h` of range `R` and strength `J`, every choice of
 anchors `aᵢ ∈ Xᵢ`, and every gapped ground vector `Ω` of `H` with gap `Δ`: with
 `δ = Δ / 2`, `c_* > 0` and `kᵢ = |Mᵢ| / c_*`, one has `0 ≤ kᵢ ≤ I`, `kᵢ Ω = 0`,
-`∑ᵢ kᵢ ≥ c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)` (`eq:quasilocal-positive`); the ball
+`∑ᵢ kᵢ ≥ c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)` (`eq:quasilocal-positive`), so
+`H_F = ∑ᵢ kᵢ ≥ g (I - |Ω⟩⟨Ω|)` with `g = Δ / c_*`: `H_F` has the ground vector `Ω`, ground
+energy zero and gap at least `g` (lines 237–238); the ball
 expectations `k_{i,l} = E_{N_l(aᵢ)}(kᵢ)` lie in `[0, I]` with
 `‖kᵢ - k_{i,l}‖ ≤ C e^{-c l^α}` (`eq:quasilocal-positive-tail`); and `kᵢ` acts on the
 connected component of `aᵢ`. -/
@@ -71,6 +73,8 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
         cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+        ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+          ∑ i, k i ∧
         (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
           siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
@@ -81,10 +85,11 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
   refine ⟨C, c, hC, hc, ?_⟩
   intro q _ Λ h a ha E₀ Ω hgs
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
-  exact ⟨positiveNormalization_pos p _ J, @hpos q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _
+  obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := @hpos q _ (Site Λ) _ _ (AdmissibleSupport Λ R) _
     (domainGraph Λ) (fun X => X.1) a ha h.term h.hermitian h.supported (fun X => X.2.edist_le)
     (fun X => X.2.card_le) (h.sum_norm_term_containing_le hJ) card_sphere_domainGraph_le
-    h.norm_le E₀ Ω hΩ hHΩ hgap⟩
+    h.norm_le E₀ Ω hΩ hHΩ hgap
+  exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
 
 /-- **Square roots and local channels on a lattice domain** (Lemma 4.4,
 `lem:quasilocal-roots`, `03-quasilocal.tex`, lines 336–389). For `p ≥ 1`, `R`, `J ≥ 0`,
@@ -133,7 +138,7 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   refine ⟨4 * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩
   intro q _ Λ h a ha E₀ Ω hgs i l k kl G Kr Gl Kl ε
-  obtain ⟨-, hk, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hgs
+  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hgs
   have hsq := sqrt_mul_exp_neg C c ((l : ℝ) ^ kernelExponent p)
   obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12⟩ :=
     quasilocalRoots (graphBall (domainGraph Λ) (a i) l) (hk i).1 (hk i).2.1 (hk i).2.2
@@ -202,7 +207,7 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
 
 /-- **Crossing count and cut budget on a lattice domain** (Proposition 4.5, `prop:truncation`,
 `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`, `03-quasilocal.tex`,
-lines 434–451 and 506–528). For `q ≥ 1` and `R` there is `C ≥ 0`, depending only on `q` and
+lines 434–451 and 505–518). For `q ≥ 1` and `R` there is `C ≥ 0`, depending only on `q` and
 `R`, such that for every domain, every choice of anchors, every `S₀`, every `r₀` and every
 `X ⊆ S₀`, with `b_X = |∂_Λ X|`: every designated support meeting both `X` and its complement
 is the ball of radius `r₀` about its anchor, `|𝒞_X| ≤ C b_X (r₀ + 1)²`,
@@ -252,7 +257,7 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
     gcongr
 
 /-- **The cut budget in terms of `n` on a lattice domain** (Proposition 4.5, last sentence,
-`03-quasilocal.tex`, lines 452–455 and 528–529). For `q ≥ 1`, `R`, `C₁ ≥ 0` and `C₂ ≥ 0` there
+`03-quasilocal.tex`, lines 452–455 and 519–520). For `q ≥ 1`, `R`, `C₁ ≥ 0` and `C₂ ≥ 0` there
 is `C ≥ 0` such that, with `r₀ = ⌈C₁ (log n)²⌉`, every `X ⊆ S₀` with `b_X ≤ C₂ n D`, `n ≥ 2`
 and `D ≥ 1` has `ℬ_X ≤ C n D (log n)¹²`. -/
 theorem exists_latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : ℝ}

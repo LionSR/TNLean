@@ -127,22 +127,6 @@ theorem quasilocalRoots [NeZero q] (K : Finset ι) {k : Matrix (ι → Fin q) (�
   · exact rootChannel_sqrt_eq_self_of_commute hl₀ hl₁
       (hB _ (siteExpectation_mem_supportedOperators K k))
 
-/-- Both square roots `k^{1/2}` and `(I - k)^{1/2}` of a positive contraction acting on `K`
-act on `K`. -/
-theorem sqrt_mem_supportedOperators [NeZero q] (K : Finset ι)
-    {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
-    (hk : k ∈ supportedOperators q (K : Set ι)) :
-    CFC.sqrt k ∈ supportedOperators q (K : Set ι) ∧
-      CFC.sqrt (1 - k) ∈ supportedOperators q (K : Set ι) := by
-  have hkY : ∀ Y ∈ supportedOperators q ((K : Set ι)ᶜ), Commute k Y := fun Y hY =>
-    commute_of_mem_supportedOperators disjoint_compl_right hk hY
-  refine ⟨mem_supportedOperators_of_forall_commute K fun Y hY => ?_,
-    mem_supportedOperators_of_forall_commute K fun Y hY => ?_⟩
-  · rw [CFC.sqrt_eq_real_sqrt _ hk₀, cfcₙ_eq_cfc]
-    exact (hkY Y hY).cfc_real _
-  · rw [CFC.sqrt_eq_real_sqrt _ (sub_nonneg.mpr hk₁), cfcₙ_eq_cfc]
-    exact ((Commute.one_left Y).sub_left (hkY Y hY)).cfc_real _
-
 /-- **Local channels fix the commutant, with spectators** (Lemma 4.4, `03-quasilocal.tex`,
 lines 366–368 and 386–389): if `0 ≤ k_l ≤ I` acts on `K`, then for every finite auxiliary
 system the channel `ℰ_l ⊗ id` with Kraus operators `(I - k_l)^{1/2} ⊗ I`, `k_l^{1/2} ⊗ I`
@@ -153,8 +137,10 @@ theorem rootChannel_kronecker_eq_self_of_commute [NeZero q] (K : Finset ι)
     (B : Matrix ((ι → Fin q) × κ) ((ι → Fin q) × κ) ℂ)
     (hB : ∀ A ∈ supportedOperators q (K : Set ι), Commute (A ⊗ₖ (1 : Matrix κ κ ℂ)) B) :
     rootChannel (CFC.sqrt (1 - k) ⊗ₖ (1 : Matrix κ κ ℂ)) (CFC.sqrt k ⊗ₖ 1) B = B := by
-  obtain ⟨hK, hG⟩ := sqrt_mem_supportedOperators K hk₀ hk₁ hk
-  refine rootChannel_eq_self_of_commute ?_ (hB _ hG) (hB _ hK)
+  refine rootChannel_eq_self_of_commute ?_
+    (hB _ (sqrt_mem_supportedOperators K (sub_nonneg.mpr hk₁)
+      (sub_mem (one_mem_supportedOperators _) hk)))
+    (hB _ (sqrt_mem_supportedOperators K hk₀ hk))
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, ← Matrix.add_kronecker,
     sqrt_one_sub_mul_add_sqrt_mul hk₀ hk₁, Matrix.mul_one, Matrix.one_kronecker_one]
 

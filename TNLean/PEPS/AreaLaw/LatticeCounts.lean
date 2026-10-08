@@ -33,7 +33,7 @@ disconnected components included, from the ambient diamond count `eq:ball-count`
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*, September 24, 2026,
-  `eq:ball-count` and the multiplicity bound after it (`01-preliminaries.tex`, lines 81–95),
+  `eq:ball-count` and the multiplicity bound after it (`01-preliminaries.tex`, lines 82–103),
   and `eq:quasilocal-budget` (`03-quasilocal.tex`, lines 30–40).
   Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. Independently
   formalized from the manuscript; no upstream Lean proof text is reused.
@@ -54,7 +54,7 @@ theorem latticeL1Distance_le_one_of_adj {x y : Site Λ} (h : (domainGraph Λ).Ad
   unfold latticeL1Distance
   omega
 
-/-- **Ball count** (`eq:ball-count`, `01-preliminaries.tex`, lines 81–87): a graph ball of
+/-- **Ball count** (`eq:ball-count`, `01-preliminaries.tex`, lines 82–87): a graph ball of
 radius `d` in an induced domain has at most `1 + 2 d (d + 1) ≤ 2 (d + 1)²` sites. -/
 theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
     ((graphBall (domainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
@@ -87,7 +87,7 @@ theorem IsAdmissibleSupport.card_le {R : ℕ} {X : Finset (Site Λ)}
     (fun _ _ hxy => latticeL1Distance_le_one_of_adj hxy) X R hX.2
 
 /-- At most `μ_R = 2 ^ (v_R - 1)` admissible supports contain a given site
-(`01-preliminaries.tex`, lines 88–95). -/
+(`01-preliminaries.tex`, lines 94–101). -/
 theorem card_admissibleSupport_containing_le (R : ℕ) (x : Site Λ) :
     (Finset.univ.filter fun X : AdmissibleSupport Λ R => x ∈ X.1).card ≤
       2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
