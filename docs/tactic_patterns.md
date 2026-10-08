@@ -5605,6 +5605,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   complete source blocks reuses the preparation tensor identity and the
   register-block exchange theorem. Neither requires another double induction.
 
+### Tensor maps under equal filtered layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify equal owner-filtered memories, transport their tensor
+  maps, and compare the resulting operators or their values on vectors.
+- **Seen:** `PartyTensorMaps.mapL_heq` and
+  `PartyFactorization.mapL_apply_heq` under `PEPS/Approximation` (two local
+  helpers across two files).
+- **Abstraction:** Canonical conjugation already uses the shared
+  `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
+  `Layout.eq_conj_memCongr_of_heq`. The remaining two helpers distinguish
+  equality of tensor maps from equality after evaluation. A further occurrence
+  should use one tensor-map equality lemma followed by evaluation.
+- **Notes:** Associator and exchange identities use the existing
+  `clm_ext_tmul₃`; no additional tactic is needed.
+- **Scan:** The focused approximation scan also found five instances of
+  eliminating the two layout equalities by `cases` and closing by reflexivity,
+  all in `WordRestriction.lean`. These express the defining equations of the
+  equality transport; there is no repeated proof argument across files.
+
 ### Complementary-slice reconstruction — candidate (2026-10-07)
 
 - **Pattern:** Choose one inside vector for each outside configuration and

@@ -98,6 +98,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -198,6 +199,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -341,6 +343,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
               - 'scripts/test_tenkz_quantum_double_local_terms.py'
+              - 'scripts/test_tenkz_quantum_double_source_construction.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -495,6 +498,23 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "$source"
           done
+
+      - name: Check labelled open coefficients early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          : > "$RUNNER_TEMP/collared-open-check.log"
+          for source in TNLeanTest/LabelledOpenCoefficient.lean \
+              TNLean/PEPS/LabelledOpenCoefficient.lean TNLean/PEPS/TorusLabelledOpenCoefficient.lean \
+              TNLean/PEPS/TorusDualCollar.lean TNLean/PEPS/TorusDualOpenDeformation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/collared-open-check.log"
+          done
+          python3 scripts/check_collared_open_axioms.py "$RUNNER_TEMP/collared-open-check.log"
 
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
@@ -1185,7 +1205,9 @@ jobs:
 
       - name: Test quantum-double local-term diagrams and nonabelian formulas
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_quantum_double_local_terms.py
+        run: |
+          python3 scripts/test_tenkz_quantum_double_local_terms.py
+          python3 scripts/test_tenkz_quantum_double_source_construction.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'

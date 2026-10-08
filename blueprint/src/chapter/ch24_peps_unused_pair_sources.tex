@@ -1,0 +1,117 @@
+\section{One-dimensional sources on unused pairs}
+\label{sec:peps_unused_pair_sources}
+
+\begin{definition}[A trivial pair source]
+    \label{def:peps_unit_pair_source}
+    \lean{TNLean.PEPS.PairEffect.PairSource.unit}
+    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_unit}
+    \lean{TNLean.PEPS.PairEffect.PairSource.norm_unit_vector}
+    \lean{TNLean.PEPS.PairEffect.PairSource.finrank_unit_spaces}
+    \leanok
+    \uses{def:peps_source_inventory}
+    For distinct parties $p,q$, the trivial pair source has the complex line
+    at each endpoint and vector $1\otimes 1\in\mathbb C\otimes\mathbb C$.
+    Both endpoint spaces have dimension one, and the source vector is
+    normalized. This is the one-dimensional source assigned to an unused
+    pair in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 242--246.
+\end{definition}
+
+\begin{theorem}[Removing a trivial pair source]
+    \label{thm:peps_remove_unit_pair_source}
+    \lean{TNLean.PEPS.PairEffect.Word.eraseUnitPair}
+    \lean{TNLean.PEPS.PairEffect.Word.eraseUnitPair_spec}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.unit_cons}
+    \leanok
+    \uses{def:peps_unit_pair_source}
+    A trivial pair source can be removed by an allowed composition of
+    local maps containing no source preparations. For any remaining
+    source list $S$ and any original memory $\mathcal H$, this composition
+    recovers $P_{S,\mathcal H}$ exactly from the preparation with the
+    trivial source placed before $S$.
+\end{theorem}
+
+\begin{proof}\leanok
+    At each endpoint, apply the canonical isometry
+    $\lambda_{\mathcal K}:\mathbb C\otimes\mathcal K\to\mathcal K$,
+    $\lambda_{\mathcal K}(1\otimes x)=x$, as a local map at that endpoint;
+    here $\mathcal K$ is the memory of the registers following it. These
+    maps are isometries and therefore contractions. On the prepared vector
+    the two removals give
+    \begin{align*}
+        \lambda_{\mathcal K}\lambda_{\mathbb C\otimes\mathcal K}
+        \bigl(1\otimes(1\otimes x)\bigr)
+        =\lambda_{\mathcal K}(1\otimes x)=x
+    \end{align*}
+    for every $x$ in the remaining memory $\mathcal K$. Taking
+    $x=P_{S,\mathcal H}(y)$ for $y\in\mathcal H$ recovers
+    $P_{S,\mathcal H}$.
+\end{proof}
+
+\begin{theorem}[A source on every pair]
+    \label{thm:peps_complete_pair_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_complete_extension}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_complete}
+    \leanok
+    \uses{def:peps_source_inventory,def:peps_unit_pair_source}
+    Let $P$ be a finite set of parties. Suppose that $S$ is a normalized
+    source list on $P$ with no repeated unordered pair. There is a list $U$
+    of sources with one-dimensional endpoint spaces such that the
+    list $T$ obtained by placing $U$ before $S$
+    is normalized and contains exactly one source for every unordered
+    pair of distinct parties in $P$.
+
+    Every pair of a source in $U$ is absent from $S$. Thus the original
+    sources are retained with their vectors, spaces, endpoint order,
+    and list order unchanged. For every original memory, an allowed
+    composition containing no sources recovers its preparation by $S$
+    from its preparation by $T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_remove_unit_pair_source}
+    List the unordered pairs of distinct parties that are absent from
+    $S$. For each such pair, choose either endpoint order and adjoin the
+    corresponding trivial source. The pairs are distinct, and every pair
+    occurs in exactly one of the original and added lists. Repeatedly
+    apply Theorem~\ref{thm:peps_remove_unit_pair_source} to remove the
+    added sources. This also covers empty and singleton party sets,
+    for which no distinct pair exists.
+\end{proof}
+
+\begin{theorem}[Local factorization with every pair present]
+    \label{thm:peps_complete_prepared_party_maps}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_complete_source_preparation}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_complete_prepared_tensorPartyMaps}
+    \leanok
+    \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
+    Let $P$ be the prescribed finite set of gate parties, with a fixed
+    ordering. Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be an
+    allowed composition whose register owners and assigned local parties
+    all belong to $P$. There is a normalized source list $T$ containing
+    exactly one source on every unordered pair of distinct parties in
+    $P$, and a contraction $B_p$ at each $p\in P$, such that
+    \begin{align}
+        U_{\rm out}F
+         & =\left(\bigotimes_{p\in P}B_p\right)
+        U_{T,\rm in}P_{T,\mathcal H_{\rm in}}.
+        \label{eq:peps_complete_prepared_party_maps}
+    \end{align}
+    The identifications group registers by party in the prescribed order.
+    The input of $B_p$ consists of that party's original input registers
+    and its halves of the sources in $T$; its output consists of that
+    party's original output registers. A source in $T$ whose pair does not
+    occur among the original sources of $F$ has one-dimensional endpoint
+    spaces.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_grouped_sources,thm:peps_complete_pair_sources,thm:peps_party_factorization}
+    First prepare and combine the actual sources of $F$ to obtain
+    $F=V\circ P_{S,\mathcal H_{\rm in}}$, with $V$ allowed and containing
+    no sources. Complete $S$ to $T$ by
+    Theorem~\ref{thm:peps_complete_pair_sources}. The local maps removing
+    the added sources, followed by $V$, form another allowed composition
+    containing no sources. Collect its local maps by party using
+    Theorem~\ref{thm:peps_party_factorization}.
+\end{proof}

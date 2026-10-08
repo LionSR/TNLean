@@ -152,6 +152,7 @@ import TNLean.PEPS.KitaevNativeCheckerboardBlocking
 import TNLean.PEPS.KitaevNativeGlobalBlocking
 import TNLean.PEPS.KitaevPeriodicTiling
 import TNLean.PEPS.KitaevPhysicalSupportReduction
+import TNLean.PEPS.LabelledOpenCoefficient
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.MixedPhysicalProductMap
 import TNLean.PEPS.NativeTorusClosureDimension
@@ -400,9 +401,11 @@ import TNLean.PEPS.TorusCutPhysicalMap
 import TNLean.PEPS.TorusCutProjectorExpansion
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusDirectedBondUpdate
+import TNLean.PEPS.TorusDualCollar
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
+import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
 import TNLean.PEPS.TorusDualRectangle
 import TNLean.PEPS.TorusDualRectangleFlux
@@ -435,6 +438,7 @@ import TNLean.PEPS.TorusIntegerStepWinding
 import TNLean.PEPS.TorusJointFluxGeometry
 import TNLean.PEPS.TorusJointFluxMeasurement
 import TNLean.PEPS.TorusLabelledBondGeometry
+import TNLean.PEPS.TorusLabelledOpenCoefficient
 import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusMatchedBondRepresentation
 import TNLean.PEPS.TorusMatchedCutClosureMembership
