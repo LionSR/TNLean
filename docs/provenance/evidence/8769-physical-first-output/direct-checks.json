@@ -50,9 +50,11 @@
         "TNLean.PEPS.PairEffect.SourceCircuit.participationCount_physicalFirstOutput",
         "TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_physicalFirstOutput"
       ],
-      "strict_log": "PhysicalFirstExchange.strict.log",
+      "strict_log": "PhysicalFirstExchange.strict.log.gz",
       "all_public_audit_source": "PhysicalFirstExchangeAudit.lean",
-      "all_public_audit_log": "PhysicalFirstExchangeAudit.strict.log"
+      "all_public_audit_log": "PhysicalFirstExchangeAudit.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "all_public_audit_log_uncompressed_sha256": "e0178be79b35fa5ecbb2874c44d55381fc11b67836ff025fa9c915283a3086cb"
     },
     {
       "module": "TNLean.PEPS.Approximation.PhysicalDensityPureInput",
@@ -65,9 +67,11 @@
       "public_exports": [
         "TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_pure_input"
       ],
-      "strict_log": "PhysicalDensityPureInput.strict.log",
+      "strict_log": "PhysicalDensityPureInput.strict.log.gz",
       "all_public_audit_source": "PhysicalDensityPureInputAudit.lean",
-      "all_public_audit_log": "PhysicalDensityPureInputAudit.strict.log"
+      "all_public_audit_log": "PhysicalDensityPureInputAudit.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "all_public_audit_log_uncompressed_sha256": "be13a60911eb898a0bff6466f13e91781be116d1a4702db6120558999e6de6de"
     },
     {
       "module": "TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness",
@@ -88,9 +92,11 @@
         "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers",
         "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem"
       ],
-      "strict_log": "AuxiliaryRegisterFiniteness.strict.log",
+      "strict_log": "AuxiliaryRegisterFiniteness.strict.log.gz",
       "all_public_audit_source": "AuxiliaryRegisterFinitenessAudit.lean",
-      "all_public_audit_log": "AuxiliaryRegisterFinitenessAudit.strict.log"
+      "all_public_audit_log": "AuxiliaryRegisterFinitenessAudit.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "all_public_audit_log_uncompressed_sha256": "b40afa515c01aa865e8e8df4edda2e5874674f2d90d6cd113f3a9dcf9f88ea20"
     },
     {
       "module": "TNLean.PEPS.Approximation.PhysicalFirstReadout",
@@ -114,10 +120,14 @@
         "TNLean.PEPS.PairEffect.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact",
         "TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half"
       ],
-      "strict_log": "PhysicalFirstReadout.strict.log",
+      "strict_log": "PhysicalFirstReadout.strict.log.gz",
       "all_public_audit_source": "PhysicalFirstReadoutAudit.lean",
-      "all_public_audit_log": "PhysicalFirstReadoutAudit.strict.log"
+      "all_public_audit_log": "PhysicalFirstReadoutAudit.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "all_public_audit_log_uncompressed_sha256": "fe978ca1348c3d260174f48e5f60c9e1ff2d02d1e5bbfae1d6211947977664f8"
     }
   ],
-  "unperformed_checks": "Canonical Lake, blueprint declarations, full-library audit and manuscript builds belong to the coordinating integration branch."
+  "unperformed_checks": "Canonical Lake, blueprint declarations, full-library audit and manuscript builds belong to the coordinating integration branch.",
+  "tactic_pattern_scan": "tactic-pattern-scan.txt.gz",
+  "tactic_pattern_scan_uncompressed_sha256": "1d24d8a9608631749ecedf578d8c96f8ec56053b53836630b51413d3b2571620"
 }

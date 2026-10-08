@@ -7,3 +7,5 @@ The actual physical register dimensions are preserved. The proofs assume individ
 The checks used the approved read-only canonical source/resource and physical artifact environment, with new outputs in an independent temporary package. `direct-checks.json` records the production and checked-source hashes, generated artifact hashes, audit inventories, options and baseline. Production differs from the checked source only by the recorded import-prefix substitution. Raw checks used all package options with warnings as errors. They are not a canonical Lake build. Canonical Lake, blueprint declaration validation, full-library audit and manuscript generation are deferred to the coordinating integration branch.
 
 The focused tactic scan reports only patterns already recorded in the approximation ledger. Tensor comparison uses the existing pure-tensor extension lemmas, and partial-trace invariance reuses the existing equivalence-reindexing theorem.
+
+All check logs and the tactic-scan output are stored as deterministic gzip files, preserving the exact original bytes.
