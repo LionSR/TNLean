@@ -67,3 +67,9 @@ source of that version and opening the named file.
 | [1903.09439](https://arxiv.org/abs/1903.09439) | Mathematical open problems in projected entangled pair states | J. I. Cirac, J. Garre-Rubio, D. Pérez-García | non-exclusive-distrib 1.0 |
 | [2011.12127](https://arxiv.org/abs/2011.12127) | Matrix Product States and Projected Entangled Pair States: Concepts, Symmetries, and Theorems | J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete | non-exclusive-distrib 1.0 |
 | [2502.20257](https://arxiv.org/abs/2502.20257) | Symmetry defects and gauging for quantum states with matrix product unitary symmetries | A. Franco-Rubio, A. Bochniak, J. I. Cirac | non-exclusive-distrib 1.0 |
+
+## Source used by the spin-one Haldane-gap plan
+
+| Exact source | Title | Authors | Source file | Availability and license |
+|---|---|---|---|---|
+| Note dated 2026-10-07 (unpublished; supplied by the repository owner) | A thermal-MPO derivation of the spin-1 gap bound | not stated | `thermal-mpo-gap-note.pdf` | Vendored at `Papers/thermal-mpo-gap-note/thermal-mpo-gap-note.pdf` as reference material for `docs/formalization/haldane-gap/README.md`; no license stated |

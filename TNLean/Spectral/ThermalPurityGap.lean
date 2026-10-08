@@ -43,6 +43,7 @@ inputs outside this file: the continuous-time thermal MPO giving the moment form
 Heisenberg chain (the note's Appendix, citing Proposition 3.1 of its Ref. [1]), and the certified
 numerical estimates `P_s(2304, 784), P_τ(4608, 784) ≥ 0.99` (Proposition 5.5 of Ref. [1]).
 Given these as hypotheses, Theorem 1 is `gapGT_of_purities` with `n₀ = 2304`, `β₀ = 784`.
+The staged plan for the Heisenberg theorem is `docs/formalization/haldane-gap/README.md`.
 
 The moment form is stated with the eigenvalue moduli `|λᵢ(β)|` indexed by `ℕ` (a finite spectrum
 is padded by zeros) and only for even lengths `L ≥ n₀`, which is all that the proofs use; this is
