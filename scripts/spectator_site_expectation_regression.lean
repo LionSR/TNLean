@@ -177,3 +177,53 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 end AxiomChecks
 
 end SpectatorSiteExpectationRegression
+
+-- Existing native proofs exposed for the spectator argument.
+
+/--
+info: 'QuantumCircuit.partialWeyl' depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms QuantumCircuit.partialWeyl
+
+/--
+info: 'QuantumCircuit.partialWeyl_mem_unitary' depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms QuantumCircuit.partialWeyl_mem_unitary
+
+/--
+info: 'QuantumCircuit.outsideWeyl_eq_partialWeyl' depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms QuantumCircuit.outsideWeyl_eq_partialWeyl
+
+/--
+info: 'QuantumCircuit.partialWeyl_insert' depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms QuantumCircuit.partialWeyl_insert
+
+/--
+info: 'QuantumCircuit.partialWeyl_singleton_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms QuantumCircuit.partialWeyl_singleton_mem
+
+/--
+info: 'QuantumCircuit.norm_commutator_mul_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms QuantumCircuit.norm_commutator_mul_le
