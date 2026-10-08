@@ -100,6 +100,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -202,6 +203,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -347,6 +349,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
               - 'scripts/test_tenkz_quantum_double_local_terms.py'
+              - 'scripts/test_tenkz_quantum_double_source_construction.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -600,30 +603,23 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/NestedCylinderCounterexamples.lean
 
-      - name: Compile shared single-qubit test coordinates strictly
+      - name: Test regularized patch minimum and coordinate first variation strictly
         run: |
-          mkdir -p .lake/build/lib/lean/TNLeanTest/Support
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-            -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-            -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            -o .lake/build/lib/lean/TNLeanTest/Support/SingleQubitConfig.olean \
+          set -e
+          # The patch tests import a shared support module. Keep its object in a
+          # fresh overlay outside the production cache, so other TNLeanTest
+          # overlays are not shadowed by a TNLeanTest directory in the build tree.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest/Support"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
+          flags="-DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true"
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
+            -o "$test_root/TNLeanTest/Support/SingleQubitConfig.olean" \
             TNLeanTest/Support/SingleQubitConfig.lean
-
-      - name: Test actual regularized patch minimum regressions strictly
-        run: |
-          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
-            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-              "TNLeanTest/$example.lean"
-          done
-
-      - name: Test coordinate first variation and canonical marginals strictly
-        run: |
-          for example in DependentRegionCoordinates RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
-            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
+              DependentRegionCoordinates RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
               "TNLeanTest/$example.lean"
           done
 
@@ -1190,7 +1186,9 @@ jobs:
 
       - name: Test quantum-double local-term diagrams and nonabelian formulas
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_quantum_double_local_terms.py
+        run: |
+          python3 scripts/test_tenkz_quantum_double_local_terms.py
+          python3 scripts/test_tenkz_quantum_double_source_construction.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
