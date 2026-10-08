@@ -19,7 +19,9 @@ contraction, and products of contractions are contractions.
 
 * `Matrix.l2_opNorm_reindex_le`: relabelling rows and columns of a rectangular matrix.
 * `Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_le_one`: `‖Aᴴ A‖ ≤ 1` gives `‖A‖ ≤ 1`.
+* `Matrix.IsIsometry.l2_opNorm_le_one`: an isometry is a contraction.
 * `Matrix.l2_opNorm_mul_le_one`, `Matrix.l2_opNorm_list_prod_le_one`: products of contractions.
+* `Matrix.l2_opNorm_conjTranspose_mul_mul_le_one`: `‖Aᴴ F A‖ ≤ 1` for contractions `A` and `F`.
 * `Matrix.kronecker_one_mul_apply`: the entries of `(N ⊗ 1) C` on one identity slice.
 -/
 
@@ -60,10 +62,20 @@ theorem l2_opNorm_le_one_of_conjTranspose_mul_self_le_one {A : Matrix m n ℂ}
   rw [l2_opNorm_conjTranspose_mul_self] at h
   nlinarith [norm_nonneg A]
 
+/-- An isometry `Aᴴ A = 1` is a contraction. -/
+theorem IsIsometry.l2_opNorm_le_one {A : Matrix m n ℂ} (hA : A.IsIsometry) : ‖A‖ ≤ 1 :=
+  l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
+    rw [show Aᴴ * A = 1 from hA]; exact (IsStarProjection.one _).norm_le)
+
 /-- The product of two contractions is a contraction. -/
 theorem l2_opNorm_mul_le_one {l : Type*} [Fintype l] [DecidableEq l] {A : Matrix m n ℂ}
     {B : Matrix n l ℂ} (hA : ‖A‖ ≤ 1) (hB : ‖B‖ ≤ 1) : ‖A * B‖ ≤ 1 :=
   (l2_opNorm_mul A B).trans ((mul_le_mul hA hB (norm_nonneg B) zero_le_one).trans_eq (one_mul 1))
+
+/-- Compressing a contraction `F` by a contraction `A` gives a contraction `Aᴴ F A`. -/
+theorem l2_opNorm_conjTranspose_mul_mul_le_one [DecidableEq m] {A : Matrix m n ℂ}
+    {F : Matrix m m ℂ} (hA : ‖A‖ ≤ 1) (hF : ‖F‖ ≤ 1) : ‖Aᴴ * F * A‖ ≤ 1 :=
+  l2_opNorm_mul_le_one (l2_opNorm_mul_le_one (by rwa [l2_opNorm_conjTranspose]) hF) hA
 
 /-- The product of a list of contractions is a contraction. -/
 theorem l2_opNorm_list_prod_le_one :

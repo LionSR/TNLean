@@ -14,64 +14,6 @@ requirements and State parameter orders are retained. No upstream proofs copied.
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import TNLean.PEPS.SquareLatticeGraph
 
-/-
-Provenance ledger: docs/provenance/openai-math.d/8740.json.
-Adapted from OpenAI's openai/math repository (Apache-2.0).
-Upstream revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Changes: renamed namespaces, shared edge spelling and narrowed imports.
-Renamed source PEPS to Tensor and made finite instances explicit.
-Retained both incidence conventions, tensor argument orders, State parameter orders and positivity.
-No upstream Lean proofs are copied.
-Provenance-ID: 8740-vertex
-Downstream: TNLean.PEPS.Approximation.Vertex
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.Vertex
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L12-L12
-Provenance-ID: 8740-forwardadjacent
-Downstream: TNLean.PEPS.Approximation.ForwardAdjacent
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.ForwardAdjacent
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L14-L14
-Provenance-ID: 8740-forwardedge
-Downstream: TNLean.PEPS.Approximation.ForwardEdge
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.Edge
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L18-L18
-Provenance-ID: 8740-pinned-incidentedge
-Downstream: TNLean.PEPS.Approximation.Pinned.IncidentEdge
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.IncidentEdge
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L25-L25
-Provenance-ID: 8740-pinned-state
-Downstream: TNLean.PEPS.Approximation.Pinned.State
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.State
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L30-L30
-Provenance-ID: 8740-pinned-localtensor
-Downstream: TNLean.PEPS.Approximation.Pinned.LocalTensor
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.LocalTensor
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L80-L80
-Provenance-ID: 8740-pinned-contractpeps
-Downstream: TNLean.PEPS.Approximation.Pinned.contractPEPS
-Upstream: OAI.PolynomialPEPS.PinnedEntropy.contractPEPS
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean#L83-L83
-Provenance-ID: 8740-vector-incidentedge
-Downstream: TNLean.PEPS.Approximation.Vector.IncidentEdge
-Upstream: OAI.PolynomialPEPS.IncidentEdge
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L22-L22
-Provenance-ID: 8740-vector-state
-Downstream: TNLean.PEPS.Approximation.Vector.State
-Upstream: OAI.PolynomialPEPS.State
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L26-L26
-Provenance-ID: 8740-vector-tensor
-Downstream: TNLean.PEPS.Approximation.Vector.Tensor
-Upstream: OAI.PolynomialPEPS.PEPS
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L68-L68
-Provenance-ID: 8740-vector-tensor-contract
-Downstream: TNLean.PEPS.Approximation.Vector.Tensor.contract
-Upstream: OAI.PolynomialPEPS.PEPS.contract
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L78-L78
-Provenance-ID: 8740-vector-tensor-maxbonddim
-Downstream: TNLean.PEPS.Approximation.Vector.Tensor.maxBondDim
-Upstream: OAI.PolynomialPEPS.PEPS.maxBondDim
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean#L83-L83
--/
-
 /-!
 # The two source square-grid PEPS presentations
 
