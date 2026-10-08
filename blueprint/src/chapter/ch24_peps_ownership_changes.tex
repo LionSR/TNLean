@@ -163,10 +163,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.Frame.changeOwner,
         TNLean.PEPS.EncodedFrame.Frame.birthEnv,
         TNLean.PEPS.EncodedFrame.Frame.mem_birthEnv,
-        TNLean.PEPS.EncodedFrame.Frame.outerHoles_subset_birthEnv,
-        TNLean.PEPS.EncodedFrame.Frame.owner_eq_of_notMem_birthEnv,
-        TNLean.PEPS.EncodedFrame.Frame.changeOwner_owner_of_notMem_birthEnv,
-        TNLean.PEPS.EncodedFrame.Frame.disjoint_birthEnv}
+        TNLean.PEPS.EncodedFrame.Frame.outerHoles_subset_birthEnv}
     \leanok
     \uses{def:peps_frame}
     For an encoded frame $\mathcal F$, a party $P_\circ$ and a set $T$ of raw
@@ -176,11 +173,28 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         E=\{x:\text{the raw owner of }x\neq P_\circ\}\cup H^+(\mathcal F),
         \qquad U=\Lambda\setminus(T\cup E)
     \end{align}
-    (\texttt{05-frames.tex}, equation (birth-partition), lines 400--405). If
-    $T$ is owned by $P_\circ$ and avoids every outer hole footprint, then $T$
-    and $E$ are disjoint, every register outside $E$ is owned by $P_\circ$ in
-    $\mathcal F$, and by $P_\circ$ or $Q_\circ$ in $\mathcal F'$.
+    (\texttt{05-frames.tex}, equation (birth-partition), lines 400--405).
 \end{definition}
+
+\begin{lemma}[Owners in the birth partition]
+    \label{lem:peps_frame_birth_partition_owners}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.owner_eq_of_notMem_birthEnv,
+        TNLean.PEPS.EncodedFrame.Frame.changeOwner_owner_of_notMem_birthEnv,
+        TNLean.PEPS.EncodedFrame.Frame.disjoint_birthEnv}
+    \leanok
+    \uses{def:peps_frame_birth_partition}
+    Every register outside $E$ is owned by $P_\circ$ in $\mathcal F$, and by
+    $P_\circ$ or $Q_\circ$ in $\mathcal F'$. If $T$ is owned by $P_\circ$ and
+    avoids every outer hole footprint, then $T$ and $E$ are disjoint
+    (\texttt{05-frames.tex}, lines 397--405).
+\end{lemma}
+
+\begin{proof}\leanok
+    A register outside $E$ has old owner $P_\circ$ by the definition of $E$;
+    in $\mathcal F'$ its owner is $Q_\circ$ if it lies in $T$ and its old
+    owner otherwise. A register of $T$ has old owner $P_\circ$ and lies in no
+    outer hole footprint, so it is in neither part of $E$.
+\end{proof}
 
 \begin{theorem}[Homogeneous birth and death: canonical map]
     \label{thm:peps_frame_birth}
@@ -188,7 +202,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.Frame.death}
     \leanok
     \uses{lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,
-        def:peps_frame_birth_partition}
+        def:peps_frame_birth_partition,lem:peps_frame_birth_partition_owners}
     In an encoded frame $\mathcal F$, let $T$ be owned by $P_\circ$ and
     disjoint from every outer hole footprint, let $E$ be as in the birth
     partition, and let $\lVert\Omega\rVert=1$. If $I_\Omega(T:E)\le L^{-60}$,
@@ -212,7 +226,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
-        lem:peps_frame_pass_encoding,def:peps_frame_birth_partition}
+        lem:peps_frame_pass_encoding,def:peps_frame_birth_partition,
+        lem:peps_frame_birth_partition_owners}
     Every hole encoder acts on $H^+(\mathcal F)\subseteq E$, so it commutes
     with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
             F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
@@ -222,7 +237,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
-    \uses{thm:peps_frame_birth}
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners}
     The birth is a bounded change involving only $P_\circ$ and $Q_\circ$: a
     private contraction at $P_\circ$, one normalized pair source between
     $Q_\circ$ and $P_\circ$, and a private contraction at $P_\circ$; the death
@@ -243,15 +258,31 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{definition}[Swapping two sheets]
     \label{def:peps_frame_sheet_swap}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwap,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp,
-        TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
-        TNLean.PEPS.EncodedFrame.commute_sheetSwapOp_kronecker}
+        TNLean.PEPS.EncodedFrame.sheetSwapOp}
     \leanok
     For $S\subseteq\Lambda$, $F_S$ is the unitary swapping the two raw sheets
-    at the positions in $S$. If $Y$ is the disjoint union of $T$ and $A$, then
-    $F_AF_Y=F_T$. The swap $F_S$ commutes with $R_1\otimes R_2$ whenever $R_1$
-    and $R_2$ act on a set disjoint from $S$.
+    at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
+
+\begin{lemma}[Composing and commuting sheet swaps]
+    \label{lem:peps_frame_sheet_swap_compose}
+    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
+        TNLean.PEPS.EncodedFrame.commute_sheetSwapOp_kronecker}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    If $Y$ is the disjoint union of $T$ and $A$, then $F_AF_Y=F_T$. The swap
+    $F_S$ commutes with $R_1\otimes R_2$ whenever $R_1$ and $R_2$ act on a
+    set disjoint from $S$ (\texttt{05-frames.tex}, lines 512--520).
+\end{lemma}
+
+\begin{proof}\leanok
+    The swaps are permutation matrices of the two-sheet configurations. On a
+    configuration, swapping at $Y$ and then at $A\subseteq Y$ swaps exactly
+    at the sites of $Y$ outside $A$, that is, at $T$. For the second claim,
+    $R_1$ and $R_2$ are the identity on $S$ tensored with operators $R_1'$
+    and $R_2'$ on the complement, so in the coordinates splitting off the two
+    copies of $S$ both $F_S$ and $R_1\otimes R_2$ act on different factors.
+\end{proof}
 
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
@@ -397,8 +428,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.eSet,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.aSet,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.mem_exchangeEnv,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.owner_eq_of_notMem_exchangeEnv,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newOwner_eq_of_notMem_exchangeEnv,
         TNLean.PEPS.EncodedFrame.liftTags,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp}
     \leanok
@@ -410,11 +439,27 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align}
     $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$ and $A=Y\cap U$
     (\texttt{05-frames.tex}, equations (exchange-Z) and (exchange-partition),
-    lines 466--473). Every register of $U$ is raw and held by $P_\circ$ on
-    both sheets, before and after the exchange. The implemented map is
+    lines 466--473). The implemented map is
     $C=D_UF_A\mathcal R$, with $D_U$ and $F_A$ acting on raw registers and as
     the identity on all tags.
 \end{definition}
+
+\begin{lemma}[Owners outside the exchange environment]
+    \label{lem:peps_frame_exchange_owners}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.owner_eq_of_notMem_exchangeEnv,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.newOwner_eq_of_notMem_exchangeEnv}
+    \leanok
+    \uses{def:peps_frame_exchange_map}
+    Every register of $U$ is raw and held by $P_\circ$ on both sheets,
+    before and after the exchange (\texttt{05-frames.tex}, lines 500--501).
+\end{lemma}
+
+\begin{proof}\leanok
+    A register of $U$ is outside $Z$, so both its old raw owners are
+    $P_\circ$ and it lies in no outer hole footprint. The exchanged frames
+    take their raw owners at each site from one of the two old frames, so
+    both new raw owners are $P_\circ$ as well.
+\end{proof}
 
 \begin{theorem}[Two-sheet exchange: canonical map]
     \label{thm:peps_frame_exchange}
@@ -426,7 +471,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.commute_sheetBufferCorrection}
     \leanok
     \uses{lem:peps_frame_exchange_intertwining,lem:peps_frame_exchange_net_map,
-        lem:peps_frame_exchange_error,def:peps_frame_exchange_map}
+        lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
+        lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_owners}
     In the setting of the exchange partition, let $\lVert\Omega\rVert=1$. If
     $I_\Omega(T:E)\le L^{-60}$, then for splitting data with error at most
     $L^{-30}$ the map $C$ is a contraction,
@@ -444,8 +490,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{proof}\leanok
     \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,
-        def:peps_frame_sheet_swap,lem:peps_frame_exchange_net_map,
-        lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
+        def:peps_frame_sheet_swap,lem:peps_frame_sheet_swap_compose,
+        lem:peps_frame_exchange_net_map,lem:peps_frame_exchange_error,
+        def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
         lem:peps_frame_encoder_contraction}
     The corrections act on $U$, away from every hole of both sheets, so they
     commute with $K_{\rm out}$; with $F_AF_Y=F_T$ and the intertwining of the
@@ -488,7 +535,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{theorem}[Two-sheet exchange: bounded change]
     \label{thm:peps_frame_exchange_bounded}
-    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order}
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
+        lem:peps_frame_exchange_owners}
     The exchange is implemented by private contractions and a register
     renaming, using $P_\circ$ and the owners of the renamed registers and
     tags; when these form a bounded list it is a bounded change in the sense

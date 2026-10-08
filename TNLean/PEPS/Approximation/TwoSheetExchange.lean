@@ -542,6 +542,7 @@ def ofFrames (F₁ F₂ : Frame pos q Party) (Y : Finset ι) (out : Hole pos q P
     · have h₁ := List.mem_filter.mp hh
       exact hout h (List.mem_append_right _ h₁.1) h₁.2
 
+/-- A permutation of a list of holes does not change its outer footprint. -/
 theorem mem_footprint_perm {l l' : List (Hole pos q Party)} (hp : l.Perm l') {x : ι} :
     x ∈ footprint (l.map Hole.patch) ↔ x ∈ footprint (l'.map Hole.patch) :=
   ⟨fun ⟨p, hp', hx⟩ => ⟨p, (hp.map _).subset hp', hx⟩,
