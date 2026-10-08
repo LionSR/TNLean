@@ -106,6 +106,20 @@ python3 scripts/test_lake_build_hotspots.py
 scripts/test_seed_lake_build.sh
 ```
 
+## Main CI cache production
+
+`pr-ci.yml` keeps one running workflow and at most one pending workflow per ref.
+New pushes to `main` replace the pending run without cancelling the running
+one, allowing it to reach the successful-build cache save despite frequent
+merges. Manual dispatches on `main` share this policy and group. Pull requests
+and dispatches on other refs still cancel superseded running workflows.
+
+This can delay checks for the latest main commit until the running workflow
+finishes; it does not guarantee a build for every intermediate commit or make
+a failing build save a cache. Cache keys still identify the built commit and
+all three root inputs. The cache guards and full build requirements below are
+unchanged.
+
 ## Narrow compatible-main CI seed
 
 The ordinary `pr-ci.yml` cache key and restore prefix still hash all three root

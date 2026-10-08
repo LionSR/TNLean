@@ -24,6 +24,8 @@ import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
+import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
+import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GroupTruncation
@@ -32,9 +34,11 @@ import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PairEffectSourcePreparation
+import TNLean.PEPS.Approximation.PairSourceCombination
 import TNLean.PEPS.Approximation.PairSourceCompletion
 import TNLean.PEPS.Approximation.PairSourceExpansion
 import TNLean.PEPS.Approximation.PairSourceGrouping
+import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyLayout
@@ -44,10 +48,13 @@ import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
+import TNLean.PEPS.Approximation.PatchRewriteTruncation
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.PEPS.Approximation.SiteChainNetwork
+import TNLean.PEPS.Approximation.SiteChainTruncation
 import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
