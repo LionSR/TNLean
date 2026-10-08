@@ -18,36 +18,6 @@ Source: OpenAI `03-patches.tex`, lines 134–146, commit
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-/-!
-## Original proof provenance
-
-Source: September 24, 2026,
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex
-sec:patches, prop:patch, and eq:patch-variational-problem.
-Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate
-Downstream declaration: TNLean.PEPS.regularizedPatchCoordinateUpdate
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate_mem
-Downstream declaration: TNLean.PEPS.regularizedPatchCoordinateUpdate_mem
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchcoordinateupdate_rpow
-Downstream declaration: TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion
-Downstream declaration: TNLean.PEPS.regularizedPatchInsertion
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion_apply
-Downstream declaration: TNLean.PEPS.regularizedPatchInsertion_apply
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchoutput_coordinateupdate
-Downstream declaration: TNLean.PEPS.regularizedPatchOutput_coordinateUpdate
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchinsertion_self
-Downstream declaration: TNLean.PEPS.regularizedPatchInsertion_self
--/
-
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open Matrix
 

@@ -20,39 +20,6 @@ Source: OpenAI `03-patches.tex`, lines 68–99, commit
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-/-!
-## Original proof provenance
-
-Source: September 24, 2026,
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex
-sec:patches, prop:patch, and eq:patch-variational-problem.
-Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigequiv
-Downstream declaration: TNLean.PEPS.dependentGlobalConfigEquiv
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigisometry
-Downstream declaration: TNLean.PEPS.dependentGlobalConfigIsometry
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.dependentglobalconfigisometry_apply
-Downstream declaration: TNLean.PEPS.dependentGlobalConfigIsometry_apply
-
-Provenance-ID: regularizedpatchstationarity8767-regional-expectation
-Downstream declaration: TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.normalizedregularizedpatchmarginal
-Downstream declaration: TNLean.PEPS.normalizedRegularizedPatchMarginal
-
-Provenance-ID: regularizedpatchstationarity8767-marginal-psd
-Downstream declaration: TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.trace_normalizedregularizedpatchmarginal
-Downstream declaration: TNLean.PEPS.trace_normalizedRegularizedPatchMarginal
-
-Provenance-ID: regularizedpatchstationarity8767-normalized-expectation
-Downstream declaration: TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace
--/
-
 open scoped BigOperators Matrix Kronecker ComplexOrder
 open Matrix
 

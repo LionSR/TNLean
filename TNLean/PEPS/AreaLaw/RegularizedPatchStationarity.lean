@@ -22,24 +22,6 @@ Source: OpenAI `03-patches.tex`, lines 134–153, commit
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-/-!
-## Original proof provenance
-
-Source: September 24, 2026,
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex
-sec:patches, prop:patch, and eq:patch-variational-problem.
-Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchunitarycurve
-Downstream declaration: TNLean.PEPS.regularizedPatchUnitaryCurve
-
-Provenance-ID: regularizedpatchstationarity8767-output-derivative
-Downstream declaration: TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate
-
-Provenance-ID: regularizedpatchstationarity8767-tnlean.peps.regularizedpatchfirstvariation_eq_zero
-Downstream declaration: TNLean.PEPS.regularizedPatchFirstVariation_eq_zero
--/
-
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open Matrix
 
