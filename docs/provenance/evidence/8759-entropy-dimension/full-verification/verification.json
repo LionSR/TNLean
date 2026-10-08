@@ -1,0 +1,101 @@
+{
+  "repository": "LionSR/TNLean",
+  "production_revision": "548f23f7b274af443eb3644d8153f15148565c31",
+  "verification_input_revision": "e623594d6c23f647bbdce797bcdf1a4cd48610b7",
+  "capacity_source_revision": "53f0bd48eed8771e331309ffb929794f9869b611",
+  "sha256": {
+    "TNLean/PEPS/AreaLaw/EntropyDimension.lean": "642cd1e991bd47852921c49558893b06c74336101d68919fd2762c3a2e15c93d",
+    "TNLean/PEPS/AreaLaw/BoundaryEntropyAssembly.lean": "a3c312b2c65bb6b698432c751f0e065e52a948f9857dfedc42d692843638d4f9",
+    "TNLean/PEPS/AreaLaw/Amplification/RadiusScales.lean": "94d252d5a6486c9ea3f2f1bfb24feab163f7e8db8ae02ca630b7d02c244e2938",
+    "lakefile.toml": "5c46488fd489a22ebaeec33b872160f36ebc58c23f43c66cc53b1404d48317b2",
+    "lake-manifest.json": "be6fe72fb55036aacaf02c0897b3e81fd70692bcda40219c055e4dd771a8e681",
+    "lean-toolchain": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47",
+    "blueprint/src/latexmkrc": "8a2b4cc2a86d878782c38b742ab89cf678d9ecfa35b202c92e16e0b638f7547d",
+    "docs/provenance/evidence/8759-entropy-dimension/kernel_lock_run.py": "799d7f225c38b2ef2040d6f62a25c86a56708c968e59498869b1097221e66ff6"
+  },
+  "web": {
+    "command": "cp print/print.bbl src/web.bbl && leanblueprint web",
+    "cwd": "blueprint",
+    "exit_code": 0,
+    "log": "web.log",
+    "sha256": "98b2a7c3e4ea544242cc760f2b5d2ee809837cdc861ee555e41ee5f56e7d959c"
+  },
+  "pdf.log.gz": {
+    "sha256": "9e93ed21674f628788dd72cc1e99d301649eb6e5ce80c8f92ba0eace527f9278",
+    "uncompressed_sha256": "cc796263099619d5bffaa945f8b3a48e35fad3f84127aa44334d345479da7a45"
+  },
+  "print.log.gz": {
+    "sha256": "6c67ee50647906641e6b0c59ec717d0eb88d644b89d85d75d953d614d2728f6c",
+    "uncompressed_sha256": "2fde76fcb72550c37933d527d8631fa70529d318d4b8e02669166be786bd0f05"
+  },
+  "pdf": {
+    "command": "latexmk -g -output-directory=../print",
+    "cwd": "blueprint/src",
+    "exit_code": 0,
+    "log": "pdf.log.gz",
+    "sha256": "9e93ed21674f628788dd72cc1e99d301649eb6e5ce80c8f92ba0eace527f9278",
+    "artifact_path": "blueprint/print/print.pdf",
+    "artifact_sha256": "47bc5cd856bf551e0a41cadc658e2361c32464e938a7e5d054e19a5acc5e2ce4",
+    "artifact_bytes": 13633330,
+    "pages": 2085,
+    "xelatex_passes": 4,
+    "string_pool_used": 6242741,
+    "string_pool_capacity": 11673555,
+    "undefined_references_or_citations": 0,
+    "inspected_pages": [
+      {
+        "physical_page": 1697,
+        "printed_page": 1696,
+        "render_path": "pdf-page-1697.png",
+        "sha256": "86a0b3e2bcb5bd680d28e5712c004fe3034cfde65d816b7618adffa24e0a9b47",
+        "visual_review": "passed: formulas, citations, references and layout are readable; no clipping or overlap observed."
+      },
+      {
+        "physical_page": 1698,
+        "printed_page": 1697,
+        "render_path": "pdf-page-1698.png",
+        "sha256": "a0724edeb6ed687ded59615e62a08e13c84bddd05b5a7c149300e6265e0a17dc",
+        "visual_review": "passed: formulas, citations, references and layout are readable; no clipping or overlap observed."
+      }
+    ]
+  },
+  "root_build": {
+    "command": "python3 docs/provenance/evidence/8759-entropy-dimension/kernel_lock_run.py scripts/lake_build_locked.sh",
+    "cwd": ".",
+    "exit_code": 0,
+    "log": "root-build.log",
+    "sha256": "5a617b1151b735c584802c2246c525d85dcff1a54ca8855bbe8f65225a537aeb",
+    "jobs": 12480,
+    "result": "passed with inherited linter warnings; no mathematical source changes."
+  },
+  "checkdecls_source": {
+    "path": ".lake/packages/checkdecls/Main.lean",
+    "sha256": "ffe21fade6dbf85c747658ed4ccd01ef9b8c6e7fa245846ee4d697a709f3f121",
+    "revision": "3d425859e73fcfbef85b9638c2a91708ef4a22d4"
+  },
+  "interpreter_attempt": {
+    "command": "lake env lean --run .lake/packages/checkdecls/Main.lean blueprint/lean_decls",
+    "exit_code": 1,
+    "log": "interpreted-checker-attempt.log",
+    "sha256": "798faf7131445f780a262a7260f6342395b62a3f3f388c8365ed4d972b8aeb34",
+    "result": "failed with Lean IR-interpreter assertion; the native executable is required for this checker."
+  },
+  "checkdecls": {
+    "command": "lake env /Users/siruilu/Local/agentFormalization/QICLean/worktrees/area-law-two-family-entropy/.lake/packages/checkdecls/.lake/build/bin/checkdecls blueprint/lean_decls",
+    "cwd": ".",
+    "exit_code": 0,
+    "log": "checkdecls.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "declaration_count": 19876,
+    "unique_declaration_count": 19876,
+    "declaration_list_sha256": "ca43ff97922cb52b5e2e033f37b73fa1bcc3c1a49bf2e35191c8761c4cd8b6ed",
+    "checker_executable_sha256": "67873de2b0bf2a3868d9b090017833275edb2ad500803ae0c9e60e536a878f14",
+    "checker_package_revision": "3d425859e73fcfbef85b9638c2a91708ef4a22d4",
+    "checker_source_and_configuration_match": true,
+    "qic_and_tn_root_toolchains_match": true,
+    "cache_artifacts_copied": false
+  },
+  "queued_local_checker_build": {
+    "result": "cancelled before lock acquisition or build execution; other agents retain their queued checks."
+  }
+}

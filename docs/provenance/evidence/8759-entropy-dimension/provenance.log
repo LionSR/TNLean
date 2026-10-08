@@ -1,0 +1,5 @@
+PASS: seven entries in the two contribution shards; immutable source bytes, declaration notices, exact kernel output and evidence hashes.
+Policy revision: 806099b4dddcce591b3a62ee1921926a6af5ad55
+Validator SHA256: 8183e29f5a339bba37e28e9473aa7a6a42791282ed6877071dfd4096eda7cb65
+Schema SHA256: a691d8e95b668c968365f2c7e33f614d49635aade8fdd4c2f27cd64f0cd6b459
+Scope: contribution shards only; no repository-wide provenance scan.
