@@ -1,0 +1,169 @@
+\section{Original input and physical-output resources}
+\label{sec:peps_physical_first_resources}
+
+The following bounds concern the actual source replacement and its prescribed
+star and sample alphabets. They do not assert an identification of the sampled
+physical operator with a contraction of local tensors.
+
+\begin{theorem}[Finite coordinates for the original input]
+    \label{thm:peps_finite_whole_party_input}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.finiteDimensional_wholePartyMem}
+    \leanok
+    Let $P$ be a finite set of parties and let $H_p$ be their original
+    finite-dimensional private memories. The ordered memory
+    $\bigotimes_{p\in P}H_p$ is finite-dimensional and hence admits a finite
+    orthonormal basis. There is no numerical bound on the dimensions $\dim H_p$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each register in the original party list has space $H_p$ for one $p\in P$.
+    Finite tensor products of finite-dimensional spaces are finite-dimensional.
+    This includes the empty tensor product and zero-dimensional factors.
+\end{proof}
+
+
+\begin{theorem}[Source positions after the physical output exchange]
+    \label{thm:peps_physical_first_source_count}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
+    \leanok
+    Let $W$ be an original contraction circuit with $N$ nonprivate gate
+    occurrences, each involving at most $a$ parties. Its physical-first
+    source replacement has at most $N\binom a2$ source positions. This count
+    does not depend on the effect-elimination accuracy or on private dimensions.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_physical_first_occurrences}
+    \leanok
+    Each replacement gate has one source slot per unordered pair of its
+    original participants. The final physical output exchange introduces
+    no new gate or source occurrence.
+\end{proof}
+
+\begin{theorem}[Polynomial sample count from original resources]
+    \label{thm:peps_physical_first_sample_polynomial}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
+    \leanok
+    Let $W,N,a$ be as in the preceding source-count theorem.
+    Let $L\ge1$, let $n,s,d,p$ be nonnegative integers, and suppose
+    \begin{align}
+        N\le C_NL^n,\qquad 0\le B\le C_BL^s,\qquad 0\le D\le C_DL^d,
+        \qquad C_B\ge0.
+    \end{align}
+    Here $B$ bounds the original gate coefficient sums, $D$ is a nonnegative
+    parameter, and $\ell$ is a nonnegative integer. In applications they are
+    chosen as a physical-dimension bound and a whole-lifetime participation bound.
+    Put $C_{\rm src}=\max\{1,C_N\binom a2\}$.
+    For the actual sample count of the physical-first replacement, chosen at
+    accuracy $L^{-p}$ and cost $B^{4\ell}D^4$, one has
+    \begin{align}
+        k<\bigl[64C_{\rm src}^2(C_B^{4\ell}C_D^4)^2+2\bigr]
+        L^{2(n+4\ell s+4d+p)}.
+    \end{align}
+    Every coefficient and exponent in this bound depends only on the fixed
+    original resource bounds and the prescribed accuracy.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_physical_first_source_count,thm:peps_source_sampling_polynomial}
+    The source count is at most $C_{\rm src}L^n$. Apply the explicit
+    sample-count estimate with this bound and the displayed bounds on $B,D$.
+    The maximum with one covers the case of no sources.
+\end{proof}
+
+\begin{theorem}[Polynomial branch counts after the physical exchange]
+    \label{thm:peps_physical_first_branch_polynomial}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
+    \leanok
+    Suppose $L\ge1$, $C_N\ge1$, $C_K,C_S,S\ge0$, and
+    \begin{align}
+        K\le C_KL^u,\qquad N\le C_NL^n,\qquad S\le C_SL^s.
+    \end{align}
+    Let every original gate contain at most $K$ monomials with at most $r$
+    pair effects each and coefficient sum at most $S$. Use gate budget
+    $\delta=L^{-p}/(8\max\{1,N\})$, where $u,n,s,p$ are nonnegative integers.
+    Every gate of the actual physical-first replacement then has at most
+    \begin{align}
+        C_K\bigl[64C_N^2(rC_S)^2+2\bigr]^r
+        L^{u+2r(n+s+p)}
+    \end{align}
+    branches.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_effect_replacement_polynomial}
+    The replacement has at most $K m^r$ branches, where $m$ is the chosen
+    stack length. Substitute its polynomial bound. The physical output
+    exchange changes neither branch labels nor coefficient sums.
+\end{proof}
+
+\begin{definition}[Original gate occurrences and network locality]
+    \label{def:peps_physical_first_original_locality}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.physicalFirstReplacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
+    \leanok
+    The original nonprivate gate occurrences are in bijection with those of
+    the physical-first replacement, preserving their participating sets.
+    Choose any collection of replacement gate occurrences and a root assignment
+    on all replacement occurrences whose value participates at every retained
+    occurrence. Every star or sample link in the
+    resulting construction joins two parties that participate in a common
+    gate of the original circuit.
+\end{definition}
+\begin{proof}
+    \leanok
+    Compose the gate correspondence for effect elimination with that for the
+    physical output exchange. A link's gate label places both endpoints in
+    its replacement gate's participating set; the correspondence identifies
+    this set with the original one.
+\end{proof}
+
+\begin{theorem}[Original lifetime bound controls the actual link degree]
+    \label{thm:peps_physical_first_original_degree}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
+    \leanok
+    Suppose every original gate involves at most $b$ parties and each party
+    participates in at most $b$ original nonprivate occurrences over the
+    whole construction. For the retained gate collection and participating
+    roots above, each party is incident to at most $2b(b-1)$ actual links,
+    counting parallel links separately.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_physical_first_original_locality}
+    The gate correspondence preserves arity and lifetime participation.
+    Discarding some gate occurrences can only reduce the latter count.
+    Each participating gate contributes at most $b-1$ star links and $b-1$
+    sample links at a party. Sum over its at most $b$ original occurrences.
+\end{proof}
+
+\begin{theorem}[Polynomial virtual dimensions of the actual source alphabets]
+    \label{thm:peps_source_alphabet_polynomial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
+    \leanok
+    Fix a set of gate occurrences of an actual source circuit, and the
+    root assignment defining its star links. A star link at occurrence
+    $g$ carries the ordered ket--bra pair of its actual branch labels;
+    each sample link carries one of $k$ sample indices.
+    Suppose $L\geq1$, $C_M,C_k\geq0$, and $u,v$ are nonnegative integers.
+    If each of these gate occurrences has at most $C_ML^u$ branches and
+    $k\leq C_kL^v$, then every constructed link alphabet satisfies
+    \begin{align}
+        \dim(\text{link alphabet})
+        \leq (C_M^2+C_k)L^{\max(2u,v)}.
+        \label{eq:peps_source_alphabet_polynomial}
+    \end{align}
+    No dimension of a private memory or source Schmidt space occurs in
+    this bound. The statement concerns the actual alphabets; the
+    identification of the sampled physical operator with a contraction
+    of local tensors is a separate assertion.
+\end{theorem}
+\begin{proof}
+    \leanok
+    At a star link the cardinality is the square of the actual branch
+    count, hence at most $C_M^2L^{2u}$. At a sample link it is exactly
+    $k\leq C_kL^v$. Since $L\geq1$, increase either exponent to
+    $\max(2u,v)$ and bound its nonnegative coefficient by $C_M^2+C_k$.
+    These are precisely the star and sample alphabets of Theorem~5.2,
+    lines 565--588 of the compression argument.
+\end{proof}

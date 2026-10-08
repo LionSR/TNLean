@@ -62,6 +62,7 @@ import TNLean.PEPS.Approximation.ExteriorPhysicalDimension
 import TNLean.PEPS.Approximation.ExteriorSourceContraction
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import TNLean.PEPS.Approximation.FamilySourceOnlyReduction
+import TNLean.PEPS.Approximation.FiniteInputMemory
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteRegisterMemories
 import TNLean.PEPS.Approximation.FiniteSourceGate
@@ -76,6 +77,10 @@ import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalSchmidtOutput
+import TNLean.PEPS.Approximation.LocalTransferExpansion
+import TNLean.PEPS.Approximation.MessageGateCircuit
+import TNLean.PEPS.Approximation.MessageGateExpansion
+import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerOutputCoordinates
@@ -89,8 +94,10 @@ import TNLean.PEPS.Approximation.PartialSourceDensity
 import TNLean.PEPS.Approximation.PartialSourceEvaluation
 import TNLean.PEPS.Approximation.PartialSourceInventory
 import TNLean.PEPS.Approximation.PartialSourcePreparation
+import TNLean.PEPS.Approximation.PartyChainComposition
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyFactorization
+import TNLean.PEPS.Approximation.PartyGateComposition
 import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyLocalMaps
@@ -100,6 +107,8 @@ import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PhysicalDensityPureInput
 import TNLean.PEPS.Approximation.PhysicalFirstExchange
+import TNLean.PEPS.Approximation.PhysicalFirstNetworkResources
+import TNLean.PEPS.Approximation.PhysicalFirstPolynomial
 import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalOutputContraction
 import TNLean.PEPS.Approximation.PhysicalReadout
@@ -117,6 +126,7 @@ import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
+import TNLean.PEPS.Approximation.SourceAlphabetPolynomial
 import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceChoiceCost
 import TNLean.PEPS.Approximation.SourceCircuitChoiceAt
@@ -168,6 +178,7 @@ import TNLean.PEPS.Approximation.SourceSubstitutionResidual
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
+import TNLean.PEPS.Approximation.TransferGateExpansion
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.WeightedPhysicalSource
 import TNLean.PEPS.Approximation.WholeGroupContraction
