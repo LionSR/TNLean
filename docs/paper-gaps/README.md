@@ -1104,3 +1104,11 @@ birth map and its factorization through one normalized pair source, the
 two-sheet renaming, the ordered private corrections and both reference-error
 bounds, and that the reading of these factorizations as allowed monomials of
 Theorem 5.2 awaits a party layout for monomials.
+
+### Polynomial PEPS approximation: elimination of pair effects
+
+[polypeps_pair_effects_party_layout.tex](polypeps_pair_effects_party_layout.tex)
+records that the formal Lemma 5.1 of the September 24, 2026 polynomial PEPS
+manuscript proves the error, count and coefficient-sum clauses in a model
+without parties, and that the source-only and party-ownership clauses await a
+party layout for the monomial chains.

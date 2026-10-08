@@ -381,7 +381,8 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Wire classification of a branch]
     \label{lem:peps_frame_wires}
-    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.patchSquares,
+    \lean{TNLean.PEPS.EncodedFrame.SquarePatch.tagSample,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.patchSquares,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.oldSample_subset_patchSquares,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.newSample_subset_patchSquares,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_old_owners_of_patch_input,
@@ -390,8 +391,10 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.owners_mem_parties_of_mem_sample}
     \leanok
     \uses{def:peps_frame_rewrite_data}
-    Assume the four conditions and fix any radii of the holes and patches
-    in a branch. Every site of a selected affected old-hole square, and of a
+    Assume the four conditions and fix any cylinder terms of the holes and
+    patches in a branch. The selected square of a term $(j,\ell)$ is $D_j$,
+    and that of the identity term of a square with empty outer sample is
+    empty. Every site of a selected affected old-hole square, and of a
     selected affected new-hole square, lies in a selected patch square. The
     sites of a selected patch square not consumed by a selected old-hole
     square have at most two old owners, and those not received by a selected
@@ -403,7 +406,7 @@ norm of matrices, rectangular ones included.
 
 \begin{proof}\leanok
     Every selected square contains its inner square and lies in its outer
-    square, so condition (2) gives the first statement and the statement on
+    square (for an empty outer sample both are empty), so condition (2) gives the first statement and the statement on
     direct sites. A site of a patch outer square in
     $H^-(\mathcal F_{\rm old})$ is not in an untouched hole by condition (1),
     hence lies in the inner square of an affected old hole and so in its
