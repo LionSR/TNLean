@@ -90,6 +90,40 @@
     Apply the product partial-trace identity.
 \end{proof}
 
+\begin{definition}[Party bases on the original register order]
+    \label{def:peps_party_grouped_basis}
+    \lean{TNLean.PEPS.PairEffect.partyGroupedBasis}
+    \leanok
+    \uses{def:peps_party_tensor_basis}
+    Let $U$ collect the registers by party in the chosen exhaustive
+    order. Transport the party tensor basis back by $U^{-1}$ to obtain
+    an orthonormal basis on the original register order.
+\end{definition}
+
+\begin{theorem}[Party coordinates of the actual chronological map]
+    \label{thm:peps_actual_party_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Word.partyGroupedBasis_repr_eval}
+    \leanok
+    \uses{def:peps_party_grouped_basis,thm:peps_actual_private_factorization}
+    Let $W$ be a chronology of local maps with no source preparations,
+    and let $W_p$ be its literal restriction to party $p$. Choose local
+    orthonormal input and output bases $b_p,c_p$, and use their
+    transported party bases on the original register order. Then
+    \begin{align}
+        [W]_{x,y}
+        &=\prod_p\langle c_p(x_p),W_pb_p(y_p)\rangle.
+    \end{align}
+    Empty party sets and zero local factors are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_private_factorization,thm:peps_party_tensor_entries}
+    Group the input and output registers by party. The actual
+    chronological map becomes the tensor product of its singleton
+    restrictions. Compute its entries in the party tensor bases,
+    then transport both bases back to the original register order.
+\end{proof}
+
 These coordinate and trace identities express the local contractions in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 565--579.
