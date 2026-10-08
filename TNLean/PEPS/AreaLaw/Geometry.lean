@@ -22,6 +22,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRadialIncidence
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRays
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
+import TNLean.PEPS.AreaLaw.Geometry.CellFanSlopes
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
 import TNLean.PEPS.AreaLaw.Geometry.ConcentricFans

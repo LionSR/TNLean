@@ -18,3 +18,18 @@ the elementary fans in \cite[Section~11]{OpenAI2026AreaLaw}.
     Then $x-v=(s-r)(q-p)$. Each of the four equations defining an
     allowed direction is preserved by real scalar multiplication.
 \end{proof}
+
+\begin{theorem}[Allowed base and radial directions]
+    \label{thm:area_law_fan_base_radial_directions}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_base_and_radial_isAllowedSlope}
+    \uses{def:area_law_cell_fan}
+    In an elementary fan, every base direction $b_i-a_i$ and every
+    radial direction $c-b_i$ has an allowed direction.
+    Each side may be left whole or subdivided at its midpoint.
+\end{theorem}
+\begin{proof}
+    \uses{def:area_law_template,def:area_law_cell_fan}
+    The fan triangle with vertices $c,a_i,b_i$ is a polygonal template.
+    Its edge directions include $b_i-a_i$ and $c-b_i$, so both have
+    one of the four prescribed slopes.
+\end{proof}

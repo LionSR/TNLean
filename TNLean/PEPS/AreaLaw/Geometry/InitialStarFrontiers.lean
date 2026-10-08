@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.Geometry.CellFanSlopes
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
@@ -62,17 +63,6 @@ private theorem marks_subset_quarter_mesh (o : ℝ × ℝ) (ℓ j : ℕ)
   simpa only [beltMarks, Finset.singleton_biUnion] using
     beltMarks_subset_affineMesh o ℓ j {z} hℓj
 
-/-- The base and last radial edge have the slopes carried by the actual
-triangle constructor. Auxiliary to Section 11, `prop:two-families`,
-lines 308–310, and `geometry:initial-stars`, lines 352–359. -/
-private theorem triangle_base_and_last_slopes (P : TemplatePolygon) :
-    match P with
-    | .triangle a b c _ _ _ _ => IsAllowedSlope (c - b) ∧ IsAllowedSlope (a - c)
-    | .rectangle _ _ _ _ _ _ _ _ => True := by
-  cases P with
-  | triangle _ _ _ _ _ hbc hca => exact ⟨hbc, hca⟩
-  | rectangle => trivial
-
 /-- A whole cell-side contact close to a common-mesh mark has an allowed
 direction from that mark. Auxiliary to Section 11, `geometry:initial-stars`,
 lines 352–359. -/
@@ -83,8 +73,8 @@ private theorem cell_frontier_near_mesh_allowed (o : ℝ × ℝ) (ℓ : ℕ)
     (hnear : dist v x < d / 2) : IsAllowedSlope (x - v) := by
   obtain ⟨s, hs⟩ := exists_dyadicCellSide_of_mem_frontier o ℓ z x hx
   have hvertices := (cellFan_vertices_mem_beltCellMarks o ℓ z (fun _ ↦ false)).2 ⟨s, 0⟩
-  have hslopes := triangle_base_and_last_slopes
-    (cellFanPolygon o ℓ z (fun _ ↦ false) ⟨s, 0⟩)
+  have hslopes := cellFanPolygon_base_and_radial_isAllowedSlope
+    o ℓ z (fun _ ↦ false) ⟨s, 0⟩
   exact near_mesh_segment_allowed hd (hmarks hvertices.1) (hmarks hvertices.2)
     hv hslopes.1 hs hnear
 
@@ -152,8 +142,8 @@ private theorem fine_fan_frontier_near_allowed
     have hxcell := closure_minimal hsub isClosed_closure (frontier_subset_closure hx)
     have hmesh := fine_cell_near_mesh o k h Z C z w v x hC hk hz hw hv hxcell hnear
     have hvertices := cellFan_vertices_mem_beltCellMarks o (fineScaleIndex h) w split
-    have hslopes := triangle_base_and_last_slopes
-      (cellFanPolygon o (fineScaleIndex h) w split l)
+    have hslopes := cellFanPolygon_base_and_radial_isAllowedSlope
+      o (fineScaleIndex h) w split l
     have ht : 0 < (2 : ℝ) ^ fineScaleIndex k := pow_pos zero_lt_two _
     rw [segment_symm] at hxl
     exact near_mesh_segment_allowed
