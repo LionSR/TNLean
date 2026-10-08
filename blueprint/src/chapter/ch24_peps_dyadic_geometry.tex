@@ -767,10 +767,101 @@ of the scale, are not formalized here.
     The two rim points differ only in $d$, by $|\alpha-\alpha'|t/1000$.
 \end{proof}
 
-The source's further claims in lines 341--351, that the tenfold enlargements
-contain no true vertex on the band interfaces other than the marked point, and that
-at a corner the rim points of the rays of both adjacent edges and of the grid lines
-are separated, are not formalized here.
+\begin{lemma}[True vertices of the unmodified guides]
+    \label{lem:peps_dyadic_unmodified_vertices}
+    \lean{TNLean.PEPS.Approximation.LocallyTwo, TNLean.PEPS.Approximation.LocallyTwo.not_isTrueVertex, TNLean.PEPS.Approximation.LocallyTwo.congr, TNLean.PEPS.Approximation.locallyTwo_of_eventuallyEq_const, TNLean.PEPS.Approximation.locallyTwo_blockGuide, TNLean.PEPS.Approximation.LocallyTwo.comp, TNLean.PEPS.Approximation.bandWord_eventually_step, TNLean.PEPS.Approximation.bandWord_eventually_mem, TNLean.PEPS.Approximation.continuousAt_bandCoord, TNLean.PEPS.Approximation.eq_point_zero_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.eq_point_end_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.locallyTwo_bandUpdate, TNLean.PEPS.Approximation.IsSquareCorner, TNLean.PEPS.Approximation.isSquareCorner_point_zero, TNLean.PEPS.Approximation.isSquareCorner_point_end, TNLean.PEPS.Approximation.isOpen_openSquare, TNLean.PEPS.Approximation.isOpen_centralRegion, TNLean.PEPS.Approximation.exists_edge_of_mem_closedSquare, TNLean.PEPS.Approximation.mem_openSquare_of_mem_closure_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_nor_eq_two_mul, TNLean.PEPS.Approximation.notMem_closedEdgeBand_of_nor_eq_two_mul, TNLean.PEPS.Approximation.mainWords, TNLean.PEPS.Approximation.auxWords, TNLean.PEPS.Approximation.mainWords_props, TNLean.PEPS.Approximation.auxWords_props, TNLean.PEPS.Approximation.mem_mainWords_of_mem_mainSteps, TNLean.PEPS.Approximation.mem_auxWords_of_mem_auxSteps, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_nbrLabel, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_finalLabel, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.locallyTwo, TNLean.PEPS.Approximation.IsTrueVertex.eq_blockCorner_of_isUnmodifiedGuide, TNLean.PEPS.Approximation.eq_blockCorner_of_isTrueVertex_of_mem_ball}
+    \leanok
+    \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_direct_repainting, lem:peps_dyadic_choice_K0, def:peps_dyadic_incident_labels}
+    Call a guide of the repainting of a block from a block guide unmodified if it is
+    the starting block guide, the guide after the central birth, a guide after
+    completed edges, or a main or auxiliary guide along an edge whose band carries
+    one of the normal words of that sheet. Every unmodified guide takes at most two
+    labels near every point that is not a grid corner, so all its true vertices are
+    grid corners. Consequently, for $n>20t$, the square of radius $10t$ about a grid
+    corner contains no true vertex of an unmodified guide other than that corner. This
+    is the observation of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 321--326,
+    and the clause of the choice of $K_0$, lines 341--343, that the tenfold
+    enlargements contain no other unmodified true vertex.
+\end{lemma}
+
+\begin{proof}\leanok
+    A normal word is constant just below every point and from the point on, so near
+    a point it takes at most two values. Inside the open band of an edge a guide
+    carrying a word therefore takes at most two labels near each point. On the curve
+    $x=-8$, away from the endpoints, the word is $C_e$ and the guide beyond the band is
+    the label $C_e$ of the neighboring block. On the curve $x=2$ the word of the main
+    sheet is $B$, and the curve lies in the open central region and off the closed
+    bands of the other edges, so the guide beyond the band is $B$ as well; the
+    auxiliary sheet is $C_e$ on both sides. Off the closed band nothing changes. The
+    closure of the central region meets the boundary of the square only at its
+    corners, so near any other point of that closure the guide takes only $A$ and
+    $B$. The corners of the square are grid corners, a block guide takes at most two
+    labels near every other point, and distinct grid corners are at distance at least
+    $n$ by Lemma~\ref{lem:peps_dyadic_choice_K0}.
+\end{proof}
+
+\begin{lemma}[The rim pattern at a corner]
+    \label{lem:peps_dyadic_rim_pattern}
+    \lean{TNLean.PEPS.Approximation.bandWord_eventually_eq, TNLean.PEPS.Approximation.edgeCurves, TNLean.PEPS.Approximation.mainWords_eventually_eq, TNLean.PEPS.Approximation.auxWords_eventually_eq, TNLean.PEPS.Approximation.eventually_bandUpdate_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.eventually_eq, TNLean.PEPS.Approximation.rimPattern, TNLean.PEPS.Approximation.rimPattern_finite, TNLean.PEPS.Approximation.dist_of_mem_rimPattern, TNLean.PEPS.Approximation.rimPattern_separation, TNLean.PEPS.Approximation.int_eq_zero_of_abs_lt, TNLean.PEPS.Approximation.mem_rimPattern_of_grid, TNLean.PEPS.Approximation.mem_rimPattern_of_curve, TNLean.PEPS.Approximation.mem_rimPattern_of_incidentLabels}
+    \leanok
+    \uses{lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0}
+    For a point $v$ and $t>0$, the rim pattern about $v$ consists of the points
+    $v+(\sigma t,jt/1000)$ and $v+(jt/1000,\sigma t)$ with $\sigma=\pm1$ and
+    $j\in\mathbb Z$, $|j|\le6$: on each side of the rim of the square of radius $t$
+    about $v$, thirteen points at spacing $t/1000$ about the midpoint of the side. It
+    is finite, its points are at distance $t$ from $v$, and distinct points are at
+    distance at least $t/1000$. Off the grid lines and off the curves $x=k$,
+    $k\in\{-6,\dots,1\}$, of the bands of the four edges, every unmodified guide is
+    constant near each point. Let $2t<n$. A point at distance $t$ from a grid corner
+    that lies on a grid line, or on one of these curves of an edge of the block, lies
+    in the rim pattern of that corner: the grid line passes through the corner, and the
+    curve belongs to one of the two edges ending at the corner. Hence every point of
+    the rim about a grid corner at which an unmodified guide has two distinct incident
+    labels lies in the rim pattern. This is the finite pattern of rim intersection
+    points of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 344--349, with the rays
+    of both adjacent edges and the grid lines.
+\end{lemma}
+
+\begin{proof}\leanok
+    A word is constant near every point other than its interfaces, and the interfaces
+    of the main and auxiliary words are integers from $-6$ to $1$; the boundary of
+    the central region lies on the curves $x=1$. For a point on a grid line, the line
+    is within $t<n/2$ of the corner, so it passes through the corner, and the point is
+    the midpoint of a side of the rim. For a point on a curve of an edge, its normal
+    coordinate is at most $6\cdot10^{-3}\min(s,n-s)$ in absolute value, so the corner
+    has normal coordinate $0$ and parallel coordinate $0$ or $n$; the straight-ray
+    chart of Lemma~\ref{lem:peps_dyadic_choice_K0} then places the point at parallel
+    distance $t$ and normal coordinate $kt/1000$. Distinct pattern points on one side
+    differ by at least $t/1000$ along it, and points on different sides differ by at
+    least $(1-6/1000)t$ in one coordinate.
+\end{proof}
+
+\begin{theorem}[Disjoint outer holes in the temporary guides]
+    \label{thm:peps_dyadic_temporary_holes}
+    \lean{TNLean.PEPS.Approximation.isTrueVertex_homogenize_cases, TNLean.PEPS.Approximation.homogenize_trueVertex_separation, TNLean.PEPS.Approximation.homogenize_outerHoles_disjoint}
+    \leanok
+    \uses{lem:peps_dyadic_rim_pattern, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_incident_change}
+    Let $20t<n$, let $\mathcal M$ be a finite set of grid corners and $P$ a label, and
+    homogenize an unmodified guide to $P$ on the open squares of radius $t$ about the
+    corners of $\mathcal M$. Every true vertex of the resulting guide is a grid corner
+    or a point of the rim pattern of a corner of $\mathcal M$, and distinct true
+    vertices are at distance at least $t/1000$. Hence for $\epsilon_0<1/4000$ the
+    closed outer hole squares of radius $2\epsilon_0t$ about distinct true vertices are
+    disjoint. This is the conclusion of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    lines 347--351, that the outer holes are disjoint in the temporary guides, for
+    the separations of the true vertices; the further smallness of $\epsilon_0$
+    compared with $a_0$ enters through Lemma~\ref{lem:peps_dyadic_birth_enlargement}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_dyadic_incident_change} a true vertex of the homogenized
+    guide is an old true vertex off the closed treated squares, a grid corner by
+    Lemma~\ref{lem:peps_dyadic_unmodified_vertices}, or a point of a treated rim with
+    two incident labels, in the rim pattern by Lemma~\ref{lem:peps_dyadic_rim_pattern}.
+    Two rim points about one corner are separated by the pattern. Otherwise the two
+    points belong to distinct grid corners, at distance at least $n$, and each lies
+    within $t$ of its corner, so they are at distance at least $n-2t>t/1000$.
+\end{proof}
 
 \begin{lemma}[Trivial holes at the last level]
     \label{lem:peps_dyadic_last_level}

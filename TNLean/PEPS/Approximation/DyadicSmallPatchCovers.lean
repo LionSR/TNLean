@@ -312,7 +312,7 @@ theorem holeRadius_resize {ε₀ n t : ℝ} (hε : 0 ≤ ε₀) (hn : 0 ≤ n) (
 /-! ### Grid corners -/
 
 /-- Near a point that is not a multiple of `n`, the block index `⌊y / n⌋` is constant. -/
-private theorem floor_div_eventually_eq {n x : ℝ} (hn : 0 < n) (hx : ∀ a : ℤ, x ≠ n * a) :
+theorem floor_div_eventually_eq {n x : ℝ} (hn : 0 < n) (hx : ∀ a : ℤ, x ≠ n * a) :
     ∀ᶠ y in nhds x, ⌊y / n⌋ = ⌊x / n⌋ := by
   have h1 := Int.floor_le (x / n)
   have h2 := Int.lt_floor_add_one (x / n)
@@ -340,6 +340,54 @@ private theorem floor_div_eventually_mem {n x : ℝ} (hn : 0 < n) :
     rw [Int.floor_lt, div_lt_iff₀ hn]; push_cast; exact hy.2
   omega
 
+/-- A labelling takes at most two values near `p`. Such a point is not a true vertex.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:109–111, 321–326`. -/
+def LocallyTwo {X ι : Type*} [TopologicalSpace X] (f : X → ι) (p : X) : Prop :=
+  ∃ P Q : ι, ∀ᶠ q in nhds p, f q ∈ ({P, Q} : Set ι)
+
+section LocallyTwo
+
+variable {X ι : Type*} [TopologicalSpace X] {f g : X → ι} {p : X}
+
+theorem LocallyTwo.not_isTrueVertex (h : LocallyTwo f p) : ¬ IsTrueVertex f p := by
+  obtain ⟨P, Q, h⟩ := h
+  exact not_isTrueVertex_of_subset_pair (incidentLabels_subset h fun _ hq => hq)
+
+theorem LocallyTwo.congr (h : LocallyTwo f p) (hfg : f =ᶠ[nhds p] g) : LocallyTwo g p := by
+  obtain ⟨P, Q, h⟩ := h
+  exact ⟨P, Q, by filter_upwards [h, hfg] with q hq e; rwa [← e]⟩
+
+theorem locallyTwo_of_eventuallyEq_const {c : ι} (h : f =ᶠ[nhds p] fun _ => c) :
+    LocallyTwo f p :=
+  ⟨c, c, by filter_upwards [h] with q hq; simp [hq]⟩
+
+end LocallyTwo
+
+/-- **A block guide has at most two labels near every point other than a grid corner.**
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:321–322, 508`. -/
+theorem locallyTwo_blockGuide {ι : Type*} {n : ℝ} (hn : 0 < n) (lab : ℤ × ℤ → ι) {c : ℝ × ℝ}
+    (hQ : ∀ Q : ℤ × ℤ, c ≠ blockCorner n Q) : LocallyTwo (blockGuide n lab) c := by
+  have hc : (∀ a : ℤ, c.1 ≠ n * a) ∨ ∀ b : ℤ, c.2 ≠ n * b := by
+    by_contra hc
+    push Not at hc
+    obtain ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := hc
+    exact hQ (a, b) (Prod.ext ha hb)
+  rcases hc with hc | hc
+  · refine ⟨lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋, ⌊c.2 / n⌋ - 1), ?_⟩
+    filter_upwards [continuous_fst.continuousAt.eventually (floor_div_eventually_eq hn hc),
+      continuous_snd.continuousAt.eventually (floor_div_eventually_mem (x := c.2) hn)]
+      with p h1 h2
+    simp only [blockGuide, blockIndex, h1]
+    rcases h2 with h2 | h2 <;> simp [h2]
+  · refine ⟨lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋ - 1, ⌊c.2 / n⌋), ?_⟩
+    filter_upwards
+      [continuous_fst.continuousAt.eventually (floor_div_eventually_mem (x := c.1) hn),
+        continuous_snd.continuousAt.eventually (floor_div_eventually_eq hn hc)] with p h1 h2
+    simp only [blockGuide, blockIndex, h2]
+    rcases h1 with h1 | h1 <;> simp [h1]
+
 /-- **True vertices of a block guide are grid corners.** A guide uniform on the `n`-blocks has
 its true vertices among the corners `(n a, n b)`.
 
@@ -348,28 +396,7 @@ theorem IsTrueVertex.eq_blockCorner {ι : Type*} {n : ℝ} (hn : 0 < n) {lab : �
     {c : ℝ × ℝ} (h : IsTrueVertex (blockGuide n lab) c) : ∃ Q : ℤ × ℤ, c = blockCorner n Q := by
   by_contra hQ
   push Not at hQ
-  have hc : (∀ a : ℤ, c.1 ≠ n * a) ∨ ∀ b : ℤ, c.2 ≠ n * b := by
-    by_contra hc
-    push Not at hc
-    obtain ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := hc
-    exact hQ (a, b) (Prod.ext ha hb)
-  rcases hc with hc | hc
-  · have ev : ∀ᶠ p in nhds c, blockGuide n lab p ∈
-        ({lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋, ⌊c.2 / n⌋ - 1)} : Set ι) := by
-      filter_upwards [continuous_fst.continuousAt.eventually (floor_div_eventually_eq hn hc),
-        continuous_snd.continuousAt.eventually (floor_div_eventually_mem (x := c.2) hn)]
-        with p h1 h2
-      simp only [blockGuide, blockIndex, h1]
-      rcases h2 with h2 | h2 <;> simp [h2]
-    exact not_isTrueVertex_of_subset_pair (incidentLabels_subset ev fun _ hp => hp) h
-  · have ev : ∀ᶠ p in nhds c, blockGuide n lab p ∈
-        ({lab (⌊c.1 / n⌋, ⌊c.2 / n⌋), lab (⌊c.1 / n⌋ - 1, ⌊c.2 / n⌋)} : Set ι) := by
-      filter_upwards
-        [continuous_fst.continuousAt.eventually (floor_div_eventually_mem (x := c.1) hn),
-          continuous_snd.continuousAt.eventually (floor_div_eventually_eq hn hc)] with p h1 h2
-      simp only [blockGuide, blockIndex, h2]
-      rcases h1 with h1 | h1 <;> simp [h1]
-    exact not_isTrueVertex_of_subset_pair (incidentLabels_subset ev fun _ hp => hp) h
+  exact (locallyTwo_blockGuide hn lab hQ).not_isTrueVertex h
 
 /-- The grid corner `Q` is one of the four corners of the block `S`. -/
 def IsBlockCornerOf (S Q : ℤ × ℤ) : Prop :=

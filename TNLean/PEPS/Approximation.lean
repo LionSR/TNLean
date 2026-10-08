@@ -21,10 +21,12 @@ import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
+import TNLean.PEPS.Approximation.DyadicRimPatterns
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicTrueVertices
+import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.PairEffectElimination
