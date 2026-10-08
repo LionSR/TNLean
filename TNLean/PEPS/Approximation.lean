@@ -32,6 +32,8 @@ import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
+import TNLean.PEPS.Approximation.PairSourceCombination
+import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
