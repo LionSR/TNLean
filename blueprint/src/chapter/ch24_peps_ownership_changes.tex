@@ -418,6 +418,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.PairEffect.Word.usesOnly_exchangeBlocks,
         TNLean.PEPS.PairEffect.Word.sourceCount_exchangeBlocks,
         TNLean.PEPS.PairEffect.Word.eval_frameList_appendIso_symm,
+        TNLean.PEPS.PairEffect.Word.appendNil,
+        TNLean.PEPS.PairEffect.Word.dropNil,
+        TNLean.PEPS.PairEffect.Word.eval_appendNil,
+        TNLean.PEPS.PairEffect.Word.eval_dropNil,
         TNLean.PEPS.PairEffect.Word.assocWord,
         TNLean.PEPS.PairEffect.Word.unassocWord,
         TNLean.PEPS.PairEffect.Word.eval_assocWord_appendIso_symm,
@@ -525,10 +529,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     pair source, whose operator in canonical coordinates is
     $\id_{\rm tags}\otimes B$ for the canonical map $B$, and which maps the
     reference vector of $\mathcal F$ within $L^{-30}$ of the reference vector
-    of the new frame. For $Q_\circ\neq P_\circ$ it consists of a private
-    contraction at $P_\circ$, one normalized pair source between $Q_\circ$ and
-    $P_\circ$, and a private contraction at $P_\circ$, together with
-    reorderings and grouping unitaries. The reversed death obeys the same
+    of the new frame. The reversed death obeys the same
     bound when these conditions hold in the frame after the death, with one
     normalized pair effect instead and no pair source. This is
     \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex},
@@ -547,7 +548,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm
             tags}\otimes B$, and the reference error is that of
     Theorem~\ref{thm:peps_frame_birth}, read through the unitary
-    identification of the registers.
+    identification of the registers. For $Q_\circ\neq P_\circ$ the monomial
+    so built consists of a private contraction at $P_\circ$, one normalized
+    pair source between $Q_\circ$ and $P_\circ$ (one pair effect for the
+    death), and a private contraction at $P_\circ$, together with reorderings
+    and grouping unitaries.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
@@ -955,8 +960,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     implemented by private contractions and register renaming, with
     reference-vector error at most $4L^{-30}$: there are splitting data and
     an allowed monomial from the registers of the two frames to those of the
-    two exchanged frames, consisting of exchanges of tensor factors and one
-    private contraction at $P_\circ$, using only $P_\circ$ and no pair
+    two exchanged frames, consisting of exchanges of tensor factors and
+    private contractions at $P_\circ$, so using only $P_\circ$ and no pair
     resource, whose operator in canonical coordinates is the implemented map
     $C=D_UF_A\mathcal R$ (composed with the relabelling $G$ of the tags when
     the holes are listed in any order), and which maps the product of the two
@@ -979,7 +984,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $D_UF_A\mathcal R$, since $D_UF_A$ is the identity on the tags and on the
     two copies of $T\cup E$ tensored with one contraction of the two copies
     of $\mathcal H_U$. For holes in any order, precede by the canonical
-    identification of tag orderings as reorderings, whose operator is $G$.
+    identification of tag orderings as reorderings, whose operator is $G$;
+    these exchanges of tag registers move the tag of each hole to the
+    position of that hole in the new list, and $G$ is the corresponding
+    relabelling of the tags, which preserves the raw part of each encoding.
     The reference error is that of Theorems~\ref{thm:peps_frame_exchange}
     and~\ref{thm:peps_frame_exchange_any_order}, read through the unitary
     identification of the registers.

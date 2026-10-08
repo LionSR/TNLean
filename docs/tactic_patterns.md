@@ -3472,6 +3472,27 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Allowed, party, source-count triples of reordering words — candidate (2026-10-08)
+
+- **Sites:** `PEPS/Approximation/SiteRegisters.lean` (`partWordApp_props`,
+  `relabelSitesApp_props`, `Word.appendNil_props`),
+  `PEPS/Approximation/RegisterReordering.lean` (`Word.assocWord_props`,
+  `tagSplit_props`, and the one-line projections after them),
+  `PEPS/Approximation/FrameRegisters.lean` (`groupWord_props`,
+  `relabelRest_props`), `PEPS/Approximation/TwoSheetRegisters.lean`
+  (`correctionLayoutWord_props`, `renameWord_props`).
+- **Pattern:** a word built by recursion or composition gets one lemma
+  `w.IsAllowed ∧ w.UsesOnly S ∧ w.sourceCount = 0`, proved by recursion, and
+  three `@[simp]` projections; compositions are then closed by
+  `simp [Word.IsAllowed, Word.UsesOnly, Word.sourceCount]` with those
+  projections, as in `Word.swapPairs_props`.
+- **Current reuse:** the recursive triples share the induction; the
+  projections are boilerplate.
+- **Promotion trigger:** at the next file that adds such a word, replace the
+  triples by one predicate (allowed, using any given parties, without pair
+  sources) with constructor lemmas for `comp`, `frame`, `frameList` and
+  `swap`, and close compositions with that simp set.
+
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
 - **Sites:** `ThetaBondCoordinates` and `ThetaBondOrthonormalCoordinates`.
