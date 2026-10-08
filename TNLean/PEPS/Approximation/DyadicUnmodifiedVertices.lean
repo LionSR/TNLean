@@ -312,17 +312,19 @@ theorem auxWords_props {W : ℝ → ι} (hW : W ∈ auxWords A B C) :
     simp only [auxWordOne, auxWordTwo, auxWord, auxWordExchanged, bandWord] <;>
     split_ifs <;> first | rfl | (exfalso; linarith)
 
-/-- Every main word is a normal word `bandWord c l`. -/
+/-- Every main word is a normal word `bandWord c l` whose interfaces lie at integers from `-6`
+to `1`. -/
 theorem exists_eq_bandWord_of_mem_mainWords {W : ℝ → ι} (hW : W ∈ mainWords A B C) :
-    ∃ c l, W = bandWord c l := by
+    ∃ c l, W = bandWord c l ∧ ∀ x ∈ l, x.1 ∈ ({-6, -5, -4, -3, -2, -1, 0, 1} : Set ℝ) := by
   simp only [mainWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl | rfl | rfl <;> exact ⟨_, _, rfl⟩
+  rcases hW with rfl | rfl | rfl | rfl | rfl | rfl <;> exact ⟨_, _, rfl, by simp⟩
 
-/-- Every auxiliary word is a normal word `bandWord c l`. -/
+/-- Every auxiliary word is a normal word `bandWord c l` whose interfaces lie at integers from
+`-6` to `1`. -/
 theorem exists_eq_bandWord_of_mem_auxWords {W : ℝ → ι} (hW : W ∈ auxWords A B C) :
-    ∃ c l, W = bandWord c l := by
+    ∃ c l, W = bandWord c l ∧ ∀ x ∈ l, x.1 ∈ ({-6, -5, -4, -3, -2, -1, 0, 1} : Set ℝ) := by
   simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl | rfl <;> exact ⟨_, _, rfl⟩
+  rcases hW with rfl | rfl | rfl | rfl | rfl <;> exact ⟨_, _, rfl, by simp⟩
 
 /-- The words before, after and surrounding a main birth or death are main words. -/
 theorem mem_mainWords_of_mem_mainSteps {op : BandOperation ι} (hop : op ∈ mainSteps A B C) :

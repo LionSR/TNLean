@@ -3087,6 +3087,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
 | `Matrix.IsGappedGroundState` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
 | `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
@@ -3250,3 +3251,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   entropy combination. Generic difference, finite-chain and pure-duality
   identities are available; canonical tripartite identification, exceptional-site
   dimension bounds and the full PEPS conditional-cell theorem remain separate.
+
+## Partial template row entropy
+
+- `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
+  absolute entropy cost at most `n * log q` for any subset of one template
+  depth row, the partial-row step of area-law Lemma 9.4.
