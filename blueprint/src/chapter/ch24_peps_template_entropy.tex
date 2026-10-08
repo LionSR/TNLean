@@ -119,3 +119,25 @@
     Selected cells are contained in the partitioned set, and their sizes
     satisfy $2^k\le2^K\le s_0$.
 \end{proof}
+
+
+\begin{theorem}[Weighted covering of the template core]
+    \label{thm:area_law_template_weighted_core_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le}
+    \uses{thm:area_law_template_core_selected_count,thm:area_law_weighted_dyadic_sum}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, let $e>0$, and choose
+    $K\ge0$ with $2^K\le s_0<2^{K+1}$. For the actual capped dyadic
+    partition $\mathcal P$ of $T$,
+    \[
+        \sum_{Q\in\mathcal P}\operatorname{side}(Q)^{1+e}
+        \le \left(18+\frac{4}{2^e-1}\right)n s_0^e.
+    \]
+    This is the core-covering moment estimate in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}. It requires neither separation
+    from a physical cut nor an entropy hypothesis.
+\end{theorem}
+\begin{proof}
+    Group the selected squares by scale. Their side budgets are $18n$ at
+    scale $K$ and $4n$ below it. Apply the finite weighted dyadic-sum
+    estimate, factor out $n$, and use $(2^K)^e\le s_0^e$.
+\end{proof}

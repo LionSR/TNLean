@@ -1,4 +1,4 @@
-import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCounts
+import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover
 
 /-!
 # Actual-template mixed-square regressions
@@ -284,3 +284,35 @@ example : 2 ^ 0 * ((cappedDyadicPartition (unitSquareTemplate 2 (by decide)).poi
     (fun c ↦ c.1 = 0)).card ≤ 4 * 72 :=
   (unitSquareTemplate 2 (by decide)).card_cappedDyadicPartition_below_cap_le
     (by norm_num) 1 0 (by decide) (by decide)
+
+-- The weighted bound consumes the actual non-dyadic template scale s₀ = 3.
+example (e : ℝ) (he : 0 < e) :
+    ∑ c ∈ cappedDyadicPartition thinDiagonalTemplate.points 1,
+      ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
+        (18 + 4 / ((2 : ℝ) ^ e - 1)) * 96 * (3 : ℝ) ^ e :=
+  thinDiagonalTemplate.sum_rpow_cappedDyadicPartition_core_le (by norm_num)
+    1 (by decide) (by decide) e he
+
+-- A genuine cap-zero partition with four sites and an arbitrary exponent.
+example (e : ℝ) (he : 0 < e) :
+    ∑ c ∈ cappedDyadicPartition (unitSquareTemplate 1 (by decide)).points 0,
+      ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
+        (18 + 4 / ((2 : ℝ) ^ e - 1)) * 48 * (1 : ℝ) ^ e :=
+  (unitSquareTemplate 1 (by decide)).sum_rpow_cappedDyadicPartition_core_le
+    (by norm_num) 0 (by decide) (by decide) e he
+
+-- The exact dyadic scale has one occupied cap square.
+example (e : ℝ) (he : 0 < e) :
+    ∑ c ∈ cappedDyadicPartition (unitSquareTemplate 2 (by decide)).points 1,
+      ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
+        (18 + 4 / ((2 : ℝ) ^ e - 1)) * 72 * (2 : ℝ) ^ e :=
+  (unitSquareTemplate 2 (by decide)).sum_rpow_cappedDyadicPartition_core_le
+    (by norm_num) 1 (by decide) (by decide) e he
+
+set_option linter.hashCommand false in
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le

@@ -726,6 +726,37 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/DyadicWeightedSum.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum'])
+                elif step.get('name') == 'Check integrated template coverings early':
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    run = step['run']
+                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
+                    target = 'lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles'
+                    self.assertLess(run.index(cache_guard), run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean'))
+                    self.assertIn('TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover', run)
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true',
+                                 'timeout --signal=INT --kill-after=5s 90s']:
+                        self.assertIn(flag, run)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.split(), [
+                        'TNLeanTest/TemplateMixedSquares.lean', 'TNLeanTest/TemplateCutBoundary.lean'])
+                    expected = {
+                        'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover'],
+                        'TemplateCutBoundary': [
+                            'TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary',
+                            'TNLean.PEPS.AreaLaw.Geometry.TemplateClearance',
+                            'TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles',
+                            'Mathlib.Data.Rat.Floor'],
+                    }
+                    for fixture, modules in expected.items():
+                        imports = (ROOT / f'TNLeanTest/{fixture}.lean').read_text().splitlines()
+                        self.assertEqual([line for line in imports if line.startswith('import ')],
+                                         ['import ' + module for module in modules])
                 elif step.get('name') == 'Check labelled open coefficients early':
                     self.assertLess(prune, i)
                     self.assertLess(i, build)
