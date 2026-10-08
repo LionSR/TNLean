@@ -10,16 +10,20 @@ The protocol of Proposition~7.1 itself, whose changes are implemented by the
 information estimate and the contraction gates of the earlier sections, is not
 treated here.
 
-The source states Lemma~7.2 for the guides of its schedule, which is not
-constructed here. The three clearance theorems below are therefore stated for
-every guide with the properties that the proof of Lemma~7.2 uses: the normal word
-of the operation on the band $\{-8<x<2\}$ and no change off it, the label $A$ on
-the open square, and the label $C$ on the exterior band $\{-8<x<0\}$. The source
-derives these properties from the disjointness of the bands below. The square is
-placed at the origin; an aligned square of the hierarchy is a translate of it,
-and sup distances are translation invariant. This scope restriction is recorded
-in~\cite{gap:openai26_dyadic_geometry_guide_properties}. Distances are sup distances in the plane, and labels are elements
-of an arbitrary set; the labels $A$, $B$, $C$ below are permitted to coincide.
+The clearance estimates are first proved for every guide with the properties that
+the proof of Lemma~7.2 uses: the normal word of the operation on the band
+$\{-8<x<2\}$ and no change off it, the label $A$ on the open square, and the label
+$C$ on the exterior band $\{-8<x<0\}$. The schedule of guides is then constructed,
+these properties are derived from the disjointness of the bands, and the estimates
+are moved to every square of the hierarchy. This gives
+Theorem~\ref{thm:peps_dyadic_angular_separation}, which is Lemma~7.2. A guide of the
+source is a partition of the plane into open chambers, with labels on boundaries
+sampled after one small generic displacement; here a guide is a labelling of the
+whole plane, and two labellings that agree off finitely many interface curves
+represent the same guide. The earlier scope restriction and this convention are
+recorded in~\cite{gap:openai26_dyadic_geometry_guide_properties}. Distances are sup
+distances in the plane, and labels are elements of an arbitrary set; the labels
+$A$, $B$, $C$ below are permitted to coincide.
 
 \begin{definition}[Edge coordinates, bands and the lens]
     \label{def:peps_dyadic_edge_band}
@@ -199,34 +203,253 @@ of an arbitrary set; the labels $A$, $B$, $C$ below are permitted to coincide.
     $\{-\tfrac72<x<-\tfrac12\}$, neither of which meets the two boundary curves.
 \end{proof}
 
+\begin{definition}[The schedule of guides of a repainting]
+    \label{def:peps_dyadic_schedule}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline, TNLean.PEPS.Approximation.openSquare, TNLean.PEPS.Approximation.closedSquare, TNLean.PEPS.Approximation.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.edgeInterface, TNLean.PEPS.Approximation.auxSteps, TNLean.PEPS.Approximation.mainSteps}
+    \leanok
+    \uses{def:peps_dyadic_normal_words, thm:peps_dyadic_central_clearance}
+    A repainting of $S=[0,n]^2$, $n>0$, starts from a guide $g$ equal to $A$ on the
+    open square and to one label $C_e$ on the open exterior neighboring square across
+    each edge $e$. The guide after the central birth is $B$ on the central region and
+    $g$ elsewhere. For a list $E$ of edges, the completed guide replaces, for each
+    $e\in E$, the band $\{-8<x<2\}$ of $e$ by the word $C_e\mid B$ at $0$. During the
+    construction along $e$ after the edges of $E$, the main guide with normal word $W$
+    is the completed guide with the band of $e$ replaced by $W$, and the auxiliary
+    guide with normal word $W$ is the uniform guide $C_e$ with the band of $e$
+    replaced by $W$. The three auxiliary births and the four main births and deaths
+    are those of Definition~\ref{def:peps_dyadic_normal_words}.
+\end{definition}
+
+\begin{lemma}[The guides of the schedule]
+    \label{lem:peps_dyadic_schedule_guides}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_edgeBand, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_edgeStartWord, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start, TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_mainGuide, TNLean.PEPS.Approximation.auxSteps_chain, TNLean.PEPS.Approximation.mainSteps_chain, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mainWordFive, TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide_uniform, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_notMem_closedSquare, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_openSquare, TNLean.PEPS.Approximation.exists_edgeBand_of_not_mem_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_forall_notMem}
+    \leanok
+    \uses{def:peps_dyadic_schedule, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_lens_word}
+    Let $e\notin E$. On the band of $e$, off the curves $x=0$ and $x=1$, the
+    completed guide carries the word $C_e\mid A\mid B$ at $0,1$; so it agrees with the
+    main guide with that word off those curves. Exchanging the starting main guide
+    and the auxiliary guide with word~(\ref{eq:pdg_aux_word}) on the lens $Y$ gives
+    the main guide with word $C_e\mid B\mid A\mid C_e\mid A\mid B$ at
+    $-6,-5,-4,0,1$. The auxiliary births start from the uniform word $C_e$, the main
+    operations start from that main word, consecutive operations on one sheet match,
+    and the last main death leaves the completed guide for the list $E$ with $e$
+    added. Once all four edges are completed, the open square carries $B$, and every
+    point outside the closed square keeps its starting label.
+\end{lemma}
+
+\begin{proof}\leanok
+    On the band of $e$, the bands of the completed edges are absent by the band
+    disjointness. Where $x<0$ the point lies in the exterior neighboring square;
+    where $0<x<1$ it lies in the open square and outside the central region; where
+    $1<x<2$ it lies in the central region, since for every other edge it lies in the
+    open square and outside that edge's band, so its normal ratio there is at least
+    $2$. The exchange is Lemma~\ref{lem:peps_dyadic_lens_word} on the band, and the
+    identity off it. A point of the open square outside the central region lies in
+    the band $\{0<x\le1\}$ of some edge, where the final word is $B$; a point outside
+    the closed square lies in no band or in the part $x<0$ of a band, where the final
+    word is $C_e$.
+\end{proof}
+
+\begin{definition}[Block guides and the labels of a level]
+    \label{def:peps_dyadic_block_guide}
+    \lean{TNLean.PEPS.Approximation.blockIndex, TNLean.PEPS.Approximation.blockGuide, TNLean.PEPS.Approximation.blockCorner, TNLean.PEPS.Approximation.SquareEdge.nbrBlock, TNLean.PEPS.Approximation.blockBaseline, TNLean.PEPS.Approximation.shiftGuide, TNLean.PEPS.Approximation.InRoot, TNLean.PEPS.Approximation.levelLabels}
+    \leanok
+    \uses{def:peps_dyadic_schedule}
+    For $n>0$ and labels $\ell(Q)$ of the blocks $Q\in\mathbb Z^2$, the block guide
+    has label $\ell(\lfloor p_1/n\rfloor,\lfloor p_2/n\rfloor)$ at $p$. The repainting
+    of the block $S=(r,s)$ to the label $B$ starts from the block guide moved by
+    $-(nr,ns)$, which is $\ell(S)$ on the open square and $\ell$ of the neighboring
+    block across each edge; all its guides are then moved back by $(nr,ns)$. During
+    the pass to level $n$, with a set of already repainted blocks, a repainted block
+    of the root square carries its new label, another block of the root square the
+    label of its parent $2n$-block, and a block outside the root square the
+    placeholder.
+\end{definition}
+
+\begin{lemma}[Translation of the estimates]
+    \label{lem:peps_dyadic_translation}
+    \lean{TNLean.PEPS.Approximation.clearance_shift, TNLean.PEPS.Approximation.dist_le_shift, TNLean.PEPS.Approximation.le_dist_of_mem_closure, TNLean.PEPS.Approximation.cornerMarkDist_sub, TNLean.PEPS.Approximation.edgeMarkDist_sub, TNLean.PEPS.Approximation.blockIndex_of_mem_openSquare, TNLean.PEPS.Approximation.blockIndex_of_mem_edgeNeighbor, TNLean.PEPS.Approximation.blockIndex_ne_of_notMem_closedSquare}
+    \leanok
+    \uses{def:peps_dyadic_block_guide}
+    Moving all guides by a vector $o$ moves the changed regions and the obstructing
+    sets by $o$, and the mark distances become the distances from the moved marks;
+    sup distances are translation invariant. A lower bound on the distance from a
+    point to every point of a set holds for its closure.
+\end{lemma}
+
+\begin{proof}\leanok
+    Translation is a homeomorphism, so it commutes with closures and boundaries,
+    and $|(y-o)-(z-o)|=|y-z|$. The set of points at distance at least $c$ from $y$
+    is closed.
+\end{proof}
+
+\begin{theorem}[Separation of the unmodified bands]
+    \label{thm:peps_dyadic_angular_separation}
+    \lean{TNLean.PEPS.Approximation.blockRepainting_central, TNLean.PEPS.Approximation.blockRepainting_auxStep, TNLean.PEPS.Approximation.blockRepainting_mainStep, TNLean.PEPS.Approximation.blockRepainting_exchange, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_central, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_central, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_auxStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_mainStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_exchange, TNLean.PEPS.Approximation.BandOperation.clearance_bandUpdate, TNLean.PEPS.Approximation.BandOperation.dist_le_bandUpdate}
+    \leanok
+    \uses{thm:peps_dyadic_central_clearance, thm:peps_dyadic_band_clearance, thm:peps_dyadic_lens_clearance, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_schedule_guides, lem:peps_dyadic_translation}
+    Let $a_0=1/5000$, $n>0$, and consider the repainting of a block $S$ of side $n$
+    from a block guide, with any block labels and any final label. Every elementary
+    birth or death of its schedule, the central birth and the seven births and
+    deaths along each edge after any completed edges, has changed region $R$ of
+    diameter at most $n$, and its surrounding guide $f$ satisfies
+    \begin{align}
+        \operatorname{dist}\bigl(y,\overline{\{f\ne P_\circ\}}\bigr)
+        \ge a_0\min\{n,d_{\mathcal V}(y)\},\qquad y\in\overline R,
+        \label{eq:pdg_angular_separation}
+    \end{align}
+    where $\mathcal V$ is the set of corners of $S$ for the central birth and the two
+    endpoints of the edge otherwise. For each lens exchange, every point $y$ in the
+    closure of the positions that are not common $C_e$ on its two guides before the
+    exchange satisfies
+    $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
+    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_dyadic_schedule_guides} the guides of the schedule have
+    the properties assumed in Theorems~\ref{thm:peps_dyadic_central_clearance},
+    \ref{thm:peps_dyadic_band_clearance} and~\ref{thm:peps_dyadic_lens_clearance}:
+    a guide obtained by replacing a band by a word carries that word on the band, two
+    such guides of one sheet agree off the band, and the starting main word is $C_e$
+    on $\{-8<x<0\}$. The diameter bound is
+    Lemma~\ref{lem:peps_dyadic_band_disjoint}. Translate by
+    Lemma~\ref{lem:peps_dyadic_translation}.
+\end{proof}
+
+\begin{lemma}[Levels and active labels]
+    \label{lem:peps_dyadic_active_labels}
+    \lean{TNLean.PEPS.Approximation.blockRepainting_final, TNLean.PEPS.Approximation.blockGuide_levelLabels_start, TNLean.PEPS.Approximation.levelLabels_mem, TNLean.PEPS.Approximation.levelLabels_empty_mem, TNLean.PEPS.Approximation.levelLabels_mem_of_subset, TNLean.PEPS.Approximation.blockRepainting_labels, TNLean.PEPS.Approximation.levelLabels_mem_owners, TNLean.PEPS.Approximation.SquareEdge.nbrBlock_adjacent, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_of_notMem}
+    \leanok
+    \uses{lem:peps_dyadic_schedule_guides, def:peps_dyadic_block_guide}
+    Once the four edges of a block $S$ of the root square are completed, the main
+    guide agrees, off the boundary of $S$, with the block guide in which $S$ also
+    carries its new label. The block guide of side $2n$ at the end of the pass to
+    level $2n$ equals the block guide of side $n$ at the start of the pass to level
+    $n$. The block labels of a level are the placeholder, old labels or new labels;
+    at the start of the level no new label occurs and at its end no old label. Every
+    value of every main or auxiliary guide of a repainting is the placeholder, an old
+    label or a new label, and outside the closed square and its exterior bands
+    $\{-8<x<0\}$ the main guides keep their starting values. The labels $A$, $B$,
+    $C_e$ of the repainting of $S$ are owned by $S$, its parent, a neighboring block
+    or its parent, or the placeholder; a neighboring block differs from $S$ by at
+    most one in each index. These are the guide part of the invariant
+    (\texttt{eq:geometry-active-labels}) in~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    lines 597--618; its part on tags is not treated here.
+\end{lemma}
+
+\begin{proof}\leanok
+    Inside the open square the final guide is $B$ by
+    Lemma~\ref{lem:peps_dyadic_schedule_guides}; outside the closed square it is the
+    starting block guide, and there the block index differs from $S$. For the level
+    transition, $\lfloor x/(2n)\rfloor=\lfloor\lfloor x/n\rfloor/2\rfloor$ and a block
+    lies in the root square of $2M$ blocks per side if and only if its parent lies in
+    that of $M$ blocks. The words use only $A$, $B$, $C_e$, which are values of the
+    starting guide or the final label.
+\end{proof}
+
+\begin{lemma}[Logarithmic floor]
+    \label{lem:peps_dyadic_floor}
+    \lean{TNLean.PEPS.Approximation.holeRadius, TNLean.PEPS.Approximation.holeRadius_of_le, TNLean.PEPS.Approximation.homogenize, TNLean.PEPS.Approximation.edgeTreated, TNLean.PEPS.Approximation.cornerTreated, TNLean.PEPS.Approximation.homogenize_changed_subset, TNLean.PEPS.Approximation.homogenize_ne_subset, TNLean.PEPS.Approximation.homogenize_noncommon_subset, TNLean.PEPS.Approximation.floor_of_subset, TNLean.PEPS.Approximation.le_edgeMarkDist_of_notMem, TNLean.PEPS.Approximation.le_cornerMarkDist_of_notMem, TNLean.PEPS.Approximation.BandOperation.floor_bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.floor_central, TNLean.PEPS.Approximation.RepaintingBaseline.floor_exchange}
+    \leanok
+    \uses{thm:peps_dyadic_angular_separation}
+    Let $0<t\le n$ and $h_n=\epsilon_0\min(n,t)=\epsilon_0t$. Homogenize every
+    involved guide of an elementary operation to its surrounding label (to $C_e$ for
+    an exchange) on the open sup squares of radius $t$ about its marks. Every point
+    $y$ of the closure of the remaining changed region satisfies
+    $|y-z|\ge a_0\max\{t,\min(n,d_{\mathcal V}(y))\}$ for every position $z$ of
+    another label in the homogenized surrounding guide, and every point $y$ of the
+    closure of the remaining positions that are not common $C_e$ satisfies the same
+    bound for every point $z$ of $\partial Y$. This
+    is~(\texttt{eq:geometry-floor}) in~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    lines 357--367, with $a_1=a_0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Homogenization only removes changed positions, only inside the treated squares,
+    and only removes other-label positions. A point of the closure of the remaining
+    changed region lies outside the open treated squares, so $d_{\mathcal V}(y)\ge t$
+    and $\min(n,d_{\mathcal V}(y))\ge t$. Apply
+    Theorem~\ref{thm:peps_dyadic_angular_separation}.
+\end{proof}
+
+\begin{lemma}[Outer holes on the birth side]
+    \label{lem:peps_dyadic_birth_enlargement}
+    \lean{TNLean.PEPS.Approximation.IsTrueVertex, TNLean.PEPS.Approximation.IsTrueVertex.mem_closure_ne, TNLean.PEPS.Approximation.le_dist_of_dist_le_closure, TNLean.PEPS.Approximation.BandOperation.floor_outerHole}
+    \leanok
+    \uses{lem:peps_dyadic_floor}
+    A true vertex, a point in the closures of the regions of three distinct labels,
+    lies in the closure of the positions of labels other than any given label. If
+    $2\epsilon_0\le a_0/2$, every point within $2\epsilon_0t$ of a true vertex of
+    the homogenized surrounding guide lies at distance at least
+    $\tfrac{a_0}2\max\{t,\min(n,d_{\mathcal V}(y))\}$ from every point $y$ of the
+    closure of the remaining changed region. This is the enlargement
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 368--373.
+\end{lemma}
+
+\begin{proof}\leanok
+    Of three distinct labels at least one differs from the given label. With
+    $Q=\max\{t,\min(n,d_{\mathcal V}(y))\}\ge t$, the floor gives $|y-c|\ge a_0Q$ at
+    the vertex $c$, hence $|y-x|\ge a_0Q-2\epsilon_0t\ge a_0Q-\tfrac{a_0}2t\ge
+        \tfrac{a_0}2Q$.
+\end{proof}
+
 \begin{lemma}[Lipschitz step of the outer-hole enlargement]
     \label{lem:peps_dyadic_hole_enlargement}
-    \lean{TNLean.PEPS.Approximation.tapered_clearance_of_center}
+    \lean{TNLean.PEPS.Approximation.tapered_clearance_of_center, TNLean.PEPS.Approximation.lens_clearance_of_center, TNLean.PEPS.Approximation.RepaintingBaseline.floor_exchange_outerHole}
     \leanok
+    \uses{lem:peps_dyadic_floor, lem:peps_dyadic_birth_enlargement}
     Let $g$ and $h$ be $1$-Lipschitz functions, $a,t>0$ and
     $2\epsilon_0(a+1)\le a/2$. If a center $c$ satisfies $g(c)\ge aQ_c$ with
     $Q_x=\max\{t,\min(n,h(x))\}$, then every $x$ with $|x-c|\le2\epsilon_0t$
-    satisfies $g(x)\ge\tfrac a2Q_x$. This arithmetic step is used
-    in~\cite[Section~7.4]{OpenAI2026PolynomialPEPS}, lines 405--415, with $g$ the
-    distance from the lens boundary and $h$ the mark distance; that instantiation,
-    the logarithmic floor of lines 357--367 and the birth-side enlargement of
-    lines 368--373 are not formalized here.
+    satisfies $g(x)\ge\tfrac a2Q_x$. With $g$ the distance from a point of the lens
+    boundary and $h$ the mark distance, and $2\epsilon_0(a_0+1)\le a_0/2$, every
+    point within $2\epsilon_0t$ of a true vertex of either homogenized sheet of an
+    exchange lies at distance at least
+    $\tfrac{a_0}2\max\{t,\min(n,d_{\mathcal V}(x))\}$ from the lens boundary. This is
+    the step of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 400--415.
 \end{lemma}
 
 \begin{proof}\leanok
     With $\delta=|x-c|$ one has $Q_x\le Q_c+\delta$ and $g(x)\ge g(c)-\delta$, so
-    $g(x)\ge aQ_x-(a+1)\delta\ge aQ_x-2\epsilon_0(a+1)t\ge aQ_x-\tfrac a2Q_x$.
+    $g(x)\ge aQ_x-(a+1)\delta\ge aQ_x-2\epsilon_0(a+1)t\ge aQ_x-\tfrac a2Q_x$. A true
+    vertex of either sheet lies in the closure of the noncommon-$C_e$ positions, so
+    it has the floor of Lemma~\ref{lem:peps_dyadic_floor}.
+\end{proof}
+
+\begin{lemma}[The lens boundary separates the exchange]
+    \label{lem:peps_dyadic_lens_sides}
+    \lean{TNLean.PEPS.Approximation.subset_or_subset_compl_of_disjoint_frontier, TNLean.PEPS.Approximation.closedBall_subset_or_subset_compl, TNLean.PEPS.Approximation.exists_mem_frontier_dist_le, TNLean.PEPS.Approximation.le_dist_of_frontier}
+    \leanok
+    \uses{lem:peps_dyadic_hole_enlargement}
+    A closed sup square every point of which is at distance at least $b>0$ from the
+    boundary of a set $Y$ lies in $Y$ or in its complement; in particular each outer
+    hole square of an exchange lies on one side of the lens boundary. If a point $x$
+    is at distance at least $b$ from every point of the boundary of $Y$, then it is
+    at distance at least $b$ from every point on the other side of $Y$. These are
+    the statements of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 403--405
+    and 421--429.
+\end{lemma}
+
+\begin{proof}\leanok
+    A preconnected set missing the boundary of $Y$ is covered by the disjoint open
+    sets $\operatorname{int}Y$ and the complement of $\overline Y$, so it lies in
+    one of them; closed squares and segments are convex. The segment from $x$ to a
+    point $z$ on the other side meets $\partial Y$ at some $w$ with
+    $|x-w|+|w-z|=|x-z|$.
 \end{proof}
 
 \begin{definition}[Padded dyadic hierarchy, junctions and addresses]
     \label{def:peps_dyadic_hierarchy}
-    \lean{TNLean.PEPS.Approximation.DyadicSquare, TNLean.PEPS.Approximation.DyadicJunction, TNLean.PEPS.Approximation.squareAddress}
+    \lean{TNLean.PEPS.Approximation.DyadicSquare, TNLean.PEPS.Approximation.DyadicJunction}
     \leanok
+    \uses{def:peps_dyadic_anchor}
     For $N=2^k$ the hierarchy consists of the aligned squares of $[0,N]^2$ of side
     $2^j$, $0\le j\le k$, indexed by $j$ and two block indices below $2^{k-j}$; the
     junctions at scale $j$ are the grid corners, indexed by two integers at most
     $2^{k-j}$. A square of side $2^j$ with block index $r$ has address coordinate
-    $2^jr+2^{j-1}$ for $j\ge1$ and $r$ for $j=0$.
+    $2^jr+2^{j-1}$ for $j\ge1$ and $r$ for $j=0$, the anchor coordinate of
+    Definition~\ref{def:peps_dyadic_anchor}.
 \end{definition}
 
 \begin{theorem}[Counts of the hierarchy and the schedule]
@@ -250,21 +473,26 @@ of an arbitrary set; the labels $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{lemma}[Addresses and locality]
     \label{lem:peps_dyadic_address_locality}
-    \lean{TNLean.PEPS.Approximation.squareAddress_mem, TNLean.PEPS.Approximation.squareAddress_lt, TNLean.PEPS.Approximation.squareAddress_lt_add, TNLean.PEPS.Approximation.squareAddress_dist_lt, TNLean.PEPS.Approximation.card_blocks_meeting_le}
+    \lean{TNLean.PEPS.Approximation.dyadicAnchor_lt_two_pow, TNLean.PEPS.Approximation.dyadicAnchor_lt_add, TNLean.PEPS.Approximation.dyadicAnchor_dist_lt, TNLean.PEPS.Approximation.dyadicAnchor_dist_lt_of_adjacent, TNLean.PEPS.Approximation.card_blocks_meeting_le}
     \leanok
-    \uses{def:peps_dyadic_hierarchy}
+    \uses{def:peps_dyadic_hierarchy, lem:peps_dyadic_active_labels}
     In each coordinate: an address coordinate lies in $[2^jr,2^jr+2^j)$, hence
     below $2^k$. If the intervals $[2^jr,2^j(r+1)]$ and $[2^{j'}r',2^{j'}(r'+1)]$
     are within distance $g$ and $j'\le j+1$, the address coordinates differ by less
-    than $g+3\cdot2^j$. The intervals of side $b$ meeting $[V,U]$ number at most
-    $\lfloor U/b\rfloor+2-\lfloor V/b\rfloor$. These are ingredients of item~3
-    and of the bounded lifetime participation
-    in~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}; the invariant on active
-    labels is not formalized here.
+    than $g+3\cdot2^j$. In particular, for two blocks of side $2^j$ with equal or
+    adjacent indices, each block or its parent of side $2^{j+1}$ has an address
+    coordinate within $3\cdot2^{j+1}$ of the other's. The intervals of side $b$
+    meeting $[V,U]$ number at most $\lfloor U/b\rfloor+2-\lfloor V/b\rfloor$. With
+    Lemma~\ref{lem:peps_dyadic_active_labels}, these are ingredients of item~3 and
+    of the bounded lifetime participation
+    in~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}; the gates and parties of
+    the protocol are not treated here.
 \end{lemma}
 
 \begin{proof}\leanok
     The first two claims follow from the position of the address in its block and
-    $2^{j'}\le2\cdot2^j$. For the count, $r\mapsto r+1$ maps the meeting blocks
+    $2^{j'}\le2\cdot2^j$. For adjacent blocks, the interval of a block or of its
+    parent contains the block's own interval, and the two blocks' intervals touch,
+    so the second claim applies with $g=0$. For the count, $r\mapsto r+1$ maps the meeting blocks
     injectively into $[\lfloor V/b\rfloor,\lfloor U/b\rfloor+1]$.
 \end{proof}

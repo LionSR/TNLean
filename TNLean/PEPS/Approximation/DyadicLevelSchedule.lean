@@ -358,6 +358,25 @@ theorem levelLabels_mem_of_subset {done : Set (ℤ × ℤ)} (hd : {Q | InRoot M 
   · exact absurd (hd h) h'
   · exact mem_insert _ _
 
+/-- **Owners of a block label.** The label of a block during the pass to level `n` is the
+placeholder, the new label of that block, or the label of its parent `2n`-block. In the
+repainting of `S` the labels `A = lab S`, `B = new S` and `C_e = lab (nbrBlock e S)` are therefore
+owned by `S`, its parent, a neighboring block of `S` or its parent, or the placeholder, which is
+attached to `S`; with `dyadicAnchor_dist_lt_of_adjacent` these are parties at the same or adjacent
+scales with address coordinates within `3 · 2n` of each other.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:34–37, 585–596`. -/
+theorem levelLabels_mem_owners (done : Set (ℤ × ℤ)) (Q : ℤ × ℤ) :
+    levelLabels M old new ph done Q ∈ ({ph, new Q, old (Q.1 / 2, Q.2 / 2)} : Set ι) := by
+  classical
+  unfold levelLabels
+  split_ifs <;> simp
+
+/-- A neighboring block differs from `S` by at most one in each index. -/
+theorem SquareEdge.nbrBlock_adjacent (e : SquareEdge) (S : ℤ × ℤ) :
+    |(e.nbrBlock S).1 - S.1| ≤ 1 ∧ |(e.nbrBlock S).2 - S.2| ≤ 1 := by
+  cases e <;> simp [SquareEdge.nbrBlock]
+
 /-- **Active labels during a repainting.** While the block `S` is repainted to its new label,
 every value of the main guide after the central birth and any completed edges, and of every main
 or auxiliary guide of an edge construction, is the placeholder, an old label or a new label.
