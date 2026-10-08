@@ -497,6 +497,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
           lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
