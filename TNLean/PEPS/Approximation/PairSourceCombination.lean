@@ -96,9 +96,9 @@ theorem isAllowed_combineSources {p q : P} (hpq : p ≠ q) (U V U' V' : HSpace) 
 followed by merging the two registers of each party, are the single pair source of the
 regrouped vector `η ⊗ η'`, whose norm is `‖η‖ ‖η'‖`.
 
-This is the tensor-product identity behind the last clause of Lemma 5.1; combining sources
-that are not adjacent is not formalized (see the scope restriction in the module docstring of
-`TNLean.PEPS.Approximation.PartyLayout`).
+This is the two-source tensor-product identity behind the last clause of Lemma 5.1. The
+combination of all sources on one pair of parties, in any order, is
+`PairEffect.partyPairEffectElimination_with_grouped_sources`.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1, `04-compression.tex`, lines
 68–70 and 125–127. -/
