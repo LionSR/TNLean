@@ -1120,8 +1120,8 @@ records that the formal Lemma 5.1 of the September 24, 2026 polynomial PEPS
 manuscript first proved the error, count and coefficient-sum clauses in a model
 without parties, and that the source-only and party-ownership clauses are now
 proved on a party layout for the monomial chains. The combination of all sources
-on one pair of parties is proved only for two adjacent sources; moving sources
-past operations on other registers remains open.
+on one pair of parties, including sources separated by operations on other
+registers, is now proved: the restriction is resolved.
 
 ### Polynomial PEPS approximation: dyadic routing
 
