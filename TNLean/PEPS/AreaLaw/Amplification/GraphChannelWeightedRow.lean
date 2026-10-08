@@ -45,6 +45,15 @@ noncomputable def graphChannelEventKernel (G : SimpleGraph ι) (a : κ → ι)
     ((Finset.univ.filter fun i : κ =>
       y ∈ graphBall G (a i) l ∧ z ∈ graphBall G (a i) l).card : ℝ)
 
+/-- A nonnegative prefactor gives a nonnegative graph-ball incidence kernel,
+without restrictions on the decay parameters or cutoff. -/
+theorem graphChannelEventKernel_nonneg (G : SimpleGraph ι) (a : κ → ι)
+    {D : ℝ} (hD : 0 ≤ D) (b α : ℝ) (N : ℕ) (y z : ι) :
+    0 ≤ graphChannelEventKernel G a D b α N y z := by
+  classical
+  unfold graphChannelEventKernel
+  exact mul_nonneg hD (Finset.sum_nonneg fun l _ => by positivity)
+
 omit [DecidableEq ι] in
 private theorem edist_le_two_mul_of_mem_graphBall {G : SimpleGraph ι} {x y z : ι}
     {l : ℕ} (hy : y ∈ graphBall G x l) (hz : z ∈ graphBall G x l) :
