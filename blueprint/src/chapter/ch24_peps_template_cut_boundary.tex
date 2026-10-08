@@ -13,7 +13,7 @@ assumption is imposed on $\Lambda$ or $A$.
         TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary,
         TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary
     }
-    \uses{def:area_law_ambient_boundary}
+    \uses{def:area_law_ambient_boundary,def:area_law_cell_counts}
     For any finite ambient set $U$ disjoint from $Z$, inclusion into the
     lattice sends $\partial_\Lambda(A\cap U)$ injectively into $\partial U$.
     In particular, $|\partial_\Lambda(A\cap U)|\le|\partial U|$.
@@ -64,7 +64,12 @@ assumption is imposed on $\Lambda$ or $A$.
 \begin{proof}
     \leanok
     The preceding separation estimate excludes cut endpoints from $T_j$
-    and its shell. Apply the ambient comparison to both sets and use the
-    ambient template bounds. The core is the case $j=0$.
+    and its shell. By Theorem~\ref{thm:area_law_physical_ambient_boundary}
+    and Lemma~\ref{lem:area_law_template_ambient_boundary},
+    \begin{align}
+        |\partial_\Lambda(A\cap T_j)|             & \le|\partial T_j|\le4n,             \\
+        |\partial_\Lambda(A\cap(T_j\setminus T))| & \le|\partial(T_j\setminus T)|\le8n.
+    \end{align}
+    The core is the case $j=0$.
     The manuscript fixes $D_0>2R+10$, which implies $D_0\ge1$ for $R\ge0$.
 \end{proof}

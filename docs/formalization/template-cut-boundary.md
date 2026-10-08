@@ -1,13 +1,5 @@
 # Physical template boundary slice (#8754)
 
-Draft #8832 is stacked on #8826 at ad9db077e1a7acb105a4d00e0d9c1bccba3e4c1d, with #8788 162fa69a88d407d97c5ce2682c95d2f87542cf10 and
-#8790 cf6736f4 ancestry. The actual model sources are unchanged, and
-`Geometry.boundaryEndpoints` is imported from `CellCounting` without duplication.
-The model owner withdrew 6b053b8b because its generated imports contained
-conflict markers; 162fa69a8 supersedes it. Our combined-tree aggregators were
-regenerated and checked, and the corrected model head is now in ancestry.
-No validation claim is made for the withdrawn model head.
-
 The seven new declarations in `Geometry/TemplateCutBoundary.lean` prove:
 
 - physical crossing-edge endpoints belong to the source set Z;
@@ -32,41 +24,9 @@ blueprint records only these geometric subresults, not the full Lemma 9.4.
 These are original proofs from the mathematical manuscript, with no upstream
 Lean proof text reused. The private test fixture is reused from TNLean #8826.
 
-The production module built in 1.3 seconds at
-`addfd463ce7ac29b03ca00b5fe4d452cd8fe35cd` in
-[PR CI run 37641625254, build job 112863109726](https://github.com/LionSR/TNLean/actions/runs/37641625254/job/112863109726).
-Every build-job step through `Complete job` reports success, including the full
-12,510-job library build, lint target, strict actual-model regressions, exact
-axiom guards, explicit axiom audit, all repository regressions, style,
-compilation times, and compiled blueprint/paper-gap declarations. The aggregate
-job status lagged behind its completed steps when this evidence was captured;
-no claim is made that the entire workflow is green.
-
-All seven captured axiom records contain only `propext`, `Classical.choice`,
-and `Quot.sound`. The build and explicit axiom output are preserved in
-[the build evidence](../provenance/evidence/8754-cut-build.log) and
-[the axiom evidence](../provenance/evidence/8754-cut-axioms.log), with hashes in
-the seven verified provenance entries. Timestamp/ANSI removal and whitespace
-normalization are stated in the evidence. All 199 combined provenance records
-validate with the immutable upstream checkout. Source-level blueprint sync
-passes with the pinned QICLean checkout present.
-
 Regressions include the complete thin-real-polygon Template, zero/maximal
 radii, negative coordinates, empty/full cuts, unordered orientation, and
 missing lattice neighbors. A concrete disconnected physical domain has a
 proved nonempty remote cut boundary, proved separation, and a proved nonempty
 local template boundary; the final core and shell bounds are instantiated
 without additional hypotheses.
-
-Rendering validation: the first separate render job exposed no step records or
-log. The fresh run 37642805340 supplied a concrete diagnosis: only this new
-chapter failed the pinned latexindent formatting gate. The chapter was formatted
-with the repository's checksum-verified latexindent 3.24.7 wrapper and passes its
-single-file idempotence check. The change is whitespace only. Fresh final-head
-CI must confirm the complete render before merge.
-Local toolchain retrieval returned HTTP 403, so no local Mathlib proof-source
-build was attempted. The blueprint completion marks refer only to these seven
-compiled, source-faithful geometric results, not the full Lemma 9.4.
-
-OpenAI Codex assisted the implementation and source comparison. Merges remain
-centralized with the parent; this branch has not been merged.

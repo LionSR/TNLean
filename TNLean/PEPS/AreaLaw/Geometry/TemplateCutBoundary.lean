@@ -22,27 +22,6 @@ The sufficient condition `1 ≤ D₀` follows from `D₀ > 2R + 10` in
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
-/-
-Source: September 24, 2026; scanner:templates (Lemma 9.4).
-Revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Original formalization; no upstream Lean proof text reused.
-Provenance-ID: 8754-cut-mem_boundaryendpoints_of_mem_edgeboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary
-Provenance-ID: 8754-cut-edgeboundary_filter_image_subset_ambientboundary
-Downstream declaration:
-  TNLean.PEPS.AreaLaw.Geometry.edgeBoundary_filter_image_subset_ambientBoundary
-Provenance-ID: 8754-cut-card_edgeboundary_filter_le_ambientboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_filter_le_ambientBoundary
-Provenance-ID: 8754-cut-template.isseparated.disjoint_ambientdilation
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation
-Provenance-ID: 8754-cut-template_cut_boundary_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le
-Provenance-ID: 8754-cut-template_core_boundary_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_core_boundary_card_le
-Provenance-ID: 8754-cut-template_shell_cut_boundary_card_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.template_shell_cut_boundary_card_le
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- A physical crossing edge contributes both endpoints to the source set `Z`.
@@ -90,7 +69,9 @@ theorem card_edgeBoundary_filter_le_ambientBoundary
   rwa [Finset.card_image_of_injective _ (Sym2.map.injective Subtype.val_injective)] at h
 
 /-- Separation excludes every point of `Z` from all permitted dilations.
-Source: Definition 9.3 and Lemma 9.4; no cut-clearance premise is added. -/
+Source: Definition 9.3 and Lemma 9.4; no cut-clearance premise is added. The hypothesis
+`1 ≤ D₀` is implied by the manuscript's standing choice `D₀ > 2R + 10`
+(`02-initial.tex`, line 225) with `R ≥ 0`, so it adds no assumption to the source. -/
 theorem Template.IsSeparated.disjoint_ambientDilation {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     {T : Template Ctpl n s₀} {Z : Finset (ℤ × ℤ)}
     (hsep : T.IsSeparated D₀ Z) (hD : 1 ≤ D₀) (j : ℕ) (hj : j ≤ s₀) :
