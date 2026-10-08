@@ -1,0 +1,72 @@
+\section{Colors of adjacent initial sectors}
+\label{sec:area_law_initial_sector_colors}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, an integer width $C\ge2$ and an initial layer
+$k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at every
+layer. Let $\mathcal I$ be the resulting actual initial identifiers,
+let $X_i^0$ be their closed birth regions, and write
+$\chi(i)\in\{0,1\}$ for their initial colors.
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+and let $v$ be one of the nine marks of its defining cell. Put
+$\ell=\ell_k-5$ and $r=2^\ell/2=t_k/64$.
+
+Divide every side of the square
+$\overline B_\infty(v,r)=v+[-r,r]^2$ at its midpoint, and join its
+center to the eight elementary bases. Let $\mathcal J$ be the set
+of these eight bases, and denote their closed triangles by
+$P_s^{\rm S}$. Write $b_s^-$ and $b_s^+$ for the initial and final
+endpoints of base $s$ in the perimeter orientation. Let
+$\sigma:\mathcal J\to\mathcal I$ be the unique actual assignment
+of Theorem~\ref{thm:area_law_actual_sector_assignment}, obtained
+from the working fan of half-side $2r=t_k/32$.
+
+This assertion concerns adjacent members of the eight fixed sectors
+in \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially 361--370, and prop:two-families, lines 313--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% No merging of sectors or active-ray conclusion is asserted here.
+% Final formalization markers require the frozen canonical source check.
+
+\begin{theorem}[Colors and identifiers on adjacent sectors]
+    \label{thm:area_law_initial_sector_colors}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_sector_assignment_adjacent_colors_eq_iff}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_initial_region_indices,
+        def:area_law_initial_birth_regions,
+        def:area_law_initial_region_colors,def:area_law_cell_fan}
+    Let $s,t\in\mathcal J$ satisfy $b_s^+=b_t^-$ or
+    $b_t^+=b_s^-$. Then
+    \begin{align}
+        \chi(\sigma(s))=\chi(\sigma(t))
+         & \quad\Longleftrightarrow\quad \sigma(s)=\sigma(t).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        thm:area_law_cell_fan_base_radius,
+        thm:area_law_initial_interface_colors,def:area_law_cell_fan,
+        def:area_law_template}
+    The exact closed restriction of the assignment gives
+    $P_s^{\rm S}\subseteq X_{\sigma(s)}^0$ for each $s$: the triangle
+    is one of the terms in the union describing
+    $X_{\sigma(s)}^0\cap\overline B_\infty(v,r)$.
+
+    Suppose first that $b_s^+=b_t^-$, and put $e=b_s^+$.
+    The base-radius identity gives $\|e-v\|_\infty=r>0$, so $e\ne v$.
+    Each triangle is the convex hull of its center and two base
+    endpoints. Consequently,
+    \begin{align}
+        [v,e] & \subseteq P_s^{\rm S}\cap P_t^{\rm S}
+        \subseteq X_{\sigma(s)}^0\cap X_{\sigma(t)}^0.
+    \end{align}
+    When $b_t^+=b_s^-$, interchange $s$ and $t$ to obtain the same
+    nondegenerate shared radial segment. If $\sigma(s)\ne\sigma(t)$,
+    the initial-interface theorem gives
+    $\chi(\sigma(s))\ne\chi(\sigma(t))$.
+    Conversely, equality of the identifiers immediately gives
+    equality of their colors.
+\end{proof}
