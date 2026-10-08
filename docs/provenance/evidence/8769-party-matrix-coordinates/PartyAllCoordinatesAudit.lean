@@ -1,0 +1,16 @@
+import TNLeanRelayMatrix.PartyTensorCoordinates
+import TNLeanRelayMatrix.PartyLabelledCoordinates
+import TNLeanRelayMatrix.PartyProductPartialTrace
+namespace TNLean.PEPS.PairEffect
+set_option linter.hashCommand false
+#print axioms partyListBasis
+#print axioms partyListBasis_nil_apply
+#print axioms partyListBasis_repr_nil
+#print axioms partyListBasis_cons_apply
+#print axioms partyListBasis_repr_cons_tmul
+#print axioms partyListBasis_repr_tensorPartyMaps
+#print axioms partyLabelledBasis
+#print axioms partyLabelledBasis_apply
+#print axioms partyLabelledBasis_repr_tensorPartyMaps
+#print axioms partialTraceRight_partyProductMatrix
+end TNLean.PEPS.PairEffect

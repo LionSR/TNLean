@@ -1,0 +1,59 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "644a45a22d077083fedcf248618e51aff00a6cf8",
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "public_export_count": 10,
+  "module_count": 3,
+  "modules": [
+    {
+      "source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/PartyTensorCoordinates.lean",
+      "source_sha256": "15588c604315781824770915bbea6edcf9514e642e52101964ff583007b216b6",
+      "artifact_sha256": "56f72dc4f3e5d888b1e6f97414bb44e85d4eb12ef7b7ceacecba88f58749dba8",
+      "strict_log": "PartyTensorCoordinates.strict.log.gz",
+      "strict_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "production_source": "TNLean/PEPS/Approximation/PartyTensorCoordinates.lean",
+      "production_source_sha256": "15588c604315781824770915bbea6edcf9514e642e52101964ff583007b216b6"
+    },
+    {
+      "source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/PartyProductPartialTrace.lean",
+      "source_sha256": "55d7810d5901ffac01162d9023f0d7584f946c65398d27b52cd8e6ffdafbcb52",
+      "artifact_sha256": "f97fdd617426a2e7d17858a5090048b94d5b8cdefe5594fe28ae25016061b3f9",
+      "strict_log": "PartyProductPartialTrace.strict.log.gz",
+      "strict_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "production_source": "TNLean/PEPS/Approximation/PartyProductPartialTrace.lean",
+      "production_source_sha256": "55d7810d5901ffac01162d9023f0d7584f946c65398d27b52cd8e6ffdafbcb52"
+    },
+    {
+      "source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/PartyLabelledCoordinates.lean",
+      "source_sha256": "4649c2a861c7f0a573fb52fd6f1ba39be90ad582af535d57ad71a2b2f47db9f2",
+      "artifact_sha256": "442b645fe6c16228feb45bbf110fab96ce163567347b82d3ff50d400f362e83b",
+      "strict_log": "PartyLabelledCoordinates.strict.log.gz",
+      "strict_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "production_source": "TNLean/PEPS/Approximation/PartyLabelledCoordinates.lean",
+      "production_source_sha256": "f96f806dced7f92ffe8151305c43f16415c503409358aa095308e26abcbf69d4"
+    }
+  ],
+  "all_public_audit_source": "PartyAllCoordinatesAudit.lean",
+  "all_public_audit_log": "all-party-coordinates-axioms.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "c2186640a3d3732c99ed04a493986128b76df922f2aa1ade77c4a6f051b1e3fb",
+  "prerequisites": [
+    "dd33dc9888a91c630d177f38f800b4215b6e24b1",
+    "f15416476c61b343f79d19602dffe8b5489a49f0"
+  ],
+  "unperformed_checks": "Canonical integration verification belongs to the coordinating branch."
+}
