@@ -27,11 +27,14 @@ cut.
   `eq:initial-tail-mgf` for the regional state.
 * `TNLean.PEPS.AreaLaw.LocalHamiltonian.surprisalTail_reducedState_le`:
   `eq:initial-tail-probability` for the regional state.
+* `TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`: the
+  typical marginal spectrum at the concentration width `concentrationWidth`.
 
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
-  September 24, 2026, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 34–69.
+  September 24, 2026, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 34–69, and the
+  concentration statement after it, lines 209–219.
   Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
