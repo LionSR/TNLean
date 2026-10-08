@@ -81,12 +81,12 @@ and $m\ge1$.
     \lean{CyclicInsertion.cyclicInsertion}
     \lean{CyclicInsertion.idealInsertion}
     \leanok
-    For a position $k\in\{1,\dots,m\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
+    For a position $k\in\{0,\dots,m-1\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
     place its input in register $k$ and a copy of $\eta$ in every other
     register. The cyclic insertion map is the average
-    \[
-        T_m=\frac1m\sum_{k=1}^m I_k,
-    \]
+    \begin{align}
+        T_m=\frac1m\sum_{k=0}^{m-1} I_k,
+    \end{align}
     and the ideal insertion map is $P_m=|\eta^{\otimes m}\rangle\langle\eta|$.
 \end{definition}
 
@@ -164,9 +164,9 @@ and $m\ge1$.
     \lean{TNLean.PEPS.PairEffect.EffectChain.IsAllowed}
     \leanok
     A monomial with $n$ recorded pair effects is a composition
-    \[
+    \begin{align}
         M=F_n\circ E_n\circ F_{n-1}\circ\cdots\circ E_1\circ F_0,
-    \]
+    \end{align}
     where each $F_i$ ends with a pair register $\mathcal W_i$ beside a
     spectator space $\mathcal S_i$, and
     $E_i=\langle\eta_i|\otimes\mathbf 1_{\mathcal S_i}$ contracts that
@@ -215,20 +215,27 @@ and $m\ge1$.
     For an allowed monomial $M$ with $n$ recorded pair effects, $M$ and
     $\widetilde M_m$ are contractions, the ideal stack content is a unit
     vector, and
-    \[
+    \begin{align}
         \Bigl\|\widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle\Bigr\|
         \le\frac n{\sqrt m}.
-    \]
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_cyclic_insertion_basic,thm:peps_one_effect_estimate}
-    By induction on $n$. Appending the ideal content of the first stack after
-    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$. The
-    difference therefore splits into the replacement error of the remaining
-    monomial composed with $T_m\otimes\mathbf 1$, and the ideal remainder
-    composed with $(T_m-P_m)\otimes\mathbf 1$. All other factors are
-    contractions, so the two terms contribute $(n-1)/\sqrt m$ and $1/\sqrt m$.
+    By induction on $n$. Write $M=M'\circ E_1\circ F_0$, where $M'$ is the
+    monomial formed by the remaining $n-1$ effects, and let
+    $I_{M'}=M'\otimes|\bigotimes_{i\ge2}\eta_i^{\otimes m}\rangle$ be its
+    ideal replacement. Appending the ideal content of the first stack after
+    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$.
+    Up to rearranging the stacks, the difference therefore splits as
+    \begin{align}
+        \widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle
+        =\bigl(\widetilde{M'}_m-I_{M'}\bigr)\circ(T_m\otimes\mathbf 1)\circ F_0
+        +I_{M'}\circ\bigl((T_m-P_m)\otimes\mathbf 1\bigr)\circ F_0.
+    \end{align}
+    All other factors are contractions, so the two terms contribute
+    $(n-1)/\sqrt m$ and $1/\sqrt m$.
 \end{proof}
 
 \begin{theorem}[Expansion of a replaced monomial]
@@ -264,10 +271,10 @@ and $m\ge1$.
     Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials,
     each with at most $r$ recorded pair effects, and let $m\ge1$. Then
     $\Gamma_m$ is a unit vector,
-    \[
+    \begin{align}
         \bigl\|\widetilde G_m-G\otimes|\Gamma_m\rangle\bigr\|
         \le\frac r{\sqrt m}\sum_\xi|c_\xi|,
-    \]
+    \end{align}
     and $\widetilde G_m$ is a weighted sum of at most $Km^r$ contractions
     whose absolute coefficient sum equals $\sum_\xi|c_\xi|$.
 
@@ -282,10 +289,18 @@ and $m\ge1$.
 
 \begin{proof}\leanok
     \uses{thm:peps_replaced_monomial_error,thm:peps_replaced_monomial_expansion}
-    By induction on the list of monomials. The difference splits into $c_\xi$
-    times the error of the first replaced monomial, followed by appending the
-    unit vector of the remaining stacks, plus the error of the remaining gate
-    with the first stacks appended. The first term is bounded by
+    By induction on the list of monomials. Let $M_\xi$ be the first monomial,
+    with ideal stack content $\eta_{(\xi)}$, and let $G_L$ be the gate of the
+    remaining monomials, with replaced gate $\widetilde G_{L,m}$ and garbage
+    vector $\Gamma_{L,m}$. Up to rearranging tensor factors,
+    \begin{align}
+        \widetilde G_m-G\otimes|\Gamma_m\rangle
+        =c_\xi\bigl(\widetilde M_{\xi,m}-M_\xi\otimes|\eta_{(\xi)}\rangle\bigr)
+        \otimes|\Gamma_{L,m}\rangle
+        +\bigl(\widetilde G_{L,m}-G_L\otimes|\Gamma_{L,m}\rangle\bigr)
+        \otimes|\eta_{(\xi)}\rangle.
+    \end{align}
+    The first term is bounded by
     Theorem~\ref{thm:peps_replaced_monomial_error} and the second by induction;
     appending a unit vector and rearranging tensor factors are contractions.
     Expanding each replaced monomial by
