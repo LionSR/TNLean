@@ -10,8 +10,12 @@ import TNLean.PEPS.Approximation.PartyLabelledCoordinates
 
 The canonical grouping isometry transports the product of the literal local register bases to
 the original register order. The matrix of a source-free word in these bases is obtained from
-its actual singleton restrictions. Source: polynomial-PEPS, `04-compression.tex`, lines
-565–588.
+its actual singleton restrictions.
+
+## References
+
+* OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*
+  (September 24, 2026), proof of Theorem 5.2, `04-compression.tex`, lines 565–588.
 -/
 
 noncomputable section
