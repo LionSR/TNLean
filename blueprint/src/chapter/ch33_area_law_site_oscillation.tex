@@ -31,8 +31,8 @@ and use $[A,B]=AB-BA$.
     \leanok
     For $y\in I$, define
     \begin{align}
-        d_y(B)&=\sup\bigl\{\|[\widehat U,B]\|:
-            U\in\mathcal A_{\{y\}},\ U^\dagger U=UU^\dagger=\mathbb 1\bigr\}.
+        d_y(B) & =\sup\bigl\{\|[\widehat U,B]\|:
+        U\in\mathcal A_{\{y\}},\ U^\dagger U=UU^\dagger=\mathbb 1\bigr\}.
         \label{eq:qc_osc_supremum}
     \end{align}
     This is the on-site unitary supremum of
@@ -64,7 +64,7 @@ and use $[A,B]=AB-BA$.
     For each admissible $U$, the operator $\widehat U$ is unitary, so
     \begin{align}
         \|[\widehat U,B]\|
-        &\le\|\widehat UB\|+\|B\widehat U\|=2\|B\|.
+         & \le\|\widehat UB\|+\|B\widehat U\|=2\|B\|.
         \label{eq:qc_osc_commutator_bound}
     \end{align}
     The assertions follow from the upper- and lower-bound properties
@@ -82,11 +82,11 @@ and use $[A,B]=AB-BA$.
     \leanok
     For every $c\in\C$,
     \begin{align}
-        d_y(B+C)&\le d_y(B)+d_y(C),
+        d_y(B+C) & \le d_y(B)+d_y(C),
         \label{eq:qc_osc_subadditivity}
     \end{align}
     \begin{align}
-        d_y(cB)&=|c|d_y(B).
+        d_y(cB) & =|c|d_y(B).
         \label{eq:qc_osc_homogeneity}
     \end{align}
     Consequently $d_y(-B)=d_y(B)$ and
@@ -109,7 +109,7 @@ and use $[A,B]=AB-BA$.
     For the finite sum, distribute the commutator and use
     \begin{align}
         \Bigl\|\Bigl[\widehat U,\sum_{k\in F}B_k\Bigr]\Bigr\|
-        &\le\sum_{k\in F}\|[\widehat U,B_k]\|
+         & \le\sum_{k\in F}\|[\widehat U,B_k]\|
         \le\sum_{k\in F}d_y(B_k).
     \end{align}
     Taking the supremum over $U$ proves the claim.
@@ -132,7 +132,7 @@ and use $[A,B]=AB-BA$.
     The commutation hypothesis bounds every norm in the supremum by
     zero, whereas $d_y(B)\ge0$. For a spectator operator,
     $(U\otimes\mathbb 1)(\mathbb 1\otimes S)=U\otimes S
-    =(\mathbb 1\otimes S)(U\otimes\mathbb 1)$.
+        =(\mathbb 1\otimes S)(U\otimes\mathbb 1)$.
 \end{proof}
 
 \subsection{Averaging physical sites}
@@ -153,7 +153,7 @@ means using $K=I\setminus Q$.
     Define $E_K^{\mathcal K}$ by applying $E_K$ to each such block:
     \begin{align}
         \bigl(E_K^{\mathcal K}(B)\bigr)_{(\sigma,a),(\tau,b)}
-        &=\bigl(E_K(B_{ab})\bigr)_{\sigma,\tau}.
+         & =\bigl(E_K(B_{ab})\bigr)_{\sigma,\tau}.
         \label{eq:qc_spectator_blocks}
     \end{align}
     In particular, when $q>0$, set $Q=I\setminus K$ and write
@@ -161,9 +161,9 @@ means using $K=I\setminus Q$.
     $\rho$ on $Q$. Then
     \begin{align}
         \bigl(E_K^{\mathcal K}(B)\bigr)_{(\sigma,a),(\tau,b)}
-        &=q^{-|Q|}\mathbf1_{\{\sigma|_Q=\tau|_Q\}}
-          \sum_{\rho\in\{0,\ldots,q-1\}^{Q}}
-          B_{(\sigma|_K\sqcup\rho,a),(\tau|_K\sqcup\rho,b)}.
+         & =q^{-|Q|}\mathbf1_{\{\sigma|_Q=\tau|_Q\}}
+        \sum_{\rho\in\{0,\ldots,q-1\}^{Q}}
+        B_{(\sigma|_K\sqcup\rho,a),(\tau|_K\sqcup\rho,b)}.
         \label{eq:qc_spectator_trace}
     \end{align}
     Both spectator indices remain unchanged.
@@ -178,11 +178,11 @@ means using $K=I\setminus Q$.
     \leanok
     Suppose $q>0$. For physical operators $A$ and spectator operators $S$,
     \begin{align}
-        E_K^{\mathcal K}(A\otimes S)&=E_K(A)\otimes S,
+        E_K^{\mathcal K}(A\otimes S) & =E_K(A)\otimes S,
         \label{eq:qc_spectator_tensor}
     \end{align}
     \begin{align}
-        E_K^{\mathcal K}(\mathbb 1\otimes S)&=\mathbb 1\otimes S.
+        E_K^{\mathcal K}(\mathbb 1\otimes S) & =\mathbb 1\otimes S.
         \label{eq:qc_spectator_fixed}
     \end{align}
     Retaining all physical sites gives $E_I^{\mathcal K}(B)=B$.
@@ -227,8 +227,8 @@ means using $K=I\setminus Q$.
     Then
     \begin{align}
         E_K^{\mathcal K}(B)
-        &=q^{-2|I|}\sum_{p\in(\Z/q\Z\times\Z/q\Z)^I}
-          \widehat{W_K(p)}B\widehat{W_K(p)}^{\dagger}.
+         & =q^{-2|I|}\sum_{p\in(\Z/q\Z\times\Z/q\Z)^I}
+        \widehat{W_K(p)}B\widehat{W_K(p)}^{\dagger}.
         \label{eq:qc_spectator_average}
     \end{align}
     Labels at retained sites are included in the sum; each choice of
@@ -269,7 +269,7 @@ means using $K=I\setminus Q$.
     every unitary $U\in\mathcal A_{\{y\}}$. Then
     \begin{align}
         \|B-E_K^{\mathcal K}(B)\|
-        &\le\sum_{y\notin K}\varepsilon_y.
+         & \le\sum_{y\notin K}\varepsilon_y.
         \label{eq:qc_spectator_error}
     \end{align}
 \end{theorem}
@@ -283,12 +283,12 @@ means using $K=I\setminus Q$.
     $\widehat{W_K(p)}$ by $\sum_{y\notin K}\varepsilon_y$.
     With $V=\widehat{W_K(p)}$, unitarity gives
     \begin{align}
-        B-VBV^\dagger&=[B,V]V^\dagger,
+        B-VBV^\dagger & =[B,V]V^\dagger,
         \label{eq:qc_spectator_difference}
     \end{align}
     \begin{align}
-        \|B-VBV^\dagger\|&=\|[B,V]\|
-            \le\sum_{y\notin K}\varepsilon_y.
+        \|B-VBV^\dagger\| & =\|[B,V]\|
+        \le\sum_{y\notin K}\varepsilon_y.
         \label{eq:qc_spectator_difference_bound}
     \end{align}
     Average~(\ref{eq:qc_spectator_difference_bound}) over all Weyl labels
@@ -302,7 +302,7 @@ Theorem~\ref{thm:qc_site_oscillation_bounds}, to obtain the physical-site
 averaging estimate of \cite{OpenAI2026AreaLaw}:
 \begin{align}
     \|B-E_{I\setminus Q}^{\mathcal K}(B)\|
-    &\le\sum_{y\in Q}d_y(B).
+     & \le\sum_{y\in Q}d_y(B).
     \label{eq:qc_osc_averaging_error}
 \end{align}
 By Theorem~\ref{thm:qc_spectator_commutant}, the averaged operator
