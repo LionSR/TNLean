@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
+import TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine
 
 /-!
 # Initial frontiers near an actual mark
@@ -35,25 +36,6 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- Differences of points on an allowed affine line have an allowed slope.
-Auxiliary to Section 11, `geometry:initial-stars`, lines 352–359. -/
-private theorem allowedSlope_sub_of_mem_line {p q v x : ℝ × ℝ}
-    (hs : IsAllowedSlope (q - p)) (hv : v ∈ affineSpan ℝ {p, q})
-    (hx : x ∈ affineSpan ℝ {p, q}) : IsAllowedSlope (x - v) := by
-  obtain ⟨r, rfl⟩ := mem_affineSpan_pair_iff_exists_lineMap_eq.mp hv
-  obtain ⟨s, rfl⟩ := mem_affineSpan_pair_iff_exists_lineMap_eq.mp hx
-  simp only [AffineMap.lineMap_apply_module']
-  dsimp [IsAllowedSlope] at hs ⊢
-  rcases hs with hs | hs | hs | hs
-  · left
-    linear_combination (s - r) * hs
-  · right; left
-    linear_combination (s - r) * hs
-  · right; right; left
-    linear_combination (s - r) * hs
-  · right; right; right
-    linear_combination (s - r) * hs
-
 /-- A sufficiently close allowed mesh segment lies on an allowed line through
 the reference mesh point. Auxiliary to Section 11, `geometry:initial-stars`,
 lines 352–359. -/
@@ -69,7 +51,7 @@ private theorem near_mesh_segment_allowed {o : ℝ × ℝ} {d : ℝ} (hd : 0 < d
   have hvline : v ∈ affineSpan ℝ {p, q} := by
     by_contra hout
     exact (not_le_of_gt hnear) (affineMesh_line_dist_ge hd hp hq hv hs hout hxline)
-  exact allowedSlope_sub_of_mem_line hs hvline hxline
+  exact isAllowedSlope_sub_of_mem_affineSpan_pair hs hvline hxline
 
 /-- One cell's marks inherit the existing quarter-mesh inclusion.
 Auxiliary to Section 11, `geometry:initial-stars`, lines 352–359. -/

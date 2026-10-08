@@ -1,0 +1,20 @@
+\section{Connected pieces of the midpoint fan}
+\label{sec:area_law_fan_pieces}
+
+A vector $(u_1,u_2)\in\R^2$ has an allowed direction if
+$u_1=0$, $u_2=0$, $u_1=u_2$ or $u_1=-u_2$.
+The following observation will be used for the radial segments of
+the elementary fans in \cite[Section~11]{OpenAI2026AreaLaw}.
+
+\begin{theorem}[Allowed directions in an affine span]
+    \label{thm:area_law_allowed_direction_affine_span}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isAllowedSlope_sub_of_mem_affineSpan_pair}
+    Let $p,q\in\R^2$ and suppose that $q-p$ has an allowed direction.
+    If $v,x\in\operatorname{aff}\{p,q\}$, then $x-v$ has an allowed
+    direction. The points $p,q$ may coincide.
+\end{theorem}
+\begin{proof}
+    Write $v=(1-r)p+rq$ and $x=(1-s)p+sq$ with $r,s\in\R$.
+    Then $x-v=(s-r)(q-p)$. Each of the four equations defining an
+    allowed direction is preserved by real scalar multiplication.
+\end{proof}
