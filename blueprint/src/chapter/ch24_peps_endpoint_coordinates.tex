@@ -1,0 +1,88 @@
+\section{Endpoint coordinates and the shared sample average}
+\label{sec:peps_endpoint_coordinates}
+
+\begin{theorem}[Coordinates of the actual source vector]
+    \label{thm:peps_actual_source_vector_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_sum_slotBasis,
+      TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_slotVector}
+    \leanok
+    In the tensor basis of the recorded source slots, a product source
+    vector has coefficients equal to the products of its individual slot
+    coefficients. Its basis expansion is the corresponding finite sum.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand each slot vector in its orthonormal basis. Multilinearity of
+    the source tensor product gives the sum over all basis assignments.
+    Applying the orthonormal coordinate functional selects one assignment.
+\end{proof}
+
+\begin{theorem}[Coordinates of the literal endpoint operator]
+    \label{thm:peps_actual_endpoint_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_endpointWord_cons_tmul,
+      TNLean.PEPS.PairEffect.SourceInventory.eval_endpointWord_slotVector_tmul,
+      TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointWord,
+      TNLean.PEPS.PairEffect.basisMatrixOperator_repr,
+      TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointMatrixWord}
+    \leanok
+    For each source slot $i$, let $A_i,B_i$ act on its two endpoints.
+    The literal endpoint operator acts on elementary source tensors by
+    applying these maps at their actual factors. Its matrix in the
+    recorded slot basis satisfies
+    $W_{x,y}=\prod_i (A_i)_{x_i^{\rm L},y_i^{\rm L}}
+      (B_i)_{x_i^{\rm R},y_i^{\rm R}}$.
+    Specifying the endpoint matrices in their orthonormal bases gives
+    precisely these coordinates of the actual operator.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_source_vector_coordinates}
+    Induct on the source slots, applying the two leading endpoint maps
+    and leaving the remaining registers as spectators. The tensor inner
+    product is the product of the endpoint inner products. Constructing
+    an operator from a matrix in an orthonormal basis recovers that matrix.
+\end{proof}
+
+\begin{theorem}[Exact shared sample average]
+    \label{thm:peps_actual_endpoint_average}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixAverage_eq_product}
+    \leanok
+    \uses{thm:peps_actual_endpoint_coordinates}
+    Let $k\geq1$, and at each source slot $i$ let $A_{ij},B_{ij}$ be
+    endpoint matrices indexed by $j\in\{1,\ldots,k\}$. Write $W_j$ for
+    the literal operator using sample assignment $(j_i)_i$, with the
+    same $j_i$ at both endpoints of slot $i$. At every matrix entry,
+    \begin{align}
+        \left[\bigotimes_i\left(k^{-1}\sum_{j=1}^k
+             A_{ij}\otimes B_{ij}\right)\right]_{x,y}
+        &=k^{-N}\sum_{(j_i)_i}(W_j)_{x,y},
+    \end{align}
+    where $N$ is the number of actual source slots. The empty inventory
+    gives the scalar identity.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_endpoint_coordinates}
+    Expand each slot average, pull out its factor $k^{-1}$, and apply
+    finite distributivity. The sum is over one sample per actual slot,
+    shared by its two endpoints.
+\end{proof}
+
+\begin{theorem}[Locality of the specified endpoint matrices]
+    \label{thm:peps_actual_endpoint_matrix_locality}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointMatrixWord_eval_eq_of_agree}
+    \leanok
+    \uses{thm:peps_actual_endpoint_coordinates}
+    If two matrix families agree at all endpoints owned by a selected
+    set of parties, their actual endpoint operators restricted to those
+    parties are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    The corresponding operators in each endpoint basis agree.
+    Apply locality of the literal endpoint operator word.
+\end{proof}
+
+These identities describe the recorded source coordinates and sample average
+in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 253--355 and 565--588.
