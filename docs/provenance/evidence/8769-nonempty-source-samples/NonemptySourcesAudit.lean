@@ -1,0 +1,12 @@
+import TNLeanRelayMatrix.NonemptySourceSamples
+set_option linter.hashCommand false
+namespace TNLean.PEPS.PairEffect.SourceCircuit
+#print axioms slotCount_eq_zero_of_not_nonempty
+#print axioms length_partialSlots_all_eq_sum_slotCount
+#print axioms sourceLocationsNonemptyEquiv
+#print axioms length_partialSlots_all_eq_sum_nonempty_slotCount
+#print axioms prod_sourceSlotWeight_eq
+#print axioms sourceSampleNonemptyEquiv
+#print axioms sourceSampleNonemptyEquiv_gate
+#print axioms sourceSampleNonemptyEquiv_parties
+end TNLean.PEPS.PairEffect.SourceCircuit

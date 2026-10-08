@@ -1,0 +1,61 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "715e93fc7",
+  "modules": [
+    {
+      "module": "SourceAveragingNormalization",
+      "source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/SourceAveragingNormalization.lean",
+      "source_sha256": "56d4bd47f1068e3e428ab9c4791c80fcf232524c48953e88a07eb662b9774e2c",
+      "artifact_sha256": "4cbcf20f8e6e24d145ab8aef483ad1816ab623773d9fed4b3b8f2a3077c7d1c8",
+      "strict_log": "SourceAveragingNormalization.strict.log.gz",
+      "strict_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "production_source": "TNLean/PEPS/Approximation/SourceAveragingNormalization.lean",
+      "production_source_sha256": "476bd362833c35708951f4ad60fa6f35728823e95bc4797a94151c3e785eb3d5"
+    },
+    {
+      "module": "NonemptySourceSamples",
+      "source": "/tmp/tnlean-party-matrix-check/TNLeanRelayMatrix/NonemptySourceSamples.lean",
+      "source_sha256": "f214b83a16d0263a74c148c6aa6637c5fee879ec42f77cd51c1aa6b3e5e29cc6",
+      "artifact_sha256": "d05c8df4a47fd3cf095d7bee124e865370f903f38f66c10cc5c350ff34de5d45",
+      "strict_log": "NonemptySourceSamples.strict.log.gz",
+      "strict_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "production_source": "TNLean/PEPS/Approximation/NonemptySourceSamples.lean",
+      "production_source_sha256": "d35ab102c70b429c16d73aca0f307f46f0d1cf2d91db970413b2463629d304a3"
+    }
+  ],
+  "module_count": 2,
+  "public_export_count": 8,
+  "additional_lean_options": [
+    "-j1"
+  ],
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "all_public_audit_source": "NonemptySourcesAudit.lean",
+  "all_public_audit_log": "nonempty-sources-all-public.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "553ee041325b8a6c96f9550f79c67eb057c00592c26768c9e49c320c1747eacc",
+  "fresh_source_dependency": {
+    "source": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/SampledSourceNetwork.lean",
+    "source_sha256": "60b2767a7e7507029a5ae41052362959d4066a7f032fb0297e4326f1eab6722a",
+    "artifact_sha256": "d19c5286399718c4f51735097248896d20fcf7deee867244c67f07cdd2abc960",
+    "strict_log": "sampled-network-canonical-C.strict.log.gz",
+    "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "prerequisites": [
+    "dd33dc9888a91c630d177f38f800b4215b6e24b1",
+    "0f932eb5719ee74b302a2393662c11d382acb89c"
+  ]
+}
