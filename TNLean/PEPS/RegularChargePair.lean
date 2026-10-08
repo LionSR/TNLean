@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegularTorusSite
 import TNLean.Algebra.RepresentationTensorProduct
 import TNLean.Algebra.TranslatedCharacterOrthogonality
+import TNLean.Algebra.BinaryProjectionFamily
 
 /-!
 # Charge-pair coefficients and the interferometric return measurement
@@ -284,6 +285,25 @@ theorem regularChargePairReturnProjection_mulVec_braided
   simp [div_eq_mul_inv, mul_comm]
 
 omit [DecidableEq G] in
+/-- The return projector acts on the literal unnormalized pair coefficients.
+Source: SCP10, interference coefficients and measurement, lines 2597–2615. -/
+theorem regularChargePairReturnProjection_mulVec_braidedCoefficient
+    (σ : Representation ℂ G E) [σ.IsIrreducible]
+    (hσ : ∀ g, LinearMap.adjoint (σ g) = σ g⁻¹) (p k x : G) :
+    regularChargePairReturnProjection σ.character p *ᵥ
+      regularBraidedChargePairCoefficient σ.character p k x =
+        (σ.character k⁻¹ / Module.finrank ℂ E) •
+          regularChargePairCoefficient σ.character p := by
+  have hscaled : (Nat.card G : ℂ) •
+      normalizedRegularBraidedChargePairCoefficient σ.character p k x =
+        regularBraidedChargePairCoefficient σ.character p k x := by
+    simp [normalizedRegularBraidedChargePairCoefficient, smul_smul]
+  rw [← hscaled, Matrix.mulVec_smul,
+    regularChargePairReturnProjection_mulVec_braided σ hσ]
+  simp [normalizedRegularChargePairCoefficient, smul_smul,
+    mul_comm]
+
+omit [DecidableEq G] in
 /-- The squared norm of the accepted coefficient vector is the probability
 printed in the interference calculation. This is a statement about the actual
 two-register coefficients. Source: SCP10, lines 2605–2615. -/
@@ -319,32 +339,8 @@ theorem regularChargePairReturnMeasurement_complete
       regularChargePairReturnMeasurement σ.character p c =
         if b = c then regularChargePairReturnMeasurement σ.character p b else 0) ∧
     (∑ b, regularChargePairReturnMeasurement σ.character p b) = 1 := by
-  let D := regularChargePairReturnProjection σ.character p
-  have hDh : D.IsHermitian := regularChargePairReturnProjection_conjTranspose _ _
-  have hDI : D * D = D := regularChargePairReturnProjection_mul_self σ hσ p
-  have hCh : (1 - D).IsHermitian := Matrix.isHermitian_one.sub hDh
-  have hCI : (1 - D) * (1 - D) = 1 - D := by
-    simp only [Matrix.mul_sub, Matrix.sub_mul, Matrix.one_mul, Matrix.mul_one,
-      hDI, sub_self, sub_zero]
-  refine ⟨?_, ?_, ?_⟩
-  · intro b
-    cases b
-    · change (1 - D).IsHermitian ∧ (1 - D).PosSemidef
-      refine ⟨hCh, ?_⟩
-      have hp := Matrix.posSemidef_self_mul_conjTranspose (1 - D)
-      rw [hCh.eq, hCI] at hp
-      exact hp
-    · change D.IsHermitian ∧ D.PosSemidef
-      refine ⟨hDh, ?_⟩
-      have hp := Matrix.posSemidef_self_mul_conjTranspose D
-      rw [hDh.eq, hDI] at hp
-      exact hp
-  · intro b c
-    cases b <;> cases c <;>
-      simp only [regularChargePairReturnMeasurement, Bool.false_eq_true, Bool.true_eq_false,
-        ↓reduceIte] <;>
-      simp only [Matrix.sub_mul, Matrix.mul_sub, Matrix.one_mul, Matrix.mul_one,
-        regularChargePairReturnProjection_mul_self σ hσ p, sub_self, sub_zero]
-  · simp [regularChargePairReturnMeasurement]
+  exact Matrix.binaryProjectionFamily_complete _
+    (regularChargePairReturnProjection_conjTranspose _ _)
+    (regularChargePairReturnProjection_mul_self σ hσ p)
 
 end TNLean.PEPS

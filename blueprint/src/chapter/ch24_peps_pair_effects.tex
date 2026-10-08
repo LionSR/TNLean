@@ -4,17 +4,17 @@ This section treats \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS},
 September 24, 2026, \texttt{04-compression.tex}, lines 53--127, together with
 the choice of the stack length and the rescaling in the proof of
 \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, lines 201--212. The estimates
-are proved for monomials written as chains of recorded pair effects between
-arbitrary contractions, with no assignment of registers to parties; the
-statements of the lemma about parties are discussed in
-\cite{gap:polypeps_pair_effects_party_layout}.
-% Maintainer note: the clauses on source-only expansions and on party
-% ownership of the additional registers are not formalized; see the
-% paper-gap note polypeps_pair_effects_party_layout.tex.
+are first proved for monomials written as chains of recorded pair effects
+between arbitrary contractions. The statements about parties are then proved
+after assigning every register to a party. Preparing the sources before the
+local operations and combining them by unordered pairs gives the full
+conclusion of the source lemma.
 
 \begin{lemma}[Elimination of normalized pair effects]
     \label{lem:peps_pair_effects_source}
-    \uses{def:peps_effect_chain,def:peps_replaced_gate}
+    \lean{TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources}
+    \leanok
+    \uses{def:peps_party_monomial}
     Let $G$ be a contraction with an expansion $G=\sum_\xi c_\xi M_\xi$ into
     $K$ allowed monomials on a fixed set of parties, each with at most $r$
     pair effects. For every integer $m\ge1$ there are a gate $\widetilde G_m$
@@ -29,15 +29,47 @@ statements of the lemma about parties are discussed in
     \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
 \end{lemma}
 
-The error bound, the count and the coefficient sum are
-Theorem~\ref{thm:peps_pair_effects_operator}, and the norm identity behind
-the combination of sources is Theorem~\ref{thm:peps_pair_combine}. The
-clauses on source-only expansions and on ownership of the additional
-registers require placing the monomials on the parties, so that each piece
-between two effects is a product of local contractions and the stacks of an
-effect are held by its two endpoint parties. These clauses are not proved
-here, and Lemma~\ref{lem:peps_pair_effects_source} is stated without a proof;
-see \cite{gap:polypeps_pair_effects_party_layout}.
+\begin{proof}\leanok
+    \uses{thm:peps_pair_effects_party,thm:peps_grouped_sources}
+    The error, normalization, expansion, and ownership conclusions follow
+    from Theorem~\ref{thm:peps_pair_effects_party}. Apply
+    Theorem~\ref{thm:peps_grouped_sources} to each monomial in this expansion.
+    It replaces all sources on a given unordered pair by one normalized
+    source and recovers the original registers by local isometries and
+    exchanges. The operator of each monomial is unchanged, as are the
+    number of monomials, their coefficients, and their common output space.
+\end{proof}
+
+\begin{theorem}[Elimination of pair effects on parties]
+    \label{thm:peps_pair_effects_party}
+    \lean{TNLean.PEPS.PairEffect.partyPairEffectElimination}
+    \leanok
+    \uses{def:peps_party_monomial}
+    Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials on
+    parties, each with at most $r$ pair effects, and let $m\ge1$. Then
+    $\Gamma_m$ is a unit vector prepared by normalized pair sources, and
+    $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le(r/\sqrt m)\sum_\xi|c_\xi|$.
+    Read on the registers of the parties, $\widetilde G_m$ is a weighted sum
+    of at most $Km^r$ operators of allowed source-only compositions, with
+    absolute coefficient sum $\sum_\xi|c_\xi|$. Its additional registers are
+    the stacks of the effect occurrences, and the stack of an effect on the
+    parties $(p,q)$ consists of $m$ registers of $p$ and $m$ registers of $q$.
+    This is \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS} without its last
+    clause, that all sources on one pair of parties may be combined into one,
+    and without the hypothesis that $G$ is a contraction, which is not needed.
+    The participating parties are the endpoint parties of the effects of the
+    monomials.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_pair_effects_operator,thm:peps_party_terms_source_only,thm:peps_party_ownership}
+    The error bound, the count and the coefficient sum are
+    Theorem~\ref{thm:peps_pair_effects_operator}, applied to the monomials
+    placed on the parties. The expansion consists of compositions of local
+    contractions and normalized pair sources by
+    Theorem~\ref{thm:peps_party_terms_source_only}, and the additional
+    registers are the stacks of Theorem~\ref{thm:peps_party_ownership}.
+\end{proof}
 
 Throughout, $\eta$ is a unit vector of a finite-dimensional Hilbert space
 $\mathcal W$, typically a pair space $\mathcal W=\mathcal U\otimes\mathcal V$,
@@ -49,12 +81,12 @@ and $m\ge1$.
     \lean{CyclicInsertion.cyclicInsertion}
     \lean{CyclicInsertion.idealInsertion}
     \leanok
-    For a position $k\in\{0,\dots,m-1\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
+    For a position $k\in\{1,\dots,m\}$, let $I_k:\mathcal W\to\mathcal W^{\otimes m}$
     place its input in register $k$ and a copy of $\eta$ in every other
     register. The cyclic insertion map is the average
-    \begin{align}
-        T_m=\frac1m\sum_{k=0}^{m-1} I_k,
-    \end{align}
+    \[
+        T_m=\frac1m\sum_{k=1}^m I_k,
+    \]
     and the ideal insertion map is $P_m=|\eta^{\otimes m}\rangle\langle\eta|$.
 \end{definition}
 
@@ -132,9 +164,9 @@ and $m\ge1$.
     \lean{TNLean.PEPS.PairEffect.EffectChain.IsAllowed}
     \leanok
     A monomial with $n$ recorded pair effects is a composition
-    \begin{align}
+    \[
         M=F_n\circ E_n\circ F_{n-1}\circ\cdots\circ E_1\circ F_0,
-    \end{align}
+    \]
     where each $F_i$ ends with a pair register $\mathcal W_i$ beside a
     spectator space $\mathcal S_i$, and
     $E_i=\langle\eta_i|\otimes\mathbf 1_{\mathcal S_i}$ contracts that
@@ -183,27 +215,20 @@ and $m\ge1$.
     For an allowed monomial $M$ with $n$ recorded pair effects, $M$ and
     $\widetilde M_m$ are contractions, the ideal stack content is a unit
     vector, and
-    \begin{align}
+    \[
         \Bigl\|\widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle\Bigr\|
         \le\frac n{\sqrt m}.
-    \end{align}
+    \]
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_cyclic_insertion_basic,thm:peps_one_effect_estimate}
-    By induction on $n$. Write $M=M'\circ E_1\circ F_0$, where $M'$ is the
-    monomial formed by the remaining $n-1$ effects, and let
-    $I_{M'}=M'\otimes|\bigotimes_{i\ge2}\eta_i^{\otimes m}\rangle$ be its
-    ideal replacement. Appending the ideal content of the first stack after
-    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$.
-    Up to rearranging the stacks, the difference therefore splits as
-    \begin{align}
-        \widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle
-        =\bigl(\widetilde{M'}_m-I_{M'}\bigr)\circ(T_m\otimes\mathbf 1)\circ F_0
-        +I_{M'}\circ\bigl((T_m-P_m)\otimes\mathbf 1\bigr)\circ F_0.
-    \end{align}
-    All other factors are contractions, so the two terms contribute
-    $(n-1)/\sqrt m$ and $1/\sqrt m$.
+    By induction on $n$. Appending the ideal content of the first stack after
+    $E_1$ is the same as applying $P_m\otimes\mathbf 1$ in place of $E_1$. The
+    difference therefore splits into the replacement error of the remaining
+    monomial composed with $T_m\otimes\mathbf 1$, and the ideal remainder
+    composed with $(T_m-P_m)\otimes\mathbf 1$. All other factors are
+    contractions, so the two terms contribute $(n-1)/\sqrt m$ and $1/\sqrt m$.
 \end{proof}
 
 \begin{theorem}[Expansion of a replaced monomial]
@@ -239,10 +264,10 @@ and $m\ge1$.
     Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials,
     each with at most $r$ recorded pair effects, and let $m\ge1$. Then
     $\Gamma_m$ is a unit vector,
-    \begin{align}
+    \[
         \bigl\|\widetilde G_m-G\otimes|\Gamma_m\rangle\bigr\|
         \le\frac r{\sqrt m}\sum_\xi|c_\xi|,
-    \end{align}
+    \]
     and $\widetilde G_m$ is a weighted sum of at most $Km^r$ contractions
     whose absolute coefficient sum equals $\sum_\xi|c_\xi|$.
 
@@ -250,27 +275,17 @@ and $m\ge1$.
     for monomials given as chains of recorded pair effects: the error bound,
     the common garbage vector, the monomial count and the coefficient sum.
     The statements about local contractions, normalized pair sources and
-    ownership of the additional registers by the parties are those of
-    Lemma~\ref{lem:peps_pair_effects_source}, see
-    \cite{gap:polypeps_pair_effects_party_layout}. The hypothesis that $G$ is
-    a contraction is not needed.
-    % Maintainer note: only the operator estimates are formalized here.
+    ownership of the additional registers by the parties are proved in
+    Theorem~\ref{thm:peps_pair_effects_party}. The hypothesis that $G$ is a
+    contraction is not needed.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_replaced_monomial_error,thm:peps_replaced_monomial_expansion}
-    By induction on the list of monomials. Let $M_\xi$ be the first monomial,
-    with ideal stack content $\eta_{(\xi)}$, and let $G_L$ be the gate of the
-    remaining monomials, with replaced gate $\widetilde G_{L,m}$ and garbage
-    vector $\Gamma_{L,m}$. Up to rearranging tensor factors,
-    \begin{align}
-        \widetilde G_m-G\otimes|\Gamma_m\rangle
-        =c_\xi\bigl(\widetilde M_{\xi,m}-M_\xi\otimes|\eta_{(\xi)}\rangle\bigr)
-        \otimes|\Gamma_{L,m}\rangle
-        +\bigl(\widetilde G_{L,m}-G_L\otimes|\Gamma_{L,m}\rangle\bigr)
-        \otimes|\eta_{(\xi)}\rangle.
-    \end{align}
-    The first term is bounded by
+    By induction on the list of monomials. The difference splits into $c_\xi$
+    times the error of the first replaced monomial, followed by appending the
+    unit vector of the remaining stacks, plus the error of the remaining gate
+    with the first stacks appended. The first term is bounded by
     Theorem~\ref{thm:peps_replaced_monomial_error} and the second by induction;
     appending a unit vector and rearranging tensor factors are contractions.
     Expanding each replaced monomial by
@@ -294,6 +309,156 @@ and $m\ge1$.
 \begin{proof}\leanok
     The squared norm is a sum of products of squared coordinates, which
     factorizes after regrouping the index set.
+\end{proof}
+
+\begin{definition}[Registers of parties and source-only compositions]
+    \label{def:peps_party_layout}
+    \lean{TNLean.PEPS.PairEffect.Reg}
+    \lean{TNLean.PEPS.PairEffect.Mem}
+    \lean{TNLean.PEPS.PairEffect.Word}
+    \lean{TNLean.PEPS.PairEffect.Word.eval}
+    \lean{TNLean.PEPS.PairEffect.Word.IsAllowed}
+    \lean{TNLean.PEPS.PairEffect.IsSourceOnly}
+    \leanok
+    A register is a Hilbert space together with the party that owns it. The
+    memory of a finite list of registers is the tensor product of their
+    spaces. A source-only composition is a composition of the following
+    operations: a local map from some registers of one party $p$ to new
+    registers of $p$, tensored with the identity on all other registers; the
+    preparation of a vector $\eta\in\mathcal U\otimes\mathcal V$ on two new
+    registers $\mathcal U$ of a party $p$ and $\mathcal V$ of a party $q\ne p$;
+    and reorderings of the tensor factors. It is allowed when its local maps
+    are contractions and its prepared pair vectors are unit vectors. An
+    operator between two memories is source-only when it is the operator of an
+    allowed source-only composition.
+\end{definition}
+
+\begin{definition}[Allowed monomials on parties]
+    \label{def:peps_party_monomial}
+    \lean{TNLean.PEPS.PairEffect.PartyChain}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.toEffectChain}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.IsAllowed}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.effectParties}
+    \lean{TNLean.PEPS.PairEffect.PartyGate}
+    \lean{TNLean.PEPS.PairEffect.toGate}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_effect_chain}
+    An allowed monomial on parties is a chain of source-only compositions
+    separated by pair effects. Each pair effect contracts a register
+    $\mathbb C^\alpha$ of a party $p$ and a register $\mathbb C^\beta$ of a
+    party $q\ne p$ with a bra $\langle\eta|$, where
+    $\eta\in\mathbb C^\alpha\otimes\mathbb C^\beta$; the monomial is
+    allowed when its source-only compositions
+    are allowed and every $\eta$ is a unit vector. An effect on arbitrary
+    finite-dimensional registers of $p$ and $q$ takes this form after local
+    isometric identifications with $\mathbb C^\alpha$ and $\mathbb C^\beta$
+    and a reordering of tensor factors, absorbed into the preceding
+    source-only composition. As an operator it is a
+    monomial with recorded pair effects in the sense of
+    Definition~\ref{def:peps_effect_chain}, whose pieces between effects are
+    source-only. This is the notion of allowed monomial of
+    \cite[Section~5.1]{OpenAI2026PolynomialPEPS}, lines 32--35.
+\end{definition}
+
+\begin{theorem}[Insertion by pair sources]
+    \label{thm:peps_insertion_by_sources}
+    \lean{TNLean.PEPS.PairEffect.stackIso_prepWord}
+    \lean{TNLean.PEPS.PairEffect.stackIso_insWord}
+    \lean{TNLean.PEPS.PairEffect.pairsOn}
+    \lean{TNLean.PEPS.PairEffect.stackIso}
+    \lean{TNLean.PEPS.PairEffect.prepWord}
+    \lean{TNLean.PEPS.PairEffect.insWord}
+    \leanok
+    \uses{def:peps_cyclic_insertion,def:peps_party_layout}
+    Let $\eta\in\mathbb C^\alpha\otimes\mathbb C^\beta$ be a unit vector on the
+    parties $p\ne q$, and consider a stack of $m$ pair registers, each made of
+    a register $\mathbb C^\alpha$ of $p$ and a register $\mathbb C^\beta$ of
+    $q$. Preparing pair sources of $\eta$ in the positions other than $k$,
+    with the input pair register in position $k$, is a source-only
+    composition, and it equals the insertion map $I_k$. Preparing $\eta$ in all
+    $m$ positions gives $\eta^{\otimes m}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By induction on $m$: for $k$ the first position, the remaining $m-1$
+    positions are prepared; otherwise a source of $\eta$ is prepared in the
+    first position and the insertion at position $k-1$ is applied to the
+    remaining registers.
+\end{proof}
+
+\begin{theorem}[The expansion is source-only]
+    \label{thm:peps_party_terms_source_only}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.replaceTerm_toEffectChain}
+    \lean{TNLean.PEPS.PairEffect.termList_toGate}
+    \lean{TNLean.PEPS.PairEffect.isSourceOnly_termList}
+    \lean{TNLean.PEPS.PairEffect.gateIso_prepGate}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.replaceWord}
+    \lean{TNLean.PEPS.PairEffect.wordList}
+    \lean{TNLean.PEPS.PairEffect.gateIso}
+    \lean{TNLean.PEPS.PairEffect.prepGate}
+    \leanok
+    \uses{def:peps_party_monomial,def:peps_replaced_gate}
+    Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into allowed monomials on
+    parties. Identify the stack of each effect occurrence on $(p,q)$ with $m$
+    pair registers whose $\mathbb C^\alpha$ halves belong to $p$ and whose
+    $\mathbb C^\beta$ halves belong to $q$. Then every term of the expansion of
+    $\widetilde G_m$ is source-only, and the garbage vector $\Gamma_m$ is
+    prepared by normalized pair sources on the endpoint parties of the
+    effects.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_insertion_by_sources}
+    In a term, each effect is replaced by an insertion, which is source-only
+    by Theorem~\ref{thm:peps_insertion_by_sources}, and the remaining pieces
+    are the source-only compositions of the monomial, now acting next to the
+    idle stacks. The stacks of the other monomials are prepared in their
+    ideal content $\eta^{\otimes m}$, again by pair sources. Both statements
+    follow by induction on the monomial and on the list of monomials.
+\end{proof}
+
+\begin{theorem}[Ownership of the additional registers]
+    \label{thm:peps_party_ownership}
+    \lean{TNLean.PEPS.PairEffect.pairRegs_eq}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.owner_stackRegs}
+    \lean{TNLean.PEPS.PairEffect.gateOut_eq}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.stackRegs}
+    \lean{TNLean.PEPS.PairEffect.gateOut}
+    \leanok
+    \uses{def:peps_party_monomial}
+    The output registers of $\widetilde G_m$ are the output registers of $G$
+    together with the stacks of all effect occurrences of all monomials. The
+    stack of an effect on the parties $(p,q)$ consists of $m$ pair registers,
+    each made of one register of $p$ and one register of $q$.
+\end{theorem}
+
+\begin{proof}\leanok
+    By induction on the monomials, collecting the stacks.
+\end{proof}
+
+\begin{theorem}[Combining pair sources on one pair of parties]
+    \label{thm:peps_party_combine_sources}
+    \lean{TNLean.PEPS.PairEffect.eval_combineSources}
+    \lean{TNLean.PEPS.PairEffect.isAllowed_combineSources}
+    \lean{TNLean.PEPS.PairEffect.pairRegroup}
+    \lean{TNLean.PEPS.PairEffect.combineSources}
+    \leanok
+    \uses{def:peps_party_layout}
+    Let $\eta\in\mathcal U\otimes\mathcal V$ and
+    $\eta'\in\mathcal U'\otimes\mathcal V'$ be pair vectors on the parties
+    $p\ne q$. Preparing
+    $\eta'$ and then $\eta$, and merging the two new registers of $p$ into
+    $\mathcal U\otimes\mathcal U'$ and the two new registers of $q$ into
+    $\mathcal V\otimes\mathcal V'$, is the preparation of the regrouped vector
+    $\eta\otimes\eta'\in(\mathcal U\otimes\mathcal U')\otimes(\mathcal V\otimes\mathcal V')$,
+    whose norm is $\|\eta\|\,\|\eta'\|$. For
+    coordinate spaces the norm identity is
+    Theorem~\ref{thm:peps_pair_combine}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both operators agree on product vectors, and the regrouping is an
+    isometry.
 \end{proof}
 
 \begin{corollary}[Stack length and rescaling]
