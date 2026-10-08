@@ -611,6 +611,24 @@ class WorkflowTests(unittest.TestCase):
         self.steps = self.workflow['jobs']['build']['steps']
         self.ids = {s['id']: s for s in self.steps if 'id' in s}
 
+    def test_main_cache_producer_survives_superseding_pushes(self):
+        # Share one ref-scoped group and the default single pending slot.
+        # Main (including dispatch) must finish; PR refs still cancel stale runs.
+        self.assertEqual(self.workflow['concurrency'], {
+            'group': '${{ github.workflow }}-${{ github.ref }}',
+            'cancel-in-progress': "${{ github.ref != 'refs/heads/main' }}",
+        })
+        self.assertNotIn('concurrency', self.workflow['jobs']['build'])
+
+    def test_cache_policy_regressions_run_for_workflow_changes(self):
+        job = self.workflow['jobs']['file-length']
+        self.assertIn("needs.changes.outputs.workflow == 'true'", job['if'])
+        step = next(s for s in job['steps']
+                    if s.get('name') == 'Test compatible CI cache guards')
+        self.assertNotIn('if', step)
+        self.assertNotIn('continue-on-error', step)
+        self.assertIn('python3 scripts/test_ci_compatible_cache.py', step['run'])
+
     def test_exact_keys_paths_and_main_only_saving_unchanged(self):
         self.assertEqual(tuple(self.workflow['env']['BUILD_CACHE_PATHS'].split()), guard.PATHS)
         self.assertEqual(self.ids['build-cache']['with']['key'], guard.KEY)
