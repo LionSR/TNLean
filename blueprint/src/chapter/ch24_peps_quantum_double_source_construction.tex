@@ -88,12 +88,20 @@ $L_u\ket g=\ket{ug}$, and an arrow pointing towards it carries
 $R_u\ket g=\ket{gu^{-1}}$. Its invariant-space projector is
 $\Pi_B=|G|^{-1}\sum_{u\in G}V_u$, with $V_u$ the product of these four
 actions, and its penalty is $h_B=I-\Pi_B$.
-For $G=\mathbb Z_2$, the two penalties are
-$h_A=\tfrac12(I-Z^{\otimes4})$ and
-$h_B=\tfrac12(I-X^{\otimes4})$, so the B projector is
-$\Pi_B=\tfrac12(I+X^{\otimes4})$.
-% Normalization correction: the printed unnormalized group sum and the
-% printed extra factors multiplying I-h_B are not projector identities.
+For $G=\mathbb Z_2$ one has $L_1=R_1=X$, so $V_0=I$, $V_1=X^{\otimes4}$,
+and the general formulas specialize to
+$\Pi_B=\tfrac12(I+X^{\otimes4})$ and $h_B=\tfrac12(I-X^{\otimes4})$.
+The A penalty is $h_A=\tfrac12(I-Z^{\otimes4})$.
+These agree with the penalties printed in
+\cite[Section~7]{Schuch2010PEPS}. The source also writes the binary
+B term as the unnormalized sum $\sum_{u}V_u=I+X^{\otimes4}=2\Pi_B$, and
+the general B term as $I-\sum_uV_u$. Since
+$\bigl(\sum_uV_u\bigr)^2=|G|\sum_uV_u$, that sum must be divided by $|G|$
+to give the projector $\Pi_B$; see
+\cite{gap:scp10_quantum_double_local_hamiltonian}.
+% Source: paper_v3.tex:2640--2656 (binary) and 2870--2872 (general group).
+% Normalization correction recorded in
+% docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex.
 
 Choose the disjoint A plaquettes at the corners of this patch as blocks.
 They become the four sites $K_{NW},K_{NE},K_{SE},K_{SW}$.
@@ -321,9 +329,20 @@ $X\otimes I$ and $Z\otimes Z$ to $I\otimes Z$, separating the local
 pair symmetries from the retained four-leg symmetry.
 For a general group, the source uses the pair permutation
 $\ket{a,b}\mapsto\ket{a,b^{-1}a}$.
-Each L has one virtual index and a physical
-output; its one-leg symmetry gives a product state after adjoining
-neighboring blocks. The diagram shows the factorized side of this
+Each L has one virtual index and a physical output. Its one-leg
+symmetry is $LU_u=L$ for every $u\in G$, where $U$ is the action on
+that index, unitarily equivalent to the regular representation. The invariant
+vectors of $U$ therefore form a line spanned by a unit vector $\omega$,
+and $|G|^{-1}\sum_uU_u=\ket\omega\bra\omega$. For any tensor $M$ on the
+neighboring block, contracting the index over an orthonormal basis
+$(\ket k)$ gives
+\begin{align*}
+    L                        & =L\,|G|^{-1}\sum_{u\in G}U_u=L\ket\omega\bra\omega, &
+    \sum_kL\ket k\otimes M_k & =L\ket\omega\otimes
+    \sum_k\braket{\omega}{k}M_k,
+\end{align*}
+so the physical output of L factors off as the fixed state
+$L\ket\omega$. The diagram shows the factorized side of this
 source construction. Physical indices are bundled, as in the original
 renormalization drawing; no equality of the unrestricted physical
 ambient spaces is asserted.
