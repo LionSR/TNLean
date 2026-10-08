@@ -363,7 +363,9 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   measurable_etaNew : ∀ r i h c, Measurable ((round r).etaNew i h c)
   choiceGain_nonneg : ∀ r h θ, 0 ≤ (round r).choiceGain h θ
   measurable_choiceGain : ∀ r h, Measurable ((round r).choiceGain h)
-  choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ κ.C * Real.log n ^ κ.Cl
+  /-- The choice-averaged gain sums one move entropy per band, each bounded by
+  `C (log n)^{C_l}` (lines 434–440), so it is at most `C K (log n)^{C_l}`. -/
+  choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ κ.C * X.K n * Real.log n ^ κ.Cl
   /- Leaf measures: `m_s(u) du dμ_σ` has mass `2s = 1/2` (line 440). -/
   isFiniteMeasure_μOld : ∀ r k p h, IsFiniteMeasure ((round r).μOld k p h)
   isFiniteMeasure_μNew : ∀ r k p h c, IsFiniteMeasure ((round r).μNew k p h c)
