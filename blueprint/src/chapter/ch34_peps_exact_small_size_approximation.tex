@@ -1,0 +1,49 @@
+% Downstream of the approximation convention owned by TNLean #8788.
+\section{The finite-size approximation conclusion}
+\label{sec:peps_exact_small_size_approximation}
+
+\begin{theorem}[Approximation on all smaller positive squares]
+    \label{thm:peps_exact_small_size_approximation}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_small_size}
+    \leanok
+    \uses{thm:peps_exact_small_sizes}
+    Fix integers $q\ge1$ and $L_0\ge0$, and real numbers $C$ and $c\ge0$.
+    Set $C'=\max\{C,q^{L_0^2}\}$. For every integer $0<L\le L_0$ and every
+    unit vector $\Omega$ on the open $L\times L$ square, there is a nonzero
+    PEPS $\Phi$ on that square with $1\le D_e\le C'L^c$ on every edge and a
+    real phase $\theta$ such that
+    $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$.
+    This is the finite-size part of~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_small_sizes}
+    Choose the exact representation from Theorem~\ref{thm:peps_exact_small_sizes}.
+    Equality of its coefficients with those of $\Omega$ gives $\Phi=\Omega$.
+    Thus $\|\Phi\|=1$, so $\Phi\ne0$. Taking $\theta=0$ makes the normalized
+    error zero, which is at most $L^{-1}$.
+\end{proof}
+
+\begin{theorem}[A uniform positive prefactor for a finite range]
+    \label{thm:peps_uniform_small_size_approximation}
+    \lean{TNLean.PEPS.Approximation.exists_uniform_small_size_approximation}
+    \leanok
+    \uses{thm:peps_exact_small_size_approximation}
+    Fix integers $q\ge1$ and $L_0\ge0$, and real numbers $C$ and $c\ge0$.
+    There is a constant $C'>0$ with $C'\ge C$ such that, for every integer
+    $2\le L<L_0$ and every unit vector $\Omega$ on the open $L\times L$ square,
+    there is a nonzero PEPS $\Phi$ on that square with
+    $1\le D_e\le C'L^c$ on every edge and a real phase $\theta$ satisfying
+    $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$.
+    The constant is chosen before $L$ and $\Omega$, as required for the finite-size
+    argument in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_small_size_approximation}
+    Take $C'=\max\{C,q^{L_0^2}\}$. Since $q\ge1$, the second entry of the
+    maximum is positive, so $C'>0$ and $C'\ge C$.
+    Apply Theorem~\ref{thm:peps_exact_small_size_approximation} at each $L$.
+\end{proof}

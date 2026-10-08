@@ -39,6 +39,10 @@ import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
 import TNLean.PEPS.Approximation.EncodedFrame
+import TNLean.PEPS.Approximation.ExactFiniteException
+import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
+import TNLean.PEPS.Approximation.ExactSquareRepresentation
+import TNLean.PEPS.Approximation.ExactTreeRepresentation
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
@@ -76,6 +80,7 @@ import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
+import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.VectorColumn
