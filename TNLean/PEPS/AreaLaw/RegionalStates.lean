@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.TheoremStatements
+import TNLean.PEPS.AreaLaw.ZeroBoundary
 import QICLean.Algebra.TraceReindex
 import QICLean.Channel.MaximalOverlap
 
@@ -32,7 +32,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- The trace of a reduced pure-state matrix is the squared norm of its vector.
 Source: area-law `sec:prelim`, lines 10–25, normalization of density operators
 and the one-dimensional empty tensor product. -/
-theorem trace_reducedState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+theorem trace_reducedState_eq_norm_sq (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
     (reducedState Λ q Ω A).trace = (‖Ω‖ : ℂ) ^ 2 := by
   rw [reducedState, Matrix.trace_partialTraceRight]
@@ -42,20 +42,13 @@ theorem trace_reducedState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     ← EuclideanSpace.inner_eq_star_dotProduct, inner_self_eq_norm_sq_to_K]
   rfl
 
-/-- A unit vector has trace-one regional density matrices.
-Source: area-law `sec:prelim`, lines 10–25, normalized density operators. -/
-theorem trace_reducedState_eq_one (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
-    (reducedState Λ q Ω A).trace = 1 := by
-  simpa [hΩ] using trace_reducedState Λ q Ω A
-
 /-- Regional entropy of a unit vector is nonnegative.
 Source: area-law `sec:prelim`, lines 10–25, entropy of normalized density operators. -/
 theorem regionalEntropy_nonneg (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
     0 ≤ regionalEntropy Λ q Ω A :=
   vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-    (reducedState_posSemidef Λ q Ω A) (trace_reducedState_eq_one Λ q Ω hΩ A)
+    (reducedState_posSemidef Λ q Ω A) (trace_reducedState Ω hΩ A)
 
 /-- The empty region has zero entropy for a unit vector.
 Source: area-law `sec:prelim`, lines 23–25, empty tensor products. -/
@@ -63,7 +56,7 @@ Source: area-law `sec:prelim`, lines 23–25, empty tensor products. -/
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
     regionalEntropy Λ q Ω ∅ = 0 := by
   apply vonNeumannEntropy_eq_zero_of_rank_le_one
-    (reducedState_posSemidef Λ q Ω ∅) (trace_reducedState_eq_one Λ q Ω hΩ ∅)
+    (reducedState_posSemidef Λ q Ω ∅) (trace_reducedState Ω hΩ ∅)
   simpa using Matrix.rank_le_card_width (reducedState Λ q Ω ∅)
 
 /-- The full region has zero entropy for a unit pure vector.
@@ -73,7 +66,7 @@ Source: area-law `sec:prelim`, lines 23–25, purity and empty complements. -/
     regionalEntropy Λ q Ω Finset.univ = 0 := by
   apply vonNeumannEntropy_eq_zero_of_rank_le_one
     (reducedState_posSemidef Λ q Ω Finset.univ)
-    (trace_reducedState_eq_one Λ q Ω hΩ Finset.univ)
+    (trace_reducedState Ω hΩ Finset.univ)
   change (Matrix.partialTraceRight (Matrix.vecMulVec
     (fun x ↦ Ω ((configurationSplit Λ q Finset.univ).symm x))
     (star (fun x ↦ Ω ((configurationSplit Λ q Finset.univ).symm x))))).rank ≤ 1

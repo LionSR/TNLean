@@ -115,6 +115,7 @@ original open square. We state the two models separately, following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
+        Matrix.IsGappedGroundState,
         TNLean.PEPS.AreaLaw.IsGappedGroundState,
         TNLean.PEPS.AreaLaw.reducedState,
         TNLean.PEPS.AreaLaw.reducedState_isHermitian,
@@ -149,8 +150,8 @@ original open square. We state the two models separately, following
     \label{thm:area_law_regional_state_identities}
     \lean{
         TNLean.PEPS.AreaLaw.reducedState_posSemidef,
+        TNLean.PEPS.AreaLaw.trace_reducedState_eq_norm_sq,
         TNLean.PEPS.AreaLaw.trace_reducedState,
-        TNLean.PEPS.AreaLaw.trace_reducedState_eq_one,
         TNLean.PEPS.AreaLaw.regionalEntropy_nonneg,
         TNLean.PEPS.AreaLaw.regionalEntropy_empty,
         TNLean.PEPS.AreaLaw.regionalEntropy_univ

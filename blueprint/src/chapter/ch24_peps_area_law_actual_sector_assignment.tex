@@ -1,0 +1,142 @@
+\section{Actual initial regions in eight sectors}
+\label{sec:area_law_actual_sector_assignment}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, an integer width $C\ge2$ and an initial layer
+$k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at every
+layer, and retain the resulting actual initial identifiers $\mathcal I$.
+Write $X_i^0$ for their closed birth regions and
+$U_i=\operatorname{int}(X_i^0)$ for their open interiors.
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+and let $v$ be any of the nine marks of its defining cell. Put
+\begin{align}
+    \ell & =\ell_k-5,                        \\
+    r    & =\frac{2^\ell}{2}=\frac{t_k}{64}.
+\end{align}
+The late-layer bound implies $\ell_k\ge5$. Use the maximum norm on
+$\mathbb R^2$. Center two fans at $v$, with origins
+$o_{\rm S}=v-r(1,1)$ and $o_{\rm L}=v-2r(1,1)$, exponents $\ell$ and
+$\ell+1$, and cell index $(0,0)$. Divide every side at its midpoint.
+Let $\mathcal J$ index the eight corresponding elementary bases, and
+write $P_s^{\rm S}$ and $P_s^{\rm L}$ for the corresponding closed
+triangles. Their half-sides are $r=t_k/64$ and $2r=t_k/32$.
+This local construction is part of
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially 352--370, and prop:two-families, lines 299--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This entry concerns the eight-sector assignment and closed restriction.
+% Active-ray mergers and the full isolated-star assertion are separate.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 352--370,
+% and prop:two-families, lines 299--310;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[The closed square centered at a prescribed point]
+    \label{thm:area_law_centered_dyadic_cell_ball}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.closure_centered_dyadicCell_eq_closedBall}
+    \leanok
+    \uses{def:area_law_dyadic_cells}
+    Let $c\in\mathbb R^2$ and $m\in\mathbb N$, and put $\rho=2^m/2$.
+    Let $Q=c-\rho(1,1)+2^m[0,1)^2$ be the zero-index half-open
+    dyadic cell at origin $c-\rho(1,1)$. In the maximum metric,
+    \begin{align}
+        \overline Q
+         & =c+[-\rho,\rho]^2
+        =\overline B_\infty(c,\rho).
+    \end{align}
+    This is the centered square used in the local fan construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures}
+    The closure of the zero-index dyadic cell is the product of the closed
+    coordinate intervals whose lower endpoints are $c_1-\rho$ and
+    $c_2-\rho$. Each interval has length $2^m=2\rho$, so its upper endpoint
+    is $c_j+\rho$. Their product is precisely the closed maximum-metric
+    ball with center $c$ and radius $\rho$.
+\end{proof}
+
+\begin{theorem}[Unique sector assignment and closed restriction]
+    \label{thm:area_law_actual_sector_assignment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_assignment}
+    \leanok
+    \uses{def:area_law_initial_region_indices,
+        def:area_law_initial_birth_regions,def:area_law_initial_open_regions,
+        def:area_law_fine_layer_indices,def:area_law_fine_belt_scales,
+        def:area_law_belt_cell_marks,def:area_law_cell_fan}
+    There is a unique function $\sigma:\mathcal J\to\mathcal I$
+    satisfying both assertions below. Every working triangle satisfies
+    \begin{align}
+        \operatorname{int}(P_s^{\rm L}) & \subseteq U_{\sigma(s)}.
+    \end{align}
+    For every initial identifier $i\in\mathcal I$,
+    \begin{align}
+        X_i^0\cap\overline B_\infty(v,r)
+         & =\bigcup_{\substack{s\in\mathcal J \\\sigma(s)=i}}P_s^{\rm S}.
+    \end{align}
+    The union is empty when no triangle is assigned to $i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_belt_marks_closed_cell,
+        thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,
+        thm:area_law_dyadic_layer_distance,
+        thm:area_law_initial_closed_cover,thm:area_law_initial_birth_regularity,
+        thm:area_law_initial_open_disjoint,
+        thm:area_law_initial_frontier_near_mark,
+        thm:area_law_cell_fan_regularity,thm:area_law_cell_fan_cover,
+        thm:area_law_cell_fan_sector_directions,
+        thm:area_law_concentric_fan_restriction,
+        thm:area_law_dyadic_closures,thm:area_law_adjacent_fine_meshes,
+        def:area_law_cell_fan}
+    The mark belongs to the closed reference fine cell and hence to
+    the closed actual layer. The layer's endpoint-distance assertion
+    supplies an element of $Z$, so the actual closed birth regions
+    cover the plane. The late-layer bound and monotonicity of the fine
+    exponent give $\ell_k\ge5$, and exponent arithmetic gives
+    $2r=t_k/32$.
+
+    Put $S_s=\operatorname{int}(P_s^{\rm L})$ and
+    $W=B_\infty(v,2r)$. The coordinate interval description of the
+    centered square and the fan cover give
+    $\bigcup_sP_s^{\rm L}=\overline B_\infty(v,2r)$.
+    Taking interiors of the inclusion of each triangle into this
+    square shows $S_s\subseteq W$. Each $S_s$ is nonempty by triangle
+    regularity, and is preconnected by convexity.
+
+    No $S_s$ meets the frontier of any $X_i^0$. Indeed, a frontier point
+    $x\in S_s$ would satisfy $\|x-v\|_\infty<t_k/32$, so the nearby
+    frontier theorem would give an allowed direction for $x-v$.
+    The all-midpoint triangle assertion excludes that direction.
+    Choose a point of $S_s$ and an actual birth region containing it.
+    Frontier exclusion puts this point in the region's interior.
+    Since $X_i^0=\overline{U_i}$, the same exclusion gives
+    $\overline{U_i}\cap S_s\subseteq U_i$. Preconnectedness then
+    propagates membership to all of $S_s$. Its nonemptiness and the
+    pairwise disjointness of the $U_i$ make its identifier unique.
+    Choosing these unique identifiers defines $\sigma$.
+
+    Let $D=\bigcup_sS_s$. Triangle regularity and the finiteness of
+    $\mathcal J$ give
+    $\overline D=\bigcup_sP_s^{\rm L}=\overline B_\infty(v,2r)$.
+    For an arbitrary identifier $i$, set
+    $E_i=\bigcup_{\sigma(s)=i}P_s^{\rm L}$.
+    This is a closed finite union, including when it is empty.
+    The assignment and disjointness give $U_i\cap D\subseteq E_i$.
+    Since $U_i$ and $W$ are open and $W\subseteq\overline D$,
+    \begin{align}
+        U_i\cap W   & \subseteq\overline{U_i\cap D}\subseteq E_i, \\
+        X_i^0\cap W & =\overline{U_i}\cap W
+        \subseteq\overline{U_i\cap W}\subseteq E_i.
+    \end{align}
+    Conversely, taking closures of the assigned interiors gives
+    $E_i\subseteq X_i^0$. The smaller closed square lies inside $W$
+    because $r<2r$, and hence
+    $X_i^0\cap\overline B_\infty(v,r)=E_i\cap\overline B_\infty(v,r)$.
+    Distribute this intersection through the finite union and apply
+    the concentric restriction to each assigned triangle. This yields
+    the asserted union of smaller triangles for every identifier.
+    Finally, any other assignment has the same identifier on each
+    nonempty working sector, and thus equals $\sigma$.
+\end{proof}
