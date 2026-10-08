@@ -49,11 +49,15 @@ its kernel.
     This is~\cite[Lemma~5.1]{OpenAI2026AreaLaw} with $U=Y$.
 \end{theorem}
 \begin{proof}\leanok
-    Order the configurations as $(x\times Y)\times(P\times F)$. The regional
-    states become the marginals of $\theta$ on the corresponding tensor
-    factors, operators acting on a region become tensor products with the
-    identity, and the entropy exponent becomes $\eta_\theta$. The estimate is
-    then~\cite[Lemma~5.1]{OpenAI2026AreaLaw}.
+    The estimate holds for four regions partitioning any finite set of sites
+    with arbitrary local dimensions: ordering the configurations as
+    $(x\times Y)\times(P\times F)$ turns the regional states into the
+    marginals of $\theta$, operators on a region into tensor products with the
+    identity, and the exponent into $\eta_\theta$, so this regional form
+    is~\cite[Lemma~5.1]{OpenAI2026AreaLaw}. Specialize it to the sites of
+    $\Lambda$ with local dimension $q$; the regional states, entropies and
+    placements of the finite-domain model are those of the general regional
+    form.
 \end{proof}
 
 \begin{theorem}[Conditional skew estimate on lattice regions]
@@ -76,8 +80,12 @@ its kernel.
     This is~\cite[Lemma~5.3]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    In the coordinates $(P_0\times P_1)\times((x\times U)\times F)$ the function
-    $f$ is the function of~\cite[Lemma~5.3]{OpenAI2026AreaLaw} for the
-    reordered vector, and its conditional mutual information $I(x:F|U)$ equals
-    $\eta_\theta$ by Theorem~\ref{thm:area_law_movement_eta}.
+    The estimate holds for five regions partitioning any finite set of sites
+    with arbitrary local dimensions: in the coordinates
+    $(P_0\times P_1)\times((x\times U)\times F)$ the function $f$ is the
+    function of~\cite[Lemma~5.3]{OpenAI2026AreaLaw} for the reordered vector,
+    whose conditional mutual information $I(x:F|U)$ is
+    $S_\theta(x|P)+S_\theta(x|U)$. Specialize this regional form to the sites
+    of $\Lambda$ with local dimension $q$, identifying the regional data of
+    the finite-domain model as in Theorem~\ref{thm:area_law_movement_eta}.
 \end{proof}
