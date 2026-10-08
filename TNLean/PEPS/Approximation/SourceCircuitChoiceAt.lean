@@ -18,41 +18,9 @@ positions retain their original identities. No label is requested at an untouche
 gate, whose branch type may be empty.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267 and 342–417.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-subset-expansion.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-fixed-vectors-choiceat
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.choiceAt
-
-Provenance-ID: 8769-fixed-vectors-sourcevectorat
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt
-
-Provenance-ID: 8769-fixed-vectors-sourcevectorat_norm
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_norm
-
-Provenance-ID: 8769-fixed-vectors-istouched_of_source_endpoint
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.isTouched_of_source_endpoint
-
-Provenance-ID: 8769-fixed-vectors-sourceat_eq_mapowner_sourcevectorat
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_mapOwner_sourceVectorAt
-
-Provenance-ID: 8769-fixed-vectors-partialslotchoice
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialSlotChoice
-
-Provenance-ID: 8769-fixed-vectors-partialslotvector
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialSlotVector
-
-Provenance-ID: 8769-fixed-vectors-eq_partialslotvector_of_inventory_eq
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.eq_partialSlotVector_of_inventory_eq
-
-Provenance-ID: 8769-fixed-vectors-exists_partial_source_preparation_with_original_vectors
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation_with_original_vectors
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
