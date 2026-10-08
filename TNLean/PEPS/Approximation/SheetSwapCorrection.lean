@@ -159,7 +159,7 @@ theorem bufferCorrection_mul_tSwap (V : Matrix (BT × BE) U ℂ) :
 
 theorem norm_bufferCorrection_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry) :
     ‖bufferCorrection (T := T) (E := E) V‖ ≤ 1 := by
-  refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_le _).trans ?_)
+  refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_rect_le _).trans ?_)
   exact l2_opNorm_conjTranspose_mul_mul_le_one (IsIsometry.kronecker V V hV hV).l2_opNorm_le_one
     (l2_opNorm_toMatrix_toPEquiv_le _)
 
