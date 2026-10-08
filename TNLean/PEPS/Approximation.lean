@@ -34,9 +34,12 @@ import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
+import TNLean.PEPS.Approximation.PatchRewriteTruncation
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.PEPS.Approximation.SiteChainNetwork
+import TNLean.PEPS.Approximation.SiteChainTruncation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
