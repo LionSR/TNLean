@@ -1,4 +1,11 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
+
+/-! # Edge cases for finite weighted dyadic summation -/
 
 open TNLean.PEPS.AreaLaw.Geometry
 
@@ -12,14 +19,18 @@ example (a : ℕ → ℝ) {A e : ℝ} (he : 0 < e) (ha : a 0 ≤ A) :
 example : (∑ k ∈ Finset.range 2, (1 : ℝ) * ((2 : ℝ) ^ k) ^ (1 + (1 : ℝ))) ≤ 6 := by
   have h := sum_weighted_dyadic_rpow_le (fun _ ↦ 1) 1 (e := 1) (A := 2) (B := 1)
     (by norm_num) (by norm_num) (by norm_num)
-    (by intro k hk; have : k = 0 := by omega; subst k; norm_num)
+    (by
+      intro k hk
+      have : k = 0 := by omega
+      subst k
+      norm_num)
   convert h using 1 <;> norm_num
 
 -- Empty weights and an arbitrary positive exponent require no occupied scale.
 example (K : ℕ) {e : ℝ} (he : 0 < e) :
     (∑ k ∈ Finset.range (K + 1), (0 : ℝ) * ((2 : ℝ) ^ k) ^ (1 + e)) ≤ 0 := by
-  simpa using sum_weighted_dyadic_rpow_le (fun _ ↦ 0) K he (le_refl (0 : ℝ))
-    (by simp) (by intros; simp)
+  exact (sum_weighted_dyadic_rpow_le (fun _ ↦ 0) K he (le_refl (0 : ℝ))
+    (by simp) (by intros; simp)).trans (by simp)
 
 set_option linter.hashCommand false in
 /--
