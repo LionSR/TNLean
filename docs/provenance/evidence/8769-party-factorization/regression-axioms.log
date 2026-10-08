@@ -1,4 +1,0 @@
-'TNLean.PEPS.PairEffect.Regression.scalar_factor_retained' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.PairEffect.Regression.reversed_register_factorization' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
