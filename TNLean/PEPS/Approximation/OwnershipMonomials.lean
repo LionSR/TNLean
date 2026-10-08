@@ -38,7 +38,7 @@ ungroup the raw registers by private unitaries and exchanges of tensor factors.
 * `EncodedFrame.pairHeadIso_birthWord_eval`, `EncodedFrame.pairHeadIso_deathChain_eval` : the
   operator of the birth and of the death is `Kᴴ K ⊗ 1` with `K = ⟨s| (1_T ⊗ V)`.
 * `EncodedFrame.sheetBirthOp_eq_submatrix` : the canonical map of `eq:birth-map` is
-  `B = 1_E ⊗ Kᴴ K`.
+  `B = 1_E ⊗ Kᴴ K` (`sheetPlace`).
 * `EncodedFrame.Frame.birth_monomial`, `EncodedFrame.Frame.death_monomial` : the birth and the
   death of Lemma 6.5 `lem:birth` on grouped registers.
 * `EncodedFrame.TwoSheetExchange.exchange_correction_monomial` : the corrections `D_U F_A` of
@@ -396,14 +396,29 @@ section FrameMonomial
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 
+/-- The matrix `1_E ⊗ M` on a sheet, in the coordinates `((t, e), u)` of `threeSplit T E`: the
+operator `M` on the configurations of `T` and `U = (T ∪ E)ᶜ`, the identity on those of `E`. -/
+def sheetPlace {T E : Finset ι} (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ M).submatrix
+    (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h)
+
+theorem sheetPlace_apply {T E : Finset ι} (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (c' c : ι → Fin q) :
+    sheetPlace h M c' c = (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) *
+      M ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x))
+        ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) := by
+  simp only [sheetPlace, Matrix.submatrix_apply, Function.comp_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, teuShuffle, Equiv.coe_fn_mk]
+  rfl
+
 /-- The canonical map of a birth on the sheet is `1_E ⊗ Kᴴ K` with `K = ⟨s| (1_T ⊗ V)`, in the
 coordinates `(e, (t, u))` (`birthOp_eq_submatrix`). -/
 theorem sheetBirthOp_eq_submatrix {T E : Finset ι} (h : Disjoint T E) (σ : SplittingData q T E) :
-    sheetBirthOp h σ =
-      ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ
-          ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).submatrix
-        (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h) := by
-  rw [sheetBirthOp, birthOp_eq_submatrix, submatrix_submatrix]
+    sheetBirthOp h σ = sheetPlace h ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s) := by
+  rw [sheetBirthOp, birthOp_eq_submatrix, submatrix_submatrix, sheetPlace]
 
 namespace Frame
 
@@ -471,10 +486,7 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
       sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ =
-        ((1 : Matrix (F.birthEnv P → Fin q) (F.birthEnv P → Fin q) ℂ) ⊗ₖ
-          ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).submatrix
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH))
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH)) ∧
+        sheetPlace (F.disjoint_birthEnv hTP hTH) ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s) ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
           sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * F.encoder =
         (F.changeOwner T Q).encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
@@ -525,10 +537,7 @@ theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
       sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ =
-        ((1 : Matrix (F.birthEnv P → Fin q) (F.birthEnv P → Fin q) ℂ) ⊗ₖ
-          ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).submatrix
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH))
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH)) ∧
+        sheetPlace (F.disjoint_birthEnv hTP hTH) ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s) ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
           sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * (F.changeOwner T Q).encoder =
         F.encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧

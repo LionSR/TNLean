@@ -10,23 +10,20 @@ import TNLean.PEPS.Approximation.SiteRegisters
 
 Words of exchanges of tensor factors used to move whole blocks of registers of encoded frames:
 reassociations of concatenated blocks (`Word.assocWord`, `Word.unassocWord`), the exchange of two
-pairs of blocks around a middle pair (`Word.swapPairs`), the versions of the partition words of
-`TNLean.PEPS.Approximation.SiteRegisters` in front of further registers (`partWordApp`,
-`unpartWordApp`, `relabelSitesApp`), the splitting and merging of the tag registers of a
-concatenated list of holes (`tagSplit`, `tagMerge`), and the canonical identification of tag
-orderings as a word (`exists_tagWord_of_perm`). Every such word is allowed, uses no party and
-no pair source; each operator is computed on product vectors.
+pairs of blocks around a middle pair (`Word.swapPairs`), the splitting and merging of the tag
+registers of a concatenated list of holes (`tagSplit`, `tagMerge`), and the canonical
+identification of tag orderings as a word (`exists_tagWord_of_perm`). Every such word is allowed,
+uses no party and no pair source; each operator is computed on product vectors.
 
 ## Main definitions
 
 * `PairEffect.Word.assocWord`, `PairEffect.Word.unassocWord`, `PairEffect.Word.swapPairs`.
-* `EncodedFrame.partWordApp`, `EncodedFrame.unpartWordApp`, `EncodedFrame.relabelSitesApp`.
 * `EncodedFrame.tagSplit`, `EncodedFrame.tagMerge`.
 
 ## Main results
 
-* `PairEffect.Word.eval_swapPairs`, `EncodedFrame.eval_partWordApp`,
-  `EncodedFrame.eval_tagSplit`, `EncodedFrame.eval_tagMerge`: the operators on product vectors.
+* `PairEffect.Word.eval_swapPairs`, `EncodedFrame.eval_tagSplit`, `EncodedFrame.eval_tagMerge`:
+  the operators on product vectors.
 * `EncodedFrame.exists_tagWord_of_perm`: a reordering of the holes of a frame is implemented on
   its tag registers by a word of exchanges, along a relabelling of the tags that preserves the
   encoding.
@@ -59,11 +56,6 @@ def assocWord : (a b c : Layout P) → Word ((a ++ b) ++ c) (a ++ (b ++ c))
 def unassocWord : (a b c : Layout P) → Word (a ++ (b ++ c)) ((a ++ b) ++ c)
   | [], b, c => .id (b ++ c)
   | r :: a, b, c => .frame r (unassocWord a b c)
-
-theorem appendIso_nil_symm_tmul (ℓ : Layout P) (a : ℂ) (y : Mem ℓ) :
-    (appendIso ([] : Layout P) ℓ).symm (a ⊗ₜ y) = a • y := by
-  change TensorProduct.lidIsometry ℂ (Mem ℓ) (a ⊗ₜ y) = _
-  simp
 
 theorem eval_assocWord_appendIso_symm : (a b c : Layout P) → (x : Mem a) → (y : Mem b) →
     (z : Mem c) → (assocWord a b c).eval
@@ -195,201 +187,6 @@ open PairEffect ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 
-/-! ### Partitioning the sites of a list in front of further registers -/
-
-/-- One step of `partWordApp`. -/
-def partStepApp (own : ι → Party) (x : ι) (a b : List ι) (tail : Layout Party) : (c : Bool) →
-    Word (⟨own x, euc (Fin q)⟩ :: (siteRegs q own a ++ (siteRegs q own b ++ tail)))
-      (siteRegs q own (cond c (x :: a, b) (a, x :: b)).1 ++
-        (siteRegs q own (cond c (x :: a, b) (a, x :: b)).2 ++ tail))
-  | true => .id _
-  | false => Word.exchangeBlocks [⟨own x, euc (Fin q)⟩] (siteRegs q own a)
-      (siteRegs q own b ++ tail)
-
-/-- The registers of the sites satisfying `p` moved to the front, in front of the registers
-`tail`, which are untouched. -/
-def partWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party) :
-    (S : List ι) → Word (siteRegs q own S ++ tail)
-      (siteRegs q own (partSites p S).1 ++ (siteRegs q own (partSites p S).2 ++ tail))
-  | [] => .id tail
-  | x :: S => .comp (.frame _ (partWordApp own p tail S)) (partStepApp own x _ _ tail (p x))
-
-/-- One step of `unpartWordApp`. -/
-def unpartStepApp (own : ι → Party) (x : ι) (a b : List ι) (tail : Layout Party) :
-    (c : Bool) →
-    Word (siteRegs q own (cond c (x :: a, b) (a, x :: b)).1 ++
-        (siteRegs q own (cond c (x :: a, b) (a, x :: b)).2 ++ tail))
-      (⟨own x, euc (Fin q)⟩ :: (siteRegs q own a ++ (siteRegs q own b ++ tail)))
-  | true => .id _
-  | false => Word.moveHead ⟨own x, euc (Fin q)⟩ (siteRegs q own a) (siteRegs q own b ++ tail)
-
-/-- The inverse of `partWordApp`. -/
-def unpartWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party) :
-    (S : List ι) → Word
-      (siteRegs q own (partSites p S).1 ++ (siteRegs q own (partSites p S).2 ++ tail))
-      (siteRegs q own S ++ tail)
-  | [] => .id tail
-  | x :: S => .comp (unpartStepApp own x _ _ tail (p x)) (.frame _ (unpartWordApp own p tail S))
-
-theorem eval_partStepApp (own : ι → Party) (x : ι) (a b : List ι) (tail : Layout Party)
-    (c : ι → Fin q) (y : Mem tail) : (cb : Bool) → (partStepApp own x a b tail cb).eval
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          (appendIso (siteRegs q own a) (siteRegs q own b ++ tail)).symm (siteVec own a c ⊗ₜ
-            (appendIso (siteRegs q own b) tail).symm (siteVec own b c ⊗ₜ y))) =
-      (appendIso (siteRegs q own (cond cb (x :: a, b) (a, x :: b)).1)
-          (siteRegs q own (cond cb (x :: a, b) (a, x :: b)).2 ++ tail)).symm
-        (siteVec own (cond cb (x :: a, b) (a, x :: b)).1 c ⊗ₜ
-          (appendIso (siteRegs q own (cond cb (x :: a, b) (a, x :: b)).2) tail).symm
-            (siteVec own (cond cb (x :: a, b) (a, x :: b)).2 c ⊗ₜ y))
-  | true => rfl
-  | false => by
-      have h := Word.eval_exchangeBlocks_appendIso_symm [⟨own x, euc (Fin q)⟩]
-        (siteRegs q own a) (siteRegs q own b ++ tail)
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ (1 : ℂ))
-        (siteVec own a c) ((appendIso (siteRegs q own b) tail).symm (siteVec own b c ⊗ₜ y))
-      rw [appendIso_one_symm_tmul, appendIso_one_symm_tmul] at h
-      exact h
-
-/-- `partWordApp` on product basis vectors in front of further registers. -/
-theorem eval_partWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
-    (c : ι → Fin q) (y : Mem tail) : (S : List ι) →
-    (partWordApp own p tail S).eval
-        ((appendIso (siteRegs q own S) tail).symm (siteVec own S c ⊗ₜ y)) =
-      (appendIso (siteRegs q own (partSites p S).1)
-          (siteRegs q own (partSites p S).2 ++ tail)).symm
-        (siteVec own (partSites p S).1 c ⊗ₜ
-          (appendIso (siteRegs q own (partSites p S).2) tail).symm
-            (siteVec own (partSites p S).2 c ⊗ₜ y))
-  | [] => by
-      change (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ y) =
-        (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ
-          (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ y))
-      rw [Word.appendIso_nil_symm_tmul (ℓ := tail), one_smul, Word.appendIso_nil_symm_tmul,
-        one_smul]
-  | x :: S => by
-      change (partStepApp own x (partSites p S).1 (partSites p S).2 tail (p x)).eval
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          (partWordApp own p tail S).eval
-            ((appendIso (siteRegs q own S) tail).symm (siteVec own S c ⊗ₜ y))) = _
-      rw [eval_partWordApp own p tail c y S]
-      exact eval_partStepApp own x _ _ tail c y (p x)
-
-theorem eval_unpartStepApp (own : ι → Party) (x : ι) (a b : List ι) (tail : Layout Party)
-    (c : ι → Fin q) (y : Mem tail) : (cb : Bool) → (unpartStepApp own x a b tail cb).eval
-        ((appendIso (siteRegs q own (cond cb (x :: a, b) (a, x :: b)).1)
-            (siteRegs q own (cond cb (x :: a, b) (a, x :: b)).2 ++ tail)).symm
-          (siteVec own (cond cb (x :: a, b) (a, x :: b)).1 c ⊗ₜ
-            (appendIso (siteRegs q own (cond cb (x :: a, b) (a, x :: b)).2) tail).symm
-              (siteVec own (cond cb (x :: a, b) (a, x :: b)).2 c ⊗ₜ y))) =
-      (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-        (appendIso (siteRegs q own a) (siteRegs q own b ++ tail)).symm (siteVec own a c ⊗ₜ
-          (appendIso (siteRegs q own b) tail).symm (siteVec own b c ⊗ₜ y))
-  | true => rfl
-  | false => Word.eval_moveHead_appendIso_symm ⟨own x, euc (Fin q)⟩ (siteRegs q own a)
-      (siteRegs q own b ++ tail) (siteVec own a c)
-      (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q))
-      ((appendIso (siteRegs q own b) tail).symm (siteVec own b c ⊗ₜ y))
-
-/-- `unpartWordApp` on product basis vectors in front of further registers. -/
-theorem eval_unpartWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
-    (c : ι → Fin q) (y : Mem tail) : (S : List ι) →
-    (unpartWordApp own p tail S).eval
-        ((appendIso (siteRegs q own (partSites p S).1)
-            (siteRegs q own (partSites p S).2 ++ tail)).symm
-          (siteVec own (partSites p S).1 c ⊗ₜ
-            (appendIso (siteRegs q own (partSites p S).2) tail).symm
-              (siteVec own (partSites p S).2 c ⊗ₜ y))) =
-      (appendIso (siteRegs q own S) tail).symm (siteVec own S c ⊗ₜ y)
-  | [] => by
-      change (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ
-          (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ y)) =
-        (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ y)
-      rw [Word.appendIso_nil_symm_tmul, one_smul]
-  | x :: S => by
-      refine (congrArg (Word.frame _ (unpartWordApp (q := q) own p tail S)).eval
-        (eval_unpartStepApp own x (partSites p S).1 (partSites p S).2 tail c y (p x))).trans ?_
-      change (EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-        (unpartWordApp (q := q) own p tail S).eval _ = _
-      rw [eval_unpartWordApp own p tail c y S]
-      rfl
-
-theorem partWordApp_props (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
-    (T : Set Party) : (S : List ι) → (partWordApp (q := q) own p tail S).IsAllowed ∧
-      (partWordApp (q := q) own p tail S).UsesOnly T ∧
-      (partWordApp (q := q) own p tail S).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | x :: S => by
-      obtain ⟨h₁, h₂, h₃⟩ := partWordApp_props own p tail T S
-      have hs : (partStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).IsAllowed ∧
-          (partStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).UsesOnly T ∧
-          (partStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).sourceCount = 0 := by
-        cases p x
-        · exact ⟨Word.isAllowed_exchangeBlocks _ _ _, Word.usesOnly_exchangeBlocks _ _ _ _,
-            Word.sourceCount_exchangeBlocks _ _ _⟩
-        · exact ⟨trivial, trivial, rfl⟩
-      exact ⟨⟨h₁, hs.1⟩, ⟨h₂, hs.2.1⟩, congrArg₂ (· + ·) h₃ hs.2.2⟩
-
-theorem unpartWordApp_props (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
-    (T : Set Party) : (S : List ι) → (unpartWordApp (q := q) own p tail S).IsAllowed ∧
-      (unpartWordApp (q := q) own p tail S).UsesOnly T ∧
-      (unpartWordApp (q := q) own p tail S).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | x :: S => by
-      obtain ⟨h₁, h₂, h₃⟩ := unpartWordApp_props own p tail T S
-      have hs : (unpartStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).IsAllowed ∧
-          (unpartStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).UsesOnly T ∧
-          (unpartStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).sourceCount = 0 := by
-        cases p x
-        · exact ⟨Word.isAllowed_moveHead _ _ _, Word.usesOnly_moveHead _ _ _ _,
-            Word.sourceCount_moveHead _ _ _⟩
-        · exact ⟨trivial, trivial, rfl⟩
-      exact ⟨⟨hs.1, h₁⟩, ⟨hs.2.1, h₂⟩, congrArg₂ (· + ·) hs.2.2 h₃⟩
-
-/-- The raw registers of `S` in front of `tail`, held by `own`, named with the owners `own'` that
-agree on `S`. -/
-def relabelSitesApp (own own' : ι → Party) (tail : Layout Party) :
-    (S : List ι) → (∀ x ∈ S, own x = own' x) →
-      Word (siteRegs q own S ++ tail) (siteRegs q own' S ++ tail)
-  | [], _ => .id tail
-  | x :: S, h => .comp
-      (.frame ⟨own x, euc (Fin q)⟩
-        (relabelSitesApp own own' tail S fun y hy => h y (List.mem_cons_of_mem x hy)))
-      (relabelHead (h x List.mem_cons_self) (euc (Fin q)) (siteRegs q own' S ++ tail))
-
-/-- Renaming owners in front of further registers moves no vector. -/
-theorem eval_relabelSitesApp (own own' : ι → Party) (tail : Layout Party) (c : ι → Fin q)
-    (y : Mem tail) : (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
-      (relabelSitesApp own own' tail S h).eval
-          ((appendIso (siteRegs q own S) tail).symm (siteVec own S c ⊗ₜ y)) =
-        (appendIso (siteRegs q own' S) tail).symm (siteVec own' S c ⊗ₜ y)
-  | [], _ => rfl
-  | x :: S, h => by
-      change (relabelHead (h x List.mem_cons_self) (euc (Fin q)) (siteRegs q own' S ++ tail)).eval
-        ((EuclideanSpace.single (c x) (1 : ℂ) : EuclideanSpace ℂ (Fin q)) ⊗ₜ
-          (relabelSitesApp own own' tail S _).eval
-            ((appendIso (siteRegs q own S) tail).symm (siteVec own S c ⊗ₜ y))) = _
-      rw [eval_relabelHead, eval_relabelSitesApp own own' tail c y S]
-      rfl
-
-@[simp] theorem relabelSitesApp_props (own own' : ι → Party) (tail : Layout Party)
-    (T : Set Party) : (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
-      (relabelSitesApp (q := q) own own' tail S h).IsAllowed ∧
-        (relabelSitesApp (q := q) own own' tail S h).UsesOnly T ∧
-        (relabelSitesApp (q := q) own own' tail S h).sourceCount = 0
-  | [], _ => ⟨trivial, trivial, rfl⟩
-  | x :: S, h => by
-      obtain ⟨h₁, h₂, h₃⟩ := relabelSitesApp_props own own' tail T S
-        fun y hy => h y (List.mem_cons_of_mem x hy)
-      obtain ⟨g₁, g₂, g₃⟩ := relabelHead_props (h x List.mem_cons_self) (euc (Fin q))
-        (siteRegs q own' S ++ tail) T
-      exact ⟨⟨h₁, g₁⟩, ⟨h₂, g₂⟩, congrArg₂ (· + ·) h₃ g₃⟩
-
 section Simp
 
 variable (own own' : ι → Party) (p : ι → Bool) (tail : Layout Party) (S : List ι)
@@ -473,7 +270,7 @@ theorem eval_tagSplit (tail : Layout Party) (y : Mem tail) :
   | [], l₂, τ => by
       change _ = (appendIso ([] : Layout Party) (tagRegs l₂ ++ tail)).symm ((1 : ℂ) ⊗ₜ
         (appendIso (tagRegs l₂) tail).symm (tagVec l₂ τ ⊗ₜ y))
-      rw [Word.appendIso_nil_symm_tmul, one_smul]
+      rw [appendIso_nil_symm_tmul, one_smul]
       rfl
   | h :: l₁, l₂, ⟨t, τ⟩ =>
       congrArg (fun w => ((EuclideanSpace.single t (1 : ℂ) :
@@ -491,20 +288,20 @@ theorem eval_tagMerge (tail : Layout Party) (y : Mem tail) :
   | [], l₂, τ₁, τ₂ => by
       change (appendIso ([] : Layout Party) (tagRegs l₂ ++ tail)).symm ((1 : ℂ) ⊗ₜ
         (appendIso (tagRegs l₂) tail).symm (tagVec l₂ τ₂ ⊗ₜ y)) = _
-      rw [Word.appendIso_nil_symm_tmul, one_smul]
+      rw [appendIso_nil_symm_tmul, one_smul]
       rfl
   | h :: l₁, l₂, ⟨t, τ₁⟩, τ₂ =>
       congrArg (fun w => ((EuclideanSpace.single t (1 : ℂ) :
           EuclideanSpace ℂ h.patch.Tag) ⊗ₜ w : Mem (tagRegs (h :: l₁ ++ l₂) ++ tail)))
         (eval_tagMerge tail y l₁ l₂ τ₁ τ₂)
 
-@[simp] theorem tagSplit_props (S : Set Party) (tail : Layout Party) :
+theorem tagSplit_props (S : Set Party) (tail : Layout Party) :
     (l₁ l₂ : List (Hole pos q Party)) → (tagSplit l₁ l₂ tail).IsAllowed ∧
       (tagSplit l₁ l₂ tail).UsesOnly S ∧ (tagSplit l₁ l₂ tail).sourceCount = 0
   | [], _ => ⟨trivial, trivial, rfl⟩
   | _ :: l₁, l₂ => tagSplit_props S tail l₁ l₂
 
-@[simp] theorem tagMerge_props (S : Set Party) (tail : Layout Party) :
+theorem tagMerge_props (S : Set Party) (tail : Layout Party) :
     (l₁ l₂ : List (Hole pos q Party)) → (tagMerge l₁ l₂ tail).IsAllowed ∧
       (tagMerge l₁ l₂ tail).UsesOnly S ∧ (tagMerge l₁ l₂ tail).sourceCount = 0
   | [], _ => ⟨trivial, trivial, rfl⟩

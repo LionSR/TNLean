@@ -124,10 +124,12 @@ every outer hole footprint, and let `E` and `U = Λ ∖ (T ∪ E)` be as in `eq:
 from the registers of `F` (one per site and per tag, each held by its owner) to the registers
 of the frame `F'` in which `T` is owned by `Q∘`, such that:
 
-* `w` uses only `P∘` and `Q∘` and at most one normalized pair source; for `Q∘ ≠ P∘` it groups the
-  registers of `T` and of `U` at `P∘`, applies the private contraction `⟨s| (1_T ⊗ V)` at `P∘`,
-  prepares the pair state `s` on `T` held by `Q∘` and `B_T` held by `P∘`, applies `Vᴴ` at `P∘`,
-  and ungroups `T` at `Q∘` and `U` at `P∘`, with exchanges of tensor factors in between;
+* `w` uses only `P∘` and `Q∘` and at most one normalized pair source; the statement records
+  these counts, which are what a bounded change asks for (`05-frames.tex`, lines 99–105). The
+  monomial constructed in the proof groups the registers of `T` and of `U` at `P∘`, applies, for
+  `Q∘ ≠ P∘`, the private contraction `⟨s| (1_T ⊗ V)` at `P∘`, prepares the pair state `s` on `T`
+  held by `Q∘` and `B_T` held by `P∘` and applies `Vᴴ` at `P∘`, and ungroups `T` at `Q∘` and `U`
+  at `P∘`, with exchanges of tensor factors in between;
 * in canonical coordinates the operator of `w` is `1_tags ⊗ B` for the canonical map `B` of
   `eq:birth-map`, and `(1 ⊗ B) K_F = K_{F'} B`;
 * the reference-vector error is at most `L^{-30}`: `‖w Ω_F - Ω_{F'}‖ ≤ L^{-30}`, with the
@@ -203,9 +205,11 @@ outer hole footprint, and let the frame before the death be `F'`, in which `T` i
 monomial from the registers of `F'` to those of `F`, using only `P∘` and `Q∘`, without pair
 sources and with at most one normalized pair effect, whose operator in canonical coordinates is
 `1_tags ⊗ B` for the canonical map `B` of `eq:birth-map`, with `(1 ⊗ B) K_{F'} = K_F B` and
-reference-vector error `‖M Ω_{F'} - Ω_F‖ ≤ L^{-30}`. For `Q∘ ≠ P∘` it groups the registers of
-`T` at `Q∘` and of `U` at `P∘`, applies `V` at `P∘`, contracts `T` and `B_T` with the pair effect
-`⟨s|` held by `Q∘` and `P∘`, reinserts `s` and applies `Vᴴ` at `P∘`, and ungroups at `P∘`.
+reference-vector error `‖M Ω_{F'} - Ω_F‖ ≤ L^{-30}`. The statement records the parties and the
+pair-resource counts; the monomial constructed in the proof groups the registers of `T` at `Q∘`
+and of `U` at `P∘`, then, for `Q∘ ≠ P∘`, applies `V` at `P∘`, contracts `T` and `B_T` with the
+pair effect `⟨s|` held by `Q∘` and `P∘`, reinserts `s` and applies `Vᴴ` at `P∘`, and ungroups at
+`P∘`.
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–446. -/
@@ -329,9 +333,10 @@ and an allowed monomial `w` from the registers of the two frames (one per site a
 each sheet, each held by its owner) to the registers of the two frames after the exchange, such
 that:
 
-* `w` is the renaming `ℛ`, a word of exchanges of tensor factors that keeps every register at its
-  party, followed by one private contraction at `P∘` on the raw registers of `U` of both sheets
-  (the corrections `D_U F_A`); it uses only `P∘` and no pair resource;
+* `w` uses only `P∘` and no pair resource; the monomial constructed in the proof is the renaming
+  `ℛ`, a word of exchanges of tensor factors that keeps every register at its party, followed by
+  one private contraction at `P∘` on the raw registers of `U` of both sheets (the corrections
+  `D_U F_A`);
 * in canonical coordinates its operator is the map `C = D_U F_A ℛ`, with
   `C (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`;
 * the reference-vector error is at most `4 L^{-30}`:
@@ -393,10 +398,16 @@ unit vector `Ω`, there are relabellings `e₁`, `e₂` of the tag configuration
 encodings of each frame with those of its holes listed outside first (the canonical
 identification of tag orderings), splitting data with error at most `L^{-30}`, and an allowed
 monomial `w` from the registers of `F₁` and `F₂` to the registers of the two frames after the
-exchange, such that `w` consists of exchanges of tensor factors and one private contraction at
-`P∘`, uses only `P∘` and no pair resource, acts in canonical coordinates as
+exchange, such that `w` uses only `P∘` and no pair resource (the monomial constructed in the
+proof consists of exchanges of tensor factors and one private contraction at `P∘`), acts in
+canonical coordinates as
 `C G = D_U F_A ℛ G` with `G = tagReorder e₁ e₂`, satisfies `C G (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`,
 and has reference-vector error `‖w (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`.
+
+The statement constrains `e₁` and `e₂` only by preserving the raw parts of the encodings. The
+relabellings constructed in the proof (`exists_tagWord_of_perm`) are the ones implemented by the
+exchanges of tag registers, which move the tag of each hole to that hole's position in the new
+list; the operator, the intertwining relation and the error bound are stated for these.
 
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479, with the
 canonical identification of tag orderings of lines 75–76 and 84–85; proof lines 481–561;

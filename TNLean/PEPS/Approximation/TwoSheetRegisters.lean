@@ -76,7 +76,8 @@ theorem twoLayoutIso_symm_single (l₁ l₂ : List (Hole pos q Party)) (own₁ o
   change _ = pairIso _ _ ((layoutIso l₂ own₂).lTensor _ ((layoutIso l₁ own₁).rTensor _
     (appendIso _ _ ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ
       layoutVec l₂ own₂ τ₂ c₂)))))
-  rw [LinearIsometryEquiv.apply_symm_apply, iso_rTensor_tmul, iso_lTensor_tmul,
+  rw [LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.rTensor_tmul,
+    LinearIsometryEquiv.lTensor_tmul,
     layoutIso_layoutVec, layoutIso_layoutVec, pairIso_single_tmul_single]
 
 theorem twoLayoutIso_basis (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
@@ -109,15 +110,6 @@ theorem twoLayoutIso_eq_act_of_basis (l₁ l₂ : List (Hole pos q Party)) (own�
   obtain ⟨⟨τ₁, c₁⟩, ⟨τ₂, c₂⟩⟩ := i
   rw [EuclideanSpace.basisFun_apply, twoLayoutIso_symm_single, hf, act_eq_matL]
 
-theorem act_toMatrix_symm_single {α β : Type} [Fintype α] [DecidableEq α]
-    [DecidableEq β] (e : α ≃ β) (i : α) :
-    act (e.symm.toPEquiv.toMatrix : Matrix β α ℂ) (EuclideanSpace.single i (1 : ℂ)) =
-      EuclideanSpace.single (e i) (1 : ℂ) := by
-  ext j
-  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, Matrix.col_apply, PEquiv.toMatrix_apply,
-    Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq, PiLp.single_apply,
-    Equiv.symm_apply_eq]
-
 end TwoLayout
 
 /-! ### A private contraction on the raw registers of `U` on two sheets -/
@@ -127,37 +119,29 @@ section Correction
 variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ} {T E : Finset ι}
 
 /-- The sites of `sites ι` in `U = (T ∪ E)ᶜ`. -/
-abbrev sitesU (T E : Finset ι) : List ι :=
-  (partSites (fun x => decide (x ∈ (T ∪ E)ᶜ)) (sites ι)).1
+abbrev sitesU (T E : Finset ι) : List ι := listT (sites ι) (T ∪ E)ᶜ
 
 /-- The sites of `sites ι` in `T ∪ E`. -/
-abbrev sitesR (T E : Finset ι) : List ι :=
-  (partSites (fun x => decide (x ∈ (T ∪ E)ᶜ)) (sites ι)).2
-
-theorem mem_sitesU_iff (x : ι) : x ∈ sitesU T E ↔ x ∈ (T ∪ E)ᶜ := by
-  simp [mem_partSites_fst, mem_sites]
-
-/-- The positions of `sitesU T E` enumerate `U = (T ∪ E)ᶜ`. -/
-def equivSitesU (T E : Finset ι) : Fin (sitesU T E).length ≃ ↥(T ∪ E)ᶜ :=
-  (List.Nodup.getEquiv _ (nodup_partSites_fst _ nodup_sites)).trans
-    (Equiv.subtypeEquivRight mem_sitesU_iff)
+abbrev sitesR (T E : Finset ι) : List ι := listR (sites ι) (T ∪ E)ᶜ
 
 /-- The raw registers of `U` on two sheets, identified with `ℂ^{(U → Fin q) × (U → Fin q)}`. -/
 def pairUIso (own₁ own₂ : ι → Party) :
     Mem (siteRegs q own₁ (sitesU T E) ++ siteRegs q own₂ (sitesU T E)) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) :=
-  (appendIso _ _).trans ((((groupIso own₁ _ (equivSitesU T E)).rTensor _).trans
-    ((groupIso own₂ _ (equivSitesU T E)).lTensor _)).trans (pairIso _ _))
+  (appendIso _ _).trans ((((groupIso own₁ _ (equivT nodup_sites mem_sites)).rTensor _).trans
+    ((groupIso own₂ _ (equivT nodup_sites mem_sites)).lTensor _)).trans (pairIso _ _))
 
 theorem pairUIso_siteVec (own₁ own₂ : ι → Party) (c₁ c₂ : ι → Fin q) :
     pairUIso (T := T) (E := E) own₁ own₂ ((appendIso _ _).symm
         (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂)) =
       EuclideanSpace.single ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x))
         (1 : ℂ) := by
-  change pairIso _ _ ((groupIso own₂ _ (equivSitesU T E)).lTensor _
-    ((groupIso own₁ _ (equivSitesU T E)).rTensor _ (appendIso _ _ ((appendIso _ _).symm
-      (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂))))) = _
-  rw [LinearIsometryEquiv.apply_symm_apply, iso_rTensor_tmul, iso_lTensor_tmul,
+  change pairIso _ _ ((groupIso own₂ _ (equivT nodup_sites mem_sites)).lTensor _
+    ((groupIso own₁ _ (equivT nodup_sites mem_sites)).rTensor _
+      (appendIso _ _ ((appendIso _ _).symm
+        (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂))))) = _
+  rw [LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.rTensor_tmul,
+    LinearIsometryEquiv.lTensor_tmul,
     groupIso_siteVec own₁ _ _ Subtype.val (fun _ => rfl) c₁,
     groupIso_siteVec own₂ _ _ Subtype.val (fun _ => rfl) c₂]
   exact pairIso_single_tmul_single _ _
@@ -185,8 +169,8 @@ def correctionLayoutWord (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : 
   have hU : ∀ r ∈ U₁ ++ U₂, r.owner = P := by
     intro r hr
     rcases List.mem_append.mp hr with hr | hr
-    · exact owner_siteRegs (fun x hx => h₁ x ((mem_sitesU_iff x).mp hx)) r hr
-    · exact owner_siteRegs (fun x hx => h₂ x ((mem_sitesU_iff x).mp hx)) r hr
+    · exact owner_siteRegs (fun x hx => h₁ x ((mem_listT mem_sites x).mp hx)) r hr
+    · exact owner_siteRegs (fun x hx => h₂ x ((mem_listT mem_sites x).mp hx)) r hr
   .comp (Word.assocWord k₁ (siteRegs q own₁ (sites ι)) (layoutRegs q l₂ own₂)) <|
   .comp (Word.frameList k₁ (partWordApp own₁ pU (layoutRegs q l₂ own₂) (sites ι))) <|
   .comp (Word.frameList k₁ (Word.frameList U₁ (Word.frameList R₁ (Word.frameList k₂
@@ -223,9 +207,8 @@ theorem merge_self_of_mem_union (h : Disjoint T E) (u : ↥(T ∪ E)ᶜ → Fin 
   · exact threeSplit_symm_apply_of_mem_left h _ _ _ hT
   · exact merge_of_mem_E h _ c hE
 
-theorem mem_sitesR_iff (x : ι) : x ∈ sitesR T E ↔ x ∈ T ∪ E := by
-  simp only [mem_partSites_snd, mem_sites, true_and, decide_eq_false_iff_not, Finset.mem_compl,
-    not_not]
+theorem mem_of_mem_sitesR {x : ι} (hx : x ∈ sitesR T E) : x ∈ T ∪ E :=
+  not_not.mp (Finset.mem_compl.not.mp ((mem_listR mem_sites x).mp hx))
 
 /-- **The corrections on basis vectors.** The configurations of the two sheets on `U` are
 mixed by `W`; those on `T ∪ E` and the tags are untouched. -/
@@ -264,9 +247,9 @@ theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos
   refine Finset.sum_congr rfl fun u _ => ?_
   congr 1
   rw [siteVec_congr own₁ (sitesR T E) (c' := merge h ((fun x : T => c₁ x), u.1) c₁)
-      fun x hx => (merge_self_of_mem_union h _ c₁ ((mem_sitesR_iff x).mp hx)).symm,
+      fun x hx => (merge_self_of_mem_union h _ c₁ (mem_of_mem_sitesR hx)).symm,
     siteVec_congr own₂ (sitesR T E) (c' := merge h ((fun x : T => c₂ x), u.2) c₂)
-      fun x hx => (merge_self_of_mem_union h _ c₂ ((mem_sitesR_iff x).mp hx)).symm]
+      fun x hx => (merge_self_of_mem_union h _ c₂ (mem_of_mem_sitesR hx)).symm]
   simp only [Word.eval_assocWord_appendIso_symm, Word.eval_frameList_appendIso_symm,
     Word.eval_exchangeBlocks_appendIso_symm, Word.eval_unassocWord_appendIso_symm,
     eval_unpartWord, eval_unpartWordApp]
@@ -387,16 +370,10 @@ namespace TwoSheetExchange
 variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ} (X : TwoSheetExchange pos q Party)
 
 /-- The sites in the region `Y`, in the order of `sites ι`. -/
-abbrev sitesY : List ι := (partSites (fun x => decide (x ∈ X.region)) (sites ι)).1
+abbrev sitesY : List ι := listT (sites ι) X.region
 
 /-- The sites outside the region `Y`, in the order of `sites ι`. -/
-abbrev sitesN : List ι := (partSites (fun x => decide (x ∈ X.region)) (sites ι)).2
-
-theorem mem_sitesY {x : ι} (hx : x ∈ X.sitesY) : x ∈ X.region := by
-  simpa using ((mem_partSites_fst _ _ x).mp hx).2
-
-theorem notMem_sitesN {x : ι} (hx : x ∈ X.sitesN) : x ∉ X.region := by
-  simpa using ((mem_partSites_snd _ _ x).mp hx).2
+abbrev sitesN : List ι := listR (sites ι) X.region
 
 /-- **The renaming `ℛ` as a word of exchanges of tensor factors.** Split the tags of both frames
 into those of the holes outside and inside `Y`, move the raw registers of the sites in `Y` of
@@ -430,16 +407,16 @@ def renameWord : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs +
   .comp (Word.frameList o₁ (Word.swapPairs i₁ Y₁ N₁ o₂ i₂ Y₂ N₂)) <|
   .comp (Word.frameList o₁ (Word.frameList i₂ (relabelSitesApp X.owner₂ X.newFrame₁.owner
     (N₁ ++ (o₂ ++ (i₁ ++ (Y₁ ++ N₂)))) X.sitesY fun x hx => by
-      simp [X.mem_sitesY hx]))) <|
+      simp [(mem_listT mem_sites x).mp hx]))) <|
   .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (relabelSitesApp X.owner₁
     X.newFrame₁.owner (o₂ ++ (i₁ ++ (Y₁ ++ N₂))) X.sitesN fun x hx => by
-      simp [X.notMem_sitesN hx])))) <|
+      simp [(mem_listR mem_sites x).mp hx])))) <|
   .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
     (Word.frameList o₂ (Word.frameList i₁ (relabelSitesApp X.owner₁ X.newFrame₂.owner N₂
-      X.sitesY fun x hx => by simp [X.mem_sitesY hx]))))))) <|
+      X.sitesY fun x hx => by simp [(mem_listT mem_sites x).mp hx]))))))) <|
   .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
     (Word.frameList o₂ (Word.frameList i₁ (Word.frameList Y₂' (relabelSites X.owner₂
-      X.newFrame₂.owner X.sitesN fun x hx => by simp [X.notMem_sitesN hx])))))))) <|
+      X.newFrame₂.owner X.sitesN fun x hx => by simp [(mem_listR mem_sites x).mp hx])))))))) <|
   .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
     (Word.frameList o₂ (Word.frameList i₁ (unpartWord X.newFrame₂.owner pY (sites ι)))))))) <|
   .comp (Word.frameList o₁ (Word.frameList i₂ (Word.frameList Y₁' (Word.frameList N₁'
@@ -469,13 +446,13 @@ theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → 
   set c₁' : ι → Fin q := fun x => if x ∈ X.region then c₂ x else c₁ x
   set c₂' : ι → Fin q := fun x => if x ∈ X.region then c₁ x else c₂ x
   have hY₁ : siteVec X.owner₁ X.sitesY c₁ = siteVec X.owner₁ X.sitesY c₂' :=
-    siteVec_congr _ _ fun x hx => by simp [c₂', X.mem_sitesY hx]
+    siteVec_congr _ _ fun x hx => by simp [c₂', (mem_listT mem_sites x).mp hx]
   have hN₁ : siteVec X.owner₁ X.sitesN c₁ = siteVec X.owner₁ X.sitesN c₁' :=
-    siteVec_congr _ _ fun x hx => by simp [c₁', X.notMem_sitesN hx]
+    siteVec_congr _ _ fun x hx => by simp [c₁', (mem_listR mem_sites x).mp hx]
   have hY₂ : siteVec X.owner₂ X.sitesY c₂ = siteVec X.owner₂ X.sitesY c₁' :=
-    siteVec_congr _ _ fun x hx => by simp [c₁', X.mem_sitesY hx]
+    siteVec_congr _ _ fun x hx => by simp [c₁', (mem_listT mem_sites x).mp hx]
   have hN₂ : siteVec X.owner₂ X.sitesN c₂ = siteVec X.owner₂ X.sitesN c₂' :=
-    siteVec_congr _ _ fun x hx => by simp [c₂', X.notMem_sitesN hx]
+    siteVec_congr _ _ fun x hx => by simp [c₂', (mem_listR mem_sites x).mp hx]
   simp only [renameWord, layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply]
   simp only [Word.eval_assocWord_appendIso_symm, eval_tagSplit, Word.eval_frameList_appendIso_symm,
     eval_partWordApp, hY₁, hN₁]

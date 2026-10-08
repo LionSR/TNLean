@@ -28,7 +28,6 @@ coordinates, as `1_tags ⊗ (1_E ⊗ M)` (`layoutIso_place`).
 
 * `EncodedFrame.groupWord`, `EncodedFrame.ungroupWord`: grouping the raw registers of two
   regions.
-* `EncodedFrame.sheetPlace`: the matrix `1_E ⊗ M` on a sheet.
 * `EncodedFrame.sites`, `EncodedFrame.layoutRegs`, `EncodedFrame.layoutVec`,
   `EncodedFrame.layoutIso`: the registers of a frame and their canonical coordinates.
 * `EncodedFrame.Frame.regs`, `EncodedFrame.Frame.regIso`.
@@ -91,6 +90,10 @@ variable {S : List ι} {T E : Finset ι}
 omit [Fintype ι] in
 theorem mem_listT (hall : ∀ x, x ∈ S) (x : ι) : x ∈ listT S T ↔ x ∈ T := by
   simp [mem_partSites_fst, hall]
+
+omit [Fintype ι] in
+theorem mem_listR (hall : ∀ x, x ∈ S) (x : ι) : x ∈ listR S T ↔ x ∉ T := by
+  simp [mem_partSites_snd, hall]
 
 theorem mem_listU (hall : ∀ x, x ∈ S) (x : ι) : x ∈ listU S T E ↔ x ∈ (T ∪ E)ᶜ := by
   simp only [mem_partSites_fst, mem_partSites_snd, hall, true_and, decide_eq_true_eq,
@@ -285,21 +288,6 @@ section Placement
 
 variable [Fintype ι] [DecidableEq ι] {S : List ι} {T E : Finset ι}
 
-theorem pairIso_single_tmul_single {α β : Type} [Fintype α] [Fintype β] [DecidableEq α]
-    [DecidableEq β] (a : α) (b : β) :
-    pairIso α β ((EuclideanSpace.single a (1 : ℂ) : EuclideanSpace ℂ α) ⊗ₜ
-      (EuclideanSpace.single b (1 : ℂ) : EuclideanSpace ℂ β)) =
-      EuclideanSpace.single (a, b) (1 : ℂ) := by
-  ext i
-  rw [pairIso_tmul_apply]
-  simp only [PiLp.single_apply, ite_zero_mul_ite_zero, one_mul, Prod.ext_iff]
-
-theorem matL_single_apply {α β : Type} [Fintype α] [Fintype β] [DecidableEq β]
-    (M : Matrix α β ℂ) (j : β) (i : α) :
-    matL M (EuclideanSpace.single j (1 : ℂ)) i = M i j := by
-  rw [matL_apply, PiLp.ofLp_single, Matrix.mulVec_single_one]
-  rfl
-
 /-- The configuration equal to `ab.1` on `T`, to `c` on `E`, and to `ab.2` on `(T ∪ E)ᶜ`. -/
 def merge (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) (c : ι → Fin q) :
     ι → Fin q :=
@@ -393,24 +381,6 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
       fun x hx => (merge_of_mem_E h ab c ((mem_listE hall h x).mp hx)).symm]
   exact eval_ungroupWord own' hS hall ℓ₀ hA' hB' t (merge h ab c)
 
-/-- The matrix `1_E ⊗ M` on a sheet, in the coordinates `((t, e), u)` of `threeSplit T E`: the
-operator `M` on the configurations of `T` and `U = (T ∪ E)ᶜ`, the identity on those of `E`. -/
-def sheetPlace (h : Disjoint T E)
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
-    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ M).submatrix
-    (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h)
-
-theorem sheetPlace_apply (h : Disjoint T E)
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
-    (c' c : ι → Fin q) :
-    sheetPlace h M c' c = (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) *
-      M ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x))
-        ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) := by
-  simp only [sheetPlace, Matrix.submatrix_apply, Function.comp_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, teuShuffle, Equiv.coe_fn_mk]
-  rfl
-
 theorem merge_eq_iff (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
     (c c' : ι → Fin q) : c' = merge h ab c ↔
       ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) ∧
@@ -456,9 +426,22 @@ theorem sum_single_merge {κ : Type} [Fintype κ] [DecidableEq κ] (h : Disjoint
 
 end Placement
 
+/-! ### Matrix actions on Euclidean registers -/
+
+/-- The two matrix actions `act` and `matL` on Euclidean vectors agree. -/
 theorem act_eq_matL {m n : Type} [Fintype m] [Fintype n] [DecidableEq n] (A : Matrix m n ℂ)
     (ψ : EuclideanSpace ℂ n) : act A ψ = matL A ψ :=
   rfl
+
+/-- The permutation matrix of a bijection `e` sends the basis vector `|i⟩` to `|e i⟩`. -/
+theorem act_toMatrix_symm_single {α β : Type} [Fintype α] [DecidableEq α] [DecidableEq β]
+    (e : α ≃ β) (i : α) :
+    act (e.symm.toPEquiv.toMatrix : Matrix β α ℂ) (EuclideanSpace.single i (1 : ℂ)) =
+      EuclideanSpace.single (e i) (1 : ℂ) := by
+  ext j
+  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, Matrix.col_apply, PEquiv.toMatrix_apply,
+    Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq, PiLp.single_apply,
+    Equiv.symm_apply_eq]
 
 /-! ### The registers of an encoded frame -/
 
@@ -520,7 +503,8 @@ theorem layoutIso_layoutVec (l : List (Hole pos q Party)) (own : ι → Party) (
     ((tagIso l).rTensor _ (appendIso (tagRegs l) (siteRegs q own (sites ι))
       ((appendIso (tagRegs l) (siteRegs q own (sites ι))).symm
         (tagVec l τ ⊗ₜ siteVec own (sites ι) c))))) = _
-  rw [LinearIsometryEquiv.apply_symm_apply, iso_rTensor_tmul, iso_lTensor_tmul, tagIso_tagVec,
+  rw [LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.rTensor_tmul,
+    LinearIsometryEquiv.lTensor_tmul, tagIso_tagVec,
     groupIso_siteVec own _ _ id (fun _ => rfl) c]
   exact pairIso_single_tmul_single τ c
 

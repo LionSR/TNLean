@@ -40,7 +40,9 @@ with the cylinder-term bound of Proposition 4.1, which the patch data do not rec
 numbers of patches and affected holes. Documented in
 `docs/paper-gaps/polypeps_small_rewrite_monomials.tex`. Elimination: write each product term as
 an allowed party chain on the registers of the frames, moving the registers of each open-leg group
-in front with the reordering words of `TNLean.PEPS.Approximation.SiteRegisters` and reading the
+in front with the reordering words of `TNLean.PEPS.Approximation.SiteRegisters` and
+`TNLean.PEPS.Approximation.RegisterReordering`, placing the grouped factors with
+`EncodedFrame.layoutIso_place` (`TNLean.PEPS.Approximation.FrameRegisters`), and reading the
 explicit matrices with the front-register calculus (`PairEffect.eval_localMap`), and carry the
 cylinder-term bound.
 
