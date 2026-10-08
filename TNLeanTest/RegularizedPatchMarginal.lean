@@ -1,10 +1,11 @@
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
+import TNLeanTest.Support.SingleQubitConfig
 
 /-! Heterogeneous dimensions, empty regions, and complex-conjugation regressions
 for the canonical reduced states of the actual regularized output. -/
 
 open scoped BigOperators Matrix ComplexOrder
-open Matrix TNLean.PEPS
+open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 section Heterogeneous
 
@@ -47,24 +48,11 @@ end Heterogeneous
 
 section ComplexOrientation
 
-private abbrev Config := (v : (Finset.univ : Finset Unit)) → Fin 2
-
-private def configEquiv : Fin 2 ≃ Config where
-  toFun i := fun _ ↦ i
-  invFun σ := σ ⟨(), by simp⟩
-  left_inv _ := rfl
-  right_inv σ := by ext v; congr 1
-
 private noncomputable def complexState : EuclideanSpace ℂ Config :=
   WithLp.toLp 2 fun σ ↦ ![1, Complex.I] (configEquiv.symm σ)
 
 private noncomputable def pauliY : Matrix Config Config ℂ :=
   Matrix.reindex configEquiv configEquiv !![0, -Complex.I; Complex.I, 0]
-
-private theorem lift_univ (K : Matrix Config Config ℂ) :
-    dependentRegionOperatorLift (Out := fun _ : Unit ↦ Fin 2) Finset.univ K = K := by
-  ext α β
-  simp [dependentRegionOperatorLift_apply]
 
 private theorem pauliY_mulVec_complexState :
     pauliY *ᵥ WithLp.ofLp complexState = WithLp.ofLp complexState := by

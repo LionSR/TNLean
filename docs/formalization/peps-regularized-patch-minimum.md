@@ -93,6 +93,9 @@ bounds, not those subsequent arguments.
 ## Dependencies and scope
 
 The shifted density powers come from `QICLean/Analysis/ShiftedDensityPowers.lean`.
+Continuity and the Euclidean norm bound for regional extension belong to
+`TNLean/PEPS/ParentHamiltonian/DependentRegionOperatorLift.lean`, alongside
+its algebraic properties.
 The minimum does not depend on cylinder orthogonalization. These results
 cover the finite-dimensional auxiliary statements only; they do not complete
 Proposition 4.1.

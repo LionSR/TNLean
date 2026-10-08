@@ -1,17 +1,10 @@
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
+import TNLeanTest.Support.SingleQubitConfig
 
 /-! Two independent singular densities on the same physical qubit give noncommuting filters. -/
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open Matrix TNLean.PEPS
-
-private abbrev Config := (v : (Finset.univ : Finset Unit)) → Fin 2
-
-private def configEquiv : Fin 2 ≃ Config where
-  toFun i := fun _ ↦ i
-  invFun σ := σ ⟨(), by simp⟩
-  left_inv _ := rfl
-  right_inv σ := by ext v; congr 1
+open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 private def firstDensity : Matrix (Fin 2) (Fin 2) ℂ := !![1, 0; 0, 0]
 
@@ -53,11 +46,6 @@ private theorem densities_feasible :
 
 example : firstDensity.det = 0 ∧ secondDensity.det = 0 := by
   norm_num [firstDensity, secondDensity, Matrix.det_fin_two]
-
-private theorem lift_univ (K : Matrix Config Config ℂ) :
-    dependentRegionOperatorLift (Out := fun _ : Unit ↦ Fin 2) Finset.univ K = K := by
-  ext α β
-  simp [dependentRegionOperatorLift_apply]
 
 open Classical in
 private theorem filter_eq_inverse (j : Fin 2) :

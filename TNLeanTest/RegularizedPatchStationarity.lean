@@ -1,19 +1,12 @@
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
+import TNLeanTest.Support.SingleQubitConfig
 
 /-! A feasible singular density with nonzero first variation is not a minimizer. -/
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open Matrix TNLean.PEPS
-
-private abbrev Config := (v : (Finset.univ : Finset Unit)) → Fin 2
+open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 noncomputable local instance : DecidableEq Config := Classical.typeDecidableEq _
-
-private def configEquiv : Fin 2 ≃ Config where
-  toFun i := fun _ ↦ i
-  invFun σ := σ ⟨(), by simp⟩
-  left_inv _ := rfl
-  right_inv σ := by ext v; congr 1
 
 private noncomputable def density : Matrix (Fin 2) (Fin 2) ℂ :=
   !![1 / 2, 1 / 2; 1 / 2, 1 / 2]
@@ -57,11 +50,6 @@ private theorem B_skew : star B = -B := by
 
 example : density.det = 0 := by
   norm_num [density, Matrix.det_fin_two]
-
-private theorem lift_univ (K : Matrix Config Config ℂ) :
-    dependentRegionOperatorLift (Out := fun _ : Unit ↦ Fin 2) Finset.univ K = K := by
-  ext α β
-  simp [dependentRegionOperatorLift_apply]
 
 /-- Repeated copies of one region remain independent coordinates. -/
 example (z : Fin 2 → Matrix Config Config ℂ) (U : Matrix Config Config ℂ) :

@@ -8,11 +8,6 @@ The coordinate variation below is the unstripped first variation in the
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L134-L149}{proof of the regularized patch estimate}.
 Its marginals are those of the same final normalized vector defined in
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L91-L99}{the variational problem}.
-% All 18 declarations passed exact-source strict checks and stock-axiom reports
-% with accepted QICLean 378bef486fc0241dee8ad875ccaf659d51d33ac9.
-% These auxiliary badges do not assert a full build, exact-head CI, trace
-% stripping, descending commutation, KKT, energy, regulator growth, or the
-% full Proposition 4.1. Immutable-source provenance publication is separate.
 
 \begin{definition}[One-coordinate variation and insertion]
     \label{def:peps_patch_coordinate_insertion}
@@ -51,20 +46,19 @@ Its marginals are those of the same final normalized vector defined in
     \uses{def:peps_patch_coordinate_insertion}
     For $x\in\mathcal D$, $b>0$, arbitrary real weights, and a unitary $U$
     on $\mathcal H_{X_j}$, one has $x^{j,U}\in\mathcal D$ and
-    \begin{equation}
-        \begin{aligned}
-            (Ux_jU^*+bI)^{-a_j/2} & =UK_jU^*,               \\
-            \Psi(x^{j,U})         & =\mathcal I_j(UK_jU^*).
-        \end{aligned}
-        \label{eq:peps_coordinate_covariance}
-    \end{equation}
+    \begin{align}
+        (Ux_jU^*+bI)^{-a_j/2} & =UK_jU^*,
+        \label{eq:peps_coordinate_covariance_rpow} \\
+        \Psi(x^{j,U})         & =\mathcal I_j(UK_jU^*).
+        \label{eq:peps_coordinate_covariance_apply}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     Unitary conjugation preserves positivity and trace. It fixes the identity,
     so $Ux_jU^*+bI=U(x_j+bI)U^*$. Unitary covariance of the real power gives
-    the first equality in~(\ref{eq:peps_coordinate_covariance}). Every factor
-    except the one at index $j$ is unchanged, giving the second equality.
+    (\ref{eq:peps_coordinate_covariance_rpow}). Every factor except the one at
+    index $j$ is unchanged, giving~(\ref{eq:peps_coordinate_covariance_apply}).
     The argument also applies to singular $x_j$ because $x_j+bI$ is positive
     definite on the full regional space.
 \end{proof}

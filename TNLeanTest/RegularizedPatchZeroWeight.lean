@@ -1,18 +1,11 @@
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
+import TNLeanTest.Support.SingleQubitConfig
 
 /-! A zero coordinate weight does not force its minimizing density to commute
 with the marginal of the actual normalized output. -/
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open Matrix TNLean.PEPS
-
-private abbrev Config := (v : (Finset.univ : Finset Unit)) → Fin 2
-
-private def configEquiv : Fin 2 ≃ Config where
-  toFun i := fun _ ↦ i
-  invFun σ := σ ⟨(), by simp⟩
-  left_inv _ := rfl
-  right_inv σ := by ext v; congr 1
+open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 private def regions : Fin 1 → Finset Unit := fun _ ↦ Finset.univ
 

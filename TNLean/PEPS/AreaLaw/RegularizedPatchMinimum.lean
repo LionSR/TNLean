@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
 import QICLean.Analysis.ShiftedDensityPowers
-import QICLean.Analysis.MatrixFramePerturbation
 import Mathlib.Topology.Order.Compact
 
 /-!
@@ -29,36 +28,6 @@ namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Out : V → Type*} [∀ v, Fintype (Out v)]
-
-open Classical in
-/-- The existing regional lift obeys its local Euclidean operator bound. -/
-theorem norm_dependentRegionOperatorLift_mulVec_le (R : Finset V)
-    (K : Matrix ((v : R) → Out v.1)
-      ((v : R) → Out v.1) ℂ)
-    (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
-    ‖WithLp.toLp 2 (dependentRegionOperatorLift R K *ᵥ ξ)‖ ≤ ‖K‖ * ‖ξ‖ := by
-  classical
-  let e := dependentRegionConfigEquiv (Out := Out) R
-  let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
-  have hmul : E (WithLp.toLp 2 (dependentRegionOperatorLift R K *ᵥ ξ)) =
-      WithLp.toLp 2 ((K ⊗ₖ 1) *ᵥ E ξ) := by
-    ext p
-    change (dependentRegionOperatorLift R K *ᵥ ξ) (e.symm p) = _
-    simp only [dependentRegionOperatorLift, Matrix.reindex_apply, Matrix.mulVec,
-      dotProduct, Equiv.symm_symm]
-    rw [← e.symm.sum_comp]
-    simp [E, e, LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft']
-  rw [← E.norm_map, hmul]
-  exact (Matrix.l2_opNorm_kronecker_one_mulVec_le K (E ξ)).trans_eq
-    (congrArg (‖K‖ * ·) (E.norm_map ξ))
-
-omit [∀ v, Fintype (Out v)] in
-/-- Lifting regional matrices is continuous. -/
-theorem continuous_dependentRegionOperatorLift (R : Finset V) :
-    Continuous (dependentRegionOperatorLift (Out := Out) R) := by
-  classical
-  unfold dependentRegionOperatorLift
-  exact (continuous_id.matrix_kronecker continuous_const).matrix_reindex _ _
 
 variable {m : ℕ} (regions : Fin m → Finset V)
 
@@ -127,7 +96,6 @@ theorem regularizedPatchDomain_nonempty
     ((v : regions j) → Out v.1) inferInstance (hn j)
   exact ⟨x, hx⟩
 
-
 /-- Each full-space regularized regional filter depends continuously on all densities. -/
 theorem continuousOn_regularizedPatchFilter (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
     (j : Fin m) :
@@ -164,7 +132,6 @@ theorem exists_isMinOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (
   (isCompact_regularizedPatchDomain regions).exists_isMinOn
     (regularizedPatchDomain_nonempty regions Ω hΩ)
     (continuousOn_regularizedPatchObjective regions a hb Ω)
-
 
 /-- Every local filter has the stated upper and lower Euclidean bounds. The lower
 bound uses cancellation with the positive power of the same shifted density. -/
@@ -244,7 +211,6 @@ theorem regularizedPatchObjective_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ 
     List.sum_reverse, List.sum_ofFn, ← Finset.sum_div, ← Finset.sum_neg_distrib,
     hΩ, mul_one, regularizedPatchObjective, regularizedPatchOutput,
     regularizedPatchOperator] using h
-
 
 /-- The common minimum value of the norm objective.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
