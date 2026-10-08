@@ -122,4 +122,3 @@ theorem card_replacementLabels_stackLength_le {C : Type} {a b : Layout C}
   exact stackLength_le r S δ
 
 end TNLean.PEPS.PairEffect
-
