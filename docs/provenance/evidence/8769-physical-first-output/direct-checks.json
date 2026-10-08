@@ -1,0 +1,123 @@
+{
+  "check": "raw Lean with package options and warnings as errors",
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "source_freeze_commit": "f15416476c61b343f79d19602dffe8b5489a49f0",
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "checked_source_rewrite": "Only TNLeanRelayOutput. imports become TNLean.PEPS.Approximation. imports in production. Mathematical declaration names and bodies are identical.",
+  "public_export_count": 43,
+  "modules": [
+    {
+      "module": "TNLean.PEPS.Approximation.PhysicalFirstExchange",
+      "production_source": "TNLean/PEPS/Approximation/PhysicalFirstExchange.lean",
+      "production_source_sha256": "fbc730dc615e00d34c36ebb5cdfc500b4544a9f989362de9f73955d93d95f30e",
+      "checked_source": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/PhysicalFirstExchange.lean",
+      "checked_source_sha256": "fbc730dc615e00d34c36ebb5cdfc500b4544a9f989362de9f73955d93d95f30e",
+      "artifact": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/PhysicalFirstExchange.olean",
+      "artifact_sha256": "3d274d6142c907b27335f2049819e3a2133c457479442b452670f4ae03372be5",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_triple_tmul",
+        "TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_threeFactors",
+        "TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_operator",
+        "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstLocationsEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstSourcesEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.participants_physicalFirstLocationsEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.slotCount_physicalFirstLocationsEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.branchLabels_physicalFirstLocationsEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.endpoints_physicalFirstSourcesEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sourceDims_physicalFirstSourcesEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_exchangeBlocks",
+        "TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.card_gateLocations_physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstParticipationEquiv",
+        "TNLean.PEPS.PairEffect.SourceCircuit.participationCount_physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_physicalFirstOutput"
+      ],
+      "strict_log": "PhysicalFirstExchange.strict.log",
+      "all_public_audit_source": "PhysicalFirstExchangeAudit.lean",
+      "all_public_audit_log": "PhysicalFirstExchangeAudit.strict.log"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PhysicalDensityPureInput",
+      "production_source": "TNLean/PEPS/Approximation/PhysicalDensityPureInput.lean",
+      "production_source_sha256": "87dbcb738b2460d8fd60956d2013cac3bca14623df386b1a635aa90ce3a21f8c",
+      "checked_source": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/PhysicalDensityPureInput.lean",
+      "checked_source_sha256": "87dbcb738b2460d8fd60956d2013cac3bca14623df386b1a635aa90ce3a21f8c",
+      "artifact": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/PhysicalDensityPureInput.olean",
+      "artifact_sha256": "9973713f63e792471057161b63452ef096243097cde59b18bcdf38e77ffef175",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_pure_input"
+      ],
+      "strict_log": "PhysicalDensityPureInput.strict.log",
+      "all_public_audit_source": "PhysicalDensityPureInputAudit.lean",
+      "all_public_audit_log": "PhysicalDensityPureInputAudit.strict.log"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness",
+      "production_source": "TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.lean",
+      "production_source_sha256": "1e5f6ba694f8258f5d8c6b1185df76e42d28a21725877c437b39eb918201a83d",
+      "checked_source": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/AuxiliaryRegisterFiniteness.lean",
+      "checked_source_sha256": "1e5f6ba694f8258f5d8c6b1185df76e42d28a21725877c437b39eb918201a83d",
+      "artifact": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/AuxiliaryRegisterFiniteness.olean",
+      "artifact_sha256": "b813e85282ce0d22c2f971c414eb3643836480313522b57c6baea31696e2702c",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_append",
+        "TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_mapOwner",
+        "TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_comp",
+        "TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepWord",
+        "TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_registers_sources_prepStack",
+        "TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepGate",
+        "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_registers",
+        "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers",
+        "TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem"
+      ],
+      "strict_log": "AuxiliaryRegisterFiniteness.strict.log",
+      "all_public_audit_source": "AuxiliaryRegisterFinitenessAudit.lean",
+      "all_public_audit_log": "AuxiliaryRegisterFinitenessAudit.strict.log"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PhysicalFirstReadout",
+      "production_source": "TNLean/PEPS/Approximation/PhysicalFirstReadout.lean",
+      "production_source_sha256": "608e62050f51c19542a86991d5eac5a8ed7503ac4d3555d04793be507b3a9699",
+      "checked_source": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/PhysicalFirstReadout.lean",
+      "checked_source_sha256": "131095fd5c54f484546a7423e3474f51659d9cdae4681006f85ed6fe31a49a62",
+      "artifact": "/tmp/tnlean-physical-output-join/TNLeanRelayOutput/PhysicalFirstReadout.olean",
+      "artifact_sha256": "7f2132d88a65df4332a3c3ae7039f6821a1197d9b6c1ca336e4e274940e89452",
+      "public_exports": [
+        "TNLean.PEPS.PairEffect.exchangedGarbageBasis",
+        "TNLean.PEPS.PairEffect.physicalFirstReadout",
+        "TNLean.PEPS.PairEffect.physicalFirstReadout_tmul",
+        "TNLean.PEPS.PairEffect.extendedPhysicalReadout_triple_tmul",
+        "TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_apply",
+        "TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_outerProduct",
+        "TNLean.PEPS.PairEffect.partialTrace_physicalFirstReadout_exchange",
+        "TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_physicalFirstOutput",
+        "TNLean.PEPS.PairEffect.EffectCircuit.physicalFirstReplacement",
+        "TNLean.PEPS.PairEffect.EffectCircuit.physicalDensity_physicalFirstReplacement",
+        "TNLean.PEPS.PairEffect.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact",
+        "TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half"
+      ],
+      "strict_log": "PhysicalFirstReadout.strict.log",
+      "all_public_audit_source": "PhysicalFirstReadoutAudit.lean",
+      "all_public_audit_log": "PhysicalFirstReadoutAudit.strict.log"
+    }
+  ],
+  "unperformed_checks": "Canonical Lake, blueprint declarations, full-library audit and manuscript builds belong to the coordinating integration branch."
+}
