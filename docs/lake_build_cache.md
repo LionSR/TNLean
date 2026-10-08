@@ -53,8 +53,9 @@ verification.
 
 ## Serialize local builds
 
-The seed command and the build wrapper use the standard macOS `lockf` utility
-with one lock file in Git's common directory. This serializes cooperating
+The seed command and the build wrapper acquire a blocking BSD file lock through
+Python 3's `fcntl.flock`, using one lock file in Git's common directory. Descriptor
+9 remains open in the command and its children. This serializes cooperating
 commands across TNLean worktrees without sharing writable package checkouts:
 
 ```bash
@@ -131,16 +132,28 @@ across one narrowly validated kind of QICLean revision update:
 - Use `hashFiles` on the baseline's original three files, then perform a
   **lookup-only** request restricted to that exact full-input prefix. Never use a
   broad `tnlean-build-` or toolchain-only prefix.
-- Validate the matched key's full commit against the frozen main first-parent
-  window and byte-identical baseline inputs. Require one unambiguous main-scoped
-  cache record and a successful main push build/save on `ubuntu-latest`, with the
-  original save key/path/policy verified at that commit. Metadata uses public,
-  unauthenticated REST reads, without a token or permission changes. The current runner must
-  be Linux/X64. Missing API access, evidence, caches, or supported configuration
-  causes ordinary uncached operation; it does not broaden the search.
-- After the normal toolchain/Mathlib setup, restore only that validated exact key.
-  Check the match and provenance again before use. A mismatch, partial restore,
-  or pruning failure stops the job rather than allowing direct Lean tests.
+- Require one unambiguous, exact, main-scoped REST record for the lookup match.
+  Its archive version witnesses the lookup action's paths/compression match.
+  Try that key first, then exact keys from the same frozen 64-commit main window.
+  Every candidate must have byte-identical baseline inputs, the same archive
+  version, one unambiguous main-scoped cache record, and a completed main push
+  workflow with a successful build/save on `ubuntu-latest`. Verify the original
+  save key/path/policy at each candidate commit. Refused candidates are skipped
+  before restoration; no completed candidate means ordinary uncached operation.
+  The [REST key filter](https://docs.github.com/en/rest/actions/cache#list-github-actions-caches-for-a-repository)
+  can also match prefixes, so require exact equality and a single result across
+  all refs/versions. Never filter out branch shadows or perform an unbounded scan.
+  The [archive version](https://github.com/actions/cache#cache-version) binds paths
+  and compression; missing or ambiguous lookup evidence refuses the fallback.
+  Metadata uses public, unauthenticated REST reads, without a token or permission
+  changes. The current runner must be Linux/X64. API errors refuse reuse without
+  retries or a broader search.
+- After the normal toolchain/Mathlib setup, restore only the selected exact key.
+  Check the match, archive version, and provenance again before use. Postrestore
+  refusal stops the job before pruning or building, without trying another cache.
+  Run/job refusals log public IDs, attempts, source/status/platform values, and
+  cache-save step results so inconsistent metadata can be diagnosed. A mismatch,
+  partial restore, or pruning failure never permits direct Lean tests.
 
 The fallback deliberately discards the cross-commit TNLean build. It also removes
 QIC aggregator artifacts, modules outside its root aggregator closure, dependency

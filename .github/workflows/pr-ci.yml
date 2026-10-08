@@ -86,6 +86,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
@@ -184,6 +185,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
@@ -323,6 +325,7 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
@@ -423,7 +426,7 @@ jobs:
             tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
           lookup-only: true
 
-      - name: Validate immutable compatible cache provenance
+      - name: Select a validated exact compatible cache
         id: compatible-cache
         if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-lookup.outputs.cache-matched-key != ''
         continue-on-error: true
@@ -435,7 +438,7 @@ jobs:
         run: |
           printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
           python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
-          python3 scripts/ci_compatible_cache.py validate \
+          python3 scripts/ci_compatible_cache.py select \
             --state "$RUNNER_TEMP/compatible-cache.json" \
             --prefix "$PREFIX" --matched "$MATCHED_KEY"
 
@@ -461,6 +464,7 @@ jobs:
           PRIMARY_KEY: ${{ steps.compatible-restore.outputs.cache-primary-key }}
           MATCHED_KEY: ${{ steps.compatible-restore.outputs.cache-matched-key }}
           VERIFIED_KEY: ${{ steps.compatible-cache.outputs.key }}
+          VERIFIED_VERSION: ${{ steps.compatible-cache.outputs.version }}
           PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
         run: |
           printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
@@ -468,7 +472,7 @@ jobs:
           # Check scope again after restore; refuse a shadow/replacement race.
           python3 scripts/ci_compatible_cache.py validate \
             --state "$RUNNER_TEMP/compatible-cache.json" \
-            --prefix "$PREFIX" --matched "$MATCHED_KEY"
+            --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
           python3 scripts/ci_compatible_cache.py prune
 
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
@@ -553,6 +557,46 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test concrete hole encoder and standard axioms strictly
+        run: |
+          for file in TNLeanTest/HoleEncoder.lean TNLeanTest/HoleEncoderAxioms.lean TNLeanTest/RegionOperatorEmbedding.lean TNLeanTest/RegionOperatorEmbeddingAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
+      - name: Test exact square-grid PEPS contraction and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/SquareGridContraction.lean
+
+      - name: Test nested-cylinder orthogonalization edge cases strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/NestedCylinderOrthogonalization.lean
+
+      - name: Test projected-image cylinder counterexamples strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/NestedCylinderCounterexamples.lean
+
+      - name: Test uniform angular reset width and standard axioms strictly
+        run: |
+          for file in TNLeanTest/PEPS/AngularResetWidth.lean TNLeanTest/PEPS/AngularResetWidthAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test actual rectangular local-window regression strictly
         run: >
@@ -927,8 +971,10 @@ jobs:
         run: python3 scripts/test_tenkz_inline_web.py
 
       - name: Diagnose full TeX system environment
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
+          cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
       - name: Check layout with TeX system dependencies
         run: |
@@ -1019,8 +1065,10 @@ jobs:
 
       - name: Install blueprint system dependencies
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
+        timeout-minutes: 20
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
+          cache-suffix: web-v3
           extra-packages: texlive-fonts-extra texlive-publishers
 
       # Also installed for paper-gap-only changes: the reference check
@@ -1051,6 +1099,10 @@ jobs:
       - name: Check paper-gap references resolve
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         run: texra-blueprint paper-gaps check
+
+      - name: Test blueprint PDF string-pool capacity
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_blueprint_pdf_capacity.py
 
       # Compile-and-cache smoke test of the tenkz picture pipeline
       # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark

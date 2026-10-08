@@ -82,6 +82,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction) records
+  that preservation of an on-site symmetry along the isometric deformation of
+  arXiv:1010.3732 is formalized for a supplied virtual unitary and for a single
+  injective block, where the fundamental theorem supplies that unitary; the
+  multiblock derivation of a unitary virtual action remains open.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
@@ -617,6 +622,12 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   with constants uniform in the volume and violates the printed bound. The
   note also shows that the vanishing of the martingale differences below the
   threshold is the minimal repair, and that repaired theorem is formalized.
+- `nachtergaele96_infinite_volume_ground_projection.tex` (open gap) records
+  that the finite-volume commutator estimate behind Nachtergaele's
+  infinite-volume gap retains the projection onto the whole finite-volume
+  ground space, so scalar centering of the observable does not by itself
+  remove that term in a degenerate finite volume; the formal limiting
+  statement keeps the projection decay as an explicit hypothesis.
 - `cpgsv21_block_parent_interaction_range.tex` records that the overlap
   argument for block-injective parent Hamiltonians first constructs a gapped
   range chosen by the argument, and the two-range comparison that transfers
@@ -1074,6 +1085,29 @@ tori of periods at least three, and the remaining tiny-period/twisted scope.
 records the single block-local map for every native closure and coherent
 sum, with the same original coarse tensor and normalized Bell factors.
 Coarse periods at least three and the stated boundary/support scope remain.
+
+### Polynomial PEPS approximation: small-patch rewrites
+
+[polypeps_small_rewrite_monomials.tex](polypeps_small_rewrite_monomials.tex)
+records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
+formalized for the canonical contraction and its reference error, with the
+branch expansion, the wire classification and the final rescaling of the
+approximation, and that the expansion into allowed monomials awaits the
+residual tensor network of a branch.
+
+### Polynomial PEPS approximation: changes of ownership
+
+[polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
+records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
+manuscript are formalized with their source hypotheses, including the canonical
+maps and both reference-error bounds. The bounded-change clauses are formalized
+on the party layout of Theorem 5.2 only with the raw registers of each region
+held by one party grouped into one register: the birth and the death as a
+private contraction, one normalized pair source or pair effect and a private
+contraction, and the exchange corrections as one private contraction. Placing
+these monomials on the registers of a frame, one per site and per tag, and
+writing the renaming of the exchange as a composition of reorderings of tensor
+factors, await that list of registers.
 
 ### Polynomial PEPS approximation: elimination of pair effects
 
