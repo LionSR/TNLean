@@ -178,11 +178,16 @@ rather than introduce a flatness assumption or a supplied gauge witness
 into the geometric deformation theorem.
 
 \section{Finite rectangular continuation}
-A finite rectangular specialization has passed strict Lean compilation and
-axiom checks in draft \ghpr{8726}.
+The finite bulk case of the deformation holds for embedded rectangles.
 Choose a translated lifted rectangle $[0,W]\times[0,H]$ with $W<w$ and
 $H<h$, retain the four unit-step labels, and require both paths to have
-the same lifted endpoints. A bottom-row and column comb reduces the
+the same lifted endpoints. Then the two projected paths are related by
+square moves and backtracks, and the two actual contractions with these
+paths are equal.\footnote{Lean statements:
+\leanid{TNLean.PEPS.TorusDualRectangle.homotopy} and
+\leanid{TNLean.PEPS.TorusDualRectangle.torusBondNetwork_eq_with_exterior};
+see \ghpr{8726}.}
+A bottom-row and column comb reduces the
 paths by adjacent-square exchanges and backtrack cancellations.
 The permitted swept primal sites form the whole rectangular interior
 $R=\{(x_0+i+1,y_0+j+1):i<W,\ j<H\}$, with coordinates reduced modulo
