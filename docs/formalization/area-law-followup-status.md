@@ -437,6 +437,21 @@ bindings and preserves every parent file except those inclusion lines.
 The historical bipartite source is retained; its four statements are replaced
 by the full QYV construction, with no parallel bipartite definitions.
 
+[QICLean #659](https://github.com/LionSR/QICLean/pull/659), at checked head
+`a820e67e`, bounds the joint exponential of both actual deficits in that
+common density. With only the unit one-copy vector and original simultaneous
+physical/C/R copy symmetry, every real exponent satisfying twice the exponent
+at most one has the average of the two polynomial moment bounds, multiplied
+by the same component's squared norm. The literal exterior-region exchange
+preserves Y and derives the second ground norm, symmetry and component mass.
+The source is `7c8099cf`, independent evidence `1966e51e`, and exact two-line
+inclusion `589ae558`. The full 9,825-job library build, strict source and fresh
+standard-kernel report, original provenance, 472-page PDF and complete
+web/native checks passed. Root independently inspected the proof, exact
+report, 89-file manifest and complete PDF/mobile statements and proofs.
+The arithmetic-mean estimate is an auxiliary polynomial step; physical
+spectral restriction and the inverse-compression theorem remain separate.
+
 [QICLean #658](https://github.com/LionSR/QICLean/pull/658), at checked head
 `f675fee8`, proves positivity of the actual merge deficit for commuting
 permutation actions and their pointwise product, then specializes it to the
@@ -455,8 +470,9 @@ The source physical space has independent regions Q, Y and V. A common
 component density for QC and VR must trace every Y copy, in addition to the
 bad physical and auxiliary copies. The local QC theorem above accommodates
 this by taking the physical complement to be YV. The common-density
-identities are now proved as above. The actual two-deficit moment and the
-compatible physical projection argument remain separate contributions. In particular,
+identities are now proved as above. The actual two-deficit moment is the separate auxiliary estimate above.
+The compatible physical projection and its application to the literal
+component density remain subsequent contributions. In particular,
 \(F_Q+F_V-F_Y\) cannot be identified globally with the QV merge deficit.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
@@ -593,6 +609,22 @@ actual correction-term integral estimate has passed strict checking. The
 common-sample error estimate and sampled operator network remain under
 construction; these later proofs are not assigned the earlier contribution's
 verification records.
+
+[TNLean #8912](https://github.com/LionSR/TNLean/pull/8912), at head
+`2f5a2d3f4163dd25caf8c0845bc81b6c5826493f`, constructs the original circuit's
+source-only replacement with physical density error at most half the
+prescribed accuracy, retaining participating parties, whole-lifetime counts,
+coefficient bounds and unequal physical dimensions. It also constructs the
+actual Schmidt input and output data with their original physical/discarded
+coordinates. Mathematical source: `33695425897e6f9895884741c0677aa38750361b`.
+The coordinator reports 48 strict compilations, 328 standard-kernel reports
+(300 new and 28 inherited declarations), 14,697 imported artifact hashes,
+a direct library-root check of all 21,283 blueprint names, and the visually
+reviewed 55-page focused PDF and seven-page web reader. These are precise
+narrow checks; no full Lake build or declaration-checker invocation is
+claimed. The subsequent actual corrected-term integral estimate and common
+sampling proofs are separately checked and await their own contribution;
+the final sampled tensor-network representation remains unfinished.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
