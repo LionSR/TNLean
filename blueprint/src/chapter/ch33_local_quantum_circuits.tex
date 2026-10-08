@@ -16,10 +16,12 @@
 A chain of $N$ sites of local dimension $d$ carries $(\C^d)^{\otimes N}$, with
 the computational basis labelled by the configurations of the chain. A local
 circuit is a product of layers of unitaries on disjoint pairs of neighbouring
-sites of the chain closed into a ring \cite{Malz2024Preparation}. A circuit of
-depth $T$ enlarges the set of sites on which an operator acts by at most $T$
-sites on each side, so a state that it prepares from a product state has no
-connected correlations beyond distance $2T$, and every unitary on a bounded
+sites of the chain closed into a ring \cite{Malz2024Preparation}, or more
+generally on disjoint bonds of a geometry such as the edges of a lattice
+\cite{Piroli2021LOCC}. A circuit of depth $T$ enlarges the set of sites on
+which an operator acts by at most $T$ steps along the bonds, on the ring by at
+most $T$ sites on each side, so a state that it prepares from a product state
+has no connected correlations beyond distance $2T$, and every unitary on a bounded
 number of sites is a product of a bounded number of gates on neighbouring
 sites. Measurements in the computational basis, followed by corrections on
 single sites chosen from all the outcomes \cite{Piroli2021LOCC}, prepare
@@ -37,6 +39,8 @@ preparation of matrix product states.
     \label{def:qc_local_circuit}
     \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
         QuantumCircuit.Layer, QuantumCircuit.circuitOp,
+        QuantumCircuit.BondLayer, QuantumCircuit.IsBondCircuitOfDepth,
+        QuantumCircuit.IsBondPreparedInDepth, QuantumCircuit.ringBond,
         QuantumCircuit.supportedOperators,
         QuantumCircuit.rectKronecker_mem_supportedOperators}
     \leanok
@@ -45,14 +49,21 @@ preparation of matrix product states.
     neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
     local circuit of depth $T$ applied to a product state.
 
+    More generally, a \emph{bond geometry} on a finite set of sites $I$ is a
+    family $(B_b)_{b\in\beta}$ of subsets of $I$, the bonds, and a layer is a
+    product of unitaries acting on pairwise disjoint bonds. The model of
+    \cite{Piroli2021LOCC} on a lattice takes for bonds the pairs of
+    nearest-neighbour sites, that is the edges of a graph. Local circuits of
+    depth $T$ and states prepared in depth $T$ are defined in the same way for
+    every bond geometry.
+
     The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
-    $\{k,k+1\}$ with indices modulo $N$, and a circuit whose gates avoid the
-    wrap-around pair $\{N,1\}$ is a circuit on the open chain. An operator
+    $\{k,k+1\}$ with indices modulo $N$; for $N=1$ the only pair is $\{1\}$,
+    and for $N=2$ both pairs are $\{1,2\}$. The open chain has the pairs
+    $\{k,k+1\}$ with $k<N$. An operator
     \emph{acts on} a set of sites $X$ if it
     lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
-    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
-    are at distance larger than $s$ if no site of one is within ring distance
-    $s$ of a site of the other.
+    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$.
 
     Acting on a set of sites needs no geometry: for any finite set of sites
     $I$ and $X\subseteq I$, an operator on $(\C^d)^{\otimes I}$ acts on $X$ if
@@ -61,23 +72,85 @@ preparation of matrix product states.
     $I=\{1,\dots,N\}$.
 \end{definition}
 
+\begin{definition}[Light cone of a bond geometry]
+    \label{def:qc_light_cone_geometry}
+    \uses{def:qc_local_circuit}
+    \lean{QuantumCircuit.bondNeighbourhood, QuantumCircuit.lightCone,
+        QuantumCircuit.neighbourhood, QuantumCircuit.IsSeparatedBy,
+        QuantumCircuit.openBond, QuantumCircuit.edgeBond}
+    \leanok
+    For a bond geometry $(B_b)_{b\in\beta}$ on $I$ and $X\subseteq I$, the
+    \emph{one-step neighbourhood} of $X$ is $X$ together with every bond that
+    meets $X$, and the \emph{light cone of radius $r$} of $X$ is its $r$-fold
+    one-step neighbourhood. On the ring, the sites within ring distance $r$ of
+    $X$ are the sites $i+m$ with $i\in X$ and $\lvert m\rvert\le r$, indices
+    modulo $N$, and two sets of sites are at distance larger than $s$ if no
+    site of one is within ring distance $s$ of a site of the other. For a
+    graph, the bonds are its edges, and the distance of two vertices is the
+    least number of edges of a path joining them, as in
+    \cite{Piroli2021LOCC}.
+\end{definition}
+
+\begin{lemma}[Light cones of the ring, the open chain and a graph]
+    \label{lem:qc_light_cone_geometries}
+    \uses{def:qc_light_cone_geometry}
+    \lean{QuantumCircuit.lightCone_ringBond,
+        QuantumCircuit.bondNeighbourhood_ringBond, QuantumCircuit.neighbourhood_succ,
+        QuantumCircuit.disjoint_lightCone_ringBond_of_isSeparatedBy,
+        QuantumCircuit.lightCone_openBond_subset, QuantumCircuit.disjoint_lightCone_openBond,
+        QuantumCircuit.lightCone_edgeBond_subset,
+        QuantumCircuit.lightCone_edgeBond_subset_dist,
+        QuantumCircuit.disjoint_lightCone_edgeBond,
+        QuantumCircuit.disjoint_lightCone_edgeBond_of_dist,
+        QuantumCircuit.lightCone_lightCone}
+    \leanok
+    On the ring of $N$ sites, for every $N\ge1$, the light cone of radius $r$
+    of $X$ is the set of sites within ring distance $r$ of $X$. On the open
+    chain it is contained in the set of sites within distance $r$ of $X$ along
+    the chain, and for the edges of a graph it is contained in the set of
+    vertices at graph distance at most $r$ from $X$. In each case, sets of
+    sites at distance larger than $2r$ have disjoint light cones of radius
+    $r$. For every bond geometry, the light cone of radius $s$ of the light
+    cone of radius $r$ of $X$ is the light cone of radius $r+s$ of $X$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    On the ring, the bonds meeting $X$ are $\{i-1,i\}$ and $\{i,i+1\}$ for
+    $i\in X$, so the one-step neighbourhood is the set of sites within ring
+    distance $1$, and a displacement of modulus at most $r+1$ is one of
+    modulus at most $r$ followed by one of modulus at most $1$. In the other
+    two cases, two sites on a common bond are at distance at most $1$, and the
+    inclusion follows by induction on $r$ and the triangle inequality. A site
+    in both light cones would give, by the triangle inequality, two points of
+    the two sets at distance at most $2r$. The composition law holds because
+    the light cone of radius $r$ is the $r$-fold iterate of the one-step
+    neighbourhood.
+\end{proof}
+
 \begin{lemma}[Light cone of a local circuit]
     \label{lem:qc_light_cone}
-    \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.conj_circuitOp_mem_supportedOperators}
+    \uses{def:qc_local_circuit, def:qc_light_cone_geometry,
+        lem:qc_light_cone_geometries}
+    \lean{QuantumCircuit.conj_circuitOp_mem_supportedOperators,
+        QuantumCircuit.IsBondCircuitOfDepth.conj_mem_supportedOperators,
+        QuantumCircuit.conj_circuitOp_mem_supportedOperators_lightCone,
+        QuantumCircuit.BondLayer.conj_op_mem_supportedOperators}
     \leanok
-    Let $U$ be a local circuit of depth $T$ and let $Z$ act on a set of sites
-    $X$. Then $U^\dagger ZU$ acts on the sites within ring distance $T$ of $X$.
-    This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
+    Let $U$ be a local circuit of depth $T$ on a bond geometry and let $Z$ act
+    on a set of sites $X$. Then $U^\dagger ZU$ acts on the light cone of
+    radius $T$ of $X$; on the ring, on the sites within ring distance $T$ of
+    $X$. This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
 \end{lemma}
 \begin{proof}
     \leanok
     By induction on the layers it suffices to treat one layer $W$. Split its
-    gates into those whose pair meets $X$, with product $G$, and the others,
+    gates into those whose bond meets $X$, with product $G$, and the others,
     with product $H$. The gates commute, so $W=HG$. The operator $H$ is unitary
     and acts on the complement of $X$, so it commutes with $Z$ and
-    $W^\dagger ZW=G^\dagger ZG$. The pairs of $G$ lie within distance $1$ of
-    $X$, and products and adjoints of operators acting on a set act on it.
+    $W^\dagger ZW=G^\dagger ZG$. The bonds of $G$ lie in the one-step
+    neighbourhood of $X$, and products and adjoints of operators acting on a
+    set act on it. On the ring, Lemma~\ref{lem:qc_light_cone_geometries}
+    identifies the light cone.
 \end{proof}
 
 \begin{lemma}[No connected correlations beyond the light cone]
@@ -85,11 +158,15 @@ preparation of matrix product states.
     \uses{lem:qc_light_cone}
     \lean{QuantumCircuit.expect_mul_eq_of_isPreparedInDepth,
         QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth,
+        QuantumCircuit.IsBondPreparedInDepth.expect_mul_eq,
+        QuantumCircuit.IsBondPreparedInDepth.expect_mul_mul_expect_one,
         QuantumCircuit.expect_productVector_rectKronecker,
         QuantumCircuit.expect_productVector_mul}
     \leanok
-    Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
-    act on sets of sites at distance larger than $2T$. Then
+    Let $\ket{\psi}$ be a unit vector prepared in depth $T$ on a bond
+    geometry, and let $Z$, $Z'$ act on sets of sites whose light cones of
+    radius $T$ are disjoint, for instance on the ring sets at distance larger
+    than $2T$. Then
     $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
     Without the normalization, every vector $\ket{\psi}$ prepared in depth $T$
     satisfies
@@ -122,16 +199,16 @@ preparation of matrix product states.
 \begin{lemma}[Inverses and series composition of local circuits]
     \label{lem:qc_circuit_inverse_composition}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.Layer.adjoint, QuantumCircuit.Layer.adjoint_partialOp,
-        QuantumCircuit.Layer.adjoint_op, QuantumCircuit.circuitOp_append,
+    \lean{QuantumCircuit.BondLayer.adjoint, QuantumCircuit.BondLayer.adjoint_partialOp,
+        QuantumCircuit.BondLayer.adjoint_op, QuantumCircuit.circuitOp_append,
         QuantumCircuit.circuitOp_map_adjoint_reverse,
-        QuantumCircuit.IsLocalCircuitOfDepth.mem_unitary,
-        QuantumCircuit.IsLocalCircuitOfDepth.star,
-        QuantumCircuit.IsLocalCircuitOfDepth.mul}
+        QuantumCircuit.IsBondCircuitOfDepth.mem_unitary,
+        QuantumCircuit.IsBondCircuitOfDepth.star,
+        QuantumCircuit.IsBondCircuitOfDepth.mul}
     \leanok
     For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
-    on the same pairs implements $W^\dagger$, and the same holds for the
-    product of the gates of $W$ over any subset of its pairs. If a circuit
+    on the same bonds implements $W^\dagger$, and the same holds for the
+    product of the gates of $W$ over any subset of its bonds. If a circuit
     has the layers $W_1,\dots,W_T$, applied in this order, and implements $U$,
     then the circuit with the layers $W_T^\dagger,\dots,W_1^\dagger$
     implements $U^\dagger$; the layers of a circuit implementing $U$ followed
@@ -144,7 +221,7 @@ preparation of matrix product states.
     \leanok
     If $U=W_T\cdots W_1$ with layers $W_k$, then
     $U^\dagger=W_1^\dagger\cdots W_T^\dagger$, and $W_k^\dagger$ is the layer
-    whose gates are the adjoints of the gates of $W_k$, on the same pairs. The
+    whose gates are the adjoints of the gates of $W_k$, on the same bonds. The
     layers of $U'U$ are those of $U$ followed by those of $U'$.
 \end{proof}
 
@@ -264,21 +341,24 @@ preparation of matrix product states.
 
 \begin{lemma}[Circuits inside sets of sites, in series and in parallel]
     \label{lem:qc_parallel_circuits}
-    \lean{QuantumCircuit.Layer.IsIn, QuantumCircuit.IsCircuitOn,
-        QuantumCircuit.IsCircuitOn.mul, QuantumCircuit.IsCircuitOn.finset_noncommProd,
+    \lean{QuantumCircuit.BondLayer.IsIn, QuantumCircuit.IsBondCircuitOn,
+        QuantumCircuit.IsCircuitOn, QuantumCircuit.IsBondCircuitOn.mul,
+        QuantumCircuit.IsBondCircuitOn.finset_noncommProd,
+        QuantumCircuit.IsCircuitOn.finset_noncommProd,
         QuantumCircuit.IsPairProduct.isCircuitOn,
         QuantumCircuit.isCircuitOn_list_prod_embedOp}
     \leanok
     \uses{def:qc_local_circuit, lem:qc_circuit_inverse_composition,
         lem:qc_placed_operators}
-    A layer acts \emph{inside} a set of sites $R$ if each of its pairs is
+    A layer acts \emph{inside} a set of sites $R$ if each of its bonds is
     contained in $R$, and $U$ is a \emph{local circuit of depth $T$ inside
         $R$} if it is implemented by $T$ layers acting inside $R$. If $U$ and
     $U'$ are local circuits inside $R$ of depths $T$ and $T'$, then $U'U$ is a
-    local circuit inside $R$ of depth $T+T'$. If $U_i$, $i\in I$ for a finite
-    set $I$, are pairwise commuting local circuits of depth $T$ inside
-    pairwise disjoint sets $R_i$, then their product is a local circuit of
-    depth $T$ inside $\bigcup_{i\in I}R_i$. Let $e$ be an injective map from
+    local circuit inside $R$ of depth $T+T'$. For a bond geometry whose bonds
+    are nonempty, such as the ring, if $U_i$, $i\in I$ for a finite set $I$,
+    are pairwise commuting local circuits of depth $T$ inside pairwise
+    disjoint sets $R_i$, then their product is a local circuit of depth $T$
+    inside $\bigcup_{i\in I}R_i$. Let $e$ be an injective map from
     the sites of an open chain of $m$ sites into the ring with
     $e(j+1)=e(j)+1$. If $X$ is a product of at most $K$ unitaries, each acting
     on two neighbouring sites of the open chain, then $X$ placed by $e$ is a
@@ -293,8 +373,9 @@ preparation of matrix product states.
     (Lemma~\ref{lem:qc_circuit_inverse_composition}). In parallel, by
     induction on $I$, the layers of two circuits of depth $T$ inside disjoint
     sets are merged one by one: the union of two layers acting inside disjoint
-    sets is a layer, and the circuit inside one set commutes with every layer
-    inside the other. A product of $K$ gates on neighbouring sites of the open
+    sets is a layer, whose operator is the product of the two because the
+    nonempty bonds of the two layers are distinct, and the circuit inside one
+    set commutes with every layer inside the other. A product of $K$ gates on neighbouring sites of the open
     chain, placed by $e$, is the circuit whose $j$-th layer is the $j$-th gate
     placed by $e$, padded with empty layers; the products on disjoint ranges
     then run in parallel.
