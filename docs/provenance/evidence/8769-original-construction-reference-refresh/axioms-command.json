@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true",
+    "Audit.lean"
+  ],
+  "cwd": "/private/tmp/tnlean-convention-reference-refresh/src",
+  "returncode": 0,
+  "seconds": 6.452642582997214,
+  "source_revision": "98d16bce7908740fa90676f850ce7d399dda1230",
+  "source_path": "TNLean/PEPS/Approximation/DistributedConstruction.lean",
+  "source_sha256": "4edf8d2f8042e7dc3a66b7660838ad2346fa360e0fd25fd7e703546c2d200a1d",
+  "audit_source_sha256": "8ea94eb0872efeca25688027a2dec061ef37bd0fb87fa5684125207047ef4a1a",
+  "log_sha256": "ebc4f89e4f6fe07561ae30c55e0e603649ef45b3c2f079eca292427042473717"
+}
