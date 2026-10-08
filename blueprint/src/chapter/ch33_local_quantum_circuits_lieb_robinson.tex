@@ -200,3 +200,85 @@ contains any given site sum to at most $b_0$.
     $X_i\subseteq C$ and $y\notin C$. Apply
     Lemma~\ref{lem:qc_lr_closed_region}.
 \end{proof}
+
+\paragraph{Normalized partial traces.}
+For $K\subseteq I$ let
+$E_K(B)=q^{-|I\setminus K|}\operatorname{Tr}_{I\setminus K}(B)\otimes\mathbb 1_{I\setminus K}$,
+with every tensor factor at its original site.
+
+\begin{definition}[Normalized partial-trace expectation]
+    \label{def:qc_site_expectation}
+    \lean{QuantumCircuit.siteExpectation, QuantumCircuit.traceOutside,
+        QuantumCircuit.siteExpectationLM}\leanok
+    The map $E_K$ on the operators of $(\C^q)^{\otimes I}$ defined above.
+\end{definition}
+
+\begin{lemma}[Weyl averaging formula]
+    \label{lem:qc_site_expectation_average}
+    \lean{QuantumCircuit.siteExpectation_eq_average,
+        QuantumCircuit.sum_localWeyl_mul_star, QuantumCircuit.outsideWeyl}\leanok
+    \uses{def:qc_site_expectation}
+    Let $q\geq1$, and for $p=(a,b)$ let $W(p)=X^aZ^b$ be the Weyl operators on
+    $\C^q$. Then $E_K(B)$ is the uniform average of $W_pBW_p^\dagger$ over all
+    products $W_p=\bigotimes_{x\notin K}W(p_x)$ of Weyl operators outside $K$.
+\end{lemma}
+\begin{proof}\leanok
+    The Weyl operators satisfy
+    $\sum_pW(p)_{ii'}\overline{W(p)_{jj'}}=q\,\delta_{ij}\delta_{i'j'}$. The
+    corresponding sum over the products factorizes over the sites, and the
+    resulting Kronecker deltas reproduce the partial-trace formula.
+\end{proof}
+
+\begin{lemma}[Properties of the expectation]
+    \label{lem:qc_site_expectation_properties}
+    \lean{QuantumCircuit.siteExpectation_mem_supportedOperators,
+        QuantumCircuit.siteExpectation_of_mem_supportedOperators,
+        QuantumCircuit.siteExpectation_one, QuantumCircuit.norm_siteExpectation_le,
+        QuantumCircuit.siteExpectationLM_isKrausCPTP}\leanok
+    \uses{lem:qc_site_expectation_average}
+    For $q\geq1$, the map $E_K$ takes values in $\mathcal A_K$, fixes every
+    operator in $\mathcal A_K$, is unital, completely positive and trace
+    preserving, and is a contraction in operator norm.
+\end{lemma}
+\begin{proof}\leanok
+    The values act on $K$ by the partial-trace formula. The averaging formula
+    is a Kraus decomposition by rescaled unitaries. Operators acting on $K$
+    commute with every $W_p$. A uniform average of unitary conjugations is a
+    contraction.
+\end{proof}
+
+\begin{lemma}[Localization error through on-site commutators]
+    \label{lem:qc_site_expectation_commutator}
+    \lean{QuantumCircuit.norm_sub_siteExpectation_le}\leanok
+    \uses{lem:qc_site_expectation_average}
+    If $\|[B,U]\|\leq\varepsilon_y$ for every site $y\notin K$ and every unitary
+    $U\in\mathcal A_{\{y\}}$, then $\|B-E_K(B)\|\leq\sum_{y\notin K}\varepsilon_y$.
+\end{lemma}
+\begin{proof}\leanok
+    By the averaging formula, $B-E_K(B)$ is the average of
+    $(BW_p-W_pB)W_p^\dagger$. Write $W_p$ as a product of on-site unitaries and
+    use $\|[B,UV]\|\leq\|[B,U]\|+\|[B,V]\|$ for unitaries $U,V$.
+\end{proof}
+
+\begin{theorem}[Localization onto graph balls]
+    \label{thm:qc_graph_ball_localization}
+    \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le,
+        QuantumCircuit.graphBall, QuantumCircuit.sum_pow_mul_exp_neg_le}\leanok
+    \uses{thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,
+        lem:qc_site_expectation_commutator,lem:qc_site_expectation_properties}
+    In the setting of Theorem~\ref{thm:qc_graph_lieb_robinson}, with $q\geq1$,
+    assume that at most $K_g(d+1)^k$ sites lie at distance exactly $d$ from any
+    site. Let $N_l(a)=\{x:d_G(a,x)\leq l\}$. Then
+    \[
+        \|\tau_t(A)-E_{N_l(a_i)}(\tau_t(A))\|
+        \leq\|A\|\min\bigl\{2,\;Ce^{v|t|-l/2}\bigr\},
+    \]
+    with $v=2v_Rb_0e^{2R}$ and $C=2e^RK_g\,2^kk!\,e^{1/2}/(1-e^{-1/2})$.
+\end{theorem}
+\begin{proof}\leanok
+    The bound $2\|A\|$ follows from contractivity. For the other bound, apply the
+    commutator lemma with $\varepsilon_y=0$ when $d_G(a_i,y)=\infty$ and
+    $\varepsilon_y=2e^R\|A\|e^{v|t|-d_G(a_i,y)}$ otherwise, using graph-distance
+    propagation with $\mu=1$. Group the sites outside the ball by their distance
+    $d>l$, and use $(d+1)^k\leq2^kk!\,e^{(d+1)/2}$ and a geometric series.
+\end{proof}

@@ -474,7 +474,7 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn (d D :
   · have hc := (isCircuitOn_pairLayerOp hN hr fun k => hKw (W k) (hWu k)).mul
       (isCircuitOn_blockLayerOp hN fun k => (hUpp k).mono
         (Nat.mul_le_mul_left Cb (hL k)))
-    refine (hc.mono ?_).isLocalCircuitOfDepth
+    refine (hc.mono ?_).isBondCircuitOfDepth
     have : Kw ≤ Kw * L := Nat.le_mul_of_pos_right _ hL1
     nlinarith
   · exact chainBlockIsometryState_eq_mulVec hd hN hr hdig A ω
