@@ -181,7 +181,7 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
     exact blockLayerOp_pairLayerOp_mulVec_registerCfg hN hr hdig A S (ω j)
       (by simpa using hω j j) (hωS j) (dig₀ j) hU (fun u => hW u j)
   exact ⟨blockLayerOp hN U * pairLayerOp hN hr (fun _ => W), KW + Cb * L,
-    hcirc.isLocalCircuitOfDepth, by nlinarith, hj⟩
+    hcirc.isBondCircuitOfDepth, by nlinarith, hj⟩
 
 /-- Compatibility interface with support at every ring size. The actual-ring theorem above
 needs only the support of the input it is asked to compile. -/

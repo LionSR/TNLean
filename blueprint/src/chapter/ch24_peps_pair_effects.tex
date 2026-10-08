@@ -346,8 +346,9 @@ and $m\ge1$.
     An allowed monomial on parties is a chain of source-only compositions
     separated by pair effects. Each pair effect contracts a register
     $\mathbb C^\alpha$ of a party $p$ and a register $\mathbb C^\beta$ of a
-    party $q\ne p$ with a bra $\langle\eta|$, $\eta\in\mathbb C^\alpha\otimes
-        \mathbb C^\beta$; the monomial is allowed when its source-only compositions
+    party $q\ne p$ with a bra $\langle\eta|$, where
+    $\eta\in\mathbb C^\alpha\otimes\mathbb C^\beta$; the monomial is
+    allowed when its source-only compositions
     are allowed and every $\eta$ is a unit vector. An effect on arbitrary
     finite-dimensional registers of $p$ and $q$ takes this form after local
     isometric identifications with $\mathbb C^\alpha$ and $\mathbb C^\beta$
@@ -443,8 +444,9 @@ and $m\ge1$.
     \lean{TNLean.PEPS.PairEffect.combineSources}
     \leanok
     \uses{def:peps_party_layout}
-    Let $\eta\in\mathcal U\otimes\mathcal V$ and $\eta'\in\mathcal
-        U'\otimes\mathcal V'$ be pair vectors on the parties $p\ne q$. Preparing
+    Let $\eta\in\mathcal U\otimes\mathcal V$ and
+    $\eta'\in\mathcal U'\otimes\mathcal V'$ be pair vectors on the parties
+    $p\ne q$. Preparing
     $\eta'$ and then $\eta$, and merging the two new registers of $p$ into
     $\mathcal U\otimes\mathcal U'$ and the two new registers of $q$ into
     $\mathcal V\otimes\mathcal V'$, is the preparation of the regrouped vector

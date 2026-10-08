@@ -24,6 +24,45 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### A positive binary measurement from an orthogonal projector — promoted (2026-10-03)
+
+- **Pattern:** Derive Hermiticity, positivity, idempotence, orthogonality and
+  completeness for a projector and its complement.
+- **Occurrences:** The return measurement in `PEPS/RegularChargePair.lean`,
+  the physical charge measurement in `PEPS/RegularTwoSitePhysicalChargeMeasurement.lean`,
+  and the physical transport in `Algebra/ScaledProjectionTransport.lean`.
+- **Abstraction:** `Matrix.binaryProjectionFamily_complete` in
+  `Algebra/BinaryProjectionFamily.lean`; all three calculations use this lemma.
+- **Related reuse:** `Matrix.scaledProjectionTransport_properties` replaces the
+  private transported-projection calculation in the two-site charge measurements.
+  It proves positivity and the coefficient-map intertwiner from the explicit
+  scaled Gram identity, support identity and commuting virtual projector.
+
+### Absorption of the regional regular projector — promoted (2026-10-03)
+
+- **Pattern:** Expand the product physical map, apply local absorption of the
+  regular averaging projector, and reassemble the product to obtain AP=A.
+- **Abstraction:** `regionPhysicalProductMatrix_mul_regularLocalProjector` in
+  `PEPS/RegularPhysicalUnitaryTransport.lean` states this regional identity once.
+- **Reuse:** The physical charge-pair image proof and original-spin return
+  measurement use it directly. The two-site local data calculation already uses
+  `regularSiteMap_projector_coefficients`, the same underlying local identity.
+  The return measurement also uses `Matrix.exists_binaryProjectionFamily_transport`
+  for the complete positive measurement on the full physical space.
+
+### Column selection identified with a fixed-input contraction — promoted (2026-10-07)
+
+- **Pattern:** Select a nonzero column with
+  `exists_column_ne_zero_of_traceNorm_sub_pure_le`, rewrite it as the
+  contraction of the network with the input fixed, and repackage.
+- **Seen:** Two sites in `TNLean/PEPS/Approximation/VectorColumn.lean` and two
+  in `TNLean/PEPS/Approximation/SquareGridColumn.lean`.
+- **Abstraction:** `exists_eq_column_ne_zero_of_traceNorm_sub_pure_le` in
+  `ColumnSelection`, taking a family `ψ z` identified with the columns `σ|z⟩`.
+- **Refactor:** Both square-grid sites use it. The two `VectorColumn` sites
+  already state their conclusion for the column itself and take the base lemma
+  directly, with no rewrite step.
+
 ### Periodic norm as transfer trace — promoted (2026-10-06)
 
 - **Pattern:** Apply the physical expectation trace identity to the identity
@@ -929,7 +968,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
+  `trace_rectKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
   and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
 - **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
@@ -5573,3 +5612,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   eliminating the two layout equalities by `cases` and closing by reflexivity,
   all in `WordRestriction.lean`. These express the defining equations of the
   equality transport; there is no repeated proof argument across files.
+
+### Complementary-slice reconstruction — candidate (2026-10-07)
+
+- **Pattern:** Choose one inside vector for each outside configuration and
+  reconstruct the global vector by composing with the regional configuration
+  equivalence. Applying a slice reduces to the equivalence's inverse law.
+- **Seen:** `range_dependentRegionOperatorLift` and the two summands in
+  `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Cylinder`.
+- **Abstraction:** None yet; these three occurrences are in one file. Reuse the
+  existing configuration equivalence before introducing another reconstruction
+  map if a second file needs the same argument.
+- **Notes:** This argument permits an empty complementary configuration type;
+  it never cancels an identity extension or assumes that the outside factor is
+  nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
+  its default thresholds.
