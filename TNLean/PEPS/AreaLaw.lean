@@ -13,6 +13,7 @@ import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
+import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.AreaLaw.EntropyDimension
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation

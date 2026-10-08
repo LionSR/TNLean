@@ -1,4 +1,4 @@
-import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
+import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCounts
 
 /-!
 # Actual-template mixed-square regressions
@@ -154,3 +154,133 @@ example (S : Finset (ℤ × ℤ)) (k : ℕ) :
       ∑ i ∈ ({0, 1, 2} : Finset ℕ),
         (mixedDyadicIndices (if i = 2 then ∅ else S) k).card :=
   card_mixedDyadicIndices_biUnion_le _ _ k
+
+-- The core below-cap estimate applies to the actual nonempty template and is
+-- not an assumption on the partition. Here cap one is the largest permitted cap.
+example : 2 ^ 0 * ((cappedDyadicPartition thinDiagonalTemplate.points 1).filter
+    (fun c ↦ c.1 = 0)).card ≤ 4 * 96 :=
+  thinDiagonalTemplate.card_cappedDyadicPartition_below_cap_le (by norm_num)
+    1 0 (by decide) (by decide)
+
+example : ((cappedDyadicPartition thinDiagonalTemplate.points 1).filter
+    (fun c ↦ c.1 = 0)).card = 3 := by
+  change ((cappedDyadicPartition thinDiagonalSample 1).filter
+    (fun c ↦ c.1 = 0)).card = 3
+  decide
+
+-- The strict upper cap boundary s₀ = 2^(K+1) - 1 is admitted.
+example : 2 ^ 1 * ((cappedDyadicPartition thinDiagonalTemplate.points 1).filter
+    (fun c ↦ c.1 = 1)).card ≤ 18 * 96 :=
+  thinDiagonalTemplate.card_cappedDyadicPartition_at_cap_le (by norm_num) 1 (by decide)
+
+-- Cap zero has no lower scales; this checks that the below-cap API does not
+-- accidentally replace strict scale comparison with a non-strict one.
+example (k : ℕ) : ¬ k < 0 := by omega
+
+set_option linter.hashCommand false in
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_at_cap_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_at_cap_le
+set_option linter.hashCommand false in
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_below_cap_le'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_below_cap_le
+
+/-- An axis-aligned closed unit square, with all four lattice vertices sampled. -/
+private noncomputable def unitSquarePolygon : TemplatePolygon :=
+  .rectangle (0, 0) (1, 0) (0, 1)
+    (by norm_num) (by norm_num) (by norm_num)
+    (by norm_num [IsAllowedSlope]) (by norm_num [IsAllowedSlope])
+
+private def unitSquareSample : Finset (ℤ × ℤ) := {(0, 0), (1, 0), (1, 1), (0, 1)}
+
+private theorem unitSquare_bounds {p : ℝ × ℝ} (hp : p ∈ unitSquarePolygon.region) :
+    (0 ≤ p.1 ∧ p.1 ≤ 1) ∧ (0 ≤ p.2 ∧ p.2 ≤ 1) := by
+  have h : unitSquarePolygon.region ⊆ Set.Icc (0 : ℝ) 1 ×ˢ Set.Icc (0 : ℝ) 1 := by
+    apply convexHull_min _ ((convex_Icc _ _).prod (convex_Icc _ _))
+    intro z hz
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz
+    rcases hz with rfl | rfl | rfl | rfl <;> norm_num
+  exact h hp
+
+private theorem unitSquare_sample_iff (p : ℤ × ℤ) :
+    p ∈ unitSquareSample ↔ integerPoint p ∈ unitSquarePolygon.region := by
+  constructor
+  · intro hp
+    apply subset_convexHull ℝ
+    simp only [unitSquareSample, Finset.mem_insert, Finset.mem_singleton] at hp
+    rcases hp with rfl | rfl | rfl | rfl <;>
+      norm_num [integerPoint]
+  · intro hp
+    obtain ⟨⟨hx₀, hx₁⟩, ⟨hy₀, hy₁⟩⟩ := unitSquare_bounds hp
+    change 0 ≤ (p.1 : ℝ) at hx₀
+    change (p.1 : ℝ) ≤ 1 at hx₁
+    change 0 ≤ (p.2 : ℝ) at hy₀
+    change (p.2 : ℝ) ≤ 1 at hy₁
+    have hx : p.1 = 0 ∨ p.1 = 1 := by
+      have : (0 : ℤ) ≤ p.1 ∧ p.1 ≤ 1 := by exact_mod_cast And.intro hx₀ hx₁
+      omega
+    have hy : p.2 = 0 ∨ p.2 = 1 := by
+      have : (0 : ℤ) ≤ p.2 ∧ p.2 ≤ 1 := by exact_mod_cast And.intro hy₀ hy₁
+      omega
+    rcases p with ⟨x, y⟩
+    rcases hx with rfl | rfl <;> rcases hy with rfl | rfl <;>
+      simp [unitSquareSample]
+
+private noncomputable def unitSquareTemplate (s₀ : ℕ) (hs : 1 ≤ s₀) :
+    Template 24 (24 * (s₀ + 1)) s₀ where
+  n_pos := by omega
+  s₀_pos := by omega
+  pieceCount := 1
+  pieceCount_pos := by decide
+  polygon _ := unitSquarePolygon
+  sample _ := unitSquareSample
+  mem_sample _ := unitSquare_sample_iff
+  piece_diameter _ x hx y hy := by
+    obtain ⟨⟨hx₀, hx₁⟩, ⟨hx₂, hx₃⟩⟩ := unitSquare_bounds hx
+    obtain ⟨⟨hy₀, hy₁⟩, ⟨hy₂, hy₃⟩⟩ := unitSquare_bounds hy
+    have hs' : (1 : ℝ) ≤ s₀ := by exact_mod_cast hs
+    simp only [max_le_iff, abs_le]
+    constructor <;> constructor <;> linarith
+  points := unitSquareSample
+  nonempty := ⟨(0, 0), by simp [unitSquareSample]⟩
+  cover := by simp
+  scale := by push_cast; norm_num
+  diameter x hx y hy := by
+    have hs' : (1 : ℝ) ≤ s₀ := by exact_mod_cast hs
+    simp only [unitSquareSample, Finset.mem_insert, Finset.mem_singleton] at hx hy
+    rcases hx with rfl | rfl | rfl | rfl <;>
+      rcases hy with rfl | rfl | rfl | rfl <;> norm_num <;> nlinarith
+
+-- Cap zero is genuinely inhabited, with four singleton cells.
+example : ((cappedDyadicPartition (unitSquareTemplate 1 (by decide)).points 0).filter
+    (fun c ↦ c.1 = 0)).card = 4 := by
+  change ((cappedDyadicPartition unitSquareSample 0).filter (fun c ↦ c.1 = 0)).card = 4
+  decide
+
+example : 2 ^ 0 * ((cappedDyadicPartition (unitSquareTemplate 1 (by decide)).points 0).filter
+    (fun c ↦ c.1 = 0)).card ≤ 18 * 48 :=
+  (unitSquareTemplate 1 (by decide)).card_cappedDyadicPartition_at_cap_le
+    (by norm_num) 0 (by decide)
+
+-- At the exact lower dyadic boundary s₀ = 2^K, the cap cell has four sites.
+example : ((cappedDyadicPartition (unitSquareTemplate 2 (by decide)).points 1).filter
+    (fun c ↦ c.1 = 1)).card = 1 := by
+  change ((cappedDyadicPartition unitSquareSample 1).filter (fun c ↦ c.1 = 1)).card = 1
+  decide
+
+example : 2 ^ 1 * ((cappedDyadicPartition (unitSquareTemplate 2 (by decide)).points 1).filter
+    (fun c ↦ c.1 = 1)).card ≤ 18 * 72 :=
+  (unitSquareTemplate 2 (by decide)).card_cappedDyadicPartition_at_cap_le
+    (by norm_num) 1 (by decide)
+
+example : 2 ^ 0 * ((cappedDyadicPartition (unitSquareTemplate 2 (by decide)).points 1).filter
+    (fun c ↦ c.1 = 0)).card ≤ 4 * 72 :=
+  (unitSquareTemplate 2 (by decide)).card_cappedDyadicPartition_below_cap_le
+    (by norm_num) 1 0 (by decide) (by decide)

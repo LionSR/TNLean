@@ -123,3 +123,35 @@
     The mixed-square estimate and $24N_0u\le n$ give
     $uN_k\le2(3n+96N_0u)\le14n$.
 \end{proof}
+
+\begin{theorem}[Selected core squares at and below the cap]
+    \label{thm:area_law_template_core_selected_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_at_cap_le,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_below_cap_le}
+    \leanok
+    \uses{thm:area_law_template_area,thm:area_law_capped_dyadic_partition,
+        thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, and suppose
+    $2^K\le s_0<2^{K+1}$. Write $N_k$ for the number of selected squares
+    of side $2^k$ in the capped partition of $T$. Then
+    \begin{align}
+        2^K N_K &\le18n, \\
+        2^k N_k &\le4n \qquad (k<K).
+    \end{align}
+    This proves the geometric core-covering counts in the proof of
+    Lemma~9.4. No separation from a cut is needed for these counts.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_area,thm:area_law_capped_dyadic_partition,
+        thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
+    The cap squares are disjoint, so
+    $4^K N_K\le |T|\le9ns_0\le18n2^K$.
+    Below the cap, every selected square has a mixed parent and each
+    parent has four children. Since $2^{k+1}\le2^K\le s_0$,
+    \begin{align}
+        2^k N_k
+        &\le2\bigl(2^{k+1}|M_{k+1}(T)|\bigr) \\
+        &\le2\bigl(n+24N_0 2^{k+1}\bigr)\le4n,
+    \end{align}
+    where $24N_0s_0\le n$ follows from the template scale inequality.
+\end{proof}
