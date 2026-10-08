@@ -1,26 +1,26 @@
 # Template depth rows
 
-This note records the geometric part of
-[#8754](https://github.com/LionSR/TNLean/issues/8754).
-The source is Lemma 9.4 of the September 24, 2026 area-law manuscript
-("A two-dimensional area law from a global spectral gap"), section
-`08-scanner.tex`, lines 571–629.
+This is the geometric slice of [#8754](https://github.com/LionSR/TNLean/issues/8754).
+The source is Lemma 9.4 of the September 24, 2026 area-law manuscript,
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`,
+`preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex`,
+lines 571–629.
 
-## Formalized statement
+## Implemented argument
 
-The theorem `Geometry.template_layer_card_le` states that, for a
-`Template Ctpl n s₀`, `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` imply
+The compiled theorem `Geometry.template_layer_card_le` states that, for an
+actual `Template Ctpl n s₀`, `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` imply
 
     (ambientDilation T.points j \ ambientDilation T.points (j - 1)).card ≤ n.
 
 It adds no row regularity, cardinality, connectedness, or disjointness hypothesis.
 The supporting code is split into four modules:
 
-- `TemplateRows.lean`: compact horizontal sections of convex hulls,
+- `TemplateRows.lean`: compact horizontal sections of actual convex hulls,
   ceiling/floor descriptions of exact samples, ambient dilation identities,
   union-layer subadditivity, and `template_card_le`, which proves
   `T.points.card ≤ 9*n*s₀` for `Ctpl ≥ 1`.
-- `TemplatePolygons.lean`: supporting slabs derived from the triangle
+- `TemplatePolygons.lean`: supporting slabs derived from the actual triangle
   and rectangle constructors, reduced to four linear forms.
 - `TemplateRowBounds.lean`: rounded integer row profiles, consecutive occupied
   rows and windowed columns, and transport between adjacent occupied rows.
@@ -28,9 +28,12 @@ The supporting code is split into four modules:
   by at most two per radius step, the single-piece layer count, and the scale
   argument for arbitrary unions.
 
+The regression file `TNLeanTest/TemplateRows.lean` checks the exported
+statements on actual template models.
+
 ## Mathematical derivation
 
-For each polygon, take the minimum and maximum of each of the forms
+For each actual polygon, take the minimum and maximum of each of the forms
 `x`, `y`, `x+y`, and `x−y` over its vertices. The convex hull is exactly the
 intersection of these four closed strips. Forward containment follows from
 convexity. For reverse containment, the implementation constructs nonnegative
@@ -68,10 +71,10 @@ and two additional extreme rows, each of length at most `2s₀+2j+1`. Therefore
 
 for `1 ≤ j ≤ s₀`. An empty sample has empty dilations and contributes zero.
 Union-layer subadditivity sums this bound over all pieces, allowing overlaps
-and disconnected unions. The template scale field and `Ctpl ≥ 24`
+and disconnected unions. The actual template scale field and `Ctpl ≥ 24`
 then give the requested bound by n.
 
 ## Scope
 
 No entropy, edge-boundary, repaired-family, or physical area-law theorem is
-claimed; this covers only the geometric part of Lemma 9.4.
+claimed. This advances only the geometric slice of #8754.

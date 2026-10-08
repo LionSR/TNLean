@@ -1,0 +1,68 @@
+\section{The dummy neighborhood meets only the initial layer}
+\label{sec:area_law_dummy_contacts}
+
+The dummy tile is the initial neighborhood $N_{k_0}$. Its distance
+bound distinguishes it from the later layers; see
+\cite[Section~11]{OpenAI2026AreaLaw}. The conclusions below concern
+closures, with distances measured in the sup metric.
+
+% Source: 10-geometry.tex, lines 160--191 and 299--306.
+
+\begin{theorem}[Distance from the neighborhood to an endpoint]
+    \label{thm:area_law_neighborhood_endpoint_distance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_exists_dist_le}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    For arbitrary origin, finite endpoint set $Z$, nonnegative integer
+    width $C_0$ and index $k$, every $x\in\overline{N_k}$ admits
+    an endpoint $z\in Z$ with
+    \begin{align}
+        d_\infty(x,z)\le(C_0+1)2^k.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures,thm:area_law_dyadic_indices,
+        thm:area_law_dyadic_cell_distance}
+    The point lies in a closed scale-$k$ cell whose index is within
+    $C_0$ of an occupied index in each coordinate. Choose an endpoint
+    in that occupied cell and apply the closed-cell distance bound.
+\end{proof}
+
+\begin{theorem}[Separation from subsequent layers]
+    \label{thm:area_law_dummy_later_layer_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    Under the same hypotheses, let $k\ge k_0+1$,
+    $x\in\overline{N_{k_0}}$, and $y\in\overline{D_k}$. Then
+    \begin{align}
+        (C_0-1)2^{k_0}\le d_\infty(x,y).
+    \end{align}
+    In particular, this is a positive separation when $C_0\ge2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_neighborhood_endpoint_distance,
+        thm:area_law_dyadic_layer_distance}
+    Choose $z\in Z$ with
+    $d_\infty(x,z)\le(C_0+1)2^{k_0}$. The layer bound gives
+    $C_0 2^k\le d_\infty(y,z)$, while $2^k\ge2\cdot2^{k_0}$.
+    The triangle inequality now yields
+    \begin{align}
+        d_\infty(x,y) & \ge C_0 2^k-(C_0+1)2^{k_0}
+        \ge(C_0-1)2^{k_0}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Only the initial layer can meet the dummy]
+    \label{thm:area_law_dummy_contact_index}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_contact_layer_eq}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    Suppose that $C_0\ge2$ and $k\ge k_0$. If
+    $\overline{N_{k_0}}\cap\overline{D_k}$ is nonempty, then $k=k_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dummy_later_layer_separation}
+    If $k\ne k_0$, then $k\ge k_0+1$. A shared point has distance
+    zero from itself, contradicting the positive separation.
+\end{proof}

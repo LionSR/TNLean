@@ -1,0 +1,29 @@
+\section{The initial partition of the integer lattice}
+\label{sec:area_law_initial_lattice_partition}
+
+% Source: 10-geometry.tex, prop:two-families, lines 154--177,
+% 212--218, 299--323 and 545--559,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is the initial lattice partition before stars and recursive repairs.
+
+\begin{theorem}[Unique initial region at each lattice point]
+    \label{thm:area_law_initial_lattice_partition}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialOpenRegion_integerPoint}
+    \leanok
+    \uses{def:area_law_initial_open_regions,def:area_law_dyadic_origin}
+    Fix the origin $o=(\sqrt2,\sqrt3)$, a nonempty finite endpoint set,
+    integer width $C\ge 2$ and initial layer $k_0\ge 50{,}000{,}000$,
+    with arbitrary valid residue choices at each layer. Every
+    $v\in\mathbb Z^2$ belongs to exactly one actual initial open region
+    $\operatorname{int}(X_i^0)$ of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_closed_cover,
+        thm:area_law_initial_lattice_membership,thm:area_law_initial_open_disjoint}
+    Closed coverage gives an identifier $i$ with $v\in X_i^0$.
+    At a lattice point, birth membership agrees with open membership,
+    so $v\in\operatorname{int}(X_i^0)$. If another identifier $j$
+    has this property, pairwise disjointness of the open regions forces
+    $j=i$.
+\end{proof}
