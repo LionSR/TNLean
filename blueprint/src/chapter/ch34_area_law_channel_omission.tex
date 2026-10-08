@@ -1,0 +1,247 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 203--215,
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% The physical module is ChannelWordOmission at
+% d53502c3def2a0b8abd0d1685868ffcc9eef0d13.
+% This leaf proves the omitted-prefix and expected time-integral steps.
+% Spatial one-event estimates and summation of their distance tail are separate.
+
+\section{Omitting events from physical channel words}
+\label{sec:al_channel_word_omission}
+
+Let $I,J$ be finite sets, let $q\in\N$, and put
+$\mathcal H=(\C^q)^{\otimes I}$ and $\mathcal K=\C^J$.
+The spectator space $\mathcal K$ may have dimension zero.
+For each label $i$ in an event alphabet $F$, let $k_i$ be a
+physical matrix on $\mathcal H$. Write
+\begin{align}
+    \label{eq:al_omission_root_map}
+    \mathcal E_i(B)
+     & =\bigl((\mathbb 1-k_i)^{1/2}\otimes\mathbb 1\bigr)
+        B\bigl((\mathbb 1-k_i)^{1/2}\otimes\mathbb 1\bigr)
+       +\bigl(k_i^{1/2}\otimes\mathbb 1\bigr)
+        B\bigl(k_i^{1/2}\otimes\mathbb 1\bigr).
+\end{align}
+Thus $\mathcal E_i$ is the actual spectator root channel from
+Definition~\ref{def:al_local_root_channel}. For a chronological word
+$w=(i_0,\ldots,i_{m-1})$, set
+$\mathcal E_w=\mathcal E_{i_{m-1}}\circ\cdots\circ\mathcal E_{i_0}$,
+with $\mathcal E_{\varnothing}=\mathrm{id}$.
+All norms below are Euclidean operator norms, and every input
+$B$ is an arbitrary complex matrix on $\mathcal H\otimes\mathcal K$.
+
+\begin{theorem}[Subtraction and contraction along a word]
+    \label{thm:al_channel_word_difference_contraction}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_sub,
+        TNLean.PEPS.AreaLaw.norm_spectatorRootChannelWord_sub_le}
+    \leanok
+    For all words $w$ and operators $B,C$,
+    \begin{align}
+        \label{eq:al_omission_word_subtraction}
+        \mathcal E_w(B-C)&=\mathcal E_w(B)-\mathcal E_w(C).
+    \end{align}
+    If $0\le k_i\le\mathbb 1$ for all $i\in F$, then
+    \begin{align}
+        \label{eq:al_omission_difference_contraction}
+        \|\mathcal E_w(B)-\mathcal E_w(C)\|&\le\|B-C\|.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_norm}
+    Both summands in~(\ref{eq:al_omission_root_map}) preserve
+    subtraction. Induction through the chronological composition
+    gives~(\ref{eq:al_omission_word_subtraction}). Apply
+    Theorem~\ref{thm:al_channel_word_norm} to $B-C$ to obtain
+    (\ref{eq:al_omission_difference_contraction}).
+\end{proof}
+
+Let $P$ be a predicate on $F$. Denote by $w|_P$ the subword
+consisting of the labels satisfying $P$, in the same order and
+with the same multiplicities. The full and retained evolutions
+are evaluated from the same original word $w$.
+
+\begin{definition}[Actual omission defect]
+    \label{def:al_channel_word_omission_defect}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect}
+    \leanok
+    For an initial operator $B$, define
+    \begin{align}
+        \label{eq:al_omission_defect}
+        D_P(w;B)&=\|\mathcal E_w(B)-\mathcal E_{w|_P}(B)\|.
+    \end{align}
+    In particular $D_P(\varnothing;B)=0$.
+\end{definition}
+
+\begin{theorem}[Uniform bound for the actual defect]
+    \label{thm:al_channel_word_omission_bounds}
+    \uses{def:al_channel_word_omission_defect}
+    \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect_bounds}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ for all $i\in F$.
+    For every word $w$ and operator $B$,
+    \begin{align}
+        \label{eq:al_omission_uniform_bound}
+        0\le D_P(w;B)&\le 2\|B\|.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_norm}
+    Nonnegativity follows from the norm. The triangle inequality
+    and contraction of both chronological words give
+    $D_P(w;B)\le\|\mathcal E_w(B)\|+
+    \|\mathcal E_{w|_P}(B)\|\le2\|B\|$.
+\end{proof}
+
+\begin{theorem}[One-event increment at the retained prefix]
+    \label{thm:al_channel_word_omission_increment}
+    \uses{def:al_channel_word_omission_defect}
+    \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect_append_sub_le}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ for all $i\in F$.
+    Write $wi$ for appending the label $i$ to $w$. Then
+    \begin{align}
+        \label{eq:al_omission_one_increment}
+        D_P(wi;B)-D_P(w;B)
+         &\le
+        \begin{cases}
+            0,&P(i),\\
+            \|(\mathcal E_i-\mathrm{id})
+                (\mathcal E_{w|_P}(B))\|,&\neg P(i).
+        \end{cases}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_difference_contraction,thm:al_channel_word_append}
+    Put $A=\mathcal E_w(B)$ and $R=\mathcal E_{w|_P}(B)$.
+    If $P(i)$ holds, both evolutions append $\mathcal E_i$, so
+    $D_P(wi;B)=\|\mathcal E_i(A)-\mathcal E_i(R)\|
+    \le\|A-R\|=D_P(w;B)$.
+    If $\neg P(i)$, the retained evolution stays at $R$. Hence
+    \begin{align}
+        \label{eq:al_omission_triangle_step}
+        D_P(wi;B)
+         &=\|\mathcal E_i(A)-R\|\nonumber\\
+         &\le\|\mathcal E_i(A)-\mathcal E_i(R)\|
+             +\|\mathcal E_i(R)-R\|\nonumber\\
+         &\le D_P(w;B)+\|\mathcal E_i(R)-R\|.
+    \end{align}
+    Subtract $D_P(w;B)$ to obtain
+    (\ref{eq:al_omission_one_increment}).
+\end{proof}
+
+\begin{theorem}[Literal omitted-prefix telescope]
+    \label{thm:al_channel_word_omission_telescope}
+    \uses{def:al_channel_word_omission_defect}
+    \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect_le_sum_prefix}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ for all $i\in F$.
+    For a word $w=(i_0,\ldots,i_{m-1})$, let
+    $w_{<j}=(i_0,\ldots,i_{j-1})$ be its actual earlier prefix.
+    Then
+    \begin{align}
+        \label{eq:al_omission_prefix_telescope}
+        D_P(w;B)&\le
+        \sum_{\substack{0\le j<m\\\neg P(i_j)}}
+            \|(\mathcal E_{i_j}-\mathrm{id})
+                (\mathcal E_{w_{<j}|_P}(B))\|.
+    \end{align}
+    Repeated labels contribute at each of their omitted positions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_omission_increment}
+    The real-valued prefix increments telescope:
+    \begin{align}
+        \label{eq:al_omission_real_telescope}
+        D_P(w;B)&=
+        \sum_{j=0}^{m-1}
+          \bigl(D_P(w_{<j}i_j;B)-D_P(w_{<j};B)\bigr),
+    \end{align}
+    since the initial defect is zero. Apply
+    (\ref{eq:al_omission_one_increment}) at each actual prefix
+    $w_{<j}$. A retained position contributes at most zero; an
+    omitted position contributes its action on the retained
+    earlier prefix. Summing proves
+    (\ref{eq:al_omission_prefix_telescope}).
+\end{proof}
+
+Now assume $F$ is finite, set $F_P=\{i\in F:P(i)\}$, and write
+$\mathcal E_u^P$ for the chronological composition of the
+restricted effects for a word $u$ over $F_P$. For any finite
+alphabet $A$ and $t\ge0$, let $\nu_{A,t}$ be the probability
+measure assigning each individual word $u$ of length $m$ the mass
+\begin{align}
+    \label{eq:al_omission_word_mass}
+    \nu_{A,t}(\{u\})&=e^{-|A|t}\frac{t^m}{m!}.
+\end{align}
+At $t=0$, or when $A$ is empty, this measure is concentrated on
+the empty word.
+
+\begin{theorem}[Expected omission error from retained one-event errors]
+    \label{thm:al_channel_word_expected_omission}
+    \uses{def:al_channel_word_omission_defect}
+    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_channelWordOmissionDefect_le}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ for all $i\in F$.
+    For every $T\ge0$ and every initial operator $B$, the actual
+    omission defect $w\mapsto D_P(w;B)$ is integrable under
+    $\nu_{F,T}$, and
+    \begin{align}
+        \label{eq:al_omission_expected_time_integral}
+        \int D_P(w;B)\,d\nu_{F,T}(w)
+         &\le\int_{(0,T]}\sum_{\substack{i\in F\\\neg P(i)}}
+           \left(\int
+             \|(\mathcal E_i-\mathrm{id})(\mathcal E_u^P(B))\|
+               \,d\nu_{F_P,s}(u)\right)\,ds.
+    \end{align}
+    The left side is the expectation of the operator norm of the
+    difference for the full word and its own retained subword.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_omission_bounds,
+        thm:al_channel_word_omission_telescope,thm:al_channel_word_filter}
+    Define the nonnegative retained-word cost
+    \begin{align}
+        \label{eq:al_omission_retained_cost}
+        c_i(u)&=\|(\mathcal E_i-\mathrm{id})(\mathcal E_u^P(B))\|.
+    \end{align}
+    The triangle inequality and contraction imply
+    $0\le c_i(u)\le2\|\mathcal E_u^P(B)\|\le2\|B\|$.
+    The defect is also bounded by $2\|B\|$ by
+    (\ref{eq:al_omission_uniform_bound}), and so it is integrable
+    under the probability measure on the countable word space.
+    The omitted-prefix sum in
+    (\ref{eq:al_omission_prefix_telescope}) is bounded by
+    $2\|B\|\,|w|$ and is integrable, since
+    $\int|w|\,d\nu_{F,T}(w)=|F|T$.
+
+    Let $\pi_P(w_{<j})$ be the actual retained prefix, now viewed
+    as a word over $F_P$. Its observable is
+    $\mathcal E_{w_{<j}|_P}(B)=\mathcal E^P_{\pi_P(w_{<j})}(B)$.
+    The retained-prefix occupation identity for the atomic
+    word law gives
+    \begin{align}
+        \label{eq:al_omission_occupation_identity}
+        &\int\sum_{\substack{0\le j<|w|\\\neg P(i_j)}}
+            c_{i_j}(\pi_P(w_{<j}))\,d\nu_{F,T}(w)\nonumber\\
+        &\qquad=\int_{(0,T]}\sum_{\substack{i\in F\\\neg P(i)}}
+            \left(\int c_i(u)\,d\nu_{F_P,s}(u)\right)\,ds.
+    \end{align}
+    Integrate~(\ref{eq:al_omission_prefix_telescope}) and apply
+    (\ref{eq:al_omission_occupation_identity}). This proves
+    (\ref{eq:al_omission_expected_time_integral}) using the actual
+    retained-prefix law.
+\end{proof}
+
+Theorem~\ref{thm:al_channel_word_expected_omission} is the
+time-integration step in \cite[\texttt{09-amplification.tex},
+lines 203--215]{OpenAI2026AreaLaw}. The spatial bound for each
+omitted event and the subsequent sum over anchor distances are
+separate estimates. The result here applies for arbitrary
+finite spectators and arbitrary complex $B$, and requires no
+assumption that a sampled prefix is independent of its word.

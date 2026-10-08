@@ -1011,6 +1011,8 @@ jobs:
               TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordThinning.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordOmission.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordOmissionAxioms.lean \
               TNLeanTest/PEPS/AreaLaw/GraphExtendedMetric.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \

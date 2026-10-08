@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelGroundVectors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelShellOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordObservables
+import TNLean.PEPS.AreaLaw.Amplification.ChannelWordOmission
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
