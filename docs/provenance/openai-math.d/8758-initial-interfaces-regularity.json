@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.initial_interface_colors",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegionInterfaces.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_ne_of_segment_subset_inter",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:nonadjacent",
+            "geometry:primary-pieces",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Distinct actual initial identifiers have opposite colors whenever their two birth regions contain an entire nondegenerate closed segment. The origin, finite endpoint set and dependent residues are arbitrary, with C at least two and k0 at least 50000000. No nonempty endpoint set, regularity, supplied contact certificate or globally finite family is assumed. Two isolated common points are not substituted for a shared segment.",
+        "Section 11, prop:two-families, lines 172\u2013177, 212\u2013218 and 299\u2013323; geometry:nonadjacent, lines 193\u2013198; geometry:primary-pieces, lines 246\u2013249; geometry:layer-distance, lines 179\u2013191. The released complete package-option direct check passed exit zero without diagnostics in 4.79 seconds wall, 2.32 seconds user and 2.7 seconds system time, at raw SHA-256 9afa8cbd355e36c4c3091016598cd99fc7f65c4e1780e771f264011fe149c688. Independent mathematical review approves the exact statements and arguments. Completed parent draft #8906 has evidence aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03, source ff3ac34d661f011020c566dff01eed0fb6454881. Immutable capture measures all 304 parent rows across 26 ledgers and all 148 recursive historical evidence files, with no old reverification. Source freeze and canonical verification remain pending. These two original declarations concern the actual initial construction and do not establish local stars, recursive repairs, the full two-family proposition or either headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.initial_birth_regularity",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialRegionRegularity.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_eq_closure_initialOpenRegion",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Every actual initial birth region equals the closure of its open interior, for arbitrary origin, finite endpoint set and dependent residues, C at least two and k0 at least 50000000. The actual determinant condition supplies triangle interior, and exact finite cell and fan covers supply all identifier cases. Empty endpoint sets, empty unions and disconnected primary regions are included. No regularity, coverage or global finiteness certificate is assumed.",
+        "Section 11, prop:two-families, lines 154\u2013177, 212\u2013218 and 299\u2013323, especially 308\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 13.27 seconds wall, 2.44 seconds user and 4.65 seconds system time, at raw SHA-256 61e4dfe5bf66b6fe0a8a96d41f87de4eaf22180fc58dba55fad8805483dbd626. Independent mathematical review approves the exact statements and arguments. Completed parent draft #8906 has evidence aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03, source ff3ac34d661f011020c566dff01eed0fb6454881. Immutable capture measures all 304 parent rows across 26 ledgers and all 148 recursive historical evidence files, with no old reverification. Source freeze and canonical verification remain pending. These two original declarations concern the actual initial construction and do not establish local stars, recursive repairs, the full two-family proposition or either headline theorem."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
