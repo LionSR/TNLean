@@ -98,7 +98,8 @@ theorem SourceInventory.exists_prepareSlots_expands (R : SourceInventory P)
     (η' : ∀ i, U' i ⊗[ℂ] V' i)
     (hE : (SourceInventory.ofSlots R U V η).Expands (SourceInventory.ofSlots R U' V' η'))
     (ℓ : Layout P) :
-    ∃ d : Word (SourceInventory.slotLayout R U V ++ ℓ) (SourceInventory.slotLayout R U' V' ++ ℓ),
+    ∃ d : Word (SourceInventory.slotLayout R U V ++ ℓ)
+        (SourceInventory.slotLayout R U' V' ++ ℓ),
       d.IsAllowed ∧ d.sources = [] ∧
         d.eval ∘L (SourceInventory.prepareSlots R U V η ℓ).eval =
           (SourceInventory.prepareSlots R U' V' η' ℓ).eval := by

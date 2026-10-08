@@ -143,6 +143,7 @@
     \lean{TNLean.PEPS.PairEffect.SourceInventory.common_ofSlots_expands}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_common_expansions}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_recovery}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_expands}
     \leanok
     \uses{def:peps_source_slots,def:peps_common_halfspaces,def:peps_source_expansion}
     Let $(S_\xi)_{\xi\in\Xi}$ be a finite family of normalized source
@@ -344,14 +345,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_complete_pair_sources,thm:peps_complete_prepared_party_maps,
+    \uses{thm:peps_common_party_maps,thm:peps_complete_prepared_party_maps,
         thm:peps_common_source_lists,thm:peps_finite_source_coordinates,
         thm:peps_party_factorization}
-    Complete each branch's source list and put all lists in common
-    spaces. Apply Theorem~\ref{thm:peps_finite_source_coordinates} to
-    their finitely many vectors at each slot. Compose the coordinate
-    inclusions with the recovery of each branch's actual sources and
-    its remaining operations. All these operations are local
+    Theorem~\ref{thm:peps_common_party_maps} prepares every branch's
+    sources in common private spaces, followed by allowed operations
+    containing no sources. Apply
+    Theorem~\ref{thm:peps_finite_source_coordinates} to the finitely many
+    common vectors at each slot. Compose the coordinate inclusions with
+    the remaining operations of each branch. All these operations are local
     contractions. Collect them by party and then sum the resulting
     branch identities with the original coefficients $c_\xi$.
 \end{proof}
