@@ -178,6 +178,15 @@ example :
   thinDiagonalTemplate.card_cappedDyadicPartition_shell_at_cap_le
     (by norm_num) 1 1 0 (by decide) (by decide) (by decide)
 
+-- The weighted theorem itself includes an empty below-cap sum at K = 0.
+example :
+    ∑ c ∈ cappedDyadicPartition (ambientDilation thinDiagonalTemplate.points 1 \
+      thinDiagonalTemplate.points) 0, ((2 : ℝ) ^ c.1) ^ (2 : ℝ) ≤ 1536 := by
+  have h := thinDiagonalTemplate.sum_rpow_cappedDyadicPartition_shell_le
+    (by norm_num) 1 1 0 (by decide) (by decide) (by decide) (by decide) 1 (by norm_num)
+  norm_num at h ⊢
+  exact h
+
 set_option linter.hashCommand false in
 /-- info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/

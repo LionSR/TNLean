@@ -61,6 +61,7 @@ theorem Template.card_cappedDyadicPartition_shell_at_cap_le {Ctpl : ℝ} {n s₀
   have hs := T.card_shell_le hC j (hj.trans hL)
   have hp : 4 ^ K = 2 ^ K * 2 ^ K := by
     rw [← mul_pow]
+    norm_num
   rw [hp] at ha
   rw [pow_succ] at hcap
   have harea : 2 ^ K * (2 ^ K *
@@ -95,10 +96,12 @@ theorem Template.sum_rpow_cappedDyadicPartition_shell_le {Ctpl : ℝ} {n s₀ : 
     rw [Real.rpow_add (by positivity), Real.rpow_one]
     ring
   have hcap : (2 : ℝ) ^ K * a K ≤ 2 * n := by
+    dsimp [a, P]
     exact_mod_cast T.card_cappedDyadicPartition_shell_at_cap_le hC j L K hj hL hhi
   have hsmall (k : ℕ) (hk : k < K) : (2 : ℝ) ^ k * a k ≤ 14 * n := by
     have hsize : 2 ^ k ≤ s₀ :=
       (Nat.pow_le_pow_right (by omega) (Nat.le_of_lt hk)).trans (hlo.trans hL)
+    dsimp [a, P]
     exact_mod_cast T.card_cappedDyadicPartition_shell_below_cap_le
       hC j K k (hj.trans hL) hk hsize
   have htwo : 1 < (2 : ℝ) ^ e := Real.one_lt_rpow (by norm_num) he
@@ -127,7 +130,8 @@ theorem Template.sum_rpow_cappedDyadicPartition_shell_le {Ctpl : ℝ} {n s₀ : 
         (2 * n) * ((2 : ℝ) ^ K) ^ e := by rw [Finset.mul_sum]
     _ ≤ (14 * n) * (((2 : ℝ) ^ K) ^ e / ((2 : ℝ) ^ e - 1)) +
         (2 * n) * ((2 : ℝ) ^ K) ^ e :=
-      add_le_add_right (mul_le_mul_of_nonneg_left hgeom (by positivity)) _
+      add_le_add
+        (mul_le_mul_of_nonneg_left hgeom (by positivity : (0 : ℝ) ≤ 14 * n)) le_rfl
     _ = (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * ((2 : ℝ) ^ K) ^ e := by ring
     _ ≤ _ := mul_le_mul_of_nonneg_left hpower (by positivity)
 
