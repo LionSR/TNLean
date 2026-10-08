@@ -225,7 +225,8 @@ Section~9 of the manuscript scans the collar of a finite target in rounds and
 selects one charge round and one interpolation parameter at which the
 transported, symmetrized vector has small defect energy (Proposition~9.2). Fix
 exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with $\kappa\le e$,
-$\nu>0$ and $W\ge1$, and put $L=\lfloor n^{1-\ell}\rfloor$,
+$\nu>0$, let the total metric weight $W\ge1$ of the scan be arbitrary, possibly
+depending on $n$, and put $L=\lfloor n^{1-\ell}\rfloor$,
 $D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
 $\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
 takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
@@ -245,7 +246,7 @@ proposition itself, which remains open until the scan data are constructed.
         TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
         TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
     \leanok
-    There are constants, depending only on the exponents and on the constants of
+    There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
     $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 2.3 and
     Propositions~7.4, 8.1, the comparator budgets

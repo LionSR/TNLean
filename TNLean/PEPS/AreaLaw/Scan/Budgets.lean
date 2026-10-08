@@ -57,12 +57,11 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
   have hℓ : 0 < 1 - X.ell := sub_pos.2 X.ell_lt_one
   have hℓμ : 0 < 1 - X.ell - X.mu := by linarith [X.mu_lt_one_sub_ell]
   filter_upwards [eventually_ge_atTop 2, eventually_le_natCast_rpow hμ 2,
-    eventually_le_natCast_rpow hℓ 2, eventually_le_natCast_rpow hℓμ (16 * (X.W + 2))]
+    eventually_le_natCast_rpow hℓ 2, eventually_le_natCast_rpow hℓμ 48]
     with n hn hm hL hK
   have hn2 : (2 : ℝ) ≤ n := by exact_mod_cast hn
   have hn0 : (0 : ℝ) < n := by linarith
   have hn1 : (1 : ℝ) ≤ n := by linarith
-  have hW := X.one_le_W
   have hm_le : (X.m n : ℝ) ≤ (n : ℝ) ^ X.mu := Nat.floor_le (by positivity)
   have hm_ge : (n : ℝ) ^ X.mu / 2 ≤ X.m n := half_le_floor hm
   have hL_le : (X.L n : ℝ) ≤ (n : ℝ) ^ (1 - X.ell) := Nat.floor_le (by positivity)
@@ -70,9 +69,9 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
   have hm_pos : (0 : ℝ) < X.m n := by linarith
   have hsplit : (n : ℝ) ^ (1 - X.ell) = (n : ℝ) ^ (1 - X.ell - X.mu) * (n : ℝ) ^ X.mu := by
     rw [← Real.rpow_add hn0]; ring_nf
-  have hratio : (X.W + 2) * (8 * X.m n) ≤ (X.L n : ℝ) := by
-    have h1 : (X.W + 2) * (8 * X.m n) ≤ (X.W + 2) * (8 * (n : ℝ) ^ X.mu) := by gcongr
-    have h2 : (X.W + 2) * (8 * (n : ℝ) ^ X.mu) ≤ (n : ℝ) ^ (1 - X.ell) / 2 := by
+  have hratio : 3 * (8 * X.m n) ≤ (X.L n : ℝ) := by
+    have h1 : 3 * (8 * X.m n) ≤ 3 * (8 * (n : ℝ) ^ X.mu) := by gcongr
+    have h2 : 3 * (8 * (n : ℝ) ^ X.mu) ≤ (n : ℝ) ^ (1 - X.ell) / 2 := by
       rw [hsplit]
       have := mul_le_mul_of_nonneg_right hK (by positivity : (0 : ℝ) ≤ (n : ℝ) ^ X.mu)
       linarith
@@ -83,10 +82,10 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
       omega)
     unfold ScannerExponents.K
     exact_mod_cast h
-  have hK1 : X.W + 1 < X.K n := by
+  have hK1 : (2 : ℝ) < X.K n := by
     by_contra h
     push Not at h
-    have : (X.K n : ℝ) * (8 * X.m n) ≤ (X.W + 1) * (8 * X.m n) :=
+    have : (X.K n : ℝ) * (8 * X.m n) ≤ 2 * (8 * X.m n) :=
       mul_le_mul_of_nonneg_right h (by positivity)
     nlinarith
   have hKpos : (0 : ℝ) < X.K n := by linarith
@@ -110,9 +109,6 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
           1 - X.ell ≤ 1))
       eps_pos := by unfold ScannerExponents.eps; positivity
       eps_lt_one := Real.rpow_lt_one_of_one_lt_of_neg (by linarith) (by linarith [X.nu_pos])
-      a_le_one := by
-        unfold ScannerExponents.a
-        rw [div_le_one hKpos]; linarith
       one_le_C₁ := by norm_num
       pow_e_div_m_le := ?_
       D_le := ?_
@@ -125,10 +121,10 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
   · have : (X.D n : ℝ) < (n : ℝ) ^ X.kappa + 1 := Nat.ceil_lt_add_one (by positivity)
     linarith
   · rw [div_le_iff₀ (by positivity)]
-    calc X.W ^ 2 * n * (X.D n : ℝ) ^ 2
-        = X.W ^ 2 * (X.D n : ℝ) ^ 2 * ((n : ℝ) ^ X.ell * (n : ℝ) ^ (1 - X.ell)) := by
+    calc n * (X.D n : ℝ) ^ 2
+        = (X.D n : ℝ) ^ 2 * ((n : ℝ) ^ X.ell * (n : ℝ) ^ (1 - X.ell)) := by
           rw [← hnL]; ring
-      _ ≤ X.W ^ 2 * (X.D n : ℝ) ^ 2 * ((n : ℝ) ^ X.ell * (32 * (X.m n * X.K n))) := by
+      _ ≤ (X.D n : ℝ) ^ 2 * ((n : ℝ) ^ X.ell * (32 * (X.m n * X.K n))) := by
           gcongr
       _ = _ := by ring
 
@@ -238,7 +234,7 @@ lemma Bmarg_le_log_pow (hD : 1 ≤ X.D n) (hn : 1 ≤ n) (hlog : 1 ≤ Real.log 
 (lines 462–470, with `z ≥ 1/2` from Lemma 2.3, lines 411–414). -/
 lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.Bsh ≤ B) (hBexc : S.Bexc ≤ E)
     (hn : 2 ≤ n) :
-    S.terminalBound ≤ 2 * (S.SXt + (n : ℝ) ^ (3 / 5 : ℝ) + 1) + 1 + X.W * (2 * B + E) := by
+    S.terminalBound ≤ 2 * (S.SXt + (n : ℝ) ^ (3 / 5 : ℝ) + 1) + 1 + S.W * (2 * B + E) := by
   have hn2 : (2 : ℝ) ≤ n := by exact_mod_cast hn
   have hn1 : (1 : ℝ) ≤ n := by linarith
   have h100 : (n : ℝ) ^ (-100 : ℝ) ≤ 1 / 2 := by
@@ -261,10 +257,10 @@ lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.Bsh ≤ B) (hBex
   rw [S.width_eq] at hd
   have hBz : S.Bsh / S.z ≤ 2 * B := by
     rw [div_le_iff₀ hz0]; nlinarith
-  have hW : 0 ≤ X.W := by linarith [X.one_le_W]
-  have hWB : X.W * (S.Bsh / S.z + S.Bexc) ≤ X.W * (2 * B + E) := by gcongr
+  have hW : 0 ≤ S.W := by linarith [S.one_le_W]
+  have hWB : S.W * (S.Bsh / S.z + S.Bexc) ≤ S.W * (2 * B + E) := by gcongr
   have : S.terminalBound = 2 * Real.log S.dstar - Real.log S.z +
-      X.W * (S.Bsh / S.z + S.Bexc) := by
+      S.W * (S.Bsh / S.z + S.Bexc) := by
     unfold terminalBound; ring
   rw [this]
   linarith
@@ -280,12 +276,11 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
       S.Bsh ≤ C * (n * (X.L n : ℝ) ^ X.e + n) ∧
       S.Bexc ≤ C * n * X.D n ∧
       S.Bmarg ≤ C * n * X.D n * Real.log n ^ Cl ∧
-      S.terminalBound ≤ C * X.W * (n : ℝ) ^ (1 + X.e) := by
+      S.terminalBound ≤ C * S.W * (n : ℝ) ^ (1 + X.e) := by
   obtain ⟨C₁, hC₁⟩ := eventually_scaleFacts X
   have hlq : 0 ≤ Real.log κ.q := ScanData.log_q_nonneg κ
   have hC : 1 ≤ κ.C := κ.one_le_C
   have hCe := κ.Ce_pos
-  have hW := X.one_le_W
   obtain ⟨C1, hC1⟩ : ∃ c : ℝ, c = κ.Ce + 1 + Real.log κ.q := ⟨_, rfl⟩
   obtain ⟨C2, hC2⟩ : ∃ c : ℝ, c = 1 + κ.C * Real.log κ.q := ⟨_, rfl⟩
   obtain ⟨C3, hC3⟩ : ∃ c : ℝ,
@@ -297,6 +292,7 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
   filter_upwards [hC₁, ScanData.SXt_le X κ, ScanData.SQt_le X κ,
     (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1]
     with n hF hSX hSQ hlog S
+  have hW := S.one_le_W
   have hC₁1 := hF.one_le_C₁
   have hC40 : 0 ≤ 2 * κ.Ce + 7 + 4 * C1 + C2 * C₁ := by positivity
   have hn2 : (2 : ℝ) ≤ n := by exact_mod_cast hF.two_le_n
@@ -353,12 +349,12 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
         _ = C2 * C₁ * N := by simp only [N, hNsplit]; ring
     have h := S.terminalBound_le_of hB0 hBsh' hBexc' hF.two_le_n
     have hS := hSX S
-    have hWN : N ≤ X.W * N := le_mul_of_one_le_left (by linarith) hW
-    have h1 : (2 * κ.Ce + 7) * N ≤ (2 * κ.Ce + 7) * (X.W * N) := by gcongr
-    have h2 : 0 ≤ (C1 + C2 + C3) * (X.W * N) := by positivity
-    have hfin : (C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * C₁)) * X.W * N =
-        (C1 + C2 + C3) * (X.W * N) + (2 * κ.Ce + 7) * (X.W * N) +
-          X.W * (2 * (C1 * (2 * N)) + C2 * C₁ * N) := by ring
+    have hWN : N ≤ S.W * N := le_mul_of_one_le_left (by linarith) hW
+    have h1 : (2 * κ.Ce + 7) * N ≤ (2 * κ.Ce + 7) * (S.W * N) := by gcongr
+    have h2 : 0 ≤ (C1 + C2 + C3) * (S.W * N) := by positivity
+    have hfin : (C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * C₁)) * S.W * N =
+        (C1 + C2 + C3) * (S.W * N) + (2 * κ.Ce + 7) * (S.W * N) +
+          S.W * (2 * (C1 * (2 * N)) + C2 * C₁ * N) := by ring
     rw [hfin]
     nlinarith
 
