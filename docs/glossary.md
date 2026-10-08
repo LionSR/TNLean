@@ -3029,7 +3029,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
 | `TNLean.PEPS.AreaLaw.Geometry.latticeRow` | Horizontal integer coordinates at a fixed vertical coordinate | Lemma 9.4 proof; this is a horizontal section, not a dilation depth layer. |
 | `TNLean.PEPS.AreaLaw.Geometry.template_card_le` | The template area is at most `9*n*s₀` when `Ctpl ≥ 1` | Area part of Lemma 9.4; distinct from the dilation depth-layer bound. |
-| `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
+| `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the polygon model; no added row regularity. See [the derivation](formalization/template-rows.md). |
 
 ## Distributed PEPS compression: finite incidence and choice costs
 

@@ -116,7 +116,7 @@
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
     }
     \uses{def:area_law_template}
-    Each actual polygon is the intersection of the supporting strips for
+    Each polygon is the intersection of the supporting strips for
     the four linear forms $x,y,x+y,x-y$. Equivalently, the polygon is the intersection of all
     closed supporting slabs with allowed normal directions.
 \end{lemma}
@@ -180,8 +180,9 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain,
         TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
     }
-    \uses{lem:area_law_affine_row_profiles,lem:area_law_dilation_rows_union}
-    Let $S$ be one actual sampled piece. Its dilated horizontal rows are
+    \uses{lem:area_law_affine_row_profiles,lem:area_law_dilation_rows_union,
+        lem:area_law_template_area}
+    Let $S$ be one sampled piece. Its dilated horizontal rows are
     intervals. Increasing the radius from $r$ to $r+1$ adds at most four
     sites to each old nonempty row. Every radius-$r$ row has at most
     $2s_0+2r+1$ sites. If $S$ is nonempty, there are integers $a\le b$ with
@@ -211,7 +212,7 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
     \uses{def:area_law_template,lem:area_law_piece_depth_layers,
         lem:area_law_dilation_rows_union}
-    If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the actual template satisfies
+    If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the template satisfies
     \[
         |T_j\setminus T_{j-1}|\le n.
     \]
