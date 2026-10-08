@@ -65,10 +65,10 @@ ground expectation, and takes the absolute value:
         lem:qc_lr_closed_region}
     There are constants $C\ge0$ and $c>0$, depending only on
     $p,R,v_R,b_0,J,\Delta$ and the growth of the spheres, such that
-    \[
+    \begin{align}
         0\le k_i\le I,\qquad k_i\Omega=0,\qquad
         \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
-    \]
+    \end{align}
     and for every integer $l\ge0$ the operator $k_{i,l}=E_{i,l}(k_i)$ lies in
     $[0,I]$ and satisfies $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts
     on the connected component of $a_i$.
@@ -252,7 +252,7 @@ only on the parameters named below.
     \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
         lem:area_domain_graph_counts}
     Graph balls and spheres of radius $d$ in $\Lambda$ have at most
-    $1+2d(d+1)\le2(d+1)^2$ sites. Every support has graph diameter at most $R$
+    $2(d+1)^2$ sites. Every support has graph diameter at most $R$
     and at most $v_R$ sites, at most $\mu_R$ supports contain a given site, at most
     $\mu_R$ labels share an anchor, and
     $\sum_{i:\,x\in X_i}\|h_i\|\le\mu_RJ$ for every site $x$ when $J\ge0$. The
@@ -279,10 +279,10 @@ only on the parameters named below.
     such that for every $q\ge1$, every finite domain, interaction, choice of
     anchors and gapped ground vector as above, the constraints $k_i=|M_i|/c_*$
     satisfy $c_*>0$,
-    \[
+    \begin{align}
         0\le k_i\le I,\qquad k_i\Omega=0,\qquad
         \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
-    \]
+    \end{align}
     so $H_F=\sum_ik_i$ satisfies $H_F\ge g(I-P_\Omega)$ with $g=\Delta/c_*$ and
     $H_F\Omega=0$: it has the unique ground vector $\Omega$, ground energy zero,
     and gap at least $g$. For every integer $l\ge0$ the operator
@@ -336,11 +336,11 @@ only on the parameters named below.
     $X\subseteq S_0$, with $b_X=|\partial_\Lambda X|$, every designated support
     meeting both $X$ and its complement is the ball of radius $r_0$ about its
     anchor and
-    \[
+    \begin{align}
         |\mathcal C_X|\le Cb_X(r_0+1)^2,\qquad
         \log d_i\le C(r_0+1)^2\quad(i\in\mathcal C_X),\qquad
         \mathcal B_X\le C(1+b_X)(r_0+1)^6.
-    \]
+    \end{align}
     Finally, for $C_1,C_2\ge0$ there is $C$, depending only on $q,R,C_1,C_2$,
     such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and
     $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This is

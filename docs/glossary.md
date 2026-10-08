@@ -3101,6 +3101,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.PEPS.AreaLaw.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; a target proposition, not a proved theorem. |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
 | `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
@@ -3119,6 +3120,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.template_card_le` | The template area is at most `9*n*s₀` when `Ctpl ≥ 1` | Area part of Lemma 9.4; distinct from the dilation depth-layer bound. |
 | `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
 | `TNLean.PEPS.AreaLaw.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
+| `TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
@@ -3263,3 +3265,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   entropy combination. Generic difference, finite-chain and pure-duality
   identities are available; canonical tripartite identification, exceptional-site
   dimension bounds and the full PEPS conditional-cell theorem remain separate.
+
+## Partial template row entropy
+
+- `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
+  absolute entropy cost at most `n * log q` for any subset of one template
+  depth row, the partial-row step of area-law Lemma 9.4.

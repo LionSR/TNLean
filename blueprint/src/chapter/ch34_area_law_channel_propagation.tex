@@ -745,13 +745,34 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     the stated support, cutoff, and localization hypotheses.
 \end{proof}
 
-% LatticeChannelWeightedRow is checked at f4f6c25b.
+% Retained-family lattice bounds are checked at 3bf19a42, integrated at 2f65172a.
 % Source: 09-amplification.tex, lines 139--160; 03-quasilocal.tex,
 % lines 220--246; 01-preliminaries.tex, lines 82--103, at the source
 % revision recorded at the start of this leaf.
 \subsection{Actual constraints on a finite lattice domain}
 
-\begin{theorem}[Uniform channel bounds for lattice positive constraints]
+\begin{theorem}[Anchor fibers after retaining labels]
+    \label{thm:al_retained_anchor_fibers}
+    \lean{TNLean.PEPS.AreaLaw.card_anchor_fiber_subtype_le}
+    \leanok
+    Let $F$ be a finite label set, let $V$ be any set, and let
+    $a:F\to V$ assign an anchor to every label. For a predicate $P$
+    on $F$, put $F_P=\{i\in F:P(i)\}$.
+    For every $x\in V$,
+    \begin{align}
+        \label{eq:al_propagation_retained_fiber}
+        |\{i\in F_P:a_i=x\}| & \le|\{i\in F:a_i=x\}|.
+    \end{align}
+    Distinct retained labels at the same anchor remain distinct.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The inclusion $F_P\hookrightarrow F$ restricts to an injection
+    from the retained anchor fiber into the original anchor fiber.
+    Taking cardinalities gives~(\ref{eq:al_propagation_retained_fiber}).
+\end{proof}
+
+\begin{theorem}[Uniform retained-channel bounds for lattice positive constraints]
     \label{thm:al_lattice_channel_uniform_bounds}
     \uses{def:area_law_hamiltonian,def:al_graph_event_kernel,
         def:al_local_root_channel,def:qc_site_oscillation}
@@ -784,18 +805,28 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     \end{align}
     with $c_*=\max\{1,J(\|f\|_1+1)\}$ and $k_X=c_*^{-1}|M_X|$.
     Write $\mathcal E_X=\mathcal E_{k_X}$ for the full root channel.
+
+    Choose any predicate $P$ on $\mathcal F_{\Lambda,R}$ and put
+    $F_P=\{X\in\mathcal F_{\Lambda,R}:P(X)\}$.
+    Every retained $k_X$ uses the original full Hamiltonian $H$ and
+    ground vector $\Omega$ in~(\ref{eq:al_propagation_lattice_filter}).
     Take the kernel~(\ref{eq:al_propagation_event_kernel}) on
-    $G_\Lambda$, with label set $\mathcal F_{\Lambda,R}$, these
-    anchors, $D=2(2+8\sqrt C\exp(c/2))$, and $b=c/2$.
+    $G_\Lambda$, with label set $F_P$, the restricted anchors,
+    $D=2(2+8\sqrt C\exp(c/2))$, and $b=c/2$.
+    Denote this kernel by $\mathsf A^{(N,P)}$. Its incidence counts are
+    \begin{align}
+        \label{eq:al_propagation_retained_count}
+        m_l^P(y,z) & =|\{X\in F_P:y,z\in N_l(a_X)\}|.
+    \end{align}
 
     Choose any finite spectator index set $T$ and any cutoff
-    $N\in\N$ such that $N\ge R_{a_X}$ for every
-    $X\in\mathcal F_{\Lambda,R}$, where $R_{a_X}$ is the maximum
+    $N\in\N$ such that $N\ge R_{a_X}$ for every $X\in F_P$,
+    where $R_{a_X}$ is the maximum
     distance from $a_X$ inside its component in $G_\Lambda$.
     Then, for every $y\in\Lambda$,
     \begin{align}
         \label{eq:al_propagation_lattice_row}
-        \sum_{z\in\Lambda}\mathsf A^{(N)}_{yz}
+        \sum_{z\in\Lambda}\mathsf A^{(N,P)}_{yz}
         \exp\left(\frac{c}{4\,2^\alpha}
         (d_{G_\Lambda}^0(y,z))^\alpha\right)
          & \le v.
@@ -804,19 +835,21 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     $(\C^q)^{\otimes\Lambda}\otimes\C^T$,
     \begin{align}
         \label{eq:al_propagation_lattice_increment}
-        \sum_{X\in\mathcal F_{\Lambda,R}}
+        \sum_{X\in F_P}
         \bigl(d_y(\mathcal E_X(B))-d_y(B)\bigr)
-         & \le\sum_{z\in\Lambda}\mathsf A^{(N)}_{yz}d_z(B).
+         & \le\sum_{z\in\Lambda}\mathsf A^{(N,P)}_{yz}d_z(B).
     \end{align}
     The constants $C,c,v$ are chosen before $q$, the domain,
-    Hamiltonian, anchors, ground vector, spectator, and cutoff.
+    Hamiltonian, anchors, ground vector, retained predicate,
+    spectator, and cutoff. The gap assumption concerns the original
+    full Hamiltonian $H$.
     This applies \cite[Proposition~4.3]{OpenAI2026AreaLaw} to the
     finite channel estimate in \cite[Section~10]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_lattice_positive_replacement,lem:al_lattice_counts,
-        thm:al_actual_channel_uniform_bounds}
+        thm:al_retained_anchor_fibers,thm:al_actual_channel_uniform_bounds}
     Choose $C,c$ from
     Theorem~\ref{thm:al_lattice_positive_replacement}.
     For every admissible lattice instance, it gives
@@ -843,14 +876,31 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     Since $0<\alpha\le1$, apply
     Theorem~\ref{thm:al_actual_channel_uniform_bounds} with
     $K=2$ and $\mu=\mu_R$ to choose $v$ before fixing any lattice
-    or operator data. After fixing such data, use
+    data or retained predicate. After fixing such data and $P$, use
     (\ref{eq:al_propagation_lattice_ball}) and
-    (\ref{eq:al_propagation_lattice_fiber}) for its geometric
-    hypotheses. Restrict~(\ref{eq:al_propagation_lattice_tail}) to
-    $l\le N$ and use the common component cutoff to obtain
+    Theorem~\ref{thm:al_retained_anchor_fibers} together with
+    (\ref{eq:al_propagation_lattice_fiber}) to obtain
+    \begin{align}
+        \label{eq:al_propagation_lattice_retained_fiber}
+        |\{X\in F_P:a_X=x\}| & \le\mu_R.
+    \end{align}
+    These are the geometric hypotheses for the retained label set.
+    Restrict positivity, component support, and
+    (\ref{eq:al_propagation_lattice_tail}) to $X\in F_P$ and
+    $l\le N$. The cutoff condition for the retained anchors then gives
     (\ref{eq:al_propagation_lattice_row}) and
     (\ref{eq:al_propagation_lattice_increment}).
 \end{proof}
+
+For the predicate $P_{\rm all}(X)=\mathrm{true}$, the inclusion
+$F_{P_{\rm all}}\hookrightarrow\mathcal F_{\Lambda,R}$ is a bijection.
+Hence $\mathsf A^{(N,P_{\rm all})}_{yz}=\mathsf A^{(N)}_{yz}$, and
+$\sum_{X\in F_{P_{\rm all}}}u_X
+    =\sum_{X\in\mathcal F_{\Lambda,R}}u_X$ for every family of real
+numbers $u_X$. The full-family weighted row and channel-increment
+bounds therefore follow with the identical witnesses $C,c,v$.
+For the identically false predicate, the kernel and increment sum
+are zero and the cutoff condition is vacuous.
 
 % GraphExtendedMetric and graphChannelEventKernel_nonneg are checked at
 % bad758200, integrated with strict checks at 2ba23cad.

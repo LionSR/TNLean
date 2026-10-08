@@ -1,6 +1,6 @@
 % Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 139--173,
 % openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% ChannelWordObservables is checked at b9968a9236.
+% ChannelWordObservables is checked at b9968a9236, with relabelling at 3bf19a42.
 % These are finite chronological compositions and their append increments.
 % No clock process or Poisson evolution estimate is asserted here.
 
@@ -58,6 +58,99 @@ the right of a finite word $w$.
     The empty composition is the identity. In the composition for
     $wi$, the last map is $\mathcal E_i$, after every map indexed by
     $w$, which gives~(\ref{eq:al_word_append}).
+\end{proof}
+
+\begin{theorem}[Relabelling chronological words]
+    \label{thm:al_channel_word_relabel}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_map}
+    \leanok
+    Let $E$ be any label set and let $f:E\to F$ be any map.
+    Define $\widetilde k_j=k_{f(j)}$ and
+    $\widetilde{\mathcal E}_j=\mathcal E_{f(j)}$ for $j\in E$.
+    For a word $w$ over $E$, let $f(w)$ be the word obtained by
+    applying $f$ to each label. Then, for every operator $B$,
+    \begin{align}
+        \label{eq:al_word_relabel}
+        \mathcal E_{f(w)}(B) & =\widetilde{\mathcal E}_w(B).
+    \end{align}
+    The map $f$ may identify distinct labels.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_channel_word}
+    At every position in the chronological composition, both sides
+    of~(\ref{eq:al_word_relabel}) apply the same map
+    $\mathcal E_{f(j)}$. They start from the same input $B$ and
+    apply these maps in the same order.
+\end{proof}
+
+% Source: 09-amplification.tex, eq:amplification-channel-vector, lines 218--224.
+\begin{theorem}[Channel words on a common ground vector]
+    \label{thm:al_channel_word_ground}
+    \uses{def:al_channel_word,def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannel_mulVec_ground,
+        TNLean.PEPS.AreaLaw.spectatorRootChannelWord_mulVec_ground}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ and $k_i\Omega=0$ for every
+    $i\in F$, where $\Omega\in\mathcal H$. Put
+    $G_i=(\mathbb 1-k_i)^{1/2}$, and, for a chronological word
+    $w=(i_0,\ldots,i_{m-1})$, put
+    $R_w=G_{i_{m-1}}\cdots G_{i_0}$, with
+    $R_{\varnothing}=\mathbb 1$.
+    For every $\xi\in\mathcal K$ and every operator $B$ on
+    $\mathcal H\otimes\mathcal K$, one has
+    \begin{align}
+        \label{eq:al_word_ground_vector}
+        \mathcal E_w(B)(\Omega\otimes\xi)
+         & =(R_w\otimes\mathbb 1)B(\Omega\otimes\xi).
+    \end{align}
+    This is the finite composition identity in
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+    Neither vector need be normalized, and $B$ need not be Hermitian.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_local_root_channel,thm:al_channel_word_append}
+    Functional calculus gives $G_i\Omega=\Omega$ and
+    $k_i^{1/2}\Omega=0$. Consequently
+    \begin{align}
+        \label{eq:al_single_ground_vector}
+        \mathcal E_i(B)(\Omega\otimes\xi)
+         & =(G_i\otimes\mathbb 1)B(\Omega\otimes\xi).
+    \end{align}
+    Induct by appending the final event to a word. The empty word
+    gives the identity. For $wi$, apply
+    (\ref{eq:al_single_ground_vector}) to $\mathcal E_w(B)$,
+    then the induction hypothesis; the resulting left factor is
+    $G_iR_w=R_{wi}$.
+\end{proof}
+
+\begin{theorem}[Vector difference bounded by channel difference]
+    \label{thm:al_channel_word_vector_difference}
+    \uses{thm:al_channel_word_ground}
+    \lean{TNLean.PEPS.AreaLaw.norm_rootProduct_sub_le_channelWord_sub}
+    \leanok
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:al_channel_word_ground}, let $u,w$ be any
+    two finite words. Then
+    \begin{align}
+        \label{eq:al_word_vector_difference}
+        \bigl\|(R_u\otimes\mathbb 1)B(\Omega\otimes\xi)
+        -(R_w\otimes\mathbb 1)B(\Omega\otimes\xi)\bigr\|
+         & \le\|\mathcal E_u(B)-\mathcal E_w(B)\|
+        \|\Omega\otimes\xi\|.
+    \end{align}
+    Vector norms are Euclidean and the matrix norm is the induced
+    operator norm. This is the pointwise conversion used in
+    \cite[\texttt{09-amplification.tex}, lines 218--224]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_ground}
+    By (\ref{eq:al_word_ground_vector}), the vector inside the norm
+    is $(\mathcal E_u(B)-\mathcal E_w(B))(\Omega\otimes\xi)$.
+    Apply the defining operator-norm inequality.
 \end{proof}
 
 \begin{theorem}[Norm contraction along a finite word]
@@ -154,3 +247,28 @@ $S\subseteq I$, then~(\ref{eq:al_word_empty}) gives
     $\mathcal E_i(B_w)$ by $B_{wi}$ using~(\ref{eq:al_word_append}).
     The resulting inequality is~(\ref{eq:al_word_kernel_increment}).
 \end{proof}
+
+For a finite retained family $F_P=\{i\in F:P(i)\}$, let
+$j:F_P\hookrightarrow F$ be the inclusion and let $\mathcal E_w^P$
+denote composition using the restricted effects $k\circ j$.
+Theorem~\ref{thm:al_channel_word_relabel} identifies
+the observable $\mathcal E_w^P(B_0)$ with
+$B_{j(w)}=\mathcal E_{j(w)}(B_0)$ in the original family.
+Under the hypotheses of Theorem~\ref{thm:al_channel_word_kernel_increment}
+for this restricted family, (\ref{eq:al_word_kernel_increment}) gives
+\begin{align}
+    \label{eq:al_word_retained_increment}
+    \sum_{i\in F_P}\bigl(d_y(B_{j(wi)})-d_y(B_{j(w)})\bigr)
+     & \le\sum_{z\in I}\mathsf A^{(N,P)}_{yz}d_z(B_{j(w)}),
+\end{align}
+where $\mathsf A^{(N,P)}$ counts the retained labels and the cutoff
+need only cover their anchors.
+For the lattice constraints of
+Theorem~\ref{thm:al_lattice_channel_uniform_bounds}, one may instead
+apply~(\ref{eq:al_propagation_lattice_increment}) directly to
+$\mathcal E_w^{\,P}(B_0)$ and use~(\ref{eq:al_word_relabel}) and
+(\ref{eq:al_word_append}). Thus the same $C,c,v$, chosen before $P$,
+give both the lattice weighted row bound and
+(\ref{eq:al_word_retained_increment}) for every retained word.
+Every effect in this composition is still constructed from the
+original full Hamiltonian and its gapped ground vector.

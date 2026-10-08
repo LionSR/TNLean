@@ -76,7 +76,9 @@ import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
+import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
+import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons

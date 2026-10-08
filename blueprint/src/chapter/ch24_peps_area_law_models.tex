@@ -32,10 +32,12 @@ original open square. We state the two models separately, following
     length at most $r$. At every site put $\mathbb C^q$,
     $q\ge1$. In configuration coordinates the physical Hilbert space is
     \begin{align}
-        \mathcal H_\Lambda     & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
-        \label{eq:area_law_state_space}                                              \\
-        \dim\mathcal H_\Lambda & =q^{|\Lambda|}.
+        \label{eq:area_law_state_space}
+        \mathcal H_\Lambda & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
+    \end{align}
+    \begin{align}
         \label{eq:area_law_dimension}
+        \dim\mathcal H_\Lambda & =q^{|\Lambda|}.
     \end{align}
     Restriction to $A$ and $\Lambda\setminus A$ identifies the configuration set
     with the product of the two regional configuration sets. Empty domains,
@@ -65,12 +67,13 @@ original open square. We state the two models separately, following
     The assigned operator may be zero, and acts as the identity on the
     complementary tensor factors. Define
     \begin{align}
-        H                  & =\sum_{\substack{\varnothing\ne X\subseteq\Lambda \\
-                \operatorname{diam}_{d_\Lambda}X\le R}}h_X,
-        \label{eq:area_law_hamiltonian}                                        \\
+        \label{eq:area_law_hamiltonian}
+        H & =\sum_{\varnothing\ne X\subseteq\Lambda,\ \operatorname{diam}_{d_\Lambda}X\le R}h_X,
+    \end{align}
+    \begin{align}
+        \label{eq:area_law_boundary}
         \partial_\Lambda A & =
         \{\{x,y\}:x\in A,\ y\in\Lambda\setminus A,\ d_\Lambda(x,y)=1\}.
-        \label{eq:area_law_boundary}
     \end{align}
     The norm is the Euclidean operator norm. Boundary edges are unordered and
     counted once; empty and full cuts have empty boundary.
