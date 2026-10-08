@@ -202,3 +202,15 @@ It creates disposable tiny projects and serializes targets to check unchanged
 reuse, upstream/dependent invalidation, independent reuse, missing traces, broken
 source rejection, and refusal of removed modules with surviving artifacts. It
 never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
+
+### Focused rectangular PEPS regression before the root build
+
+The finite rectangular dual-path CI check runs after cache setup and provenance
+pruning. It first requires the prebuilt `Mathlib.olean`, then runs Lake's
+fail-fast build on `TorusDualRectangleFlux` and `TorusDualWinding`, which are
+exactly the regression file's imports. Only after these complete import
+closures are rebuilt does it elaborate `TNLeanTest/TorusDualRectangle.lean`
+with strict options and warnings as errors. The workflow guard tests check
+this narrow exception's order, module targets, regression path, imports, and
+failure behavior. All other direct Lean regressions remain after the full
+root build. No dependency pin or artifact provenance rule changes.

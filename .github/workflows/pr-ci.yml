@@ -489,6 +489,22 @@ jobs:
             --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
           python3 scripts/ci_compatible_cache.py prune
 
+      # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check finite rectangular dual geometry early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean \
+            +TNLean.PEPS.TorusDualWinding:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          for source in TNLean/PEPS/TorusDualRectangle.lean \
+              TNLean/PEPS/TorusDualRectangleFlux.lean TNLeanTest/TorusDualRectangle.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
       # Export only the explicit QIC allowlist and hashes, never the whole workspace.
@@ -778,7 +794,7 @@ jobs:
           trap 'rm -rf "$test_root"' EXIT
           mkdir -p "$test_root/TNLeanTest"
           export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
-          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
+          for example in TorusDualFluxString TorusDualFluxParent TorusDualRectangle QuantumDoublePhysicalTerms; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -809,6 +825,18 @@ jobs:
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
+          done
+
+      - name: Test exact square-grid PEPS representations and finite exceptions
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in ExactTreeRepresentation SquareLatticeConnectivity \
+              ExactTreeRepresentationAxioms ExactSmallSizeApproximation ExactFiniteException; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/PEPS/Approximation/$example.lean"
           done
 
       - name: Test algebraic preparation import boundary
@@ -1183,6 +1211,9 @@ jobs:
       - name: Smoke-test tenkz picture pipeline
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
+
+      - name: Test finite rectangular dual geometry
+        run: python3 scripts/test_tenkz_dual_rectangle.py
 
       - name: Test quantum-double local-term diagrams and nonabelian formulas
         if: env.TEX_CHANGED == 'true'
