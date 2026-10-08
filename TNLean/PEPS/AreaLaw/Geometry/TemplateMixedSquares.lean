@@ -55,7 +55,7 @@ theorem Template.card_mixedDyadicIndices_dilation_pieceCount_le {Ctpl : ℝ} {n 
       rw [Finset.mul_sum]
     _ ≤ ∑ _i ∈ (Finset.univ : Finset (Fin T.pieceCount)), 24 * (s₀ + r + 2 ^ k) :=
       Finset.sum_le_sum (fun i _ ↦ T.card_mixedDyadicIndices_sample_dilation_le i r k)
-    _ = _ := by simp [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+    _ = _ := by simp [Nat.mul_comm, Nat.mul_left_comm]
 
 /-- The scaled mixed-square count of the undilated actual template. -/
 theorem Template.card_mixedDyadicIndices_le {Ctpl : ℝ} {n s₀ : ℕ}

@@ -267,7 +267,8 @@ theorem Template.card_mixedDyadicIndices_sample_dilation_le {Ctpl : ℝ} {n s₀
     have hX : u * (X.card : ℤ) ≤ 2 * s₀ + 2 * r + 2 * u := by
       have h := quotient_interval_card (p.1 - s₀ - r) (p.1 + s₀ + r) u hu (by omega)
       dsimp only [X]
-      convert h using 1 <;> ring
+      convert h using 1
+      ring
     have hY : u * (Y.card : ℤ) ≤ 2 * s₀ + 2 * r + 2 * u := by
       calc
         _ ≤ hi - lo + 2 * u :=
