@@ -91,7 +91,8 @@ theorem eventually_scaleFacts (X : ScannerExponents) :
   have hnL : (n : ℝ) = (n : ℝ) ^ X.ell * (n : ℝ) ^ (1 - X.ell) := by
     rw [← Real.rpow_add hn0]; simp
   have hκ1 : (1 : ℝ) ≤ (n : ℝ) ^ X.kappa := Real.one_le_rpow hn1 X.kappa_pos.le
-  have hκe : (n : ℝ) ^ X.kappa ≤ (n : ℝ) ^ X.e := Real.rpow_le_rpow_of_exponent_le hn1 X.kappa_le_e
+  have hκe : (n : ℝ) ^ X.kappa ≤ (n : ℝ) ^ X.e :=
+    Real.rpow_le_rpow_of_exponent_le hn1 X.kappa_le_e
   refine
     { two_le_n := hn
       one_le_K := by exact_mod_cast (show (1 : ℝ) ≤ X.K n by linarith)
@@ -142,7 +143,8 @@ lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) 
     rw [← Real.rpow_natCast, ← Real.rpow_mul hn0.le]
     rw [show (-250 : ℝ) * ((2 : ℕ) : ℝ) = -500 by norm_num]
     exact ht
-  have hsplit : (n : ℝ) ^ (-247 : ℝ) = (n : ℝ) ^ (-250 : ℝ) * ((n : ℝ) * (n : ℝ) ^ 2) := by
+  have hsplit :
+      (n : ℝ) ^ (-247 : ℝ) = (n : ℝ) ^ (-250 : ℝ) * ((n : ℝ) * (n : ℝ) ^ 2) := by
     rw [← pow_succ', ← Real.rpow_natCast, ← Real.rpow_add hn0]; norm_num
   have hn2 : (1 : ℝ) ≤ (n : ℝ) ^ 2 := one_le_pow₀ hn1
   have h1 : 1 + C * (n : ℝ) ^ 2 * lq ≤ (1 + C * lq) * (n : ℝ) ^ 2 := by
