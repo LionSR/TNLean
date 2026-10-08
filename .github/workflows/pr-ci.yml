@@ -450,9 +450,9 @@ jobs:
         run: |
           set -e
           for example in MixedEndpointComparison MixedEndpointPhase \
-              MixedEndpointOpenGap MixedEndpointUniformPathGap \
-              PhysicalIsometricGapTransport ArbitraryPhysicalMixedPathGap \
-              ArbitraryPhysicalEndpointAttachment JointInsertedOpenKernel; do
+              MixedEndpointOpenGap MixedEndpointUniformPathGap PhysicalIsometricGapTransport \
+              ArbitraryPhysicalMixedPathGap ArbitraryPhysicalEndpointAttachment JointInsertedOpenKernel \
+              JointMixedEndpointFamily JointMixedEndpointBoundaryColumns DependentSpectatorGapEquivalence; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \

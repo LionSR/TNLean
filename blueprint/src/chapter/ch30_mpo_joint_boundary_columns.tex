@@ -1,0 +1,133 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
+
+\subsection{Joint rectangular columns at a singular endpoint}
+\label{sec:mpo_joint_boundary_columns}
+
+Use the mixed family $C_x$ and the shared physical alphabet $\mathcal I$
+of Definition~\ref{def:mpo_joint_mixed_family}. Write
+$D_x=D_x^0+D_x^1$ and $V_x=V_{x,0}$. The two spaces of boundary
+coordinates are
+\begin{align}
+    \mathcal B_L & =\coprod_x\bigl(\Fin{D_x}\times\Fin{D_x^0}\bigr),
+                 & \mathcal B_R                                      & =\coprod_x\bigl(\Fin{D_x^0}\times\Fin{D_x}\bigr).
+\end{align}
+
+\begin{definition}[Joint rectangular boundary matrices]
+    \label{def:mpo_joint_boundary_columns}
+    \lean{MPSTensor.MPOSymmetry.JointMixedFirstBoundaryIndex,
+        MPSTensor.MPOSymmetry.JointMixedLastBoundaryIndex,
+        MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns,
+        MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns,
+        MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_apply,
+        MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns_apply}
+    \leanok
+    \uses{def:mpo_joint_mixed_family}
+    Define $L:\C^{\mathcal B_L}\to\C^{\mathcal I}$ and
+    $R:\C^{\mathcal B_R}\to\C^{\mathcal I}$ by
+    \begin{align}
+        L_{i;(x,a,b)} & =(C_x^iV_x)_{ab},
+                      & R_{j;(x,c,e)}     & =(V_x^*C_x^j)_{ce}.
+    \end{align}
+    Both matrices use the single common physical alphabet $\mathcal I$.
+\end{definition}
+
+\begin{theorem}[Joint injectivity and polar factors]
+    \label{thm:mpo_joint_boundary_polar}
+    \lean{MPSTensor.injective_jointOneSiteColumns_of_wordTupleSpanTop,
+        MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_injective,
+        MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns_injective,
+        MPSTensor.MPOSymmetry.jointMixedBoundaryColumns_polar}
+    \leanok
+    \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_span}
+    Suppose that each endpoint family has simultaneous one-site span,
+    as in~(\ref{eq:mpo_joint_mixed_endpoint_span}). Then $L$ and $R$ are
+    injective. Their polar decompositions satisfy
+    \begin{align}
+        L & =U_LP_L, & U_L^*U_L & =I_{\mathcal B_L}, & P_L & >0, \\
+        R & =U_RP_R, & U_R^*U_R & =I_{\mathcal B_R}, & P_R & >0.
+    \end{align}
+    The factors $P_L=(L^*L)^{1/2}$ and $P_R=(R^*R)^{1/2}$ act on the
+    full joint boundary spaces. The assertions include the empty family.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_mixed_span,def:mpo_joint_boundary_columns}
+    For any simultaneously spanning family $B_x$, its one-site
+    coefficient map has columns $B_x^i[a,b]$ and is injective by
+    nondegeneracy of the joint trace pairing. Apply this to $C_x$.
+    The columns of $L$ are the columns indexed by
+    $(x,a,V_xb)$, while the columns of $R$ are indexed by
+    $(x,V_xc,e)$. Both indexing maps are injective, so these column
+    subfamilies remain independent. The polar decomposition of each
+    injective matrix gives the stated identities and positive factors.
+\end{proof}
+
+\begin{theorem}[The Gram matrices retain cross-label entries]
+    \label{thm:mpo_joint_boundary_gram}
+    \lean{MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_gram_apply,
+        MPSTensor.MPOSymmetry.jointMixedFirstBoundaryColumns_gram_firstSector,
+        MPSTensor.MPOSymmetry.jointMixedLastBoundaryColumns_gram_apply}
+    \leanok
+    \uses{def:mpo_joint_boundary_columns}
+    For arbitrary labels $x,y$, including $x\ne y$,
+    \begin{align}
+        (L^*L)_{(x,a,b),(y,c,e)}
+         & =\sum_{i\in\mathcal I}
+        \overline{(C_x^iV_x)_{ab}}(C_y^iV_y)_{ce}, \\
+        (R^*R)_{(x,a,b),(y,c,e)}
+         & =\sum_{i\in\mathcal I}
+        \overline{(V_x^*C_x^i)_{ab}}(V_y^*C_y^i)_{ce}.
+    \end{align}
+    If the two exterior rows of $L$ are in the first virtual sector,
+    then
+    \begin{align}
+        (L^*L)_{(x,V_xa,b),(y,V_yc,e)}
+         & =\sum_{i\in\Fin{d_0}}
+        \overline{(A_x^0)^i_{ab}}(A_y^0)^i_{ce}.
+    \end{align}
+    In particular, simultaneous spanning does not make these matrices
+    block diagonal in $x$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_compression}
+    Expand matrix multiplication. When the two exterior rows are in
+    the first sector, only the shared $00$ physical alphabet contributes,
+    and its rectangular entries are exactly those of $A_x^0$ and $A_y^0$.
+\end{proof}
+
+\begin{theorem}[The original endpoint remains at every interior site]
+    \label{thm:mpo_joint_boundary_original_bulk}
+    \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_insertedEvalWord_boundaryFactors,
+        MPSTensor.MPOSymmetry.jointMixedFirstPhysicalIndex,
+        MPSTensor.MPOSymmetry.jointMixedEndpointLeftTensor_firstPhysicalIndex,
+        MPSTensor.MPOSymmetry.evalWord_jointMixedEndpointLeftTensor_firstPhysicalIndex,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_insertedEvalWord_originalBulk}
+    \leanok
+    \uses{def:mpo_joint_boundary_columns,thm:mpo_joint_mixed_compression}
+    Let $\iota:\Fin{d_0}\to\mathcal I$ be the shared $00$ physical
+    inclusion. For a word $w=(k_1,\ldots,k_n)$ over $\Fin{d_0}$, set
+    $A_x^0(w)=(A_x^0)^{k_1}\cdots(A_x^0)^{k_n}$. Then
+    \begin{align}
+         & \bigl(C_x^i W_x(0)C_x^{\iota(k_1)}W_x(0)
+        \cdots C_x^{\iota(k_n)}W_x(0)C_x^j\bigr)_{ae}\notag \\
+         & \qquad=\sum_{b,c\in\Fin{D_x^0}}
+        L_{i;(x,a,b)} A_x^0(w)_{bc} R_{j;(x,c,e)}.
+    \end{align}
+    This identity requires no spanning assumption. The two exterior
+    indices $a,e\in\Fin{D_x}$ are unrestricted.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_mixed_compression,def:mpo_joint_boundary_columns}
+    Substitute $W_x(0)=V_xV_x^*$ between neighboring letters.
+    Every interior compression is
+    $V_x^*C_x^{\iota(k)}V_x=(A_x^0)^k$.
+    Associativity leaves $C_x^iV_x$ at the first site and
+    $V_x^*C_x^j$ at the last; expanding their product gives the formula.
+\end{proof}
+
+% The polar factors above concern the two boundary physical maps. No
+% transformation of the interior letters, identification of transformed
+% orthogonal constraint projectors, or uniform Hamiltonian gap is asserted
+% by these statements.
