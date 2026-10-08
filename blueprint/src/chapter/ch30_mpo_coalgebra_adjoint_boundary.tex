@@ -68,6 +68,53 @@ the dual $C^*$-algebra involution, which also involves the antipode
     and (\ref{eq:glm_dual_star_product}), proves both identities.
 \end{proof}
 
+In the following diagrams, a west virtual leg is a matrix row and an
+east virtual leg is a matrix column. The north physical leg $\sigma_n$
+is an output and the south physical leg $\tau_n$ is an input, so the
+box at site $n$ is the matrix $T^{\sigma_n\tau_n}$. The first identity
+of (\ref{eq:glm_dual_representation_words}) reads as follows: the open
+chain of tensor letters is one matrix of the representation, evaluated
+at the ordered convolution product of the coefficient functionals.
+% TENKZ-COALGEBRA-WORDS-BEGIN
+% Formula: (T^{sigma_0 tau_0} ... T^{sigma_{N-1} tau_{N-1}})_{alpha beta}
+% = psi(f_{sigma_0 tau_0} ... f_{sigma_{N-1} tau_{N-1}})_{alpha beta},
+% the first identity of eq:glm_dual_representation_words, coefficientwise
+% in fixed configurations sigma, tau of length N.
+% Ink-to-index map: box n is T^{sigma_n tau_n}; its north physical leg
+% sigma_n is the output (row) index and its south physical leg tau_n the
+% input (column) index of phi(x). West ports are matrix rows, east ports
+% are matrix columns. External alpha, beta range over Fin D.
+% Contracted legs: the D-dimensional virtual bonds between adjacent boxes.
+% Three sites are drawn and the dots atom stands for the remaining ones.
+% On the right, sigma and tau are labels of the functional, not legs.
+% Boundary signature: left open:w, open:e, phys:n=N, phys:s=N; right
+% open:w, open:e.
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+        \tn[at=(1,1),name=T0,skin=box,size=l,
+            ports={180:virtual:$\alpha$,0:virtual,
+                    90:physical:$\sigma_0$,270:physical:$\tau_0$}]{T}
+        \tn[at=(1,2),name=T1,skin=box,size=l,
+            ports={180:virtual,0:virtual,
+                    90:physical:$\sigma_1$,270:physical:$\tau_1$}]{T}
+        \tn[at=(1,3),name=D,skin=dots,
+            ports={180:virtual,0:virtual}]{}
+        \tn[at=(1,4),name=TN,skin=box,size=l,
+            ports={180:virtual,0:virtual:$\beta$,
+                    90:physical:$\sigma_{N-1}$,
+                    270:physical:$\tau_{N-1}$}]{T}
+        \tnwire{T0.0}{T1.180}
+        \tnwire{T1.0}{D.180}
+        \tnwire{D.0}{TN.180}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1),name=P,skin=box,size=l,wide=2,
+            ports={180:virtual:$\alpha$,0:virtual:$\beta$}]{\psi(f_{\sigma,\tau})}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-COALGEBRA-WORDS-END
+
 \begin{theorem}[One adjoint boundary at every length]
     \label{thm:glm_coalgebra_adjoint_boundary}
     \lean{MPOTensor.exists_boundary_trace_dualStar,
@@ -103,6 +150,58 @@ the dual $C^*$-algebra involution, which also involves the antipode
     The boundary $Y$ was chosen before $N$. At $N=0$, the identity is
     $\operatorname{tr}(Y)=\overline{\operatorname{tr}(X)}$.
 \end{proof}
+
+Coefficientwise, (\ref{eq:glm_coalgebra_adjoint_boundary}) says
+$\operatorname{tr}(YT^{\sigma_0\tau_0}\cdots T^{\sigma_{N-1}\tau_{N-1}})
+    =\overline{\operatorname{tr}(XT^{\tau_0\sigma_0}\cdots
+        T^{\tau_{N-1}\sigma_{N-1}})}$.
+Conjugating every factor of the right-hand trace gives the following
+picture for $N\geq1$: the adjoint exchanges the north and south
+physical legs of every letter and conjugates every entry, with no
+virtual transpose, and the result is the same ring closed by the
+single boundary $Y$.
+% TENKZ-COALGEBRA-ADJOINT-BEGIN
+% Formula: tr(Y T^{sigma_0 tau_0} ... T^{sigma_{N-1} tau_{N-1}})
+% = tr(conj(X) conj(T^{tau_0 sigma_0}) ... conj(T^{tau_{N-1} sigma_{N-1}})),
+% the (sigma, tau) coefficient of eq:glm_coalgebra_adjoint_boundary,
+% where conj is entrywise complex conjugation.
+% Ink-to-index map: a box M has west virtual row index and east virtual
+% column index; adjacent east/west legs are contracted, and the periodic
+% closure contracts the final east leg with the first west leg, so the
+% row reads as a trace from left to right. North physical legs are
+% output indices and south physical legs are input indices: on the left,
+% site n carries sigma_n north and tau_n south; on the right the same
+% labels appear exchanged, tau_n north and sigma_n south, on the
+% conjugated letters. The boundary boxes have virtual legs only.
+% Three sites are drawn and the dots atom stands for the remaining ones.
+% Boundary signature on both sides: virtual-west=0, virtual-east=0,
+% physical-north=N, physical-south=N.
+\begin{tenkzequation}
+    \begin{tenkz}[rows={op}, cols=5, boundary=periodic]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{Y} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,
+                    90:physical:$\sigma_0$,270:physical:$\tau_0$}]{T} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,
+                    90:physical:$\sigma_1$,270:physical:$\tau_1$}]{T} &
+        \tn[skin=dots,ports={180:virtual,0:virtual}]{} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,
+                    90:physical:$\sigma_{N-1}$,
+                    270:physical:$\tau_{N-1}$}]{T}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={op}, cols=5, boundary=periodic]
+        \tn[skin=box,ports={180:virtual,0:virtual}]{\overline X} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,
+                    90:physical:$\tau_0$,270:physical:$\sigma_0$}]{\overline T} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,
+                    90:physical:$\tau_1$,270:physical:$\sigma_1$}]{\overline T} &
+        \tn[skin=dots,ports={180:virtual,0:virtual}]{} &
+        \tn[skin=mpo,ports={180:virtual,0:virtual,
+                    90:physical:$\tau_{N-1}$,
+                    270:physical:$\sigma_{N-1}$}]{\overline T}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-COALGEBRA-ADJOINT-END
 
 \begin{theorem}[Canonical parent symmetry of a dual representation]
     \label{thm:glm_dual_representation_parent}
