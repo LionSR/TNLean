@@ -1,0 +1,143 @@
+\section{Radial incidence and convexity in an elementary fan}
+\label{sec:area_law_fan_radial_incidence_convexity}
+
+Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
+$Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
+Write $c$ for its center. On each side choose either the whole side or
+its two midpoint halves. Orient the perimeter counterclockwise, and
+orient each chosen base accordingly. Let $\mathcal E$ index the resulting
+ordered bases $[a_i,b_i]$, and put
+\begin{align}
+    P_i & =\operatorname{conv}\{c,a_i,b_i\}, &
+    R_i & =[c,b_i].
+\end{align}
+These are the triangles and radial segments of the elementary fan in
+\cite[Section~11]{OpenAI2026AreaLaw}. All endpoints satisfy
+$\|b_i-c\|_\infty=2^\ell/2>0$, and the directed rays determined by
+$b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% and geometry:initial-stars, lines 333--370;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+% build/sections/10-geometry.tex.
+% The radial-incidence, affine-basis and radial-deletion auxiliaries have
+% declaration references.
+% Completion markers await ordinary-module and blueprint verification.
+
+\begin{theorem}[Noncentral radial incidence]
+    \label{thm:area_law_fan_noncentral_radial_incidence}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_mem_iff_of_mem_radial}
+    \uses{def:area_law_cell_fan}
+    For $i,t\in\mathcal E$ and $x\in R_t$ with $x\ne c$,
+    \begin{align}
+        x\in P_i & \quad\Longleftrightarrow\quad
+        t=i\ \text{or}\ b_t=a_i.
+        \label{eq:fan_radial_incidence}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_fan_triangle_contact,
+        thm:area_law_cell_fan_end_same_ray}
+    The segment $R_t$ is contained in $P_t$ by convexity. If $t=i$,
+    this proves the reverse implication. If $b_t=a_i$, then
+    $R_t=[c,a_i]\subseteq P_i$, which gives the other reverse case.
+
+    Conversely, suppose $x\in P_i$ and $t\ne i$. The distinct points
+    $c,x$ belong to $P_t\cap P_i$. The classification of contacts
+    between distinct fan triangles therefore gives either $b_t=a_i$,
+    as required, or
+    \begin{align}
+        b_i & =a_t, & P_t\cap P_i & =R_i.
+    \end{align}
+    In the second case $x\in R_t\cap R_i$ and $x\ne c$. Thus there
+    are $u,v>0$ with
+    \begin{align}
+        x-c & =u(b_t-c)=v(b_i-c).
+    \end{align}
+    The two endpoint vectors consequently determine the same directed
+    ray. Distinctness of these directed rays gives $t=i$, contradicting
+    the assumption. This proves~(\ref{eq:fan_radial_incidence}).
+\end{proof}
+
+\begin{theorem}[Affine basis of an elementary fan triangle]
+    \label{thm:area_law_fan_triangle_affine_basis}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_exists_affineBasis}
+    \uses{def:area_law_cell_fan}
+    For every $i\in\mathcal E$, the ordered triple $(c,a_i,b_i)$
+    is an affine basis of $\R^2$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_cell_fan_regularity}
+    The triangle $P_i$ has nonempty interior. Its affine span is
+    therefore the whole plane. The vector space parallel to that
+    affine span has dimension $2$. Since there are three vertices,
+    they are affinely independent and form an affine basis.
+\end{proof}
+
+\begin{theorem}[Convexity after removal of a radial]
+    \label{thm:area_law_fan_radial_deletion_convex}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radial_convex}
+    \uses{def:area_law_cell_fan}
+    For every $i,t\in\mathcal E$, the set $P_i\setminus R_t$ is convex.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_fan_noncentral_radial_incidence,
+        thm:area_law_fan_triangle_affine_basis}
+    Every $R_t$ contains $c$. Applying~(\ref{eq:fan_radial_incidence})
+    away from $c$ therefore gives the exact alternatives
+    \begin{align}
+        P_i\cap R_t & =
+        \begin{cases}
+            [c,b_i], & t=i,                         \\
+            [c,a_i], & t\ne i\ \text{and}\ b_t=a_i, \\
+            \{c\},   & \text{otherwise}.
+        \end{cases}
+        \label{eq:fan_radial_face_cases}
+    \end{align}
+    The three vertices of $P_i$ form an affine basis by the preceding
+    theorem. Let
+    $\lambda_0,\lambda_1,\lambda_2$ be the barycentric coordinates for
+    $c,a_i,b_i$, respectively. On $P_i$ these coordinates are
+    nonnegative, sum to $1$, and reconstruct each point as
+    $x=\lambda_0(x)c+\lambda_1(x)a_i+\lambda_2(x)b_i$.
+    It follows that
+    \begin{align}
+        P_i\setminus[c,b_i]
+         & =P_i\cap\{x:\lambda_1(x)>0\},              \\
+        P_i\setminus[c,a_i]
+         & =P_i\cap\{x:\lambda_2(x)>0\},              \\
+        P_i\setminus\{c\}
+         & =P_i\cap\{x:\lambda_1(x)+\lambda_2(x)>0\}.
+        \label{eq:fan_radial_convex_deletions}
+    \end{align}
+    Each set in~(\ref{eq:fan_radial_convex_deletions}) is convex,
+    being the intersection of a triangle with a strict affine
+    half-plane. Hence~(\ref{eq:fan_radial_face_cases}) shows that
+    $P_i\setminus R_t$ is convex for every $t\in\mathcal E$.
+\end{proof}
+
+\begin{theorem}[Convexity after removal of any family of radials]
+    \label{thm:area_law_fan_radial_union_deletion_convex}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radials_convex}
+    \uses{def:area_law_cell_fan}
+    For every $i\in\mathcal E$ and every subset $A\subseteq\mathcal E$,
+    the set
+    \begin{align}
+        P_i\setminus\bigcup_{t\in A}R_t
+        \label{eq:fan_radial_union_deletion}
+    \end{align}
+    is convex. The set $A$ may be empty.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_fan_radial_deletion_convex}
+    By the preceding theorem, $P_i\setminus R_t$ is convex for every
+    $t\in\mathcal E$. Moreover,
+    \begin{align}
+        P_i\setminus\bigcup_{t\in A}R_t
+         & =P_i\cap\bigcap_{t\in A}(P_i\setminus R_t).
+    \end{align}
+    The intersection of convex sets is convex. When $A=\varnothing$,
+    the bounded intersection is the whole plane, so the last expression
+    is $P_i$; no exclusion of the center is made in this case.
+\end{proof}
