@@ -50,7 +50,7 @@ theorem truncatedConstraint_mem_Icc {q : ℕ} [NeZero q] {ι : Type*} [Fintype �
 at `p = 1`: `0 ≤ kᵢ ≤ I`, `kᵢ Ω = 0`, `∑ᵢ kᵢ ≥ g (I - |Ω⟩⟨Ω|)`, and ball tails
 `C e^{-c √l}`, on a graph whose balls of radius `d` have at most `K_b (d + 1)²` sites and
 whose sites anchor at most `μ` labels. There is `C₁ > 0`, depending only on
-`C, c, g, μ, K_b, C₀`, such that for every real `n ≥ 2` and every nonempty `S₀` with
+`C, c, g, μ, K_b, C₀`, such that for every real `n ≥ 2` and every `S₀` with
 `|S₀| ≤ C₀ n²`, with `r₀ = ⌈C₁ (log n)²⌉` and `ε_n = min {n^{-1000}, g/4}`: the truncated
 constraints are positive contractions, `‖H' - H_F‖ ≤ ε_n` for their sum `H'`, and `H'` has
 a unit ground vector `Ω₀` with ground energy `e₀ ∈ [0, ε_n]`,
@@ -70,7 +70,7 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
           C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
         (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
-        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, S₀.Nonempty → (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
         let r₀ := ⌈C₁ * Real.log n ^ 2⌉₊
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
@@ -89,7 +89,7 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
   obtain ⟨C₁, hC₁, hrad⟩ := exists_truncationConstant (B := C * μ * Kb * A) (C₀ := C₀)
     (by positivity) hC₀ hc hg
   refine ⟨C₁, hC₁, ?_⟩
-  intro q _ ι _ _ κ _ G a k Ω hΩ hk hgap htail hBall hMult n hn S₀ _ hS₀ r₀ ε Ht
+  intro q _ ι _ _ κ _ G a k Ω hΩ hk hgap htail hBall hMult n hn S₀ hS₀ r₀ ε Ht
   have hHt := truncatedConstraint_mem_Icc (q := q) G S₀ r₀
   have herr : ‖Ht - ∑ i, k i‖ ≤ ε := by
     refine (norm_sum_truncatedConstraint_sub_le G S₀ a k hC hKb hμ htail hBall hMult hA r₀).trans
@@ -137,7 +137,7 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
         (∑ k, h k) *ᵥ WithLp.ofLp Ω = (E₀ : ℂ) • WithLp.ofLp Ω →
         ((∑ k, h k) - (E₀ : ℂ) • 1 -
           (Δ : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, S₀.Nonempty → (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
         let cs := SpectralFilter.positiveNormalization 1 (Δ / 2) J
         let g := Δ / cs
         let k := fun i =>
@@ -166,7 +166,7 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
   obtain ⟨C₁, hC₁, htr⟩ := exists_finiteSetTruncation hC hc (div_pos hΔ hcs) hμ hKb hC₀
   refine ⟨C₁, hC₁, ?_⟩
   intro q _ ι _ _ κ _ G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hBall hMult hJh
-    E₀ Ω hΩ hHΩ hgap n hn S₀ hS₀ hS₀n
+    E₀ Ω hΩ hHΩ hgap n hn S₀ hS₀n
   obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := hpos G X a ha h hHerm hSupport hDiam hCard hBudget
     hGrowth hJh E₀ Ω hΩ hHΩ hgap
   have hgapF : ((∑ i, SpectralFilter.positiveConstraint cs
@@ -183,6 +183,6 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
     have := (htail i l).2.2
     rwa [kernelExponent_one] at this
   exact ⟨fun i => truncatedConstraint_mem_supportedOperators G S₀ _ (a i) (hcomp i),
-    htr G a _ Ω hΩ hk hgapF htail' hBall hMult n hn S₀ hS₀ hS₀n⟩
+    htr G a _ Ω hΩ hk hgapF htail' hBall hMult n hn S₀ hS₀n⟩
 
 end TNLean.PEPS.AreaLaw

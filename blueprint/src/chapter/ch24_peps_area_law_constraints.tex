@@ -114,7 +114,7 @@ ground expectation, and takes the absolute value:
 \section{Truncation near a finite set}
 \label{sec:al_truncation}
 
-Fix a nonempty set $S_0$ of sites and an integer $r_0\ge0$. For a label whose
+Fix a set $S_0$ of sites and an integer $r_0\ge0$. For a label whose
 anchor has finite distance $d_i^0=d(a_i,S_0)$ from $S_0$ put
 $r_i=\max\{r_0,\lfloor d_i^0/2\rfloor\}$, $\widetilde h_i=k_{i,r_i}$ and
 $\widetilde X_i=N_{r_i}(a_i)$; if $d_i^0=\infty$ put $\widetilde h_i=k_i$ and let
@@ -157,7 +157,8 @@ $\mu$ labels.
     \uses{lem:al_truncation_error, thm:al_positive_replacement}
     Use Theorem~\ref{thm:al_positive_replacement} with $p=1$, so $\alpha=1/2$,
     and fix $C_0>0$. There is $C_1$ such that for every real $n\ge2$ and every
-    nonempty $S_0$ with $|S_0|\le C_0n^2$, with
+    set $S_0$ with $|S_0|\le C_0n^2$ (the source states this for nonempty $S_0$; for
+    $S_0=\varnothing$ every constraint is retained), with
     $r_0=\lceil C_1(\log n)^2\rceil$ and
     $\epsilon_n=\min\{n^{-1000},g/4\}$: the truncated terms are positive
     contractions, $\|\widetilde H-H_F\|\le\epsilon_n$, the ground energy of
