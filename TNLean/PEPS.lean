@@ -10,15 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation
 import TNLean.PEPS.AreaLaw
-import TNLean.PEPS.AreaLaw.CrossingBudget
-import TNLean.PEPS.AreaLaw.Cylinder
-import TNLean.PEPS.AreaLaw.FiniteSetTruncation
-import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
-import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
-import TNLean.PEPS.AreaLaw.PositiveConstraints
-import TNLean.PEPS.AreaLaw.QuasilocalRoots
-import TNLean.PEPS.AreaLaw.TruncationRadius
-import TNLean.PEPS.AreaLaw.TruncationSeries
 import TNLean.PEPS.BasisRepresentation
 import TNLean.PEPS.BlockMultiplicityRepresentation
 import TNLean.PEPS.Blocking

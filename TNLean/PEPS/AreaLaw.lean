@@ -15,8 +15,5 @@ import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.QuasilocalRoots
-<<<<<<< HEAD
 import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
-=======
->>>>>>> origin/main
