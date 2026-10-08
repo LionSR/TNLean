@@ -29,6 +29,7 @@ import pathlib
 import re
 import subprocess
 import sys
+import time
 
 # The sorry badge's Lean-aware stripper (nested block comments and string literals).
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
@@ -39,8 +40,31 @@ THEOREM_KINDS = r"Theorem|Lemma|Proposition|Corollary|Definition|Remark"
 
 # --------------------------------------------------------------------------- tools
 
-def run(*args: str) -> str:
-    return subprocess.check_output(args, text=True, stderr=subprocess.DEVNULL)
+TRANSIENT = re.compile(r"rate limit|secondary|abuse|timed? ?out|50[234]|Something went wrong|EOF|connection reset", re.I)
+
+
+class CommandError(subprocess.CalledProcessError):
+    """A failed command whose message includes its error output."""
+
+    def __str__(self) -> str:
+        return f"{' '.join(map(str, self.cmd[:3]))} failed: {(self.stderr or self.output or '').strip()[:800]}"
+
+
+def run(*args: str, attempts: int = 4) -> str:
+    """Run a command and return its output.
+
+    The workflow's token shares an hourly quota with every other workflow of the
+    repository, so rate limits, timeouts and 5xx responses are retried with
+    growing waits. Other failures, such as a missing file, are raised at once.
+    """
+    for attempt in range(attempts):
+        proc = subprocess.run(args, capture_output=True, text=True)
+        if proc.returncode == 0:
+            return proc.stdout
+        if attempt + 1 == attempts or not TRANSIENT.search(proc.stderr + proc.stdout):
+            raise CommandError(proc.returncode, args, proc.stdout, proc.stderr)
+        time.sleep(30 * 2 ** attempt)
+    raise AssertionError("unreachable")
 
 
 def gh_api(path: str) -> list | dict:
@@ -214,7 +238,10 @@ def file_stats(repo_slug: str, number: int, head: str, base: str) -> dict:
     return stats
 
 
-def collect_prs(cfg: dict, campaign_issues: set[int]) -> list[dict]:
+def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None) -> list[dict]:
+    """Campaign pull requests. File statistics are reused from `cache`, keyed by
+    (repository, number, head commit), so unchanged pull requests cost no request."""
+    cache = cache or {}
     primary = next(r for r in cfg["repos"] if r.get("primary"))
     # A companion repository refers to primary issues as `TNLean#123` or by URL.
     cross_ref = re.compile(rf"{re.escape(primary['name'])}(?:#|/issues/)(\d{{4,}})")
@@ -239,7 +266,8 @@ def collect_prs(cfg: dict, campaign_issues: set[int]) -> list[dict]:
                 "closes": sorted(closing & campaign_issues),
                 "refs": sorted((referenced & campaign_issues) - closing),
                 "ci": (rollup[0]["commit"]["statusCheckRollup"] or {}).get("state") if rollup else None,
-                **file_stats(repo["slug"], p["number"], p["headRefOid"], p["baseRefOid"]),
+                **(cache.get((repo["name"], p["number"], p["headRefOid"]))
+                   or file_stats(repo["slug"], p["number"], p["headRefOid"], p["baseRefOid"])),
             })
     return sorted(prs, key=lambda p: (p["repo"], p["number"]))
 
@@ -333,6 +361,22 @@ def lean_footprint(checkout: Checkout, directories: list[str]) -> list[dict]:
 
 # ---------------------------------------------------------------------------- main
 
+STAT_KEYS = ("leanAdd", "leanDel", "sorryAdded", "leanokAdded", "leanFiles", "gapFiles")
+
+
+def previous_stats() -> dict:
+    """File statistics from the previously published snapshot ($PREVIOUS_SNAPSHOT), if any."""
+    path = os.environ.get("PREVIOUS_SNAPSHOT")
+    if not path or not pathlib.Path(path).exists():
+        return {}
+    try:
+        prs = json.loads(pathlib.Path(path).read_text()).get("prs", [])
+    except json.JSONDecodeError:
+        return {}
+    return {(p["repo"], p["number"], p.get("headRefOid")): {k: p[k] for k in STAT_KEYS}
+            for p in prs if p.get("headRefOid") and all(k in p for k in STAT_KEYS)}
+
+
 def collect(campaign_dir: pathlib.Path) -> dict:
     cfg = json.loads((campaign_dir / "config.json").read_text())
     checkouts = {r["name"]: Checkout(os.environ.get(r.get("checkoutEnv", ""), r["checkout"])) for r in cfg["repos"]}
@@ -348,7 +392,7 @@ def collect(campaign_dir: pathlib.Path) -> dict:
     for paper, spec in cfg["papers"].items():
         body = run("gh", "api", f"repos/{primary['slug']}/issues/{spec['stream']}", "--jq", ".body")
         results += [{"paper": paper, **row} for row in result_table(body)]
-    prs = collect_prs(cfg, set(by_number))
+    prs = collect_prs(cfg, set(by_number), previous_stats())
     return {
         "generatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="minutes"),
         "mainCommit": checkouts[primary["name"]].short_head(),
