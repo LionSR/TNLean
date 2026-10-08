@@ -1,0 +1,70 @@
+\section{Fan contacts along cell boundaries}
+\label{sec:area_law_fan_side_contacts}
+
+The labels assigned across cell sides in \cite[Section~11]{OpenAI2026AreaLaw}
+are labels of elementary perimeter segments. The following equalities
+identify precisely where the incident triangles can meet those boundaries.
+Empty and single-point intersections are included.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are boundary identities, not the full two-family proposition.
+
+\begin{theorem}[A triangle meets its own sides through its base]
+    \label{thm:area_law_fan_own_side_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_inter_dyadicCellSide}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_dyadic_cell_side}
+    Fix an arbitrary translated dyadic square, a natural exponent,
+    a signed cell index and an optional side-midpoint subdivision.
+    For any actual triangle $P_i$ of the resulting fan, write
+    $e_i=[a_i,b_i]$ for its elementary base. If $E$ is any whole side
+    of its own square, then
+    \begin{align}
+        P_i\cap E=e_i\cap E.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,thm:area_law_cell_fan_cover,
+        thm:area_law_unsplit_side_endpoints}
+    Let $Q$ be the half-open square and $c$ its center.
+    The elementary base lies in $\overline Q$, and
+    $P_i$ is the convex join of $\{c\}$ and $e_i$.
+    Since $Q$ is convex and $c\in\operatorname{int}Q$, every point
+    of $P_i$ outside $e_i$ lies in $\operatorname{int}Q$.
+    A whole side has one coordinate fixed at a lower or upper endpoint
+    of the square, and so is disjoint from its interior. This gives
+    $P_i\cap E\subseteq e_i\cap E$; base containment gives the reverse inclusion.
+\end{proof}
+
+\begin{theorem}[Contact with a distinct actual cell passes through the base]
+    \label{thm:area_law_fan_other_cell_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_closedCell_eq}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_fine_layer_indices}
+    Fix an arbitrary common origin, finite endpoint set and nonnegative
+    integer neighborhood width. Let $z\in F_{k,\ell_k}$ and
+    $w\in F_{h,\ell_h}$ be actual fine-cell indices with
+    $(k,z)\ne(h,w)$. Choose an arbitrary optional midpoint mask
+    for the cell $Q_{\ell_k}(z)$, and let $P_i$ and $e_i$ be any
+    resulting triangle and its elementary base. Then
+    \begin{align}
+        P_i\cap\overline{Q_{\ell_h}(w)}
+        =e_i\cap\overline{Q_{\ell_h}(w)}.
+    \end{align}
+    No lower scale bound or positive-length contact assumption is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fine_cells_disjoint}
+    The two actual half-open fine cells are disjoint. The open interior
+    of the reference cell is therefore disjoint from the other cell
+    and from its closure. As in the preceding proof, every point
+    of $P_i$ outside its base lies in that interior. Such a point
+    cannot belong to the other closed cell, proving one inclusion.
+    The other follows from $e_i\subseteq P_i$.
+\end{proof}
+
+These exact identities preserve the locations of contacts when passing from
+triangles to their bases. Interfaces between run regions in different cells
+will be considered through shared nondegenerate segments, rather than through
+two arbitrary common points.
