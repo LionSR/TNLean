@@ -1,0 +1,14 @@
+# PR #8718 production-validation evidence, 2026-10-06 UTC
+# Public head: 210e1d8300d2bf585a34511fc4eb2bf6a394ee1b
+# Tested merge: 98c696deae14aaa7330203aabc9bde8f2a7a2728
+# Both trees: 7f4498ab78ff201416e31d63b97945f32fe86896
+# Run: 37424899108; build job: 112142631279
+# URL: https://github.com/LionSR/TNLean/actions/runs/37424899108/job/112142631279
+# Production blob: 91babeaf7722ef8710c8a88c5ebe0add99355ab9
+# Production SHA256: 9c4a67d14d8a8d4400a6e49c94ec70db5d67fd24271c3ad442476f8a8de691e8
+# The following are the checkout, production success, and only Lean errors
+# reported in the inspected job log. The strict regression file did not pass.
+2026-10-06T06:40:18.1038435Z HEAD is now at 98c696dea Merge 210e1d8300d2bf585a34511fc4eb2bf6a394ee1b into 0d6654d1ce36244365bef972d456eba2f9eb696d
+2026-10-06T06:55:40.9844921Z ✔ [12178/12228] Built TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalEndpointAttachment (11s)
+2026-10-06T07:01:36.9073419Z TNLeanTest/ArbitraryPhysicalEndpointAttachment.lean:66:34: error: `if_false` has been deprecated: Use `ite_false` instead
+2026-10-06T07:01:36.9076644Z TNLeanTest/ArbitraryPhysicalEndpointAttachment.lean:76:14: error: `if_true` has been deprecated: Use `ite_true` instead
