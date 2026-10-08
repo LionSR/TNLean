@@ -354,6 +354,25 @@ original provenance, the 434-page PDF and complete web/native checks passed.
 The symmetry supplies the auxiliary premise for the merge-moment estimate;
 it imposes no independence assumption on the auxiliary copies.
 
+[QICLean #648](https://github.com/LionSR/QICLean/pull/648), at checked head
+`5a835680`, proves the exact expansion of the exponential merge deficit in
+its actual joint central projections, and the corresponding trace identity
+for an arbitrary matrix. Only the commuting separate actions and their
+simultaneous product are assumed; the exponent is any real number. The
+complete 9,792-job library build, two fresh standard-kernel reports,
+original provenance, the 446-page PDF and complete web/native checks passed.
+
+[QICLean #649](https://github.com/LionSR/QICLean/pull/649), at checked head
+`ef7442f0`, proves the merge-moment estimate on the literal paired copy space.
+For a positive matrix invariant under both separate actions, the label-ratio
+moment is bounded by \( (m+1)^{(|Q|\,|C|)^2}\operatorname{Tr}\rho \)
+for every real exponent at most one. The trace-one form is also proved.
+Total normalization includes zero mass, empty bases and zero copies.
+The complete 9,792-job library build, seven fresh standard-kernel reports,
+original provenance, the 447-page PDF and complete web/native checks passed.
+Deriving the actual component invariances and trace mass, and identifying
+both merge deficits on their common space, are separate applications.
+
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
 Lemma 6.1. Their application to the actual good-copy component and the
@@ -442,6 +461,17 @@ The coordinator reports 67 new and 24 refreshed standard-kernel reports,
 strict checking of 35 affected modules, 585 provenance entries and all
 20,877 compiled blueprint declaration names. The Gaussian estimates, actual
 frame identifications and complete corrected-density bound remain separate.
+
+[TNLean #8903](https://github.com/LionSR/TNLean/pull/8903), at head
+`70e23f40`, continues the Gaussian and Schmidt estimates at source
+`258925377`. Its dependency is the separately checked QICLean helper
+contribution [#646](https://github.com/LionSR/QICLean/pull/646), at
+`b2521d2a`. The coordinator reports 17 strict checks, 30 standard-kernel
+reports, all 614 provenance entries, all 20,906 blueprint declaration names
+and focused rendering checks. These are narrow checks, distinct from a
+complete library build. The actual norm integrability and some-sample
+bound are further checked local consequences reported by that coordinator;
+the complete physical compression and polynomial PEPS theorem remain open.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
