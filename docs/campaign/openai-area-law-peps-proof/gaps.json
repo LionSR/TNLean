@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-08T05:28Z",
+  "reviewedAt": "2026-10-08T15:56Z",
   "entries": [
     {
       "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
@@ -63,20 +63,21 @@
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
       "result": "Lemma 7.2",
       "title": "Clearance during the dyadic repainting",
       "issue": 8772,
       "prs": {
         "TNLean": [
-          8836
+          8836,
+          8910
         ]
       },
       "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
-      "found": "Lean proves the clearance with a₀ = 1/5000 for any schedule of guides that has the properties the paper's proof uses. The schedule itself is not yet built. The paper derives those properties in a few lines from the disjointness of the bands along different edges, and that disjointness is proved.",
-      "impact": "No problem with the paper has been found. What remains is to construct the schedule as part of Proposition 7.1.",
-      "plan": "Construct the repainting schedule, derive the guide properties from the band disjointness, and translate the estimates to the actual square."
+      "found": "Lean first proved the clearance, with a₀ = 1/5000, for any schedule of guides having the properties the paper's proof uses. #8910 now constructs the repainting schedule and proves the lemma on every block. Two technical identifications remain informal: that the paper's open chambers are where the formal labellings are constant, and that the paper's generic displacement avoids the finitely many exceptional segments.",
+      "impact": "None expected. The lemma holds for the constructed schedule; the remaining points concern how the paper's description matches the formal one.",
+      "plan": "Formalize the two identifications if a later step needs them."
     },
     {
       "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",
@@ -156,6 +157,45 @@
       "found": "Lean proves the step from the conclusions of those five results to Proposition 9.2: the entropy balance over the scan rounds, the averaging choice of a round and a parameter, the Hölder accounting of the defect energy, and the three budgets. The five conclusions enter as data, each transcribing one displayed statement of its source. Two bookkeeping details differ: one continuity error is O(n^−248) but not at most n^−248, so Lean carries n^−247, and an unspecified logarithmic power is fixed at 12.",
       "impact": "No problem with the paper has been found. The two bookkeeping differences do not affect any later step.",
       "plan": "Build the data from the scan geometry of Lemma 9.1 and the transported states of Proposition 7.4, with Proposition 8.1 and Lemmas 2.1 and 2.3 supplying the rest. Each is a separate issue of the campaign."
+    },
+    {
+      "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",
+      "repo": "QICLean",
+      "kind": "narrower",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Proposition 7.4",
+      "title": "Commutation of the transport metrics",
+      "issue": 8752,
+      "prs": {
+        "QICLean": [
+          689,
+          695
+        ]
+      },
+      "claims": "Proposition 7.4 bounds how entropy and energy change as the replicas are transported across several bands. It assumes that the operators of different bands commute on the symmetric subspace of the replicas.",
+      "found": "The first Lean version required commutation on the whole tensor power, which is stronger. It can fail when two regions overlap without nesting: for three qubits, an explicit commutator is nonzero on the full tensor power and zero on the symmetric subspace. QICLean now restricts the operators to the symmetric subspace and assumes exactly the paper's condition.",
+      "impact": "None. The paper's hypothesis was the right one, and the first formal version was stricter than needed.",
+      "plan": "Nothing further."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_nondegenerate_templates.tex",
+      "repo": "TNLean",
+      "kind": "convention",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Definition 9.3",
+      "title": "Rectangles and triangles in the scan templates",
+      "issue": 8754,
+      "prs": {
+        "TNLean": [
+          8788
+        ]
+      },
+      "claims": "The collar scan uses templates built from finitely many rectangles and triangles whose sides have slope 0, ∞, 1 or −1.",
+      "found": "Lean reads rectangle and triangle in the ordinary sense and excludes segments and points as degenerate shapes. The convention is part of the definition, and no theorem carries an extra hypothesis.",
+      "impact": "None. Only the reading of a degenerate case changes.",
+      "plan": "Nothing further."
     }
   ],
   "checked": [
