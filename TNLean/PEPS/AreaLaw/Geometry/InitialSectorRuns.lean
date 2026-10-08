@@ -100,7 +100,7 @@ theorem exists_unique_initialRegion_sector_run_assignment
   have hpath (s t : J) (p : G.Walk s t) (_ : p.IsPath) : σ s = σ t :=
     identifier_eq_of_reachable G σ hedge p.reachable
   let runLabel : G.ConnectedComponent → I := SimpleGraph.ConnectedComponent.lift σ hpath
-  have hλ (s : J) : runLabel (G.connectedComponentMk s) = σ s := rfl
+  have hRunLabel (s : J) : runLabel (G.connectedComponentMk s) = σ s := rfl
   have hdecomp (i : I) :
       initialBirthRegion o k₀ Z C a b hC h₀ i ∩ Metric.closedBall v r =
         ⋃ s : {s : J // σ s = i},
@@ -108,14 +108,14 @@ theorem exists_unique_initialRegion_sector_run_assignment
     (Classical.choose_spec
       (exists_unique_initialRegion_sector_assignment
         o k₀ Z C a b hC h₀ k z v hk₀ hz hv)).1.2 i
-  refine ⟨runLabel, ⟨hλ, ?_⟩, ?_⟩
+  refine ⟨runLabel, ⟨hRunLabel, ?_⟩, ?_⟩
   · intro i
     apply Set.Subset.antisymm
     · intro x hx
       rw [hdecomp i] at hx
       obtain ⟨s, hxs⟩ := Set.mem_iUnion.mp hx
       have hRi : runLabel (G.connectedComponentMk s.val) = i :=
-        (hλ s.val).trans s.property
+        (hRunLabel s.val).trans s.property
       refine Set.mem_iUnion.mpr ⟨⟨G.connectedComponentMk s.val, hRi⟩, ?_⟩
       change x ∈ ⋃ t ∈ (G.connectedComponentMk s.val).supp,
         (cellFanPolygon oSmall ℓ (0, 0) (fun _ ↦ true) t).region
@@ -129,14 +129,14 @@ theorem exists_unique_initialRegion_sector_run_assignment
       obtain ⟨hsR, hxs⟩ := Set.mem_iUnion.mp hxs
       have hMk : G.connectedComponentMk s = R.val :=
         (SimpleGraph.ConnectedComponent.mem_supp_iff _ _).mp hsR
-      have hsi : σ s = i := (hλ s).symm.trans
+      have hsi : σ s = i := (hRunLabel s).symm.trans
         ((congrArg runLabel hMk).trans R.property)
       rw [hdecomp i]
       exact Set.mem_iUnion.mpr ⟨⟨s, hsi⟩, hxs⟩
   · intro μ hμ
     funext R
     obtain ⟨s, rfl⟩ := R.exists_rep
-    exact (hμ.1 s).trans (hλ s).symm
+    exact (hμ.1 s).trans (hRunLabel s).symm
 
 /-- If every actual neighboring sector has the same assigned identifier,
 the smaller closed square lies in one unique actual initial open region.
@@ -199,13 +199,13 @@ theorem exists_unique_initialRegion_of_no_active_sector
   have hconnected (s t : J) : G.connectedComponentMk s = G.connectedComponentMk t :=
     SimpleGraph.ConnectedComponent.sound
       ((SimpleGraph.ConnectedComponent.exact (hconstant s t)).mono hle)
-  obtain ⟨runLabel, hλ, _⟩ :=
+  obtain ⟨runLabel, hRunLabel, _⟩ :=
     (exists_unique_initialRegion_sector_run_assignment
       o k₀ Z C a b hC h₀ k z v hk₀ hz hv).exists
   let s₀ : J := ⟨0, 0⟩
   let i₀ : I := σ s₀
   have hσ (s : J) : σ s = i₀ :=
-    (hλ s).symm.trans ((congrArg runLabel (hconnected s s₀)).trans (hλ s₀))
+    (hRunLabel s).symm.trans ((congrArg runLabel (hconnected s s₀)).trans (hRunLabel s₀))
   have hworking (s : J) : interior (P s) ⊆ U (σ s) :=
     (Classical.choose_spec
       (exists_unique_initialRegion_sector_assignment
