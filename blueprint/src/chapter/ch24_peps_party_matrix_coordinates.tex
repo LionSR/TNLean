@@ -64,6 +64,32 @@
     corresponding entry on the right.
 \end{proof}
 
+\begin{theorem}[Local conjugation followed by the private trace]
+    \label{thm:peps_party_product_conjugation}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
+      TNLean.PEPS.PairEffect.partyProductMatrix_conjugate,
+      TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \leanok
+    \uses{thm:peps_party_product_trace}
+    Let $X_p$ be an arbitrary matrix on the source coordinates at party
+    $p$, and let $A_p,B_p$ map these coordinates to the physical and
+    private output coordinates at that party. Then
+    \begin{align}
+        \operatorname{Tr}_{\rm private}
+          \left[(\bigotimes_p A_p)(\bigotimes_p X_p)
+          (\bigotimes_p B_p)^*\right]
+        &=\bigotimes_p\operatorname{Tr}_{\rm private}
+          (A_pX_pB_p^*).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_product_trace}
+    Taking the adjoint takes the adjoint of each factor. Finite
+    distributivity computes both products separately at each party.
+    Apply the product partial-trace identity.
+\end{proof}
+
 These coordinate and trace identities express the local contractions in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 565--579.
