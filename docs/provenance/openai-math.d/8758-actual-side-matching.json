@@ -182,26 +182,27 @@
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For C \u2265 2, reference k \u2265 50000000, k\u2080 \u2264 k and an actual fine-layer membership, every elementary slot of the exact actual midpoint mask has its entire closed segment contained either in the closure of the initial dummy neighborhood or in the closure of one actual distinct fine cell at h \u2265 k\u2080. Nonemptiness of Z is derived. No contact, plane-cover, label, sparsity or nonempty-Z premise is imposed. The source is released; exact-source canonical verification remains pending.",
         "Section 11, lines 154\u2013181 and 299\u2013310. The actual plane cover in an outward neighborhood provides a member of a finite family of potential opponents. Actual fine-cell or dummy-cell corner exclusion extends midpoint contact across the whole elementary segment. Opponent uniqueness and region labels remain separate obligations.",
-        "Reverified after the existing private elementary_geometry proof was exported as cellFan_elementary_geometry in the same source file, without changing that proof, and its two callers were renamed. The opponent-existence statement is unchanged. The original exact-source verification at 93c807b97f45312bab807ba47abb06f11d686f18 and its logs remain preserved in docs/provenance/evidence/8758-actual-side-matching.md and the ledger at completed parent eda992e719dd7161906b54b20a057992037b44cb. This declaration is rechecked because its entire source file has changed."
+        "Reverified after the existing private elementary_geometry proof was exported as cellFan_elementary_geometry in the same source file, without changing that proof, and its two callers were renamed. The opponent-existence statement is unchanged. The original exact-source verification at 93c807b97f45312bab807ba47abb06f11d686f18 and its logs remain preserved in docs/provenance/evidence/8758-actual-side-matching.md and the ledger at completed parent eda992e719dd7161906b54b20a057992037b44cb. This declaration is rechecked because its entire source file has changed.",
+        "Reverified after the private rectangle and cell continuation proofs in ElementarySideOpponents.lean were generalized from the midpoint to an arbitrary interior point, with the previous midpoint use specialized to the generalized proof. The public signature of TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent is unchanged. Fresh whole-file verification is required because that source file changed. The previous exact-source verification at 9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a and every original command/log remain preserved in the ledger and recursive evidence at completed parent d6f8fca2f3420463d833fe2b21918edf64a6c677."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a",
+        "revision": "d5463154269cf320c7a176349b64589388220a0e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-unique-side-opponents-build.log",
-            "sha256": "ad15eb10a27b717528f53332014c8a476fce75f45261cd66e038e12a607f1de9"
+            "log": "docs/provenance/evidence/8758-dummy-run-interfaces-build.log",
+            "sha256": "ec85062d538f864012b08dabd136b2a6183a225f86f5fe322cc5557cbba32453"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-unique-side-opponents-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-dummy-run-interfaces-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-unique-side-opponents-axioms.log",
-            "sha256": "ba0acf2b658b36f431a98ca3d40e562492f3eacac54d68dd7330c186136416ec"
+            "log": "docs/provenance/evidence/8758-dummy-run-interfaces-axioms.log",
+            "sha256": "46c6eefd9ce77b18ed94ddbaf55f8da113e85cfa782be0cb0e2bb7f8fe8aa449"
           }
         ]
       },

@@ -1,0 +1,20 @@
+Command: lake env lean docs/provenance/evidence/8758-dummy-run-interfaces-axioms.lean
+Revision: d5463154269cf320c7a176349b64589388220a0e
+Elapsed seconds: 53.181
+Exit code: 0
+
+'TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementarySide_subset_dummy_of_mem_openSegment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_dummy_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_dummy_interface' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_primary_interface' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.beltCellFanRuns_interface_colors_ne' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

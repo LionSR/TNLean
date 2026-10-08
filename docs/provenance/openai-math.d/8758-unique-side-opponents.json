@@ -30,26 +30,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For every origin, natural exponent, signed integer cell index, arbitrary optional midpoint mask and its elementary slot, proves that the two endpoints are distinct and that their common first or second coordinate is a boundary coordinate of the actual square. No layer, radius, late-scale, membership or belt assumption is imposed.",
-        "Section 11, lines 299\u2013310. The existing independently proved private elementary_geometry lemma is exported under this public name without changing its statement or proof; two callers are renamed, with no alias. The unchanged promotion and both renamed callers have been independently reviewed; exact-source canonical verification remains pending."
+        "Section 11, lines 299\u2013310. The existing independently proved private elementary_geometry lemma is exported under this public name without changing its statement or proof; two callers are renamed, with no alias. The unchanged promotion and both renamed callers have been independently reviewed; exact-source canonical verification remains pending.",
+        "Reverified after the private rectangle and cell continuation proofs in ElementarySideOpponents.lean were generalized from the midpoint to an arbitrary interior point, with the previous midpoint use specialized to the generalized proof. The public signature of TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry is unchanged. Fresh whole-file verification is required because that source file changed. The previous exact-source verification at 9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a and every original command/log remain preserved in the ledger and recursive evidence at completed parent d6f8fca2f3420463d833fe2b21918edf64a6c677."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "9e31e29bd1879dac3ae946c0e89e5cdbe9bcc30a",
+        "revision": "d5463154269cf320c7a176349b64589388220a0e",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-unique-side-opponents-build.log",
-            "sha256": "ad15eb10a27b717528f53332014c8a476fce75f45261cd66e038e12a607f1de9"
+            "log": "docs/provenance/evidence/8758-dummy-run-interfaces-build.log",
+            "sha256": "ec85062d538f864012b08dabd136b2a6183a225f86f5fe322cc5557cbba32453"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-unique-side-opponents-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-dummy-run-interfaces-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-unique-side-opponents-axioms.log",
-            "sha256": "ba0acf2b658b36f431a98ca3d40e562492f3eacac54d68dd7330c186136416ec"
+            "log": "docs/provenance/evidence/8758-dummy-run-interfaces-axioms.log",
+            "sha256": "46c6eefd9ce77b18ed94ddbaf55f8da113e85cfa782be0cb0e2bb7f8fe8aa449"
           }
         ]
       },
