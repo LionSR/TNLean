@@ -18,8 +18,11 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
+import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
+import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
+import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
