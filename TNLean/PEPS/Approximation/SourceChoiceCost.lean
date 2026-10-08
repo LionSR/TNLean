@@ -5,34 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DistributedSourceComposition
 
-/-! # Exact scalar cost of choosing only affected gate branches -/
+/-! # Exact scalar cost of choosing only affected gate branches 
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-choice-cost.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_gate_of_touches
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_gate_of_touches
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_gate_of_exterior
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_gate_of_exterior
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_comp
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_comp
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_frame
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_frame
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_id
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_id
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_localmap
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_localMap
-
-Provenance-ID: 8769-chronological-local-cost-sourcecircuit.sum_norm_coefficient_swap
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_swap
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
