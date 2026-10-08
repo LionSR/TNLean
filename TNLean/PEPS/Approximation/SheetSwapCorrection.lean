@@ -56,8 +56,8 @@ section Kron
 
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
 
-/-- A Kronecker product acts factorwise on a product vector: `(A ⊗ B)(x ⊗ y) = (A x) ⊗ (B y)`. -/
 omit [Fintype m'] [Fintype n'] in
+/-- A Kronecker product acts factorwise on a product vector: `(A ⊗ B)(x ⊗ y) = (A x) ⊗ (B y)`. -/
 theorem act_kronecker_vecKron (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) (x : EuclideanSpace ℂ m)
     (y : EuclideanSpace ℂ n) : act (A ⊗ₖ B) (vecKron x y) = vecKron (act A x) (act B y) := by
   ext ⟨i, j⟩
