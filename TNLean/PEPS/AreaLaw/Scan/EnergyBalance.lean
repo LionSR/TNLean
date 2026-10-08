@@ -327,10 +327,10 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
     ∃ C Cl : ℝ, ∀ᶠ n in Filter.atTop, ScaleFacts X n C₁ → ∀ S : ScanData X κ n,
       ∃ Λ : ℝ, 0 ≤ Λ ∧ ∀ (r : Fin (X.rounds n)) (k : ℕ) (p ρ : ℝ),
         p ∈ Icc (X.eps n / 2) (X.eps n) → 0 ≤ ρ →
-        (S.round r).chargeDefect k p / (X.K n * n * X.D n) ≤ X.delta Cδ κ.Cl n + ρ →
+        (S.round r).chargeDefect k p / (X.K n * n * X.D n) ≤ X.delta S.W Cδ κ.Cl n + ρ →
         S.defectEnergy r k p ≤
-          C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * X.W ^ 2 * Real.log n ^ Cl *
-              (X.delta Cδ κ.Cl n ^ (1 / 8 : ℝ) + X.eps n + (n : ℝ) ^ (-100 : ℝ)) +
+          C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * S.W ^ 2 * Real.log n ^ Cl *
+              (X.delta S.W Cδ κ.Cl n ^ (1 / 8 : ℝ) + X.eps n + (n : ℝ) ^ (-100 : ℝ)) +
             C * (n : ℝ) ^ (-1000 : ℝ) + Λ * (S.rem k + ρ ^ (1 / 8 : ℝ)) := by
   refine ⟨2 / κ.g * (κ.C ^ 4 * C₁ + 1), κ.Cl + κ.Cl / 8, ?_⟩
   filter_upwards [Filter.eventually_ge_atTop 3] with n hn3 hS S
@@ -349,25 +349,25 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
   have hgap0 : 0 < S.gap := by linarith
   have hε := hS.eps_pos
   have hε1 := hS.eps_lt_one
-  have ha0 : 0 ≤ X.a n := div_nonneg (by linarith [X.one_le_W]) (by linarith)
-  have hδ : 0 ≤ X.delta Cδ κ.Cl n := by
+  have ha0 : 0 ≤ X.a S.W n := div_nonneg (by linarith [S.one_le_W]) (by linarith)
+  have hδ : 0 ≤ X.delta S.W Cδ κ.Cl n := by
     unfold ScannerExponents.delta
     have : 0 ≤ Real.log n ^ κ.Cl := Real.rpow_nonneg (by linarith) _
-    have : 0 ≤ X.a n ^ (1 / 4 : ℝ) := Real.rpow_nonneg ha0 _
+    have : 0 ≤ X.a S.W n ^ (1 / 4 : ℝ) := Real.rpow_nonneg ha0 _
     have : 0 ≤ (n : ℝ) ^ (X.e - X.mu) := Real.rpow_nonneg (by linarith) _
     positivity
   set N : ℝ := κ.C * X.K n * n * X.D n with hNdef
   have hN : 0 < N := by positivity
   set L0 : ℝ := Real.log n ^ κ.Cl with hL0def
   have hL0 : 0 ≤ L0 := Real.rpow_nonneg (by linarith) _
-  set coef : ℝ := κ.C * X.a n ^ 2 * L0 * (κ.C * X.D n / X.m n * N) with hcoef
+  set coef : ℝ := κ.C * X.a S.W n ^ 2 * L0 * (κ.C * X.D n / X.m n * N) with hcoef
   have hcoef0 : 0 ≤ coef := by positivity
   refine ⟨(coef + 1) / S.gap, by positivity, ?_⟩
   intro r k p ρ hp hρ hQ
   have hp' : p ∈ Ioo (0 : ℝ) 1 := ⟨by linarith [hp.1], by linarith [hp.2]⟩
   have hsum := S.energySum_le hS r k hp'
   have hen := S.energy r k p hp'
-  set δ := X.delta Cδ κ.Cl n with hδdef
+  set δ := X.delta S.W Cδ κ.Cl n with hδdef
   set Q := (S.round r).chargeDefect k p with hQdef
   have hQ0 : 0 ≤ Q := S.chargeDefect_nonneg r k p
   -- The selected density at the scale `N = CKnD`.
@@ -389,26 +389,26 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
   -- The energy estimate at the selected point.
   have hkey : (S.round r).meanEnergy k p - S.E0 ≤
       S.E0 + coef * M + (coef * ρ ^ (1 / 8 : ℝ) + S.rem k) := by
-    have h1 : κ.C * X.a n ^ 2 * L0 * (S.round r).energySum k p ≤
-        κ.C * X.a n ^ 2 * L0 * (κ.C * X.D n / X.m n * N * (M + ρ ^ (1 / 8 : ℝ))) := by
+    have h1 : κ.C * X.a S.W n ^ 2 * L0 * (S.round r).energySum k p ≤
+        κ.C * X.a S.W n ^ 2 * L0 * (κ.C * X.D n / X.m n * N * (M + ρ ^ (1 / 8 : ℝ))) := by
       refine mul_le_mul_of_nonneg_left (hsum.trans ?_) (by positivity)
       refine mul_le_mul_of_nonneg_left ?_ (by positivity)
       rw [hMdef]; linarith
-    have h2 : κ.C * X.a n ^ 2 * L0 * (κ.C * X.D n / X.m n * N * (M + ρ ^ (1 / 8 : ℝ))) =
+    have h2 : κ.C * X.a S.W n ^ 2 * L0 * (κ.C * X.D n / X.m n * N * (M + ρ ^ (1 / 8 : ℝ))) =
         coef * M + coef * ρ ^ (1 / 8 : ℝ) := by rw [hcoef]; ring
     linarith
   -- The coefficient carries no total-volume factor (lines 516–520).
-  set P : ℝ := (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * X.W ^ 2 with hPdef
+  set P : ℝ := (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * S.W ^ 2 with hPdef
   have hP0 : 0 ≤ P := by positivity
   have hcoefle : coef ≤ κ.C ^ 3 * C₁ * P * L0 := by
-    have e : coef = κ.C ^ 3 * L0 * (X.W ^ 2 * n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n)) := by
+    have e : coef = κ.C ^ 3 * L0 * (S.W ^ 2 * (n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n))) := by
       rw [hcoef, hNdef]
       unfold ScannerExponents.a
       field_simp
     rw [e]
-    have := hS.coefficient_le
-    calc κ.C ^ 3 * L0 * (X.W ^ 2 * n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n))
-        ≤ κ.C ^ 3 * L0 * (C₁ * X.W ^ 2 * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2) :=
+    have := mul_le_mul_of_nonneg_left hS.coefficient_le (sq_nonneg S.W)
+    calc κ.C ^ 3 * L0 * (S.W ^ 2 * (n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n)))
+        ≤ κ.C ^ 3 * L0 * (S.W ^ 2 * (C₁ * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2)) :=
           mul_le_mul_of_nonneg_left this (by positivity)
       _ = κ.C ^ 3 * C₁ * P * L0 := by rw [hPdef]; ring
   -- The logarithmic factors.
@@ -459,7 +459,7 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
   have hΛ : (coef + 1) / S.gap * (S.rem k + ρ ^ (1 / 8 : ℝ)) * S.gap =
       (coef + 1) * (S.rem k + ρ ^ (1 / 8 : ℝ)) := by field_simp
   have hn1000 : 0 ≤ (n : ℝ) ^ (-1000 : ℝ) := Real.rpow_nonneg (by linarith) _
-  have e1 : 2 / κ.g * (κ.C ^ 4 * C₁ + 1) * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * X.W ^ 2 * Lc * T
+  have e1 : 2 / κ.g * (κ.C ^ 4 * C₁ + 1) * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * S.W ^ 2 * Lc * T
       = 2 / κ.g * (κ.C ^ 4 * C₁ + 1) * (P * Lc * T) := by rw [hPdef]; ring
   rw [e1, add_mul, add_mul, hΛ]
   have hC4 : 0 ≤ κ.C ^ 4 * C₁ := by positivity

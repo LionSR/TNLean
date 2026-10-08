@@ -225,7 +225,7 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
 theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) (hk : 1 ≤ k) :
     S.IntegratedChargeBound k := by
   have hk0 : (0 : ℝ) < k := by exact_mod_cast hk
-  have ha : 0 ≤ X.a n := div_nonneg (by linarith [X.one_le_W]) (Nat.cast_nonneg _)
+  have ha : 0 ≤ X.a S.W n := div_nonneg (by linarith [S.one_le_W]) (Nat.cast_nonneg _)
   have hc : 0 ≤ κ.c / (n * X.D n) := div_nonneg κ.c_pos.le (by positivity)
   have hR : 0 < X.rounds n := by
     unfold ScannerExponents.rounds
@@ -234,10 +234,10 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
     positivity
   have heps := hn.eps_pos
   have heps1 := hn.eps_lt_one
-  set err : ℝ := κ.C * k * X.a n * X.K n * X.a n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k
+  set err : ℝ := κ.C * k * X.a S.W n * X.K n * X.a S.W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k
   have key := sum_integral_le_of_deriv (fun r ↦ (S.round r).logNormSq k)
     (fun r ↦ (S.round r).chargeDefect k) (X.chargeRounds n)
-    (coef := k * X.a n * (κ.c / (n * X.D n))) (err := err) (α := X.eps n / 2)
+    (coef := k * X.a S.W n * (κ.c / (n * X.D n))) (err := err) (α := X.eps n / 2)
     (β := X.eps n) (by positivity) (by linarith)
     (by linarith) (by positivity) hR (fun r ↦ S.continuousOn_logNormSq r k)
     (fun r ↦ S.differentiableOn_logNormSq r k) (fun r p _ ↦ S.chargeDefect_nonneg r k p)
@@ -245,14 +245,14 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
     (fun r hr p hp ↦ by
       have h1 := S.entropy_gain r k p hp
       have h2 := S.chargeDefect_le_choiceGainSum r (Finset.mem_filter.1 hr).2 k p
-      have h3 : k * X.a n * (κ.c / (n * X.D n) * (S.round r).chargeDefect k p) ≤
-          k * X.a n * (S.round r).choiceGainSum k p :=
+      have h3 : k * X.a S.W n * (κ.c / (n * X.D n) * (S.round r).chargeDefect k p) ≤
+          k * X.a S.W n * (S.round r).choiceGainSum k p :=
         mul_le_mul_of_nonneg_left h2 (by positivity)
       simp only [err]
       linarith)
     (fun r p hp ↦ by
       have h1 := S.entropy_gain r k p hp
-      have h2 : 0 ≤ k * X.a n * (S.round r).choiceGainSum k p := by
+      have h2 : 0 ≤ k * X.a S.W n * (S.round r).choiceGainSum k p := by
         refine mul_nonneg (by positivity) (Finset.sum_nonneg fun h _ ↦ ?_)
         exact mul_nonneg (S.w_nonneg r h) (integral_nonneg (S.choiceGain_nonneg r h))
       simp only [err]
