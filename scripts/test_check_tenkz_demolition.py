@@ -15,7 +15,8 @@ import check_tenkz_demolition as guard
 
 
 def assert_git_grep_empty(pattern: str, *, fixed: bool = False) -> None:
-    command = ["git", "grep", "-n"]
+    # Compressed image bytes are not catalogue source text.
+    command = ["git", "grep", "-I", "-n"]
     if fixed:
         command.append("-F")
     command.extend((pattern, "--", "."))
