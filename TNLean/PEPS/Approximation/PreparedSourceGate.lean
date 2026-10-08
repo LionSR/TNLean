@@ -21,43 +21,9 @@ full party set. Source positions therefore do not depend on the monomial label.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `eq:compression-source-gate`, `04-compression.tex`, lines 233–299 and 342–381.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.branchword
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.eval
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.eval
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.branchword_isallowed
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord_isAllowed
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.sources_branchword
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.sources_branchWord
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.norm_eval_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.norm_eval_le_one
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.evalatowners
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.evalatowners_eq_sum
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners_eq_sum
-
-Provenance-ID: 8769-selective-gate-preparedsourcegate.norm_evalatowners_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.PreparedSourceGate.norm_evalAtOwners_le_one
-
-Provenance-ID: 8769-selective-gate-word.exists_preparedsourcegate
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_preparedSourceGate
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

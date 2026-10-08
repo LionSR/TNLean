@@ -16,22 +16,9 @@ identity holds for arbitrary input matrices.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 342–381.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-subset-expansion.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-density-sourcecircuit.expandedeval_eq_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_eq_mapOwner
-
-Provenance-ID: 8769-chronological-density-sourcecircuit.tomatrix_eval_eq_sum_partialword
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.toMatrix_eval_eq_sum_partialWord
-
-Provenance-ID: 8769-chronological-density-sourcecircuit.density_eval_eq_sum_partialword
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.density_eval_eq_sum_partialWord
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

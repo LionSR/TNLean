@@ -16,6 +16,16 @@ import time
 import ci_compatible_cache as guard
 
 ROOT = Path(__file__).resolve().parents[1]
+QIC_LAYOUT = '''name = "QICLean"
+defaultTargets = ["QICLean"]
+[[lean_lib]]
+name = "QICLean"
+[[lean_exe]]
+name = "lint_style"
+srcDir = "scripts"
+root = "LintStyle"
+supportInterpreter = true
+'''
 
 
 def write(root, path, source):
@@ -46,7 +56,9 @@ def stamps(root):
 
 def commit(root):
     guard.git(root, 'add', '.')
-    guard.git(root, '-c', 'user.name=Lake Fixture', '-c', 'user.email=fixture@example.invalid',
+    # Keep temporary fixture repositories quiescent when commit returns.
+    guard.git(root, '-c', 'maintenance.auto=false',
+              '-c', 'user.name=Lake Fixture', '-c', 'user.email=fixture@example.invalid',
               'commit', '-qm', 'fixture')
     return guard.git(root, 'rev-parse', 'HEAD').decode().strip()
 
@@ -103,6 +115,7 @@ def experiment(lake):
         guard.git(qic, 'init', '-q')
         for path in guard.INPUTS:
             write(qic, path, 'identical fixture metadata')
+        write(qic, 'lakefile.toml', QIC_LAYOUT)
         write(qic, '.gitignore', '.lake/\n')
         write(qic, 'QICLean/Removed.lean', 'def removed : Nat := 1\n')
         old = commit(qic)
@@ -115,8 +128,9 @@ def experiment(lake):
         assert artifact.exists()
         try:
             guard.additive_qic(qic, old, new)
-        except guard.Refusal:
-            pass
+        except guard.Refusal as error:
+            assert str(error) == ('QIC change is not a regular added module/aggregator: '
+                                  'QICLean/Removed.lean'), str(error)
         else:
             raise AssertionError('removed source was eligible despite surviving stale artifact')
         print('PASS: removed module refused despite surviving compiled artifact')
