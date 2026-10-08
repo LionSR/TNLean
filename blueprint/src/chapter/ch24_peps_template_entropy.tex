@@ -20,6 +20,7 @@
     \label{thm:area_template_partial_row}
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le}
     \leanok
+    \uses{def:area_law_ground_entropy,def:area_law_template}
     Let $T$ be a template with $C_{\rm tpl}\ge24$, let $1\le j\le s_0$,
     and let $Y\subseteq T_j\setminus T_{j-1}$. For a unit vector $\Omega$,
     local dimension $q\ge1$, and any physical region $A$, one has
@@ -32,7 +33,7 @@
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_partial_row_increment,thm:area_law_entropy_dimension,lem:area_law_template_depth_layers}
+    \uses{thm:area_partial_row_increment,thm:area_law_entropy_dimension,thm:area_law_template_depth_layers}
     Set $R=A\cap(T_{j-1}\setminus T)$ and $B=A\cap Y$.
     These regions are disjoint and $|B|\le |Y|\le n$.
     The regional increment bound and $S_\Omega(B)\le|B|\log q$
