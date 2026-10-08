@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-08T04:23Z",
+  "reviewedAt": "2026-10-08T05:28Z",
   "entries": [
     {
       "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
@@ -137,6 +137,25 @@
       "found": "With no parties at all, a circuit can still multiply by a scalar c, while a network with no nodes always contracts to 1, so the literal statement fails in that empty case (for c = 1/2 the error is 3/4). Lean requires the party set to be nonempty, once, in the definition of a distributed construction. A scalar from a gate with no participating parties is absorbed at an existing party, as the paper's proof does.",
       "impact": "None. The square grids with L ≥ 2 that the paper uses always have parties.",
       "plan": "Nothing further."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_scanner_inputs.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "area",
+      "result": "Proposition 9.2",
+      "title": "The scanner estimate from its inputs",
+      "issue": 8755,
+      "prs": {
+        "TNLean": [
+          8926
+        ]
+      },
+      "claims": "Proposition 9.2 says that for many enough replicas, some round of the collar scan and some interpolation parameter give a small defect energy, with explicit budgets for the comparison norms. The proof combines the scan geometry (Lemma 9.1), entropy and energy transport (Proposition 7.4), the norm comparisons (Proposition 8.1), continuity (Lemma 2.1) and tail bounds (Lemma 2.3).",
+      "found": "Lean proves the step from the conclusions of those five results to Proposition 9.2: the entropy balance over the scan rounds, the averaging choice of a round and a parameter, the Hölder accounting of the defect energy, and the three budgets. The five conclusions enter as data, each transcribing one displayed statement of its source. Two bookkeeping details differ: one continuity error is O(n^−248) but not at most n^−248, so Lean carries n^−247, and an unspecified logarithmic power is fixed at 12.",
+      "impact": "No problem with the paper has been found. The two bookkeeping differences do not affect any later step.",
+      "plan": "Build the data from the scan geometry of Lemma 9.1 and the transported states of Proposition 7.4, with Proposition 8.1 and Lemmas 2.1 and 2.3 supplying the rest. Each is a separate issue of the campaign."
     }
   ],
   "checked": [
