@@ -115,6 +115,7 @@ theorem stationaryBlockDensity_invariant_iff_spectralRadius_eq_one
       stationaryBlockDensity A Λ N) ↔
       spectralRadius ℂ (Module.End.toContinuousLinearMap
         (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) = 1 := by
+  have : NeZero D := ⟨by rintro rfl; simp at hΛtr⟩
   have hIrr := (pureCanonical_isIrreducibleMap_and_isPrimitive A Λ
     hΛpos hΛfix hNorm hPure).1
   exact stationaryBlockDensity_invariant_iff_spectralRadius_eq_one_of_irreducible
