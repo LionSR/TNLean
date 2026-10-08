@@ -69,6 +69,7 @@ import TNLean.MPS.ParentHamiltonian.CPSVOriginalRange
 import TNLean.MPS.ParentHamiltonian.CanonicalBlockGroundSpaceAtInjectivityLength
 import TNLean.MPS.ParentHamiltonian.CanonicalBoundedRangeGroundSpace
 import TNLean.MPS.ParentHamiltonian.CanonicalGroundSpaceTransport
+import TNLean.MPS.ParentHamiltonian.CanonicalParentGroundState
 import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionExistence
 import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.CenteredOverlapFactor
@@ -110,6 +111,7 @@ import TNLean.MPS.ParentHamiltonian.FNWProjectorDefect
 import TNLean.MPS.ParentHamiltonian.FNWTransferConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
 import TNLean.MPS.ParentHamiltonian.FNWTransferEigenvalueRate
+import TNLean.MPS.ParentHamiltonian.FaithfulLocalStateSupport
 import TNLean.MPS.ParentHamiltonian.FaithfulPeriodicGroundSpace
 import TNLean.MPS.ParentHamiltonian.FrameOperator
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
@@ -130,6 +132,8 @@ import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.ParentHamiltonian.InjectiveIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.MPS.ParentHamiltonian.IntervalObservableCoordinates
+import TNLean.MPS.ParentHamiltonian.IntervalStateProjection
 import TNLean.MPS.ParentHamiltonian.IsometricDeformation
 import TNLean.MPS.ParentHamiltonian.IsometricDeformationCovariance
 import TNLean.MPS.ParentHamiltonian.IsometricDeformationSymmetry
@@ -137,11 +141,17 @@ import TNLean.MPS.ParentHamiltonian.JointGroundSpaceIntersection
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.KnabeGapNeighborhood
 import TNLean.MPS.ParentHamiltonian.LeftPolar
+import TNLean.MPS.ParentHamiltonian.LocalCommutatorExpectation
 import TNLean.MPS.ParentHamiltonian.LocalDensitySupport
 import TNLean.MPS.ParentHamiltonian.LocalFaithfulSupport
 import TNLean.MPS.ParentHamiltonian.LocalObservableExpectation
 import TNLean.MPS.ParentHamiltonian.LocalObservableInsertion
+import TNLean.MPS.ParentHamiltonian.LocalObservableQuasiLocalState
+import TNLean.MPS.ParentHamiltonian.LocalObservableRegionExpectation
 import TNLean.MPS.ParentHamiltonian.LocalObservableState
+import TNLean.MPS.ParentHamiltonian.LocalObservableTranslationInvariance
+import TNLean.MPS.ParentHamiltonian.LocalParentExpectation
+import TNLean.MPS.ParentHamiltonian.LocalParentExpectationFromOpenKernel
 import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale
@@ -189,9 +199,16 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveFamilyIntersection
 import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 import TNLean.MPS.ParentHamiltonian.PrimitiveLocalCommutatorGap
 import TNLean.MPS.ParentHamiltonian.PrimitiveLocalParentInteractionGap
+import TNLean.MPS.ParentHamiltonian.PrimitiveQuasiLocalPurity
+import TNLean.MPS.ParentHamiltonian.PrimitiveQuasiLocalUniqueness
 import TNLean.MPS.ParentHamiltonian.PrimitiveSectorRepresentatives
 import TNLean.MPS.ParentHamiltonian.PrimitiveWitnessTransport
 import TNLean.MPS.ParentHamiltonian.ProjectorCancellation
+import TNLean.MPS.ParentHamiltonian.QuasiLocalCommutatorLocality
+import TNLean.MPS.ParentHamiltonian.QuasiLocalExpectationEquality
+import TNLean.MPS.ParentHamiltonian.QuasiLocalOpenInteractionExpectation
+import TNLean.MPS.ParentHamiltonian.QuasiLocalParentGroundStateFace
+import TNLean.MPS.ParentHamiltonian.QuasiLocalPrimitiveGap
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGram
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGramInverse
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryOverlap
@@ -221,6 +238,7 @@ import TNLean.MPS.ParentHamiltonian.SpectatorBoundary
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import TNLean.MPS.ParentHamiltonian.SpectatorOverlap
+import TNLean.MPS.ParentHamiltonian.StationaryLocalStateSupport
 import TNLean.MPS.ParentHamiltonian.StationarySupportCompression
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.SuppliedIsometryInsertion
