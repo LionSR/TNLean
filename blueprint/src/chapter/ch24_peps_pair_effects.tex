@@ -231,10 +231,11 @@ and $m\ge1$.
     Up to rearranging the stacks, the difference therefore splits as
     \begin{align}
         \widetilde M_m-M\otimes\Bigl|\bigotimes_i\eta_i^{\otimes m}\Bigr\rangle
-        =\bigl(\widetilde{M'}_m-I_{M'}\bigr)\circ(T_m\otimes\mathbf 1)\circ F_0
-        +I_{M'}\circ\bigl((T_m-P_m)\otimes\mathbf 1\bigr)\circ F_0.
+        =\bigl(\mathbf 1\otimes(\widetilde{M'}_m-I_{M'})\bigr)\circ(T_m\otimes\mathbf 1)\circ F_0
+        +(\mathbf 1\otimes I_{M'})\circ\bigl((T_m-P_m)\otimes\mathbf 1\bigr)\circ F_0,
     \end{align}
-    All other factors are contractions, so the two terms contribute
+    where $\mathbf 1$ in the first factor of each term is the identity on the new
+    first stack. All other factors are contractions, so the two terms contribute
     $(n-1)/\sqrt m$ and $1/\sqrt m$.
 \end{proof}
 
