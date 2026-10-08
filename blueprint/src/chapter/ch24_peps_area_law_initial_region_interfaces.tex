@@ -42,13 +42,22 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
     two distinct common points; the fan-run contact theorem gives
     opposite colors.
 
-    Two contacting primaries lie in neighboring closed layers.
-    Distinct primaries in the same layer have positive separation,
-    so contact forces consecutive layer indices. Their parities,
-    and hence their colors, differ. A primary contacting the dummy
-    lies in layer $k_0$; its parity differs from the dummy parity
-    $k_0-1$. Two dummy identifiers cannot be distinct. These cases
-    exhaust the actual identifier family.
+    Let primaries $i=(k,J)$ and $j=(h,K)$ with $k\le h$ share a point
+    $x$. They lie in neighboring closed layers, so $h\in\{k,k+1\}$. If
+    $h=k$, then $J\ne K$, and positive separation gives some $t>0$ with
+    \begin{align}
+        0=\|x-x\|_\infty & \ge t,
+    \end{align}
+    which is impossible. Hence $h=k+1$, and
+    \begin{align}
+        \lambda(j)=k+1\ne k=\lambda(i)\quad\text{in }\mathbb Z/2\mathbb Z.
+    \end{align}
+    A primary $i=(k,J)$ contacting the dummy lies in layer $k=k_0$, so
+    \begin{align}
+        \lambda(i)=k_0\ne k_0-1=\lambda(*)\quad\text{in }\mathbb Z/2\mathbb Z.
+    \end{align}
+    Two dummy identifiers cannot be distinct. These cases exhaust the
+    identifier family.
 \end{proof}
 
 The hypothesis retains the whole segment. Two isolated common corners of

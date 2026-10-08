@@ -26,7 +26,7 @@ Empty and single-point intersections are included.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,thm:area_law_cell_fan_cover,
-        thm:area_law_unsplit_side_endpoints}
+        thm:area_law_elementary_side_boundary_geometry}
     Let $Q$ be the half-open square and $c$ its center.
     The elementary base lies in $\overline Q$, and
     $P_i$ is the convex join of $\{c\}$ and $e_i$.
@@ -55,7 +55,7 @@ Empty and single-point intersections are included.
     No lower scale bound or positive-length contact assumption is needed.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_fine_cells_disjoint}
+    \uses{thm:area_law_fine_cells_disjoint,thm:area_law_cell_fan_cover}
     The two actual half-open fine cells are disjoint. The open interior
     of the reference cell is therefore disjoint from the other cell
     and from its closure. As in the preceding proof, every point

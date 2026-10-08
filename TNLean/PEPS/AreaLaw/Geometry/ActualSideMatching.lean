@@ -16,7 +16,8 @@ other cell, with the opposite orientation. The midpoint choices are those
 determined by actual corners at or above the starting layer.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-September 24, 2026, Section 11, lines 299–306.
+September 24, 2026, Section 11, `prop:two-families`, lines 299–306, and
+`geometry:initial-stars`, lines 352–356.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/

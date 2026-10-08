@@ -19,16 +19,22 @@
         TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_of_common_mem,
         TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_parent}
     \leanok
-    \uses{def:area_law_lattice_dyadic_square}
+    \uses{def:area_law_lattice_dyadic_square,def:area_law_dyadic_cells}
     Membership is given by coordinatewise integer division:
     $x\in C_{k,z}$ if and only if $\lfloor x/2^k\rfloor=z$.
+    Equivalently, $C_{k,z}=\Z^2\cap 2^k\bigl(z+[0,1)^2\bigr)$ consists of
+    the integer points of the half-open cell of
+    Definition~\ref{def:area_law_dyadic_cells} with origin $o=0$; this is
+    why the same symbol is used for both.
     Thus $|C_{k,z}|=4^k$ and $C_{0,z}=\{z\}$.
     Two intersecting squares are nested in scale order. In particular,
     $C_{k,z}\subseteq C_{k+1,\lfloor z/2\rfloor}$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement}
-    Refine a single index to unit scale. Integer ancestry agrees with the
+    \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement,
+        thm:area_law_dyadic_indices}
+    The floor description of membership in the real cell at origin zero gives
+    the identification with its integer points. Refine a single index to unit scale. Integer ancestry agrees with the
     floor index at origin zero. Composing ancestry maps shows that all sites
     of a fine square have the same coarse index, which proves nesting.
 \end{proof}
@@ -69,12 +75,20 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition}
-    For each $x\in S$, the unit square is contained. Choose the largest
-    contained scale at most $K$. If its parent were contained below the cap,
-    this scale would not be largest. Conversely, every selected square is
-    contained in $S$. If two selected squares intersect at different scales,
-    the smaller square's parent lies in the larger square and hence in $S$,
-    a contradiction. At equal scales the common site forces equal indices.
+    For each $x\in S$, the unit square $C_{0,x}=\{x\}$ is contained in $S$.
+    Choose
+    \begin{align}
+        k & =\max\bigl\{j\le K:C_{j,\lfloor x/2^j\rfloor}\subseteq S\bigr\}.
+    \end{align}
+    If $k<K$, maximality shows that the parent
+    $C_{k+1,\lfloor x/2^{k+1}\rfloor}$ is not contained in $S$, so
+    $(k,\lfloor x/2^k\rfloor)\in\mathcal P_K(S)$. Conversely, every
+    selected square is contained in $S$. Let $(k,u),(l,v)\in\mathcal P_K(S)$
+    with $k<l$ and $C_{k,u}\cap C_{l,v}\neq\varnothing$. Nesting gives
+    \begin{align}
+        C_{k+1,\lfloor u/2\rfloor}\subseteq C_{l,v}\subseteq S,
+    \end{align}
+    and $k<l\le K$, contradicting the selection of $(k,u)$. At equal scales the common site forces equal indices.
     Counting the disjoint union gives the sum identity; restricting its
     nonnegative summands to scale $K$ gives the cap bound.
 \end{proof}

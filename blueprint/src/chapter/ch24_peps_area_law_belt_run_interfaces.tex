@@ -16,7 +16,7 @@ need not lie on a common interface.
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_primary_interface}
     \leanok
     \uses{def:area_law_belt_fan_color,def:area_law_fan_runs,
-        def:area_law_primary_regions}
+        def:area_law_primary_regions,def:area_law_primary_pitch_indices}
     Fix a common origin, finite endpoint set, width $C\ge 2$ and
     initial layer $k_0\ge 50{,}000{,}000$, with arbitrary residue choices
     in every layer. Let $R$ be an actual run of the labelled fan in an
@@ -55,7 +55,8 @@ need not lie on a common interface.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_other_cell_contact,
-        thm:area_law_belt_fan_contact_colors,thm:area_law_fan_run_color}
+        thm:area_law_belt_fan_contact_colors,thm:area_law_fan_run_color,
+        thm:area_law_cell_fan_cover}
     The segment is covered by finitely many pairs of constituent
     triangles. Infinitude again yields a pair with two distinct common
     points. Each triangle lies in its own closed cell. Applying the

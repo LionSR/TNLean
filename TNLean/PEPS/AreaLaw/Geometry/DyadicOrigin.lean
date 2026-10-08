@@ -15,7 +15,7 @@ the integer translates of the four prescribed supporting lines contain no
 integer lattice point.
 
 This is the arithmetic prerequisite for excluding lattice sites from geometric
-edges. Identifying the supporting lines of the actual edges is a separate
+edges. Identifying the supporting lines of the edges is a separate
 geometric assertion.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,

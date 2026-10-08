@@ -53,11 +53,16 @@ boundary segments or isolated points. Their open interiors are disjoint.
         def:area_law_initial_birth_regions}
     A half-open dyadic square $Q$ is convex with nonempty interior, so
     $\overline{\operatorname{int}(Q)}=\overline Q$. Suppose that $Q$
-    is disjoint from each half-open cell in an opposing family. Since
-    $\operatorname{int}(Q)$ is open, it is also disjoint from each
-    opposing cell closure, and thus from their union. Restrict that
-    union to its open interior and take the closure on the $Q$ side.
-    This shows that $\overline Q$ is disjoint from that interior.
+    is disjoint from each half-open cell $T_i$ in an opposing family.
+    Since $\operatorname{int}(Q)$ is open, it is also disjoint from each
+    closure $\overline{T_i}$, and thus from their union. The open set
+    $U=\operatorname{int}\bigl(\bigcup_i\overline{T_i}\bigr)$ is
+    therefore disjoint from $\operatorname{int}(Q)$, hence from its
+    closure:
+    \begin{align}
+        \overline Q\cap\operatorname{int}\Bigl(\bigcup_i\overline{T_i}\Bigr)
+         & =\varnothing.
+    \end{align}
     Union over the first family's cells to obtain disjoint interiors
     of the two unions of closures.
 

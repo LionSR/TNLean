@@ -158,13 +158,15 @@ index set $I_k$ from Definition~\ref{def:area_law_dyadic_layers}.
     \leanok
     \uses{def:area_law_belt_cells,def:area_law_fine_layer_indices}
     Let $Z$ be the crossing-edge endpoint set of a finite induced-domain
-    cut, with crossing-edge count $b$. For every pair of scales
-    $\ell\le k$ and pitch exponent $p\ge k$, put $F=F_{k,\ell}$ and
-    $m=2^{p-\ell}$. There are residues $a,b'\in\{0,\ldots,m-1\}$ such that
+    cut, with crossing-edge count $b$. For every fine scale $\ell\le k$
+    and every pitch exponent $p\ge0$, put $F=F_{k,\ell}$ and
+    $m=2^{\max(p-\ell,0)}$.
+    There are residues $a,b'\in\{0,\ldots,m-1\}$ such that
     \begin{align}
         m\,|B(F;m,a,b')| & \le16(2C_0+1)^2b\,4^{k-\ell}.
     \end{align}
-    Thus, with $r=2^k$, $t=2^\ell$, and $s=2^p$,
+    When $p\ge\ell$, put $r=2^k$, $t=2^\ell$, and $s=2^p$; then $m=s/t$
+    and
     \begin{align}
         |B(F;m,a,b')| & \le16(2C_0+1)^2b\,\frac{r^2}{st}.
     \end{align}

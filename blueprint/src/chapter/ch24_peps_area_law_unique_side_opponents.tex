@@ -88,14 +88,20 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     tangential coordinate of $x$ lies strictly between the two
     tangential bounds of each opposing square.
 
-    The tangential open intervals of all three squares overlap at
-    $x$. Pairwise disjoint interiors therefore force their normal
-    open intervals to be pairwise disjoint. All three normal closed
-    intervals contain the normal coordinate of $x$. Three intervals
-    of positive length cannot have disjoint interiors and a common
-    point in their closures: at most one can extend to either side
-    of that point. This is a contradiction. Interchanging the
-    coordinates handles a horizontal elementary segment.
+    Write $x=(\xi,\eta)$ in tangential and normal coordinates, and
+    write the closures of the reference square and the two opposing
+    squares as $[u_j,v_j]\times[u'_j,v'_j]$ for $j=0,1,2$. Then
+    \begin{align}
+        \xi  & \in(u_0,v_0)\cap(u_1,v_1)\cap(u_2,v_2),   \\
+        \eta & \in[u'_0,v'_0]\cap[u'_1,v'_1]\cap[u'_2,v'_2].
+    \end{align}
+    Since the tangential open intervals overlap, pairwise disjoint
+    interiors force the normal open intervals $(u'_j,v'_j)$ to be
+    pairwise disjoint. Each of them has positive length and contains
+    $(\eta-\epsilon,\eta)$ or $(\eta,\eta+\epsilon)$ for some
+    $\epsilon>0$. Two of the three therefore meet, a contradiction.
+    Interchanging the coordinates handles a horizontal elementary
+    segment.
 
     If both the dummy neighborhood and a distinct actual fine cell
     contain the segment, the finite union defining the dummy

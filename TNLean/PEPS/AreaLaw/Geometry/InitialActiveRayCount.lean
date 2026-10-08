@@ -33,7 +33,7 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- The deduplicated directed rays at changes of the actual initial sector
+/-- The distinct directed rays at changes of the actual initial sector
 identifier have even cardinality at most eight. The sector assignment is
 derived from the actual initial regions. Source: Section 11,
 `geometry:initial-stars`, lines 333–370, especially lines 366–370. -/
@@ -101,6 +101,5 @@ theorem initialRegion_frontier_near_mark_iff_active_successor
   simpa only [cellFanEnd_eq_cellFanStart_iff, exists_eq_left] using
     initialRegion_frontier_near_mark_iff_active_radial
       o k₀ Z C a b hC h₀ k z v hk₀ hz hv x hx
-
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -11,15 +11,15 @@ import TNLean.PEPS.AreaLaw.Geometry.FineCellPartition
 # Initial region identifiers and their closed cover
 
 The initial family consists of the dummy neighborhood, the retained primary
-regions at every layer, and the equal-colored runs in every actual belt cell.
-An identifier keeps its layer and its actual primary or cell index. A primary
+regions at every layer, and the equal-colored runs in every belt cell.
+An identifier keeps its layer and its primary or cell index. A primary
 may have disconnected pieces, while distinct runs remain distinct even when
 their colors agree.
 
 Each identifier determines its closed birth region, its initial open interior,
-and its color. The run color descends through the actual connected component;
+and its color. The run color descends through the connected component;
 no representative triangle is selected. For a nonempty endpoint set the closed
-birth regions cover the plane, by the actual fine-cell exhaustion. Coverage of
+birth regions cover the plane, by the fine-cell exhaustion. Coverage of
 lattice sites by open interiors and disjointness of those interiors remain
 separate assertions.
 
@@ -43,8 +43,8 @@ private def runColor (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     cellFanRun_color_eq o ℓ z split family i j
       (SimpleGraph.ConnectedComponent.sound p.reachable)
 
-/-- An initial identifier is the dummy, an actually retained primary together
-with its layer, or an actual belt-cell run together with its layer and cell.
+/-- An initial identifier is the dummy, a retained primary together
+with its layer, or a belt-cell run together with its layer and cell.
 Source: area-law Section 11, `prop:two-families`, lines 172–177,
 212–218 and 299–323. -/
 def InitialRegionIndex (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
@@ -61,7 +61,7 @@ def InitialRegionIndex (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (
           (fineLayerSplitMask o k₀ k.val Z C z.val)
           (beltCellFanColor o k₀ Z C a b k.val z.val hC h₀ k.property z.property)))
 
-/-- The actual closed birth region of an initial identifier, before any repair.
+/-- The closed birth region of an initial identifier, before any repair.
 Source: area-law Section 11, `prop:two-families`, lines 172–177,
 212–218 and 308–316. -/
 def initialBirthRegion (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
@@ -85,7 +85,7 @@ def initialOpenRegion (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C
   interior (initialBirthRegion o k₀ Z C a b hC h₀ i)
 
 /-- Dummy and primary identifiers have their prescribed layer parity; a belt
-run has the color descended from its actual component.
+run has the color descended from its component.
 Source: area-law Section 11, `prop:two-families`, lines 172–174,
 212–218 and 299–323. -/
 def initialRegionColor (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
@@ -98,7 +98,7 @@ def initialRegionColor (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (
       (fineLayerSplitMask o k₀ k.val Z C z.val)
       (beltCellFanColor o k₀ Z C a b k.val z.val hC h₀ k.property z.property) R
 
-/-- The color of a belt-run identifier equals the actual color of every
+/-- The color of a belt-run identifier equals the color of every
 constituent triangle. Source: area-law Section 11, `prop:two-families`,
 lines 313–318. -/
 theorem initialRegionColor_beltRun_eq (o : ℝ × ℝ) (k₀ : ℕ)
@@ -117,7 +117,7 @@ theorem initialRegionColor_beltRun_eq (o : ℝ × ℝ) (k₀ : ℕ)
   rw [← (SimpleGraph.ConnectedComponent.mem_supp_iff R i).mp hi]
   exact SimpleGraph.ConnectedComponent.lift_mk
 
-/-- The actual closed birth regions cover the plane when the endpoint set is
+/-- The closed birth regions cover the plane when the endpoint set is
 nonempty. Source: area-law Section 11, `prop:two-families`, lines 154–177,
 212–218 and 299–316. -/
 theorem initialBirthRegions_cover (o : ℝ × ℝ) (k₀ : ℕ)

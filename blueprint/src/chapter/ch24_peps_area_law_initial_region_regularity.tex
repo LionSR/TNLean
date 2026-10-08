@@ -26,10 +26,14 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
     \uses{thm:area_law_cell_fan_cover,
         thm:area_law_primary_fine_cell_cover,def:area_law_fan_runs,
         def:area_law_initial_birth_regions}
-    Each actual fan triangle is a closed convex hull with nonzero
-    determinant. Its two edge vectors are linearly independent and
-    span the plane, so the three vertices affinely span the plane.
-    Thus the triangle has nonempty interior. A convex set with
+    Each fan triangle is the closed convex hull of vertices $a,b,c$ with
+    \begin{align}
+        (b_1-a_1)(c_2-a_2)-(b_2-a_2)(c_1-a_1) & \neq 0.
+    \end{align}
+    This determinant is that of the edge vectors $b-a$ and $c-a$, so
+    they are linearly independent and span the plane, and the three
+    vertices affinely span the plane. Thus the triangle has nonempty
+    interior. A convex set with
     nonempty interior has the same closure as its interior; closedness
     therefore gives the asserted identity for each triangle.
 

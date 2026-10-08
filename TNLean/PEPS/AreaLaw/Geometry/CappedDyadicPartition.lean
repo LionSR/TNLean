@@ -184,7 +184,7 @@ theorem pairwiseDisjoint_cappedDyadicPartition (S : Finset (ℤ × ℤ)) (K : �
     exact hxa.symm.trans hxb
   exact hab (Prod.ext hk hz)
 
-/-- The sum of the actual selected square cardinalities is exactly `|S|`. -/
+/-- The sum of the selected square cardinalities is exactly `|S|`. -/
 theorem sum_card_cappedDyadicPartition (S : Finset (ℤ × ℤ)) (K : ℕ) :
     ∑ c ∈ cappedDyadicPartition S K, (latticeDyadicCell c.1 c.2).card = S.card := by
   rw [← Finset.card_biUnion (pairwiseDisjoint_cappedDyadicPartition S K),
@@ -213,7 +213,7 @@ Source: `scanner:mixed-piece` and `scanner:templates`, lines 622–649. -/
 def mixedDyadicIndices (S : Finset (ℤ × ℤ)) (k : ℕ) : Finset (ℤ × ℤ) :=
   (S.image (dyadicAncestor k)).filter fun z ↦ ¬latticeDyadicCell k z ⊆ S
 
-/-- Mixedness asserts actual inside and outside sites in the square. -/
+/-- Mixedness asserts inside and outside sites in the square. -/
 theorem mem_mixedDyadicIndices (S : Finset (ℤ × ℤ)) (k : ℕ) (z : ℤ × ℤ) :
     z ∈ mixedDyadicIndices S k ↔
       (∃ x ∈ latticeDyadicCell k z, x ∈ S) ∧

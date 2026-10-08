@@ -4,8 +4,8 @@
 Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
 $Z\subset\mathbb Z^2$, an integer width $C\ge 2$ and an initial layer
 $k_0\ge 50{,}000{,}000$. At each layer $k\ge k_0$, choose arbitrary
-residues $a_k,b_k$ modulo $2^{p_k-\ell_k}$. Retain the actual primary
-indices, belt cells, actual midpoint subdivisions and triangle colors of
+residues $a_k,b_k$ modulo $2^{p_k-\ell_k}$. Retain the primary
+indices, belt cells, midpoint subdivisions and triangle colors of
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, prop:two-families, lines 154--177,
@@ -19,9 +19,9 @@ indices, belt cells, actual midpoint subdivisions and triangle colors of
     \leanok
     \uses{def:area_law_primary_pitch_indices,def:area_law_belt_fan_color,
         def:area_law_fan_runs}
-    Let $G_k$ be the retained primary pitch indices and $B_k$ the actual
+    Let $G_k$ be the retained primary pitch indices and $B_k$ the
     belt-cell indices at layer $k$. For $z\in B_k$, let $\mathcal R_{k,z}$
-    be the runs of its actual colored fan. The identifier family is the
+    be the runs of its colored fan. The identifier family is the
     disjoint union
     \begin{align}
         \mathcal I
@@ -85,14 +85,14 @@ indices, belt cells, actual midpoint subdivisions and triangle colors of
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_beltRun_eq}
     \leanok
     \uses{def:area_law_initial_region_colors}
-    If $e$ is any constituent triangle of an actual belt run $R$ in
-    layer $k$ and cell $z$, then $\lambda(k,z,R)$ equals the actual
+    If $e$ is any constituent triangle of a belt run $R$ in
+    layer $k$ and cell $z$, then $\lambda(k,z,R)$ equals the
     color of $e$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_fan_run_color,def:area_law_initial_region_colors}
-    The run is the component containing $e$. Its common color is therefore
-    the color of $e$, by constancy on that component.
+    \uses{def:area_law_initial_region_colors}
+    The run is the component containing $e$. By definition, $\lambda(k,z,R)$
+    is the color that this component carries, which is the color of $e$.
 \end{proof}
 
 \begin{theorem}[Closed cover by the initial family]
@@ -111,10 +111,10 @@ indices, belt cells, actual midpoint subdivisions and triangle colors of
         def:area_law_initial_birth_regions}
     Fix $x\in\mathbb R^2$. If $x\in N_0$, then
     $x\in\overline{N_0}=X_*^0$. Otherwise fine-cell exhaustion gives
-    an actual fine cell at some layer $k\ge k_0$ containing $x$.
+    a fine cell at some layer $k\ge k_0$ containing $x$.
     Its closure also contains $x$. If the cell is in the belt, its
     closed square is covered by its run regions, so $x$ lies in one
     $T_{k,z,R}$. If the cell is outside the belt, the unique retained
     primary containing its closure also contains $x$. Each case places
-    $x$ in a birth region with an actual identifier.
+    $x$ in a birth region with an identifier.
 \end{proof}

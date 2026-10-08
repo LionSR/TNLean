@@ -77,17 +77,32 @@ at indices at least $k_0$ participate in this construction.
 
 \begin{definition}[The actual midpoint subdivision]
     \label{def:area_law_actual_side_mask}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask,
-        TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask}
     \leanok
     \uses{def:area_law_cell_fan,def:area_law_cell_corner,
         def:area_law_fine_layer_indices}
     For the fine cell indexed by $z$ in layer $k$, write $[a_s,b_s]$
-    for its whole side $s$. Divide this side at its midpoint precisely
-    when that midpoint is a corner of some actual fine cell in a layer
-    $h\ge k_0$. The elementary segments are the whole side if no such
-    corner exists, and its two midpoint halves otherwise.
+    for its whole side $s$. Set $\varepsilon_s=1$ if the midpoint
+    $(a_s+b_s)/2$ is a corner of some fine cell in a layer $h\ge k_0$,
+    and $\varepsilon_s=0$ otherwise. The elementary segments are the
+    whole side if $\varepsilon_s=0$, and its two midpoint halves if
+    $\varepsilon_s=1$.
 \end{definition}
+
+\begin{theorem}[Witnesses for a divided side]
+    \label{thm:area_law_actual_side_mask_iff}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff}
+    \leanok
+    \uses{def:area_law_actual_side_mask}
+    Side $s$ of the fine cell indexed by $z$ in layer $k$ is divided if
+    and only if there are a layer $h\ge k_0$, an index $w\in F_{h,\ell_h}$
+    and a corner $\varepsilon\in\{0,1\}^2$ such that the corner
+    $\varepsilon$ of the fine cell $w$ equals $(a_s+b_s)/2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_actual_side_mask}
+    This is the defining condition of $\varepsilon_s$.
+\end{proof}
 
 \begin{theorem}[Opposing corners are elementary endpoints]
     \label{thm:area_law_elementary_corner_endpoint}
@@ -110,3 +125,8 @@ at indices at least $k_0$ participate in this construction.
     the opposite endpoint of the whole side lies outside that half.
     The remaining two possibilities are exactly its endpoints.
 \end{proof}
+
+The source takes the lower index $k_0$ sufficiently large without fixing a
+value \cite[Section~11]{OpenAI2026AreaLaw}. The bound $k\ge50\,000\,000$ is
+one admissible explicit choice of that threshold, so the statement above
+implies the qualitative assertion for all sufficiently large layers.
