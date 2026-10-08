@@ -68,6 +68,7 @@ evaluated along any enumeration.
 \begin{theorem}[Nonzero column close to a pure state]
     \label{thm:peps_ket_column_vector}
     \lean{TNLean.PEPS.Approximation.exists_column_ne_zero_of_traceNorm_sub_pure_le,
+        TNLean.PEPS.Approximation.exists_eq_column_ne_zero_of_traceNorm_sub_pure_le,
         Matrix.toEuclideanLin_single_one_apply}
     \leanok
     Let $\Omega$ be a unit vector and let $\sigma$ be an operator with
@@ -175,7 +176,6 @@ evaluated along any enumeration.
     selected column.
 \end{proof}
 
-\subsection{The open square grid}
 The assembly of \cite[\S8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
 lines 9--99) applies the column lemma to an operator network and then
 realizes the resulting ket network as a PEPS on the open $L\times L$ square
@@ -226,6 +226,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{thm:peps_square_grid_contraction}
     Both sides of the first identity have the same dimension on every edge
     and the same components, coordinate by coordinate. The second identity
     is the equality of square-grid contractions applied at each pair of
@@ -262,7 +263,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
         TNLean.PEPS.Approximation.Pinned.exists_peps_of_traceNorm_sub_pure_le,
         TNLean.PEPS.Approximation.Vector.Tensor.exists_peps_of_traceNorm_sub_pure_le}
     \leanok
-    \uses{thm:peps_ket_column_square}
+    \uses{def:peps_ket_column_square_fix_input}
     Let an operator network on the open $L\times L$ square have edge
     dimensions $D_e\le B$, and let its operator $\sigma$ satisfy
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$ for a unit
@@ -287,6 +288,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
 \end{corollary}
 
 \begin{proof}\leanok
+    \uses{thm:peps_ket_column_square}
     Take the fixed-input tensors of the preceding theorem; their edge
     dimensions are those of the operator network. These dimensions are
     positive because the column is nonzero: if some $D_e$ vanished, the
