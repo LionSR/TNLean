@@ -1,0 +1,108 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "65c30cad6",
+  "modules": [
+    {
+      "module": "SourcePrivatePreparation",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/SourcePrivatePreparation.lean",
+      "frozen_source_sha256": "919043d7521c1bb490692679ad7ff9c6ef1f11c2fe397d7756c225b66b6e9f93",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/SourcePrivatePreparation.lean",
+      "checked_source_sha256": "14b12eb175a1e0e94c1cca0eb97a1cf56ec0daf8af6fc88d2b6171bb6fa55c8c",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/SourcePrivatePreparation.lean",
+      "production_source_sha256": "0d7061ea3ff6cb69dd1742252bd9b6b30611d0054d6049ef48eb2d617268f06c",
+      "artifact_sha256": "74e506d8c3804afde7b1817052a69b2864b3c28c68668d2574096518ce62351e",
+      "strict_log": "SourcePrivatePreparation.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "ActualSourceLocalMatrices",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/ActualSourceLocalMatrices.lean",
+      "frozen_source_sha256": "1766e5bbad505abfcd23ef0043dc893cab968f0893dce8e7b001b07e1ba06419",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/ActualSourceLocalMatrices.lean",
+      "checked_source_sha256": "10f5b45e01c0f0559dadc4f87df72fe37aeac9f2663b1cddb76be26c193b10c6",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/ActualSourceLocalMatrices.lean",
+      "production_source_sha256": "843c13b6753f565eb4c720246a5b428ee691c87604082e10b2fc23e5857ad348",
+      "artifact_sha256": "916ae9cde868305cd717ad8c6b92bdf383c7ef4bfe30b8e6db21f270589be885",
+      "strict_log": "ActualSourceLocalMatrices.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "IncidentGateLabels",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/IncidentGateLabels.lean",
+      "frozen_source_sha256": "a814315fff629e186bf50ef77b953207ee3c32a4ba28dbe0fd104047ecb671d2",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/IncidentGateLabels.lean",
+      "checked_source_sha256": "5aa699b36e4d23c8382248b1f99bea242a49025a6db79f2577dffdbbb01e2056",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/IncidentGateLabels.lean",
+      "production_source_sha256": "436e5121f6c620b15c310f695ab1886f26cd0ecaf358229150c9caa56db7acab",
+      "artifact_sha256": "8bba3913a3f0ddee4ed149c11042db2e80b456220a2c88e23c6f371810afd852",
+      "strict_log": "IncidentGateLabels.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointOperatorWord",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointOperatorWord.lean",
+      "frozen_source_sha256": "8fd6d6fba9e3f3b7212f9071684d81a3b692b315266ac37ea381394558f9383c",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointOperatorWord.lean",
+      "checked_source_sha256": "03e2c8f9fde84b808968831ec03a4aa5c69a743d5bd0e55d7ce5695e281fd6da",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointOperatorWord.lean",
+      "production_source_sha256": "5484ff5c362696b15edab74964b4f4f26496c3ec9e8e2bf35cb44570c209875d",
+      "artifact_sha256": "6bdd5d991ffdfb8f8ad186ec583cb997704b1a1f7d4791ef1a6c7e1a30962e94",
+      "strict_log": "EndpointOperatorWord.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointOperatorLocality",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointOperatorLocality.lean",
+      "frozen_source_sha256": "4ea048c57f32db77f3c148345aa509ca79bde4dbe3129f73dd0b24af37321e43",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointOperatorLocality.lean",
+      "checked_source_sha256": "e288a0f3fc03cf3c98bf7f473c4f5b62157052ac075f99d3b447b017c91099c3",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointOperatorLocality.lean",
+      "production_source_sha256": "daa4e2ff9bc0f2d843bbc9a31524a0976f6170fcf93257fdc89b8f68080ad90f",
+      "artifact_sha256": "1fa7036e25d43d4224e96cff5c0e329d2457bf317ead9892f44642b82741505c",
+      "strict_log": "EndpointOperatorLocality.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointInventoryLocality",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointInventoryLocality.lean",
+      "frozen_source_sha256": "410de84f18cd44bfd466e22d2e72add377911c394ff7bbe68340049e07aae255",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointInventoryLocality.lean",
+      "checked_source_sha256": "f694f196eeb4434df08890db59c7f10fbb2e9e961bbede918c239d0e8882bf77",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointInventoryLocality.lean",
+      "production_source_sha256": "af9756910b96475183ebdbee0e970cbd1f7bdc052a1b63094f9a7ea13cd56ddb",
+      "artifact_sha256": "8edd09fb271ae4ce45a7192cd4e585e27f735c78d84702deb44f601be76603ce",
+      "strict_log": "EndpointInventoryLocality.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "module_count": 6,
+  "public_export_count": 20,
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "all_public_audit_source": "EndpointHelpersAudit.lean",
+  "all_public_audit_log": "EndpointHelpersAudit.strict.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "f6eb995a4d35e6330e0eac2fe964f08d800151adef55a8ea41ffe90ec8df4f1e",
+  "prerequisites": [
+    "dd33dc9888a91c630d177f38f800b4215b6e24b1"
+  ]
+}
