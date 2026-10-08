@@ -65,8 +65,9 @@ private theorem interior_triangle_ne_functional_level
       refine convexHull_min (𝕜 := ℝ) (t := g ⁻¹' Set.Ici (g c)) ?_ hconv
       intro y hy
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
+      change g c ≤ g y
       rcases hy with rfl | rfl | rfl
-      · exact (le_rfl : g c ≤ g c)
+      · exact le_rfl
       · exact ha
       · exact hb
     have hxi := interior_mono hsub hx
