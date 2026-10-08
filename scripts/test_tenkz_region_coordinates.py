@@ -79,7 +79,10 @@ def check_source(generic: str, marginal: str) -> list[str]:
         r"E_V=E_X\otimes E_C", r"K'=E_XKE_X^*",
     ):
         assert phrase in generic, phrase
-    assert "unit-norm hypotheses" in marginal and "same final vector" in marginal
+    assert "same final vector" in marginal
+    marginal_prose = " ".join(marginal.split())
+    assert "every tuple" in marginal_prose and "every choice of weights and regulator." in marginal_prose
+    assert "trace one" not in marginal_prose, "normalization belongs to the density entry"
     assert r"\begin{tenkzequation}" in generic
     assert not re.search(r"\\(?:begin\{tikzpicture\}|draw\b|fill\b|node\b)", generic)
     units = re.findall(r"\\begin\{tenkz\}.*?\\end\{tenkz\}", generic, re.S)
@@ -120,6 +123,26 @@ def check_rejected_mutations(generic: str, marginal: str) -> None:
         except AssertionError:
             continue
         raise AssertionError(("semantic mutation was accepted", old, new))
+
+    for changed in (
+        marginal.replace("every tuple", "each normalized tuple", 1),
+        marginal.replace(r"\end{theorem}", "Both sides have trace one.\n" + r"\end{theorem}", 1),
+    ):
+        assert changed != marginal
+        try:
+            check_source(generic, changed)
+        except AssertionError:
+            continue
+        raise AssertionError("a marginal-scope mutation was accepted")
+
+
+def check_density_scope(source: str) -> None:
+    density = entry(source, "Regional expectation and density properties")
+    assert "TNLean.PEPS.trace_normalizedRegularizedPatchMarginal" in density
+    prose = " ".join(density.split())
+    for condition in (r"$a_j\ge0$", "$b>0$", r"$\|\Omega\|=1$", r"$x\in\mathcal D$"):
+        assert condition in prose, condition
+    assert r"$\tr\rho_X=1$" in prose
 
 
 def check_coefficients() -> None:
@@ -179,11 +202,13 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
     generic = entry(REGIONAL.read_text(), "Local basis relabelling")
-    marginal = entry(MARGINAL.read_text(), "Relabelling the final-state marginal")
+    marginal_source = MARGINAL.read_text()
+    marginal = entry(marginal_source, "Relabelling the final-state marginal")
+    check_density_scope(marginal_source)
     units = check_source(generic, marginal)
     check_rejected_mutations(generic, marginal)
     check_coefficients()
-    print("PASS: declaration placement, same-vector marginal, diagram incidence, six rejected mutations, coefficient checks")
+    print("PASS: declaration placement, same-vector marginal, diagram incidence, eight rejected mutations, coefficient checks")
     if args.source_only:
         print("NOT RUN: SVG rendering and event-stream audit (--source-only)")
     elif args.output_dir:
