@@ -951,7 +951,7 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
 
-      - name: Test area-law graph interaction foundations
+      - name: Test area-law foundations and physical oscillations
         timeout-minutes: 2
         run: |
           set -e
@@ -961,6 +961,16 @@ jobs:
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
+          done
+          for file in scripts/spectator_site_expectation_regression.lean \
+              TNLeanTest/SiteOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannels.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannelsAxioms.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelShellOscillation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
           done
 
       - name: Check changed Lean compilation times
