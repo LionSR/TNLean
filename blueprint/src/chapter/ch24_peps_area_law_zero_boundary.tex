@@ -18,7 +18,7 @@ cases recorded before it in Section~2 of that preprint.
 \begin{proof}\leanok
     Let $a,b$ be the least eigenvalues of $H_A,H_B$ with unit eigenvectors
     $u,v$. Then $H\ge a+b$, so $E_0=\langle\omega,H\omega\rangle\ge a+b$, while
-    $u\otimes v$ has energy $a+b$. The gap inequality on $u\otimes v$ gives
+    $H(u\otimes v)=(H_Au)\otimes v+u\otimes(H_Bv)=(a+b)(u\otimes v)$. The gap inequality on $u\otimes v$ gives
     $\Delta(1-|\langle\omega,u\otimes v\rangle|^2)\le a+b-E_0\le0$, hence
     $|\langle\omega,u\otimes v\rangle|=1$ and $\omega$ is a multiple of
     $u\otimes v$. The reduced state is then a rank-one projection.
@@ -28,7 +28,7 @@ cases recorded before it in Section~2 of that preprint.
     \label{thm:area_law_support_components}
     \lean{TNLean.PEPS.AreaLaw.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
     \leanok
-    \uses{def:area_law_domain}
+    \uses{def:area_law_domain,def:area_law_hamiltonian}
     Every support of finite induced-graph diameter lies in one connected
     component of the domain graph. If $\partial_\Lambda A=\varnothing$, every
     such support lies in $A$ or in $\Lambda\setminus A$. The set of sites of any
@@ -41,9 +41,28 @@ cases recorded before it in Section~2 of that preprint.
     are joined by such a walk. Adjacent sites lie in the same component.
 \end{proof}
 
+\begin{theorem}[A cut splitting no support]
+    \label{thm:area_law_unsplit_supports}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_forall_subset_or_disjoint}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if every
+    admissible support $X$ satisfies $X\subseteq A$ or $X\cap A=\varnothing$,
+    then $S_\Omega(A)=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_product_ground_state}
+    Every term of the Hamiltonian acts inside $A$ or inside its complement, so in
+    the coordinates of the cut $H=H_A\otimes I+I\otimes H_{\Lambda\setminus A}$;
+    replacing both factors by their Hermitian parts keeps this form. The ground
+    vector is then a product vector across the cut and its reduced state on $A$
+    has zero entropy.
+\end{proof}
+
 \begin{theorem}[A cut with no crossing edge]
     \label{thm:area_law_zero_boundary}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_forall_subset_or_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty}
     \leanok
     \uses{def:area_law_ground_entropy}
     Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if
@@ -53,12 +72,10 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_product_ground_state, thm:area_law_support_components}
-    Every term of the Hamiltonian acts inside $A$ or inside its complement, so in
-    the coordinates of the cut $H=H_A\otimes I+I\otimes H_{\Lambda\setminus A}$;
-    replacing both factors by their Hermitian parts keeps this form. The ground
-    vector is then a product vector across the cut and its reduced state on $A$
-    has zero entropy.
+    \uses{thm:area_law_unsplit_supports, thm:area_law_support_components}
+    By Theorem~\ref{thm:area_law_support_components}, every admissible support
+    lies in $A$ or in $\Lambda\setminus A$, so
+    Theorem~\ref{thm:area_law_unsplit_supports} applies.
 \end{proof}
 
 \begin{theorem}[Degenerate cases]
@@ -74,8 +91,9 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_zero_boundary, thm:area_law_support_components}
-    For $R=0$ every support is a single site and so is never split by a cut.
+    \uses{thm:area_law_unsplit_supports, thm:area_law_zero_boundary, thm:area_law_support_components}
+    For $R=0$ every support is a single site and so is never split by a cut,
+    so Theorem~\ref{thm:area_law_unsplit_supports} applies.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is
     one-dimensional, and a unit-trace state on it has zero entropy. A union of
     connected components has no crossing edge by
