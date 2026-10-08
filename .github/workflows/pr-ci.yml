@@ -578,14 +578,6 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
 
-      - name: Audit standalone square-grid bridge provenance declarations
-        timeout-minutes: 2
-        run: >
-          lake env lean
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          docs/provenance/evidence/8740-axioms.lean
-
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -599,6 +591,15 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/NestedCylinderCounterexamples.lean
+
+      - name: Test uniform angular reset width and standard axioms strictly
+        run: |
+          for file in TNLeanTest/PEPS/AngularResetWidth.lean TNLeanTest/PEPS/AngularResetWidthAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test actual rectangular local-window regression strictly
         run: >

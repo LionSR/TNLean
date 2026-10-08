@@ -1,0 +1,62 @@
+[
+  {
+    "file": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+    "sha256": "12abcdfd9c2b9ee707a97faccea5d3e3e86361359a547de0013ac46bb3a02bf7",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Approximation/AngularResetWidth.lean"
+    ],
+    "exit_code": 1,
+    "seconds": 3.707289238998783,
+    "log": "<VALIDATION_LOGS>/TNLean_PEPS_Approximation_AngularResetWidth.lean-angular-reset-strict-7756.log"
+  },
+  {
+    "file": "TNLeanTest/PEPS/AngularResetWidth.lean",
+    "sha256": "cc79c1b3fdde2925ab3789b2529fb32fe9ce8ca53e4606d8119fe274e21571a3",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLeanTest/PEPS/AngularResetWidth.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 3.183323945995653,
+    "log": "<VALIDATION_LOGS>/TNLeanTest_PEPS_AngularResetWidth.lean-angular-reset-strict-7756.log"
+  },
+  {
+    "file": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+    "sha256": "cd46bcf41cf827e8727b005a5a50c528535f4fad184494853bd1c3771bc15ab2",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "--profile",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLeanTest/PEPS/AngularResetWidthAxioms.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.682039409999561,
+    "log": "<VALIDATION_LOGS>/TNLeanTest_PEPS_AngularResetWidthAxioms.lean-angular-reset-strict-7756.log"
+  }
+]

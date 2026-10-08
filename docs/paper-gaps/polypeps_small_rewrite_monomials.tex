@@ -1,0 +1,116 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+
+\title{Allowed Monomials in the Small-Patch Rewrite}
+\author{}
+\date{2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source lemma}
+
+Lemma~6.3 of the polynomial PEPS approximation manuscript of September~24,
+2026 (\path{05-frames.tex}, lines~188--219) considers old and new one-sheet
+encoded frames that agree outside boundedly many affected holes, and $m$
+additional square patches satisfying four conditions: (i) the patch outer
+squares and the affected holes avoid the outer footprints of the untouched
+holes; (ii) the patch inner squares cover every site whose raw owner changes
+and the whole outer footprint of every affected hole; (iii) in each patch
+outer square, the sites outside the old inner holes have at most two old
+owners, and the sites outside the new inner holes have at most two new owners;
+(iv) all involved raw owners and affected tag owners belong to a specified
+bounded list of parties. The lemma asserts:
+\begin{enumerate}
+\item the canonical map $M=K_{\rm new}P_m\cdots P_1K_{\rm old}^{\dagger}$ is a
+  contraction with
+  $\|M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\|
+   \le(m+r_{\rm old})\varepsilon$;
+\item for every fixed $a>0$, $M$ has a contractive approximation $M_a$ with
+  $\|M_a-M\|\le L^{-a}$ and a polynomial expansion into monomials allowed by
+  Theorem~5.2, using only the specified parties.
+\end{enumerate}
+
+\section{What the formal statement covers}
+
+The first assertion is formalized with exactly the source hypotheses, for
+frames whose tags are listed in any order; the reference error uses only
+condition~(i).\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le},
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le}, and, for
+arbitrary tag orderings,
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}.}
+For the second assertion the following steps of the proof
+(\path{05-frames.tex}, lines~254--344) are formalized: the exact expansion of
+$M$ into complete branches and the count of branches; the site-level wire
+classification of every branch, for every choice of cylinder terms, including
+unequal radii, holes and patches with empty outer sample (whose identity term
+selects the empty square), and overlapping patches and holes (decoded old-hole kets have no open
+output legs, new-hole bras have no open input legs, the open inputs of a patch
+bra have at most two old owners and the open outputs of a patch ket at most two
+new owners, direct wires keep their owner, and all involved owners lie in the
+specified list); the summation of branchwise errors; the choice of the
+truncation rank $k$; and the final rescaling by $1+\tfrac12L^{-a}$.
+
+Not formalized is the passage from one branch to a residual tensor network of
+normalized bras and kets, the application of the whole-group truncation of
+Lemma~6.2 to that network with the dimension-free branch error $g/\sqrt k$, and
+the reading of every product term as an allowed monomial of Theorem~5.2.
+Allowed monomials are now available on party layouts: compositions of
+contractions on registers of one party, normalized pair sources and normalized
+pair effects on registers of two named parties, and exchanges of tensor
+factors, as used for Lemma~5.1 and for the bounded-change clauses of
+Lemmas~6.5 and~6.6 (\path{polypeps_ownership_change_monomials.tex}). What is
+missing for this lemma is the residual network itself: its vertices, the site
+wires followed in chronological order through the selected actions, the
+identification of the branch operator with the contraction of the network
+composed with the factored private maps and the direct identities, and a list
+of registers of the frame by owner on which each product term acts. Without
+these, the existence of a contraction $M_a$ with $\|M_a-M\|\le L^{-a}$ is
+trivial ($M_a=M$), so no statement of that form is offered as the second
+assertion.
+
+The formal frames record the pairwise disjointness of the physical outer
+footprints of holes rather than of the outer squares in the plane; the source
+condition implies the formal one, so this is a generalization. The rewrite is
+constructed in canonical coordinates in which the tags of the untouched holes
+come first in both frames. Since the encodings of holes with disjoint
+footprints commute, moving every tag to the new position of its hole is a
+relabelling of the tag basis that carries one encoding to the other; along it
+the canonical rewrite becomes a contraction between frames with arbitrary tag
+orderings, with the same reference error. This is the canonical identification
+of tag orderings of Definition~6.1, and it is formalized.
+
+\section{Elimination plan}
+
+For one branch, build the residual network whose vertices are the decoded kets,
+the encoding bras and the patch bras and kets, and whose internal edges are the
+site wires followed in chronological order, and prove that the branch operator
+is the contraction of this network composed with the factored tag maps,
+zero-state maps and direct identities. The wire classification proved here
+shows that each open leg group is wholly input or wholly output and belongs to
+at most two parties. Lemma~6.2, whose simultaneous truncation of a finite
+tensor graph is formalized,\footnote{%
+\leanid{TNLean.PEPS.WholeGroup.exists_simultaneous_group_truncation}.}
+then gives the truncation with error $g/\sqrt k$. Each product term is a
+product of normalized group covectors followed by normalized group vectors,
+each on the registers of at most two parties; on a list of the frame's
+registers by owner it is an allowed monomial of the party layout, with the
+factored maps as private contractions. Combined with the branch expansion, the
+error summation and the rescaling already formalized, this yields the second
+assertion.
+
+\end{document}

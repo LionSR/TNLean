@@ -53,16 +53,16 @@ section LayerOfList
 
 variable {ι : Type*} (l : List ι) (key : ι → Fin N)
   (G : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-  (hl : l.Pairwise fun i j => Disjoint (bond (key i)) (bond (key j)))
+  (hl : l.Pairwise fun i j => Disjoint (ringBond (key i)) (ringBond (key j)))
   (hu : ∀ i ∈ l, G i ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
-  (hs : ∀ i ∈ l, G i ∈ supportedOperators d (bond (key i)))
+  (hs : ∀ i ∈ l, G i ∈ supportedOperators d (ringBond (key i)))
 
-private theorem key_mem_bond (k : Fin N) : k ∈ bond k := Or.inl rfl
+private theorem key_mem_bond (k : Fin N) : k ∈ ringBond k := Or.inl rfl
 
 include hl in
 private theorem eq_of_key_eq {i j : ι} (hi : i ∈ l) (hj : j ∈ l) (h : key i = key j) : i = j := by
   by_contra hne
-  have : Std.Symm fun i j : ι => Disjoint (bond (key i)) (bond (key j)) :=
+  have : Std.Symm fun i j : ι => Disjoint (ringBond (key i)) (ringBond (key j)) :=
     ⟨fun _ _ h => h.symm⟩
   exact Set.disjoint_left.mp (hl.forall hi hj hne) (key_mem_bond (key i)) (h ▸ key_mem_bond _)
 
@@ -98,7 +98,7 @@ noncomputable def layerOfList : Layer d N where
     intro k hk k' hk' hkk'
     obtain ⟨i, hi, rfl⟩ := List.mem_map.mp (List.mem_toFinset.mp hk)
     obtain ⟨j, hj, rfl⟩ := List.mem_map.mp (List.mem_toFinset.mp hk')
-    have : Std.Symm fun i j : ι => Disjoint (bond (key i)) (bond (key j)) :=
+    have : Std.Symm fun i j : ι => Disjoint (ringBond (key i)) (ringBond (key j)) :=
       ⟨fun _ _ h => h.symm⟩
     exact hl.forall hi hj fun h => hkk' (h ▸ rfl)
 
@@ -109,7 +109,7 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
   have hnodup : (l.map key).Nodup := by
     exact List.Pairwise.map _ (fun a b h hab =>
       Set.disjoint_left.mp h (key_mem_bond (key a)) (hab ▸ key_mem_bond (key b))) hl
-  rw [Layer.op, Layer.partialOp]
+  rw [BondLayer.op, BondLayer.partialOp]
   refine (Finset.noncommProd_toFinset (l.map key) (layerOfListGate l key G) _ hnodup).trans ?_
   rw [List.map_map]
   exact congrArg List.prod (List.map_congr_left fun i hi => layerOfListGate_key l key G hl hi)
@@ -197,7 +197,7 @@ theorem disjoint_measuredSites {h : TeleportHop N} {hs : List (TeleportHop N)}
 /-! ### The layers of a list of hops -/
 
 theorem pairwise_disjoint_one : ∀ {hs : List (TeleportHop N)}, Valid hs →
-    hs.Pairwise fun h h' => Disjoint (bond h.k₁) (bond h'.k₁)
+    hs.Pairwise fun h h' => Disjoint (ringBond h.k₁) (ringBond h'.k₁)
   | [], _ => List.Pairwise.nil
   | h :: hs, ⟨hv, he, hf, _⟩ => by
     refine List.Pairwise.cons (fun h' hh' => ?_) (pairwise_disjoint_one hv)
@@ -209,7 +209,7 @@ theorem pairwise_disjoint_one : ∀ {hs : List (TeleportHop N)}, Valid hs →
         simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
 
 theorem pairwise_disjoint_two : ∀ {hs : List (TeleportHop N)}, Valid hs →
-    hs.Pairwise fun h h' => Disjoint (bond h.k₂) (bond h'.k₂)
+    hs.Pairwise fun h h' => Disjoint (ringBond h.k₂) (ringBond h'.k₂)
   | [], _ => List.Pairwise.nil
   | h :: hs, ⟨hv, he, _, hc⟩ => by
     refine List.Pairwise.cons (fun h' hh' => ?_) (pairwise_disjoint_two hv)
