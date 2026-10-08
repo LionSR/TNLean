@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DistributedSourceComposition
 
-/-! # Exact scalar cost of choosing only affected gate branches 
+/-! # Exact scalar cost of choosing only affected gate branches
 
 Independently formalized from the manuscript; no upstream Lean proof text is
 reused.

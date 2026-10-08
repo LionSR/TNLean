@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.SourceChoiceCost
 import TNLean.PEPS.Approximation.SourceCircuitLocations
 
-/-! # Products of the exact scalar costs at touched gate occurrences 
+/-! # Products of the exact scalar costs at touched gate occurrences
 
 Independently formalized from the manuscript; no upstream Lean proof text is
 reused.

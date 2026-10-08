@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DistributedSourceComposition
 
-/-! # Allowed partial branches and their original source occurrences 
+/-! # Allowed partial branches and their original source occurrences
 
 Independently formalized from the manuscript; no upstream Lean proof text is
 reused.
