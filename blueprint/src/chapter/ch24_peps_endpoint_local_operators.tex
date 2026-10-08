@@ -1,0 +1,83 @@
+\section{Actual local maps and endpoint operators}
+\label{sec:peps_endpoint_local_operators}
+
+\begin{theorem}[Insertion of the recorded private input]
+    \label{thm:peps_recorded_private_input}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul,
+      TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul}
+    \leanok
+    For a chronological branch and a recorded party product input $\psi$,
+    preparing the private input while leaving the source registers unchanged
+    sends a source vector $y$ to $y\otimes\psi$. Composing this preparation
+    with the chronological residual gives its action on that vector.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each private input is prepared at its recorded register and owner.
+    Framing these preparations by the source registers acts as the identity
+    on the source vector. Apply the definition of composition.
+\end{proof}
+
+\begin{definition}[Local branch and physical matrices]
+    \label{def:peps_actual_local_branch_matrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalMatrix,
+      TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalPhysicalMatrix}
+    \leanok
+    In chosen orthonormal bases, let $L_\eta$ be the matrix of the actual
+    party-local source-to-output map at incident branch choice $\eta$,
+    after the recorded private input is prepared. For a source operator $X$
+    and two choices $\eta,\zeta$, the local physical matrix is
+    $\operatorname{Tr}_{\rm private}(L_\eta X L_\zeta^*)$.
+    The source operator need not be positive.
+\end{definition}
+
+\begin{theorem}[Agreement with the chronological restriction]
+    \label{thm:peps_actual_local_branch_matrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceLocalMatrix_eq_actual_restriction,
+      TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
+    \leanok
+    \uses{def:peps_actual_local_branch_matrix}
+    Projecting an actual global branch choice to its incident original
+    gate occurrences gives precisely the local choices used by the
+    restricted chronological map. The local matrix above is its matrix
+    in the chosen bases.
+\end{theorem}
+
+\begin{proof}\leanok
+    The correspondence between touched occurrences and incident labels
+    commutes with projection. Apply the equality of the local map and
+    the actual chronological restriction to each input basis vector.
+\end{proof}
+
+\begin{definition}[Endpoint operator word]
+    \label{def:peps_actual_endpoint_word}
+    \lean{TNLean.PEPS.PairEffect.Word.localEndpoint,
+      TNLean.PEPS.PairEffect.SourceInventory.endpointWord}
+    \leanok
+    At each recorded source slot, apply the prescribed left and right
+    endpoint operators at their actual owners. Other registers remain
+    unchanged, and no source is prepared by these operations.
+\end{definition}
+
+\begin{theorem}[Locality of the endpoint operators]
+    \label{thm:peps_actual_endpoint_locality}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_localEndpoint_tmul,
+      TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointWord_eval_eq_of_agree}
+    \leanok
+    \uses{def:peps_actual_endpoint_word}
+    A single endpoint operation sends $x\otimes y$ to $Ax\otimes y$.
+    If two endpoint families agree at all owners in a selected set of
+    parties, their operator words restricted to that set are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    The single endpoint action follows from the tensor product of its map
+    with the identity. Induct on the source slots. A selected endpoint
+    uses the same operator in both families; an unselected endpoint has
+    no effect on the restriction. Composition and framing preserve these
+    equalities.
+\end{proof}
+
+These results describe the actual local operators in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 279--355 and 565--588.
