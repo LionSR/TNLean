@@ -18,8 +18,6 @@ build job `112058990825`, checked merge
 `5a364cfc2b717793730e9c3e81f0ab53f97fbcf3`. Its tree
 `b97968d93c0233f1e5c23194b247004d806f5f7d` exactly equals the proof
 head and local commit `0497edf559d6e508baae6b80e3f3224f047f172a`.
-The exact source/pin hashes are preserved in
-`2026-10-06_glm23_whole_interval_checked.json`.
 
 The guarded results allow only `propext`, `Classical.choice`, and
 `Quot.sound`. They cover the uniform closed-interval periodic gap, both

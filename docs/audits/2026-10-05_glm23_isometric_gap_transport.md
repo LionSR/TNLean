@@ -255,9 +255,7 @@ production compilation times alone are not a timing-gate pass.
 
 The 38 blueprint owners now have 17 checked statement markers and
 15 checked mathematical proofs, supported by the complete production
-build. The immutable proof-source/pin manifest is
-`2026-10-06_glm23_arbitrary_physical_checked.json`. It records the failed
-regression checkpoint explicitly. Final combined validation remains
+build. Final combined validation remains
 pending; these markers do not claim full-paper completion or a passed
 repaired regression.
 

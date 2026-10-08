@@ -142,8 +142,6 @@ The already checked generic conjugacy owner remains unchanged and matches
 the periodic-swap branch exactly. The source restrictions above are unchanged:
 the normalized chain and full two-site frame results do not prove the actual
 cropped-chain identification or a physical endpoint uniform gap.
-The [recovery audit](2026-10-06_glm23_frame_core_recovery.md) and its companion
-JSON record the exact CI jobs and the later focused documentation checks.
 
 ## Narrow spectator dependency extraction
 

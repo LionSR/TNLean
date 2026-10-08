@@ -45,9 +45,7 @@ A strict pass of the repaired file remains pending.
 The 15 production declaration owners in the isolated attachment blueprint
 now carry checked statement markers, and both production-backed proof
 blocks carry checked proof markers. This promotion records the successful
-production build, not success of the repaired regression. The inspectable
-checkout/pass/error excerpt is
-[`data/glm23-endpoint-attachment-ci-210e1d.txt`](data/glm23-endpoint-attachment-ci-210e1d.txt).
+production build, not success of the repaired regression.
 The local canonical warmup of the earlier head is not used as pass evidence.
 
 ## Dependency and coverage findings
@@ -256,9 +254,7 @@ one bibliography page; all three page images were inspected. There are no
 final-pass LaTeX/BibTeX warnings, overfull/underfull boxes or missing-glyph
 reports, and no clipping or illegible formulas was observed. Rendering
 required the existing writable TeX cache and explicit installed TeX/font
-search paths; no Lean cache was touched. The production/source/test and
-render hashes, page counts and marker counts are recorded in
-[`data/glm23-endpoint-attachment-render-review.json`](data/glm23-endpoint-attachment-render-review.json).
+search paths; no Lean cache was touched.
 
 The pinned single-leaf formatting check passed. The source-level global
 blueprint/Lean synchronization and reverse coverage check also passed with

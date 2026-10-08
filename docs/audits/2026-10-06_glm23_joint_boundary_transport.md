@@ -107,9 +107,5 @@ second dimensions may vanish.
 
 A focused native declaration check imported the new leaves and checked all
 44 documented names, with zero errors or warnings. This is scoped declaration
-validation, not a whole-repository aggregate build. Evidence and source SHA-256
-hashes are in
-`/workspace/shared/glm23-recovery/joint-boundary-native-validation.json`;
-its referenced build, strict-regression, and declaration logs record the exact
-commands and outcomes. No placeholder proof, new axiom, resource-cap increase,
+validation, not a whole-repository aggregate build. No placeholder proof, new axiom, resource-cap increase,
 or additional mathematical hypothesis was introduced by the repairs.
