@@ -19,12 +19,16 @@ $\{-8<x<2\}$ and no change off it, the label $A$ on the open square, and the lab
 $C$ on the exterior band $\{-8<x<0\}$. The schedule of guides is then constructed,
 these properties are derived from the disjointness of the bands, and the estimates
 are moved to every square of the hierarchy. This gives
-Theorem~\ref{thm:peps_dyadic_angular_separation}, which is Lemma~7.2. A guide of the
+Theorem~\ref{thm:peps_dyadic_angular_separation}, which is Lemma~7.2 for the
+labellings that the schedule specifies; Lemma~7.2 for the guides sampled under the
+source's tie convention is Theorem~\ref{thm:peps_dyadic_angular_separation_sampled}. A guide of the
 source is a partition of the plane into open chambers, with labels on boundaries
 sampled after one small generic displacement; here a guide is a labelling of the
 whole plane, and two labellings that agree off finitely many interface curves
-represent the same guide. The earlier scope restriction and this convention are
-recorded in~\cite{gap:openai26_dyadic_geometry_guide_properties}. Distances are sup
+represent the same guide. The source's sampled guides are identified with readings
+of these labellings in Lemma~\ref{lem:peps_dyadic_chamber_sampling}. The earlier scope
+restriction and this convention are recorded
+in~\cite{gap:openai26_dyadic_geometry_guide_properties}. Distances are sup
 distances in the plane, and labels are elements of an arbitrary set; the labels
 $A$, $B$, $C$ below are permitted to coincide.
 
@@ -311,7 +315,9 @@ $A$, $B$, $C$ below are permitted to coincide.
     closure of the positions that are not common $C_e$ on its two guides before the
     exchange satisfies
     $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
-    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}. The positions inside $Y$ that
+    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS} for the labellings that the schedule
+    specifies; for the guides sampled under the source's tie convention it is
+    Theorem~\ref{thm:peps_dyadic_angular_separation_sampled}. The positions inside $Y$ that
     are not common $C_e$ before the exchange, which contain the positions the
     exchange changes, also form a set whose closure has diameter at most $n$; the
     source uses this bound in its proof of the exchange step, lines 421--424.
@@ -453,13 +459,92 @@ conventions differ on the interface curves of those two edges.
 Lemma~\ref{lem:peps_dyadic_readings_exist} shows that the guides of the schedule have
 readings after every displacement, and
 Lemma~\ref{lem:peps_dyadic_sampled_guides} gives the clearance estimates of Lemma~7.2
-for every such reading, on all four edges. These are the estimates for the source's
-sampled guides only once the sampled guides are identified with the readings, and
-Lemma~7.2 for the source's guides is stated here only in that conditional form. The
-identification rests on two facts that are not proved here: the source's open
-chambers are the open sets on which the formal labellings are constant, off a locally finite family of segments, and the
-source's generic displacement is parallel to none of these segments, so that the ray
-$p+\varepsilon v$ leaves them at once.
+for every such reading, on all four edges. The next three results identify the
+source's sampled guides with these readings and state Lemma~7.2 for them.
+
+\begin{definition}[Open chambers and sampled guides]
+    \label{def:peps_dyadic_chamber_sampling}
+    \lean{TNLean.PEPS.Approximation.IsChamberSampling, TNLean.PEPS.Approximation.IsChamberSampling.isDisplacedReading, TNLean.PEPS.Approximation.IsChamberSampling.unique, TNLean.PEPS.Approximation.normalLine, TNLean.PEPS.Approximation.IsLocallyInLines, TNLean.PEPS.Approximation.HasLineWalls, TNLean.PEPS.Approximation.wallThresholds, TNLean.PEPS.Approximation.wallNormals, TNLean.PEPS.Approximation.IsGenericDisplacement, TNLean.PEPS.Approximation.isGenericDisplacement_one_one, TNLean.PEPS.Approximation.IsGenericDisplacement.smul}
+    \leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    The open chamber of a label $l$ of a labelling $f$ of the plane is the interior of
+    $f^{-1}(l)$. A labelling $g$ is sampled from the open chambers of $f$ after the
+    displacement $v$ if, at every point $p$, the point $p+\varepsilon v$ lies in the open
+    chamber of the label $g(p)$ for all sufficiently small $\varepsilon>0$; such a $g$
+    reads $f$ after $v$, and two of them agree. The source's open polygonal chambers are
+    modelled in this way as the interiors of the label regions of the labellings that
+    the schedule specifies: these agree with the source's descriptions on every open
+    chamber, merging adjacent chambers of one label does not change the sampled label,
+    and a label confined to boundaries is never sampled. Let
+    $T=\{-8,-6,-5,-4,-3,-2,-1,0,1,2\}$, the values of the normal ratio at which a
+    guide of the schedule, or the region of a band that a word replaces, can have a
+    boundary, and let $\mathcal N$ be the set of the
+    vectors $(\pm t,1000)$ and $(1000,\pm t)$ with $t\in T$. A displacement $v$ is
+    generic if $N\cdot v\ne0$ for every $N\in\mathcal N$: it is parallel to none of
+    the lines with normals in $\mathcal N$, so it avoids finitely many lines through
+    the origin. The vector $(1,1)$ is generic, and so is every nonzero multiple of a
+    generic vector.
+\end{definition}
+
+\begin{lemma}[The sampled guides are the readings]
+    \label{lem:peps_dyadic_chamber_sampling}
+    \lean{TNLean.PEPS.Approximation.IsLocallyInLines.eventually_notMem, TNLean.PEPS.Approximation.HasLineWalls.isChamberSampling_iff, TNLean.PEPS.Approximation.HasLineWalls.exists_isChamberSampling, TNLean.PEPS.Approximation.hasLineWalls_lt, TNLean.PEPS.Approximation.hasLineWalls_floor, TNLean.PEPS.Approximation.isLocallyInLines_bandWidth_eq, TNLean.PEPS.Approximation.isLocallyInLines_div_eq_int, TNLean.PEPS.Approximation.hasLineWalls_mem_edgeBand, TNLean.PEPS.Approximation.hasLineWalls_mem_centralRegion, TNLean.PEPS.Approximation.hasLineWalls_mem_ball, TNLean.PEPS.Approximation.hasLineWalls_bandCoord_lt, TNLean.PEPS.Approximation.hasLineWalls_bandWord, TNLean.PEPS.Approximation.word_subset_wallThresholds, TNLean.PEPS.Approximation.hasLineWalls_blockGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isRayConstant, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.hasLineWalls, TNLean.PEPS.Approximation.hasLineWalls_schedule, TNLean.PEPS.Approximation.isChamberSampling_schedule}
+    \leanok
+    \uses{def:peps_dyadic_chamber_sampling, lem:peps_dyadic_readings_exist, lem:peps_dyadic_schedule_guides, def:peps_dyadic_block_guide}
+    The block guide, every guide of the repainting of a block (after the central birth,
+    after completed edges, and along an edge with a word of the construction on its
+    band, on the main or on the auxiliary sheet), and each of these homogenized on the
+    open squares of radius $t$ about finitely many grid corners, is constant near every
+    point off a set that lies near every point in finitely many lines with normals in
+    $\mathcal N$. So its open chambers are the open sets on which it is constant, off a
+    locally finite family of segments. Consequently, for every generic displacement $v$,
+    each of these guides has exactly one guide sampled from its open chambers after $v$,
+    and a labelling is sampled from its open chambers after $v$ if and only if it reads
+    it after $v$.
+\end{lemma}
+
+\begin{proof}\leanok
+    In the edge coordinates of a square of side $n$, the interface curve $x=t$ of a band
+    is $1000\,d=t\min(s,n-s)$, a union of two segments on lines with normals
+    $(\pm t,1000)$ or $(1000,\pm t)$, and $w(s)=0$ only on the lines $s=0$ and $s=n$.
+    The edges, the sides of the treated squares and the grid lines are lines with
+    $t=0$, and near every point only two grid lines in each direction can occur. A
+    strict inequality between continuous functions is locally constant where the two
+    sides differ; the bound $d/w(s)<t$ is locally constant where $w(s)\ne0$ and
+    $d\ne t\,w(s)$; the integer part of a continuous function is locally constant where
+    the function is not an integer. The guides are finite Boolean combinations and
+    choices among such conditions, and the thresholds of the bands and of the words of
+    the construction lie in $T$. A line not parallel to $v$ meets the ray
+    $p+\varepsilon v$ in at most one point, so for generic $v$ and small $\varepsilon>0$
+    the point $p+\varepsilon v$ avoids the walls, where the guide is locally constant;
+    with the eventual label of Lemma~\ref{lem:peps_dyadic_readings_exist} it lies in the
+    open chamber of that label.
+\end{proof}
+
+\begin{theorem}[Separation for the source's sampled guides]
+    \label{thm:peps_dyadic_angular_separation_sampled}
+    \lean{TNLean.PEPS.Approximation.exists_isChamberSampling_blockRepainting, TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_mainStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_exchange_of_chamberSampling}
+    \leanok
+    \uses{thm:peps_dyadic_angular_separation, lem:peps_dyadic_sampled_guides, lem:peps_dyadic_chamber_sampling}
+    Let $a_0=1/5000$, $n>0$, and let $v$ be a generic displacement. The guides of the
+    repainting of a block $S$ of side $n$, read as in the source by sampling their open
+    chambers after $v$, exist, and the estimates of
+    Theorem~\ref{thm:peps_dyadic_angular_separation} hold for them: every elementary
+    birth or death has changed region of diameter at most $n$ and satisfies
+    \eqref{eq:pdg_angular_separation} for its sampled surrounding guide, and every point
+    $y$ in the closure of the positions that are not common $C_e$ on the two sampled
+    guides before a lens exchange satisfies
+    $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
+    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS} under the source's tie convention,
+    lines 69--80, with the source's hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every guide named in the statement is the block guide or a guide of the repainting
+    of $S$, so its sampled guide exists by Lemma~\ref{lem:peps_dyadic_chamber_sampling}.
+    A sampled guide reads the guide of the schedule after $v$, so
+    Lemma~\ref{lem:peps_dyadic_sampled_guides} applies.
+\end{proof}
 
 \begin{lemma}[Logarithmic floor]
     \label{lem:peps_dyadic_floor}
@@ -955,9 +1040,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 464--479 and 481--505: in
     units of $t$ the guides come from finitely many ray patterns, with or without the
     square clearing. Its patches have inner radius $u=\nu t/2$, since their outer
-    squares have radius at most $2u$. The statement concerns the guides of the
-    schedule; its transfer to their readings after a small displacement is not
-    formalized.
+    squares have radius at most $2u$. The same ratios hold for the readings of these
+    guides after a small displacement
+    (Theorem~\ref{thm:peps_dyadic_sampled_ratio}).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1011,6 +1096,39 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     radius $h_n=\epsilon_0n$ and $h_{2n}=\epsilon_0\min(2n,t)$ lie between
     $\epsilon_0n$ and $2\epsilon_0n$. Since $h_n\le h_{2n}$, a configuration with some
     holes resized has larger holes than the one with all radii $h_n$.
+\end{proof}
+
+\begin{theorem}[Patch ratios for the sampled guides]
+    \label{thm:peps_dyadic_sampled_ratio}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.range_subset, TNLean.PEPS.Approximation.IsDisplacedReading.eq_on_ball, TNLean.PEPS.Approximation.IsRayConstant.comp_affine, TNLean.PEPS.Approximation.IsRayConstant.pointTreated, TNLean.PEPS.Approximation.HasLineWalls.pointTreated, TNLean.PEPS.Approximation.isChamberSampling_pointTreated, TNLean.PEPS.Approximation.isRayConstant_footprintTemplate, TNLean.PEPS.Approximation.exists_template_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}
+    \leanok
+    \uses{thm:peps_dyadic_point_ratio, thm:peps_dyadic_block_ratio, lem:peps_dyadic_readings_exist, lem:peps_dyadic_chamber_sampling}
+    Fix a displacement $v$. The conclusions of
+    Theorems~\ref{thm:peps_dyadic_point_ratio} and~\ref{thm:peps_dyadic_block_ratio}
+    hold, with a ratio $\nu>0$ depending on $v$ and on the fixed constants, for every
+    labelling that reads the guides concerned after $v$, with holes at its own true
+    vertices. For generic $v$ these are the source's sampled guides, by
+    Lemma~\ref{lem:peps_dyadic_chamber_sampling}; the point-treated guides are also
+    constant off finitely many lines with normals in $\mathcal N$ near every point, so
+    the same holds for them. The ratio is proved for each displacement, while the
+    source's ratio serves every generic displacement: the source chooses $\nu$ before
+    the information scale $D$ and the displacement only after all the guides, which
+    depend on $D$ (\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 73--77 and
+    559--563). Genericity does not depend on $L$, $D$, $n$ or $t$, so one generic
+    direction, such as $v=(1,1)$, may be fixed before every constant, and $\nu$ for it is
+    a fixed constant. This scope restriction is recorded
+    in~\cite{gap:openai26_dyadic_geometry_guide_properties}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A reading takes only values of the labelling. If a guide agrees on an open square
+    about $c$ with $u\mapsto\sigma(T((u-c)/s))$ for a template $T$, then every reading
+    of the guide after $v$ agrees there with $u\mapsto\sigma(T'((u-c)/s))$ for the
+    reading $T'$ of $T$ after $v$, since $(u+\varepsilon v-c)/s=(u-c)/s+(\varepsilon/s)v$.
+    The templates of the point treatment and of the block guides are eventually constant
+    along rays, so they have readings after $v$. Apply the compactness argument of
+    Lemma~\ref{lem:peps_dyadic_footprint_uniform} to the finitely many readings of the
+    templates.
 \end{proof}
 
 \begin{lemma}[Trivial holes at the last level]

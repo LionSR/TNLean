@@ -26,10 +26,8 @@ are unique, and that the separation of the true vertices of the temporary guides
   of a reading is a true vertex of the labelling, and the outer holes of the readings of the
   temporary guides of the point treatment are disjoint.
 
-That the source's sampled guides are these readings rests on two further facts that are not
-formalized: the source's open chambers are the open sets on which the formal labellings are
-constant, off a locally finite family of segments, and the source's generic displacement is
-parallel to none of these segments, so that the ray `p + ε v` leaves them at once.
+That the source's sampled guides are these readings, for a generic displacement, is proved in
+`TNLean.PEPS.Approximation.DyadicChamberSampling`.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -393,6 +391,18 @@ theorem isRayConstant_mainGuide (E : List SquareEdge) (e : SquareEdge) (c : ι)
     (l : List (ℝ × ι)) : IsRayConstant (R.mainGuide E e (bandWord c l)) :=
   (R.isRayConstant_completedGuide hR E).bandUpdate R.n e c l
 
+/-- **The unmodified guides are eventually constant along rays.** -/
+theorem IsUnmodifiedGuide.isRayConstant {g : ℝ × ℝ → ι} (hg : R.IsUnmodifiedGuide g) :
+    IsRayConstant g := by
+  rcases hg with rfl | rfl | ⟨E, rfl⟩ | ⟨E, e, W, hW, rfl⟩ | ⟨e, W, hW, rfl⟩
+  · exact hR
+  · exact R.isRayConstant_centralGuide hR
+  · exact R.isRayConstant_completedGuide hR E
+  · obtain ⟨c, l, rfl, -⟩ := exists_eq_bandWord_of_mem_mainWords hW
+    exact R.isRayConstant_mainGuide hR E e c l
+  · obtain ⟨c, l, rfl, -⟩ := exists_eq_bandWord_of_mem_auxWords hW
+    exact R.isRayConstant_auxGuide e c l
+
 end RepaintingBaseline
 
 /-- Every normal word of the construction along an edge is a normal word `bandWord c l`. -/
@@ -479,16 +489,8 @@ theorem homogenize_reading_outerHoles_disjoint {ι : Type*} {n t ε₀ : ℝ} (h
   refine ⟨?_, fun g' hg' c₁ c₂ h₁ h₂ hne =>
     homogenize_outerHoles_disjoint hn ht htn hε hg M P (hg'.isTrueVertex h₁)
       (hg'.isTrueVertex h₂) hne⟩
-  obtain ⟨hb, hc, hE, hm, ha⟩ := isRayConstant_blockSchedule hn lab S B
-  have hgr : IsRayConstant (shiftGuide (blockCorner n S) g) := by
-    rcases hg with rfl | rfl | ⟨E, rfl⟩ | ⟨E, e, W, hW, rfl⟩ | ⟨e, W, hW, rfl⟩
-    · exact ((isRayConstant_blockGuide n lab).comp_add _).shiftGuide _
-    · exact hc
-    · exact hE E
-    · obtain ⟨c, l, rfl⟩ := exists_eq_bandWord_of_mem_mainWords hW
-      exact hm E e c l
-    · obtain ⟨c, l, rfl⟩ := exists_eq_bandWord_of_mem_auxWords hW
-      exact ha e c l
+  have hgr : IsRayConstant (shiftGuide (blockCorner n S) g) :=
+    (hg.isRayConstant _ ((isRayConstant_blockGuide n lab).comp_add _)).shiftGuide _
   exact (hgr.homogenize M n t P).exists_isDisplacedReading v
 
 end TNLean.PEPS.Approximation
