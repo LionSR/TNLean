@@ -27,7 +27,7 @@ rev = "v4.35.0-rc3"
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "8d5389d23c8e675a0117442e1a0d2c683a4bad41"
+rev = "7d9e0688a55a64474707c5f5b260163e11b30128"
 
 [[lean_lib]]
 name = "TNLean"

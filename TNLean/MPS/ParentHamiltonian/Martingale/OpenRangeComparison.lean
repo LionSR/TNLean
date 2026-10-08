@@ -25,7 +25,10 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private def suffixStartEquiv {R W N n : ℕ} (hR : 0 < R) (_hRW : R ≤ W)
+/-- Translate the starts of nonwrapping windows in a finite interval to the
+corresponding starts in an embedded suffix interval. Source: Nachtergaele,
+arXiv:cond-mat/9410110, condition C1. -/
+def nonwrappingSuffixStartEquiv {R W N n : ℕ} (hR : 0 < R) (_hRW : R ≤ W)
     (hWn : W ≤ n) (hnN : n ≤ N) :
     NonwrappingStart R W ≃
       {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n} where
@@ -72,7 +75,7 @@ theorem openSuffixParentHamiltonianES_conj_cyclicActiveBlock
   dsimp only
   let s : Fin N := ⟨n - W, by omega⟩
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-  let e := suffixStartEquiv hR hRW hWn hnN
+  let e := nonwrappingSuffixStartEquiv hR hRW hWn hnN
   have hsum : openSuffixParentHamiltonianES A R W N n =
       ∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
         localTermES A R i.1.1 := by
