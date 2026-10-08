@@ -66,15 +66,6 @@ theorem continuous_openInteractionHamiltonianES_family
   ext v
   simp [openInteractionHamiltonianES]
 
-/-- The nonwrapping sum of canonical local projections is the existing
-canonical open-chain Hamiltonian. -/
-theorem openInteractionHamiltonianES_parentInteractionES
-    {d D R : ℕ} (A : MPSTensor d D) (hR : 0 < R) (N : ℕ) :
-    openInteractionHamiltonianES (parentInteractionES A R) N =
-      openParentHamiltonianES A R N := by
-  simp only [openInteractionHamiltonianES,
-    periodicLocalInteractionES_parentInteractionES A hR, openParentHamiltonianES]
-
 namespace MPOSymmetry
 
 variable {D₀ D₁ N : ℕ}

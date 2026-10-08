@@ -18,12 +18,12 @@ concern these given tensors; the constants may depend on them.
     \label{thm:mpo_mixed_open_gap_continuity}
     \lean{MPSTensor.continuous_periodicLocalInteractionES_family,
         MPSTensor.continuous_openInteractionHamiltonianES_family,
-        MPSTensor.openInteractionHamiltonianES_parentInteractionES,
         MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonianES_eq_of_mem_Ioo,
         MPSTensor.MPOSymmetry.eventually_mixedEndpoint_open_gap,
         MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_gap_fixed_volume}
     \leanok
-    \uses{def:mpo_mixed_extended_support,def:injective}
+    \uses{def:mpo_mixed_extended_support,def:injective,
+        lem:open_local_interaction_sum_properties}
     At every fixed $N\geq2$, the actual open Hamiltonian and its
     kernel projector depend continuously on $\gamma\in\R$. If it has
     gap $\eta>0$ at $\gamma_0$, then every $\eta'<\eta$ is a lower

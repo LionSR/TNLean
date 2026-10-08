@@ -440,10 +440,10 @@ original tensors.
 
 \begin{theorem}[Coordinate representation of a periodic interaction]
     \label{thm:mpo_periodic_interaction_coordinates}
-    \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator,
-        MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator,
+    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator,
         MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_interactionHamiltonian}
     \leanok
+    \uses{thm:parent_interaction_sum_on_site_symmetry}
     For any local matrix $a$ on $(\C^d)^{\otimes R}$, with $R\leq N$,
     its action on a cyclic window agrees with the operator defined by applying $a$
     to that window and fixing the exterior configuration. Their periodic

@@ -44,7 +44,8 @@
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_insertedBoundaryMap,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedBoundarySupport_starProjection}
     \leanok
-    \uses{def:mpo_mixed_extended_boundary,def:injective}
+    \uses{def:mpo_mixed_extended_boundary,def:injective,
+        def:open_local_interaction_sum}
     If $A$ is injective and $W\neq0$, then the extended products span
     the full matrix algebra at every $N\geq1$. Consequently
     $\Gamma'_{W,N}$ is injective and $\dim\mathcal S'_{W,N}=D^2$.
@@ -127,7 +128,6 @@
         MPSTensor.mem_ker_periodicLocalInteractionES_iff,
         MPSTensor.periodicLocalInteractionES_zero,
         MPSTensor.periodicLocalInteractionES_isPositive,
-        MPSTensor.openInteractionHamiltonianES,
         MPSTensor.mem_ker_openInteractionHamiltonianES_iff,
         MPSTensor.MPOSymmetry.mem_ker_insertedParentInteraction_iff,
         MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_inserted_eq,
