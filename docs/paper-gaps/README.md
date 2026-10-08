@@ -1092,18 +1092,20 @@ Coarse periods at least three and the stated boundary/support scope remain.
 records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
 formalized for the canonical contraction and its reference error, with the
 branch expansion, the wire classification and the final rescaling of the
-approximation, and that the expansion into allowed monomials awaits a party
-layout for monomials.
+approximation, and that the expansion into allowed monomials awaits the
+residual tensor network of a branch.
 
 ### Polynomial PEPS approximation: changes of ownership
 
 [polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
 records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
 manuscript are formalized with their source hypotheses, including the canonical
-birth map and its factorization through one normalized pair source, the
-two-sheet renaming, the ordered private corrections and both reference-error
-bounds, and that the reading of these factorizations as allowed monomials of
-Theorem 5.2 awaits a party layout for monomials.
+maps, both reference-error bounds and the bounded-change clauses on the party
+layout of Theorem 5.2: the birth and the death as a private contraction, one
+normalized pair source or pair effect and a private contraction, and the
+exchange corrections as one private contraction. Writing the renaming of the
+exchange as a composition of reorderings of tensor factors awaits a layout with
+one register per site and per tag.
 
 ### Polynomial PEPS approximation: elimination of pair effects
 

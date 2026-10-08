@@ -27,8 +27,8 @@ of a word acts at a party of `S` and every pair source joins two parties of `S`,
 * `PairEffect.matL` : a matrix as a continuous linear map of Euclidean spaces.
 * `PairEffect.oneIso`, `PairEffect.twoIso` : one or two Euclidean registers as a Euclidean
   space.
-* `PairEffect.matLocal₁₁`, `PairEffect.matLocal₂₁`, `PairEffect.matLocal₁₂`,
-  `PairEffect.matLocal₂₂` : local maps given by matrices on one or two registers of one party.
+* `PairEffect.matLocal₂₁`, `PairEffect.matLocal₁₂`, `PairEffect.matLocal₂₂` : local maps given
+  by matrices on one or two registers of one party.
 
 ## Main results
 
@@ -199,11 +199,6 @@ theorem appendIso_two_symm {p q : P} (ℓ : Layout P) (v : EuclideanSpace ℂ (�
 
 /-! ### Local maps given by matrices -/
 
-/-- The local map of a matrix from one register `ℂ^α` of `p` to one register `ℂ^β` of `p`. -/
-def matLocal₁₁ [DecidableEq α] (p : P) (A : Matrix β α ℂ) :
-    Mem [⟨p, euc α⟩] →L[ℂ] Mem [⟨p, euc β⟩] :=
-  isoL (oneIso p β).symm ∘L matL A ∘L isoL (oneIso p α)
-
 /-- The local map of a matrix from two registers `ℂ^α`, `ℂ^β` of `p` to one register `ℂ^γ`
 of `p`. -/
 def matLocal₂₁ [DecidableEq α] [DecidableEq β] (p : P) (A : Matrix γ (α × β) ℂ) :
@@ -230,9 +225,6 @@ theorem norm_comp_isoL_le {E F G H : Type*} [NormedAddCommGroup E] [InnerProduct
     (LinearIsometry.norm_toContinuousLinearMap_le _)).trans ?_
   refine (opNorm_comp_le _ _).trans ?_
   exact mul_le_of_le_one_right (norm_nonneg _) (LinearIsometry.norm_toContinuousLinearMap_le _)
-
-theorem norm_matLocal₁₁_le [DecidableEq α] (p : P) (A : Matrix β α ℂ) : ‖matLocal₁₁ p A‖ ≤ ‖A‖ :=
-  norm_comp_isoL_le _ _ _
 
 theorem norm_matLocal₂₁_le [DecidableEq α] [DecidableEq β] (p : P) (A : Matrix γ (α × β) ℂ) :
     ‖matLocal₂₁ p A‖ ≤ ‖A‖ :=

@@ -43,13 +43,16 @@ The swaps `F_S` of the two sheets and the buffer correction `D_U` are constructe
 
 ## Scope
 
-**Scope restriction (monomial structure):** Lemma 6.6 asserts that the exchange is implemented
-by private contractions and register renaming, using `P∘` and the owners of the renamed registers
-and tags, and is therefore a bounded change in the sense of Theorem 5.2. Here `C = D_U F_A ℛ` is
-constructed, `D_U` and `F_A` act on the raw registers of `U` alone, which `P∘` holds on both
-sheets before and after the exchange, and `ℛ` keeps every register at its party. Reading this as
-an allowed monomial of Theorem 5.2 needs a model of operators placed on parties, which the library
-does not yet have. Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+**Scope restriction (renaming of an exchange):** Lemma 6.6 asserts that the exchange is
+implemented by private contractions and register renaming, using `P∘` and the owners of the renamed
+registers and tags, and is therefore a bounded change in the sense of Theorem 5.2. Here
+`C = D_U F_A ℛ` is constructed; the corrections `D_U F_A` are proved to be one private contraction
+at `P∘` on the registers of `U`, which `P∘` holds on both sheets before and after the exchange
+(`TwoSheetExchange.exchange_correction_monomial` in
+`TNLean.PEPS.Approximation.OwnershipMonomials`), and `ℛ` is the identification of tensor factors
+`renameEquiv`, which keeps every register at its party. Writing `ℛ` as a word of exchanges of
+tensor factors needs a layout with one register per site and per tag, which is not formalized.
+Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 The source condition that every hole's outer square lies on one side of `∂Y` enters through the
 classification of the holes as outside or inside `Y`, which is part of the data, and through its

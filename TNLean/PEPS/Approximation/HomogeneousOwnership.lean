@@ -39,15 +39,11 @@ vectors.
 
 ## Scope
 
-**Scope restriction (monomial structure):** Lemma 6.5 asserts that the birth and the death are
-bounded changes in the sense of Theorem 5.2, that is, that they have expansions into allowed
-monomials (one normalized pair source, respectively one pair effect, and private contractions)
-involving only `P∘` and `Q∘`. Here the canonical map is factored as `B = (𝒱ᴴ S) (Sᴴ 𝒱)`, with
-`S` the source of the single normalized pair vector `s`, every other register it acts on lies in
-`T ∪ U`, whose old owner is `P∘` and whose new owner is `P∘` or `Q∘`, and `B` acts as the identity
-on `E` and on all tags. Reading this factorization as an allowed monomial of Theorem 5.2 needs a
-model of operators placed on parties, which the library does not yet have. Documented in
-`docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+The bounded-change clause of Lemma 6.5, that the birth is a private contraction at `P∘`, one
+normalized pair source between `Q∘` and `P∘` and a private contraction at `P∘`, and the death the
+same with one normalized pair effect, is proved on a party layout from the factorization
+`B = (𝒱ᴴ S) (Sᴴ 𝒱)` in `TNLean.PEPS.Approximation.OwnershipMonomials` (`Frame.birth_monomial`,
+`Frame.death_monomial`).
 
 ## References
 
@@ -393,8 +389,8 @@ by `P∘` before the birth and by `P∘` or `Q∘` after it (`owner_eq_of_notMem
 The frames `F` and `F'` differ only in raw owners, and the encoding and the reference vector do
 not depend on raw owners (Definition 6.1, `05-frames.tex`, lines 71–82), so `K_{F'} = K_F` and
 `Ω_{F'} = Ω_F`; the identity `(1 ⊗ B) K_F = K_{F'} B` says that `B` commutes with the encoding.
-The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause, which is not
-formalized (see the module docstring).
+The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause, proved in
+`Frame.birth_monomial`.
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437. -/

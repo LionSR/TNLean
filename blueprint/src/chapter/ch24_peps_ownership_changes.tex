@@ -3,9 +3,12 @@
 The statements below formalize Lemmas~6.5 and~6.6 of
 \cite{OpenAI2026PolynomialPEPS}, September 24, 2026, \texttt{05-frames.tex},
 lines 347--570, for the canonical maps constructed in their proofs, with the
-information bounds kept as hypotheses. The reading of these maps as bounded
-changes, that is, as allowed monomials of
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, is recorded in
+information bounds kept as hypotheses, and their reading as bounded changes,
+that is, as allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+on the registers of the parties (Section~\ref{sec:peps_pair_effects}). The
+renaming of the two-sheet exchange is formalized as an identification of tensor
+factors that keeps every register at its party; its reading as a composition of
+reorderings of tensor factors is recorded in
 \cite{gap:polypeps_ownership_change_monomials}.
 
 We keep the setting of Section~\ref{sec:peps_encoded_frames}. For a set
@@ -235,22 +238,160 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     canonical coordinates, since only raw owners change.
 \end{proof}
 
+\begin{definition}[Parties used by a monomial]
+    \label{def:peps_monomial_parties}
+    \lean{TNLean.PEPS.PairEffect.Word.UsesOnly,
+        TNLean.PEPS.PairEffect.Word.sourceCount,
+        TNLean.PEPS.PairEffect.PartyChain.UsesOnly,
+        TNLean.PEPS.PairEffect.PartyChain.sourceCount}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_party_monomial}
+    An allowed monomial on parties uses only the parties of a set $S$ when
+    each of its local maps acts at a party of $S$ and each of its pair sources
+    and pair effects joins two parties of $S$; reorderings of tensor factors
+    use no party. Its numbers of pair sources and of pair effects are counted
+    along the composition.
+\end{definition}
+
+\begin{lemma}[Matrices on registers of one party]
+    \label{lem:peps_front_registers}
+    \lean{TNLean.PEPS.PairEffect.matL,
+        TNLean.PEPS.PairEffect.matL_apply,
+        TNLean.PEPS.PairEffect.ofLp_matL,
+        TNLean.PEPS.PairEffect.norm_matL,
+        TNLean.PEPS.PairEffect.matL_add,
+        TNLean.PEPS.PairEffect.matL_mul,
+        TNLean.PEPS.PairEffect.oneIso,
+        TNLean.PEPS.PairEffect.twoIso,
+        TNLean.PEPS.PairEffect.pairHeadIso_eq,
+        TNLean.PEPS.PairEffect.appendIso_one_symm,
+        TNLean.PEPS.PairEffect.appendIso_two_symm,
+        TNLean.PEPS.PairEffect.matLocal₂₁,
+        TNLean.PEPS.PairEffect.matLocal₁₂,
+        TNLean.PEPS.PairEffect.matLocal₂₂,
+        TNLean.PEPS.PairEffect.eval_localMap,
+        TNLean.PEPS.PairEffect.eval_localMap₂₁,
+        TNLean.PEPS.PairEffect.eval_localMap₁₂,
+        TNLean.PEPS.PairEffect.pairHeadIso_eval_localMap₂₂}
+    \leanok
+    \uses{def:peps_party_layout}
+    Identify one register $\C^\alpha$ with $\C^\alpha$, and two registers
+    $\C^\alpha$, $\C^\beta$ with $\C^{\alpha\times\beta}$. A matrix $A$ from
+    $\C^{\alpha\times\beta}$ (or $\C^\alpha$) to $\C^{\gamma\times\delta}$ (or
+    $\C^\gamma$) defines a local map of a party $p$ on registers of $p$ of these
+    dimensions, of norm at most $\lVert A\rVert$. Placed in front of an
+    arbitrary list of further registers, its operator is $A\otimes\id$ in
+    these identifications.
+\end{lemma}
+
+\begin{proof}\leanok
+    Check the identity on pure tensors, using linearity.
+\end{proof}
+
+\begin{definition}[Birth and death monomials]
+    \label{def:peps_frame_birth_monomials}
+    \lean{TNLean.PEPS.EncodedFrame.birthWord,
+        TNLean.PEPS.EncodedFrame.birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.deathChain,
+        TNLean.PEPS.EncodedFrame.deathPrivateChain}
+    \leanok
+    \uses{def:peps_frame_birth_map,def:peps_party_monomial,lem:peps_front_registers}
+    Let $K=\bra s(\id_T\otimes V)\colon\mathcal H_T\otimes\mathcal H_U\to\mathcal
+        B_E$, with the data of the splitting lemma. Consider a register
+    $\mathcal H_U$ of $P_\circ$ and further registers left untouched. For
+    $Q_\circ\neq P_\circ$, the birth monomial starts from a register $\mathcal
+        H_T$ of $P_\circ$: it applies the private contraction $K$ at $P_\circ$ from
+    $\mathcal H_T\otimes\mathcal H_U$ to a register $\mathcal B_E$ of $P_\circ$,
+    prepares the normalized pair vector $s$ on a new register $\mathcal H_T$ of
+    $Q_\circ$ and a new register $\mathcal B_T$ of $P_\circ$, and applies the
+    private contraction $V^\dagger$ at $P_\circ$ from $\mathcal
+        B_T\otimes\mathcal B_E$ to $\mathcal H_U$ (\texttt{05-frames.tex}, lines
+    413--419). The death monomial starts from a register $\mathcal H_T$ of
+    $Q_\circ$: it applies the private isometry $V$ at $P_\circ$ from $\mathcal
+        H_U$ to $\mathcal B_T\otimes\mathcal B_E$, contracts $\mathcal H_T$ and
+    $\mathcal B_T$ with the normalized pair effect $\bra s$, and applies the
+    private contraction $K^\dagger$ at $P_\circ$ from $\mathcal B_E$ to new
+    registers $\mathcal H_T$, $\mathcal H_U$ of $P_\circ$ (lines 439--446). For
+    $Q_\circ=P_\circ$ both are the private contraction $K^\dagger K$ at
+    $P_\circ$ (lines 447--449).
+\end{definition}
+
+\begin{lemma}[Operators of the birth and death monomials]
+    \label{lem:peps_frame_birth_monomial_operators}
+    \lean{TNLean.PEPS.EncodedFrame.pairHeadIso_birthWord_eval,
+        TNLean.PEPS.EncodedFrame.pairHeadIso_deathChain_eval,
+        TNLean.PEPS.EncodedFrame.pairHeadIso_birthPrivateWord_eval,
+        TNLean.PEPS.EncodedFrame.sourceThenAdjoint,
+        TNLean.PEPS.EncodedFrame.sourceThenAdjoint_pairVec,
+        TNLean.PEPS.EncodedFrame.pairHeadIso_frame_localMap_source,
+        TNLean.PEPS.EncodedFrame.effectNext,
+        TNLean.PEPS.EncodedFrame.effectNext_apply,
+        TNLean.PEPS.EncodedFrame.effectNext_matL,
+        TNLean.PEPS.EncodedFrame.norm_birthKernel_le_one,
+        TNLean.PEPS.EncodedFrame.norm_le_one_of_isIsometry,
+        TNLean.PEPS.EncodedFrame.norm_toLp_of_star_dotProduct,
+        TNLean.PEPS.EncodedFrame.isAllowed_birthWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.isAllowed_deathChain,
+        TNLean.PEPS.EncodedFrame.usesOnly_birthWord,
+        TNLean.PEPS.EncodedFrame.sourceCount_birthWord,
+        TNLean.PEPS.EncodedFrame.usesOnly_birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.sourceCount_birthPrivateWord,
+        TNLean.PEPS.EncodedFrame.usesOnly_deathChain,
+        TNLean.PEPS.EncodedFrame.counts_deathChain,
+        TNLean.PEPS.EncodedFrame.sheetBirthOp_eq_submatrix}
+    \leanok
+    \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,
+        lem:peps_frame_birth_map}
+    The birth and death monomials are allowed and use only $P_\circ$ and
+    $Q_\circ$; for $Q_\circ\neq P_\circ$ the birth has one pair source and no
+    pair effect, and the death one pair effect and no pair source. With the
+    registers $\mathcal H_T$ and $\mathcal H_U$ identified with $\mathcal
+        H_T\otimes\mathcal H_U$, the operator of each is $K^\dagger K\otimes\id$ on
+    the untouched registers, and on the sheet $B=\id_E\otimes K^\dagger K$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The contraction $K$ is the effect $S^\dagger\mathcal V$ with $E$ trivial, so
+    $\lVert K\rVert\le1$, and $\lVert V\rVert\le1$. For the birth, on $t\otimes
+        u\otimes w$ the first contraction gives $k=K(t\otimes u)$; preparing
+    $s=\sum t'\otimes b$ and applying $V^\dagger$ to $b\otimes k$ gives
+    $\sum t'\otimes V^\dagger(b\otimes k)=K^\dagger k$, by comparing
+    coordinates and using linearity in the prepared vector. For the death,
+    $V u=\sum b\otimes e$ and the effect gives $\sum\langle s,t\otimes
+        b\rangle e=K(t\otimes u)$, after which $K^\dagger$ is applied.
+\end{proof}
+
 \begin{theorem}[Homogeneous birth and death: bounded change]
     \label{thm:peps_frame_birth_bounded}
-    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners}
-    The birth is a bounded change involving only $P_\circ$ and $Q_\circ$: a
-    private contraction at $P_\circ$, one normalized pair source between
-    $Q_\circ$ and $P_\circ$, and a private contraction at $P_\circ$; the death
-    uses one normalized pair effect instead. This is the remaining assertion
-    of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}.
+    \lean{TNLean.PEPS.EncodedFrame.Frame.birth_monomial,
+        TNLean.PEPS.EncodedFrame.Frame.death_monomial,
+        TNLean.PEPS.EncodedFrame.Frame.exists_birthWord,
+        TNLean.PEPS.EncodedFrame.Frame.exists_deathChain}
+    \leanok
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
+        lem:peps_frame_birth_monomial_operators}
+    In the setting of the canonical birth map, the birth is a bounded change
+    involving only $P_\circ$ and $Q_\circ$: a private contraction at $P_\circ$,
+    one normalized pair source between $Q_\circ$ and $P_\circ$, and a private
+    contraction at $P_\circ$; the death uses one normalized pair effect
+    instead. Here the raw registers of $T$, owned by $P_\circ$ before the birth
+    and by $Q_\circ$ after it, and those of $U$, owned by $P_\circ$ throughout,
+    are written as one register each, which is a private identification at
+    their owner; all other registers are untouched. The operator of the
+    monomial is the canonical map $B$, with the reference error of
+    Theorem~\ref{thm:peps_frame_birth}. This is the remaining assertion of
+    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, with its hypotheses.
 \end{theorem}
 
-\begin{proof}
-    The factorization $B=(\mathcal V^\dagger S)(S^\dagger\mathcal V)$ and the
-    ownership of the registers outside $E$ give the monomial. Its reading as
-    an allowed monomial needs the party layout of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}; see
-    \cite{gap:polypeps_ownership_change_monomials}.
+\begin{proof}\leanok
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
+        lem:peps_frame_birth_partition_owners}
+    Take the splitting data of Theorem~\ref{thm:peps_frame_birth}. The
+    registers of $U$ lie outside $E$, so they are owned by $P_\circ$ before
+    and after, and those of $T$ are owned by $P_\circ$ before and by $Q_\circ$
+    after. The birth and death monomials have operator $K^\dagger K$ on
+    $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
@@ -533,10 +674,42 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     contraction.
 \end{proof}
 
+\begin{lemma}[Exchange corrections as one private contraction]
+    \label{lem:peps_frame_exchange_correction_monomial}
+    \lean{TNLean.PEPS.EncodedFrame.partSwap,
+        TNLean.PEPS.EncodedFrame.correctionMatrix,
+        TNLean.PEPS.EncodedFrame.norm_correctionMatrix_le_one,
+        TNLean.PEPS.EncodedFrame.sheetSwapOp_eq_submatrix_of_subset,
+        TNLean.PEPS.EncodedFrame.sheetBufferCorrection_mul_sheetSwapOp_eq,
+        TNLean.PEPS.EncodedFrame.correctionWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_correction_monomial}
+    \leanok
+    \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
+        lem:peps_front_registers,def:peps_monomial_parties}
+    In the setting of the exchange partition, the corrections are
+    $D_UF_A=\id\otimes W$ in the coordinates in which the two copies of
+    $\mathcal H_T\otimes\mathcal H_E$ come first, where
+    $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on the two
+    copies of $\mathcal H_U$ and $\lVert W\rVert\le1$. The registers of $U$ are
+    held by $P_\circ$ on both sheets before and after the exchange, and, with
+    the raw registers of $U$ on each sheet written as one register,
+    $W\otimes\id$ is the operator of one allowed private contraction at
+    $P_\circ$ that leaves all other registers untouched
+    (\texttt{05-frames.tex}, lines 503--515).
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $A\subseteq U$, the swap $F_A$ exchanges only the $A$-parts of the
+    two copies of $\mathcal H_U$, so $F_A=\id\otimes F'_A$, and
+    $D_U=\id\otimes(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}$. Each
+    factor of $W$ is a contraction.
+\end{proof}
+
 \begin{theorem}[Two-sheet exchange: bounded change]
     \label{thm:peps_frame_exchange_bounded}
     \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
-        lem:peps_frame_exchange_owners}
+        lem:peps_frame_exchange_owners,
+        lem:peps_frame_exchange_correction_monomial}
     The exchange is implemented by private contractions and a register
     renaming, using $P_\circ$ and the owners of the renamed registers and
     tags; when these form a bounded list it is a bounded change in the sense
@@ -545,9 +718,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}
-    The corrections act on registers of $U$, all held by $P_\circ$, and the
-    renaming keeps every register at its party. Reading this as an allowed
-    monomial needs the party layout of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}; see
-    \cite{gap:polypeps_ownership_change_monomials}.
+    The corrections are one private contraction at $P_\circ$ by
+    Lemma~\ref{lem:peps_frame_exchange_correction_monomial}, and the renaming
+    keeps every register at its party. Writing the renaming as a composition
+    of reorderings of tensor factors needs one register per site and per tag;
+    see \cite{gap:polypeps_ownership_change_monomials}.
 \end{proof}
