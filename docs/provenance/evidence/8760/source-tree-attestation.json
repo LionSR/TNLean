@@ -1,0 +1,17 @@
+{
+  "repository": "LionSR/TNLean",
+  "published_branch": "dot/two-family-entropy",
+  "published_source_revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+  "locally_checked_source_revision": "6d13ef7fa70538fd7329ef22a8ab2b89866d8ef7",
+  "published_tree": "df8939313e80a8132a7fe7d8a394e849f8cbdde9",
+  "locally_checked_tree": "df8939313e80a8132a7fe7d8a394e849f8cbdde9",
+  "tree_identity_verified": true,
+  "accepted_qic_revision": "e0d95bff81c11eab7db872a927d1d69f820d4f47",
+  "model_base_revision": "158bc6bb178ee53a2c981ba751fadf6e7a3ff0a2",
+  "verification_commands": [
+    "git fetch origin dot/two-family-entropy",
+    "git rev-parse origin/dot/two-family-entropy",
+    "git diff --exit-code 6d13ef7fa70538fd7329ef22a8ab2b89866d8ef7 4295513f99a80a2fec33dadae29ac67fd785c593"
+  ],
+  "diff_exit_code": 0
+}

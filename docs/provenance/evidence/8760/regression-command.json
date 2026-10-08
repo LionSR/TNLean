@@ -1,0 +1,32 @@
+{
+  "module": "TNLeanTest.TwoFamilyEntropy",
+  "source": "/workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLeanTest/TwoFamilyEntropy.lean",
+  "cwd": "/workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration",
+  "unchanged_dependency": false,
+  "source_sha256": "7057f60e12a5d52122a8ff9a49f565349ff4f3d2ca057fc43d77f696d6572082",
+  "command": [
+    "timeout",
+    "--signal=INT",
+    "--kill-after=5s",
+    "90s",
+    "lean",
+    "-j1",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "-DautoImplicit=false",
+    "-o",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107606446825876/TNLeanTest/TwoFamilyEntropy.olean",
+    "-i",
+    "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107606446825876/TNLeanTest/TwoFamilyEntropy.ilean",
+    "/workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLeanTest/TwoFamilyEntropy.lean"
+  ],
+  "lean_path": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/7637e06d0fc2/TNLean/.lake/packages/importGraph/.lake/build/lib/lean",
+  "start": "2026-10-07T08:53:59.411555+00:00",
+  "elapsed_seconds": 2.5953481800097506,
+  "exit_code": 0,
+  "log": "/workspace/scratch/7637e06d0fc2/two-family-entropy-validation/logs/TNLeanTest.TwoFamilyEntropy.107606447079637.log",
+  "artifact_sha256": "778e59c4f93ce70ebe3ffde644e983d71e5d4e10ea072594bed0c3506eb0fcd2"
+}

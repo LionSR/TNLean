@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8760-tn-consumer-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.reducedState_eq_finiteProduct",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8760-tn-consumer-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8760-tn-consumer-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.familyIndices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8760-tn-consumer-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.past_familyIndices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8760-tn-consumer-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.union_familyIndices",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8760-tn-consumer-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "8760-tn-consumer-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:cancellation"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently identify the existing finite-domain density/entropy coordinates or induce the two label orders, then consume the generic QICLean finite-product entropy theorem. No model definitions or upstream proof code are duplicated."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "4295513f99a80a2fec33dadae29ac67fd785c593",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107603612830145/TNLean/PEPS/AreaLaw/TwoFamilies.ilean /workspace/scratch/7637e06d0fc2/TNLean-two-family-entropy-integration/TNLean/PEPS/AreaLaw/TwoFamilies.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/TNLean.PEPS.AreaLaw.TwoFamilies.log",
+            "sha256": "556daafc9b8c28dd845acd196a83a299ebe92bdd2f7836abdf572df882d7e81b"
+          },
+          {
+            "kind": "axioms",
+            "command": "timeout --signal=INT --kill-after=5s 90s lean -j1 -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true -o /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.olean -i /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/tmp/107609094674181/TNAxioms.ilean /workspace/scratch/7637e06d0fc2/two-family-entropy-validation/TNAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8760/axioms.log",
+            "sha256": "567336fc5ee08a4c8824823e7d82b0f0240d946df5f06f643691abb5653afdd7"
+          }
+        ]
+      }
+    }
+  ]
+}

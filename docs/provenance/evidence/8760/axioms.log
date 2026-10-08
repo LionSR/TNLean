@@ -1,0 +1,17 @@
+'TNLean.PEPS.AreaLaw.reducedState_eq_finiteProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.regionalEntropy_eq_finiteProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.familyIndices' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.past_familyIndices' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.union_familyIndices' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
