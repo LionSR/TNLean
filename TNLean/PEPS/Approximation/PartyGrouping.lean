@@ -15,34 +15,6 @@ memories. The construction successively separates each party from the remaining 
 Source: Polynomial-PEPS manuscript, Theorem 5.2, `04-compression.tex`, lines 233–251.
 -/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-partygrouping-layout.withoutparty
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.withoutParty
-
-Provenance-ID: 8769-partygrouping-layout.atparty_withoutparty
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.atParty_withoutParty
-
-Provenance-ID: 8769-partygrouping-layout.mem_withoutparty
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.mem_withoutParty
-
-Provenance-ID: 8769-partygrouping-layout.owners_withoutparty
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.owners_withoutParty
-
-Provenance-ID: 8769-partygrouping-partylayout_withoutparty
-Downstream declaration: TNLean.PEPS.PairEffect.partyLayout_withoutParty
-
-Provenance-ID: 8769-partygrouping-groupbypartyiso
-Downstream declaration: TNLean.PEPS.PairEffect.groupByPartyIso
-
-Provenance-ID: 8769-partygrouping-groupbypartyiso_cons
-Downstream declaration: TNLean.PEPS.PairEffect.groupByPartyIso_cons
--/
-
 noncomputable section
 
 open scoped InnerProductSpace TensorProduct

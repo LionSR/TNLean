@@ -66,6 +66,26 @@ theorem exists_positive_regionPhysicalProductMatrix_gram
   simp only [regionPhysicalProductMatrix, Matrix.smul_apply, smul_eq_mul,
     Finset.prod_mul_distrib, Complex.ofReal_prod]
 
+omit [∀ v, Fintype (κ v)] [∀ v, DecidableEq (κ v)] in
+/-- The product original site map absorbs the product invariant projector.
+Source: SCP10, the local physical isometry comparison, lines 1765–1820.
+The support identity follows from local regular invariance. -/
+theorem regionPhysicalProductMatrix_mul_regularLocalProjector
+    (a : (v : V) → (IncidentEdge Γ v → G) → κ v → ℂ)
+    (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
+      (regularSiteMap (a v))) (R : Finset V) :
+    regionPhysicalProductMatrix R (fun v => Matrix.of fun s α => a v α s) *
+        regionPhysicalProductMatrix R
+          (fun v => regularLegProjector (G := G) (IncidentEdge Γ v)) =
+      regionPhysicalProductMatrix R (fun v => Matrix.of fun s α => a v α s) := by
+  classical
+  rw [regionPhysicalProductMatrix_mul (Mid := fun v => IncidentEdge Γ v → G)]
+  apply congrArg (regionPhysicalProductMatrix R)
+  funext v
+  ext s η
+  simpa only [Matrix.mul_apply, Matrix.of_apply] using
+    (ha v).regularSiteMap_projector_coefficients s η
+
 /-- A unitary commuting with the product of the canonical local invariant
 projectors has a unitary implementation on the original physical region.
 The product Gram identity is derived from the local isometry assumptions.

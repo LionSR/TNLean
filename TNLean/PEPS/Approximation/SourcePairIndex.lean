@@ -20,25 +20,9 @@ or private halfspaces.
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, pair slots at lines 233–245 and sample positions at
 lines 565–585.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate and thm:compression.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-free-input-pairs-sourceinventory.pairindexequiv
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv
-
-Provenance-ID: 8769-free-input-pairs-sourceinventory.pairindexequiv_apply
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv_apply
-
-Provenance-ID: 8769-free-input-pairs-sourceinventory.length_eq_choose
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.length_eq_choose
-
-Provenance-ID: 8769-free-input-pairs-sourceinventory.length_le_card_sq
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.length_le_card_sq
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

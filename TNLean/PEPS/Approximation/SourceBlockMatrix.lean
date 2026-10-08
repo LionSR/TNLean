@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.SourceSlotBasis
 
+<<<<<<< HEAD
 /-!
 # Joint contraction of free source inputs
 
@@ -48,6 +49,8 @@ Downstream declaration:
 TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix
 -/
 
+=======
+>>>>>>> 70cfe56765b33e9a493bddf43f45e0c576dd1e0d
 noncomputable section
 
 open scoped ComplexConjugate TensorProduct Matrix Matrix.Norms.L2Operator
