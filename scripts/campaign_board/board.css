@@ -220,3 +220,12 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .checked li::before { content: "✓ "; color: var(--s-done); font-weight: 600; }
 @media (max-width: 560px) { .wrap { padding-inline: 16px; } td.t { min-width: 200px; } .stage { grid-template-columns: 34px minmax(0,1fr); gap: 0 10px; } .stage .dot { width: 28px; height: 28px; font-size: 12px; } }
 @media (prefers-reduced-motion: no-preference) { #map .node, #map .edge { transition: opacity .15s; } }
+
+/* libraries */
+.libs { font-size: 16px; color: var(--ink); margin: 0; }
+.libs a { font-weight: 600; }
+.libcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.libcard { background: var(--card, var(--surface, #fff)); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 10px; align-content: start; }
+.libcard h3 { margin: 0; font-size: 20px; }
+.libcard p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.libcard .links { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; }
