@@ -32,10 +32,20 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    At each endpoint, use the canonical identification of its
-    one-dimensional register with the empty memory. These maps are
-    isometries and therefore contractions. Applied to the prepared vector
-    $1\otimes1$, they leave the remaining memory unchanged.
+    At each endpoint, apply the canonical isometry
+    $\lambda_{\mathcal K}:\mathbb C\otimes\mathcal K\to\mathcal K$,
+    $\lambda_{\mathcal K}(1\otimes x)=x$, as a local map at that endpoint;
+    here $\mathcal K$ is the memory of the registers following it. These
+    maps are isometries and therefore contractions. On the prepared vector
+    the two removals give
+    \begin{align*}
+        \lambda_{\mathcal K}\lambda_{\mathbb C\otimes\mathcal K}
+        \bigl(1\otimes(1\otimes x)\bigr)
+        =\lambda_{\mathcal K}(1\otimes x)=x
+    \end{align*}
+    for every $x$ in the remaining memory $\mathcal K$. Taking
+    $x=P_{S,\mathcal H}(y)$ for $y\in\mathcal H$ recovers
+    $P_{S,\mathcal H}$.
 \end{proof}
 
 \begin{theorem}[A source on every pair]
@@ -43,11 +53,11 @@
     \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_complete_extension}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_complete}
     \leanok
-    \uses{def:peps_unit_pair_source,thm:peps_remove_unit_pair_source}
+    \uses{def:peps_source_inventory,def:peps_unit_pair_source}
     Let $P$ be a finite set of parties. Suppose that $S$ is a normalized
     source list with no repeated unordered pair. There is a list $U$
     of sources with one-dimensional endpoint spaces such that the
-    concatenation $T=U\mathbin{+\!+}S$
+    list $T$ obtained by placing $U$ before $S$
     is normalized and contains exactly one source for every unordered
     pair of distinct parties in $P$.
 
@@ -59,6 +69,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_remove_unit_pair_source}
     List the unordered pairs of distinct parties that are absent from
     $S$. For each such pair, choose either endpoint order and adjoin the
     corresponding trivial source. The pairs are distinct, and every pair
@@ -73,7 +84,7 @@
     \lean{TNLean.PEPS.PairEffect.Word.exists_complete_source_preparation}
     \lean{TNLean.PEPS.PairEffect.Word.exists_complete_prepared_tensorPartyMaps}
     \leanok
-    \uses{thm:peps_complete_pair_sources,thm:peps_prepared_party_maps}
+    \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
     Let $P$ be the prescribed finite set of gate parties, with a fixed
     ordering. Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be an
     allowed composition whose register owners and assigned local parties
@@ -95,7 +106,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_grouped_sources,thm:peps_party_factorization}
+    \uses{thm:peps_grouped_sources,thm:peps_complete_pair_sources,thm:peps_party_factorization}
     First prepare and combine the actual sources of $F$ to obtain
     $F=V\circ P_{S,\mathcal H_{\rm in}}$, with $V$ allowed and containing
     no sources. Complete $S$ to $T$ by

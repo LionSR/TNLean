@@ -15,22 +15,9 @@ subspaces of their ambient halfspaces.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 279–355 and 409–427.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-free-input-maps-word.mapsourceslots
-Downstream declaration: TNLean.PEPS.PairEffect.Word.mapSourceSlots
-
-Provenance-ID: 8769-free-input-maps-word.mapsourceslots_spec
-Downstream declaration: TNLean.PEPS.PairEffect.Word.mapSourceSlots_spec
-
-Provenance-ID: 8769-free-input-maps-word.eval_mapsourceslots_prepareslots
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_mapSourceSlots_prepareSlots
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
