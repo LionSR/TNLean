@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLeanTest.TorusDualFluxString
 import TNLean.PEPS.ParentHamiltonian.TorusDualFluxParent
 
 /-!
@@ -17,25 +18,10 @@ noncomputable section
 open scoped Matrix
 namespace TNLeanTest.TorusDualFluxParent
 
-open TNLean.PEPS
+open TNLean.PEPS TNLeanTest.TorusDualFluxString
 local instance : Fact (2 < 3) := ⟨by decide⟩
-local instance : Quiver (TorusVertex 3 3) := torusDualQuiver 3 3
 local notation "S₃" => Equiv.Perm (Fin 3)
 local notation "A" => projectorSiteFin S₃
-
-/-- An order-three permutation, so inverse labels cannot disappear as involutions.
-Duplicated from the flux-string regression file to keep this parent regression a
-standalone test module with no cross-test-file object import. -/
-def cycle : Equiv.Perm (Fin 3) := Equiv.swap 0 1 * Equiv.swap 1 2
-
-/-- An eastward dual segment crossing the downward bond on its right. -/
-def eastPath : TorusDualPath ((0, 0) : TorusVertex 3 3) (1, 0) :=
-  Quiver.Path.nil.cons (TorusDualStep.east 0 0)
-
-/-- A full eastward winding, closed on the torus but moving three units in the cover. -/
-def eastWinding : TorusDualPath ((0, 0) : TorusVertex 3 3) (0, 0) :=
-  ((Quiver.Path.nil.cons (TorusDualStep.east 0 0)).cons
-    (TorusDualStep.east 1 0)).cons (TorusDualStep.east 2 0)
 
 /-- The canonical parent away from an open-string endpoint annihilates a
 concrete nonzero, nonabelian regular-projector flux state. -/
