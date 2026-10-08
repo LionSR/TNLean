@@ -43,8 +43,8 @@ Definition~\ref{def:area_law_hamiltonian}.
         TNLean.PEPS.AreaLaw.LocalHamiltonian.surprisalTail_reducedState_le}
     \leanok
     \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget}
-    Let $\Omega$ satisfy (\ref{eq:area_law_ground_vector}) and
-    (\ref{eq:area_law_projector_gap}) for a Hamiltonian whose terms have norm
+    Let $\Omega$ be a unit vector satisfying (\ref{eq:area_law_ground_vector})
+    and (\ref{eq:area_law_projector_gap}) with $\Delta>0$ for a Hamiltonian whose terms have norm
     at most $J\ge0$, and let $A\subseteq\Lambda$. Let $K$ take the value
     $-\log p_j$ with probability $p_j$ for the eigenvalues $p_j$ of
     $\rho_A$, and put $\vartheta=J/\Delta$. Then
@@ -87,13 +87,16 @@ Definition~\ref{def:area_law_hamiltonian}.
     \lean{TNLean.PEPS.AreaLaw.concentrationWidth,
         TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState}
     \leanok
-    \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget}
+    \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget,
+        thm:area_law_marginal_tails}
     Under the hypotheses and notation of
-    Theorem~\ref{thm:area_law_marginal_tails}, with $\Delta>0$, let $n\ge0$ be an
+    Theorem~\ref{thm:area_law_marginal_tails}, let $n\ge0$ be an
     integer and $M$ real, and put
     $w=32\sqrt{(1+\vartheta)\mathcal B_A}\,(M\log(n+2)+\mathrm e/2+\log2)$.
     The positive eigenvalues $p_j$ of $\rho_A$ with
     $|-\log p_j-S_\Omega(A)|\le w$ carry total mass at least $1-(n+2)^{-M}$.
+    This is the concentration statement following Lemma~3.1 of
+    \cite{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_marginal_tails}

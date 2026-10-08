@@ -22,7 +22,8 @@ cut.
 
 ## Main results
 
-* `QuantumCircuit.isSupportedOn_of_mem_supportedOperators`: the support bridge.
+* `QuantumCircuit.isSupportedOn_of_mem_supportedOperators`: supported operators act
+  as the identity outside their support.
 * `TNLean.PEPS.AreaLaw.LocalHamiltonian.log_surprisalMoment_reducedState_le`:
   `eq:initial-tail-mgf` for the regional state.
 * `TNLean.PEPS.AreaLaw.LocalHamiltonian.surprisalTail_reducedState_le`:
