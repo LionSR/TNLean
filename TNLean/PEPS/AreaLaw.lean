@@ -25,6 +25,7 @@ import TNLean.PEPS.AreaLaw.GraphInteractionSeries
 import TNLean.PEPS.AreaLaw.GraphInteractionTarget
 import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
 import TNLean.PEPS.AreaLaw.GraphLatticeDistance
+import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.MarginalTails
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
