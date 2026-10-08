@@ -1,7 +1,8 @@
 \section{Exact finite-size PEPS representations}
 \label{sec:peps_exact_tree}
 
-The finite-size argument in~\cite[assembly, lines 203--214]{PolynomialPEPS2026}
+The finite-size argument in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+(\texttt{07-assembly.tex}, lines 203--214)
 uses a spanning tree to represent every vector exactly. Let $G=(V,E)$ be a
 finite connected graph, let $q\ge 1$, and put
 $\Sigma=\{0,\ldots,q-1\}^{V}$ and $N=|\Sigma|=q^{|V|}$.
@@ -116,6 +117,7 @@ to a vertex of any degree.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_exact_tree}
     For one vertex $v$, set $A_v(i)=\psi(\sigma_i)$, where
     $\sigma_i(v)=i$. The graph has no edges, so the contraction is
     $A_v(\sigma(v))=\psi(\sigma)$. For no vertices there is one empty virtual

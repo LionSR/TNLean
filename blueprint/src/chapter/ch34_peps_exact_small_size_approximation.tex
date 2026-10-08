@@ -1,6 +1,4 @@
 % Downstream of the approximation convention owned by TNLean #8788.
-% Checked locally against the pinned, unmerged model dependency.
-% Register after dependency integration; deliberately not in content.tex yet.
 \section{The finite-size approximation conclusion}
 \label{sec:peps_exact_small_size_approximation}
 
@@ -15,7 +13,8 @@
     PEPS $\Phi$ on that square with $1\le D_e\le C'L^c$ on every edge and a
     real phase $\theta$ such that
     $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$.
-    This is the finite-size part of~\cite[assembly, lines 203--214]{PolynomialPEPS2026}.
+    This is the finite-size part of~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214).
 \end{theorem}
 \begin{proof}
     \leanok
@@ -26,7 +25,6 @@
     error zero, which is at most $L^{-1}$.
 \end{proof}
 
-% The uniform-quantifier wrapper is checked locally at revision 6b194ffc9.
 \begin{theorem}[A uniform positive prefactor for a finite range]
     \label{thm:peps_uniform_small_size_approximation}
     \lean{TNLean.PEPS.Approximation.exists_uniform_small_size_approximation}
@@ -39,7 +37,8 @@
     $1\le D_e\le C'L^c$ on every edge and a real phase $\theta$ satisfying
     $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$.
     The constant is chosen before $L$ and $\Omega$, as required for the finite-size
-    argument in~\cite[assembly, lines 203--214]{PolynomialPEPS2026}.
+    argument in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214).
 \end{theorem}
 \begin{proof}
     \leanok
