@@ -36,8 +36,6 @@ namespace TNLean.PEPS.Approximation
 linear budget above one fixed scale. This supplies the sublinear estimate used
 after equation `eq:info-reset-scale-cost`, without restricting `K` to integers.
 
-Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_reset_scale_polylog_le
-Downstream declaration: TNLean.PEPS.Approximation.exists_reset_scale_polylog_le
 Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_reset_scale_polylog_le (K C₃ c : ℝ) (hc : 0 < c) :
@@ -68,8 +66,6 @@ every reset scale. The lower scale also exceeds `exp (max K 1)`, as required in
 the argument following equation `eq:info-reset-scale-cost`. No coefficient or
 threshold depends on the subsequently quantified size or scale.
 
-Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_bound_of_slope
-Downstream declaration: TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope
 Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_angular_reset_width_bound_of_slope (K C₃ C₄ c D : ℝ)
@@ -105,8 +101,6 @@ scales. The proof chooses `D = max 1 (4 * C₄ / c)` before `L₀`, `L`, and `s`
 This proves the scalar uniformity step after `eq:info-reset-scale-cost`, including
 zero coefficients and exponent zero.
 
-Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_bound
-Downstream declaration: TNLean.PEPS.Approximation.exists_angular_reset_width_bound
 Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_angular_reset_width_bound (K C₃ C₄ c : ℝ) (hc : 0 < c) :
@@ -125,8 +119,6 @@ available width, uniformly over all sizes and scales past one threshold.
 The width assumption is equation `eq:info-reset-scale-cost`; the strict
 conclusion is derived from the uniform scalar estimate.
 
-Provenance-ID: angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_lt_of_slope
-Downstream declaration: TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_slope
 Source: September 24, 2026, equation `eq:info-reset-scale-cost` and its ensuing argument.
 Original Lean proof; no upstream Lean proof text reused. -/
 theorem exists_angular_reset_width_lt_of_slope (K C₃ C₄ c D : ℝ)
