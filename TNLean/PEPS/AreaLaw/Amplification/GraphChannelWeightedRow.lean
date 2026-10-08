@@ -28,8 +28,8 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
-open QuantumCircuit
-open scoped BigOperators
+open QuantumCircuit Matrix
+open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -243,5 +243,77 @@ theorem exists_graphChannelEventKernel_weighted_row_le {D K μ b α : ℝ}
   intro ι κ _ _ _ G a hball hfiber N y
   exact (sum_graphChannelEventKernel_mul_exp_le G a hD hK hμ hb hα hball hfiber N y).trans
     (mul_le_mul_of_nonneg_left (hbound N) (by positivity))
+
+variable {q : ℕ} [NeZero q] {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
+
+/-- The actual summed full-channel oscillation increments are dominated by
+the finite graph-ball event kernel. The coefficient is the one derived from
+the actual localization tails, including its factor of two. This is only a
+finite reordering of the event-family estimate. Source: area law,
+`09-amplification.tex`, lines 139–146. -/
+theorem sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
+    (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
+    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
+    (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
+    (hε : ∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      C * Real.exp (-(c * (l : ℝ) ^ α)))
+    (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
+    (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
+      siteOscillation q y B)) ≤
+      ∑ z, graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+        (c / 2) α N y z * siteOscillation q z B := by
+  have h := sum_siteOscillation_spectatorRootChannel_sub_le_exp_card
+    G a k hk₀ hk₁ hk hC hc hα hα₁ N hN hε y B
+  convert h using 1
+  simp only [graphChannelEventKernel, mul_assoc, Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+
+/-- Uniform weighted rows and literal channel-increment domination for an
+actual finite family of component-supported effects. If
+`A = 2 + 8 * sqrt C * exp (c / 2)`, the kernel uses `D = 2 * A`, `b = c / 2`,
+and weight exponent `c / (4 * 2 ^ α)`. The row constant is chosen before the
+site, label and spectator types, local dimension, graph, effects and cutoff;
+only the scalar tail, ball-growth and fiber bounds enter its choice. Source:
+area law, `09-amplification.tex`, lines 139–160. -/
+theorem exists_graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
+    (hC : 0 ≤ C) (hK : 0 ≤ K) (hμ : 0 ≤ μ)
+    (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
+    ∃ R : ℝ, 0 ≤ R ∧
+      ∀ (ι κ Aux : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
+        [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
+        (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
+        (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
+        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+        (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+        ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
+        (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+          C * Real.exp (-(c * (l : ℝ) ^ α))) →
+        (∀ y, (∑ z,
+          graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+            (c / 2) α N y z * Real.exp (c / (4 * (2 : ℝ) ^ α) *
+              (G.dist y z : ℝ) ^ α)) ≤ R) ∧
+        (∀ (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
+          (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
+            siteOscillation q y B)) ≤
+          ∑ z,
+            graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+              (c / 2) α N y z * siteOscillation q z B) := by
+  obtain ⟨R, hR, hrows⟩ := exists_graphChannelEventKernel_weighted_row_le
+    (D := 2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+    (by positivity) hK hμ (half_pos hc) hα
+  refine ⟨R, hR, ?_⟩
+  intro ι κ Aux _ _ _ _ _ q _ G a k hk₀ hk₁ hk hball hfiber N hN hε
+  constructor
+  · intro y
+    convert hrows ι κ G a hball hfiber N y using 1
+    congr 1
+    ext z
+    congr 2
+    ring
+  · exact sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
+      G a k hk₀ hk₁ hk hC hc hα hα₁ N hN hε
 
 end TNLean.PEPS.AreaLaw

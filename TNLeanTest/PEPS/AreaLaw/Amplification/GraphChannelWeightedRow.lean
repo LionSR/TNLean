@@ -7,8 +7,8 @@ import TNLean.PEPS.AreaLaw.Amplification.GraphChannelWeightedRow
 
 /-! Strict boundary consumers for the actual graph-ball weighted row estimate. -/
 
-open QuantumCircuit TNLean.PEPS.AreaLaw
-open scoped BigOperators
+open QuantumCircuit TNLean.PEPS.AreaLaw Matrix
+open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 namespace GraphChannelWeightedRowTest
 
@@ -72,6 +72,33 @@ example {D K μ b α : ℝ} (hD : 0 ≤ D) (hK : 0 ≤ K) (hμ : 0 ≤ μ)
         (∑ z, graphChannelEventKernel G a D b α N y z *
           Real.exp (b / (2 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α)) ≤ C :=
   exists_graphChannelEventKernel_weighted_row_le hD hK hμ hb hα
+
+-- An actual family supplies both conclusions for arbitrary spectator operators.
+theorem actualBounds {q : ℕ} [NeZero q] {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
+    {C K μ c α : ℝ} (hC : 0 ≤ C) (hK : 0 ≤ K) (hμ : 0 ≤ μ)
+    (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
+    (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
+    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) :
+    ∃ R : ℝ, 0 ≤ R ∧ ∀ N : ℕ,
+      (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
+      (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        C * Real.exp (-(c * (l : ℝ) ^ α))) →
+      (∀ y, (∑ z,
+        graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+          (c / 2) α N y z * Real.exp (c / (4 * (2 : ℝ) ^ α) *
+            (G.dist y z : ℝ) ^ α)) ≤ R) ∧
+      (∀ (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
+        (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
+          siteOscillation q y B)) ≤
+        ∑ z,
+          graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
+            (c / 2) α N y z * siteOscillation q z B) := by
+  obtain ⟨R, hR, h⟩ :=
+    exists_graphChannelEventKernel_bounds_of_component_support hC hK hμ hc hα hα₁
+  exact ⟨R, hR, h ι κ Aux q G a k hk₀ hk₁ hk hball hfiber⟩
 
 end GraphChannelWeightedRowTest
 
@@ -146,3 +173,39 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms GraphChannelWeightedRowTest.disconnected
+
+/--
+info: 'TNLean.PEPS.AreaLaw.graphChannelEventKernel'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms graphChannelEventKernel
+
+/--
+info: 'TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
+
+/--
+info: 'TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_bounds_of_component_support'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms exists_graphChannelEventKernel_bounds_of_component_support
+
+/--
+info: 'GraphChannelWeightedRowTest.actualBounds'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms GraphChannelWeightedRowTest.actualBounds
