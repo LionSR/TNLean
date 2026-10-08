@@ -49,7 +49,8 @@
     \lean{MPSTensor.IsBNTCanonicalForm.inner_basisFixedPointPair,
         MPSTensor.IsBNTCanonicalForm.isIsometry_pairIsometry_basisFixedPointPair}
     \leanok
-    \uses{def:ldp_canonical_block_fixed_points, thm:ldp_local_orthogonality}
+    \uses{def:ldp_canonical_block_fixed_points, thm:ldp_local_orthogonality,
+        thm:ldp_ghz_form}
     The actual block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
         =\delta_{jj'}$. Consequently $W\ket{j}=\ket{\omega_j}$ is an isometry.
 \end{theorem}
@@ -129,7 +130,8 @@
     \lean{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_eq_tensorPower_mulVec_ghzState,
         MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_norm_sq}
     \leanok
-    \uses{def:ldp_corrected_canonical_one_copy, thm:ldp_canonical_block_pair_isometry}
+    \uses{def:ldp_corrected_canonical_one_copy, thm:ldp_canonical_block_pair_isometry,
+        thm:ldp_ghz_form}
     In bond coordinates the corrected state equals
     $W^{\otimes M}\sum_j\alpha'_j\ket{j}^{\otimes M}$.
     If $M\geq1$ and $(\beta_j)_j\neq0$, its norm is one.
@@ -190,9 +192,16 @@
          & =V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}.
     \end{align}
     Thus the unnormalized physical vector is independent of the chosen copies.
-    Normalizing both the weights and the resulting physical vectors gives
-    the same normalized overlap with the target. A vanishing vector is assigned
-    zero under this normalization.
+    Let $\ket{\phi_N}$ be the normalized periodic state of $A$ on $N=qM$ sites,
+    put $\alpha_j=\beta_j/(\sum_l|\beta_l|^2)^{1/2}$, and let
+    $\ket{\widetilde\phi'_N}$ and $\ket{\widetilde\phi_N}$ be the normalizations of
+    $V^{\otimes M}\sum_j\alpha'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}$ and
+    $V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j}$. Then
+    \begin{align}
+        \langle\widetilde\phi'_N|\phi_N\rangle
+         & =\langle\widetilde\phi_N|\phi_N\rangle.
+    \end{align}
+    A vanishing coefficient vector or physical vector is normalized to zero.
 
     % Formula: V K_{j,k_j} = (mu_{j,k_j}^q / c_j) V L_j.
     % Source: corrected MSWC24 (S7), one-copy polar restriction identity.
@@ -230,7 +239,13 @@
 \begin{proof}
     \leanok
     Use $VK_{j,k_j}=(\mu_{j,k_j}^q/c_j)VL_j$ and
-    $\beta'_j(\mu_{j,k_j}^q/c_j)^M=\beta_j$. Normalizing the coefficient
-    vectors changes the physical vectors only by positive scalars, which cancel
-    in the normalized overlap.
+    $\beta'_j(\mu_{j,k_j}^q/c_j)^M=\beta_j$. The nonzero copy weights make
+    $\beta'=0$ exactly when $\beta=0$, and then both states vanish. Otherwise,
+    with $\lVert\beta\rVert=(\sum_l|\beta_l|^2)^{1/2}$ and likewise for $\beta'$,
+    \begin{align*}
+        V^{\otimes M}\sum_j\alpha'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}
+         & =\frac{\lVert\beta\rVert}{\lVert\beta'\rVert}
+        V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j},
+    \end{align*}
+    and the positive factor cancels in the normalized overlap.
 \end{proof}
