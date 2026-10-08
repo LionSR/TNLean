@@ -1,0 +1,71 @@
+\section{Sampling the replacement of an original circuit}
+\label{sec:peps_sampled_original_circuit}
+
+\begin{theorem}[Physical approximation after replacement and sampling]
+    \label{thm:peps_sampled_original_density}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
+    \leanok
+    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
+      thm:peps_auxiliary_register_finiteness}
+    Let $W$ be a circuit on a finite party set $P$, with initial vector
+    $\psi=\bigotimes_{p\in P}\psi_p$, where each $\psi_p$ is normalized
+    in the whole initial private memory of party $p$. The final physical
+    register at $p$ has dimension $d_p$, and every discarded private
+    register is finite-dimensional. Suppose that the original nonprivate
+    gate count is at most $M$, each party participates in at most $\ell$
+    nonprivate occurrences, and the original expansion bounds hold with
+    effect budget $r$ and coefficient-sum bound $B\ge1$. Let $D\ge1$
+    satisfy $d_p\le D$ for every $p$.
+
+    Fix $0<\varepsilon\le1$. Set
+    $\delta=\varepsilon/(8\max\{1,M\})$, and form the physical-first
+    replacement $R$ using the corresponding prepared stack length.
+    Let $\mathcal E_R$ be its actual source occurrences and
+    $N_R=|\mathcal E_R|$. Choose
+    \begin{align}
+        Q&=B^{4\ell}D^4, &
+        k&=\left\lceil
+            \left(\frac{8\max\{1,N_R\}Q}{\varepsilon}\right)^2
+          \right\rceil+1.
+        \label{eq:peps_original_sample_count}
+    \end{align}
+    There exist Schmidt data for every actual source and branch, and
+    one Gaussian sample array $\omega$, such that the sampled physical
+    operator $\widehat\rho_R(\omega)$ satisfies
+    \begin{align}
+        \|\widehat\rho_R(\omega)-\rho_W\|_1
+        \le\frac{3\varepsilon}{4}.
+        \label{eq:peps_original_sample_error}
+    \end{align}
+    Here $\rho_W$ is the physical partial trace of $|W\psi\rangle
+    \langle W\psi|$, in the original party-labelled coordinates.
+    No numerical bound on private-memory dimensions is assumed.
+    These are the density-approximation steps in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--151, 199--229 and 342--381.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
+      thm:peps_auxiliary_register_finiteness}
+    Prepare each $\psi_p$ by a local contraction from the scalar space.
+    Their chronological composition prepares $\psi$ and introduces no
+    pair source. The replacement is a contraction, preserves the original
+    participating occurrences, and retains coefficient-sum bound $B$.
+    A finite bound on its monomial counts follows from the finite original
+    gate lists; it is not an additional hypothesis. Every auxiliary
+    register is finite-dimensional by its Euclidean construction, so the
+    individual private-register assumption suffices for all discarded
+    registers of $R$.
+
+    Apply Theorem~\ref{thm:peps_actual_source_sampling} to this actual
+    circuit, preparation, and discarded memory. It gives original-source
+    Schmidt data and one sample $\omega$ with
+    $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$.
+    Theorem~\ref{thm:peps_physical_first_exact_sources} gives
+    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$. The trace-norm triangle
+    inequality yields~(\ref{eq:peps_original_sample_error}).
+\end{proof}
+
+% The actual party-local sampled contraction and the uniform-family
+% polynomial and incidence estimates are separate statements.
