@@ -317,8 +317,7 @@ auxiliary matrix. Only the prescribed one-copy ground vector is unit; zero
 components and zero copies are included. The complete 9,690-job library build,
 two fresh standard-kernel reports, exact provenance and complete PDF/web/native
 checks passed. The physical regional restriction is established below. Good-auxiliary
-symmetry is also established below; applying the merge-moment theorem remains
-separate.
+symmetry and the actual local component moment are established below.
 
 [QICLean #639](https://github.com/LionSR/QICLean/pull/639), at checked head
 `41c946d4`, instantiates the repeated Bell contraction with the actual
@@ -340,8 +339,8 @@ after the specified chosen enumeration of the good copies. Only the
 one-copy ground vector is unit; the excitation component \(w\) may vanish.
 The complete 9,714-job library build, one fresh standard-kernel report,
 exact provenance and complete PDF/web/native checks passed. The joint physical
-and good-auxiliary marginal and the application of the merge-moment estimate are being established separately. Neither result
-asserts the complete inverse-compression inequality.
+and good-auxiliary marginal and the local component moment are established
+below. None of these results asserts the complete inverse-compression inequality.
 
 [QICLean #643](https://github.com/LionSR/QICLean/pull/643), at checked head
 `72f13fda`, defines the literal good-auxiliary marginal by tracing all
@@ -370,8 +369,36 @@ for every real exponent at most one. The trace-one form is also proved.
 Total normalization includes zero mass, empty bases and zero copies.
 The complete 9,792-job library build, seven fresh standard-kernel reports,
 original provenance, the 447-page PDF and complete web/native checks passed.
-Deriving the actual component invariances and trace mass, and identifying
-both merge deficits on their common space, are separate applications.
+The actual local component application is established below. Identifying
+both regional marginals and merge deficits on a common space remains separate.
+
+[QICLean #651](https://github.com/LionSR/QICLean/pull/651), at checked head
+`771e955a`, defines the literal joint marginal of the good physical Q copies
+and the good auxiliary C copies. For the same selected component, it is the
+product of the one-copy physical marginal tensor power and the actual good
+auxiliary marginal. Only the one-copy vector is unit; no independence of the
+auxiliary copies is assumed. The complete 9,733-job library build, two fresh
+standard-kernel reports, original provenance, the revised 437-page PDF and
+complete web/native checks passed.
+
+[QICLean #652](https://github.com/LionSR/QICLean/pull/652), at checked head
+`b5ba8ae2`, applies the paired merge moment to that actual component. For
+\(m=|B^c|\) and every real \(b\le1\),
+\[
+ \operatorname{Re}\operatorname{Tr}\!\left[
+  \rho_{QC}(w)e^{b(F_Q+F_C-F_{QC})}\right]
+ \le (m+1)^{(|Q|\,|C|)^2}\|w\|^2.
+\]
+The only vector premises are the unit one-copy vector and the original
+simultaneous permutation symmetry. Positivity, both separate marginal
+symmetries and the trace mass are derived from the same selected component.
+Zero components, zero copies and empty good sets are included. The complete
+9,821-job library build passed at `65b283fc`; the later book revision
+`3587609f` adopts the checked #651 exposition without changing Lean sources
+or dependency pins. The revised 469-page PDF, all 3,753 declaration checks,
+the complete 50-page web reader, one fresh standard-kernel report, original
+provenance and 138 portable artifact bindings passed. The QC moment alone
+does not combine the two regional deficits or prove inverse compression.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
