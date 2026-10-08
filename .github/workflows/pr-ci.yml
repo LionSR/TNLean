@@ -1161,7 +1161,20 @@ jobs:
 
       - name: Check regional basis-relabelling diagrams
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_region_coordinates.py
+        run: >
+          python3 scripts/test_tenkz_region_coordinates.py
+          --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
+
+      - name: Preserve regional coordinate diagrams for review
+        if: success() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: region-coordinate-diagrams-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/region-coordinate-diagrams/tenkz-*.svg
+            ${{ runner.temp }}/region-coordinate-diagrams/cache/tenkz-*.tnlog
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'
