@@ -13,10 +13,11 @@ import TNLean.MPS.Chain.BlockedChainFT
 /-!
 # String order of the AKLT state under its `Z₂ × Z₂` symmetry
 
-This module exhibits the AKLT state as a witness of the string-order criterion of
-Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447).  The single-site
-AKLT tensor is not injective, only normal (`2`-block injective), so the criterion
-is applied to the length-`2` blocked tensor, which is injective.
+This module proves virtual-boundary nondecay for each `Z₂ × Z₂` symmetry twist
+of the blocked AKLT tensor. The single-site tensor is not injective, only
+normal (`2`-block injective), so the virtual-boundary criterion is applied to
+the length-`2` blocked tensor. The unblocked physical endpoint calculation
+is in `AKLTPhysicalStringOrder`.
 
 ## Main definitions
 
@@ -29,8 +30,8 @@ is applied to the length-`2` blocked tensor, which is injective.
 * `akltBlocked_isInjective` : the blocked tensor is injective
 * `aklt_blocked_isOnSiteSymmetric_Z2Z2` : the blocked tensor is on-site symmetric
   under `Z₂ × Z₂`
-* `aklt_hasStringOrder` : the blocked AKLT tensor has string order under every
-  element of its `Z₂ × Z₂` symmetry, with the maximally mixed boundary state
+* `aklt_hasStringOrder` : virtual-boundary nondecay for every `Z₂ × Z₂` twist,
+  including the identity, with the maximally mixed boundary state
 
 ## References
 
@@ -158,18 +159,14 @@ theorem akltBlockedZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
   rw [akltBlockedZ2Z2Action, blockKronAction_apply]
   exact blockKron_mul_conjTranspose 2 (akltZ2Z2Action g) (aklt_isUnitary_Z2Z2 g)
 
-/-- **The AKLT state has string order under its `Z₂ × Z₂` symmetry.**
+/-- The blocked AKLT tensor has virtual-boundary nondecay for every element of
+its `Z₂ × Z₂` symmetry, including the identity.
 
-For every group element `g`, the length-`2` blocked AKLT tensor has string order
-with the maximally mixed boundary state `Λ = (1/2)·1`.  The blocked tensor is
-injective and on-site symmetric, the maximally mixed state is a positive definite,
-trace-one fixed point of the adjoint transfer map, and the transfer map itself is
-unital; an injective, on-site symmetric tensor meeting these conditions has string
-order for every group element (see `hasStringOrder_of_symmetric_injective`).
-
-Like the cluster state, the AKLT state thus witnesses the string-order criterion of
-Pérez-García, Wolf, Sanz, Verstraete, Cirac (arXiv:0802.0447); it carries the same
-caveat on the virtual-boundary form of the string order parameter recorded in
+The tensor is injective and on-site symmetric. The maximally mixed state
+`Λ = (1/2)·1` is a faithful trace-one fixed point of the adjoint transfer map,
+and the transfer map is unital. These conditions give fixed-twist nondecay
+with arbitrary virtual boundary matrices. The physical endpoint condition of
+arXiv:0802.0447 is treated separately; see
 `docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`. -/
 theorem aklt_hasStringOrder (g : Multiplicative (ZMod 2 × ZMod 2)) :
     HasStringOrder akltBlocked (akltBlockedZ2Z2Action g)

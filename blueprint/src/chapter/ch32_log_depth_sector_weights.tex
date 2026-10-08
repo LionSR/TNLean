@@ -1,0 +1,207 @@
+\subsection{Selected vectors with different sector probabilities}
+\label{sec:ldp_sector_weights}
+
+The logarithmic-depth conversion remark in the discussion and outlook
+of~\cite{Malz2024Preparation} leaves the choice of vector in a degenerate
+parent groundspace unspecified. Equality of those groundspaces alone does
+not imply a shallow unitary conversion between the selected vectors.
+The following obstruction concerns this interpretation; it does not impose
+a definition of phase or exclude conversion of compatible coherent seeds.
+
+\begin{theorem}[Matrix elements outside the support]
+    \label{thm:ldp_offsupport_matrix_elements}
+    \lean{QuantumCircuit.apply_eq_zero_of_mem_supportedOperators,
+        QuantumCircuit.productVector_single,
+        QuantumCircuit.expect_single,
+        QuantumCircuit.mul_apply_eq_mul_of_mem_supportedOperators,
+        QuantumCircuit.expect_smul_single_add_of_offDiag_zero}
+    \leanok
+    \uses{def:qc_local_circuit}
+    Let $A$ act on $S$. If configurations $\sigma,\tau$ differ at a site
+    outside $S$, then $\langle\sigma|A|\tau\rangle=0$.
+    If $A,B$ act on disjoint sets, then
+    $\langle\sigma|AB|\sigma\rangle=
+        \langle\sigma|A|\sigma\rangle\langle\sigma|B|\sigma\rangle$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A product operator with identity factors outside $S$ has an entry
+    containing $\delta_{\sigma_k,\tau_k}=0$ at the differing site $k$.
+    Extend this equality by linearity. A computational-basis vector is
+    the product of its one-site basis vectors, so disjoint expectations
+    factor.
+\end{proof}
+
+\begin{theorem}[Stability of connected correlations]
+    \label{thm:ldp_covariance_stability}
+    \lean{QuantumCircuit.expect_eq_inner,
+        QuantumCircuit.norm_expect_le_one,
+        QuantumCircuit.norm_expect_sub_le,
+        QuantumCircuit.expect_smul_state,
+        QuantumCircuit.norm_covariance_sub_le}
+    \leanok
+    For unit vectors $\psi,\phi$ and unitary observables $A,B$, write
+    $\operatorname{Cov}_\psi(A,B)=
+        \langle\psi|AB|\psi\rangle-
+        \langle\psi|A|\psi\rangle\langle\psi|B|\psi\rangle$.
+    Then $|\langle\psi|A|\psi\rangle|\le1$, and
+    \begin{align}
+        |\langle\psi|A|\psi\rangle-
+        \langle\phi|A|\phi\rangle| & \le2\|\psi-\phi\|, \\
+        |\operatorname{Cov}_\psi(A,B)-\operatorname{Cov}_\phi(A,B)|
+                                   & \le6\|\psi-\phi\|.
+    \end{align}
+    Both expectations and covariances are unchanged by a unit scalar
+    multiplying the state.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the expectation difference as
+    $\langle\psi-\phi|A\psi\rangle+
+        \langle\phi|A(\psi-\phi)\rangle$ and apply Cauchy--Schwarz.
+    Expand the difference of the two products of expectations into two
+    terms. The three expectation differences each contribute at most
+    $2\|\psi-\phi\|$.
+\end{proof}
+
+\begin{theorem}[Separated correlations in a weighted GHZ vector]
+    \label{thm:ldp_weighted_ghz_covariance}
+    \lean{QuantumCircuit.ghzState_two_eq,
+        QuantumCircuit.zero_config_ne_one,
+        QuantumCircuit.norm_ghzState_two,
+        QuantumCircuit.norm_ghzState_two_sq,
+        QuantumCircuit.ghzState_smul_two,
+        QuantumCircuit.expect_ghzState_two_diagonal,
+        QuantumCircuit.expect_ghzState_two,
+        QuantumCircuit.covariance_ghzState_two,
+        QuantumCircuit.norm_covariance_ghzState_two_le,
+        QuantumCircuit.norm_covariance_mulVec_ghzState_two_le,
+        QuantumCircuit.diagonal_comp_eval_mem_supportedOperators}
+    \leanok
+    Let $|a|^2+|b|^2=1$, $N\ge1$, and
+    $\chi=a|0^N\rangle+b|1^N\rangle$.
+    Let unitary observables $X,Y$ act on disjoint sets $I,J$ with
+    nonempty complement. Put $x_s=\langle s^N|X|s^N\rangle$ and
+    $y_s=\langle s^N|Y|s^N\rangle$. For arbitrary $a,b$, $\|\chi\|^2=|a|^2+|b|^2$, and scaling $\chi$
+    by $c$ scales both coefficients by $c$. Under the normalization above,
+    $\|\chi\|=1$ and
+    \begin{align}
+        \operatorname{Cov}_\chi(X,Y)
+                                       & =|a|^2|b|^2(x_0-x_1)(y_0-y_1), \\
+        |\operatorname{Cov}_\chi(X,Y)| & \le4|a|^2|b|^2.
+    \end{align}
+    The same bound holds after a depth-$T$ circuit for observables whose
+    backward light cones are disjoint and leave a site unobserved.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_offsupport_matrix_elements,thm:ldp_covariance_stability}
+    The unobserved site kills both cross terms. Within each product branch,
+    $\langle XY\rangle_s=x_sy_s$. Subtract the product of the two weighted
+    expectations and use $|a|^2+|b|^2=1$. Each diagonal expectation has
+    modulus at most one. For a circuit, pull both observables back through
+    the unitary, retaining their support inside the backward light cones.
+\end{proof}
+
+% TENKZ-SECTOR-WEIGHT-BEGIN
+% Formula: <s^N| X_I Y_J |t^N> = <s_I|X|t_I><s_J|Y|t_J><s_R|t_R>,
+% with R the nonempty complement of I union J. For s != t the last factor is zero.
+% Ink: columns are the I, J, R Hilbert spaces; all six wires are physical contractions.
+% No open legs or bonds between columns: the boundary signature is the empty scalar signature.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=brai, skin=box, ports={270:physical}]{\langle s_I\rvert}
+        \tn[at=(1,2), name=braj, skin=box, ports={270:physical}]{\langle s_J\rvert}
+        \tn[at=(1,3), name=brar, skin=box, ports={270:physical}]{\langle s_R\rvert}
+        \tn[at=(2,1), name=obsx, skin=box, ports={90:physical,270:physical}]{X}
+        \tn[at=(2,2), name=obsy, skin=box, ports={90:physical,270:physical}]{Y}
+        \tn[at=(2,3), name=obsr, skin=box, ports={90:physical,270:physical}]{1_R}
+        \tn[at=(3,1), name=keti, skin=box, ports={90:physical}]{\lvert t_I\rangle}
+        \tn[at=(3,2), name=ketj, skin=box, ports={90:physical}]{\lvert t_J\rangle}
+        \tn[at=(3,3), name=ketr, skin=box, ports={90:physical}]{\lvert t_R\rangle}
+        \tnwire{brai.270}{obsx.90}
+        \tnwire{braj.270}{obsy.90}
+        \tnwire{brar.270}{obsr.90}
+        \tnwire{obsx.270}{keti.90}
+        \tnwire{obsy.270}{ketj.90}
+        \tnwire{obsr.270}{ketr.90}
+    \end{tenkz}
+\end{center}
+% TENKZ-SECTOR-WEIGHT-END
+
+\begin{theorem}[Equal parent Hamiltonians with unequal periodic weights]
+    \label{thm:ldp_sector_weight_parent}
+    \lean{MPSTensor.groundSpaceMap_repeatedBlockTensor_eq_ghzState,
+        MPSTensor.groundSpaceMap_ghzTensor_eq_ghzState,
+        MPSTensor.mpv_repeatedBlockTensor_eq_ghzState,
+        MPSTensor.mpv_ghzTensor_eq_ghzState,
+        MPSTensor.norm_mpvState_repeatedBlockTensor,
+        MPSTensor.norm_mpvState_ghzTensor,
+        MPSTensor.normalizedMPVState_repeatedBlockTensor,
+        MPSTensor.normalizedMPVState_ghzTensor,
+        MPSTensor.groundSpace_repeatedBlockTensor_eq_ghzTensor,
+        MPSTensor.parentInteraction_repeatedBlockTensor_eq_ghzTensor,
+        MPSTensor.chainGroundSpace_repeatedBlockTensor_eq_ghzTensor,
+        MPSTensor.parentHamiltonian_repeatedBlockTensor_eq_ghzTensor}
+    \leanok
+    Define
+    \begin{align}
+        A^0 & =\operatorname{diag}(1,1,0), & A^1 & =\operatorname{diag}(0,0,1), \\
+        B^0 & =\operatorname{diag}(1,0),   & B^1 & =\operatorname{diag}(0,1).
+    \end{align}
+    On every positive chain, their normalized periodic vectors are
+    $(2|0^N\rangle+|1^N\rangle)/\sqrt5$ and
+    $(|0^N\rangle+|1^N\rangle)/\sqrt2$.
+    At every interaction length the local boundary-generated spaces and
+    canonical parent projectors agree. Consequently their periodic-chain
+    constraint spaces and canonical parent Hamiltonians agree for every
+    chain length.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A boundary matrix $X$ for $A$ contributes amplitudes
+    $(X_{00}+X_{11},X_{22})$; one for $B$ contributes $(X_{00},X_{11})$.
+    Both pairs range over $\mathbb C^2$. For the identity boundary they
+    become $(2,1)$ and $(1,1)$, whose norms on a positive chain are
+    $\sqrt5$ and $\sqrt2$. The local orthogonal projectors are determined
+    by these boundary-generated spaces. The same local terms define the
+    chain constraints and Hamiltonians.
+\end{proof}
+
+\begin{theorem}[A lower bound for changing sector probabilities]
+    \label{thm:ldp_sector_weight_obstruction}
+    \lean{MPSPreparation.ghz_sector_weight_infidelity_lower_bound,
+        MPSTensor.repeatedBlockTensor_infidelity_lower_bound,
+        MPSTensor.length_le_of_repeatedBlockTensor_infidelity_lt,
+        QuantumCircuit.isSeparatedBy_of_val_bounds,
+        QuantumCircuit.IsSeparatedBy.symm,
+        QuantumCircuit.IsSeparatedBy.notMem_neighbourhood,
+        QuantumCircuit.exists_separated_singletons_notMem_neighbourhood}
+    \leanok
+    \uses{def:qc_local_circuit}
+    Let $\psi_N=(2|0^N\rangle+|1^N\rangle)/\sqrt5$ and
+    $\phi_N=(|0^N\rangle+|1^N\rangle)/\sqrt2$.
+    Every depth-$T$ nearest-neighbour unitary circuit $U$ on the ring,
+    with $N>4T+4$, satisfies
+    \begin{align}
+        1-|\langle U\psi_N|\phi_N\rangle|\ge\frac9{5000}.
+    \end{align}
+    These are the normalized periodic vectors of the tensors in
+    Theorem~\ref{thm:ldp_sector_weight_parent}. Conversely, overlap error
+    strictly below $9/5000$ forces $N\le4T+4$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_weighted_ghz_covariance,thm:ldp_covariance_stability,
+        lem:ldp_error_triangle}
+    Choose sites $i=0$, $j=2T+2$ and $k=T+1$. The radius-$T$ backward
+    cones of $i,j$ are disjoint, and neither contains $k$, including around
+    the periodic boundary. The Pauli observables $Z_i,Z_j$ have covariance
+    at most $16/25$ in modulus in $U\psi_N$, while their covariance in
+    $\phi_N$ is one. Choose $|c|=1$ with
+    $\eta^2=\|U\psi_N-c\phi_N\|^2
+        =2(1-|\langle U\psi_N|\phi_N\rangle|)$.
+    Correlation stability gives $1\le16/25+6\eta$, hence
+    $\eta\ge3/50$ and the stated bound.
+\end{proof}

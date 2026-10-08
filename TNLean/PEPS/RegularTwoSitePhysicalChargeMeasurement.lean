@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ScaledProjectionTransport
 import TNLean.PEPS.RegularTwoSiteChargeCommutation
 import TNLean.PEPS.RegularChargeCompleteMeasurement
 
@@ -80,29 +81,6 @@ theorem regularTwoSitePhysicalChargeColumn_eq_image (i : ι) (j : κ)
   funext s
   simp [regularTwoSitePhysicalChargeColumn, Matrix.kroneckerMap, mul_assoc]
 
-private theorem transported_projection {H K : Type*} [Fintype H] [Fintype K]
-    (T : Matrix H K ℂ) (P D : Matrix K K ℂ) (c : ℝ) (hc : 0 < c)
-    (hGram : T.conjTranspose * T = (c : ℂ) • P)
-    (hTP : T * P = T) (hcomm : D * P = P * D)
-    (hDh : D.IsHermitian) (hDI : D * D = D) :
-    let Q := (c : ℂ)⁻¹ • (T * D * T.conjTranspose)
-    Q.IsHermitian ∧ Q.PosSemidef ∧ Q * Q = Q ∧ Q * T = T * D := by
-  let Q := (c : ℂ)⁻¹ • (T * D * T.conjTranspose)
-  have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hc.ne'
-  have hQT : Q * T = T * D := by
-    change (c : ℂ)⁻¹ • (T * D * T.conjTranspose) * T = _
-    rw [Matrix.smul_mul, Matrix.mul_assoc, hGram, Matrix.mul_smul, smul_smul,
-      inv_mul_cancel₀ hc', one_smul, Matrix.mul_assoc, hcomm,
-      ← Matrix.mul_assoc, hTP]
-  have hQh : Q.IsHermitian :=
-    (Matrix.isHermitian_mul_mul_conjTranspose T hDh).smul (by simp [IsSelfAdjoint])
-  have hQI : Q * Q = Q := by
-    change Q * ((c : ℂ)⁻¹ • (T * D * T.conjTranspose)) = Q
-    rw [Matrix.mul_smul, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hQT,
-      Matrix.mul_assoc T D D, hDI]
-  refine ⟨hQh, ?_, hQI, hQT⟩
-  simpa only [hQh.eq, hQI] using Matrix.posSemidef_self_mul_conjTranspose Q
-
 omit [Group G] [Fintype G] [DecidableEq G] [Fintype ι] [Fintype κ]
   [DecidableEq ι] [DecidableEq κ] [Fintype A] [Fintype B] in
 /-- A complete commuting virtual projection family induces a complete physical
@@ -127,7 +105,7 @@ theorem exists_physicalProjectionFamily {H K L : Type*}
   let F : L → Matrix H H ℂ := fun l => (c : ℂ)⁻¹ • (T*D l*T.conjTranspose)
   have hF (l : L) : (F l).IsHermitian ∧ (F l).PosSemidef ∧
       F l*F l = F l ∧ F l*T = T*D l :=
-    transported_projection T P (D l) c hc hGram hTP (hDP l).eq
+    Matrix.scaledProjectionTransport_properties T P (D l) c hc hGram hTP (hDP l).eq
       (hDh l) (by simpa using hDD l l)
   have hFF (l m : L) : F l*F m = if l=m then F l else 0 := by
     change F l*((c : ℂ)⁻¹ • (T*D m*T.conjTranspose)) = _
@@ -213,11 +191,12 @@ theorem exists_regularTwoSitePhysicalChargeProjector (i : ι) (j : κ)
   obtain ⟨c, hc, hGram, hTP⟩ := two_site_matrix_data a b ha hb
   let Q := (c : ℂ)⁻¹ •
     (T * regularTwoSiteChargeDetector i j χ * T.conjTranspose)
-  obtain ⟨hh, hp, hi, hQT⟩ := transported_projection T P
+  obtain ⟨hh, hp, hi, hQT⟩ := Matrix.scaledProjectionTransport_properties T P
     (regularTwoSiteChargeDetector i j χ) c hc hGram hTP
       (regularTwoSiteChargeDetector_commute_projector i j χ).eq
       (regularTwoSiteChargeDetector_properties i j χ).1
       (regularTwoSiteChargeDetector_properties i j χ).2.2
+  change Q * T = T * regularTwoSiteChargeDetector i j χ at hQT
   refine ⟨Q, hh, hp, hi, hQT, ?_⟩
   intro p θ
   rw [← regularTwoSitePhysicalChargeColumn_eq_image i j a b ha hb,
@@ -251,29 +230,14 @@ theorem exists_regularTwoSitePhysicalChargeMeasurement
     exists_regularTwoSitePhysicalChargeProjector i j a b ha hb σ.character
   let C : Matrix (A × B) (A × B) ℂ := 1-D
   let Q : Bool → Matrix (A × B) (A × B) ℂ := fun r => if r then D else C
-  have hCh : C.IsHermitian := Matrix.isHermitian_one.sub hh
-  have hCI : C*C = C := by
-    dsimp only [C]
-    simp only [Matrix.mul_sub, Matrix.sub_mul, Matrix.one_mul, Matrix.mul_one,
-      hi, sub_self, sub_zero]
-  have hCp : C.PosSemidef := by
-    simpa only [hCh.eq, hCI] using Matrix.posSemidef_self_mul_conjTranspose C
-  refine ⟨Q, ?_, ?_, ?_, hselected, ?_⟩
-  · intro r
-    cases r with
-    | false => exact ⟨hCh, hCp⟩
-    | true => exact ⟨hh, hp⟩
-  · intro r s
-    cases r <;> cases s <;>
-      simp [Q, C, Matrix.mul_sub, Matrix.sub_mul, hi]
-  · simp [Q, C]
-  · intro τ hτ hne p θ
-    let := hτ
-    change D *ᵥ regularTwoSitePhysicalChargeColumn i j a b τ.character p θ = 0
-    rw [← regularTwoSitePhysicalChargeColumn_eq_image i j a b ha hb,
-      Matrix.mulVec_mulVec, hDT, ← Matrix.mulVec_mulVec,
-      regularTwoSiteChargeDetector_other_column σ τ hσ hne, Matrix.mulVec_zero]
-
+  obtain ⟨hQh, hQQ, hQsum⟩ := Matrix.binaryProjectionFamily_complete D hh hi
+  refine ⟨Q, hQh, hQQ, hQsum, hselected, ?_⟩
+  intro τ hτ hne p θ
+  let := hτ
+  change D *ᵥ regularTwoSitePhysicalChargeColumn i j a b τ.character p θ = 0
+  rw [← regularTwoSitePhysicalChargeColumn_eq_image i j a b ha hb,
+    Matrix.mulVec_mulVec, hDT, ← Matrix.mulVec_mulVec,
+    regularTwoSiteChargeDetector_other_column σ τ hσ hne, Matrix.mulVec_zero]
 /-- All actual regular charge detectors remain complete after extending them to the
 remaining half-edge coordinates. Source: SCP10, charge detection, lines 2474–2486. -/
 theorem regularTwoSiteChargeDetector_complete (i : ι) (j : κ) :
