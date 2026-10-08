@@ -477,6 +477,53 @@ theorem eval_tagMerge (tail : Layout Party) (y : Mem tail) :
   | [], _ => ⟨trivial, trivial, rfl⟩
   | _ :: l₁, l₂ => tagMerge_props S tail l₁ l₂
 
+open QuantumCircuit in
+/-- **The canonical identification of tag orderings as a word.** If `l'` lists the holes of `l`,
+whose outer footprints are pairwise disjoint, in another order, there are a relabelling `e` of
+the tag configurations that preserves the raw parts of the encoding and a word of exchanges of
+tensor factors moving the tag registers of `l` to the order of `l'`, with `|τ⟩ ↦ |e τ⟩`.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 74–75 and 84–85. -/
+theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
+    (hd : PairwiseDisjointOuter (l.map Hole.patch)) (hp : l.Perm l') (tail : Layout Party) :
+    ∃ e : TagSpace l ≃ TagSpace l', (∀ t, rawProd l' (e t) = rawProd l t) ∧
+      ∃ w : Word (tagRegs l ++ tail) (tagRegs l' ++ tail),
+        w.IsAllowed ∧ (∀ S : Set Party, w.UsesOnly S) ∧ w.sourceCount = 0 ∧
+        ∀ (τ : TagSpace l) (y : Mem tail),
+          w.eval ((appendIso (tagRegs l) tail).symm (tagVec l τ ⊗ₜ y)) =
+            (appendIso (tagRegs l') tail).symm (tagVec l' (e τ) ⊗ₜ y) := by
+  induction hp with
+  | nil => exact ⟨Equiv.refl _, fun _ => rfl, .id _, trivial, fun _ => trivial, rfl,
+      fun _ _ => rfl⟩
+  | @cons h l₁ l₂ _ ih =>
+    obtain ⟨e, he, w, hw₁, hw₂, hw₃, hw⟩ := ih (PairwiseDisjointOuter.of_cons hd)
+    refine ⟨(Equiv.refl h.patch.Tag).prodCongr e, fun t => ?_, .frame _ w, hw₁, hw₂, hw₃,
+      fun τ y => ?_⟩
+    · change h.patch.branch t.1 * rawProd _ (e t.2) = h.patch.branch t.1 * rawProd _ t.2
+      rw [he]
+    · obtain ⟨t, τ⟩ := τ
+      exact congrArg (fun v => ((EuclideanSpace.single t (1 : ℂ) :
+        EuclideanSpace ℂ h.patch.Tag) ⊗ₜ v : Mem (tagRegs (h :: l₂) ++ tail))) (hw τ y)
+  | swap x y l =>
+    refine ⟨⟨fun t => (t.2.1, t.1, t.2.2), fun t => (t.2.1, t.1, t.2.2), fun _ => rfl,
+      fun _ => rfl⟩, fun t => ?_, .swap _ _ _, trivial, fun _ => trivial, rfl,
+      fun τ z => ?_⟩
+    · change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
+        y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
+      have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
+        Finset.disjoint_coe.mpr (List.rel_of_pairwise_cons hd List.mem_cons_self)
+      rw [← mul_assoc, ← mul_assoc, (commute_of_mem_supportedOperators hyx
+        (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _)).eq]
+    · obtain ⟨t, s, τ⟩ := τ
+      exact leftCommL_tmul _ _ _
+  | trans h₁ _ ih₁ ih₂ =>
+    obtain ⟨e₁, he₁, w₁, a₁, b₁, c₁, hw₁⟩ := ih₁ hd
+    obtain ⟨e₂, he₂, w₂, a₂, b₂, c₂, hw₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
+    refine ⟨e₁.trans e₂, fun t => (he₂ _).trans (he₁ t), .comp w₁ w₂, ⟨a₁, a₂⟩,
+      fun S => ⟨b₁ S, b₂ S⟩, congrArg₂ (· + ·) c₁ c₂, fun τ z => ?_⟩
+    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, hw₁, hw₂]
+    rfl
+
 section
 
 variable (S : Set Party) (tail : Layout Party) (l₁ l₂ : List (Hole pos q Party))

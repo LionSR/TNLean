@@ -238,6 +238,45 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
 
 end Frame
 
+/-- **The canonical identification of tag orderings on two frames, as a word.** If `l₁'`, `l₂'`
+list the holes of `l₁`, `l₂` in other orders, there are relabellings `e₁`, `e₂` of the tag
+configurations preserving the raw parts of the encodings and a word of exchanges of tensor
+factors, using no party, whose operator in canonical coordinates is the relabelling
+`tagReorder e₁ e₂`.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 74–75 and 84–85. -/
+theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos q Party)}
+    (hd₁ : PairwiseDisjointOuter (l₁.map Hole.patch))
+    (hd₂ : PairwiseDisjointOuter (l₂.map Hole.patch)) (hp₁ : l₁.Perm l₁') (hp₂ : l₂.Perm l₂')
+    (own₁ own₂ : ι → Party) :
+    ∃ (e₁ : TagSpace l₁ ≃ TagSpace l₁') (e₂ : TagSpace l₂ ≃ TagSpace l₂'),
+      (∀ t, rawProd l₁' (e₁ t) = rawProd l₁ t) ∧ (∀ t, rawProd l₂' (e₂ t) = rawProd l₂ t) ∧
+      ∃ w : Word (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)
+          (layoutRegs q l₁' own₁ ++ layoutRegs q l₂' own₂),
+        w.IsAllowed ∧ (∀ S : Set Party, w.UsesOnly S) ∧ w.sourceCount = 0 ∧
+        ∀ z, twoLayoutIso l₁' l₂' own₁ own₂ (w.eval z) =
+          act (TwoSheetExchange.tagReorder e₁ e₂) (twoLayoutIso l₁ l₂ own₁ own₂ z) := by
+  obtain ⟨e₁, he₁, w₁, a₁, b₁, c₁, hw₁⟩ := exists_tagWord_of_perm hd₁ hp₁
+    (siteRegs q own₁ (sites ι) ++ layoutRegs q l₂ own₂)
+  obtain ⟨e₂, he₂, w₂, a₂, b₂, c₂, hw₂⟩ := exists_tagWord_of_perm hd₂ hp₂
+    (siteRegs q own₂ (sites ι))
+  refine ⟨e₁, e₂, he₁, he₂,
+    (Word.assocWord (tagRegs l₁) (siteRegs q own₁ (sites ι)) (layoutRegs q l₂ own₂)).comp
+      (w₁.comp ((Word.unassocWord (tagRegs l₁') (siteRegs q own₁ (sites ι))
+        (layoutRegs q l₂ own₂)).comp (Word.frameList (layoutRegs q l₁' own₁) w₂))),
+    ⟨Word.isAllowed_assocWord _ _ _, a₁, Word.isAllowed_unassocWord _ _ _,
+      (Word.isAllowed_frameList_iff _ _).mpr a₂⟩,
+    fun S => ⟨Word.usesOnly_assocWord _ _ _ _, b₁ S, Word.usesOnly_unassocWord _ _ _ _,
+      (Word.usesOnly_frameList_iff _ _ _).mpr (b₂ S)⟩, ?_, ?_⟩
+  · simp only [Word.sourceCount, Word.sourceCount_assocWord, Word.sourceCount_unassocWord,
+      Word.sourceCount_frameList, c₁, c₂]
+  · refine twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ fun τ₁ c₁ τ₂ c₂ => ?_
+    simp only [layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
+      Word.eval_assocWord_appendIso_symm, hw₁, Word.eval_unassocWord_appendIso_symm,
+      Word.eval_frameList_appendIso_symm, hw₂]
+    rw [← layoutVec, ← layoutVec, twoLayoutIso_basis, TwoSheetExchange.tagReorder, act_toMatrix_symm_single]
+    rfl
+
 namespace TwoSheetExchange
 
 open EuclideanSpace (vecKron)
