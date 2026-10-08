@@ -9,7 +9,7 @@
 
 \title{Guide Properties in the Angular Separation of Dyadic Repaintings}
 \author{}
-\date{2026-10-07; resolved 2026-10-08; interface labels 2026-10-08}
+\date{2026-10-07; resolved 2026-10-08; interface labels and sampled guides 2026-10-08}
 
 \begin{document}
 \maketitle
@@ -179,12 +179,57 @@ reading is a true vertex of the labelling, and the outer holes of the readings o
 temporary guides are disjoint
 (\leanid{TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}).
 
-Two facts remain unformalized: that the source's open chambers are the open sets on
-which the formal labellings are constant, off a locally finite family of segments,
-and that the source's generic displacement is parallel to none of these segments, so
-that a ray $p+\varepsilon v$ leaves them at once. Together they identify each sampled
-guide of the source with the reading of the corresponding formal labelling. The
-uniform footprint ratios of the point treatment and of the block guides are proved for
-the formal labellings, not for their readings.
+\section{The sampled guides are the readings}
+
+The source's sampled guides are identified with these readings. The open chamber of
+a label of a labelling $f$ is the interior of the region of $f$ with that label, and
+the guide sampled from the chambers of $f$ after $v$ takes at $p$ the label of the
+chamber containing $p+\varepsilon v$ for all small $\varepsilon>0$
+(\leanid{TNLean.PEPS.Approximation.IsChamberSampling}). A sampled guide is a reading.
+
+Every guide of the schedule, the block guide, every guide of the repainting of a
+block, and each of these homogenized on finitely many open squares, is constant near
+every point off a set that lies, near every point, in finitely many lines whose normals
+are $(\pm t,1000)$ or $(1000,\pm t)$ with $t$ in
+$T=\{-8,-6,-5,-4,-3,-2,-1,0,1,2\}$. Indeed the interface curve $x=t$ of a band is
+$1000\,d=t\min(s,n-s)$, a union of two segments; the edges, the grid lines and the
+sides of the treated squares are lines with $t=0$; the grid lines form a locally finite
+family; and a strict inequality between continuous functions, a bound on $d/w(s)$ off
+$w(s)=0$, and the integer part of a coordinate are constant off the sets where the two
+sides agree or the coordinate is a grid value
+(\leanid{TNLean.PEPS.Approximation.HasLineWalls},
+\leanid{TNLean.PEPS.Approximation.hasLineWalls_schedule}). So the open chambers of a
+formal guide are the open sets on which it is constant, off a locally finite family of
+segments. A displacement $v$ is generic if it is parallel to none of these lines, that
+is, if it avoids finitely many lines through the origin; $(1,1)$ is generic, and so is
+every nonzero multiple of a generic vector. A line not parallel to $v$ meets the ray
+$p+\varepsilon v$ in at most one point, so for generic $v$ the ray leaves the walls at
+once and lies, for all small $\varepsilon>0$, in one open chamber
+(\leanid{TNLean.PEPS.Approximation.IsLocallyInLines.eventually_notMem}). Hence for
+every generic $v$ the sampled guide of every guide of the schedule exists, is unique,
+and equals its reading
+(\leanid{TNLean.PEPS.Approximation.isChamberSampling_schedule}), and the estimates of
+Lemma~7.2 hold for the sampled guides with $a_0=1/5000$
+(\leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep_of_chamberSampling},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange_of_chamberSampling}).
+The estimates need no hypothesis beyond $n>0$; the genericity of the displacement,
+which the source assumes, is used only for the existence of the sampled guides.
+
+The uniform footprint ratios of the point treatment and of the block guides also hold
+for the readings, with holes at the true vertices of the readings. A reading takes only
+values of the labelling, and a reading of a relabelled similar image of a template is
+the same image of a reading of the template; the templates are eventually constant
+along rays, so their finitely many readings serve as templates. The ratio $\nu$ then
+depends on $v$, which the source fixes once all the guides are specified, before the
+patch ratio is chosen
+(\leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading},
+\leanid{TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}).
+Nothing of Lemma~7.2 or of its sampling convention remains open.
 
 \end{document}

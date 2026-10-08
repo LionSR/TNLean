@@ -26,10 +26,8 @@ are unique, and that the separation of the true vertices of the temporary guides
   of a reading is a true vertex of the labelling, and the outer holes of the readings of the
   temporary guides of the point treatment are disjoint.
 
-That the source's sampled guides are these readings rests on two further facts that are not
-formalized: the source's open chambers are the open sets on which the formal labellings are
-constant, off a locally finite family of segments, and the source's generic displacement is
-parallel to none of these segments, so that the ray `p + ε v` leaves them at once.
+That the source's sampled guides are these readings, for a generic displacement, is proved in
+`TNLean.PEPS.Approximation.DyadicChamberSampling`.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
