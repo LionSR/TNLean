@@ -14,8 +14,8 @@ designated support `N_r(aᵢ)` with `r = max {r₀, ⌊d/2⌋}`; a label whose a
 meeting both `X` and its complement is a ball of radius exactly `r₀`, and its anchor lies
 within `r₀` of an endpoint of an edge of the cut. Hence at most `2 μ K_b (r₀ + 1)² b_X` labels
 cross the cut, where `b_X` is the number of cut edges, and the cut parameter
-`ℬ_X = 1 + ∑_{i ∈ 𝒞_X} log²(e dᵢ)` with `dᵢ = q^{|X̃ᵢ|}` is at most
-`C (1 + b_X) (r₀ + 1)⁶`. No factor involving the total volume appears; components not
+`ℬ_X = 1 + ∑_{i ∈ 𝒞_X} log²(e dᵢ)` with `dᵢ = q^{|Sᵢ|}`, `Sᵢ` the designated support, is at
+most `C (1 + b_X) (r₀ + 1)⁶`. No factor involving the total volume appears; components not
 meeting `S₀`, and the empty set `S₀`, contribute no crossing label.
 
 ## Main definitions
@@ -198,15 +198,15 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
     _ ≤ (2 * E.card) * (Kb * ((r₀ : ℝ) + 1) ^ 2) * μ := by gcongr
     _ = 2 * μ * Kb * ((r₀ : ℝ) + 1) ^ 2 * E.card := by ring
 
-/-- **The cut parameter** `ℬ_X = 1 + ∑_{i ∈ 𝒞_X} log²(e dᵢ)` with `dᵢ = q^{|X̃ᵢ|}`
-(`eq:quasilocal-cut-budget`, `03-quasilocal.tex`, lines 448–451). -/
+/-- **The cut parameter** `ℬ_X = 1 + ∑_{i ∈ 𝒞_X} log²(e dᵢ)` with `dᵢ = q^{|Sᵢ|}` for the
+designated support `Sᵢ` (`eq:quasilocal-cut-budget`, `03-quasilocal.tex`, lines 448–451). -/
 noncomputable def cutBudget {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι)
     (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) (X : Finset ι) : ℝ :=
   1 + ∑ i ∈ crossingLabels G S₀ r₀ a X,
     Real.log (Real.exp 1 * (q : ℝ) ^ (designatedSupport G S₀ r₀ (a i)).card) ^ 2
 
 /-- **Support dimensions of crossing labels** (`eq:quasilocal-crossing-count`,
-`03-quasilocal.tex`, lines 447–448): `log dᵢ = |X̃ᵢ| log q ≤ K_b (r₀ + 1)² log q`. -/
+`03-quasilocal.tex`, lines 447–448): `log dᵢ = |Sᵢ| log q ≤ K_b (r₀ + 1)² log q`. -/
 theorem log_dim_le_of_mem_crossingLabels {κ : Type*} [Fintype κ] {q : ℕ} (hq : 1 ≤ q)
     {G : SimpleGraph ι} {S₀ : Finset ι} {r₀ : ℕ} {a : κ → ι} {X : Finset ι} (hX : X ⊆ S₀)
     {Kb : ℝ} (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
