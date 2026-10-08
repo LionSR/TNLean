@@ -9471,6 +9471,38 @@ shorter interaction range.
     for every sector and every observable.
 \end{proof}
 
+\begin{theorem}[One quasi-local commutator gap in all constructed sectors]
+    \label{thm:multiblock_quasi_local_parent_commutator_gap}
+    \lean{MPSTensor.exists_pos_multiblock_quasiLocalCommutator_gap_of_isParentInteraction}
+    \leanok
+    Let $d>0$, and let $A_j$ be finitely many normalized primitive tensors
+    with positive bond dimensions and positive-definite invariant matrices
+    $\rho_j$. Suppose that the simultaneous word span is full at a length
+    $S>0$. Let $T=\bigoplus_j\mu_jA_j$ with $\mu_j\neq0$, and let $h\geq0$
+    have kernel $G_R(T)$ at range $R\geq S+1$.
+    There is a constant $\gamma>0$ such that, for every sector $\alpha$,
+    $a\in\mathbb Z$, $k\geq1$, and $X\in M_{d^k}(\mathbb C)$
+    with $\omega_{A_\alpha}(j_{a,k}(X))=0$,
+    \begin{align}
+        \gamma\operatorname{Re}\omega_{A_\alpha}
+        \bigl(j_{a,k}(X)^*j_{a,k}(X)\bigr)
+        \leq\operatorname{Re}\omega_{A_\alpha}(j_{a-t,w}(Y)),
+        \notag
+    \end{align}
+    where $t=R-1$, $w=2t+k$, $B=I_t\otimes X\otimes I_t$, and
+    $Y=B^*[H_w(h),B]$. The same constant applies to all sectors,
+    positions, and centered observables. The states are the completed
+    expectations of the given primitive blocks; identification of the full
+    pure GVBS ground-state face remains a separate assertion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:multiblock_local_parent_commutator_gap,
+        thm:mps_quasi_local_interval_expectation, thm:quasi_local_interval_observable}
+    The common finite-interval bound is expressed in the constructed states
+    by interval evaluation. The interval inclusions preserve products and
+    adjoints, so the centered hypothesis and both terms agree exactly.
+\end{proof}
+
 \begin{definition}[Rectangular observable insertion]
     \label{def:mixed_observable_insertion}
     \lean{MPSTensor.mixedPhysicalObservableTransfer, MPSTensor.mixedPhysicalObservableTransfer_apply, MPSTensor.mixedPhysicalObservableTransfer_self}
@@ -9550,6 +9582,30 @@ shorter interaction range.
     The pullback is the rectangular coefficient reshuffling of the virtual
     sandwich. This reshuffling is linear between fixed finite-dimensional
     spaces and hence continuous. Apply it to the sandwich limit.
+\end{proof}
+
+\begin{theorem}[Constructing sector states from simultaneous injectivity]
+    \label{thm:normalized_multiblock_quasi_local_parent_gap}
+    \lean{MPSTensor.exists_primitiveFamily_quasiLocalCommutator_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $d>0$, and let $A_j$ have positive bond dimensions and full
+    simultaneous word span at $S>0$. Let $T=\bigoplus_j\mu_jA_j$ with
+    $\mu_j\neq0$, and let $h\geq0$ have kernel $G_R(T)$ at $R\geq S+1$.
+    There exist normalized primitive representatives $B_j$ with
+    positive-definite invariant matrices $\rho_j$ such that
+    $G_N(A_j)=G_N(B_j)$ for every $j,N$. Their constructed quasi-local
+    states satisfy the preceding common commutator inequality for the
+    original interaction $h$, with one positive constant for all sectors,
+    interval positions, and centered local observables.
+    No normalized representatives or invariant matrices are supplied.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_word_span_primitive_normalization,
+        thm:multiblock_quasi_local_parent_commutator_gap}
+    Primitive normalization preserves each block support and simultaneous
+    injectivity. Hence it also preserves the assembled local support and
+    the parent-interaction kernel. Apply the common bound to the normalized
+    family with the original positive interaction.
 \end{proof}
 
 \begin{theorem}[Quasi-local images of interior inclusions]
@@ -9810,6 +9866,40 @@ shorter interaction range.
     constructed state.
 \end{proof}
 
+\begin{theorem}[Literal infinite-volume commutator gap in the primitive sectors]
+    \label{thm:multiblock_quasi_local_commutator_limit_gap}
+    \lean{MPSTensor.exists_pos_multiblock_quasiLocalCommutator_limit_gap}
+    \leanok
+    Let $A=\bigoplus_{\alpha=0}^{b-1}\mu_\alpha A_\alpha$, with nonzero
+    coefficients, trace-preserving primitive blocks, and faithful invariant
+    density matrices. Suppose that the blocks have simultaneous injectivity
+    length $S>0$, and that $h\geq0$ is a parent interaction of range
+    $R\geq S+1$. Then there is $\gamma>0$ such that, for every constructed
+    sector state $\omega_\alpha$ and every local observable $X$ satisfying
+    $\omega_\alpha(X)=0$,
+    \begin{align}
+        \lim_{\ell,r\to\infty}
+        \omega_\alpha\bigl(X^*[H_{[a-\ell,a+k+r)},X]\bigr)
+        \geq \gamma\,\omega_\alpha(X^*X).
+        \notag
+    \end{align}
+    Here $X$ is supported on $[a,a+k)$, with $k>0$, and the limit may be
+    taken along any filter for which both margins tend to infinity.
+    The limit is real and nonnegative. This proves the displayed
+    infinite-volume estimate of \cite[Theorem~1.2]{Nachtergaele1996Spectral}
+    for these constructed sectors at the stated sufficient range;
+    identification of the entire source ground-state face is a separate result.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:multiblock_quasi_local_parent_commutator_gap,thm:quasi_local_commutator_energy_limit,thm:local_commutator_expectation_positive}
+    Once both margins contain $R-1$ sites, the quasi-local energy observable
+    equals the inclusion of the fixed commutator patch. Thus its expectation
+    is eventually constant. Local support and positivity make this expectation
+    real and nonnegative. The common sector gap bounds its real part by
+    $\gamma\omega_\alpha(X^*X)$, and positivity of the state makes the latter
+    real as well.
+\end{proof}
+
 \begin{theorem}[Joint compression from sector column limits]
     \label{thm:sector_observable_decomposition_from_columns}
     \lean{Submodule.tendsto_norm_joint_compression_sub_sector_sum_zero}
@@ -9876,6 +9966,61 @@ shorter interaction range.
     $\|\sum_jP_j(n)-P(n)\|\to0$. Interior inclusion gives
     $\|X_n\|\le\|X\|$. Apply the joint-compression theorem with
     $c_j=\eta_{A_j}(X)$ and the sector column limits.
+\end{proof}
+
+\begin{theorem}[Zero energy and a support projection]
+    \label{thm:positive_functional_zero_energy_support}
+    \lean{PositiveLinearMap.apply_projection_eq_one_of_le_of_apply_eq_zero,
+        MPSTensor.quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero}
+    \leanok
+    \uses{def:mps_ground_space_projection_matrix,def:qca_state_space_purity}
+    Let $f$ be a positive normalized complex-linear functional and
+    $p=p^*=p^2$. If $f(H)=0$ and $\kappa(1-p)\leq H$ for some
+    $\kappa>0$, then $f(p)=1$.
+    In particular, if $H\geq0$ is a finite-interval Hamiltonian with
+    $\ker H=G_N(A)$, then every normalized positive quasi-local state
+    satisfying $\varphi(j_{a,N}(H))=0$ also satisfies
+    $\varphi(j_{a,N}(p_A(N)))=1$. No uniform gap is required.
+    This is the finite-dimensional support implication used in
+    \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive-kernel-projection-comparison}
+    Positivity gives $f(1-p)\geq0$, whereas monotonicity gives
+    $\kappa f(1-p)\leq f(H)=0$. Thus $f(1-p)=0$ and $f(p)=1$.
+    A finite positive Hamiltonian dominates a positive multiple of its
+    kernel-complement projection. Restrict the quasi-local state to the
+    interval matrix algebra and apply the preceding argument.
+\end{proof}
+
+\begin{theorem}[Local zero energy implies joint MPS support]
+    \label{thm:quasi_local_parent_zero_energy_joint_support}
+    \lean{MPSTensor.%
+        quasiLocalState_groundSpaceProjection_eq_one_of_isParentInteraction_wordTupleSpanTop,
+        MPSTensor.eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one}
+    \leanok
+    Let $A=\bigoplus_\alpha\mu_\alpha A_\alpha$ have nonzero weights and
+    simultaneous injectivity length $S>0$. Let $h\geq0$ have
+    $\ker h=G_R(A)$ at range $R\geq S+1$.
+    If a normalized positive quasi-local state $\varphi$ satisfies
+    $\varphi(j_{a,R}(h))=0$ for every $a\in\mathbb Z$, then
+    \begin{align}
+        \forall\,a\in\mathbb Z,\ N\geq R:\ \varphi(j_{a,N}(p_A(N)))=1.
+        \notag
+    \end{align}
+    Consequently the same support constraint holds eventually on the
+    symmetric intervals $[-n,n+1)$. The state need not be translation
+    invariant, and primitive normalization of the original blocks is
+    unnecessary. This is the local support consequence of the zero-energy
+    condition in \cite[Theorem~1.1]{Nachtergaele1996Spectral}, at the stated
+    sufficient range.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_open_interaction_zero_expectation,thm:block_open_kernel_simultaneous_injectivity,thm:positive_functional_zero_energy_support}
+    Every finite open sum has zero expectation, since each translated local
+    term does. Positivity is preserved by the sum, and its kernel is exactly
+    $G_N(A)$ when $N\geq R$. The preceding support lemma applies.
+    Since $2n+1\geq R$ eventually, it also applies to the symmetric intervals.
 \end{proof}
 
 \begin{theorem}[Local zero energy and finite open-chain expectations]
@@ -9951,6 +10096,78 @@ shorter interaction range.
     final difference to the expectation of $pXp-Y$.
 \end{proof}
 
+\begin{theorem}[Compactness of finite convex weights]
+    \label{thm:finite_convex_weights_compactness}
+    \lean{exists_convex_weights_subsequence,
+        exists_convex_weights_of_approximate_evaluations}
+    \leanok
+    Let $J$ be finite, and let $w_j(n)$ be real weights that eventually lie
+    in $[0,1]$, with $\sum_jw_j(n)\to1$. There are a strictly increasing
+    subsequence $n_s$ and weights $p_j\geq0$, $\sum_jp_j=1$, such that
+    $w_j(n_s)\to p_j$ for every $j$.
+    For any family of tests $x$, if
+    $f(x)-\sum_jw_j(n)g_j(x)\longrightarrow0$ for every test $x$,
+    then one choice of normalized weights satisfies
+    $f(x)=\sum_jp_jg_j(x)$ for all tests. The test family need not be countable.
+\end{theorem}
+\begin{proof}\leanok
+    Extract a convergent subsequence in the compact cube $[0,1]^J$.
+    Continuity of the finite sum shows that the limit has total mass one.
+    For each test, compare the assumed limit with the evaluation along
+    this same subsequence. Uniqueness of limits gives the asserted identity.
+\end{proof}
+
+\begin{theorem}[Pure sector states and the literal gap from the original blocks]
+    \label{thm:original_blocks_pure_sector_commutator_limit_gap}
+    \lean{MPSTensor.%
+        exists_pure_primitiveFamily_quasiLocalCommutator_limit_gap_of_wordTupleSpanTop}
+    \leanok
+    Let the original block family have simultaneous injectivity length $S>0$
+    and nonzero weights. For every positive parent interaction of the original
+    weighted tensor at range $R\geq S+1$, there are trace-preserving primitive
+    representatives, with faithful invariant matrices, preserving every
+    block ground space at every length. Their completed sector states are
+    pure among all quasi-local states and have a common positive literal
+    infinite-volume commutator gap for the original interaction.
+    The original blocks need not be normalized, and the invariant matrices
+    and purity are conclusions. The two free margins may tend to infinity
+    along any filter, as in the preceding theorem.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_word_span_primitive_normalization,thm:multiblock_quasi_local_commutator_limit_gap,thm:primitive_quasi_local_purity}
+    Normalize the blocks without changing their local ground spaces or their
+    simultaneous span. Equality of the block spaces preserves the local
+    kernel of the original positive interaction. Apply the common sector
+    commutator theorem to the representatives and the primitive purity theorem
+    to each completed sector state.
+\end{proof}
+
+\begin{theorem}[Ground-state support from the eventual kernel identity]
+    \label{thm:quasi_local_zero_energy_support_eventual_kernel}
+    \lean{MPSTensor.%
+        eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eventual_kernel}
+    \leanok
+    Let $h\geq0$ have positive finite interaction range. Suppose that
+    $\ker H_N(h)=G_N(A)$ for every sufficiently large $N$.
+    If a normalized positive quasi-local state $\varphi$ has
+    $\varphi(j_{a,R}(h))=0$ for every $a\in\mathbb Z$, then, for every sufficiently large $n$,
+    \begin{align}
+        \varphi\bigl(j_{-n,2n+1}(p_A(2n+1))\bigr)=1.
+        \notag
+    \end{align}
+    This uses the eventual kernel hypothesis in
+    \cite[Theorem~1.2]{Nachtergaele1996Spectral} directly. It imposes no
+    local parent-kernel equality and no lower bound on the interaction
+    range in terms of injectivity.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_open_interaction_zero_expectation,thm:positive_functional_zero_energy_support}
+    Every open interaction sum has zero expectation. For sufficiently large
+    symmetric intervals it is positive and has the prescribed MPS kernel.
+    Its finite-dimensional kernel-complement comparison therefore forces
+    expectation one on the MPS support projection.
+\end{proof}
+
 \begin{definition}[The zero-energy state set of a local interaction]
     \label{def:quasi_local_parent_ground_state_face}
     \lean{MPSTensor.parentGroundStateFace}
@@ -10005,6 +10222,57 @@ shorter interaction range.
     For the weighted block tensor,
     $G_R(A_j)\subseteq\sum_iG_R(A_i)=G_R(B)=\ker h$.
     Apply the same support assertion to each sector.
+\end{proof}
+
+\begin{theorem}[Convex decomposition of a state with joint MPS support]
+    \label{thm:multiblock_supported_quasi_local_state_convex_combination}
+    \lean{MPSTensor.exists_convex_combination_quasiLocalExpectation_of_eventually_groundSpace_support}
+    \leanok
+    \uses{def:mps_ground_space_projection_matrix,def:mps_quasi_local_expectation}
+    Let $(A_j)_{j=0}^{b-1}$ be finitely many trace-preserving primitive tensors
+    of positive physical and bond dimensions, with positive definite invariant matrices $\rho_j$. Suppose distinct sectors are
+    inequivalent up to virtual gauge and phase. Let $T$ be their weighted
+    block sum with nonzero coefficients, and let $\omega_j$ be the
+    constructed quasi-local state of the $j$th sector.
+    Suppose $\varphi$ is a normalized positive norm-one continuous
+    complex-linear state on the quasi-local algebra and that, for all
+    sufficiently large $n$,
+    \begin{align}
+        \varphi\bigl(j_{-n,2n+1}(p_T(2n+1))\bigr)=1.
+        \notag
+    \end{align}
+    Then there are real weights $w_j\geq0$, $\sum_jw_j=1$, such that
+    \begin{align}
+        \varphi=\sum_jw_j\omega_j.
+        \notag
+    \end{align}
+    The competing state need not be translation invariant. This is the
+    support-to-convex-hull implication in the argument for
+    \cite[Theorem~1.1]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:interval_state_projection_estimates,thm:finite_convex_weights_compactness,thm:multiblock_bulk_observable_sector_decomposition,thm:sector_projection_sum_error_decay,thm:inequivalent_block_ground_space_overlap_decay,thm:quasi_local_interval_observable,thm:mps_quasi_local_interval_expectation}
+    On $I_n=[-n,n+1)$, put
+    $w_j(n)=\varphi(j_{-n,2n+1}(p_{A_j}(2n+1)))$.
+    Positivity gives real weights in $[0,1]$. The sum of the sector
+    projections approaches the joint projection in operator norm.
+    The support condition and the norm-one bound therefore give
+    $\sum_jw_j(n)\to1$.
+
+    Fix an observable $X$ on $I_m$. For $n\geq m$, include it into $I_n$
+    with equal margins $n-m$. Support compression and asymptotic sector
+    decomposition give
+    \begin{align}
+        \varphi(j_{-m,2m+1}(X))-
+        \sum_jw_j(n)\eta_{A_j}(X)\longrightarrow0.
+        \notag
+    \end{align}
+    Extract one convergent subsequence of the finite weight vectors.
+    Its limit is nonnegative with total mass one. The same subsequence
+    identifies all centered interval expectations with the corresponding
+    convex combination. Every finite region lies in such an interval,
+    and local observables are dense. Continuity proves the state identity
+    on the completed algebra.
 \end{proof}
 
 \begin{theorem}[Sector zero energy from a finite open kernel]
@@ -10230,6 +10498,443 @@ shorter interaction range.
     gives one constant for every volume.
 \end{proof}
 
+\begin{theorem}[Classification of the zero-energy state face for primitive sectors]
+    \label{thm:primitive_multiblock_quasi_local_ground_state_classification}
+    \lean{MPSTensor.mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel}
+    \leanok
+    \uses{def:quasi_local_parent_ground_state_face}
+    Let $T=\bigoplus_{j=0}^{b-1}\mu_jA_j$, with $\mu_j\ne0$, be a finite
+    weighted sum of inequivalent trace-preserving primitive tensors with
+    faithful invariant density matrices. Write $\omega_j$ for their
+    constructed quasi-local states. Let $h\geq0$ have range $R\geq1$,
+    and suppose $\ker H_N^{\mathrm{open}}(h)=G_N(T)$ for all sufficiently
+    large $N$. Then, for every normalized positive state $\varphi$,
+    \begin{align}
+        \varphi\in\mathcal F_h
+        \quad\Longleftrightarrow\quad
+        \exists (w_j)_j:\ w_j\geq0,\quad\sum_jw_j=1,\quad
+        \varphi=\sum_j w_j\omega_j.
+        \notag
+    \end{align}
+    No translation invariance of $\varphi$ is assumed. This is the
+    ground-state classification associated with
+    \cite[Theorems~1.1--1.2]{Nachtergaele1996Spectral} for the stated
+    primitive sector family. More general periodic presentations remain
+    separate \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_zero_energy_support_eventual_kernel,thm:multiblock_supported_quasi_local_state_convex_combination,thm:quasi_local_parent_ground_state_face_properties,thm:sector_local_zero_from_eventual_open_kernel}
+    Zero local energy and the eventual kernel identity give expectation
+    one on the joint support projections of sufficiently large intervals.
+    The supported-state decomposition gives the convex coefficients.
+    Conversely, each sector state has zero local interaction expectation:
+    its expectation of a sufficiently long open sum is zero, and every
+    summand has the same expectation. Convexity preserves this property.
+\end{proof}
+
+\begin{theorem}[Pure ground states are precisely the primitive sectors]
+    \label{thm:primitive_multiblock_pure_ground_state_classification}
+    \lean{MPSTensor.isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel}
+    \leanok
+    Under the preceding hypotheses, a state $\varphi$ is a pure element of
+    $\mathcal F_h$ if and only if $\varphi=\omega_j$ for some $j$.
+    Purity is extremality among all states of the quasi-local algebra.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_multiblock_quasi_local_ground_state_classification,thm:finite_pure_state_decomposition,thm:primitive_quasi_local_purity}
+    A pure state in a finite convex combination equals one of the
+    constituent states. Each constructed primitive sector state is pure
+    and has zero local energy.
+\end{proof}
+
+\begin{theorem}[Positive commutator expectation from eventual joint support]
+    \label{thm:eventual_kernel_sector_commutator_positive}
+    \lean{MPSTensor.quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kernel}
+    \leanok
+    Let $h\geq0$ have range $R>0$, and suppose that the kernels of its
+    sufficiently long open-chain Hamiltonians equal the joint boundary spaces
+    of a weighted tensor family with nonzero weights. Let $\omega_\alpha$ be
+    a constructed sector state, with a trace-preserving tensor and a positive
+    invariant matrix of nonzero trace. For $X$ on $k>0$ sites,
+    \begin{align}
+        \omega_\alpha\bigl(j_{a-(R-1),\,2(R-1)+k}
+        (X^*[H_{\mathrm{patch}},X])\bigr)\geq0.
+        \notag
+    \end{align}
+    Neither primitivity nor faithfulness of the invariant matrix is needed
+    for this assertion. The local commutator patch has real expectation.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:local_commutator_expectation_positive,thm:quasi_local_commutator_locality,thm:mps_quasi_local_interval_expectation}
+    Choose one sufficiently large volume containing both interaction
+    margins. Its Hamiltonian annihilates the sector boundary space and is
+    positive. The expectation of $B^*[H,B]$ therefore equals that of
+    $B^*HB$ and is nonnegative. The quasi-local commutator identity identifies
+    this expectation with the fixed local patch.
+\end{proof}
+
+\begin{theorem}[One finite-chain and local commutator gap for all primitive sectors]
+    \label{thm:eventual_kernel_sector_local_gap}
+    \lean{MPSTensor.exists_pos_multiblock_localCommutator_gap_of_eventual_kernel,
+        MPSTensor.exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel}
+    \leanok
+    Let $A_1,\ldots,A_b$ be pairwise gauge-phase inequivalent normalized
+    primitive tensors with faithful invariant matrices, and let all weights
+    be nonzero. Let $h\geq0$ have arbitrary range $R>0$. Suppose that
+    $\ker H_N^{\mathrm{open}}(h)$ equals the joint boundary-condition space
+    for all sufficiently large $N$. Then there is $\gamma>0$ such that, for every $N$ and every
+    $v\perp\ker H_N^{\mathrm{open}}(h)$,
+    \begin{align}
+        \gamma\lVert v\rVert\leq\lVert H_N^{\mathrm{open}}(h)v\rVert,
+        \notag
+    \end{align}
+    and, for every sector, position, and centered observable $X$ on $k>0$
+    sites,
+    \begin{align}
+        \gamma\omega_\alpha(X^*X)
+        \leq\omega_\alpha(X^*[H_{\mathrm{patch}},X]).
+        \notag
+    \end{align}
+    The same inequality holds for the finite-interval insertion expectations.
+    No local parent-kernel equality or lower bound on $R$ in terms of an
+    injectivity length is assumed. This is the primitive-sector specialization
+    of the argument in \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral};
+    the more general GVBS presentations are recorded in
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:eventual_kernel_open_interaction_gap,thm:multiblock_local_open_interaction_commutator_gap,thm:mps_quasi_local_interval_expectation}
+    Choose the uniform finite-chain constant. Pull the eventual kernel
+    equality along growing buffered volumes. Apply the full joint-ground
+    projection decay and the finite-volume commutator estimate in each sector.
+    Evaluation on consecutive intervals is the insertion expectation.
+\end{proof}
+
+\begin{theorem}[A common finite-chain and literal infinite-volume sector gap]
+    \label{thm:eventual_kernel_sector_literal_gap}
+    \lean{MPSTensor.exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel}
+    \leanok
+    Under the primitive-family hypotheses of
+    Theorem~\ref{thm:eventual_kernel_sector_local_gap}, choose the same
+    $\gamma>0$ for the finite-chain bound. Let $\ell,r$ tend to infinity
+    along any filter. For every constructed sector state and centered local
+    $X$ on $k>0$ sites, the literal energies
+    \begin{align}
+        \omega_\alpha\bigl(X^*[H_{[a-\ell,\,a+k+r)}(h),X]\bigr)
+        \notag
+    \end{align}
+    converge to a real number $e$ satisfying
+    $\gamma\omega_\alpha(X^*X)\leq e$. Thus one constant gives both the
+    all-volume finite-chain norm gap and the infinite-volume sector bound.
+    This states the primitive-sector case explicitly; classification of all
+    pure zero-energy states is a separate assertion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:eventual_kernel_sector_local_gap,thm:eventual_kernel_sector_commutator_positive,thm:quasi_local_commutator_locality}
+    Once both margins exceed $R-1$, locality makes the commutator observable
+    equal to its fixed patch. Its expectation is real and nonnegative by
+    eventual support. Combine this literal limit with the local bound using
+    the same finite-chain constant.
+\end{proof}
+
+\begin{theorem}[Ground-state classification after primitive normalization]
+    \label{thm:normalized_quasi_local_ground_state_classification}
+    \lean{MPSTensor.%
+        exists_normalized_parentGroundStateFace_classification_of_eventually_open_kernel}
+    \leanok
+    Let $A_j$ be a finite family with positive bond dimensions whose
+    word tuples at some length $S>0$ span the full product matrix algebra.
+    This is the simultaneous spanning condition of
+    \cite[Section~IV.C]{Cirac2021Matrix}.
+    Let $T_A=\bigoplus_j\mu_jA_j$, with every $\mu_j\ne0$.
+    Suppose that $h\geq0$ has range $R\geq1$ and that
+    $\ker H^{\mathrm{open}}_{h,N}=G_N(T_A)$ for all sufficiently large $N$.
+    There exist primitive trace-preserving tensors $B_j$ with faithful
+    invariant matrices $\rho_j$ such that their word tuples still span the
+    full product algebra at length $S$. Write $T_B=\bigoplus_j\mu_jB_j$. Then
+    \begin{align}
+        G_N(A_j) & =G_N(B_j), &
+        G_N(T_A) & =G_N(T_B).
+        \notag
+    \end{align}
+    These equalities hold for every block $j$ and every length $N$.
+    Let $\omega_j$ be the quasi-local state constructed from $B_j,\rho_j$.
+    For every continuous complex-linear functional $\varphi$ on the
+    quasi-local algebra,
+    \begin{align}
+        \varphi\in\mathcal F_h
+         & \quad\Longleftrightarrow\quad
+        \exists (w_j)_j:\ w_j\geq0,\quad\sum_jw_j=1,\quad
+        \varphi=\sum_jw_j\omega_j,\notag \\
+        \varphi\in\mathcal F_h\ \text{and }\varphi\text{ is pure}
+         & \quad\Longleftrightarrow\quad
+        \exists j:\ \varphi=\omega_j.\notag
+    \end{align}
+    The original interaction range need not exceed $S$.
+    This combines the normalization in
+    \cite[equations~(3.1)--(3.2b)]{Nachtergaele1996Spectral}
+    with the ground-state classification of
+    \cite[Theorems~1.1--1.2]{Nachtergaele1996Spectral}, for the original
+    simultaneously spanning family. The passage from more general periodic
+    presentations is separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_word_span_primitive_normalization,
+        thm:block-word-span-separation,thm:ph_block_replacement_parent_equality,
+        thm:primitive_multiblock_quasi_local_ground_state_classification,
+        thm:primitive_multiblock_pure_ground_state_classification}
+    Normalize each block by a nonzero rescaling and a virtual gauge.
+    These operations preserve every block ground space and the simultaneous
+    word span. The weighted joint ground spaces therefore coincide at every
+    length, and the eventual kernel identity transfers to $T_B$.
+    Simultaneous spanning excludes gauge-phase equivalence between distinct
+    normalized blocks. Apply the convex-combination and pure-sector
+    classifications to this normalized family and the unchanged interaction.
+\end{proof}
+
+\begin{theorem}[Finite and infinite-volume gaps in every pure ground state]
+    \label{thm:eventual_kernel_pure_ground_state_gap}
+    \lean{MPSTensor.exists_pos_pure_ground_state_commutator_limit_gap_of_eventual_kernel}
+    \leanok
+    Let $T=\bigoplus_j\mu_jA_j$ be a finite weighted family of inequivalent
+    trace-preserving primitive tensors with faithful invariant density matrices
+    and nonzero coefficients. Let $h\geq0$ have range $R\geq1$, and suppose
+    $\ker H_N^{\mathrm{open}}(h)=G_N(T)$ for every sufficiently large $N$.
+    Let both free margins tend to infinity. Then there is one $\gamma>0$
+    such that
+    \begin{align}
+        \gamma\|v\|\leq\|H_N^{\mathrm{open}}(h)v\|
+        \qquad\bigl(N\geq0,\ v\perp\ker H_N^{\mathrm{open}}(h)\bigr),
+        \notag
+    \end{align}
+    and, for every pure $\eta\in\mathcal F_h$ and every local observable
+    $X$ with $\eta(X)=0$, the literal limit exists and satisfies
+    \begin{align}
+        \lim_{M\to-\infty,\,N\to+\infty}
+        \eta\bigl(X^*[H_{[M,N]}(h),X]\bigr)
+        \geq\gamma\eta(X^*X).
+        \notag
+    \end{align}
+    The margins may diverge along an arbitrary filter. This is the pair
+    of conclusions in \cite[Theorem~1.2]{Nachtergaele1996Spectral} for
+    the stated primitive family; the original range has no injectivity
+    lower bound. General periodic presentations remain separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:eventual_kernel_sector_literal_gap,thm:primitive_multiblock_pure_ground_state_classification}
+    The sector gap theorem supplies one constant for both conclusions.
+    The pure-state classification identifies each pure zero-energy state
+    with a constructed sector, to which the same literal limit and bound apply.
+\end{proof}
+
+\begin{theorem}[The pure ground-state gap from an original spanning family]
+    \label{thm:original_family_eventual_kernel_pure_ground_state_gap}
+    \lean{MPSTensor.exists_pos_pure_ground_state_commutator_limit_gap_of_wordTupleSpanTop}
+    \leanok
+    The preceding finite and infinite-volume conclusions also hold when
+    the original blocks are only assumed to have full simultaneous word
+    span at some positive length $S$. Their normalization and invariant
+    density matrices are derived internally. No condition $R\geq S+1$
+    is required; positivity and the eventual open-chain kernel identity
+    remain the hypotheses on the original interaction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:normalized_quasi_local_ground_state_classification,thm:eventual_kernel_pure_ground_state_gap}
+    Normalize the blocks, preserving every block ground space and every
+    weighted joint ground space. The eventual kernel condition transfers
+    to this family. Its simultaneous span excludes gauge-and-phase
+    equivalence of different blocks. Apply the preceding theorem.
+\end{proof}
+
+\begin{theorem}[Existence of a positive interaction for a primitive family]
+    \label{thm:primitive_ground_state_interaction_exists}
+    \lean{MPSTensor.exists_positive_parent_interaction_of_isPrimitiveMPS}
+    \leanok
+    \uses{def:open_local_interaction_sum}
+    Let $T=\bigoplus_{j=0}^{b-1}\mu_jA_j$, with nonzero weights, be a finite
+    family of pairwise gauge-phase inequivalent trace-preserving primitive
+    tensors of positive bond dimensions. Suppose each tensor has a faithful
+    invariant matrix. There exist $R>0$ and a positive interaction $h$ on
+    $R$ sites such that, for every $N\geq R$,
+    \begin{align}
+        \ker H_N^{\mathrm{open}}(h)=G_N(T).
+        \notag
+    \end{align}
+    Neither $R$ nor a simultaneous injectivity length is supplied.
+    The inequality $N\geq R$ is stronger than the inclusive-interval bound
+    $N\geq R+1$ in
+    \cite[Theorem~1.1]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ph_primitive_blocks_open_kernel,rem:euclidean_local_projector_ingredients}
+    Choose the positive open-kernel threshold $R$ and let $h$ be the
+    orthogonal projection onto $G_R(T)^\perp$. Its open sum is the canonical
+    range-$R$ parent Hamiltonian. The threshold theorem gives the stated
+    kernel equality, including the single-window volume $N=R$.
+\end{proof}
+
+\begin{theorem}[An interaction realizing the entire primitive-sector ground-state face]
+    \label{thm:primitive_ground_state_face_interaction_exists}
+    \lean{MPSTensor.exists_positive_parent_interaction_groundStateFace_of_isPrimitiveMPS}
+    \leanok
+    For the primitive family of the preceding theorem, one can choose a
+    single $R>0$ and $h\geq0$ such that the open kernels equal $G_N(T)$
+    for every $N\geq R$, and hence for all sufficiently large $N$, and
+    \begin{align}
+        \mathcal F_h
+        =\left\{\sum_{j=0}^{b-1} w_j\omega_j:
+        w_j\geq0,\ \sum_jw_j=1\right\}.
+        \notag
+    \end{align}
+    Here $\omega_j$ is the constructed quasi-local state of $A_j$.
+    The pure states in $\mathcal F_h$ are precisely the states $\omega_j$.
+    Purity is extremality among all normalized positive quasi-local states;
+    no translation invariance of a state being classified is assumed.
+    This is the stated primitive-family case of the existence assertion in
+    \cite[Theorem~1.1 and its finite-family consequence]{Nachtergaele1996Spectral}.
+    More general periodic GVBS presentations remain separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_ground_state_interaction_exists,thm:primitive_multiblock_quasi_local_ground_state_classification,thm:primitive_multiblock_pure_ground_state_classification}
+    The all-volume kernel bound implies the eventual kernel hypothesis.
+    Apply the two classification theorems to the same positive canonical
+    interaction. They characterize the entire zero-energy face and its pure
+    states without an invariance assumption on the state.
+\end{proof}
+
+\begin{theorem}[Ground-space projection observables under blocking]
+    \label{thm:blocked_ground_projection_observable}
+    \lean{MPSTensor.groundSpaceProjectionMatrix_blockTensor_reindex,
+        MPSTensor.quasiLocalBlocking_groundSpaceProjectionMatrix}
+    \leanok
+    Let $A$ be any MPS tensor, and let $P_A(N)$ denote the matrix of the
+    orthogonal projection onto $G_N(A)$. For $L,N\geq0$,
+    \begin{align}
+        \mathcal R_{N,L}\bigl(P_{A^{[L]}}(N)\bigr)=P_A(NL).
+    \end{align}
+    If $d>0$ and $L>0$, then for every $a\in\mathbb Z$ and $N\geq0$,
+    \begin{align}
+        \overline{\mathcal B}_L
+        \bigl(j^{(d^L)}_{a,N}(P_{A^{[L]}}(N))\bigr)
+        =j^{(d)}_{aL,NL}(P_A(NL)).
+    \end{align}
+    No normality or translation invariance is assumed. These are coordinate
+    consequences of the site regrouping in
+    \cite[lines~825--836]{Nachtergaele1996Spectral} and the blocked local
+    spaces of \cite[lines~1815--1820 and 1985--1992]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_local_ground_space_transport,
+        def:mps_ground_space_projection_matrix,
+        thm:qca_blocking_quasi_local_interval}
+    Evaluate the finite projection conjugacy on a configuration basis vector.
+    This gives the matrix reindexing identity. Apply the interval observable
+    blocking formula to obtain the completed identity.
+\end{proof}
+
+\begin{theorem}[Expectations of aligned ground-space projections]
+    \label{thm:blocked_ground_projection_expectation}
+    \lean{MPSTensor.quasiLocalBlockingFunctional_groundSpaceProjectionMatrix,
+        MPSTensor.quasiLocalBlockingFunctional_symm_groundSpaceProjectionMatrix}
+    \leanok
+    Let $d,L>0$ and let $T_L\omega=\omega\circ\overline{\mathcal B}_L^{-1}$
+    be functional transport from the blocked chain to the original chain.
+    For every continuous complex-linear functional $\omega$ on the blocked
+    algebra,
+    \begin{align}
+        (T_L\omega)\bigl(j^{(d)}_{aL,NL}(P_A(NL))\bigr)
+        =\omega\bigl(j^{(d^L)}_{a,N}(P_{A^{[L]}}(N))\bigr).
+    \end{align}
+    Equivalently, for every continuous complex-linear functional $\varphi$
+    on the original algebra,
+    \begin{align}
+        (T_L^{-1}\varphi)\bigl(j^{(d^L)}_{a,N}(P_{A^{[L]}}(N))\bigr)
+        =\varphi\bigl(j^{(d)}_{aL,NL}(P_A(NL))\bigr).
+    \end{align}
+    Both identities include $N=0$ and arbitrary integer $a$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_ground_projection_observable, def:qca_blocking_functional}
+    Substitute the projection observable identity into inverse
+    precomposition. The inverse evaluation follows by applying the same
+    identity to $T_L^{-1}\varphi$.
+\end{proof}
+
+\begin{theorem}[Blocked interval support and aligned original support]
+    \label{thm:blocked_ground_projection_support}
+    \lean{MPSTensor.groundSpace_support_blockTensor_iff_aligned,
+        MPSTensor.groundSpace_support_blockTensor_iff_aligned_of_positive_lengths}
+    \leanok
+    For $d,L>0$, exact support of $T_L^{-1}\varphi$ in every interval
+    space of $A^{[L]}$ is equivalent to exact support of $\varphi$ in every
+    aligned interval space of $A$:
+    \begin{align}
+         & \forall a\in\mathbb Z\ \forall N\geq0,\quad
+        (T_L^{-1}\varphi)
+        \bigl(j^{(d^L)}_{a,N}(P_{A^{[L]}}(N))\bigr)=1
+        \\
+         & \hspace{2em}\Longleftrightarrow
+        \forall a\in\mathbb Z\ \forall N\geq0,\quad
+        \varphi\bigl(j^{(d)}_{aL,NL}(P_A(NL))\bigr)=1.
+    \end{align}
+    The same equivalence holds when both quantifiers over lengths are
+    restricted to $N>0$. These identities hold for every continuous
+    complex-linear functional; positivity and normalization are not required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_ground_projection_expectation}
+    Apply the inverse evaluation identity to each pair $(a,N)$, with the
+    same restriction on lengths on both sides.
+\end{proof}
+
+\begin{theorem}[MPS support descends to contained intervals]
+    \label{thm:mps_support_contained_interval}
+    \lean{MPSTensor.chainWindowOperator_groundSpaceProjection_mul,
+        MPSTensor.quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval}
+    \leanok
+    Let $A$ be any MPS tensor. Let $P_A(I)$ be the projection onto its
+    open-boundary MPS space on a finite nonempty interval $I$.
+    If $I\subseteq J$, the projection $P_A(I)$, extended by the identity
+    outside $I$, fixes $P_A(J)$. Consequently, every positive normalized
+    quasi-local state $\varphi$ with $\varphi(P_A(J))=1$ satisfies
+    $\varphi(P_A(I))=1$. Neither injectivity nor translation invariance
+    is required. This is the restriction direction of
+    \cite[Section~3, equation~(3.12)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Every restriction of an open-boundary MPS vector belongs to the MPS
+    space on the smaller interval. Thus the smaller interval's extended
+    ground projection absorbs the larger ground projection. Positivity
+    and Cauchy--Schwarz imply that a state supported in a projection
+    evaluates every observable through its compression to that projection.
+    Compressing the extended smaller projection therefore gives expectation
+    one.
+\end{proof}
+
+\begin{theorem}[Aligned blocked intervals determine all MPS support]
+    \label{thm:blocked_aligned_mps_support_iff}
+    \lean{MPSTensor.quasiLocalState_groundSpaceProjection_eq_one_iff_aligned}
+    \leanok
+    Let $A$ be any MPS tensor, let $L\geq1$, and let $\varphi$ be a positive
+    normalized quasi-local state. Then $\varphi(P_A([a,a+N)))=1$ for every $a\in\mathbb Z$ and $N\geq1$
+    if and only if $\varphi(P_A([aL,(a+N)L)))=1$ for every $a\in\mathbb Z$
+    and $N\geq1$.
+    No primitivity, translation invariance, or spectral gap is assumed.
+    This gives the support-space consequence of finite blocking in
+    \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_support_contained_interval}
+    One implication follows by restricting the collection of intervals.
+    For the converse, Euclidean division writes an arbitrary left endpoint
+    as $a=cL+b$ with $0\leq b<L$. An aligned interval starting at $cL$
+    and containing $b+N$ blocks contains $[a,a+N)$, even when $a<0$.
+    Apply the contained-interval support lemma.
+\end{proof}
+
 \begin{theorem}[Open MPS spaces from an isometric sector resolution]
     \label{thm:isometric_sector_ground_space_resolution}
     \lean{MPSTensor.groundSpace_eq_iSup_of_isometric_sector_resolution,
@@ -10288,6 +10993,61 @@ shorter interaction range.
     letters. Apply the isometric sector resolution to obtain
     $G_N(A^{[p]})=\bigvee_\alpha G_N(B_\alpha)$, and identify the latter
     with the open MPS space of the direct-sum tensor.
+\end{proof}
+
+\begin{theorem}[Joint support of a normalized sector state]
+    \label{thm:sector_state_joint_mps_support}
+    \lean{MPSTensor.quasiLocalExpectation_toTensorFromBlocks_groundSpaceProjection_eq_one}
+    \leanok
+    Let $T=\bigoplus_j\mu_j A_j$, where every $\mu_j\ne0$.
+    If $A_j$ is trace preserving and has a nonzero positive invariant matrix,
+    its constructed state $\omega_j$ satisfies
+    \begin{align}
+        \omega_j\bigl(j_{a,N}(P_T(N))\bigr)=1
+    \end{align}
+    for every $a\in\mathbb Z$ and $N\geq0$. Primitivity is unnecessary.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:block_sum_local_ground_space,
+        thm:mps_state_local_support}
+    The sector MPS space is contained in the joint space. Thus its vectors
+    are annihilated by $1-P_T(N)$, which has zero expectation in the sector
+    state. Normalization gives the assertion.
+\end{proof}
+
+\begin{theorem}[All states supported in primitive joint MPS spaces]
+    \label{thm:primitive_joint_mps_supported_state_classification}
+    \lean{MPSTensor.groundSpace_supported_iff_convex_combination_of_isPrimitiveMPS,
+        MPSTensor.isPure_groundSpace_supported_iff_sector_of_isPrimitiveMPS}
+    \leanok
+    Suppose finitely many pairwise inequivalent primitive tensors $A_j$
+    have faithful invariant matrices, and let $T=\bigoplus_j\mu_j A_j$
+    with every $\mu_j\ne0$. Let $\omega_j$ be their constructed states.
+    A state $\varphi$ satisfies
+    \begin{align}
+        \forall\,a\in\mathbb Z,\ N>0:\ \varphi\bigl(j_{a,N}(P_T(N))\bigr)=1
+    \end{align}
+    if and only if
+    \begin{align}
+        \varphi=\sum_jw_j\omega_j,
+        \qquad w_j\geq0,\qquad\sum_jw_j=1.
+    \end{align}
+    Among these supported states, the pure states are precisely the
+    $\omega_j$. No translation invariance of $\varphi$ is assumed.
+    This is the primitive-family support classification used in
+    \cite[Theorem~1.1 and Section~3]{Nachtergaele1996Spectral}; identification
+    of a general periodic GVBS presentation remains separate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:multiblock_supported_quasi_local_state_convex_combination,
+        thm:sector_state_joint_mps_support,
+        thm:finite_pure_state_decomposition, thm:primitive_quasi_local_purity}
+    Full interval support implies support on every centered interval, so
+    the centered-interval argument supplies the convex coefficients.
+    Conversely, every sector state has joint support, and linearity
+    preserves this property under convex combinations. A pure state in a
+    finite convex combination equals a constituent, and every constituent
+    is pure among all states.
 \end{proof}
 
 \begin{theorem}[Primitive sectors after blocking by a multiple of the period]
@@ -10446,6 +11206,203 @@ shorter interaction range.
     Apply the theorem with $p=m$, using positivity of the period.
 \end{proof}
 
+\begin{theorem}[Expanding symmetric support determines every interval]
+    \label{thm:eventual_symmetric_mps_support_all_intervals}
+    \lean{MPSTensor.%
+        quasiLocalState_groundSpaceProjection_eq_one_of_eventual_symmetric_support}
+    \leanok
+    Let $A$ be any MPS tensor of positive physical dimension, and let
+    $\varphi$ be a normalized positive norm-one quasi-local state.
+    If $\varphi(j_{-n,2n+1}(p_A(2n+1)))=1$ for every sufficiently large
+    $n$, then $\varphi(j_{a,N}(p_A(N)))=1$ for every $a\in\mathbb Z$
+    and every $N>0$. This is the finite-support restriction used in
+    \cite[Theorem~1.1 and Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_support_contained_interval,def:mps_ground_space_projection_matrix}
+    Choose $n$ sufficiently large that the symmetric interval
+    $[-n,n]$ contains $[a,a+N-1]$ and has full ground-projection
+    expectation. Support descends to the contained interval.
+\end{proof}
+
+\begin{theorem}[Zero local energy is equivalent to all interval support]
+    \label{thm:eventual_kernel_ground_state_support_iff}
+    \lean{MPSTensor.mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel}
+    \leanok
+    Let $A$ be any MPS tensor of positive physical dimension, and let
+    $h\geq0$ be a local interaction of range $R>0$. Suppose that
+    $\ker H_N(h)=G_N(A)$ for every sufficiently large $N$.
+    For every continuous complex-linear functional $\varphi$,
+    \begin{align}
+        \varphi\in\mathcal F_h
+        \quad\Longleftrightarrow\quad
+         & \varphi\text{ is a normalized positive norm-one state and}\notag \\
+         & \forall a\in\mathbb Z,\ \forall N>0,\quad
+        \varphi(j_{a,N}(p_A(N)))=1.\notag
+    \end{align}
+    These are the eventual finite-volume kernel and local support
+    conditions of \cite[Theorems~1.1--1.2 and Section~3]{Nachtergaele1996Spectral}.
+    No translation invariance of $\varphi$ or injectivity bound on $R$
+    is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:quasi_local_parent_ground_state_face,
+        thm:quasi_local_zero_energy_support_eventual_kernel,
+        thm:eventual_symmetric_mps_support_all_intervals,
+        thm:positive_functional_support_compression,
+        thm:quasi_local_open_interaction_zero_expectation}
+    Zero local energy first gives full support on sufficiently large
+    symmetric intervals, and hence on every nonempty interval.
+    Conversely, fix $a$ and choose $N\geq R$ with the exact kernel.
+    Set $p=p_A(N)$ and restrict $\varphi$ to this interval.
+    Since $H_N(h)p=0$ and $\varphi(j_{a,N}(p))=1$, support compression
+    gives $\varphi(j_{a,N}(H_N(h)))=0$. The finite open sum is the sum of
+    its translated interaction observables. Their expectations are all
+    nonnegative, so each is zero; its first summand gives
+    $\varphi(j_{a,R}(h))=0$.
+\end{proof}
+
+\begin{theorem}[All interval support is preserved by blocking]
+    \label{thm:mps_support_blocking_iff}
+    \lean{MPSTensor.groundSpace_support_blockTensor_iff}
+    \leanok
+    Let $d,L>0$, let $A$ be a tensor, and let $\varphi$ be a normalized
+    positive state on the original chain. Write $T_L$ for transport of
+    states from the blocked chain. Then
+    \begin{align}
+        \bigl(\forall\,a\in\mathbb Z,\ N>0:\ \varphi(P_{G_A([a,a+N-1])})=1\bigr)
+        \quad\Longleftrightarrow\quad
+        \bigl(\forall\,a\in\mathbb Z,\ N>0:\
+        (T_L^{-1}\varphi)(P_{G_{A^{[L]}}([a,a+N-1])})=1\bigr).
+        \notag
+    \end{align}
+    This statement requires neither primitivity nor translation invariance.
+    It makes the regrouping in
+    \cite[lines~825--836 and Section~3]{Nachtergaele1996Spectral}
+    explicit at the level of supported states.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_aligned_mps_support_iff,
+        thm:blocked_ground_projection_support, def:qca_blocking_functional}
+    Support on all intervals is equivalent to support on the aligned
+    intervals. The blocked projection identity transports the latter
+    conditions to all intervals of the blocked chain.
+\end{proof}
+
+\begin{theorem}[An exact blocked representation preserves support]
+    \label{thm:blocked_support_representation_iff}
+    \lean{MPSTensor.groundSpace_support_blocked_representation_iff}
+    \leanok
+    Suppose $G_{A^{[L]}}(N)=G_C(N)$ for every $N\geq0$.
+    Then a state $\varphi$ is supported on all nonempty original
+    $A$-intervals if and only if $T_L^{-1}\varphi$ is supported on all
+    nonempty $C$-intervals. No primitivity assumption is made.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mps_support_blocking_iff}
+    Equal subspaces have equal orthogonal projections. Substitute these
+    projections in the support equivalence.
+\end{proof}
+
+\begin{theorem}[Supported states from an exact blocked primitive representation]
+    \label{thm:blocked_primitive_supported_state_classification}
+    \lean{MPSTensor.groundSpace_supported_iff_convex_combination_of_blocked_primitive_family,
+        MPSTensor.isPure_groundSpace_supported_iff_sector_of_blocked_primitive_family}
+    \leanok
+    Let $d,L>0$. Suppose $B_1,\ldots,B_b$ are pairwise inequivalent
+    primitive tensors of positive bond dimensions on the blocked alphabet,
+    with faithful invariant matrices, and $\mu_j\ne0$. Assume the exact identities
+    \begin{align}
+        \forall\,N\geq0:\ G_{A^{[L]}}(N)=G_{\bigoplus_j\mu_j B_j}(N).
+    \end{align}
+    Let $\omega_j$ denote the normalized sector states on the blocked
+    chain. For any normalized positive state $\varphi$ on the original
+    chain, support on all nonempty $A$-intervals is equivalent to
+    \begin{align}
+        \varphi=\sum_{j=0}^{b-1} w_j T_L\omega_j,
+        \qquad w_j\geq0,\qquad \sum_{j=0}^{b-1} w_j=1.
+    \end{align}
+    The pure supported states are exactly the states $T_L\omega_j$.
+    Purity and the support condition are taken among all states.
+    This is the conclusion of
+    \cite[Theorem~1.1, lines~854--926]{Nachtergaele1996Spectral}
+    for the specified exact representation; its existence and identification
+    with a general GVBS construction are separate assertions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_support_representation_iff,
+        thm:primitive_joint_mps_supported_state_classification,
+        thm:qca_blocking_state_purity}
+    Apply the primitive-family classification to $T_L^{-1}\varphi$.
+    State transport preserves finite real convex combinations and purity,
+    so transport the resulting identities back to the original chain.
+\end{proof}
+
+\begin{theorem}[Nonwrapping windows commute with physical blocking]
+    \label{thm:blocked_interaction_window}
+    \lean{MPSTensor.chainWindowOperator_blocking_reindex}
+    \leanok
+    Let $d,L,K>0$, let $b+K\leq N$, and let $h$ be any operator on
+    $K$ blocked sites. Write $W_{N,b}(h)$ for its nonwrapping placement
+    starting at $b$, and $\mathcal R_{N,L}$ for decoding both matrix indices.
+    Then
+    \begin{align}
+        \mathcal R_{N,L}\bigl(W_{N,b}(h)\bigr)
+        =W_{NL,bL}\bigl(\mathcal R_{K,L}(h)\bigr).
+    \end{align}
+    This is an operator identity under the site regrouping in
+    \cite[lines~825--836 and Section~3]{Nachtergaele1996Spectral} and
+    \cite[Appendix, lines~2308 and 2313--2320]{Cirac2017MPU}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qca_blocking_quasi_local_interval,
+        thm:quasi_local_bulk_inclusion, thm:quasi_local_interval_observable}
+    Apply the injective interval inclusion to both matrices. Their
+    quasi-local images agree by the window inclusion and interval blocking
+    identities: the blocked start $b$ becomes $bL$ and the length becomes $KL$.
+\end{proof}
+
+\begin{theorem}[Blocked open sums have aligned original starts]
+    \label{thm:blocked_open_interaction_sum}
+    \lean{MPSTensor.openInteractionMatrix_blocking_reindex}
+    \leanok
+    For $d,L,K>0$ and every $N\geq0$, write $H_h(N)$ for the open sum
+    of the range-$K$ interaction $h$ on the blocked chain. Then
+    \begin{align}
+        \mathcal R_{N,L}\bigl(H_h(N)\bigr)
+        =\sum_{\substack{b\geq0 \\b+K\leq N}}
+        W_{NL,bL}\bigl(\mathcal R_{K,L}(h)\bigr).
+    \end{align}
+    The sum is zero when $N<K$. This is the open interaction convention
+    of \cite[equation~(3.12)]{Nachtergaele1996Spectral} transported under blocking.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_interaction_window, def:finite_open_interaction_matrix}
+    Matrix reindexing is linear. Apply the window identity to each term of
+    the finite open sum.
+\end{proof}
+
+\begin{theorem}[Aligned positive windows are bounded by the full open sum]
+    \label{thm:aligned_positive_window_sum}
+    \lean{MPSTensor.sum_aligned_chainWindowOperator_le_openInteractionMatrix}
+    \leanok
+    Let $d\geq0$, $K,L>0$, and let $Y\geq0$ be an operator on $KL$
+    original sites. For every $N\geq0$,
+    \begin{align}
+        \sum_{\substack{b\geq0 \\b+K\leq N}}W_{NL,bL}(Y)
+        \leq H_Y(NL).
+    \end{align}
+    The coefficient is one. This is a derived positive-term counting
+    consequence of \cite[equation~(3.12)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:finite_open_interaction_matrix}
+    The map $b\mapsto bL$ is injective because $L>0$, and every aligned
+    start satisfies $bL+KL\leq NL$. Thus the left sum is a subsum of the
+    full open sum. Each omitted term is positive, since window placement is
+    a star-algebra homomorphism.
+\end{proof}
+
 \begin{theorem}[Blocking distributes over the joint boundary space]
     \label{thm:blocking_joint_boundary_space}
     \lean{MPSTensor.groundSpaceES_blockTensor_toTensorFromBlocks_eq_iSup}
@@ -10545,6 +11502,129 @@ shorter interaction range.
     common-multiple presentation theorem.
 \end{proof}
 
+\begin{definition}[Interaction obtained by grouping consecutive sites]
+    \label{def:blocked_interaction_matrix}
+    \lean{MPSTensor.blockedInteractionMatrix,
+        MPSTensor.reindex_blockedInteractionMatrix}
+    \leanok
+    For a range-$R$ matrix $h$, let $H_h(n)$ be its finite open interaction
+    sum. Group $L$ sites into one site and let $\mathcal R_{K,L}$ decode
+    both indices of a matrix on $K$ grouped sites. Define
+    \begin{align}
+        h_B=\mathcal R_{K,L}^{-1}\bigl(H_h(KL)\bigr).
+    \end{align}
+    Decoding $h_B$ recovers $H_h(KL)$. The definition allows $d,L,K\geq0$. This is a regrouping construction for
+    \cite[Section~3, equations~(3.12)--(3.14)]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Positivity of the grouped interaction]
+    \label{thm:blocked_interaction_matrix_posSemidef}
+    \lean{MPSTensor.blockedInteractionMatrix_posSemidef}
+    \leanok
+    \uses{def:blocked_interaction_matrix}
+    If $R>0$ and $h\geq0$, then $h_B\geq0$, including when $KL<R$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:finite_open_interaction_matrix,thm:open_interaction_matrix_posSemidef}
+    Reindexing is an equivalence. Each nonwrapping local term is positive
+    because its inclusion is a star-algebra homomorphism; finite sums and
+    matrix reindexing preserve positivity.
+\end{proof}
+
+\begin{theorem}[Expansion of the grouped open interaction sum]
+    \label{thm:blocked_interaction_expansion}
+    \lean{MPSTensor.openInteractionMatrix_blockedInteractionMatrix_reindex}
+    \leanok
+    Let $d,L,R,K>0$, $R\leq KL$, and $N\geq K$. If $h_B$ is the grouped
+    interaction, then
+    \begin{align}
+        \mathcal R_{N,L}\bigl(H_{h_B}(N)\bigr)
+        =\sum_{i=0}^{N-K}\sum_{j=0}^{KL-R}W_{NL,iL+j}(h),
+    \end{align}
+    where $W_{n,b}$ places an operator at the nonwrapping start $b$.
+    This is the aligned interaction sum of
+    \cite[equation~(3.12)]{Nachtergaele1996Spectral} with each grouped
+    interaction expanded into its original terms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:blocked_interaction_matrix, thm:blocked_open_interaction_sum}
+    Decoding sends each grouped window to the corresponding original
+    window. Inclusion is linear, and nested nonwrapping inclusions add
+    their starts, so the internal start $j$ becomes $iL+j$.
+\end{proof}
+
+\begin{theorem}[Positive comparison and kernel equality under grouping]
+    \label{thm:blocked_interaction_comparison}
+    \lean{MPSTensor.openInteractionMatrix_blockedInteractionMatrix_comparison,
+        MPSTensor.ker_toEuclideanLin_openInteractionMatrix_blockedInteractionMatrix_reindex,
+        MPSTensor.ker_openInteractionHamiltonianES_blockedInteractionMatrix_map}
+    \leanok
+    Let $d,L,R,K>0$, $h\geq0$, $N\geq K$, and $R+L\leq KL+1$.
+    Then
+    \begin{align}
+        H_h(NL)\leq\mathcal R_{N,L}\bigl(H_{h_B}(N)\bigr)
+        \leq(KL-R+1)H_h(NL).
+    \end{align}
+    The decoded operators have equal kernels. Equivalently, the
+    configuration isometry maps $\ker H_{h_B}(N)$ onto $\ker H_h(NL)$.
+    These are derived positive counting consequences of
+    \cite[Section~3, equations~(3.12)--(3.14)]{Nachtergaele1996Spectral};
+    no local MPS-kernel condition is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_interaction_expansion, lem:positive-comparison-kernel-gap}
+    For an original start $s$, choose
+    $i=\min(\lfloor s/L\rfloor,N-K)$ and $j=s-iL$.
+    The covering condition gives $0\leq j\leq KL-R$, and the pair
+    $(i,j)$ determines $s$, giving the lower bound by a positive subsum.
+    For each fixed $j$, the starts $iL+j$ are distinct and nonwrapping,
+    so their sum is bounded by $H_h(NL)$. Sum this bound over the
+    $KL-R+1$ internal offsets. Two-sided positive comparison gives kernel
+    equality, and the configuration isometry transports that kernel.
+\end{proof}
+
+\begin{theorem}[Eventual MPS kernels persist under grouping]
+    \label{thm:blocked_interaction_eventual_kernel}
+    \lean{MPSTensor.eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace,
+        MPSTensor.eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES}
+    \leanok
+    Let $d,L,R,K>0$, $R+L\leq KL+1$, $h\geq0$, and let $A$ be any
+    MPS tensor. Suppose that $\ker H_h(n)=\mathcal G_n(A)$ for all
+    sufficiently large $n$. Then, for all sufficiently large $N$,
+    \begin{align}
+        \ker H_{h_B}(N)=\mathcal G_N(A^{[L]}).
+    \end{align}
+    After decoding, this is the equality with the isometric image of
+    $\mathcal G_N(A^{[L]})$. No normality or primitivity hypothesis is needed.
+    This transports the eventual kernel hypothesis of
+    \cite[Theorem~1.2]{Nachtergaele1996Spectral} through its regrouping convention.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_interaction_comparison, thm:blocked_local_ground_space_transport}
+    Since $L>0$, the original volumes $NL$ tend to infinity. Apply the
+    original eventual kernel equality and the exact isometric transport
+    $\mathcal G_N(A^{[L]})\mapsto\mathcal G_{NL}(A)$.
+    Injectivity of the configuration isometry gives the equality in
+    grouped coordinates.
+\end{proof}
+
+\begin{theorem}[Positivity of open interaction sums]
+    \label{thm:open_interaction_matrix_posSemidef}
+    \lean{MPSTensor.openInteractionMatrix_posSemidef}
+    \leanok
+    Let $R>0$ and let $h$ be a positive semidefinite interaction on $R$
+    sites. For every $n\geq0$, the open sum
+    $\sum_{a=0}^{n-R}\iota_{a}(h)$ of its nonwrapping translates on $n$
+    sites is positive semidefinite; for $n<R$ the sum is empty and equal
+    to zero. This is the positivity of the finite-volume Hamiltonians in
+    \cite[equation~(3.12)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Each translate is the tensor product of $h$ with an identity, hence
+    positive semidefinite, and a finite sum of positive semidefinite
+    matrices is positive semidefinite.
+\end{proof}
+
 \begin{theorem}[A vanishing square annihilates left multiples]
     \label{thm:positive_functional_vanishing_square}
     \lean{PositiveLinearMap.apply_mul_star_mul_self_eq_zero}
@@ -10591,6 +11671,52 @@ shorter interaction range.
     $0\leq f(C)\leq c f(H)=0$, hence the same identity for $C$.
     Conjugating $C\leq cH$ by $X$ gives $X^*CX\leq cX^*HX$;
     monotonicity of $f$ proves (\ref{eq:ph_positive_commutator_comparison}).
+\end{proof}
+
+\begin{theorem}[Configuration reindexing preserves kernels and norm gaps]
+    \label{thm:configuration_reindex_kernel_gap}
+    \lean{Matrix.toEuclideanLin_reindex_piLpCongrLeft,
+        Matrix.ker_toEuclideanLin_reindex_map,
+        Matrix.norm_gap_toEuclideanLin_reindex}
+    \leanok
+    Let $e:I\to J$ be a bijection of finite configuration sets, and let $H$
+    be any square complex matrix on $I$. The associated Euclidean isometry
+    $U_e$ satisfies
+    \begin{align}
+        H^e U_e=U_e H,\qquad \ker H^e=U_e(\ker H).
+    \end{align}
+    Every estimate $\gamma\|v\|\leq\|Hv\|$ on $(\ker H)^\perp$
+    holds with the same constant for $H^e$ on $(\ker H^e)^\perp$.
+    Positivity is unnecessary.
+\end{theorem}
+\begin{proof}\leanok
+    Change the summation index in the matrix action. The intertwining
+    identity and invertibility give the kernel identity. Isometries
+    preserve norms and orthogonal complements, yielding the gap estimate.
+\end{proof}
+
+\begin{theorem}[Every original local observable has blocked interval coordinates]
+    \label{thm:original_local_observable_blocked_interval}
+    \lean{SpinChain.exists_blocked_quasiLocalIntervalObservable}
+    \leanok
+    Let $d,L>0$. For every observable $X$ on an original interval
+    $[a,a+k)$ with $k>0$, there exist $b\in\mathbb Z$, $N>0$, and an
+    observable $Y$ on $N$ blocked sites such that
+    \begin{align}
+        \mathcal B_L\bigl(j_{b,N}(Y)\bigr)=j_{a,k}(X).
+    \end{align}
+    Negative interval starts are included. This is the local observable
+    form of the regrouping in
+    \cite[lines~825--836 and Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qca_blocking_quasi_local_interval,
+        thm:quasi_local_interval_observable}
+    Put $c=a\bmod L$, $b=\lfloor a/L\rfloor$, and $N=c+k$.
+    Since $L\geq1$, the original interval lies inside $[bL,(b+N)L)$.
+    Place $X$ at offset $c$ in this enlarged interval, adjoin identities,
+    and invert the configuration reindexing. The interval placement and
+    blocking identities give the asserted equality.
 \end{proof}
 
 \begin{theorem}[Sector separation in identified bond spaces]
@@ -10724,6 +11850,94 @@ shorter interaction range.
     intertwining. Apply the residual range resolution to this derived data.
 \end{proof}
 
+\begin{theorem}[Independence of the local energy representative]
+    \label{thm:local_commutator_energy_representation}
+    \lean{MPSTensor.localCommutatorObservable_eq_of_quasiLocalIntervalObservable_eq}
+    \leanok
+    Let $h$ have positive range $R$, and let $X,Y$ be observables on positive-length
+    intervals with the same image in the quasi-local algebra. The images of their
+    stabilized local commutator energies $X^*[H,X]$ and $Y^*[H,Y]$ are equal.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_commutator_locality}
+    Place both observables in a common interval containing the interaction margins
+    on either side. The finite-volume commutator energy is the same for the two
+    representations. Locality identifies it with each stabilized representative.
+\end{proof}
+
+\begin{theorem}[Nonnegative energy under a zero-energy positive functional]
+    \label{thm:quasi_local_zero_energy_commutator_nonnegative}
+    \lean{MPSTensor.quasiLocalIntervalObservable_localCommutatorObservable_nonneg}
+    \leanok
+    Let $\varphi$ be a continuous complex-linear functional that is nonnegative on
+    squares, and let $h\geq0$ have range $R>0$. If $\varphi$ vanishes on every
+    translate of $h$, then every stabilized local commutator energy has real,
+    nonnegative expectation. Normalization and translation invariance are not
+    required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:positive_functional_commutator_comparison}
+    On the enlarged finite interval, write the interaction sum as $H\geq0$ and
+    restrict the functional to its matrix algebra. Its value on $H$ is zero, so
+    $\varphi(X^*[H,X])=\varphi(X^*HX)\geq0$.
+\end{proof}
+
+\begin{theorem}[Commutator-energy comparison under site grouping]
+    \label{thm:blocked_commutator_energy_comparison}
+    \lean{MPSTensor.blocking_localCommutator_energy_le}
+    \leanok
+    Let $d,L,R,K>0$, let $h\geq0$ have range $R$, and assume $R+L\leq KL+1$.
+    On the grouped chain, let $h_B$ be the original open interaction sum on $KL$
+    sites expressed in grouped coordinates, and put $M=KL+1-R$.
+    Let $\varphi$ be positive on squares and vanish on every original translate
+    of $h$, and let $\psi=\varphi\circ\mathcal B_L$ be its functional on the grouped
+    quasi-local algebra. For every grouped interval observable $Y$, with original
+    image $X=\mathcal B_L(Y)$,
+    \begin{align}
+        \psi\bigl(Y^*[H_B,Y]\bigr)
+        \leq M\varphi\bigl(X^*[H,X]\bigr).
+        \notag
+    \end{align}
+    Both commutators denote their stabilized finite-range representatives.
+\end{theorem}
+\begin{proof}\leanok
+    In a sufficiently large grouped interval, the decoded Hamiltonian $C$ satisfies
+    $0\leq C\leq MH$. The original functional has zero expectation on $H$.
+    Positive comparison therefore bounds the two finite commutator energies.
+    Locality identifies their stabilized representatives.
+\end{proof}
+
+\begin{theorem}[Infinite-volume gap transport under site grouping]
+    \label{thm:blocked_quasi_local_gap_transport}
+    \lean{MPSTensor.quasiLocalCommutator_gap_of_blocking,
+        MPSTensor.quasiLocalCommutator_limit_gap_of_blocking}
+    \leanok
+    Under the preceding hypotheses, suppose that a real constant $\gamma$ satisfies
+    $\gamma\psi(Y^*Y)\leq\psi\bigl(Y^*[H_B,Y]\bigr)$
+    for every positive-length grouped interval observable $Y$ with $\psi(Y)=0$. Then every original
+    local observable $X$ with $\varphi(X)=0$ satisfies
+    \begin{align}
+        \frac{\gamma}{M}\varphi(X^*X)
+        \leq\varphi\bigl(X^*[H,X]\bigr).
+        \notag
+    \end{align}
+    The original commutator energy is also the limit of the literal finite-volume
+    commutator energy as both boundary distances tend to infinity, along any
+    filter. In particular, a positive grouped gap yields a positive original gap.
+    This is a conditional transport statement; it does not assert the existence
+    of a gap for an arbitrary interaction. The argument is the site-grouping
+    reduction used in \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_commutator_energy_comparison,thm:local_commutator_energy_representation,thm:quasi_local_zero_energy_commutator_nonnegative}
+    Every original interval observable has a grouped interval representation.
+    Apply the grouped gap and the energy comparison to this representation.
+    The variance is preserved by the star-algebra isomorphism, and the local
+    energy is independent of its interval representation. Divide by $M>0$.
+    Locality makes the literal finite-volume energy eventually equal to the fixed
+    representative; positivity makes both sides of the inequality real.
+\end{proof}
+
 \begin{theorem}[Correlated residual overlap]
     \label{thm:correlated_residual_overlap}
     \lean{MPSTensor.norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound}
@@ -10777,6 +11991,59 @@ shorter interaction range.
     \uses{thm:residual_sector_overlap_decay,thm:sector_projection_sum_error_decay}
     The finite family of residual ranges is asymptotically orthogonal by the
     uniform overlap estimate. Apply the finite-family projection comparison.
+\end{proof}
+
+\begin{theorem}[A pure-state gap from an exact blocked primitive presentation]
+    \label{thm:blocked_primitive_quasi_local_gap}
+    \lean{MPSTensor.exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family}
+    \leanok
+    Let $d,L>0$ and let $A$ be an MPS tensor. Suppose that a finite,
+    possibly empty, family of pairwise gauge-phase inequivalent normalized
+    primitive tensors $B_j$ of positive bond dimensions has faithful invariant
+    matrices, nonzero weights $\mu_j$, and the exact identities
+    \begin{align}
+        \forall\,N\geq0:\ \mathcal G_N(A^{[L]})
+        =\mathcal G_N\Bigl(\bigoplus_j\mu_jB_j\Bigr).
+        \notag
+    \end{align}
+    Let $h\geq0$ have range $R>0$, and suppose
+    $\ker H_h(n)=\mathcal G_n(A)$ for all sufficiently large $n$.
+    There is one $\gamma>0$ with the following property. For every pure
+    zero-energy state $\varphi$, every $a\in\mathbb Z$, and every matrix $X$
+    on $k>0$ consecutive original sites, put $X_a=j_{a,k}(X)$ and assume
+    $\varphi(X_a)=0$. Along every filter for which the two margins
+    $\ell,r$ tend to infinity, there is $e\in\mathbb C$ such that
+    \begin{align}
+        \varphi\bigl(X_a^*[H_{\ell,r}^{a,k},X_a]\bigr) & \longrightarrow e,
+                                                       &
+        \gamma\varphi(X_a^*X_a)                        & \leq e,
+        \label{eq:blocked_primitive_literal_gap}                                                        \\
+        H_{\ell,r}^{a,k}
+                                                       & =j_{a-\ell,\ell+k+r}\bigl(H_h(\ell+k+r)\bigr).
+        \nonumber
+    \end{align}
+    The energy and variance are real and nonnegative. The same $\gamma$
+    works for all states, observables, filters, and diverging margins.
+    No translation invariance of $\varphi$ or short-range injectivity
+    bound is assumed. This is the exact-presentation version of the
+    blocking reduction in \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral};
+    identification with a general GVBS presentation remains separate,
+    as recorded in \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocked_interaction_eventual_kernel,
+        thm:eventual_kernel_sector_local_gap,
+        thm:eventual_kernel_ground_state_support_iff,
+        thm:blocked_primitive_supported_state_classification,
+        thm:blocked_quasi_local_gap_transport}
+    Take $K=R+L$ and group the original Hamiltonian on $KL$ sites.
+    Coverage gives $R+L\leq KL+1$, so its eventual kernel is the supplied
+    joint primitive space. Obtain one positive coarse gap for all sectors.
+    The eventual original kernel identifies every pure zero-energy state
+    with a transported sector. Positive comparison transfers the coarse
+    inequality with divisor $KL+1-R>0$. The coarse constant is chosen
+    before any state, observable, or exhaustion. Finite-range locality
+    gives the literal limit and positivity gives its reality.
 \end{proof}
 
 \begin{theorem}[Periodic residual projection comparison]
