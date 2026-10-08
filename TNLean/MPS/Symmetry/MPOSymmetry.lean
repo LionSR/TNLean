@@ -36,6 +36,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointEmbedding
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointExtendedBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointIntersection
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPO
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOWeights
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenKernel
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointReducingSectors
