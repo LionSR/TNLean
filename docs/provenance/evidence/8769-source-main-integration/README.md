@@ -92,4 +92,7 @@ python3 docs/provenance/evidence/8769-source-main-integration/validate-evidence.
 
 This validates the evidence and source bytes; it does not rerun Lean, the
 provenance checker, or the blueprint renderer. The exact original verification
-scripts are included separately.
+scripts are included separately. The long importing audit is preserved as
+`imported-audit/Axioms.lean.gz`; decompress it to `Axioms.lean` before replaying
+its recorded command. Compression preserves the exact verified bytes and
+keeps this historical evidence outside the production Lean file-length check.

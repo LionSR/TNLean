@@ -55,6 +55,8 @@ def main():
     refresh = load('final-refresh/commands.json')
     require(len(refresh) == 2 and all(r['returncode'] == 0 for r in refresh), 'Final refresh failed')
     audit = load('imported-audit/audit-command.json')
+    checker = gzip.decompress((evidence / 'imported-audit/Axioms.lean.gz').read_bytes())
+    require(digest(checker) == audit['source_sha256'], 'Importing audit source differs')
     axioms = load('imported-audit/axiom-dependencies.json')
     require(audit['returncode'] == 0 and len(axioms) == audit['audited_declarations'] == 342,
             'Kernel audit count differs')

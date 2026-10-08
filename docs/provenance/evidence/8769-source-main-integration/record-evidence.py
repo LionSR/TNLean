@@ -91,7 +91,7 @@ def main():
             bundle(file, 'final-refresh/' + file.name)
     for file in sorted((records / 'imported-audit').iterdir()):
         if file.is_file():
-            if file.name in ['imported-dependencies.json', 'imported-modules.json']:
+            if file.name in ['imported-dependencies.json', 'imported-modules.json', 'Axioms.lean']:
                 copy(file, 'imported-audit/' + file.name + '.gz', True)
             else:
                 bundle(file, 'imported-audit/' + file.name)

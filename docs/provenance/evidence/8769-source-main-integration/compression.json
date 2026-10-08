@@ -378,5 +378,9 @@
   "blueprint/final-tex.log.gz": {
     "uncompressed_sha256": "77423173779579a7b8e5e0d7dcbb22f41fdb9c5c8ee4f1a8caffb0ecd970ff9b",
     "uncompressed_bytes": 71590
+  },
+  "imported-audit/Axioms.lean.gz": {
+    "uncompressed_sha256": "c9c0d3b586079c43a8fa36be11332a52a793b286ff5a0b15256dbd3a4b6d830b",
+    "uncompressed_bytes": 40210
   }
 }
