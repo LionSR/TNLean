@@ -3,8 +3,11 @@
 This section treats the geometric part of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
 September 24, 2026, \texttt{06-geometry.tex}: the bands along the edges of a
 repainted dyadic square, the angular separation of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}
-(lines 254--319), the point-treatment estimates (lines 357--415), and the counts
-of the padded dyadic hierarchy behind items 1--3
+(lines 254--319), the point-treatment estimates (lines 357--415), the absence of
+changed true vertices in the bulk operations and the tags (lines 375--398 and
+610--631), the geometry of the small-patch covers, of the direct repaintings and of
+the hole resizings (lines 341--351 and 447--570), and the counts of the padded
+dyadic hierarchy behind items 1--3
 of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (lines 12--53 and 633--652).
 The protocol of Proposition~7.1 itself, whose changes are implemented by the
 information estimate and the contraction gates of the earlier sections, is not
@@ -352,7 +355,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     or its parent, or the placeholder; a neighboring block differs from $S$ by at
     most one in each index. These are the guide part of the invariant on active
     labels in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 597--618; its part on
-    tags is not treated here.
+    tags is Lemma~\ref{lem:peps_dyadic_tags}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -481,6 +484,240 @@ $A$, $B$, $C$ below are permitted to coincide.
     is at distance at least $\tfrac{a_0}2t>0$ from $\partial Y$. The segment from $x$ to a
     point $z$ on the other side meets $\partial Y$ at some $w$ with
     $|x-w|+|w-z|=|x-z|$.
+\end{proof}
+
+\begin{definition}[Incident labels and tag holders]
+    \label{def:peps_dyadic_incident_labels}
+    \lean{TNLean.PEPS.Approximation.incidentLabels, TNLean.PEPS.Approximation.isTrueVertex_iff_incidentLabels, TNLean.PEPS.Approximation.IsTagHolder}
+    \leanok
+    \uses{lem:peps_dyadic_birth_enlargement}
+    The labels incident at a point $c$ of a guide are those whose region has $c$ in
+    its closure; a true vertex is a point with three distinct incident labels. A
+    label may hold the tag of a true vertex if it is incident there and is not the
+    placeholder. A tag rule chooses one such label at every true vertex, as
+    in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 109--125.
+\end{definition}
+
+\begin{lemma}[Incident labels under local changes]
+    \label{lem:peps_dyadic_incident_change}
+    \lean{TNLean.PEPS.Approximation.isTrueVertex_congr, TNLean.PEPS.Approximation.not_isTrueVertex_of_subset_pair, TNLean.PEPS.Approximation.incidentLabels_congr, TNLean.PEPS.Approximation.incidentLabels_subset, TNLean.PEPS.Approximation.mem_range_of_mem_incidentLabels, TNLean.PEPS.Approximation.incidentLabels_eq_or_subset_pair, TNLean.PEPS.Approximation.isTrueVertex_iff_of_two_labels, TNLean.PEPS.Approximation.incidentLabels_piecewise, TNLean.PEPS.Approximation.isTrueVertex_piecewise_iff, TNLean.PEPS.Approximation.incidentLabels_homogenize_subset, TNLean.PEPS.Approximation.IsTrueVertex.of_homogenize}
+    \leanok
+    \uses{def:peps_dyadic_incident_labels}
+    Two guides that agree near $c$ have the same incident labels at $c$, and a point
+    with at most two incident labels is not a true vertex.
+    \begin{enumerate}
+        \item Let the closure of the set where two guides differ lie in an open set $U$
+              on which both take only the values $P$ and $Q$. Then the two guides have
+              the same true vertices; each lies outside $U$ and has the same incident
+              labels in both guides.
+        \item Let two guides $h_1,h_2$ both equal $C$ on an open set $U$ containing
+              $\partial Y$, and let $h$ be $h_2$ on $Y$ and $h_1$ off $Y$. Then $h$ has a
+              true vertex at $c$ if and only if $c\in Y$ and $h_2$ has one there, or
+              $c\notin Y$ and $h_1$ has one there; it then has the incident labels of
+              that guide at $c$.
+        \item A true vertex of a guide homogenized to $P$ on an open set $U$ is either a
+              true vertex of the guide off $\overline U$, or a point of $\partial U$ at
+              which two distinct labels other than $P$ of the guide meet.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}\leanok
+    Closures at $c$ depend only on a neighborhood of $c$. In the first case a point
+    outside $\overline{\{f\ne g\}}$ has a neighborhood where the guides agree, and a
+    point of $U$ has one where both take only two values. In the second, a point of
+    $U$ has only the incident label $C$, and a point off $\partial Y$ lies in the
+    interior of $Y$ or of its complement. In the third, a point of $U$ has only the
+    incident label $P$, a point off $\overline U$ has a neighborhood where
+    homogenization does nothing, and homogenization adds at most the label $P$ to
+    the incident labels.
+\end{proof}
+
+\begin{theorem}[No changed true vertex in the bulk operations]
+    \label{thm:peps_dyadic_no_changed_vertex}
+    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
+    \leanok
+    \uses{lem:peps_dyadic_floor, lem:peps_dyadic_incident_change, def:peps_dyadic_schedule}
+    Let $0<t\le n$. Each of the seven births and deaths of an edge construction
+    introduces a single label: at every changed normal ratio the words before and
+    after take only the surrounding label and one further label. Homogenize the
+    guides of an elementary birth or death, the central birth included, to its
+    surrounding label on the treated squares of radius $t$. Then the guides before
+    and after have the same true vertices, each at distance at least $a_0t$ from the
+    closure of the remaining changed region and with the same incident labels, so
+    with the same holes and tag holders. Homogenize both sheets of a lens exchange to
+    $C_e$ on the treated squares. Both are $C_e$ on the open neighborhood of radius
+    $a_0t$ of $\partial Y$, and each exchanged guide has inside $Y$ exactly the true
+    vertices and incident labels of the sheet it takes there, and outside $Y$ those
+    of the other sheet. These are the statements
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 375--387 and 389--398.
+\end{theorem}
+
+\begin{proof}\leanok
+    By the logarithmic floor of Lemma~\ref{lem:peps_dyadic_floor}, the homogenized
+    surrounding guide is $P_\circ$ on the open neighborhood of radius $a_0t$ of the
+    remaining changed region. On that neighborhood both guides take only the values
+    $P_\circ$ and the inserted label: off the changed region they agree with the
+    surrounding guide, and on it they carry the operation's words, outside the
+    treated squares. Apply the first part of
+    Lemma~\ref{lem:peps_dyadic_incident_change}. For the exchange, a point within
+    $a_0t$ of $\partial Y$ that is not common $C_e$ would contradict the floor;
+    apply the second part.
+\end{proof}
+
+\begin{lemma}[Tags and active labels]
+    \label{lem:peps_dyadic_tags}
+    \lean{TNLean.PEPS.Approximation.IsTrueVertex.exists_isTagHolder, TNLean.PEPS.Approximation.isTagHolder_congr, TNLean.PEPS.Approximation.IsTagHolder.mem_of_forall, TNLean.PEPS.Approximation.isTagHolder_levelStart, TNLean.PEPS.Approximation.isTagHolder_level, TNLean.PEPS.Approximation.isTagHolder_levelEnd, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem}
+    \leanok
+    \uses{def:peps_dyadic_incident_labels, lem:peps_dyadic_active_labels, thm:peps_dyadic_no_changed_vertex}
+    A true vertex has at least two incident labels other than the placeholder, so a
+    tag holder exists, and guides with the same incident labels at a point have the
+    same tag holders there. Tag holders are values of the guide other than the
+    placeholder. Hence at the start of the pass to level $n$ only labels of
+    $2n$-blocks hold main tags, during it only labels of $2n$- and $n$-blocks, and at
+    its end only labels of $n$-blocks: a party of side $2n$ has disappeared from every
+    main tag by the end of level $n$. The initial label $C_e$ of an auxiliary sheet
+    is a value of the current main guide, so no auxiliary initialization uses a
+    frozen label. These are the tag part of the invariant on active labels and the
+    statement on frozen auxiliary frames
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 610--614 and 625--627.
+\end{lemma}
+
+\begin{proof}\leanok
+    Of three distinct incident labels at most one is the placeholder. An incident
+    label is a value of the guide, and the block labels of a level are described by
+    Lemma~\ref{lem:peps_dyadic_active_labels}. The label $C_e$ is the value of the
+    starting guide on the neighboring block.
+\end{proof}
+
+\begin{lemma}[The compactness observation]
+    \label{lem:peps_dyadic_footprint}
+    \lean{TNLean.PEPS.Approximation.exists_pos_le_max_dist_of_inter_eq_empty, TNLean.PEPS.Approximation.exists_footprint_two_owners, TNLean.PEPS.Approximation.exists_footprint_two_owners_param, TNLean.PEPS.Approximation.exists_footprint_two_owners_guide}
+    \leanok
+    \uses{def:peps_dyadic_incident_labels}
+    Let finitely many compact sets $F_c$ in a metric space be such that no three with
+    distinct labels have a common point. Then there is $\delta>0$ such that no
+    closed ball of radius $\delta$ meets three of them with distinct labels. If the
+    $F_c$ are compact sets of pairs of a parameter and a point, one $\delta$ works
+    for all values of the parameter. In particular, let a guide take finitely many
+    values, let $W$ be a compact working neighborhood, and let every true vertex in
+    $W$ lie in one of the open inner hole squares. Then there is $\delta>0$ such that
+    every closed footprint of radius $\delta$ meets at most two labels at its points
+    of $W$ outside the open inner holes. This is the compactness observation
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 453--479.
+\end{lemma}
+
+\begin{proof}\leanok
+    For three compact sets without a common point,
+    $\max(|y_1-y_2|,|y_1-y_3|)$ attains a positive minimum on their product; take a
+    third of the smallest of these minima over the finitely many triples. For the
+    parameters, apply this in the product space, where points with the same
+    parameter are at the distance of their second coordinates. For the guide, take
+    $F_c$ the closure of the region of $c$ in $W$ with the open inner holes removed;
+    a common point of three of them would be a true vertex outside every inner hole.
+\end{proof}
+
+\begin{lemma}[Square nets of patches]
+    \label{lem:peps_dyadic_nets}
+    \lean{TNLean.PEPS.Approximation.exists_blockCorner_dist_lt, TNLean.PEPS.Approximation.exists_finset_blockCorner_dist_le, TNLean.PEPS.Approximation.exists_netCover, TNLean.PEPS.Approximation.closedBall_subset_thickening}
+    \leanok
+    \uses{def:peps_dyadic_block_guide}
+    Let $u>0$. Every point is within distance less than $u$ of the net $u\mathbb Z^2$.
+    A set inside a closed ball of radius $\rho$ is covered by the inner squares of
+    radius $u$ about at most $(2(\rho+u)/u+1)^2$ net points, each within $u$ of
+    the set, and the outer square of radius $2u$ about such a net point lies within
+    $3u$ of the set. With $u=\nu t$ and $\rho=O(t)$, or $u=\nu n$ and
+    $\rho=O(n)$, this is the fixed number of patches
+    in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 491--499 and 520--525.
+\end{lemma}
+
+\begin{proof}\leanok
+    Round each coordinate down to the net. The net coordinates within $\rho+u$ of a
+    coordinate of the center form an interval of at most $2(\rho+u)/u+1$ integers.
+\end{proof}
+
+\begin{lemma}[Hole radii of direct repaintings and resizings]
+    \label{lem:peps_dyadic_small_radius}
+    \lean{TNLean.PEPS.Approximation.holeRadius_div_mem, TNLean.PEPS.Approximation.holeRadius_resize}
+    \leanok
+    \uses{lem:peps_dyadic_floor}
+    Let $\epsilon_0\ge0$ and $h_n=\epsilon_0\min(n,t)$. If $0<n\le K_0t$ with $t>0$,
+    then $\epsilon_0/\max(K_0,1)\le h_n/n\le\epsilon_0$. If $n,t\ge0$, then
+    $h_n\le\epsilon_0\min(2n,t)\le2h_n$, and the two radii differ only when $n<t$.
+    These are~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 511--516 and
+    529--533.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $n\le t$ the ratio is $\epsilon_0$. Otherwise it is $\epsilon_0t/n$, which lies
+    between $\epsilon_0/K_0$ and $\epsilon_0$. For the resizing, compare $\min(2n,t)$
+    with $\min(n,t)$ in the two cases $n\le t$ and $t\le n$.
+\end{proof}
+
+\begin{lemma}[Grid corners and direct repaintings]
+    \label{lem:peps_dyadic_direct_repainting}
+    \lean{TNLean.PEPS.Approximation.IsTrueVertex.eq_blockCorner, TNLean.PEPS.Approximation.IsBlockCornerOf, TNLean.PEPS.Approximation.isBlockCornerOf_of_mem_closedSquare, TNLean.PEPS.Approximation.le_dist_blockCorner, TNLean.PEPS.Approximation.isTrueVertex_blockGuide_update, TNLean.PEPS.Approximation.levelLabels_insert, TNLean.PEPS.Approximation.isTrueVertex_levelLabels_insert}
+    \leanok
+    \uses{def:peps_dyadic_block_guide, lem:peps_dyadic_incident_change}
+    Let $n>0$. The true vertices of a block guide are grid corners $(na,nb)$. Changing
+    the label of one block $S$ changes the true-vertex status, and the incident labels
+    at a true vertex, only at the four corners of $S$; in particular this holds for
+    the direct repainting of a block of the root square during a level. Every other
+    grid corner is at distance at least $n$ from the closed block $S$. These are the
+    facts on true vertices and untouched holes used for the direct repainting
+    in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 507--527.
+\end{lemma}
+
+\begin{proof}\leanok
+    Near a point whose first coordinate is not a multiple of $n$, the first block
+    index is constant and the second takes at most two values, so at most two labels
+    occur; similarly for the second coordinate. Off the closed block $S$ the two
+    guides agree near the point. A grid corner in the closed block is one of its
+    corners, and a grid corner differing by at least $2$ or by $-1$ in a block index
+    is at distance at least $n$ in that coordinate.
+\end{proof}
+
+\begin{lemma}[Separations behind the choice of $K_0$]
+    \label{lem:peps_dyadic_choice_K0}
+    \lean{TNLean.PEPS.Approximation.le_dist_blockCorner_of_ne, TNLean.PEPS.Approximation.disjoint_ball_blockCorner, TNLean.PEPS.Approximation.bandWidth_of_le_half, TNLean.PEPS.Approximation.mem_edgeBand_iff_of_mem_ball, TNLean.PEPS.Approximation.eq_point_of_mem_rim, TNLean.PEPS.Approximation.rim_separation}
+    \leanok
+    \uses{def:peps_dyadic_edge_band, lem:peps_dyadic_direct_repainting}
+    Distinct grid corners are at distance at least $n$. Hence for $n>20t$ the
+    squares of radius $10t$ about distinct grid corners are disjoint and contain no
+    other grid corner. In the open square of radius $n/2$ about an endpoint of an
+    edge, a band $\{\alpha<x<\beta\}$ is the cone
+    $\{s>0,\ \alpha s/1000<d<\beta s/1000\}$, so its interfaces are straight rays. A
+    point of the curve $x=\alpha$, $|\alpha|\le8$, with $0<s\le n/2$, on the rim of
+    the square of radius $t$ about the endpoint is the point $s=t$,
+    $d=\alpha t/1000$; rays with $|\alpha-\alpha'|\ge1/2$ meet the rim at points at
+    distance at least $t/2000$, and the closed squares of radius $2\epsilon_0t$
+    about them are disjoint once $\epsilon_0<1/8000$. These are part of the choice
+    of $K_0$ and $\epsilon_0$ in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines
+    341--351. The source's further claims there, that the enlargements contain no
+    true vertex on the band interfaces other than the marked point, and that the rim
+    points of the rays of both bands at a corner and of the grid lines are separated,
+    are not formalized here.
+\end{lemma}
+
+\begin{proof}\leanok
+    Distinct grid corners differ by at least $1$ in some block index. On
+    $0\le s\le n/2$ one has $w(s)=s/1000$. On the curve $|d|=|\alpha|s/1000<s$, so the
+    distance from the endpoint is $s$. The two rim points differ only in $d$, by
+    $|\alpha-\alpha'|t/1000$.
+\end{proof}
+
+\begin{lemma}[Trivial holes at the last level]
+    \label{lem:peps_dyadic_last_level}
+    \lean{TNLean.PEPS.Approximation.IsCellCenter.notMem_closedBall_blockCorner}
+    \leanok
+    \uses{lem:peps_dyadic_sites}
+    At level $n=1$, a closed square of radius less than $1/2$ about a grid corner
+    contains no cell center. With $\epsilon_0<1/4$ the outer hole squares, of radius
+    $2\epsilon_0$, contain no lattice site, so their encodings are trivial,
+    as in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 669--672.
+\end{lemma}
+
+\begin{proof}\leanok
+    A half-odd number is at distance at least $1/2$ from every integer.
 \end{proof}
 
 \begin{definition}[Padded dyadic hierarchy, junctions and addresses]
