@@ -66,7 +66,7 @@ private theorem interior_triangle_ne_functional_level
       intro y hy
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
       rcases hy with rfl | rfl | rfl
-      · exact le_rfl
+      · exact (le_rfl : g c ≤ g c)
       · exact ha
       · exact hb
     have hxi := interior_mono hsub hx
@@ -146,9 +146,8 @@ private theorem fan_vertices_same_functional_side (o : ℝ × ℝ) (ℓ : ℕ)
   all_goals
     rw [ha, hb]
     norm_num [slopeFunctional, cellFanCenter, midpoint_eq_smul_add,
-      invOf_eq_inv, smul_eq_mul] <;> first
+      invOf_eq_inv, smul_eq_mul]; first
     | nlinarith
-    | apply And.intro <;> nlinarith
     | left
       first
       | nlinarith
