@@ -34,7 +34,7 @@ example : ¬ ∃ C : TorusDualCollar 3 3, C.patch.cols = 2 := by
 #print axioms TorusDualCollar.openCoefficient_eq
 #print axioms TorusDualCollar.correlatedBoundary_eq
 
--- The delta bridge uses a labelled self bond with its two independent incidences.
+-- The delta-exterior identity uses a labelled self bond with its two independent incidences.
 example (A : (v : (Set.univ : Set Unit)) →
     LocalConfig (fun _ : Unit ↦ ()) (fun _ : Unit ↦ ()) (fun _ ↦ Fin 2) v.1 → ℂ)
     (O : Unit → Matrix (Fin 2) (Fin 2) ℂ)

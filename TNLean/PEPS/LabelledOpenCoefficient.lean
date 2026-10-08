@@ -13,7 +13,7 @@ The open coefficient sums region incidence labels, fixes crossing incidences
 by boundary data, and inserts arbitrary matrices on internal labelled bonds.
 An exact delta-exterior completion realizes this independent sum as a closed
 contraction. Parallel bonds and both incidences of self bonds are retained.
-This is the finite-coordinate bridge for the collared specialization of SCP10,
+This finite-coordinate identity serves the collared specialization of SCP10,
 arXiv:1001.3807v3, Lemma 6.14; no vacuum-density assertion is made.
 -/
 
@@ -164,7 +164,7 @@ private theorem completed_siteWeight
       exact propext funext_iff.symm
 
 open Classical in
-/-- Exact delta-exterior bridge. There is no dimension scalar and no product
+/-- Exact delta-exterior identity. There is no dimension scalar and no product
 assumption on subsequent boundary tensors. -/
 theorem network_deltaCompletedTensor
     (A : (v : R) → LocalConfig tail head (fun _ ↦ V) v.1 → ℂ)

@@ -1,59 +1,104 @@
-% SCP10 arXiv1001.3807v3, Lemma 6.14: finite-coordinate bridge only.
+% SCP10 arXiv1001.3807v3, Lemma 6.14: finite-coordinate identities only.
 \begin{definition}[Open coefficients on labelled bonds]
     \label{def:peps_labelled_open_coefficient}
     \lean{TNLean.PEPS.DependentBondNetwork.RegionBoundaryEndpoint,
         TNLean.PEPS.DependentBondNetwork.RegionSiteConfig,
-        TNLean.PEPS.DependentBondNetwork.joinRegionConfig,
         TNLean.PEPS.DependentBondNetwork.openBondFactor,
         TNLean.PEPS.DependentBondNetwork.openCoefficient,
-        TNLean.PEPS.DependentBondNetwork.openBoundaryContraction,
-        TNLean.PEPS.DependentBondNetwork.deltaExteriorConfig,
-        TNLean.PEPS.DependentBondNetwork.deltaCompletedTensor,
-        TNLean.PEPS.DependentBondNetwork.internalBondMatrices}
+        TNLean.PEPS.DependentBondNetwork.openBoundaryContraction}
     \leanok
     For a region $R$ in a finite directed multigraph, assign an independent
-    virtual index to every incidence at every vertex of $R$. Fix the indices
-    on region-side incidences of crossing bonds to boundary data $\theta$.
-    Multiply the region site coefficients and the prescribed matrix entries
-    on internal bonds, and sum the remaining indices. Pair this coefficient
-    with any joint boundary tensor by summing over $\theta$.
+    virtual index to every incidence at every vertex of $R$; write $\eta$
+    for such an assignment, and $\eta_{t(e)}$, $\eta_{h(e)}$ for its values
+    at the tail and head incidences of a bond $e$. Fix the indices
+    on region-side incidences of crossing bonds to boundary data $\theta$,
+    with $\theta_{t(e)}$, $\theta_{h(e)}$ its values there.
+    With matrices $O_e$ and site coefficients $A_v$, put
+    \begin{align}
+        f_e(\eta,\theta) & =
+        \begin{cases}
+            (O_e)_{\eta_{h(e)},\eta_{t(e)}} & t(e),h(e)\in R,           \\
+            [\eta_{t(e)}=\theta_{t(e)}]     & t(e)\in R,\ h(e)\notin R, \\
+            [\eta_{h(e)}=\theta_{h(e)}]     & t(e)\notin R,\ h(e)\in R, \\
+            1                               & t(e),h(e)\notin R,
+        \end{cases}
+        \label{eq:peps_open_bond_factor}                     \\
+        c(\theta)        & =\sum_\eta\prod_ef_e(\eta,\theta)
+        \prod_{v\in R}A_v(\eta_v).
+        \label{eq:peps_open_coefficient}
+    \end{align}
+    Pair this coefficient with any joint boundary tensor $B$ by
+    $\sum_\theta B(\theta)c(\theta)$.
 \end{definition}
 \begin{theorem}[Exact delta-exterior completion]
     \label{thm:peps_labelled_open_delta}
-    \lean{TNLean.PEPS.DependentBondNetwork.network_deltaCompletedTensor}
+    \lean{TNLean.PEPS.DependentBondNetwork.joinRegionConfig,
+        TNLean.PEPS.DependentBondNetwork.deltaExteriorConfig,
+        TNLean.PEPS.DependentBondNetwork.deltaCompletedTensor,
+        TNLean.PEPS.DependentBondNetwork.internalBondMatrices,
+        TNLean.PEPS.DependentBondNetwork.network_deltaCompletedTensor}
     \leanok
     \uses{def:peps_labelled_open_coefficient}
-    Fix a virtual label $v_0$. Replace every exterior site by a delta tensor
-    fixing each incidence opposite $R$ to its prescribed boundary label,
-    and each other exterior incidence to $v_0$. Retain the internal bond
-    matrices and insert identity matrices on all other bonds. The closed
-    contraction equals the open coefficient exactly, with no scalar factor.
+    Fix a virtual label $v_0$. A site assignment of the whole graph is a
+    pair $(\eta,\xi)$ of a region assignment $\eta$ and an exterior
+    assignment $\xi$. Let $\xi^\delta$ be the exterior assignment fixing
+    each incidence opposite $R$ to its prescribed boundary label, and each
+    other exterior incidence to $v_0$. Put
+    \begin{align*}
+        \Delta_v(\eta_v) & =A_v(\eta_v)\ (v\in R),             &
+        \Delta_v(\xi_v)  & =[\xi_v=\xi^\delta_v]\ (v\notin R), &
+        O^{\rm int}_e    & =
+        \begin{cases}
+            O_e & t(e),h(e)\in R,   \\
+            I   & \text{otherwise}.
+        \end{cases}
+    \end{align*}
+    The closed contraction of $\Delta$ with the bond matrices $O^{\rm int}$
+    equals the open coefficient $c(\theta)$ exactly, with no scalar factor.
 \end{theorem}
 \begin{proof}\leanok
-    Split the site assignments into region and exterior assignments.
-    The exterior deltas leave one assignment. Identity matrices on crossing
-    bonds impose the boundary constraints, while those on exterior bonds
-    contribute one. The remaining sum is the defining open coefficient.
+    Write $\beta=(\eta,\xi)$ and $\beta^\delta=(\eta,\xi^\delta)$. The exterior
+    deltas leave one exterior assignment:
+    \begin{align*}
+        \sum_{\eta,\xi}\prod_e(O^{\rm int}_e)_{\beta_{h(e)},\beta_{t(e)}}
+        \prod_v\Delta_v(\beta_v)
+         & =\sum_\eta\prod_e(O^{\rm int}_e)_{\beta^\delta_{h(e)},\beta^\delta_{t(e)}}
+        \prod_{v\in R}A_v(\eta_v).
+    \end{align*}
+    For a crossing bond with $t(e)\in R$, $h(e)\notin R$, one has
+    $\beta^\delta_{h(e)}=\theta_{t(e)}$, so
+    $I_{\theta_{t(e)},\eta_{t(e)}}=[\eta_{t(e)}=\theta_{t(e)}]$; the other
+    crossing orientation is symmetric. For an exterior bond
+    $I_{v_0,v_0}=1$, and internal bonds keep $(O_e)_{\eta_{h(e)},\eta_{t(e)}}$.
+    Hence each bond factor equals $f_e(\eta,\theta)$ of
+    (\ref{eq:peps_open_bond_factor}), and the sum is
+    (\ref{eq:peps_open_coefficient}).
 \end{proof}
 
 \begin{definition}[Native coordinates and an embedded one-site collar]
     \label{def:peps_dual_collar}
-    \lean{TNLean.PEPS.torusLocalTupleEquiv,TNLean.PEPS.torusEndpointTupleEquiv,
-        TNLean.PEPS.torusOpenCoefficient,TNLean.PEPS.torusDeltaCompletedTensor,
+    \lean{TNLean.PEPS.torusLocalTupleEquiv,
         TNLean.PEPS.TorusDualCollar,TNLean.PEPS.TorusDualCollar.region,
-        TNLean.PEPS.TorusDualCollar.swept,TNLean.PEPS.torusDualFluxBondMatrices}
+        TNLean.PEPS.TorusDualCollar.swept}
     \leanok
     \uses{def:peps_labelled_open_coefficient,def:peps_dual_rectangle_comb}
     Native horizontal and vertical bond labels retain their direction and
     endpoint polarity. The four incidence labels at a site are ordered
     top, right, down, left. Around a rectangular sweep of side lengths
-    $W,H$, take the translated collar with lifted coordinates
-    $0\leq i\leq W+1$, $0\leq j\leq H+1$, requiring
-    $W+1<w$ and $H+1<h$.
+    $W,H$, with the embedding $\kappa$ of
+    Definition~\ref{def:peps_dual_rectangle_comb}, take the translated collar
+    and swept support
+    \begin{align*}
+        Y & =\{\kappa(i,j):0\leq i\leq W+1,\ 0\leq j\leq H+1\}, &
+        R & =\{\kappa(i+1,j+1):0\leq i<W,\ 0\leq j<H\},
+    \end{align*}
+    requiring $W+1<w$ and $H+1<h$.
 \end{definition}
 \begin{theorem}[Native delta completion and collar geometry]
     \label{thm:peps_dual_collar_geometry}
-    \lean{TNLean.PEPS.labelledNetwork_eq_torusBondNetwork,
+    \lean{TNLean.PEPS.torusEndpointTupleEquiv,
+        TNLean.PEPS.labelledNetwork_eq_torusBondNetwork,
+        TNLean.PEPS.torusOpenCoefficient,TNLean.PEPS.torusDeltaCompletedTensor,
         TNLean.PEPS.torusBondNetwork_deltaCompletedTensor,
         TNLean.PEPS.TorusDualCollar.origin_mem,TNLean.PEPS.TorusDualCollar.injective,
         TNLean.PEPS.TorusDualCollar.neighbors_mem,
@@ -61,41 +106,87 @@
         TNLean.PEPS.TorusDualCollar.noninternal_outside,
         TNLean.PEPS.torusOpenCoefficient_eq_zero_of_isEmpty}
     \leanok
-    \uses{def:peps_dual_collar,thm:peps_labelled_open_delta}
-    The labelled contraction equals the native four-leg contraction, so the
-    delta-completion identity holds in native coordinates as well.
+    \uses{def:peps_dual_collar,thm:peps_labelled_open_delta,
+        thm:peps_dual_rectangle_injective}
+    Grouping the bond-end labels by their anchoring vertex identifies bond-end
+    assignments with maps $X\to V^4$, and the labelled contraction equals the
+    native four-leg contraction. Hence, for an arbitrary region, writing
+    $c^{\rm nat}(\theta)$ and $\Delta^{\rm nat}$ for the open coefficient and
+    the delta-completed tensors read through the top, right, down, left
+    ordering, the native contraction of $\Delta^{\rm nat}$ with the bond
+    matrices $O^{\rm int}$ equals $c^{\rm nat}(\theta)$.
     The collar is nonempty and embedded. Every swept site and its four
     neighbors lie in it; hence each noninternal bond has both endpoints
     outside the swept support. For an empty virtual alphabet the open
-    coefficient is zero, since the collar contains an incidence.
+    coefficient of a nonempty region is zero, since the region contains an
+    incidence.
 \end{theorem}
 \begin{proof}\leanok
     Regroup the four anchored bond endpoints at each vertex and read their
-    incident site coordinates. The collar bounds follow directly from the
-    lifted coordinate ranges. A noninternal bond incident to a swept site
-    would have its other endpoint among that site's neighbors, a contradiction.
+    incident site coordinates. The point $\kappa(0,0)$ lies in $Y$, and
+    Theorem~\ref{thm:peps_dual_rectangle_injective} with $W+1<w$, $H+1<h$
+    makes $\kappa$ injective on the collar. A swept site is
+    $\kappa(i+1,j+1)$ with $i<W$, $j<H$; its neighbors are
+    $\kappa(i+1\pm1,j+1)$ and $\kappa(i+1,j+1\pm1)$, and
+    \begin{align*}
+        0 & \leq i\leq i+2\leq W+1, & 0 & \leq j\leq j+2\leq H+1.
+    \end{align*}
+    So every bond incident to $R$ has both endpoints in $Y$. Contrapositively,
+    a bond not internal to $Y$ has neither endpoint in $R$.
+    If $V$ is empty, a vertex of the region has an incidence that admits no
+    label, so the sum (\ref{eq:peps_open_coefficient}) is empty.
 \end{proof}
 \begin{theorem}[Collared open deformation with a correlated boundary]
     \label{thm:peps_dual_collar_open}
-    \lean{TNLean.PEPS.TorusDualCollar.exists_internalFluxGauge,
+    \lean{TNLean.PEPS.torusDualFluxBondMatrices,
+        TNLean.PEPS.TorusDualCollar.exists_internalFluxGauge,
         TNLean.PEPS.TorusDualCollar.openCoefficient_eq,
         TNLean.PEPS.TorusDualCollar.correlatedBoundary_eq}
     \leanok
     \uses{thm:peps_dual_collar_geometry,thm:peps_dual_rectangle,
         thm:peps_dual_flux_deformation}
-    Two labelled unit-step paths with the same lifted endpoints in the
-    embedded patch have equal open coefficients on its collar, provided
-    the site tensors are virtually invariant on the swept interior.
-    The group and its matrix representation are arbitrary. Equality persists
-    after contraction against any joint boundary tensor, without a
-    factorization hypothesis or a nonempty virtual-alphabet assumption.
+    For a dual path $p$, let $O^p_e$ be $U_{u_h^p(v)}$ on the horizontal
+    bond at $v$ and $U_{u_v^p(v)}$ on the vertical bond at $v$, as in
+    Definition~\ref{def:peps_dual_flux_matrices}. Let $p,q$ be two labelled
+    unit-step paths with the same lifted endpoints in the embedded patch.
+    There is $k:X\to G$ with $k=1$ off $R$ such that the matrices
+    $O^{p,\rm int}$, $O^{q,\rm int}$ of Theorem~\ref{thm:peps_labelled_open_delta}
+    for the collar $Y$ satisfy
+    \begin{align}
+        O^{q,\rm int}_e=U_{k(h(e))}\,O^{p,\rm int}_e\,U_{k(t(e))^{-1}}
+        \label{eq:peps_collar_internal_gauge}
+    \end{align}
+    on every bond. If the site tensors are virtually invariant on $R$, then
+    $p$ and $q$ have equal open coefficients on $Y$ for every fixed physical
+    configuration on $Y$. The group and its matrix representation are
+    arbitrary. Equality persists after contraction against any joint
+    boundary tensor, without a factorization hypothesis or a nonempty
+    virtual-alphabet assumption.
 \end{theorem}
 \begin{proof}\leanok
-    Derive the supported gauge from the rectangular homotopy. Both endpoints
-    of crossing bonds are outside its support, so their gauge values are
-    identity. Complete the fixed physical coefficient by exterior delta
-    tensors and apply the closed gauge-contraction identity. The exact
-    completion formula gives equality of open coefficients. Sum it against
-    the joint boundary tensor. If the virtual alphabet is empty, both open
-    sums vanish.
+    \uses{thm:peps_dual_flux_gauge_absorption,
+        thm:peps_torus_operator_string_deformation}
+    Theorem~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$, and its
+    derived potential gives $k$ with $k=1$ off $R$ and the gauge relation
+    (\ref{eq:peps_dual_label_gauge}). On bonds internal to $Y$ this is
+    (\ref{eq:peps_collar_internal_gauge}). On any other bond both endpoints
+    lie outside $R$ by Theorem~\ref{thm:peps_dual_collar_geometry}, so
+    $k(h(e))=k(t(e))=1$ and both sides of
+    (\ref{eq:peps_collar_internal_gauge}) are $I$.
+    If $V$ is nonempty, choose $v_0\in V$ and complete the fixed physical
+    coefficient by exterior deltas. At $v$ with $k(v)\neq1$ one has $v\in R$,
+    so $\Delta^{\rm nat}_v=A_v(\sigma_v)$ is invariant under the four-leg
+    action of $k(v)$ by Theorem~\ref{thm:peps_torus_operator_string_deformation}.
+    Theorem~\ref{thm:peps_dual_flux_gauge_absorption} and
+    Theorem~\ref{thm:peps_dual_collar_geometry} then give
+    \begin{align*}
+        c^{\rm nat}_q(\theta)
+        =\Psi\bigl(\Delta^{\rm nat},O^{q,\rm int}\bigr)
+        =\Psi\bigl(\Delta^{\rm nat},O^{p,\rm int}\bigr)
+        =c^{\rm nat}_p(\theta),
+    \end{align*}
+    where $\Psi$ denotes the closed native contraction. Multiplying by
+    $B(\theta)$ and summing over $\theta$ gives the boundary statement. If $V$
+    is empty, both open coefficients vanish by
+    Theorem~\ref{thm:peps_dual_collar_geometry}, since $\kappa(0,0)\in Y$.
 \end{proof}

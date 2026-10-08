@@ -11,7 +11,7 @@ import TNLean.PEPS.TorusLabelledBondGeometry
 
 The labelled endpoint sum agrees with the native four-leg contraction,
 including parallel bonds and both incidences of self bonds. This coordinate
-identity supplies the delta-exterior bridge used for the collared rectangular
+identity transfers the delta-exterior identity used for the collared rectangular
 specialization of SCP10, arXiv:1001.3807v3, Lemma 6.14.
 -/
 
@@ -104,7 +104,7 @@ def torusDeltaCompletedTensor (R : Set X) (A : R → (V × V × V × V) → ℂ)
     ((torusLocalTupleEquiv v).symm c) PUnit.unit.{1}
 
 open Classical in
-/-- The exact delta-exterior bridge in native torus coordinates. -/
+/-- The exact delta-exterior identity in native torus coordinates. -/
 theorem torusBondNetwork_deltaCompletedTensor
     (R : Set X) (A : R → (V × V × V × V) → ℂ) (O : E → Matrix V V ℂ)
     (v₀ : V) (θ : RegionBoundaryEndpoint torusLabelledBondTail torusLabelledBondHead R → V) :
