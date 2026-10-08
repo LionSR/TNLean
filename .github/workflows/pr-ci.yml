@@ -600,30 +600,23 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/NestedCylinderCounterexamples.lean
 
-      - name: Compile shared single-qubit test coordinates strictly
+      - name: Test regularized patch minimum and coordinate first variation strictly
         run: |
-          mkdir -p .lake/build/lib/lean/TNLeanTest/Support
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-            -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-            -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            -o .lake/build/lib/lean/TNLeanTest/Support/SingleQubitConfig.olean \
+          set -e
+          # The patch tests import a shared support module. Keep its object in a
+          # fresh overlay outside the production cache, so other TNLeanTest
+          # overlays are not shadowed by a TNLeanTest directory in the build tree.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest/Support"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
+          flags="-DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true"
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
+            -o "$test_root/TNLeanTest/Support/SingleQubitConfig.olean" \
             TNLeanTest/Support/SingleQubitConfig.lean
-
-      - name: Test actual regularized patch minimum regressions strictly
-        run: |
-          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
-            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-              "TNLeanTest/$example.lean"
-          done
-
-      - name: Test coordinate first variation and canonical marginals strictly
-        run: |
-          for example in RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
-            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
+              RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
               "TNLeanTest/$example.lean"
           done
 
