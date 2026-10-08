@@ -8,9 +8,11 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Scan
 
+import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.Scan.EnergyBalance
 import TNLean.PEPS.AreaLaw.Scan.EntropyBalance
+import TNLean.PEPS.AreaLaw.Scan.ExponentBootstrap
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.Selection
