@@ -1,0 +1,602 @@
+[
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.eval",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.isallowed",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.norm_eval_le_one",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.choices",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.choicesfintype",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.partialword",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.coefficient",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/DistributedSourceComposition.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/DistributedSourceComposition.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-word.eval_sum_appendtail",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.eval_partial_gate",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval_comp",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval_frame",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval_mapowner",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceEvaluation.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceEvaluation.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-density-sourcecircuit.expandedeval_eq_mapowner",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceDensity.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-density-sourcecircuit.tomatrix_eval_eq_sum_partialword",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceDensity.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-density-sourcecircuit.density_eval_eq_sum_partialword",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "02ff0a871f6e1847f847f00609ba89c3942ab5c4",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-chronological-source/TNLean/PEPS/Approximation/PartialSourceDensity.olean /private/tmp/tnlean-chronological-source/src/TNLean/PEPS/Approximation/PartialSourceDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/direct-build.log",
+          "sha256": "58942e1ef80d7062d9b57227de4e6cc87c24c1cc6a93c3f74d77b4ebf3ffdb1b"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-chronological-source/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-chronological-source-expansion/axioms.log",
+          "sha256": "c50d4fa105d4c11cd85c27c204a1f780f7d65e00b11cdab534258640eeb16168"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_sum_smul",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_eq_sum_basis",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.prepareddensitycoefficient",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_density_sum_smul",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_density_eq_sum_basis",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_gate_density_eq_sum_basis",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "86ed134591132d21ab3046d504e84196e2ee5ec6",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-gate-density/TNLean/PEPS/Approximation/SourceGateDensity.olean /private/tmp/tnlean-source-gate-density/src/TNLean/PEPS/Approximation/SourceGateDensity.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/direct-build.log",
+          "sha256": "596519dfc733da54b84a45a2d490485371322fc892f921db439d31b181b5ed00"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true /tmp/tnlean-source-gate-density/final-verification-20261007/AllAxioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-gate-density/axioms.log",
+          "sha256": "446568d870ff109a941ea846cf86b74f0d1ce2966196f18341f688fb53887488"
+        }
+      ]
+    }
+  }
+]

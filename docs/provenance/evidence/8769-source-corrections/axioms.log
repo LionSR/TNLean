@@ -1,0 +1,194 @@
+Source revision: f932b80f1b67668584120403b983be0633f62602
+Working directory: /private/tmp/tnlean-source-corrections/imported-audit
+Command: /Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean
+Exit code: 0
+
+'TNLean.PEPS.PairEffect.Layout.affectedOwner_mapOwner_eq_none' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Matrix.sum_smul_mul_mul_conjTranspose' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.branchWithSources' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_original' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources_original' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_eq_sum_partialWithSources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceVectors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_selectedSourceVectors_eq_sum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.residualInSlots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sources_residualInSlots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.isAllowed_residualInSlots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.eval_residualInSlots_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialResidual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sources_partialResidual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialResidual' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWithSources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.residualInSlots_partialWithSources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.ofSlots_partialWithSources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare_substituted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sum_nonempty_allSourceSlots' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.SourceBasisChoice' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisChoiceFintype' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.labelBasisVectors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix_eq_sum_partial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_partial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.SelectedSourceCoordinates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinatesFintype' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.coordinateBasisVectors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix_eq_ite' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_coordinates' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.mem_selectedPartialSlots' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlotEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_reindex' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_basis' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceOperatorDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub_prepared' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sourceContraction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.exactSourceMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_piecewise' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_sub_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.physicalCorrectedSourceTerm' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_sub_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.IsAllowed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.Choices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.choicesFintype' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.partialWord' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.coefficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.eval_sum_appendTail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_partial_gate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.expandedEval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_comp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_mapOwner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_eq_mapOwner' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.toMatrix_eval_eq_sum_partialWord' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.density_eval_eq_sum_partialWord' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedMatrix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedMatrix_sum_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedMatrix_eq_sum_basis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedMatrix_density_sum_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedMatrix_density_eq_sum_basis' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.Word.preparedMatrix_gate_density_eq_sum_basis' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

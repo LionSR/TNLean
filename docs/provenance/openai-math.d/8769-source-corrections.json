@@ -1,0 +1,3292 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8769-source-corrections-sourceownersupport-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceOwnerSupport.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Layout.affectedOwner_mapOwner_eq_none",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceOwnerSupport.olean TNLean/PEPS/Approximation/SourceOwnerSupport.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-matrixdensitysum-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/Algebra/MatrixDensitySum.lean",
+        "declaration": "Matrix.sum_smul_mul_mul_conjTranspose",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/Algebra/MatrixDensitySum.olean TNLean/Algebra/MatrixDensitySum.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PreparedSourceGate.branchWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_original",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources_original",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_eq_sum_partialWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceVectors",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecircuitsubstitution-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_selectedSourceVectors_eq_sum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCircuitSubstitution.olean TNLean/PEPS/Approximation/SourceCircuitSubstitution.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.residualInSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_residualInSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_residualInSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_residualInSlots_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialResidual",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sources_partialResidual",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialResidual",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourceresidualcoordinates-09",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceResidualCoordinates.olean TNLean/PEPS/Approximation/SourceResidualCoordinates.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcesubstitutionresidual-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceSubstitutionResidual.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceSubstitutionResidual.olean TNLean/PEPS/Approximation/SourceSubstitutionResidual.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcesubstitutionresidual-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceSubstitutionResidual.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.residualInSlots_partialWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceSubstitutionResidual.olean TNLean/PEPS/Approximation/SourceSubstitutionResidual.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcesubstitutioninventory-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceSubstitutionInventory.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.ofSlots_partialWithSources",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceSubstitutionInventory.olean TNLean/PEPS/Approximation/SourceSubstitutionInventory.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcesubstitutioninventory-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceSubstitutionInventory.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare_substituted",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceSubstitutionInventory.olean TNLean/PEPS/Approximation/SourceSubstitutionInventory.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-allsourceslots-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AllSourceSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/AllSourceSlots.olean TNLean/PEPS/Approximation/AllSourceSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-allsourceslots-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AllSourceSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv_apply",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/AllSourceSlots.olean TNLean/PEPS/Approximation/AllSourceSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-allsourceslots-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AllSourceSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sum_nonempty_allSourceSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/AllSourceSlots.olean TNLean/PEPS/Approximation/AllSourceSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.SourceBasisChoice",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisChoiceFintype",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.labelBasisVectors",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_empty",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix_eq_sum_partial",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedterm-09",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_partial",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedTerm.olean TNLean/PEPS/Approximation/SourceCorrectedTerm.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.SelectedSourceCoordinates",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinatesFintype",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.coordinateBasisVectors",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix_eq_ite",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_coordinates",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontraction-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContraction.olean TNLean/PEPS/Approximation/SourceCorrectedContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedslots-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedSlots.olean TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedslots-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.mem_selectedPartialSlots",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedSlots.olean TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedslots-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlotEquiv",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedSlots.olean TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedslots-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedSlots.olean TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedslots-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv_apply",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedSlots.olean TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedslots-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_reindex",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedSlots.olean TNLean/PEPS/Approximation/SourceCorrectedSlots.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-preparedsourcecontraction-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/PreparedSourceContraction.olean TNLean/PEPS/Approximation/PreparedSourceContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-preparedsourcecontraction-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_basis",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/PreparedSourceContraction.olean TNLean/PEPS/Approximation/PreparedSourceContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-preparedsourcecorrections-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceOperatorDensity",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/PreparedSourceCorrections.olean TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-preparedsourcecorrections-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/PreparedSourceCorrections.olean TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-preparedsourcecorrections-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_exact",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/PreparedSourceCorrections.olean TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-preparedsourcecorrections-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub_prepared",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/PreparedSourceCorrections.olean TNLean/PEPS/Approximation/PreparedSourceCorrections.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-selectedsourcecontraction-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SelectedSourceContraction.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SelectedSourceContraction.olean TNLean/PEPS/Approximation/SelectedSourceContraction.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecorrectedcontractionidentity-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCorrectedContractionIdentity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sourceContraction",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCorrectedContractionIdentity.olean TNLean/PEPS/Approximation/SourceCorrectedContractionIdentity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecompresseddensity-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.exactSourceMatrix",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCompressedDensity.olean TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecompresseddensity-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCompressedDensity.olean TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecompresseddensity-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_exact",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCompressedDensity.olean TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecompresseddensity-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_piecewise",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCompressedDensity.olean TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcecompresseddensity-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_sub_exact",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourceCompressedDensity.olean TNLean/PEPS/Approximation/SourceCompressedDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcephysicaldensity-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourcePhysicalDensity.olean TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcephysicaldensity-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalCorrectedSourceTerm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourcePhysicalDensity.olean TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcephysicaldensity-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourcePhysicalDensity.olean TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcephysicaldensity-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_exact",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourcePhysicalDensity.olean TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcephysicaldensity-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_sub_exact",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourcePhysicalDensity.olean TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-source-corrections-sourcephysicaldensity-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "eq:compression-subset-expansion"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Defines the corrected term on original source occurrences before choosing affected parties. Derives reaggregation, canonical residual recovery, the source-contraction identity, and the nonempty-subset difference for independently defined local source-operator replacement, including the physical partial trace. Gaussian sampling and quantitative corrected-term estimates remain separate obligations."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "f932b80f1b67668584120403b983be0633f62602",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SourcePhysicalDensity.olean TNLean/PEPS/Approximation/SourcePhysicalDensity.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+            "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+            "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

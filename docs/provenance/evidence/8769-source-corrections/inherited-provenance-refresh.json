@@ -1,0 +1,146 @@
+[
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.eval",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.isallowed",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.IsAllowed",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.norm_eval_le_one",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_le_one",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.choices",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.Choices",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.choicesfintype",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.choicesFintype",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.partialword",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.partialWord",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-circuit-sourcecircuit.coefficient",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.coefficient",
+    "path": "TNLean/PEPS/Approximation/DistributedSourceComposition.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-word.eval_sum_appendtail",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_sum_appendTail",
+    "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.eval_partial_gate",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.eval_partial_gate",
+    "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.expandedEval",
+    "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval_comp",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_comp",
+    "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval_frame",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_frame",
+    "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-evaluation-sourcecircuit.expandedeval_mapowner",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_mapOwner",
+    "path": "TNLean/PEPS/Approximation/PartialSourceEvaluation.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-density-sourcecircuit.expandedeval_eq_mapowner",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_eq_mapOwner",
+    "path": "TNLean/PEPS/Approximation/PartialSourceDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-density-sourcecircuit.tomatrix_eval_eq_sum_partialword",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.toMatrix_eval_eq_sum_partialWord",
+    "path": "TNLean/PEPS/Approximation/PartialSourceDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-chronological-source-expansion.json",
+    "id": "8769-chronological-density-sourcecircuit.density_eval_eq_sum_partialword",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.density_eval_eq_sum_partialWord",
+    "path": "TNLean/PEPS/Approximation/PartialSourceDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_sum_smul",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_sum_smul",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_eq_sum_basis",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_eq_sum_basis",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.prepareddensitycoefficient",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_density_sum_smul",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_density_sum_smul",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_density_eq_sum_basis",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_density_eq_sum_basis",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  },
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-gate-density.json",
+    "id": "8769-source-density-density-word.preparedmatrix_gate_density_eq_sum_basis",
+    "declaration": "TNLean.PEPS.PairEffect.Word.preparedMatrix_gate_density_eq_sum_basis",
+    "path": "TNLean/PEPS/Approximation/SourceGateDensity.lean"
+  }
+]

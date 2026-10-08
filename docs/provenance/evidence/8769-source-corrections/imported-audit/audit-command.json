@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true",
+    "Axioms.lean"
+  ],
+  "cwd": "/private/tmp/tnlean-source-corrections/imported-audit",
+  "LEAN_PATH": "/private/tmp/tnlean-source-corrections/artifacts:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Cli/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/batteries/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Qq/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/aesop/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/importGraph/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/plausible/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/checkdecls/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/Gametheory/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-approx-pair-layout/.lake/packages/mathlib/.lake/build/lib/lean:/Users/siruilu/Local/agentFormalization/QICLean/worktrees/area-law-pure-tensor-power/.lake/build/lib/lean:/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/lib/lean",
+  "returncode": 0,
+  "seconds": 8.659,
+  "source_sha256": "49eb1936ffc8744044b7e1cac66578b0702807be5a02f5a237fb8560e161fbee",
+  "log_sha256": "0883649b8eb83e548b101be09a9582fb897c8a174b55b42481521973200a8fbd",
+  "audited_declarations": 91,
+  "new_declarations": 67,
+  "refactored_declarations": 24,
+  "imported_artifacts": 14632,
+  "imported_dependencies_sha256": "b6f81bc0aea4d249d47bd8ed3caa3e9d53d061306f103406ae1e2dd908f5406f",
+  "source_revision": "f932b80f1b67668584120403b983be0633f62602",
+  "all_source_bytes_match_git_commit": true
+}

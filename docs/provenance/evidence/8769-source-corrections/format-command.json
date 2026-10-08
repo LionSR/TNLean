@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-corrections/scripts/latexindent",
+    "-l",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-corrections/blueprint/latexindent.yaml",
+    "-w",
+    "-s",
+    "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-corrections-format-1n533cei/ch24_peps_source_corrections.tex"
+  ],
+  "returncode": 0,
+  "idempotent": true,
+  "source_path": "blueprint/src/chapter/ch24_peps_source_corrections.tex",
+  "source_sha256": "c371c8bc2d936e3ea40e04fa52b80c7e4f4fa6477b3f595db40292cfd07e9cf2"
+}
