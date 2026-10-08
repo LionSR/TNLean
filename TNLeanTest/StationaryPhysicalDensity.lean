@@ -40,7 +40,7 @@ example {d D : ℕ} (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
   intro i
   simp [rotatePhysical, Matrix.one_apply]
 
-private def unequalGHZBoundary : Matrix (Fin 2) (Fin 2) ℂ :=
+private noncomputable def unequalGHZBoundary : Matrix (Fin 2) (Fin 2) ℂ :=
   Matrix.diagonal ![3 / 4, 1 / 4]
 
 private theorem unequalGHZBoundary_posDef : unequalGHZBoundary.PosDef := by
@@ -76,16 +76,18 @@ private theorem ghz_twisted_entry (X : Matrix (Fin 2) (Fin 2) ℂ) (i j : Fin 2)
     twistedTransferMap ghzTensor pauliX X i j = if i = j then 0 else X i j := by
   fin_cases i <;> fin_cases j <;>
     simp [twistedTransferMap_apply, ghzTensor, pauliX, Matrix.mul_apply,
-      Matrix.conjTranspose_apply, Fin.sum_univ_two, Matrix.diagonal_apply, Pi.single_apply]
+      Fin.sum_univ_two, Matrix.diagonal_apply, Pi.single_apply]
 
 private theorem ghz_twisted_pauliX : twistedTransferMap ghzTensor pauliX pauliX = pauliX := by
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [ghz_twisted_entry, pauliX]
+  fin_cases i <;> fin_cases j <;> simp [pauliX]
 
 private theorem ghz_twisted_spectralRadius :
     spectralRadius ℂ (Module.End.toContinuousLinearMap (Matrix (Fin 2) (Fin 2) ℂ)
       (twistedTransferMap ghzTensor pauliX)) = 1 := by
-  let Φ := Module.End.toContinuousLinearMap (Matrix (Fin 2) (Fin 2) ℂ)
+  let Φ : Module.End ℂ (Matrix (Fin 2) (Fin 2) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin 2) (Fin 2) ℂ →L[ℂ] Matrix (Fin 2) (Fin 2) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin 2) (Fin 2) ℂ)
   have hE : IsIdempotentElem (twistedTransferMap ghzTensor pauliX) := by
     ext X i j
     change twistedTransferMap ghzTensor pauliX
