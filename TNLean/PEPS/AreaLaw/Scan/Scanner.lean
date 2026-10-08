@@ -20,7 +20,8 @@ comparator budgets.
 (`prop:comparators`), Lemma 2.1 (`lem:continuity`) and Lemma 2.3 (`lem:tail`) for the concrete
 scan are the fields of `ScanData`; this module proves the step of the source from those
 conclusions to Proposition 9.2. The theorem becomes the source statement once a `ScanData` is
-constructed from the scan geometry and the transported states.
+constructed from the scan geometry and the transported states. Documented in
+`docs/paper-gaps/oai_area_law_scanner_inputs.tex`.
 
 ## Main results
 

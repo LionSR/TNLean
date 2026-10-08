@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scan.Defs
+import TNLean.PEPS.AreaLaw.Scan.EntropyBalance
 
 /-!
 # Energy at the selected charge point
@@ -104,18 +104,6 @@ lemma integral_etaNew_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i 
     (h : (S.round r).H) (c : (S.round r).Ch h) :
     0 ≤ ∫ θ, (S.round r).etaNew i h c θ ^ (1 / 8 : ℝ) ∂((S.round r).μNew k p h c) :=
   integral_nonneg fun θ ↦ Real.rpow_nonneg (S.etaNew_nonneg r i h c θ) _
-
-open Classical in
-/-- The charge defect is nonnegative. -/
-lemma chargeDefect_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
-    0 ≤ (S.round r).chargeDefect k p := by
-  refine Finset.sum_nonneg fun h _ ↦ ?_
-  split_ifs
-  · refine mul_nonneg (S.w_nonneg r h) (Finset.sum_nonneg fun i _ ↦ ?_)
-    split_ifs
-    · exact integral_nonneg fun θ ↦ S.etaOld_nonneg r i h θ
-    · exact le_rfl
-  · exact le_rfl
 
 open Classical in
 /-- The leaf sum of one term is nonnegative for `p ∈ (0, 1)`. -/
