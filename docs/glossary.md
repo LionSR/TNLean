@@ -2089,6 +2089,28 @@ in `MPS/Preparation/` uses it.
   dynamics onto graph balls under a sphere-growth hypothesis).
 - **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
 
+#### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
+  constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
+  from QICLean and their ball expectations
+  `QuantumCircuit.siteExpectation q (QuantumCircuit.graphBall G aᵢ l) kᵢ`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
+- **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
+  centered at the ground vector; the positive contractions annihilate `Ω`, their sum
+  dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
+  `e^{-c l^{p/(p+1)}}`.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Proposition 4.3 (`prop:positive`) and Lemma 4.4 (`lem:quasilocal-roots`),
+  `03-quasilocal.tex`, lines 220–389.
+- **Sanctioned bridges:** `SpectralFilter.positive_replacement`,
+  `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` (QICLean),
+  `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
+- **Caveat:** stated for a general finite graph with the support, multiplicity and
+  sphere-growth hypotheses of the propagation estimate; the specialization to the induced
+  lattice domains is a separate step.
+
 ## Inhomogeneous short-range correlated chains
 
 ### `MPSTensor.IsInjectiveOn`
