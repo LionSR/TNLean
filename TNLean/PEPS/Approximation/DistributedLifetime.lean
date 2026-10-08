@@ -39,44 +39,6 @@ These proofs are newly written from the paper's mathematical argument. No OpenAI
 Lean code is copied or adapted.
 -/
 
-/-!
-Original proof provenance.
-Source: September 24, 2026.
-Paper file: https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex
-Labels: thm:compression, eq:compression-subset-expansion;
-independently formalized; no upstream Lean proof text reused.
-Mathematical source commit: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-
-Provenance-ID: 8769-lifetime-source-endpoints
-Downstream declaration: TNLean.PEPS.Approximation.sourceEndpoints
-Provenance-ID: 8769-lifetime-corrected-parties
-Downstream declaration: TNLean.PEPS.Approximation.correctedParties
-Provenance-ID: 8769-lifetime-incident-gates
-Downstream declaration: TNLean.PEPS.Approximation.incidentGates
-Provenance-ID: 8769-lifetime-gates-touching
-Downstream declaration: TNLean.PEPS.Approximation.gatesTouching
-Provenance-ID: 8769-lifetime-mem-source-endpoints
-Downstream declaration: TNLean.PEPS.Approximation.mem_sourceEndpoints
-Provenance-ID: 8769-lifetime-mem-corrected-parties
-Downstream declaration: TNLean.PEPS.Approximation.mem_correctedParties
-Provenance-ID: 8769-lifetime-mem-incident-gates
-Downstream declaration: TNLean.PEPS.Approximation.mem_incidentGates
-Provenance-ID: 8769-lifetime-mem-gates-touching
-Downstream declaration: TNLean.PEPS.Approximation.mem_gatesTouching
-Provenance-ID: 8769-lifetime-card-source-endpoints-le
-Downstream declaration: TNLean.PEPS.Approximation.card_sourceEndpoints_le
-Provenance-ID: 8769-lifetime-card-corrected-parties-le
-Downstream declaration: TNLean.PEPS.Approximation.card_correctedParties_le
-Provenance-ID: 8769-lifetime-card-gates-touching-le
-Downstream declaration: TNLean.PEPS.Approximation.card_gatesTouching_le
-Provenance-ID: 8769-lifetime-card-gates-touching-corrected-parties-le
-Downstream declaration: TNLean.PEPS.Approximation.card_gatesTouching_correctedParties_le
-Provenance-ID: 8769-lifetime-owner-mem-gates-touching-corrected-parties
-Downstream declaration: TNLean.PEPS.Approximation.owner_mem_gatesTouching_correctedParties
-Provenance-ID: 8769-lifetime-disjoint-participants-of-not-mem-gates-touching
-Downstream declaration: TNLean.PEPS.Approximation.disjoint_participants_of_not_mem_gatesTouching
--/
-
 namespace TNLean.PEPS.Approximation
 
 variable {Party Gate Position : Type*} [DecidableEq Party] [DecidableEq Gate]

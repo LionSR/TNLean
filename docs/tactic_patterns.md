@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
+
+- **Pattern:** Rewrite the quasi-local MPS expectation of an interval
+  observable by unfolding the interval inclusion, applying the interval
+  formula, and cancelling the coordinate equivalence.
+- **Seen:** Six parent-Hamiltonian modules repeated the same three-step
+  rewrite.
+- **Abstraction:** `MPSTensor.quasiLocalExpectation_quasiLocalIntervalObservable`
+  in `LocalObservableQuasiLocalState`, next to the interval formula it uses.
+- **Refactor:** All known callers use the lemma.
+
 ### A positive binary measurement from an orthogonal projector — promoted (2026-10-03)
 
 - **Pattern:** Derive Hermiticity, positivity, idempotence, orthogonality and

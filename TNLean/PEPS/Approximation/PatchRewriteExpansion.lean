@@ -26,23 +26,17 @@ affected old hole. This file proves:
   dividing by `1 + δ / 2` gives a contraction within `δ` of `M`, and the integer `k` of the
   whole-group truncation can be chosen so that `N g / √k ≤ δ / 2`.
 
-**Scope restriction (monomial structure):** the step of the proof of Lemma 6.3 that turns one
-branch into a residual tensor network of normalized bras and kets, applies the whole-group
-truncation of Lemma 6.2 to it, and reads every product term as an allowed monomial of
-Theorem 5.2 is not formalized here (`05-frames.tex`, lines 254–330). It needs allowed
-monomials as operators: chronological products of one-party contractions and of normalized pair
-sources and pair effects between two named parties, which the library does not yet have.
-Consequently the clause "`M_a` has a polynomial expansion into allowed monomials using only the
-specified parties" of Lemma 6.3 is not formalized; `norm_rescale_sum_le_of_branches`
-assembles `M_a` from any branchwise approximations. Documented in
-`docs/paper-gaps/polypeps_small_rewrite_monomials.tex`.
+The network of a branch, its truncation by Lemma 6.2 and the assembly of `M_a` are in
+`TNLean.PEPS.Approximation.PatchRewriteTruncation`.
 
 ## Main definitions
 
 * `EncodedFrame.PatchTags`, `EncodedFrame.cylProd`: the cylinder-term choices for a list of
   patches and the corresponding ordered product of cylinder projectors.
-* `EncodedFrame.SmallPatchRewrite.Branch`, `EncodedFrame.SmallPatchRewrite.branchOp`: complete
-  branches and their operators.
+* `EncodedFrame.SmallPatchRewrite.Branch`, `EncodedFrame.SmallPatchRewrite.branchRaw`,
+  `EncodedFrame.SmallPatchRewrite.branchOp`: complete branches and their operators.
+* `EncodedFrame.tagLift`, `EncodedFrame.SmallPatchRewrite.liftBranch`: a matrix on the raw
+  registers placed in a tag block, extended by the identity on the untouched tags.
 * `EncodedFrame.patchSquares`, `EncodedFrame.holeSquares`: the selected squares of a list of
   patches or holes, for a choice of one term at every position of the list.
 
@@ -199,6 +193,11 @@ theorem stack_mul_mul_stack_conjTranspose_apply {S T m : Type*} [Fintype m]
     (ρ : m) : (stack B * X * (stack A)ᴴ) (s, σ) (t, ρ) = (B s * X * (A t)ᴴ) σ ρ := by
   simp [Matrix.mul_apply, stack_apply]
 
+/-- A matrix `Y` placed in the tag block `(a, b)`: `|a⟩⟨b| ⊗ Y`. -/
+def tagLift {S T m : Type*} [DecidableEq S] [DecidableEq T] (a : S) (b : T) (Y : Matrix m m ℂ) :
+    Matrix (S × m) (T × m) ℂ :=
+  Matrix.of fun x y => if x.1 = a ∧ y.1 = b then Y x.2 y.2 else 0
+
 /-! ### Branches of the canonical rewrite -/
 
 namespace SmallPatchRewrite
@@ -211,15 +210,15 @@ patch, and a tag of every affected old hole.
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 254–257. -/
 abbrev Branch : Type := TagSpace R.newAffected × PatchTags R.patches × TagSpace R.oldAffected
 
-/-- The operator of a branch `β = (a, s, b)`: `|a⟩⟨b| ⊗ R^{new}_a C_s (R^{old}_b)ᴴ`, where
+/-- The raw part `R^{new}_a C_s (R^{old}_b)ᴴ` of the operator of a branch `(a, s, b)`, where
 `C_s` is the ordered product of the chosen cylinder projectors. -/
+def branchRaw [NeZero q] (β : R.Branch) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  rawProd R.newAffected β.1 * cylProd R.patches β.2.1 * (rawProd R.oldAffected β.2.2)ᴴ
+
+/-- The operator of a branch `β = (a, s, b)`: `|a⟩⟨b| ⊗ R^{new}_a C_s (R^{old}_b)ᴴ`. -/
 def branchOp [NeZero q] (β : R.Branch) :
     Matrix (TagSpace R.newAffected × (ι → Fin q)) (TagSpace R.oldAffected × (ι → Fin q)) ℂ :=
-  Matrix.of fun x y =>
-    if x.1 = β.1 ∧ y.1 = β.2.2 then
-      (rawProd R.newAffected β.1 * cylProd R.patches β.2.1 * (rawProd R.oldAffected β.2.2)ᴴ)
-        x.2 y.2
-    else 0
+  tagLift β.1 β.2.2 (R.branchRaw β)
 
 /-- **Branch expansion of the affected rewrite.** -/
 theorem affectedRewrite_eq_sum_branchOp [NeZero q] :
@@ -227,23 +226,30 @@ theorem affectedRewrite_eq_sum_branchOp [NeZero q] :
   ext ⟨a, σ⟩ ⟨b, ρ⟩
   rw [affectedRewrite, frameEncoder, frameEncoder, stack_mul_mul_stack_conjTranspose_apply,
     patchProj, projProd_eq_sum_cylProd, Matrix.sum_apply, Fintype.sum_prod_type]
-  simp only [branchOp, of_apply, Fintype.sum_prod_type]
+  simp only [branchOp, branchRaw, tagLift, of_apply, Fintype.sum_prod_type]
   rw [Finset.sum_eq_single a (fun a' _ ha' => by simp [Ne.symm ha'])
     (fun h => absurd (Finset.mem_univ a) h)]
   simp only [true_and, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
   rw [Finset.mul_sum, Finset.sum_mul, Matrix.sum_apply]
 
+/-- A matrix `Y` on the raw registers placed in the tag block of a branch `(a, s, b)`:
+`|a⟩⟨b| ⊗ Y` on the affected tags and the raw registers, extended by the identity on the tags of
+the untouched holes. -/
+def liftBranch (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    Matrix R.newFrame.Layout R.oldFrame.Layout ℂ :=
+  reindex (R.layoutEquiv R.newAffected) (R.layoutEquiv R.oldAffected)
+    (tagLift β.1 β.2.2 Y ⊗ₖ (1 : Matrix (TagSpace R.untouched) (TagSpace R.untouched) ℂ))
+
 /-- **Branch expansion of the canonical rewrite.** `M = ∑_β M_β`, where `M_β` is the branch
-operator on the affected tags and the raw registers, extended by the identity on the untouched
-tags.
+operator `|a⟩⟨b| ⊗ R^{new}_a C_s (R^{old}_b)ᴴ` on the affected tags and the raw registers,
+extended by the identity on the untouched tags.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 254–257. -/
 theorem rewrite_eq_sum_branch [NeZero q] :
-    R.rewrite = ∑ β, reindex (R.layoutEquiv R.newAffected) (R.layoutEquiv R.oldAffected)
-      (R.branchOp β ⊗ₖ (1 : Matrix (TagSpace R.untouched) (TagSpace R.untouched) ℂ)) := by
+    R.rewrite = ∑ β, R.liftBranch β (R.branchRaw β) := by
   ext x y
-  simp only [rewrite, reindex_apply, submatrix_apply, Matrix.sum_apply, kroneckerMap_apply,
-    affectedRewrite_eq_sum_branchOp, Finset.sum_mul]
+  simp only [rewrite, liftBranch, reindex_apply, submatrix_apply, Matrix.sum_apply,
+    kroneckerMap_apply, affectedRewrite_eq_sum_branchOp, branchOp, Finset.sum_mul]
 
 /-- **Number of branches.** If every affected hole and every additional patch has at most `D`
 cylinder terms, there are at most `D ^ (r_new + m + r_old)` complete branches.
