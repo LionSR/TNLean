@@ -1,7 +1,0 @@
-'TNLean.PEPS.Approximation.ketBraCoefficientCost' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.Approximation.ketBraCoefficientCost_eq_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.Approximation.correctedPositionChoiceCost' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.Approximation.correctedPositionChoiceCost_le' depends on axioms: [propext, Classical.choice, Quot.sound]
-'TNLean.PEPS.Approximation.compressionChoiceBase_le_of_monomial_bounds' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
