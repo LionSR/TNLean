@@ -60,8 +60,9 @@ private theorem interior_triangle_ne_functional_level
   have hstrict (g : (ℝ × ℝ) →L[ℝ] ℝ) (hg : Function.Surjective g)
       (ha : g c ≤ g a) (hb : g c ≤ g b) : g c < g x := by
     have hsub : convexHull ℝ {c, a, b} ⊆ g ⁻¹' Set.Ici (g c) := by
-      refine convexHull_min (𝕜 := ℝ) ?_
-        ((convex_Ici (𝕜 := ℝ) (g c)).linear_preimage g.toLinearMap)
+      have hconv : Convex ℝ (g ⁻¹' Set.Ici (g c)) :=
+        (convex_Ici (𝕜 := ℝ) (β := ℝ) (g c)).linear_preimage g.toLinearMap
+      refine convexHull_min (𝕜 := ℝ) (t := g ⁻¹' Set.Ici (g c)) ?_ hconv
       intro y hy
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
       rcases hy with rfl | rfl | rfl
@@ -147,9 +148,15 @@ private theorem fan_vertices_same_functional_side (o : ℝ × ℝ) (ℓ : ℕ)
     norm_num [slopeFunctional, cellFanCenter, midpoint_eq_smul_add,
       invOf_eq_inv, smul_eq_mul] <;> first
     | nlinarith
-    | constructor <;> nlinarith
-    | left; constructor <;> nlinarith
-    | right; constructor <;> nlinarith
+    | apply And.intro <;> nlinarith
+    | left
+      first
+      | nlinarith
+      | apply And.intro <;> nlinarith
+    | right
+      first
+      | nlinarith
+      | apply And.intro <;> nlinarith
 
 /-- The interior of each of the eight actual midpoint-subdivided fan triangles
 avoids every allowed direction from the cell center.
