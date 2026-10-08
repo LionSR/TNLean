@@ -707,10 +707,6 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     multiplies all sup distances by $s$.
 \end{proof}
 
-The source applies this argument to the scaled old and new guides near a mark, at a
-direct repainting and at a resizing. That these guides are relabelled similar images
-of finitely many templates, lines 469--471 and 486--491, is not formalized here.
-
 \begin{lemma}[Square nets of patches]
     \label{lem:peps_dyadic_nets}
     \lean{TNLean.PEPS.Approximation.exists_blockCorner_dist_lt, TNLean.PEPS.Approximation.exists_finset_blockCorner_dist_le, TNLean.PEPS.Approximation.exists_netCover, TNLean.PEPS.Approximation.closedBall_two_mul_subset_thickening_three_mul}
@@ -895,6 +891,47 @@ of finitely many templates, lines 469--471 and 486--491, is not formalized here.
     points belong to distinct grid corners, at distance at least $n$, and each lies
     within $t$ of its corner, so they are at distance at least $n-2t>t/1000$.
 \end{proof}
+
+\begin{theorem}[One patch ratio for the point treatment]
+    \label{thm:peps_dyadic_point_ratio}
+    \lean{TNLean.PEPS.Approximation.SquareEdge.par_smul, TNLean.PEPS.Approximation.SquareEdge.nor_inv_smul, TNLean.PEPS.Approximation.bandWidth_inv_mul, TNLean.PEPS.Approximation.mem_edgeBand_inv_smul, TNLean.PEPS.Approximation.bandCoord_inv_smul, TNLean.PEPS.Approximation.mem_centralRegion_inv_smul, TNLean.PEPS.Approximation.bandUpdate_inv_smul, TNLean.PEPS.Approximation.comp_bandWord, TNLean.PEPS.Approximation.bandUpdate_comp, TNLean.PEPS.Approximation.comp_mainWords, TNLean.PEPS.Approximation.comp_auxWords, TNLean.PEPS.Approximation.exists_mainWords_comp, TNLean.PEPS.Approximation.exists_auxWords_comp, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.mainGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.auxGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.isUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.isUnmodifiedGuide, TNLean.PEPS.Approximation.IsConicalAt, TNLean.PEPS.Approximation.corner_trichotomy, TNLean.PEPS.Approximation.SquareEdge.par_add_smul, TNLean.PEPS.Approximation.SquareEdge.nor_add_smul, TNLean.PEPS.Approximation.mem_edgeBand_conical, TNLean.PEPS.Approximation.bandCoord_conical, TNLean.PEPS.Approximation.mem_centralRegion_conical, TNLean.PEPS.Approximation.isConicalAt_blockGuide, TNLean.PEPS.Approximation.IsConicalAt.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isConicalAt, TNLean.PEPS.Approximation.isTrueVertex_comp_iff, TNLean.PEPS.Approximation.isTrueVertex_comp_homeomorph, TNLean.PEPS.Approximation.similarityInv, TNLean.PEPS.Approximation.similarityInv_apply, TNLean.PEPS.Approximation.image_similarity_closedBall, TNLean.PEPS.Approximation.TwoOwnerFootprints.congr, TNLean.PEPS.Approximation.windowBlocks, TNLean.PEPS.Approximation.WindowSlot, TNLean.PEPS.Approximation.windowSlot, TNLean.PEPS.Approximation.windowLabel, TNLean.PEPS.Approximation.referenceRepainting, TNLean.PEPS.Approximation.nbrBlock_zero_mem_windowBlocks, TNLean.PEPS.Approximation.windowLabel_windowSlot, TNLean.PEPS.Approximation.isRelabel_referenceRepainting, TNLean.PEPS.Approximation.isRescale_blockBaseline, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_congr, TNLean.PEPS.Approximation.RepaintingBaseline.finite_isUnmodifiedGuide, TNLean.PEPS.Approximation.pointTreated, TNLean.PEPS.Approximation.classSection, TNLean.PEPS.Approximation.classRep, TNLean.PEPS.Approximation.classRep_spec, TNLean.PEPS.Approximation.injOn_range_classRep, TNLean.PEPS.Approximation.TemplateIndex, TNLean.PEPS.Approximation.template, TNLean.PEPS.Approximation.cornerOffset, TNLean.PEPS.Approximation.isSquareCorner_cornerOffset, TNLean.PEPS.Approximation.blockCorner_sub_blockCorner, TNLean.PEPS.Approximation.blockIndex_mem_windowBlocks, TNLean.PEPS.Approximation.exists_reference_eq, TNLean.PEPS.Approximation.exists_template_eq, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio}
+    \leanok
+    \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0, lem:peps_dyadic_floor}
+    Fix $\epsilon_0>0$. There is a ratio $\nu>0$ with the following property. Let
+    $8t<n$, consider the repainting of a block $S$ of side $n$ from a block guide, an
+    unmodified guide of it, a corner $v$ of $S$, and either no homogenization or the
+    homogenization, on the open square of radius $t$ about $v$, to the final label or
+    to the label of one of the nine blocks around $S$. Then the resulting guide
+    satisfies the two-owner condition with working set the closed square of radius
+    $2t$ about $v$, holes at its true vertices within $3t$ of $v$, inner radius
+    $\epsilon_0t$ and footprint radius $\nu t$. This is the uniformity of the patch
+    ratio near a mark in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 464--479
+    and 481--505: in units of $t$ the guides come from finitely many ray patterns,
+    with or without the square clearing.
+\end{theorem}
+
+\begin{proof}\leanok
+    Scaling by $1/n$ carries the bands, their normal ratios and the central region of
+    the block of side $n$ to those of the unit square, so every unmodified guide is an
+    unmodified guide of the repainting of the unit square composed with the scaling.
+    Relabelling commutes with replacing a band by a word and with the central birth,
+    so near the corner the guide is the relabelling by the window labels of an
+    unmodified guide of one reference repainting, whose labels are the nine blocks
+    around $(0,0)$ and the final label. On the unit square the bands, the normal
+    ratios, the central region and the block guide are conical about each corner
+    within distance $1/2$, by the straight-ray charts of
+    Lemma~\ref{lem:peps_dyadic_choice_K0}; so are the unmodified guides, and the scale
+    $t/n<1/8$ can be replaced by $1/32$. The reference repainting has finitely many
+    unmodified guides, since a guide after completed edges depends only on which edges
+    are completed. Choosing for each label-equality type a representative map of the
+    finitely many slots, the guide near $v$ is an injective relabelling of one of
+    finitely many templates, and injective relabellings and similarities preserve true
+    vertices. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform}.
+\end{proof}
+
+The source applies the same argument at a direct repainting and at a resizing, in
+units of $n$, with the radius ratio in the interval of
+Lemma~\ref{lem:peps_dyadic_small_radius}. That instance is not formalized here.
 
 \begin{lemma}[Trivial holes at the last level]
     \label{lem:peps_dyadic_last_level}
