@@ -1090,10 +1090,14 @@ Coarse periods at least three and the stated boundary/support scope remain.
 
 [polypeps_small_rewrite_monomials.tex](polypeps_small_rewrite_monomials.tex)
 records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
-formalized for the canonical contraction and its reference error, with the
-branch expansion, the wire classification and the final rescaling of the
-approximation, and that the expansion into allowed monomials awaits the
-residual tensor network of a branch.
+formalized for the canonical contraction and its reference error, and that
+for the approximation the branch expansion, the wire classification, the
+network of each branch, its truncation by Lemma 6.2 and the final rescaling
+are formalized, giving a contraction within `L^{-a}` of the rewrite that is a
+sum of explicit product terms. Two steps remain: reading each product term as
+an allowed monomial on a layout of the frame's registers by owner, and the
+polynomial count of terms, which needs the bound on the number of cylinder
+terms of Proposition 4.1 and bounded numbers of patches and affected holes.
 
 ### Polynomial PEPS approximation: changes of ownership
 
@@ -1118,3 +1122,23 @@ without parties, and that the source-only and party-ownership clauses are now
 proved on a party layout for the monomial chains. The combination of all sources
 on one pair of parties is proved only for two adjacent sources; moving sources
 past operations on other registers remains open.
+
+### Polynomial PEPS approximation: dyadic routing
+
+[polypeps_routing_network_bounds.tex](polypeps_routing_network_bounds.tex)
+records that Lemma 8.2 of the September 24, 2026 polynomial PEPS manuscript
+concerns the party network of Proposition 7.1 and has no hypotheses, and that
+it is formalized for an arbitrary party network on dyadic anchors under four
+hypotheses: boundedly many parties per block, bounded degree, and link
+separation bounded by a fixed multiple of the endpoint scales, which the source
+derives from that proposition, and anchors on the padded grid, which comes from
+attaching each party to the anchor of its dyadic block.
+
+### Two-dimensional area law: the scanner estimate
+
+[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) records that
+Proposition 9.2 of the September 24, 2026 two-dimensional area-law manuscript
+is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
+Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
+construction of that package from the scan geometry and the transported states
+remains open.
