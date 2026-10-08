@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRestriction
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 
 /-!
 # Exact open-chain kernels of the extended mixed interaction
@@ -129,13 +130,6 @@ theorem periodicLocalInteractionES_isPositive
   apply LinearMap.nonneg_iff_isPositive.mp
   simpa only [periodicLocalInteractionES_zero] using
     periodicLocalInteractionES_mono (LinearMap.nonneg_iff_isPositive.mpr hh) i
-
-/-- Sum only the nonwrapping translates of one fixed local interaction.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-noncomputable def openInteractionHamiltonianES
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)) (N : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  ∑ i : NonwrappingStart R N, periodicLocalInteractionES h i.1
 
 /-- Positivity identifies the open-chain kernel with its individual
 nonwrapping local constraints. -/
