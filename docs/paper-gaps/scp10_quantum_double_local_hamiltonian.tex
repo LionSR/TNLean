@@ -1,0 +1,119 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Quantum-double Hamiltonian terms: normalization and local scope}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source and normalization correction}
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807}{arXiv:1001.3807v3},
+\path{Papers/1001.3807/paper_v3.tex}, lines 2861--2877, gives the
+product-one diagonal plaquette term and a coherent group-action term.
+The latter is printed as $I-\sum_{u\in G}V_u$, with the basis indices
+implicit. The action convention is $L_u\ket z=\ket{uz}$ and
+$R_u\ket z=\ket{zu^{-1}}$, according to the arrows.
+
+For this permutation representation, put $S=\sum_uV_u$. Then
+\begin{align}
+    S^\dagger & =S,         & S^2       & =|G|S,             \\
+    A         & =|G|^{-1}S, & A^\dagger & =A,    & A^2 & =A.
+\end{align}
+On every invariant vector, $(I-S)\psi=(1-|G|)\psi$. Except for the
+trivial group, the printed expression therefore does not annihilate
+the intended invariant state. The projector-complement Hamiltonian term
+is $h=I-A$. This corrects the group average; it does not rescale the
+color-difference tensor or assume that its state is normalized.
+
+\section{Exact tensor and orientation}
+The tensor retained from source lines 2896--2916 is
+\begin{align}
+    K(p,q,r,s) & =\ket{pq^{-1},qr^{-1},rs^{-1},sp^{-1}}.
+\end{align}
+Equation~(7.10) and its footnote, source lines 2896--2908, explicitly
+prescribe clockwise rotation. We label its
+virtual positions north, east, south, west by $p,q,r,s$, and its physical
+positions northeast, southeast, southwest, northwest by $a,b,c,d$.
+The available \path{figs6/tc-lattice.pdf} and
+\path{figs6/tc-blocked-lattice.pdf} show which sites and plaquettes are
+blocked and which color bonds are shared. These earlier drawings are used
+only for incidence and blocking. The physical arrows and nonabelian
+multiplication order used here are fixed by Equation~(7.10) and its
+clockwise footnote; no literal agreement with each physical arrow of the
+earlier drawings is asserted or needed. The unavailable
+\path{figs6/renorm-as-diff-doubles} figure is not treated as inspected
+evidence; the coordinate assignments above and all nonabelian products
+are stated explicitly.
+
+At an east--west bond the shared color is $q_L=s_R=x$. Replacing
+$x$ by $ux$ acts on the actual eight physical spins as
+\begin{align}
+    (a,b,c,d;e,f,g,h) & \longmapsto
+    (au^{-1},ub,c,d;e,f,gu^{-1},uh).
+\end{align}
+The hole uses the ordered spin tuple
+$(NW.b,SW.a,SE.d,NE.c)$. Shared colors give these four spins as
+$(xy^{-1},yz^{-1},zw^{-1},wx^{-1})$, whose product is one.
+Neither identity assumes an abelian group.
+
+\section{Local assertions and remaining obligations}
+The local tensor image is the entire span of product-one computational
+basis vectors. When $abcd=1$, an explicit preimage is
+\begin{align}
+    F(1,a^{-1},(ab)^{-1},(abc)^{-1}) & =(a,b,c,d).
+\end{align}
+Thus the local flatness projector is
+the actual range projector of $K$, rather than an assumed tensor-image
+condition.
+
+The east--west group average fixes the actual open two-tensor contraction
+before every choice of the six exterior colors: reindex its shared-color
+sum by $x\mapsto ux$. The diagonal four-block plaquette projector fixes
+the actual open four-tensor contraction before every choice of the eight
+exterior colors, by the displayed telescoping product. Their complements
+annihilate the respective contractions.
+
+More precisely, let $\mathsf C$ be the two-block contraction map and
+$P_{00}=P_0\otimes P_0$ the two local flatness constraints. Then
+$P_{00}A_e=A_eP_{00}$ and
+\begin{align}
+    \operatorname{ran}\mathsf C & =\operatorname{ran}(A_eP_{00}).
+\end{align}
+For a product-one physical pair $\xi=(a,b,c,d;e,f,g,h)$, set
+\begin{align}
+    \beta(\xi) & =(a,b^{-1},(bc)^{-1};efg,fg,g).
+\end{align}
+These boundary colors reconstruct $\xi$ at shared color one.
+Averaging that physical basis vector gives exactly $|G|^{-1}$ times
+the corresponding contraction column. This supplies the reverse range
+inclusion; tensor-image membership is not assumed.
+
+The four-block hole projector also commutes with the coherent action
+on its northern bond and with that bond's normalized average.
+The hole holonomy is conjugated by $u$, so the product-one condition
+is preserved even on the full ambient physical space.
+
+Source lines 2918--2923 describe the three families of blocked Hamiltonian
+terms. The present assertions are a local part of that description. The
+following statements require further arguments:
+\begin{enumerate}
+    \item a placement of all three families on a specified full lattice,
+          with every bond orientation and boundary convention accounted for;
+    \item commutation of all placed terms and a full common-kernel
+          identification, including the appropriate topological sectors;
+    \item a comparison of that explicit common kernel with the existing
+          PEPS parent Hamiltonian, rather than merely local annihilation;
+    \item the actual unblocked arbitrary-group $T$-to-$K$ physical
+          renormalization, with its redundant factors and normalization.
+\end{enumerate}
+The local physical relabelling between the review's dual tensor and the
+clockwise tensor does not construct the last operation. Generic parent
+classification results do not establish the second or third item unless
+their local kernels are identified with the explicit Hamiltonian here.
+
+\end{document}

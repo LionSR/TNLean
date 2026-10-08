@@ -26,6 +26,17 @@ the degree bound `Δ`.
 The source additionally records that the two endpoint scales of every link are equal or
 adjacent; the bounds here do not use it, so it is not assumed.
 
+**Scope restriction (party-network bounds as hypotheses):** Lemma 8.2 `lem:routing`
+(`07-assembly.tex:122–127`) has no hypotheses; it concerns the party network of
+Proposition 7.1 `prop:protocol` (`06-geometry.tex:12–53`). That network satisfies the block,
+degree and separation bounds by Proposition 7.1, and its anchors lie on the padded grid
+because the parties are attached to dyadic-block anchors (`07-assembly.tex:113–114`). Here
+`foldedRouting_card_traversal_le` and `exists_squarePEPS_of_dyadicRouting` take these four
+properties (`InGrid`, `BlockBounded`, `DegreeBounded`, `SeparationBounded`) as hypotheses on
+an arbitrary party network, so they are a conditional form of the lemma. Documented in
+`docs/paper-gaps/polypeps_routing_network_bounds.tex`; the hypotheses are discharged once
+both Proposition 7.1 and the attachment of its parties to the padded anchors are formalized.
+
 ## Main results
 
 * `TNLean.PEPS.Approximation.foldedRouting_card_traversal_le`: the folded congestion bound,
