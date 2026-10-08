@@ -10,8 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
+import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
+import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
@@ -19,13 +21,16 @@ import TNLean.PEPS.AreaLaw.GraphInteractionSeries
 import TNLean.PEPS.AreaLaw.GraphInteractionTarget
 import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
 import TNLean.PEPS.AreaLaw.GraphLatticeDistance
+import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.QuasilocalRoots
+import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.Scan
+import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
