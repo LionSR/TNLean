@@ -5745,3 +5745,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** These are short pointwise or set-level applications of the same
   theorem. No coordinate table is copied, and no further export or tactic is
   needed. The existing pointwise applications remain unchanged.
+
+### Square-frontier whole-side extraction — promoted (2026-10-08)
+
+- **Pattern:** Pass from a boundary point of a half-open dyadic square to
+  one of its four closed whole sides.
+- **Seen:** The dummy-contact proof in `DummyRunInterfaces.lean` and the
+  actual nearby-frontier proof in `InitialStarFrontiers.lean`.
+- **Abstraction:** `exists_dyadicCellSide_of_mem_frontier` in `CellSides.lean`
+  shares the original product-frontier proof unchanged. The consumers use
+  the actual side endpoints and the slopes already carried by the triangles.
+- **Notes:** The proposed third marked-endpoint containment calculation was
+  removed from the nearby-frontier proof. Its radial point belongs to the
+  closed defining cell by the actual fan cover and closure monotonicity;
+  the existing segment-containment candidates remain at two old instances.

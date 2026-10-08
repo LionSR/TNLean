@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.cell_frontier_side",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/CellSides.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.exists_dyadicCellSide_of_mem_frontier",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For an arbitrary origin, natural exponent, signed cell index and actual dyadic-square frontier point, one of the four actual whole sides contains the point. The existing independent TNLean private argument is moved unchanged from DummyRunInterfaces.lean, with only its public name and visibility changed. No layer, late-scale, width, mesh or contact hypothesis is added.",
+        "Section 11, prop:two-families, lines 299\u2013323; geometry:initial-stars, lines 333\u2013370, especially 352\u2013359. Independent mathematical review approves the complete visible statement and argument at raw SHA-256 71fe8baa01014a7568bad218fb9bcab0f15ff7a9a062b0452ec14df7b7bd1114. Neither this new module nor the revised dummy consumer has a direct compiler check at the prepared source. At preparation the completed parent, measured inventory and exact source freeze were unbound; canonical verification remained pending. The combined canonical build may be the first source check. Two existing dummy-interface rows require fresh whole-file evidence after precisely one helper-call rename. Active rays, sector assignment, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.initial_frontier_near_mark",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/InitialStarFrontiers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_near_mark_allowed",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "For the actual initial identifiers at arbitrary origin and valid residue functions, C at least two and k0 at least 50000000, an actual reference fine-cell mark at k at least k0 sees every actual birth-region frontier point at distance less than one thirty-second of its fine side in an allowed direction. Actual finite cell/fan frontier decomposition, neighboring-layer quarter mesh and allowed-line clearance supply the direction. The dummy case forces k=k0. No local boundary description, nonempty endpoint set, selected ray, sector, minimum-scale or contact certificate is assumed.",
+        "Section 11, geometry:initial-stars, lines 333\u2013370, especially 352\u2013359; actual construction in prop:two-families, lines 154\u2013177, 212\u2013218 and 299\u2013323. Independent mathematical review approves the complete visible statement and argument at raw SHA-256 234bcd9e43f00d850a46743b390e671073b7c202c3b321fb078ccf96a86448a8. Neither this new module nor the revised dummy consumer has a direct compiler check at the prepared source. At preparation the completed parent, measured inventory and exact source freeze were unbound; canonical verification remained pending. The combined canonical build may be the first source check. Two existing dummy-interface rows require fresh whole-file evidence after precisely one helper-call rename. Active rays, sector assignment, isolated stars, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

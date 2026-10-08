@@ -28,6 +28,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
+import TNLean.PEPS.AreaLaw.Geometry.CellSides
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
 import Mathlib.Data.Set.Finite.Lattice
@@ -60,51 +61,6 @@ open scoped Fin.NatCast
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-private theorem mem_side_of_mem_frontier (o : ℝ × ℝ) (ℓ : ℕ)
-    (z : ℤ × ℤ) (x : ℝ × ℝ) (hx : x ∈ frontier (dyadicCell o ℓ z)) :
-    ∃ s : Fin 4, x ∈ dyadicCellSide o ℓ z s := by
-  let A := o.1 + (2 : ℝ) ^ ℓ * z.1
-  let A' := o.1 + (2 : ℝ) ^ ℓ * (z.1 + 1)
-  let B := o.2 + (2 : ℝ) ^ ℓ * z.2
-  let B' := o.2 + (2 : ℝ) ^ ℓ * (z.2 + 1)
-  have ht : 0 < (2 : ℝ) ^ ℓ := by positivity
-  have hA : A < A' := by dsimp [A, A']; linarith
-  have hB : B < B' := by dsimp [B, B']; linarith
-  have hfront : frontier (dyadicCell o ℓ z) =
-      (Set.Icc A A' ×ˢ {B, B'}) ∪ ({A, A'} ×ˢ Set.Icc B B') := by
-    change frontier (Set.Ico A A' ×ˢ Set.Ico B B') = _
-    rw [frontier_prod_eq, frontier_Ico hB, frontier_Ico hA,
-      closure_Ico hA.ne, closure_Ico hB.ne]
-  have hcoords (s : Fin 4) := congrArg
-    (fun ab : (ℝ × ℝ) × (ℝ × ℝ) ↦ segment ℝ ab.1 ab.2)
-    (cellFan_unsplit_endpoints_coordinates o ℓ z s)
-  rw [hfront] at hx
-  rcases hx with ⟨hx₁, hx₂⟩ | ⟨hx₁, hx₂⟩
-  · rcases hx₂ with hx₂ | hx₂
-    · refine ⟨3, ?_⟩
-      have hs := hcoords 3
-      norm_num at hs
-      rw [dyadicCellSide, hs, ← Prod.image_mk_segment_left, segment_eq_Icc hA.le]
-      exact ⟨x.1, hx₁, Prod.ext rfl hx₂.symm⟩
-    · refine ⟨1, ?_⟩
-      have hs := hcoords 1
-      norm_num at hs
-      rw [dyadicCellSide, hs, segment_symm, ← Prod.image_mk_segment_left,
-        segment_eq_Icc hA.le]
-      exact ⟨x.1, hx₁, Prod.ext rfl hx₂.symm⟩
-  · rcases hx₁ with hx₁ | hx₁
-    · refine ⟨2, ?_⟩
-      have hs := hcoords 2
-      norm_num at hs
-      rw [dyadicCellSide, hs, segment_symm, ← Prod.image_mk_segment_right,
-        segment_eq_Icc hB.le]
-      exact ⟨x.2, hx₂, Prod.ext hx₁.symm rfl⟩
-    · refine ⟨0, ?_⟩
-      have hs := hcoords 0
-      norm_num at hs
-      rw [dyadicCellSide, hs, ← Prod.image_mk_segment_right, segment_eq_Icc hB.le]
-      exact ⟨x.2, hx₂, Prod.ext hx₁.symm rfl⟩
-
 /-- A fan triangle of an actual later fine cell meets the dummy closure exactly
 where its elementary base does. The neighborhood width and optional midpoint
 subdivision are arbitrary, and empty or singleton contacts are included.
@@ -131,7 +87,7 @@ theorem fineLayer_cellFanPolygon_inter_dummy_eq
     have hxfront : x ∈ frontier (dyadicCell o (fineScaleIndex k) z) := by
       rw [← closure_sdiff_interior]
       exact ⟨hxcell, fun hi ↦ Set.disjoint_left.mp hclosed hi hx.2⟩
-    obtain ⟨s, hs⟩ := mem_side_of_mem_frontier o (fineScaleIndex k) z x hxfront
+    obtain ⟨s, hs⟩ := exists_dyadicCellSide_of_mem_frontier o (fineScaleIndex k) z x hxfront
     have hface := cellFanPolygon_inter_dyadicCellSide o (fineScaleIndex k) z split i s
     exact ⟨((Set.ext_iff.mp hface x).mp ⟨hx.1, hs⟩).1, hx.2⟩
   · intro x hx

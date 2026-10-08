@@ -1,0 +1,31 @@
+\section{Whole sides of a dyadic square}
+\label{sec:area_law_cell_sides}
+
+The primitive boundary analysis in \cite[Section~11]{OpenAI2026AreaLaw}
+uses whole square sides. Let $Q$ be an actual translated half-open dyadic
+square, with arbitrary origin, exponent and integer index, and let
+$S_0,S_1,S_2,S_3$ be its four closed whole sides.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% and geometry:initial-stars, lines 333--370, especially 352--359;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Every square frontier point lies on a whole side]
+    \label{thm:area_law_square_frontier_side}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_dyadicCellSide_of_mem_frontier}
+    \leanok
+    \uses{def:area_law_dyadic_cells,def:area_law_dyadic_cell_side}
+    For every $x\in\partial Q$, there is an index $s\in\{0,1,2,3\}$
+    such that $x\in S_s$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unsplit_side_endpoints}
+    Write $Q=[A,A')\times[B,B')$, where $A<A'$ and $B<B'$.
+    The product frontier identity gives
+    \begin{align}
+        \partial Q & =([A,A']\times\{B,B'\})
+        \cup(\{A,A'\}\times[B,B']).
+    \end{align}
+    These four closed segments are exactly the four whole sides,
+    by the established endpoint coordinates.
+\end{proof}
