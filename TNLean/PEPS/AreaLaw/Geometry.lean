@@ -15,6 +15,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
@@ -51,6 +52,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorAssignment
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorColors
+import TNLean.PEPS.AreaLaw.Geometry.InitialSectorCycle
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorRuns
 import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition

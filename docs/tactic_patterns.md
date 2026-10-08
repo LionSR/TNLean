@@ -5686,21 +5686,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   triangle's convex hull and the existing fan-cover theorem. Do not copy the
   marked-endpoint calculation into a third file.
 
-### First and last elementary endpoints — candidate (2026-10-08)
+### First and last elementary endpoints — promoted (2026-10-08)
 
-- **Pattern:** Unfold a fan endpoint and reduce its scalar parameter at the
-  first or last half-slot to identify the corresponding whole-side endpoint.
+- **Pattern:** Identify the first and last half-slot endpoints by specializing
+  the indexed affine parameters of a whole side.
 - **Seen:** `first_half_endpoints` and `last_half_endpoints` in
-  `Geometry/FanRunContacts.lean`. The earlier `first_last_reachable` proof in
-  `Geometry/FanRuns.lean` uses a related parameter reduction to identify the
-  common midpoint, rather than an outer endpoint.
-- **Abstraction:** The two outer-endpoint calculations are in one file. If a
-  further file needs either endpoint statement, prefer a shared geometric
-  lemma to another parameter calculation. The existing optional endpoint
-  classification already supplies the remaining midpoint identities.
-- **Notes:** The present contact proof reuses the promoted elementary-side
-  geometry and whole-side coordinate identities. It introduces no new
-  center-and-radius coordinate table.
+  `Geometry/FanRunContacts.lean`, and the two successor endpoint cases in
+  `Geometry/CellFanCycle.lean`.
+- **Abstraction:** `cellFan_elementary_endpoints_lineMap` in
+  `Geometry/SideSubdivisionMask.lean` exposes the existing full parameter
+  statement and proof unchanged. Both old private endpoint proofs and the
+  new successor proof specialize this pair. Their signatures and existing
+  callers are unchanged; no second scalar calculation is copied.
+- **Notes:** The related midpoint reachability step in `FanRuns.lean` has
+  a different conclusion and remains unchanged. The successor proof also
+  uses the existing whole-side coordinates at consecutive corners.
 
 ### Infinitude of a nondegenerate real segment — candidate (2026-10-08)
 

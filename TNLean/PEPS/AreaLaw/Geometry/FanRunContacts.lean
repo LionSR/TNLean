@@ -8,30 +8,6 @@ import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 
-/-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cell_fan_triangle_contact
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_nontrivial_inter_cases
-Source labels: prop:two-families
-Source: Section 11, lines 308–323.
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cell_fan_run_contact
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_contact_colors_ne
-Source labels: prop:two-families
-Source: Section 11, lines 313–323.
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
 
 /-!
 # Contacts between triangles and runs of one cell fan
@@ -43,9 +19,14 @@ Consequently, distinct equal-colored run regions have no nontrivial contact.
 The statements allow arbitrary origins, integer cell indices, and optional
 midpoint subdivisions; they do not require a choice of global colors.
 
+## References
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, lines 308–323, `prop:two-families`.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Manuscript file:
+`preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
+`build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
@@ -198,18 +179,8 @@ private theorem first_half_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
       cellFanEnd o ℓ z split i = midpoint ℝ
         (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
         (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩) := by
-  have ha : cellFanStart o ℓ z split i =
-      cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩ := by
-    dsimp only [cellFanStart]
-    congr 1
-    change (if split i.1 then (i.2.val : ℝ) - 1 else -1) = -1
-    simp [hs, hi]
-  rcases cellFan_elementary_endpoints_cases o ℓ z split i with
-    ⟨hf, _, _⟩ | ⟨_, _, hm⟩ | ⟨_, hm, _⟩
-  · simp [hs] at hf
-  · exact ⟨ha, hm⟩
-  · exact False.elim ((sbtw_midpoint_of_ne ℝ (whole_start_ne_end o ℓ z i.1)).ne_left
-      (hm.symm.trans ha))
+  simpa [hs, hi, midpoint, invOf_eq_inv] using
+    cellFan_elementary_endpoints_lineMap o ℓ z split i
 
 private theorem last_half_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split)
@@ -218,18 +189,8 @@ private theorem last_half_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ
         (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
         (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩) ∧
       cellFanEnd o ℓ z split i = cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩ := by
-  have hb : cellFanEnd o ℓ z split i =
-      cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩ := by
-    dsimp only [cellFanEnd]
-    congr 1
-    change (if split i.1 then (i.2.val : ℝ) else 1) = 1
-    simp [hs, hi]
-  rcases cellFan_elementary_endpoints_cases o ℓ z split i with
-    ⟨hf, _, _⟩ | ⟨_, _, hm⟩ | ⟨_, hm, _⟩
-  · simp [hs] at hf
-  · exact False.elim ((sbtw_midpoint_of_ne ℝ (whole_start_ne_end o ℓ z i.1)).ne_right
-      (hm.symm.trans hb))
-  · exact ⟨hm, hb⟩
+  simpa [hs, hi, midpoint, invOf_eq_inv] using
+    cellFan_elementary_endpoints_lineMap o ℓ z split i
 
 private theorem perimeter_inter_cases (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i j : CellFanSlot split) (hij : i ≠ j)

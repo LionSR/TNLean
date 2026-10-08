@@ -14,33 +14,17 @@ is a corner of an actual fine cell at or above the starting layer. Every such
 corner on a resulting elementary segment is an endpoint of that segment.
 The mask uses all actual fine cells, including the cells outside the belts.
 
+## References
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, lines 299–310.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Manuscript file:
+`preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
+`build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/10-geometry.tex
-Labels: prop:two-families.
-Source lines: 299–310.
-Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finelayersplitmask
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finelayersplitmask_eq_true_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfan_elementary_endpoints
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.cellfan_elementary_side_containment
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.finelayer_corner_on_elementaryside
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide
--/
 
 noncomputable section
 
@@ -89,7 +73,10 @@ private theorem side_interpolation (c : ℝ × ℝ) (r : ℝ) (s : Fin 4) (u : �
   rw [AffineMap.lineMap_apply_module]
   fin_cases s <;> apply Prod.ext <;> dsimp <;> norm_num <;> ring
 
-private theorem elementary_lineMap_eq (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+/-- The indexed elementary endpoints are the whole-side affine parametrization
+at the corresponding subdivision parameters. Source: Section 11,
+`prop:two-families`, lines 299–310. -/
+theorem cellFan_elementary_endpoints_lineMap (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split) :
     cellFanStart o ℓ z split i = AffineMap.lineMap
         (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
@@ -128,7 +115,7 @@ theorem cellFan_elementary_endpoints_cases (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ
     (split i.1 = true ∧ cellFanStart o ℓ z split i = midpoint ℝ a b ∧
       cellFanEnd o ℓ z split i = b) := by
   dsimp only
-  obtain ⟨hs, he⟩ := elementary_lineMap_eq o ℓ z split i
+  obtain ⟨hs, he⟩ := cellFan_elementary_endpoints_lineMap o ℓ z split i
   cases hm : split i.1
   · exact Or.inl ⟨rfl, by simpa [hm] using hs, by simpa [hm] using he⟩
   · have hj : i.2.val = 0 ∨ i.2.val = 1 := by

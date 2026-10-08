@@ -9,6 +9,51 @@ at indices at least $k_0$ participate in this construction.
 % Source: 10-geometry.tex, lines 299--310. Dummy-neighborhood corners
 % and opposing-region constancy are separate assertions.
 
+% Source: 10-geometry.tex, prop:two-families, lines 299--310;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This exposes the existing indexed affine interpolation assertion.
+% Its complete mathematical statement and proof are unchanged.
+
+\begin{theorem}[Indexed affine parameters of an elementary side]
+    \label{thm:area_law_indexed_side_interpolation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_lineMap}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Fix an arbitrary origin $o\in\mathbb R^2$, a natural exponent
+    $\ell$, and a signed integer cell index $z\in\mathbb Z^2$.
+    Choose any optional midpoint subdivisions of the cell sides.
+    Write $A_s,B_s$ for the ordered whole-side endpoints, and put
+    $L_s(u)=(1-u)A_s+uB_s$.
+    Let $\varepsilon_s\in\{0,1\}$ record whether side $s$ is divided.
+    Index its elementary segments by $h=0$ when $\varepsilon_s=0$,
+    and by $h\in\{0,1\}$ when $\varepsilon_s=1$.
+    Their initial and final endpoints satisfy
+    \begin{align}
+        a_{s,h}      & =L_s(\alpha_{s,h}), &
+        b_{s,h}      & =L_s(\beta_{s,h}),      \\
+        \alpha_{s,h} & =
+        \begin{cases}
+            0,   & \varepsilon_s=0, \\
+            h/2, & \varepsilon_s=1,
+        \end{cases}
+                     & \beta_{s,h}         & =
+        \begin{cases}
+            1,       & \varepsilon_s=0, \\
+            (h+1)/2, & \varepsilon_s=1.
+        \end{cases}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    Parametrize the whole side by a signed coordinate $u\in[-1,1]$.
+    Its affine parameter is $(u+1)/2$.
+    For an undivided side the initial and final signed coordinates are
+    $-1$ and $1$, giving parameters $0$ and $1$.
+    For half $h$ of a divided side they are $h-1$ and $h$, giving
+    parameters $h/2$ and $(h+1)/2$. The defining side coordinates give
+    the asserted ordered endpoint identities.
+\end{proof}
+
 \begin{theorem}[Geometry of an elementary side]
     \label{thm:area_law_elementary_side_geometry}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases,
@@ -23,7 +68,7 @@ at indices at least $k_0$ participate in this construction.
     $(u,v)=((a+b)/2,b)$. In every case $[u,v]\subseteq[a,b]$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:area_law_cell_fan}
+    \uses{thm:area_law_indexed_side_interpolation}
     In the affine parametrization of the whole side by $[0,1]$, the
     elementary endpoints have parameters $0,1$ for an undivided side,
     $0,1/2$ for the first half, and $1/2,1$ for the second half.
