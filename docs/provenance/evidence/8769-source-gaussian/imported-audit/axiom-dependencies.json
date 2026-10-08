@@ -1,0 +1,152 @@
+{
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceCoordinates": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceCoordinates_norm": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_local_schmidt_source_frames": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.SourceGaussianSamples": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLaw": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLawIsProbabilityMeasure": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_sourceGaussian_eval": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_selected_sourceGaussian": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.integrable_sampledSourceMatrix": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.integral_sampledSourceMatrix": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.exists_unbiased_sampledSourceMatrix": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceGaussianCorrection": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection_eq_transport": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.sourceCorrection_product_eq_selected": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.integrable_sourceCorrection_product_mul_conj": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceCorrection_product_mul_conj": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceCorrection_product_eq_zero": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.PairSource.exists_probability_schmidt_isometries": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.PartialSchmidtCoordinates": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv_apply": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtSourceVectors": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_eq_sum": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "MultilinearMap.map_piecewise_sum_smul": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ]
+}

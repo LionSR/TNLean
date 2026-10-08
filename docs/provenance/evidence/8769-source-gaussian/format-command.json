@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gaussian/scripts/latexindent",
+    "-l",
+    "/Users/siruilu/Local/agentFormalization/TNLean/worktrees/peps-source-gaussian/blueprint/latexindent.yaml",
+    "-w",
+    "-s",
+    "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tn-gaussian-format-205fmstt/ch24_peps_source_gaussian.tex"
+  ],
+  "returncode": 0,
+  "idempotent": true,
+  "source_path": "blueprint/src/chapter/ch24_peps_source_gaussian.tex",
+  "source_sha256": "2fec435ca853c1856a759952da36c4bddf0ae04fde0a21fb35a8c4f2455b68be",
+  "new_tags": 29
+}

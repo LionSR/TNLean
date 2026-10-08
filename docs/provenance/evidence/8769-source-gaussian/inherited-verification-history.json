@@ -1,0 +1,27 @@
+[
+  {
+    "shard": "docs/provenance/openai-math.d/8769-source-corrections.json",
+    "id": "8769-source-corrections-selectedsourcecontraction-01",
+    "previous_verification": {
+      "result": "passed",
+      "repository": "LionSR/TNLean",
+      "revision": "f932b80f1b67668584120403b983be0633f62602",
+      "commands": [
+        {
+          "kind": "build",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-source-corrections/artifacts/TNLean/PEPS/Approximation/SelectedSourceContraction.olean TNLean/PEPS/Approximation/SelectedSourceContraction.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-corrections/direct-build.log",
+          "sha256": "13b2af6c9d11f39ad1cb781f9b984fb35ddf7c29f867e7cc29ad98188d4fe011"
+        },
+        {
+          "kind": "axioms",
+          "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+          "exit_code": 0,
+          "log": "docs/provenance/evidence/8769-source-corrections/axioms.log",
+          "sha256": "84c06e5e7ab25c1f20fcfdac910f46f710768f0564f75a3c0213d0e33a50f1df"
+        }
+      ]
+    }
+  }
+]

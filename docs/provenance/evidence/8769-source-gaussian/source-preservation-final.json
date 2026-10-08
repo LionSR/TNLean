@@ -1,0 +1,55 @@
+{
+  "base_revision": "329d192af8c46f7ff540610de918d5179d13d46e",
+  "sources": [
+    {
+      "path": "TNLean/PEPS/Approximation/SourceCircuitSchmidtSources.lean",
+      "original_sha256": "65aefd075ab240369964a0e00a5ca95ac2ede59cc4a2c82149f4969a0a04f91e",
+      "production_sha256": "be2451645035c2d017f8b53eedc244d14747c665800f8b44f8ef9af63b485f61",
+      "preservation": "All noncomment tokens preserved."
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianLaw.lean",
+      "original_sha256": "d9be881c918b9f4d011401dacf0b6c53176eeba5a1a466856248b37051635ec1",
+      "production_sha256": "6b935ef1ae44f62c369baee987d71079ff760018ccd4e589a43c3b546422e3df",
+      "preservation": "All noncomment tokens preserved."
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianDensity.lean",
+      "original_sha256": "8b3bbf43cba1cb20872e83caa779aee7ba7b5466f6e6ed864f7b088f9f4c2cbb",
+      "production_sha256": "ea5fe7602814437dc3b2d7a5d23f7b83b122937ace1b11e91656828169deb8cb",
+      "preservation": "All noncomment tokens preserved."
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianCoefficients.lean",
+      "original_sha256": "c63de5e6ea77a80058e025af1ab4e8d023270a0381444cc4fb49a2fdcd623f2b",
+      "production_sha256": "805ab8728dc735e113d55d70847eb5fd12d4091f02d4d2247707c97f2fe2ef38",
+      "preservation": "All noncomment tokens preserved."
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/TensorSchmidtIsometries.lean",
+      "original_sha256": "2b1bc4612dabff2605fa0bc6af709bcc2f4bc99a2bba01c92b74a3ef929d3bd2",
+      "production_sha256": "0eeada93c42efa40bbe72f4d0ea24a161ff311925c41b4e8b03662929aa2a67b",
+      "preservation": "All noncomment tokens preserved."
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PreparedSourceTransport.lean",
+      "original_sha256": "dda53858b25ce9a2b8ad7e72c7d06b4a4631e37bd9fa48d3166c0f9043e32d39",
+      "production_sha256": "9dcbd486ccfca914f04ff8dab827af0cb40fb6416060ea9314435c881246c536",
+      "preservation": "Actual prepared-word theorem tokens unchanged except the shared lemma name; two generic lemmas moved to their owning libraries."
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SourceGaussianContraction.lean",
+      "original_sha256": "4747ed5425ea8cae08bab7f2a315962d6cf55126c92167e4b74e1861b022387c",
+      "production_sha256": "a278a4c2e3163f9a99e1da9a13bc380cd31698552e77a0a76b0f601e14b7c38c",
+      "preservation": "All noncomment tokens preserved."
+    },
+    {
+      "path": "TNLean/Algebra/MultilinearSelectedSum.lean",
+      "original_sha256": null,
+      "production_sha256": "c6e2d304f561b82b91e50684e640cf03c3897eac7469331770c207f885456a28",
+      "preservation": "Generic selected-argument lemma moved with the same proof body; namespace, name and direct imports adapted."
+    }
+  ],
+  "new_public_declarations": 29,
+  "existing_refactored_declarations": 1
+}
