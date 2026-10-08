@@ -216,6 +216,74 @@ means using $K=I\setminus Q$.
     claimed equality.
 \end{proof}
 
+\begin{definition}[Weyl product on a set of sites]
+    \label{def:qc_partial_weyl}
+    \uses{lem:qc_site_expectation_average}
+    \lean{QuantumCircuit.partialWeyl}
+    \leanok
+    Suppose $q>0$, let $S\subseteq I$, and let
+    $p\in(\Z/q\Z\times\Z/q\Z)^I$. For the on-site Weyl operators
+    $W(p_x)$, put $M_x=W(p_x)$ when $x\in S$ and
+    $M_x=\mathbb 1$ otherwise. Define
+    \begin{align}
+        P_S(p) & =\bigotimes_{x\in I}M_x.
+        \label{eq:qc_partial_weyl}
+    \end{align}
+    In particular, $P_{\varnothing}(p)=\mathbb 1$.
+\end{definition}
+
+\begin{theorem}[Unitarity and site insertion for Weyl products]
+    \label{thm:qc_partial_weyl_identities}
+    \uses{def:qc_partial_weyl,def:qc_local_circuit}
+    \lean{QuantumCircuit.partialWeyl_mem_unitary,
+        QuantumCircuit.outsideWeyl_eq_partialWeyl,
+        QuantumCircuit.partialWeyl_insert,
+        QuantumCircuit.partialWeyl_singleton_mem}
+    \leanok
+    Suppose $q>0$. Every $P_S(p)$ is unitary. The Weyl product
+    $W_K(p)$ with factors $W(p_x)$ off $K$ and the identity on $K$ satisfies
+    $W_K(p)=P_{I\setminus K}(p)$, and
+    $P_{\{y\}}(p)\in\mathcal A_{\{y\}}$ for every $y\in I$.
+    If $y\notin S$, then
+    \begin{align}
+        P_{S\cup\{y\}}(p) & =P_{\{y\}}(p)P_S(p).
+        \label{eq:qc_partial_weyl_insert}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:qc_partial_weyl,def:qc_local_circuit}
+    Each tensor factor $M_x$ is unitary. Taking adjoints and multiplying
+    factor by factor gives $P_S(p)^\dagger P_S(p)=\mathbb 1$ and
+    $P_S(p)P_S(p)^\dagger=\mathbb 1$.
+    The complementary-set identity follows because both products have
+    factor $\mathbb 1$ on $K$ and $W(p_x)$ off $K$.
+    The singleton product has identity factors off $\{y\}$, so it is
+    supported there. For~(\ref{eq:qc_partial_weyl_insert}), the factor
+    at $y$ on the right is $W(p_y)\mathbb 1$. At every other site it is
+    $\mathbb 1\,M_x$. These are the factors on the left.
+\end{proof}
+
+\begin{theorem}[Commutator with a product of unitaries]
+    \label{thm:qc_unitary_product_commutator}
+    \lean{QuantumCircuit.norm_commutator_mul_le}
+    \leanok
+    Let $R$ be a normed star ring satisfying the $C^*$-identity. For
+    $B\in R$ and unitaries $U,V\in R$,
+    \begin{align}
+        \|[B,UV]\| & \le\|[B,U]\|+\|[B,V]\|.
+        \label{eq:qc_unitary_product_commutator}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand $[B,UV]=[B,U]V+U[B,V]$. The triangle inequality and
+    invariance of the norm under left or right multiplication by a
+    unitary give
+    $\|[B,UV]\|\le\|[B,U]V\|+\|U[B,V]\|
+        =\|[B,U]\|+\|[B,V]\|$.
+\end{proof}
+
 \begin{theorem}[Amplified Weyl averaging formula]
     \label{thm:qc_spectator_average}
     \uses{def:qc_spectator_expectation,lem:qc_site_expectation_average}
@@ -252,8 +320,9 @@ means using $K=I\setminus Q$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:qc_spectator_average}
-    Every $\widehat{W_K(p)}$ is unitary, so each summand in
+    \uses{thm:qc_spectator_average,thm:qc_partial_weyl_identities}
+    By Theorem~\ref{thm:qc_partial_weyl_identities}, every
+    $\widehat{W_K(p)}$ is unitary, so each summand in
     (\ref{eq:qc_spectator_average}) has norm $\|B\|$.
     There are $q^{2|I|}$ labels. The triangle inequality and the
     normalization $q^{-2|I|}q^{2|I|}=1$ give the result.
@@ -275,11 +344,18 @@ means using $K=I\setminus Q$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:qc_spectator_average}
+    \uses{thm:qc_spectator_average,def:qc_partial_weyl,
+        thm:qc_partial_weyl_identities,thm:qc_unitary_product_commutator}
     For unitaries $V,W$ on $\mathcal H\otimes\mathcal K$,
     $[B,VW]=[B,V]W+V[B,W]$ and hence
-    $\|[B,VW]\|\le\|[B,V]\|+\|[B,W]\|$.
-    Induction over the sites outside $K$ bounds the commutator with
+    $\|[B,VW]\|\le\|[B,V]\|+\|[B,W]\|$ by
+    Theorem~\ref{thm:qc_unitary_product_commutator}.
+    Starting from $P_{\varnothing}(p)=\mathbb 1$, use the insertion
+    identity~(\ref{eq:qc_partial_weyl_insert}) and the unitary,
+    single-site support properties of
+    Theorem~\ref{thm:qc_partial_weyl_identities}.
+    Induction over the sites outside $K$, with the identity on the
+    spectator throughout, bounds the commutator with
     $\widehat{W_K(p)}$ by $\sum_{y\notin K}\varepsilon_y$.
     With $V=\widehat{W_K(p)}$, unitarity gives
     \begin{align}

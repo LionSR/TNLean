@@ -1,14 +1,15 @@
-% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 101--139 and 173,
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 101--155 and 173,
 % openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % Checked declarations: LocalChannelOscillation at 436daa61 and
 % ExponentialChannelShells at 73381fcb; SpectatorOscillationSupport at 54772a7c.
 % GraphChannelOscillation production passed native compilation at 02ec325d.
+% GraphChannelEventKernel is checked at 12209d14.
 % This leaf covers initial support, finite-radius physical shells, and
-% one-event increments, including full channels with exact component support.
-% It does not assert an infinite-radius limit or propagation under
-% retained Poisson clocks.
+% one-event and finite event-family increments with exact component support.
+% It does not assert a weighted row bound, an infinite-radius limit, or
+% propagation under retained Poisson clocks.
 
-\section{Finite one-event oscillation bounds}
+\section{Finite channel oscillation bounds}
 \label{sec:al_channel_propagation}
 
 Use the physical space $\mathcal H=(\C^q)^{\otimes I}$, with $q>0$,
@@ -375,4 +376,97 @@ in~(\ref{eq:qc_component_root_channel}).
     Theorem~\ref{thm:qc_component_channel_stabilization}.
     Substitute this identity into~(\ref{eq:al_propagation_exp_increment})
     and rewrite $y\in N_l(a)$ as $d_G(a,y)\le l$.
+\end{proof}
+
+\subsection{Finite families of channel events}
+
+Let $F$ be a finite set of event labels, with an anchor $a_i\in I$
+for each $i\in F$. The anchors need not be distinct. For $l\in\N$
+and $y,z\in I$, set
+\begin{align}
+    \label{eq:al_propagation_ball_count}
+    m_l(y,z) & =\bigl|\{i\in F:y,z\in N_l(a_i)\}\bigr|.
+\end{align}
+This counts labels, so distinct labels at the same anchor contribute
+separately.
+
+\begin{theorem}[Finite shell sums as counts of labels]
+    \label{thm:al_graph_shell_sum_cardinality}
+    \lean{TNLean.PEPS.AreaLaw.sum_graphBall_shell_eq_sum_card}
+    \leanok
+    Let $(w_l)_{l\ge0}$ be any real sequence and let
+    $(v_z)_{z\in I}$ be any family of real numbers. For every
+    $n\in\N$ and $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_shell_count}
+        \sum_{i\in F}\sum_{0\le l\le n,\ d_G(a_i,y)\le l}
+        w_l\sum_{z\in N_l(a_i)}v_z
+         & =\sum_{l=0}^{n}w_l\sum_{z\in I}m_l(y,z)v_z.
+    \end{align}
+    Both the weights $w_l$ and the site values $v_z$ may have either
+    sign.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Replace the radius filter by the indicator of $y\in N_l(a_i)$
+    and interchange the finite sums over $i$ and $l$. For each
+    fixed radius, interchange the finite sums over labels and sites:
+    \begin{align}
+        \label{eq:al_propagation_count_reorder}
+        \sum_{i\in F}\mathbf1_{N_l(a_i)}(y)
+        \sum_{z\in N_l(a_i)}v_z
+         & =\sum_{z\in I}\left(\sum_{i\in F}
+        \mathbf1_{N_l(a_i)}(y)\mathbf1_{N_l(a_i)}(z)\right)v_z.
+    \end{align}
+    The inner sum on the right of
+    (\ref{eq:al_propagation_count_reorder}) is $m_l(y,z)$ by
+    (\ref{eq:al_propagation_ball_count}). Multiply by $w_l$ and sum
+    over $0\le l\le n$ to obtain~(\ref{eq:al_propagation_shell_count}).
+\end{proof}
+
+\begin{theorem}[Sum of full-channel oscillation increments]
+    \label{thm:al_graph_event_increment_cardinality}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,
+        def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_exp_card}
+    \leanok
+    For each $i\in F$, let $k_i$ be a positive contraction supported
+    on $C(a_i)$, and let $\mathcal E_i=\mathcal E_{k_i}$ be its full
+    root channel. Let $C\ge0$, $c>0$, and $0<\alpha\le1$, and use
+    $A,b$ from~(\ref{eq:al_propagation_exp_constants}).
+    Fix a common cutoff $n\in\N$ satisfying $n\ge R_{a_i}$ for
+    every $i\in F$. Suppose that, for every $i\in F$ and every
+    integer $l$ with $0\le l\le n$,
+    \begin{align}
+        \label{eq:al_propagation_family_error}
+        \|k_i-E_{N_l(a_i)}(k_i)\| & \le C\exp(-cl^\alpha).
+    \end{align}
+    Then, for every $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_family_increment}
+        \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
+         & \le2A\sum_{l=0}^{n}\exp(-bl^\alpha)
+        \sum_{z\in I}m_l(y,z)d_z(B).
+    \end{align}
+    Each channel and every site oscillation on the right act on the
+    same original operator $B$. The estimate holds for arbitrary
+    finite spectators and arbitrary complex $B$. This is the finite
+    event-label sum in \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_graph_channel_exp_increment,
+        thm:al_graph_shell_sum_cardinality}
+    Apply Theorem~\ref{thm:al_graph_channel_exp_increment} to each
+    $k_i$ with the common cutoff $n$. Subtract $d_y(B)$ from each
+    resulting inequality and sum over $i\in F$:
+    \begin{align}
+        \label{eq:al_propagation_family_shells}
+        \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
+         & \le2\sum_{i\in F}\sum_{0\le l\le n,\ d_G(a_i,y)\le l}
+        A\exp(-bl^\alpha)\sum_{z\in N_l(a_i)}d_z(B).
+    \end{align}
+    Use~(\ref{eq:al_propagation_shell_count}) with
+    $w_l=A\exp(-bl^\alpha)$ and $v_z=d_z(B)$ in
+    (\ref{eq:al_propagation_family_shells}), and factor out $A$.
 \end{proof}
