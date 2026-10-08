@@ -109,9 +109,6 @@ theorem projProd_eq_sum_cylProd :
     change p.proj * projProd l = ∑ s : p.Tag × PatchTags l, p.cyl s.1 * cylProd l s.2
     rw [projProd_eq_sum_cylProd l, SquarePatch.proj, Finset.sum_mul_sum, Fintype.sum_prod_type]
 
-theorem card_tag (p : SquarePatch pos q) : Fintype.card p.Tag = ∑ j, p.dim j := by
-  simp [SquarePatch.Tag, Fintype.card_sigma]
-
 theorem card_patchTags_le {D : ℕ} :
     (l : List (SquarePatch pos q)) → (∀ p ∈ l, Fintype.card p.Tag ≤ D) →
       Fintype.card (PatchTags l) ≤ D ^ l.length

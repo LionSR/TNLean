@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
+import TNLean.PEPS.Approximation.HoleEncoder
 
 /-!
 # Encoded frames
@@ -22,6 +23,9 @@ vectors `v_{jℓ}` on the sites of `D_j`, and mutually orthogonal cylinder proje
 `|v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1`. Their sum is the projector `P_{c,h}`. With the product zero vector
 `|0⟩^{⊗ D_j}` the *hole encoder* is
 `K_{c,h} = ∑_{j,ℓ} |j, ℓ⟩ ⊗ (|0⟩^{⊗ D_j}⟨v_{jℓ}| ⊗ 1)`, and `K_{c,h}ᴴ K_{c,h} = P_{c,h}`.
+Following the manuscript, a square whose outer sample is empty has one tag, its projector is the
+identity, and its encoder is the identity encoding; this convention is part of the definitions
+of `SquarePatch.Tag`, `SquarePatch.proj` and `SquarePatch.encoder`.
 
 An encoded frame is a raw ownership assignment together with a list of holes, each carrying
 its square-patch data and the party that holds its tag, with pairwise disjoint outer samples.
@@ -45,6 +49,8 @@ encoders; its reference vector is `Ω_F = K_F Ω`. Disjoint holes commute, so
 
 ## Main results
 
+* `EncodedFrame.SquarePatch.proj_of_outer_eq_empty`,
+  `EncodedFrame.SquarePatch.encoder_submatrix_of_outer_eq_empty`: the empty-outer convention.
 * `EncodedFrame.SquarePatch.encoder_conjTranspose_mul_self`,
   `EncodedFrame.SquarePatch.norm_encoder_le_one`: `K_{c,h}ᴴ K_{c,h} = P_{c,h}` and
   `‖K_{c,h}‖ ≤ 1` (`eq:encoder-contraction`).
@@ -56,7 +62,8 @@ encoders; its reference vector is `Ω_F = K_F Ω`. Disjoint holes commute, so
 
 * Polynomial-PEPS manuscript (September 24, 2026), §6.1, `05-frames.tex`, lines 11–97:
   sheets (lines 13–19), squares and the projector `eq:hole-projector` (lines 26–48), the hole
-  encoder `eq:hole-encoder` and `eq:encoder-contraction` (lines 50–69), Definition 6.1
+  encoder `eq:hole-encoder` and `eq:encoder-contraction` with the empty-outer convention
+  (lines 50–69), Definition 6.1
   `def:frame` (lines 71–82), and `eq:frame-norm` (lines 84–94). The cylinder data are those of
   Proposition 4.1 `prop:patch`, `03-patches.tex`, lines 24–49.
 
@@ -295,28 +302,65 @@ theorem sample_subset_outer (j : Fin p.n) : p.sample j ⊆ p.outer :=
 theorem inner_subset_outer : p.inner ⊆ p.outer :=
   squareSample_mono pos p.center (by linarith [p.scale_pos])
 
-/-- The tag register basis: the pairs `(j, ℓ)`. -/
-abbrev Tag : Type := (j : Fin p.n) × Fin (p.dim j)
+/-- The tag register basis. When the outer sample is nonempty, it is the set of pairs `(j, ℓ)`.
+When the outer sample is empty, it is a single identity tag, and the cylinder data are not used.
 
-/-- The cylinder projector `|v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1`. -/
-def cyl (s : p.Tag) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  siteLift (p.sample s.1) (rankOne (p.vec s.1 s.2))
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 50–69; the empty-outer convention is lines
+67–69: "If the outer square has empty physical sample, we use the identity encoding with a
+one-dimensional tag." -/
+abbrev Tag : Type :=
+  {_u : Unit // p.outer = ∅} ⊕ {_s : (j : Fin p.n) × Fin (p.dim j) // p.outer.Nonempty}
 
-/-- The projector `P_{c,h} = ∑_{j,ℓ} |v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1`. -/
+/-- The cylinder projector `|v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1` at a tag `(j, ℓ)`, and the identity at
+the identity tag of an empty outer sample. -/
+def cyl : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
+  | .inl _ => 1
+  | .inr s => siteLift (p.sample s.1.1) (rankOne (p.vec s.1.1 s.1.2))
+
+/-- The projector `P_{c,h} = ∑_{j,ℓ} |v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1`; it is the identity when the
+outer sample is empty. -/
 def proj : Matrix (ι → Fin q) (ι → Fin q) ℂ := ∑ s, p.cyl s
 
-/-- The raw part `|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1` of the hole encoder at the tag `(j, ℓ)`. -/
-def branch [NeZero q] (s : p.Tag) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  siteLift (p.sample s.1) (vecMulVec (zeroVec (p.sample s.1)) (star ⇑(p.vec s.1 s.2)))
+/-- The raw part `|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1` of the hole encoder at the tag `(j, ℓ)`, and
+the identity at the identity tag of an empty outer sample. -/
+def branch [NeZero q] : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
+  | .inl _ => 1
+  | .inr s => siteLift (p.sample s.1.1)
+      (vecMulVec (zeroVec (p.sample s.1.1)) (star ⇑(p.vec s.1.1 s.1.2)))
+
+/-- A patch with empty outer sample has exactly one tag. -/
+theorem card_tag_of_outer_eq_empty (h : p.outer = ∅) : Fintype.card p.Tag = 1 := by
+  simp [Fintype.card_sum, Fintype.card_subtype, h]
+
+/-- With nonempty outer sample, the tags are the pairs `(j, ℓ)`. -/
+theorem card_tag_of_outer_nonempty (h : p.outer.Nonempty) :
+    Fintype.card p.Tag = ∑ j, p.dim j := by
+  simp [Fintype.card_sum, Fintype.card_subtype, h.ne_empty, h, Fintype.card_sigma]
+
+/-- **Empty outer sample.** The projector is the identity. -/
+theorem proj_of_outer_eq_empty (h : p.outer = ∅) : p.proj = 1 := by
+  have hn : ¬ p.outer.Nonempty := Finset.not_nonempty_iff_eq_empty.mpr h
+  have : IsEmpty {_s : (j : Fin p.n) × Fin (p.dim j) // p.outer.Nonempty} :=
+    ⟨fun s => hn s.2⟩
+  have : Unique {_u : Unit // p.outer = ∅} := ⟨⟨⟨(), h⟩⟩, fun _ => Subtype.ext rfl⟩
+  simp [proj, Fintype.sum_sum_type, cyl]
 
 theorem cyl_conjTranspose (s : p.Tag) : (p.cyl s)ᴴ = p.cyl s := by
-  rw [cyl, siteLift_conjTranspose, rankOne_conjTranspose]
+  cases s with
+  | inl _ => exact conjTranspose_one
+  | inr s => rw [cyl, siteLift_conjTranspose, rankOne_conjTranspose]
 
 theorem cyl_mul_self (s : p.Tag) : p.cyl s * p.cyl s = p.cyl s := by
-  rw [cyl, siteLift_mul, rankOne_mul_self (p.norm_vec _ _)]
+  cases s with
+  | inl _ => exact mul_one _
+  | inr s => rw [cyl, siteLift_mul, rankOne_mul_self (p.norm_vec _ _)]
 
-theorem cyl_mul_cyl_of_ne {s s' : p.Tag} (h : s ≠ s') : p.cyl s * p.cyl s' = 0 :=
-  p.orthogonal s s' h
+theorem cyl_mul_cyl_of_ne {s s' : p.Tag} (h : s ≠ s') : p.cyl s * p.cyl s' = 0 := by
+  rcases s with s | s <;> rcases s' with s' | s'
+  · exact absurd (congrArg Sum.inl (Subsingleton.elim s s')) h
+  · exact absurd s'.2 (Finset.not_nonempty_iff_eq_empty.mpr s.2)
+  · exact absurd s.2 (Finset.not_nonempty_iff_eq_empty.mpr s'.2)
+  · exact p.orthogonal s.1 s'.1 fun he => h (congrArg Sum.inr (Subtype.ext he))
 
 /-- `P_{c,h}` is an orthogonal projection. -/
 theorem proj_isStarProjection : IsStarProjection p.proj := by
@@ -336,19 +380,25 @@ theorem norm_proj_le_one : ‖p.proj‖ ≤ 1 :=
 
 theorem branch_conjTranspose_mul_self [NeZero q] (s : p.Tag) :
     (p.branch s)ᴴ * p.branch s = p.cyl s := by
+  rcases s with s | s
+  · simp [branch, cyl]
   rw [branch, siteLift_conjTranspose, siteLift_mul, conjTranspose_vecMulVec,
     Matrix.vecMulVec_mul_vecMulVec, star_star, star_zeroVec_dotProduct_zeroVec, one_smul, cyl,
     rankOne]
 
 theorem cyl_mem_supportedOperators (s : p.Tag) :
-    p.cyl s ∈ supportedOperators q (p.outer : Set ι) :=
-  supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1))
-    (siteLift_mem_supportedOperators _ _)
+    p.cyl s ∈ supportedOperators q (p.outer : Set ι) := by
+  rcases s with s | s
+  · exact one_mem_supportedOperators _
+  · exact supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
+      (siteLift_mem_supportedOperators _ _)
 
 theorem branch_mem_supportedOperators [NeZero q] (s : p.Tag) :
-    p.branch s ∈ supportedOperators q (p.outer : Set ι) :=
-  supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1))
-    (siteLift_mem_supportedOperators _ _)
+    p.branch s ∈ supportedOperators q (p.outer : Set ι) := by
+  rcases s with s | s
+  · exact one_mem_supportedOperators _
+  · exact supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
+      (siteLift_mem_supportedOperators _ _)
 
 theorem proj_mem_supportedOperators : p.proj ∈ supportedOperators q (p.outer : Set ι) :=
   Submodule.sum_mem _ fun s _ => p.cyl_mem_supportedOperators s
@@ -405,6 +455,16 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 61–63. -/
 theorem norm_encoder_le_one [NeZero q] : ‖p.encoder‖ ≤ 1 :=
   l2_opNorm_le_one_of_conjTranspose_mul_self_le_one
     (by rw [encoder_conjTranspose_mul_self]; exact p.norm_proj_le_one)
+
+/-- **Empty outer sample.** The hole encoder is the identity encoding with a one-dimensional
+tag, `identityHoleEncoder`, read on the sole tag.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 67–69. -/
+theorem encoder_submatrix_of_outer_eq_empty [NeZero q] (h : p.outer = ∅) :
+    p.encoder.submatrix (fun x : PUnit.{1} × (ι → Fin q) => (Sum.inl ⟨(), h⟩, x.2)) id =
+      identityHoleEncoder := by
+  ext ⟨u, σ⟩ τ
+  simp [encoder, branch, identityHoleEncoder, Matrix.one_apply]
 
 end SquarePatch
 

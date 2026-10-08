@@ -22,8 +22,10 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SquarePatch,
         TNLean.PEPS.EncodedFrame.SquarePatch.inner,
         TNLean.PEPS.EncodedFrame.SquarePatch.outer,
+        TNLean.PEPS.EncodedFrame.SquarePatch.Tag,
         TNLean.PEPS.EncodedFrame.SquarePatch.cyl,
-        TNLean.PEPS.EncodedFrame.SquarePatch.proj}
+        TNLean.PEPS.EncodedFrame.SquarePatch.proj,
+        TNLean.PEPS.EncodedFrame.SquarePatch.proj_of_outer_eq_empty}
     \leanok
     For a center $c\in\R^2$ and a scale $h>0$, the inner and outer squares
     $Q^-(c,h)$ and $Q^+(c,h)$ are the closed sup-norm balls of radii $h$ and
@@ -39,7 +41,8 @@ norm of matrices, rectangular ones included.
         \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id .
     \]
     Every $D_j$ contains the inner sample and is contained in the outer
-    sample. This is the projector of \texttt{05-frames.tex}, lines 26--48,
+    sample. If the outer sample is empty, then $P_{c,h}=\id$, whatever the
+    cylinder data. This is the projector of \texttt{05-frames.tex}, lines 26--48,
     with the cylinder data of \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS};
     the accuracy $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$ enters as
     a hypothesis where it is used. The polynomial bound on $\sum_jd_j$ is not
@@ -51,7 +54,9 @@ norm of matrices, rectangular ones included.
     \label{def:peps_frame_hole_encoder}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.branch,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder,
-        TNLean.PEPS.EncodedFrame.stack}
+        TNLean.PEPS.EncodedFrame.stack,
+        TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_of_outer_eq_empty,
+        TNLean.PEPS.EncodedFrame.SquarePatch.encoder_submatrix_of_outer_eq_empty}
     \leanok
     \uses{def:peps_frame_square_patch}
     Let $\mathcal J_{c,h}$ be a tag register with orthonormal basis
@@ -63,7 +68,9 @@ norm of matrices, rectangular ones included.
             \otimes\id\bigr]
         \colon\mathcal H_\Lambda\to\mathcal J_{c,h}\otimes\mathcal H_\Lambda .
     \]
-    It keeps a raw register at every site, inside the hole as well.
+    It keeps a raw register at every site, inside the hole as well. If the
+    outer sample is empty, the tag register is one-dimensional and $K_{c,h}$
+    is the identity encoding, as in \texttt{05-frames.tex}, lines 67--69.
 \end{definition}
 
 \begin{lemma}[Encoders are contractions]
@@ -80,7 +87,9 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    Each cylinder projector is Hermitian and idempotent because $v_{j\ell}$
+    If the outer sample is empty, $K_{c,h}$ is the identity encoding and all
+    three claims are immediate. Otherwise, each cylinder projector is Hermitian
+    and idempotent because $v_{j\ell}$
     is a unit vector, and products of distinct cylinder projectors vanish by
     orthogonality; hence $P_{c,h}$ is an orthogonal projection. Orthogonality
     of the tag basis gives
