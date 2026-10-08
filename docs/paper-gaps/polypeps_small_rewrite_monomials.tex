@@ -113,6 +113,21 @@ identities as untouched registers. The approximation statement is therefore
 formalized with the product terms in explicit tensor form, and the clause ``a
 polynomial expansion into allowed monomials'' is stated only through that form.
 
+The count of terms is also not yet polynomial in $L$. The formal statement
+gives at most $k^{2m}$ product terms per branch with
+$k=\lceil(4Nm/\delta)^2\rceil+1$, where $N$ is the number of branches. The
+branch count is bounded by $D^{\,r_{\rm new}+m+r_{\rm old}}$ when every
+affected hole and every patch has at most $D$ cylinder terms.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le}.}
+The source's bound $N\le L^{C_1}$ (lines~331--332) and its total
+$Nk^{g_0}$ (lines~341--342) need two further inputs that the formal data
+do not carry: (a) $D\le CL^{c}$, which is the polynomial bound on the number
+$\sum_jd_j$ of cylinder terms of Proposition~4.1 (the formal patches record
+the cylinder data but not this bound); and (b) bounded $m$, $r_{\rm old}$ and
+$r_{\rm new}$, which the source has from the bounded number of affected holes
+and patches. With both, $N$ and $k$ are polynomial in $L$ for $\delta=L^{-a}$,
+and so is the total number of terms.
+
 The formal frames record the pairwise disjointness of the physical outer
 footprints of holes rather than of the outer squares in the plane; the source
 condition implies the formal one, so this is a generalization. The rewrite is
@@ -134,7 +149,20 @@ covectors on the open input groups (pair effects on the two old owners, or
 private maps for one owner), the zero bras and tag bras as private maps, then
 the zero kets and tag kets and the normalized group vectors on the open output
 groups (pair sources on the two new owners, or private maps), framed by the
-untouched registers. The approximation theorem above then yields the second
-assertion of Lemma~6.3 with allowed monomials.
+untouched registers. Read the explicit matrices with the front-register
+calculus already used for Lemmas~6.5 and~6.6, which identifies one or two
+Euclidean registers at the front of a layout with a coordinate space and
+evaluates a local map given by a matrix as that matrix tensored with the
+identity of the remaining registers,\footnote{%
+\leanid{TNLean.PEPS.PairEffect.matL},
+\leanid{TNLean.PEPS.PairEffect.oneIso},
+\leanid{TNLean.PEPS.PairEffect.twoIso},
+\leanid{TNLean.PEPS.PairEffect.eval_localMap}.}
+rather than a separate construction. For the polynomial count, carry the bound
+$\sum_jd_j\le CL^{c}$ of Proposition~4.1 on the patch and hole data, or state
+the source-labelled theorem with an explicit hypothesis $D\le CL^{c}$ on the
+number of cylinder terms, together with bounds on $m$, $r_{\rm old}$ and
+$r_{\rm new}$. The approximation theorem above then yields the second
+assertion of Lemma~6.3 with polynomially many allowed monomials.
 
 \end{document}

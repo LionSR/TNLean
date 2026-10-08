@@ -33,9 +33,13 @@ of normalized vectors and covectors on the open-leg groups of the patch vertices
 most two parties of the specified list), of product zero vectors on the selected hole squares, of
 tag basis vectors, and of identities (`SiteChain.termOp_apply`); their identification with the
 operators of allowed monomials (`PairEffect.PartyChain`) on a layout of the frame's registers by
-owner, with one register per site and per tag, is not constructed. Documented in
+owner, with one register per site and per tag, is not constructed. The number of terms is
+bounded through the number `N` of branches only (`card_branch_le`); it becomes polynomial in `L`
+with the cylinder-term bound of Proposition 4.1, which the patch data do not record, and bounded
+numbers of patches and affected holes. Documented in
 `docs/paper-gaps/polypeps_small_rewrite_monomials.tex`. Elimination: construct that register
-layout and write each product term as an allowed party chain on it.
+layout, write each product term as an allowed party chain on it with the front-register calculus
+(`PairEffect.eval_localMap`), and carry the cylinder-term bound.
 
 ## Main definitions
 
@@ -44,8 +48,6 @@ layout and write each product term as an allowed party chain on it.
 * `EncodedFrame.SmallPatchRewrite.branchSteps`, `EncodedFrame.SmallPatchRewrite.branchChain`: the
   steps of a branch.
 * `EncodedFrame.SmallPatchRewrite.patchVertices`: the bra and ket vertices of the patch terms.
-* `EncodedFrame.SmallPatchRewrite.liftBranch`: `|a⟩⟨b| ⊗ Y`, extended by the identity on the
-  untouched tags.
 
 ## Main results
 
@@ -79,66 +81,60 @@ open SiteChain WholeGroup
 
 variable {ι : Type*} {q : ℕ}
 
-/-! ### Chains given by lists -/
+/-! ### Chains given by lists
 
-/-- The chain of the steps of a list, the head of the list being applied last. -/
-def listChain (L : List (Step ι q)) : Fin L.length → Step ι q := fun i => L[i.1]
+The chain of the steps of a list `L` is `L.get`, the head of the list being applied last. -/
 
 section ThreeParts
 
 variable (A B C : List (Step ι q))
 
-theorem listChain_mem_left (i : Fin (A ++ B ++ C).length) (hi : (i : ℕ) < A.length) :
-    listChain (A ++ B ++ C) i ∈ A := by
-  simp only [listChain]
+theorem get_append₃_mem_left (i : Fin (A ++ B ++ C).length) (hi : (i : ℕ) < A.length) :
+    (A ++ B ++ C).get i ∈ A := by
+  simp only [List.get_eq_getElem]
   rw [List.getElem_append_left (by simp; omega), List.getElem_append_left hi]
   exact List.getElem_mem _
 
-theorem listChain_mem_mid (i : Fin (A ++ B ++ C).length) (hi₁ : A.length ≤ i)
-    (hi₂ : (i : ℕ) < A.length + B.length) : listChain (A ++ B ++ C) i ∈ B := by
-  simp only [listChain]
+theorem get_append₃_mem_mid (i : Fin (A ++ B ++ C).length) (hi₁ : A.length ≤ i)
+    (hi₂ : (i : ℕ) < A.length + B.length) : (A ++ B ++ C).get i ∈ B := by
+  simp only [List.get_eq_getElem]
   rw [List.getElem_append_left (by simp; omega), List.getElem_append_right hi₁]
   exact List.getElem_mem _
 
-theorem listChain_mem_right (i : Fin (A ++ B ++ C).length) (hi : A.length + B.length ≤ i) :
-    listChain (A ++ B ++ C) i ∈ C := by
-  simp only [listChain]
+theorem get_append₃_mem_right (i : Fin (A ++ B ++ C).length) (hi : A.length + B.length ≤ i) :
+    (A ++ B ++ C).get i ∈ C := by
+  simp only [List.get_eq_getElem]
   rw [List.getElem_append_right (by simp; omega)]
   exact List.getElem_mem _
 
-theorem exists_listChain_eq_mid {s : Step ι q} (hs : s ∈ B) :
+theorem exists_get_append₃_eq_mid {s : Step ι q} (hs : s ∈ B) :
     ∃ i : Fin (A ++ B ++ C).length, A.length ≤ (i : ℕ) ∧ (i : ℕ) < A.length + B.length ∧
-      listChain (A ++ B ++ C) i = s := by
+      (A ++ B ++ C).get i = s := by
   obtain ⟨p, hp, rfl⟩ := List.getElem_of_mem hs
   refine ⟨⟨A.length + p, by simp; omega⟩, by simp, by simp; omega, ?_⟩
-  simp only [listChain]
+  simp only [List.get_eq_getElem]
   rw [List.getElem_append_left (by simp; omega), List.getElem_append_right (by simp)]
   simp
 
-theorem exists_listChain_eq_right {s : Step ι q} (hs : s ∈ C) :
+theorem exists_get_append₃_eq_right {s : Step ι q} (hs : s ∈ C) :
     ∃ i : Fin (A ++ B ++ C).length, A.length + B.length ≤ (i : ℕ) ∧
-      listChain (A ++ B ++ C) i = s := by
+      (A ++ B ++ C).get i = s := by
   obtain ⟨p, hp, rfl⟩ := List.getElem_of_mem hs
   refine ⟨⟨A.length + B.length + p, by simp; omega⟩, by simp, ?_⟩
-  simp only [listChain]
+  simp only [List.get_eq_getElem]
   rw [List.getElem_append_right (by simp)]
   simp
 
-theorem exists_listChain_eq_left {s : Step ι q} (hs : s ∈ A) :
-    ∃ i : Fin (A ++ B ++ C).length, (i : ℕ) < A.length ∧ listChain (A ++ B ++ C) i = s := by
+theorem exists_get_append₃_eq_left {s : Step ι q} (hs : s ∈ A) :
+    ∃ i : Fin (A ++ B ++ C).length, (i : ℕ) < A.length ∧ (A ++ B ++ C).get i = s := by
   obtain ⟨p, hp, rfl⟩ := List.getElem_of_mem hs
   refine ⟨⟨p, by simp; omega⟩, hp, ?_⟩
-  simp only [listChain]
+  simp only [List.get_eq_getElem]
   rw [List.getElem_append_left (by simp; omega), List.getElem_append_left hp]
 
 end ThreeParts
 
 /-! ### Tag blocks -/
-
-/-- A matrix `Y` on the raw registers placed in the tag block `(a, b)`: `|a⟩⟨b| ⊗ Y`. -/
-def tagLift {S T m : Type*} [DecidableEq S] [DecidableEq T] (a : S) (b : T) (Y : Matrix m m ℂ) :
-    Matrix (S × m) (T × m) ℂ :=
-  Matrix.of fun x y => if x.1 = a ∧ y.1 = b then Y x.2 y.2 else 0
 
 theorem norm_stack_indicator_le_one {U m : Type*} [Fintype U] [Fintype m] [DecidableEq U]
     [DecidableEq m] (c : U) :
@@ -176,12 +172,8 @@ theorem SquarePatch.exists_mem_sample_of_mem_tagSample (p : SquarePatch pos q) {
 
 variable [NeZero q]
 
-theorem chainOp_listChain (L : List (Step ι q)) :
-    chainOp (listChain L) = (L.map Step.op).prod := by
-  rw [chainOp]
-  congr 1
-  conv_rhs => rw [← List.ofFn_getElem (xs := L)]
-  rw [List.map_ofFn]
+theorem chainOp_get (L : List (Step ι q)) : chainOp L.get = (L.map Step.op).prod := by
+  conv_rhs => rw [← List.ofFn_get L, List.map_ofFn]
   rfl
 
 /-! ### Cylinder terms as rank-one steps -/
@@ -393,15 +385,11 @@ def branchSteps (β : R.Branch) : List (Step ι q) :=
 
 /-- The chain of steps of a branch. -/
 abbrev branchChain (β : R.Branch) : Fin (R.branchSteps β).length → Step ι q :=
-  listChain (R.branchSteps β)
-
-/-- The raw part `R^{new}_a C_s (R^{old}_b)ᴴ` of the operator of a branch `(a, s, b)`. -/
-def branchRaw (β : R.Branch) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  rawProd R.newAffected β.1 * cylProd R.patches β.2.1 * (rawProd R.oldAffected β.2.2)ᴴ
+  (R.branchSteps β).get
 
 /-- **The raw branch operator is the chain operator of its steps.** -/
 theorem branchRaw_eq_chainOp (β : R.Branch) : R.branchRaw β = chainOp (R.branchChain β) := by
-  rw [chainOp_listChain, branchSteps, List.map_append, List.map_append, List.prod_append,
+  rw [chainOp_get, branchSteps, List.map_append, List.map_append, List.prod_append,
     List.prod_append, branchRaw, rawProd_eq_prod, cylProd_eq_prod, rawProd_conjTranspose_eq_prod]
 
 theorem norm_vec_le_one_of_mem_branchSteps (β : R.Branch) {s : Step ι q}
@@ -463,40 +451,40 @@ theorem mem_patchIndices_of_isOpen (hR : R.Conditions) (β : R.Branch)
   · obtain ⟨hx, hE, hb⟩ := h
     have hj2 : (j : ℕ) < E.length + P.length := by
       by_contra hc
-      have := bra_eq_none_of_mem_decSteps _ _ (listChain_mem_right E P D j (by omega))
-      change (listChain (E ++ P ++ D) j).bra.isSome = true at hb
+      have := bra_eq_none_of_mem_decSteps _ _ (get_append₃_mem_right E P D j (by omega))
+      change ((E ++ P ++ D).get j).bra.isSome = true at hb
       rw [this] at hb
       exact absurd hb (by simp)
     have hj1 : E.length ≤ (j : ℕ) := by
       by_contra hc
-      have hmem := listChain_mem_left E P D j (by omega)
+      have hmem := get_append₃_mem_left E P D j (by omega)
       have hxh : x ∈ holeSquares R.newAffected β.1 :=
         (mem_holeSquares_iff_encSteps _ _).mpr ⟨_, hmem, hx⟩
       obtain ⟨s', hs', hxs'⟩ :=
         (mem_patchSquares_iff _ _).mp (R.newSample_subset_patchSquares hR β.2.1 β.1 hxh)
-      obtain ⟨i', hi'1, -, hi'⟩ := exists_listChain_eq_mid E P D hs'
+      obtain ⟨i', hi'1, -, hi'⟩ := exists_get_append₃_eq_mid E P D hs'
       exact hE ⟨i', Fin.lt_def.mpr (by omega), by
-        change x ∈ (listChain (E ++ P ++ D) i').sites
+        change x ∈ ((E ++ P ++ D).get i').sites
         rw [hi']
         exact hxs'⟩
     exact ⟨hj1, hP ▸ hj2⟩
   · obtain ⟨hx, hL, hk⟩ := h
     have hi1 : E.length ≤ (i : ℕ) := by
       by_contra hc
-      have := ket_eq_none_of_mem_encSteps _ _ (listChain_mem_left E P D i (by omega))
-      change (listChain (E ++ P ++ D) i).ket.isSome = true at hk
+      have := ket_eq_none_of_mem_encSteps _ _ (get_append₃_mem_left E P D i (by omega))
+      change ((E ++ P ++ D).get i).ket.isSome = true at hk
       rw [this] at hk
       exact absurd hk (by simp)
     have hi2 : (i : ℕ) < E.length + P.length := by
       by_contra hc
-      have hmem := listChain_mem_right E P D i (by omega)
+      have hmem := get_append₃_mem_right E P D i (by omega)
       have hxh : x ∈ holeSquares R.oldAffected β.2.2 :=
         (mem_holeSquares_iff_decSteps _ _).mpr ⟨_, hmem, hx⟩
       obtain ⟨s', hs', hxs'⟩ :=
         (mem_patchSquares_iff _ _).mp (R.oldSample_subset_patchSquares hR β.2.1 β.2.2 hxh)
-      obtain ⟨i', -, hi'2, hi'⟩ := exists_listChain_eq_mid E P D hs'
+      obtain ⟨i', -, hi'2, hi'⟩ := exists_get_append₃_eq_mid E P D hs'
       exact hL ⟨i', Fin.lt_def.mpr (by omega), by
-        change x ∈ (listChain (E ++ P ++ D) i').sites
+        change x ∈ ((E ++ P ++ D).get i').sites
         rw [hi']
         exact hxs'⟩
     exact ⟨hi1, hP ▸ hi2⟩
@@ -529,19 +517,19 @@ theorem exists_owners_of_isOpen_inl (hR : R.Conditions) (β : R.Branch)
     set D := decSteps R.oldAffected β.2.2
     have hP : P.length = R.patches.length := length_patchSteps _ _
     obtain ⟨Q, hQ, t, hsites, -, -⟩ :=
-      exists_of_mem_patchSteps _ _ (listChain_mem_mid E P D j hrange.1 (by omega))
+      exists_of_mem_patchSteps _ _ (get_append₃_mem_mid E P D j hrange.1 (by omega))
     obtain ⟨S, hS, hown⟩ := R.exists_old_owners_of_patch_input hR hQ t β.2.2
     refine ⟨S, hS, fun x hx => ?_⟩
     have hxQ : x ∈ Q.tagSample t := by
       have := hx.1
-      change x ∈ (listChain (E ++ P ++ D) j).sites at this
+      change x ∈ ((E ++ P ++ D).get j).sites at this
       rwa [hsites] at this
     refine ⟨hown x hxQ fun hxh => ?_, R.owners_mem_parties_of_mem_sample hR
       (Or.inl ⟨Q, hQ, Q.exists_mem_sample_of_mem_tagSample hxQ⟩)⟩
     obtain ⟨s', hs', hxs'⟩ := (mem_holeSquares_iff_decSteps _ _).mp hxh
-    obtain ⟨i', hi'1, hi'⟩ := exists_listChain_eq_right E P D hs'
+    obtain ⟨i', hi'1, hi'⟩ := exists_get_append₃_eq_right E P D hs'
     exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega), by
-      change x ∈ (listChain (E ++ P ++ D) i').sites
+      change x ∈ ((E ++ P ++ D).get i').sites
       rw [hi']
       exact hxs'⟩
   · exact ⟨∅, by simp, fun x hx => absurd ⟨x, hx⟩ hj⟩
@@ -566,19 +554,19 @@ theorem exists_owners_of_isOpen_inr (hR : R.Conditions) (β : R.Branch)
     set D := decSteps R.oldAffected β.2.2
     have hP : P.length = R.patches.length := length_patchSteps _ _
     obtain ⟨Q, hQ, t, hsites, -, -⟩ :=
-      exists_of_mem_patchSteps _ _ (listChain_mem_mid E P D i hrange.1 (by omega))
+      exists_of_mem_patchSteps _ _ (get_append₃_mem_mid E P D i hrange.1 (by omega))
     obtain ⟨S, hS, hown⟩ := R.exists_new_owners_of_patch_output hR hQ t β.1
     refine ⟨S, hS, fun x hx => ?_⟩
     have hxQ : x ∈ Q.tagSample t := by
       have := hx.1
-      change x ∈ (listChain (E ++ P ++ D) i).sites at this
+      change x ∈ ((E ++ P ++ D).get i).sites at this
       rwa [hsites] at this
     refine ⟨hown x hxQ fun hxh => ?_, R.owners_mem_parties_of_mem_sample hR
       (Or.inl ⟨Q, hQ, Q.exists_mem_sample_of_mem_tagSample hxQ⟩)⟩
     obtain ⟨s', hs', hxs'⟩ := (mem_holeSquares_iff_encSteps _ _).mp hxh
-    obtain ⟨i', hi'1, hi'⟩ := exists_listChain_eq_left E P D hs'
+    obtain ⟨i', hi'1, hi'⟩ := exists_get_append₃_eq_left E P D hs'
     exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega), by
-      change x ∈ (listChain (E ++ P ++ D) i').sites
+      change x ∈ ((E ++ P ++ D).get i').sites
       rw [hi']
       exact hxs'⟩
   · exact ⟨∅, by simp, fun x hx => absurd ⟨x, hx⟩ hi⟩
@@ -612,17 +600,6 @@ theorem exists_branch_truncation (hR : R.Conditions) (β : R.Branch) (k : ℕ) (
   exact herr.trans (div_le_div_of_nonneg_right (by exact_mod_cast R.card_patchVertices_le β)
     (Real.sqrt_nonneg _))
 
-/-- A matrix `Y` on the raw registers placed in the tag block of a branch `(a, s, b)`:
-`|a⟩⟨b| ⊗ Y` on the affected tags and the raw registers, extended by the identity on the tags of
-the untouched holes. -/
-def liftBranch (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    Matrix R.newFrame.Layout R.oldFrame.Layout ℂ :=
-  reindex (R.layoutEquiv R.newAffected) (R.layoutEquiv R.oldAffected)
-    (tagLift β.1 β.2.2 Y ⊗ₖ (1 : Matrix (TagSpace R.untouched) (TagSpace R.untouched) ℂ))
-
-theorem rewrite_eq_sum_liftBranch : R.rewrite = ∑ β, R.liftBranch β (R.branchRaw β) :=
-  R.rewrite_eq_sum_branch
-
 omit [NeZero q] in
 theorem liftBranch_sub (β : R.Branch) (Y Y' : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     R.liftBranch β Y - R.liftBranch β Y' = R.liftBranch β (Y - Y') := by
@@ -651,7 +628,8 @@ zero vectors of the hole encodings, and of the identity on the sites outside the
 squares (`termOp_apply`).
 
 The reading of each product term as an allowed monomial of Theorem 5.2 on a layout of the
-frame's registers is not formalized; see the scope restriction in the module docstring.
+frame's registers, and a polynomial bound on `N`, are not part of this statement; see the scope
+restriction in the module docstring.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
 proof lines 254–341. -/
@@ -678,7 +656,7 @@ theorem exists_contractive_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 < δ) 
   obtain ⟨h1, h2⟩ := norm_rescale_sum_le_of_branches R.norm_rewrite_le_one
     (fun β => R.liftBranch β (R.branchRaw β))
     (fun β => R.liftBranch β (∑ i, c β i • termOp (R.branchChain β) (e β) i))
-    R.rewrite_eq_sum_liftBranch hδ.le
+    R.rewrite_eq_sum_branch hδ.le
     (η := ((2 * R.patches.length : ℕ) : ℝ) / √k)
     (fun β => by
       rw [liftBranch_sub]

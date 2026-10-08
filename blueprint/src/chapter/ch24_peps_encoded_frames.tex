@@ -356,7 +356,9 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.cylProd,
         TNLean.PEPS.EncodedFrame.projProd_eq_sum_cylProd,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.Branch,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.branchRaw,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.branchOp,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.affectedRewrite_eq_sum_branchOp,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.rewrite_eq_sum_branch,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le}
@@ -468,7 +470,7 @@ norm of matrices, rectangular ones included.
     \lean{TNLean.PEPS.SiteChain.Step,
         TNLean.PEPS.SiteChain.chainOp,
         TNLean.PEPS.SiteChain.tensor,
-        TNLean.PEPS.SiteChain.list_ofFn_prod_apply,
+        Matrix.ofFn_prod_apply,
         TNLean.PEPS.SiteChain.chainOp_apply}
     \leanok
     Let $L_0,\dots,L_{n-1}$ be operators
@@ -499,7 +501,7 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Whole-group truncation of a chain]
     \label{lem:peps_frame_chain_truncation}
-    \lean{TNLean.PEPS.SiteChain.l2_opNorm_le_of_blocks,
+    \lean{Matrix.l2_opNorm_le_of_blocks,
         TNLean.PEPS.SiteChain.vertexNormSq_tensor_le_one,
         TNLean.PEPS.SiteChain.approxOp,
         TNLean.PEPS.SiteChain.norm_approxOp_le,
@@ -567,7 +569,6 @@ norm of matrices, rectangular ones included.
 \begin{theorem}[Small-patch rewrite: approximation by product terms]
     \label{thm:peps_frame_small_rewrite_product_terms}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}
     \leanok
     \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,
@@ -582,12 +583,16 @@ norm of matrices, rectangular ones included.
     the untouched tags, is a contraction with $\lVert M_\delta-M\rVert\le
         \delta$. Each product term $T_{\beta,i}$ is the tensor product of
     normalized vectors on the open output groups of the patch kets, normalized
-    covectors on the open input groups of the patch bras, each group on at
-    most two parties of the specified list, product zero vectors on the
-    selected hole squares, and identities. This is the second assertion of
-    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS} with the product terms written
-    as explicit tensor products; that each of them is an allowed monomial of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} is not asserted here
+    covectors on the open input groups of the patch bras, product zero
+    vectors on the selected hole squares, and identities; by
+    Lemma~\ref{lem:peps_frame_branch_network} each open group lies on at most
+    two parties of the specified list. This formalizes the branch-network,
+    truncation and rescaling steps of the proof of the second assertion of
+    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}. The second assertion itself,
+    an expansion of $M_\delta$ into polynomially many monomials allowed by
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} using only the specified
+    parties, is not asserted here: neither the reading of the product terms as
+    allowed monomials nor a polynomial bound on $N$ is part of this statement
     \cite{gap:polypeps_small_rewrite_monomials}.
 \end{theorem}
 

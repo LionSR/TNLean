@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.WholeGroupContraction
 
@@ -37,7 +38,6 @@ are passed through. Every wire joins a ket to a bra, so no wire joins a vertex t
 
 ## Main results
 
-* `SiteChain.list_ofFn_prod_apply`: the path-sum expansion of an ordered product of matrices.
 * `SiteChain.chainOp_apply`: the chain operator is the contraction of its network.
 
 ## References
@@ -60,48 +60,12 @@ namespace TNLean.PEPS.SiteChain
 
 open EncodedFrame WholeGroup
 
-/-! ### Path sums of ordered products -/
-
-section PathSum
-
-variable {C : Type*} [Fintype C] [DecidableEq C]
-
-/-- An entry of an ordered product of matrices is a sum over paths `ρ_0, …, ρ_n` from the row
-index to the column index. -/
-theorem list_ofFn_prod_apply : ∀ {n : ℕ} (f : Fin n → Matrix C C ℂ) (σ τ : C),
-    (List.ofFn f).prod σ τ = ∑ ρ : Fin (n + 1) → C,
-      if ρ 0 = σ ∧ ρ (Fin.last n) = τ then ∏ i : Fin n, f i (ρ i.castSucc) (ρ i.succ) else 0
-  | 0, f, σ, τ => by
-    rw [List.ofFn_zero, List.prod_nil, ← (Equiv.funUnique (Fin 1) C).symm.sum_comp]
-    by_cases h : σ = τ
-    · subst h
-      simp [one_apply]
-    · rw [one_apply_ne h]
-      refine (Finset.sum_eq_zero fun x _ => ?_).symm
-      simp only [Equiv.funUnique_symm_apply, Fin.isValue, Finset.univ_eq_empty,
-        Finset.prod_empty]
-      exact ite_eq_right_iff.mpr fun hx => absurd (hx.1.symm.trans hx.2) h
-  | n + 1, f, σ, τ => by
-    rw [List.ofFn_succ, List.prod_cons, mul_apply]
-    simp_rw [list_ofFn_prod_apply (fun i => f i.succ), Finset.mul_sum]
-    rw [← (Fin.consEquiv fun _ : Fin (n + 2) => C).sum_comp, Fintype.sum_prod_type,
-      Finset.sum_comm]
-    conv_rhs => rw [Finset.sum_comm]
-    refine Finset.sum_congr rfl fun ρ _ => ?_
-    simp only [Fin.consEquiv_apply, Fin.prod_univ_succ, Fin.castSucc_zero, Fin.cons_zero,
-      Fin.cons_succ, ← Fin.succ_last, ← Fin.succ_castSucc]
-    rw [Finset.sum_eq_single (ρ 0) (fun x _ hx => by simp [Ne.symm hx]) (by simp),
-      Finset.sum_eq_single σ (fun a _ ha => by simp [ha]) (by simp)]
-    simp only [true_and]
-    split_ifs <;> simp
-
-end PathSum
-
 /-! ### Rank-one steps -/
 
 /-- A rank-one step `|k⟩⟨b|_S ⊗ 1` on the sites of a finite set `S`. The output vector `k` and the
-input vector `b` are unit vectors on the configurations of `S`, or the product zero vector
-`|0⟩^{⊗ S}`, recorded as `none`. -/
+input vector `b` are vectors on the configurations of `S`, or the product zero vector
+`|0⟩^{⊗ S}`, recorded as `none`. No norm is imposed here; the truncation results assume norm at
+most one. -/
 structure Step (ι : Type*) (q : ℕ) where
   /-- The sites on which the step acts. -/
   sites : Finset ι
@@ -214,7 +178,7 @@ theorem path_const (hρ : ∀ i : Fin n, ∀ x ∉ (st i).sites, ρ i.castSucc x
     · rfl
 
 /-- Along a path of nonzero weight, a site keeps its value across steps that do not touch it. -/
-theorem path_const'
+theorem path_const_fin
     (hρ : ∀ i : Fin n, ∀ x ∉ (st i).sites, ρ i.castSucc x = ρ i.succ x) (x : ι)
     {a b : Fin (n + 1)} (hab : a ≤ b)
     (h : ∀ i : Fin n, (a : ℕ) ≤ i → (i : ℕ) < b → x ∉ (st i).sites) : ρ a x = ρ b x :=
@@ -236,7 +200,6 @@ theorem exists_inEnd {x : ι} (h : ∃ i, x ∈ (st i).sites) :
 end Path
 
 variable [DecidableEq ι]
-
 
 instance (i : Fin n) (x : ι) : Decidable (LaterTouch st i x) := by
   unfold LaterTouch; infer_instance
@@ -509,6 +472,7 @@ instance (σ τ : ι → Fin q) : Decidable (Good st σ τ) := by
 /-- The ordered product `L_0 L_1 ⋯ L_{n-1}` of the operators of the steps; the step `n - 1` is
 applied first. -/
 def chainOp : Matrix (ι → Fin q) (ι → Fin q) ℂ := (List.ofFn fun i => (st i).op).prod
+
 /-- The vertex tensors of the network of a chain: the conjugate input vector at each bra vertex
 and the output vector at each ket vertex. -/
 def tensor : VertexTensors (tail st) (head st) (fun _ => Fin q) (Group st)
@@ -550,7 +514,7 @@ Polynomial-PEPS manuscript (September 24, 2026), proof of Lemma 6.3 `lem:small-r
 `05-frames.tex`, lines 274–281. -/
 theorem chainOp_apply (σ τ : ι → Fin q) :
     chainOp st σ τ = if Good st σ τ then contraction (tensor st) (groupsOf st σ τ) else 0 := by
-  rw [chainOp, list_ofFn_prod_apply]
+  rw [chainOp, Matrix.ofFn_prod_apply]
   split_ifs with hG
   · symm
     refine Fintype.sum_of_injective (wire st σ τ) (wire_injective st σ τ) _ _ ?_ ?_
@@ -572,14 +536,14 @@ theorem chainOp_apply (σ τ : ι → Fin q) :
     have hρ := fun i => (hstep i).1
     refine hG ⟨fun x hx => ?_, fun x ⟨j, hxj, hE, hb⟩ => ?_, fun x ⟨i, hxi, hL, hk⟩ => ?_⟩
     · rw [← h0, ← hn]
-      exact path_const' hρ x (Fin.zero_le _) fun i _ _ => hx i
+      exact path_const_fin hρ x (Fin.zero_le _) fun i _ _ => hx i
     · by_contra hτ
       refine (hstep j).2.2 ?_
       rw [Step.braVec_of_none _ (by simpa using hb)]
       refine Step.zeroState_apply_of_ne _ fun hc => hτ ?_
       have hx : ρ j.succ x = τ x := by
         rw [← hn]
-        exact path_const' hρ x (Fin.le_last _) fun i hi _ hxi => hE ⟨i, hi, hxi⟩
+        exact path_const_fin hρ x (Fin.le_last _) fun i hi _ hxi => hE ⟨i, hi, hxi⟩
       rw [← hx]
       exact congrFun hc ⟨x, hxj⟩
     · by_contra hσ
@@ -588,7 +552,7 @@ theorem chainOp_apply (σ τ : ι → Fin q) :
       refine Step.zeroState_apply_of_ne _ fun hc => hσ ?_
       have hx : ρ i.castSucc x = σ x := by
         rw [← h0]
-        exact (path_const' hρ x (Fin.zero_le _) fun j _ hj hxj => hL ⟨j, hj, hxj⟩).symm
+        exact (path_const_fin hρ x (Fin.zero_le _) fun j _ hj hxj => hL ⟨j, hj, hxj⟩).symm
       rw [← hx]
       exact congrFun hc ⟨x, hxi⟩
 

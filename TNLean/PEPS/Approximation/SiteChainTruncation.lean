@@ -25,8 +25,6 @@ no factor depending on the dimensions of the sites.
 
 ## Main results
 
-* `SiteChain.l2_opNorm_le_of_blocks`: the operator norm of a block-diagonal matrix is at most
-  the largest Hilbert--Schmidt norm of its blocks.
 * `SiteChain.vertexNormSq_tensor_le_one`: the vertex tensors have norm at most one.
 * `SiteChain.norm_approxOp_le`: the operator norm is at most the Hilbert-space norm.
 * `SiteChain.exists_chainOp_truncation`: Lemma 6.2 applied to the network of a chain.
@@ -50,71 +48,6 @@ noncomputable section
 namespace TNLean.PEPS.SiteChain
 
 open EncodedFrame WholeGroup
-
-/-! ### Sums along injective maps -/
-
-theorem sum_comp_le_of_injective {α β : Type*} [Fintype α] [Fintype β] {g : α → β}
-    (hg : Function.Injective g) {F : β → ℝ} (hF : ∀ b, 0 ≤ F b) :
-    ∑ a, F (g a) ≤ ∑ b, F b := by
-  classical
-  rw [← Finset.sum_image fun a _ b _ h => hg h]
-  exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ _) fun b _ _ => hF b
-
-theorem sum_sum_comp_le_of_injective {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
-    {g : α → β → γ} (hg : Function.Injective fun p : α × β => g p.1 p.2)
-    {F : γ → ℝ} (hF : ∀ c, 0 ≤ F c) : ∑ a, ∑ b, F (g a b) ≤ ∑ c, F c := by
-  rw [← Fintype.sum_prod_type']
-  exact sum_comp_le_of_injective hg hF
-
-/-! ### Operator norm of a block-diagonal matrix -/
-
-/-- **Block-diagonal operator norm.** If `Y a b` vanishes unless the labels `u a` and `u' b`
-agree, then the operator norm of `Y` is at most the largest Hilbert--Schmidt norm of its diagonal
-blocks. -/
-theorem l2_opNorm_le_of_blocks {α β U : Type*} [Fintype α] [Fintype β] [DecidableEq β]
-    [Finite U] [DecidableEq U] (Y : Matrix α β ℂ) (u : α → U) (u' : β → U)
-    (hY : ∀ a b, u a ≠ u' b → Y a b = 0) {c : ℝ} (hc : 0 ≤ c)
-    (hblock : ∀ z, ∑ a ∈ Finset.univ.filter (u · = z),
-      ∑ b ∈ Finset.univ.filter (u' · = z), ‖Y a b‖ ^ 2 ≤ c ^ 2) :
-    ‖Y‖ ≤ c := by
-  have := Fintype.ofFinite U
-  refine l2_opNorm_le_of_forall hc fun v => ?_
-  set F : U → ℝ := fun z => ∑ b ∈ Finset.univ.filter (u' · = z), ‖v b‖ ^ 2
-  have hrow : ∀ a, ‖(Y *ᵥ v) a‖ ^ 2 ≤
-      (∑ b ∈ Finset.univ.filter (u' · = u a), ‖Y a b‖ ^ 2) * F (u a) := by
-    intro a
-    have hsum : (Y *ᵥ v) a = ∑ b ∈ Finset.univ.filter (u' · = u a), Y a b * v b := by
-      rw [mulVec, dotProduct, Finset.sum_filter]
-      refine Finset.sum_congr rfl fun b _ => ?_
-      split_ifs with h
-      · rfl
-      · rw [hY a b (Ne.symm h), zero_mul]
-    rw [hsum]
-    calc ‖∑ b ∈ Finset.univ.filter (u' · = u a), Y a b * v b‖ ^ 2
-        ≤ (∑ b ∈ Finset.univ.filter (u' · = u a), ‖Y a b‖ * ‖v b‖) ^ 2 := by
-          gcongr
-          exact (norm_sum_le _ _).trans_eq (Finset.sum_congr rfl fun b _ => norm_mul _ _)
-      _ ≤ _ := Finset.sum_mul_sq_le_sq_mul_sq _ _ _
-  have hv : ‖(EuclideanSpace.equiv β ℂ).symm v‖ ^ 2 = ∑ z, F z := by
-    rw [EuclideanSpace.norm_sq_eq, Finset.sum_fiberwise]
-    rfl
-  have hYv : ‖(EuclideanSpace.equiv α ℂ).symm (Y *ᵥ v)‖ ^ 2 ≤
-      (c * ‖(EuclideanSpace.equiv β ℂ).symm v‖) ^ 2 := by
-    rw [mul_pow, hv, Finset.mul_sum, EuclideanSpace.norm_sq_eq]
-    calc ∑ a, ‖(EuclideanSpace.equiv α ℂ).symm (Y *ᵥ v) a‖ ^ 2
-        ≤ ∑ a, (∑ b ∈ Finset.univ.filter (u' · = u a), ‖Y a b‖ ^ 2) * F (u a) :=
-          Finset.sum_le_sum fun a _ => hrow a
-      _ = ∑ z, ∑ a ∈ Finset.univ.filter (u · = z),
-            (∑ b ∈ Finset.univ.filter (u' · = z), ‖Y a b‖ ^ 2) * F z := by
-          rw [← Finset.sum_fiberwise Finset.univ u]
-          refine Finset.sum_congr rfl fun z _ => Finset.sum_congr rfl fun a ha => ?_
-          rw [(Finset.mem_filter.mp ha).2]
-      _ ≤ ∑ z, c ^ 2 * F z := by
-          refine Finset.sum_le_sum fun z _ => ?_
-          rw [← Finset.sum_mul]
-          exact mul_le_mul_of_nonneg_right (hblock z)
-            (Finset.sum_nonneg fun b _ => sq_nonneg _)
-  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (by positivity) two_ne_zero).mp hYv
 
 variable {ι : Type*} {q : ℕ} [NeZero q] {n : ℕ} (st : Fin n → Step ι q)
 
@@ -194,25 +127,27 @@ norm at most one. -/
 theorem vertexNormSq_tensor_le_one (hket : ∀ i, ‖(st i).ketVec‖ ≤ 1)
     (hbra : ∀ i, ‖(st i).braVec‖ ≤ 1) (v : Fin n ⊕ Fin n) : vertexNormSq (tensor st) v ≤ 1 := by
   rcases v with j | i
-  · have key := sum_sum_comp_le_of_injective (g := braCfg st j) (braCfg_injective st j)
-      (F := fun c => ‖(st j).braVec c‖ ^ 2) fun _ => sq_nonneg _
-    calc vertexNormSq (tensor st) (.inl j)
-        = ∑ a, ∑ b, (fun c => ‖(st j).braVec c‖ ^ 2) (braCfg st j a b) := by
+  · calc vertexNormSq (tensor st) (.inl j)
+        = ∑ a, ∑ b, ‖(st j).braVec (braCfg st j a b)‖ ^ 2 := by
           rw [vertexNormSq]
           refine Finset.sum_congr rfl fun x _ => Finset.sum_congr rfl fun p _ => ?_
           change ‖star ((st j).braVec (braCfg st j x p))‖ ^ 2 = _
           rw [norm_star]
-      _ ≤ ∑ c, (fun c => ‖(st j).braVec c‖ ^ 2) c := key
+      _ ≤ ∑ c, ‖(st j).braVec c‖ ^ 2 := by
+          rw [← Fintype.sum_prod_type', ← Finset.sum_image (f := fun c => ‖(st j).braVec c‖ ^ 2)
+            (g := fun p => braCfg st j p.1 p.2) fun p _ p' _ h => braCfg_injective st j h]
+          exact Finset.sum_le_univ_sum_of_nonneg fun _ => sq_nonneg _
       _ ≤ 1 := by
           rw [← EuclideanSpace.norm_sq_eq]
           exact pow_le_one₀ (norm_nonneg _) (hbra j)
-  · have key := sum_sum_comp_le_of_injective (g := ketCfg st i) (ketCfg_injective st i)
-      (F := fun c => ‖(st i).ketVec c‖ ^ 2) fun _ => sq_nonneg _
-    calc vertexNormSq (tensor st) (.inr i)
-        = ∑ a, ∑ b, (fun c => ‖(st i).ketVec c‖ ^ 2) (ketCfg st i a b) := by
+  · calc vertexNormSq (tensor st) (.inr i)
+        = ∑ a, ∑ b, ‖(st i).ketVec (ketCfg st i a b)‖ ^ 2 := by
           rw [vertexNormSq]
           rfl
-      _ ≤ ∑ c, (fun c => ‖(st i).ketVec c‖ ^ 2) c := key
+      _ ≤ ∑ c, ‖(st i).ketVec c‖ ^ 2 := by
+          rw [← Fintype.sum_prod_type', ← Finset.sum_image (f := fun c => ‖(st i).ketVec c‖ ^ 2)
+            (g := fun p => ketCfg st i p.1 p.2) fun p _ p' _ h => ketCfg_injective st i h]
+          exact Finset.sum_le_univ_sum_of_nonneg fun _ => sq_nonneg _
       _ ≤ 1 := by
           rw [← EuclideanSpace.norm_sq_eq]
           exact pow_le_one₀ (norm_nonneg _) (hket i)
