@@ -34,8 +34,8 @@ guides of a large-scale repainting and their point treatments:
   any one of them, so the same ratio serves the simultaneous point treatment of an operation.
 
 The unmodified guides are those of `RepaintingBaseline.IsUnmodifiedGuide`, which include the
-auxiliary guide after the lens exchange; the source's guides sampled after a small displacement
-are not treated here.
+auxiliary guide after the lens exchange. The same ratios for the source's guides sampled after a
+small displacement are in `TNLean.PEPS.Approximation.DyadicReadingFootprints`.
 
 The direct repaintings and the resizings, whose guides are block guides in units of `n`, are in
 `TNLean.PEPS.Approximation.DyadicBlockFootprints`.
