@@ -2,7 +2,7 @@
 
 This record supports the [continuing goal](area-law-peps-goal.md).
 The goal remains active. Both source-faithful headline theorems remain unproved.
-Eighteen geometric contributions contain **123 canonically verified original
+Nineteen geometric contributions contain **125 canonically verified original
 declarations**. The latest exact source has passed the Geometry build, both
 imported reports, strict promotion and the unchanged normal provenance policy.
 Evidence finalization has passed. Its finalized rows are byte-identical
@@ -31,9 +31,10 @@ separate from local source synchronization. Both headline theorems remain open.
 | Selected opponents, contact characterization and reciprocity | [#8894](https://github.com/LionSR/TNLean/pull/8894), evidence `957de7bed210e037a8a082eae6ad5f9969565fb2` | `b8c1e59e88eadf8694530d1a6fc470d8348c237e` | [reciprocal opponents](evidence/8758-reciprocal-opponents.md) |
 | Actual belt-fan colors and retained opposing primaries | [#8895](https://github.com/LionSR/TNLean/pull/8895), evidence `4aaa0256f74aa317cb0180856a9e2579c21b341e` | `acff16af5c9f4726de4efbee7eb01f56729e42b1` | [belt-fan colors](evidence/8758-belt-fan-colors.md) |
 | Within-fan contacts and finite fine-cell cover of primaries | [#8897](https://github.com/LionSR/TNLean/pull/8897), evidence `a4833852f7e6dbee5930b1c983fff39e3a74daa7` | `26dbf77709501643284144f4294c4d768966958b` | [combined fan/primary evidence](evidence/8758-fan-primary-contacts.md) |
-| Boundary contacts of actual fan triangles | Verified successor to [#8897](https://github.com/LionSR/TNLean/pull/8897), on `feat/area-law-fan-side-contacts`; publication unassigned | `9dce097b1d70dff4a59a8a3ed0fb035c725166ac` | [fan-side evidence](evidence/8758-fan-side-contacts.md) |
+| Boundary contacts of actual fan triangles | [#8899](https://github.com/LionSR/TNLean/pull/8899), evidence `3847e691d456f820d306b3b58fdfa575f64d75f1` | `9dce097b1d70dff4a59a8a3ed0fb035c725166ac` | [fan-side evidence](evidence/8758-fan-side-contacts.md) |
+| Positive-length interfaces of belt runs with primaries and other belt runs | Verified successor to [#8899](https://github.com/LionSR/TNLean/pull/8899), on `feat/area-law-belt-run-interfaces`; publication unassigned | `3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a` | [belt-run interface evidence](evidence/8758-belt-run-interfaces.md) |
 
-## Completed parent and current frozen source
+## Completed eighteenth source and preceding parent
 
 The combined fan-contact and primary-cover contribution is published as
 [#8897](https://github.com/LionSR/TNLean/pull/8897), evidence
@@ -100,6 +101,53 @@ measuring **2,931** production files and **3,051** total module files. The
 one-file pattern scan finds no repeated proof blocks. The completed canonical
 outcomes are recorded separately above.
 
+## Current nineteenth contribution
+
+The nineteenth contribution adds two verified original declarations at source
+`3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a`, bringing the cumulative original
+geometric inventory to **125**. Canonical checks, strict promotion, the
+unchanged normal policy and guarded finalization all pass. Earlier source and
+peer observations retain their recorded historical states.
+
+The current completed parent is now published as draft
+[#8899](https://github.com/LionSR/TNLean/pull/8899), with exact evidence head
+`3847e691d456f820d306b3b58fdfa575f64d75f1` and proof
+`9dce097b1d70dff4a59a8a3ed0fb035c725166ac`. Its new public handoffs are
+[#8758, comment 6049410354](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049410354)
+and [#8733, comment 6049410607](https://github.com/LionSR/TNLean/issues/8733#issuecomment-6049410607).
+The successor's immutable capture measures **284** parent records across
+**22** ledger files and **132** tracked recursive historical evidence files.
+Exactly two original verified rows are added, for **286** total;
+all parent records, shards and historical bytes remain unchanged.
+
+The five frozen files are BeltRunInterfaces.lean, Geometry.lean, the imported
+two-name report, its new mathematical chapter and ch24_peps_regions.tex.
+The source freeze contains the final planned master unchanged at SHA-256
+`9371ce8e0282237942b77244ba1f11ba1beda703acc607a7230c5cb3ea4d15d9`.
+The single canonical Geometry build passed in **19.471 seconds**, and the
+imported two-name report passed in **4.618 seconds**, exit 0 without
+diagnostics. Each actual report contains exactly `propext`, `Classical.choice`
+and `Quot.sound`. Strict promotion and the unchanged normal policy pass all
+**286** records, preserving all **284** parents and **132** historical files.
+The raw strict output is retained. Only the two new historical preparation
+sentences are clarified before the normal-policy run; guarded finalization
+independently derives byte-identical rows and preserves all five frozen files.
+The compiler slot is released for the dummy author's temporary direct checks,
+with one warm cache and one direct process at a time.
+
+Actual pre-freeze synchronization reports **20,234** theorem-like blueprint
+entries and **20,240** lines in the flat reference file, with no missing,
+stale or duplicate tags. Generated imports cover **2,858** production modules
+in **75** files. Both changed chapters are formatter-idempotent. The scoped
+chapter has two theorems, two proofs, two declaration tags and four completion
+markers, and all dependency labels resolve. Source and blueprint reviews
+approve both exact statements and arguments. Forbidden-token, reader prose,
+numbered-item, size and diff guards pass; the scoped proof-pattern scan finds
+no repetition. These measurements are separate from the completed canonical checks.
+The remote checks queried at 00:19 UTC confirm provenance and generated imports
+passed for #8899; its remaining workflow jobs are queued. #8897 and #8895 retain
+queued Lean/book jobs. No complete remote CI pass is inferred.
+
 ## Mathematical scope of the eighteenth contribution
 
 For an arbitrary translated dyadic cell, exponent, signed index and optional
@@ -125,14 +173,21 @@ and connected runs within one fan, and the exact finite nonbelt fine-cell
 cover of every primary birth region. These are local ingredients. They do
 not yet supply the global two-family proposition, isolated stars or repairs.
 
-## Claimed next positive-length interfaces
+## Mathematical scope of the nineteenth contribution
 
 The two-result successor is now publicly assigned at
 [#8758, comment 6049314635](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049314635).
-The author polynomial_provenance_review owns only the new BeltRunInterfaces.lean
-and the sole direct-check slot. The primary theorem and finite-cover helpers
-are being written and checked; the belt–belt result follows. No completed
-source, canonical result or future verified declaration count is asserted.
+The author polynomial_provenance_review completed and released the exact
+209-line BeltRunInterfaces.lean and the direct-check slot to root. Whole-file
+package-option elaboration passed exit 0 without diagnostics in **12.02 seconds
+wall**, **2.33 seconds user** and **5.47 seconds system**. Released SHA-256 is
+`855e8f2eedf724e372e752018d3f75e9b4ea41cc35bb02c870f7474eed3b2bde`;
+independent complete mathematical review approves that same hash. The final
+direct log is `/tmp/tnlean-8758-belt-run-interfaces-direct-3.log`, SHA-256
+`eab7ba6972771d4e4144ba64ab268fe11918f87dc2140265d0b63a3cee4d86de`.
+Root owns the frozen source. Its canonical build and two imported reports
+have passed at the times recorded above. Strict promotion, the unchanged
+normal policy and guarded finalization also pass all 286 records.
 The read-only design remains in `/tmp/tnlean-8758-belt-run-interfaces-design.md`.
 The two results use existing actual run identifiers and colors, with C ≥ 2,
 k₀ ≥ 50,000,000, arbitrary dependent residue functions and actual belt cells
@@ -163,13 +218,25 @@ previous run-contact theorem is stronger because all its triangles contain
 the same center. The new design keeps these different geometric premises
 explicit and introduces no parallel region or label model.
 
-Dummy interfaces remain a separate read-only design in
-`/tmp/tnlean-8758-dummy-run-interfaces-design.md`. The useful continuation
-statement starts from a point of an open elementary segment in the closed
-dummy neighborhood. A whole-run interface should retain the nondegenerate
-segment premise. No bare two-point dummy-contact implication is asserted.
-Any needed generalization of existing private rectangle continuation must
-be separately scoped and reused rather than copied.
+## Claimed dummy interfaces and next action
+
+The dummy-interface continuation is now publicly assigned at
+[#8758, comment 6049462072](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6049462072).
+The source author's ownership is confined to the stated generalization in
+ElementarySideOpponents.lean and the new DummyRunInterfaces.lean; root owns
+imports, blueprint, provenance and publication. The claim has three new
+results: an open elementary contact with the dummy closure extends to the
+whole elementary segment; a fan triangle's dummy intersection equals its
+base's dummy intersection; and a nondegenerate segment shared by an actual
+belt run and the dummy closure gives the opposite dummy parity on every
+constituent triangle. The existing midpoint conclusion is unchanged, and
+its two existing public declarations require fresh whole-file verification.
+The rectangle continuation is generalized and reused rather than copied.
+The preceding canonical interval has released the sole warm slot to the
+dummy author for temporary direct checks only. The read-only design remains in
+`/tmp/tnlean-8758-dummy-run-interfaces-design.md`. No completed dummy proof or
+canonical result is asserted, and no bare two-point dummy-containment
+implication is substituted for a shared nondegenerate segment.
 
 Global labels and interfaces, local sectors, isolated stars, recursive
 repairs and descendant estimates remain further obligations. Both headline
@@ -179,15 +246,16 @@ theorems remain open. QICLean stays pinned to
 ## Worktrees and verification discipline
 
 - `worktrees/area-law-peps-models` is the sole warm worktree, on
-  `feat/area-law-fan-side-contacts` at frozen source
-  `9dce097b1d70dff4a59a8a3ed0fb035c725166ac`. Its canonical build and
-  imported reports have passed. Preserve all five frozen source files and
-  cached dependencies during metadata publication. The successor author
-  holds the sole nonmutating direct-check slot.
-- `worktrees/area-law-source-preparation` has no `.lake`; its parent is
-  completed evidence `a4833852f7e6dbee5930b1c983fff39e3a74daa7` on
-  `prep/area-law-fan-side-contacts`. Root owns future advances and production
-  changes; no build, cache fetch or cache seeding is performed there.
+  `feat/area-law-belt-run-interfaces` at frozen source
+  `3a65bd3f6b2a0c7ebbc7f198a33edf47aa8d891a`. Its single canonical build and
+  imported two-name report have passed. Preserve all five frozen source files
+  and cached dependencies. The dummy author now holds the sole temporary
+  nonmutating direct-check slot.
+- `worktrees/area-law-source-preparation` has no `.lake`; its current completed
+  parent is evidence `3847e691d456f820d306b3b58fdfa575f64d75f1`, with successor
+  ownership under the public dummy-interface claim. Root owns branch advances
+  and production changes; no build, cache fetch or cache seeding is performed
+  there.
 - Canonical builds and cache mutations use the warm worktree's own locked
   wrapper. The shared lock waits without consuming CPU. Direct source checks
   use the warm environment and package options, with one process at a time.
