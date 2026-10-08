@@ -1,0 +1,80 @@
+\section{Matching elementary sides under the actual subdivision}
+\label{sec:area_law_actual_side_matching}
+
+When two actual fine cells have a common side segment, their midpoint
+choices must agree on that segment. The following statement applies to
+each elementary segment under the subdivision determined by all actual
+corners at or above the fixed lower index; see
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 299--306 and 352--356,
+% prop:two-families and geometry:initial-stars,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is conditional matching, not opponent existence or a region assignment.
+
+\begin{theorem}[Every elementary segment with contact matches]
+    \label{thm:area_law_actual_elementary_side_matching}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementary_contact_match}
+    \leanok
+    \uses{def:area_law_actual_side_mask,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
+    integer width $C_0\ge2$ and natural indices $k_0,k,h$ with
+    $k\ge50\,000\,000$ and $k_0\le k,h$.
+    Let $z\in F_{k,\ell_k}$ and $w\in F_{h,\ell_h}$ be actual
+    fine-cell indices with $(k,z)\ne(h,w)$, and write
+    $Q_{k,z}=Q_{\ell_k}(z)$ and $Q_{h,w}=Q_{\ell_h}(w)$.
+    Let $[a_i,b_i]$ be any elementary segment of the reference cell
+    under its actual midpoint subdivision relative to $k_0$.
+    Suppose that
+    $[a_i,b_i]\cap\overline{Q_{h,w}}$ contains two distinct points.
+    Then there is an elementary segment $[a_j,b_j]$ of the other
+    cell under its actual midpoint subdivision relative to $k_0$
+    such that
+    \begin{align}
+        s(j) & =s(i)+2\pmod4,       \\
+        a_i  & =b_j,\qquad b_i=a_j,
+    \end{align}
+    where $s(i)$ and $s(j)$ are their counterclockwise side indices.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fine_cell_contact,thm:area_law_elementary_side_geometry,
+        def:area_law_actual_side_mask,thm:area_law_elementary_corner_endpoint,
+        thm:area_law_unsplit_side_endpoints,thm:area_law_adjacent_fine_meshes}
+    The closed-cell contact is either a whole side of each cell or
+    a whole side of the smaller cell equal to a midpoint half of a
+    side of the larger cell. Contact containing two distinct points
+    identifies the facing side of the reference cell: two different
+    sides of the same square meet in at most one point.
+
+    In the whole-side case, the two whole sides have the same
+    midpoint. Their subdivision conditions therefore have exactly
+    the same corner witnesses. If they are undivided, the whole
+    sides match. If they are divided, the first half on one side
+    matches the second half on the opposite side, and conversely.
+
+    In the unequal-size case, a corner of the smaller cell is the
+    midpoint of the larger side. The smaller cell lies at or above
+    $k_0$, so this corner forces the larger side to be divided.
+    The smaller side is undivided. Indeed, a corner at its midpoint
+    would lie strictly inside the corresponding elementary half
+    of the larger side, contrary to the elementary-corner endpoint
+    assertion. That assertion is applicable to the larger cell:
+    its layer is at least that of the smaller cell, so the required
+    late-layer bound follows from the reference bound whenever the
+    reference cell is the smaller one.
+
+    Hence the whole smaller side matches the appropriate half of
+    the larger side. When the reference cell is larger, contact
+    containing two distinct points selects that half, since the
+    two halves meet only at their midpoint. Finally, counterclockwise
+    traversal of opposite facing sides gives the reversed endpoint
+    equalities.
+\end{proof}
+
+Theorem~\ref{thm:area_law_elementary_side_opponent} supplies an opposing
+closed region for every elementary segment, and
+Theorem~\ref{thm:area_law_unique_elementary_side_opponent} proves that its
+actual fine-cell or dummy identifier is unique. Consistent region labels
+and the isolated-star construction remain further steps in the
+two-family argument.

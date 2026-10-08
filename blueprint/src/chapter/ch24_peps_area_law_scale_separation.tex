@@ -1,0 +1,67 @@
+\section{Uniform separation of the dyadic scales}
+\label{sec:area_law_scale_separation}
+
+Retain the fixed exponents and scales of
+Definition~\ref{def:area_law_fine_belt_scales}. In particular,
+$\delta_0=2\cdot10^{-7}$, $\zeta=1-\delta_0/2$, $t_k=2^{\ell_k}$,
+$r_k=2^k$, and $s_k=2^{p_k}$. All indices below are nonnegative integers.
+The following statements give the uniform scale separation used in
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+\begin{theorem}[Explicit gaps between scale indices]
+    \label{thm:area_law_scale_index_gaps}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicScale_index_gaps}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
+    For every pair of indices $d,k$ satisfying $10^7d\le k$,
+    \begin{align}
+        \ell_k+d & \le k,   \\
+        k+d      & \le p_k.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_exponent_gaps}
+    The threshold gives $d\le k$ and
+    $\zeta k=k-10^{-7}k\le k-d$. Taking the floor proves the first
+    inequality. Likewise $(1+\delta_0)k\ge k+2d\ge k+d$, so its floor
+    is at least the integer $k+d$.
+\end{proof}
+
+\begin{theorem}[Dyadic factors between successive sides]
+    \label{thm:area_law_scale_side_ratios}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicScale_side_ratios}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
+    For every pair of indices $d,k$ satisfying $10^7d\le k$,
+    \begin{align}
+        2^d t_k & \le r_k, \\
+        2^d r_k & \le s_k.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_scale_index_gaps}
+    Apply the increasing function $n\mapsto2^n$ to the two index
+    inequalities and use $2^{a+b}=2^a2^b$.
+\end{proof}
+
+\begin{theorem}[Uniform multiplicative separation]
+    \label{thm:area_law_uniform_scale_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
+    For every real number $M$, there is a nonnegative integer $K$ such
+    that, for every nonnegative integer $k\ge K$,
+    \begin{align}
+        M t_k & \le r_k, \\
+        M r_k & \le s_k.
+    \end{align}
+    The threshold is chosen from $M$ and the fixed exponents alone,
+    independently of the origin, domain, cut, and neighborhood radius.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_scale_side_ratios}
+    Choose a nonnegative integer $d$ with $M<2^d$, using the unboundedness
+    of powers of two, and set $K=10^7d$. For every $k\ge K$, the preceding
+    theorem gives $2^dt_k\le r_k$ and $2^dr_k\le s_k$. The cell sides are
+    positive, so replacing $2^d$ by $M$ proves both inequalities.
+\end{proof}

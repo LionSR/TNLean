@@ -1,0 +1,132 @@
+\section{Subdivisions determined by actual corners}
+\label{sec:area_law_actual_side_mask}
+
+The opposing corners determine the subdivisions used in the cell fans;
+see \cite[Section~11]{OpenAI2026AreaLaw}. Retain the common origin, endpoint
+set and dyadic layers, and fix a lower index $k_0$. All actual fine cells
+at indices at least $k_0$ participate in this construction.
+
+% Source: 10-geometry.tex, lines 299--310. Dummy-neighborhood corners
+% and opposing-region constancy are separate assertions.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--310;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This exposes the existing indexed affine interpolation assertion.
+% Its complete mathematical statement and proof are unchanged.
+
+\begin{theorem}[Indexed affine parameters of an elementary side]
+    \label{thm:area_law_indexed_side_interpolation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_lineMap}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Fix an arbitrary origin $o\in\mathbb R^2$, a natural exponent
+    $\ell$, and a signed integer cell index $z\in\mathbb Z^2$.
+    Choose any optional midpoint subdivisions of the cell sides.
+    Write $A_s,B_s$ for the ordered whole-side endpoints, and put
+    $L_s(u)=(1-u)A_s+uB_s$.
+    Let $\varepsilon_s\in\{0,1\}$ record whether side $s$ is divided.
+    Index its elementary segments by $h=0$ when $\varepsilon_s=0$,
+    and by $h\in\{0,1\}$ when $\varepsilon_s=1$.
+    Their initial and final endpoints satisfy
+    \begin{align}
+        a_{s,h}      & =L_s(\alpha_{s,h}), &
+        b_{s,h}      & =L_s(\beta_{s,h}),      \\
+        \alpha_{s,h} & =
+        \begin{cases}
+            0,   & \varepsilon_s=0, \\
+            h/2, & \varepsilon_s=1,
+        \end{cases}
+                     & \beta_{s,h}         & =
+        \begin{cases}
+            1,       & \varepsilon_s=0, \\
+            (h+1)/2, & \varepsilon_s=1.
+        \end{cases}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan}
+    Parametrize the whole side by a signed coordinate $u\in[-1,1]$.
+    Its affine parameter is $(u+1)/2$.
+    For an undivided side the initial and final signed coordinates are
+    $-1$ and $1$, giving parameters $0$ and $1$.
+    For half $h$ of a divided side they are $h-1$ and $h$, giving
+    parameters $h/2$ and $(h+1)/2$. The defining side coordinates give
+    the asserted ordered endpoint identities.
+\end{proof}
+
+\begin{theorem}[Geometry of an elementary side]
+    \label{thm:area_law_elementary_side_geometry}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases,
+        TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Fix any dyadic cell and optional midpoint subdivision. Let $[a,b]$
+    be a whole side and $[u,v]$ one of its elementary segments, ordered
+    counterclockwise. One of the following descriptions applies:
+    the side is undivided and $(u,v)=(a,b)$; the side is divided and
+    $(u,v)=(a,(a+b)/2)$; or the side is divided and
+    $(u,v)=((a+b)/2,b)$. In every case $[u,v]\subseteq[a,b]$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_indexed_side_interpolation}
+    In the affine parametrization of the whole side by $[0,1]$, the
+    elementary endpoints have parameters $0,1$ for an undivided side,
+    $0,1/2$ for the first half, and $1/2,1$ for the second half.
+    Each resulting interval belongs to $[0,1]$.
+\end{proof}
+
+\begin{definition}[The actual midpoint subdivision]
+    \label{def:area_law_actual_side_mask}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_corner,
+        def:area_law_fine_layer_indices}
+    For the fine cell indexed by $z$ in layer $k$, write $[a_s,b_s]$
+    for its whole side $s$. Set $\varepsilon_s=1$ if the midpoint
+    $(a_s+b_s)/2$ is a corner of some fine cell in a layer $h\ge k_0$,
+    and $\varepsilon_s=0$ otherwise. The elementary segments are the
+    whole side if $\varepsilon_s=0$, and its two midpoint halves if
+    $\varepsilon_s=1$.
+\end{definition}
+
+\begin{theorem}[Witnesses for a divided side]
+    \label{thm:area_law_actual_side_mask_iff}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff}
+    \leanok
+    \uses{def:area_law_actual_side_mask}
+    Side $s$ of the fine cell indexed by $z$ in layer $k$ is divided if
+    and only if there are a layer $h\ge k_0$, an index $w\in F_{h,\ell_h}$
+    and a corner $\varepsilon\in\{0,1\}^2$ such that the corner
+    $\varepsilon$ of the fine cell $w$ equals $(a_s+b_s)/2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_actual_side_mask}
+    This is the defining condition of $\varepsilon_s$.
+\end{proof}
+
+\begin{theorem}[Opposing corners are elementary endpoints]
+    \label{thm:area_law_elementary_corner_endpoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide}
+    \leanok
+    \uses{def:area_law_actual_side_mask}
+    Suppose that $C_0\ge2$, $k\ge50\,000\,000$, and $z$ indexes an
+    actual fine cell of layer $k$. Let $w$ index an actual fine cell of
+    any layer $h\ge k_0$. If a corner of the cell indexed by $w$ belongs
+    to an elementary segment of the reference cell under the actual
+    midpoint subdivision, then it is an endpoint of that segment.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_corner_side_subdivision,def:area_law_actual_side_mask,
+        thm:area_law_elementary_side_geometry}
+    Every elementary segment lies on its whole side. The whole-side
+    assertion gives its start, midpoint or end as the only possible
+    opposing corners. For an undivided side, a corner at the midpoint
+    would be a witness requiring subdivision. For either midpoint half,
+    the opposite endpoint of the whole side lies outside that half.
+    The remaining two possibilities are exactly its endpoints.
+\end{proof}
+
+The source takes the lower index $k_0$ sufficiently large without fixing a
+value \cite[Section~11]{OpenAI2026AreaLaw}. The bound $k\ge50\,000\,000$ is
+one admissible explicit choice of that threshold, so the statement above
+implies the qualitative assertion for all sufficiently large layers.
