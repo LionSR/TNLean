@@ -1,0 +1,125 @@
+{
+  "baseline_environment": "/private/tmp/tnlean-actual-corrected-bound/env.json",
+  "baseline_environment_sha256": "883042351542627c77e494132559b59b427e6b1b1cac75b25c5e7b9221bc533a",
+  "baseline_checked_sources": "/private/tmp/tnlean-actual-corrected-bound/checked-sources.json",
+  "baseline_checked_sources_sha256": "b89c6af9c768dabd0540eea16ec7406eb61aefc252d84654c4f65754927625b1",
+  "baseline_imported_artifacts": 5472,
+  "baseline_imported_artifacts_sha256": "35d56e23a598be1d82855021eeb198ec8a1026a4b50bdb4d5313b1b2ca1a81bc",
+  "options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "source_freeze_commit": "d746f84e7",
+  "modules": [
+    {
+      "module": "EndpointOperatorAction",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointOperatorAction.lean",
+      "frozen_source_sha256": "8738da83638417f32557b1756df98021821b132f7d5b51d7eac677cb962c79bc",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointOperatorAction.lean",
+      "checked_source_sha256": "39ce09e74a9afadcad20ce5a287c346cdf346a260b3ec41dce4dd2362cf83ecb",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointOperatorAction.lean",
+      "production_source_sha256": "4f2854ccb46ec06980c4fdf56034e9d63d67134c7fc73c0d00dbfe3c9126178b",
+      "artifact_sha256": "7d45c1407044ec6e6b0b6b82a316a5c42703a8fddb1488c2c8a5a84b80eb8e6d",
+      "strict_log": "EndpointOperatorAction.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "SourceSlotCoordinates",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/SourceSlotCoordinates.lean",
+      "frozen_source_sha256": "7284e843b57d20410aac6791c13d867d4d8e019b4a5fb1599239565e9eab454c",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/SourceSlotCoordinates.lean",
+      "checked_source_sha256": "dc60a5788f16a077378ad71f0a5fb292e47188677769d524629e6b91847fa76e",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/SourceSlotCoordinates.lean",
+      "production_source_sha256": "3f8efc107995741e79d544b4c59f1831b98b8758bf19d62cd98024c5f2056905",
+      "artifact_sha256": "d04deeb431e284a5d1c5e98d26c5c723cec49b09fcc83f338259edaf394f5aec",
+      "strict_log": "SourceSlotCoordinates.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointOperatorCoordinates",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointOperatorCoordinates.lean",
+      "frozen_source_sha256": "b331bfb7be549bee7d02367dceeff04b04e41e8cfabb06ffaa64d6d22205904d",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointOperatorCoordinates.lean",
+      "checked_source_sha256": "80e6f776166b58db77b8f58df286a99c4e30013e64b60098eaa43b2615b2f3de",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointOperatorCoordinates.lean",
+      "production_source_sha256": "d722a7884fec94085c9d8f33990139786c05920641ef99990daf821ab4be0790",
+      "artifact_sha256": "b421fe97ea383968620c8f9f2637a2d2fa8b928934ac5e0af8251afef3b980a4",
+      "strict_log": "EndpointOperatorCoordinates.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "BasisMatrixOperator",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/BasisMatrixOperator.lean",
+      "frozen_source_sha256": "7aafda68701f6bcffb29c81c8ae0650beb8e2ad369e98e8a367479ea5e013212",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/BasisMatrixOperator.lean",
+      "checked_source_sha256": "68a6f2842c1d31643621b7f359ffd90e7f0ad31a5e1718d451d66b5d6c538585",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/BasisMatrixOperator.lean",
+      "production_source_sha256": "32025cc0b1f226e43f28d4965372135a95a12c31ebeb6c3fbba57e6d77b00a99",
+      "artifact_sha256": "cdc215f8215dec81bef1a517863d51a1f11cefa6b0e79228bb496c1fb0564b30",
+      "strict_log": "BasisMatrixOperator.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointMatrixWord",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointMatrixWord.lean",
+      "frozen_source_sha256": "37d58671be33bce40bba63eef787a4634628980514b0ec154d568e907696ac50",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointMatrixWord.lean",
+      "checked_source_sha256": "94d6ef45e5dbc2071b2aaef1f116acbcddd804be3aa4e3b16b15a9d906ab90fe",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointMatrixWord.lean",
+      "production_source_sha256": "b20f9a0c72cb0b36c4f9ed35d43877c4d42217d1ade69fff537867bc02cda0fa",
+      "artifact_sha256": "08053a5748c4a84f35549a62198a66e60ed8cc963e78743b14eaf49c3030896d",
+      "strict_log": "EndpointMatrixWord.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointMatrixAverage",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointMatrixAverage.lean",
+      "frozen_source_sha256": "ea14fdcb9fa14d9f68444e4325e686565f2ceeae778cfa5dd1606395b3e017e6",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointMatrixAverage.lean",
+      "checked_source_sha256": "aeb5954e45036b9d715dcf12d477960c7305fb4ea0f90ca62a2621c72b65ec35",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointMatrixAverage.lean",
+      "production_source_sha256": "51b87b6f58b8aaf40e8f8875db0997aa3e920acab3023def75989e32d5a59b09",
+      "artifact_sha256": "4e75e13c9a203d774f41d64785781bbea7272038fdf474f6cc045595eeaa425f",
+      "strict_log": "EndpointMatrixAverage.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "module": "EndpointMatrixLocality",
+      "frozen_source": "/tmp/tnlean-coefficient-resources/EndpointMatrixLocality.lean",
+      "frozen_source_sha256": "7db0ea334375b67fb7d1b38054c0bcf2171e81f8b15f44df0e1a8c46ab35af7c",
+      "checked_source": "/tmp/tnlean-network-canonical-check/TNLeanRelayNetwork/EndpointMatrixLocality.lean",
+      "checked_source_sha256": "cbaf7fcda810a30b93ac2339c8f83d1945319a10bbb0558939e3fc78cd26eb32",
+      "rewrite": "Only module headers and import prefixes differ from the frozen source.",
+      "production_source": "TNLean/PEPS/Approximation/EndpointMatrixLocality.lean",
+      "production_source_sha256": "57a7c3463784e489a56b624f766146edcdfeaee2c2234a88dd33f653b57238b1",
+      "artifact_sha256": "d76674223928e01695d970f105d41555ca8815a5e8d68a40404d2cc43d8d83c8",
+      "strict_log": "EndpointMatrixLocality.strict.log.gz",
+      "strict_log_uncompressed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "module_count": 7,
+  "public_export_count": 11,
+  "additional_lean_options": [
+    "-j1"
+  ],
+  "independent_mathematical_review": "Coordinating PEPS agent read all seven frozen source modules and reported PASS; this is a mathematical review, not a new compilation.",
+  "canonical_lake_build": false,
+  "canonical_blueprint_checkdecls": false,
+  "full_library_audit": false,
+  "manuscript_build": false,
+  "all_public_audit_source": "EndpointCoordinatesAudit11.lean",
+  "all_public_audit_log": "EndpointCoordinatesAudit11.strict.log.gz",
+  "all_public_audit_log_uncompressed_sha256": "524f6c92bb33ab87cb8e332352cff0746297d09f1b27f9a7fb28885d5587a16c",
+  "prerequisites": [
+    "dd33dc9888a91c630d177f38f800b4215b6e24b1"
+  ]
+}

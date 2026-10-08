@@ -1,0 +1,7 @@
+# Endpoint coordinates and the exact shared sample average
+
+Seven modules expand the actual source vectors in their recorded bases, evaluate the literal endpoint operator on elementary source tensors, recover specified endpoint matrices in those bases, and compute its exact shared sample average. The same sample index is used at both endpoints of each actual source slot. The identities allow arbitrary matrices; positivity and norm bounds are not assumed. Matrix locality follows from actual chronological restriction, without complementary cancellation.
+
+The source revision is `d746f84e7`. Each module passed raw Lean checking with package options, warnings as errors and one worker against the approved immutable dependency environment. All eleven named public declarations depend only on `propext`, `Classical.choice`, and `Quot.sound`. The coordinating PEPS agent independently read the seven frozen modules and reported mathematical agreement. Complete strict and axiom logs and source/artifact hashes are recorded here.
+
+Checked copies add only headers and rewrite import prefixes from the original frozen proofs; production copies rewrite only import prefixes. Canonical Lake verification, blueprint declaration checking, full-library auditing and manuscript builds belong to the coordinating integration branch. The remaining actual physical contraction is not established by these coordinate identities alone.
