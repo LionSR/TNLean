@@ -1,0 +1,103 @@
+\section{The initial safe-box estimate}
+\label{sec:area_law_initial_box}
+
+For fixed $q,R,J,\Delta$ and $D_0>2R+10$, let $F_{\mathrm{box}}(r)$ be the
+supremum of $S_\Omega(A\cap Q)$ over all finite-range Hamiltonians on finite
+domains with gapped ground vectors, all cuts $A$, and all safe rectangles $Q$
+of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}). It is
+nonnegative, nondecreasing, and at most $r^2\log q$.
+
+\begin{definition}[Safe-box entropy]
+    \label{def:area_law_box_entropy}
+    \lean{TNLean.PEPS.AreaLaw.boxEntropy}
+    \leanok
+    \uses{def:area_law_safe_rectangle, def:area_law_ground_entropy}
+    The function $F_{\mathrm{box}}$ of~\cite[Section~3.2]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Children of a rectangle]
+    \label{thm:area_law_box_children}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.child,
+        TNLean.PEPS.AreaLaw.IntRect.exists_mem_child,
+        TNLean.PEPS.AreaLaw.IntRect.dist_le_of_mem_child_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.child_dilate_subset}
+    \leanok
+    \uses{def:area_law_safe_rectangle}
+    Partition each axis of a rectangle $Q$ of size at most $Mr$ into chunks of
+    $r$ sites and one final shorter chunk. The products of chunks are at most
+    $M^2$ pairwise disjoint rectangles of size at most $r$ covering $Q$. If a
+    point of one child lies in the $Cr$-padding of another, their chunk
+    positions differ by at most $C$ along each axis. A child at least $C$
+    positions from the first chunk and $C+2$ from the last along both axes
+    has its $Cr$-padding inside $Q$.
+\end{theorem}
+\begin{proof}\leanok
+    Coordinates in a chunk at position $a$ lie in $[ar,ar+r-1]$ relative to
+    the corner of $Q$, and the padding adds $Cr$ on both sides.
+\end{proof}
+
+\begin{theorem}[Averaged entropy chain rule]
+    \label{thm:area_law_rotated_chain_rule}
+    \lean{TNLean.PEPS.AreaLaw.sum_sub_filter_key_eq,
+        TNLean.PEPS.AreaLaw.regionalEntropy_biUnion_le_rotations}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $X_i$ be pairwise disjoint regions carrying colors in
+    $\{0,\dots,N-1\}$, and suppose each $i$ in a set $G$ has a buffer $T_i$
+    contained in the union of the regions of the other colors, with
+    $S(X_i\mid T_i)\le S(X_i)/2+\beta$. Then
+    \begin{align}
+        S\Bigl(\bigcup_iX_i\Bigr)\le\sum_iS(X_i)-\frac1{2N}\sum_{i\in G}S(X_i)
+        +\frac{|G|\beta}N.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    For each of the $N$ cyclic rotations of the colors, order the regions by
+    rotated color and apply the chain rule. Every term is at most $S(X_i)$.
+    For $i\in G$, in the rotation putting the color of $i$ last, all of $T_i$
+    precedes $X_i$, so the term is at most $S(X_i\mid T_i)$. Average over the
+    rotations.
+\end{proof}
+
+\begin{theorem}[Scale recurrence for the safe-box entropy]
+    \label{thm:area_law_box_recurrence}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectRegion_le_of_children,
+        TNLean.PEPS.AreaLaw.boxEntropy_le_of_scale}
+    \leanok
+    \uses{thm:area_law_initial_buffer, thm:area_law_box_children,
+        thm:area_law_rotated_chain_rule, def:area_law_box_entropy}
+    With $C_{\mathrm{pad}},C_{\mathrm{buf}}$ from
+    Theorem~\ref{thm:area_law_initial_buffer}, $P=2C_{\mathrm{pad}}+1$ and
+    $p=1/(2P^2)$, for every $M$ and $r\ge1$,
+    \begin{align}
+        F_{\mathrm{box}}(Mr)\le\bigl[(1-p)M^2+p\cdot2PM\bigr]F_{\mathrm{box}}(r)
+        +C_{\mathrm{buf}}M^2r.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_buffer}
+    Color the children of a safe parent by their chunk positions modulo $P$.
+    The padding of a child meets only children within $C_{\mathrm{pad}}$
+    positions, which have other colors. Children are safe and of size at most
+    $r$, and interior children satisfy the hypotheses of
+    Theorem~\ref{thm:area_law_initial_buffer}. At most $2PM$ children are not
+    interior. Apply Theorem~\ref{thm:area_law_rotated_chain_rule} with
+    $N=P^2$.
+\end{proof}
+
+\begin{theorem}[Initial safe-box estimate]
+    \label{thm:area_law_initial_box}
+    \lean{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow}
+    \leanok
+    \uses{thm:area_law_box_recurrence}
+    There are constants $C$ and $e_0\in(0,1)$ with
+    $F_{\mathrm{box}}(r)\le Cr^{1+e_0}$ for every $r\ge1$.
+    This is~\cite[Proposition~3.3]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_box_recurrence}
+    Take $M=8(C_{\mathrm{pad}}+1)$, so $2PM\le M^2/2$ and the coefficient is
+    at most $\lambda=(1-p/2)M^2$, with $M<\lambda<M^2$. Iterating the
+    recurrence at powers of $M$ and using monotonicity gives
+    $F_{\mathrm{box}}(r)\le Cr^{\log_M\lambda}$, and $1<\log_M\lambda<2$.
+\end{proof}
