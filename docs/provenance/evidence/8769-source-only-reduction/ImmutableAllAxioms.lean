@@ -1,0 +1,38 @@
+import TNLeanReduction.SourceOnlyReduction
+set_option linter.hashCommand false
+namespace TNLean.PEPS.PairEffect
+#print axioms exists_prepared_effectReplacement_native
+#print axioms exists_prepared_effectReplacement_uniform
+#print axioms ProductInput.prepareIsometry
+#print axioms ProductInput.partitionIso_symm_mapOwner_vector
+#print axioms ProductInput.nodup_owners_wholePartyLayout
+#print axioms ProductInput.mem_owners_wholePartyLayout
+#print axioms EffectCircuit.isAllowed_replacement
+#print axioms EffectCircuit.norm_auxiliaryVector
+#print axioms EffectCircuit.referenceEval_apply
+#print axioms EffectCircuit.norm_replacement_sub_reference_le
+#print axioms EffectCircuit.finiteDimensional_auxiliary
+#print axioms EffectCircuit.rectangularTraceNorm_replacement_density_sub_le
+#print axioms OriginalCircuit.eval_produce
+#print axioms OriginalCircuit.expandedGateCount_produce
+#print axioms OriginalCircuit.participants_replacementLocationsEquiv
+#print axioms OriginalCircuit.card_participants_ne_one
+#print axioms OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le
+#print axioms OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half
+#print axioms OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half
+#print axioms sourceGateBudget_eq_of_pos
+#print axioms OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le
+#print axioms OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half
+#print axioms physicalListBasis
+#print axioms labelledPhysicalReadout
+#print axioms regionalPhysicalReadout
+#print axioms regionalPhysicalReadout_apply
+#print axioms norm_regionalPhysicalReadout_le_one
+#print axioms card_regionalPhysicalIndex
+#print axioms finrank_regionalPhysicalSpace
+#print axioms restrict_physicalLayout
+#print axioms length_filter_region
+#print axioms finrank_physicalLayout
+#print axioms finrank_restrict_physicalLayout
+#print axioms restrictedPhysicalBasis
+end TNLean.PEPS.PairEffect

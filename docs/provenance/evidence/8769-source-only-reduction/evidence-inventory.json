@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "path": "AllAxioms.lean",
+      "sha256": "df61b06e2f8f4852e9bafde12b56cea1d0cd590e1a17a002d49af76f82f50195",
+      "bytes": 1795
+    },
+    {
+      "path": "ImmutableAllAxioms.lean",
+      "sha256": "e737a5f131e6fa961642b3921730e8bd039136838b30c50a4cb9c1bad575d0bb",
+      "bytes": 1989
+    },
+    {
+      "path": "README.md",
+      "sha256": "dbf4b4a4a614b6755605c5712351bb02e516524d9ca76755f54ea39984973828",
+      "bytes": 3230
+    },
+    {
+      "path": "axioms.log",
+      "sha256": "5b5027054b53d60933e2749cb0c41995a385573b51e0b155ae6479f5ec33e8d4",
+      "bytes": 3718
+    },
+    {
+      "path": "direct-checks.json",
+      "sha256": "7e985efb6a93adaa43cdc1971a0ad5f0646284e59263d14eb3222a0ccdb3d289",
+      "bytes": 3929
+    },
+    {
+      "path": "immutable-axioms.log",
+      "sha256": "6ab7f81477d934eef76bd661ddd0964fedba25b65f6225000946973d55271fc9",
+      "bytes": 4262
+    },
+    {
+      "path": "immutable-direct-checks.json",
+      "sha256": "65b73be6ed09f6df6c076515241a6ce67bcc780e8419ca3908ef1b71962a09aa",
+      "bytes": 7711
+    },
+    {
+      "path": "tactic-pattern-scan.log",
+      "sha256": "7e60fcde4c763ca9b289a8d98dd1e9767774edda911121a4e57933df40332c42",
+      "bytes": 1235
+    }
+  ]
+}

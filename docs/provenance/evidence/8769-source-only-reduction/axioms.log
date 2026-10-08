@@ -1,0 +1,61 @@
+'TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_native' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.ProductInput.prepareIsometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.ProductInput.partitionIso_symm_mapOwner_vector' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.ProductInput.nodup_owners_wholePartyLayout' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.ProductInput.mem_owners_wholePartyLayout' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.isAllowed_replacement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.norm_auxiliaryVector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.referenceEval_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.norm_replacement_sub_reference_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.eval_produce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.expandedGateCount_produce' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.participants_replacementLocationsEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_ne_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.sourceGateBudget_eq_of_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.physicalListBasis' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.labelledPhysicalReadout' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.regionalPhysicalReadout' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.regionalPhysicalReadout_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.norm_regionalPhysicalReadout_le_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.card_regionalPhysicalIndex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace' depends on axioms: [propext, Classical.choice, Quot.sound]

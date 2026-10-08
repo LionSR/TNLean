@@ -39,3 +39,13 @@ declaration check, and canonical provenance replay have not been run for this
 branch. The full distributed compression theorem and the area-law theorem
 remain unfinished; subsequent sampling and polynomial bounds are separate
 arguments.
+
+The final seven-module chain was recompiled against the recovered immutable
+Gaussian artifact environment, preserving all 14,643 audited imported module
+hashes. The source freeze is `1458060da2d52da27b1c89d5eadc0c2c36550781`. The final importing audit has 34
+stock-axiom reports, adding the actual owned-register restriction and its
+labelled basis. `immutable-direct-checks.json` records the exact source,
+checked-source, and generated artifact hashes, and the recovered baseline
+manifest hash. The earlier 29-report evidence is retained separately. These
+checks still use the temporary module prefix and do not replace canonical
+integration verification.
