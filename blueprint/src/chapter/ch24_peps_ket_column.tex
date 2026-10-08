@@ -130,7 +130,7 @@ evaluated along any enumeration.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_ket_column_vector}
+    \uses{thm:peps_ket_column_vector,def:peps_ket_column_dependent_fix_input}
     Apply the vector statement to $\sigma$ and identify the selected column
     with the fixed-input contraction, coordinate by coordinate.
 \end{proof}
@@ -146,7 +146,7 @@ evaluated along any enumeration.
     \uses{def:peps_tensor,def:peps_stateCoeff}
     Let $A$ be a tensor on a finite simple graph with physical dimension
     $d^2$, each physical index read as an output-input pair in
-    $\{1,\dots,d\}^2$. Its coefficients define an operator $\sigma$ on
+    $\{0,\dots,d-1\}^2$. Its coefficients define an operator $\sigma$ on
     $(\C^d)^{\otimes V}$. For an input configuration $z$, the fixed-input
     tensor has physical dimension $d$ and, at each vertex $v$, the components
     of $A$ with input index $z_v$. Its bond dimensions are those of $A$ on
@@ -169,7 +169,7 @@ evaluated along any enumeration.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_ket_column_vector}
+    \uses{thm:peps_ket_column_vector,def:peps_ket_column_tensor_fix_input}
     Apply the vector statement to $\sigma$; fixing inputs leaves every bond
     dimension unchanged, and the state of the fixed-input tensor is the
     selected column.

@@ -237,7 +237,7 @@ private theorem permOp_prod (P : PhysicalPortLayout N W) (l : List (Equiv.Perm (
 independently of the number of selected neighboring bonds. -/
 theorem register_matching (P : PhysicalPortLayout N W) (e : Fin k → (Fin N ↪ Fin W))
     (he : ∀ t i, P.site (e t i) = i) (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) :
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) :
     IsPhysicalPortUnitary (d := d) P k
       (permOp (registerPermutation e (PortMatching.perm K hK))) := by
   have h := permOp_prod (d := d) P

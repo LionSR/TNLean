@@ -90,6 +90,58 @@ The corresponding finite-volume estimate and limiting implication are
 also proved in the cited module. Finite-volume uniqueness is an explicit
 hypothesis; it is not inferred from purity of the limiting state.
 
+\section{Faithful generating data and finite supports}
+
+Let $A$ be a tensor of positive bond dimension and let $\rho>0$. For a
+$k$-site matrix $X$, put
+\[
+ \eta_{A,\rho}(X)=\frac{1}{\operatorname{tr}\rho}
+   \sum_{\sigma,\tau}X_{\sigma\tau}
+       \operatorname{tr}(A^\tau\rho(A^\sigma)^*).
+\]
+No stationarity or normalization is required for the following equivalence:
+\[
+ \eta_{A,\rho}(X^*X)=0\quad\Longleftrightarrow\quad
+ G_A(k)\subseteq\ker X.
+\]
+Indeed, writing $C_b=\sum_\sigma X_{b\sigma}A^\sigma$, one has
+\[
+ (\operatorname{tr}\rho)\eta_{A,\rho}(X^*X)
+   =\operatorname{tr}\!\left(\rho\sum_b C_b^*C_b\right).
+\]
+Faithfulness of $\rho$ makes this trace zero precisely when every $C_b$ is
+zero. The identity
+$(X\Gamma_k(Y))_b=\operatorname{tr}(C_bY)$ and the nondegeneracy of the
+trace pairing finish the argument. This is proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalFaithfulSupport.lean}.
+The argument applies also at $k=0$.
+
+If $\sum_iA_i^*A_i=I$, the functional is positive and normalized.
+It therefore has a positive representing matrix $\sigma_k$ with trace one:
+\[
+ \eta_{A,\rho}(X)=\operatorname{tr}(\sigma_kX),
+ \qquad \operatorname{ran}\sigma_k=G_A(k).
+\]
+The range equality follows by comparing the vanishing conditions for
+$\eta_{A,\rho}(X^*X)$ and
+$\operatorname{tr}(\sigma_kX^*X)$, then testing the orthogonal-complement
+projections of the two subspaces. The result is proved in
+\path{TNLean/MPS/ParentHamiltonian/LocalDensitySupport.lean}.
+Stationarity is unnecessary for these finite densities. Without stationarity
+the conclusion does not assert consistency across intervals.
+
+These finite-volume statements take the faithful generating data as given.
+Nachtergaele passes from an arbitrary GVBS presentation to faithful minimal
+generating data \cite{Nachtergaele1996Spectral}, local source lines 1724--1738.
+That passage is not formalized here; the support results therefore carry the
+faithful generators as an explicit hypothesis. Removing it requires
+formalizing the minimal-data construction from a general presentation.
+Likewise, results stated for a primitive tensor with canonical data, for a
+normalized periodic tensor, or for a finite periodic family take that tensor
+presentation as given. Deriving such a presentation from a general GVBS
+boundary-limit presentation is part of the same unformalized passage, and the
+same elimination plan applies.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

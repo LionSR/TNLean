@@ -82,6 +82,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction) records
+  that preservation of an on-site symmetry along the isometric deformation of
+  arXiv:1010.3732 is formalized for a supplied virtual unitary and for a single
+  injective block, where the fundamental theorem supplies that unitary; the
+  multiblock derivation of a unitary virtual action remains open.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
@@ -1080,3 +1085,11 @@ tori of periods at least three, and the remaining tiny-period/twisted scope.
 records the single block-local map for every native closure and coherent
 sum, with the same original coarse tensor and normalized Bell factors.
 Coarse periods at least three and the stated boundary/support scope remain.
+
+### Polynomial PEPS approximation: elimination of pair effects
+
+[polypeps_pair_effects_party_layout.tex](polypeps_pair_effects_party_layout.tex)
+records that the formal Lemma 5.1 of the September 24, 2026 polynomial PEPS
+manuscript proves the error, count and coefficient-sum clauses in a model
+without parties, and that the source-only and party-ownership clauses await a
+party layout for the monomial chains.

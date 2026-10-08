@@ -40,6 +40,7 @@ import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
 import TNLean.Algebra.CycleLaplacianFourier
+import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
@@ -112,6 +113,7 @@ import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
+import TNLean.Algebra.NuclearNormTruncation
 import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
@@ -171,6 +173,7 @@ import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.SymmetryParity
 import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
+import TNLean.Algebra.TensorProductContraction
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
