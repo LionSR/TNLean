@@ -501,13 +501,6 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Test template mixed-square counts strictly
-        run: >
-          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/TemplateMixedSquares.lean
-
       - name: Check finite rectangular dual geometry early
         run: |
           set -eo pipefail
@@ -642,6 +635,13 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/CappedDyadicPartition.lean
+
+      - name: Test template mixed-square counts strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateMixedSquares.lean
 
       - name: Test concrete hole encoder and standard axioms strictly
         run: |

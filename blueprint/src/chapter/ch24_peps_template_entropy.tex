@@ -60,13 +60,14 @@
 \begin{theorem}[Shell area and cap count]
     \label{thm:area_template_shell_cap}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le,TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le}
+    \leanok
     \uses{def:area_law_template}
     Let $T$ be a template with $C_{\rm tpl}\ge24$ and $0\le j\le L\le s_0$.
     Then $|T_j\setminus T|\le nj$. If $L<2^{K+1}$, the number $a_K$ of
     cap-scale squares in the capped dyadic partition of $T_j\setminus T$
     satisfies $2^K a_K\le2n$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_template_depth_layers,thm:area_law_capped_dyadic_partition}
     Sum the depth-layer estimates to obtain $|T_j\setminus T|\le nj$.
     Disjointness gives $4^K a_K\le nj\le nL<2n2^K$; divide by $2^K>0$.
@@ -75,6 +76,7 @@
 \begin{theorem}[Weighted shell covering]
     \label{thm:area_template_weighted_shell}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le}
+    \leanok
     \uses{def:area_law_template}
     Let $T$ be a template with $C_{\rm tpl}\ge24$,
     $0\le j\le L\le s_0$, $2^K\le L<2^{K+1}$, and $e>0$.
@@ -87,7 +89,7 @@
     This is the weighted covering step of
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count}
     Write $a_k$ for the number of selected squares of side $2^k$.
     The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
