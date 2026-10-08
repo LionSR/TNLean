@@ -18,9 +18,8 @@ and behind the choice of the constants `K₀` and `ε₀`:
 * the abstract compactness argument: if no three closed label regions with the inner holes
   removed meet, there is a positive footprint radius below which no footprint meets three of them,
   uniformly over a parameter set when the joint sets are compact; for one guide whose true vertices
-  lie in open inner holes this is the two-owner condition. The instantiation on the scaled guide
-  families of the protocol, which makes the footprint radius uniform in the scale, is not proved
-  here;
+  lie in open inner holes this is the two-owner condition. Its uniformity in the radius and in the
+  scale is in `TNLean.PEPS.Approximation.DyadicFootprintScaling`;
 * square nets: a net of mesh `u` covers a bounded set by a number of patches bounded in terms of
   its radius over `u`, with outer patches within `3u` of the set;
 * the hole radius `h_n / n` of a direct repainting lies in `[ε₀ / max(K₀, 1), ε₀]`, and the two
@@ -116,7 +115,8 @@ theorem exists_footprint_two_owners {X ι : Type*} [MetricSpace X] [Finite ι] {
 point are compact, and no three with distinct labels have a common point, then one footprint
 radius `δ > 0` works for every value of the parameter: no closed ball of radius `δ` meets three
 slices with distinct labels at the same parameter. The compactness of the joint sets is a
-hypothesis here; the source derives it for its radius parameters at lines 465–468.
+hypothesis here; for the radius parameter of the inner holes it is
+`isCompact_footprintJointSet`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–469`. -/
 theorem exists_footprint_two_owners_param {Λ X ι : Type*} [MetricSpace Λ] [MetricSpace X]
@@ -135,8 +135,8 @@ true vertex of it in the compact working neighborhood `W` lie in an open inner h
 `ball h r` with `h ∈ H`. Then there is a footprint radius `δ > 0` such that every closed footprint
 of radius `δ` meets at most two labels at its points of `W` outside the open inner holes.
 
-This is the test for one fixed guide and one working neighborhood; its uniformity over the scaled
-guide families of the protocol is not proved here.
+This is the test for one fixed guide and one working neighborhood; its uniformity in the radius
+and the scale is `exists_footprintRatio`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:453–462, 475–479`. -/
 theorem exists_footprint_two_owners_guide {ι : Type*} {f : ℝ × ℝ → ι} (hfin : (range f).Finite)

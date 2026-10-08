@@ -672,11 +672,44 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     a common point of three of them would be a true vertex outside every inner hole.
 \end{proof}
 
+\begin{lemma}[Footprint ratios uniform in the scale]
+    \label{lem:peps_dyadic_footprint_uniform}
+    \lean{TNLean.PEPS.Approximation.TwoOwnerFootprints, TNLean.PEPS.Approximation.TwoOwnerFootprints.mono, TNLean.PEPS.Approximation.TwoOwnerFootprints.relabel, TNLean.PEPS.Approximation.similarity, TNLean.PEPS.Approximation.dist_similarity, TNLean.PEPS.Approximation.similarity_inv, TNLean.PEPS.Approximation.TwoOwnerFootprints.image_similarity, TNLean.PEPS.Approximation.isCompact_footprintJointSet, TNLean.PEPS.Approximation.exists_twoOwnerFootprints_Icc, TNLean.PEPS.Approximation.exists_footprintRatio}
+    \leanok
+    \uses{lem:peps_dyadic_footprint}
+    Say that a guide satisfies the two-owner condition with working set $W$, hole
+    centers $H$, inner radius $r$ and footprint radius $\delta$ if every closed
+    footprint of radius $\delta$ meets at most two labels at its points of $W$ outside
+    the open inner holes of radius $r$ about the points of $H$. This condition survives
+    shrinking $\delta$ and identifying labels, and it is carried by the similarity
+    $u\mapsto v+su$, $s>0$, to the image guide, working set and hole centers with the
+    radii $sr$ and $s\delta$. For a guide with finitely many values and a compact $W$,
+    the pairs of a radius $r\in[r_0,r_1]$ and a point of $W$ in the closure of the
+    region of one label and outside the open inner holes of radius $r$ form a compact
+    set. Hence, if every true vertex in $W$ lies in an open inner hole of radius
+    $r_0>0$, one footprint radius works for every $r\in[r_0,r_1]$. Consequently, for
+    finitely many template guides with this property there is one ratio $\nu>0$ such
+    that every relabelled image of a template under a similarity of ratio $s>0$
+    satisfies the two-owner condition with inner radius $sr$, $r\in[r_0,r_1]$, and
+    footprint radius $\nu s$. This is the uniformity argument
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 464--479, with the joint
+    sets of lines 465--468 and the minimum over finitely many label-equality types of
+    lines 469--471.
+\end{lemma}
+
+\begin{proof}\leanok
+    Being outside an open square is the non-strict inequality $r\le|y-h|$, which is
+    closed in the pair $(r,y)$; with $r\in[r_0,r_1]$ and $y\in W$ the joint sets are
+    compact. Three of them with distinct labels have no common point, since a common
+    point $y$ would be a true vertex with $r_0\le r\le|y-h|<r_0$ for some $h$. Apply
+    the parametric form of Lemma~\ref{lem:peps_dyadic_footprint}, take the minimum
+    over the finitely many templates, and transport by the similarity, which
+    multiplies all sup distances by $s$.
+\end{proof}
+
 The source applies this argument to the scaled old and new guides near a mark, at a
-direct repainting and at a resizing. That these form finitely many label-equality
-types (lines 469--471), that the joint sets of a radius parameter and a point are
-closed (lines 465--468), and hence that the footprint ratio $\nu$ is bounded below independently
-of the scale, are not formalized here.
+direct repainting and at a resizing. That these guides are relabelled similar images
+of finitely many templates, lines 469--471 and 486--491, is not formalized here.
 
 \begin{lemma}[Square nets of patches]
     \label{lem:peps_dyadic_nets}
