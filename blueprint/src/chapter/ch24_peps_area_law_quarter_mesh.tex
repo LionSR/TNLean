@@ -122,17 +122,16 @@ of the active interfaces; see \cite[Section~11]{OpenAI2026AreaLaw}.
 \begin{theorem}[Clearance from a nonincident allowed segment]
     \label{thm:area_law_affine_mesh_segment_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_segment_dist_ge_of_not_mem}
+    \leanok
     \uses{def:area_law_affine_mesh,def:area_law_template}
     Let $q>0$ and $a,b,p\in\mathcal M(o,q)$. Suppose that the segment
     $[a,b]$ is horizontal, vertical or diagonal, with coincident endpoints
     also permitted. If $p\notin[a,b]$, then every $x\in[a,b]$ satisfies
-    \begin{align}
-        \|p-x\|_\infty & \ge q/2.
-    \end{align}
+    $\|p-x\|_\infty\ge q/2$.
     This estimate is used in the isolation arguments for the initial stars
     and recursive repair in \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_affine_mesh_point_separation,thm:area_law_affine_mesh_line_clearance}
     If $a=b$, then $x=a\ne p$, so mesh-point separation gives the
     stronger bound $q$. Otherwise let $L$ be the supporting line of

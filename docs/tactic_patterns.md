@@ -3606,6 +3606,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** `isMPUSimple_of_rankOne_diagonal` (`TNLean/MPS/MPU/SimpleRankOne.lean`,
   2026-10-06) proves simplicity from three scalar pairings; the shift's own simplicity proof
   (`rightShiftTensor_isMPUSimple`) has this form and could be replaced by it.
+
 ### Nonnegative barycentric coordinates — candidate (2026-10-08)
 
 - **Pattern:** Obtain nonnegativity of every barycentric coordinate from
