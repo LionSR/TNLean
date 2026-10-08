@@ -189,7 +189,7 @@ theorem Template.card_mixedDyadicIndices_sample_dilation_le {Ctpl : ℝ} {n s₀
   classical
   by_cases hne : (T.sample i).Nonempty
   · obtain ⟨p, hp⟩ := hne
-    obtain ⟨a, b, hab, hheight, hdomain⟩ := T.exists_dilation_row_domain i hne
+    obtain ⟨a, b, hab, hheight, hdomain⟩ := T.exists_dilation_row_domain i ⟨p, hp⟩
     let u : ℤ := 2 ^ k
     have hu : 0 < u := by dsimp [u]; positivity
     let lo := a - (r : ℤ)
@@ -260,7 +260,7 @@ theorem Template.card_mixedDyadicIndices_sample_dilation_le {Ctpl : ℝ} {n s₀
           omega)
         have hzcols : z.1 ∈ cols z.2 := by
           dsimp only [cols]
-          rw [dif_pos hbase]
+          rw [dite_eq_left hbase]
           exact mixed_interior_columns T i r k z hz hrows hbase
         apply Finset.mem_union_right
         exact Finset.mem_biUnion.mpr ⟨z.2, hzY, Finset.mem_product.mpr
@@ -274,9 +274,11 @@ theorem Template.card_mixedDyadicIndices_sample_dilation_le {Ctpl : ℝ} {n s₀
         _ ≤ (X.product {lo / u, hi / u}).card + bands.card := Finset.card_union_le _ _
         _ ≤ X.card * 2 + ∑ y ∈ Y, 10 := by
           apply Nat.add_le_add
-          · simpa only [Finset.card_product] using Nat.mul_le_mul_left X.card hend
+          · simpa only [Finset.product_eq_sprod, Finset.card_product] using
+              Nat.mul_le_mul_left X.card hend
           · exact Finset.card_biUnion_le.trans (Finset.sum_le_sum fun y _ ↦ by
-              simpa only [Finset.card_product, Finset.card_singleton, Nat.mul_one] using hcols y)
+              simpa only [Finset.product_eq_sprod, Finset.card_product, Finset.card_singleton,
+                Nat.mul_one] using hcols y)
         _ = _ := by simp [Nat.mul_comm]
     have hX : u * (X.card : ℤ) ≤ 2 * s₀ + 2 * r + 2 * u := by
       have h := quotient_interval_card (p.1 - s₀ - r) (p.1 + s₀ + r) u hu (by omega)
