@@ -40,15 +40,13 @@ def regionConfigurationEquiv {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     ({x : Site Λ // x ∈ A} → Fin q) ≃ ({x : Site Λ' // x ∈ A'} → Fin q) :=
   Equiv.arrowCongr (e.subtypeEquiv hA) (Equiv.refl (Fin q))
 
-private theorem configurationSplit_pullback {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
+/-- Configuration transport of the complement of a region preserved by a site
+bijection. Source: area-law `sec:prelim`, lines 10–25, finite tensor factors. -/
+def complementConfigurationEquiv {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
-    (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
-    (σ : Configuration Λ' q) :
-    configurationSplit Λ q A (σ ∘ e) =
-      ((regionConfigurationEquiv q A A' e hA).symm ((configurationSplit Λ' q A') σ).1,
-        (Equiv.arrowCongr (e.subtypeEquiv (fun x ↦ not_congr (hA x)))
-          (Equiv.refl (Fin q))).symm ((configurationSplit Λ' q A') σ).2) := by
-  rfl
+    (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A') :
+    ({x : Site Λ // x ∉ A} → Fin q) ≃ ({x : Site Λ' // x ∉ A'} → Fin q) :=
+  Equiv.arrowCongr (e.subtypeEquiv (fun s ↦ not_congr (hA s))) (Equiv.refl (Fin q))
 
 private theorem configurationSplit_symm_pullback {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
@@ -58,10 +56,13 @@ private theorem configurationSplit_symm_pullback {Λ Λ' : Finset (ℤ × ℤ)} 
     (configurationSplit Λ' q A').symm x ∘ e =
       (configurationSplit Λ q A).symm
         (((regionConfigurationEquiv q A A' e hA).prodCongr
-          (Equiv.arrowCongr (e.subtypeEquiv (fun x ↦ not_congr (hA x)))
-            (Equiv.refl (Fin q)))).symm x) := by
+          (complementConfigurationEquiv q A A' e hA)).symm x) := by
   have h := congrArg (configurationSplit Λ q A).symm
-    (configurationSplit_pullback q A A' e hA ((configurationSplit Λ' q A').symm x))
+    (show configurationSplit Λ q A ((configurationSplit Λ' q A').symm x ∘ e) =
+      ((regionConfigurationEquiv q A A' e hA).symm
+          (configurationSplit Λ' q A' ((configurationSplit Λ' q A').symm x)).1,
+        (complementConfigurationEquiv q A A' e hA).symm
+          (configurationSplit Λ' q A' ((configurationSplit Λ' q A').symm x)).2) from rfl)
   simpa [Prod.map] using h
 
 /-- The same physical vector written after relabelling its sites.
@@ -84,9 +85,7 @@ theorem reducedState_relabel {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
         (regionConfigurationEquiv q A A' e hA).symm
         (regionConfigurationEquiv q A A' e hA).symm := by
   let eA := regionConfigurationEquiv q A A' e hA
-  let eB : ({x : Site Λ // x ∉ A} → Fin q) ≃
-      ({x : Site Λ' // x ∉ A'} → Fin q) :=
-    Equiv.arrowCongr (e.subtypeEquiv (fun x ↦ not_congr (hA x))) (Equiv.refl (Fin q))
+  let eB := complementConfigurationEquiv q A A' e hA
   refine Eq.trans ?_ (Matrix.partialTraceRight_submatrix_prod_equiv eA eB
     ((Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x))).submatrix
       (configurationSplit Λ q A).symm (configurationSplit Λ q A).symm))
