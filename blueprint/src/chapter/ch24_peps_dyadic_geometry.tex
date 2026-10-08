@@ -602,7 +602,7 @@ $p+\varepsilon v$ leaves them at once.
 
 \begin{theorem}[No changed true vertex in the bulk operations]
     \label{thm:peps_dyadic_no_changed_vertex}
-    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
+    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.angularConstant_mul_le_mul_max, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
     \leanok
     \uses{lem:peps_dyadic_floor, lem:peps_dyadic_incident_change, def:peps_dyadic_schedule}
     Let $0<t\le n$. Each of the seven births and deaths of an edge construction
@@ -643,7 +643,7 @@ protocol and are not formalized here.
     \label{lem:peps_dyadic_tags}
     \lean{TNLean.PEPS.Approximation.IsTrueVertex.exists_isTagHolder, TNLean.PEPS.Approximation.isTagHolder_congr, TNLean.PEPS.Approximation.IsTagHolder.mem_of_forall, TNLean.PEPS.Approximation.isTagHolder_levelStart, TNLean.PEPS.Approximation.isTagHolder_level, TNLean.PEPS.Approximation.isTagHolder_blockRepainting, TNLean.PEPS.Approximation.isTagHolder_levelEnd, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_range_mainGuide}
     \leanok
-    \uses{def:peps_dyadic_incident_labels, lem:peps_dyadic_active_labels, thm:peps_dyadic_no_changed_vertex}
+    \uses{def:peps_dyadic_incident_labels, lem:peps_dyadic_active_labels}
     A true vertex has at least two incident labels other than the placeholder, so a
     tag holder exists, and guides with the same incident labels at a point have the
     same tag holders there. Tag holders are values of the guide other than the

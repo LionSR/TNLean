@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CorrectedPositionCost
 import TNLean.PEPS.Approximation.DistributedLifetime
@@ -31,15 +32,24 @@ import TNLean.PEPS.Approximation.DyadicSampledGuides
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
+import TNLean.PEPS.Approximation.EncodedFrame
+import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.HoleEncoder
+import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyWord
+import TNLean.PEPS.Approximation.PatchRewrite
+import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.RoutedContraction
+import TNLean.PEPS.Approximation.SheetSplitting
+import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
+import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
