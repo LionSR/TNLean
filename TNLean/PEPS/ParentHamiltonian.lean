@@ -96,7 +96,9 @@ import TNLean.PEPS.ParentHamiltonian.ThreeBlockRegularIntersection
 import TNLean.PEPS.ParentHamiltonian.TorusClosureKernelIntersection
 import TNLean.PEPS.ParentHamiltonian.TorusClosureParentConstraint
 import TNLean.PEPS.ParentHamiltonian.TorusDependentParentSeamCuts
+import TNLean.PEPS.ParentHamiltonian.TorusDualFluxParent
 import TNLean.PEPS.ParentHamiltonian.TorusEntanglementBound
+import TNLean.PEPS.ParentHamiltonian.TorusFluxStringLocalParent
 import TNLean.PEPS.ParentHamiltonian.TorusInvariantClosureMembership
 import TNLean.PEPS.ParentHamiltonian.TorusNativeGInjectiveSupport
 import TNLean.PEPS.ParentHamiltonian.TorusNonuniformParentSeamCuts
