@@ -1,4 +1,4 @@
-import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
+import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 
 /-!
 # Actual-template mixed-square regressions
@@ -154,3 +154,44 @@ example (S : Finset (ℤ × ℤ)) (k : ℕ) :
       ∑ i ∈ ({0, 1, 2} : Finset ℕ),
         (mixedDyadicIndices (if i = 2 then ∅ else S) k).card :=
   card_mixedDyadicIndices_biUnion_le _ _ k
+
+-- A zero-radius shell has no selected cells, at every cap and exponent.
+example (K : ℕ) (e : ℝ) :
+    ∑ c ∈ cappedDyadicPartition (ambientDilation thinDiagonalTemplate.points 0 \
+      thinDiagonalTemplate.points) K, ((2 : ℝ) ^ c.1) ^ (1 + e) = 0 := by
+  simp
+
+-- The positive-exponent covering theorem also covers e = 1; its constant is 16.
+-- This tests the largest admissible radius, a non-power-of-two L, and a thin sample.
+example :
+    ∑ c ∈ cappedDyadicPartition (ambientDilation thinDiagonalTemplate.points 3 \
+      thinDiagonalTemplate.points) 1, ((2 : ℝ) ^ c.1) ^ (2 : ℝ) ≤ 4608 := by
+  have h := thinDiagonalTemplate.sum_rpow_cappedDyadicPartition_shell_le
+    (by norm_num) 3 3 1 (by decide) (by decide) (by decide) (by decide) 1 (by norm_num)
+  norm_num at h ⊢
+  exact h
+
+-- L = 1 forces cap zero, so there is no below-cap geometric sum.
+example :
+    2 ^ 0 * ((cappedDyadicPartition (ambientDilation thinDiagonalTemplate.points 1 \
+      thinDiagonalTemplate.points) 0).filter (fun c ↦ c.1 = 0)).card ≤ 2 * 96 :=
+  thinDiagonalTemplate.card_cappedDyadicPartition_shell_at_cap_le
+    (by norm_num) 1 1 0 (by decide) (by decide) (by decide)
+
+set_option linter.hashCommand false in
+/-- info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le
+
+set_option linter.hashCommand false in
+/-- info: 'TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le
+
+set_option linter.hashCommand false in
+/-- info: 'TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le
