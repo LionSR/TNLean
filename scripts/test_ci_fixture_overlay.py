@@ -15,7 +15,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = yaml.safe_load((ROOT / '.github/workflows/pr-ci.yml').read_text())
 STEP_NAME = 'Test PEPS dual flux paths and quantum-double local terms'
-EXAMPLES = ('TorusDualFluxString', 'TorusDualFluxParent', 'QuantumDoublePhysicalTerms')
+EXAMPLES = ('TorusDualFluxString', 'TorusDualFluxParent',
+            'TorusDualRectangle', 'QuantumDoublePhysicalTerms')
 FLAGS = ['-DautoImplicit=false', '-DrelaxedAutoImplicit=false', '-Dpp.unicode.fun=true',
          '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true', '-DwarningAsError=true']
 
