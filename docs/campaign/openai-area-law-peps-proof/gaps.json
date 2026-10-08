@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-07T21:30Z",
+  "reviewedAt": "2026-10-08T20:30Z",
   "entries": [
     {
       "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
@@ -65,7 +65,7 @@
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "resolved-pending",
+      "status": "resolved",
       "paper": "peps",
       "result": "Lemma 7.2",
       "title": "Clearance during the dyadic repainting",
@@ -81,14 +81,14 @@
       },
       "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
       "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane. On an interface curve they take the label on one fixed side, while the paper reads a boundary point after a small generic displacement into an incident chamber. #8935 proves the estimates for every guide read after one small displacement. #8970 identifies the paper's sampled guides with these readings. Every guide of the schedule is constant off a locally finite family of lines in finitely many directions, and a displacement parallel to none of them leaves them at once. So the sampled guides exist, are unique and equal the readings. #8970 states and proves Lemma 7.2 for the paper's sampled guides. It also proves the footprint ratios of the point treatment and of the block guides for them. The paper chooses ν before the scale D and the displacement after the guides, so its ν serves every generic displacement. #8974 proves the ratios in this order: two displacements on the same side of each of the finitely many wall directions give the same readings, so each template has finitely many readings after generic displacements, and one ν serves all of them.",
-      "impact": "None. Lemma 7.2 is formalized for the paper's chamber-sampled guides, with a₀ = 1/5000, and the footprint ratios for them with one ν for every generic displacement once #8974 merges.",
-      "plan": "Merge #8974. The protocol of Proposition 7.1 is separate work."
+      "impact": "None. Lemma 7.2 is formalized for the paper's chamber-sampled guides, with a₀ = 1/5000, and so are the footprint ratios for them, with one ν for every generic displacement.",
+      "plan": "Nothing remains for this note. The protocol of Proposition 7.1 is separate work."
     },
     {
       "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "resolved-pending",
+      "status": "resolved",
       "paper": "peps",
       "result": "Lemma 5.1",
       "title": "Who owns the replacement of a shared resource",
@@ -102,8 +102,67 @@
       },
       "claims": "Lemma 5.1 removes a two-party shared state by replacing it with a stack of m fresh copies, at error r/√m. It also states that the replacement uses only operations local to the two parties plus normalized shared states, and that all shared states between the same two parties can be merged into one.",
       "found": "The first Lean model had no notion of a party, so the locality clauses could not be stated (#8791). #8843 added parties and proved those clauses. #8853 proves the merging clause. Each freshly prepared shared state can be moved to the front, and the states between the same two parties combine into one normalized state. No hypotheses were added.",
-      "impact": "None. Lemma 5.1 is formalized as stated once #8853 merges.",
-      "plan": "Merge #8853. The aggregate map per party used by Theorem 5.2 is separate work."
+      "impact": "None. Lemma 5.1 is formalized as stated.",
+      "plan": "Nothing remains for this note. The aggregate map per party used by Theorem 5.2 is separate work."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_nondegenerate_templates.tex",
+      "repo": "TNLean",
+      "kind": "convention",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Definition 9.3",
+      "title": "Rectangles and triangles in a template are nondegenerate",
+      "issue": 8738,
+      "prs": {
+        "TNLean": [
+          8788
+        ]
+      },
+      "claims": "Definition 9.3 builds a template as a finite union of the lattice points of closed rectangles and triangles of bounded size whose sides have slope 0, ∞, 1 or −1.",
+      "found": "Read literally, a segment or a single point could count as a degenerate rectangle or triangle. The paper plainly means ordinary rectangles and triangles: its remark after the definition says the estimates use the pieces only through their number and their sizes. Lean builds the ordinary reading into the definition of the permitted pieces, so no theorem carries a separate nondegeneracy hypothesis.",
+      "impact": "None. This is a reading of the paper's words, not an added hypothesis.",
+      "plan": "Nothing to do."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_scanner_inputs.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "area",
+      "result": "Proposition 9.2",
+      "title": "The scanner estimate from the conclusions of its inputs",
+      "issue": 8755,
+      "prs": {
+        "TNLean": [
+          8926,
+          8944
+        ]
+      },
+      "claims": "Proposition 9.2 says that, for one scan at scale n and every large replica count, some charge round and some interpolation parameter make the energy of the defect small, with explicit bounds on three comparator budgets. Its proof combines the scan geometry (Lemma 9.1), transport (Proposition 7.4), the comparators (Proposition 8.1), continuity (Lemma 2.1) and the spectral tails (Lemma 2.3).",
+      "found": "Lean proves the step from the conclusions of those five results to Proposition 9.2: the entropy balance over the charge rounds, the choice of a round and a parameter by averaging, the accounting of the defect energy at that point, and the three budgets. The five conclusions enter as one package of hypotheses, each transcribing one displayed statement of the paper. Two bookkeeping differences are harmless: one error term is carried as n^−247 rather than n^−248, and the unspecified logarithmic power is 12.",
+      "impact": "No problem with the paper has been found. The proposition holds for the paper's scan once its inputs are proved.",
+      "plan": "Build the package from the scan geometry of Lemma 9.1 and the transported states of Proposition 7.4, with Proposition 8.1 and Lemmas 2.1 and 2.3 supplying the rest. Each is a separate item of the campaign."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_routing_network_bounds.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Lemma 8.2",
+      "title": "Routing the party network with constant congestion",
+      "issue": 8764,
+      "prs": {
+        "TNLean": [
+          8796,
+          8921
+        ]
+      },
+      "claims": "Lemma 8.2 states, with no hypotheses, that the links of the party network built by the distribution protocol can be routed on the grid with constant congestion, and that folding into the L × L square keeps the congestion constant and the physical outputs in place.",
+      "found": "The proof uses four properties of that network: every anchor lies on the padded grid, each dyadic block carries boundedly many parties, each party has boundedly many links, and linked anchors are close relative to their scale. The protocol of Proposition 7.1 is not yet formalized, so Lean proves the lemma for every party network with these four properties: congestion at most 8(2c+1)BΔ after folding, and the routed network is exactly a PEPS on the open square with bond dimension at most max(D,1)^(8(2c+1)BΔ).",
+      "impact": "No problem with the paper has been found. The paper's lemma is the case of its own network, once that network is shown to have the four properties.",
+      "plan": "Formalize Proposition 7.1 and attach its parties to the anchors of the dyadic blocks. The first property follows from the attachment, the other three from items 1–3 of Proposition 7.1."
     }
   ],
   "checked": [
