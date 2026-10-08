@@ -266,8 +266,7 @@ theorem HasLineWalls.finite_genericReadings {ι : Type*} {f : ℝ × ℝ → ι}
     have e : 0 < N.1 * v₂.1 + N.2 * v₂.2 ↔ 0 < N.1 * v₁.1 + N.2 * v₁.2 :=
       Iff.of_eq (congrFun hs ⟨N, hN⟩)
     rcases lt_or_gt_of_ne (hv₂ N hN) with h | h
-    · exact mul_pos_of_neg_of_neg h (lt_of_le_of_ne (not_lt.1 fun h' => absurd (e.2 h')
-        (not_lt.2 h.le)) (hv₁ N hN))
+    · exact mul_pos_of_neg_of_neg h ((hv₁ N hN).lt_of_le (not_lt.1 (mt e.2 (not_lt.2 h.le))))
     · exact mul_pos h (e.1 h)
   · rintro g ⟨v, hv, hg⟩
     exact mem_iUnion.2 ⟨side v, v, hv, rfl, hg⟩
