@@ -258,7 +258,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{definition}[Block guides and the labels of a level]
     \label{def:peps_dyadic_block_guide}
-    \lean{TNLean.PEPS.Approximation.blockIndex, TNLean.PEPS.Approximation.blockGuide, TNLean.PEPS.Approximation.blockCorner, TNLean.PEPS.Approximation.SquareEdge.nbrBlock, TNLean.PEPS.Approximation.blockBaseline, TNLean.PEPS.Approximation.shiftGuide, TNLean.PEPS.Approximation.InRoot, TNLean.PEPS.Approximation.levelLabels}
+    \lean{TNLean.PEPS.Approximation.blockIndex, TNLean.PEPS.Approximation.blockGuide, TNLean.PEPS.Approximation.blockCorner, TNLean.PEPS.Approximation.SquareEdge.nbrBlock, TNLean.PEPS.Approximation.blockBaseline, TNLean.PEPS.Approximation.blockIndex_of_mem_openSquare, TNLean.PEPS.Approximation.blockIndex_of_mem_edgeNeighbor, TNLean.PEPS.Approximation.blockIndex_ne_of_notMem_closedSquare, TNLean.PEPS.Approximation.shiftGuide, TNLean.PEPS.Approximation.shiftGuide_blockBaseline_guide, TNLean.PEPS.Approximation.InRoot, TNLean.PEPS.Approximation.levelLabels}
     \leanok
     \uses{def:peps_dyadic_schedule}
     For $n>0$ and labels $\ell(Q)$ of the blocks $Q\in\mathbb Z^2$, the block guide
@@ -274,7 +274,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{lemma}[Translation of the estimates]
     \label{lem:peps_dyadic_translation}
-    \lean{TNLean.PEPS.Approximation.clearance_shift, TNLean.PEPS.Approximation.dist_le_shift, TNLean.PEPS.Approximation.le_dist_of_mem_closure, TNLean.PEPS.Approximation.cornerMarkDist_sub, TNLean.PEPS.Approximation.edgeMarkDist_sub, TNLean.PEPS.Approximation.blockIndex_of_mem_openSquare, TNLean.PEPS.Approximation.blockIndex_of_mem_edgeNeighbor, TNLean.PEPS.Approximation.blockIndex_ne_of_notMem_closedSquare}
+    \lean{TNLean.PEPS.Approximation.clearance_shift, TNLean.PEPS.Approximation.dist_le_shift, TNLean.PEPS.Approximation.le_dist_of_mem_closure, TNLean.PEPS.Approximation.cornerMarkDist_sub, TNLean.PEPS.Approximation.edgeMarkDist_sub, TNLean.PEPS.Approximation.sub_mem_closure, TNLean.PEPS.Approximation.sub_mem_frontier, TNLean.PEPS.Approximation.mem_closure_shift}
     \leanok
     \uses{def:peps_dyadic_block_guide}
     Moving all guides by a vector $o$ moves the changed regions and the obstructing
@@ -299,10 +299,11 @@ $A$, $B$, $C$ below are permitted to coincide.
     guides that the schedule specifies at each operation. Every elementary
     birth or death of its schedule, the central birth and the seven births and
     deaths along each edge after any completed edges, has changed region $R$ of
-    diameter at most $n$, and its surrounding guide $f$ satisfies
+    diameter at most $n$, and its surrounding guide $f$ satisfies, at every point
+    $y\in\overline R$,
     \begin{align}
         \operatorname{dist}\bigl(y,\overline{\{f\ne P_\circ\}}\bigr)
-        \ge a_0\min\{n,d_{\mathcal V}(y)\},\qquad y\in\overline R,
+        \ge a_0\min\{n,d_{\mathcal V}(y)\},
         \label{eq:pdg_angular_separation}
     \end{align}
     where $\mathcal V$ is the set of corners of $S$ for the central birth and the two
@@ -310,10 +311,10 @@ $A$, $B$, $C$ below are permitted to coincide.
     closure of the positions that are not common $C_e$ on its two guides before the
     exchange satisfies
     $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
-    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}. Moreover the positions inside $Y$
-    that are not common $C_e$ before the exchange, which contain the positions the
-    exchange changes, form a set whose closure has diameter at most $n$; the source
-    uses this bound in its proof of the exchange step, lines 421--424.
+    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}. The positions inside $Y$ that
+    are not common $C_e$ before the exchange, which contain the positions the
+    exchange changes, also form a set whose closure has diameter at most $n$; the
+    source uses this bound in its proof of the exchange step, lines 421--424.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -337,7 +338,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{lemma}[Levels and active labels]
     \label{lem:peps_dyadic_active_labels}
-    \lean{TNLean.PEPS.Approximation.blockRepainting_final, TNLean.PEPS.Approximation.blockGuide_levelLabels_start, TNLean.PEPS.Approximation.levelLabels_mem, TNLean.PEPS.Approximation.levelLabels_empty_mem, TNLean.PEPS.Approximation.levelLabels_mem_of_subset, TNLean.PEPS.Approximation.blockRepainting_labels, TNLean.PEPS.Approximation.edgeWords, TNLean.PEPS.Approximation.edgeWords_mem, TNLean.PEPS.Approximation.bandWord_mem, TNLean.PEPS.Approximation.levelLabels_mem_owners, TNLean.PEPS.Approximation.SquareEdge.nbrBlock_adjacent, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_of_notMem}
+    \lean{TNLean.PEPS.Approximation.blockRepainting_final, TNLean.PEPS.Approximation.levelLabels_insert_of_ne, TNLean.PEPS.Approximation.blockGuide_levelLabels_start, TNLean.PEPS.Approximation.levelLabels_mem, TNLean.PEPS.Approximation.levelLabels_empty_mem, TNLean.PEPS.Approximation.levelLabels_mem_of_subset, TNLean.PEPS.Approximation.blockRepainting_labels, TNLean.PEPS.Approximation.edgeWords, TNLean.PEPS.Approximation.edgeWords_mem, TNLean.PEPS.Approximation.bandWord_mem, TNLean.PEPS.Approximation.levelLabels_mem_owners, TNLean.PEPS.Approximation.SquareEdge.nbrBlock_adjacent, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_of_notMem}
     \leanok
     \uses{lem:peps_dyadic_schedule_guides, def:peps_dyadic_block_guide}
     Once the four edges of a block $S$ of the root square are completed, the main
