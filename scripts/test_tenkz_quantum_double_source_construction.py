@@ -694,7 +694,7 @@ def render(work, source, checkerboard, pics, *, only_combined=False):
     cases.append(("qd-source-combined", r"\chapter{Quantum-double source construction}" +
                   definition + source + local + checkerboard, [p.signature() for p in combined_pics]))
     bibliography = r"""
-\begin{thebibliography}{3}
+\begin{thebibliography}{4}
 \bibitem{Schuch2010PEPS} N. Schuch, J. I. Cirac and D. P\'erez-Garc\'ia.
 PEPS as ground states: degeneracy and topology. arXiv:1001.3807v3.
 \bibitem{Cirac2021Matrix} J. I. Cirac, D. P\'erez-Garc\'ia, N. Schuch and F. Verstraete.
@@ -703,6 +703,9 @@ Rev. Mod. Phys. 93, 045003 (2021).
 \bibitem{gap:rmp_peps_quantum_double_g_isometry} The TNLean contributors.
 Quantum-Double PEPS: Normalization, Representations and Scope. Paper-gap note (2026).
 \url{https://sirui-lu.com/TNLean/paper-gaps/rmp_peps_quantum_double_g_isometry.pdf}.
+\bibitem{gap:scp10_quantum_double_local_hamiltonian} The TNLean contributors.
+Quantum-Double Hamiltonian Terms: Normalization and Local Scope. Paper-gap note (2026).
+\url{https://sirui-lu.com/TNLean/paper-gaps/scp10_quantum_double_local_hamiltonian.pdf}.
 \end{thebibliography}
 \end{document}
 """

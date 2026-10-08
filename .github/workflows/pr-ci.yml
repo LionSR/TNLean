@@ -1155,7 +1155,7 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: |
           python3 scripts/test_tenkz_quantum_double_local_terms.py
-          python3 scripts/test_tenkz_quantum_double_source_construction.py --no-render
+          python3 scripts/test_tenkz_quantum_double_source_construction.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
