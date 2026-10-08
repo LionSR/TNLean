@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.VertexVirtualParentTransport
+import QICLean.Analysis.MatrixFramePerturbation
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.Algebra.Star.StarProjection
 
@@ -15,9 +16,16 @@ Splitting the full product of site matrices across the region shows that any
 regional intertwining identity extends to the full product space.
 These finite-dimensional identities allow different input and output spaces
 at each vertex and require no range or commutation assumptions.
+
+## References
+
+The continuity and norm bound are used in the regularized variational problem
+of OpenAI, Polynomial PEPS approximation of gapped square-grid ground states,
+September 24, 2026, `03-patches.tex`, lines 68–99,
+commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open scoped BigOperators Matrix Kronecker
+open scoped BigOperators Matrix Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS
 
@@ -33,6 +41,35 @@ noncomputable def dependentRegionOperatorLift (R : Finset V)
   classical
   exact Matrix.reindex (dependentRegionConfigEquiv R).symm
     (dependentRegionConfigEquiv R).symm (K ⊗ₖ 1)
+
+open Classical Matrix in
+/-- The regional lift obeys its local Euclidean operator bound. -/
+theorem norm_dependentRegionOperatorLift_mulVec_le [∀ v, Fintype (Out v)] (R : Finset V)
+    (K : Matrix ((v : R) → Out v.1)
+      ((v : R) → Out v.1) ℂ)
+    (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
+    ‖WithLp.toLp 2 (dependentRegionOperatorLift R K *ᵥ ξ)‖ ≤ ‖K‖ * ‖ξ‖ := by
+  classical
+  let e := dependentRegionConfigEquiv (Out := Out) R
+  let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
+  have hmul : E (WithLp.toLp 2 (dependentRegionOperatorLift R K *ᵥ ξ)) =
+      WithLp.toLp 2 ((K ⊗ₖ 1) *ᵥ E ξ) := by
+    ext p
+    change (dependentRegionOperatorLift R K *ᵥ ξ) (e.symm p) = _
+    simp only [dependentRegionOperatorLift, Matrix.reindex_apply, Matrix.mulVec,
+      dotProduct, Equiv.symm_symm]
+    rw [← e.symm.sum_comp]
+    simp [E, e, LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft']
+  rw [← E.norm_map, hmul]
+  exact (Matrix.l2_opNorm_kronecker_one_mulVec_le K (E ξ)).trans_eq
+    (congrArg (‖K‖ * ·) (E.norm_map ξ))
+
+/-- Lifting regional matrices is continuous. -/
+theorem continuous_dependentRegionOperatorLift (R : Finset V) :
+    Continuous (dependentRegionOperatorLift (Out := Out) R) := by
+  classical
+  unfold dependentRegionOperatorLift
+  exact (continuous_id.matrix_kronecker continuous_const).matrix_reindex _ _
 
 /-- Lifting preserves the identity matrix. -/
 theorem dependentRegionOperatorLift_one [∀ v, DecidableEq (Out v)] (R : Finset V) :

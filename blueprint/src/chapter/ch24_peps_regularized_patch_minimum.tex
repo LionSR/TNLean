@@ -5,9 +5,9 @@ Let $V$ be a finite ordered set of sites, with finite-dimensional coordinate
 Hilbert spaces $\mathcal H_v$, and set
 $\mathcal H_X=\bigotimes_{v\in X}\mathcal H_v$.
 The empty tensor product is $\C$.
-For $X\subseteq V$, write $\iota_X(K)=K\otimes I_{V\setminus X}$ in the
-canonical regional coordinates. Fix regions $X_0,\ldots,X_{m-1}$ and a unit
-vector $\Omega\in\mathcal H_V$.
+For $X\subseteq V$, use the regional extension $\widehat K_X$ of
+Definition~\ref{def:peps_regional_operator_extension}.
+Fix regions $X_0,\ldots,X_{m-1}$ and a unit vector $\Omega\in\mathcal H_V$.
 The following argument proves attainment and the elementary norm bounds in the
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized variational problem}
 of the September 24, 2026 polynomial-PEPS manuscript.
@@ -15,29 +15,6 @@ of the September 24, 2026 polynomial-PEPS manuscript.
 % adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These are the finite-dimensional minimum and elementary bounds only, not
 % stationarity, energy, slow regulator growth, retained rank, or Proposition 4.1.
-
-\begin{lemma}[Identity extension]
-    \label{lem:peps_regularized_identity_extension}
-    \lean{
-        TNLean.PEPS.norm_dependentRegionOperatorLift_mulVec_le,
-        TNLean.PEPS.continuous_dependentRegionOperatorLift
-    }
-    \leanok
-    For any region $X$, the map $K\mapsto\iota_X(K)$ is continuous.
-    For every operator $K$ on $\mathcal H_X$ and $\xi\in\mathcal H_V$,
-    \[
-        \|\iota_X(K)\xi\|\le\|K\|\,\|\xi\|.
-    \]
-\end{lemma}
-\begin{proof}
-    \leanok
-    Regroup the coordinates as
-    $\mathcal H_V=\mathcal H_X\otimes\mathcal H_{V\setminus X}$.
-    Each complementary-coordinate slice is multiplied by $K$.
-    Summing the squared Euclidean bounds on these slices proves the inequality.
-    The matrix entries of the identity extension depend linearly on those of $K$,
-    proving continuity.
-\end{proof}
 
 \begin{definition}[Feasible densities and ordered filters]
     \label{def:peps_regularized_patch_objective}
@@ -49,11 +26,12 @@ of the September 24, 2026 polynomial-PEPS manuscript.
         TNLean.PEPS.regularizedPatchObjective
     }
     \leanok
+    \uses{def:peps_regional_operator_extension}
     Let $b>0$ and $a_0,\ldots,a_{m-1}\in\R$, and put $A=\sum_j a_j$. Define
     \begin{align*}
         \mathcal D & =\prod_{j=0}^{m-1}
         \{x_j\in\operatorname{End}(\mathcal H_{X_j}):x_j\ge0,\ \tr x_j=1\}, \\
-        L_j(x)     & =\iota_{X_j}\bigl((x_j+bI_{X_j})^{-a_j/2}\bigr),       \\
+        K_j(x)     & =(x_j+bI_{X_j})^{-a_j/2},\qquad L_j(x)=\widehat{K_j(x)}_{X_j}, \\
         M(x)       & =L_{m-1}(x)\cdots L_0(x),                              \\
         \Psi(x)    & =M(x)\Omega,\qquad F(x)=\|\Psi(x)\|.
     \end{align*}
@@ -135,7 +113,7 @@ are scalar identities.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:peps_regularized_identity_extension}
+    \uses{thm:peps_regional_extension_norm}
     In finite dimension, the positive semidefinite trace-one matrices form a
     compact set. Their finite product is compact. Since $\|\Omega\|=1$,
     some global configuration has a nonzero coefficient in $\Omega$.
@@ -169,7 +147,7 @@ are scalar identities.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_regularized_identity_extension}
+    \uses{thm:peps_regional_extension_norm}
     A positive semidefinite trace-one matrix satisfies $0\le x_j\le I$.
     The eigenvalues of $x_j+bI$ therefore lie in $[b,1+b]$.
     The negative power has operator norm at most $b^{-a_j/2}$, while its
