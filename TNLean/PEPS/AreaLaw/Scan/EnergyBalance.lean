@@ -14,8 +14,8 @@ Lemma 9.1(4), and new leaves by their total weight `p ≤ ε`. The coefficient
 `a² (D/m) KnD = W² n D²/(mK) ≤ C W² n^ℓ D²` contains no total-volume factor.
 
 **Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
-are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
-Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
+are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4
+and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Main results

@@ -14,8 +14,8 @@ Proposition 9.2: the transfer of the entropy input from `Ω` to `\widetilde Ω`,
 `𝓑 ≤ C n D (log n)^C`, and the terminal rough upper bound `≤ C W n^{1+e}`.
 
 **Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
-are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
-Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
+are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4
+and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Main results
