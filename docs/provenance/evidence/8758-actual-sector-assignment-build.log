@@ -1,0 +1,8 @@
+Command: lake build TNLean.PEPS.AreaLaw.Geometry
+Revision: eec1eadc03a5804a6b526d85f116a140b67fb83e
+Elapsed seconds: 18.827
+Exit code: 0
+
+✔ [2478/2479] Built TNLean.PEPS.AreaLaw.Geometry.InitialSectorAssignment (12s)
+✔ [2479/2479] Built TNLean.PEPS.AreaLaw.Geometry (3.2s)
+Build completed successfully (2479 jobs).
