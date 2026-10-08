@@ -1,11 +1,10 @@
 % SCP10 arXiv:1001.3807v3, Lemma 6.14, paper_v3.tex:2199--2214.
-% Finite-rectangle specialization verified by strict Lean checks in PR #8726.
+% Finite-rectangle specialization: PR #8726.
 
 \begin{definition}[Lifted rectangular steps and the rooted comb]%
     \label{def:peps_dual_rectangle_comb}
     \lean{TNLean.PEPS.torusRectCoord,
         TNLean.PEPS.torusRectCoord_eq,
-        TNLean.PEPS.torusRectCoord_injective,
         TNLean.PEPS.torusRectColumn,
         TNLean.PEPS.torusRectComb,
         TNLean.PEPS.RectDualStep,
@@ -14,8 +13,7 @@
         TNLean.PEPS.torusRectInterior,
         TNLean.PEPS.rectDualToTorus,
         TNLean.PEPS.rectDualPathToTorus,
-        TNLean.PEPS.TorusDualRectangle,
-        TNLean.PEPS.TorusDualRectangle.injective}
+        TNLean.PEPS.TorusDualRectangle}
     \leanok
     \uses{def:peps_dual_flux_path}
     Choose $(x_0,y_0)\in X$ and $W,H\geq0$.
@@ -23,15 +21,34 @@
     The horizontal steps join $(i,j)$ and $(i+1,j)$ for $i<W$, $j\leq H$;
     the vertical steps join $(i,j)$ and $(i,j+1)$ for $i\leq W$, $j<H$.
     Both orientations retain their direction labels under
-    $\iota(i,j)=(x_0+i,y_0+j)$ modulo the periods.
+    $\kappa(i,j)=(x_0+i,y_0+j)$ modulo the periods.
     Vertices outside the rectangle are isolated.
     The rooted comb path $C_{i,j}$ consists of $i$ east steps on the
     bottom row followed by $j$ north steps. Its vertical segment is
     the column at $i$. The swept primal set is
-    $R=\{\iota(i+1,j+1):i<W,\ j<H\}$.
-    An embedded patch also requires $W<w$ and $H<h$; these inequalities
-    imply injectivity of $\iota$ on its closed lifted rectangle.
+    $R=\{\kappa(i+1,j+1):i<W,\ j<H\}$.
+    An embedded patch also requires $W<w$ and $H<h$.
 \end{definition}
+
+\begin{theorem}[Injectivity of the embedded patch]%
+    \label{thm:peps_dual_rectangle_injective}
+    \lean{TNLean.PEPS.torusRectCoord_injective,
+        TNLean.PEPS.TorusDualRectangle.injective}
+    \leanok
+    \uses{def:peps_dual_rectangle_comb}
+    Let $x\in\mathbb Z/n$ and $W<n$. If $0\leq i,j\leq W$ and
+    $x+i=x+j$ in $\mathbb Z/n$, then $i=j$. Consequently, if $W<w$ and
+    $H<h$, then $\kappa$ is injective on the closed lifted rectangle
+    $\{0,\ldots,W\}\times\{0,\ldots,H\}$.
+\end{theorem}
+\begin{proof}\leanok
+    Cancelling $x$ gives $i\equiv j\pmod n$. Since
+    \begin{align*}
+        0\leq i\leq W<n, \qquad 0\leq j\leq W<n,
+    \end{align*}
+    both are their own residues, so $i=j$. Apply this to the first
+    coordinates with $n=w$ and to the second with $n=h$, $W$ replaced by $H$.
+\end{proof}
 
 \begin{theorem}[Comb-edge normalization and prefix cancellation]%
     \label{thm:peps_dual_rectangle_comb}
@@ -48,9 +65,31 @@
     and $cp\sim_R cq$ implies $p\sim_R q$.
 \end{theorem}
 \begin{proof}\leanok
-    Exchange a column and its final east edge by successive adjacent
-    squares; a north edge simply extends a column.
-    Reverse edges and common prefixes are removed by backtrack cancellation.
+    Write $e_{i,j}:(i,j)\to(i+1,j)$ and $n_{i,j}:(i,j)\to(i,j+1)$, and let
+    $\gamma_i^j=n_{i,0}n_{i,1}\cdots n_{i,j-1}$ be the column at $i$.
+    For $i<W$ and $k<H$ the square move (\ref{eq:peps_dual_square_move})
+    at the swept site $\kappa(i+1,k+1)\in R$ gives
+    $n_{i,k}e_{i,k+1}\sim_R e_{i,k}n_{i+1,k}$. Induction on $j\leq H$ gives
+    \begin{align*}
+        \gamma_i^{j+1}e_{i,j+1}
+        =\gamma_i^j n_{i,j}e_{i,j+1}
+        \sim_R\gamma_i^j e_{i,j}n_{i+1,j}
+        \sim_R e_{i,0}\gamma_{i+1}^j n_{i+1,j}
+        =e_{i,0}\gamma_{i+1}^{j+1}.
+    \end{align*}
+    Since $C_{i,j}=C_{i,0}\gamma_i^j$ and $C_{i+1,0}=C_{i,0}e_{i,0}$,
+    \begin{align*}
+        C_{i,j}e_{i,j}=C_{i,0}\gamma_i^je_{i,j}
+        \sim_R C_{i,0}e_{i,0}\gamma_{i+1}^j=C_{i+1,j},
+        \qquad
+        C_{i,j}n_{i,j}=C_{i,j+1}.
+    \end{align*}
+    If $ce\sim_R d$, then backtrack removal gives
+    $de^{-1}\sim_R cee^{-1}\sim_R c$; this yields the west and south edges.
+    If $cp\sim_R cq$, removing the backtracks of $c^{-1}c$ one by one gives
+    \begin{align*}
+        p\sim_R c^{-1}cp\sim_R c^{-1}cq\sim_R q.
+    \end{align*}
 \end{proof}
 
 \begin{theorem}[Deformation inside an embedded rectangular dual patch]%
@@ -63,8 +102,8 @@
     Fix a dual plaquette $(x_0,y_0)$ and integers $0\leq W<w$,
     $0\leq H<h$. Embed the closed rectangle
     $D=\{0,\ldots,W\}\times\{0,\ldots,H\}$ by
-    $\iota(i,j)=(x_0+i,y_0+j)$ modulo $(w,h)$, and put
-    $R=\{\iota(i+1,j+1):0\leq i<W,\ 0\leq j<H\}$.
+    $\kappa(i,j)=(x_0+i,y_0+j)$ modulo $(w,h)$, and put
+    $R=\{\kappa(i+1,j+1):0\leq i<W,\ 0\leq j<H\}$.
     Every two labelled unit-step paths in $D$ with the same lifted
     endpoints have projections related by $\sim_R$.
     This is the rectangular bulk specialization of
@@ -79,8 +118,9 @@
     by cancelling an edge with its reverse. Induction on the steps
     of $p:a\to b$ gives $C_a p\sim_R C_b$.
     Thus $C_a p\sim_R C_a q$; prepend $C_a^{-1}$ and cancel
-    its successive backtracks. The bounds $W<w$ and $H<h$ make
-    $\iota$ injective on $D$. No periodic-endpoint identification
+    its successive backtracks. By
+    Theorem~\ref{thm:peps_dual_rectangle_injective}, the bounds $W<w$
+    and $H<h$ make $\kappa$ injective on $D$. No periodic-endpoint identification
     replaces equality of the lifted endpoints.
 \end{proof}
 
@@ -127,6 +167,11 @@
     configuration. Site tensors outside $R$ are unrestricted.
 \end{theorem}
 \begin{proof}\leanok
-    The derived homotopy uses only squares supported in $R$.
-    Apply the supported gauge cancellation identity to the actual contraction.
+    Theorem~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$ for the
+    projections $\bar p,\bar q$ of $p,q$, using only square moves at sites
+    of $R$. Theorem~\ref{thm:peps_dual_flux_deformation}, applied with the
+    fixed exterior assignment $E$, then gives
+    \begin{align*}
+        \Psi_{\bar p}^E(\sigma)=\Psi_{\bar q}^E(\sigma).
+    \end{align*}
 \end{proof}
