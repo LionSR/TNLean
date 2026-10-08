@@ -194,3 +194,32 @@ Its marginals are those of the same final normalized vector defined in
     assumption is needed. Partial trace preserves positivity and trace.
     Finally $J$ preserves the norm and $\|\phi\|=1$, so $\tr\rho_X=1$.
 \end{proof}
+
+\begin{theorem}[Relabelling the final-state marginal]
+    \label{thm:peps_patch_basis_relabelling}
+    \lean{TNLean.PEPS.reindex_normalizedRegularizedPatchMarginal}
+    \leanok
+    \uses{def:peps_patch_canonical_marginal,
+        thm:peps_regional_basis_relabelling}
+    For the sitewise basis relabellings of
+    Theorem~\ref{thm:peps_regional_basis_relabelling}, the marginal
+    $\rho_X$ of the same final vector $\phi=\widehat\Psi(x)$ satisfies
+    \begin{align}
+        E_X\rho_XE_X^*
+         & =\operatorname{Tr}_{V\setminus X}
+        \ketbra{E_V\phi}{E_V\phi}.
+        \label{eq:peps_patch_marginal_relabelling}
+    \end{align}
+    This identity holds for every tuple $x$ and every choice of weights
+    and regulator. Under the unit-norm hypotheses of
+    Theorem~\ref{thm:peps_patch_marginal_expectation}, both sides have
+    trace one.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_patch_canonical_marginal,
+        thm:peps_regional_basis_relabelling}
+    Apply~(\ref{eq:peps_marginal_basis_relabelling}) to $\xi=\phi$,
+    using the canonical identification $J$ in
+    Definition~\ref{def:peps_patch_canonical_marginal}.
+\end{proof}

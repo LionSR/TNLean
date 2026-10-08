@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
-import QICLean.Channel.FiniteProduct
+import TNLean.PEPS.ParentHamiltonian.DependentRegionCoordinates
 
 /-!
 # Canonical marginals of regularized patch outputs
@@ -28,74 +28,7 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Out : V → Type*}
 
-/-- Forget the redundant full-region membership witness in a configuration. -/
-def dependentGlobalConfigEquiv :
-    ((v : (Finset.univ : Finset V)) → Out v.1) ≃ ((v : V) → Out v) where
-  toFun σ v := σ ⟨v, Finset.mem_univ v⟩
-  invFun σ v := σ v.1
-  left_inv σ := by funext v; rfl
-  right_inv σ := rfl
-
 variable [∀ v, Fintype (Out v)]
-
-/-- The canonical unitary identification of the full-region and global
-configuration Hilbert spaces. -/
-noncomputable def dependentGlobalConfigIsometry :
-    EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ ((v : V) → Out v) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ dependentGlobalConfigEquiv
-
-@[simp]
-theorem dependentGlobalConfigIsometry_apply
-    (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
-    (σ : (v : V) → Out v) :
-    dependentGlobalConfigIsometry ξ σ = ξ (fun v ↦ σ v.1) := rfl
-
-/-- The actual regional lift pairs with the canonical finite-product marginal.
-This equality is complex-valued and requires no Hermiticity assumption on the
-regional matrix. -/
-theorem inner_dependentRegionOperatorLift_eq_trace_reducedPure (R : Finset V)
-    (K : Matrix ((v : R) → Out v.1) ((v : R) → Out v.1) ℂ)
-    (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
-    inner ℂ ξ (WithLp.toLp 2 (dependentRegionOperatorLift R K *ᵥ ξ)) =
-      Matrix.trace (FiniteProduct.reducedPure Out (dependentGlobalConfigIsometry ξ) R * K) := by
-  classical
-  let e := dependentRegionConfigEquiv (Out := Out) R
-  let P := Matrix.vecMulVec (WithLp.ofLp ξ) (star (WithLp.ofLp ξ))
-  let Y := P.submatrix e.symm e.symm
-  have hρ : FiniteProduct.reducedPure Out (dependentGlobalConfigIsometry ξ) R =
-      Matrix.partialTraceRight Y := by
-    rfl
-  have hpair : Matrix.trace (Matrix.partialTraceRight Y * K) =
-      Matrix.trace (Y * (K ⊗ₖ 1)) := by
-    let s := Equiv.prodComm (FiniteProduct.Configuration Out Rᶜ)
-      (FiniteProduct.Configuration Out R)
-    have hswap : (K ⊗ₖ (1 : Matrix (FiniteProduct.Configuration Out Rᶜ)
-        (FiniteProduct.Configuration Out Rᶜ) ℂ)).submatrix s s = 1 ⊗ₖ K := by
-      ext p q
-      exact mul_comm _ _
-    calc
-      _ = Matrix.trace (Matrix.partialTraceLeft (Y.submatrix s s) * K) := rfl
-      _ = Matrix.trace (Y.submatrix s s * (1 ⊗ₖ K)) :=
-        Matrix.trace_partialTraceLeft_mul K _
-      _ = Matrix.trace ((Y * (K ⊗ₖ 1)).submatrix s s) := by
-        rw [← hswap, Matrix.submatrix_mul_equiv]
-      _ = Matrix.trace (Y * (K ⊗ₖ 1)) := Matrix.trace_submatrix_equiv s _
-  have hLift : (dependentRegionOperatorLift R K).submatrix e.symm e.symm =
-      K ⊗ₖ 1 := by
-    ext p q
-    change (K ⊗ₖ 1) (e (e.symm p)) (e (e.symm q)) = _
-    simp only [Equiv.apply_symm_apply]
-  rw [hρ, hpair]
-  calc
-    _ = Matrix.trace (P * dependentRegionOperatorLift R K) := by
-      rw [Matrix.trace_mul_comm, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec]
-      exact EuclideanSpace.inner_eq_star_dotProduct ξ _
-    _ = Matrix.trace ((P * dependentRegionOperatorLift R K).submatrix e.symm e.symm) :=
-      (Matrix.trace_submatrix_equiv e.symm _).symm
-    _ = Matrix.trace (Y * (K ⊗ₖ 1)) := by
-      rw [← Matrix.submatrix_mul_equiv P (dependentRegionOperatorLift R K)
-        e.symm e.symm e.symm, hLift]
 
 variable {m : ℕ} (regions : Fin m → Finset V)
 
@@ -139,5 +72,19 @@ theorem inner_normalizedRegularizedPatchOutput_lift_eq_trace (a : Fin m → ℝ)
           normalizedRegularizedPatchOutput regions a b Ω x)) =
       Matrix.trace (normalizedRegularizedPatchMarginal regions a b Ω x R * K) :=
   inner_dependentRegionOperatorLift_eq_trace_reducedPure R K _
+
+/-- Relabelling the actual normalized final-state marginal gives the QIC
+regional state of that same normalized output. No optimizer or commutation
+hypothesis is involved. -/
+theorem reindex_normalizedRegularizedPatchMarginal {n : V → ℕ}
+    (e : ∀ v, Out v ≃ Fin (n v)) (a : Fin m → ℝ) (b : ℝ)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
+    (R : Finset V) :
+    Matrix.reindex (dependentRegionFinEquiv e R) (dependentRegionFinEquiv e R)
+        (normalizedRegularizedPatchMarginal regions a b Ω x R) =
+      Entropy.regionState R (dependentGlobalFinIsometry e
+        (normalizedRegularizedPatchOutput regions a b Ω x)) :=
+  reindex_reducedPure_eq_regionState e R _
 
 end TNLean.PEPS
