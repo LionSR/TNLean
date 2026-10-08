@@ -14,10 +14,20 @@ The small-patch covers of the source are applied to its sampled guides. The foot
 `TNLean.PEPS.Approximation.DyadicFootprintTemplates` and
 `TNLean.PEPS.Approximation.DyadicBlockFootprints` are proved for the formal labellings, with holes
 at their true vertices. This file proves them for the readings of these labellings after one
-displacement `v`, with holes at the true vertices of the readings; by
-`TNLean.PEPS.Approximation.DyadicChamberSampling`, for generic `v` these readings are the source's
-sampled guides. The ratio `ν` depends on `v`, which the source fixes once all the guides are
-specified, before the patch ratio is chosen:
+displacement `v`, with holes at the true vertices of the readings. For generic `v` these readings
+are the source's sampled guides, by `isChamberSampling_schedule` for the block guides and the
+homogenized guides and by `isChamberSampling_pointTreated` for the point-treated guides.
+
+**Scope restriction (one displacement):** the ratio `ν` is proved for each displacement `v`, and
+may depend on it. The source chooses the patch ratio before the information scale `D`, and the
+displacement only after all the guides, which depend on `D`, are specified (`06-geometry.tex:73–77,
+559–563`); its ratio serves every generic displacement. Here genericity does not depend on `L`,
+`D`, `n` or `t` (`IsGenericDisplacement`), so one generic direction, such as `(1, 1)`
+(`isGenericDisplacement_one_one`), can be fixed before every constant, and the ratio for it is
+then a fixed constant. Documented in
+`docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex`.
+
+The argument:
 
 * a reading takes only values of the labelling, and reading commutes with relabellings and with
   the similarities `u ↦ c + s u`, `s > 0`: if `f` agrees on an open square with a relabelled
@@ -94,6 +104,35 @@ theorem IsRayConstant.pointTreated {ι : Type*} {f : ℝ × ℝ → ι} (h : IsR
   cases P with
   | none => exact h
   | some P₀ => exact (isRayConstant_mem_ball c t).ite (isRayConstant_const P₀) h
+
+/-- The point treatment keeps the walls on lines. -/
+theorem HasLineWalls.pointTreated {ι : Type*} {f : ℝ × ℝ → ι} (h : HasLineWalls wallNormals f)
+    (c : ℝ × ℝ) (t : ℝ) (P : Option ι) : HasLineWalls wallNormals (pointTreated c t P f) := by
+  cases P with
+  | none => exact h
+  | some P₀ => exact (hasLineWalls_mem_ball c t).ite (hasLineWalls_const P₀) h
+
+/-- **The sampled point-treated guides are the readings.** Let `v` be generic. Every unmodified
+guide of the repainting of the block `S`, placed on the block and point treated about a grid
+corner, has exactly one guide sampled from its open chambers after `v`, and a guide is sampled
+from its chambers after `v` exactly when it reads it after `v`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–80, 330–338, 481–505`. -/
+theorem isChamberSampling_pointTreated {ι : Type*} {n : ℝ} (hn : 0 < n) {v : ℝ × ℝ}
+    (hv : IsGenericDisplacement v) {lab : ℤ × ℤ → ι} {S : ℤ × ℤ} {B : ι} {g : ℝ × ℝ → ι}
+    (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g) (Q : ℤ × ℤ) (t : ℝ) (P : Option ι) :
+    (∃ g', IsChamberSampling g'
+      (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g)) v) ∧
+    ∀ g', IsChamberSampling g'
+      (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g)) v ↔
+      IsDisplacedReading g'
+        (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g)) v := by
+  have hw := ((hasLineWalls_schedule hn hg ∅ 0 B).2.1).pointTreated (blockCorner n Q) t P
+  have hr : IsRayConstant
+      (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g)) :=
+    ((hg.isRayConstant _ ((isRayConstant_blockGuide n lab).comp_add _)).shiftGuide _).pointTreated
+      _ t P
+  exact ⟨hw.exists_isChamberSampling hr hv, fun _ => hw.isChamberSampling_iff hv⟩
 
 /-- The templates of the point treatment are eventually constant along rays. -/
 theorem isRayConstant_footprintTemplate (i : TemplateIndex) :

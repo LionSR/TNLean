@@ -186,12 +186,20 @@ a label of a labelling $f$ is the interior of the region of $f$ with that label,
 the guide sampled from the chambers of $f$ after $v$ takes at $p$ the label of the
 chamber containing $p+\varepsilon v$ for all small $\varepsilon>0$
 (\leanid{TNLean.PEPS.Approximation.IsChamberSampling}). A sampled guide is a reading.
+This models the source's open polygonal chambers as the interiors of the label regions
+of the formal labellings. The model is faithful because the formal guides agree with
+the source's chamber descriptions on every open chamber, merging adjacent chambers that
+carry one label does not change the sampled label, and a label confined to boundaries
+is never sampled, as line 77 of the source requires. What is proved about the chambers
+is the next paragraph: the formal guides are constant off a locally finite family of
+lines.
 
 Every guide of the schedule, the block guide, every guide of the repainting of a
 block, and each of these homogenized on finitely many open squares, is constant near
 every point off a set that lies, near every point, in finitely many lines whose normals
 are $(\pm t,1000)$ or $(1000,\pm t)$ with $t$ in
-$T=\{-8,-6,-5,-4,-3,-2,-1,0,1,2\}$. Indeed the interface curve $x=t$ of a band is
+$T=\{-8,-6,-5,-4,-3,-2,-1,0,1,2\}$; the values $-8$ and $2$ bound only the region of
+a band that a word replaces. Indeed the interface curve $x=t$ of a band is
 $1000\,d=t\min(s,n-s)$, a union of two segments; the edges, the grid lines and the
 sides of the treated squares are lines with $t=0$; the grid lines form a locally finite
 family; and a strict inequality between continuous functions, a bound on $d/w(s)$ off
@@ -208,7 +216,10 @@ once and lies, for all small $\varepsilon>0$, in one open chamber
 (\leanid{TNLean.PEPS.Approximation.IsLocallyInLines.eventually_notMem}). Hence for
 every generic $v$ the sampled guide of every guide of the schedule exists, is unique,
 and equals its reading
-(\leanid{TNLean.PEPS.Approximation.isChamberSampling_schedule}), and the estimates of
+(\leanid{TNLean.PEPS.Approximation.isChamberSampling_schedule},
+\leanid{TNLean.PEPS.Approximation.exists_isChamberSampling_blockRepainting}), and the
+same holds for the guides point treated about one grid corner
+(\leanid{TNLean.PEPS.Approximation.isChamberSampling_pointTreated}). The estimates of
 Lemma~7.2 hold for the sampled guides with $a_0=1/5000$
 (\leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling},
 \leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling},
@@ -221,15 +232,33 @@ The uniform footprint ratios of the point treatment and of the block guides also
 for the readings, with holes at the true vertices of the readings. A reading takes only
 values of the labelling, and a reading of a relabelled similar image of a template is
 the same image of a reading of the template; the templates are eventually constant
-along rays, so their finitely many readings serve as templates. The ratio $\nu$ then
-depends on $v$, which the source fixes once all the guides are specified, before the
-patch ratio is chosen
+along rays, so their finitely many readings serve as templates
 (\leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading},
 \leanid{TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading},
 \leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}).
+
+\section{Scope restriction: one ratio for each displacement}
+
+The footprint ratio $\nu$ for the readings is proved for each displacement $v$, and
+may depend on $v$. The source's ratio does not: it chooses $K_0$, then $\epsilon_0$,
+then $\nu$, and only afterwards the clearance $a$ and the information scale $D$
+(lines 559--563), while the guides depend on $D$ through $t=D\log L$ and the
+displacement is chosen after all the guides are specified (lines 73--77). So the
+source's $\nu$ serves every generic displacement; its compactness argument (lines
+453--462) uses only the closures of the label regions, which do not depend on $v$.
+
+The formal genericity condition does not depend on $L$, $D$, $n$ or $t$: a direction
+is generic when it is parallel to none of the lines with normals $(\pm t,1000)$ or
+$(1000,\pm t)$, $t\in T$. One generic direction, such as $v=(1,1)$, can therefore be
+fixed before every constant, and $\nu$ for it is then a fixed constant chosen in the
+source's order. The restriction does not affect Lemma~7.2, whose estimates hold for
+every displacement. Elimination: prove one ratio for all generic directions, using that
+for generic $v$ the closure of each label region of a reading is the closure of the
+interior of the corresponding region of the labelling, independent of $v$.
+
 Nothing of Lemma~7.2 or of its sampling convention remains open.
 
 \end{document}

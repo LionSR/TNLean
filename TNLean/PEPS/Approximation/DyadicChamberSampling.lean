@@ -51,6 +51,12 @@ variable {X ι : Type*} [AddCommGroup X] [Module ℝ X] [TopologicalSpace X]
 point `p`, for all small `ε > 0`, the point `p + ε v` lies in the open chamber of label `g p`, the
 interior of the region of `f` with that label.
 
+The source's open polygonal chambers are modelled as the interiors of the label regions of the
+formal labelling `f`. The formal guides agree with the source's descriptions on every open chamber,
+merging adjacent chambers with one label does not change the sampled label, and a label confined
+to boundaries is never sampled, as the source requires (`06-geometry.tex:77`). What is proved about
+the chambers is `HasLineWalls`: the formal guides are constant off a locally finite family of lines.
+
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–77`: "All guides below are
 specified by their open polygonal chambers. … move a sampled point by an arbitrarily small generic
 vector into an incident chamber … and take the resulting label". -/
@@ -151,12 +157,10 @@ theorem IsLocallyInLines.preimage_add (h : IsLocallyInLines 𝒩 Z) (o : ℝ × 
     linear_combination hm
 
 /-- A positive small parameter eventually avoids any given value. -/
-theorem eventually_ne_nhdsGT_zero (a : ℝ) : ∀ᶠ ε in 𝓝[>] (0 : ℝ), ε ≠ a := by
-  rcases le_or_gt a 0 with ha | ha
-  · filter_upwards [self_mem_nhdsWithin] with ε (hε : 0 < ε)
-    exact (ha.trans_lt hε).ne'
-  · filter_upwards [Ioo_mem_nhdsGT ha] with ε hε
-    exact hε.2.ne
+private theorem eventually_ne_nhdsGT_zero (a : ℝ) : ∀ᶠ ε in 𝓝[>] (0 : ℝ), ε ≠ a := by
+  rcases eq_or_ne a 0 with rfl | ha
+  · filter_upwards [self_mem_nhdsWithin] with ε (hε : (0 : ℝ) < ε) using hε.ne'
+  · exact nhdsWithin_le_nhds (eventually_ne_nhds ha.symm)
 
 /-- **The ray leaves the walls at once.** If `v` is parallel to none of the lines with normals in
 `𝒩`, then for every point `p` the point `p + ε v` avoids a set lying locally in such lines for
@@ -299,9 +303,9 @@ end Walls
 
 /-! ### The walls of the schedule -/
 
-/-- The thresholds of the normal ratio at which the guides of the schedule can have interfaces:
-the band boundaries `-8` and `2`, the interfaces `-6, …, -1, 0, 1` of the normal words, and `0`
-for the edges themselves and the grid lines.
+/-- The thresholds of the normal ratio at which a guide of the schedule or a band-update region
+can have a boundary: the boundaries `-8` and `2` of the band-update region, the interfaces
+`-6, …, -1, 0, 1` of the normal words, and `0` for the edges themselves and the grid lines.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:142–221`. -/
 def wallThresholds : Set ℝ := {-8, -6, -5, -4, -3, -2, -1, 0, 1, 2}
@@ -554,21 +558,13 @@ theorem hasLineWalls_blockGuide {ι : Type*} (n : ℝ) (lab : ℤ × ℤ → ι)
 
 /-! ### The guides of the schedule -/
 
-/-- Every main word is a normal word with threshold interfaces. -/
-theorem exists_eq_bandWord_of_mem_mainWords_thresholds {ι : Type*} {A B C : ι} {W : ℝ → ι}
-    (hW : W ∈ mainWords A B C) :
-    ∃ c l, W = bandWord c l ∧ ∀ x ∈ l, x.1 ∈ wallThresholds := by
-  simp only [mainWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl | rfl | rfl <;>
-    exact ⟨_, _, rfl, by simp [wallThresholds]⟩
-
-/-- Every auxiliary word is a normal word with threshold interfaces. -/
-theorem exists_eq_bandWord_of_mem_auxWords_thresholds {ι : Type*} {A B C : ι} {W : ℝ → ι}
-    (hW : W ∈ auxWords A B C) :
-    ∃ c l, W = bandWord c l ∧ ∀ x ∈ l, x.1 ∈ wallThresholds := by
-  simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl | rfl <;>
-    exact ⟨_, _, rfl, by simp [wallThresholds]⟩
+/-- The interfaces of the normal words are thresholds. -/
+theorem word_subset_wallThresholds :
+    ({-6, -5, -4, -3, -2, -1, 0, 1} : Set ℝ) ⊆ wallThresholds := by
+  intro x hx
+  simp only [mem_insert_iff, mem_singleton_iff] at hx
+  simp only [wallThresholds, mem_insert_iff, mem_singleton_iff]
+  tauto
 
 namespace RepaintingBaseline
 
@@ -591,10 +587,10 @@ theorem IsUnmodifiedGuide.hasLineWalls (hR : HasLineWalls wallNormals R.guide)
   · exact hR
   · exact central
   · exact completed E
-  · obtain ⟨c, l, rfl, hl⟩ := exists_eq_bandWord_of_mem_mainWords_thresholds hW
-    exact (completed E).bandUpdate R.n e c hl
-  · obtain ⟨c, l, rfl, hl⟩ := exists_eq_bandWord_of_mem_auxWords_thresholds hW
-    exact (hasLineWalls_const _).bandUpdate R.n e c hl
+  · obtain ⟨c, l, rfl, hl⟩ := exists_eq_bandWord_of_mem_mainWords hW
+    exact (completed E).bandUpdate R.n e c fun x hx => word_subset_wallThresholds (hl x hx)
+  · obtain ⟨c, l, rfl, hl⟩ := exists_eq_bandWord_of_mem_auxWords hW
+    exact (hasLineWalls_const _).bandUpdate R.n e c fun x hx => word_subset_wallThresholds (hl x hx)
 
 end RepaintingBaseline
 
@@ -659,12 +655,35 @@ variable {ι : Type*} {n : ℝ} (hn : 0 < n) (lab : ℤ × ℤ → ι) (S : ℤ 
 local notation "R" => blockBaseline hn lab S B
 local notation "o" => blockCorner n S
 
+/-- **The sampled guides of the repainting exist.** For a generic displacement `v`, the block
+guide, the guide after the central birth of the block `S`, and every main or auxiliary guide along
+an edge whose band carries a main or an auxiliary word, placed on the block, have a guide sampled
+from their open chambers after `v`. These include all the guides of
+`blockRepainting_central_of_chamberSampling`, `blockRepainting_auxStep_of_chamberSampling`,
+`blockRepainting_mainStep_of_chamberSampling` and `blockRepainting_exchange_of_chamberSampling`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–80, 155–241`. -/
+theorem exists_isChamberSampling_blockRepainting (hv : IsGenericDisplacement v) :
+    (∃ g, IsChamberSampling g (blockGuide n lab) v) ∧
+    (∃ g, IsChamberSampling g (shiftGuide o (R).centralGuide) v) ∧
+    (∀ (E : List SquareEdge) (e : SquareEdge), ∀ W ∈ mainWords (lab S) B (lab (e.nbrBlock S)),
+      ∃ g, IsChamberSampling g (shiftGuide o ((R).mainGuide E e W)) v) ∧
+    ∀ e : SquareEdge, ∀ W ∈ auxWords (lab S) B (lab (e.nbrBlock S)),
+      ∃ g, IsChamberSampling g (shiftGuide o ((R).auxGuide e W)) v := by
+  have key {g : ℝ × ℝ → ι} (hg : (R).IsUnmodifiedGuide g) :
+      ∃ g', IsChamberSampling g' (shiftGuide o g) v :=
+    (isChamberSampling_schedule hn hv hg ∅ 0 B _ (mem_insert_of_mem _ (mem_insert _ _))).1
+  refine ⟨(hasLineWalls_blockGuide n lab).exists_isChamberSampling (isRayConstant_blockGuide n lab)
+    hv, key (Or.inr (Or.inl rfl)), fun E e W hW => key (Or.inr (Or.inr (Or.inr (Or.inl
+      ⟨E, e, W, hW, rfl⟩)))), fun e W hW => key (Or.inr (Or.inr (Or.inr (Or.inr
+      ⟨e, W, hW, rfl⟩))))⟩
+
 /-- **Lemma 7.2 for the source's sampled guides, central birth.** For the guides `g₀`, `g₁`
 sampled after one displacement `v` from the open chambers of the block guide and of the guide
 after the central birth of the block `S`, the changed region has closure of diameter at most `n`,
 and each of its points `y` lies at sup distance at least `a₀ min(n, d_V(y))` from the closure of
 the positions where `g₀` is not the old label. For generic `v` these sampled guides exist
-(`isChamberSampling_schedule`).
+(`exists_isChamberSampling_blockRepainting`).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`, equation
 `eq:geometry-birth-clearance`, `06-geometry.tex:69–80, 254–264, 276–281`. -/

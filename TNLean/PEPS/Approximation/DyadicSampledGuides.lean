@@ -398,9 +398,9 @@ theorem IsUnmodifiedGuide.isRayConstant {g : ℝ × ℝ → ι} (hg : R.IsUnmodi
   · exact hR
   · exact R.isRayConstant_centralGuide hR
   · exact R.isRayConstant_completedGuide hR E
-  · obtain ⟨c, l, rfl⟩ := exists_eq_bandWord_of_mem_mainWords hW
+  · obtain ⟨c, l, rfl, -⟩ := exists_eq_bandWord_of_mem_mainWords hW
     exact R.isRayConstant_mainGuide hR E e c l
-  · obtain ⟨c, l, rfl⟩ := exists_eq_bandWord_of_mem_auxWords hW
+  · obtain ⟨c, l, rfl, -⟩ := exists_eq_bandWord_of_mem_auxWords hW
     exact R.isRayConstant_auxGuide e c l
 
 end RepaintingBaseline
