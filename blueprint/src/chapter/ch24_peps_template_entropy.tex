@@ -67,3 +67,55 @@
     \]
     The same formula includes $K=0$, when the lower sum is empty.
 \end{proof}
+
+\section{Safe rectangles in template coverings}
+
+\begin{definition}[Native rectangles of dyadic cells]
+    \label{def:area_template_dyadic_rectangle}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect}
+    \uses{def:area_law_safe_rectangle,def:area_law_lattice_dyadic_square}
+    For $k\ge0$ and $z\in\mathbb Z^2$, let $R_{k,z}$ have coordinate intervals
+    from $2^kz_i$ to $2^kz_i+2^k-1$, inclusive.
+\end{definition}
+
+\begin{theorem}[Exact rectangle interpretation]
+    \label{thm:area_template_dyadic_rectangle}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.toFinset_latticeDyadicRect,
+        TNLean.PEPS.AreaLaw.Geometry.size_latticeDyadicRect,
+        TNLean.PEPS.AreaLaw.Geometry.rectRegion_latticeDyadicRect}
+    \uses{def:area_template_dyadic_rectangle}
+    The lattice points of $R_{k,z}$ are exactly $C_{k,z}$,
+    its size is $2^k$, and its physical region is $A\cap C_{k,z}$.
+\end{theorem}
+\begin{proof}
+    Integer division by the positive integer $2^k$ identifies the closed
+    integer interval with the corresponding half-open dyadic interval.
+    Each coordinate interval contains exactly $2^k$ sites.
+\end{proof}
+
+\begin{theorem}[Safety from template separation]
+    \label{thm:area_template_safe_rectangles}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_shell}
+    \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,
+        thm:area_law_capped_dyadic_partition}
+    Let $T$ be separated from the cut, let $D_0\ge1$ be an integer, and let
+    $0\le j\le s_0$. Every integer rectangle $Q\subseteq T_j$ of size at
+    most $s_0$ is safe. In particular, if $2^K\le s_0$, every selected square
+    of the capped partitions of $T$ and $T_j\setminus T$ is a safe rectangle.
+    The standing choice $D_0>2R+10$ implies $D_0\ge1$.
+    This is the clearance step of~\cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    For $x\in Q\subseteq T_j$, choose $p\in T$ with
+    $\|p-x\|_\infty\le j$. For every cut endpoint $z$,
+    \[
+        4D_0s_0<\|p-z\|_\infty
+        \le j+\|x-z\|_\infty.
+    \]
+    Since $j\le s_0\le D_0s_0$, this gives
+    $D_0\operatorname{size}(Q)\le D_0s_0<\|x-z\|_\infty$.
+    Selected cells are contained in the partitioned set, and their sizes
+    satisfy $2^k\le2^K\le s_0$.
+\end{proof}

@@ -504,6 +504,14 @@ jobs:
             -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
             TNLeanTest/DyadicWeightedSum.lean
 
+      - name: Build safe template rectangle adapter early
+        timeout-minutes: 10
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Check finite rectangular dual geometry early
         run: |
           set -eo pipefail
