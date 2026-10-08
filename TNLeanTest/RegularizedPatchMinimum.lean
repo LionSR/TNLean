@@ -1,6 +1,6 @@
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 
-/-! Degenerate and repeated-region regressions for the actual regularized minimum. -/
+/-! Degenerate and repeated-region regressions for the regularized minimum. -/
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open Matrix TNLean.PEPS
