@@ -43,18 +43,12 @@ The swaps `F_S` of the two sheets and the buffer correction `D_U` are constructe
 
 ## Scope
 
-**Scope restriction (renaming of an exchange):** Lemma 6.6 asserts that the exchange is
-implemented by private contractions and register renaming, using `P∘` and the owners of the renamed
-registers and tags, and is therefore a bounded change in the sense of Theorem 5.2. Here
-`C = D_U F_A ℛ` is constructed; the corrections `D_U F_A` are proved to be one private contraction
-at `P∘` on the registers of `U`, which `P∘` holds on both sheets before and after the exchange
-(`TwoSheetExchange.exchange_correction_monomial` in
-`TNLean.PEPS.Approximation.OwnershipMonomials`, on a layout grouping the raw registers of `U` on
-each sheet into one register), and `ℛ` is the identification of tensor factors `renameEquiv`,
-which keeps every register at its party. Writing `ℛ` as a word of exchanges of tensor factors,
-and placing the corrections on the frames' registers, needs a layout with one register per site
-and per tag identified with the canonical coordinates, which is not formalized. Documented in
-`docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+Lemma 6.6 also asserts that the exchange is implemented by private contractions and register
+renaming, and is therefore a bounded change in the sense of Theorem 5.2. Here `C = D_U F_A ℛ` is
+constructed in canonical coordinates; its implementation on the registers of the frames, with
+`ℛ` a word of exchanges of tensor factors and `D_U F_A` one private contraction at `P∘`, is
+`TwoSheetExchange.exchange_bounded` and `TwoSheetExchange.exchange_ofFrames_bounded` in
+`TNLean.PEPS.Approximation.FrameBoundedChanges`.
 
 The source condition that every hole's outer square lies on one side of `∂Y` enters through the
 classification of the holes as outside or inside `Y`, which is part of the data, and through its

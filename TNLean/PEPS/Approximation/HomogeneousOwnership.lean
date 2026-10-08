@@ -37,16 +37,11 @@ vectors.
   `EncodedFrame.norm_act_birthOp_sub_le`.
 * `EncodedFrame.Frame.birth`, `EncodedFrame.Frame.death`: Lemma 6.5 `lem:birth`.
 
-## Scope
-
-**Scope restriction (register grouping):** the bounded-change clause of Lemma 6.5, that the
-birth is a private contraction at `P∘`, one normalized pair source between `Q∘` and `P∘` and a
-private contraction at `P∘`, and the death the same with one normalized pair effect, is not
-proved in this file.  It is proved in `TNLean.PEPS.Approximation.OwnershipMonomials`
-(`Frame.birth_monomial`, `Frame.death_monomial`) on a layout in which the raw registers of `T`,
-and those of `U`, are grouped into one register each, whereas the source has one raw register
-per site; the identification of that layout with the frame's registers and canonical coordinates
-is not formalized.  Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+The bounded-change clause of Lemma 6.5, that the birth is a private contraction at `P∘`, one
+normalized pair source between `Q∘` and `P∘` and a private contraction at `P∘`, and the death the
+same with one normalized pair effect, is `Frame.birth_bounded` and `Frame.death_bounded` in
+`TNLean.PEPS.Approximation.FrameBoundedChanges`, on the registers of the frame with one register
+per site and per tag.
 
 ## References
 
@@ -397,8 +392,8 @@ by `P∘` before the birth and by `P∘` or `Q∘` after it (`owner_eq_of_notMem
 The frames `F` and `F'` differ only in raw owners, and the encoding and the reference vector do
 not depend on raw owners (Definition 6.1, `05-frames.tex`, lines 71–82), so `K_{F'} = K_F` and
 `Ω_{F'} = Ω_F`; the identity `(1 ⊗ B) K_F = K_{F'} B` says that `B` commutes with the encoding.
-The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause, proved on
-grouped registers in `Frame.birth_monomial` (see the module docstring).
+The change of owner from `P∘` to `Q∘` is the content of the bounded-change clause,
+`Frame.birth_bounded`.
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437. -/
