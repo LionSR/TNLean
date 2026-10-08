@@ -52,7 +52,7 @@ supporting statement makes the irreducibility requirement explicit; the
 pure-FCS statement below derives it from the source hypotheses.
 Source: arXiv:0802.0447, Theorem 2, lines 297–323. -/
 private theorem stationaryBlockDensity_invariant_iff_spectralRadius_eq_one_of_irreducible
-    [NeZero D] (A : MPSTensor d D)
+    (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛpos : Λ.PosDef)
     (hΛtr : Matrix.trace Λ = 1)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
@@ -63,6 +63,7 @@ private theorem stationaryBlockDensity_invariant_iff_spectralRadius_eq_one_of_ir
       stationaryBlockDensity A Λ N) ↔
       spectralRadius ℂ (Module.End.toContinuousLinearMap
         (Matrix (Fin D) (Fin D) ℂ) (twistedTransferMap A u)) = 1 := by
+  have : NeZero D := ⟨by rintro rfl; simp at hΛtr⟩
   constructor
   · intro hsym
     by_contra hne
@@ -101,7 +102,7 @@ pure-FCS assumptions are the source assumptions; one-site injectivity and
 nonscalarity of u are not required.
 Source: arXiv:0802.0447, Theorem 2, lines 297–323. -/
 theorem stationaryBlockDensity_invariant_iff_spectralRadius_eq_one
-    [NeZero D] (A : MPSTensor d D)
+    (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛpos : Λ.PosDef)
     (hΛtr : Matrix.trace Λ = 1)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)

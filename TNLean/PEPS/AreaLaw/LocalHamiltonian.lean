@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.Circuit.SiteEmbedding
+import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
@@ -89,15 +90,14 @@ theorem localLift_mem_supportedOperators (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     QuantumCircuit.embedOp_mem_supportedOperators
       (e := fun x : ↥X ↦ x.val) Subtype.val_injective K
 
-/-- A unit eigenvector with the full-system projector gap.
+/-- A unit eigenvector with the full-system projector gap, the specialization of
+`Matrix.IsGappedGroundState` to the finite-domain state space.
 Source: area-law Theorem 1.1. For a Hermitian Hamiltonian and positive `Δ`,
 the inequality also forces the eigenvalue to be the ground energy and its
 eigenspace to be one-dimensional; these consequences are separate proof obligations. -/
 def IsGappedGroundState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (H : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
     (E₀ : ℝ) (Ω : StateSpace Λ q) (Δ : ℝ) : Prop :=
-  ‖Ω‖ = 1 ∧ Matrix.toEuclideanCLM (n := Configuration Λ q) (𝕜 := ℂ) H Ω = (E₀ : ℂ) • Ω ∧
-    (H - (E₀ : ℂ) • 1 - (Δ : ℂ) •
-      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef
+  Matrix.IsGappedGroundState H E₀ Ω Δ
 
 end TNLean.PEPS.AreaLaw
