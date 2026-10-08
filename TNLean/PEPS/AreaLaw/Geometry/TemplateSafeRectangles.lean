@@ -44,6 +44,7 @@ def latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) : IntRect where
 Source: Lemma 9.4, lines 641–649. -/
 @[simp] theorem toFinset_latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) :
     (latticeDyadicRect k z).toFinset = latticeDyadicCell k z := by
+  rcases z with ⟨a, b⟩
   ext p
   rw [IntRect.mem_toFinset, mem_latticeDyadicCell]
   simp only [latticeDyadicRect, dyadicAncestor, Prod.mk.injEq,
