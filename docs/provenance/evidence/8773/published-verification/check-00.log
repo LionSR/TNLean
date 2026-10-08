@@ -1,7 +1,0 @@
-✔ [2815/2820] Built TNLean.PEPS.Approximation.SquareLatticeConnectivity (3.9s)
-✔ [2816/2820] Built TNLean.PEPS.Approximation.ExactTreeRepresentation (4.6s)
-✔ [2817/2820] Built TNLean.PEPS.Approximation.ExactSquareRepresentation (2.4s)
-✔ [2818/2820] Built TNLean.PEPS.Approximation.ExactSmallSizeApproximation (2.4s)
-✔ [2819/2820] Built TNLean.PEPS.Approximation.ExactFiniteException (2.6s)
-✔ [2820/2820] Built TNLean.PEPS.Approximation (2.1s)
-Build completed successfully (2820 jobs).
