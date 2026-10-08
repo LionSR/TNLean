@@ -15,7 +15,13 @@ import TNLean.PEPS.RegularPhysicalChargeMotion
 The two reference labels are isolated by a genuine coordinate equivalence.
 A simultaneous-left-invariant unitary acts there, and every other physical
 coordinate is retained. Source: SCP10, arXiv:1001.3807, lines 2505–2558.
-This auxiliary block statement does not identify a prescribed six-site region.
+
+**Scope restriction (finite-region reference coordinates):** The preparation
+and return-projection identities are stated in the reference coordinates of a
+supplied finite block with a chosen tree and two internal bonds. They do not
+identify a prescribed six-site region, a decomposition of the physical state,
+or a completed geometric braid (lines 2560–2615). See
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 noncomputable section
 open scoped BigOperators Matrix Kronecker
