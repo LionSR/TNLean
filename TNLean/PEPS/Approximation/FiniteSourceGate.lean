@@ -52,17 +52,12 @@ theorem Word.exists_finite_source_preparation {P ι : Type} [Finite P] [Finite �
               (SourceInventory.prepareSlots R (fun i ↦ euc (Fin (a i)))
                 (fun i ↦ euc (Fin (b i))) (η ξ) ℓ).eval := by
   classical
-  obtain ⟨R, _, hR, hRK, _⟩ := SourceInventory.exists_complete ([] : SourceInventory P)
-    (by simp [SourceInventory.IsNormalized]) (by simp)
-  choose S hS hN hK hD v hv hvs he using fun ξ ↦
-    (w ξ).exists_complete_source_preparation (hw ξ)
-  obtain ⟨U, V, η, hη, hE⟩ := SourceInventory.exists_common_expansions R S hR hS hN
-    (fun ξ k ↦ (hRK k).trans (hK ξ k).symm)
+  obtain ⟨R, hR, hRK, U, V, η, hη, v, hv, hvs, he⟩ :=
+    Word.exists_common_source_preparation w hw
   obtain ⟨a, b, _, _, η₀, _, hnorm, hF⟩ :=
     SourceInventory.exists_finite_coordinate_expansions R U V η
-  choose d hd hds hde using fun ξ ↦ SourceInventory.exists_prepareSlots_recovery R (S ξ)
-    (fun i ↦ euc (Fin (a i))) (fun i ↦ euc (Fin (b i))) (η₀ ξ)
-    ((hF ξ).trans (hE ξ)) ℓ
+  choose d hd hds hde using fun ξ ↦ SourceInventory.exists_prepareSlots_expands R
+    (fun i ↦ euc (Fin (a i))) (fun i ↦ euc (Fin (b i))) U V (η₀ ξ) (η ξ) (hF ξ) ℓ
   refine ⟨R, hR, hRK, a, b, η₀, fun ξ i ↦ (hnorm ξ i).trans (hη ξ i),
     fun ξ ↦ .comp (d ξ) (v ξ), fun ξ ↦ ⟨hd ξ, hv ξ⟩, ?_, ?_⟩
   · intro ξ

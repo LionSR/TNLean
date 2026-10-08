@@ -47,8 +47,8 @@ namespace TNLean.PEPS.AreaLaw.Scan
 
 open MeasureTheory
 
-/-- The fixed exponents of the scan: `0 < ℓ < 1`, `0 < κ < μ < 1 - ℓ`, `W ≥ 1`
-(`scanner:scales`, `08-scanner.tex`, lines 41), together with the exponent `e` of the entropy
+/-- The fixed exponents of the scan: `0 < ℓ < 1`, `0 < κ < μ < 1 - ℓ`
+(`scanner:scales`, `08-scanner.tex`, line 41), together with the exponent `e` of the entropy
 input, `0 < e < 1`, `κ ≤ e` (line 352), and `ν > 0` with `ε = n^{-ν}` (line 358). -/
 structure ScannerExponents where
   /-- The collar-depth exponent: `L = ⌊n^{1-ℓ}⌋`. -/
@@ -61,14 +61,11 @@ structure ScannerExponents where
   nu : ℝ
   /-- The exponent of the entropy input `scanner:entropy-input`. -/
   e : ℝ
-  /-- The total scalar metric weight `W = aK`. -/
-  W : ℝ
   ell_pos : 0 < ell
   ell_lt_one : ell < 1
   kappa_pos : 0 < kappa
   kappa_lt_mu : kappa < mu
   mu_lt_one_sub_ell : mu < 1 - ell
-  one_le_W : 1 ≤ W
   nu_pos : 0 < nu
   e_pos : 0 < e
   e_lt_one : e < 1
@@ -90,8 +87,8 @@ noncomputable def K (n : ℕ) : ℕ := X.L n / (8 * X.m n)
 /-- Charge lookahead `D = ⌈n^κ⌉` (`scanner:scales`, line 37). -/
 noncomputable def D (n : ℕ) : ℕ := ⌈(n : ℝ) ^ X.kappa⌉₊
 
-/-- Per-band metric weight `a = W / K` (`scanner:scales`, line 38). -/
-noncomputable def a (n : ℕ) : ℝ := X.W / X.K n
+/-- Per-band metric weight `a = W / K` for the total weight `W` (`scanner:scales`, line 38). -/
+noncomputable def a (W : ℝ) (n : ℕ) : ℝ := W / X.K n
 
 /-- Interpolation scale `ε = n^{-ν}` (line 358). -/
 noncomputable def eps (n : ℕ) : ℝ := (n : ℝ) ^ (-X.nu)
@@ -101,8 +98,8 @@ noncomputable def rounds (n : ℕ) : ℕ := 2 * n * X.m n
 
 /-- The defect density `δ_n = C_δ ε^{-1} (n^{e-μ} + a^{1/4} (log n)^{C_l})`
 (`scanner:density-output`, lines 380–384), with its constants made explicit. -/
-noncomputable def delta (Cδ Cl : ℝ) (n : ℕ) : ℝ :=
-  Cδ * (X.eps n)⁻¹ * ((n : ℝ) ^ (X.e - X.mu) + X.a n ^ (1 / 4 : ℝ) * Real.log n ^ Cl)
+noncomputable def delta (W Cδ Cl : ℝ) (n : ℕ) : ℝ :=
+  Cδ * (X.eps n)⁻¹ * ((n : ℝ) ^ (X.e - X.mu) + X.a W n ^ (1 / 4 : ℝ) * Real.log n ^ Cl)
 
 end ScannerExponents
 
@@ -232,16 +229,14 @@ structure ScaleFacts (X : ScannerExponents) (n : ℕ) (C₁ : ℝ) : Prop where
   L_le_n : X.L n ≤ n
   eps_pos : 0 < X.eps n
   eps_lt_one : X.eps n < 1
-  a_le_one : X.a n ≤ 1
   one_le_C₁ : 1 ≤ C₁
   /-- `n^e / m ≤ C₁ n^{e-μ}`, since `m ≍ n^μ` (line 480). -/
   pow_e_div_m_le : (n : ℝ) ^ X.e / X.m n ≤ C₁ * (n : ℝ) ^ (X.e - X.mu)
   /-- `D ≤ C₁ n^e`, since `κ ≤ e` (line 469). -/
   D_le : (X.D n : ℝ) ≤ C₁ * (n : ℝ) ^ X.e
-  /-- `W² n D² / (m K) ≤ C₁ W² n^ℓ D²` (lines 519–520). -/
+  /-- `n D² / (m K) ≤ C₁ n^ℓ D²` (lines 519–520). -/
   coefficient_le :
-    X.W ^ 2 * n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n) ≤
-      C₁ * X.W ^ 2 * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2
+    n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n) ≤ C₁ * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2
 
 open Classical in
 /-- The finite data of the collar scan at scale `n`, for all replica counts `k`, together with
@@ -258,6 +253,12 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   [instMeasΘ : MeasurableSpace Θ]
   /-- The rounds of the scan. -/
   round : Fin (X.rounds n) → ScanRound ι Θ
+  /-- The total scalar metric weight `W = aK ≥ 1` of the scan (`scanner:scales`, lines 38–41).
+  It is part of the scan at scale `n`, not a fixed exponent: the source later takes `W = n^ω`
+  (`scanner:final-parameters`, line 843), so no constant may depend on it. -/
+  W : ℝ
+  /-- `W ≥ 1` (`scanner:scales`, line 41). -/
+  one_le_W : 1 ≤ W
   /- Truncated Hamiltonian (Proposition 4.5 as used in lines 49–59). -/
   /-- Ground energy `\widetilde E_0`. -/
   E0 : ℝ
@@ -363,7 +364,9 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   measurable_etaNew : ∀ r i h c, Measurable ((round r).etaNew i h c)
   choiceGain_nonneg : ∀ r h θ, 0 ≤ (round r).choiceGain h θ
   measurable_choiceGain : ∀ r h, Measurable ((round r).choiceGain h)
-  choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ κ.C * Real.log n ^ κ.Cl
+  /-- The choice-averaged gain sums one move entropy per band, each bounded by
+  `C (log n)^{C_l}` (lines 434–440), so it is at most `C K (log n)^{C_l}`. -/
+  choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ κ.C * X.K n * Real.log n ^ κ.Cl
   /- Leaf measures: `m_s(u) du dμ_σ` has mass `2s = 1/2` (line 440). -/
   isFiniteMeasure_μOld : ∀ r k p h, IsFiniteMeasure ((round r).μOld k p h)
   isFiniteMeasure_μNew : ∀ r k p h c, IsFiniteMeasure ((round r).μNew k p h c)
@@ -376,14 +379,14 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   differentiableOn_logNormSq : ∀ r k, DifferentiableOn ℝ ((round r).logNormSq k) (Set.Ioo 0 1)
   /-- `transport:entropy-gain`, with the band count `K` and `ℓ = C (log n)^{C_l}`. -/
   entropy_gain : ∀ r k, ∀ p ∈ Set.Ioo (0 : ℝ) 1,
-    k * X.a n * (round r).choiceGainSum k p
-        - κ.C * k * X.a n * X.K n * X.a n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl - β k ≤
+    k * X.a W n * (round r).choiceGainSum k p
+        - κ.C * k * X.a W n * X.K n * X.a W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl - β k ≤
       -deriv ((round r).logNormSq k) p
   /-- `transport:energy`, using that `pre` is a mean-energy eigenvector of eigenvalue
   `\widetilde E_0` (`comparator:prevector`). -/
   energy : ∀ r k, ∀ p ∈ Set.Ioo (0 : ℝ) 1,
     (round r).meanEnergy k p ≤
-      2 * E0 + κ.C * X.a n ^ 2 * Real.log n ^ κ.Cl * (round r).energySum k p + rem k
+      2 * E0 + κ.C * X.a W n ^ 2 * Real.log n ^ κ.Cl * (round r).energySum k p + rem k
   /- Schedule (lines 145–154, 457–461) and the rough upper comparison at the end
   (`comparator:rough-upper`, lines 462–467). -/
   /-- Adjacent endpoint metrics agree. -/
@@ -394,7 +397,7 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   /-- `comparator:rough-upper` at the last endpoint, `s = 1/4`. -/
   logNormSq_final : ∀ (r : Fin (X.rounds n)), r.val + 1 = X.rounds n → ∀ k, 1 ≤ k →
     -(round r).logNormSq k 1 / k ≤
-      2 * Real.log dstar - Real.log z + 2 * (1 / 4) * X.W * (2 * Bsh / z + 2 * Bexc) + rem k
+      2 * Real.log dstar - Real.log z + 2 * (1 / 4) * W * (2 * Bsh / z + 2 * Bexc) + rem k
 
 attribute [instance] ScanData.instFintypeι ScanData.instMeasΘ
 
@@ -404,7 +407,7 @@ variable {X : ScannerExponents} {κ : ScanConstants} {n : ℕ} (S : ScanData X �
 
 /-- The right side of `comparator:rough-upper` without its remainder. -/
 noncomputable def terminalBound : ℝ :=
-  2 * Real.log S.dstar - Real.log S.z + 2 * (1 / 4) * X.W * (2 * S.Bsh / S.z + 2 * S.Bexc)
+  2 * Real.log S.dstar - Real.log S.z + 2 * (1 / 4) * S.W * (2 * S.Bsh / S.z + 2 * S.Bexc)
 
 /-- The defect energy `E_def = (⟨v, \bar{\widetilde H} v⟩ - \widetilde E_0) / \widetilde g`
 (lines 366–369). -/
@@ -416,10 +419,11 @@ noncomputable def defectEnergy (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) : ℝ 
 `[ε/2, ε]`, the telescoped left side bounded by the initial floor and the terminal rough upper
 comparison (lines 457–475), before normalization. -/
 def IntegratedChargeBound (k : ℕ) : Prop :=
-  k * X.a n * (κ.c / (n * X.D n)) *
+  k * X.a S.W n * (κ.c / (n * X.D n)) *
       ∑ r ∈ X.chargeRounds n, ∫ p in (X.eps n / 2)..(X.eps n), (S.round r).chargeDefect k p ≤
     S.β k + k * (S.terminalBound + S.rem k) +
-      X.rounds n * (κ.C * k * X.a n * X.K n * X.a n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k)
+      X.rounds n *
+        (κ.C * k * X.a S.W n * X.K n * X.a S.W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k)
 
 end ScanData
 

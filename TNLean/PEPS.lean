@@ -400,6 +400,13 @@ import TNLean.PEPS.TorusCutPhysicalMap
 import TNLean.PEPS.TorusCutProjectorExpansion
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusDirectedBondUpdate
+import TNLean.PEPS.TorusDualFluxDetection
+import TNLean.PEPS.TorusDualFluxString
+import TNLean.PEPS.TorusDualHomotopy
+import TNLean.PEPS.TorusDualPath
+import TNLean.PEPS.TorusDualRectangle
+import TNLean.PEPS.TorusDualRectangleFlux
+import TNLean.PEPS.TorusDualWinding
 import TNLean.PEPS.TorusEdgeAbsorbed
 import TNLean.PEPS.TorusEdgeBlockingCrossing
 import TNLean.PEPS.TorusEdgeBlockingRegion
@@ -417,6 +424,7 @@ import TNLean.PEPS.TorusGaugedVerticalFluxMove
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusGraphBondContraction
 import TNLean.PEPS.TorusGraphSeamGauge
+import TNLean.PEPS.TorusGroupGaugeContraction
 import TNLean.PEPS.TorusIncidentCoordinates
 import TNLean.PEPS.TorusIncidentGInjectivity
 import TNLean.PEPS.TorusInitialStringPhysicalCrossing
@@ -432,6 +440,7 @@ import TNLean.PEPS.TorusMatchedBondRepresentation
 import TNLean.PEPS.TorusMatchedCutClosureMembership
 import TNLean.PEPS.TorusMatchedProjectorExpansion
 import TNLean.PEPS.TorusMultiplicityBondState
+import TNLean.PEPS.TorusNativeFluxHolonomy
 import TNLean.PEPS.TorusNativeOrientation
 import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusOrientedIncidentGInjectivity

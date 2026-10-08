@@ -1,0 +1,126 @@
+\subsection{Capped contained dyadic squares}
+
+% Auxiliary finite geometry from scanner:templates, not the complete entropy lemma.
+\begin{definition}[Lattice dyadic squares]
+    \label{def:area_law_lattice_dyadic_square}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell}
+    \leanok
+    For $k\in\N$ and $z\in\Z^2$, let $C_{k,z}$ be the integer sites of
+    $\lbrack 2^kz_1,2^k(z_1+1))\times\lbrack 2^kz_2,2^k(z_2+1))$.
+\end{definition}
+
+\begin{theorem}[Integer dyadic nesting]
+    \label{thm:area_law_lattice_dyadic_nesting}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicAncestor_eq_cellIndex,
+        TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell,
+        TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_mem_cell,
+        TNLean.PEPS.AreaLaw.Geometry.card_latticeDyadicCell,
+        TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_zero,
+        TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_of_common_mem,
+        TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_subset_parent}
+    \leanok
+    \uses{def:area_law_lattice_dyadic_square,def:area_law_dyadic_cells}
+    Membership is given by coordinatewise integer division:
+    $x\in C_{k,z}$ if and only if $\lfloor x/2^k\rfloor=z$.
+    Equivalently, $C_{k,z}=\Z^2\cap 2^k\bigl(z+[0,1)^2\bigr)$ consists of
+    the integer points of the half-open cell of
+    Definition~\ref{def:area_law_dyadic_cells} with origin $o=0$; this is
+    why the same symbol is used for both.
+    Thus $|C_{k,z}|=4^k$ and $C_{0,z}=\{z\}$.
+    Two intersecting squares are nested in scale order. In particular,
+    $C_{k,z}\subseteq C_{k+1,\lfloor z/2\rfloor}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement,
+        thm:area_law_dyadic_indices}
+    The floor description of membership in the real cell at origin zero gives
+    the identification with its integer points. Refine a single index to unit scale. Integer ancestry agrees with the
+    floor index at origin zero. Composing ancestry maps shows that all sites
+    of a fine square have the same coarse index, which proves nesting.
+\end{proof}
+
+\begin{definition}[Capped maximal contained squares]
+    \label{def:area_law_capped_dyadic_partition}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition}
+    \leanok
+    \uses{def:area_law_lattice_dyadic_square}
+    For a finite set $S\subseteq\Z^2$ and $K\in\N$, let $\mathcal P_K(S)$
+    consist of the pairs $(k,z)$ with $k\le K$, $C_{k,z}\subseteq S$, and
+    either $k=K$ or $C_{k+1,\lfloor z/2\rfloor}\not\subseteq S$.
+    This is the selection in the covering argument of
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Exact capped partition]
+    \label{thm:area_law_capped_dyadic_partition}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.mem_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.exists_mem_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.biUnion_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.sum_card_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.sum_pow_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_at_cap_le,
+        TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_empty,
+        TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_zero}
+    \leanok
+    \uses{def:area_law_capped_dyadic_partition}
+    The squares selected by $\mathcal P_K(S)$ partition $S$. In particular,
+    \begin{align}
+        \sum_{(k,z)\in\mathcal P_K(S)}|C_{k,z}|
+                                                       & =\sum_{(k,z)\in\mathcal P_K(S)}4^k=|S|, \\
+        4^K\bigl|\{(k,z)\in\mathcal P_K(S):k=K\}\bigr| & \le |S|.
+    \end{align}
+    The empty set has an empty partition, and
+    $\mathcal P_0(S)=\{(0,x):x\in S\}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition}
+    For each $x\in S$, the unit square $C_{0,x}=\{x\}$ is contained in $S$.
+    Choose
+    \begin{align}
+        k & =\max\bigl\{j\le K:C_{j,\lfloor x/2^j\rfloor}\subseteq S\bigr\}.
+    \end{align}
+    If $k<K$, maximality shows that the parent
+    $C_{k+1,\lfloor x/2^{k+1}\rfloor}$ is not contained in $S$, so
+    $(k,\lfloor x/2^k\rfloor)\in\mathcal P_K(S)$. Conversely, every
+    selected square is contained in $S$. Let $(k,u),(l,v)\in\mathcal P_K(S)$
+    with $k<l$ and $C_{k,u}\cap C_{l,v}\neq\varnothing$. Nesting gives
+    \begin{align}
+        C_{k+1,\lfloor u/2\rfloor}\subseteq C_{l,v}\subseteq S,
+    \end{align}
+    and $k<l\le K$, contradicting the selection of $(k,u)$. At equal scales the common site forces equal indices.
+    Counting the disjoint union gives the sum identity; restricting its
+    nonnegative summands to scale $K$ gives the cap bound.
+\end{proof}
+
+\begin{definition}[Mixed dyadic squares]
+    \label{def:area_law_mixed_dyadic_square}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices}
+    \leanok
+    \uses{def:area_law_lattice_dyadic_square}
+    Let $M_k(S)$ be the indices $z$ for which $C_{k,z}$ meets both $S$
+    and its complement.
+\end{definition}
+
+\begin{theorem}[Mixed parents below the cap]
+    \label{thm:area_law_capped_mixed_parents}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.mem_mixedDyadicIndices,
+        TNLean.PEPS.AreaLaw.Geometry.parent_mem_mixedDyadicIndices,
+        TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition_subset_mixed_refinement,
+        TNLean.PEPS.AreaLaw.Geometry.card_cappedDyadicPartition_below_cap_le}
+    \leanok
+    \uses{def:area_law_mixed_dyadic_square,def:area_law_capped_dyadic_partition}
+    If $(k,z)\in\mathcal P_K(S)$ and $k<K$, then
+    $\lfloor z/2\rfloor\in M_{k+1}(S)$. Consequently,
+    \begin{align}
+        \bigl|\{(l,z)\in\mathcal P_K(S):l=k\}\bigr|\le4|M_{k+1}(S)|.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition,
+        thm:area_law_dyadic_refinement}
+    A selected square is nonempty and contained in $S$, so its parent has
+    an inside site. Below the cap, selection supplies an outside site in
+    the parent. All selected indices at scale $k$ therefore belong to the
+    one-step refinement of $M_{k+1}(S)$, whose cardinality is $4|M_{k+1}(S)|$.
+\end{proof}

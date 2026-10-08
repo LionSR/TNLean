@@ -81,6 +81,34 @@ theorem SourceInventory.exists_prepareSlots_recovery (R S : SourceInventory P)
     (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
   exact (eval_cast_middle _ _ h).trans he
 
+/-- Identifying both endpoint layouts of a recovery preserves the recovery identity.
+This is the fixed-memory identification in `04-compression.tex`, lines 260–267. -/
+private theorem eval_cast_recovery {a b c b' c' : Layout P} (u : Word a b) (d : Word b c)
+    (p : Word a c) (h : b = b') (h' : c = c') (he : d.eval ∘L u.eval = p.eval) :
+    (d.castLayouts h h').eval ∘L (u.castLayouts rfl h).eval = (p.castLayouts rfl h').eval := by
+  cases h
+  cases h'
+  exact he
+
+/-- An expansion between two slot inventories on the same pairs gives an allowed recovery
+between their preparations in the fixed slot layouts.
+Source: polynomial-PEPS manuscript, `04-compression.tex`, lines 260–267. -/
+theorem SourceInventory.exists_prepareSlots_expands (R : SourceInventory P)
+    (U V U' V' : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
+    (η' : ∀ i, U' i ⊗[ℂ] V' i)
+    (hE : (SourceInventory.ofSlots R U V η).Expands (SourceInventory.ofSlots R U' V' η'))
+    (ℓ : Layout P) :
+    ∃ d : Word (SourceInventory.slotLayout R U V ++ ℓ)
+        (SourceInventory.slotLayout R U' V' ++ ℓ),
+      d.IsAllowed ∧ d.sources = [] ∧
+        d.eval ∘L (SourceInventory.prepareSlots R U V η ℓ).eval =
+          (SourceInventory.prepareSlots R U' V' η' ℓ).eval := by
+  obtain ⟨d, hd, hds, he⟩ := hE ℓ
+  refine ⟨d.castLayouts (congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U V η _))
+      (congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U' V' η' (fun _ ↦ 0))),
+    (Word.isAllowed_castLayouts _ _ _).mpr hd, (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
+  exact eval_cast_recovery _ _ _ _ _ he
+
 /-- Prepare every monomial's sources in fixed private spaces, followed by allowed
 operations containing no sources. The common spaces are constructed from the monomials.
 Source: polynomial-PEPS manuscript, `04-compression.tex`, lines 233–267. -/

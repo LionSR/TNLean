@@ -48,7 +48,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_source_expansion}
+    \uses{def:peps_source_expansion,thm:peps_source_expansion_operations}
     Induct on the reference list. Select the actual source on its first
     unordered pair and move this source block to the front. If its
     endpoint order is reversed, apply the tensor-factor exchange
@@ -132,8 +132,8 @@
 
 \begin{proof}\leanok
     Act first at the first party and then at the second party, keeping
-    the remaining registers untouched. The formula follows on
-    elementary tensors, hence on every source vector by linearity.
+    the remaining registers untouched. Equation~(\ref{eq:peps_map_source_pair})
+    follows on elementary tensors, hence on every source vector by linearity.
     Tensoring each local contraction with an identity preserves its
     contraction bound.
 \end{proof}
@@ -143,6 +143,7 @@
     \lean{TNLean.PEPS.PairEffect.SourceInventory.common_ofSlots_expands}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_common_expansions}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_recovery}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_expands}
     \leanok
     \uses{def:peps_source_slots,def:peps_common_halfspaces,def:peps_source_expansion}
     Let $(S_\xi)_{\xi\in\Xi}$ be a finite family of normalized source
@@ -161,7 +162,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_map_source_pair}
+    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_map_source_pair,
+        thm:peps_source_expansion_operations}
     Put every list in the reference order using
     Theorem~\ref{thm:peps_source_ordering}. At each half of each pair,
     form the orthogonal sum of its branch spaces and embed the branch
@@ -298,7 +300,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_finite_pair_coordinates,thm:peps_map_source_pair}
+    \uses{thm:peps_finite_pair_coordinates,thm:peps_map_source_pair,
+        thm:peps_source_expansion_operations}
     Apply Theorem~\ref{thm:peps_finite_pair_coordinates} at each pair
     slot. Apply $f_e$ and $g_e$ locally to the two halves of that slot,
     then proceed through the source list. Equation
@@ -344,14 +347,14 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_complete_pair_sources,thm:peps_complete_prepared_party_maps,
-        thm:peps_common_source_lists,thm:peps_finite_source_coordinates,
-        thm:peps_party_factorization}
-    Complete each branch's source list and put all lists in common
-    spaces. Apply Theorem~\ref{thm:peps_finite_source_coordinates} to
-    their finitely many vectors at each slot. Compose the coordinate
-    inclusions with the recovery of each branch's actual sources and
-    its remaining operations. All these operations are local
+    \uses{thm:peps_common_party_maps,thm:peps_common_source_lists,
+        thm:peps_finite_source_coordinates,thm:peps_party_factorization}
+    Theorem~\ref{thm:peps_common_party_maps} prepares every branch's
+    sources in common private spaces, followed by allowed operations
+    containing no sources. Apply
+    Theorem~\ref{thm:peps_finite_source_coordinates} to the finitely many
+    common vectors at each slot. Compose the coordinate inclusions with
+    the remaining operations of each branch. All these operations are local
     contractions. Collect them by party and then sum the resulting
     branch identities with the original coefficients $c_\xi$.
 \end{proof}
