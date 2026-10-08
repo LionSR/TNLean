@@ -20,8 +20,12 @@ of each repainting every `n`-square carries a single label, its old `2n`-square 
   `S = (n r, n s) + [0, n] ^ 2` by translation;
 * proves Lemma 7.2 (`lem:geometry-angular`) for every elementary birth, death and lens exchange
   of the repainting of every block, with `a₀ = 1/5000`, in the source's form: the changed region
-  has diameter at most `n`, and its closure is at sup distance at least `a₀ min(n, d_V(y))` from
-  the closure of the positions of the other labels;
+  of a birth or death has diameter at most `n`, and its closure is at sup distance at least
+  `a₀ min(n, d_V(y))` from the closure of the positions of the other labels; the closure of the
+  positions that are not common `C_e` before a lens exchange is at that distance from the lens
+  boundary. The positions inside the lens that are not common `C_e`, which contain the positions
+  changed by the exchange, also have diameter at most `n`, as the source uses at
+  `06-geometry.tex:421–424`;
 * proves that the repainting leaves, off the boundary of the block, the guide of the next
   repainting, that the guide at the end
   of level `2n` is the guide at the start of level `n`, and the part of the active-label invariant
@@ -280,11 +284,32 @@ theorem blockRepainting_mainStep (E : List SquareEdge) (e : SquareEdge) {op : Ba
 common `C_e` on the two guides before the exchange along `e` lies at sup distance at least
 `a₀ min(n, d_V(y))` from the boundary of the translated lens `Y`. The main guide is the one the
 schedule specifies at the start of the construction along `e ∉ E`; at the lattice sites it equals
-the guide reached (`blockRepainting_start_site`).
+the guide reached (`blockRepainting_start_site`). The closure of the positions changed on the
+main sheet by the exchange, and the closure of the positions inside the translated lens that are
+not common `C_e`, have diameter at most `n`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`, equation
-`eq:geometry-exchange-clearance`, `06-geometry.tex:265–272, 295–299`. -/
+`eq:geometry-exchange-clearance`, `06-geometry.tex:265–272, 295–299`, and the diameter of the
+exchange, `06-geometry.tex:421–424`. -/
 theorem blockRepainting_exchange (E : List SquareEdge) (e : SquareEdge) :
+    (∀ y ∈ closure {p |
+        shiftGuide o ((R).mainGuide E e (edgeStartWord (lab S) B (lab (e.nbrBlock S)))) p ≠
+          shiftGuide o ((R).mainGuide E e (mainWordOne (lab S) B (lab (e.nbrBlock S)))) p},
+      ∀ z ∈ closure {p |
+        shiftGuide o ((R).mainGuide E e (edgeStartWord (lab S) B (lab (e.nbrBlock S)))) p ≠
+          shiftGuide o ((R).mainGuide E e (mainWordOne (lab S) B (lab (e.nbrBlock S)))) p},
+        dist y z ≤ n) ∧
+    (∀ y ∈ closure {p | p - o ∈ edgeLens n e ∧
+        (shiftGuide o ((R).mainGuide E e (edgeStartWord (lab S) B (lab (e.nbrBlock S)))) p ≠
+            lab (e.nbrBlock S) ∨
+          shiftGuide o ((R).auxGuide e (auxWord (lab S) B (lab (e.nbrBlock S)))) p ≠
+            lab (e.nbrBlock S))},
+      ∀ z ∈ closure {p | p - o ∈ edgeLens n e ∧
+        (shiftGuide o ((R).mainGuide E e (edgeStartWord (lab S) B (lab (e.nbrBlock S)))) p ≠
+            lab (e.nbrBlock S) ∨
+          shiftGuide o ((R).auxGuide e (auxWord (lab S) B (lab (e.nbrBlock S)))) p ≠
+            lab (e.nbrBlock S))},
+        dist y z ≤ n) ∧
     ∀ y ∈ closure {p |
         shiftGuide o ((R).mainGuide E e (edgeStartWord (lab S) B (lab (e.nbrBlock S)))) p ≠
           lab (e.nbrBlock S) ∨
@@ -292,7 +317,11 @@ theorem blockRepainting_exchange (E : List SquareEdge) (e : SquareEdge) :
           lab (e.nbrBlock S)},
       ∀ z ∈ frontier ((fun p => p - o) ⁻¹' edgeLens n e),
         angularConstant * min n (edgeMarkDist n e (y - o)) ≤ dist y z := by
-  intro y hy z hz
+  refine ⟨fun y hy z hz => dist_le_shift o (fun _ hy _ hz =>
+      dist_le_of_mem_closure_edgeLens (fun _ hp => ((R).exchange_changed_subset E e hp).1) hy hz)
+      hy hz, fun y hy z hz => ?_, fun y hy z hz => ?_⟩
+  · have := (R).dist_le_exchange E e (sub_mem_closure hy) (sub_mem_closure hz)
+    rwa [dist_sub_right] at this
   have hy' := sub_mem_closure (s := {p |
       (R).mainGuide E e (edgeStartWord (lab S) B (lab (e.nbrBlock S))) p ≠ lab (e.nbrBlock S) ∨
       (R).auxGuide e (auxWord (lab S) B (lab (e.nbrBlock S))) p ≠ lab (e.nbrBlock S)}) hy
@@ -380,14 +409,16 @@ theorem SquareEdge.nbrBlock_adjacent (e : SquareEdge) (S : ℤ × ℤ) :
 
 /-- **Active labels during a repainting.** While the block `S` is repainted to its new label,
 every value of the main guide after the central birth and any completed edges, and of every main
-or auxiliary guide of an edge construction, is the placeholder, an old label or a new label.
+or auxiliary guide of an edge construction, with any of its normal words (`edgeWords`: the
+starting word and the words before, after and surrounding each elementary birth or death), is the
+placeholder, an old label or a new label.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-active-labels`,
 `06-geometry.tex:585–609`. -/
 theorem blockRepainting_labels {n : ℝ} (hn : 0 < n) (done : Set (ℤ × ℤ)) (S : ℤ × ℤ)
     (E : List SquareEdge) (e : SquareEdge) {W : ℝ → ι}
-    (hW : ∀ x, W x = levelLabels M old new ph done S ∨ W x = new S ∨
-      W x = levelLabels M old new ph done (e.nbrBlock S)) (p : ℝ × ℝ) :
+    (hW : W ∈ edgeWords (levelLabels M old new ph done S) (new S)
+      (levelLabels M old new ph done (e.nbrBlock S))) (p : ℝ × ℝ) :
     (blockBaseline hn (levelLabels M old new ph done) S (new S)).completedGuide E p ∈
         insert ph (range old ∪ range new) ∧
       (blockBaseline hn (levelLabels M old new ph done) S (new S)).mainGuide E e W p ∈

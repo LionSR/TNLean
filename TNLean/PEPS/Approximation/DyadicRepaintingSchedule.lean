@@ -25,10 +25,13 @@ proves:
   elementary operations on one sheet match, and that after the four edges `S` has label `B`
   while every point outside the closed square keeps its starting label;
 * the estimates of Lemma 7.2 (`lem:geometry-angular`) for every elementary birth, death and lens
-  exchange of this schedule, with `a₀ = 1/5000`, and the diameter bound on the changed regions;
-* the labels of the main guides: every value is the final label or a value of the starting guide,
-  and outside the closed square together with the four exterior bands the main guides keep their
-  starting values.
+  exchange of this schedule, with `a₀ = 1/5000`, the diameter bound on the changed regions of the
+  births and deaths, and the same bound for the positions inside the lens that are not common
+  `C_e`, which contain the positions changed by the exchange;
+* the labels of the guides: every normal word of an edge construction takes only the values `A`,
+  `B`, `C_e`, every value of a main or auxiliary guide is the final label or a value of the
+  starting guide, and outside the closed square together with the four exterior bands the main
+  guides keep their starting values.
 
 A guide of the source is specified by its open polygonal chambers and read at the lattice sites
 after one small generic displacement (`06-geometry.tex:62–80`). A guide here is a labelling of the
@@ -147,6 +150,16 @@ theorem le_dist_of_mem_closure {X : Type*} [PseudoMetricSpace X] {s : Set X} {y 
     (h : ∀ z ∈ s, c ≤ dist y z) {z : X} (hz : z ∈ closure s) : c ≤ dist y z :=
   closure_minimal h (isClosed_le continuous_const (continuous_const.dist continuous_id)) hz
 
+/-- Two points of the closure of a subset of the lens are at sup distance at most `n`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:199–203, 421–424`. -/
+theorem dist_le_of_mem_closure_edgeLens {n : ℝ} {e : SquareEdge} {s : Set (ℝ × ℝ)}
+    (hs : s ⊆ edgeLens n e) {y z : ℝ × ℝ} (hy : y ∈ closure s) (hz : z ∈ closure s) :
+    dist y z ≤ n :=
+  dist_le_of_mem_closedEdgeBand (α := -7) (β := -7 / 2) (by norm_num) (by norm_num)
+    (closure_edgeBand_subset n e _ _ (closure_mono hs hy))
+    (closure_edgeBand_subset n e _ _ (closure_mono hs hz))
+
 /-! ### Band updates -/
 
 open Classical in
@@ -244,6 +257,46 @@ theorem mainSteps_chain :
   refine ⟨rfl, ?_, rfl⟩
   simp only [mainSteps, List.isChain_cons_cons, List.isChain_singleton, and_true]
   exact ⟨rfl, rfl, rfl⟩
+
+/-- A normal word with all labels in a set takes values in it. -/
+theorem bandWord_mem {s : Set ι} {c : ι} (hc : c ∈ s) {l : List (ℝ × ι)}
+    (hl : ∀ q ∈ l, q.2 ∈ s) (x : ℝ) : bandWord c l x ∈ s := by
+  induction l generalizing c with
+  | nil => exact hc
+  | cons q l ih =>
+    obtain ⟨t, d⟩ := q
+    simp only [List.mem_cons, forall_eq_or_imp] at hl
+    simp only [bandWord]
+    split_ifs
+    · exact hc
+    · exact ih hl.1 hl.2
+
+/-- The normal words of the construction along one edge: the starting word `C | A | B`, and the
+words before, after and surrounding each of its seven births and deaths. Among the latter are the
+uniform word `C` of the fresh auxiliary sheet, the auxiliary word `eq:geometry-aux-word`, the main
+word `eq:geometry-main-word` and the final word `C | B`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:160–221`. -/
+def edgeWords : Set (ℝ → ι) :=
+  insert (edgeStartWord A B C)
+    {W | ∃ op ∈ edgeOperations A B C, W = op.before ∨ W = op.after ∨ W = op.surrounding}
+
+/-- **The labels of the edge words.** Every normal word of the construction along an edge takes
+only the values `A`, `B` and `C`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:160–221, 597–609`. -/
+theorem edgeWords_mem {W : ℝ → ι} (hW : W ∈ edgeWords A B C) (x : ℝ) :
+    W x = A ∨ W x = B ∨ W x = C := by
+  suffices W x ∈ ({A, B, C} : Set ι) by simpa using this
+  have key (c : ι) (l : List (ℝ × ι)) (hc : c ∈ ({A, B, C} : Set ι))
+      (hl : ∀ q ∈ l, q.2 ∈ ({A, B, C} : Set ι)) : bandWord c l x ∈ ({A, B, C} : Set ι) :=
+    bandWord_mem hc hl x
+  rcases hW with rfl | ⟨op, hop, rfl | rfl | rfl⟩
+  · exact key _ _ (by simp) (by simp)
+  all_goals
+    simp only [edgeOperations, List.mem_cons, List.not_mem_nil, or_false] at hop
+    rcases hop with rfl | rfl | rfl | rfl | rfl | rfl | rfl <;>
+      exact key _ _ (by simp) (by simp)
 
 end Steps
 
@@ -569,20 +622,46 @@ theorem clearance_exchange (E : List SquareEdge) (e : SquareEdge) {y : ℝ × �
   rw [mainGuide, bandUpdate_of_mem hb]
   simp [edgeStartWord, bandWord, hx]
 
-/-! ### The labels of the main guides -/
+/-- **The positions changed by the lens exchange.** The exchange changes the main guide from the
+starting guide to the guide with the main word (`lensExchange_mainGuide`), and the auxiliary guide
+to the starting main guide on the lens; both changes occur only at points of the lens where the two
+sheets differ, which are not common `C_e`.
 
-/-- A normal word with all labels in a set takes values in it. -/
-theorem bandWord_mem {s : Set ι} {c : ι} (hc : c ∈ s) {l : List (ℝ × ι)}
-    (hl : ∀ q ∈ l, q.2 ∈ s) (x : ℝ) : bandWord c l x ∈ s := by
-  induction l generalizing c with
-  | nil => exact hc
-  | cons q l ih =>
-    obtain ⟨t, d⟩ := q
-    simp only [List.mem_cons, forall_eq_or_imp] at hl
-    simp only [bandWord]
-    split_ifs
-    · exact hc
-    · exact ih hl.1 hl.2
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:198–212, 421–424`. -/
+theorem exchange_changed_subset (E : List SquareEdge) (e : SquareEdge) :
+    {p | R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠
+        R.mainGuide E e (mainWordOne R.oldLabel R.finalLabel (R.nbrLabel e)) p} ⊆
+      {p | p ∈ edgeLens R.n e ∧
+        (R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠
+            R.nbrLabel e ∨
+          R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e)} := by
+  classical
+  intro p hp
+  rw [mem_ofPred_eq, ← R.lensExchange_mainGuide E e] at hp
+  by_cases hY : p ∈ edgeLens R.n e
+  · simp only [hY, ↓reduceIte] at hp
+    refine ⟨hY, ?_⟩
+    by_contra h
+    push Not at h
+    exact hp (h.1.trans h.2.symm)
+  · simp only [hY, ↓reduceIte, ne_eq, not_true_eq_false] at hp
+
+/-- **Diameter of the lens exchange.** The positions inside the lens that are not common `C_e` on
+the two guides before the exchange, which contain the positions changed by the exchange
+(`exchange_changed_subset`), form a set whose closure has diameter at most `n`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:199–203, 421–424`. -/
+theorem dist_le_exchange (E : List SquareEdge) (e : SquareEdge) {y z : ℝ × ℝ}
+    (hy : y ∈ closure {p | p ∈ edgeLens R.n e ∧
+      (R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e ∨
+        R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e)})
+    (hz : z ∈ closure {p | p ∈ edgeLens R.n e ∧
+      (R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e ∨
+        R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e)) p ≠ R.nbrLabel e)}) :
+    dist y z ≤ R.n :=
+  dist_le_of_mem_closure_edgeLens (fun _ hp => hp.1) hy hz
+
+/-! ### The labels of the main guides -/
 
 /-- The label `C_e` across an edge is a value of the starting guide. -/
 theorem nbrLabel_mem (e : SquareEdge) : R.nbrLabel e ∈ Set.range R.guide := by
@@ -617,17 +696,17 @@ theorem completedGuide_mem (E : List SquareEdge) (p : ℝ × ℝ) :
     · rw [completedGuide, bandUpdate_of_notMem hb]
       exact ih
 
-/-- **Active labels during an edge construction.** Every value of a main guide whose word uses the
-labels `A`, `B`, `C_e` is the final label or a value of the starting guide; so is every value of
-the auxiliary guides.
+/-- **Active labels during an edge construction.** Every value of a main or auxiliary guide of the
+construction along `e`, with any normal word of that construction, is the final label or a value
+of the starting guide.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:585–609`. -/
 theorem mainGuide_mem (E : List SquareEdge) (e : SquareEdge) {W : ℝ → ι}
-    (hW : ∀ x, W x = R.oldLabel ∨ W x = R.finalLabel ∨ W x = R.nbrLabel e) (p : ℝ × ℝ) :
+    (hW : W ∈ edgeWords R.oldLabel R.finalLabel (R.nbrLabel e)) (p : ℝ × ℝ) :
     R.mainGuide E e W p ∈ insert R.finalLabel (Set.range R.guide) ∧
       R.auxGuide e W p ∈ insert R.finalLabel (Set.range R.guide) := by
   have hW' : W (bandCoord R.n e p) ∈ insert R.finalLabel (Set.range R.guide) := by
-    rcases hW (bandCoord R.n e p) with h | h | h <;> rw [h]
+    rcases edgeWords_mem _ _ _ hW (bandCoord R.n e p) with h | h | h <;> rw [h]
     · exact mem_insert_of_mem _ R.oldLabel_mem
     · exact mem_insert _ _
     · exact mem_insert_of_mem _ (R.nbrLabel_mem e)

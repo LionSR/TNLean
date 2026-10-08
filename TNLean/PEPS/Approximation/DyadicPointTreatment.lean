@@ -26,9 +26,9 @@ radius `2 h_n`. This file proves the geometric estimates of this point treatment
   once `2 ε₀ ≤ a₀ / 2`;
 * the exchange side: the Lipschitz step from a hole center to every point of its outer square,
   instantiated with the distance from a lens boundary point and the mark distance, the fact that
-  an outer square then lies on one side of the lens boundary, and the tapering separation of the
-  inside positions from the outside ones, since a segment from inside to outside crosses the
-  boundary.
+  every outer hole square of radius `2 ε₀ t` about a true vertex of either sheet then lies on one
+  side of the lens boundary, and the tapering separation of the inside positions from the outside
+  ones, since a segment from inside to outside crosses the boundary.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -375,6 +375,29 @@ theorem closedBall_subset_or_subset_compl {Y : Set (ℝ × ℝ)} {c : ℝ × ℝ
       have := h x hx x hxY
       rw [dist_self] at this
       linarith
+
+/-- **The outer hole squares of an exchange lie on one side of the lens boundary.** For a true
+vertex `c` of either homogenized sheet of the exchange along `e`, the closed sup square of radius
+`2 ε₀ t` about `c`, its outer hole square, lies in the lens `Y` or in its complement, once
+`2 ε₀ (a₀ + 1) ≤ a₀ / 2`: by `RepaintingBaseline.floor_exchange_outerHole` each of its points is
+at distance at least `(a₀ / 2) t > 0` from the boundary of `Y`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:400–405, 415–417`. -/
+theorem RepaintingBaseline.outerHole_subset_or_subset_compl {ι : Type*}
+    (R : RepaintingBaseline ι) {t ε₀ : ℝ} (ht : 0 < t) (htn : t ≤ R.n)
+    (hε : 2 * ε₀ * (angularConstant + 1) ≤ angularConstant / 2) (E : List SquareEdge)
+    (e : SquareEdge) {c : ℝ × ℝ}
+    (hc : IsTrueVertex (homogenize (edgeTreated R.n e t) (R.nbrLabel e)
+        (R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)))) c ∨
+      IsTrueVertex (homogenize (edgeTreated R.n e t) (R.nbrLabel e)
+        (R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e)))) c) :
+    closedBall c (2 * ε₀ * t) ⊆ edgeLens R.n e ∨
+      closedBall c (2 * ε₀ * t) ⊆ (edgeLens R.n e)ᶜ := by
+  have ha := angularConstant_pos
+  refine closedBall_subset_or_subset_compl (b := angularConstant / 2 * t) (by positivity)
+    fun x hx z hz => ?_
+  exact (mul_le_mul_of_nonneg_left (le_max_left _ _) (by positivity)).trans
+    (R.floor_exchange_outerHole ht htn hε E e hc (mem_closedBall.1 hx) z hz)
 
 /-- A segment from a point of `Y` to a point outside `Y` meets the boundary of `Y` within its
 length.

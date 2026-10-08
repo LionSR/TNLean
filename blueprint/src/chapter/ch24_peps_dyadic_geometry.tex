@@ -288,7 +288,7 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{theorem}[Separation of the unmodified bands]
     \label{thm:peps_dyadic_angular_separation}
-    \lean{TNLean.PEPS.Approximation.blockRepainting_central, TNLean.PEPS.Approximation.blockRepainting_auxStep, TNLean.PEPS.Approximation.blockRepainting_mainStep, TNLean.PEPS.Approximation.blockRepainting_exchange, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_central, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_central, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_auxStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_mainStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_exchange, TNLean.PEPS.Approximation.BandOperation.clearance_bandUpdate, TNLean.PEPS.Approximation.BandOperation.dist_le_bandUpdate}
+    \lean{TNLean.PEPS.Approximation.blockRepainting_central, TNLean.PEPS.Approximation.blockRepainting_auxStep, TNLean.PEPS.Approximation.blockRepainting_mainStep, TNLean.PEPS.Approximation.blockRepainting_exchange, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_central, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_central, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_auxStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_mainStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_exchange, TNLean.PEPS.Approximation.BandOperation.clearance_bandUpdate, TNLean.PEPS.Approximation.BandOperation.dist_le_bandUpdate, TNLean.PEPS.Approximation.dist_le_of_mem_closure_edgeLens, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_exchange}
     \leanok
     \uses{thm:peps_dyadic_central_clearance, thm:peps_dyadic_band_clearance, thm:peps_dyadic_lens_clearance, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_schedule_guides, lem:peps_dyadic_translation}
     Let $a_0=1/5000$, $n>0$, and consider the repainting of a block $S$ of side $n$
@@ -307,7 +307,10 @@ $A$, $B$, $C$ below are permitted to coincide.
     closure of the positions that are not common $C_e$ on its two guides before the
     exchange satisfies
     $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
-    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}.
+    is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}. Moreover the positions inside $Y$
+    that are not common $C_e$ before the exchange, which contain the positions the
+    exchange changes, form a set whose closure has diameter at most $n$; the source
+    uses this bound in its proof of the exchange step, lines 421--424.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -320,13 +323,18 @@ $A$, $B$, $C$ below are permitted to coincide.
     guide of the central birth is $A$ on the open square.
     Lemma~\ref{lem:peps_dyadic_schedule_guides} identifies these guides with the
     guides reached by the schedule. The diameter bound is
+    Lemma~\ref{lem:peps_dyadic_band_disjoint}. The exchange changes the main guide
+    from the starting guide to the guide with the main word, and the auxiliary guide
+    to the starting main guide on $Y$, so it changes only points of $Y$ where the two
+    sheets differ; these are not common $C_e$. The closure of $Y$ lies in the closed
+    band $\{-7\le x\le-7/2\}$, of diameter at most $n$ by
     Lemma~\ref{lem:peps_dyadic_band_disjoint}. Translate by
     Lemma~\ref{lem:peps_dyadic_translation}.
 \end{proof}
 
 \begin{lemma}[Levels and active labels]
     \label{lem:peps_dyadic_active_labels}
-    \lean{TNLean.PEPS.Approximation.blockRepainting_final, TNLean.PEPS.Approximation.blockGuide_levelLabels_start, TNLean.PEPS.Approximation.levelLabels_mem, TNLean.PEPS.Approximation.levelLabels_empty_mem, TNLean.PEPS.Approximation.levelLabels_mem_of_subset, TNLean.PEPS.Approximation.blockRepainting_labels, TNLean.PEPS.Approximation.levelLabels_mem_owners, TNLean.PEPS.Approximation.SquareEdge.nbrBlock_adjacent, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_of_notMem}
+    \lean{TNLean.PEPS.Approximation.blockRepainting_final, TNLean.PEPS.Approximation.blockGuide_levelLabels_start, TNLean.PEPS.Approximation.levelLabels_mem, TNLean.PEPS.Approximation.levelLabels_empty_mem, TNLean.PEPS.Approximation.levelLabels_mem_of_subset, TNLean.PEPS.Approximation.blockRepainting_labels, TNLean.PEPS.Approximation.edgeWords, TNLean.PEPS.Approximation.edgeWords_mem, TNLean.PEPS.Approximation.bandWord_mem, TNLean.PEPS.Approximation.levelLabels_mem_owners, TNLean.PEPS.Approximation.SquareEdge.nbrBlock_adjacent, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_of_notMem}
     \leanok
     \uses{lem:peps_dyadic_schedule_guides, def:peps_dyadic_block_guide}
     Once the four edges of a block $S$ of the root square are completed, the main
@@ -335,8 +343,10 @@ $A$, $B$, $C$ below are permitted to coincide.
     level $2n$ equals the block guide of side $n$ at the start of the pass to level
     $n$. The block labels of a level are the placeholder, old labels or new labels;
     at the start of the level no new label occurs and at its end no old label. Every
-    value of every main or auxiliary guide of a repainting is the placeholder, an old
-    label or a new label, and outside the closed square and its exterior bands
+    normal word of an edge construction, the starting word and the words before,
+    after and surrounding each of its births and deaths, takes only the values $A$,
+    $B$, $C_e$. Hence every value of every main or auxiliary guide of a repainting is
+    the placeholder, an old label or a new label, and outside the closed square and its exterior bands
     $\{-8<x<0\}$ the main guides keep their starting values. The labels $A$, $B$,
     $C_e$ of the repainting of $S$ are owned by $S$, its parent, a neighboring block
     or its parent, or the placeholder; a neighboring block differs from $S$ by at
@@ -449,12 +459,14 @@ $A$, $B$, $C$ below are permitted to coincide.
 
 \begin{lemma}[The lens boundary separates the exchange]
     \label{lem:peps_dyadic_lens_sides}
-    \lean{TNLean.PEPS.Approximation.subset_or_subset_compl_of_disjoint_frontier, TNLean.PEPS.Approximation.closedBall_subset_or_subset_compl, TNLean.PEPS.Approximation.exists_mem_frontier_dist_le, TNLean.PEPS.Approximation.le_dist_of_frontier}
+    \lean{TNLean.PEPS.Approximation.subset_or_subset_compl_of_disjoint_frontier, TNLean.PEPS.Approximation.closedBall_subset_or_subset_compl, TNLean.PEPS.Approximation.exists_mem_frontier_dist_le, TNLean.PEPS.Approximation.le_dist_of_frontier, TNLean.PEPS.Approximation.RepaintingBaseline.outerHole_subset_or_subset_compl}
     \leanok
     \uses{lem:peps_dyadic_hole_enlargement}
     A closed sup square every point of which is at distance at least $b>0$ from the
-    boundary of a set $Y$ lies in $Y$ or in its complement; in particular each outer
-    hole square of an exchange lies on one side of the lens boundary. If a point $x$
+    boundary of a set $Y$ lies in $Y$ or in its complement. In particular, let
+    $0<t\le n$ and $2\epsilon_0(a_0+1)\le a_0/2$; then the outer hole square of
+    radius $2\epsilon_0t$ about a true vertex of either homogenized sheet of an
+    exchange lies in the lens $Y$ or in its complement. If a point $x$
     is at distance at least $b$ from every point of the boundary of $Y$, then it is
     at distance at least $b$ from every point on the other side of $Y$. These are
     the statements of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 403--405
@@ -464,7 +476,9 @@ $A$, $B$, $C$ below are permitted to coincide.
 \begin{proof}\leanok
     A preconnected set missing the boundary of $Y$ is covered by the disjoint open
     sets $\operatorname{int}Y$ and the complement of $\overline Y$, so it lies in
-    one of them; closed squares and segments are convex. The segment from $x$ to a
+    one of them; closed squares and segments are convex. By
+    Lemma~\ref{lem:peps_dyadic_hole_enlargement} every point of an outer hole square
+    is at distance at least $\tfrac{a_0}2t>0$ from $\partial Y$. The segment from $x$ to a
     point $z$ on the other side meets $\partial Y$ at some $w$ with
     $|x-w|+|w-z|=|x-z|$.
 \end{proof}
