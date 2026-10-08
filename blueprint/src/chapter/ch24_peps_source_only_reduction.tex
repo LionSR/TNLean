@@ -179,6 +179,60 @@ dimensions.
     applies to the literal regional partial trace.
 \end{proof}
 
+\begin{theorem}[Resources of the constructed source-only circuit]
+    \label{thm:peps_source_only_resources}
+    \lean{TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients_le}
+    \lean{TNLean.PEPS.PairEffect.card_replacementLabels_le}
+    \lean{TNLean.PEPS.PairEffect.stackLength_le}
+    \lean{TNLean.PEPS.PairEffect.card_replacementLabels_stackLength_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_replacement}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_eq_choose}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount_eq_choose}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_replacement_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement_le}
+    \leanok
+    \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants}
+    Suppose each original nonprivate gate has at most $K$ monomials,
+    absolute coefficient sum at most $S$, and at most $r$ pair effects
+    per monomial. Suppose also that each gate involves at most $b$
+    parties and each party participates in at most $b$ nonprivate
+    occurrences over the entire circuit.
+
+    With the stack length chosen above, each replacement gate has at
+    most $Km^r$ monomials and absolute coefficient sum at most $S$.
+    Moreover,
+    \begin{align}
+        m&\le(rS/\delta)^2+2,\\
+        Km^r&\le K\bigl((rS/\delta)^2+2\bigr)^r.
+        \label{eq:peps_replacement_resource_bound}
+    \end{align}
+    After combining sources on equal party pairs, a gate with $q$
+    participating parties has exactly $\binom q2$ common source slots,
+    including one-dimensional padding. Thus the entire replacement
+    has at most $N\binom b2$ source positions. Each party participates
+    in exactly as many expanded gate occurrences as originally, so
+    its bound $b$ over the entire circuit is preserved.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
+    Expanding the permutation averages preserves the absolute sum of
+    the original coefficients. The common rescaling has modulus
+    $(1+\delta)^{-1}\le1$, so it cannot increase that sum. The monomial
+    count is at most $Km^r$ by the gate expansion. The ceiling estimate
+    gives (\ref{eq:peps_replacement_resource_bound}). Inducting on the
+    original chronology carries both bounds through composition and
+    retained spectators.
+
+    Each prepared gate has one common slot for every unordered pair of
+    distinct participating parties. Summing $\binom q2\le\binom b2$
+    over its $N$ occurrences bounds all source positions. The occurrence
+    correspondence of Theorem~\ref{thm:peps_replacement_participants}
+    restricts to a bijection on the occurrences involving any fixed
+    party, proving exact preservation of its count.
+\end{proof}
+
 % These statements establish the effect-elimination part of the proof of
 % Theorem 5.2. They do not establish the subsequent sampling construction,
 % uniform polynomial bounds, or the full distributed density-compression theorem.

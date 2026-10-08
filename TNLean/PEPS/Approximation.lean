@@ -30,6 +30,10 @@ import TNLean.PEPS.Approximation.EffectCircuitDensity
 import TNLean.PEPS.Approximation.EffectCircuitError
 import TNLean.PEPS.Approximation.EffectCircuitLocations
 import TNLean.PEPS.Approximation.EffectCircuitReplacement
+import TNLean.PEPS.Approximation.EffectCircuitResources
+import TNLean.PEPS.Approximation.EffectReplacementCoefficients
+import TNLean.PEPS.Approximation.EffectReplacementExpansion
+import TNLean.PEPS.Approximation.EffectReplacementSources
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation

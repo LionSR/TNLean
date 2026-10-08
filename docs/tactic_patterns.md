@@ -5698,3 +5698,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   defining equations of distinct dependent maps; they follow the existing
   congruence-after-identifying-layout-memories decision above. Tensor calculations
   reuse `clm_ext_tmul`, `rTensor_tmul`, and the existing preparation identities.
+
+### Circuit expansion bounds under retained memories — candidate (2026-10-08)
+
+- **Pattern:** Transport a property of the actual gate expansions through equal
+  layout identifications, retained spectator registers, and source-free local
+  words.
+- **Seen:** `SourceCircuit.isExpansionBounded_castLayouts`,
+  `isExpansionBounded_frameList`, and `isExpansionBounded_ofLocalWord` in
+  `PEPS/Approximation/EffectReplacementExpansion.lean`.
+- **Abstraction:** One predicate records both scalar coefficient and monomial
+  counts, so the original-circuit induction proves both bounds together rather
+  than repeating the chronology for each estimate. Actual source-position counts
+  instead reuse the participant-preserving occurrence equivalence.
+- **Notes:** Short equality elimination continues the earlier congruence decision.
+  A fourth independent property of all gate expansions should be derived from a
+  common occurrence-wise description before adding another structural induction.
