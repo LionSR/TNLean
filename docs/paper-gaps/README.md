@@ -1094,3 +1094,11 @@ formalized for the canonical contraction and its reference error, with the
 branch expansion, the wire classification and the final rescaling of the
 approximation, and that the expansion into allowed monomials awaits a party
 layout for monomials.
+
+### Polynomial PEPS approximation: elimination of pair effects
+
+[polypeps_pair_effects_party_layout.tex](polypeps_pair_effects_party_layout.tex)
+records that the formal Lemma 5.1 of the September 24, 2026 polynomial PEPS
+manuscript proves the error, count and coefficient-sum clauses in a model
+without parties, and that the source-only and party-ownership clauses await a
+party layout for the monomial chains.
