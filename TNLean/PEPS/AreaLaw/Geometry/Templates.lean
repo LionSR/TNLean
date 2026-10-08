@@ -37,7 +37,11 @@ def IsAllowedSlope (u : ℝ × ℝ) : Prop :=
 
 /-- The rectangles and triangles permitted in a template. The vertices of a
 triangle are noncollinear; the adjacent sides of a rectangle are nonzero and
-orthogonal. Source: area-law Definition 9.3, closed convex rectangles and triangles. -/
+orthogonal. Source: area-law Definition 9.3, closed convex rectangles and triangles.
+
+**Local fix (nondegenerate pieces):** the source's rectangles and triangles are
+read in the ordinary sense, so segments and points are not admitted as degenerate
+pieces. Documented in `docs/paper-gaps/arealaw2d_nondegenerate_templates.tex`. -/
 inductive TemplatePolygon where
   /-- A triangle whose three sides have allowed slopes. -/
   | triangle (a b c : ℝ × ℝ)
