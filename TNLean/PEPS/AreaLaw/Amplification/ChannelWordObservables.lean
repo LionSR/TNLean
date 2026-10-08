@@ -46,6 +46,17 @@ noncomputable def spectatorRootChannelWord
     Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ :=
   w.foldl (fun B i => spectatorRootChannel (k i) B) B
 
+/-- Relabelling a chronological word evaluates exactly the same physical
+channels in the same order. In particular, forgetting membership in a retained
+family preserves the observable. Source: area law, `09-amplification.tex`,
+lines 161–173. -/
+theorem spectatorRootChannelWord_map {η : Type*} (f : η → κ)
+    (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (w : List η)
+    (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
+    spectatorRootChannelWord k (w.map f) B =
+      spectatorRootChannelWord (k ∘ f) w B :=
+  List.foldl_map
+
 /-- The empty chronological word leaves the initial observable unchanged. -/
 @[simp] theorem spectatorRootChannelWord_nil
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)

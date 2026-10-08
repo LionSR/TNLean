@@ -35,6 +35,19 @@ namespace TNLean.PEPS.AreaLaw
 
 variable {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
 
+omit [Fintype ι] in
+/-- Retaining an arbitrary predicate of labels cannot increase any anchor
+fiber. Distinct labels at the same anchor stay distinct. Source: area law,
+`09-amplification.tex`, lines 139–160, where the same multiplicity bound is
+used after retaining a subset of the events. -/
+theorem card_anchor_fiber_subtype_le (a : κ → ι) (P : κ → Prop)
+    [DecidablePred P] (x : ι) :
+    (Finset.univ.filter fun i : {i // P i} => a i = x).card ≤
+      (Finset.univ.filter fun i : κ => a i = x).card := by
+  classical
+  exact Finset.card_le_card_of_injOn Subtype.val
+    (fun i hi => by simpa using hi) (fun _ _ _ _ h => Subtype.ext h)
+
 /-- The finite kernel in the actual event-family oscillation estimate. The
 cardinality counts labels, including repeated anchors. Source: area law,
 `09-amplification.tex`, lines 139–146. -/
