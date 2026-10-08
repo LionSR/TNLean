@@ -35,6 +35,15 @@ party in the same way.
 The source additionally records that the two endpoint scales of a link are equal or adjacent.
 The bound below does not use that information, so it is not assumed.
 
+**Scope restriction (party-network bounds as hypotheses):** Lemma 8.2 `lem:routing`
+(`07-assembly.tex:122–127`) has no hypotheses; it concerns the party network of
+Proposition 7.1 `prop:protocol` (`06-geometry.tex:12–53`), from which the source derives the
+block bound, the degree bound and the separation bound. Here `load_horizontal_le` and
+`load_vertical_le` take these three bounds (`BlockBounded`, `DegreeBounded`,
+`SeparationBounded`) as hypotheses on an arbitrary placement, so they are a conditional form of
+the lemma. Documented in `docs/paper-gaps/polypeps_routing_network_bounds.tex`; the hypotheses
+are discharged once Proposition 7.1 is formalized.
+
 ## Main results
 
 * `TNLean.PEPS.Approximation.DyadicPlacement.load_horizontal_le`,
