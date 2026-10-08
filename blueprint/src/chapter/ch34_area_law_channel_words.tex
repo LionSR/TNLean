@@ -288,16 +288,16 @@ composition~(\ref{eq:al_word_composition}), and expectations are taken
 with respect to $\nu_t$.
 
 Use the extended graph distance $\rho_G$ from
-Definition~\ref{def:al_graph_extended_metric}, and write
+Definition~\ref{def:al_graph_extended_metric}, and write\newline
 $d_G(y,S)=\inf_{z\in S}\rho_G(y,z)$. For $\beta\ge0$ and
 $0<\alpha\le1$, define the distance profile by
 \begin{align}
     \label{eq:al_poisson_distance_profile}
     H_S(y) & =
-    \begin{cases}
-        \exp(-\beta d_G(y,S)^\alpha),&d_G(y,S)<\infty,\\
-        0,&d_G(y,S)=\infty.
-    \end{cases}
+    \left\{\begin{array}{ll}
+               \exp(-\beta d_G(y,S)^\alpha), & d_G(y,S)<\infty, \\
+               0,                            & d_G(y,S)=\infty.
+           \end{array}\right.
 \end{align}
 In particular, $H_{\varnothing}=0$.
 
@@ -434,4 +434,131 @@ In particular, $H_{\varnothing}=0$.
     components, so Theorem~\ref{thm:al_channel_poisson_kernel_growth}
     gives~(\ref{eq:al_poisson_lattice_decay}) and the remaining
     conclusions.
+\end{proof}
+
+\begin{theorem}[Chronological restriction of a full word]
+    \label{thm:al_channel_word_filter}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_filter}
+    \leanok
+    Let $P$ be a predicate on the event alphabet $F$, and let
+    $F_P=\{i\in F:P(i)\}$. For a word $w$ over $F$, let
+    $\pi_P(w)$ be the word over $F_P$ obtained by retaining exactly
+    the letters satisfying $P$, in their original order and with
+    their original multiplicities. Write $w|_P$ for the same list
+    regarded as a word over $F$. Then
+    \begin{align}
+        \label{eq:al_channel_word_filter}
+        \mathcal E_{w|_P}(B_0)
+         & =\mathcal E^P_{\pi_P(w)}(B_0).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_relabel}
+    The inclusion $j:F_P\hookrightarrow F$ sends $\pi_P(w)$ to
+    the ordered list $w|_P$. Apply
+    Theorem~\ref{thm:al_channel_word_relabel} to this inclusion.
+\end{proof}
+
+\begin{theorem}[Expectations of retained physical words]
+    \label{thm:al_channel_word_filter_expectation}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.integrable_spectatorRootChannelWord_filter_iff,
+        TNLean.PEPS.AreaLaw.integral_spectatorRootChannelWord_filter}
+    \leanok
+    Let $F$ be finite and $t\geq0$. Let $\nu_{F,t}$ be the
+    probability measure on finite words over $F$ assigning to
+    each word $w$ of length $m$ the mass
+    \begin{align}
+        \nu_{F,t}(\{w\})
+         & =e^{-|F|t}\frac{t^m}{m!}.
+    \end{align}
+    Let $P$ be a predicate on $F$, and let $\Phi$ be a function
+    from operators on $\mathcal H\otimes\mathcal K$ to a normed
+    real vector space. The function
+    $w\mapsto\Phi(\mathcal E_{w|_P}(B_0))$ is integrable under
+    $\nu_{F,t}$ if and only if
+    $u\mapsto\Phi(\mathcal E^P_u(B_0))$ is integrable under
+    $\nu_{F_P,t}$, and their Bochner integrals satisfy
+    \begin{align}
+        \label{eq:al_channel_word_filter_expectation}
+        \int\Phi(\mathcal E_{w|_P}(B_0))\,d\nu_{F,t}(w)
+         & =\int\Phi(\mathcal E^P_u(B_0))\,d\nu_{F_P,t}(u).
+    \end{align}
+    In particular, $\Phi$ may be the identity on matrices equipped
+    with the Euclidean operator norm, or the site oscillation
+    $B\mapsto d_y(B)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_filter}
+    The ordered Poisson-word marginal identity gives
+    $(\pi_P)_*\nu_{F,t}=\nu_{F_P,t}$. Both word spaces are
+    countable and have the discrete sigma-algebra, so every
+    observation of a word is strongly measurable. Use
+    (\ref{eq:al_channel_word_filter}) to identify the two physical
+    evaluations, then apply change of variables under $\pi_P$
+    for integrability and the Bochner integral.
+\end{proof}
+
+\begin{theorem}[Retained oscillation bounds under the full word law]
+    \label{thm:al_channel_word_filter_oscillation}
+    \uses{thm:al_channel_word_filter_expectation,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_filter_le}
+    \leanok
+    Fix $y\in I$ and $R\in\R$. If
+    $u\mapsto d_y(\mathcal E^P_u(B_0))$ is integrable under
+    $\nu_{F_P,t}$ and its integral is at most $R$, then
+    $w\mapsto d_y(\mathcal E_{w|_P}(B_0))$ is integrable under
+    $\nu_{F,t}$ and
+    \begin{align}
+        \int d_y(\mathcal E_{w|_P}(B_0))\,d\nu_{F,t}(w)
+         & \leq R.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_filter_expectation}
+    Apply the integrability equivalence and
+    (\ref{eq:al_channel_word_filter_expectation}) with
+    $\Phi(B)=d_y(B)$.
+\end{proof}
+
+\begin{theorem}[Filtered full lattice words satisfy spatial decay]
+    \label{thm:al_channel_poisson_lattice_filter_growth}
+    \uses{thm:al_channel_poisson_lattice_growth,
+        thm:al_channel_word_filter}
+    \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_filter_spatial_growth}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:al_channel_poisson_lattice_growth}, sample a
+    word $w$ from the full event alphabet $F$, and retain only the
+    events satisfying $P$. Then
+    $w\mapsto d_y(\mathcal E_{w|_P}(B))$ is integrable under
+    $\nu_{F,t}$, and the same constants $c>0$, $v\ge0$ satisfy
+    \begin{align}
+        \label{eq:al_poisson_lattice_filtered_decay}
+        \mathbb E_{\nu_{F,t}}d_y(\mathcal E_{w|_P}(B))
+         & \le e^{vt}\,2\|B\|\,H_S(y).
+    \end{align}
+    Here $\alpha=p/(p+1)$, $\beta=c/(4\cdot2^\alpha)$, and
+    $H_S$ is~(\ref{eq:al_poisson_distance_profile}). If the
+    component of $y$ does not meet $S$, the filtered observable
+    has zero oscillation at $y$ for every full word. The constants
+    precede the choice of domain, local dimension, Hamiltonian,
+    retained predicate, spectator and supported operator $B$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_poisson_lattice_growth,
+        thm:al_channel_word_filter_oscillation,thm:al_channel_word_filter}
+    Choose $c,v$ from
+    Theorem~\ref{thm:al_channel_poisson_lattice_growth}, and apply
+    Theorem~\ref{thm:al_channel_word_filter_oscillation} to its
+    retained-law integrability and expectation bound. This gives
+    (\ref{eq:al_poisson_lattice_filtered_decay}). The pointwise
+    identity~(\ref{eq:al_channel_word_filter}) transfers the
+    zero-oscillation conclusion from each retained word
+    $\pi_P(w)$ to the corresponding filtered full word.
 \end{proof}
