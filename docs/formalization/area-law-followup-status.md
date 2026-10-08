@@ -317,8 +317,8 @@ auxiliary matrix. Only the prescribed one-copy ground vector is unit; zero
 components and zero copies are included. The complete 9,690-job library build,
 two fresh standard-kernel reports, exact provenance and complete PDF/web/native
 checks passed. The physical regional restriction is established below. Good-auxiliary
-symmetry and the application of the merge-moment theorem remain separate.
-
+symmetry is also established below; applying the merge-moment theorem remains
+separate.
 
 [QICLean #639](https://github.com/LionSR/QICLean/pull/639), at checked head
 `41c946d4`, instantiates the repeated Bell contraction with the actual
@@ -339,10 +339,20 @@ For \(m=|B^c|\), its literal reduced matrix is
 after the specified chosen enumeration of the good copies. Only the
 one-copy ground vector is unit; the excitation component \(w\) may vanish.
 The complete 9,714-job library build, one fresh standard-kernel report,
-exact provenance and complete PDF/web/native checks passed. Tracing to the
-good auxiliary copies and applying their permutation invariance to the
-merge-moment estimate are being established separately. Neither result
+exact provenance and complete PDF/web/native checks passed. The joint physical
+and good-auxiliary marginal and the application of the merge-moment estimate are being established separately. Neither result
 asserts the complete inverse-compression inequality.
+
+[QICLean #643](https://github.com/LionSR/QICLean/pull/643), at checked head
+`72f13fda`, defines the literal good-auxiliary marginal by tracing all
+physical copies, bad auxiliary copies and exterior copies. It derives
+invariance under every good-copy permutation solely from the original
+vector's simultaneous copy fixedness. The ground vector need not be unit;
+zero components, zero copies and empty coordinate sets are included.
+The complete 9,729-job library build, three fresh standard-kernel reports,
+original provenance, the 434-page PDF and complete web/native checks passed.
+The symmetry supplies the auxiliary premise for the merge-moment estimate;
+it imposes no independence assumption on the auxiliary copies.
 
 The accepted [QICLean #580](https://github.com/LionSR/QICLean/pull/580)
 contains the compatible merge and grouped-copy dimension inequalities of
@@ -423,6 +433,15 @@ aggregators, 342 imported standard-kernel reports, all 20,810 blueprint names
 and exact preservation of the earlier proof sources. These checks are distinct
 from the earlier complete library builds and from the unfinished physical
 compression argument.
+
+[TNLean #8900](https://github.com/LionSR/TNLean/pull/8900), at head
+`329d192af`, supplies deterministic identities for the corrections at the
+original source positions, above the preceding integration. Its mathematical
+source is `f932b80f`; the exact QICLean dependency remains `4be0ef42`.
+The coordinator reports 67 new and 24 refreshed standard-kernel reports,
+strict checking of 35 affected modules, 585 provenance entries and all
+20,877 compiled blueprint declaration names. The Gaussian estimates, actual
+frame identifications and complete corrected-density bound remain separate.
 
 The accepted [QICLean #589](https://github.com/LionSR/QICLean/pull/589), merged
 at `48425ea8ed2390a94c71870ac19142490e5df5b7`, supplies the Schur–Weyl
