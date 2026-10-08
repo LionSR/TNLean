@@ -93,4 +93,24 @@ theorem exists_unitary_regularChargeReferencePreparation
       (Matrix.kronecker_mem_unitary hU hU)
       (pair_translation_invariant (fun _ : G => 1) 1 x)
       (pair_translation_invariant σ.character p x)
+
+/-- The return projector commutes with the common translation of the two actual
+charge-pair references. Source: SCP10, the accessible-register measurement,
+lines 2582–2615. -/
+theorem regularChargePairReturnProjection_commute (χ : G → ℂ) (p x : G) :
+    Commute (regularChargePairReturnProjection χ p)
+      (leftRegularMatrix G x ⊗ₖ leftRegularMatrix G x) := by
+  let v := normalizedRegularChargePairCoefficient χ p
+  let U := leftRegularMatrix G x ⊗ₖ leftRegularMatrix G x
+  have hU : leftRegularMatrix G x ∈ Matrix.unitaryGroup G ℂ := by
+    simpa only [leftRegularMatrix, MonoidHom.comp_apply, Matrix.permMatrixHom_apply] using
+      ((MulAction.toPermHom G G x)⁻¹).permMatrix_mem_unitaryGroup
+  have hc := Matrix.unitaryVectorSwap_commute v 0 U
+    (Matrix.kronecker_mem_unitary hU hU)
+    (pair_translation_invariant χ p x) (by simp)
+  have hform : Matrix.unitaryVectorSwap v 0 = 1 - regularChargePairReturnProjection χ p := by
+    simp only [Matrix.unitaryVectorSwap, sub_zero, v, regularChargePairReturnProjection]
+  rw [hform] at hc
+  simpa using (Commute.one_left U).sub_left hc
+
 end TNLean.PEPS

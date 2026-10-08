@@ -1,0 +1,23 @@
+import took 1.63s
+'TNLean.PEPS.Approximation.exists_resetScale_polylog_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.Approximation.exists_angularResetWidth_bound_of_slope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.Approximation.exists_angularResetWidth_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+'TNLean.PEPS.Approximation.exists_angularResetWidth_lt_of_slope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+`#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+cumulative profiling times:
+	elaboration 0.655ms
+	import 1.63s
+	initialization 34ms
+	interpretation 291ms
+	linting 2.44ms
+	module linting 0.00172ms
+	overlappingInstancesLinter 1.9ms
+	parsing 0.266ms
+	tacticAnalysis 11.9ms
