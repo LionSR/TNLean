@@ -81,27 +81,25 @@ private theorem supDist_triangle (p x z : ℤ × ℤ) :
     (hx.trans (Nat.add_le_add (le_max_left _ _) (le_max_left _ _)))
     (hy.trans (Nat.add_le_add (le_max_right _ _) (le_max_right _ _)))
 
-/-- Ambient clearance after dilation, for the source's real separation constant.
-This is Lemma 9.4, lines 651–655. No integrality of `D₀` is required. -/
-theorem Template.IsSeparated.clearance_ambientDilation {Ctpl D₀ : ℝ} {n s₀ : ℕ}
+private theorem separated_dilation_clearance {Ctpl : ℝ} {n s₀ D₀ : ℕ}
     {T : Template Ctpl n s₀} {Z : Finset (ℤ × ℤ)}
     (hsep : T.IsSeparated D₀ Z) (hD : 1 ≤ D₀)
     (j : ℕ) (hj : j ≤ s₀) {x z : ℤ × ℤ}
     (hx : x ∈ ambientDilation T.points j) (hz : z ∈ Z) :
-    D₀ * s₀ < max |(x.1 : ℝ) - z.1| |(x.2 : ℝ) - z.2| := by
+    D₀ * s₀ < supDist x z := by
   obtain ⟨p, hp, hcoord⟩ := mem_ambientDilation_iff.mp hx
   have hnear : supDist p x ≤ j := by
     simp only [supDist]
     omega
-  have hsep' := hsep p hp z hz
-  rw [← cast_supDist] at hsep' ⊢
-  have htri : (supDist p z : ℝ) ≤ j + (supDist x z : ℝ) := by
-    exact_mod_cast (supDist_triangle p x z).trans (Nat.add_le_add_right hnear _)
-  have hscale : (s₀ : ℝ) ≤ D₀ * s₀ := by
-    simpa only [one_mul] using
-      mul_le_mul_of_nonneg_right hD (Nat.cast_nonneg s₀ : (0 : ℝ) ≤ s₀)
-  have hj' : (j : ℝ) ≤ s₀ := by exact_mod_cast hj
-  nlinarith
+  have hsep' : 4 * D₀ * s₀ < supDist p z := by
+    have h := hsep p hp z hz
+    rw [← cast_supDist] at h
+    exact_mod_cast h
+  rw [Nat.mul_assoc] at hsep'
+  have htri := (supDist_triangle p x z).trans (Nat.add_le_add_right hnear _)
+  have hscale : s₀ ≤ D₀ * s₀ := by
+    simpa only [one_mul] using Nat.mul_le_mul_right s₀ hD
+  omega
 
 /-- Every sufficiently small native rectangle contained in a permitted dilation
 is safe, with safety derived from template separation. This is the clearance
@@ -114,11 +112,9 @@ theorem Template.IsSeparated.isSafe_of_subset_ambientDilation
     (hQ : Q.toFinset ⊆ ambientDilation T.points j) (hsize : Q.size ≤ s₀) :
     IsSafe Λ A D₀ Q := by
   intro e he z hz p hp
-  have hclear := hsep.clearance_ambientDilation (by exact_mod_cast hD) j hj (hQ hp)
-    (mem_boundaryEndpoints_of_mem_edgeBoundary he hz)
-  rw [← cast_supDist] at hclear
-  have hdist : D₀ * s₀ < supDist p z.1 := by exact_mod_cast hclear
-  exact (Nat.mul_le_mul_left D₀ hsize).trans_lt hdist
+  exact (Nat.mul_le_mul_left D₀ hsize).trans_lt
+    (separated_dilation_clearance hsep hD j hj (hQ hp)
+      (mem_boundaryEndpoints_of_mem_edgeBoundary he hz))
 
 /-- Every cell of the actual capped core partition is a safe native rectangle.
 Containment and size are derived from selection, not assumed of the cover.

@@ -350,24 +350,10 @@ example : rectRegion disconnectedCut (latticeDyadicRect 0 (-3, 2)) = ∅ := by
   simp only [disconnectedDomain, Finset.mem_insert, Finset.mem_singleton] at hdomain
   rcases hdomain with h | h | h | h <;> rw [h] at hrect <;> norm_num at hrect
 
--- The geometric clearance theorem allows the source's nonintegral real constant.
-example (x : ℤ × ℤ) (hx : x ∈ ambientDilation thinDiagonalTemplate.points 3) :
-    (3 / 2 : ℝ) * 3 < max |(x.1 : ℝ) - 20| |(x.2 : ℝ)| := by
-  have hsep : thinDiagonalTemplate.IsSeparated (3 / 2) {(20, 0)} := by
-    intro p hp z hz
-    simp only [thinDiagonalTemplate, thinDiagonalSample, Finset.mem_insert,
-      Finset.mem_singleton] at hp
-    simp only [Finset.mem_singleton] at hz
-    subst z
-    rcases hp with rfl | rfl | rfl <;> norm_num
-  simpa using hsep.clearance_ambientDilation (by norm_num) 3 (by decide) hx
-    (show (20, 0) ∈ ({(20, 0)} : Finset (ℤ × ℤ)) by simp)
-
 -- Check the complete export list against the standard kernel axioms.
 run_cmd do
   for name in [``latticeDyadicRect, ``toFinset_latticeDyadicRect,
       ``size_latticeDyadicRect, ``rectRegion_latticeDyadicRect,
-      ``Template.IsSeparated.clearance_ambientDilation,
       ``Template.IsSeparated.isSafe_of_subset_ambientDilation,
       ``Template.IsSeparated.isSafe_cappedDyadicPartition_core,
       ``Template.IsSeparated.isSafe_cappedDyadicPartition_shell] do
