@@ -168,6 +168,7 @@ import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
+import TNLean.Algebra.SupportedRangeProjector
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.SymmetryParity
