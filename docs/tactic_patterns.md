@@ -5713,3 +5713,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   infinitude lemma, then share the minimal geometric consequence if needed.
 - **Notes:** The interface proofs require an actual nondegenerate segment;
   two isolated points of a disconnected intersection are insufficient.
+
+
+### Excluding integer-translated scalar equalities — candidate (2026-10-08)
+
+- **Pattern:** Subtract the integer translation from a coordinate equality,
+  convert the resulting integer expression to a real expression, and apply
+  the established nonintegrality assertion.
+- **Seen:** Four branches of
+  `dyadicOrigin_supporting_lines_avoid_lattice` in `Geometry/DyadicOrigin.lean`.
+- **Abstraction:** These branches occur in one file and do not meet the
+  two-file promotion condition. They share the existing four-part
+  nonintegrality theorem; no additional exported theorem is needed here.
+- **Notes:** The four equations concern the two coordinates, their sum and
+  their difference. They establish line avoidance; classifying actual edges
+  remains a separate geometric argument.

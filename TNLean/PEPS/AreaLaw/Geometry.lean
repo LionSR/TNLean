@@ -23,6 +23,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DummyRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.DyadicClosure
 import TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion
 import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
+import TNLean.PEPS.AreaLaw.Geometry.DyadicOrigin
 import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
@@ -36,6 +37,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FineBelts
 import TNLean.PEPS.AreaLaw.Geometry.FineCellPartition
 import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily
+import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
