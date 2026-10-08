@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "angular-reset8766-tnlean.peps.approximation.exists_reset_scale_polylog_le",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+        "declaration": "TNLean.PEPS.Approximation.exists_reset_scale_polylog_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex",
+          "labels": [
+            "eq:info-reset-scale-cost"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Prove eventual C3*(1+log s)^K <= (c/2)*s for arbitrary real K and C3 from Mathlib logarithmic-power asymptotics.",
+        "Independent scalar formalization of source lines 745–778. No upstream OpenAI Lean proof text is reused. This does not prove the physical reset proposition or angular information invariant."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
+          }
+        ]
+      }
+    },
+    {
+      "id": "angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_bound_of_slope",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+        "declaration": "TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex",
+          "labels": [
+            "eq:info-reset-scale-cost"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "For every fixed positive D >= 4*C4/c, choose L0 >= 2 so all L >= L0 and s >= D*log L satisfy the three-quarter bound and strict c*s bound; expose exp(max K 1) <= D*log L.",
+        "Independent scalar formalization of source lines 745–778. No upstream OpenAI Lean proof text is reused. This does not prove the physical reset proposition or angular information invariant."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
+          }
+        ]
+      }
+    },
+    {
+      "id": "angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_bound",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+        "declaration": "TNLean.PEPS.Approximation.exists_angular_reset_width_bound",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex",
+          "labels": [
+            "eq:info-reset-scale-cost"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Choose D=max(1,4*C4/c) independently of L and s, including exponent zero and zero coefficients.",
+        "Independent scalar formalization of source lines 745–778. No upstream OpenAI Lean proof text is reused. This does not prove the physical reset proposition or angular information invariant."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
+          }
+        ]
+      }
+    },
+    {
+      "id": "angular-reset8766-tnlean.peps.approximation.exists_angular_reset_width_lt_of_slope",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+        "declaration": "TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_slope",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex",
+          "labels": [
+            "eq:info-reset-scale-cost"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Apply the uniform bound to any independently supplied real width w bounded by the source reset-cost expression.",
+        "Independent scalar formalization of source lines 745–778. No upstream OpenAI Lean proof text is reused. This does not prove the physical reset proposition or angular information invariant."
+      ],
+      "no_upstream_proof_text_reused": true,
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b07d3ca6e4eb6b197f03aa67ff94b54a8cb41cca",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "lake build TNLean.PEPS.Approximation.AngularResetWidth",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/native-build.log",
+            "sha256": "d2bdd498c8f953b25cddcee7c7bd06b5d2645081d23bff6945fedd38dd3a1f8a"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/source-strict.log",
+            "sha256": "a9264a574796de0f941f0a153b8f1555ed65bc5f3bc1e15be11640f9f3597973"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/consumers-strict.log",
+            "sha256": "dca5a46d6e4334ca259900b6a31d2af1418451be41e82c8f2da64ff706998a25"
+          },
+          {
+            "kind": "source-audit",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/guards-strict.log",
+            "sha256": "063994ecb79c5b88be14d845899f6b504b0607ff6d46c81bc6e4bf64d8c879ff"
+          },
+          {
+            "kind": "axioms",
+            "command": "lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8766-angular-reset-width/refresh/public-axioms.raw.log",
+            "sha256": "0a3953e5539fa1a41fe2d6372b8d9110445cdc119b7aded9ceb4f4e6d5e74fd8"
+          }
+        ]
+      }
+    }
+  ]
+}

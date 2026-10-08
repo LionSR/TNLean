@@ -97,6 +97,7 @@ import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixIdempotentFactorization
+import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
@@ -168,12 +169,14 @@ import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
+import TNLean.Algebra.SupportedRangeProjector
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.SymmetryParity
 import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TensorProductContraction
+import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
