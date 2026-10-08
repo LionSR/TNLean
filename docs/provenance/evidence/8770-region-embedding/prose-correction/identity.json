@@ -1,0 +1,67 @@
+{
+  "public_source_revision": "650bbc640e475cbc944b293fce2eee1b9c902d9e",
+  "actual_local_execution_revision": "c126d9ddaf9ac393290398f95e5374fabbba6a53",
+  "public_source_url": "https://github.com/LionSR/TNLean/commit/650bbc640e475cbc944b293fce2eee1b9c902d9e",
+  "identical_complete_tree": "2e1a469031737c1f6921e078354e4e79591aeb39",
+  "identity_scope": "The published source and actual local execution revision have identical complete Git trees. The compiler runs are the retained original c126 runs, not new executions at the public commit or this metadata correction.",
+  "previous_verification_revision": "bdaa988c4cf11aa6c5b5b9e6af6cfb4945a63be7",
+  "source_change": "One module-overview sentence cites the polynomial-PEPS approximation manuscript instead of tracking issue numbers. Declaration signatures and proof text are unchanged, but full module bytes differ, requiring new verification references.",
+  "source_files": [
+    {
+      "path": "TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
+      "sha256": "5b54cdc497ec3f0924fb929315d754f6454be1611b00b7048cfea5a364c81fd4"
+    },
+    {
+      "path": "TNLeanTest/RegionOperatorEmbedding.lean",
+      "sha256": "bd46791357af01a2af77a006cf59f787691e9d322039a736e01d209f86773a76"
+    },
+    {
+      "path": "TNLeanTest/RegionOperatorEmbeddingAxioms.lean",
+      "sha256": "ba047a05afca2bdb001e7bd0b10f08869611e8d33bc211acf5a8521747e17641"
+    },
+    {
+      "path": "docs/provenance/evidence/8770-region-embedding/RegionOperatorEmbeddingAxioms.lean",
+      "sha256": "af01153727733e4218c604180e009c4ec0828cd54951210c13077ccbe27bae4b"
+    }
+  ],
+  "execution_pin_files": [
+    {
+      "path": "lean-toolchain",
+      "sha256": "bc84812c94489d1e3e191baa1dc10d5eb684382d7fe9d2a5ab085e72c1c67e47"
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b219a7786c9affe607aa70c6dcf7266f836099b5143c3d81f15b38b21b6440aa"
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "7d3d5a57cfdbfa2b751f9810b84da3d8497de1bee757c99c8e1ab7ad1569be4c"
+    },
+    {
+      "path": "docbuild/lake-manifest.json",
+      "sha256": "14c25f6ccdded847364acc442c2a27ae37f45f0f79027ef5b77f111fcb0a2e70"
+    }
+  ],
+  "qiclean_pin": "83fdc804bb0ce258a41d32ecb1063e0c7fa8b84c",
+  "historical_ledger": "docs/provenance/evidence/8770-region-embedding/historical/before-prose-correction-ledger.json",
+  "historical_ledger_sha256": "efbb5f09e8545eab85964b2d6a8318e40a090c59351bee2ff594954dd177a954",
+  "original_manifest_sha256": "5a576079cf33c848fc645186f730c47f89026e162c975eea0f0f45e1aa2193ea",
+  "retained_checks_sha256": "de28eda2597be66788120ef1decf957fd6a612d0ce92e263aeb7c094d0f35e0b",
+  "normalization": "Only absolute log destinations in the manifest are replaced by retained basenames, and log hashes are added. All six logs are byte-identical to the original files. Actual revision, commands, file hashes, durations and exit codes are preserved.",
+  "validation_summary": {
+    "native_build_jobs": 3205,
+    "strict_adapter_checks": 4,
+    "text_style_exit_code": 0,
+    "raw_adapter_axiom_reports": 3,
+    "permitted_axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "remote_failure": {
+    "run_url": "https://github.com/LionSR/TNLean/actions/runs/37663808122",
+    "job_id": 112937773274,
+    "error": "region-embedding8770-tnlean.peps.agreeoff_region_iff: downstream differs from verified revision; rebuild and update evidence"
+  }
+}

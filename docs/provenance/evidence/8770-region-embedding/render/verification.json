@@ -1,0 +1,32 @@
+{
+  "source_leaf": "blueprint/src/chapter/ch24_peps_region_operator_embedding.tex",
+  "source_sha256": "2f31374c2d59e2f690ca3abb57170d2ef47d7e1a0d37d6550c0cb6fc7a50a39b",
+  "html_render_exit_code": 0,
+  "pdf_render_exit_code": 0,
+  "html_declaration_links": [
+    "TNLean.PEPS.agreeOff_region_iff",
+    "TNLean.PEPS.regionLocalTerm_eq_embedOp",
+    "TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp"
+  ],
+  "pdf_declaration_links": [
+    "TNLean.PEPS.agreeOff_region_iff",
+    "TNLean.PEPS.regionLocalTerm_eq_embedOp",
+    "TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp"
+  ],
+  "missing_html_local_anchors": [],
+  "equation_anchors": [
+    "eq:peps_region_embedding_entries",
+    "eq:peps_region_embedding_coordinates"
+  ],
+  "pdf_pages": 4,
+  "visual_inspection": "The mathematical page and following empty bibliography page were inspected. Equations, proof text and degenerate examples fit without clipping.",
+  "latexindent_version": "3.24.7",
+  "format_idempotent": true,
+  "scope": "Focused unchanged leaf and standard support files; no full-book, live-browser MathJax, remote documentation, or combined import build claimed.",
+  "render_commands": [
+    "plastex -c plastex.cfg web.tex",
+    "latexmk -xelatex -interaction=nonstopmode -halt-on-error print.tex"
+  ],
+  "pdf_sha256": "058d87b929b88533b20de745eee84805c687fe7b46b6cd74b6246377aaa75248",
+  "html_sha256": "c3dc81bc6796dc4ebbff36924797c9f60afb89b18aca4e0621241bdce791177f"
+}
