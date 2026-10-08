@@ -1,0 +1,74 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Scanner Estimate from the Conclusions of Its Inputs}
+\author{}
+\date{2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source proposition}
+
+Proposition~9.2 of the two-dimensional area-law manuscript of September~24,
+2026~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~349--397) states
+that, under the scan scales and the entropy input
+$S_\Omega(X)\le C_en^{1+e}$, $S_\Omega(Q_j)\le C_e(nL^e+n)$, for every
+sufficiently large replica count $k$ some charge round and some common
+parameter $p_k\in[\epsilon/2,\epsilon]$ give the defect-energy bound
+\[
+  E_{\mathrm{def},k}\le Cn^\ell D^2W^2(\log n)^C
+  \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+o_k(1),
+\]
+with $\delta_n=C_e\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^C)$, and with the
+comparator budgets $B_{\mathrm{sh}}\le C_e(nL^e+n)$,
+$B_{\mathrm{exc}}\le CnD$ and $\mathcal B\le CnD(\log n)^C$.
+
+Its proof (lines~399--533) uses Lemma~9.1 (the scan histories),
+Proposition~7.4 (transport), Proposition~8.1 (comparators), Lemma~2.1
+(continuity) and Lemma~2.3 (tails) for the concrete scan.
+
+\section{The restriction}
+
+The formal statement takes the conclusions of those five results, for one
+scan at scale $n$, as the fields of one data package, and proves the step of
+the source from these conclusions to Proposition~9.2: the integrated entropy
+balance over the charge rounds, the averaging selection of a round and of a
+parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
+accounting of the defect energy at the selected point, and the three
+comparator budgets.\footnote{The packaged statement is
+\leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
+one displayed conclusion of an input and cites its source line; no field
+asserts more than the cited statement. The constants depend only on the fixed
+exponents and on the constants of the inputs, as in the source.
+
+Two harmless differences in the bookkeeping are recorded. The continuity
+input bounds the change of the shell entropies by
+$C\sqrt{n^{-500}}(1+Cn^2\log q)$, which is $O(n^{-248})$ but not at most
+$n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
+marginal parameter is bounded with logarithmic power $12$, coming from the
+crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
+source writes an unspecified power $C$.
+
+\section{Elimination}
+
+The restriction disappears once the data package is constructed from the
+scan geometry of Lemma~9.1 and the transported states of Proposition~7.4,
+with Propositions~8.1 and Lemmas~2.1 and~2.3 supplying the remaining fields.
+Those inputs are separate items of the same formalization program.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
