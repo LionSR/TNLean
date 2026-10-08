@@ -2,43 +2,42 @@
 
 This record supports the [continuing goal](area-law-peps-goal.md). The goal
 remains active; both source-faithful headline theorems remain unproved.
-Twenty-four geometric contributions contain **148 canonically verified
-original declarations**. Earlier verification details remain in the linked
-evidence notes and their immutable source revisions.
+Twenty-five geometric contributions contain **150 canonically verified
+original declarations**. Earlier exact revisions and evidence remain below.
 
 ## Current verified source
 
 The exact mathematical source is
-`8f86fd6d2e20a77f6c130274cbaad6c5b9f3a60e`, on
-`feat/area-law-fan-frontiers-near-mark`. Its completed parent is draft
-[#8907](https://github.com/LionSR/TNLean/pull/8907), evidence
-`74d88251d951ced6bdb4b9fdbc251c84e20b5aaf`, mathematical source
-`eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac`.
+`ba085d83ba7568a8333d4163f05d9711b9a2d71d`, on
+`feat/area-law-initial-star-frontiers`. Its completed parent is draft
+[#8909](https://github.com/LionSR/TNLean/pull/8909), evidence
+`707599e38a39a3c489daa68804a10879e3073bd0`, mathematical source
+`8f86fd6d2e20a77f6c130274cbaad6c5b9f3a60e`.
 
-Three new results retain actual geometric endpoints and scales. Every actual
-fan frontier lies on its outer square frontier or an actual radial segment.
-A fine cell meeting the closed 10t neighborhood of an actual reference-cell
-mark lies in a neighboring layer, with all marks on the common quarter mesh.
-The closed dummy neighborhood is separated from each later layer by sixteen
-of that layer's fine sides. Origins and endpoint sets remain arbitrary;
-empty sets are included through the actual membership implications.
+Two originals establish whole-side extraction for an actual dyadic square
+frontier and the allowed direction of each actual initial frontier within
+t/32 of an actual reference-cell mark. The latter retains C ≥ 2, k₀ ≥
+50,000,000, actual cell and mark memberships, and k₀ ≤ k. It supplies no
+sector assignment, selected ray, desired boundary or nonempty-endpoint premise.
+The square-side proof moves unchanged from its former private owner.
 
-One locked targeted Geometry build passed in **24.979 seconds** and one
-six-name imported report in **5.261 seconds**, without diagnostics. Every
-report contains exactly `propext`, `Classical.choice` and `Quot.sound`.
-Strict promotion, the unchanged **309-record** normal policy and guarded
-finalization pass: three originals, exactly three fresh old boundary reports,
-and **303 unchanged parent records**. The three old public signatures and
-proof bodies are unchanged after shared primitive-proof reuse. All **152**
-recursive historical evidence files and all eight frozen mathematical files
-retain their exact bytes. Full CI and compiled-book checking remain separate.
+One locked targeted Geometry build passed in **91.799 seconds** and one
+four-name imported report in **35.527 seconds**, without diagnostics.
+All four reports contain exactly `propext`, `Classical.choice` and `Quot.sound`.
+Strict promotion and the unchanged **311-record** normal policy pass:
+two originals, exactly two old dummy-interface refreshes and **307 unchanged
+parent records**. The old signatures are unchanged; precisely one helper
+call is renamed in the first proof, and the second proof is unchanged.
+All **156** recursive historical files and eight frozen mathematical files
+retain their bytes. The guarded finalizer and complete independent final review pass.
+No successful compiler or normal-policy check was repeated.
 
-The temporary strict attempt stopped at a macOS path-prefix guard before
-writing output. Comparing resolved paths with the resolved temporary prefix
-fixed the helper alone; the failure log is retained. The failed strict step
-was rerun, and no successful compiler or normal-policy check was repeated.
-The exact preparation and completed artifacts are preserved under
-`/tmp/tnlean-8758-fan-frontiers-near-mark-`.
+The scoped timing check warns that CellSides took 29 seconds, above 25 and
+below the 50-second limit. All three affected source files had their first
+check in this combined canonical build. No direct check or successful
+compiler repetition occurred. Artifacts are preserved under
+`/tmp/tnlean-8758-initial-star-frontiers-`. Full CI and compiled-book checking
+remain separate.
 
 ## Verified contributions
 
@@ -67,8 +66,8 @@ The exact preparation and completed artifacts are preserved under
 | Actual initial-region identifiers, closed coverage and translated origin | [#8904](https://github.com/LionSR/TNLean/pull/8904), evidence `f93aec9cd0c6ae5dd399f44edd0d0d1e69d364e1` | `afb83051377658183c94673c0c2bd5a2f508a4d3` | [initial regions and origin](evidence/8758-initial-regions-origin.md) |
 | Disjoint initial interiors, lattice-free boundaries and unique initial lattice assignment | [#8906](https://github.com/LionSR/TNLean/pull/8906), evidence `aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03` | `ff3ac34d661f011020c566dff01eed0fb6454881` | [initial lattice partition](evidence/8758-initial-lattice-partition.md) |
 | Colors and regularity of actual initial regions | [#8907](https://github.com/LionSR/TNLean/pull/8907), evidence `74d88251d951ced6bdb4b9fdbc251c84e20b5aaf` | `eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac` | [initial interfaces and regularity](evidence/8758-initial-interfaces-regularity.md) |
-| Primitive fan frontiers and near-mark mesh/dummy separation | Canonical source verified; draft publication follows the completed evidence | `8f86fd6d2e20a77f6c130274cbaad6c5b9f3a60e` | [fan frontiers and near-mark geometry](evidence/8758-fan-frontiers-near-mark.md) |
-
+| Primitive fan frontiers and near-mark mesh/dummy separation | [#8909](https://github.com/LionSR/TNLean/pull/8909), evidence `707599e38a39a3c489daa68804a10879e3073bd0` | `8f86fd6d2e20a77f6c130274cbaad6c5b9f3a60e` | [fan frontiers and near-mark geometry](evidence/8758-fan-frontiers-near-mark.md) |
+| Whole square sides and nearby actual initial frontiers | Canonical source verified; draft publication follows the completed evidence | `ba085d83ba7568a8333d4163f05d9711b9a2d71d` | [initial star frontiers](evidence/8758-initial-star-frontiers.md) |
 
 ## Mathematical obligations that remain
 
@@ -100,43 +99,40 @@ area-law theorem and polynomial PEPS theorem remain open.
 
 ## Next claimed source and immediate action
 
-The public assignments are
-[#8758, comment 6050540131](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050540131)
-and [comment 6050562726](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050562726).
-The next contribution has two original statements and two old dummy reports:
+The next public assignment is
+[#8758, comment 6050817719](https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719).
+Four elementary fan results are written and independently approved in the
+source-preparation tree. Their first compilation remains unperformed:
 
-- `CellSides.lean`: every frontier point of an actual translated dyadic square
-  belongs to a whole side. Raw SHA-256
-  `71fe8baa01014a7568bad218fb9bcab0f15ff7a9a062b0452ec14df7b7bd1114`.
-  The existing private proof moves unchanged to this lower owner.
-- `InitialStarFrontiers.lean`: within t/32 of an actual fine-cell mark, every
-  actual initial birth frontier has an allowed direction from that mark.
-  Raw SHA-256
-  `234bcd9e43f00d850a46743b390e671073b7c202c3b321fb078ccf96a86448a8`.
-  The exact initial parameters, actual cell/mark memberships and k₀≤k are
-  retained. No sector, local mesh, nonempty-endpoint or desired partition
-  premise is supplied. A repeated containment argument was removed by using
-  the actual fan cover.
-- `DummyRunInterfaces.lean`: raw SHA-256
-  `a2868a8bda7fdd39a29ed46bbb034a4e9eb98b83bbe6bb89fe5aeb6289cac38a`.
-  The old private proof is removed and its single public-proof call is renamed.
-  Both old public statements retain their mathematical signatures and arguments;
-  they require fresh whole-file reports at the later source.
+| Source | Exact prepared SHA-256 | Mathematical result |
+|---|---|---|
+| FanRegularity.lean | `2e1c30f312f7bb1e5866bb80e4fcf143d075d6eef9946ad0703d98b96e06e131` | Nonempty actual triangle interior and equality with its closure |
+| CellFans.lean | `63618634a67ec019d5801334b39ecbd90bbe10db814d0b15cd3363724c1c7ae6` | Every actual base point is half a side from its center |
+| CellFanSectors.lean | `a32a8080a27aefc575e0be86641fbc2311cc20d673b6916f13451ca6a903930f` | All-midpoint triangle interiors avoid the four allowed center lines |
+| ConcentricFans.lean | `21aa1955d8d36644ead4217b00c3b833fefb643d2380c6dec74feed6c763419b` | Clipping the larger concentric fan gives the smaller fan at the same slot |
 
-Root and independent review approve the released mathematics and both new
-chapters. **No compiler has checked these future files.** Their first check
-can be one combined canonical build and four imported reports after the
-current contribution is published and its clean completed parent captured.
-The planned metadata remains under `/tmp/tnlean-8758-initial-star-frontiers-`;
-BASE and SOURCE must stay unset until those actual steps occur. Do not copy
-future files into the current eight-file freeze or capture an unfinished parent.
+The regularity and base-distance proofs are reused unchanged. Revised old
+InitialRegionRegularity has hash
+`b92e1d96598a75282df27ffbb3abeb6d1a8a7be396486d325115943b7e2aa30f`;
+its two calls are renamed. Three old CellFans calls are renamed. Exactly
+nine old CellFans rows and one old regularity row will need fresh evidence;
+all other old rows remain immutable. The proposed four originals give
+315 records and fourteen reports across five affected modules, subject to
+measuring the next clean completed parent after this publication.
 
-The subsequent all-midpoint fan analysis is read-only design. Connected open
-triangle interiors and their actual regularity can assign identifiers from
-the proved initial cover. A finite union of triangle interiors is dense in
-its fan square, so the closure argument need not repeat the earlier
-nowhere-dense segment proof. The angular exclusion and nested-square fan
-comparison still need concrete statements and proofs before being claimed.
+First finish and publish the current verified contribution. Then capture
+that clean completed parent once, assemble only the released next files and
+scoped chapters, and perform their first combined canonical check. Keep
+future files outside the current eight-file freeze. No future source success,
+parent capture or BASE/SOURCE binding is inferred from review.
+
+The later sector assignment is being scouted without source changes. Connected
+open triangle interiors, the actual initial cover and frontier exclusion can
+give one identifier per sector. A finite union of triangle interiors is dense
+in the working square; birth regularity then identifies the local closed
+pieces. Concentric clipping passes to the smaller square. This avoids
+repeating the earlier nowhere-dense segment argument. Actual sector assignment,
+inactive-ray merging and recursive repairs still need proofs.
 
 ## Worktrees, resources and coordination
 
@@ -153,26 +149,21 @@ coexist there. Copy only explicitly released files, preserving original notices;
 do not reset this tree or copy all of its files. Hot-main and dependency
 integration retain their separate owners. No peer build is interrupted.
 
-Coordination was refreshed for #8733, #8758, #8753 and #8769 at 01:51 UTC.
-Latest concrete replies are
-[#8769, comment 6050537150](https://github.com/LionSR/TNLean/issues/8769#issuecomment-6050537150)
-and [#8753, comment 6050631317](https://github.com/LionSR/TNLean/issues/8753#issuecomment-6050631317).
-Refresh approximately every thirty minutes and before a new claim or shared
-mathematical interface change. Use a small team with disjoint responsibilities.
+Coordination was refreshed for #8733, #8758, #8753 and #8769 at 02:40 UTC.
+The latest exact-freeze replies are
+[#8769, comment 6050944614](https://github.com/LionSR/TNLean/issues/8769#issuecomment-6050944614)
+and [#8753, comment 6050944463](https://github.com/LionSR/TNLean/issues/8753#issuecomment-6050944463).
+Refresh approximately every thirty minutes and before new claims or shared
+mathematical interface changes. Use a small team with disjoint responsibilities.
 
-The analytic owner reports published QICLean #651 at
-`771e955ae728db3e88af04114b5773843fc04eef` and #652 at
-`b5ba8ae27c0a86858a02e62337cf66a343a9d6ad`, for actual joint density and the
-selected-component QC moment. Read-only GitHub checks confirmed those draft
-heads; their complete builds and books remain owner evidence. Actual QC/VR
-same-component marginals, merge-deficit positivity, physical projector
-comparison and inverse compression retain the analytic owners.
+The analytic owner reports subsequent QICLean joint-density and merge results
+in drafts #656 and #658, with complete builds and books under that owner's
+verification. These reports do not change this geometry worktree's QICLean
+pin. Actual QC/VR marginals, positivity, physical projector comparison and
+inverse compression retain the analytic owners.
 
-The compression owner reports thirteen original-to-source-only chronological
-reduction modules at `8b4483ccad9b1fe9467205cb7173e2da61a13383`, eighty strict
-standard reports, whole-circuit resource bounds, variable party dimensions
-and density error at most ε/2. Canonical integration is reserved there.
-The actual sampled local operators, Gaussian endpoint factors and physical
-Schmidt-output/coordinate joins retain the compression owner. These reports
-are not repeated verification by geometry or completion of either headline.
-Continue the active goal from the concrete next source above.
+The compression owner reports chronological reduction and sampled Gaussian
+ε/4 approximation, with actual factorization and coordinate steps. The network
+chronology and final ε/2 readout retain the compression owner's assignments.
+These reports are not repeated verification by geometry or completion of either
+headline theorem. Continue from the concrete next source above.
