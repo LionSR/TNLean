@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Symmetry.StringOrder
+import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Core.PhysicalRotation
 import QICLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
 import QICLean.Channel.Peripheral.SpectralRadius
@@ -259,6 +259,32 @@ theorem pureCanonical_spectralRadius_eq_one_iff_localSymmetry
   · rintro ⟨V, μ, hV, _, hμ, _, hInter⟩
     exact ⟨V, μ, hV, hμ, hInter⟩
 
+/-- Faithful canonical density and a one-dimensional peripheral eigenspace
+imply irreducibility and primitivity of the transfer map. The faithful invariant
+density is essential to the irreducibility conclusion.
+
+Source: arXiv:0802.0447, lines 147–162. -/
+theorem pureCanonical_isIrreducibleMap_and_isPrimitive
+    [NeZero D] (A : MPSTensor d D)
+    (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛpos : Λ.PosDef)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (hPure : ∀ (ev : ℂ) (X : Matrix (Fin D) (Fin D) ℂ),
+      X ≠ 0 → ‖ev‖ = 1 → Kraus.transferMap A X = ev • X →
+      ev = 1 ∧ ∃ c : ℂ, X = c • 1) :
+    IsIrreducibleMap (Kraus.transferMap A) ∧ IsPrimitive (Kraus.transferMap A) := by
+  have hIrr : IsIrreducibleMap (Kraus.transferMap A) :=
+    isIrreducibleMap_of_canonical_fixedSpace A Λ hΛpos hΛfix hNorm fun X hX => by
+      rcases eq_or_ne X 0 with rfl | hXne
+      · exact ⟨0, by simp⟩
+      · exact (hPure 1 X hXne (by simp) (by simpa using hX)).2
+  have hPrim : IsPrimitive (Kraus.transferMap A) := by
+    apply isPrimitive_of_unique_norm_one (Kraus.transferMap A) 1 hNorm one_ne_zero
+    intro ev hEig hev
+    obtain ⟨X, hX⟩ := hEig.exists_hasEigenvector
+    exact (hPure ev X hX.2 hev hX.apply_eq_smul).1
+  exact ⟨hIrr, hPrim⟩
+
 /-- PGWSVC08 Lemma 1 in the source's canonical spectral-purity regime.
 The hypothesis explicitly includes the one-dimensional peripheral eigenspace,
 not merely uniqueness of its eigenvalue as a set. Irreducibility is derived
@@ -284,16 +310,8 @@ theorem pureCanonical_twistedTransfer_spectral_lemma
       X ≠ 0 → Y ≠ 0 → ‖ev‖ = 1 → ‖ν‖ = 1 →
       twistedTransferMap A u X = ev • X → twistedTransferMap A u Y = ν • Y →
       ev = ν ∧ ∃ c : ℂ, c ≠ 0 ∧ X = c • Y := by
-  have hIrr : IsIrreducibleMap (Kraus.transferMap A) :=
-    isIrreducibleMap_of_canonical_fixedSpace A Λ hΛpos hΛfix hNorm fun X hX => by
-      rcases eq_or_ne X 0 with rfl | hXne
-      · exact ⟨0, by simp⟩
-      · exact (hPure 1 X hXne (by simp) (by simpa using hX)).2
-  have hPrim : IsPrimitive (Kraus.transferMap A) := by
-    apply isPrimitive_of_unique_norm_one (Kraus.transferMap A) 1 hNorm one_ne_zero
-    intro ev hEig hev
-    obtain ⟨X, hX⟩ := hEig.exists_hasEigenvector
-    exact (hPure ev X hX.2 hev hX.apply_eq_smul).1
+  obtain ⟨hIrr, hPrim⟩ :=
+    pureCanonical_isIrreducibleMap_and_isPrimitive A Λ hΛpos hΛfix hNorm hPure
   exact ⟨twistedTransfer_spectralRadius_le_one_of_irreducible A hIrr u hu hNorm,
     pureCanonical_spectralRadius_eq_one_iff_localSymmetry
       A hIrr u hu Λ hΛpos hΛtr hΛfix hNorm,

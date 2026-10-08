@@ -12,12 +12,12 @@ import TNLean.MPS.Symmetry.PhysicalStringEndpoints
 These results formalize the endpoint coefficient criterion in PGWSVC08,
 arXiv:0802.0447, lines 241–276, for a fixed physical twist with a specified
 peripheral virtual intertwiner. They do not assert the existential Theorem 1
-over nontrivial twists, nor change `HasPhysicalStringOrder` or its convention
-for the identity action modulo scalar phases.
+over nontrivial twists. The corrected projective global criterion is proved
+separately in `PhysicalStringPhase`.
 
 **Scope restriction (fixed physical twist):** The theorem does not quantify
 over nontrivial twists or identify scalar phases with the identity action.
-The remaining global equivalence and its interface question are recorded in
+The source's scalar-phase issue and its explicit correction are recorded in
 `docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
 -/
 
@@ -81,16 +81,8 @@ theorem pureCanonical_physicalString_selection_rule
       Matrix.trace (Λ * twistedTransferMap A x V) ≠ 0) ∧
     ((∃ x y, HasPhysicalStringOrderWith A Λ x y u) ↔
       ∃ n m : Fin d, Matrix.trace (V * Λ * A n * (A m)ᴴ) ≠ 0) := by
-  have hIrr : IsIrreducibleMap (Kraus.transferMap A) :=
-    isIrreducibleMap_of_canonical_fixedSpace A Λ hΛpos hΛfix hNorm fun X hX => by
-      rcases eq_or_ne X 0 with rfl | hXne
-      · exact ⟨0, by simp⟩
-      · exact (hPure 1 X hXne (by simp) (by simpa using hX)).2
-  have hPrim : IsPrimitive (Kraus.transferMap A) := by
-    apply isPrimitive_of_unique_norm_one (Kraus.transferMap A) 1 hNorm one_ne_zero
-    intro ev hEig hev
-    obtain ⟨X, hX⟩ := hEig.exists_hasEigenvector
-    exact (hPure ev X hX.2 hev hX.apply_eq_smul).1
+  obtain ⟨hIrr, hPrim⟩ :=
+    pureCanonical_isIrreducibleMap_and_isPrimitive A Λ hΛpos hΛfix hNorm hPure
   exact ⟨fun x y => hasPhysicalStringOrderWith_iff_endpoint_coefficients
       A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm x y u V μ hV hμ hInter,
     exists_hasPhysicalStringOrderWith_iff_letter_coefficient

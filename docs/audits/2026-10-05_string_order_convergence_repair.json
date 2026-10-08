@@ -1,0 +1,188 @@
+{
+  "CI_head": "185c47a348df80663be58c1e86e46e6245c3a290",
+  "CI_run": "https://github.com/LionSR/TNLean/actions/runs/37373964927",
+  "CI_job": 111978042065,
+  "CI_conclusion": "failure: two terminal continuous-linear-map composition elaboration errors in PhysicalStringAsymptotics; downstream phase/order/counterexample modules not validated",
+  "actual_modules_passed_before_failure": {
+    "TNLean.MPS.Core.ObservableTransfer": {
+      "source_sha256": "61d4d28031daec5a0c01ccb8162d896ca8a8bf7d2f77abd5347e124ca25c3072",
+      "log_line": "2026-10-05T21:18:56.1075098Z \u2714 [10103/10891] Built TNLean.MPS.Core.ObservableTransfer (5.5s)"
+    },
+    "TNLean.MPS.Core.Blocking": {
+      "source_sha256": "cc09be466aa6b84a90ea72aae82137a5154662b90ea8eb44b9c36126b386a889",
+      "log_line": "2026-10-05T21:19:00.2291702Z \u2714 [10131/11203] Built TNLean.MPS.Core.Blocking (9.7s)"
+    },
+    "TNLean.MPS.Symmetry.StringOrderDefs": {
+      "source_sha256": "40ceff7700d171bfdbada07732d596dc0335ea441ca1871529553ff06641364e",
+      "log_line": "2026-10-05T21:18:58.3155141Z \u2714 [10118/11007] Built TNLean.MPS.Symmetry.StringOrderDefs (7.7s)"
+    },
+    "TNLean.MPS.Symmetry.StringOrderAux": {
+      "source_sha256": "04219111fd548a3828680bfee3fa97029a3013d46e4b859014255f22f42d0753",
+      "log_line": "2026-10-05T21:21:07.9696453Z \u2714 [10269/12125] Built TNLean.MPS.Symmetry.StringOrderAux (18s)"
+    },
+    "TNLean.MPS.Symmetry.StringOrder": {
+      "source_sha256": "ec9944177c039523eaba37981716d39f426eff488cb2f05936ce5c37ebbf8925",
+      "log_line": "2026-10-05T21:22:20.5980626Z \u2714 [10377/12149] Built TNLean.MPS.Symmetry.StringOrder (10s)"
+    },
+    "TNLean.MPS.Symmetry.PureTwistedSpectrum": {
+      "source_sha256": "badb9118f006b4b92b5f039a9b65566a51000b33fa60085dcc8c5412a14bed84",
+      "log_line": "2026-10-05T21:22:25.4406587Z \u2714 [10383/12149] Built TNLean.MPS.Symmetry.PureTwistedSpectrum (14s)"
+    },
+    "TNLean.MPS.Symmetry.PhysicalStringEndpoints": {
+      "source_sha256": "5809c70ca7f2361569f0adf202eb17041972e4a35a9a1cee74cb4fc4a1c523f5",
+      "log_line": "2026-10-05T21:19:02.9404838Z \u2714 [10150/11203] Built TNLean.MPS.Symmetry.PhysicalStringEndpoints (4.7s)"
+    },
+    "TNLean.MPS.Symmetry.PhysicalStringEndpointSpan": {
+      "source_sha256": "4c418a465f8a6481434aa5949b556e61e84ee0554e299464a11b4d0df3168baa",
+      "log_line": "2026-10-05T21:21:22.2084951Z \u2714 [10340/12149] Built TNLean.MPS.Symmetry.PhysicalStringEndpointSpan (4.9s)"
+    },
+    "TNLean.MPS.Symmetry.PhysicalStringBlockEndpoints": {
+      "source_sha256": "5a9f6c0c93e70f7899d611388e175458a454e7d9e4a6856e26901d76a277ad66",
+      "log_line": "2026-10-05T21:22:34.1285237Z \u2714 [10418/12150] Built TNLean.MPS.Symmetry.PhysicalStringBlockEndpoints (6.2s)"
+    },
+    "TNLean.MPS.Examples.AKLTStringOrder": {
+      "source_sha256": "25bf9230ac69d9e1443f4a9cf02e9ff05132f2bbcb0982d0f33fe1d1e785fde9",
+      "log_line": "2026-10-05T21:23:40.2124808Z \u2714 [10480/12151] Built TNLean.MPS.Examples.AKLTStringOrder (7.1s)"
+    },
+    "TNLean.MPS.Examples.AKLTPhysicalStringOrder": {
+      "source_sha256": "5e46c081dfb489cb111ec704b89257bbe8e4bd6be7ee6c6f37ffc9746f66c17e",
+      "log_line": "2026-10-05T21:26:18.3089015Z \u2714 [10579/12154] Built TNLean.MPS.Examples.AKLTPhysicalStringOrder (13s)"
+    },
+    "TNLean.MPS.Examples.ClusterPhysicalStringOrder": {
+      "source_sha256": "c27afa29360b38cc391a8fa0b2da425736e2a263244a0104b41b91faac2276ef",
+      "log_line": "2026-10-05T21:53:42.0225124Z \u2714 [11457/12192] Built TNLean.MPS.Examples.ClusterPhysicalStringOrder (25s)"
+    }
+  },
+  "repair": "Explicit pointwise intermediate limits and staged map_smul normalization; same correction for the blocked endpoint consumer; public signatures and hypotheses unchanged.",
+  "changed_production_sources": {
+    "TNLean/MPS/Symmetry/PhysicalStringAsymptotics.lean": "c1d3026662cc6938eec2ec18690996df6274a635c75375941fb80d9dede7ce80",
+    "TNLean/MPS/Symmetry/PhysicalStringBlockOrder.lean": "67d0a9f3bf9b9ffb0f3a8346491ef4a30cc8bde2657c9ad0444eed0b711796c2"
+  },
+  "faithful_minimal_probe": {
+    "scope": "Exact production terminal composition segments, same scopes and Mat alias; analytic limits and phase identity are explicit hypotheses, not actual-import validation of analytic owners.",
+    "segments_sha256": {
+      "vector": "d8aeda48b7affcdf0943b43f3c8e4ddbc42ee3fd596d00d9b24516b48cfb76ae",
+      "scalar": "82bc21736c6f994fbb1589d35f9328caf8bc23e39eb817a3d7bc5b197c6c9e2d",
+      "block": "3d621c1aa3f3a8292ff270e16469f73ca9950d75c6fc991b3c60d2450a191483"
+    },
+    "probe_sha256": "aba7c784d8351b293fa5fd9641d2c64b900537f8ef8fd3c1315847e50fb91210",
+    "start": "2026-10-05T22:32:26.179593+00:00",
+    "end": "2026-10-05T22:32:37.625393+00:00",
+    "exit_code": 0,
+    "command": [
+      "timeout",
+      "-k",
+      "5s",
+      "120s",
+      "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+      "-j",
+      "1",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-Dweak.linter.mathlibStandardSet=true",
+      "-DmaxSynthPendingDepth=3",
+      "-DwarningAsError=true",
+      "StringPhaseConvergenceProbe.lean",
+      "-o",
+      "StringPhaseConvergenceProbe.olean"
+    ],
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "previous_attempt": "Cached module overlay had a missing symlink; no source elaboration occurred.",
+    "artifact_sha256": "408e6463dbfcb72d1f7576928b0b2d789e57a792fea4fd5169291db62697f2e4"
+  },
+  "pending": "Actual-import repaired analytic owners, final phase/counterexample assembly, post-build regressions, root build and compiled checkdecls.",
+  "early_CI_target": "PhysicalStringBlockOrder and StringOrderScalarPhase before the unchanged mandatory root build; pipefail retained and timings appended.",
+  "main_compatibility": {
+    "main": "916aa103fc7419e0f2671843d72e24cdd0a1a9aa",
+    "source_delta": "PEPS files and independent workflow test-list additions; no String Order proof/document overlap.",
+    "merge_tree_conflicts": [],
+    "QIC_pin": "2ba242ee081d7dcc1274c7a5b23bffb368a9fa6f",
+    "action": "Read-only compatibility check; no unrelated main merge."
+  },
+  "second_CI_run": {
+    "head": "5b7edb9a6790aaa024606c5b94260ac04a245901",
+    "run": "https://github.com/LionSR/TNLean/actions/runs/37383585493",
+    "job_id": 112011333939,
+    "actual_import_passes": [
+      "TNLean.MPS.Symmetry.PhysicalStringAsymptotics",
+      "TNLean.MPS.Symmetry.PhysicalStringSelectionRule"
+    ],
+    "remaining_errors": [
+      "PhysicalStringBlockOrder: unfold Kraus.IsTP explicitly when deriving adjoint TP from unitality",
+      "PhysicalStringPhase: reconstruct the existential physical endpoints after destructuring the original witness"
+    ],
+    "warning_repair": "Remove the reported unused Matrix.smul_mul simplification argument.",
+    "mathematical_signatures_changed": false,
+    "definition_only_regression": {
+      "scope": "Definition-only adjoint-TP normalization and existential endpoint-witness reconstruction under actual scopes/Mat alias; no full analytic-import claim.",
+      "start": "2026-10-05T22:44:43.017958+00:00",
+      "end": "2026-10-05T22:44:54.518490+00:00",
+      "exit_code": 0,
+      "command": [
+        "timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+        "-j",
+        "1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dweak.linter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "StringPhaseWitnessProbe.lean",
+        "-o",
+        "StringPhaseWitnessProbe.olean"
+      ],
+      "source_sha256": "d918bca2fa49f80205faf9fbc752a2b9fe8c709f9045828f237e38ed7d04e237",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "c3732bcba5434151937820487d4c5d571db42c2b3c166857f1f417740d85cff7"
+    },
+    "repaired_source_sha256": {
+      "TNLean/MPS/Symmetry/PhysicalStringBlockOrder.lean": "731dee08674cd0a080deaed2797541740c71989bd5b27ec56bc82b56fde0665d",
+      "TNLean/MPS/Symmetry/PhysicalStringPhase.lean": "408d3d1668cdbcb781cb492b120211675d1c0e304b14b525430fbca5cd547129"
+    }
+  },
+  "third_CI_run": {
+    "head": "ee966026f0a917432f1acf5adb5ec3d64f99d3b6",
+    "run": "https://github.com/LionSR/TNLean/actions/runs/37384615235",
+    "job_id": 112014902133,
+    "actual_import_passes": [
+      "TNLean.MPS.Symmetry.PhysicalStringAsymptotics",
+      "TNLean.MPS.Symmetry.PhysicalStringSelectionRule",
+      "TNLean.MPS.Symmetry.PhysicalStringBlockOrder",
+      "TNLean.MPS.Symmetry.PhysicalStringPhase"
+    ],
+    "remaining_error": "StringOrderScalarPhase: explicitly unfold CondC1 when eliminating the unit peripheral phase.",
+    "definition_only_regression": {
+      "scope": "Exact CondC1 phase-one normalization for an arbitrary tensor, with production scopes/Mat alias; definition-level check only.",
+      "start": "2026-10-05T22:56:23.334702+00:00",
+      "end": "2026-10-05T22:56:41.948477+00:00",
+      "exit_code": 0,
+      "command": [
+        "timeout",
+        "-k",
+        "5s",
+        "120s",
+        "/workspace/shared/lean-toolchains/lean-4.35.0-rc3-linux/bin/lean",
+        "-j",
+        "1",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dweak.linter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "StringPhaseCondC1Probe.lean",
+        "-o",
+        "StringPhaseCondC1Probe.olean"
+      ],
+      "source_sha256": "f645fdd5c426b0c7d2d469f75c692da3ed1184197f8c2638000239bf4da03d6e",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "artifact_sha256": "491b817bd9f372308ddc0f1cae4a9a7e53401d95636fa5b01938f80448e54f8b"
+    },
+    "repaired_source_sha256": "6972290480c1ec589e34971008ae16683197b4b3f1c64f1282c4dc6c6949d0f7",
+    "mathematical_signatures_changed": false,
+    "source_refutation_verdict": "Still pending full counterexample module validation."
+  }
+}

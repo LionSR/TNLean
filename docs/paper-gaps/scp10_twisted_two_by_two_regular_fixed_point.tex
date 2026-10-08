@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1in]{geometry}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Uniform native-closure regular PEPS renormalization}
+\author{}
+\date{2026-10-05}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and proved specialization}
+The source is Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Definition 5.6, Theorem 5.9 and Observation 6.6, local source lines
+1515--1525, 1582--1621 and 1888--1909.
+
+Let $G$ be an arbitrary finite group and $A$ a homogeneous regular
+G-isometric four-leg tensor with an arbitrary finite physical alphabet.
+For coarse periods $w,h\geq3$, one isometry $I$ on the full product block
+physical support satisfies, for every native closure pair $(g_0,h_0)$,
+\[
+ I\Psi_f(g_0,h_0)=R\Psi_c(g_0,h_0)\otimes\Omega,\qquad
+ I\widehat\Psi_f(g_0,h_0)=\widehat\Psi_c(g_0,h_0)\otimes\Omega.
+\]
+Here the fine periods are $2w,2h$, the coarse tensor is literally $A$,
+$\Omega$ is a fixed unit Bell product, and
+\[
+ R=\left(\prod_v\frac{\sqrt{c_{B,v}}}{\sqrt{c_{C,v}}}\right)
+    (\sqrt{|G|})^{|E(\Gamma)|}>0.
+\]
+Neither $I$, its local physical matrices, nor $R$ depends on the closure.
+The factors are derived from the G-isometry of the actual four-site block
+and of the original tensor with surplus identity registers. The previous
+four-site Gram result retains its internal-cycle group-order factor.
+Each native closure is proved nonzero rather than assumed nonzero.
+
+The horizontal seam carries $h_0$ on the receiving left legs; the
+vertical seam carries $g_0$ in the native downward orientation. Reversing
+an arrow to express it as an ordered graph edge transposes its inserted
+matrix and therefore inverts the regular group label. Both paired bond
+labels receive the same insertion before the relative-coordinate change.
+The identity $(ua)^{-1}(ub)=a^{-1}b$ leaves the surplus label unchanged.
+
+\section{Coherent vectors and ground-state scope}
+For arbitrary complex coefficients $z_{g_0,h_0}$, the same map gives
+\[
+ I\sum_{g_0,h_0}z_{g_0,h_0}\Psi_f(g_0,h_0)
+ =R\left(\sum_{g_0,h_0}z_{g_0,h_0}\Psi_c(g_0,h_0)\right)\otimes\Omega.
+\]
+Fine and coarse sums vanish simultaneously, and their nonzero normalized
+vectors satisfy the corresponding exact identity. Thus relative
+coefficients and phases are preserved. Restricting the coefficients to
+commuting pairs proves this assertion for arbitrary coherent vectors in
+the commuting-closure span. The algebraic result also covers noncommuting
+pairs but makes no parent-ground-space claim for them. Identification with
+a particular parent kernel uses the separate parent-ground-space theorem;
+it is not inferred from noncommuting closure nonvanishing.
+
+\section{Remaining restrictions}
+This result removes the identity-closure restriction of the earlier
+periodic original-tensor fixed-point specialization. It preserves its
+homogeneous, finite regular, physical-support scope. The native geometric
+regrouping includes all positive coarse periods, but the physical-support
+and Bell-separation argument requires the simple coarse graph and therefore
+periods at least three. Extending it to bond-indexed loops and parallel
+bonds is still required for periods one and two.
+
+All original physical registers are retained. An ambient-space unitary
+extension is not asserted; unused physical directions are permitted.
+Open or other boundary conditions, nonregular representations, approximate
+schemes, and a general parent-Hamiltonian renormalization identity remain
+outside the theorem. These are the remaining qualifications to the source's
+unrestricted fixed-point formulation.
+
+\section{Declarations}
+The scalar-one native geometric identity is
+\leanid{TNLean.PEPS.torusGClosure_leftRegular_eq_twoByTwoBlocked}.
+The native-to-bundled contraction comparison is
+\leanid{TNLean.PEPS.torusGClosure_leftRegular_eq_twoByTwoBundledGraphSite}.
+Uniform inserted physical support transport is
+\leanid{TNLean.PEPS.exists_graphGIsometricInsertedPhysicalSupportTransport}.
+The exact original-tensor surplus factorization is
+\leanid{TNLean.PEPS.graphInsertedBondNetwork_regularGraphSurplusSite}.
+The uniform capstone, including all coherent sums, is
+\leanid{TNLean.PEPS.exists_regularTwoByTwoTwistedTensorIsometry}.
+\end{document}

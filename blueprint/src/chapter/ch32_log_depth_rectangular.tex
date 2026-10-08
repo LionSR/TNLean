@@ -1,0 +1,203 @@
+\section{Quantitative preparation with varying bond dimensions}
+\label{sec:ldp_rectangular}
+
+Let $A_i^s:\C^{D_{i+1}}\to\C^{D_i}$ be the site matrices of a ring,
+with $1\le D_i\le D$ and cyclic subscripts. Choose density matrices
+$\sigma_i$ on the actual bond spaces; they may be singular. The following
+quantitative hypothesis concerns these rectangular matrices themselves.
+It is sufficient for the accuracy-dependent depth claimed in the
+inhomogeneous paragraph of~\cite{Malz2024Preparation}; it is not implied
+by the qualitative convergence condition in that paragraph.
+
+\begin{theorem}[Rectangular blocking and zero padding]
+    \label{thm:ldp_rectangular_blocking}
+    \lean{MPSPreparation.blockSite_singleton,
+        MPSChainTensor.rectangularEval,
+        MPSChainTensor.rectangularTransfer,
+        MPSChainTensor.rectangularTransfer_apply,
+        MPSChainTensor.zeroPad_rectangularEval,
+        VaryingBondChain.blockBondDim,
+        VaryingBondChain.blockBondDim_site,
+        VaryingBondChain.blockBondDim_succ,
+        VaryingBondChain.blockBondDim_zero,
+        VaryingBondChain.blockBondDim_length,
+        VaryingBondChain.rectangularBlockSites,
+        VaryingBondChain.rectangularBlockTensor,
+        VaryingBondChain.zeroPad_rectangularBlockTensor}
+    \leanok
+    For a nonempty interval $[a,b)$, write
+    $B^{\boldsymbol s}=A_a^{s_a}\cdots A_{b-1}^{s_{b-1}}$,
+    a matrix of size $D_a\times D_b$. Let $J_i:\C^{D_i}\to\C^D$
+    be the coordinate isometry, and put $P_i=J_iJ_i^\dagger$.
+    Then
+    \begin{align}
+        (J_aA_a^{s_a}J_{a+1}^\dagger)\cdots
+        (J_{b-1}A_{b-1}^{s_{b-1}}J_b^\dagger)
+         & =J_aB^{\boldsymbol s}J_b^\dagger,\notag \\
+        F_{a:b}(X)
+         & =\sum_{\boldsymbol s}B^{\boldsymbol s}X
+        (B^{\boldsymbol s})^\dagger
+        =F_a\circ\cdots\circ F_{b-1}(X).
+    \end{align}
+    The empty product on an actual bond pads to $P_a$, whereas the
+    empty product of ambient matrices is $I_D$.
+\end{theorem}
+\begin{proof}\leanok
+    Induct on the interval length. Each internal contraction uses
+    $J_i^\dagger J_i=I_{D_i}$. Summing over the first physical index and
+    then over the remaining word gives the transfer composition.
+\end{proof}
+
+For two adjacent sites, the following equality retains both physical
+indices. The open virtual indices have dimensions $D_a$ and $D_{a+2}$;
+the contracted middle bond has dimension $D_{a+1}$.
+% TENKZ-RECTANGULAR-BLOCK-BEGIN
+% Formula: B^(i,j)_(alpha,gamma) = sum_beta A_a^i_(alpha,beta) A_(a+1)^j_(beta,gamma).
+% Boundary: alpha,gamma are virtual; i,j are physical. Only beta is contracted.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+            \tn[at=(1,1), name=rectleft, skin=box,
+                ports={180:virtual:$\alpha$, 0:virtual,
+                        90:physical:$i$}]{A_a}
+            \tn[at=(1,3), name=rectright, skin=box,
+                ports={180:virtual, 0:virtual:$\gamma$,
+                        90:physical:$j$}]{A_{a+1}}
+            \tnwire{rectleft.0}{rectright.180}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+            \tn[at=(1,1), name=rectblock, skin=box, wide=2,
+                ports={180:virtual:$\alpha$, 0:virtual:$\gamma$,
+                        90@1:physical:$i$, 90@2:physical:$j$}]{B}
+        \end{tenkz}
+    \end{tenkzequation}
+\end{center}
+% TENKZ-RECTANGULAR-BLOCK-END
+
+\begin{definition}[Corner reset references]
+    \label{def:ldp_corner_reference}
+    \lean{MPSPreparation.cornerProjection,
+        MPSPreparation.cornerReferenceMap,
+        MPSPreparation.cornerReferenceMap_apply,
+        MPSPreparation.cornerProjection_full,
+        MPSPreparation.cornerReferenceMap_full}
+    \leanok
+    Set $\widehat\sigma_i=J_i\sigma_iJ_i^\dagger$. The padded reference
+    for an interval $[a,b)$ is
+    $Q_{a:b}(X)=\operatorname{Tr}(P_bX)\widehat\sigma_a$.
+    It vanishes on inputs outside the outgoing bond corner.
+\end{definition}
+
+\begin{theorem}[Gram matrices and pairs on the actual bonds]
+    \label{thm:ldp_rectangular_gram_pairs}
+    \lean{MPSTensor.exists_norm_gram_transferMatrix_sub_le_of_entries,
+        MPSTensor.zeroPad_eq_embeddedBlockState,
+        MPSTensor.padPair_fixedPointPair,
+        MPSPreparation.posSemidef_cornerProjection,
+        MPSPreparation.cornerProjection_mul_self,
+        MPSPreparation.sqrt_transpose_kronecker_corner,
+        MPSPreparation.exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square,
+        MPSPreparation.exists_norm_polarPos_sub_le_sqrt_cornerReferenceMap,
+        MPSPreparation.ofPhysicalMatrix_sqrt_transpose_kronecker_corner,
+        MPSPreparation.mixedMapLM_sqrt_transpose_kronecker_corner,
+        MPSPreparation.exists_norm_transferMatrix_zeroPad_sub_cornerReferenceMap_le}
+    \leanok
+    Give every map between actual matrix spaces its Hilbert--Schmidt
+    induced operator norm, namely the $L^2$ operator norm of its
+    matrix in the matrix-unit bases. Padding changes transfer-matrix
+    errors by at most a constant depending only on $D$.
+    The Gram reference and its positive square root are
+    \begin{align}
+        G_{a:b} & =\widehat\sigma_a^{\mathsf T}\otimes P_b,
+                & \sqrt{G_{a:b}}                            & =(\sqrt{\widehat\sigma_a})^{\mathsf T}\otimes P_b.
+    \end{align}
+    Consequently the positive-polar error is bounded by a
+    dimension-dependent constant times
+    $\|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|^{1/2}$.
+    Moreover $\sqrt{\widehat\sigma_i}=J_i\sqrt{\sigma_i}J_i^\dagger$,
+    so the pair obtained from the padded reference is precisely the
+    padding of the pair on the actual bond.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_rectangular_blocking,thm:ldp_sqrt_holder}
+    Extend the matrix-unit coefficient matrix by zero and permute its
+    indices into the transfer convention. There are only finitely many
+    pairs of endpoint dimensions at most $D$, so these linear maps have
+    a common operator-norm bound. Reshuffling the corner reset gives
+    $G_{a:b}$. Its displayed square root is positive and squares to it.
+    Apply the global square-root H\"older estimate. Conjugation by a
+    coordinate isometry preserves positivity and squares, giving the
+    square-root and pair identities.
+\end{proof}
+
+\begin{theorem}[Ordered corner references and normalized error]
+    \label{thm:ldp_rectangular_error}
+    \lean{MPSPreparation.transferMatrix_cornerReferenceMap_eq_mul_diagonal,
+        MPSPreparation.norm_transferMatrix_cornerReferenceMap_le,
+        MPSPreparation.transferMatrix_cornerReferenceMap_mul,
+        MPSPreparation.prod_range_transferMatrix_cornerReferenceMap,
+        MPSPreparation.trace_transferMatrix_cornerReferenceMap,
+        MPSPreparation.exists_uniform_reference_bounds,
+        MPSPreparation.exists_norm_trace_prod_sub_one_le_of_reference_bounds,
+        MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_corner_reference,
+        MPSPreparation.exists_abs_norm_chainState_sq_sub_one_le_corner_reference,
+        MPSPreparation.exists_one_sub_norm_inner_chainPosState_le_varying_reference}
+    \leanok
+    For consecutive blocks, $Q_{a:b}Q_{b:c}=Q_{a:c}$, and the matrix
+    trace of a whole-ring reference is one. Every contiguous reference
+    product has norm bounded in terms of $D$ alone.
+    If every blocked transfer and the whole-ring transfer have error
+    at most $\delta$ from their corner references, the normalized
+    positive-part state has pair error at most $C_DM\sqrt\delta$.
+    The pair leaving a block uses the density at the next block's
+    incoming bond.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_rectangular_gram_pairs,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_normalization_triangle}
+    Composition removes the middle bond because
+    $\operatorname{Tr}(P_b\widehat\sigma_b)=1$.
+    The surviving outgoing-corner mask is a contraction. Apply the
+    ordered-product perturbation estimate to the mixed transfers and
+    then take their trace. Control normalization separately by taking
+    the trace of the whole-ring transfer error. The inverse-norm
+    estimate gives the stated normalized error, including the regime
+    where the trivial error bound one is sharper.
+\end{proof}
+
+\begin{theorem}[Physical logarithmic depth from rectangular mixing]
+    \label{thm:ldp_rectangular_preparation}
+    \lean{mul_exp_neg_mul_le_of_div_log_le,
+        MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
+    \leanok
+    Fix $d>0$ and $D$, and let the preceding data vary with the ring length
+    $N$. Suppose $K,r>0$ are independent of $N$ and every nonempty
+    block $[a,b)$ of every partition of the ordered ring satisfies
+    \begin{align}
+        \|F_{a:b}-\operatorname{Tr}(\cdot)\sigma_a\|
+        \le K e^{-r(b-a)}.
+    \end{align}
+    There are $N_0$ and $C$, chosen before $N$ and $\varepsilon$, such
+    that for positive ring lengths $N\ge N_0$ and $0<\varepsilon\le1$, the normalized ring
+    state admits a unit-vector approximation with error at most
+    $\varepsilon$ prepared by a ring circuit of depth at most
+    $C\log(N/\varepsilon)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_rectangular_error,thm:ldp_inhomogeneous_uniform_rate_from}
+    Whole-ring mixing gives
+    $|\|\phi_N\|^2-1|\le C_DKe^{-rN}$, hence nonvanishing beyond
+    a fixed cutoff. Partition into blocks with
+    $q\le\ell_j\le2q$. The pair error is at most
+    $C'_D\sqrt K\,N e^{-rq/2}$.
+    Apply the uniform-rate preparation theorem, which chooses a
+    logarithmic block length and uses exact preparation if that length
+    exceeds $N$.
+\end{proof}
+
+Equation (S39) of~\cite{Malz2024Preparation} concerns open-boundary
+states in its numerical study. Dimension-one bonds are allowed in the
+preceding theorems, but their physical circuits use ring adjacency.
+An open-line gate conclusion would additionally require a construction
+that avoids the wrap-around edge.

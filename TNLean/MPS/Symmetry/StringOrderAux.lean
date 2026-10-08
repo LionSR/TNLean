@@ -7,6 +7,8 @@ import QICLean.Algebra.ComplexPhasePositivity
 import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Analysis.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
+import TNLean.MPS.Core.TPGauge
+import TNLean.Spectral.TransferOperatorGapNT
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.Adjoint
 import TNLean.MPS.SharedInfra.Scaling
@@ -29,6 +31,8 @@ boundary-state invariance `V† Λ V = Λ`.
 ## Contents
 
 * `TwistedTPGaugeSetup` — bundled TP-gauge data for the spectral radius bound
+* `twistedTransfer_eigenvalue_norm_le_one_of_irreducible` — the twisted eigenvalue bound
+* `twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible` — peripheral rigidity
 * `Kraus.mapLM_tpGauge_eq_similarityMap` — similarity transform of the transfer map
 * `Kraus.isPrimitive_mapLM_tpGauge_iff` — invariance of primitivity under the
   Perron gauge
@@ -716,5 +720,90 @@ theorem boundaryState_invariant_of_virtualUnitary
   boundaryState_invariant_of_virtualUnitary_of_irreducible
     A (Kraus.injective_implies_irreducibleCP A hA) u hu Λ hΛpos hΛtr hΛfix
     V μ hV hV' hμ hC1μ
+
+/-! ### Irreducible twisted-transfer bounds and rigidity -/
+
+/-- Every eigenvalue of a unital irreducible tensor's twisted transfer map has
+modulus at most one (arXiv:0802.0447, Lemma 1). The proof passes the two Kraus
+families to a common trace-preserving gauge and applies the mixed-transfer
+eigenvalue bound. -/
+theorem twistedTransfer_eigenvalue_norm_le_one_of_irreducible
+    (A : MPSTensor d D)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
+    (hV : V ≠ 0)
+    (hEig : twistedTransferMap A u V = ev • V) :
+    ‖ev‖ ≤ 1 := by
+  have hDpos : 0 < D := by
+    by_contra hD
+    have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
+    subst hD0
+    apply hV
+    ext i j
+    exact Fin.elim0 i
+  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  let setup := twistedTPGaugeSetup_of_irreducible (A := A) hIrrA u hu hNorm
+  have hHas : Module.End.HasEigenvalue
+      (Kraus.mixedMapLM setup.A' setup.B') ev :=
+    twistedTPGaugeSetup_hasEigenvalue
+      (A := A) (u := u) (setup := setup) ev V hV hEig
+  exact Kraus.eigenvalue_norm_le_one
+    (A := setup.A') (B := setup.B') setup.hA'TP setup.hB'TP ev hHas
+
+open scoped Kraus in
+/-- For a unital irreducible tensor, a modulus-one twisted-transfer eigenvalue
+forces the twisted companion tensor to be gauge-phase equivalent to the original
+tensor (arXiv:0802.0447, Lemma 1). The proof passes to a common trace-preserving
+gauge and applies irreducible mixed-transfer rigidity. -/
+theorem twistedTransfer_modulus_one_implies_gaugePhase_of_irreducible
+    (A : MPSTensor d D)
+    (hIrrA : IsIrreducibleMap (Kraus.transferMap A))
+    (u : Matrix (Fin d) (Fin d) ℂ)
+    (hu : u * uᴴ = 1)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    (ev : ℂ) (V : Matrix (Fin D) (Fin D) ℂ)
+    (hV : V ≠ 0)
+    (hEig : twistedTransferMap A u V = ev • V)
+    (hev : ‖ev‖ = 1) :
+    GaugePhaseEquiv A (twistedMixedCompanion A u) := by
+  have hDpos : 0 < D := by
+    by_contra hD
+    have hD0 : D = 0 := Nat.eq_zero_of_not_pos hD
+    subst hD0
+    apply hV
+    ext i j
+    exact Fin.elim0 i
+  have : NeZero D := ⟨Nat.ne_of_gt hDpos⟩
+  let setup := twistedTPGaugeSetup_of_irreducible (A := A) hIrrA u hu hNorm
+  have hHas : Module.End.HasEigenvalue (Kraus.mixedMapLM setup.A' setup.B') ev :=
+    twistedTPGaugeSetup_hasEigenvalue
+      (A := A) (u := u) (setup := setup) ev V hV hEig
+  let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+      (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+  have hspec : ev ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B')) := by
+    rw [AlgEquiv.spectrum_eq Φ]
+    exact hHas.mem_spectrum
+  have hRadGe : Kraus.mixedTransferSpectralRadius setup.A' setup.B' ≥ 1 := by
+    rw [Kraus.mixedTransferSpectralRadius_eq]
+    have hnorm_ev_nn : (1 : NNReal) = ‖ev‖₊ := by
+      apply Subtype.ext
+      simpa using hev.symm
+    have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
+      exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
+    rw [ge_iff_le, hnorm_ev, spectralRadius_eq_of_unital]
+    exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B'))) _
+      (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
+  have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
+    modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
+      setup.A' setup.B' setup.hIrrA' setup.hIrrB' setup.hA'TP setup.hB'TP hRadGe
+  simpa [setup.hA'_def, setup.hB'_def, setup.hB_def] using
+    gaugePhaseEquiv_of_gaugeEquiv_left_right
+    (gaugeEquiv_tpGauge (A := A) (ρ := setup.σ) setup.hσ_pd)
+    hGauge'
+    (gaugeEquiv_tpGauge (A := setup.B) (ρ := setup.σ) setup.hσ_pd)
 
 end MPSTensor

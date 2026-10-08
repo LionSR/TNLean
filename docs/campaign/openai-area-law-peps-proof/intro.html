@@ -1,0 +1,100 @@
+<!--
+  Campaign-specific introduction for the area-law board: the two headline
+  theorems with their figures. The generic board fills every
+  `.thm[data-target]` card's <dl class="tdl"> with the status of the target
+  issue and wires its `.trace` button to the blocking map.
+-->
+<section>
+  <header>
+    <h2>The two theorems</h2>
+    <p>Qudits of dimension <i>q</i> sit on the sites of a finite piece Λ of the square lattice. The Hamiltonian <i>H</i> is a sum of bounded local terms. Its ground vector Ω is unique and separated from the rest of the spectrum by a gap Δ, so that <math><mi>H</mi><mo>−</mo><msub><mi>E</mi><mn>0</mn></msub><mo>≥</mo><mi>Δ</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mo stretchy="false">|</mo><mi>Ω</mi><mo stretchy="false">⟩⟨</mo><mi>Ω</mi><mo stretchy="false">|</mo><mo stretchy="false">)</mo></math>. Neither theorem assumes a gap on subregions, frustration freeness or translation invariance.</p>
+  </header>
+  <div class="thms">
+    <article class="thm" data-target="8759">
+      <div class="eyebrow">Area-law manuscript · Theorem 1.1</div>
+      <h3>Entanglement obeys an area law</h3>
+      <svg class="fig" id="fig-area" viewBox="0 0 360 170" role="img" aria-label="A region A on a square lattice with its crossing edges highlighted"></svg>
+      <p class="stmt">For every region <i>A</i>, the entanglement entropy of the ground state is at most a constant times the number of lattice edges leaving <i>A</i>.</p>
+      <div class="formula"><math display="block"><msub><mi>S</mi><mi>Ω</mi></msub><mo stretchy="false">(</mo><mi>A</mi><mo stretchy="false">)</mo><mo>≤</mo><mi>C</mi><mo stretchy="false">(</mo><mi>q</mi><mo>,</mo><mi>R</mi><mo>,</mo><mi>J</mi><mo>,</mo><mi>Δ</mi><mo stretchy="false">)</mo><mspace width="0.2em"></mspace><mo stretchy="false">|</mo><msub><mo>∂</mo><mi>Λ</mi></msub><mi>A</mi><mo stretchy="false">|</mo></math></div>
+      <p class="why">Without such a bound, <i>S</i> could grow like the number of sites in <i>A</i>. The statement is the gap-to-area-law conjecture in two dimensions. Hastings proved the one-dimensional case in 2007. Earlier two-dimensional results assumed frustration-free models with local gaps and gave weaker bounds.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+    <article class="thm" data-target="8773">
+      <div class="eyebrow">PEPS manuscript · Theorem 1.1</div>
+      <h3>Ground states are polynomial PEPS</h3>
+      <svg class="fig" id="fig-peps" viewBox="0 0 360 170" role="img" aria-label="A projected entangled-pair state on a grid of tensors"></svg>
+      <p class="stmt">On an open <i>L</i>×<i>L</i> grid, a tensor network with one tensor per site and bond dimension polynomial in <i>L</i> reproduces the whole ground vector to error 1/<i>L</i>.</p>
+      <div class="formula"><math display="block"><munder><mo movablelimits="true">min</mo><mi>θ</mi></munder><mrow><mo>‖</mo><mfrac><mi>Φ</mi><mrow><mo>‖</mo><mi>Φ</mi><mo>‖</mo></mrow></mfrac><mo>−</mo><msup><mi>e</mi><mrow><mi>i</mi><mi>θ</mi></mrow></msup><mi>Ω</mi><mo>‖</mo></mrow><mo>≤</mo><msup><mi>L</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>,</mo><mspace width="1em"></mspace><msub><mi>D</mi><mi>max</mi></msub><mo>≤</mo><mi>C</mi><msup><mi>L</mi><mi>c</mi></msup></math></div>
+      <p class="why">An area law bounds each cut separately, while a PEPS has to make all cuts compatible on the given lattice. The result addresses Questions 7–8 of the Cirac–Garre-Rubio–Pérez-García survey tracked in #8273. It asserts existence only, and the tensors need not be efficiently computable.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+  </div>
+</section>
+
+<script>
+(function () {
+  const NS = "http://www.w3.org/2000/svg";
+  const sv = (t, a = {}) => { const n = document.createElementNS(NS, t); for (const [k, v] of Object.entries(a)) n.setAttribute(k, v); return n; };
+  (function areaFig() {
+    const svg = document.getElementById("fig-area");
+    const cols = 17, rows = 7, s = 20, x0 = 20, y0 = 18;
+    const inA = (c, r) => {
+      const dx = (c - 7.2) / 4.3, dy = (r - 3) / 2.6;
+      return dx * dx + dy * dy < 1.05 && !(c === 10 && r === 1) || (c === 12 && r === 3) || (c === 11 && r === 2) || (c === 11 && r === 4);
+    };
+    const g = sv("g"); svg.append(g);
+    const cut = sv("g"); svg.append(cut);
+    const dots = sv("g"); svg.append(dots);
+    let crossing = 0, sites = 0;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const x = x0 + c * s, y = y0 + r * s;
+      for (const [dc, dr] of [[1, 0], [0, 1]]) {
+        const c2 = c + dc, r2 = r + dr;
+        if (c2 >= cols || r2 >= rows) continue;
+        const crossingEdge = inA(c, r) !== inA(c2, r2);
+        if (crossingEdge) crossing++;
+        const ln = sv("line", { x1: x, y1: y, x2: x0 + c2 * s, y2: y0 + r2 * s });
+        ln.style.stroke = crossingEdge ? "var(--cut)" : "var(--line)";
+        ln.style.strokeWidth = crossingEdge ? "3" : "1.2";
+        (crossingEdge ? cut : g).append(ln);
+      }
+      if (inA(c, r)) sites++;
+      const d = sv("circle", { cx: x, cy: y, r: inA(c, r) ? 4.6 : 2.8 });
+      d.style.fill = inA(c, r) ? "var(--accent)" : "var(--muted)";
+      dots.append(d);
+    }
+    const t1 = sv("text", { x: x0, y: 166 }); t1.textContent = `region A: ${sites} sites · ${crossing} crossing edges`;
+    t1.style.fill = "var(--muted)"; t1.style.font = "11px var(--f-mono)";
+    const t2 = sv("text", { x: x0 + 7.2 * s, y: y0 + 3 * s + 4, "text-anchor": "middle" }); t2.textContent = "A";
+    t2.style.fill = "var(--surface)"; t2.style.font = "italic 600 15px var(--f-display)";
+    svg.append(t1, t2);
+  })();
+  (function pepsFig() {
+    const svg = document.getElementById("fig-peps");
+    const n = 6, s = 24, x0 = 110, y0 = 14, R = 6.5;
+    const bonds = sv("g"), legs = sv("g"), nodes = sv("g");
+    svg.append(bonds, legs, nodes);
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const x = x0 + c * s, y = y0 + r * s;
+      if (c < n - 1) { const l = sv("line", { x1: x, y1: y, x2: x + s, y2: y }); l.style.stroke = "var(--accent)"; l.style.strokeWidth = "2"; bonds.append(l); }
+      if (r < n - 1) { const l = sv("line", { x1: x, y1: y, x2: x, y2: y + s }); l.style.stroke = "var(--accent)"; l.style.strokeWidth = "2"; bonds.append(l); }
+      const lg = sv("line", { x1: x, y1: y, x2: x + 7, y2: y - 8 }); lg.style.stroke = "var(--muted)"; lg.style.strokeWidth = "1.4"; legs.append(lg);
+      const cc = sv("circle", { cx: x, cy: y, r: R }); cc.style.fill = "var(--surface)"; cc.style.stroke = "var(--ink)"; cc.style.strokeWidth = "1.4"; nodes.append(cc);
+    }
+    const hx = x0 + 2.5 * s, hy = y0 + 2 * s;
+    const hl = sv("line", { x1: x0 + 2 * s + R, y1: hy, x2: x0 + 3 * s - R, y2: hy }); hl.style.stroke = "var(--cut)"; hl.style.strokeWidth = "4"; svg.append(hl);
+    const lab = (x, y, txt, anchor) => { const t = sv("text", { x, y, "text-anchor": anchor || "start" }); t.textContent = txt; t.style.fill = "var(--muted)"; t.style.font = "11px var(--f-mono)"; svg.append(t); return t; };
+    lab(x0 + n * s - 4, hy - 30, "bond ≤ C·Lᶜ").style.fill = "var(--cut)";
+    const pl = sv("path", { d: `M${hx},${hy - 4} C${hx + 30},${hy - 30} ${x0 + n * s - 30},${hy - 34} ${x0 + n * s - 6},${hy - 34}` });
+    pl.style.fill = "none"; pl.style.stroke = "var(--cut)"; pl.style.strokeWidth = "1"; svg.append(pl);
+    lab(12, y0 + 6, "one tensor").style.fill = "var(--ink)";
+    lab(12, y0 + 20, "per site");
+    lab(12, y0 + 60, "physical leg").style.fill = "var(--ink)";
+    lab(12, y0 + 74, "dimension q");
+    lab(x0 + (n - 1) * s / 2, 166, "L × L open grid", "middle");
+  })();
+
+})();
+</script>
