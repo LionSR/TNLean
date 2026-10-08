@@ -9553,6 +9553,321 @@ shorter interaction range.
     gives one constant for every volume.
 \end{proof}
 
+\begin{theorem}[Open MPS spaces from an isometric sector resolution]
+    \label{thm:isometric_sector_ground_space_resolution}
+    \lean{MPSTensor.groundSpace_eq_iSup_of_isometric_sector_resolution,
+        MPSTensor.groundSpaceES_eq_iSup_of_isometric_sector_resolution}
+    \leanok
+    Let $C$ be an MPS tensor of bond dimension $D$, and let
+    $(B_j)_{j\in J}$ be a finite family of tensors with the same physical
+    dimension and bond dimensions $D_j$. Suppose that
+    $V_j:\C^{D_j}\to\C^D$ satisfy $V_j^\dagger V_j=\Id_{D_j}$,
+    $\sum_jV_jV_j^\dagger=\Id_D$, and $C^iV_j=V_jB_j^i$.
+    Then $G_N(C)=\bigvee_jG_N(B_j)$ for every $N\ge0$, both in
+    computational coordinates and in the physical Hilbert space.
+\end{theorem}
+\begin{proof}\leanok
+    The letterwise intertwining implies $C^wV_j=V_jB_j^w$ for every word,
+    including the empty word. Trace cyclicity gives
+    \begin{align}
+        \Gamma_N^C(V_jYV_j^\dagger) & =\Gamma_N^{B_j}(Y),\notag                      \\
+        \Gamma_N^C(X)               & =\sum_j\Gamma_N^{B_j}(V_j^\dagger XV_j).\notag
+    \end{align}
+    The first identity includes each sector space in the ambient space;
+    the second gives the reverse inclusion in their sum.
+\end{proof}
+
+\begin{theorem}[Open MPS spaces under prescribed periodic blocking]
+    \label{thm:periodic_blocked_ground_space}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_groundSpaceDecomposition}
+    \leanok
+    Suppose that $A$ is periodic of period $m$ and $p>0$.
+    Put $r=\gcd(m,p)$. There are nonzero cyclic projections $P_u$ with
+    $\sum_uP_u=\Id_D$ and $P_uA^i=A^iP_{u+1}$, positive dimensions
+    $D_\alpha$ with $\sum_\alpha D_\alpha=D$, and left-canonical tensors
+    $B_\alpha$ indexed by $\alpha\in\{0,\ldots,r-1\}$.
+    Their support isometries satisfy
+    \begin{align}
+        V_\alpha^\dagger V_\alpha & =\Id_{D_\alpha},\notag                      \\
+        V_\alpha V_\alpha^\dagger & =
+        \sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m},\notag                              \\
+        B_\alpha^I                & =V_\alpha^\dagger(A^{[p]})^IV_\alpha,\notag \\
+        (A^{[p]})^IV_\alpha       & =V_\alpha B_\alpha^I.\notag
+    \end{align}
+    Every $B_\alpha$ is periodic of period $m/r$, and for every $N\ge0$,
+    \begin{align}
+        G_N(A^{[p]}) & =G_N\left(\bigoplus_\alpha B_\alpha\right).\notag
+    \end{align}
+    The cyclic compression is that of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}; the local-space equality
+    is its supported word contraction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_prescribed_blocking_compression,
+        thm:isometric_sector_ground_space_resolution,
+        thm:block_sum_local_ground_space}
+    The step-orbit projections commute with every blocked letter and resolve
+    the virtual identity. The displayed compression therefore intertwines
+    letters. Apply the isometric sector resolution to obtain
+    $G_N(A^{[p]})=\bigvee_\alpha G_N(B_\alpha)$, and identify the latter
+    with the open MPS space of the direct-sum tensor.
+\end{proof}
+
+\begin{theorem}[Primitive sectors after blocking by a multiple of the period]
+    \label{thm:periodic_primitive_ground_space}
+    \lean{MPSTensor.IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd}
+    \leanok
+    Let $A$ be periodic of period $m$, and let $p>0$ satisfy $m\mid p$.
+    Put $r=\gcd(m,p)=m$. There are positive bond dimensions $D_j$ with
+    $\sum_{j=0}^{r-1}D_j=D$, tensors $B_j$ on the blocked physical alphabet,
+    and positive definite matrices $\rho_j$, such that each pair
+    $(B_j,\rho_j)$ has primitive fixed-point data. In particular,
+    \begin{align}
+        \sum_I(B_j^I)^\dagger B_j^I & =\Id_{D_j},
+                                    & \E_{B_j}(\rho_j) & =\rho_j,
+    \end{align}
+    and for every $N\geq0$,
+    \begin{align}
+        G_N(A^{[p]})=G_N\left(\bigoplus_{j=0}^{r-1}B_j\right).
+    \end{align}
+    No inequivalence assumption is imposed on the sector family.
+    This combines the periodic blocking of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible} with the primitive normalization
+    used in \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
+    The peripheral period is the corrected $m/\gcd(m,p)$ of
+    \cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_blocked_ground_space,
+        lem:periodic_scale_of_irreducible, def:primitive_mps}
+    The compressed sectors have period $m/\gcd(m,p)=1$, hence are
+    irreducible, trace preserving, and peripheral primitive.
+    Finite-dimensional Perron--Frobenius theory supplies their primitive
+    fixed-point data, and irreducibility makes each invariant matrix positive
+    definite. Retain the compressed tensors themselves, so the exact
+    direct-sum support identity is unchanged at every length.
+\end{proof}
+
+\begin{theorem}[Primitive sectors after blocking by the period]
+    \label{thm:periodic_primitive_ground_space_at_period}
+    \lean{MPSTensor.IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition}
+    \leanok
+    A periodic tensor of period $m$ admits $m$ positive-dimensional
+    primitive sectors after blocking by $m$. Their bond dimensions sum to
+    $D$, they have faithful invariant matrices, and
+    \begin{align}
+        \forall\,N\geq0:\ G_N(A^{[m]})=G_N\left(\bigoplus_{j=0}^{m-1}B_j\right).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_primitive_ground_space}
+    Take $p=m$ and use $m>0$ and $\gcd(m,m)=m$.
+\end{proof}
+
+\begin{theorem}[Exact open-boundary support under gauge and phase equivalence]
+    \label{thm:primitive_representative_support_gauge}
+    \lean{MPSTensor.GaugePhaseEquiv.groundSpaceES_eq,
+        MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor}
+    \leanok
+    Gauge-equivalent MPS tensors, including a common nonzero scalar factor
+    on every physical matrix, have the same open-boundary MPS space at every
+    length. More generally, normalized normal tensors whose periodic vectors
+    differ by powers of one nonzero scalar have identical open-boundary
+    spaces at every length, even when their bond dimensions are initially
+    allowed to differ. The latter assertion uses the dimension equality and
+    invertible gauge supplied by the fundamental theorem
+    \cite[Proposition~2.7, Theorem~2.10]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    An invertible similarity is absorbed into the boundary matrix, while
+    a nonzero length-dependent scalar is absorbed into its normalization.
+    For normalized normal tensors, the periodic phase relation first gives
+    equal bond dimensions and a gauge relation. Apply the first assertion.
+\end{proof}
+
+\begin{theorem}[Primitive representatives preserve the joint MPS spaces]
+    \label{thm:primitive_sector_representatives_exact_support}
+    \lean{MPSTensor.MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives,
+        MPSTensor.exists_primitive_sector_representatives}
+    \leanok
+    Let $(A_j)_{j=0}^{r-1}$ be a finite family of normalized primitive tensors
+    of positive bond dimensions, with faithful fixed-point witnesses
+    $\rho_j$. Let $\mu_j\neq0$. There is an injective selection of original
+    indices $s:\{0,\ldots,g-1\}\to\{0,\ldots,r-1\}$ such that the tensors
+    $B_k=A_{s(k)}$ retain the supplied primitive and faithful witnesses,
+    and distinct $B_k$ are not gauge-phase equivalent after any equality
+    of their bond dimensions. Every $A_j$ is gauge-phase equivalent to
+    one $B_k$, with the required bond-dimension equality supplied.
+    For every $N\geq0$,
+    \begin{align}
+        \mathcal G_{\bigoplus_j\mu_jA_j}(N)
+        =\mathcal G_{\bigoplus_k B_k}(N).
+        \notag
+    \end{align}
+    The finite family may be empty. This is the exact local-support
+    consequence of selecting phase-class representatives in
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}, used for the
+    inequivalent primitive sectors of \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_representative_support_gauge}
+    Select one original index from each periodic phase class. Distinct
+    selections are gauge-phase inequivalent. Primitivity and faithfulness
+    imply normalized normality, so each original tensor has exactly the
+    same local MPS spaces as its selected representative. The local space
+    of a weighted direct sum with nonzero weights is the sum of the block
+    spaces. Replacing repeated summands by their representatives therefore
+    preserves that sum at every length. The witnesses are inherited because
+    the representatives are selected original tensors.
+\end{proof}
+
+\begin{theorem}[Inequivalent primitive presentation after periodic blocking]
+    \label{thm:periodic_ground_state_presentation}
+    \lean{MPSTensor.IsPeriodic.exists_inequivalent_primitive_groundStatePresentation_of_dvd}
+    \leanok
+    Let $A$ be periodic of period $m$, and let $p>0$ satisfy $m\mid p$.
+    There is a nonempty finite family $(B_j)_{j=0}^{g-1}$, with positive
+    bond dimensions and faithful invariant matrices $\rho_j$, such that
+    each $(B_j,\rho_j)$ has normalized primitive fixed-point data, distinct
+    sectors are gauge-phase inequivalent after any equality of their bond
+    dimensions, and
+    \begin{align}
+        \forall\,N\geq0:\ G_N(A^{[p]})=G_N\left(\bigoplus_{j=0}^{g-1}B_j\right).
+    \end{align}
+    The tensors and matrices are selected from the compressed primitive
+    family. Inequivalence is derived, rather than assumed.
+    This is a finite local-support consequence of the periodic blocking in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible} and the representative selection
+    in \cite[Proposition~2.7, Theorem~2.10]{Cirac2016MPDO_arXiv}.
+    The compressed peripheral period uses the correction in
+    \cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_primitive_ground_space,
+        thm:primitive_sector_representatives_exact_support}
+    Obtain primitive compressed sectors with their exact joint local space.
+    Select one representative of each gauge-phase class. The supplied
+    primitive and faithful witnesses are inherited, and the joint support
+    is preserved at every length. Since the original period is positive,
+    the compressed family is nonempty; the gauge cover therefore contains
+    at least one selected representative.
+\end{proof}
+
+\begin{theorem}[Inequivalent primitive presentation at the period]
+    \label{thm:periodic_ground_state_presentation_at_period}
+    \lean{MPSTensor.IsPeriodic.exists_inequivalent_primitive_groundStatePresentation}
+    \leanok
+    Blocking a periodic tensor by its period gives a nonempty finite
+    pairwise gauge-phase inequivalent primitive family with faithful
+    invariant matrices and
+    \begin{align}
+        \forall\,N\geq0:\ G_N(A^{[m]})=G_N\left(\bigoplus_jB_j\right).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_ground_state_presentation}
+    Apply the theorem with $p=m$, using positivity of the period.
+\end{proof}
+
+\begin{theorem}[Blocking distributes over the joint boundary space]
+    \label{thm:blocking_joint_boundary_space}
+    \lean{MPSTensor.groundSpaceES_blockTensor_toTensorFromBlocks_eq_iSup}
+    \leanok
+    Let $A_j$ be a finite family of tensors and let $\mu_j\neq0$.
+    For all integers $L,N\geq0$, the open-boundary space of the blocked
+    weighted sum satisfies
+    \begin{align}
+        \mathcal G_{(\bigoplus_j\mu_jA_j)^{(L)}}(N)
+        =\sum_j\mathcal G_{A_j^{(L)}}(N).
+    \end{align}
+    No periodicity, positivity, or nonempty-family assumption is required.
+    These are the boundary spaces of
+    \cite[Section~3]{Nachtergaele1996Spectral} under the blocking coordinates
+    of \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    The configuration isometry identifies each blocked boundary space
+    with the original boundary space at length $NL$. Under this isometry,
+    the space of the weighted sum is the sum of the original block spaces.
+    A linear isomorphism preserves sums of subspaces, giving the asserted
+    identity in the blocked coordinates.
+\end{proof}
+
+\begin{theorem}[Primitive presentation of a finite collection of families]
+    \label{thm:primitive_nested_family_presentation}
+    \lean{MPSTensor.exists_primitive_nestedFamilyPresentation}
+    \leanok
+    Let $(B_{j,a})_a$ be finitely many finite families of primitive tensors
+    of positive bond dimensions, with faithful invariant matrices.
+    There is a finite pairwise gauge-phase inequivalent primitive faithful
+    family $(C_b)_b$ such that, for every $N\geq0$,
+    \begin{align}
+        \sum_j\sum_a\mathcal G_{B_{j,a}}(N)
+        =\mathcal G_{\bigoplus_b C_b}(N).
+    \end{align}
+    Any of the families may be empty. This is representative selection
+    in \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}
+    applied to a finite union of primitive families.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_sector_representatives_exact_support}
+    Index all pairs $(j,a)$ by one finite set and apply primitive
+    representative selection. A sum over a dependent finite index set
+    is the iterated sum over its two indices, so the selected family
+    retains the asserted boundary space at every length.
+\end{proof}
+
+\begin{theorem}[Primitive presentation at a common period multiple]
+    \label{thm:periodic_block_family_primitive_presentation}
+    \lean{MPSTensor.exists_primitive_blockFamilyPresentation_of_period_dvd}
+    \leanok
+    Let $A_j$ be a finite family of normalized periodic tensors with periods
+    $m_j$, and let $\mu_j\neq0$. Suppose $L>0$ and $m_j\mid L$ for every $j$.
+    There are finitely many primitive tensors $B_k$ of positive bond
+    dimensions, with faithful invariant matrices $\rho_k$, such that
+    distinct $B_k$ are not gauge-phase equivalent after any equality of
+    their bond dimensions. For every $N\geq0$,
+    \begin{align}
+        \mathcal G_{(\bigoplus_j\mu_jA_j)^{(L)}}(N)
+        =\mathcal G_{\bigoplus_k B_k}(N).
+    \end{align}
+    The original family may be empty, and the representative family may
+    consequently be empty. This is the finite-family support consequence
+    of \cite[Lemma~6]{DeLasCuevas2017Irreducible}
+    and representative selection in
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:blocking_joint_boundary_space,
+        thm:periodic_primitive_ground_space,
+        thm:primitive_nested_family_presentation}
+    The cyclic-sector decomposition of $A_j^{(L)}$ has compressed period
+    $m_j/\gcd(m_j,L)=1$, so each compressed tensor is primitive and has a
+    faithful invariant matrix. Flatten these finitely many sector families.
+    The joint boundary-space identity identifies their sum with the
+    blocked original space. Selecting one representative from each
+    gauge-phase class preserves this sum at every length and inherits
+    the primitive and faithful witnesses.
+\end{proof}
+
+\begin{theorem}[Existence of a primitive presentation after blocking]
+    \label{thm:periodic_block_family_primitive_presentation_exists}
+    \lean{MPSTensor.exists_primitive_blockFamilyPresentation_of_isPeriodic}
+    \leanok
+    Every finite weighted family of normalized periodic tensors with
+    nonzero weights admits a positive blocking length and an inequivalent
+    primitive faithful family with identical open-boundary spaces at
+    every blocked length. No original inequivalence or nonempty-family
+    assumption is required. This is the common-period consequence of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_block_family_primitive_presentation}
+    Take $L=\prod_jm_j$. Every period is positive, and every $m_j$ divides
+    this product. For an empty family, the product equals one. Apply the
+    common-multiple presentation theorem.
+\end{proof}
+
 \begin{theorem}[A vanishing square annihilates left multiples]
     \label{thm:positive_functional_vanishing_square}
     \lean{PositiveLinearMap.apply_mul_star_mul_self_eq_zero}
@@ -9599,6 +9914,362 @@ shorter interaction range.
     $0\leq f(C)\leq c f(H)=0$, hence the same identity for $C$.
     Conjugating $C\leq cH$ by $X$ gives $X^*CX\leq cX^*HX$;
     monotonicity of $f$ proves (\ref{eq:ph_positive_commutator_comparison}).
+\end{proof}
+
+\begin{theorem}[Sector separation in identified bond spaces]
+    \label{thm:sector_separation_bond_transport}
+    \lean{MPSTensor.BlocksNotGaugePhaseEquiv.forall_ne_transport}
+    \leanok
+    Let $(A_j)$ be a finite family of pairwise gauge-phase inequivalent
+    tensors, of bond dimensions $D_j$. If $i\neq j$ and $D_j=D_i$, then
+    the tensor $A_j$, transported by this bond-space identification, is
+    not gauge-phase equivalent to $A_i$. No normalization, positive
+    dimension, or nonempty-family assumption is required. This is the
+    separation condition of
+    \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}
+    written in the bond-space orientation used by the sector support
+    and gap arguments.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the separation condition to the ordered pair $(j,i)$ and the
+    supplied dimension equality. The two descriptions of the bond-space
+    identification are identical.
+\end{proof}
+
+\begin{definition}[Opposite cyclic boundary degree]
+    \label{def:cyclic_boundary_degree}
+    \lean{MPSTensor.cyclicBoundarySpace,
+        MPSTensor.cyclicBoundarySpace_mul_left,
+        MPSTensor.cyclicBoundarySpace_mul_right,
+        MPSTensor.conjTranspose_mem_cyclicMatrixSubspace_of_cyclicBoundary}
+    \leanok
+    For matrices $P_u$ indexed by $\mathbb Z/m\mathbb Z$, define
+    \begin{align}
+        V_n=\{X:\ P_{u+n}X=XP_u\text{ for every }u\}.
+        \notag
+    \end{align}
+    If $P_uA_i=A_iP_{u+1}$, both $A_iX$ and $XA_i$ belong
+    to $V_n$ whenever $X\in V_{n+1}$.
+    When the $P_u$ are Hermitian, $X\in V_n$ implies that
+    $X^*$ has the word degree $n$, namely $P_uX^*=X^*P_{u+n}$.
+    These are the cyclic coordinates of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible}.
+\end{definition}
+\begin{proof}\leanok
+    Substitute the cyclic letter identity in each product. For the right
+    product, use the boundary relation at $u-1$. Taking adjoints
+    exchanges the two degree conventions.
+\end{proof}
+
+\begin{theorem}[Compression of a cyclic boundary]
+    \label{thm:cyclic_boundary_compression}
+    \lean{MPSTensor.sum_cyclicBoundary_mem,
+        MPSTensor.groundSpaceMap_sum_cyclicBoundary,
+        MPSTensor.exists_cyclicBoundary_of_mem_groundSpace}
+    \leanok
+    Let $m>0$, let $P_uP_v=\delta_{uv}P_u$, and assume
+    $\sum_uP_u=I$. If every length-$n$ word satisfies
+    $P_uA^\sigma=A^\sigma P_{u+n}$, then
+    \begin{align}
+        C_n(X)=\sum_uP_{u+n}XP_u\in V_n,
+        \qquad \Gamma_n(C_n(X))=\Gamma_n(X).
+        \notag
+    \end{align}
+    In particular every vector in $G_n(A)$ has a representative in $V_n$.
+    This is the cyclic-boundary preparation for the intersection
+    property in \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_boundary_degree}
+    Orthogonality gives both sides of the boundary relation for $C_n(X)$.
+    Cycle $P_u$ through the trace, use the word relation and idempotence,
+    and sum the resulting terms with $\sum_uP_u=I$.
+\end{proof}
+
+\begin{theorem}[Restricted injectivity of the boundary map]
+    \label{thm:boundary_injectivity_adjoint_span}
+    \lean{MPSTensor.groundSpaceMap_injOn_of_adjoint_mem_wordSpan}
+    \leanok
+    Let $S\subseteq\mathcal M_D$ be a complex linear subspace.
+    If $X^*$ belongs to the span of the length-$n$ words for every
+    $X\in S$, then $\Gamma_n$ is injective on $S$.
+\end{theorem}
+\begin{proof}\leanok
+    For $X,Y\in S$ with $\Gamma_n(X)=\Gamma_n(Y)$, the trace pairing
+    of $X-Y$ with every length-$n$ word vanishes. Test against
+    $(X-Y)^*$; then $\operatorname{tr}((X-Y)^*(X-Y))=0$, so $X=Y$.
+\end{proof}
+
+\begin{theorem}[The graded one-step intersection]
+    \label{thm:cyclic_boundary_intersection}
+    \lean{MPSTensor.mem_groundSpace_of_cyclicBoundary_restrictions,
+        MPSTensor.groundSpace_eq_restriction_intersection_of_cyclicBoundary,
+        MPSTensor.groundSpace_eq_restriction_intersection_of_cyclic_wordSpan}
+    \leanok
+    Suppose $P_uA_i=A_iP_{u+1}$ and $\sum_iA_i^*A_i=I$.
+    If every vector of $G_{n+1}(A)$ has a boundary representative in
+    $V_{n+1}$, and $\Gamma_n$ is injective on $V_n$, then
+    \begin{align}
+        G_{n+2}(A)
+        =(G_{n+1}(A)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes G_{n+1}(A)).
+        \notag
+    \end{align}
+    In particular these hypotheses follow when $m>0$, the $P_u$
+    are Hermitian orthogonal projections summing to $I$, and
+    the length-$n$ word span equals
+    $\{Z:\ P_uZ=ZP_{u+n}\text{ for every }u\}$.
+    This is an algebraic criterion for
+    \cite[equations (3.10)--(3.11) and Lemma existenceinteraction]
+    {Nachtergaele1996Spectral}; eventual spanning for a periodic tensor
+    is a separate step.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_boundary_degree,thm:cyclic_boundary_compression,
+        thm:boundary_injectivity_adjoint_span,
+        thm:ground_space_restriction_overlap,thm:ground_space_grow_back}
+    Write the two sets of one-site restrictions with boundaries $Y_i,Z_j$
+    in $V_{n+1}$. Their overlap gives
+    $\Gamma_n(A_jY_i)=\Gamma_n(Z_jA_i)$.
+    Both boundaries belong to $V_n$, hence $A_jY_i=Z_jA_i$.
+    The left-canonical identity reconstructs the enlarged boundary as
+    $\sum_jA_j^*Z_j$.
+    Under the stated spanning condition, cyclic compression supplies
+    the representatives, and the adjoint-span criterion supplies injectivity.
+\end{proof}
+
+\begin{definition}[Cyclic matrix degrees]
+    \label{def:cyclic_word_degree}
+    \lean{MPSTensor.cyclicMatrixSubspace,
+        MPSTensor.evalWord_mem_cyclicMatrixSubspace,
+        MPSTensor.wordSpan_le_cyclicMatrixSubspace}
+    \leanok
+    For a family $(P_u)_{u\in\mathbb Z/m\mathbb Z}$, set
+    \begin{align}
+        W_n=\{X:\ P_uX=XP_{u+n}\text{ for every }u\}.
+        \notag
+    \end{align}
+    If $P_uA_i=A_iP_{u+1}$, every word of length $n$ belongs
+    to $W_n$. The family need not consist of projections for this conclusion.
+    These degrees describe the cyclic sectors of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible}.
+\end{definition}
+\begin{proof}\leanok
+    Induct on the word length and move each $P_u$ through the first letter.
+\end{proof}
+
+\begin{theorem}[Subtraction of an adjoint degree]
+    \label{thm:cyclic_adjoint_degree}
+    \lean{MPSTensor.mul_conjTranspose_mem_cyclicMatrixSubspace}
+    \leanok
+    Suppose every $P_u$ is Hermitian. If $X\in W_{q+r}$ and
+    $Y\in W_r$, then $XY^*\in W_q$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_word_degree}
+    Take the adjoint of the relation for $Y$ at $u+q$ and multiply
+    it by $X$, using the relation for $X$ at $u$.
+\end{proof}
+
+\begin{theorem}[Propagation of cyclic word spanning]
+    \label{thm:cyclic_word_span_propagation}
+    \lean{MPSTensor.wordSpan_eq_cyclicMatrixSubspace_add,
+        MPSTensor.wordSpan_eq_cyclicMatrixSubspace_of_ge}
+    \leanok
+    Suppose that every $P_u$ is Hermitian,
+    $P_uA_i=A_iP_{u+1}$, and $\sum_iA_i^*A_i=I$.
+    If the words of length $q$ span $W_q$, then the words of
+    length $N$ span $W_N$ for every $N\ge q$.
+    This algebraic implication supplies the later lengths in the
+    intersection argument of
+    \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral};
+    the initial spanning equality is assumed here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:cyclic_word_degree,thm:cyclic_adjoint_degree}
+    Write $N=q+r$. The left-canonical identity implies
+    $\sum_{|w|=r}A_w^*A_w=I$. For $X\in W_{q+r}$, reconstruct
+    \begin{align}
+        X=\sum_{|w|=r}(XA_w^*)A_w.
+        \notag
+    \end{align}
+    Every coefficient $XA_w^*$ belongs to $W_q$, hence is a
+    combination of words of length $q$. The displayed sum is therefore
+    a combination of words of length $q+r$. The reverse inclusion
+    follows from the cyclic degree of each word.
+\end{proof}
+
+\begin{definition}[Sector matrix embedding]
+    \label{def:sector_matrix_embedding}
+    \lean{MPSTensor.sectorMatrixEmbedding}
+    \leanok
+    For rectangular matrices $V_j$ with a common row space, the sector
+    embedding sends a family $M=(M_j)_j$ of square matrices to
+    $\mathcal E(M)=\sum_jV_jM_jV_j^*$.
+\end{definition}
+
+\begin{theorem}[Word spans under an isometric sector resolution]
+    \label{thm:embedded_sector_word_span}
+    \lean{MPSTensor.sectorMatrixEmbedding_wordTuple,
+        MPSTensor.sectorMatrixEmbedding_range_le_wordSpan,
+        MPSTensor.sectorMatrixEmbedding_compress_eq,
+        MPSTensor.mem_wordSpan_of_sector_wordTupleSpanTop}
+    \leanok
+    \uses{def:sector_matrix_embedding}
+    Let $C,B_j$ be tensors on the same physical alphabet and let
+    $V_j$ be rectangular matrices satisfying
+    $\sum_jV_jV_j^*=I$ and $C_iV_j=V_jB_{j,i}$.
+    Let $\mathcal E$ be the sector embedding of
+    Definition~\ref{def:sector_matrix_embedding}.
+    Then every simultaneous word tuple maps to the corresponding word of $C$.
+    If the length-$q$ simultaneous word span is the full product matrix algebra,
+    $\operatorname{ran}\mathcal E$ is contained in the length-$q$ word span of $C$.
+    If also $V_j^*V_j=I$, every matrix $X$ commuting with all
+    $V_jV_j^*$ satisfies
+    \begin{align}
+        X=\mathcal E\bigl((V_j^*XV_j)_j\bigr)
+        \notag
+    \end{align}
+    and hence belongs to that word span.
+    No positivity of the sector dimensions or tensor normalization is assumed.
+    These are the embedded cyclic-sector identities of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    Intertwining propagates along words. Resolve the virtual identity to
+    identify the image of every word tuple. Taking linear spans gives
+    the range inclusion. For a commuting matrix, each compressed term
+    equals $XV_jV_j^*$; summing reconstructs $X$.
+\end{proof}
+
+\begin{theorem}[Initial spanning of cyclic corners]
+    \label{thm:cyclic_blocked_initial_word_span}
+    \lean{MPSTensor.wordSpan_eq_cyclicMatrixSubspace_of_blocked_sector_span}
+    \leanok
+    Let $m>0$, let $P_uA_i=A_iP_{u+1}$, and suppose that the tensor
+    $A^{[m]}$ has an isometric sector resolution $B_j,V_j$, with
+    $j\in\{0,\ldots,m-1\}$, satisfying
+    \begin{align}
+        V_j^*V_j=I,\qquad \sum_jV_jV_j^*=I,\qquad
+        A^{[m]}_iV_j=V_jB_{j,i}.
+        \notag
+    \end{align}
+    Suppose each support $V_jV_j^*$ is one of the matrices $P_u$;
+    their cyclic labels need not be prescribed.
+    If the length-$q$ simultaneous word span of $B_j$ is full, then
+    \begin{align}
+        \operatorname{span}\{A^\sigma:|\sigma|=qm\}
+        =\{X:\ P_uX=XP_{u+qm}\text{ for every }u\}.
+        \notag
+    \end{align}
+    This supplies the initial graded spanning step for the intersection
+    construction in \cite[equations (3.10)--(3.11) and Section~6]
+    {Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:embedded_sector_word_span}
+    Every original word has its length as cyclic degree. Conversely $qm$
+    is zero modulo $m$, so a matrix of this degree commutes with every
+    sector support. Apply the embedded-sector lemma, then identify the
+    length-$q$ blocked word span with the original length-$qm$ span.
+\end{proof}
+
+\begin{theorem}[Faithful primitive witness at period one]
+    \label{thm:period_one_primitive_witness}
+    \lean{MPSTensor.exists_isPrimitiveMPS_of_isPeriodic_one}
+    \leanok
+    \uses{def:primitive_mps}
+    Let $A$ be a normalized irreducible tensor of period one with positive
+    bond dimension. There is a positive-definite matrix $\rho$ such that
+    $A$ and $\rho$ form a primitive normalized MPS pair.
+    This is the Perron--Frobenius normalization used in
+    \cite[Equations~(3.1)--(3.2b)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Period one gives a primitive trace-preserving transfer map and
+    irreducibility of its Kraus family. The primitive Perron--Frobenius
+    theorem supplies an invariant matrix $\rho$; irreducibility makes it
+    positive definite.
+\end{proof}
+
+\begin{theorem}[Primitive cyclic sector resolution]
+    \label{thm:cyclic_primitive_sector_resolution}
+    \lean{MPSTensor.IsPeriodic.exists_cyclic_primitive_sector_resolution}
+    \leanok
+    Let $A$ be a normalized irreducible periodic tensor of period $m$.
+    There are positive sector dimensions, primitive normalized tensors $B_j$
+    on blocks of $m$ sites, faithful invariant matrices $\rho_j$, and isometries
+    $V_j$ whose mutually orthogonal support projections sum to the identity.
+    Distinct $B_j$ are inequivalent up to similarity and phase. In the inverse
+    cyclic labelling, the projections satisfy $P_{j+1}A_i=A_iP_j$.
+    Both rectangular intertwiners hold:
+    $A^{[m]}_iV_j=V_jB_{j,i}$ and
+    $V_j^*A^{[m]}_i=B_{j,i}V_j^*$.
+    This retains the cyclic coordinates of
+    \cite[Lemma~5]{DeLasCuevas2017Irreducible} used in the grouping argument of
+    \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    Take the cyclic isometric resolution of the periodic tensor.
+    Each compressed blocked sector has period one, hence admits a faithful
+    primitive invariant matrix. The cyclic sector separation theorem gives
+    pairwise inequivalence. Multiplying the corner identity by the isometry
+    and its adjoint gives the two intertwiners.
+\end{proof}
+
+\begin{theorem}[Eventual cyclic spanning and original intersection]
+    \label{thm:periodic_original_intersection}
+    \lean{MPSTensor.IsPeriodic.exists_eventually_cyclic_wordSpan,
+        MPSTensor.IsPeriodic.exists_eventually_groundSpace_restriction_intersection}
+    \leanok
+    Let $A$ be a normalized irreducible periodic tensor of period $m$.
+    There is an orthogonal resolution $\{P_u\}_{u\in\Z/m\Z}$ satisfying
+    $P_uA_i=A_iP_{u+1}$, and a threshold $n_0$, such that for every $n\ge n_0$
+    the length-$n$ words span precisely
+    $\{X:P_uX=XP_{u+n}\text{ for all }u\}$.
+    Consequently,
+    \begin{align}
+        \forall\,n\ge n_0:\ (G_{n+1}(A)\otimes\C^d)\cap(\C^d\otimes G_{n+1}(A))=G_{n+2}(A).
+        \notag
+    \end{align}
+    The lengths here count original sites, with no divisibility requirement.
+    This is the cyclic-sector form of the intersection argument in
+    \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cyclic_primitive_sector_resolution,thm:ph_primitive_blocks_word_span,thm:cyclic_blocked_initial_word_span,thm:cyclic_word_span_propagation,thm:cyclic_boundary_intersection}
+    Simultaneous spanning of the primitive blocked sectors gives spanning of
+    one degree-zero cyclic corner algebra. Negating the cyclic labels puts the
+    projections in the word-degree convention. The adjoint-word resolution
+    propagates this span to all later lengths. Restricted boundary injectivity
+    then gives the intersection identity.
+\end{proof}
+
+\begin{theorem}[Canonical original-chain interaction for a periodic tensor]
+    \label{thm:periodic_original_parent_interaction}
+    \lean{MPSTensor.IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES,
+        MPSTensor.IsPeriodic.exists_positive_parent_interaction}
+    \leanok
+    For the same tensor $A$, there is $R_0>0$ such that, for every $R\ge R_0$
+    and every $N\ge R$, the canonical range-$R$ open parent Hamiltonian has
+    kernel exactly $G_N(A)$. In particular, there exists a positive interaction
+    $h$ of some range $R>0$ with this kernel identity at every $N\ge R$.
+    No faithful invariant matrix, cyclic resolution, or short-range intersection
+    is supplied as a hypothesis.
+    This concerns the explicit normalized periodic tensor presentation; it does
+    not assert a presentation theorem for arbitrary GVBS states.
+    It implements the finite-support interaction construction of
+    \cite[Lemma existenceinteraction and Theorem~1.1]{Nachtergaele1996Spectral}
+    in this tensor setting.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_original_intersection}
+    Choose the interaction range beyond the intersection threshold.
+    Iteration over contiguous intervals identifies the simultaneous local
+    constraints with the full boundary-condition space. Positivity of the
+    local complementary projection identifies these constraints with the open
+    Hamiltonian kernel, including the single-window volume $N=R$.
+    Writing that projection in physical matrix coordinates gives $h$.
 \end{proof}
 
 \begin{definition}[Matrix of the canonical parent interaction]
@@ -9658,6 +10329,121 @@ shorter interaction range.
     $X\Gamma_k=0$. The range of $\Gamma_k$ is $G_A(k)$.
 \end{proof}
 
+\begin{theorem}[Periodic phase relations preserve open-boundary support]
+    \label{thm:periodic_phase_relation_support}
+    \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic,
+        MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isPeriodic}
+    \leanok
+    Let $A$ and $B$ be normalized periodic tensors. Suppose that there is
+    $z\ne0$ such that their periodic vectors satisfy
+    $\ket{V^{(N)}(B)}=z^N\ket{V^{(N)}(A)}$ for every $N>0$.
+    Then their bond dimensions agree, they are gauge and phase equivalent,
+    and $\mathcal G_A(N)=\mathcal G_B(N)$ for every $N\ge0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto,
+        thm:primitive_representative_support_gauge}
+    Along common multiples of the two periods, the self-overlaps tend to
+    the positive periods. Proportionality gives the exact identity
+    $|\braket{V^{(N)}(A)}{V^{(N)}(B)}|^2
+        =\braket{V^{(N)}(A)}{V^{(N)}(A)}\braket{V^{(N)}(B)}{V^{(N)}(B)}$.
+    Thus the mixed overlap cannot tend to zero. The periodic overlap
+    dichotomy supplies the gauge relation. Gauge transformations and nonzero
+    scalar rescaling preserve all open-boundary spaces.
+\end{proof}
+
+\begin{theorem}[Periodic representatives with exact joint support]
+    \label{thm:periodic_sector_representatives_exact_support}
+    \lean{MPSTensor.MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives_of_isPeriodic,
+        MPSTensor.exists_periodic_sector_representatives}
+    \leanok
+    Let $(A_j)_{j=0}^{b-1}$ be a finite family of normalized periodic tensors,
+    with arbitrary periods, and let $\mu_j\ne0$.
+    There is a subfamily selected by an injective map
+    $s:\{0,\ldots,g-1\}\to\{0,\ldots,b-1\}$ such that its members are pairwise
+    inequivalent under gauge and phase transformations. Every original
+    member is gauge and phase equivalent to a selected member, after the
+    corresponding bond-dimension identification. \begin{align}
+        \forall\,N\ge0:\ \mathcal G_{\bigoplus_j\mu_jA_j}(N)
+        =\mathcal G_{\bigoplus_k A_{s(k)}}(N).
+    \end{align}
+    The selected family inherits the original periods and positive bond
+    dimensions. The statement also allows an empty original family.
+    This is an algebraic support identity; it does not assert the joint
+    intersection property or automatic existence of a parent interaction.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:periodic_phase_relation_support}
+    Select one member from each periodic-vector phase class. The preceding
+    lemma identifies the open-boundary spaces of all members of a class.
+    Taking their sums proves the displayed identity. The phase-class
+    separation gives pairwise gauge and phase inequivalence.
+\end{proof}
+
+\begin{theorem}[Trace preservation of an isometric corner]
+    \label{thm:trace_preserving_isometric_corner}
+    \lean{MPSTensor.IsLeftCanonical.of_isometry_intertwine}
+    \leanok
+    Let $A$ be trace preserving, let $V^*V=I$, and suppose
+    $A_iV=VB_i$ for every letter $i$. Then $B$ is trace preserving.
+    This is the normalization identity used in the compressed periodic
+    sectors of \cite[Section~2.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:left_canonical_tensor}
+    Taking products of adjoints in $A_iV=VB_i$ and summing gives
+    \begin{align}
+        \sum_i B_i^*B_i
+        =V^*\left(\sum_i A_i^*A_i\right)V
+        =V^*V=I.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Periodic support presentation of faithful normalized generators]
+    \label{thm:faithful_periodic_ground_space_presentation}
+    \lean{MPSTensor.exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint}
+    \leanok
+    Let $A$ have positive bond dimension, assume
+    $\sum_iA_i^*A_i=I$, and let $\rho>0$ satisfy $E_A(\rho)=\rho$.
+    There exist a nonempty finite family of positive-dimensional periodic
+    tensors $B_j$ with periods $m_j\geq1$ and support isometries $V_j$ such
+    that
+    \begin{align}
+        V_j^*V_j                    & =I,                &
+        \sum_jV_jV_j^*              & =I,                &
+        \forall\,i\neq j:\ V_i^*V_j & =0,\notag            \\
+        B_j^i                       & =V_j^*A_iV_j,      &
+        A_iV_j                      & =V_jB_j^i,         &
+        V_j^*A_i                    & =B_j^iV_j^*.\notag
+    \end{align}
+    For every $N\geq0$,
+    \begin{align}
+        G_A(N)=\bigvee_jG_{B_j}(N)
+        =G_{\bigoplus_jB_j}(N).
+        \label{eq:faithful_periodic_support_presentation}
+    \end{align}
+    This is a consequence for supplied normalized faithful generating data
+    in \cite[Section~3]{Nachtergaele1996Spectral}. It does not construct
+    such data from a general GVBS boundary limit or impose minimality;
+    that passage remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:faithful_stationary_projector_closure,
+        thm:projector_closure_irreducible_corners,
+        thm:trace_preserving_isometric_corner,
+        thm:irreducible_left_canonical_periodic,
+        thm:isometric_sector_ground_space_resolution,
+        thm:block_sum_local_ground_space}
+    Faithful stationarity makes every invariant projection reducing.
+    Decompose into irreducible isometric corners; the identity resolution
+    and positive ambient bond dimension imply that the family is nonempty.
+    Trace preservation passes to each corner. Each normalized irreducible
+    corner therefore has a finite period. The letterwise intertwining
+    identifies the MPS boundary spaces at every length, and the unit-weight
+    direct sum has their joint space.
+\end{proof}
+
 \begin{theorem}[Finite MPS densities and their ranges]
     \label{thm:local_mps_density_support}
     \lean{MPSTensor.exists_local_density_range_eq_groundSpaceES}
@@ -9697,6 +10483,154 @@ shorter interaction range.
     the two subspaces.
 \end{proof}
 
+\begin{theorem}[Independence from an overlap matrix]
+    \label{thm:subspace_independence_overlap_matrix}
+    \lean{Submodule.iSupIndep_of_overlapMatrix}
+    \leanok
+    Let $(V_i)_{i\in I}$ be finitely many subspaces of a complex Hilbert
+    space, and let $B$ be a real matrix with zero diagonal and $\|B\|<1$.
+    Suppose that, for $i\ne j$, $x\in V_i$, and $y\in V_j$,
+    \begin{align}
+        |\langle x,y\rangle|\le B_{ij}\|x\|\|y\|.
+    \end{align}
+    Then the family $(V_i)$ is independent: a vanishing sum of vectors,
+    one from each subspace, has every component zero.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:subspace_overlap_lower_gram}
+    The lower Gram estimate gives
+    \begin{align}
+        (1-\|B\|)\sum_i\|x_i\|^2
+        \le\left\|\sum_i x_i\right\|^2.
+    \end{align}
+    A zero sum therefore makes every summand zero.
+\end{proof}
+
+\begin{theorem}[Eventual independence of asymptotically orthogonal subspaces]
+    \label{thm:asymptotic_subspace_independence}
+    \lean{Submodule.eventually_iSupIndep_of_pairwise_overlap}
+    \leanok
+    Let $V_i(n)$ be a finite family of subspaces of Hilbert spaces that
+    may depend on $n$. Suppose that for every $\varepsilon>0$, eventually
+    \begin{align}
+        \forall\,i\ne j,\ x\in V_i(n),\ y\in V_j(n):\ |\langle x,y\rangle|\le\varepsilon\|x\|\|y\|.
+    \end{align}
+    Then the family $(V_i(n))_i$ is eventually independent.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:subspace_independence_overlap_matrix}
+    Let $C$ have zero diagonal and all off-diagonal entries equal to one.
+    Choose $\varepsilon=(1+\|C\|)^{-1}$. Then
+    $\|\varepsilon C\|<1$, and the preceding lemma applies whenever
+    the stated pairwise estimate holds.
+\end{proof}
+
+\begin{theorem}[Eventual independence of primitive boundary spaces]
+    \label{thm:primitive_ground_space_eventual_independence}
+    \lean{MPSTensor.eventually_groundSpaceES_iSupIndep_of_primitive}
+    \leanok
+    \uses{def:primitive_mps, def:ground_space_es}
+    A finite family of pairwise gauge and phase inequivalent primitive
+    tensors, with faithful invariant matrices, has independent boundary
+    spaces $G_{B_i}(N)$ for every sufficiently large $N$.
+    This is the consequence of the overlap estimates in
+    \cite[Lemmas disjoint and overlapestimate]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:inequivalent_block_ground_space_overlap_decay,
+        thm:asymptotic_subspace_independence}
+    Inequivalence gives uniformly vanishing pairwise ground-space
+    overlaps. Finiteness makes the bounds simultaneous, so the preceding
+    theorem proves independence.
+\end{proof}
+
+\begin{theorem}[Independent ambient sums and middle restrictions]
+    \label{thm:independent_ambient_sum_intersection}
+    \lean{Submodule.iSup_inf_iSup_eq_of_le_independent,
+        Submodule.iSupIndep_iInf_comap_of_separating,
+        MPSTensor.iSupIndep_middleRestriction_comap,
+        MPSTensor.groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep}
+    \leanok
+    Let $(W_i)_{i\in I}$ be an independent family of subspaces, with $I$
+    finite, and let $U_i,V_i\subseteq W_i$. Then
+    \begin{align}
+        \Bigl(\sum_i U_i\Bigr)\cap\Bigl(\sum_i V_i\Bigr)
+        =\sum_i(U_i\cap V_i).
+    \end{align}
+    More generally, suppose a family of linear restrictions $f_t:E\to F$
+    determines every vector of $E$. For any independent family $(G_i)$ in
+    $F$, the subspaces $\bigcap_t f_t^{-1}(G_i)$ are independent in $E$.
+    In particular, adjoining the first and last physical indices preserves
+    independence of middle support spaces. Independence is also unchanged
+    by passing from the coefficient functions to their Euclidean realization.
+\end{theorem}
+\begin{proof}\leanok
+    Independence makes the decomposition into the ambient subspaces unique,
+    so the decompositions from the two sums agree term by term.
+    For the restriction assertion, apply independence after every
+    restriction, then use that the restrictions determine the original vector.
+    The first and last physical restrictions determine all coefficients.
+    The Euclidean realization is a linear isomorphism.
+\end{proof}
+
+\begin{theorem}[Joint intersection from independent middle spaces]
+    \label{thm:joint_restriction_intersection_middle_independence}
+    \lean{MPSTensor.restriction_intersection_iSup_eq_of_middle_independent}
+    \leanok
+    Let $G_i\subseteq(\mathbb C^d)^{\otimes n}$ and
+    $H_i\subseteq(\mathbb C^d)^{\otimes(n+1)}$ be finite families.
+    Assume that the $G_i$ are independent and that every restriction of a
+    vector in $H_i$, obtained by fixing either the first or last physical
+    index, lies in $G_i$. Write
+    $L_i=H_i\otimes\mathbb C^d$ and $R_i=\mathbb C^d\otimes H_i$.
+    Then
+    \begin{align}
+        \Bigl(\sum_iL_i\Bigr)\cap\Bigl(\sum_iR_i\Bigr)
+        =\sum_i(L_i\cap R_i).
+    \end{align}
+    This is the geometric step of Nachtergaele,
+    arXiv:cond-mat/9410110, the proposition and equivalence lemma of Section 4; no tensor representation
+    is assumed in this statement.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:independent_ambient_sum_intersection}
+    Both $L_i$ and $R_i$ lie in
+    $\mathbb C^d\otimes G_i\otimes\mathbb C^d$.
+    These ambient spaces are independent by the preceding lemma.
+    Finite sums commute with adjoining an exterior physical index, as is
+    seen by decomposing each fixed-index coefficient separately.
+    Apply the independent ambient-sum intersection identity.
+\end{proof}
+
+\begin{theorem}[One-step joint ground-space intersection criterion]
+    \label{thm:joint_ground_space_intersection_middle_independence}
+    \lean{MPSTensor.iSup_groundSpace_eq_restriction_intersection_of_middle_independent}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of tensors, possibly empty.
+    Suppose that their ground spaces $\mathcal G_i(n)$ are independent
+    and that each tensor satisfies
+    \begin{align}
+        (\mathcal G_i(n+1)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G_i(n+1))
+        =\mathcal G_i(n+2).
+    \end{align}
+    Then the sums $\mathcal G(q)=\sum_i\mathcal G_i(q)$ satisfy
+    \begin{align}
+        (\mathcal G(n+1)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G(n+1))
+        =\mathcal G(n+2).
+    \end{align}
+    The individual intersection identities and middle independence remain
+    explicit hypotheses. This criterion does not by itself assert the
+    unrestricted intersection theorem for periodic tensor families.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:joint_restriction_intersection_middle_independence}
+    Ground-space vectors restrict into the corresponding ground spaces
+    on the shorter interval. Apply the preceding geometric lemma, then
+    substitute the assumed individual intersection identities.
+\end{proof}
+
 \begin{theorem}[Positive physical dimension of a normalized tensor]
     \label{thm:left_canonical_physical_dimension}
     \lean{MPSTensor.IsLeftCanonical.physDim_ne_zero}
@@ -9710,6 +10644,151 @@ shorter interaction range.
     \uses{def:left_canonical_tensor}
     An empty physical alphabet would make the sum zero, contradicting the
     nonzero identity on the bond space.
+\end{proof}
+
+\begin{theorem}[Canonical open kernels from eventual intersections]
+    \label{thm:canonical_open_kernel_from_eventual_intersection}
+    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_restriction_intersection,
+        MPSTensor.exists_ker_openParentHamiltonianES_eq_groundSpaceES_of_eventually_restriction_intersection}
+    \leanok
+    Let $d\ge1$ and let $A$ be any tensor. Suppose that, for every $q\ge R$,
+    \begin{align}
+        (\mathcal G_A(q)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G_A(q))=\mathcal G_A(q+1).
+    \end{align}
+    If $R>0$, the canonical open Hamiltonian of range $R$ has kernel
+    $\mathcal G_A(N)$ for every $N\ge R$.
+    Consequently, if the one-step identity holds at every sufficiently
+    large length, there is $R_0>0$ such that the same kernel identity holds
+    for every $N\ge R\ge R_0$.
+    The intersection identity is an explicit hypothesis of this criterion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mem_ground_space_es,lem:open_chain_iteration_subspace_sequence,thm:open_parent_hamiltonian_window_ground_space,thm:open_ground_space_le_hamiltonian_kernel,rem:cyclic_window_operators}
+    A vector in the Hamiltonian kernel satisfies every contiguous local
+    ground-space constraint. Iterating the one-step intersections enlarges
+    these local spaces to the whole interval. Conversely, every
+    open-boundary vector satisfies every local constraint.
+\end{proof}
+
+\begin{theorem}[Eventual joint intersection for primitive sectors]
+    \label{thm:primitive_joint_intersection_from_overlap}
+    \lean{MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_independent_middle,
+        MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_isPrimitiveMPS}
+    \leanok
+    For a finite tensor family, eventual independence of the middle ground
+    spaces and the individual eventual one-step intersection identities
+    imply the eventual joint one-step intersection identity.
+    In particular, this applies to any finite family of pairwise gauge and
+    phase inequivalent normalized primitive tensors with positive bond
+    dimensions and faithful invariant matrices. Thus, writing
+    $\mathcal G(q)=\sum_j\mathcal G_j(q)$, for all sufficiently large $n$,
+    \begin{align}
+        (\mathcal G(n+1)\otimes\mathbb C^d)
+        \cap(\mathbb C^d\otimes\mathcal G(n+1))
+        =\mathcal G(n+2).
+    \end{align}
+    The family may be empty. The primitive assertion concerns the supplied
+    generating tensors, rather than an arbitrary GVBS presentation.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:joint_ground_space_intersection_middle_independence,
+        thm:primitive_ground_space_eventual_independence,
+        thm:periodic_original_intersection}
+    Finiteness gives one eventual set on which all individual identities
+    hold. Apply the middle-independence criterion on its intersection with
+    the eventual independence set. For primitive tensors, overlap decay
+    supplies that independence, and period-one periodicity supplies the
+    individual intersections.
+\end{proof}
+
+\begin{theorem}[Canonical primitive-family interaction from overlap]
+    \label{thm:primitive_parent_interaction_from_overlap}
+    \lean{MPSTensor.exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_primitive_overlap,
+        MPSTensor.exists_positive_parent_interaction_of_primitive_overlap}
+    \leanok
+    Let $d\ge1$, let $(A_j)$ be a finite family of pairwise gauge and phase
+    inequivalent normalized primitive tensors with positive bond dimensions
+    and faithful invariant matrices, and let $\mu_j\ne0$.
+    For $T=\bigoplus_j\mu_jA_j$, there exists $R_0>0$ such that
+    \begin{align}
+        \forall\,N\ge R\ge R_0:\ \ker H_{R,N}^{\mathrm{open}}(T)=\mathcal G_T(N).
+    \end{align}
+    In particular, the canonical local projection of range $R_0$ is a
+    positive parent interaction with this exact kernel at every $N\ge R_0$.
+    No simultaneous word span is supplied in this assertion or used in the
+    family intersection argument.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_joint_intersection_from_overlap,
+        thm:canonical_open_kernel_from_eventual_intersection}
+    Nonzero weights preserve the joint open-boundary space. Substitute
+    the eventual joint intersection into the canonical kernel criterion.
+    The orthogonal projection onto the local ground-space complement is
+    positive, so choosing that projection gives the interaction.
+\end{proof}
+
+\begin{theorem}[Observable insertions under a virtual intertwiner]
+    \label{thm:observable_insertion_isometric_intertwiner}
+    \lean{MPSTensor.physicalObservableTransfer_intertwine}
+    \lean{MPSTensor.observableInsertionExpectation_eq_of_isometric_intertwine}
+    \leanok
+    Suppose $A_iV=VB_i$ for every letter $i$. For every virtual matrix
+    $\sigma$ and every observable $X$ on $k\geq0$ sites,
+    \begin{align}
+        E_{A,X}(V\sigma V^*)=V E_{B,X}(\sigma)V^*.
+        \label{eq:observable_insertion_intertwiner}
+    \end{align}
+    If additionally $V^*V=I$, $\rho=V\sigma V^*$, and
+    $\operatorname{tr}\sigma\neq0$, then $\operatorname{tr}\rho=\operatorname{tr}\sigma$ and
+    $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$.
+    No normalization, stationarity, or positivity is needed for these
+    identities. This concerns the finite insertion formula in
+    \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:physical_observable_transfer,def:primitive_insertion_expectation}
+    Letter intertwining gives $A^\tau V=VB^\tau$ for every word $\tau$.
+    Expanding the insertion as a sum over words proves
+    (\ref{eq:observable_insertion_intertwiner}). When $V^*V=I$, cyclicity
+    gives $\operatorname{Tr}(VZV^*)=\operatorname{Tr}Z$; apply this to both
+    the inserted matrix and the normalization denominator.
+\end{proof}
+
+\begin{theorem}[Faithful compression of stationary generating data]
+    \label{thm:stationary_support_faithful_generators}
+    \lean{MPSTensor.exists_faithful_stationary_supportCompression_of_leftCanonical}
+    \leanok
+    Let $A$ satisfy $\sum_iA_i^*A_i=I$, and let $\rho\geq0$ have nonzero
+    trace with $E_A(\rho)=\rho$. There exist a positive dimension $E$, an
+    isometry $V$, a tensor $B$, and a faithful matrix $\sigma>0$ such that
+    \begin{align}
+        V^*V                    & =I,                           & VV^*   & =\operatorname{supp}\rho, &
+        B_i                     & =V^*A_iV,                     & \sigma & =V^*\rho V,\notag           \\
+        \sum_iB_i^*B_i          & =I,                           & A_iV   & =VB_i,                    &
+        E_B(\sigma)             & =\sigma,                      &
+        \operatorname{Tr}\sigma & =\operatorname{Tr}\rho.\notag
+    \end{align}
+    $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$ for every observable
+    on every finite interval, including length zero.
+    This is a restriction of supplied stationary generating data to their
+    support, as in \cite{Wolf2012Quantum}, restriction to full-rank fixed
+    points, and the normalized generating representation of
+    \cite[Section~3]{Nachtergaele1996Spectral}. Constructing generating
+    data from an arbitrary GVBS boundary limit remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fp_inv_proj,thm:trace_preserving_isometric_corner,
+        thm:observable_insertion_isometric_intertwiner}
+    The stationary support projection $P$ obeys $(I-P)A_iP=0$.
+    Choose $V$ with $V^*V=I$ and $VV^*=P$. Then $PV=V$ gives
+    $A_iV=V(V^*A_iV)$. Compression preserves trace preservation and the
+    stationary equation. Since $P\rho P=\rho$, the compressed matrix is
+    positive definite and expands as $\rho=V\sigma V^*$.
+    Cyclicity gives $\operatorname{Tr}\sigma=\operatorname{Tr}\rho$,
+    whose nonvanishing forces $E>0$. Apply the insertion intertwiner to
+    obtain all finite expectation identities.
 \end{proof}
 
 \begin{lemma}[Canonical interactions depend only on local support]

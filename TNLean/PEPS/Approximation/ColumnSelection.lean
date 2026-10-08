@@ -249,6 +249,26 @@ theorem exists_column_ne_zero_of_traceNorm_sub_pure_le (e : ι ≃ Fin n)
     exact (pow_le_pow_iff_left₀ (norm_nonneg _)
       (mul_nonneg hη0 (norm_nonneg _)) two_ne_zero).mp hfz
 
+/-- **Polynomial-PEPS Lemma 8.1, vector part, for a family identified with the
+columns.** If `ψ z` is the column `σ|z⟩` for every basis label `z`, as for the
+contraction of a network with input fixed to `z`, then some `ψ z` is nonzero and
+within `2η` of `Ω` after normalization, up to a phase.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 8.1 `lem:columns`,
+`07-assembly.tex`, lines 67–94. -/
+theorem exists_eq_column_ne_zero_of_traceNorm_sub_pure_le (e : ι ≃ Fin n)
+    {σ : Matrix ι ι ℂ} (Ω : EuclideanSpace ℂ ι) (hΩ : ‖Ω‖ = 1) {η : ℝ}
+    (hσ : Matrix.traceNorm
+      (Matrix.reindex e e (σ - Matrix.vecMulVec (⇑Ω) (star ⇑Ω))) ≤ η)
+    (hη : η < 1) {ψ : ι → EuclideanSpace ℂ ι}
+    (hψ : ∀ z, ψ z = Matrix.toEuclideanLin σ (EuclideanSpace.single z 1)) :
+    ∃ z : ι, ψ z = Matrix.toEuclideanLin σ (EuclideanSpace.single z 1) ∧ ψ z ≠ 0 ∧
+      ∃ θ : ℝ, ‖((‖ψ z‖ : ℂ)⁻¹) • ψ z - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
+  obtain ⟨z, hz, θ, hθ⟩ :=
+    exists_column_ne_zero_of_traceNorm_sub_pure_le e σ Ω hΩ hσ hη
+  rw [← hψ] at hz hθ
+  exact ⟨z, hψ z, hz, θ, hθ⟩
+
 end Column
 
 end TNLean.PEPS.Approximation
