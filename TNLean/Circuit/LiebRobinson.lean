@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Circuit.LiebRobinson.CommutatorRecursion
 import TNLean.Circuit.LiebRobinson.ComponentLocality
+import TNLean.Circuit.LiebRobinson.GraphBallStabilization
 import TNLean.Circuit.LiebRobinson.GraphLocalization
 import TNLean.Circuit.LiebRobinson.GraphPropagation
 import TNLean.Circuit.LiebRobinson.Volterra

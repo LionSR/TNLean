@@ -1,0 +1,251 @@
+\subsection{The actual canonical block pairs}
+
+\begin{definition}[Normalized faithful block fixed points]
+    \label{def:ldp_canonical_block_fixed_points}
+    \lean{MPSTensor.IsBNTCanonicalForm.basisFixedPoint,
+        MPSTensor.IsBNTCanonicalForm.basisFixedPoint_spec,
+        MPSTensor.IsBNTCanonicalForm.basisFixedPointPair}
+    \leanok
+    \uses{def:ldp_sector_fixed_point_state}
+    Let $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\ldots,\mu_{j,m_j})
+        \otimes A_j^i$ be in basis-of-normal-tensors canonical form, with each
+    $A_j$ left-canonical. Let $\sigma_j$ be the unique density matrix satisfying
+    $\E_{A_j}(\sigma_j)=\sigma_j$. Irreducibility implies $\sigma_j>0$.
+    Choose one retained copy $k_j$ of each block and place
+    $\ket{\omega_j}=\operatorname{vec}(\sqrt{\sigma_j})$ on both virtual
+    coordinates of that copy. These are the block pairs used in
+    \cite[eqs.~(8) and~(S7)]{Malz2024Preparation}.
+
+    Write $E_{j,k_j}:\C^{D_j}\to\C^D$ for the corresponding coordinate inclusion.
+    % Formula: omega_j = (E_{j,k_j} tensor E_{j,k_j}) vec(sqrt(sigma_j)).
+    % Source: MSWC24 (8), (S2), (S7), with the specified retained copy.
+    % Ink: the two E boxes embed the two block indices r,l into full bond indices R,L.
+    % Contractions: the two block indices of sqrt(sigma_j) with the inputs of E.
+    % Boundary signature: two north virtual legs R,L on each panel; no input legs.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+                \tn[at=(1,1), skin=box, wide=3,
+                    ports={90@1:virtual:$R$,90@3:virtual:$L$}]{\omega_j}
+            \end{tenkz}
+            $=$
+            \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+                \tn[at=(1,1), skin=box, name=e1,
+                    ports={90:virtual:$R$,270:virtual}]{E_{j,k_j}}
+                \tn[at=(1,3), skin=box, name=e2,
+                    ports={90:virtual:$L$,270:virtual}]{E_{j,k_j}}
+                \tn[at=(2,1), skin=box, wide=3, name=sigma,
+                    ports={90@1:virtual,90@3:virtual}]{\sqrt{\sigma_j}}
+                \tnwire{sigma.90@1}{e1.270}
+                \tnwire{sigma.90@3}{e2.270}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+\end{definition}
+
+\begin{theorem}[Orthonormal canonical block pairs]
+    \label{thm:ldp_canonical_block_pair_isometry}
+    \lean{MPSTensor.IsBNTCanonicalForm.inner_basisFixedPointPair,
+        MPSTensor.IsBNTCanonicalForm.isIsometry_pairIsometry_basisFixedPointPair}
+    \leanok
+    \uses{def:ldp_canonical_block_fixed_points, thm:ldp_local_orthogonality,
+        thm:ldp_ghz_form}
+    The actual block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
+        =\delta_{jj'}$. Consequently $W\ket{j}=\ket{\omega_j}$ is an isometry.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each diagonal inner product is $\operatorname{tr}\sigma_j=1$.
+    Distinct blocks occupy disjoint virtual coordinates.
+\end{proof}
+
+\begin{theorem}[Canonical copy coordinates and weights]
+    \label{thm:ldp_canonical_copy_coordinates}
+    \lean{MPSTensor.SectorDecomposition.copyWeights,
+        MPSTensor.SectorDecomposition.bntWeight_copyWeights,
+        MPSTensor.SectorDecomposition.copyCoord_disjoint,
+        MPSTensor.SectorDecomposition.toTensor_eq_repeatedBlockSum}
+    \leanok
+    \uses{def:ldp_sector_fixed_point_state, def:ldp_repeated_block_sum}
+    Let $\iota_{j,k}$ include the virtual coordinates of copy $k$ of block $j$
+    in the flattened canonical direct sum. Their ranges are disjoint for distinct
+    pairs $(j,k)$, and the assembled tensor satisfies
+    \begin{align}
+        A^i & =\sum_j\sum_k\mu_{j,k}\iota_{j,k}A_j^i\iota_{j,k}^{\dagger}.
+    \end{align}
+    Its sector coefficient at length $N$ is exactly
+    $\beta_j=\sum_k\mu_{j,k}^N$.
+
+    % Formula: A^i = sum_{j,k} mu_{j,k} iota_{j,k} A_j^i iota_{j,k}^dagger.
+    % Source: MSWC24 (S2), with the flattened canonical copy coordinates.
+    % Ink: iota embeds block row r into alpha; iota^dagger restricts beta to block column s.
+    % Contractions: the two horizontal block indices r,s on the right panel.
+    % Boundary signature: west/east virtual alpha,beta and north physical i on both panels.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+                \tn[skin=box, ports={180:virtual:$\alpha$,0:virtual:$\beta$,
+                            90:physical:$i$}]{A}
+            \end{tenkz}
+            $=\sum_{j,k}\mu_{j,k}$
+            \begin{tenkz}[rows={wire}, cols=3]
+                \tn[at=(1,1), skin=box, name=e,
+                    ports={180:virtual:$\alpha$,0:virtual}]{\iota_{j,k}}
+                \tn[at=(1,2), skin=box, name=a,
+                    ports={180:virtual,0:virtual,90:physical:$i$}]{A_j}
+                \tn[at=(1,3), skin=box, name=ed,
+                    ports={180:virtual,0:virtual:$\beta$}]{\iota_{j,k}^{\dagger}}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the block-diagonal matrix as the sum of its inclusions and reindex
+    the flattened list by the pairs $(j,k)$.
+\end{proof}
+
+\begin{definition}[Corrected canonical one-copy state]
+    \label{def:ldp_corrected_canonical_one_copy}
+    \lean{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState}
+    \leanok
+    \uses{def:ldp_canonical_block_fixed_points, def:ldp_one_copy_weight}
+    At $N=qM$, put $\beta'_j=\beta_j(c_j/\mu_{j,k_j}^q)^M$ and
+    $\alpha'_j=\beta'_j/(\sum_l|\beta'_l|^2)^{1/2}$, with
+    $c_j=(\sum_k|\mu_{j,k}|^{2q})^{1/2}$. If every $\beta'_j$ vanishes, set
+    $\alpha'=0$. The corrected state is
+    \begin{align}
+        \ket{\Omega'_{\mathrm{corr}}}
+         & =\sum_j\alpha'_j\bigotimes_{s=1}^M\ket{\omega_j}_{R_sL_{s+1}}.
+    \end{align}
+    The coefficient correction is necessary also for multiplicity one:
+    then $\beta'_j=|\mu_j|^{qM}$
+    \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}.
+\end{definition}
+
+\begin{theorem}[Canonical GHZ form and normalization]
+    \label{thm:ldp_corrected_canonical_ghz}
+    \lean{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_norm_sq}
+    \leanok
+    \uses{def:ldp_corrected_canonical_one_copy, thm:ldp_canonical_block_pair_isometry,
+        thm:ldp_ghz_form}
+    In bond coordinates the corrected state equals
+    $W^{\otimes M}\sum_j\alpha'_j\ket{j}^{\otimes M}$.
+    If $M\geq1$ and $(\beta_j)_j\neq0$, its norm is one.
+
+    % Formula: Omega'_corr = W tensor W tensor W |chi_3(alpha')>, in bond coordinates.
+    % Source: MSWC24 (19), with corrected one-copy coefficients beta'_j.
+    % Ink: chi_3 = sum_j alpha'_j |j,j,j>; each W sends j to omega_j.
+    % Contractions: the three block-label indices between chi_3 and W.
+    % Boundary signature: six north virtual legs R1,L2,R2,L3,R3,L1 on each panel.
+    % The displayed M=3 instance has no omitted sites or undeclared trace closures.
+    For three bonds the identity is
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire}, cols=6, bonds=none]
+                \tn[at=(1,1), skin=box, wide=6,
+                    ports={90@1:virtual:$R_1$,90@2:virtual:$L_2$,
+                            90@3:virtual:$R_2$,90@4:virtual:$L_3$,
+                            90@5:virtual:$R_3$,90@6:virtual:$L_1$}]{\Omega'_{\mathrm{corr}}}
+            \end{tenkz}
+            $=$
+            \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none]
+                \tn[at=(1,1), skin=box, wide=2, name=w1,
+                    ports={90@1:virtual:$R_1$,90@2:virtual:$L_2$,270:virtual}]{W}
+                \tn[at=(1,3), skin=box, wide=2, name=w2,
+                    ports={90@1:virtual:$R_2$,90@2:virtual:$L_3$,270:virtual}]{W}
+                \tn[at=(1,5), skin=box, wide=2, name=w3,
+                    ports={90@1:virtual:$R_3$,90@2:virtual:$L_1$,270:virtual}]{W}
+                \tn[at=(2,1), skin=box, wide=6, name=chi,
+                    ports={90@1:virtual,90@3:virtual,90@5:virtual}]{\chi_3(\alpha')}
+                \tnwire{chi.90@1}{w1.270}
+                \tnwire{chi.90@3}{w2.270}
+                \tnwire{chi.90@5}{w3.270}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the tensor power on the GHZ state. Orthonormality of the pairs gives
+    squared norm $\sum_j|\alpha'_j|^2=1$; the nonzero copy weights ensure that
+    $(\beta'_j)_j$ vanishes exactly when $(\beta_j)_j$ does.
+\end{proof}
+
+\begin{theorem}[Physical identification for the canonical tensor]
+    \label{thm:ldp_corrected_canonical_physical}
+    \lean{MPSTensor.IsBNTCanonicalForm.nonNormalApproxVector_oneCopyFixedPoint,
+        MPSTensor.IsBNTCanonicalForm.nonNormalApproxOverlap_oneCopyFixedPoint}
+    \leanok
+    \uses{def:ldp_corrected_canonical_one_copy, thm:ldp_canonical_copy_coordinates,
+        lem:ldp_one_copy_state}
+    Let $q\geq1$, let $V$ be the polar factor of the actual $q$-site blocked
+    canonical tensor, and let $L_j$ be its copy isometries. Write
+    $\ket{\Omega_j}$ for the product of the unembedded pairs of $\sigma_j$ and
+    $K_{j,k_j}$ for the pair embedding on the chosen copy. Then
+    \begin{align}
+        V^{\otimes M}\sum_j\beta'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}
+         & =V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}.
+    \end{align}
+    Thus the unnormalized physical vector is independent of the chosen copies.
+    Let $\ket{\phi_N}$ be the normalized periodic state of $A$ on $N=qM$ sites,
+    put $\alpha_j=\beta_j/(\sum_l|\beta_l|^2)^{1/2}$, and let
+    $\ket{\widetilde\phi'_N}$ and $\ket{\widetilde\phi_N}$ be the normalizations of
+    $V^{\otimes M}\sum_j\alpha'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}$ and
+    $V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j}$. Then
+    \begin{align}
+        \langle\widetilde\phi'_N|\phi_N\rangle
+         & =\langle\widetilde\phi_N|\phi_N\rangle.
+    \end{align}
+    A vanishing coefficient vector or physical vector is normalized to zero.
+
+    % Formula: V K_{j,k_j} = (mu_{j,k_j}^q / c_j) V L_j.
+    % Source: corrected MSWC24 (S7), one-copy polar restriction identity.
+    % Ink: V has the physical blocked output i and two full virtual inputs.
+    % K and L map the two block virtual indices r,l into the full pair space.
+    % Contractions: the two full virtual indices between V and K or L.
+    % Boundary signature: two south virtual legs r,l and one north physical leg i.
+    % The scalar has no legs; both panels keep exactly the same typed boundary.
+    The local identity used in the proof is
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkzequation}
+            \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+                \tn[at=(1,1), skin=box, wide=2, name=v,
+                    ports={90:physical:$i$,270@1:virtual,270@2:virtual}]{V}
+                \tn[at=(2,1), skin=box, wide=2, name=k,
+                    ports={90@1:virtual,90@2:virtual,
+                            270@1:virtual:$r$,270@2:virtual:$l$}]{K_{j,k_j}}
+                \tnwire{k.90@1}{v.270@1}
+                \tnwire{k.90@2}{v.270@2}
+            \end{tenkz}
+            $=\frac{\mu_{j,k_j}^q}{c_j}$
+            \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+                \tn[at=(1,1), skin=box, wide=2, name=v,
+                    ports={90:physical:$i$,270@1:virtual,270@2:virtual}]{V}
+                \tn[at=(2,1), skin=box, wide=2, name=l,
+                    ports={90@1:virtual,90@2:virtual,
+                            270@1:virtual:$r$,270@2:virtual:$l$}]{L_j}
+                \tnwire{l.90@1}{v.270@1}
+                \tnwire{l.90@2}{v.270@2}
+            \end{tenkz}
+        \end{tenkzequation}
+    \end{center}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use $VK_{j,k_j}=(\mu_{j,k_j}^q/c_j)VL_j$ and
+    $\beta'_j(\mu_{j,k_j}^q/c_j)^M=\beta_j$. The nonzero copy weights make
+    $\beta'=0$ exactly when $\beta=0$, and then both states vanish. Otherwise,
+    with $\lVert\beta\rVert=(\sum_l|\beta_l|^2)^{1/2}$ and likewise for $\beta'$,
+    \begin{align*}
+        V^{\otimes M}\sum_j\alpha'_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}
+         & =\frac{\lVert\beta\rVert}{\lVert\beta'\rVert}
+        V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j},
+    \end{align*}
+    and the positive factor cancels in the normalized overlap.
+\end{proof}
