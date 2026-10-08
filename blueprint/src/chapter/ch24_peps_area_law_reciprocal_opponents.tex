@@ -1,0 +1,119 @@
+\section{Contact and reciprocal selection of opposing regions}
+\label{sec:area_law_reciprocal_opponents}
+
+The unique opposing region determines a selection for each actual
+elementary side. Contact with an actual fine cell characterizes this
+selection. When the lower index is sufficiently large, the corresponding
+elementary segments select each other; see
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--316 for
+% choice/contact and lines 299--323 for reciprocal selection,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Scoped statements only; all three released declarations independently reviewed.
+
+\begin{definition}[The selected opposing region]
+    \label{def:area_law_selected_elementary_opponent}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent}
+    \leanok
+    \uses{thm:area_law_unique_elementary_side_opponent,
+        def:area_law_actual_side_mask,def:area_law_fine_layer_indices}
+    Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
+    integer width $C_0\ge2$, and natural indices $k_0\le k$ with
+    $k\ge50\,000\,000$. For an actual fine-cell index
+    $z\in F_{k,\ell_k}$ and a slot $i$ of its actual midpoint
+    subdivision, write $e_i=[a_i,b_i]$.
+    Denote by $P_{k,z}(i)$ the unique opposing identifier whose closed
+    region contains $e_i$: the dummy symbol $\star$ represents
+    $\overline{N_{k_0}}$, while an indexed cell $(h,w)$ represents
+    $\overline{Q_{\ell_h}(w)}$ with $h\ge k_0$,
+    $w\in F_{h,\ell_h}$ and $(h,w)\ne(k,z)$.
+    The dummy neighborhood is one identifier even if several coarse
+    cells contribute to it. No late bound on $k_0$ is required.
+\end{definition}
+
+\begin{theorem}[Selection is equivalent to contact with an actual fine cell]
+    \label{thm:area_law_selected_opponent_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_eq_some_iff_contact}
+    \leanok
+    \uses{def:area_law_selected_elementary_opponent,
+        def:area_law_fine_layer_indices}
+    Retain the assumptions of the selected-opponent definition.
+    Let $w\in F_{h,\ell_h}$ be an actual candidate fine-cell index
+    at a layer $h\ge k_0$. Then
+    \begin{align}
+        P_{k,z}(i)=(h,w)
+        \quad\Longleftrightarrow\quad
+        (k,z)\ne(h,w)\ \text{and}\
+        e_i\cap\overline{Q_{\ell_h}(w)}
+        \text{ contains two distinct points}.
+    \end{align}
+    The candidate layer $h$ has no additional late bound.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unique_elementary_side_opponent,
+        thm:area_law_elementary_side_boundary_geometry,
+        thm:area_law_actual_elementary_side_matching,
+        thm:area_law_cell_fan_mark_vertices,
+        thm:area_law_belt_marks_closed_cell,thm:area_law_dyadic_closures}
+    If the candidate is selected, its indexed cell differs from the
+    reference and its closure contains the whole segment. The two
+    elementary endpoints are distinct, so both belong to the contact.
+
+    Conversely, distinct indexed cells with two-point contact have
+    matching actual elementary segments with reversed endpoints.
+    The candidate segment lies in the closed candidate square:
+    its endpoints belong to that square and the square is convex.
+    Thus the whole reference segment lies in the same closed square.
+    Uniqueness of the opposing identifier makes the candidate the
+    selected opponent.
+\end{proof}
+
+\begin{theorem}[Reciprocal selection along matching elementary sides]
+    \label{thm:area_law_reciprocal_elementary_opponents}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.elementarySideOpponent_reciprocal_iff}
+    \leanok
+    \uses{def:area_law_selected_elementary_opponent,
+        def:area_law_actual_side_mask,def:area_law_fine_layer_indices}
+    Fix a common origin and finite endpoint set, integer width
+    $C_0\ge2$, and natural indices $k,h\ge k_0\ge50\,000\,000$.
+    Let $z\in F_{k,\ell_k}$ and $w\in F_{h,\ell_h}$ be actual
+    fine-cell indices. For every actual elementary slot $i$ of
+    the reference cell, the equality $P_{k,z}(i)=(h,w)$ holds
+    if and only if $(k,z)\ne(h,w)$ and there exists an actual
+    elementary slot $j$ of the candidate cell such that
+    \begin{align}
+        s(j)       & =s(i)+2\pmod4,       \\
+        a_i        & =b_j,\qquad b_i=a_j, \\
+        P_{h,w}(j) & =(k,z).
+    \end{align}
+    Here $s(i)$ and $s(j)$ are the counterclockwise side indices,
+    and both subdivisions use the same lower index $k_0$.
+    No matching or return selection is supplied as a premise.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_selected_opponent_contact,
+        thm:area_law_actual_elementary_side_matching,
+        thm:area_law_elementary_side_boundary_geometry,
+        thm:area_law_cell_fan_mark_vertices,
+        thm:area_law_belt_marks_closed_cell,thm:area_law_dyadic_closures}
+    The lower bound on $k_0$ gives the required late bounds on
+    both $k$ and $h$. If the candidate is selected, the contact
+    characterization gives distinctness and two-point contact.
+    Actual matching supplies the slot $j$, opposite side index
+    and reversed endpoints. These endpoints belong to the
+    closed reference square, which is convex; they are distinct.
+    Applying the contact characterization with the cells exchanged
+    shows that $j$ selects the reference cell in return.
+
+    Conversely, the reversed endpoints make the two elementary
+    segments equal. The candidate segment is nondegenerate and
+    lies in its closed square. Hence the reference segment has
+    two-point contact with that square. Distinctness and the
+    contact characterization give $P_{k,z}(i)=(h,w)$.
+\end{proof}
+
+These assertions establish reciprocal selection of actual fine-cell
+opponents. They do not assign primary identifiers or colors. Consistent
+global labels, the isolated-star construction and the complete two-family
+partition remain further obligations.

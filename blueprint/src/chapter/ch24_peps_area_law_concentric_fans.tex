@@ -1,0 +1,45 @@
+\section{Restriction of concentric dyadic fans}
+\label{sec:area_law_concentric_fans}
+
+Use the maximum norm on $\mathbb R^2$. Fix a common center
+$c\in\mathbb R^2$ and a natural exponent $\ell$, and put $r=2^\ell/2$.
+The smaller square has origin $o_{\rm S}=c-r(1,1)$, exponent $\ell$
+and cell index $(0,0)$; the larger square has origin
+$o_{\rm L}=c-2r(1,1)$, exponent $\ell+1$ and the same index.
+Choose identical optional midpoint subdivisions on corresponding sides,
+and denote the corresponding triangles by $P_e^{\rm S}$ and $P_e^{\rm L}$.
+This restriction supplies the margin in the local construction of
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially 352--363, and prop:two-families, lines 299--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Exact restriction of corresponding fan triangles]
+    \label{thm:area_law_concentric_fan_restriction}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_succ_inter_closedBall}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    For every pair of corresponding elementary bases $e$,
+    \begin{align}
+        P_e^{\rm L}\cap\overline B_\infty(c,r) & =P_e^{\rm S}.
+    \end{align}
+    The subdivisions may be arbitrary; they need only agree between
+    the two fans.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius}
+    The homothety $H(y)=c+(y-c)/2$ fixes $c$ and sends the two large
+    perimeter vertices to their corresponding small vertices. Affine
+    maps preserve convex hulls, so $H(P_e^{\rm L})=P_e^{\rm S}$.
+
+    A point of the larger triangle has the form
+    $x=c+\lambda(y-c)$, where $0\le\lambda\le1$ and $y$ lies on its
+    elementary base. The base-radius identity gives
+    $\|y-c\|_\infty=2r$, hence $\|x-c\|_\infty=2r\lambda$.
+    If $x\in\overline B_\infty(c,r)$, then $\lambda\le1/2$, and
+    $x=c+2\lambda(H(y)-c)$ belongs to the smaller triangle.
+    Conversely, halving a radial coefficient in $[0,1]$ keeps the
+    resulting point in the larger triangle and within distance $r$
+    of $c$. This proves both inclusions.
+\end{proof}
