@@ -400,7 +400,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–
 413–437. -/
 theorem birth [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
-    {L : ℝ} (hL : 0 < L)
+    {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T (F.birthEnv P),
@@ -414,7 +414,7 @@ theorem birth [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
           sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) (F.refVec Ω) -
         (F.changeOwner T Q).refVec Ω‖ ≤ L ^ (-30 : ℤ) := by
   set hTE := F.disjoint_birthEnv hTP hTH
-  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow hTE hΩ hL hI
+  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow hTE hΩ hI
   have hcomm : ∀ t, Commute (sheetBirthOp hTE σ) (rawProd F.holes t) := fun t =>
     commute_sheetBirthOp hTE σ F.outerHoles_subset_birthEnv
       (rawProd_mem_supportedOperators F.holes t)
@@ -437,7 +437,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–
 439–446. -/
 theorem death [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
-    {L : ℝ} (hL : 0 < L)
+    {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T (F.birthEnv P),
@@ -450,7 +450,7 @@ theorem death [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
       ‖act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
           sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) ((F.changeOwner T Q).refVec Ω) -
         F.refVec Ω‖ ≤ L ^ (-30 : ℤ) :=
-  F.birth (Q := Q) hTP hTH hΩ hL hI
+  F.birth (Q := Q) hTP hTH hΩ hI
 
 end Frame
 

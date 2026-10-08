@@ -463,7 +463,6 @@ renaming keeps every register at its party (`newFrame₁_owner_of_mem`).
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479; proof
 lines 481–561. -/
 theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hL : 0 < L)
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (X.tSet P) (X.eSet P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q (X.tSet P) (X.eSet P),
@@ -475,7 +474,7 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
       ‖act (X.exchangeOp P σ) (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω)) -
         vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω)‖ ≤ 4 * L ^ (-30 : ℤ) := by
   set h := X.disjoint_tSet_eSet P
-  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow h hΩ hL hI
+  obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow h hΩ hI
   refine ⟨σ, hσ, X.norm_exchangeOp_le_one P σ, X.exchangeOp_mul_encoder P σ, ?_⟩
   have hKout : ‖X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder‖ ≤ 1 :=
     l2_opNorm_kronecker_le_one X.newFrame₁.norm_encoder_le_one X.newFrame₂.norm_encoder_le_one
@@ -608,7 +607,7 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
     (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) (P : Party)
-    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ} (hL : 0 < L)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
       ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤
         L ^ (-60 : ℤ)) :
@@ -630,7 +629,7 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
           vecKron ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
             ((ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω)‖ ≤ 4 * L ^ (-30 : ℤ) := by
   set X := ofFrames F₁ F₂ Y out hout hin
-  obtain ⟨σ, hσ, hC, hK, herr⟩ := X.exchange P hΩ hL hI
+  obtain ⟨σ, hσ, hC, hK, herr⟩ := X.exchange P hΩ hI
   obtain ⟨e₁, he₁⟩ := exists_tagEquiv_of_perm F₁.disjoint (List.filter_append_perm
     out F₁.holes).symm
   obtain ⟨e₂, he₂⟩ := exists_tagEquiv_of_perm F₂.disjoint (List.filter_append_perm

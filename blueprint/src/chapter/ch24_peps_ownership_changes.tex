@@ -60,10 +60,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$ and unit vectors
     $s\in\mathcal H_T\otimes\mathcal B_T$, $s'\in\mathcal H_E\otimes\mathcal
         B_E$ with
-    \[
+    \begin{align}
         \lVert(\id_{TE}\otimes V)\Omega-s\otimes s'\rVert
         \le\sqrt{2(1-e^{-b/2})}\le\sqrt b .
-    \]
+    \end{align}
     In particular, if $b\le L^{-60}$ the error is at most $L^{-30}$. This is
     \cite[Lemma~6.4]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
     lines 352--368) on the sheet.
@@ -94,11 +94,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     let $S\colon\mathcal H_E\otimes\mathcal B_E\to\mathcal
         H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$ insert $s$ on
     $T\mathcal B_T$. The canonical map of the birth is
-    \[
+    \begin{align}
         B=\mathcal V^\dagger SS^\dagger\mathcal V
         =\mathcal V^\dagger\bigl(\ket s\bra s_{T\mathcal B_T}
         \otimes\id_{E\mathcal B_E}\bigr)\mathcal V
-    \]
+    \end{align}
     (\texttt{05-frames.tex}, equation (birth-map), lines 414--426). It is the
     effect $S^\dagger\mathcal V$, which applies $V$ on $U$ and contracts
     $T\mathcal B_T$ with $\bra s$, followed by its adjoint, which supplies
@@ -124,9 +124,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     The map $B$ is a Hermitian contraction, it acts as the identity on
     $\mathcal H_E$, so it commutes with every operator acting on a subset of
     $E$, and for every vector $\psi$
-    \[
+    \begin{align}
         \lVert(B-\id)\psi\rVert\le\lVert\mathcal V\psi-s\otimes s'\rVert .
-    \]
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -172,10 +172,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     For an encoded frame $\mathcal F$, a party $P_\circ$ and a set $T$ of raw
     sites, let $\mathcal F'$ be the frame in which the raw registers of $T$
     are owned by $Q_\circ$, with every hole, encoding and tag owner kept, and
-    \[
+    \begin{align}
         E=\{x:\text{the raw owner of }x\neq P_\circ\}\cup H^+(\mathcal F),
         \qquad U=\Lambda\setminus(T\cup E)
-    \]
+    \end{align}
     (\texttt{05-frames.tex}, equation (birth-partition), lines 400--405). If
     $T$ is owned by $P_\circ$ and avoids every outer hole footprint, then $T$
     and $E$ are disjoint, every register outside $E$ is owned by $P_\circ$ in
@@ -195,10 +195,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     the canonical map $B$ of splitting data with error at most $L^{-30}$ is a
     Hermitian contraction, acts as the identity on $E$ and on all tags,
     satisfies $(\id\otimes B)K_{\mathcal F}=K_{\mathcal F'}B$, and
-    \[
+    \begin{align}
         \lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal F'}\rVert
         \le L^{-30}.
-    \]
+    \end{align}
     Since $\mathcal F$ and $\mathcal F'$ differ only in raw owners,
     $K_{\mathcal F'}=K_{\mathcal F}$ and $\Omega_{\mathcal
             F'}=\Omega_{\mathcal F}$, so the intertwining identity says that $B$
@@ -211,6 +211,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
+        lem:peps_frame_pass_encoding,def:peps_frame_birth_partition}
     Every hole encoder acts on $H^+(\mathcal F)\subseteq E$, so it commutes
     with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
             F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
@@ -296,9 +298,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         lem:peps_frame_commute}
     With $K_{\rm in}=K_{\mathcal F_1}\otimes K_{\mathcal F_2}$ and
     $K_{\rm out}=K_{\mathcal F_1'}\otimes K_{\mathcal F_2'}$,
-    \[
+    \begin{align}
         \mathcal RK_{\rm in}=K_{\rm out}F_{Y\cap\Lambda}
-    \]
+    \end{align}
     (\texttt{05-frames.tex}, equation (exchange-intertwining), lines
     490--498).
 \end{lemma}
@@ -324,9 +326,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{lem:peps_frame_splitting}
     With the data of the splitting lemma, the buffer correction on the two
     copies of $U$ is
-    \[
+    \begin{align}
         D_U=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2},
-    \]
+    \end{align}
     where $F_{\mathcal B_T}$ swaps the two copies of $\mathcal B_T$
     (\texttt{05-frames.tex}, equation (exchange-buffer-correction), lines
     503--510). It acts as the identity on the two copies of $T\cup E$.
@@ -345,10 +347,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_buffer_correction,def:peps_frame_sheet_swap}
     With $\mathcal V=\id_{TE}\otimes V$,
-    \[
+    \begin{align}
         D_UF_T=(\mathcal V^{\otimes2})^\dagger F_{T\mathcal B_T}
         \mathcal V^{\otimes2}
-    \]
+    \end{align}
     (\texttt{05-frames.tex}, equation (exchange-net-map), lines 516--526).
 \end{lemma}
 
@@ -373,9 +375,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{lem:peps_frame_exchange_net_map}
     For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes
         s'\rVert$,
-    \[
+    \begin{align}
         \lVert D_UF_T\,\omega^{\otimes2}-\omega^{\otimes2}\rVert\le4\delta .
-    \]
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -402,10 +404,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_exchange_data,def:peps_frame_buffer_correction}
     For a party $P_\circ$ put
-    \[
+    \begin{align}
         Z=\{x:\text{the two old raw owners of }x\text{ are not both }P_\circ\}
         \cup H^+(\mathcal F_1)\cup H^+(\mathcal F_2),
-    \]
+    \end{align}
     $T=Z\cap Y$, $E=Z\setminus Y$, $U=\Lambda\setminus Z$ and $A=Y\cap U$
     (\texttt{05-frames.tex}, equations (exchange-Z) and (exchange-partition),
     lines 466--473). Every register of $U$ is raw and held by $P_\circ$ on
@@ -429,11 +431,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $I_\Omega(T:E)\le L^{-60}$, then for splitting data with error at most
     $L^{-30}$ the map $C$ is a contraction,
     $CK_{\rm in}=K_{\rm out}D_UF_T$, and
-    \[
+    \begin{align}
         \lVert C(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
         -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
         \le4L^{-30}.
-    \]
+    \end{align}
     The encoded reference vectors are not assumed normalized. This is the
     content of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the implemented
     map, with its hypotheses, when the holes of each frame are listed as those
@@ -441,6 +443,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,
+        def:peps_frame_sheet_swap,lem:peps_frame_exchange_net_map,
+        lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
+        lem:peps_frame_encoder_contraction}
     The corrections act on $U$, away from every hole of both sheets, so they
     commute with $K_{\rm out}$; with $F_AF_Y=F_T$ and the intertwining of the
     renaming, $CK_{\rm in}=K_{\rm out}D_UF_T$. The encoding $K_{\rm out}$ is a
@@ -464,14 +470,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     of the regrouped listings, and splitting data with error at most
     $L^{-30}$, such that $CG$ is a contraction,
     $CG(K_{\mathcal F_1}\otimes K_{\mathcal F_2})=K_{\rm out}D_UF_T$, and
-    \[
+    \begin{align}
         \lVert CG(\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2})
         -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
         \le4L^{-30}.
-    \]
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
+        lem:peps_frame_exchange_error}
     Encodings of distinct holes commute after the canonical identification of
     tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives $G$.
     Apply the exchange to the regrouped listings and compose with $G$, a

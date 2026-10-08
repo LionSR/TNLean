@@ -413,14 +413,13 @@ sentence). If `I_Ω(T:E) ≤ L^{-60}`, the splitting error is at most `L^{-30}`.
 
 Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 366–367. -/
 theorem exists_sheetSplitting_zpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hL : 0 < L)
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E ≤ L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T E, σ.error h Ω ≤ L ^ (-30 : ℤ) := by
   obtain ⟨σ, h₁, h₂⟩ := exists_sheetSplitting h hΩ
   refine ⟨σ, h₁.trans (h₂.trans ?_)⟩
   have hsq : L ^ (-60 : ℤ) = (L ^ (-30 : ℤ)) ^ 2 := by
-    rw [sq, ← zpow_add₀ hL.ne']; norm_num
-  rw [← Real.sqrt_sq (zpow_nonneg hL.le (-30 : ℤ)), ← hsq]
+    rw [← zpow_natCast, ← _root_.zpow_mul]; norm_num
+  rw [← Real.sqrt_sq (Even.zpow_nonneg ⟨-15, by norm_num⟩ L), ← hsq]
   exact Real.sqrt_le_sqrt hI
 
 end Splitting
