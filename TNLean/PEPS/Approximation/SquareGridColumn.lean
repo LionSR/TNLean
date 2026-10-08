@@ -131,7 +131,7 @@ theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le (D : ForwardEdge L
 /-- A nonzero contraction on the open square forces every edge dimension to be
 positive: if some `D e` were zero, the sum over virtual configurations would be
 empty. Theorem 1.1 `thm:main` asks for a nonzero PEPS
-(`00-introduction.tex`, lines 36–37), so positive bond dimensions are part of
+(`00-introduction.tex`, lines 50–51), so positive bond dimensions are part of
 its conclusion and need not be assumed of the operator network. -/
 theorem pos_of_contractPEPS_ne_zero (D : ForwardEdge L → ℕ)
     (A : (v : Vertex L) → LocalTensor q D v) (h : contractPEPS D A ≠ 0)
