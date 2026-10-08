@@ -19,5 +19,6 @@ import TNLean.Spectral.PhysicalCorrelationGauge
 import TNLean.Spectral.PhysicalCorrelationJordan
 import TNLean.Spectral.PrimitiveOverlap
 import TNLean.Spectral.QuantitativeGap
+import TNLean.Spectral.ThermalPurityGap
 import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT

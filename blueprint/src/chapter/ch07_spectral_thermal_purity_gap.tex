@@ -1,0 +1,129 @@
+\section{A two-purity criterion for a uniform spectral gap}
+
+This section follows the note \emph{A thermal-MPO derivation of the spin-1 gap
+bound} (dated October 7, 2026). For each length~$L$ let $H_L$ be a Hamiltonian
+on a finite-dimensional space with eigenvalues $E_0(L)\le E_1(L)\le\cdots$,
+counted with multiplicity, and spectral gap $\Delta_L=E_1(L)-E_0(L)$.
+
+\begin{definition}[Thermal and spatial purities]\label{def:thermal_spatial_purity}
+    \lean{ThermalPurityGap.partitionFunction, ThermalPurityGap.thermalPurity,
+        ThermalPurityGap.spatialPurity}
+    \leanok
+    For $\beta>0$ put $Z_L(\beta)=\operatorname{Tr}e^{-\beta H_L}
+        =\sum_m e^{-\beta E_m(L)}$. The thermal and spatial purities are
+    \begin{align}
+        P_\tau(L,\beta) & =\frac{Z_L(2\beta)}{Z_L(\beta)^2},
+                        &
+        P_s(n,\beta)    & =\frac{Z_{2n}(\beta)}{Z_n(\beta)^2}.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Moment form]\label{def:spatial_moment_form}
+    \lean{ThermalPurityGap.HasSpatialMomentForm}
+    \leanok
+    \uses{def:thermal_spatial_purity}
+    The partition functions have the moment form above length $n_0$ if for
+    every $\beta>0$ there are numbers $\lambda_i(\beta)$ with
+    $Z_L(\beta)=\sum_i|\lambda_i(\beta)|^L$ for every even $L\ge n_0$.
+\end{definition}
+
+\begin{lemma}[Squaring]\label{lem:purity_squaring}
+    \lean{ThermalPurityGap.one_sub_squaredPurity_le_squaringDefect}
+    \leanok
+    Let $p_i\ge0$ with $\sum_ip_i=1$ and purity $P=\sum_ip_i^2$. The squared
+    spectrum $p_i^2/P$ has purity $P'$ with
+    $1-P'\le f(1-P)$, where $f(z)=z^2/(2(1-z)^2)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Writing $1-P=2\sum_{i<k}p_ip_k$ and $1-P'=2\sum_{i<k}p_i^2p_k^2/P^2$, the
+    nonnegativity of the cross terms gives
+    $(1-P)^2\ge4\sum_{i<k}p_i^2p_k^2=2P^2(1-P')$.
+\end{proof}
+
+\begin{lemma}[Coupling]\label{lem:purity_coupling}
+    \lean{ThermalPurityGap.spatialPurity_two_mul, ThermalPurityGap.thermalPurity_four_mul}
+    \leanok
+    \uses{def:thermal_spatial_purity}
+    For every $n$ and $\beta>0$,
+    \begin{align}
+        P_s(n,2\beta)     & =\frac{P_s(n,\beta)^2P_\tau(2n,\beta)}{P_\tau(n,\beta)^2},
+                          &
+        P_\tau(4n,\beta) & =\frac{P_\tau(2n,\beta)^2P_s(2n,2\beta)}{P_s(2n,\beta)^2}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both sides of each identity reduce to the same quotient of partition
+    functions.
+\end{proof}
+
+\begin{lemma}[Purity bounds the excited weight]\label{lem:purity_gap_bound}
+    \lean{ThermalPurityGap.exp_neg_mul_sub_le_of_isMin}
+    \leanok
+    \uses{def:thermal_spatial_purity}
+    For $\beta\ge0$, $e^{-\beta\Delta_L}\le(1-P_\tau(L,\beta))/P_\tau(L,\beta)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    With Gibbs weights $w_0\ge w_1\ge\cdots$ one has
+    $P_\tau=\sum_mw_m^2\le w_0$ and $w_1\le1-w_0$, so
+    $e^{-\beta\Delta_L}=w_1/w_0\le(1-w_0)/w_0\le(1-P_\tau)/P_\tau$.
+\end{proof}
+
+\begin{lemma}[Doubling]\label{lem:purity_doubling}
+    \lean{ThermalPurityGap.doubling}
+    \leanok
+    \uses{def:spatial_moment_form, lem:purity_squaring, lem:purity_coupling}
+    Assume the moment form, let $n\ge n_0$ be even and $0\le\varepsilon\le1/100$.
+    If $P_s(n,\beta),P_\tau(2n,\beta)\ge1-\varepsilon$, then
+    $P_s(2n,2\beta),P_\tau(4n,2\beta)\ge1-5\varepsilon^2$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The first coupling identity and $P_\tau(n,\beta)\le1$ give
+    $P_s(n,2\beta)\ge(1-\varepsilon)^3$; squaring the spatial spectrum and the
+    squaring lemma give $P_s(2n,2\beta)\ge1-f(1-(1-\varepsilon)^3)\ge1-5\varepsilon^2$.
+    The second coupling identity and $P_s(2n,\beta)\le1$ give
+    $P_\tau(4n,\beta)\ge(1-\varepsilon)^3$, and squaring the Gibbs spectrum
+    gives the thermal bound.
+\end{proof}
+
+\begin{proposition}[Two-purity criterion]\label{prop:two_purity_criterion}
+    \lean{ThermalPurityGap.gapGT_of_purities}
+    \leanok
+    \uses{lem:purity_doubling, lem:purity_gap_bound}
+    Assume the moment form above an even length $n_0>0$, and let $\beta_0>0$
+    with $P_s(n_0,\beta_0),P_\tau(2n_0,\beta_0)\ge0.99$. Then
+    $\Delta_L>(\log20)/\beta_0$ for every even $L\ge n_0$.
+\end{proposition}
+
+\begin{proof}
+    \leanok
+    Iterating the doubling lemma from $(n_0,\beta_0)$ gives
+    $P_s(n_j,\beta_j),P_\tau(2n_j,\beta_j)\ge1-\varepsilon_j$ with
+    $n_j=n_02^j$, $\beta_j=\beta_02^j$, $\varepsilon_j=20^{-2^j}/5$. For
+    $n_j\le L\le2n_j$, monotonicity of $\ell^p$ norms gives
+    $P_\tau(L,\beta_j)\ge1-3\varepsilon_j$, and the purity bound gives
+    $e^{-\beta_j\Delta_L}<20^{-2^j}$.
+\end{proof}
+
+\begin{theorem}[Spin-one Heisenberg chain]\label{thm:spin_one_heisenberg_gap}
+    \uses{prop:two_purity_criterion}
+    For every even $L\ge2304$, the periodic spin-one antiferromagnetic
+    Heisenberg chain $H_L=\sum_{j=1}^L\mathbf S_j\cdot\mathbf S_{j+1}$ has
+    spectral gap $\Delta_L>(\log20)/784$.
+\end{theorem}
+
+\begin{proof}
+    The note obtains the moment form from a continuous-time thermal matrix
+    product operator whose spatial transfer operator is self-adjoint, and the
+    starting estimates $P_s(2304,784),P_\tau(4608,784)\ge0.99$ from certified
+    finite-size computations in a separate manuscript. Neither input is
+    formalized; given both, the theorem is the two-purity criterion with
+    $n_0=2304$ and $\beta_0=784$.
+\end{proof}
