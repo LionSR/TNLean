@@ -1514,9 +1514,14 @@ The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
 from `TNLean/MPS/`. Its local labels are `Fin d`. The notions that involve no
 geometry (operators acting on a set of sites, expectations, product vectors,
 placed operators, permutations of configurations and of sites, onsite
-channels) are stated for any finite type of sites `ι`; layers, circuits,
-neighbourhoods and light cones use the sites `Fin N`, closed into a ring by
-addition modulo `N`. The blueprint chapter is
+channels) are stated for any finite type of sites `ι`. Layers, circuits and
+light cones are stated for a bond geometry `bond : β → Set ι` on such a type
+(`TNLean/Circuit/Geometry.lean`), with the ring `ringBond k = {k, k + 1}` on
+`Fin N` (addition modulo `N`), the open chain `openBond`, and the edges of a
+simple graph `edgeBond G` as instances; the ring-facing names (`Layer`,
+`IsLocalCircuitOfDepth`, `IsPreparedInDepth`, `IsCircuitOn`, `ChannelLayer`,
+`IsChannelPreparedInDepth`) abbreviate the general notions for `ringBond`.
+Measurement protocols and teleportation remain stated on the ring. The blueprint chapter is
 `ch33_local_quantum_circuits.tex`; the preparation of matrix product states
 in `MPS/Preparation/` uses it.
 
@@ -1546,26 +1551,50 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** membership says nothing about unitarity; for `S = ∅` the
   submodule consists of the scalar multiples of the identity.
 
-#### `QuantumCircuit.Layer`
+#### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
 
-- **Declaration:** `structure QuantumCircuit.Layer (d N : ℕ) [NeZero N]`, with
-  fields `bonds : Finset (Fin N)` (the left sites `k` of the pairs
-  `{k, k + 1}`), `gate : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ`,
+- **Declarations:**
+  `QuantumCircuit.bondNeighbourhood {ι β : Type*} (bond : β → Set ι) (X : Set ι) : Set ι`
+  and `QuantumCircuit.lightCone (bond : β → Set ι) (X : Set ι) : ℕ → Set ι`.
+- **Defined in:** `TNLean/Circuit/Geometry.lean`.
+- **Meaning:** `X` together with every bond meeting `X`, and its `r`-fold
+  iterate.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
+  light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
+  LOCC" (gates on nearest-neighbour pairs of a lattice) and the graph
+  distance before Proposition `propQCA2`.
+- **Sanctioned bridges:** `QuantumCircuit.lightCone_ringBond` (on the ring,
+  the light cone of radius `r` is `neighbourhood X r`, the sites within ring
+  distance `r`, for every `N`), `QuantumCircuit.lightCone_openBond_subset`,
+  `QuantumCircuit.lightCone_edgeBond_subset` and
+  `QuantumCircuit.lightCone_edgeBond_subset_dist` (graph distance), with the
+  disjointness criteria `disjoint_lightCone_ringBond_of_isSeparatedBy`,
+  `disjoint_lightCone_openBond`, `disjoint_lightCone_edgeBond` and
+  `disjoint_lightCone_edgeBond_of_dist`.
+- **Caveat:** for the open chain and graphs only the inclusion in the metric
+  ball is proved; on the ring the equality holds.
+
+#### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
+
+- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
+  with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and lies in
-  `supportedOperators d (bond k)`, and that the pairs `bond k` of distinct
-  bonds are disjoint.
+  `supportedOperators d (bond b)`, and that the bonds carrying gates are
+  pairwise disjoint; `QuantumCircuit.Layer (d N : ℕ) [NeZero N]` abbreviates
+  `BondLayer d ringBond` on `Fin N`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** one layer of a local circuit on the ring of `N` sites:
-  unitaries on pairwise disjoint pairs of neighbouring sites. Its operator
-  `Layer.op` is the product of its gates, which commute.
+- **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
+  bonds; on the ring, pairs of neighbouring sites. Its operator
+  `BondLayer.op` is the product of its gates, which commute.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
-  quantum circuits").
-- **Sanctioned bridges:** `Layer.op_mem_unitary`,
-  `Layer.conj_op_mem_supportedOperators` (the light cone of one layer), and
-  `Layer.adjoint` with `Layer.adjoint_op` (the layer of the adjoint gates
-  implements the adjoint).
-- **Caveat:** the pairs are taken modulo `N`, so for `N ≤ 2` they degenerate;
-  a circuit on the open chain is one whose bonds avoid the pair `{N - 1, 0}`.
+  quantum circuits"); arXiv:2103.13367, main text, paragraph "Quantum circuits
+  and LOCC".
+- **Sanctioned bridges:** `BondLayer.op_mem_unitary`,
+  `BondLayer.conj_op_mem_supportedOperators` (the light cone of one layer),
+  and `BondLayer.adjoint` with `BondLayer.adjoint_op` (the layer of the adjoint
+  gates implements the adjoint).
+- **Caveat:** on the ring the pairs are taken modulo `N`, so for `N ≤ 2` they
+  degenerate; the open chain is the separate geometry `openBond`.
 
 #### `QuantumCircuit.IsLocalCircuitOfDepth`
 
@@ -1576,13 +1605,16 @@ in `MPS/Preparation/` uses it.
   head of the list applied first.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits").
-- **Sanctioned bridges:** `IsLocalCircuitOfDepth.mem_unitary`,
-  `IsLocalCircuitOfDepth.star`, `IsLocalCircuitOfDepth.mul` (depths add),
-  `QuantumCircuit.conj_circuitOp_mem_supportedOperators` (the light cone of
-  radius `T`), `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site
-  unitaries in depth `2`), and `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`.
+- **Sanctioned bridges:** it abbreviates `IsBondCircuitOfDepth ringBond U T`;
+  `IsBondCircuitOfDepth.mem_unitary`, `IsBondCircuitOfDepth.star`,
+  `IsBondCircuitOfDepth.mul` (depths add),
+  `IsBondCircuitOfDepth.conj_mem_supportedOperators` (the light cone of radius
+  `T` for any bond geometry), `QuantumCircuit.conj_circuitOp_mem_supportedOperators`
+  (on the ring, within ring distance `T`),
+  `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site unitaries in
+  depth `2`), and `QuantumCircuit.IsBondCircuitOn.isBondCircuitOfDepth`.
 - **Caveat:** the depth is exact in the definition; a smaller depth is padded
-  with empty layers, as in `IsCircuitOn.mono`.
+  with empty layers, as in `IsBondCircuitOn.mono`.
 
 #### `QuantumCircuit.IsPreparedInDepth`
 
@@ -1593,10 +1625,12 @@ in `MPS/Preparation/` uses it.
   and a product vector `productVector v = ⊗ᵢ vᵢ`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
   obtained from depth-`T` local quantum circuits applied to product states").
-- **Sanctioned bridges:** `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
+- **Sanctioned bridges:** it abbreviates `IsBondPreparedInDepth ringBond T ψ`;
+  `IsBondPreparedInDepth.expect_mul_eq` (vanishing connected correlations of
+  operators on sets with disjoint light cones, for any bond geometry),
+  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
   and `QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth`
-  (vanishing connected correlations of operators at ring distance larger than
-  `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
+  (on the ring, operators at ring distance larger than `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
   (a nonzero prepared vector is a multiple of a local circuit of depth `T + 2`
   applied to `|0⋯0⟩`), and
   `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`.
@@ -1625,39 +1659,44 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
-#### `QuantumCircuit.Layer.IsIn`
+#### `QuantumCircuit.BondLayer.IsIn`
 
 - **Declaration:**
-  `QuantumCircuit.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
+  `QuantumCircuit.BondLayer.IsIn (L : BondLayer d bond) (R : Set ι) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** every gate of the layer `L` acts on a bond `{k, k+1}` contained
-  in the set of sites `R`.
+- **Meaning:** every gate of the layer `L` acts on a bond contained in the set
+  of sites `R`.
 - **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
   the block unitaries act in parallel on disjoint blocks of sites; the source
   has no separate name for this support condition.
-- **Sanctioned bridges:** `Layer.IsIn.mono` enlarges `R`;
-  `Layer.op_mem_supportedOperators` places the layer operator among the
-  operators supported on `R`; `Layer.union` and `Layer.union_op` merge layers
-  acting in disjoint sets; `Layer.empty_isIn` covers the empty layer.
+- **Sanctioned bridges:** `BondLayer.IsIn.mono` enlarges `R`;
+  `BondLayer.op_mem_supportedOperators` places the layer operator among the
+  operators supported on `R`; `BondLayer.union` and `BondLayer.union_op`
+  merge layers acting in disjoint sets; `BondLayer.empty_isIn` covers the
+  empty layer.
 - **Caveat:** the condition is on the bonds of the layer, not on its operator;
-  it is the per-layer ingredient of `IsCircuitOn`.
+  it is the per-layer ingredient of `IsBondCircuitOn`. `BondLayer.union_op`
+  needs every bond to be nonempty, as the ring bonds are.
 
-#### `QuantumCircuit.IsCircuitOn`
+#### `QuantumCircuit.IsBondCircuitOn` and `QuantumCircuit.IsCircuitOn`
 
-- **Declaration:**
+- **Declarations:**
+  `QuantumCircuit.IsBondCircuitOn (bond : β → Set ι) (R : Set ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fin d) ℂ) : Prop`
+  and its ring abbreviation
   `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
-  each of whose gates acts inside the set of sites `R`.
+- **Meaning:** `U` is the operator of a list of exactly `T` layers, each of
+  whose gates acts inside the set of sites `R`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits"), restricted to gates inside `R` as in the parallel
   application of block unitaries in the paragraph "The sequential-RG circuit".
-- **Sanctioned bridges:** `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`
-  forgets the support; `IsCircuitOn.mul` composes in series (depths add), and
-  `IsCircuitOn.par` runs two circuits of the same depth on disjoint sets of
+- **Sanctioned bridges:** `IsBondCircuitOn.isBondCircuitOfDepth` forgets the
+  support; `IsBondCircuitOn.mul` composes in series (depths add), and
+  `IsBondCircuitOn.par` (for nonempty bonds) and its ring form
+  `IsCircuitOn.par` run two circuits of the same depth on disjoint sets of
   sites in parallel.
-- **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
-  with empty layers.
+- **Caveat:** the depth is exact in the definition; `IsBondCircuitOn.mono`
+  pads it with empty layers.
 
 #### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
@@ -2095,6 +2134,28 @@ in `MPS/Preparation/` uses it.
   `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
   dynamics onto graph balls under a sphere-growth hypothesis).
 - **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+
+#### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
+  constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
+  from QICLean and their ball expectations
+  `QuantumCircuit.siteExpectation q (QuantumCircuit.graphBall G aᵢ l) kᵢ`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
+- **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
+  centered at the ground vector; the positive contractions annihilate `Ω`, their sum
+  dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
+  `e^{-c l^{p/(p+1)}}`.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Proposition 4.3 (`prop:positive`) and Lemma 4.4 (`lem:quasilocal-roots`),
+  `03-quasilocal.tex`, lines 220–389.
+- **Sanctioned bridges:** `SpectralFilter.positive_replacement`,
+  `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` (QICLean),
+  `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
+- **Caveat:** stated for a general finite graph with the support, multiplicity and
+  sphere-growth hypotheses of the propagation estimate; the specialization to the induced
+  lattice domains is a separate step.
 
 ## Inhomogeneous short-range correlated chains
 

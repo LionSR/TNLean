@@ -18,43 +18,6 @@ PEPS approximation manuscript, `03-patches.tex`, lines 563–603 at revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-/-!
-Source: September 24, 2026, 03-patches.tex.
-https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex
-sec:patches, prop:patch, eq:patch-cylinder-projection; independently formalized;
-no upstream Lean proof text reused.
-Manuscript commit: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript passage: lines 563–603.
-
-Provenance-ID: orthogonalization8767-tnlean.peps.dependentregioncylinder
-Downstream declaration: TNLean.PEPS.dependentRegionCylinder
-
-Provenance-ID: orthogonalization8767-tnlean.peps.mem_dependentregioncylinder
-Downstream declaration: TNLean.PEPS.mem_dependentRegionCylinder
-
-Provenance-ID: orthogonalization8767-tnlean.peps.range_dependentregionoperatorlift
-Downstream declaration: TNLean.PEPS.range_dependentRegionOperatorLift
-
-Provenance-ID: orthogonalization8767-tnlean.peps.coordinaterangeprojector_dependentregioncylinder
-Downstream declaration: TNLean.PEPS.coordinateRangeProjector_dependentRegionCylinder
-
-Provenance-ID: orthogonalization8767-tnlean.peps.dependentregioncylinder_bot
-Downstream declaration: TNLean.PEPS.dependentRegionCylinder_bot
-
-Provenance-ID: orthogonalization8767-tnlean.peps.dependentregioncylinder_sup
-Downstream declaration: TNLean.PEPS.dependentRegionCylinder_sup
-
-Provenance-ID: orthogonalization8767-tnlean.peps.dependentregioncylinder_isup
-Downstream declaration: TNLean.PEPS.dependentRegionCylinder_iSup
-
-Provenance-ID: orthogonalization8767-tnlean.peps.dependentregioncylinder_subregion
-Downstream declaration: TNLean.PEPS.dependentRegionCylinder_subregion
-
-Provenance-ID: orthogonalization8767-tnlean.peps.dependentregioncylinder_map
-Downstream declaration: TNLean.PEPS.dependentRegionCylinder_map
-
--/
-
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

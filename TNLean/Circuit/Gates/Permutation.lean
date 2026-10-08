@@ -147,8 +147,8 @@ variable {N : ℕ} [NeZero N]
 
 /-- The layer of permutation gates `τ k` on the pairwise disjoint neighbouring pairs
 `{k, k + 1}`, `k ∈ K`. -/
-noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint bond)
-    (τ : Fin N → Equiv.Perm (Fin N → Fin d)) (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
+noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond)
+    (τ : Fin N → Equiv.Perm (Fin N → Fin d)) (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (τ k)) :
     Layer d N where
   bonds := K
   gate k := (τ k).permMatrix ℂ
@@ -157,24 +157,24 @@ noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).Pairwis
   pairwiseDisjoint := hK
 
 private theorem exists_partialOp_permLayer (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (τ : Fin N → Equiv.Perm (Fin N → Fin d))
-    (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) (τ : Fin N → Equiv.Perm (Fin N → Fin d))
+    (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (τ k)) :
     ∀ (s : Finset (Fin N)) (hs : s ⊆ K), ∃ P : Equiv.Perm (Fin N → Fin d),
       (permLayer K hK τ hτ).partialOp s hs = P.permMatrix ℂ ∧
-      (∀ x, ∀ k ∈ s, ∀ i ∈ bond k, P x i = τ k x i) ∧
-      ∀ x i, (∀ k ∈ s, i ∉ bond k) → P x i = x i := by
+      (∀ x, ∀ k ∈ s, ∀ i ∈ ringBond k, P x i = τ k x i) ∧
+      ∀ x i, (∀ k ∈ s, i ∉ ringBond k) → P x i = x i := by
   classical
   intro s
   induction s using Finset.induction_on with
   | empty =>
     intro hs
-    exact ⟨1, by simp [Layer.partialOp], by simp, fun _ _ _ => rfl⟩
+    exact ⟨1, by simp [BondLayer.partialOp], by simp, fun _ _ _ => rfl⟩
   | insert a s ha ih =>
     intro hs
     have hsK : s ⊆ K := (Finset.subset_insert a s).trans hs
     have haK : a ∈ K := hs (Finset.mem_insert_self a s)
     obtain ⟨P, hP, h1, h2⟩ := ih hsK
-    have hdisj : ∀ k ∈ s, ∀ i ∈ bond a, i ∉ bond k := fun k hk i hia hik => by
+    have hdisj : ∀ k ∈ s, ∀ i ∈ ringBond a, i ∉ ringBond k := fun k hk i hia hik => by
       have hne : a ≠ k := fun h => ha (h ▸ hk)
       exact Set.disjoint_left.mp (hK haK (hsK hk) hne) hia hik
     refine ⟨P * τ a, ?_, ?_, ?_⟩
@@ -196,12 +196,12 @@ private theorem exists_partialOp_permLayer (K : Finset (Fin N))
 disjoint pairs `{k, k + 1}`, `k ∈ K`, acts on vectors as `v ↦ v ∘ P`, where `P` agrees with
 `τ k` on the pair `{k, k + 1}` and with the identity on the sites outside all pairs. -/
 theorem exists_permLayer_op_mulVec (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (τ : Fin N → Equiv.Perm (Fin N → Fin d))
-    (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) (τ : Fin N → Equiv.Perm (Fin N → Fin d))
+    (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (τ k)) :
     ∃ P : (Fin N → Fin d) → (Fin N → Fin d),
     (∀ v : (Fin N → Fin d) → ℂ, (permLayer K hK τ hτ).op *ᵥ v = v ∘ P) ∧
-      (∀ x, ∀ k ∈ K, ∀ i ∈ bond k, P x i = τ k x i) ∧
-      ∀ x i, (∀ k ∈ K, i ∉ bond k) → P x i = x i := by
+      (∀ x, ∀ k ∈ K, ∀ i ∈ ringBond k, P x i = τ k x i) ∧
+      ∀ x i, (∀ k ∈ K, i ∉ ringBond k) → P x i = x i := by
   obtain ⟨P, hP, h1, h2⟩ := exists_partialOp_permLayer K hK τ hτ K subset_rfl
   refine ⟨P, fun v => ?_, h1, h2⟩
   change (permLayer K hK τ hτ).partialOp K subset_rfl *ᵥ v = _
@@ -213,18 +213,18 @@ variable [NeZero d]
 pair, the layer acts as `v ↦ v ∘ P`, where `P` adds `f k x` at each site `t k` and leaves the
 other sites unchanged. -/
 theorem exists_shiftLayer_op_mulVec (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (t : Fin N → Fin N)
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) (t : Fin N → Fin N)
     (f : Fin N → (Fin N → Fin d) → Fin d) (hf : ∀ k x c, f k (Function.update x (t k) c) = f k x)
-    (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (shiftPerm (t k) (f k) (hf k))) :
+    (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (shiftPerm (t k) (f k) (hf k))) :
     ∃ P : (Fin N → Fin d) → (Fin N → Fin d),
       (∀ v : (Fin N → Fin d) → ℂ,
         (permLayer K hK (fun k => shiftPerm (t k) (f k) (hf k)) hτ).op *ᵥ v = v ∘ P) ∧
-      (∀ x, ∀ k ∈ K, t k ∈ bond k → P x (t k) = x (t k) + f k x) ∧
+      (∀ x, ∀ k ∈ K, t k ∈ ringBond k → P x (t k) = x (t k) + f k x) ∧
       ∀ x i, (∀ k ∈ K, t k ≠ i) → P x i = x i := by
   obtain ⟨P, hv, h1, h2⟩ := exists_permLayer_op_mulVec K hK _ hτ
   refine ⟨P, hv, fun x k hk ht => ?_, fun x i hi => ?_⟩
   · rw [h1 x k hk _ ht, shiftPerm_apply, Function.update_self]
-  · by_cases hb : ∃ k ∈ K, i ∈ bond k
+  · by_cases hb : ∃ k ∈ K, i ∈ ringBond k
     · obtain ⟨k, hk, hik⟩ := hb
       rw [h1 x k hk i hik, shiftPerm_apply, Function.update_of_ne (hi k hk).symm]
     · exact h2 x i fun k hk hik => hb ⟨k, hk, hik⟩
