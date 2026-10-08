@@ -24,7 +24,7 @@ reused.
 
 noncomputable section
 
-open scoped ComplexConjugate TensorProduct Matrix Matrix.Norms.L2Operator
+open scoped TensorProduct Matrix Matrix.Norms.L2Operator
 open ContinuousLinearMap
 
 namespace TNLean.PEPS.PairEffect.Word
