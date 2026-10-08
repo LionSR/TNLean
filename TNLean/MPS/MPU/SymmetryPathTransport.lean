@@ -20,6 +20,16 @@ in one fixed ambient virtual dimension, as in the current strict-equivalence
 definition. They do not compare unequal raw virtual dimensions. See
 `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
+**Scope restriction (no identity ancillas):** The equivalence comparisons
+`strictlyEquivalentUnderSymmetry_iff_ketLeftMul` and
+`exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul` compare
+strict equivalence, before and after common positive blocking, without
+adjoining identity ancillas. The source definition of equivalence under a
+symmetry also permits identity ancillas (arXiv:1703.09188, Definition
+`def:equivalent-symmetry`, lines 1356--1366), and transporting the symmetry
+action to the enlarged physical dimension is not determined by the source.
+See `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085.
 -/
 

@@ -17,8 +17,11 @@ ancillas are introduced. These statements are distinct from unrestricted
 stabilized equivalence. See `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`
 and `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
 
-The one-sided transformation is the correction recorded in
-`docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
+**Local fix (one-sided swap):** equation `threeMPU2` uses one-sided
+multiplication \(\widetilde U_N=S_NU_N\), while the conjugation paragraph in
+the printed proof of `lemma:sym-trafo-swap` displays two-sided multiplication.
+The blocked comparisons here use the one-sided transformation of the defining
+equation. See `docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085.
 -/
 
