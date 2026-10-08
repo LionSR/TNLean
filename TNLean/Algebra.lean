@@ -174,6 +174,7 @@ import TNLean.Algebra.SymmetryParity
 import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TensorProductContraction
+import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
