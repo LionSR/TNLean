@@ -17,6 +17,15 @@ identification of the output memory with physical output and discarded memory.
 
 /-!
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
+eq:compression-exterior-contraction; Theorem 5.2, lines 409–450.
+Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+Independently formalized; no upstream Lean proof text reused.
+Provenance-ID: 8769-source-resource-physicaloutputcontraction-repr
+TNLean.PEPS.PairEffect.Word.repr_effectMap
+-/
+
+/-!
+Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
@@ -256,7 +265,7 @@ end TNLean.PEPS.PairEffect.Layout
 namespace TNLean.PEPS.PairEffect.Word
 
 /-- Partial inner product extracts the corresponding tensor coordinate. -/
-private theorem repr_effectMap {X d D : Type} [Fintype X] [Fintype d]
+theorem repr_effectMap {X d D : Type} [Fintype X] [Fintype d]
     [NormedAddCommGroup D] [InnerProductSpace ℂ D]
     (bD : OrthonormalBasis d ℂ D) (x : X) (z : EuclideanSpace ℂ X ⊗[ℂ] D) (k : d) :
     bD.repr (effectMap (EuclideanSpace.basisFun X ℂ x) D z) k =

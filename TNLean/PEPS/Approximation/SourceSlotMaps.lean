@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
+import TNLean.PEPS.Approximation.WordEvaluationTransport
 
 /-!
 # Local maps on all source slots
@@ -83,15 +84,6 @@ theorem Word.mapSourceSlots_spec (R : SourceInventory P)
       List.nil_append]
     exact ⟨⟨ha, hta⟩, trivial⟩
 
-/-- Canonical layout identifications preserve evaluation on the corresponding vector. -/
-private theorem eval_castLayouts_apply_heq {a b a' b' : Layout P}
-    (w : Word a b) (hi : a = a') (ho : b = b')
-    {x : Mem a'} {y : Mem a} (hxy : HEq x y) :
-    HEq ((w.castLayouts hi ho).eval x) (w.eval y) := by
-  cases hi
-  cases ho
-  exact heq_of_eq (congrArg w.eval (eq_of_heq hxy))
-
 /-- An operation on spectator registers commutes with preparing the pair in front. -/
 private theorem frame_pair_source (r : PairSource P) (U V : HSpace)
     (η : U ⊗[ℂ] V) {a b : Layout P} (w : Word a b) (x : Mem a) :
@@ -105,7 +97,7 @@ private theorem prepareSlots_heq_prepare (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
     (ℓ : Layout P) (x : Mem ℓ) :
     HEq ((prepareSlots R U V η ℓ).eval x) (((ofSlots R U V η).prepare ℓ).eval x) := by
-  exact eval_castLayouts_apply_heq _ _ _ HEq.rfl
+  exact Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl
 
 /-- Equal spectator layouts identify the vectors obtained by adjoining one source. -/
 private theorem source_apply_heq (r : PairSource P) (U V : HSpace) (η : U ⊗[ℂ] V)
@@ -147,7 +139,7 @@ theorem Word.eval_mapSourceSlots_prepareSlots (R : SourceInventory P)
     apply ContinuousLinearMap.ext
     intro x
     apply eq_of_heq
-    refine (eval_castLayouts_apply_heq
+    refine (Word.eval_castLayouts_apply_heq
       (Word.comp (Word.mapPair r.left r.right (f 0) (g 0)
         (slotLayout R (fun i ↦ U i.succ) (fun i ↦ V i.succ) ++ ℓ))
         (Word.frame ⟨r.left, U' 0⟩ (Word.frame ⟨r.right, V' 0⟩
