@@ -1,0 +1,147 @@
+{
+  "source_parent": "a1be4cc9ba5a7e8f20bd24267b5c4cff77563a45",
+  "parent_source_revision": "1213a68ed511bf20c357b72f4ac5a03078b7c677",
+  "preserved_artifacts": [
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS.olean",
+      "sha256": "c6f79e4a1aaa87e1c579c4c53a2a14562f3e07693b021b1c93d85f7829c8a886"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation.olean",
+      "sha256": "b4d184e1b08f0d60b82683ed9667f5fba203be92fba99ff471af4913754f1a62"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectReplacementPolynomial.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectReplacementPolynomial.olean",
+      "sha256": "683003727425788ed60709b80d30f328e41809158ab6b34682046190cd94ce4c"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateCircuitResources.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateCircuitResources.olean",
+      "sha256": "c97550504c3407eeb44e5ff269699f599aad8cb2e27d952f033f6b289993f3d2"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ActualSourcePolynomial.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ActualSourcePolynomial.olean",
+      "sha256": "f2bb94d06e751c4b02b505455dd2d594f6a7035dc032f49a84853c5b6251326e"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateCircuitRealAccuracy.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateCircuitRealAccuracy.olean",
+      "sha256": "394c864ae911879538290dcd876b6f9132be84f1d630d437d3b5e26dcad5e529"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectReplacementCoefficients.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectReplacementCoefficients.olean",
+      "sha256": "1881e26aa383461d63e185961b3f9343b12aee433f771d428ed2eec840ee34b6"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectReplacementExpansion.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectReplacementExpansion.olean",
+      "sha256": "31255034d088c295340151d8ec1c964fa608bc2b8cd74502792bdb8f10aa5c46"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectCircuitResources.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectCircuitResources.olean",
+      "sha256": "731058ee10b35663954726589c64f038f592154c944626f0c79b4cdffc6207f0"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/SourceOnlyReduction.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/SourceOnlyReduction.olean",
+      "sha256": "8885051707ace4dc8e5a81eb3e8df7ea68c24d27af2a279aeb4c8ce42d4d85e8"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateGateEvaluation.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateGateEvaluation.olean",
+      "sha256": "c9aa06564c8b7141ace17089cba4c0b08886685c95577c998d35b8a8cdd81b99"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateGateRescaling.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateGateRescaling.olean",
+      "sha256": "6478cf6e5c765936aa4a4a835fea4ebb8df0e1cd4880ac8781ddca0ce3fc32b5"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ActualSourceSampling.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ActualSourceSampling.olean",
+      "sha256": "bde4db6f639c4fc66d1150a2bf153e7731bef3104201cba51202e102215d6888"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/PhysicalFirstReadout.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/PhysicalFirstReadout.olean",
+      "sha256": "0ff19ec15eafea7e2f072bda1694ebd7598cfa6dd3e10746a0a3ad10c9129a2d"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateCircuitError.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateCircuitError.olean",
+      "sha256": "6f55b6708b137b30d13072c62e45028d338a72efae3225fad6a1a090a8b8b92a"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ActualSourceLifetimeBound.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ActualSourceLifetimeBound.olean",
+      "sha256": "f2bdf0593162378e29fde3b952184282710c68603b791c4cb43932b098bc16a2"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectCircuitError.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectCircuitError.olean",
+      "sha256": "949f21944d33ae48f9c9d2bd19eee7f4fdb374dc1ba387c6f221e61739dde064"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateCircuitPolynomial.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateCircuitPolynomial.olean",
+      "sha256": "094c781dc7549356a65d826b7da34e5c2a29c062c95d9b902b0ae27d0772fec3"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/PhysicalFirstExchange.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/PhysicalFirstExchange.olean",
+      "sha256": "03af559d6f5b2c0fe1fcf74056a2100512091708d1b302726d0aaa52f131ef7b"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectReplacementSources.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectReplacementSources.olean",
+      "sha256": "87c788e19c2537645b88d17202202dfbdda82dfef7c957ad415e903c42007b51"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/EffectCircuitDensity.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/EffectCircuitDensity.olean",
+      "sha256": "e829cd6a3ab542a9ad74c1aa2feb844177878f6da7f7a1ee51b9b1ae86696818"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/AuxiliaryRegisterFiniteness.olean",
+      "sha256": "970def98e5cd8ee5eee8faef0a1cee90f5ae09fea8841884c09b4bf4a78da0fc"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/FamilySourceOnlyReduction.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/FamilySourceOnlyReduction.olean",
+      "sha256": "1973d16f7d35c9d67f7c8dd14a5bfd13bb0cddc1da72618b74bf9d4993ddacaa"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/SourceCircuitResourceBounds.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/SourceCircuitResourceBounds.olean",
+      "sha256": "8743c8ecd6cc3074d17befb68fd578b57ccfb7771fe6e44a5311377ff26dff03"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/ApproximateCircuitDensity.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/ApproximateCircuitDensity.olean",
+      "sha256": "62e4b89e946022ad21cbce6d144fad55e159f55e06b551bd929b6a62f252498b"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/GateCoefficientBounds.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/GateCoefficientBounds.olean",
+      "sha256": "3396b286de2d0b04eacac9859b6c9e193a745106c5b3ddd81f8d146132b83d43"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean/PEPS/Approximation/PhysicalDensityPureInput.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean/PEPS/Approximation/PhysicalDensityPureInput.olean",
+      "sha256": "a2e7534d47e213deba215979b30ffbfce8fb631b9bdaa7ecd2561d045ee03fee"
+    },
+    {
+      "original": "/private/tmp/tnlean-approximate-physical-output/artifacts/TNLean.olean",
+      "frozen": "/private/tmp/tnlean-message-resource-bounds/dependencies/TNLean.olean",
+      "sha256": "13feb03b79b5ffe20ba84f7e204f98432260c51cf4e1022af29b9de224bdd0e4"
+    }
+  ],
+  "readonly_links": 3928
+}

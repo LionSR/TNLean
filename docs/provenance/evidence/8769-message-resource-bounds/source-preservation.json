@@ -1,0 +1,134 @@
+[
+  {
+    "original_module": "LocalTransferExpansion",
+    "original_path": "/tmp/LocalTransferExpansion.lean",
+    "original_sha256": "247f3fd114d9fb20a2c5dc6f86ebb7600eef2e52d8964ed893ea3d13c9e1aa6b",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "sha256": "d80e999136b0006ef80a396a66b3c97e59991296b1abbae5970b6c0cac8bb939"
+      }
+    ]
+  },
+  {
+    "original_module": "TransferGateExpansion",
+    "original_path": "/tmp/TransferGateExpansion.lean",
+    "original_sha256": "6d5a315ffa682412bf81c45b5ad006d239339cbb701bc8e3416c76c53ca0f534",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "sha256": "1fcae844e7bbb196dae8925ecefbb5a7393be4a77c4cee06849614580ef7edd9"
+      }
+    ]
+  },
+  {
+    "original_module": "PartyChainComposition",
+    "original_path": "/tmp/PartyChainComposition.lean",
+    "original_sha256": "9012f181cde6d1ba096055df265d8abd8349b0b92dcf0168c78fef6c83b40995",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "sha256": "f36704f65b696205c09e5f710a9ea69077071123ea48249926d2a8f68cc9fee1"
+      }
+    ]
+  },
+  {
+    "original_module": "PartyGateComposition",
+    "original_path": "/tmp/PartyGateComposition.lean",
+    "original_sha256": "2e3ee89fb9777dda62b55e88f6509b8b1324f0f69d5c12e1e0d59b6ded4e9291",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "sha256": "feca2867b73c228e24cc8d4369f25bf4848aa0c6f82cd1a8a0dfd73979d056a1"
+      }
+    ]
+  },
+  {
+    "original_module": "MessageMonomial",
+    "original_path": "/tmp/MessageMonomial.lean",
+    "original_sha256": "3b3a9668203da66067f8664745f9ac874b2f7ee5cdda893722900ad5d83585c1",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "sha256": "e6911e510164139be1f3910857c345479ec2aa57c3f9f207c234392a86fae26d"
+      }
+    ]
+  },
+  {
+    "original_module": "MessageGateExpansion",
+    "original_path": "/tmp/MessageGateExpansion.lean",
+    "original_sha256": "5b09fff5a88e0bd252aee4347ddf11c4c461e1483efd62a5c3886f16f943c0f3",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "sha256": "6493ba4a31795ff3a95ea182427725ccb2da3e4d6bf7c93d9954ca4c7720126a"
+      }
+    ]
+  },
+  {
+    "original_module": "MessageGateCircuit",
+    "original_path": "/tmp/MessageGateCircuit.lean",
+    "original_sha256": "013311ff75bf15f4d8419b60cb4baeeeb43049d097b7399eba1fd1d16ea3f26f",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "sha256": "d0ff9564a241b8c29b406fb3b77a5b25bc1810ccd8070b11f77fd88f987c94f4"
+      }
+    ]
+  },
+  {
+    "original_module": "SourceAlphabetPolynomial",
+    "original_path": "/tmp/SourceAlphabetPolynomial.lean",
+    "original_sha256": "0c8b88ddb0700fa928d10c789b6ceca83318e555c4ffccd60856ac2d12a858f6",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/SourceAlphabetPolynomial.lean",
+        "sha256": "b6b2351267d74156a87bb998e0566f8cf81748645ce529139319a9704f204f32"
+      }
+    ]
+  },
+  {
+    "original_module": "FiniteInputMemory",
+    "original_path": "/tmp/FiniteInputMemory.lean",
+    "original_sha256": "3555d79ab8f2c9b66e51e6ca0ba2b0881dcca88683ad67d6cde13443d8f485f3",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/FiniteInputMemory.lean",
+        "sha256": "5476694d6818a8e64b24bcd44469cc443e905626e4833a7d71ed85cef7c0be49"
+      }
+    ]
+  },
+  {
+    "original_module": "PhysicalFirstPolynomial",
+    "original_path": "/tmp/PhysicalFirstPolynomial.lean",
+    "original_sha256": "b4893646d7657253e40b541428427c349605b20795309ea2a0fae0994287ce8f",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+        "sha256": "802413e8346c473f8060e38ed8f4d6a70ffd23bb3fc9fd38e8328be0890763b8"
+      }
+    ]
+  },
+  {
+    "original_module": "PhysicalFirstNetworkResources",
+    "original_path": "/tmp/PhysicalFirstNetworkResources.lean",
+    "original_sha256": "e28a3f7686b15a93f44532e534909d05e940a8ebfd2d5e0e1c998d47f1798373",
+    "proof_tokens_preserved": true,
+    "production": [
+      {
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+        "sha256": "cecc1a08a825e81a6100d2f7091ee1c53146941e9a9163823c8626b0cfcdf7e7"
+      }
+    ]
+  }
+]

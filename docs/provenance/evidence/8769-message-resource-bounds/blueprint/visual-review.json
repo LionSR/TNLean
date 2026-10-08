@@ -1,0 +1,22 @@
+{
+  "result": "pass",
+  "source_revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+  "reviewed_pdf_pages": [
+    62,
+    63,
+    64,
+    65,
+    66,
+    67
+  ],
+  "method": "Rendered each listed page with pdftoppm at 1350 pixels and inspected the resulting PNG images.",
+  "findings": "All new message and physical-resource statements, formulas, links and proof paragraphs are legible and unclipped. The new composition heading was shortened to remove its 3.47179pt overflow. The remaining 0.99057pt overflow is the unchanged inherited common-source heading.",
+  "images": {
+    "final-page-63.png": "af9f5104cd3820a355dd57933960f292c759d0dae17464c0fee3a784136299fb",
+    "final-page-62.png": "44a4127684c636bc44898d4fa44028ed84b2f3bc27b0e04720e53dfa2d37bfe4",
+    "final-page-66.png": "bc2f38ce31ed2fafe240b52cd76bfe6116fcb7e65d3f83603a84e006fc8fde95",
+    "final-page-67.png": "7e5b653990d19b985dbc100359ffba96eb7cc715a22e751bd30d3debeb3ecda8",
+    "final-page-65.png": "213e5062737a7f13cc7504d189b8b12a1ea569ee0f07e8050f2aca3ff0024596",
+    "final-page-64.png": "69d7ade6dbc5fd31dd5c6e2da94f07407fa91650199013ddaad394ef20299a26"
+  }
+}

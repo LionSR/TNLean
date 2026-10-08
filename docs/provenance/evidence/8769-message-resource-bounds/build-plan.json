@@ -1,0 +1,31 @@
+{
+  "selected_modules": [
+    "TNLean.PEPS.Approximation.FiniteInputMemory",
+    "TNLean.PEPS.Approximation.LocalTransferExpansion",
+    "TNLean.PEPS.Approximation.TransferGateExpansion",
+    "TNLean.PEPS.Approximation.PartyChainComposition",
+    "TNLean.PEPS.Approximation.PartyGateComposition",
+    "TNLean.PEPS.Approximation.MessageMonomial",
+    "TNLean.PEPS.Approximation.MessageGateExpansion",
+    "TNLean.PEPS.Approximation.MessageGateCircuit",
+    "TNLean.PEPS.Approximation.PhysicalFirstNetworkResources",
+    "TNLean.PEPS.Approximation.PhysicalFirstPolynomial",
+    "TNLean.PEPS.Approximation.SourceAlphabetPolynomial",
+    "TNLean.PEPS.Approximation",
+    "TNLean.PEPS",
+    "TNLean"
+  ],
+  "changed_modules": [
+    "TNLean.PEPS.Approximation.FiniteInputMemory",
+    "TNLean.PEPS.Approximation.LocalTransferExpansion",
+    "TNLean.PEPS.Approximation.MessageGateCircuit",
+    "TNLean.PEPS.Approximation.MessageGateExpansion",
+    "TNLean.PEPS.Approximation.MessageMonomial",
+    "TNLean.PEPS.Approximation.PartyChainComposition",
+    "TNLean.PEPS.Approximation.PartyGateComposition",
+    "TNLean.PEPS.Approximation.PhysicalFirstNetworkResources",
+    "TNLean.PEPS.Approximation.PhysicalFirstPolynomial",
+    "TNLean.PEPS.Approximation.SourceAlphabetPolynomial",
+    "TNLean.PEPS.Approximation.TransferGateExpansion"
+  ]
+}

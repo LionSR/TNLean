@@ -1,0 +1,71 @@
+{
+  "source_parent": "a1be4cc9ba5a7e8f20bd24267b5c4cff77563a45",
+  "sources": [
+    {
+      "module": "TNLean.PEPS.Approximation.LocalTransferExpansion",
+      "source": "/tmp/LocalTransferExpansion.lean",
+      "sha256": "247f3fd114d9fb20a2c5dc6f86ebb7600eef2e52d8964ed893ea3d13c9e1aa6b",
+      "original_evidence": "/private/tmp/tnlean-actual-corrected-bound/message-local-expansion-checks"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.TransferGateExpansion",
+      "source": "/tmp/TransferGateExpansion.lean",
+      "sha256": "6d5a315ffa682412bf81c45b5ad006d239339cbb701bc8e3416c76c53ca0f534",
+      "original_evidence": "/private/tmp/tnlean-actual-corrected-bound/message-local-expansion-checks"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PartyChainComposition",
+      "source": "/tmp/PartyChainComposition.lean",
+      "sha256": "9012f181cde6d1ba096055df265d8abd8349b0b92dcf0168c78fef6c83b40995",
+      "original_evidence": "/private/tmp/tnlean-actual-corrected-bound/message-local-expansion-checks"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PartyGateComposition",
+      "source": "/tmp/PartyGateComposition.lean",
+      "sha256": "2e3ee89fb9777dda62b55e88f6509b8b1324f0f69d5c12e1e0d59b6ded4e9291",
+      "original_evidence": "/private/tmp/tnlean-party-gate-composition/final-verification-20261008"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.MessageMonomial",
+      "source": "/tmp/MessageMonomial.lean",
+      "sha256": "3b3a9668203da66067f8664745f9ac874b2f7ee5cdda893722900ad5d83585c1",
+      "original_evidence": "/private/tmp/tnlean-message-monomial/message-monomial-checks"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.MessageGateExpansion",
+      "source": "/tmp/MessageGateExpansion.lean",
+      "sha256": "5b09fff5a88e0bd252aee4347ddf11c4c461e1483efd62a5c3886f16f943c0f3",
+      "original_evidence": "/private/tmp/tnlean-message-gate/final-verification-20261008"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.MessageGateCircuit",
+      "source": "/tmp/MessageGateCircuit.lean",
+      "sha256": "013311ff75bf15f4d8419b60cb4baeeeb43049d097b7399eba1fd1d16ea3f26f",
+      "original_evidence": "/private/tmp/tnlean-message-gate/final-verification-20261008"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.SourceAlphabetPolynomial",
+      "source": "/tmp/SourceAlphabetPolynomial.lean",
+      "sha256": "0c8b88ddb0700fa928d10c789b6ceca83318e555c4ffccd60856ac2d12a858f6",
+      "original_evidence": "/private/tmp/tnlean-source-alphabet-polynomial/source-alphabet-polynomial-checks"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.FiniteInputMemory",
+      "source": "/tmp/FiniteInputMemory.lean",
+      "sha256": "3555d79ab8f2c9b66e51e6ca0ba2b0881dcca88683ad67d6cde13443d8f485f3",
+      "original_evidence": "/private/tmp/tnlean-finite-input-memory/final-verification-20261008"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PhysicalFirstPolynomial",
+      "source": "/tmp/PhysicalFirstPolynomial.lean",
+      "sha256": "b4893646d7657253e40b541428427c349605b20795309ea2a0fae0994287ce8f",
+      "original_evidence": "/private/tmp/tnlean-uniform-compression/physical-first-polynomial-checks"
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.PhysicalFirstNetworkResources",
+      "source": "/tmp/PhysicalFirstNetworkResources.lean",
+      "sha256": "e28a3f7686b15a93f44532e534909d05e940a8ebfd2d5e0e1c998d47f1798373",
+      "original_evidence": "/private/tmp/tnlean-uniform-compression/physical-first-network-resource-checks"
+    }
+  ]
+}

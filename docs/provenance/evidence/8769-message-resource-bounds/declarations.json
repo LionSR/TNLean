@@ -1,0 +1,392 @@
+[
+  {
+    "id": "8769-message-resources-localtransferexpansion-01",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_localDiscard_tmul",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-02",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.eval_transferTerm_tmul",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-03",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_localDiscard",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-04",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_transferTerm",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-05",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.localDiscard",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-06",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.sources_transferTerm",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-07",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.sum_eval_transferTerm",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-localtransferexpansion-08",
+    "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.Word.transferTerm",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-transfergateexpansion-01",
+    "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.eval_transfer",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-transfergateexpansion-02",
+    "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.isAllowed_effectCount_transfer",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-transfergateexpansion-03",
+    "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.length_transfer",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-transfergateexpansion-04",
+    "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.sum_norm_coeff_transfer",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-transfergateexpansion-05",
+    "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.transfer",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-transfergateexpansion-06",
+    "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.gate_toGate_eq_sum",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-01",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-02",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.effectCount_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-03",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.effectCount_prependWord",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-04",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.eval_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-05",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.eval_prependWord",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-06",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.isAllowed_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-07",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.isAllowed_prependWord",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partychaincomposition-08",
+    "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyChain.prependWord",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-01",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-02",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.effectCount_comp_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-03",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.gate_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-04",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.isAllowed_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-05",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.length_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-06",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.mem_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-partygatecomposition-07",
+    "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+    "declaration": "TNLean.PEPS.PairEffect.PartyGate.sum_norm_comp",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-01",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-02",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.IsAllowed",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-03",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.effectCount",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-04",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.eval",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-05",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.eval_expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-06",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-07",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expansion_size",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-08",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-09",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le_of_power_bounds",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-10",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.isAllowed_effectCount_expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagemonomial-11",
+    "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.messageDimensions",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-01",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-02",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.effectCount_expand_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-03",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.eval",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-04",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.eval_expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-05",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-06",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.expansion_size",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-07",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.expansion_size_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-08",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.expansion_size_le_of_coeff_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-09",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.isAllowed_expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegateexpansion-10",
+    "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.mem_expand",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegatecircuit-01",
+    "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.eval_toOriginalCircuit",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegatecircuit-02",
+    "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.isExpansionBounded_toOriginalCircuit",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegatecircuit-03",
+    "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.isMonomialBounded_toOriginalCircuit",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegatecircuit-04",
+    "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.nonprivateCount_toOriginalCircuit",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegatecircuit-05",
+    "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-messagegatecircuit-06",
+    "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+    "declaration": "TNLean.PEPS.PairEffect.MessageGate.toOriginalCircuit",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-sourcealphabetpolynomial-01",
+    "path": "TNLean/PEPS/Approximation/SourceAlphabetPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-finiteinputmemory-01",
+    "path": "TNLean/PEPS/Approximation/FiniteInputMemory.lean",
+    "declaration": "TNLean.PEPS.PairEffect.ProductInput.finiteDimensional_wholePartyMem",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstpolynomial-01",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstpolynomial-02",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstpolynomial-03",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstnetworkresources-01",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstLinks_le",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstnetworkresources-02",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_link",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstnetworkresources-03",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv",
+    "paper_label": "thm:compression"
+  },
+  {
+    "id": "8769-message-resources-physicalfirstnetworkresources-04",
+    "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+    "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.physicalFirstReplacementLocationsEquiv",
+    "paper_label": "thm:compression"
+  }
+]

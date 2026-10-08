@@ -1,0 +1,3194 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8769-message-resources-localtransferexpansion-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_localDiscard_tmul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.eval_transferTerm_tmul",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_localDiscard",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.isAllowed_transferTerm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.localDiscard",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sources_transferTerm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.sum_eval_transferTerm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-localtransferexpansion-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.Word.transferTerm",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/LocalTransferExpansion.olean TNLean/PEPS/Approximation/LocalTransferExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-transfergateexpansion-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.eval_transfer",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/TransferGateExpansion.olean TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-transfergateexpansion-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.isAllowed_effectCount_transfer",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/TransferGateExpansion.olean TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-transfergateexpansion-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.length_transfer",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/TransferGateExpansion.olean TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-transfergateexpansion-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.sum_norm_coeff_transfer",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/TransferGateExpansion.olean TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-transfergateexpansion-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.transfer",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/TransferGateExpansion.olean TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-transfergateexpansion-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.gate_toGate_eq_sum",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/TransferGateExpansion.olean TNLean/PEPS/Approximation/TransferGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.effectCount_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.effectCount_prependWord",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.eval_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.eval_prependWord",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.isAllowed_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.isAllowed_prependWord",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partychaincomposition-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyChainComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyChain.prependWord",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyChainComposition.olean TNLean/PEPS/Approximation/PartyChainComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.effectCount_comp_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.gate_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.isAllowed_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.length_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.mem_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-partygatecomposition-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PartyGateComposition.lean",
+        "declaration": "TNLean.PEPS.PairEffect.PartyGate.sum_norm_comp",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PartyGateComposition.olean TNLean/PEPS/Approximation/PartyGateComposition.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.IsAllowed",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.effectCount",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.eval",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.eval_expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expansion_size",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-09",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le_of_power_bounds",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-10",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.isAllowed_effectCount_expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagemonomial-11",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageMonomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageMonomial.messageDimensions",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageMonomial.olean TNLean/PEPS/Approximation/MessageMonomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.effectCount_expand_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.eval",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.eval_expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.expansion_size",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-07",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.expansion_size_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-08",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.expansion_size_le_of_coeff_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-09",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.isAllowed_expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegateexpansion-10",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.mem_expand",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateExpansion.olean TNLean/PEPS/Approximation/MessageGateExpansion.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegatecircuit-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.eval_toOriginalCircuit",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateCircuit.olean TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegatecircuit-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.isExpansionBounded_toOriginalCircuit",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateCircuit.olean TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegatecircuit-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.isMonomialBounded_toOriginalCircuit",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateCircuit.olean TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegatecircuit-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.nonprivateCount_toOriginalCircuit",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateCircuit.olean TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegatecircuit-05",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateCircuit.olean TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-messagegatecircuit-06",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+        "declaration": "TNLean.PEPS.PairEffect.MessageGate.toOriginalCircuit",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/MessageGateCircuit.olean TNLean/PEPS/Approximation/MessageGateCircuit.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-sourcealphabetpolynomial-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/SourceAlphabetPolynomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/SourceAlphabetPolynomial.olean TNLean/PEPS/Approximation/SourceAlphabetPolynomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-finiteinputmemory-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/FiniteInputMemory.lean",
+        "declaration": "TNLean.PEPS.PairEffect.ProductInput.finiteDimensional_wholePartyMem",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/FiniteInputMemory.olean TNLean/PEPS/Approximation/FiniteInputMemory.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstpolynomial-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstPolynomial.olean TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstpolynomial-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstPolynomial.olean TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstpolynomial-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstPolynomial.olean TNLean/PEPS/Approximation/PhysicalFirstPolynomial.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstnetworkresources-01",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstLinks_le",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.olean TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstnetworkresources-02",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_link",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.olean TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstnetworkresources-03",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.olean TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8769-message-resources-physicalfirstnetworkresources-04",
+      "status": "ported",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+        "declaration": "TNLean.PEPS.PairEffect.OriginalCircuit.physicalFirstReplacementLocationsEquiv",
+        "name_status": "declared"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex",
+          "labels": [
+            "thm:compression"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the manuscript; no upstream Lean proof text reused.",
+        "Constructs the exact finite expansion of messages into the existing local monomials, including weighted gates and their original-circuit realization. Proves the product-of-dimensions count and coefficient formulas, polynomial branch and sample bounds after the physical output exchange, and actual link alphabet, locality and degree bounds. Private input dimensions are finite but have no numerical bound. A contraction-of-local-tensors identity for the sampled physical operator remains separate."
+      ],
+      "verification": {
+        "result": "passed",
+        "repository": "LionSR/TNLean",
+        "revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
+        "commands": [
+          {
+            "kind": "build",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true -o /private/tmp/tnlean-message-resource-bounds/artifacts/TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.olean TNLean/PEPS/Approximation/PhysicalFirstNetworkResources.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/direct-build.log",
+            "sha256": "e0601db694dc65376b359974bcc44e9eb21a91ac68769719e6e0d7d62020dd64"
+          },
+          {
+            "kind": "axioms",
+            "command": "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -Dlinter.mathlibStandardSet=true -DmaxSynthPendingDepth=3 -DwarningAsError=true Axioms.lean",
+            "exit_code": 0,
+            "log": "docs/provenance/evidence/8769-message-resource-bounds/axioms.log",
+            "sha256": "52c5340ac3e35e15a75d1242518f5a268b6a2f9648aeb7e46d90690b904cfa19"
+          }
+        ]
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}
