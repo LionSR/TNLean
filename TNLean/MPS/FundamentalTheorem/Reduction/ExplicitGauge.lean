@@ -141,9 +141,10 @@ theorem left_gaugeOfMatrix (P : MultiBlockCompression B S C)
   ext i y
   rw [left, hgauge, gaugeMatrix_gaugeOfMatrix, Matrix.mul_apply,
     Finset.sum_eq_single (⟨Sum.inl s, i⟩ : BlockSpace D S P.z)]
-  · simp [Matrix.blockProj, Matrix.blockEmbed]
+  · simp [Matrix.sigmaBlockProj, Matrix.sigmaBlockEmbed]
   · intro x _ hx
-    rw [Matrix.blockProj, Matrix.transpose_apply, Matrix.blockEmbed_apply_of_ne hx, zero_mul]
+    rw [Matrix.sigmaBlockProj, Matrix.transpose_apply,
+      Matrix.sigmaBlockEmbed_apply_of_ne hx, zero_mul]
   · intro h
     exact absurd (Finset.mem_univ (⟨Sum.inl s, i⟩ : BlockSpace D S P.z)) h
 
@@ -157,9 +158,9 @@ theorem right_gaugeOfMatrix (P : MultiBlockCompression B S C)
   ext x j
   rw [right, hgauge, gaugeMatrixInv_gaugeOfMatrix, Matrix.mul_apply,
     Finset.sum_eq_single (⟨Sum.inl s, j⟩ : BlockSpace D S P.z)]
-  · simp [Matrix.blockEmbed]
+  · simp [Matrix.sigmaBlockEmbed]
   · intro y _ hy
-    rw [Matrix.blockEmbed_apply_of_ne hy, mul_zero]
+    rw [Matrix.sigmaBlockEmbed_apply_of_ne hy, mul_zero]
   · intro h
     exact absurd (Finset.mem_univ (⟨Sum.inl s, j⟩ : BlockSpace D S P.z)) h
 

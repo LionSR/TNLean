@@ -179,37 +179,37 @@ theorem dim_eq : DB = ∑ s ∈ S, D s + P.z := by
 
 /-- The compression out of the bond space of `B` onto the slot `s` (the note's `W_s`). -/
 noncomputable def left (s : {s // s ∈ S}) : Matrix (Fin (D s.1)) (Fin DB) ℂ :=
-  Matrix.blockProj (slotSize D) (Sum.inl s) * gaugeMatrix P.gauge
+  Matrix.sigmaBlockProj (slotSize D) (Sum.inl s) * gaugeMatrix P.gauge
 
 /-- The compression into the bond space of `B` from the slot `s` (the note's `V_s`). -/
 noncomputable def right (s : {s // s ∈ S}) : Matrix (Fin DB) (Fin (D s.1)) ℂ :=
-  gaugeMatrixInv P.gauge * Matrix.blockEmbed (slotSize D) (Sum.inl s)
+  gaugeMatrixInv P.gauge * Matrix.sigmaBlockEmbed (slotSize D) (Sum.inl s)
 
 /-- Sandwiching a bond-space operator between two compressions reads off the corresponding
 off-diagonal block of its matrix in the block coordinates. -/
 theorem left_mul_mul_right (A : Matrix (Fin DB) (Fin DB) ℂ) (s t : {s // s ∈ S}) :
     P.left s * A * P.right t =
-      Matrix.blockProj (slotSize D) (Sum.inl s) * conjMatrix P.gauge A *
-        Matrix.blockEmbed (slotSize D) (Sum.inl t) := by
+      Matrix.sigmaBlockProj (slotSize D) (Sum.inl s) * conjMatrix P.gauge A *
+        Matrix.sigmaBlockEmbed (slotSize D) (Sum.inl t) := by
   simp only [left, right, conjMatrix_eq_gaugeMatrix_mul, Matrix.mul_assoc]
 
 /-- **Biorthogonality of a slot with itself** (P5 note, `eq:p5-main-biorthogonality`). -/
 theorem left_mul_right_self (s : {s // s ∈ S}) : P.left s * P.right s = 1 := by
   simp only [left, right, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
-    Matrix.blockProj_mul_blockEmbed_self]
+    Matrix.sigmaBlockProj_mul_sigmaBlockEmbed_self]
 
 /-- **Biorthogonality of two distinct slots** (P5 note, `eq:p5-main-biorthogonality`). -/
 theorem left_mul_right_of_ne {s t : {s // s ∈ S}} (h : s ≠ t) : P.left s * P.right t = 0 := by
   simp only [left, right, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
-    Matrix.blockProj_mul_blockEmbed_of_ne (fun hst => h (Sum.inl_injective hst))]
+    Matrix.sigmaBlockProj_mul_sigmaBlockEmbed_of_ne (fun hst => h (Sum.inl_injective hst))]
 
 /-- **The compression identity** (P5 note, `eq:p5-main-compression`). Compressing a word of `B`
 to the slot `s` gives the corresponding word of `C s`. -/
 theorem left_mul_evalWord_mul_right (s : {s // s ∈ S}) (w : List (Fin d)) :
     P.left s * Kraus.evalWord B w * P.right s = Kraus.evalWord (C s.1) w := by
-  rw [P.left_mul_mul_right, Matrix.blockProj_mul_mul_blockEmbed, ← evalWord_conjMatrix,
+  rw [P.left_mul_mul_right, Matrix.sigmaBlockProj_mul_mul_sigmaBlockEmbed, ← evalWord_conjMatrix,
     Matrix.blockDiag'_evalWord P.ord.injective P.triangular]
   simp [P.matched]
 
@@ -228,8 +228,8 @@ diagonal block of that slot. -/
 theorem conjMatrix_right_mul_mul_left (s : {s // s ∈ S})
     (X : Matrix (Fin (D s.1)) (Fin (D s.1)) ℂ) :
     conjMatrix P.gauge (P.right s * X * P.left s) =
-      Matrix.blockEmbed (slotSize D) (Sum.inl s) * X *
-        Matrix.blockProj (slotSize D) (Sum.inl s) := by
+      Matrix.sigmaBlockEmbed (slotSize D) (Sum.inl s) * X *
+        Matrix.sigmaBlockProj (slotSize D) (Sum.inl s) := by
   simp only [conjMatrix_eq_gaugeMatrix_mul, left, right, Matrix.mul_assoc]
   rw [gaugeMatrix_mul_gaugeMatrixInv, Matrix.mul_one,
     ← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul]
@@ -242,10 +242,10 @@ theorem conjMatrix_remainder (i : Fin d) :
         Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
   have hsum : ∑ s : {s // s ∈ S}, conjMatrix P.gauge (P.right s * C s.1 i * P.left s) =
       Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
-    rw [← Matrix.sum_blockEmbed_mul_mul_blockProj, Fintype.sum_sum_type]
-    have h2 : ∑ t : Fin P.z, Matrix.blockEmbed (slotSize D) (Sum.inr t) *
+    rw [← Matrix.sum_sigmaBlockEmbed_mul_mul_sigmaBlockProj, Fintype.sum_sum_type]
+    have h2 : ∑ t : Fin P.z, Matrix.sigmaBlockEmbed (slotSize D) (Sum.inr t) *
         (conjMatrix P.gauge (B i)).blockDiag' (Sum.inr t) *
-        Matrix.blockProj (slotSize D) (Sum.inr t) = 0 :=
+        Matrix.sigmaBlockProj (slotSize D) (Sum.inr t) = 0 :=
       Finset.sum_eq_zero fun t _ => by rw [P.unmatched i t]; simp
     rw [h2, add_zero]
     exact Finset.sum_congr rfl fun s _ => by
