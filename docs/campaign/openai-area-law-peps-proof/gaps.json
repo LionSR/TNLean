@@ -32,13 +32,14 @@
       "issue": 8771,
       "prs": {
         "TNLean": [
-          8855
+          8855,
+          8917
         ]
       },
       "claims": "Handing a region from one party to another (birth or death), or swapping ownership between two copies of the state (exchange), costs reference error at most L^−30 (4L^−30 for the exchange), provided the region shares information at most L^−60 with its surroundings. Each move involves only the named parties.",
-      "found": "Both lemmas are proved with exactly the paper's hypotheses. The proofs cover the canonical maps, their contractivity and factorization, and the error bounds. The information bound remains a hypothesis, as in the paper, and Proposition 3.4 supplies it later. Still unstated is that each factorization is an allowed monomial of the compression theorem, meaning a private map, one shared state and a private map. This needs the party model built in #8843 and #8853.",
-      "impact": "No problem with the paper has been found. The factorizations are proved, and what remains is to restate them in terms of parties.",
-      "plan": "Restate the proved factorizations on the party layout of #8843 and #8853."
+      "found": "Both lemmas are proved with exactly the paper's hypotheses, including the canonical maps, their contractivity and both error bounds. On the party model built in #8843, with the registers of each region held by one party grouped into one register, the birth is proved to be a private map, one shared state and a private map, and the death the same with one shared effect. The exchange corrections are proved to be one private map on such grouped registers. The paper has one register per site, and the grouped registers are not yet identified with the registers of a frame. Also unstated is that the exchange's renaming is a reordering of registers. It is proved to keep every register with its party, but writing it as a reordering needs the same list with one register per site and per tag.",
+      "impact": "No problem with the paper has been found. What remains is to place the grouped monomials on the registers of a frame and to restate the renaming step of the exchange.",
+      "plan": "List the registers of a frame one per site and per tag, identified with the canonical coordinates. Move and group the registers of each region by reorderings and private unitaries, so that the birth, death and correction monomials act on that list, and write the exchange's renaming as a reordering of it."
     },
     {
       "id": "docs/paper-gaps/polypeps_small_rewrite_monomials.tex",
@@ -51,32 +52,34 @@
       "issue": 8770,
       "prs": {
         "TNLean": [
-          8823
+          8823,
+          8932
         ]
       },
       "claims": "Lemma 6.3 rewrites the state near a small patch where ownership changes. It states that (1) the rewrite map is a contraction that moves the old reference state close to the new one, and (2) up to error L^−a the map is a polynomial sum of operations that the compression theorem allows.",
-      "found": "Part (1) is proved with exactly the paper's hypotheses. For part (2), Lean proves the branch expansion, the owner bookkeeping, the error sum and the final rescaling. Turning each branch into a small tensor network and truncating it with Lemma 6.2 needs the party model of Lemma 5.1, which was missing when this work was done. Without that model part (2) would hold trivially, so it is left unstated.",
-      "impact": "No problem with the paper has been found. The missing piece is library infrastructure.",
-      "plan": "Use the party layout of #8843, build the residual network for one branch, and apply the whole-group truncation of Lemma 6.2."
+      "found": "Part (1) is proved with exactly the paper's hypotheses. For part (2), Lean proves the branch expansion, the owner bookkeeping, the network of each branch with no wire from a vertex to itself, its truncation by Lemma 6.2 with error 2m/√k and at most k^(2m) terms independent of the site dimensions, and the final rescaling: for every δ > 0 there is a contraction within δ of the rewrite that is a sum of explicit product terms. Two steps are not yet formalized. Each product term is not yet written as an allowed monomial of Theorem 5.2, because the frame's registers have no layout by owner with one register per site and per tag. The term count is not yet polynomial in L, because the patches do not carry the bound on the number of cylinder terms from Proposition 4.1.",
+      "impact": "No problem with the paper has been found. What remains is the register layout of a frame and carrying the cylinder-term bound of Proposition 4.1 into the patch data.",
+      "plan": "List the frame's registers one per site and per tag, identified with the canonical coordinates, and read each product term as an allowed party chain with the front-register calculus already used for Lemmas 6.5 and 6.6. Carry the bound on the number of cylinder terms from Proposition 4.1, with bounded numbers of patches and affected holes, to make the count of terms polynomial in L."
     },
     {
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved-pending",
       "paper": "peps",
       "result": "Lemma 7.2",
       "title": "Clearance during the dyadic repainting",
       "issue": 8772,
       "prs": {
         "TNLean": [
-          8836
+          8836,
+          8910
         ]
       },
       "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
-      "found": "Lean proves the clearance with a₀ = 1/5000 for any schedule of guides that has the properties the paper's proof uses. The schedule itself is not yet built. The paper derives those properties in a few lines from the disjointness of the bands along different edges, and that disjointness is proved.",
-      "impact": "No problem with the paper has been found. What remains is to construct the schedule as part of Proposition 7.1.",
-      "plan": "Construct the repainting schedule, derive the guide properties from the band disjointness, and translate the estimates to the actual square."
+      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that represent the paper's open chambers, and the estimates are proved for the labellings the schedule specifies. At the start of each edge and at the end of each repainting the schedule passes to a labelling that agrees with the one reached only off a few curves; no lattice site lies on those curves, so the labels at the sites are unchanged, matching the paper's sampling convention.",
+      "impact": "No problem with the paper. Lemma 7.2 is formalized with the paper's hypotheses once #8910 merges, for guides represented by labellings that are read at the lattice sites.",
+      "plan": "Merge #8910. The protocol of Proposition 7.1 is separate work."
     },
     {
       "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",

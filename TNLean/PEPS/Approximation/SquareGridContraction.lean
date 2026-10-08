@@ -5,48 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SquareGridSource
 
-/-
-Provenance ledger: docs/provenance/openai-math.d/8740.json.
-Original proofs; no upstream Lean proof text reused.
-September 24, 2026 manuscript, sec:introduction, PEPS definition before thm:main (lines 20–34).
-Provenance-ID: 8740-forwardsquareedgeequiv
-Downstream: TNLean.PEPS.Approximation.forwardSquareEdgeEquiv
-Provenance-ID: 8740-forwardsquareedgeequiv-val
-Downstream: TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_val
-Provenance-ID: 8740-forwardsquareedgeequiv-symm-val
-Downstream: TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_symm_val
-Provenance-ID: 8740-forwardsquareincidentequiv
-Downstream: TNLean.PEPS.Approximation.forwardSquareIncidentEquiv
-Provenance-ID: 8740-pinnedsquareincidentequiv
-Downstream: TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv
-Provenance-ID: 8740-forwardsquareincidentequiv-val
-Downstream: TNLean.PEPS.Approximation.forwardSquareIncidentEquiv_val
-Provenance-ID: 8740-pinnedsquareincidentequiv-val
-Downstream: TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv_val
-Provenance-ID: 8740-graphbonddim
-Downstream: TNLean.PEPS.Approximation.graphBondDim
-Provenance-ID: 8740-graphbonddim-forward
-Downstream: TNLean.PEPS.Approximation.graphBondDim_forward
-Provenance-ID: 8740-forwardsquarevirtualconfigequiv
-Downstream: TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv
-Provenance-ID: 8740-forwardsquarevirtualconfigequiv-incident
-Downstream: TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_incident
-Provenance-ID: 8740-forwardsquarevirtualconfigequiv-pinnedincident
-Downstream: TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_pinnedIncident
-Provenance-ID: 8740-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.pinnedTensorToGraphTensor
-Provenance-ID: 8740-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.vectorTensorToGraphTensor
-Provenance-ID: 8740-pinnedtensortographtensor-component
-Downstream: TNLean.PEPS.Approximation.pinnedTensorToGraphTensor_component
-Provenance-ID: 8740-vectortensortographtensor-component
-Downstream: TNLean.PEPS.Approximation.vectorTensorToGraphTensor_component
-Provenance-ID: 8740-statecoeff-pinnedtensortographtensor
-Downstream: TNLean.PEPS.Approximation.stateCoeff_pinnedTensorToGraphTensor
-Provenance-ID: 8740-statecoeff-vectortensortographtensor
-Downstream: TNLean.PEPS.Approximation.stateCoeff_vectorTensorToGraphTensor
--/
-
 /-!
 # Exact conversion of open square-grid contractions
 

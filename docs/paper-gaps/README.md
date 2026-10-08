@@ -1090,20 +1090,28 @@ Coarse periods at least three and the stated boundary/support scope remain.
 
 [polypeps_small_rewrite_monomials.tex](polypeps_small_rewrite_monomials.tex)
 records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
-formalized for the canonical contraction and its reference error, with the
-branch expansion, the wire classification and the final rescaling of the
-approximation, and that the expansion into allowed monomials awaits a party
-layout for monomials.
+formalized for the canonical contraction and its reference error, and that
+for the approximation the branch expansion, the wire classification, the
+network of each branch, its truncation by Lemma 6.2 and the final rescaling
+are formalized, giving a contraction within `L^{-a}` of the rewrite that is a
+sum of explicit product terms. Two steps remain: reading each product term as
+an allowed monomial on a layout of the frame's registers by owner, and the
+polynomial count of terms, which needs the bound on the number of cylinder
+terms of Proposition 4.1 and bounded numbers of patches and affected holes.
 
 ### Polynomial PEPS approximation: changes of ownership
 
 [polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
 records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
 manuscript are formalized with their source hypotheses, including the canonical
-birth map and its factorization through one normalized pair source, the
-two-sheet renaming, the ordered private corrections and both reference-error
-bounds, and that the reading of these factorizations as allowed monomials of
-Theorem 5.2 awaits a party layout for monomials.
+maps and both reference-error bounds. The bounded-change clauses are formalized
+on the party layout of Theorem 5.2 only with the raw registers of each region
+held by one party grouped into one register: the birth and the death as a
+private contraction, one normalized pair source or pair effect and a private
+contraction, and the exchange corrections as one private contraction. Placing
+these monomials on the registers of a frame, one per site and per tag, and
+writing the renaming of the exchange as a composition of reorderings of tensor
+factors, await that list of registers.
 
 ### Polynomial PEPS approximation: elimination of pair effects
 
@@ -1121,6 +1129,16 @@ past operations on other registers remains open.
 records that Lemma 8.2 of the September 24, 2026 polynomial PEPS manuscript
 concerns the party network of Proposition 7.1 and has no hypotheses, and that
 it is formalized for an arbitrary party network on dyadic anchors under four
-hypotheses the source derives from that proposition: anchors on the padded
-grid, boundedly many parties per block, bounded degree, and link separation
-bounded by a fixed multiple of the endpoint scales.
+hypotheses: boundedly many parties per block, bounded degree, and link
+separation bounded by a fixed multiple of the endpoint scales, which the source
+derives from that proposition, and anchors on the padded grid, which comes from
+attaching each party to the anchor of its dyadic block.
+
+### Two-dimensional area law: the scanner estimate
+
+[arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) records that
+Proposition 9.2 of the September 24, 2026 two-dimensional area-law manuscript
+is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
+Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
+construction of that package from the scan geometry and the transported states
+remains open.
