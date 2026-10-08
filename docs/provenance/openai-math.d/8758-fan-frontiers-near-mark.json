@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "source": {
+    "repository": "openai/math",
+    "commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+  },
+  "entries": [
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.fan_frontier_radials",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/FanFrontiers.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_frontier_subset_outer_and_radials",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "prop:two-families",
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Every actual fan-triangle frontier lies in its outer dyadic-cell frontier together with the actual radial segments from the center to fan endpoints. The origin, natural exponent, signed cell index and midpoint mask are arbitrary. No late-scale, mesh, contact or nonempty-region premise is added. The existing private finite closed-cover and closed-triangle arguments move unchanged into this owner; no upstream Lean proof text is reused.",
+        "Section 11, prop:two-families, lines 299\u2013323; geometry:initial-stars, lines 333\u2013370, especially 352\u2013359. The released full package-option direct check passed without diagnostics in 11.46 seconds wall, 2.03 seconds user and 5.55 seconds system time, at raw SHA-256 cb2ee8c85f1b723bf3b3626bdb664c024e68c0b75887b44056577d7f2aadc5e8. Independent mathematical review approved the exact released statement and argument. At preparation the completed parent and source freeze were unbound, and canonical verification remained pending. Three existing boundary records require fresh whole-file evidence after the explicitly claimed private-proof reuse; their public signatures and proof bodies are unchanged. Local sector assignment, active rays, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.near_mark_quarter_mesh",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NearMarkGeometry.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.fineLayer_near_mark_quarter_mesh",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:initial-stars"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "An actual fine cell meeting the closed ball of radius ten reference fine sides about an actual reference cell mark lies in the same or a neighboring layer. Its fine exponent equals the reference exponent or differs by one, and all marks of both actual cells lie on the reference quarter mesh. The reference alone is late, C is at least two, and origin and endpoint set are arbitrary. The closed-radius proof uses sixteen-side separation; no opposing lateness, selected belt, sparse shift or mesh premise is added.",
+        "Section 11, geometry:initial-stars, lines 352\u2013359. The released full package-option direct check passed without diagnostics in 4.59 seconds wall, 2.1 seconds user and 2.73 seconds system time, at raw SHA-256 7f4216ff37864c5050c9638770b00c9e52e2f631c1b2f3bdead3aefcc4352268. Independent mathematical review approved the exact released statement and argument. At preparation the completed parent and source freeze were unbound, and canonical verification remained pending. Three existing boundary records require fresh whole-file evidence after the explicitly claimed private-proof reuse; their public signatures and proof bodies are unchanged. Local sector assignment, active rays, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    },
+    {
+      "id": "8758-tnlean.peps.arealaw.geometry.dummy_later_fine_separation",
+      "status": "planned",
+      "reuse_kind": "original",
+      "upstream": null,
+      "downstream": {
+        "repository": "LionSR/TNLean",
+        "path": "TNLean/PEPS/AreaLaw/Geometry/NearMarkGeometry.lean",
+        "declaration": "TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer_fineScale",
+        "name_status": "proposed"
+      },
+      "paper_sources": [
+        {
+          "version": "September 24, 2026",
+          "path": "preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/10-geometry.tex",
+          "labels": [
+            "geometry:initial-stars",
+            "geometry:layer-distance"
+          ]
+        }
+      ],
+      "license": "Apache-2.0",
+      "notices": [],
+      "changes": [
+        "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
+        "Every point in the closed dummy neighborhood is at distance at least sixteen later-layer fine sides from every point in that closed later layer. The layer satisfies the existing late threshold and lies strictly after the dummy index; C is at least two. Actual dummy membership supplies the endpoint witness, so no nonempty-endpoint premise or additional initial index threshold is assumed.",
+        "Section 11, geometry:initial-stars, lines 352\u2013359; geometry:layer-distance, lines 179\u2013191; scale comparison, lines 200\u2013207. The released full package-option direct check passed without diagnostics in 4.59 seconds wall, 2.1 seconds user and 2.73 seconds system time, at raw SHA-256 7f4216ff37864c5050c9638770b00c9e52e2f631c1b2f3bdead3aefcc4352268. Independent mathematical review approved the exact released statement and argument. At preparation the completed parent and source freeze were unbound, and canonical verification remained pending. Three existing boundary records require fresh whole-file evidence after the explicitly claimed private-proof reuse; their public signatures and proof bodies are unchanged. Local sector assignment, active rays, recursive repairs, the full two-family proposition and both headline theorems remain further obligations."
+      ],
+      "verification": {
+        "result": "pending"
+      },
+      "no_upstream_proof_text_reused": true
+    }
+  ]
+}

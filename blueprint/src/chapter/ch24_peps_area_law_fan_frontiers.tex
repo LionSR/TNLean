@@ -1,0 +1,47 @@
+\section{Primitive frontiers of actual fans}
+\label{sec:area_law_fan_frontiers}
+
+The local mesh argument of \cite[Section~11]{OpenAI2026AreaLaw} needs the
+actual endpoints of boundary segments. Retain any origin, dyadic exponent,
+integer cell index and optional midpoint subdivisions. Write $Q$ for the
+half-open square, $c$ for its center, $\mathcal E$ for its cyclic fan slots,
+$P_e$ for the corresponding closed triangle and $v_e$ for its final base
+endpoint.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% and geometry:initial-stars, lines 333--370, especially 352--359;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is a primitive frontier inclusion, not the active-star assertion.
+
+\begin{theorem}[Fan frontiers lie on outer or radial edges]
+    \label{thm:area_law_fan_frontier_primitives}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_frontier_subset_outer_and_radials}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    For every actual fan slot $e\in\mathcal E$,
+    \begin{align}
+        \partial P_e & \subseteq\partial Q\cup
+        \bigcup_{f\in\mathcal E}[c,v_f].
+    \end{align}
+    No layer, contact or positive-exponent condition is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_cover,
+        thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections}
+    A boundary point of a member of a finite closed cover lies on the
+    outer frontier or belongs to another member. Indeed, away from the
+    outer frontier and all other members, the complement of their
+    finite closed union gives an open neighborhood contained in the
+    selected member, contradicting boundary membership.
+
+    Apply this observation to the actual closed fan triangles, whose
+    union is $\overline Q$. A shared point is either the center or,
+    together with the center, gives two distinct common points. In the
+    latter case the triangle-contact classification places it on an
+    actual radial segment. The center itself belongs to every such
+    segment. This proves the inclusion.
+\end{proof}
+
+The inclusion retains primitive edges, including seams that may disappear
+when neighboring triangles are merged. Active boundaries are determined
+by distinct region identifiers in the subsequent local analysis.

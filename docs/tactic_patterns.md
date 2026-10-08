@@ -5728,3 +5728,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The four equations concern the two coordinates, their sum and
   their difference. They establish line avoidance; classifying actual edges
   remains a separate geometric argument.
+
+### Single-cell specializations of the quarter mesh — promoted (2026-10-08)
+
+- **Pattern:** Pass from marks in one cell to the quarter mesh, either pointwise
+  or as a set inclusion, including the unit-spacing specialization.
+- **Seen:** The private helpers `cellMark_mem_quarter_mesh` in
+  `FineMarkSeparation.lean`, `mark_mem_unitMesh` in
+  `InitialRegionBoundaries.lean`, and `cellMarks_subset_quarter_mesh` in
+  `NearMarkGeometry.lean`.
+- **Abstraction:** All three already use the public
+  `beltMarks_subset_affineMesh` in `MeshGeometry.lean`. The new set-level
+  application uses Mathlib's `Finset.singleton_biUnion` to specialize the
+  finite-family theorem. The coordinate argument remains in its existing
+  shared owner.
+- **Notes:** These are short pointwise or set-level applications of the same
+  theorem. No coordinate table is copied, and no further export or tactic is
+  needed. The existing pointwise applications remain unchanged.

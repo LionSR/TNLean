@@ -30,6 +30,7 @@ import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
@@ -46,6 +47,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
+import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
