@@ -13,8 +13,9 @@ import TNLean.Algebra.FinCyclicInduction
 
 This file expands an ordered product of finitely many square matrices as a sum
 over index paths: the matrix-vector product of the ordered product is the sum
-over paths starting at the row index (`ofFn_prod_mulVec_apply`), and the trace
-of the ordered product of a nonempty family is the sum over cyclic paths, in
+over paths starting at the row index (`ofFn_prod_mulVec_apply`), an entry of the
+ordered product is the sum over paths between its two indices (`ofFn_prod_apply`), and
+the trace of the ordered product of a nonempty family is the sum over cyclic paths, in
 which each factor connects a site to its cyclic successor
 (`trace_ofFn_prod_eq_sum_cyclic`).  The cyclic form is the transfer-matrix
 identity behind closed-chain contractions of matrix product operators.  For a
@@ -63,6 +64,21 @@ theorem ofFn_prod_mulVec_apply :
       rw [Fin.prod_univ_succ, ← Fin.succ_last]
       simp only [Fin.castSucc_zero, Fin.cons_zero, Fin.cons_succ, ← Fin.succ_castSucc]
       ring
+
+/-- **Entry path expansion.**  The entry at `(a, b)` of the ordered product of the matrices
+`M 0, …, M (L - 1)` is the sum, over all paths `t` of length `L + 1` from `a` to `b`, of the
+product of the matrix entries along the path. -/
+theorem ofFn_prod_apply (L : ℕ) (M : Fin L → Matrix ι ι R) (a b : ι) :
+    (List.ofFn M).prod a b =
+      ∑ t : Fin (L + 1) → ι,
+        if t 0 = a ∧ t (Fin.last L) = b then ∏ i : Fin L, M i (t i.castSucc) (t i.succ)
+        else 0 := by
+  have h := ofFn_prod_mulVec_apply L M (Pi.single b 1) a
+  rw [Matrix.mulVec_single_one, col_apply] at h
+  rw [h, sum_fin_cons, Finset.sum_eq_single a
+    (fun c _ hc => Finset.sum_eq_zero fun t _ => by simp [hc]) (by simp)]
+  refine Finset.sum_congr rfl fun t _ => ?_
+  simp [Pi.single_apply]
 
 /-- **Cyclic path expansion.**  The trace of the ordered product of a nonempty
 family of matrices is the sum, over all assignments of an index to each site of
