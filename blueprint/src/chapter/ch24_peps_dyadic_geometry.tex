@@ -417,16 +417,47 @@ $A$, $B$, $C$ below are permitted to coincide.
     stated for closures, which can only shrink.
 \end{proof}
 
+\begin{lemma}[Readings of the schedule exist]
+    \label{lem:peps_dyadic_readings_exist}
+    \lean{TNLean.PEPS.Approximation.IsRayConstant, TNLean.PEPS.Approximation.IsRayAffine, TNLean.PEPS.Approximation.IsRayConstant.exists_isDisplacedReading, TNLean.PEPS.Approximation.IsDisplacedReading.unique, TNLean.PEPS.Approximation.eventually_affine_trichotomy, TNLean.PEPS.Approximation.IsRayAffine.isRayConstant_lt, TNLean.PEPS.Approximation.IsRayAffine.isRayConstant_div_lt, TNLean.PEPS.Approximation.IsRayAffine.isRayConstant_floor, TNLean.PEPS.Approximation.isRayConstant_mem_edgeBand, TNLean.PEPS.Approximation.isRayConstant_mem_centralRegion, TNLean.PEPS.Approximation.isRayConstant_mem_ball, TNLean.PEPS.Approximation.isRayConstant_bandWord, TNLean.PEPS.Approximation.isRayConstant_blockGuide, TNLean.PEPS.Approximation.IsRayConstant.homogenize, TNLean.PEPS.Approximation.exists_eq_bandWord_of_mem_edgeWords, TNLean.PEPS.Approximation.isRayConstant_blockSchedule, TNLean.PEPS.Approximation.exists_readings_exchange}
+    \leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    Let $v$ be any vector. The block guide, every guide of the repainting of a block
+    (after the central birth, after completed edges, and along an edge with a normal
+    word on its band, on the main or on the auxiliary sheet), and each of these guides
+    homogenized on the open squares of radius $t$ about finitely many grid corners,
+    have exactly one reading after $v$: at every point $p$ the label at
+    $p+\varepsilon v$ is the same for all small $\varepsilon>0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Along a ray $\varepsilon\mapsto p+\varepsilon v$ the coordinates, the parallel and
+    normal coordinates of an edge, and the band width $w(s)=10^{-3}\min(s,n-s)$ agree
+    for small $\varepsilon>0$ with affine functions $a+b\varepsilon$. Such a function
+    has, for small $\varepsilon>0$, a constant sign: that of $a$ if $a\ne0$, and that
+    of $b$ otherwise. Hence every strict inequality between such functions, and every
+    bound $x<t$ on the normal ratio $x=d/w(s)$, is eventually decided; the floor
+    $\lfloor a+b\varepsilon\rfloor$ is eventually $\lfloor a\rfloor$ if $b\ge0$ and
+    $\lceil a\rceil-1$ if $b<0$. The bands, the central region, the sup squares and the
+    blocks are finite Boolean combinations of such conditions, and a guide is a finite
+    choice among them. Two readings agree, since both are the eventual label.
+\end{proof}
+
 The source specifies each guide by its open polygonal chambers and reads it at a
 point after one small generic displacement into an incident chamber
 (\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 69--80). The guides of the
 schedule take, on an interface curve $x=t$, the label for $x\ge t$, while a fixed
-displacement crosses to $x<t$ along two edges of a square. They agree with the open
-chambers off finitely many segments, and a displacement parallel to none of them
-leaves those segments at once, so the source's guides read the guides of the
-schedule. Lemma~\ref{lem:peps_dyadic_sampled_guides} therefore gives Lemma~7.2 for
-the source's guides on all four edges; the genericity of the displacement is the
-source's choice and is not formalized.
+displacement $v$ whose two components are not small relative to each other crosses to
+$x>t$ along two edges of a square and to $x<t$ along the other two; the two
+conventions differ on the interface curves of those two edges.
+Lemma~\ref{lem:peps_dyadic_readings_exist} shows that the guides of the schedule have
+readings after every displacement, and
+Lemma~\ref{lem:peps_dyadic_sampled_guides} gives Lemma~7.2 for every such reading, on
+all four edges. That the source's sampled guides are these readings rests on two facts
+that are not formalized: the source's open chambers are the open sets on which the
+formal labellings are constant, off a locally finite family of segments, and the
+source's generic displacement is parallel to none of these segments, so that the ray
+$p+\varepsilon v$ leaves them at once.
 
 \begin{lemma}[Logarithmic floor]
     \label{lem:peps_dyadic_floor}
@@ -674,14 +705,16 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{lemma}[Footprint ratios uniform in the scale]
     \label{lem:peps_dyadic_footprint_uniform}
-    \lean{TNLean.PEPS.Approximation.TwoOwnerFootprints, TNLean.PEPS.Approximation.TwoOwnerFootprints.mono, TNLean.PEPS.Approximation.TwoOwnerFootprints.relabel, TNLean.PEPS.Approximation.similarity, TNLean.PEPS.Approximation.dist_similarity, TNLean.PEPS.Approximation.similarity_inv, TNLean.PEPS.Approximation.TwoOwnerFootprints.image_similarity, TNLean.PEPS.Approximation.isCompact_footprintJointSet, TNLean.PEPS.Approximation.exists_twoOwnerFootprints_Icc, TNLean.PEPS.Approximation.exists_footprintRatio, TNLean.PEPS.Approximation.TwoOwnerFootprints.of_template}
+    \lean{TNLean.PEPS.Approximation.HasTwoOwnerFootprints, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.mono, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.relabel, TNLean.PEPS.Approximation.similarity, TNLean.PEPS.Approximation.dist_similarity, TNLean.PEPS.Approximation.similarity_inv, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.image_similarity, TNLean.PEPS.Approximation.isCompact_footprintJointSet, TNLean.PEPS.Approximation.exists_hasTwoOwnerFootprints_Icc, TNLean.PEPS.Approximation.exists_footprintRatio, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.of_template, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.of_le_radii}
     \leanok
     \uses{lem:peps_dyadic_footprint}
     Say that a guide satisfies the two-owner condition with working set $W$, hole
     centers $H$, inner radius $r$ and footprint radius $\delta$ if every closed
     footprint of radius $\delta$ meets at most two labels at its points of $W$ outside
     the open inner holes of radius $r$ about the points of $H$. This condition survives
-    shrinking $\delta$ and identifying labels, and it is carried by the similarity
+    shrinking $\delta$, identifying labels, and enlarging some of the inner holes, so it
+    holds as well when the holes have different radii, all at least $r$. It is carried
+    by the similarity
     $u\mapsto v+su$, $s>0$, to the image guide, working set and hole centers with the
     radii $sr$ and $s\delta$. For a guide with finitely many values and a compact $W$,
     the pairs of a radius $r\in[r_0,r_1]$ and a point of $W$ in the closure of the
@@ -798,15 +831,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{lemma}[True vertices of the unmodified guides]
     \label{lem:peps_dyadic_unmodified_vertices}
-    \lean{TNLean.PEPS.Approximation.LocallyTwo, TNLean.PEPS.Approximation.LocallyTwo.not_isTrueVertex, TNLean.PEPS.Approximation.LocallyTwo.congr, TNLean.PEPS.Approximation.locallyTwo_of_eventuallyEq_const, TNLean.PEPS.Approximation.locallyTwo_blockGuide, TNLean.PEPS.Approximation.LocallyTwo.comp, TNLean.PEPS.Approximation.bandWord_eventually_step, TNLean.PEPS.Approximation.bandWord_eventually_mem, TNLean.PEPS.Approximation.continuousAt_bandCoord, TNLean.PEPS.Approximation.eq_point_zero_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.eq_point_end_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.locallyTwo_bandUpdate, TNLean.PEPS.Approximation.IsSquareCorner, TNLean.PEPS.Approximation.isSquareCorner_point_zero, TNLean.PEPS.Approximation.isSquareCorner_point_end, TNLean.PEPS.Approximation.isOpen_openSquare, TNLean.PEPS.Approximation.isOpen_centralRegion, TNLean.PEPS.Approximation.exists_edge_of_mem_closedSquare, TNLean.PEPS.Approximation.mem_openSquare_of_mem_closure_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_nor_eq_two_mul, TNLean.PEPS.Approximation.notMem_closedEdgeBand_of_nor_eq_two_mul, TNLean.PEPS.Approximation.mainWords, TNLean.PEPS.Approximation.auxWords, TNLean.PEPS.Approximation.mainWords_props, TNLean.PEPS.Approximation.auxWords_props, TNLean.PEPS.Approximation.mem_mainWords_of_mem_mainSteps, TNLean.PEPS.Approximation.mem_auxWords_of_mem_auxSteps, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_nbrLabel, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_finalLabel, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.locallyTwo_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.locallyTwo, TNLean.PEPS.Approximation.IsTrueVertex.eq_blockCorner_of_isUnmodifiedGuide, TNLean.PEPS.Approximation.eq_blockCorner_of_isTrueVertex_of_mem_ball}
+    \lean{TNLean.PEPS.Approximation.HasTwoLabelsNear, TNLean.PEPS.Approximation.HasTwoLabelsNear.not_isTrueVertex, TNLean.PEPS.Approximation.HasTwoLabelsNear.congr, TNLean.PEPS.Approximation.hasTwoLabelsNear_of_eventuallyEq_const, TNLean.PEPS.Approximation.hasTwoLabelsNear_blockGuide, TNLean.PEPS.Approximation.HasTwoLabelsNear.comp, TNLean.PEPS.Approximation.bandWord_eventually_step, TNLean.PEPS.Approximation.bandWord_eventually_mem, TNLean.PEPS.Approximation.continuousAt_bandCoord, TNLean.PEPS.Approximation.eq_point_zero_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.eq_point_end_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.hasTwoLabelsNear_bandUpdate, TNLean.PEPS.Approximation.IsSquareCorner, TNLean.PEPS.Approximation.isSquareCorner_point_zero, TNLean.PEPS.Approximation.isSquareCorner_point_end, TNLean.PEPS.Approximation.isOpen_openSquare, TNLean.PEPS.Approximation.isOpen_centralRegion, TNLean.PEPS.Approximation.exists_edge_of_mem_closedSquare, TNLean.PEPS.Approximation.mem_openSquare_of_mem_closure_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_nor_eq_two_mul, TNLean.PEPS.Approximation.notMem_closedEdgeBand_of_nor_eq_two_mul, TNLean.PEPS.Approximation.mainWords, TNLean.PEPS.Approximation.auxWordExchanged, TNLean.PEPS.Approximation.auxWords, TNLean.PEPS.Approximation.mainWords_props, TNLean.PEPS.Approximation.auxWords_props, TNLean.PEPS.Approximation.exists_eq_bandWord_of_mem_mainWords, TNLean.PEPS.Approximation.exists_eq_bandWord_of_mem_auxWords, TNLean.PEPS.Approximation.mem_mainWords_of_mem_mainSteps, TNLean.PEPS.Approximation.mem_auxWords_of_mem_auxSteps, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_nbrLabel, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_finalLabel, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.hasTwoLabelsNear, TNLean.PEPS.Approximation.IsTrueVertex.eq_blockCorner_of_isUnmodifiedGuide, TNLean.PEPS.Approximation.eq_blockCorner_of_isTrueVertex_of_mem_closedBall}
     \leanok
     \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_direct_repainting, lem:peps_dyadic_choice_K0, def:peps_dyadic_incident_labels}
     Call a guide of the repainting of a block from a block guide unmodified if it is
     the starting block guide, the guide after the central birth, a guide after
     completed edges, or a main or auxiliary guide along an edge whose band carries
-    one of the normal words of that sheet. Every unmodified guide takes at most two
-    labels near every point that is not a grid corner, so all its true vertices are
-    grid corners. Consequently, for $n>20t$, the square of radius $10t$ about a grid
+    one of the normal words of that sheet. The auxiliary words are the uniform word,
+    the words after the three auxiliary births, and the word $C\mid A\mid B\mid C$
+    with interfaces $-3,-2,-1$ left by the lens exchange, to which the point treatment
+    of the exchange is removed before the auxiliary sheet is retired. Every unmodified
+    guide takes at most two labels near every point that is not a grid corner, so all
+    its true vertices are grid corners. Consequently, for $n>20t$, the closed square of
+    radius $10t$ about a grid
     corner contains no true vertex of an unmodified guide other than that corner. This
     is the observation of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 321--326,
     and the clause of the choice of $K_0$, lines 341--343, that the tenfold
@@ -831,7 +868,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{lemma}[The rim pattern at a corner]
     \label{lem:peps_dyadic_rim_pattern}
-    \lean{TNLean.PEPS.Approximation.bandWord_eventually_eq, TNLean.PEPS.Approximation.edgeCurves, TNLean.PEPS.Approximation.mainWords_eventually_eq, TNLean.PEPS.Approximation.auxWords_eventually_eq, TNLean.PEPS.Approximation.eventually_bandUpdate_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.eventually_eq, TNLean.PEPS.Approximation.rimPattern, TNLean.PEPS.Approximation.rimPattern_finite, TNLean.PEPS.Approximation.dist_of_mem_rimPattern, TNLean.PEPS.Approximation.rimPattern_separation, TNLean.PEPS.Approximation.int_eq_zero_of_abs_lt, TNLean.PEPS.Approximation.mem_rimPattern_of_grid, TNLean.PEPS.Approximation.mem_rimPattern_of_curve, TNLean.PEPS.Approximation.mem_rimPattern_of_incidentLabels}
+    \lean{TNLean.PEPS.Approximation.bandWord_eventually_eq, TNLean.PEPS.Approximation.edgeCurves, TNLean.PEPS.Approximation.mainWords_eventually_eq, TNLean.PEPS.Approximation.auxWords_eventually_eq, TNLean.PEPS.Approximation.eventually_bandUpdate_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.eventually_eq, TNLean.PEPS.Approximation.rimPattern, TNLean.PEPS.Approximation.rimPattern_finite, TNLean.PEPS.Approximation.dist_of_mem_rimPattern, TNLean.PEPS.Approximation.le_dist_of_mem_rimPattern, TNLean.PEPS.Approximation.mem_rimPattern_of_grid, TNLean.PEPS.Approximation.mem_rimPattern_of_curve, TNLean.PEPS.Approximation.mem_rimPattern_of_incidentLabels}
     \leanok
     \uses{lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0}
     For a point $v$ and $t>0$, the rim pattern about $v$ consists of the points
@@ -867,18 +904,20 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{theorem}[Disjoint outer holes in the temporary guides]
     \label{thm:peps_dyadic_temporary_holes}
-    \lean{TNLean.PEPS.Approximation.isTrueVertex_homogenize_cases, TNLean.PEPS.Approximation.homogenize_trueVertex_separation, TNLean.PEPS.Approximation.homogenize_outerHoles_disjoint}
+    \lean{TNLean.PEPS.Approximation.isTrueVertex_homogenize_cases, TNLean.PEPS.Approximation.le_dist_of_isTrueVertex_homogenize, TNLean.PEPS.Approximation.homogenize_outerHoles_disjoint, TNLean.PEPS.Approximation.IsDisplacedReading.preimage_subset_closure, TNLean.PEPS.Approximation.IsDisplacedReading.isTrueVertex, TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}
     \leanok
-    \uses{lem:peps_dyadic_rim_pattern, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_incident_change}
+    \uses{lem:peps_dyadic_rim_pattern, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_incident_change, lem:peps_dyadic_readings_exist}
     Let $20t<n$, let $\mathcal M$ be a finite set of grid corners and $P$ a label, and
     homogenize an unmodified guide to $P$ on the open squares of radius $t$ about the
     corners of $\mathcal M$. Every true vertex of the resulting guide is a grid corner
     or a point of the rim pattern of a corner of $\mathcal M$, and distinct true
     vertices are at distance at least $t/1000$. Hence for $\epsilon_0<1/4000$ the
     closed outer hole squares of radius $2\epsilon_0t$ about distinct true vertices are
-    disjoint. This is the conclusion of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
-    lines 347--351, that the outer holes are disjoint in the temporary guides, for
-    the separations of the true vertices; the further smallness of $\epsilon_0$
+    disjoint. The same holds for every reading of the homogenized guide after a
+    displacement, and such a reading exists after every displacement. This is the
+    conclusion of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 347--351, that the
+    outer holes are disjoint in the temporary guides, for the separations of the true
+    vertices; the further smallness of $\epsilon_0$
     compared with $a_0$ enters through Lemma~\ref{lem:peps_dyadic_birth_enlargement}.
 \end{theorem}
 
@@ -889,14 +928,17 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     two incident labels, in the rim pattern by Lemma~\ref{lem:peps_dyadic_rim_pattern}.
     Two rim points about one corner are separated by the pattern. Otherwise the two
     points belong to distinct grid corners, at distance at least $n$, and each lies
-    within $t$ of its corner, so they are at distance at least $n-2t>t/1000$.
+    within $t$ of its corner, so they are at distance at least $n-2t>t/1000$. A point
+    of the region of a label in a reading is a limit of points of that region in the
+    guide, so a true vertex of a reading is a true vertex of the guide; readings exist
+    by Lemma~\ref{lem:peps_dyadic_readings_exist}.
 \end{proof}
 
 \begin{theorem}[One patch ratio for the point treatment]
     \label{thm:peps_dyadic_point_ratio}
-    \lean{TNLean.PEPS.Approximation.SquareEdge.par_smul, TNLean.PEPS.Approximation.SquareEdge.nor_inv_smul, TNLean.PEPS.Approximation.bandWidth_inv_mul, TNLean.PEPS.Approximation.mem_edgeBand_inv_smul, TNLean.PEPS.Approximation.bandCoord_inv_smul, TNLean.PEPS.Approximation.mem_centralRegion_inv_smul, TNLean.PEPS.Approximation.bandUpdate_inv_smul, TNLean.PEPS.Approximation.comp_bandWord, TNLean.PEPS.Approximation.bandUpdate_comp, TNLean.PEPS.Approximation.comp_mainWords, TNLean.PEPS.Approximation.comp_auxWords, TNLean.PEPS.Approximation.exists_mainWords_comp, TNLean.PEPS.Approximation.exists_auxWords_comp, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.mainGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.auxGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.isUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.isUnmodifiedGuide, TNLean.PEPS.Approximation.IsConicalAt, TNLean.PEPS.Approximation.corner_trichotomy, TNLean.PEPS.Approximation.SquareEdge.par_add_smul, TNLean.PEPS.Approximation.SquareEdge.nor_add_smul, TNLean.PEPS.Approximation.mem_edgeBand_conical, TNLean.PEPS.Approximation.bandCoord_conical, TNLean.PEPS.Approximation.mem_centralRegion_conical, TNLean.PEPS.Approximation.isConicalAt_blockGuide, TNLean.PEPS.Approximation.IsConicalAt.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isConicalAt, TNLean.PEPS.Approximation.isTrueVertex_comp_iff, TNLean.PEPS.Approximation.isTrueVertex_comp_homeomorph, TNLean.PEPS.Approximation.similarityInv, TNLean.PEPS.Approximation.similarityInv_apply, TNLean.PEPS.Approximation.image_similarity_closedBall, TNLean.PEPS.Approximation.TwoOwnerFootprints.congr, TNLean.PEPS.Approximation.windowBlocks, TNLean.PEPS.Approximation.WindowSlot, TNLean.PEPS.Approximation.windowSlot, TNLean.PEPS.Approximation.windowLabel, TNLean.PEPS.Approximation.referenceRepainting, TNLean.PEPS.Approximation.nbrBlock_zero_mem_windowBlocks, TNLean.PEPS.Approximation.windowLabel_windowSlot, TNLean.PEPS.Approximation.isRelabel_referenceRepainting, TNLean.PEPS.Approximation.isRescale_blockBaseline, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_congr, TNLean.PEPS.Approximation.RepaintingBaseline.finite_isUnmodifiedGuide, TNLean.PEPS.Approximation.pointTreated, TNLean.PEPS.Approximation.classSection, TNLean.PEPS.Approximation.classRep, TNLean.PEPS.Approximation.classRep_spec, TNLean.PEPS.Approximation.injOn_range_classRep, TNLean.PEPS.Approximation.TemplateIndex, TNLean.PEPS.Approximation.template, TNLean.PEPS.Approximation.cornerOffset, TNLean.PEPS.Approximation.isSquareCorner_cornerOffset, TNLean.PEPS.Approximation.blockCorner_sub_blockCorner, TNLean.PEPS.Approximation.blockIndex_mem_windowBlocks, TNLean.PEPS.Approximation.exists_reference_eq, TNLean.PEPS.Approximation.exists_template_eq, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio}
+    \lean{TNLean.PEPS.Approximation.SquareEdge.par_smul, TNLean.PEPS.Approximation.SquareEdge.nor_inv_smul, TNLean.PEPS.Approximation.bandWidth_inv_mul, TNLean.PEPS.Approximation.mem_edgeBand_inv_smul, TNLean.PEPS.Approximation.bandCoord_inv_smul, TNLean.PEPS.Approximation.mem_centralRegion_inv_smul, TNLean.PEPS.Approximation.bandUpdate_inv_smul, TNLean.PEPS.Approximation.comp_bandWord, TNLean.PEPS.Approximation.bandUpdate_comp, TNLean.PEPS.Approximation.comp_mainWords, TNLean.PEPS.Approximation.comp_auxWords, TNLean.PEPS.Approximation.exists_mainWords_comp, TNLean.PEPS.Approximation.exists_auxWords_comp, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.mainGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.auxGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.isUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.isUnmodifiedGuide, TNLean.PEPS.Approximation.IsConicalAt, TNLean.PEPS.Approximation.IsSquareCorner.trichotomy, TNLean.PEPS.Approximation.SquareEdge.par_add_smul, TNLean.PEPS.Approximation.SquareEdge.nor_add_smul, TNLean.PEPS.Approximation.mem_edgeBand_conical, TNLean.PEPS.Approximation.bandCoord_conical, TNLean.PEPS.Approximation.mem_centralRegion_conical, TNLean.PEPS.Approximation.isConicalAt_blockGuide, TNLean.PEPS.Approximation.IsConicalAt.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isConicalAt, TNLean.PEPS.Approximation.isTrueVertex_comp_iff, TNLean.PEPS.Approximation.isTrueVertex_comp_homeomorph, TNLean.PEPS.Approximation.similarityInv, TNLean.PEPS.Approximation.similarityInv_apply, TNLean.PEPS.Approximation.image_similarity_closedBall, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.congr, TNLean.PEPS.Approximation.referenceRepainting, TNLean.PEPS.Approximation.nbrBlock_zero_mem_blockWindow, TNLean.PEPS.Approximation.isRelabel_referenceRepainting, TNLean.PEPS.Approximation.isRescale_blockBaseline, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_congr, TNLean.PEPS.Approximation.RepaintingBaseline.finite_isUnmodifiedGuide, TNLean.PEPS.Approximation.pointTreated, TNLean.PEPS.Approximation.classRep, TNLean.PEPS.Approximation.classRep_spec, TNLean.PEPS.Approximation.injOn_range_classRep, TNLean.PEPS.Approximation.TemplateIndex, TNLean.PEPS.Approximation.footprintTemplate, TNLean.PEPS.Approximation.cornerOffset, TNLean.PEPS.Approximation.isSquareCorner_cornerOffset, TNLean.PEPS.Approximation.blockCorner_sub_blockCorner, TNLean.PEPS.Approximation.blockIndex_mem_blockWindow, TNLean.PEPS.Approximation.exists_reference_eq, TNLean.PEPS.Approximation.exists_template_eq, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio, TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_mem_ball, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion}
     \leanok
-    \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0, lem:peps_dyadic_floor}
+    \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0, lem:peps_dyadic_floor, thm:peps_dyadic_block_ratio}
     Fix $\epsilon_0>0$. There is a ratio $\nu>0$ with the following property. Let
     $8t<n$, consider the repainting of a block $S$ of side $n$ from a block guide, an
     unmodified guide of it, a corner $v$ of $S$, and either no homogenization or the
@@ -904,10 +946,16 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     to the label of one of the nine blocks around $S$. Then the resulting guide
     satisfies the two-owner condition with working set the closed square of radius
     $2t$ about $v$, holes at its true vertices within $3t$ of $v$, inner radius
-    $\epsilon_0t$ and footprint radius $\nu t$. This is the uniformity of the patch
-    ratio near a mark in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 464--479
-    and 481--505: in units of $t$ the guides come from finitely many ray patterns,
-    with or without the square clearing.
+    $\epsilon_0t$ and footprint radius $\nu t$. The same holds, about each corner of
+    $S$ in a finite set $\mathcal M$ of grid corners, for the guide homogenized to one
+    such label on the open squares of radius $t$ about all corners of $\mathcal M$ at
+    once. This is the uniformity of the patch ratio near a mark
+    in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 464--479 and 481--505: in
+    units of $t$ the guides come from finitely many ray patterns, with or without the
+    square clearing. Its patches have inner radius $u=\nu t/2$, since their outer
+    squares have radius at most $2u$. The statement concerns the guides of the
+    schedule; its transfer to their readings after a small displacement is not
+    formalized.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -926,12 +974,15 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     are completed. Choosing for each label-equality type a representative map of the
     finitely many slots, the guide near $v$ is an injective relabelling of one of
     finitely many templates, and injective relabellings and similarities preserve true
-    vertices. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform}.
+    vertices. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform}. Near one corner of
+    $\mathcal M$ the other treated squares are at distance more than $n-5t>3t$, so
+    homogenizing on all of them agrees with homogenizing on its square alone within
+    distance $4t$ of the corner, which contains the working set and the holes.
 \end{proof}
 
 \begin{theorem}[One patch ratio for direct repaintings and resizings]
     \label{thm:peps_dyadic_block_ratio}
-    \lean{TNLean.PEPS.Approximation.blockWindow, TNLean.PEPS.Approximation.BlockSlot, TNLean.PEPS.Approximation.blockSlot, TNLean.PEPS.Approximation.blockSlotLabel, TNLean.PEPS.Approximation.blockGuide_eq_blockSlot, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio}
+    \lean{TNLean.PEPS.Approximation.blockWindow, TNLean.PEPS.Approximation.BlockSlot, TNLean.PEPS.Approximation.blockSlot, TNLean.PEPS.Approximation.blockSlotLabel, TNLean.PEPS.Approximation.blockSlotLabel_blockSlot, TNLean.PEPS.Approximation.floor_mem_Icc, TNLean.PEPS.Approximation.blockGuide_eq_blockSlot, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed}
     \leanok
     \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_small_radius, lem:peps_dyadic_direct_repainting}
     Fix $\rho$ and $0<r_0\le r_1$. There is a ratio $\nu>0$ such that every guide
@@ -943,9 +994,10 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     side $0<n\le K_0t$, before and after, with inner radius $h_n$ and working set the
     closed square of radius $2n$ about a corner of the square; and one ratio serves
     every resizing with $0<n<t$, with both radii $h_n$ and $h_{2n}$ on the guide uniform
-    on the blocks of side $2n$ and working set of radius $2n$. These are the
-    compactness arguments of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines
-    515--520 and 534--538, in units of $n$.
+    on the blocks of side $2n$ and working set of radius $2n$, and also when some holes
+    have radius $h_n$ and the others $h_{2n}$. These are the compactness arguments
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 515--520 and 534--538, in units
+    of $n$, with the intermediate configurations of lines 538--540.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -955,7 +1007,8 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the window. Apply Lemma~\ref{lem:peps_dyadic_footprint_uniform} and
     Lemma~\ref{lem:peps_dyadic_small_radius} for the radius ratios; when $n<t$ the
     radius $h_n=\epsilon_0n$ and $h_{2n}=\epsilon_0\min(2n,t)$ lie between
-    $\epsilon_0n$ and $2\epsilon_0n$.
+    $\epsilon_0n$ and $2\epsilon_0n$. Since $h_n\le h_{2n}$, a configuration with some
+    holes resized has larger holes than the one with all radii $h_n$.
 \end{proof}
 
 \begin{lemma}[Trivial holes at the last level]

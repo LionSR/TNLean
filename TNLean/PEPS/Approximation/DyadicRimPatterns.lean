@@ -95,7 +95,7 @@ theorem auxWords_eventually_eq {W : ℝ → ι} (hW : W ∈ auxWords A B C) {x�
     (hx : ∀ k : ℤ, -6 ≤ k → k ≤ 1 → x₀ ≠ k) : ∀ᶠ x in 𝓝 x₀, W x = W x₀ := by
   obtain ⟨m6, m5, m4, m3, m2, m1, -, -⟩ := ne_of_forall_int hx
   simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl <;> exact bandWord_eventually_eq _ _ (by simp_all)
+  rcases hW with rfl | rfl | rfl | rfl | rfl <;> exact bandWord_eventually_eq _ _ (by simp_all)
 
 end Words
 
@@ -316,7 +316,7 @@ private theorem sep_cross {σ t : ℝ} (ht : 0 < t) (hσ : σ = 1 ∨ σ = -1) {
 at sup distance at least `t / 1000`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:346–351`. -/
-theorem rimPattern_separation {v c c' : ℝ × ℝ} {t : ℝ} (ht : 0 < t) (hc : c ∈ rimPattern v t)
+theorem le_dist_of_mem_rimPattern {v c c' : ℝ × ℝ} {t : ℝ} (ht : 0 < t) (hc : c ∈ rimPattern v t)
     (hc' : c' ∈ rimPattern v t) (hne : c ≠ c') : t / 1000 ≤ dist c c' := by
   obtain ⟨σ, hσ, j, hj, rfl | rfl⟩ := hc <;> obtain ⟨σ', hσ', j', hj', rfl | rfl⟩ := hc' <;>
     rw [dist_add_left, Prod.dist_eq, Real.dist_eq, Real.dist_eq]
@@ -337,12 +337,10 @@ theorem rimPattern_separation {v c c' : ℝ × ℝ} {t : ℝ} (ht : 0 < t) (hc :
 /-! ### Rim points of the unmodified guides -/
 
 /-- An integer multiple of `n > 0` of absolute value less than `n` is zero. -/
-theorem int_eq_zero_of_abs_lt {n : ℝ} (hn : 0 < n) {m : ℤ} (h : |n * m| < n) : m = 0 := by
+private theorem int_eq_zero_of_abs_lt {n : ℝ} (hn : 0 < n) {m : ℤ} (h : |n * m| < n) : m = 0 := by
   rw [abs_mul, abs_of_pos hn] at h
   have : |(m : ℝ)| < 1 := by nlinarith [abs_nonneg (m : ℝ)]
-  have : |m| < 1 := by exact_mod_cast (show ((|m| : ℤ) : ℝ) < 1 by rwa [Int.cast_abs])
-  rw [abs_lt] at this
-  omega
+  rwa [← Int.cast_abs, ← Int.cast_one, Int.cast_lt, Int.abs_lt_one_iff] at this
 
 /-- **Grid lines meet the rim in the pattern.** For `2 t < n`, a point of a grid line at sup
 distance `t` from a grid corner lies in the rim pattern of that corner: the grid line is one of
@@ -552,7 +550,7 @@ vertices of an unmodified guide of the repainting of a block, homogenized on the
 radius `t` about finitely many grid corners, are at sup distance at least `t / 1000`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:341–351`. -/
-theorem homogenize_trueVertex_separation {ι : Type*} {n t : ℝ} (hn : 0 < n) (ht : 0 < t)
+theorem le_dist_of_isTrueVertex_homogenize {ι : Type*} {n t : ℝ} (hn : 0 < n) (ht : 0 < t)
     (htn : 20 * t < n) {lab : ℤ × ℤ → ι} {S : ℤ × ℤ} {B : ι} {g : ℝ × ℝ → ι}
     (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g) (M : Finset (ℤ × ℤ)) (P : ι)
     {c₁ c₂ : ℝ × ℝ}
@@ -585,7 +583,7 @@ theorem homogenize_trueVertex_separation {ι : Type*} {n t : ℝ} (hn : 0 < n) (
       linarith
   · by_cases h : Q₁ = Q₂
     · subst h
-      exact rimPattern_separation ht hc₁ hc₂ hne
+      exact le_dist_of_mem_rimPattern ht hc₁ hc₂ hne
     · have hd₁ := dist_of_mem_rimPattern ht.le hc₁
       have hd₂ := dist_of_mem_rimPattern ht.le hc₂
       have := le_dist_blockCorner_of_ne hn h
@@ -607,7 +605,7 @@ theorem homogenize_outerHoles_disjoint {ι : Type*} {n t ε₀ : ℝ} (hn : 0 < 
     (h₂ : IsTrueVertex (homogenize (⋃ Q ∈ M, ball (blockCorner n Q) t) P
       (shiftGuide (blockCorner n S) g)) c₂) (hne : c₁ ≠ c₂) :
     Disjoint (closedBall c₁ (2 * ε₀ * t)) (closedBall c₂ (2 * ε₀ * t)) := by
-  have := homogenize_trueVertex_separation hn ht htn hg M P h₁ h₂ hne
+  have := le_dist_of_isTrueVertex_homogenize hn ht htn hg M P h₁ h₂ hne
   exact closedBall_disjoint_closedBall (by nlinarith)
 
 end TNLean.PEPS.Approximation

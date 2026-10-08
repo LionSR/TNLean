@@ -19,9 +19,11 @@ the side `x < t` on the other two: the two conventions differ on the interface c
 
 This file proves that the estimates of Lemma 7.2 do not depend on that difference. A labelling
 `f'` *reads* a labelling `f` after the displacement `v` if, at every point `p`, `f' p = f (p + ε v)`
-for all small `ε > 0`. When `f` agrees with the open chambers of the source off finitely many
-segments and `v` is parallel to none of them, the ray `p + ε v` leaves those segments at once, so
-the source's sampled guide reads `f` after `v`. We prove:
+for all small `ε > 0`. When `f` agrees with the open chambers of the source off a locally finite
+family of segments and `v` is parallel to none of them, the ray `p + ε v` leaves those segments at
+once, so the source's sampled guide reads `f` after `v`. That agreement and the genericity of `v`
+are not formalized; the existence and uniqueness of the readings of the schedule's guides are in
+`TNLean.PEPS.Approximation.DyadicSampledGuides`. We prove:
 
 * readings of two labellings along one displacement differ only in the closure of the set where
   the labellings differ, and a reading takes a value other than `c` only in the closure of the set
@@ -29,8 +31,8 @@ the source's sampled guide reads `f` after `v`. We prove:
 * consequently every estimate stated, as in the source, for closures of changed regions,
   obstructing sets and noncommon sets passes from the labellings to their readings;
 * Lemma 7.2 on every block of the hierarchy (`blockRepainting_central`, `blockRepainting_auxStep`,
-  `blockRepainting_mainStep`, `blockRepainting_exchange`) holds for the readings of the schedule's
-  guides after any displacement `v`, so for the source's sampled guides on all four edges.
+  `blockRepainting_mainStep`, `blockRepainting_exchange`) holds for every reading of the schedule's
+  guides after any displacement `v`, on all four edges.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -98,6 +100,8 @@ theorem IsDisplacedReading.ne_subset_closure {f₁ f₂ f₁' f₂' : X → ι}
   by_contra hne
   exact hq (subset_closure hne)
 
+/-- The closure of the set where two readings differ lies in the closure of the set where the
+labellings differ. -/
 theorem IsDisplacedReading.closure_ne_subset {f₁ f₂ f₁' f₂' : X → ι}
     (h₁ : IsDisplacedReading f₁' f₁ v) (h₂ : IsDisplacedReading f₂' f₂ v) :
     closure {p | f₁' p ≠ f₂' p} ⊆ closure {p | f₁ p ≠ f₂ p} :=

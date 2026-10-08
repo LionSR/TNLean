@@ -343,32 +343,36 @@ private theorem floor_div_eventually_mem {n x : ℝ} (hn : 0 < n) :
 /-- A labelling takes at most two values near `p`. Such a point is not a true vertex.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:109–111, 321–326`. -/
-def LocallyTwo {X ι : Type*} [TopologicalSpace X] (f : X → ι) (p : X) : Prop :=
+def HasTwoLabelsNear {X ι : Type*} [TopologicalSpace X] (f : X → ι) (p : X) : Prop :=
   ∃ P Q : ι, ∀ᶠ q in nhds p, f q ∈ ({P, Q} : Set ι)
 
-section LocallyTwo
+section HasTwoLabelsNear
 
 variable {X ι : Type*} [TopologicalSpace X] {f g : X → ι} {p : X}
 
-theorem LocallyTwo.not_isTrueVertex (h : LocallyTwo f p) : ¬ IsTrueVertex f p := by
+/-- A point near which a labelling takes at most two values is not a true vertex. -/
+theorem HasTwoLabelsNear.not_isTrueVertex (h : HasTwoLabelsNear f p) : ¬ IsTrueVertex f p := by
   obtain ⟨P, Q, h⟩ := h
   exact not_isTrueVertex_of_subset_pair (incidentLabels_subset h fun _ hq => hq)
 
-theorem LocallyTwo.congr (h : LocallyTwo f p) (hfg : f =ᶠ[nhds p] g) : LocallyTwo g p := by
+/-- Taking at most two values near a point depends only on the labelling near that point. -/
+theorem HasTwoLabelsNear.congr (h : HasTwoLabelsNear f p) (hfg : f =ᶠ[nhds p] g) :
+    HasTwoLabelsNear g p := by
   obtain ⟨P, Q, h⟩ := h
   exact ⟨P, Q, by filter_upwards [h, hfg] with q hq e; rwa [← e]⟩
 
-theorem locallyTwo_of_eventuallyEq_const {c : ι} (h : f =ᶠ[nhds p] fun _ => c) :
-    LocallyTwo f p :=
+/-- A labelling constant near a point takes at most two values there. -/
+theorem hasTwoLabelsNear_of_eventuallyEq_const {c : ι} (h : f =ᶠ[nhds p] fun _ => c) :
+    HasTwoLabelsNear f p :=
   ⟨c, c, by filter_upwards [h] with q hq; simp [hq]⟩
 
-end LocallyTwo
+end HasTwoLabelsNear
 
 /-- **A block guide has at most two labels near every point other than a grid corner.**
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:321–322, 508`. -/
-theorem locallyTwo_blockGuide {ι : Type*} {n : ℝ} (hn : 0 < n) (lab : ℤ × ℤ → ι) {c : ℝ × ℝ}
-    (hQ : ∀ Q : ℤ × ℤ, c ≠ blockCorner n Q) : LocallyTwo (blockGuide n lab) c := by
+theorem hasTwoLabelsNear_blockGuide {ι : Type*} {n : ℝ} (hn : 0 < n) (lab : ℤ × ℤ → ι) {c : ℝ × ℝ}
+    (hQ : ∀ Q : ℤ × ℤ, c ≠ blockCorner n Q) : HasTwoLabelsNear (blockGuide n lab) c := by
   have hc : (∀ a : ℤ, c.1 ≠ n * a) ∨ ∀ b : ℤ, c.2 ≠ n * b := by
     by_contra hc
     push Not at hc
@@ -396,7 +400,7 @@ theorem IsTrueVertex.eq_blockCorner {ι : Type*} {n : ℝ} (hn : 0 < n) {lab : �
     {c : ℝ × ℝ} (h : IsTrueVertex (blockGuide n lab) c) : ∃ Q : ℤ × ℤ, c = blockCorner n Q := by
   by_contra hQ
   push Not at hQ
-  exact (locallyTwo_blockGuide hn lab hQ).not_isTrueVertex h
+  exact (hasTwoLabelsNear_blockGuide hn lab hQ).not_isTrueVertex h
 
 /-- The grid corner `Q` is one of the four corners of the block `S`. -/
 def IsBlockCornerOf (S Q : ℤ × ℤ) : Prop :=

@@ -28,7 +28,14 @@ guides of a large-scale repainting and their point treatments:
   blocks, about one of four corners, scaled from `t` to `1/32`, with one of finitely many
   homogenizing labels and label-equality types;
 * with `exists_footprintRatio`, one ratio `ν > 0` gives the two-owner condition at footprint
-  radius `ν t` near every mark of every large-scale repainting, at every scale.
+  radius `ν t` near every corner of the repainted block, for every unmodified guide, point-treated
+  or not, at every scale;
+* homogenizing on the treated squares about several corners at once does not change a guide near
+  any one of them, so the same ratio serves the simultaneous point treatment of an operation.
+
+The unmodified guides are those of `RepaintingBaseline.IsUnmodifiedGuide`, which include the
+auxiliary guide after the lens exchange; the source's guides sampled after a small displacement
+are not treated here.
 
 The direct repaintings and the resizings, whose guides are block guides in units of `n`, are in
 `TNLean.PEPS.Approximation.DyadicBlockFootprints`.
@@ -48,14 +55,17 @@ open Set Metric Filter Topology SquareEdge
 
 /-! ### Scaling the square to side one -/
 
+/-- The parallel coordinate is linear. -/
 theorem SquareEdge.par_smul (e : SquareEdge) (a : ℝ) (p : ℝ × ℝ) :
     e.par (a • p) = a * e.par p := by
   cases e <;> simp [par]
 
+/-- The scaling `p ↦ n⁻¹ p` divides the normal coordinate of the square of side `n` by `n`. -/
 theorem SquareEdge.nor_inv_smul {n : ℝ} (hn : n ≠ 0) (e : SquareEdge) (p : ℝ × ℝ) :
     e.nor 1 (n⁻¹ • p) = n⁻¹ * e.nor n p := by
   cases e <;> simp [nor] <;> field_simp
 
+/-- The scaling `s ↦ n⁻¹ s` divides the band width of the square of side `n` by `n`. -/
 theorem bandWidth_inv_mul {n : ℝ} (hn : 0 < n) (s : ℝ) :
     bandWidth 1 (n⁻¹ * s) = n⁻¹ * bandWidth n s := by
   unfold bandWidth
@@ -98,6 +108,7 @@ theorem mem_centralRegion_inv_smul {n : ℝ} (hn : 0 < n) {p : ℝ × ℝ} :
   simp only [centralRegion, mem_ofPred_eq, Prod.smul_fst, Prod.smul_snd, smul_eq_mul,
     SquareEdge.par_smul, SquareEdge.nor_inv_smul hn.ne', bandWidth_inv_mul hn, k1, k2, k3]
 
+/-- Band updates commute with the scaling `p ↦ n⁻¹ p` to the unit square. -/
 theorem bandUpdate_inv_smul {ι : Type*} {n : ℝ} (hn : 0 < n) (e : SquareEdge) (W : ℝ → ι)
     {g g' : ℝ × ℝ → ι} (hg : ∀ p, g p = g' (n⁻¹ • p)) (p : ℝ × ℝ) :
     bandUpdate n e W g p = bandUpdate 1 e W g' (n⁻¹ • p) := by
@@ -120,6 +131,7 @@ theorem comp_bandWord {ι κ : Type*} (σ : ι → κ) (c : ι) (l : List (ℝ �
     · rfl
     · exact ih l'
 
+/-- Band updates commute with relabelling. -/
 theorem bandUpdate_comp {ι κ : Type*} (σ : ι → κ) (n : ℝ) (e : SquareEdge) (W : ℝ → ι)
     {g : ℝ × ℝ → ι} {g' : ℝ × ℝ → κ} {p : ℝ × ℝ} (hg : g' p = σ (g p)) :
     bandUpdate n e (σ ∘ W) g' p = σ (bandUpdate n e W g p) := by
@@ -131,6 +143,7 @@ section Words
 
 variable {ι κ : Type*} (σ : ι → κ) (A B C : ι)
 
+/-- Relabelling carries main words to main words of the relabelled labels. -/
 theorem comp_mainWords {W : ℝ → ι} (hW : W ∈ mainWords A B C) :
     σ ∘ W ∈ mainWords (σ A) (σ B) (σ C) := by
   simp only [mainWords, mem_insert_iff, mem_singleton_iff] at hW ⊢
@@ -138,11 +151,12 @@ theorem comp_mainWords {W : ℝ → ι} (hW : W ∈ mainWords A B C) :
     simp [edgeStartWord, mainWordOne, mainWordTwo, mainWordThree, mainWordFour, mainWordFive,
       comp_bandWord]
 
+/-- Relabelling carries auxiliary words to auxiliary words of the relabelled labels. -/
 theorem comp_auxWords {W : ℝ → ι} (hW : W ∈ auxWords A B C) :
     σ ∘ W ∈ auxWords (σ A) (σ B) (σ C) := by
   simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW ⊢
-  rcases hW with rfl | rfl | rfl | rfl <;>
-    simp [auxWordOne, auxWordTwo, auxWord, comp_bandWord]
+  rcases hW with rfl | rfl | rfl | rfl | rfl <;>
+    simp [auxWordOne, auxWordTwo, auxWord, auxWordExchanged, comp_bandWord]
 
 /-- Every main word of relabelled labels is the relabelling of a main word. -/
 theorem exists_mainWords_comp {W' : ℝ → κ} (hW : W' ∈ mainWords (σ A) (σ B) (σ C)) :
@@ -160,11 +174,13 @@ theorem exists_mainWords_comp {W' : ℝ → κ} (hW : W' ∈ mainWords (σ A) (�
 theorem exists_auxWords_comp {W' : ℝ → κ} (hW : W' ∈ auxWords (σ A) (σ B) (σ C)) :
     ∃ W ∈ auxWords A B C, W' = σ ∘ W := by
   simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl
+  rcases hW with rfl | rfl | rfl | rfl | rfl
   · exact ⟨bandWord C [], by simp [auxWords], by simp [comp_bandWord]⟩
   · exact ⟨auxWordOne B C, by simp [auxWords], by simp [auxWordOne, comp_bandWord]⟩
   · exact ⟨auxWordTwo A B C, by simp [auxWords], by simp [auxWordTwo, comp_bandWord]⟩
   · exact ⟨auxWord A B C, by simp [auxWords], by simp [auxWord, comp_bandWord]⟩
+  · exact ⟨auxWordExchanged A B C, by simp [auxWords],
+      by simp [auxWordExchanged, comp_bandWord]⟩
 
 end Words
 
@@ -188,6 +204,7 @@ section Rescale
 variable {R R' : RepaintingBaseline ι} (h : R.IsRescale R')
 include h
 
+/-- The guide after the central birth commutes with rescaling. -/
 theorem IsRescale.centralGuide_eq (p : ℝ × ℝ) :
     R.centralGuide p = R'.centralGuide (R.n⁻¹ • p) := by
   by_cases hc : p ∈ centralRegion R.n
@@ -198,6 +215,7 @@ theorem IsRescale.centralGuide_eq (p : ℝ × ℝ) :
       rw [h.n_eq]; exact fun h' => hc ((mem_centralRegion_inv_smul R.n_pos).1 h')
     rw [R.centralGuide_of_notMem hc, R'.centralGuide_of_notMem hc', h.guide_eq]
 
+/-- The guides after completed edges commute with rescaling. -/
 theorem IsRescale.completedGuide_eq (E : List SquareEdge) (p : ℝ × ℝ) :
     R.completedGuide E p = R'.completedGuide E (R.n⁻¹ • p) := by
   induction E generalizing p with
@@ -206,11 +224,13 @@ theorem IsRescale.completedGuide_eq (E : List SquareEdge) (p : ℝ × ℝ) :
     simp only [completedGuide]
     rw [bandUpdate_inv_smul R.n_pos e _ ih, h.n_eq, h.finalLabel_eq, h.nbrLabel_eq]
 
+/-- The main guides commute with rescaling. -/
 theorem IsRescale.mainGuide_eq (E : List SquareEdge) (e : SquareEdge) (W : ℝ → ι)
     (p : ℝ × ℝ) : R.mainGuide E e W p = R'.mainGuide E e W (R.n⁻¹ • p) := by
   simp only [mainGuide]
   rw [bandUpdate_inv_smul R.n_pos e W (h.completedGuide_eq E), h.n_eq]
 
+/-- The auxiliary guides commute with rescaling. -/
 theorem IsRescale.auxGuide_eq (e : SquareEdge) (W : ℝ → ι) (p : ℝ × ℝ) :
     R.auxGuide e W p = R'.auxGuide e W (R.n⁻¹ • p) := by
   simp only [auxGuide]
@@ -248,12 +268,14 @@ section Relabel
 variable {R : RepaintingBaseline ι} {R' : RepaintingBaseline κ} {σ : ι → κ} (h : R.IsRelabel R' σ)
 include h
 
+/-- The guide after the central birth commutes with relabelling where the starting guides do. -/
 theorem IsRelabel.centralGuide_eq {p : ℝ × ℝ} (hp : R'.guide p = σ (R.guide p)) :
     R'.centralGuide p = σ (R.centralGuide p) := by
   by_cases hc : p ∈ centralRegion R.n
   · rw [R.centralGuide_of_mem hc, R'.centralGuide_of_mem (h.n_eq ▸ hc), h.finalLabel_eq]
   · rw [R.centralGuide_of_notMem hc, R'.centralGuide_of_notMem (h.n_eq ▸ hc), hp]
 
+/-- The guides after completed edges commute with relabelling where the starting guides do. -/
 theorem IsRelabel.completedGuide_eq (E : List SquareEdge) {p : ℝ × ℝ}
     (hp : R'.guide p = σ (R.guide p)) : R'.completedGuide E p = σ (R.completedGuide E p) := by
   induction E with
@@ -300,14 +322,17 @@ def IsConicalAt {ι : Type*} (f : ℝ × ℝ → ι) (c : ℝ × ℝ) : Prop :=
   ∀ (w : ℝ × ℝ) (a b : ℝ), 0 < a → 0 < b → ‖a • w‖ < 1 / 2 → ‖b • w‖ < 1 / 2 →
     f (c + a • w) = f (c + b • w)
 
-theorem corner_trichotomy {c : ℝ × ℝ} (hc : IsSquareCorner 1 c) (e : SquareEdge) :
+/-- A corner of the unit square is an endpoint of each edge, or lies on the opposite edge. -/
+theorem IsSquareCorner.trichotomy {c : ℝ × ℝ} (hc : IsSquareCorner 1 c) (e : SquareEdge) :
     c = e.point 1 0 0 ∨ c = e.point 1 1 0 ∨ e.nor 1 c = 1 := by
   rcases hc with rfl | rfl | rfl | rfl <;> cases e <;> simp [point, nor]
 
+/-- The parallel coordinate along a ray. -/
 theorem SquareEdge.par_add_smul (e : SquareEdge) (c w : ℝ × ℝ) (a : ℝ) :
     e.par (c + a • w) = e.par c + a * e.par w := by
   cases e <;> simp [par]
 
+/-- The normal coordinate of the unit square along a ray. -/
 theorem SquareEdge.nor_add_smul (e : SquareEdge) (c w : ℝ × ℝ) (a : ℝ) :
     e.nor 1 (c + a • w) = e.nor 1 c + a * (e.nor 1 w - e.nor 1 0) := by
   cases e <;> simp [nor] <;> ring
@@ -352,7 +377,7 @@ theorem mem_edgeBand_conical {c : ℝ × ℝ} (hc : IsSquareCorner 1 c) (e : Squ
     c + a • w ∈ edgeBand 1 e α β ↔ c + b • w ∈ edgeBand 1 e α β := by
   have mem (x : ℝ) (hx : ‖x • w‖ < 1 / 2) : c + x • w ∈ ball c (1 / 2) := by
     rw [mem_ball, dist_eq_norm, add_sub_cancel_left]; exact hx
-  rcases corner_trichotomy hc e with rfl | rfl | hn
+  rcases hc.trichotomy e with rfl | rfl | hn
   · rw [mem_edgeBand_iff_of_mem_ball (mem _ haw), mem_edgeBand_iff_of_mem_ball (mem _ hbw)]
     simp only [e.par_add_smul, e.nor_add_smul, par_point, nor_point, zero_add]
     rw [cone_iff ha, cone_iff hb]
@@ -377,7 +402,7 @@ theorem bandCoord_conical {c : ℝ × ℝ} (hc : IsSquareCorner 1 c) (e : Square
   have hp := abs_par_lt (e := e) haw
   have hq := abs_par_lt (e := e) hbw
   rw [abs_lt] at hp hq
-  rcases corner_trichotomy hc e with rfl | rfl | hn
+  rcases hc.trichotomy e with rfl | rfl | hn
   · simp only [bandCoord, e.par_add_smul, e.nor_add_smul, par_point, nor_point, zero_add]
     rw [bandWidth_of_le_half (by linarith), bandWidth_of_le_half (by linarith),
       mul_div_assoc a (e.par w), mul_div_assoc b (e.par w), mul_div_mul_left _ _ ha.ne',
@@ -421,7 +446,7 @@ theorem mem_centralRegion_conical {c : ℝ × ℝ} (hc : IsSquareCorner 1 c) {w 
     have nq := abs_nor_lt (e := e) hbw
     rw [abs_lt] at hp hq np nq
     simp only [e.par_add_smul, e.nor_add_smul]
-    rcases corner_trichotomy hc e with rfl | rfl | hn
+    rcases hc.trichotomy e with rfl | rfl | hn
     · simp only [par_point, nor_point, zero_add]
       rw [bandWidth_of_le_half (by linarith), bandWidth_of_le_half (by linarith),
         mul_div_assoc, mul_div_assoc, mul_lt_mul_iff_of_pos_left ha,
@@ -531,40 +556,22 @@ end RepaintingBaseline
 
 /-! ### The reference repainting -/
 
-/-- The `3 × 3` blocks about the block `(0, 0)`. -/
-def windowBlocks : Finset (ℤ × ℤ) := Finset.Icc (-1) 1 ×ˢ Finset.Icc (-1) 1
-
-/-- The labels of the reference repainting: one slot for each block of the window, and one slot
-for the final label and for the blocks outside the window. -/
-abbrev WindowSlot := Option windowBlocks
-
-/-- The slot of a block. -/
-def windowSlot (Q : ℤ × ℤ) : WindowSlot := if h : Q ∈ windowBlocks then some ⟨Q, h⟩ else none
-
-/-- The labels that a repainting with block labels `lab` and final label `B` puts in the slots. -/
-def windowLabel {ι : Type*} (lab : ℤ × ℤ → ι) (B : ι) : WindowSlot → ι
-  | none => B
-  | some Q => lab Q
-
 /-- The reference repainting: the block `(0, 0)` of side one, labelled by the slots. -/
-noncomputable def referenceRepainting : RepaintingBaseline WindowSlot :=
-  blockBaseline one_pos windowSlot (0, 0) none
+noncomputable def referenceRepainting : RepaintingBaseline (BlockSlot 1) :=
+  blockBaseline one_pos (blockSlot 1) (0, 0) none
 
-theorem nbrBlock_zero_mem_windowBlocks (e : SquareEdge) : e.nbrBlock (0, 0) ∈ windowBlocks := by
+/-- The blocks across the edges of the block `(0, 0)` lie in the `3 × 3` window. -/
+theorem nbrBlock_zero_mem_blockWindow (e : SquareEdge) : e.nbrBlock (0, 0) ∈ blockWindow 1 := by
   cases e <;> decide
-
-theorem windowLabel_windowSlot {ι : Type*} (lab : ℤ × ℤ → ι) (B : ι) {Q : ℤ × ℤ}
-    (hQ : Q ∈ windowBlocks) : windowLabel lab B (windowSlot Q) = lab Q := by
-  simp [windowSlot, hQ, windowLabel]
 
 /-- The repainting of the block `(0, 0)` of side one with block labels `lab` and final label `B`
 is the reference repainting relabelled by the window labels. -/
 theorem isRelabel_referenceRepainting {ι : Type*} (lab : ℤ × ℤ → ι) (B : ι) :
-    referenceRepainting.IsRelabel (blockBaseline one_pos lab (0, 0) B) (windowLabel lab B) where
+    referenceRepainting.IsRelabel (blockBaseline one_pos lab (0, 0) B) (blockSlotLabel lab B) where
   n_eq := rfl
-  oldLabel_eq := (windowLabel_windowSlot lab B (by decide)).symm
+  oldLabel_eq := (blockSlotLabel_blockSlot lab B (by decide)).symm
   finalLabel_eq := rfl
-  nbrLabel_eq e := (windowLabel_windowSlot lab B (nbrBlock_zero_mem_windowBlocks e)).symm
+  nbrLabel_eq e := (blockSlotLabel_blockSlot lab B (nbrBlock_zero_mem_blockWindow e)).symm
 
 /-- The repainting of the block `S` of side `n` scales to the repainting of the block `(0, 0)` of
 side one with the block labels translated by `S`. -/
@@ -645,8 +652,9 @@ noncomputable def pointTreated {ι : Type*} (v : ℝ × ℝ) (t : ℝ) (P : Opti
 unit square, the homogenizing label if any, and a representative map of a label-equality type. -/
 abbrev TemplateIndex : Type :=
   {g // referenceRepainting.IsUnmodifiedGuide g} × {c : ℝ × ℝ // IsSquareCorner 1 c} ×
-    Option WindowSlot × (WindowSlot → WindowSlot)
+    Option (BlockSlot 1) × (BlockSlot 1 → BlockSlot 1)
 
+/-- There are finitely many templates. -/
 instance : Finite TemplateIndex := by
   have h1 : Finite {g // referenceRepainting.IsUnmodifiedGuide g} :=
     referenceRepainting.finite_isUnmodifiedGuide.to_subtype
@@ -657,7 +665,7 @@ instance : Finite TemplateIndex := by
 
 /-- The template guide of an index, in units of `t` about the mark: the reference guide about the
 corner, scaled by `1/32`, point-treated on the unit square about the origin, and relabelled. -/
-noncomputable def template (i : TemplateIndex) (u : ℝ × ℝ) : WindowSlot :=
+noncomputable def footprintTemplate (i : TemplateIndex) (u : ℝ × ℝ) : BlockSlot 1 :=
   i.2.2.2 (pointTreated 0 1 i.2.2.1 (fun u => i.1.1 (i.2.1.1 + (1 / 32 : ℝ) • u)) u)
 
 /-! ### The guides near a mark are relabelled templates -/
@@ -666,27 +674,27 @@ noncomputable def template (i : TemplateIndex) (u : ℝ × ℝ) : WindowSlot :=
 side. -/
 def cornerOffset (S Q : ℤ × ℤ) : ℝ × ℝ := (((Q.1 - S.1 : ℤ) : ℝ), ((Q.2 - S.2 : ℤ) : ℝ))
 
+/-- The offset of a corner of a block is a corner of the unit square. -/
 theorem isSquareCorner_cornerOffset {S Q : ℤ × ℤ} (hQ : IsBlockCornerOf S Q) :
     IsSquareCorner 1 (cornerOffset S Q) := by
   obtain ⟨h1 | h1, h2 | h2⟩ := hQ <;> simp [IsSquareCorner, cornerOffset, h1, h2]
 
+/-- The displacement between two grid corners is `n` times their offset. -/
 theorem blockCorner_sub_blockCorner (n : ℝ) (S Q : ℤ × ℤ) :
     blockCorner n Q - blockCorner n S = n • cornerOffset S Q := by
   refine Prod.ext ?_ ?_ <;> simp [blockCorner, cornerOffset] <;> ring
 
-theorem blockIndex_mem_windowBlocks {c p : ℝ × ℝ} (hc : IsSquareCorner 1 c)
-    (hp : dist p c < 1 / 8) : blockIndex 1 p ∈ windowBlocks := by
+/-- Near a corner of the unit square, the block index lies in the `3 × 3` window. -/
+theorem blockIndex_mem_blockWindow {c p : ℝ × ℝ} (hc : IsSquareCorner 1 c)
+    (hp : dist p c < 1 / 8) : blockIndex 1 p ∈ blockWindow 1 := by
   have hc' : (c.1 = 0 ∨ c.1 = 1) ∧ (c.2 = 0 ∨ c.2 = 1) := by
     rcases hc with rfl | rfl | rfl | rfl <;> simp
   rw [Prod.dist_eq, max_lt_iff, Real.dist_eq, Real.dist_eq, abs_lt, abs_lt] at hp
   have k (x c₀ : ℝ) (hc₀ : c₀ = 0 ∨ c₀ = 1) (h1 : -(1 / 8) < x - c₀) (h2 : x - c₀ < 1 / 8) :
-      ⌊x / 1⌋ ∈ Finset.Icc (-1 : ℤ) 1 := by
-    rw [div_one, Finset.mem_Icc]
-    have a : (-1 : ℝ) < x := by rcases hc₀ with rfl | rfl <;> linarith
-    have b : x < 2 := by rcases hc₀ with rfl | rfl <;> linarith
-    have a' : -1 ≤ ⌊x⌋ := Int.le_floor.2 (by push_cast; linarith)
-    have b' : ⌊x⌋ < 2 := Int.floor_lt.2 (by push_cast; linarith)
-    omega
+      ⌊x / 1⌋ ∈ Finset.Icc (-((1 : ℕ) : ℤ)) (1 : ℕ) := by
+    rw [div_one]
+    exact floor_mem_Icc (by rcases hc₀ with rfl | rfl <;> push_cast <;> linarith)
+      (by rcases hc₀ with rfl | rfl <;> push_cast <;> linarith)
   exact Finset.mem_product.2 ⟨k _ _ hc'.1 hp.1.1 hp.1.2, k _ _ hc'.2 hp.2.1 hp.2.2⟩
 
 section Instantiation
@@ -703,7 +711,7 @@ theorem exists_reference_eq {g : ℝ × ℝ → ι} (hg : (blockBaseline hn lab 
     {Q : ℤ × ℤ} (hQ : IsBlockCornerOf S Q) (ht : 0 < t) (htn : 8 * t < n) :
     ∃ g₀, referenceRepainting.IsUnmodifiedGuide g₀ ∧ ∀ u : ℝ × ℝ, ‖u‖ < 4 →
       shiftGuide (blockCorner n S) g (blockCorner n Q + t • u) =
-        windowLabel (fun R => lab (R + S)) B (g₀ (cornerOffset S Q + (1 / 32 : ℝ) • u)) := by
+        blockSlotLabel (fun R => lab (R + S)) B (g₀ (cornerOffset S Q + (1 / 32 : ℝ) • u)) := by
   set c := cornerOffset S Q
   have hc := isSquareCorner_cornerOffset hQ
   obtain ⟨g₁, hg₁, hg₁eq⟩ := (isRescale_blockBaseline hn lab S B).isUnmodifiedGuide hg
@@ -730,12 +738,12 @@ theorem exists_reference_eq {g : ℝ × ℝ → ι} (hg : (blockBaseline hn lab 
       abs_of_pos (by norm_num : (0 : ℝ) < 1 / 32)]
     linarith [norm_nonneg u]
   have hrel : (blockBaseline one_pos (fun R => lab (R + S)) (0, 0) B).guide
-      (c + (1 / 32 : ℝ) • u) = windowLabel (fun R => lab (R + S)) B
+      (c + (1 / 32 : ℝ) • u) = blockSlotLabel (fun R => lab (R + S)) B
         (referenceRepainting.guide (c + (1 / 32 : ℝ) • u)) := by
-    have hm := blockIndex_mem_windowBlocks hc hwin
+    have hm := blockIndex_mem_blockWindow hc hwin
     simp only [referenceRepainting, blockBaseline, blockGuide, blockCorner, Int.cast_zero,
       mul_zero, Prod.mk_zero_zero, add_zero]
-    rw [windowLabel_windowSlot _ _ hm]
+    rw [blockSlotLabel_blockSlot _ _ hm]
   simp only [shiftGuide]
   rw [hg₁eq]
   change g₁ (n⁻¹ • (blockCorner n Q + t • u - blockCorner n S)) = _
@@ -745,14 +753,15 @@ theorem exists_reference_eq {g : ℝ × ℝ → ι} (hg : (blockBaseline hn lab 
 /-- **The point-treated guides near a mark are relabelled templates.** -/
 theorem exists_template_eq {g : ℝ × ℝ → ι}
     (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g) {Q : ℤ × ℤ} (hQ : IsBlockCornerOf S Q)
-    (ht : 0 < t) (htn : 8 * t < n) (Pκ : Option WindowSlot) :
+    (ht : 0 < t) (htn : 8 * t < n) (Pκ : Option (BlockSlot 1)) :
     ∃ i : TemplateIndex, i.2.1.1 = cornerOffset S Q ∧ i.2.2.1 = Pκ ∧
-      i.2.2.2 = classRep (windowLabel (fun R => lab (R + S)) B) ∧
+      i.2.2.2 = classRep (blockSlotLabel (fun R => lab (R + S)) B) ∧
       ∀ q ∈ ball (blockCorner n Q) (4 * t),
-        pointTreated (blockCorner n Q) t (Pκ.map (windowLabel (fun R => lab (R + S)) B))
+        pointTreated (blockCorner n Q) t (Pκ.map (blockSlotLabel (fun R => lab (R + S)) B))
           (shiftGuide (blockCorner n S) g) q =
-        windowLabel (fun R => lab (R + S)) B (template i (t⁻¹ • (q - blockCorner n Q))) := by
-  set σ := windowLabel (fun R => lab (R + S)) B
+        blockSlotLabel (fun R => lab (R + S)) B
+          (footprintTemplate i (t⁻¹ • (q - blockCorner n Q))) := by
+  set σ := blockSlotLabel (fun R => lab (R + S)) B
   set v := blockCorner n Q
   obtain ⟨g₀, hg₀, heq⟩ := exists_reference_eq hn hg hQ ht htn
   refine ⟨(⟨g₀, hg₀⟩, ⟨_, isSquareCorner_cornerOffset hQ⟩, Pκ, classRep σ), rfl, rfl, rfl,
@@ -770,7 +779,7 @@ theorem exists_template_eq {g : ℝ × ℝ → ι}
     rw [inv_mul_lt_iff₀ ht, mul_one]
   have hf := heq u hu
   rw [← hqu] at hf
-  simp only [template, classRep_spec]
+  simp only [footprintTemplate, classRep_spec]
   cases Pκ with
   | none => simp only [Option.map_none, pointTreated, Option.elim]; exact hf
   | some k =>
@@ -789,7 +798,8 @@ universe u
 /-- **One footprint ratio for the point treatment at every scale.** Fix `ε₀ > 0`. There is a ratio
 `ν > 0` such that for every repainting of a block of side `n`, every scale `t` with `8 t < n`,
 every unmodified guide, every corner `v` of the block and every homogenizing label among the final
-label and the labels of the blocks next to the repainted one (or none), the guide point-treated
+label and the labels of the `3 × 3` window of blocks around and including the repainted one (or
+none), the guide point-treated
 on the open square of radius `t` about `v` has the two-owner condition with working set the closed
 square of radius `2 t` about `v`, holes at its true vertices within `3 t` of `v`, inner radius
 `ε₀ t` and footprint radius `ν t`. For `ε₀ ≤ 1` holes centered farther than `3 t` from `v` do not
@@ -801,21 +811,21 @@ theorem exists_pointTreatment_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
     ∃ ν > 0, ∀ {ι : Type u} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
       ∀ {lab : ℤ × ℤ → ι} {S : ℤ × ℤ} {B : ι} {g : ℝ × ℝ → ι},
       (blockBaseline hn lab S B).IsUnmodifiedGuide g → ∀ {Q : ℤ × ℤ}, IsBlockCornerOf S Q →
-      ∀ P : Option ι, (∀ x ∈ P, x = B ∨ ∃ R ∈ windowBlocks, x = lab (R + S)) →
-      TwoOwnerFootprints (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g))
+      ∀ P : Option ι, (∀ x ∈ P, x = B ∨ ∃ R ∈ blockWindow 1, x = lab (R + S)) →
+      HasTwoOwnerFootprints (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g))
         (closedBall (blockCorner n Q) (2 * t))
         {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧
           IsTrueVertex (pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g)) c}
         (ε₀ * t) (ν * t) := by
-  obtain ⟨ν, hν, H⟩ := exists_footprintRatio.{0, 0, u} (I := TemplateIndex) (g := template)
+  obtain ⟨ν, hν, H⟩ := exists_footprintRatio.{0, 0, u} (I := TemplateIndex) (g := footprintTemplate)
     (fun _ => Set.toFinite _) (W := fun _ => closedBall 0 2) (fun _ => isCompact_closedBall 0 2)
-    (H := fun i => {u | u ∈ closedBall (0 : ℝ × ℝ) 3 ∧ IsTrueVertex (template i) u})
+    (H := fun i => {u | u ∈ closedBall (0 : ℝ × ℝ) 3 ∧ IsTrueVertex (footprintTemplate i) u})
     (r₀ := ε₀) (r₁ := ε₀) (fun _ c hc htv =>
       ⟨c, ⟨closedBall_subset_closedBall (by norm_num) hc, htv⟩, mem_ball_self hε⟩)
   refine ⟨ν, hν, fun {ι n t} hn ht htn {lab S B g} hg {Q} hQ P hP => ?_⟩
-  set σ := windowLabel (fun R => lab (R + S)) B
+  set σ := blockSlotLabel (fun R => lab (R + S)) B
   set v := blockCorner n Q
-  obtain ⟨Pκ, rfl⟩ : ∃ Pκ : Option WindowSlot, P = Pκ.map σ := by
+  obtain ⟨Pκ, rfl⟩ : ∃ Pκ : Option (BlockSlot 1), P = Pκ.map σ := by
     cases P with
     | none => exact ⟨none, rfl⟩
     | some x =>
@@ -823,13 +833,80 @@ theorem exists_pointTreatment_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
       · exact ⟨some none, rfl⟩
       · exact ⟨some (some ⟨R, hR⟩), rfl⟩
   obtain ⟨i, -, -, hπ, heq⟩ := exists_template_eq hn hg hQ ht htn Pκ
-  have hinj : InjOn σ (range (template i)) := (injOn_range_classRep σ).mono (by
+  have hinj : InjOn σ (range (footprintTemplate i)) := (injOn_range_classRep σ).mono (by
     rintro _ ⟨w, rfl⟩
-    simp only [template, hπ]
+    simp only [footprintTemplate, hπ]
     exact mem_range_self _)
-  have key := TwoOwnerFootprints.of_template (ρ₁ := 2) (ρ₂ := 3) (ρ₃ := 4) hinj ht
+  have key := HasTwoOwnerFootprints.of_template (ρ₁ := 2) (ρ₂ := 3) (ρ₃ := 4) hinj ht
     (by norm_num) (by norm_num) (fun q hq => heq q (by rwa [mul_comm] at hq))
     (H i σ v ht ε₀ ⟨le_rfl, le_rfl⟩)
   rwa [mul_comm t 2, mul_comm t 3, mul_comm t ε₀] at key
+
+/-- **Simultaneous treatment near one corner.** For `8 t < n`, homogenizing on the open squares of
+radius `t` about all the grid corners of a finite set `M` agrees, on the open square of radius
+`4 t` about one of them, with homogenizing on its square alone: the other treated squares are
+farther away.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:330–333, 341–343`. -/
+theorem homogenize_iUnion_eq_of_mem_ball {ι : Type*} {n t : ℝ} (hn : 0 < n) (htn : 8 * t < n)
+    (M : Finset (ℤ × ℤ)) {Q : ℤ × ℤ} (hQ : Q ∈ M) (P : ι) (f : ℝ × ℝ → ι) {q : ℝ × ℝ}
+    (hq : q ∈ ball (blockCorner n Q) (4 * t)) :
+    homogenize (⋃ Q' ∈ M, ball (blockCorner n Q') t) P f q =
+      homogenize (ball (blockCorner n Q) t) P f q := by
+  have key : q ∈ ⋃ Q' ∈ M, ball (blockCorner n Q') t ↔ q ∈ ball (blockCorner n Q) t := by
+    refine ⟨fun h => ?_, fun h => mem_biUnion hQ h⟩
+    simp only [mem_iUnion, exists_prop] at h
+    obtain ⟨Q', -, hQ'⟩ := h
+    by_cases e : Q' = Q
+    · exact e ▸ hQ'
+    · have h1 := le_dist_blockCorner_of_ne hn e
+      have h2 := dist_triangle (blockCorner n Q') q (blockCorner n Q)
+      rw [mem_ball] at hq hQ'
+      rw [dist_comm] at hQ'
+      linarith
+  by_cases h : q ∈ ball (blockCorner n Q) t
+  · rw [homogenize_of_mem h, homogenize_of_mem (key.2 h)]
+  · rw [homogenize_of_notMem h, homogenize_of_notMem fun h' => h (key.1 h')]
+
+/-- **One footprint ratio for the simultaneous point treatment.** With one ratio `ν > 0`, for every
+repainting of a block of side `n`, every scale `t` with `8 t < n`, every unmodified guide, every
+finite set `M` of grid corners and every homogenizing label as in
+`exists_pointTreatment_footprintRatio`, the guide homogenized on the open squares of radius `t`
+about all corners of `M` has, about each corner of `M` that is a corner of the block, the two-owner
+condition with working set the closed square of radius `2 t`, holes at its true vertices within
+`3 t`, inner radius `ε₀ t` and footprint radius `ν t`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:330–333, 464–479, 481–505`. -/
+theorem exists_pointTreatment_footprintRatio_iUnion {ε₀ : ℝ} (hε : 0 < ε₀) :
+    ∃ ν > 0, ∀ {ι : Type u} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
+      ∀ {lab : ℤ × ℤ → ι} {S : ℤ × ℤ} {B : ι} {g : ℝ × ℝ → ι},
+      (blockBaseline hn lab S B).IsUnmodifiedGuide g → ∀ (M : Finset (ℤ × ℤ)) {Q : ℤ × ℤ},
+      Q ∈ M → IsBlockCornerOf S Q → ∀ P : ι, (P = B ∨ ∃ R ∈ blockWindow 1, P = lab (R + S)) →
+      HasTwoOwnerFootprints
+        (homogenize (⋃ Q' ∈ M, ball (blockCorner n Q') t) P (shiftGuide (blockCorner n S) g))
+        (closedBall (blockCorner n Q) (2 * t))
+        {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧ IsTrueVertex
+          (homogenize (⋃ Q' ∈ M, ball (blockCorner n Q') t) P (shiftGuide (blockCorner n S) g)) c}
+        (ε₀ * t) (ν * t) := by
+  obtain ⟨ν, hν, H⟩ := exists_pointTreatment_footprintRatio.{u} hε
+  refine ⟨ν, hν, fun {ι n t} hn ht htn {lab S B g} hg M {Q} hQM hQ P hP => ?_⟩
+  set f := homogenize (⋃ Q' ∈ M, ball (blockCorner n Q') t) P (shiftGuide (blockCorner n S) g)
+  set f₁ := pointTreated (blockCorner n Q) t (some P) (shiftGuide (blockCorner n S) g)
+  have heq (q : ℝ × ℝ) (hq : q ∈ ball (blockCorner n Q) (4 * t)) : f q = f₁ q :=
+    homogenize_iUnion_eq_of_mem_ball hn htn M hQM P _ hq
+  have hH := H hn ht htn hg hQ (some P) fun x hx => by
+    rw [Option.mem_def, Option.some_inj] at hx
+    exact hx ▸ hP
+  have hTV : {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧ IsTrueVertex f₁ c} =
+      {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧ IsTrueVertex f c} := by
+    ext c
+    refine and_congr_right fun hc => ?_
+    have hc4 : c ∈ ball (blockCorner n Q) (4 * t) := closedBall_subset_ball (by linarith) hc
+    have hloc : f₁ =ᶠ[𝓝 c] f := by
+      filter_upwards [isOpen_ball.mem_nhds hc4] with q hq
+      exact (heq q hq).symm
+    exact isTrueVertex_congr (incidentLabels_congr hloc)
+  rw [hTV] at hH
+  exact hH.congr fun q hq => (heq q (closedBall_subset_ball (by linarith) hq)).symm
 
 end TNLean.PEPS.Approximation

@@ -40,46 +40,6 @@ open Set Metric
 
 universe u
 
-/-- The blocks `Q` with `|Q₁|, |Q₂| ≤ M`. -/
-def blockWindow (M : ℕ) : Finset (ℤ × ℤ) :=
-  Finset.Icc (-(M : ℤ)) M ×ˢ Finset.Icc (-(M : ℤ)) M
-
-/-- The labels of the block templates: one slot for each block of the window, and one further
-slot for the blocks outside it. -/
-abbrev BlockSlot (M : ℕ) := Option (blockWindow M)
-
-/-- The slot of a block. -/
-def blockSlot (M : ℕ) (Q : ℤ × ℤ) : BlockSlot M :=
-  if h : Q ∈ blockWindow M then some ⟨Q, h⟩ else none
-
-/-- The labels that the block labels `lab` put in the slots, with `b` outside the window. -/
-def blockSlotLabel {ι : Type*} {M : ℕ} (lab : ℤ × ℤ → ι) (b : ι) : BlockSlot M → ι
-  | none => b
-  | some Q => lab Q
-
-/-- **A block guide in units of its side.** Near a grid corner `blockCorner s Q`, at points
-`blockCorner s Q + s u` with `‖u‖ < M`, a block guide of side `s` is the relabelling of the block
-guide of side one labelled by the slots of the window of radius `M`. -/
-theorem blockGuide_eq_blockSlot {ι : Type*} {s : ℝ} (hs : 0 < s) (lab : ℤ × ℤ → ι)
-    (Q : ℤ × ℤ) (M : ℕ) {u : ℝ × ℝ} (hu : ‖u‖ < M) :
-    blockGuide s lab (blockCorner s Q + s • u) =
-      blockSlotLabel (fun R => lab (Q + R)) (lab Q) (blockGuide 1 (blockSlot M) u) := by
-  rw [Prod.norm_def, max_lt_iff, Real.norm_eq_abs, Real.norm_eq_abs, abs_lt, abs_lt] at hu
-  have fl (x : ℝ) (hx1 : -(M : ℝ) < x) (hx2 : x < M) : ⌊x⌋ ∈ Finset.Icc (-(M : ℤ)) M := by
-    rw [Finset.mem_Icc]
-    have a : -(M : ℤ) ≤ ⌊x⌋ := Int.le_floor.2 (by push_cast; linarith)
-    have b : ⌊x⌋ < M := Int.floor_lt.2 (by push_cast; linarith)
-    omega
-  have hmem : (⌊u.1⌋, ⌊u.2⌋) ∈ blockWindow M :=
-    Finset.mem_product.2 ⟨fl _ hu.1.1 hu.1.2, fl _ hu.2.1 hu.2.2⟩
-  have h1 : (s * Q.1 + s * u.1) / s = u.1 + Q.1 := by field_simp; ring
-  have h2 : (s * Q.2 + s * u.2) / s = u.2 + Q.2 := by field_simp; ring
-  simp only [blockGuide, blockIndex, blockCorner, div_one, Prod.fst_add, Prod.snd_add,
-    Prod.smul_fst, Prod.smul_snd, smul_eq_mul, h1, h2, Int.floor_add_intCast, blockSlot, hmem,
-    dite_true, blockSlotLabel]
-  congr 1
-  exact Prod.ext (add_comm _ _) (add_comm _ _)
-
 /-- **One footprint ratio for block guides.** Fix `ρ` and `0 < r₀`. There is a ratio `ν > 0`
 such that every guide uniform on the blocks of side `s > 0`, about every grid corner `v`, with
 every inner radius `r ∈ [r₀ s, r₁ s]`, has the two-owner condition with working set the closed
@@ -91,7 +51,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–479, 5
 theorem exists_blockGuide_footprintRatio {ρ r₀ r₁ : ℝ} (hr₀ : 0 < r₀) :
     ∃ ν > 0, ∀ {ι : Type u} {s : ℝ}, 0 < s → ∀ (lab : ℤ × ℤ → ι) (Q : ℤ × ℤ),
       ∀ r ∈ Icc (r₀ * s) (r₁ * s),
-      TwoOwnerFootprints (blockGuide s lab) (closedBall (blockCorner s Q) (s * ρ))
+      HasTwoOwnerFootprints (blockGuide s lab) (closedBall (blockCorner s Q) (s * ρ))
         {c | c ∈ closedBall (blockCorner s Q) (s * (ρ + 1)) ∧ IsTrueVertex (blockGuide s lab) c}
         r (ν * s) := by
   set M : ℕ := ⌈ρ⌉₊ + 2
@@ -122,7 +82,7 @@ theorem exists_blockGuide_footprintRatio {ρ r₀ r₁ : ℝ} (hr₀ : 0 < r₀)
     rw [blockGuide_eq_blockSlot hs lab Q M hu]
     simp only [T, σ, classRep_spec]
   have hrs : r / s ∈ Icc r₀ r₁ := ⟨(le_div_iff₀ hs).2 hr.1, (div_le_iff₀ hs).2 hr.2⟩
-  have key := TwoOwnerFootprints.of_template (ρ₁ := ρ) (ρ₂ := ρ + 1) (ρ₃ := ρ + 2) hinj hs
+  have key := HasTwoOwnerFootprints.of_template (ρ₁ := ρ) (ρ₂ := ρ + 1) (ρ₃ := ρ + 2) hinj hs
     (by linarith) (by linarith) hf (H (classRep σ) σ (blockCorner s Q) hs (r / s) hrs)
   rwa [mul_div_cancel₀ r hs.ne'] at key
 
@@ -137,7 +97,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:507–527`. 
 theorem exists_directRepainting_footprintRatio {ε₀ K₀ : ℝ} (hε : 0 < ε₀) :
     ∃ ν > 0, ∀ {ι : Type u} {n t : ℝ}, 0 < n → 0 < t → n ≤ K₀ * t →
       ∀ (lab : ℤ × ℤ → ι) (Q : ℤ × ℤ),
-      TwoOwnerFootprints (blockGuide n lab) (closedBall (blockCorner n Q) (n * 2))
+      HasTwoOwnerFootprints (blockGuide n lab) (closedBall (blockCorner n Q) (n * 2))
         {c | c ∈ closedBall (blockCorner n Q) (n * (2 + 1)) ∧ IsTrueVertex (blockGuide n lab) c}
         (holeRadius ε₀ n t) (ν * n) := by
   obtain ⟨ν, hν, H⟩ := exists_blockGuide_footprintRatio.{u} (ρ := 2) (r₀ := ε₀ / max K₀ 1)
@@ -157,7 +117,8 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:529–541`. 
 theorem exists_resizing_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
     ∃ ν > 0, ∀ {ι : Type u} {n t : ℝ}, 0 < n → n < t → ∀ (lab : ℤ × ℤ → ι) (Q : ℤ × ℤ),
       ∀ r ∈ ({holeRadius ε₀ n t, holeRadius ε₀ (2 * n) t} : Set ℝ),
-      TwoOwnerFootprints (blockGuide (2 * n) lab) (closedBall (blockCorner (2 * n) Q) (2 * n * 1))
+      HasTwoOwnerFootprints (blockGuide (2 * n) lab)
+        (closedBall (blockCorner (2 * n) Q) (2 * n * 1))
         {c | c ∈ closedBall (blockCorner (2 * n) Q) (2 * n * (1 + 1)) ∧
           IsTrueVertex (blockGuide (2 * n) lab) c} r (ν * (2 * n)) := by
   obtain ⟨ν, hν, H⟩ := exists_blockGuide_footprintRatio.{u} (ρ := 1) (r₀ := ε₀ / 2) (r₁ := ε₀)
@@ -172,5 +133,30 @@ theorem exists_resizing_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
       nlinarith
     · have : min (2 * n) t ≤ 2 * n := min_le_left _ _
       nlinarith
+
+/-- **Intermediate configurations of a resizing.** With one ratio `ν > 0`, whenever `0 < n < t`,
+every guide uniform on the `2n`-blocks satisfies the two-owner condition about every grid corner of
+side `2n` when each hole has its own radius, `h_n` or `h_{2n}`: some holes may already be resized
+and others not. The holes, the working set and the footprint radius are those of
+`exists_resizing_footprintRatio`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:529–541`. -/
+theorem exists_resizing_footprintRatio_mixed {ε₀ : ℝ} (hε : 0 < ε₀) :
+    ∃ ν > 0, ∀ {ι : Type u} {n t : ℝ}, 0 < n → n < t → ∀ (lab : ℤ × ℤ → ι) (Q : ℤ × ℤ)
+      (ρ : ℝ × ℝ → ℝ), (∀ c, ρ c = holeRadius ε₀ n t ∨ ρ c = holeRadius ε₀ (2 * n) t) →
+      ∀ x p₁ p₂ p₃ : ℝ × ℝ, (∀ p ∈ ({p₁, p₂, p₃} : Set (ℝ × ℝ)),
+        p ∈ (closedBall x (ν * (2 * n)) ∩ closedBall (blockCorner (2 * n) Q) (2 * n * 1)) \
+          ⋃ c ∈ {c | c ∈ closedBall (blockCorner (2 * n) Q) (2 * n * (1 + 1)) ∧
+            IsTrueVertex (blockGuide (2 * n) lab) c}, ball c (ρ c)) →
+      blockGuide (2 * n) lab p₁ = blockGuide (2 * n) lab p₂ ∨
+        blockGuide (2 * n) lab p₁ = blockGuide (2 * n) lab p₃ ∨
+        blockGuide (2 * n) lab p₂ = blockGuide (2 * n) lab p₃ := by
+  obtain ⟨ν, hν, H⟩ := exists_resizing_footprintRatio.{u} hε
+  refine ⟨ν, hν, fun {ι n t} hn hnt lab Q ρ hρ x p₁ p₂ p₃ hp => ?_⟩
+  have hle : holeRadius ε₀ n t ≤ holeRadius ε₀ (2 * n) t :=
+    mul_le_mul_of_nonneg_left (min_le_min (by linarith) le_rfl) hε.le
+  exact (H hn hnt lab Q _ (Or.inl rfl)).of_le_radii
+    (fun c _ => (hρ c).elim (fun h => h.ge) fun h => h ▸ hle) x p₁ p₂ p₃
+    (hp p₁ (by simp)) (hp p₂ (by simp)) (hp p₃ (by simp))
 
 end TNLean.PEPS.Approximation

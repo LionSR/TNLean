@@ -10,7 +10,9 @@ import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 
 The guides of a large-scale repainting before any point treatment are the starting block guide,
 the guide after the central birth, the guides after completed edges, and the main and auxiliary
-guides along an edge, which replace the band `-8 < x < 2` of the edge by a normal word. The source
+guides along an edge, which replace the band `-8 < x < 2` of the edge by a normal word. The
+auxiliary words include the word left on the auxiliary sheet by the lens exchange, to which the
+point treatment of the exchange is removed before that sheet is retired. The source
 observes that all true vertices of these guides are separated on scale `n`: the baseline vertices
 are grid corners, the band interfaces are disjoint except at their endpoints, and the bends at
 `s = n/2` have only two incident labels. This file proves:
@@ -22,9 +24,9 @@ are grid corners, the band interfaces are disjoint except at their endpoints, an
 * the guide after the central birth has at most two labels near every point other than the four
   corners of the square at which the starting guide has at most two;
 * hence every true vertex of every unmodified guide of the repainting of a block is a grid corner,
-  and for `n > 20 t` the tenfold enlargement of the treated square about a grid corner contains no
-  true vertex of these guides other than its center. This is the clause of the choice of `K₀`
-  that the enlargements contain no other unmodified true vertex.
+  and for `n > 20 t` the closed tenfold enlargement of the treated square about a grid corner
+  contains no true vertex of these guides other than its center. This is the clause of the choice
+  of `K₀` that the enlargements contain no other unmodified true vertex.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -38,10 +40,6 @@ Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 namespace TNLean.PEPS.Approximation
 
 open Set Metric Filter Topology SquareEdge
-
-instance : Fintype SquareEdge where
-  elems := {.bottom, .right, .top, .left}
-  complete e := by cases e <;> simp
 
 /-! ### Normal words near a point -/
 
@@ -82,6 +80,7 @@ theorem bandWord_eventually_mem {ι : Type*} (c : ι) (l : List (ℝ × ι)) (x�
 
 /-! ### Band coordinates near a point -/
 
+/-- The normal ratio is continuous off the endpoints of the parallel span. -/
 theorem continuousAt_bandCoord {n : ℝ} {e : SquareEdge} {p : ℝ × ℝ} (h1 : 0 < e.par p)
     (h2 : e.par p < n) : ContinuousAt (bandCoord n e) p :=
   (e.continuous_nor n).continuousAt.div
@@ -112,15 +111,15 @@ replacing the band `-8 < x < 2` of `g` by the word `W` leaves at most two labels
 other than the two endpoints of the edge.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:227–241, 321–326`. -/
-theorem locallyTwo_bandUpdate {ι : Type*} {n : ℝ} (hn : 0 < n) {e : SquareEdge} {W : ℝ → ι}
+theorem hasTwoLabelsNear_bandUpdate {ι : Type*} {n : ℝ} (hn : 0 < n) {e : SquareEdge} {W : ℝ → ι}
     {g : ℝ × ℝ → ι} {p : ℝ × ℝ} (hW : ∀ x₀, ∃ P, ∀ᶠ x in 𝓝 x₀, W x ∈ ({P, W x₀} : Set ι))
     {c₁ c₂ : ι} (hlo : ∀ x ∈ Ioo (-8 : ℝ) (-7), W x = c₁) (hhi : ∀ x ∈ Ioo (1 : ℝ) 2, W x = c₂)
-    (h0 : p ≠ e.point n 0 0) (h1 : p ≠ e.point n n 0) (hg : LocallyTwo g p)
+    (h0 : p ≠ e.point n 0 0) (h1 : p ≠ e.point n n 0) (hg : HasTwoLabelsNear g p)
     (hlow : 0 < e.par p → e.par p < n → e.nor n p = -8 * bandWidth n (e.par p) →
       g =ᶠ[𝓝 p] fun _ => c₁)
     (hup : 0 < e.par p → e.par p < n → e.nor n p = 2 * bandWidth n (e.par p) →
       g =ᶠ[𝓝 p] fun _ => c₂) :
-    LocallyTwo (bandUpdate n e W g) p := by
+    HasTwoLabelsNear (bandUpdate n e W g) p := by
   by_cases hb : p ∈ edgeBand n e (-8) 2
   · obtain ⟨s1, s2, -, -⟩ := id hb
     obtain ⟨P, hP⟩ := hW (bandCoord n e p)
@@ -144,7 +143,7 @@ theorem locallyTwo_bandUpdate {ι : Type*} {n : ℝ} (hn : 0 < n) {e : SquareEdg
     · have hx : bandCoord n e p < -7 := by
         rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
         norm_num
-      refine locallyTwo_of_eventuallyEq_const (c := c₁) ?_
+      refine hasTwoLabelsNear_of_eventuallyEq_const (c := c₁) ?_
       filter_upwards [hlow hs0 hsn hd, hc.eventually (Iio_mem_nhds hx)] with q hq (hq' : _ < _)
       by_cases hqb : q ∈ edgeBand n e (-8) 2
       · rw [bandUpdate_of_mem hqb]
@@ -154,7 +153,7 @@ theorem locallyTwo_bandUpdate {ι : Type*} {n : ℝ} (hn : 0 < n) {e : SquareEdg
     · have hx : 1 < bandCoord n e p := by
         rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
         norm_num
-      refine locallyTwo_of_eventuallyEq_const (c := c₂) ?_
+      refine hasTwoLabelsNear_of_eventuallyEq_const (c := c₂) ?_
       filter_upwards [hup hs0 hsn hd, hc.eventually (Ioi_mem_nhds hx)] with q hq (hq' : _ < _)
       by_cases hqb : q ∈ edgeBand n e (-8) 2
       · rw [bandUpdate_of_mem hqb]
@@ -171,14 +170,18 @@ theorem locallyTwo_bandUpdate {ι : Type*} {n : ℝ} (hn : 0 < n) {e : SquareEdg
 def IsSquareCorner (n : ℝ) (p : ℝ × ℝ) : Prop :=
   p = (0, 0) ∨ p = (n, 0) ∨ p = (0, n) ∨ p = (n, n)
 
+/-- The first endpoint of an edge is a corner of the square. -/
 theorem isSquareCorner_point_zero (n : ℝ) (e : SquareEdge) : IsSquareCorner n (e.point n 0 0) := by
   cases e <;> simp [IsSquareCorner, point]
 
+/-- The second endpoint of an edge is a corner of the square. -/
 theorem isSquareCorner_point_end (n : ℝ) (e : SquareEdge) : IsSquareCorner n (e.point n n 0) := by
   cases e <;> simp [IsSquareCorner, point]
 
+/-- The open square is open. -/
 theorem isOpen_openSquare (n : ℝ) : IsOpen (openSquare n) := isOpen_Ioo.prod isOpen_Ioo
 
+/-- The central region is open. -/
 theorem isOpen_centralRegion (n : ℝ) : IsOpen (centralRegion n) := by
   have h : centralRegion n = openSquare n ∩ ⋂ e : SquareEdge,
       {p | bandWidth n (e.par p) < e.nor n p} := by
@@ -266,12 +269,21 @@ def mainWords {ι : Type*} (A B C : ι) : Set (ℝ → ι) :=
   {edgeStartWord A B C, mainWordOne A B C, mainWordTwo A B C, mainWordThree B C, mainWordFour B C,
     mainWordFive B C}
 
-/-- The normal words of the auxiliary sheet along an edge: the uniform word and the words after
-its three births.
+/-- The normal word `C | A | B | C` at interfaces `-3, -2, -1` of the auxiliary sheet after the
+lens exchange: the auxiliary word `eq:geometry-aux-word` with the lens `-7 < x < -7/2` replaced by
+the main sheet's `C`. The point treatment of the exchange is removed by changing to it, before the
+auxiliary sheet is retired.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:187–197`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:193–214, 334–338`. -/
+noncomputable def auxWordExchanged {ι : Type*} (A B C : ι) : ℝ → ι :=
+  bandWord C [(-3, A), (-2, B), (-1, C)]
+
+/-- The normal words of the auxiliary sheet along an edge: the uniform word, the words after its
+three births, and the word after the lens exchange.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:187–214`. -/
 def auxWords {ι : Type*} (A B C : ι) : Set (ℝ → ι) :=
-  {bandWord C [], auxWordOne B C, auxWordTwo A B C, auxWord A B C}
+  {bandWord C [], auxWordOne B C, auxWordTwo A B C, auxWord A B C, auxWordExchanged A B C}
 
 section Words
 
@@ -295,10 +307,22 @@ theorem auxWords_props {W : ℝ → ι} (hW : W ∈ auxWords A B C) :
     (∀ x₀, ∃ P, ∀ᶠ x in 𝓝 x₀, W x ∈ ({P, W x₀} : Set ι)) ∧
       (∀ x ∈ Ioo (-8 : ℝ) (-7), W x = C) ∧ ∀ x ∈ Ioo (1 : ℝ) 2, W x = C := by
   simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW
-  rcases hW with rfl | rfl | rfl | rfl <;>
+  rcases hW with rfl | rfl | rfl | rfl | rfl <;>
     refine ⟨bandWord_eventually_mem _ _, fun x ⟨h1, h2⟩ => ?_, fun x ⟨h1, h2⟩ => ?_⟩ <;>
-    simp only [auxWordOne, auxWordTwo, auxWord, bandWord] <;>
+    simp only [auxWordOne, auxWordTwo, auxWord, auxWordExchanged, bandWord] <;>
     split_ifs <;> first | rfl | (exfalso; linarith)
+
+/-- Every main word is a normal word `bandWord c l`. -/
+theorem exists_eq_bandWord_of_mem_mainWords {W : ℝ → ι} (hW : W ∈ mainWords A B C) :
+    ∃ c l, W = bandWord c l := by
+  simp only [mainWords, mem_insert_iff, mem_singleton_iff] at hW
+  rcases hW with rfl | rfl | rfl | rfl | rfl | rfl <;> exact ⟨_, _, rfl⟩
+
+/-- Every auxiliary word is a normal word `bandWord c l`. -/
+theorem exists_eq_bandWord_of_mem_auxWords {W : ℝ → ι} (hW : W ∈ auxWords A B C) :
+    ∃ c l, W = bandWord c l := by
+  simp only [auxWords, mem_insert_iff, mem_singleton_iff] at hW
+  rcases hW with rfl | rfl | rfl | rfl | rfl <;> exact ⟨_, _, rfl⟩
 
 /-- The words before, after and surrounding a main birth or death are main words. -/
 theorem mem_mainWords_of_mem_mainSteps {op : BandOperation ι} (hop : op ∈ mainSteps A B C) :
@@ -325,8 +349,8 @@ variable {ι : Type*} (R : RepaintingBaseline ι)
 where the starting guide has at most two labels, so does the guide after the central birth.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:155–160, 321–326`. -/
-theorem locallyTwo_centralGuide {p : ℝ × ℝ} (hp : ¬ IsSquareCorner R.n p)
-    (hg : LocallyTwo R.guide p) : LocallyTwo R.centralGuide p := by
+theorem hasTwoLabelsNear_centralGuide {p : ℝ × ℝ} (hp : ¬ IsSquareCorner R.n p)
+    (hg : HasTwoLabelsNear R.guide p) : HasTwoLabelsNear R.centralGuide p := by
   by_cases hc : p ∈ closure (centralRegion R.n)
   · have hS := mem_openSquare_of_mem_closure_centralRegion hc hp
     refine ⟨R.finalLabel, R.oldLabel, ?_⟩
@@ -387,15 +411,15 @@ theorem eventually_completedGuide_finalLabel (E : List SquareEdge) {e : SquareEd
 where the starting guide has at most two labels, so does every completed guide.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:227–241, 321–326`. -/
-theorem locallyTwo_completedGuide (E : List SquareEdge) {p : ℝ × ℝ}
-    (hp : ¬ IsSquareCorner R.n p) (hg : LocallyTwo R.guide p) :
-    LocallyTwo (R.completedGuide E) p := by
+theorem hasTwoLabelsNear_completedGuide (E : List SquareEdge) {p : ℝ × ℝ}
+    (hp : ¬ IsSquareCorner R.n p) (hg : HasTwoLabelsNear R.guide p) :
+    HasTwoLabelsNear (R.completedGuide E) p := by
   induction E with
-  | nil => exact R.locallyTwo_centralGuide hp hg
+  | nil => exact R.hasTwoLabelsNear_centralGuide hp hg
   | cons e E ih =>
     have hW := mainWords_props (A := R.oldLabel) (B := R.finalLabel) (C := R.nbrLabel e)
       (W := mainWordFive R.finalLabel (R.nbrLabel e)) (by simp [mainWords])
-    exact locallyTwo_bandUpdate R.n_pos hW.1 hW.2.1 hW.2.2
+    exact hasTwoLabelsNear_bandUpdate R.n_pos hW.1 hW.2.1 hW.2.2
       (fun h => hp (h ▸ isSquareCorner_point_zero _ e))
       (fun h => hp (h ▸ isSquareCorner_point_end _ e)) ih
       (fun h1 h2 hd => R.eventually_completedGuide_nbrLabel E h1 h2 hd)
@@ -406,14 +430,14 @@ the starting guide has at most two labels, so does every main guide along an edg
 carries a main word.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:160–165, 207–241, 321–326`. -/
-theorem locallyTwo_mainGuide (E : List SquareEdge) (e : SquareEdge) {W : ℝ → ι}
+theorem hasTwoLabelsNear_mainGuide (E : List SquareEdge) (e : SquareEdge) {W : ℝ → ι}
     (hW : W ∈ mainWords R.oldLabel R.finalLabel (R.nbrLabel e)) {p : ℝ × ℝ}
-    (hp : ¬ IsSquareCorner R.n p) (hg : LocallyTwo R.guide p) :
-    LocallyTwo (R.mainGuide E e W) p := by
+    (hp : ¬ IsSquareCorner R.n p) (hg : HasTwoLabelsNear R.guide p) :
+    HasTwoLabelsNear (R.mainGuide E e W) p := by
   have hW := mainWords_props hW
-  exact locallyTwo_bandUpdate R.n_pos hW.1 hW.2.1 hW.2.2
+  exact hasTwoLabelsNear_bandUpdate R.n_pos hW.1 hW.2.1 hW.2.2
     (fun h => hp (h ▸ isSquareCorner_point_zero _ e))
-    (fun h => hp (h ▸ isSquareCorner_point_end _ e)) (R.locallyTwo_completedGuide E hp hg)
+    (fun h => hp (h ▸ isSquareCorner_point_end _ e)) (R.hasTwoLabelsNear_completedGuide E hp hg)
     (fun h1 h2 hd => R.eventually_completedGuide_nbrLabel E h1 h2 hd)
     (fun h1 h2 hd => R.eventually_completedGuide_finalLabel E h1 h2 hd)
 
@@ -422,13 +446,13 @@ carries an auxiliary word has at most two labels near every point other than the
 of `e`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:187–197, 321–326`. -/
-theorem locallyTwo_auxGuide (e : SquareEdge) {W : ℝ → ι}
+theorem hasTwoLabelsNear_auxGuide (e : SquareEdge) {W : ℝ → ι}
     (hW : W ∈ auxWords R.oldLabel R.finalLabel (R.nbrLabel e)) {p : ℝ × ℝ}
     (h0 : p ≠ e.point R.n 0 0) (h1 : p ≠ e.point R.n R.n 0) :
-    LocallyTwo (R.auxGuide e W) p := by
+    HasTwoLabelsNear (R.auxGuide e W) p := by
   have hW := auxWords_props hW
-  exact locallyTwo_bandUpdate R.n_pos hW.1 hW.2.1 hW.2.2 h0 h1
-    (locallyTwo_of_eventuallyEq_const (Eventually.of_forall fun _ => rfl))
+  exact hasTwoLabelsNear_bandUpdate R.n_pos hW.1 hW.2.1 hW.2.2 h0 h1
+    (hasTwoLabelsNear_of_eventuallyEq_const (Eventually.of_forall fun _ => rfl))
     (fun _ _ _ => Eventually.of_forall fun _ => rfl)
     (fun _ _ _ => Eventually.of_forall fun _ => rfl)
 
@@ -444,14 +468,14 @@ def IsUnmodifiedGuide (g : ℝ × ℝ → ι) : Prop :=
 
 /-- Every unmodified guide has at most two labels near every point other than the four corners
 at which the starting guide has at most two. -/
-theorem IsUnmodifiedGuide.locallyTwo {g : ℝ × ℝ → ι} (h : R.IsUnmodifiedGuide g) {p : ℝ × ℝ}
-    (hp : ¬ IsSquareCorner R.n p) (hg : LocallyTwo R.guide p) : LocallyTwo g p := by
+theorem IsUnmodifiedGuide.hasTwoLabelsNear {g : ℝ × ℝ → ι} (h : R.IsUnmodifiedGuide g) {p : ℝ × ℝ}
+    (hp : ¬ IsSquareCorner R.n p) (hg : HasTwoLabelsNear R.guide p) : HasTwoLabelsNear g p := by
   rcases h with rfl | rfl | ⟨E, rfl⟩ | ⟨E, e, W, hW, rfl⟩ | ⟨e, W, hW, rfl⟩
   · exact hg
-  · exact R.locallyTwo_centralGuide hp hg
-  · exact R.locallyTwo_completedGuide E hp hg
-  · exact R.locallyTwo_mainGuide E e hW hp hg
-  · exact R.locallyTwo_auxGuide e hW (fun h => hp (h ▸ isSquareCorner_point_zero _ e))
+  · exact R.hasTwoLabelsNear_centralGuide hp hg
+  · exact R.hasTwoLabelsNear_completedGuide E hp hg
+  · exact R.hasTwoLabelsNear_mainGuide E e hW hp hg
+  · exact R.hasTwoLabelsNear_auxGuide e hW (fun h => hp (h ▸ isSquareCorner_point_zero _ e))
       (fun h => hp (h ▸ isSquareCorner_point_end _ e))
 
 end RepaintingBaseline
@@ -459,9 +483,9 @@ end RepaintingBaseline
 /-! ### True vertices on the blocks of the hierarchy -/
 
 /-- Two labels near a point pull back along a map continuous there. -/
-theorem LocallyTwo.comp {X Y ι : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f : Y → ι}
-    {φ : X → Y} {c : X} (h : LocallyTwo f (φ c)) (hφ : ContinuousAt φ c) :
-    LocallyTwo (f ∘ φ) c := by
+theorem HasTwoLabelsNear.comp {X Y ι : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f : Y → ι}
+    {φ : X → Y} {c : X} (h : HasTwoLabelsNear f (φ c)) (hφ : ContinuousAt φ c) :
+    HasTwoLabelsNear (f ∘ φ) c := by
   obtain ⟨P, Q, h⟩ := h
   exact ⟨P, Q, hφ.eventually h⟩
 
@@ -491,26 +515,28 @@ theorem IsTrueVertex.eq_blockCorner_of_isUnmodifiedGuide {ι : Type*} {n : ℝ} 
     · refine hQ (S.1 + 1, S.2 + 1) ?_
       rw [sub_eq_iff_eq_add] at hc
       rw [hc]; simp [o, blockCorner, mul_add, add_comm]
-  have hb : LocallyTwo (blockBaseline hn lab S B).guide (c - o) := by
-    have := (locallyTwo_blockGuide hn lab (c := c - o + o) (by rwa [sub_add_cancel])).comp
+  have hb : HasTwoLabelsNear (blockBaseline hn lab S B).guide (c - o) := by
+    have := (hasTwoLabelsNear_blockGuide hn lab (c := c - o + o) (by rwa [sub_add_cancel])).comp
       (φ := fun q => q + o) (continuous_id.add continuous_const).continuousAt
     exact this
-  have := (RepaintingBaseline.IsUnmodifiedGuide.locallyTwo _ hg hp hb).comp
+  have := (RepaintingBaseline.IsUnmodifiedGuide.hasTwoLabelsNear _ hg hp hb).comp
     (φ := fun q => q - o) (continuous_id.sub continuous_const).continuousAt
   exact this.not_isTrueVertex h
 
-/-- **No other unmodified true vertex in the tenfold enlargements.** For `n > 20 t`, the open
+/-- **No other unmodified true vertex in the tenfold enlargements.** For `n > 20 t`, the closed
 square of radius `10 t` about a grid corner contains no true vertex of an unmodified guide of the
 repainting of a block other than that corner.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:321–326, 341–343`. -/
-theorem eq_blockCorner_of_isTrueVertex_of_mem_ball {ι : Type*} {n t : ℝ} (hn : 0 < n)
+theorem eq_blockCorner_of_isTrueVertex_of_mem_closedBall {ι : Type*} {n t : ℝ} (hn : 0 < n)
     (ht : 20 * t < n) {lab : ℤ × ℤ → ι} {S : ℤ × ℤ} {B : ι} {g : ℝ × ℝ → ι}
     (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g) {Q : ℤ × ℤ} {c : ℝ × ℝ}
-    (hc : c ∈ ball (blockCorner n Q) (10 * t))
+    (hc : c ∈ closedBall (blockCorner n Q) (10 * t))
     (h : IsTrueVertex (shiftGuide (blockCorner n S) g) c) : c = blockCorner n Q := by
   obtain ⟨Q', rfl⟩ := h.eq_blockCorner_of_isUnmodifiedGuide hn hg
   by_contra hne
-  exact (disjoint_ball_blockCorner hn ht fun h => hne (by rw [h])).2 hc
+  have := le_dist_blockCorner_of_ne hn fun h : Q' = Q => hne (by rw [h])
+  rw [mem_closedBall] at hc
+  linarith
 
 end TNLean.PEPS.Approximation

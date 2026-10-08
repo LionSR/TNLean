@@ -8,9 +8,11 @@ import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 /-!
 # Footprint ratios uniform in the scale
 
-The small-patch covers need a patch radius `u = ν t` (near a mark) or `u = ν n` (direct repainting
-and resizing) such that every outer patch footprint meets at most two owners outside the inner
-holes, with one ratio `ν` for all scales. The source obtains `ν` from the compactness observation:
+The small-patch covers need a footprint radius `ν t` (near a mark) or `ν n` (direct repainting
+and resizing) such that every closed footprint of that radius meets at most two owners outside the
+inner holes, with one ratio `ν` for all scales. The source's patches have inner radius `u` and
+outer squares of radius at most `2 u`, so the source's inner patch radius is `u = ν t / 2` (or
+`ν n / 2`) for the ratio `ν` of this file. The source obtains `ν` from the compactness observation:
 the scaled old and new guides form finitely many label-equality types, the radius parameters
 range over compact intervals bounded away from zero, and the joint sets of a radius and a point
 are closed because being outside an open square is a non-strict distance inequality. This file
@@ -18,6 +20,8 @@ proves this argument in the following form:
 
 * the two-owner condition for a guide, a working set, hole centers, an inner radius and a
   footprint radius; it survives shrinking the footprint and identifying labels;
+* it survives enlarging some of the inner holes, which covers configurations in which only some
+  holes have been resized;
 * it is invariant under the similarities `u ↦ v + s u`, `s > 0`, of the sup metric, which scale
   all radii by `s`;
 * for one guide with finitely many values whose true vertices in a compact working set lie strictly
@@ -30,7 +34,9 @@ proves this argument in the following form:
   center with an injective relabelling of a similar image of a template inherits the template's
   two-owner condition, with holes at its own true vertices;
 * a representative map of each label-equality type of a relabelling, through which the relabelling
-  is injective.
+  is injective;
+* a block guide near a grid corner, in units of its side, is a relabelling of a block guide of side
+  one labelled by the slots of a square window of blocks.
 
 The guides of the protocol are identified with relabelled similar images of finitely many
 templates in `TNLean.PEPS.Approximation.DyadicFootprintTemplates` (near a mark) and
@@ -55,7 +61,7 @@ open Set Metric
 guide `f` at its points of the working set `W` outside the open inner holes `ball h r`, `h ∈ H`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:453–462, 481–485`. -/
-def TwoOwnerFootprints {ι : Type*} (f : ℝ × ℝ → ι) (W H : Set (ℝ × ℝ)) (r δ : ℝ) : Prop :=
+def HasTwoOwnerFootprints {ι : Type*} (f : ℝ × ℝ → ι) (W H : Set (ℝ × ℝ)) (r δ : ℝ) : Prop :=
   ∀ x p₁ p₂ p₃ : ℝ × ℝ, p₁ ∈ (closedBall x δ ∩ W) \ (⋃ h ∈ H, ball h r) →
     p₂ ∈ (closedBall x δ ∩ W) \ (⋃ h ∈ H, ball h r) →
     p₃ ∈ (closedBall x δ ∩ W) \ (⋃ h ∈ H, ball h r) →
@@ -66,18 +72,35 @@ section TwoOwner
 variable {ι κ : Type*} {f : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)} {r δ : ℝ}
 
 /-- The two-owner condition survives shrinking the footprint. -/
-theorem TwoOwnerFootprints.mono {δ' : ℝ} (h : TwoOwnerFootprints f W H r δ) (hδ : δ' ≤ δ) :
-    TwoOwnerFootprints f W H r δ' := fun x p₁ p₂ p₃ h₁ h₂ h₃ =>
+theorem HasTwoOwnerFootprints.mono {δ' : ℝ} (h : HasTwoOwnerFootprints f W H r δ) (hδ : δ' ≤ δ) :
+    HasTwoOwnerFootprints f W H r δ' := fun x p₁ p₂ p₃ h₁ h₂ h₃ =>
   h x p₁ p₂ p₃ ⟨⟨closedBall_subset_closedBall hδ h₁.1.1, h₁.1.2⟩, h₁.2⟩
     ⟨⟨closedBall_subset_closedBall hδ h₂.1.1, h₂.1.2⟩, h₂.2⟩
     ⟨⟨closedBall_subset_closedBall hδ h₃.1.1, h₃.1.2⟩, h₃.2⟩
+
+/-- **Enlarging some holes.** If the two-owner condition holds with inner radius `r`, it holds for
+the points of the working set outside the holes `ball h (ρ h)`, `h ∈ H`, of any radii `ρ h ≥ r`.
+This covers the intermediate configurations of a resizing, in which some holes already have their
+new radius.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:538–540`. -/
+theorem HasTwoOwnerFootprints.of_le_radii (h : HasTwoOwnerFootprints f W H r δ) {ρ : ℝ × ℝ → ℝ}
+    (hρ : ∀ c ∈ H, r ≤ ρ c) (x p₁ p₂ p₃ : ℝ × ℝ)
+    (h₁ : p₁ ∈ (closedBall x δ ∩ W) \ ⋃ c ∈ H, ball c (ρ c))
+    (h₂ : p₂ ∈ (closedBall x δ ∩ W) \ ⋃ c ∈ H, ball c (ρ c))
+    (h₃ : p₃ ∈ (closedBall x δ ∩ W) \ ⋃ c ∈ H, ball c (ρ c)) :
+    f p₁ = f p₂ ∨ f p₁ = f p₃ ∨ f p₂ = f p₃ := by
+  have sub : (⋃ c ∈ H, ball c r) ⊆ ⋃ c ∈ H, ball c (ρ c) :=
+    iUnion₂_mono fun c hc => ball_subset_ball (hρ c hc)
+  exact h x p₁ p₂ p₃ ⟨h₁.1, fun hm => h₁.2 (sub hm)⟩ ⟨h₂.1, fun hm => h₂.2 (sub hm)⟩
+    ⟨h₃.1, fun hm => h₃.2 (sub hm)⟩
 
 /-- **Identifying labels.** The two-owner condition survives any relabelling, injective or not:
 identifying nominal labels can only merge owners.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:315–318, 469–471`. -/
-theorem TwoOwnerFootprints.relabel (h : TwoOwnerFootprints f W H r δ) (σ : ι → κ) :
-    TwoOwnerFootprints (σ ∘ f) W H r δ := fun x p₁ p₂ p₃ h₁ h₂ h₃ => by
+theorem HasTwoOwnerFootprints.relabel (h : HasTwoOwnerFootprints f W H r δ) (σ : ι → κ) :
+    HasTwoOwnerFootprints (σ ∘ f) W H r δ := fun x p₁ p₂ p₃ h₁ h₂ h₃ => by
   rcases h x p₁ p₂ p₃ h₁ h₂ h₃ with e | e | e
   · exact Or.inl (congrArg σ e)
   · exact Or.inr (Or.inl (congrArg σ e))
@@ -90,10 +113,12 @@ end TwoOwner
 /-- The similarity `u ↦ v + s u` of the plane. -/
 def similarity (v : ℝ × ℝ) (s : ℝ) (u : ℝ × ℝ) : ℝ × ℝ := v + s • u
 
+/-- A similarity of ratio `s > 0` multiplies sup distances by `s`. -/
 theorem dist_similarity (v : ℝ × ℝ) {s : ℝ} (hs : 0 < s) (a b : ℝ × ℝ) :
     dist (similarity v s a) (similarity v s b) = s * dist a b := by
   rw [similarity, similarity, dist_add_left, dist_smul₀, Real.norm_eq_abs, abs_of_pos hs]
 
+/-- The similarity `u ↦ v + s u` undoes `q ↦ s⁻¹ (q - v)`. -/
 theorem similarity_inv (v : ℝ × ℝ) {s : ℝ} (hs : s ≠ 0) (q : ℝ × ℝ) :
     similarity v s (s⁻¹ • (q - v)) = q := by
   rw [similarity, smul_smul, mul_inv_cancel₀ hs, one_smul, add_sub_cancel]
@@ -104,9 +129,9 @@ with working set `W`, hole centers `H`, inner radius `r` and footprint radius `�
 working set and hole centers and the radii `s r` and `s δ`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–471, 486–491`. -/
-theorem TwoOwnerFootprints.image_similarity {ι : Type*} {g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)}
-    {r δ : ℝ} (h : TwoOwnerFootprints g W H r δ) (v : ℝ × ℝ) {s : ℝ} (hs : 0 < s) :
-    TwoOwnerFootprints (fun q => g (s⁻¹ • (q - v))) (similarity v s '' W)
+theorem HasTwoOwnerFootprints.image_similarity {ι : Type*} {g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)}
+    {r δ : ℝ} (h : HasTwoOwnerFootprints g W H r δ) (v : ℝ × ℝ) {s : ℝ} (hs : 0 < s) :
+    HasTwoOwnerFootprints (fun q => g (s⁻¹ • (q - v))) (similarity v s '' W)
       (similarity v s '' H) (s * r) (s * δ) := by
   have back (q : ℝ × ℝ) : similarity v s (s⁻¹ • (q - v)) = q := similarity_inv v hs.ne' q
   have key {x p : ℝ × ℝ} (hp : p ∈ (closedBall x (s * δ) ∩ similarity v s '' W) \
@@ -157,10 +182,10 @@ hole `ball h r₀`, `h ∈ H`, of the smallest radius. Then one footprint radius
 two-owner condition for every inner radius `r ∈ [r₀, r₁]`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:453–469`. -/
-theorem exists_twoOwnerFootprints_Icc {ι : Type*} {f : ℝ × ℝ → ι} (hfin : (range f).Finite)
+theorem exists_hasTwoOwnerFootprints_Icc {ι : Type*} {f : ℝ × ℝ → ι} (hfin : (range f).Finite)
     {W : Set (ℝ × ℝ)} (hW : IsCompact W) {H : Set (ℝ × ℝ)} {r₀ r₁ : ℝ}
     (hH : ∀ c ∈ W, IsTrueVertex f c → ∃ h ∈ H, c ∈ ball h r₀) :
-    ∃ δ > 0, ∀ r ∈ Icc r₀ r₁, TwoOwnerFootprints f W H r δ := by
+    ∃ δ > 0, ∀ r ∈ Icc r₀ r₁, HasTwoOwnerFootprints f W H r δ := by
   have : Finite (range f) := hfin.to_subtype
   let F : range f → Set (ℝ × (ℝ × ℝ)) := fun c =>
     {q | q.1 ∈ Icc r₀ r₁ ∧ q.2 ∈ closure (f ⁻¹' {c.1}) ∩ W ∧ ∀ h ∈ H, q.1 ≤ dist q.2 h}
@@ -206,9 +231,9 @@ theorem exists_footprintRatio {I κ : Type*} [Finite I] {g : I → ℝ × ℝ �
     (hfin : ∀ i, (range (g i)).Finite) {W H : I → Set (ℝ × ℝ)} (hW : ∀ i, IsCompact (W i))
     {r₀ r₁ : ℝ} (hH : ∀ i, ∀ c ∈ W i, IsTrueVertex (g i) c → ∃ h ∈ H i, c ∈ ball h r₀) :
     ∃ ν > 0, ∀ (i : I) {ι : Type*} (σ : κ → ι) (v : ℝ × ℝ) {s : ℝ}, 0 < s →
-      ∀ r ∈ Icc r₀ r₁, TwoOwnerFootprints (fun q => σ (g i (s⁻¹ • (q - v))))
+      ∀ r ∈ Icc r₀ r₁, HasTwoOwnerFootprints (fun q => σ (g i (s⁻¹ • (q - v))))
         (similarity v s '' W i) (similarity v s '' H i) (s * r) (ν * s) := by
-  choose δ hδ hδr using fun i => exists_twoOwnerFootprints_Icc (r₁ := r₁) (hfin i) (hW i) (hH i)
+  choose δ hδ hδr using fun i => exists_hasTwoOwnerFootprints_Icc (r₁ := r₁) (hfin i) (hW i) (hH i)
   obtain ⟨ν, hν0, hν⟩ : ∃ ν > 0, ∀ i, ν ≤ δ i := by
     rcases isEmpty_or_nonempty I with hI | hI
     · exact ⟨1, one_pos, fun i => hI.elim i⟩
@@ -267,10 +292,13 @@ theorem isTrueVertex_comp_homeomorph {X Y ι : Type*} [TopologicalSpace X] [Topo
 noncomputable def similarityInv (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) : (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
   (Homeomorph.addRight (-v)).trans (Homeomorph.smulOfNeZero t⁻¹ (inv_ne_zero ht))
 
+/-- The value of the inverse similarity. -/
 theorem similarityInv_apply (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) (q : ℝ × ℝ) :
     similarityInv v ht q = t⁻¹ • (q - v) := by
   simp [similarityInv, sub_eq_add_neg]
 
+/-- A similarity of ratio `t > 0` carries the closed square of radius `ρ` about the origin onto
+the closed square of radius `t ρ` about `v`. -/
 theorem image_similarity_closedBall (v : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ : ℝ) :
     similarity v t '' closedBall 0 ρ = closedBall v (t * ρ) := by
   ext q
@@ -290,9 +318,9 @@ theorem image_similarity_closedBall (v : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ 
     exact hq
 
 /-- The two-owner condition depends only on the values of the guide on the working set. -/
-theorem TwoOwnerFootprints.congr {ι : Type*} {f g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)} {r δ : ℝ}
-    (h : TwoOwnerFootprints f W H r δ) (hfg : ∀ p ∈ W, f p = g p) :
-    TwoOwnerFootprints g W H r δ := fun x p₁ p₂ p₃ h₁ h₂ h₃ => by
+theorem HasTwoOwnerFootprints.congr {ι : Type*} {f g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)} {r δ : ℝ}
+    (h : HasTwoOwnerFootprints f W H r δ) (hfg : ∀ p ∈ W, f p = g p) :
+    HasTwoOwnerFootprints g W H r δ := fun x p₁ p₂ p₃ h₁ h₂ h₃ => by
   rw [← hfg p₁ h₁.1.2, ← hfg p₂ h₂.1.2, ← hfg p₃ h₃.1.2]
   exact h x p₁ p₂ p₃ h₁ h₂ h₃
 
@@ -304,13 +332,13 @@ the image working set `closedBall 0 ρ₁` and the image hole centers at the tru
 hole centers at its true vertices in `closedBall v (s ρ₂)`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:469–471, 486–491`. -/
-theorem TwoOwnerFootprints.of_template {ι κ : Type*} {f : ℝ × ℝ → ι} {T : ℝ × ℝ → κ}
+theorem HasTwoOwnerFootprints.of_template {ι κ : Type*} {f : ℝ × ℝ → ι} {T : ℝ × ℝ → κ}
     {σ : κ → ι} (hσ : InjOn σ (range T)) {v : ℝ × ℝ} {s : ℝ} (hs : 0 < s) {ρ₁ ρ₂ ρ₃ : ℝ}
     (h12 : ρ₁ ≤ ρ₂) (h23 : ρ₂ < ρ₃) (hf : ∀ q ∈ ball v (s * ρ₃), f q = σ (T (s⁻¹ • (q - v))))
-    {r δ : ℝ} (hT : TwoOwnerFootprints (fun q => σ (T (s⁻¹ • (q - v))))
+    {r δ : ℝ} (hT : HasTwoOwnerFootprints (fun q => σ (T (s⁻¹ • (q - v))))
       (similarity v s '' closedBall 0 ρ₁)
       (similarity v s '' {u | u ∈ closedBall (0 : ℝ × ℝ) ρ₂ ∧ IsTrueVertex T u}) r δ) :
-    TwoOwnerFootprints f (closedBall v (s * ρ₁))
+    HasTwoOwnerFootprints f (closedBall v (s * ρ₁))
       {c | c ∈ closedBall v (s * ρ₂) ∧ IsTrueVertex f c} r δ := by
   have htv (q : ℝ × ℝ) (hq : q ∈ closedBall v (s * ρ₂)) :
       IsTrueVertex f q ↔ IsTrueVertex T (s⁻¹ • (q - v)) := by
@@ -345,25 +373,73 @@ theorem TwoOwnerFootprints.of_template {ι κ : Type*} {f : ℝ × ℝ → ι} {
 
 /-! ### Label-equality types -/
 
-/-- A preimage under `σ` of each value of `σ`. -/
-noncomputable def classSection {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (y : ι) : κ := by
-  classical
-  exact if h : ∃ k, σ k = y then h.choose else default
+/-- A representative, under `σ`, of the class of `k`: a preimage under `σ` of `σ k`, chosen as a
+function of `σ k`.
 
-/-- A representative, under `σ`, of the class of `k`: a function of `σ k`. -/
-noncomputable def classRep {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (k : κ) : κ :=
-  classSection σ (σ k)
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:469–471`. -/
+noncomputable def classRep {κ ι : Type*} [Nonempty κ] (σ : κ → ι) (k : κ) : κ :=
+  Function.invFun σ (σ k)
 
-theorem classRep_spec {κ ι : Type*} [Inhabited κ] (σ : κ → ι) (k : κ) :
-    σ (classRep σ k) = σ k := by
-  have h : ∃ k', σ k' = σ k := ⟨k, rfl⟩
-  simp only [classRep, classSection, h, dite_true]
-  exact h.choose_spec
+/-- The representative of a class has the same image. -/
+theorem classRep_spec {κ ι : Type*} [Nonempty κ] (σ : κ → ι) (k : κ) :
+    σ (classRep σ k) = σ k :=
+  Function.invFun_eq ⟨k, rfl⟩
 
-theorem injOn_range_classRep {κ ι : Type*} [Inhabited κ] (σ : κ → ι) :
+/-- A relabelling is injective on the representatives of its classes. -/
+theorem injOn_range_classRep {κ ι : Type*} [Nonempty κ] (σ : κ → ι) :
     InjOn σ (range (classRep σ)) := by
   rintro _ ⟨k, rfl⟩ _ ⟨k', rfl⟩ h
   rw [classRep_spec σ k, classRep_spec σ k'] at h
   simp only [classRep, h]
+
+/-! ### Block guides in units of their side -/
+
+/-- The integer part of a real number in `[a, b + 1)` lies in `[a, b]`. -/
+theorem floor_mem_Icc {a b : ℤ} {x : ℝ} (h₁ : (a : ℝ) ≤ x) (h₂ : x < b + 1) :
+    ⌊x⌋ ∈ Finset.Icc a b :=
+  Finset.mem_Icc.2 ⟨Int.le_floor.2 h₁, Int.floor_le_iff.2 h₂⟩
+
+/-- The blocks `Q` with `|Q₁|, |Q₂| ≤ M`. -/
+def blockWindow (M : ℕ) : Finset (ℤ × ℤ) :=
+  Finset.Icc (-(M : ℤ)) M ×ˢ Finset.Icc (-(M : ℤ)) M
+
+/-- The labels of the block templates: one slot for each block of the window, and one further
+slot for the blocks outside it. -/
+abbrev BlockSlot (M : ℕ) := Option (blockWindow M)
+
+/-- The slot of a block. -/
+def blockSlot (M : ℕ) (Q : ℤ × ℤ) : BlockSlot M :=
+  if h : Q ∈ blockWindow M then some ⟨Q, h⟩ else none
+
+/-- The labels that the block labels `lab` put in the slots, with `b` outside the window. -/
+def blockSlotLabel {ι : Type*} {M : ℕ} (lab : ℤ × ℤ → ι) (b : ι) : BlockSlot M → ι
+  | none => b
+  | some Q => lab Q
+
+/-- The slot labels of a block of the window are its labels. -/
+theorem blockSlotLabel_blockSlot {ι : Type*} {M : ℕ} (lab : ℤ × ℤ → ι) (b : ι) {Q : ℤ × ℤ}
+    (hQ : Q ∈ blockWindow M) : blockSlotLabel lab b (blockSlot M Q) = lab Q := by
+  simp [blockSlot, hQ, blockSlotLabel]
+
+/-- **A block guide in units of its side.** Near a grid corner `blockCorner s Q`, at points
+`blockCorner s Q + s u` with `‖u‖ < M`, a block guide of side `s` is the relabelling of the block
+guide of side one labelled by the slots of the window of radius `M`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–471, 515–520`. -/
+theorem blockGuide_eq_blockSlot {ι : Type*} {s : ℝ} (hs : 0 < s) (lab : ℤ × ℤ → ι)
+    (Q : ℤ × ℤ) (M : ℕ) {u : ℝ × ℝ} (hu : ‖u‖ < M) :
+    blockGuide s lab (blockCorner s Q + s • u) =
+      blockSlotLabel (fun R => lab (Q + R)) (lab Q) (blockGuide 1 (blockSlot M) u) := by
+  rw [Prod.norm_def, max_lt_iff, Real.norm_eq_abs, Real.norm_eq_abs, abs_lt, abs_lt] at hu
+  have hmem : (⌊u.1⌋, ⌊u.2⌋) ∈ blockWindow M :=
+    Finset.mem_product.2 ⟨floor_mem_Icc (by push_cast; linarith) (by push_cast; linarith),
+      floor_mem_Icc (by push_cast; linarith) (by push_cast; linarith)⟩
+  have h1 : (s * Q.1 + s * u.1) / s = u.1 + Q.1 := by field_simp; ring
+  have h2 : (s * Q.2 + s * u.2) / s = u.2 + Q.2 := by field_simp; ring
+  simp only [blockGuide, blockIndex, blockCorner, div_one, Prod.fst_add, Prod.snd_add,
+    Prod.smul_fst, Prod.smul_snd, smul_eq_mul, h1, h2, Int.floor_add_intCast, blockSlot, hmem,
+    dite_true, blockSlotLabel]
+  congr 1
+  exact Prod.ext (add_comm _ _) (add_comm _ _)
 
 end TNLean.PEPS.Approximation

@@ -151,22 +151,40 @@ the interface curves of two edges.
 
 The estimates do not depend on this difference. Say that a labelling $f'$ reads
 $f$ after the displacement $v$ if $f'(p)=f(p+\varepsilon v)$ for every point $p$ and
-all sufficiently small $\varepsilon>0$. The formal labellings agree with the
-source's open chambers off finitely many segments, and a ray $p+\varepsilon v$ with
-$v$ parallel to none of them leaves those segments at once; so each sampled guide
-of the source reads the corresponding formal labelling after $v$. If $f_1'$,
-$f_2'$ read $f_1$, $f_2$ after the same $v$ and $f_1=f_2$ near $p$, then
-$f_1'(p)=f_2'(p)$. Hence the set where $f_1'\ne f_2'$ lies in the closure of the
-set where $f_1\ne f_2$, the set where $f'\ne c$ lies in the closure of the set
-where $f\ne c$, and the same holds for the positions that are not common $C$.
-Every estimate of Lemma~7.2 is stated for these closures, so each passes from the
-formal labellings to the sampled guides, for every displacement $v$
+all sufficiently small $\varepsilon>0$. If $f_1'$, $f_2'$ read $f_1$, $f_2$ after the
+same $v$ and $f_1=f_2$ near $p$, then $f_1'(p)=f_2'(p)$. Hence the set where
+$f_1'\ne f_2'$ lies in the closure of the set where $f_1\ne f_2$, the set where
+$f'\ne c$ lies in the closure of the set where $f\ne c$, and the same holds for the
+positions that are not common $C$. Every estimate of Lemma~7.2 is stated for these
+closures, so each passes from the formal labellings to every reading of them, for
+every displacement $v$
 (\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.closure_ne_subset},
 \leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_reading},
 \leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_reading},
 \leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep_of_reading},
 \leanid{TNLean.PEPS.Approximation.blockRepainting_exchange_of_reading}).
-That a generic $v$ is parallel to none of the segments is the source's choice of
-$v$ and is not formalized.
+
+Readings of the formal labellings exist and are unique, for every displacement.
+Along a ray $p+\varepsilon v$ the coordinates, the band width and the normal
+coordinates agree for small $\varepsilon>0$ with affine functions of $\varepsilon$,
+whose signs are then eventually constant; the bands, the central region, the sup
+squares and the blocks are finite combinations of strict inequalities and floors of
+such functions, so every formal labelling, and every one homogenized on finitely many
+open squares, is eventually constant along every ray
+(\leanid{TNLean.PEPS.Approximation.isRayConstant_blockSchedule},
+\leanid{TNLean.PEPS.Approximation.IsRayConstant.exists_isDisplacedReading},
+\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.unique}). The region of a label
+in a reading lies in the closure of its region in the labelling, so a true vertex of a
+reading is a true vertex of the labelling, and the outer holes of the readings of the
+temporary guides are disjoint
+(\leanid{TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}).
+
+Two facts remain unformalized: that the source's open chambers are the open sets on
+which the formal labellings are constant, off a locally finite family of segments,
+and that the source's generic displacement is parallel to none of these segments, so
+that a ray $p+\varepsilon v$ leaves them at once. Together they identify each sampled
+guide of the source with the reading of the corresponding formal labelling. The
+uniform footprint ratios of the point treatment and of the block guides are proved for
+the formal labellings, not for their readings.
 
 \end{document}
