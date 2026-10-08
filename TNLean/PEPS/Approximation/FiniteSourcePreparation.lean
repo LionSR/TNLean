@@ -17,19 +17,9 @@ additional sources. No dimension bound on the private ambient spaces is required
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, common private slot spaces and finite source representations,
 lines 253–267 and 279–305.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-finiteprep-sourceinventory.ofslots_mapisometry_expands
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.ofSlots_mapIsometry_expands
-
-Provenance-ID: 8769-commonsource-finiteprep-sourceinventory.exists_finite_coordinate_expansions
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.exists_finite_coordinate_expansions
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
