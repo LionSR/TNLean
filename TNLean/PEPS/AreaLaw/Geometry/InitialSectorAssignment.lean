@@ -1,24 +1,4 @@
 /-
-Original formalization from the cited manuscript;
-no upstream Lean proof text reused.
-Manuscript: OpenAI, A two-dimensional area law from a global spectral gap,
-September 24, 2026.
-Pinned source: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Manuscript path:
-preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-build/sections/10-geometry.tex
-
-Provenance-ID: 8758-tnlean.peps.arealaw.geometry.actual_sector_assignment
-Downstream declaration:
-TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_assignment
-Source labels: geometry:initial-stars, prop:two-families
-Source: Section 11, geometry:initial-stars, lines 333–370, especially 352–370;
-prop:two-families, lines 299–323.
-Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6051085776
-
-OpenAI Codex (GPT-6) assistance was used in this formalization.
--/
-/-
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
@@ -46,10 +26,14 @@ The finite union of the open triangles is dense in the working square; the
 regularity of actual birth regions then gives the closed equality, including
 identifiers assigned no triangle. The metric on the plane is the maximum norm.
 
+## References
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:initial-stars`, lines 333–370,
 especially 352–370, and `prop:two-families`, lines 299–323.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Manuscript file: `preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
+`build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
@@ -99,7 +83,7 @@ private theorem preconnected_unique_interior {I : Type*}
 its prescribed center. The product metric is the maximum metric.
 Auxiliary to Section 11, `geometry:initial-stars`, lines 352–370, and the dyadic
 fan in `prop:two-families`, lines 299–310. -/
-private theorem centered_cell_closedBall (c : ℝ × ℝ) (ℓ : ℕ) :
+theorem closure_centered_dyadicCell_eq_closedBall (c : ℝ × ℝ) (ℓ : ℕ) :
     let r := (2 : ℝ) ^ ℓ / 2
     closure (dyadicCell (c.1 - r, c.2 - r) ℓ (0, 0)) = Metric.closedBall c r := by
   dsimp only
@@ -186,7 +170,7 @@ theorem exists_unique_initialRegion_sector_assignment
     apply Prod.ext <;> simp [oLarge, r, cellFanCenter, pow_succ] <;> ring
   have hcell : closure (dyadicCell oLarge (ℓ + 1) (0, 0)) =
       Metric.closedBall v (2 * r) := by
-    have h := centered_cell_closedBall v (ℓ + 1)
+    have h := closure_centered_dyadicCell_eq_closedBall v (ℓ + 1)
     dsimp only at h
     rw [hp] at h
     exact h

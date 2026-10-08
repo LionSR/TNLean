@@ -30,6 +30,35 @@ This local construction is part of
 % Active-ray mergers and the full isolated-star assertion are separate.
 % Final formalization markers require the frozen canonical source check.
 
+% Source: 10-geometry.tex, geometry:initial-stars, lines 352--370,
+% and prop:two-families, lines 299--310;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[The closed square centered at a prescribed point]
+    \label{thm:area_law_centered_dyadic_cell_ball}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.closure_centered_dyadicCell_eq_closedBall}
+    \leanok
+    \uses{def:area_law_dyadic_cells}
+    Let $c\in\mathbb R^2$ and $m\in\mathbb N$, and put $\rho=2^m/2$.
+    Let $Q=c-\rho(1,1)+2^m[0,1)^2$ be the zero-index half-open
+    dyadic cell at origin $c-\rho(1,1)$. In the maximum metric,
+    \begin{align}
+        \overline Q
+         & =c+[-\rho,\rho]^2
+        =\overline B_\infty(c,\rho).
+    \end{align}
+    This is the centered square used in the local fan construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures}
+    The closure of the zero-index dyadic cell is the product of the closed
+    coordinate intervals whose lower endpoints are $c_1-\rho$ and
+    $c_2-\rho$. Each interval has length $2^m=2\rho$, so its upper endpoint
+    is $c_j+\rho$. Their product is precisely the closed maximum-metric
+    ball with center $c$ and radius $\rho$.
+\end{proof}
+
 \begin{theorem}[Unique sector assignment and closed restriction]
     \label{thm:area_law_actual_sector_assignment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_assignment}
