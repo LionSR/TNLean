@@ -1,0 +1,59 @@
+{
+  "source_freeze": "0f932eb5719ee74b302a2393662c11d382acb89c",
+  "upstream_revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "immutable_input_manifest_sha256": "3b2e1394f772a37d848d7437e3278e69f5eace04fd4b1dcc5773ab4df8fa74bc",
+  "validation_baseline": "Recovered immutable published Gaussian artifact closure, with the separately checked TNLeanReduction source-only modules.",
+  "strict_options": [
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DmaxSynthPendingDepth=3",
+    "-DwarningAsError=true"
+  ],
+  "modules": [
+    {
+      "module": "TNLean.PEPS.Approximation.SampledSourceNetwork",
+      "source_sha256": "60b2767a7e7507029a5ae41052362959d4066a7f032fb0297e4326f1eab6722a",
+      "checked_module": "TNLeanReduction.SampledSourceNetwork",
+      "checked_source_sha256": "b08eee1981a1767e45f8e7a748b82df8f6ffea00393556c10c4a21bc1eaee12c",
+      "artifact_sha256": "5add454217e38692b2903a9c72a539020c2e0d3ed3e99d0bbc270595169bdad3",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/SampledSourceNetwork.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/SampledSourceNetwork.lean"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.Approximation.ZeroPartyGates",
+      "source_sha256": "76a4a9425b4860f4dc5e6ba38d59b8961b17a31b97bc88429760fb1cdf451caa",
+      "checked_module": "TNLeanReduction.ZeroPartyGates",
+      "checked_source_sha256": "76a4a9425b4860f4dc5e6ba38d59b8961b17a31b97bc88429760fb1cdf451caa",
+      "artifact_sha256": "d67e1a58079026f24dd30269ea8387de6f3eb3a6245af2bbb22a6138bc02f5c5",
+      "returncode": 0,
+      "diagnostics": "",
+      "command": [
+        "/Users/siruilu/.elan/toolchains/leanprover--lean4---v4.35.0-rc3/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DmaxSynthPendingDepth=3",
+        "-DwarningAsError=true",
+        "-o",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/ZeroPartyGates.olean",
+        "/tmp/tnlean-source-only-reduction-check/TNLeanReduction/ZeroPartyGates.lean"
+      ]
+    }
+  ],
+  "selected_kernel_reports": 14,
+  "full_lake_build": false,
+  "blueprint_checkdecls": false,
+  "full_provenance_replay": false
+}

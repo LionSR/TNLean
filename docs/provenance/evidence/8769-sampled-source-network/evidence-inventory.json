@@ -1,0 +1,39 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "c4e45e16a95ea632e44e6d6924699f299e3ae4bddefcc23afad49365a04bd56e",
+      "bytes": 2110
+    },
+    {
+      "path": "SampledSourceNetwork-axioms.log",
+      "sha256": "7a0b64fc641fbaea2ee6843b945290722158e8fd02d7005791592c248bf57c92",
+      "bytes": 1244
+    },
+    {
+      "path": "SampledSourceNetworkAxioms.lean",
+      "sha256": "6c29cf0012dd60bb718e38fc295cef82d539e613d271b041e2f1ad822f3257f1",
+      "bytes": 1277
+    },
+    {
+      "path": "ZeroPartyGates-axioms.log",
+      "sha256": "9f5a9c403c64582b3e645d1c3187904f975edbd02314df7ce6a5b7256c3b1c0e",
+      "bytes": 1157
+    },
+    {
+      "path": "ZeroPartyGatesAxioms.lean",
+      "sha256": "8cf9f06b2d3842b9ab65e0d97148b64b3337cb52214dcc000dd2d11f9c17522d",
+      "bytes": 791
+    },
+    {
+      "path": "direct-checks.json",
+      "sha256": "700255b5e68b0eb96d2a21ea3ac92bcb926308bdb0a5f21e3c605c8095c4cd46",
+      "bytes": 2643
+    },
+    {
+      "path": "tactic-pattern-scan.log.gz",
+      "sha256": "50a58f4e9cfd60b4ae95e4efbe9c882563a92b18ecd81632c27164950f294796",
+      "bytes": 359
+    }
+  ]
+}

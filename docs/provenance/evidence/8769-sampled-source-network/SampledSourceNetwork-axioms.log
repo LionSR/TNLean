@@ -1,0 +1,20 @@
+'TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourcePairAt_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSlotPairEquiv_endpoints' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv_parties' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleIndices_apply' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,18 @@
+'TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_eq_coeffSum_smul_id_of_isEmpty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_heq_coeffSum_smul_id_of_participants_eq_empty' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@TNLean.PEPS.PairEffect.SourceCircuit.eval_gate_heq_coeffSum_smul_id_of_participants_eq_empty : ∀ {P C ι : Type}
+  [inst : Fintype C] [inst_1 : Fintype ι] (owner : C ↪ P) {a b : TNLean.PEPS.PairEffect.Layout C} {c : ι → ℂ}
+  (G : TNLean.PEPS.PairEffect.PreparedSourceGate c a b) (tail : TNLean.PEPS.PairEffect.Layout P),
+  (TNLean.PEPS.PairEffect.SourceCircuit.gate owner G tail).participants () = ∅ →
+    (TNLean.PEPS.PairEffect.SourceCircuit.gate owner G tail).eval ≍
+      (∑ ξ, c ξ) • ContinuousLinearMap.id ℂ (TNLean.PEPS.PairEffect.Mem tail).carrier
