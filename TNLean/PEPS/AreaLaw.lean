@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
+import TNLean.PEPS.AreaLaw.ConditionalEstimates
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.EntropyDimension
