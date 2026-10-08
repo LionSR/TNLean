@@ -29,20 +29,13 @@ with the original coefficients gives `‖G'_m - G ⊗ |Γ_m⟩‖ ≤ (r / √m)
 averages over insertion positions writes `G'_m` as a weighted sum of at most `K m^r`
 contractions, with unchanged absolute coefficient sum.
 
-**Scope restriction (party layout):** the model has no parties.  The effect-free pieces `F_i`
-of an `EffectChain` are arbitrary contractions, so the model cannot distinguish a local
-contraction from a pair effect hidden inside some `F_i`; the count `effectCount` bounds only
-the effects that the presentation records.  Consequently two conclusions of Lemma 5.1 are not
-formalized: that the expansion of `G'_m` uses only local contractions and normalized pair
-sources (`04-compression.tex`, lines 65–66), and that the additional registers are owned by
-the original participating parties (lines 67–68).  For the last clause, that all sources on
-one pair of parties may be combined into one normalized pair source (lines 68–70), only the
-norm identity `EuclideanSpace.norm_pairCombine` is formalized.  The expansion terms of
-`termList` are built by `EffectChain.replaceTerm` from the pieces `F_i`, insertions
-`insertAt η k`, the fixed vectors `η^{⊗ m}` and canonical tensor isometries, without any pair
-bra, but no statement records this.  Documented in
-`docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.  Elimination: place `EffectChain`
-monomials on a party layout and prove these clauses there.
+The model here has no parties: the effect-free pieces `F_i` of an `EffectChain` are arbitrary
+contractions.  Two statements of Lemma 5.1 about parties (the expansion of `G'_m` uses only
+local contractions and normalized pair sources, and its additional registers are owned by the
+original participating parties) are proved in `TNLean.PEPS.Approximation.PartyLayout`, where
+monomials are placed on parties and their effect chains are the `EffectChain`s of this file.
+The last clause, that all sources on one pair of parties combine into one, is proved there
+only for two adjacent sources; see the scope restriction in that module.
 
 ## Main definitions
 
@@ -190,8 +183,8 @@ def replace (m : ℕ) : {X Y : HSpace} → (M : EffectChain X Y) → (X →L[ℂ
 replaced by the insertion at position `κ i`.  The definition applies no pair bra: it composes
 the pieces `F_i` of the monomial with insertions, which are preparations of copies of the
 normalized pair vector followed by register permutations (`CyclicInsertion.insertAt_zero`,
-`CyclicInsertion.insertAt_perm`).  No statement records this; see the scope restriction in
-the module docstring.
+`CyclicInsertion.insertAt_perm`).  On a party layout, each term is the operator of a word of
+local contractions and normalized pair sources (`PartyChain.replaceTerm_toEffectChain`).
 
 Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 96–98 and
 121–123. -/
@@ -520,8 +513,8 @@ replaced gate `G'_m` and the common garbage vector `Γ_m` satisfy:
 * their absolute coefficient sum equals `∑_ξ |c_ξ|`;
 * each term is a contraction.
 
-These are the error, count and coefficient-sum clauses of the source lemma; the clauses
-that are not formalized are listed in the scope restriction of the module docstring.
+These are the error, count and coefficient-sum clauses of the source lemma; the clauses about
+parties are proved on a party layout in `partyPairEffectElimination`.
 
 The hypothesis that `G` is a contraction is not needed here; it enters
 `replaceGate_rescaled`.

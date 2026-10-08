@@ -1086,10 +1086,35 @@ records the single block-local map for every native closure and coherent
 sum, with the same original coarse tensor and normalized Bell factors.
 Coarse periods at least three and the stated boundary/support scope remain.
 
+### Polynomial PEPS approximation: small-patch rewrites
+
+[polypeps_small_rewrite_monomials.tex](polypeps_small_rewrite_monomials.tex)
+records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
+formalized for the canonical contraction and its reference error, with the
+branch expansion, the wire classification and the final rescaling of the
+approximation, and that the expansion into allowed monomials awaits the
+residual tensor network of a branch.
+
+### Polynomial PEPS approximation: changes of ownership
+
+[polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
+records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
+manuscript are formalized with their source hypotheses, including the canonical
+maps and both reference-error bounds. The bounded-change clauses are formalized
+on the party layout of Theorem 5.2 only with the raw registers of each region
+held by one party grouped into one register: the birth and the death as a
+private contraction, one normalized pair source or pair effect and a private
+contraction, and the exchange corrections as one private contraction. Placing
+these monomials on the registers of a frame, one per site and per tag, and
+writing the renaming of the exchange as a composition of reorderings of tensor
+factors, await that list of registers.
+
 ### Polynomial PEPS approximation: elimination of pair effects
 
 [polypeps_pair_effects_party_layout.tex](polypeps_pair_effects_party_layout.tex)
 records that the formal Lemma 5.1 of the September 24, 2026 polynomial PEPS
-manuscript proves the error, count and coefficient-sum clauses in a model
-without parties, and that the source-only and party-ownership clauses await a
-party layout for the monomial chains.
+manuscript first proved the error, count and coefficient-sum clauses in a model
+without parties, and that the source-only and party-ownership clauses are now
+proved on a party layout for the monomial chains. The combination of all sources
+on one pair of parties is proved only for two adjacent sources; moving sources
+past operations on other registers remains open.

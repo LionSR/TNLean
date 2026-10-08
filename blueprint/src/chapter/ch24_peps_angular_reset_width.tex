@@ -1,0 +1,85 @@
+\section{A uniform width bound for angular reset scales}
+\label{sec:peps_angular_reset_width}
+
+Fix real constants $C_3,C_4,K$ and a positive constant $c$.
+The angular information argument bounds the reset width at scale $s$ by
+\begin{align}
+    B(L,s)=C_3(1+\log s)^K+C_4\log L.
+    \label{eq:peps_angular_reset_cost}
+\end{align}
+All powers in this section are real powers. The estimates below are used
+only for $L\ge2$ and $s\ge1$, where their bases are positive.
+They formalize the uniform scale argument following
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex\#L744}{equation \texttt{info-reset-scale-cost}}
+in the September 24, 2026 polynomial-PEPS manuscript.
+The source has nonnegative coefficients and exponent; the analytic bounds
+allow arbitrary fixed real values.
+
+\begin{theorem}[Sublinear polylogarithmic width]
+    \label{thm:peps_reset_polylog_width}
+    \lean{TNLean.PEPS.Approximation.exists_reset_scale_polylog_le}
+    \leanok
+    There is a real $S\ge1$ such that, for every $s\ge S$,
+    \begin{align}
+        C_3(1+\log s)^K\le \frac c2s.
+        \label{eq:peps_reset_polylog_width}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    For every fixed real $K$, $(\log x)^K/x$ tends to zero as
+    $x$ tends to infinity. Substituting $x=es$ and using
+    $\log(es)=1+\log s$ proves the same limit for
+    $(1+\log s)^K/s$. Multiplication by the fixed coefficient and
+    the positive tolerance $c/2$ give one threshold valid for all larger
+    scales.
+\end{proof}
+
+\begin{theorem}[Uniform width at every scale]
+    \label{thm:peps_angular_reset_uniform_width}
+    \lean{
+        TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope,
+        TNLean.PEPS.Approximation.exists_angular_reset_width_bound
+    }
+    \leanok
+    Fix $D>0$ with $D\ge4C_4/c$. There is a real $L_0\ge2$ such that,
+    for every real $L\ge L_0$, one has $e^{\max(K,1)}\le D\log L$,
+    and for every real $s\ge D\log L$,
+    \begin{align}
+        B(L,s)\le\frac{3c}{4}s<cs.
+        \label{eq:peps_angular_reset_uniform_width}
+    \end{align}
+    In particular one can choose $D=\max\{1,4C_4/c\}$ before choosing
+    $L_0$. Once the coefficients and exponent are fixed, both choices are independent
+    of $L$ and $s$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_polylog_width}
+    Take $S$ from Theorem~\ref{thm:peps_reset_polylog_width}.
+    Set $T=\max\{S,e^{\max(K,1)}\}$ and
+    $L_0=\max\{2,e^{T/D}\}$. Then $D\log L\ge T$ for all $L\ge L_0$. Then every allowed $s$ is at
+    least $S$, so the polylogarithmic term is at most $cs/2$.
+    The slope inequality and $\log L\ge0$ give
+    $C_4\log L\le(c/4)D\log L\le cs/4$.
+    Adding proves the first inequality. The second is strict because
+    $c>0$ and $s\ge1$.
+\end{proof}
+
+\begin{corollary}[Fitting an upper-bounded reset width]
+    \label{cor:peps_angular_reset_width_fits}
+    \lean{TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_slope}
+    \leanok
+    With the same fixed constants, any width function bounded above by
+    $B(L,s)$ is strictly smaller than $cs$ throughout the stated range.
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_angular_reset_uniform_width}
+    If $w(L,s)\le B(L,s)$, then (\ref{eq:peps_angular_reset_uniform_width})
+    gives $w(L,s)\le B(L,s)\le\frac{3c}{4}s<cs$.
+\end{proof}
+
+This establishes the numerical clearance needed at every annular layer.
+The physical reset theorem, geometric core separation, entropy estimates,
+and annular induction remain separate obligations.

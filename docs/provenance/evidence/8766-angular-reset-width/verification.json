@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "scope": "Local focused native build, strict source elaboration, four consumers, four guarded axiom reports and four raw axiom reports. Assembled from existing local validation runs; no Lean build was run during evidence assembly.",
+  "revision": "a2f108f651808dd591361572f4f4cef85cc87871",
+  "toolchain": "leanprover/lean4:v4.35.0-rc3",
+  "validation_environment": {
+    "working_directory": "<VALIDATION_WORKTREE>",
+    "lean_toolchain": "<LEAN_TOOLCHAIN>",
+    "limit": "The supplied run records do not freeze the complete dependency/cache closure or process environment."
+  },
+  "source_files": [
+    {
+      "path": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "sha256": "439c805928d772b2d415369e3dab2b539222c6e68cd9304dd5e9d9aa54b46587",
+      "git_blob": "f5a9ee1d6de7beee51898c34811a36961133e228",
+      "matches_checked_bytes": true,
+      "source_record": "runs/angular-reset-strict-final.json",
+      "row": 0
+    },
+    {
+      "path": "TNLeanTest/PEPS/AngularResetWidth.lean",
+      "sha256": "1070bcd4e7023580340ae18bf7ae7de1011e6fb2e1b09ea541a6a43992d8708d",
+      "git_blob": "76bd414a15023a49cbd1575979a2c3ca6441b78d",
+      "matches_checked_bytes": true,
+      "source_record": "runs/angular-reset-strict-final.json",
+      "row": 1
+    },
+    {
+      "path": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "sha256": "362b4deecd696f05f1ec3abb70068f4e2320200b47ebab712898e57b443d62ee",
+      "git_blob": "b6995ae7b2b2dca1038252174802fcafcf694ad7",
+      "matches_checked_bytes": true,
+      "source_record": "runs/angular-reset-strict-final.json",
+      "row": 2
+    },
+    {
+      "path": "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+      "sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900",
+      "git_blob": "4110bdbe802c38f5b0a5fafac7140754fa930cf4",
+      "matches_checked_bytes": true,
+      "source_record": "runs/angular-reset-strict-final.json",
+      "row": 3
+    }
+  ],
+  "successful_runs": [
+    {
+      "id": "source",
+      "record": "runs/angular-reset-strict-final.json",
+      "row": 0,
+      "kind": "elaboration",
+      "file": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "sha256": "439c805928d772b2d415369e3dab2b539222c6e68cd9304dd5e9d9aa54b46587",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "exit_code": 0,
+      "seconds": 3.6276746349976747,
+      "log": "source-strict.log",
+      "log_sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531"
+    },
+    {
+      "id": "consumers",
+      "record": "runs/angular-reset-strict-final.json",
+      "row": 1,
+      "kind": "test",
+      "file": "TNLeanTest/PEPS/AngularResetWidth.lean",
+      "sha256": "1070bcd4e7023580340ae18bf7ae7de1011e6fb2e1b09ea541a6a43992d8708d",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+      "exit_code": 0,
+      "seconds": 3.033876693996717,
+      "log": "consumers-strict.log",
+      "log_sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e"
+    },
+    {
+      "id": "guards",
+      "record": "runs/angular-reset-strict-final.json",
+      "row": 2,
+      "kind": "axioms",
+      "file": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "sha256": "362b4deecd696f05f1ec3abb70068f4e2320200b47ebab712898e57b443d62ee",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "exit_code": 0,
+      "seconds": 2.4899903829937102,
+      "log": "guards-strict.log",
+      "log_sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd"
+    },
+    {
+      "id": "raw_axioms",
+      "record": "runs/angular-reset-strict-final.json",
+      "row": 3,
+      "kind": "axioms",
+      "file": "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+      "sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true <RAW_AXIOM_DRIVER>",
+      "exit_code": 0,
+      "seconds": 2.5884335070004454,
+      "log": "public-axioms.raw.log",
+      "log_sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009",
+      "replay_command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean"
+    }
+  ],
+  "counts": {
+    "public_declarations": 4,
+    "consumer_examples": 4,
+    "guarded_axiom_reports": 4,
+    "unguarded_axiom_reports": 4
+  },
+  "axiom_set": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "axioms_by_declaration": {
+    "TNLean.PEPS.Approximation.exists_reset_scale_polylog_le": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "TNLean.PEPS.Approximation.exists_angular_reset_width_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "TNLean.PEPS.Approximation.exists_angular_reset_width_lt_of_slope": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "raw_audit_note": "The exact checked raw driver intentionally has no hash-command linter override. Four informational hashCommand diagnostics are retained. The guarded CI file separately disables that linter and passes strict validation.",
+  "supporting_native_build": {
+    "status": "success_reported_in_log",
+    "log": "native-build.log",
+    "log_sha256": "6e9b8ced75a121a1aac58c1a8cb83df660566fc9d76e67af9f41dac6fda1c905",
+    "completed_jobs": 2047,
+    "reported_module_seconds": 3.1,
+    "command": null,
+    "exit_code": null,
+    "limit": "Supporting log-only evidence; the top-level invocation, process exit code and source hash are not captured by this log and are not reconstructed."
+  },
+  "superseded_history": [
+    {
+      "record": "runs/angular-reset-strict-7756.json",
+      "row": 0,
+      "file": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "sha256": "12abcdfd9c2b9ee707a97faccea5d3e3e86361359a547de0013ac46bb3a02bf7",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "exit_code": 1,
+      "seconds": 3.707289238998783,
+      "log": "history/TNLean_PEPS_Approximation_AngularResetWidth.lean-angular-reset-strict-7756.log",
+      "log_sha256": "e84346437739d26fed3c16b97c47bdcc1a5cac1beb3d45d957b7471591767769",
+      "status": "failed",
+      "note": "Unused/unreachable ring tactic; repaired before final strict validation."
+    },
+    {
+      "record": "runs/angular-reset-strict-7756.json",
+      "row": 1,
+      "file": "TNLeanTest/PEPS/AngularResetWidth.lean",
+      "sha256": "cc79c1b3fdde2925ab3789b2529fb32fe9ce8ca53e4606d8119fe274e21571a3",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidth.lean",
+      "exit_code": 0,
+      "seconds": 3.183323945995653,
+      "log": "history/TNLeanTest_PEPS_AngularResetWidth.lean-angular-reset-strict-7756.log",
+      "log_sha256": "8f93dd8cb00b2a5ba2d3460f39dfb8638cff55fa272c8a75024fdb18204bbc74",
+      "status": "superseded_success",
+      "note": "Old declaration names and pre-guard audit file; superseded by final checks."
+    },
+    {
+      "record": "runs/angular-reset-strict-7756.json",
+      "row": 2,
+      "file": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "sha256": "cd46bcf41cf827e8727b005a5a50c528535f4fad184494853bd1c3771bc15ab2",
+      "command": "lake env lean --profile -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "exit_code": 0,
+      "seconds": 2.682039409999561,
+      "log": "history/TNLeanTest_PEPS_AngularResetWidthAxioms.lean-angular-reset-strict-7756.log",
+      "log_sha256": "ef0ecb533ceb4fddc0a0bb7d07d07d07b9667fe20b54bc9b57a5a0695c684aa1",
+      "status": "superseded_success",
+      "note": "Old declaration names and pre-guard audit file; superseded by final checks."
+    },
+    {
+      "original_log": "angular-reset-first.log",
+      "status": "failed",
+      "reason": "Incorrect Real namespace on the logarithmic-power asymptotic theorem.",
+      "command": null,
+      "exit_code": null,
+      "log": "history/angular-reset-first.log",
+      "log_sha256": "519327d76e207473b24125707ead2c468f7bdec57c5f5d05fd4704deaf47d10b",
+      "metadata_limit": "This log does not record the top-level invocation, process exit code or source digest; no values are inferred."
+    },
+    {
+      "original_log": "angular-reset-native-9c38.log",
+      "status": "failed",
+      "reason": "Same namespace lookup failure in the focused native build.",
+      "command": null,
+      "exit_code": null,
+      "log": "history/angular-reset-native-9c38.log",
+      "log_sha256": "4a50594ac7625b400bbc68daca00e9bc29eff94abc3003ad3280e8dd03609d9d",
+      "metadata_limit": "This log does not record the top-level invocation, process exit code or source digest; no values are inferred."
+    },
+    {
+      "original_log": "angular-reset-native-7756.log",
+      "status": "built_with_warnings",
+      "reason": "Namespace fixed; redundant ring tactic still caused warnings.",
+      "command": null,
+      "exit_code": null,
+      "log": "history/angular-reset-native-7756.log",
+      "log_sha256": "03ea2810941c1564cbd3defd6eb4dfa2c28b5182432644805af273043bce0214",
+      "metadata_limit": "This log does not record the top-level invocation, process exit code or source digest; no values are inferred."
+    }
+  ],
+  "rendering": {
+    "status": "focused_passed",
+    "summary": "docs/provenance/evidence/8766-angular-reset-width/render/render-verification-summary.json",
+    "pdf_pages": 5,
+    "public_declarations": 4,
+    "equation_anchors": 3,
+    "source_labels": 7,
+    "visual_review": "passed",
+    "full_book": "not_run_locally",
+    "normalized_records": [
+      {
+        "path": "docs/provenance/evidence/8766-angular-reset-width/render/render-verification-summary.json",
+        "original_sha256": "4c65a110f3fc583493174c25763b39d41810bccfb18ec8fedebb13f790cf0f14",
+        "normalized_sha256": "ec726b87a843f577cede9a683dd63ebd1378c0b5b13bedd70d9decce0506bfce"
+      },
+      {
+        "path": "docs/provenance/evidence/8766-angular-reset-width/render/automated-verification.json",
+        "original_sha256": "8f47b9f6f38ae2f6c52d9a7ab2310f2a3d0f596d5c2457056d2a2b21a8635fd9",
+        "normalized_sha256": "8078cdc2773c09900285a45584c88d54a2f9545c9caa7c2c72d84f4bbf27949c"
+      }
+    ]
+  },
+  "normalization": {
+    "encoding": "UTF-8",
+    "rules": [
+      "Replace private validation-log, validation-worktree, author-worktree, Lean-toolchain and workspace prefixes by the matching angle-bracket role tokens.",
+      "Replace the raw temporary-driver pathname by <RAW_AXIOM_DRIVER> in records; retain the exact driver bytes separately.",
+      "Apply specific prefixes before the general workspace prefix; preserve all diagnostics, commands, timings and embedded hashes.",
+      "For .log files only, remove horizontal whitespace at line ends and reduce terminal blank lines to one final newline."
+    ],
+    "hash_semantics": "original_sha256 hashes exact input bytes; normalized_sha256 hashes committed bytes. Embedded hashes in retained run JSON retain their original meaning. Token paths describe roles and are not runnable paths.",
+    "original_to_normalized": [
+      {
+        "original": "<VALIDATION_LOGS>/angular-reset-strict-final.json",
+        "original_sha256": "0da3d25bc37daaf623364c23e7c8ef8cd9e26c7ff5c4ba9904416261ad774272",
+        "retained": "runs/angular-reset-strict-final.json",
+        "normalized_sha256": "7db11f47ecdf30aac79df774de428e64be02214eb5ab685554aa3298baccf424",
+        "original_bytes": 2752,
+        "normalized_bytes": 2560,
+        "role": "Recorded final commands, source SHA256 values, process exits, timings and original log references."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/angular-reset-strict-7756.json",
+        "original_sha256": "3066b7097276ae51b2cacc9e59643ec72a429c2fb2c7b76e13030a4a9aaa8ba0",
+        "retained": "runs/angular-reset-strict-7756.json",
+        "normalized_sha256": "83760135f1c5bdcf4f304283423b884fcbcc35c8f6c05954e9cb097f83c3cb8d",
+        "original_bytes": 2067,
+        "normalized_bytes": 1956,
+        "role": "Superseded recorded strict run, including the unused-tactic failure and earlier consumer/axiom runs."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/TNLean_PEPS_Approximation_AngularResetWidth.lean-angular-reset-strict-final.log",
+        "original_sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531",
+        "retained": "source-strict.log",
+        "normalized_sha256": "1cf9f04a76ac9b68f1a53c0682ccf97a19204c3dc2a7f0ddf726f700f8306531",
+        "original_bytes": 817,
+        "normalized_bytes": 817,
+        "role": "Successful final source run."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/TNLeanTest_PEPS_AngularResetWidth.lean-angular-reset-strict-final.log",
+        "original_sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e",
+        "retained": "consumers-strict.log",
+        "normalized_sha256": "f244929f9c4991d5a2461689515739db985b3915fd8c4e071902e8d55cb64d1e",
+        "original_bytes": 508,
+        "normalized_bytes": 508,
+        "role": "Successful final consumers run."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/TNLeanTest_PEPS_AngularResetWidthAxioms.lean-angular-reset-strict-final.log",
+        "original_sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd",
+        "retained": "guards-strict.log",
+        "normalized_sha256": "cb17f51db132c830c9730d1a11d218ab979f6c3ca7b00283cecbf679178771fd",
+        "original_bytes": 270,
+        "normalized_bytes": 270,
+        "role": "Successful final guards run."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/_tmp_angular-reset-width-axioms-raw.lean-angular-reset-strict-final.log",
+        "original_sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009",
+        "retained": "public-axioms.raw.log",
+        "normalized_sha256": "1166b70d9147c90245b2079885377fa94b0c1be28be552722e450f1628af1009",
+        "original_bytes": 1067,
+        "normalized_bytes": 1067,
+        "role": "Successful final raw_axioms run."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/angular-reset-native-a2f1.log",
+        "original_sha256": "6e9b8ced75a121a1aac58c1a8cb83df660566fc9d76e67af9f41dac6fda1c905",
+        "retained": "native-build.log",
+        "normalized_sha256": "6e9b8ced75a121a1aac58c1a8cb83df660566fc9d76e67af9f41dac6fda1c905",
+        "original_bytes": 115,
+        "normalized_bytes": 115,
+        "role": "Final focused native-build log, reporting 2047 completed jobs."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/TNLean_PEPS_Approximation_AngularResetWidth.lean-angular-reset-strict-7756.log",
+        "original_sha256": "e84346437739d26fed3c16b97c47bdcc1a5cac1beb3d45d957b7471591767769",
+        "retained": "history/TNLean_PEPS_Approximation_AngularResetWidth.lean-angular-reset-strict-7756.log",
+        "normalized_sha256": "e84346437739d26fed3c16b97c47bdcc1a5cac1beb3d45d957b7471591767769",
+        "original_bytes": 1000,
+        "normalized_bytes": 1000,
+        "role": "Superseded strict output retained without removing diagnostics."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/TNLeanTest_PEPS_AngularResetWidth.lean-angular-reset-strict-7756.log",
+        "original_sha256": "8f93dd8cb00b2a5ba2d3460f39dfb8638cff55fa272c8a75024fdb18204bbc74",
+        "retained": "history/TNLeanTest_PEPS_AngularResetWidth.lean-angular-reset-strict-7756.log",
+        "normalized_sha256": "8f93dd8cb00b2a5ba2d3460f39dfb8638cff55fa272c8a75024fdb18204bbc74",
+        "original_bytes": 514,
+        "normalized_bytes": 514,
+        "role": "Superseded strict output retained without removing diagnostics."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/TNLeanTest_PEPS_AngularResetWidthAxioms.lean-angular-reset-strict-7756.log",
+        "original_sha256": "ef0ecb533ceb4fddc0a0bb7d07d07d07b9667fe20b54bc9b57a5a0695c684aa1",
+        "retained": "history/TNLeanTest_PEPS_AngularResetWidthAxioms.lean-angular-reset-strict-7756.log",
+        "normalized_sha256": "ef0ecb533ceb4fddc0a0bb7d07d07d07b9667fe20b54bc9b57a5a0695c684aa1",
+        "original_bytes": 1057,
+        "normalized_bytes": 1057,
+        "role": "Superseded strict output retained without removing diagnostics."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/angular-reset-first.log",
+        "original_sha256": "519327d76e207473b24125707ead2c468f7bdec57c5f5d05fd4704deaf47d10b",
+        "retained": "history/angular-reset-first.log",
+        "normalized_sha256": "519327d76e207473b24125707ead2c468f7bdec57c5f5d05fd4704deaf47d10b",
+        "original_bytes": 140,
+        "normalized_bytes": 140,
+        "role": "Incorrect Real namespace on the logarithmic-power asymptotic theorem."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/angular-reset-native-9c38.log",
+        "original_sha256": "deabbb4c71709a7c8bc7f71b219533f870e28638434f6a889401caadeef625f6",
+        "retained": "history/angular-reset-native-9c38.log",
+        "normalized_sha256": "4a50594ac7625b400bbc68daca00e9bc29eff94abc3003ad3280e8dd03609d9d",
+        "original_bytes": 2461,
+        "normalized_bytes": 1651,
+        "role": "Same namespace lookup failure in the focused native build."
+      },
+      {
+        "original": "<VALIDATION_LOGS>/angular-reset-native-7756.log",
+        "original_sha256": "03ea2810941c1564cbd3defd6eb4dfa2c28b5182432644805af273043bce0214",
+        "retained": "history/angular-reset-native-7756.log",
+        "normalized_sha256": "03ea2810941c1564cbd3defd6eb4dfa2c28b5182432644805af273043bce0214",
+        "original_bytes": 480,
+        "normalized_bytes": 480,
+        "role": "Namespace fixed; redundant ring tactic still caused warnings."
+      },
+      {
+        "original": "<RAW_AXIOM_DRIVER>",
+        "original_sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900",
+        "retained": "AngularResetWidthAxioms.lean",
+        "normalized_sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900",
+        "original_bytes": 582,
+        "normalized_bytes": 582,
+        "role": "Exact checked raw-driver bytes. No source normalization or linter-setting change."
+      }
+    ]
+  },
+  "limitations": [
+    "No full-root or import-aggregator build, remote CI, publication, or physical angular/reset theorem is claimed.",
+    "The scalar proof is original; no upstream OpenAI Lean proof text was reused."
+  ]
+}
