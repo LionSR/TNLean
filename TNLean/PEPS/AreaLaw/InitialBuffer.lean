@@ -412,14 +412,14 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
 /-- **Lemma 3.2: conditional entropy in a buffered rectangle** (area-law manuscript,
 `lem:initial-buffer`, `02-initial.tex`, lines 240–256). For local dimension `q ≥ 1`, range
 `R`, term norm bound `J ≥ 0` and gap `Δ > 0` there are an integer `C_pad ≥ 1` and a constant
-`C_buf` with the following property, for every safety parameter `D₀ > 2R + 10`. Let `Ω` be a
+`C_buf ≥ 0` with the following property, for every safety parameter `D₀ > 2R + 10`. Let `Ω` be a
 gapped ground vector of a finite-range Hamiltonian on a finite domain, `A` a cut, `Q` a safe
 rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`. Then for
 `X = A ∩ Q₀` and `T = (A ∩ Q₀^{+C_pad r}) \ X`,
 `S(X | T) = S(X ∪ T) - S(T) ≤ S(X)/2 + C_buf r`. -/
 theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) :
-    ∃ Cpad : ℕ, 1 ≤ Cpad ∧ ∃ Cbuf : ℝ,
+    ∃ Cpad : ℕ, 1 ≤ Cpad ∧ ∃ Cbuf : ℝ, 0 ≤ Cbuf ∧
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q),
         IsGappedGroundState Λ q h.operator E₀ Ω Δ →
@@ -440,7 +440,9 @@ theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : �
     simp only [Cpad]
     push_cast at this ⊢
     linarith
-  refine ⟨Cpad, by omega, _, fun D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe r hr Q₀ hQ₀ hpad ↦
+  have hK' := one_le_bufferBudgetConst q R
+  have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
+  refine ⟨Cpad, by omega, _, by positivity, fun D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe r hr Q₀ hQ₀ hpad ↦
     condEntropy_le_initialBuffer_of_constants hq hJ hΔ (le_max_left _ _)
       ((le_max_left _ _).trans (le_max_right _ _)) ((le_max_right _ _).trans (le_max_right _ _))
       (by omega) hCZ (by omega) h hgs hsafe hr hQ₀ hpad⟩
