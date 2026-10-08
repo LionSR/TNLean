@@ -30,26 +30,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For arbitrary split : Fin 4 \u2192 Bool, abbreviates \u03a3 side : Fin 4, Fin (if split side then 2 else 1), indexing each side by one whole-side segment or two midpoint segments. Uses existing Sigma and Fin constructors; no new public constructor is introduced.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.CellFanSlot are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -80,26 +81,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Defines the actual center of the dyadic cell with origin o, natural side exponent \u2113 and integer cell index z.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFanCenter are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -130,26 +132,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Defines the actual first perimeter endpoint of each elementary segment indexed by CellFanSlot split, for arbitrary midpoint choices split : Fin 4 \u2192 Bool.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFanStart are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -180,26 +183,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Defines the actual second perimeter endpoint of each elementary segment indexed by CellFanSlot split, for arbitrary midpoint choices split : Fin 4 \u2192 Bool.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFanEnd are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -230,26 +234,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Defines TemplatePolygon.triangle with the actual dyadic-cell center and the two actual perimeter endpoints of the selected elementary segment.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -280,26 +285,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For every split : Fin 4 \u2192 Bool, proves 4 <= Fintype.card (CellFanSlot split) and Fintype.card (CellFanSlot split) <= 8.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.card_cellFanSlot_bounds are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -330,26 +336,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For arbitrary o, \u2113, z and midpoint choices split, proves \u22c3 i, (cellFanPolygon o \u2113 z split i).region = closure (dyadicCell o \u2113 z).",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -380,26 +387,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For every pair of positions i,j, including i = j, proves the exact polygon-region intersection equals {cellFanCenter} \u222a convexJoin \u211d {cellFanCenter} (segment \u211d start_i end_i \u2229 segment \u211d start_j end_j). Thus the common center is retained even when the two perimeter segments have empty intersection.",
-        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations."
+        "Source: Section 11, the fine-cell midpoint divisions and center fan in lines 299\u2013310 of the proof of prop:two-families. Actual identification of opposing-cell side divisions, label assignment, merging equal-label runs and the complete isolated-star and two-family constructions remain separate obligations.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_inter_eq are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
@@ -431,26 +439,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "For every origin o, natural scale \u2113, integer cell index z and arbitrary split : Fin 4 \u2192 Bool, proves cellFanCenter o \u2113 z \u2208 beltCellMarks o \u2113 z and, for every i : CellFanSlot split, both cellFanStart o \u2113 z split i and cellFanEnd o \u2113 z split i belong to that same actual nine-point cell-mark set.",
-        "Source: Section 11, the actual fan endpoints in lines 299\u2013310 and the nine initial belt-cell marks in lines 325\u2013330, in the proof of prop:two-families immediately before geometry:initial-stars. This theorem connects the actual fan vertices to existing marked points; it does not assign labels or prove active ray and sector assertions."
+        "Source: Section 11, the actual fan endpoints in lines 299\u2013310 and the nine initial belt-cell marks in lines 325\u2013330, in the proof of prop:two-families immediately before geometry:initial-stars. This theorem connects the actual fan vertices to existing marked points; it does not assign labels or prove active ray and sector assertions.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at 8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2 and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "8d3f5cd9d9bb6c327eae8b90452ce3caecd406c2",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-build.log",
-            "sha256": "3f4dc3db379953712828ec6f6e90832c954f49c91466d5a51f137e2a0ef34e18"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-cell-fans-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-cell-fans-axioms.log",
-            "sha256": "38e7af9f3f7d983eef54b669b5e3b04d7c6ed96cb3ebeedd2937213a636fa260"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },

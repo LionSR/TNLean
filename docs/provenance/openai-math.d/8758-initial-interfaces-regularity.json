@@ -83,26 +83,27 @@
       "changes": [
         "Independently formalized from the cited manuscript; no upstream Lean source or proof text is reused.",
         "Every actual initial birth region equals the closure of its open interior, for arbitrary origin, finite endpoint set and dependent residues, C at least two and k0 at least 50000000. The actual determinant condition supplies triangle interior, and exact finite cell and fan covers supply all identifier cases. Empty endpoint sets, empty unions and disconnected primary regions are included. No regularity, coverage or global finiteness certificate is assumed.",
-        "Section 11, prop:two-families, lines 154\u2013177, 212\u2013218 and 299\u2013323, especially 308\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 13.27 seconds wall, 2.44 seconds user and 4.65 seconds system time, at raw SHA-256 61e4dfe5bf66b6fe0a8a96d41f87de4eaf22180fc58dba55fad8805483dbd626. Independent mathematical review approves the exact statements and arguments. Completed parent draft #8906 has evidence aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03, source ff3ac34d661f011020c566dff01eed0fb6454881. Immutable capture measures all 304 parent rows across 26 ledgers and all 148 recursive historical evidence files, with no old reverification. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These two original declarations concern the actual initial construction and do not establish local stars, recursive repairs, the full two-family proposition or either headline theorem."
+        "Section 11, prop:two-families, lines 154\u2013177, 212\u2013218 and 299\u2013323, especially 308\u2013316. The released complete package-option direct check passed exit zero without diagnostics in 13.27 seconds wall, 2.44 seconds user and 4.65 seconds system time, at raw SHA-256 61e4dfe5bf66b6fe0a8a96d41f87de4eaf22180fc58dba55fad8805483dbd626. Independent mathematical review approves the exact statements and arguments. Completed parent draft #8906 has evidence aa2dea58b6945af6ca0d3a1c88b89ade7fbf0d03, source ff3ac34d661f011020c566dff01eed0fb6454881. Immutable capture measures all 304 parent rows across 26 ledgers and all 148 recursive historical evidence files, with no old reverification. At initial preparation, source freeze and canonical verification were pending. The exact frozen source now passes canonical verification and independent review. These two original declarations concern the actual initial construction and do not establish local stars, recursive repairs, the full two-family proposition or either headline theorem.",
+        "Reverified after the unchanged determinant and actual fan regularity proofs moved to FanRegularity, with only fan theorem name and visibility changed, and after the unchanged private base-norm proof became public in CellFans. Public claim: https://github.com/LionSR/TNLean/issues/8758#issuecomment-6050817719. The public command and signature of TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_eq_closure_initialOpenRegion are unchanged after reversing only the authorized call-name changes: exactly two old regularity calls and three CellFans calls in total. The original exact-source verification at eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac and all original notices, IDs, history, logs and evidence remain retained at completed parent d7f49227375497d51de3b8c7395e632076cd0031. Fresh whole-file evidence is required because the containing source module changed."
       ],
       "verification": {
         "result": "passed",
         "repository": "LionSR/TNLean",
-        "revision": "eb7f6c0b9cb30358c0c5125aca3dba7ee56916ac",
+        "revision": "7a9d7f716a443c76f66c2f973575854014166a3b",
         "commands": [
           {
             "kind": "build",
             "command": "lake build TNLean.PEPS.AreaLaw.Geometry",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-initial-interfaces-regularity-build.log",
-            "sha256": "ef2790841130c1b6a1c286f23fbd4ee48b717e5c3b805e8ece6493fb13380f9b"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-build.log",
+            "sha256": "f840061adc26120d61e99673669aeaf3d5c7d7e44fab2e8ea60fda8d5b3aa65d"
           },
           {
             "kind": "axioms",
-            "command": "lake env lean docs/provenance/evidence/8758-initial-interfaces-regularity-axioms.lean",
+            "command": "lake env lean docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.lean",
             "exit_code": 0,
-            "log": "docs/provenance/evidence/8758-initial-interfaces-regularity-axioms.log",
-            "sha256": "e0223b964a5f1f8360789247c3dd8f1486a0857a0ec0da8f838aebea309b654f"
+            "log": "docs/provenance/evidence/8758-auxiliary-fan-geometry-axioms.log",
+            "sha256": "5103b284a5def916e5ddbd96283476c6050ae32c906b2a7b6c841a559b78ad5c"
           }
         ]
       },
