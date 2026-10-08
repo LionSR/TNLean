@@ -296,9 +296,10 @@ the common garbage vector `Γ_m = inventoryVector`:
 
 The source's participating parties are read as the parties named by the monomials: every
 additional register is owned by an endpoint party of an effect of some monomial.  The clause
-that all sources on one pair of parties may be combined into one is not stated here; only the
-combination of two adjacent sources is formalized (`eval_combineSources`, see the scope
-restriction in the module docstring).  The hypothesis that `G` is a contraction is not needed.
+that all sources on one pair of parties may be combined into one is not stated here: the
+two-source identity is `eval_combineSources`, and the combination of all sources on one pair,
+in any order, is `PairEffect.partyPairEffectElimination_with_grouped_sources`.  The hypothesis
+that `G` is a contraction is not needed.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1 `lem:effects`,
 `04-compression.tex`, lines 53–127. -/
