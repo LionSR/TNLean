@@ -7,7 +7,7 @@
         TNLean.PEPS.AreaLaw.regionConfigurationEquiv,
         TNLean.PEPS.AreaLaw.relabelState}
     \leanok
-    \uses{def:area_law_domain,def:area_law_ground_entropy}
+    \uses{def:area_law_domain}
     Let $e:\Lambda\to\Lambda'$ be a bijection of finite domains, and let
     $A\subseteq\Lambda$, $A'\subseteq\Lambda'$ satisfy $e(A)=A'$.
     It induces bijections $e_A:A\to A'$ and
@@ -23,27 +23,59 @@
 
 \begin{theorem}[Covariance of reductions and invariance of entropy]
     \label{thm:area_law_regional_relabelling}
-    \lean{TNLean.PEPS.AreaLaw.reducedState_relabel,
+    \lean{TNLean.PEPS.AreaLaw.norm_relabelState,
+        TNLean.PEPS.AreaLaw.reducedState_relabel,
         TNLean.PEPS.AreaLaw.regionalEntropy_relabel}
     \leanok
-    \uses{def:area_law_regional_relabelling}
-    For every vector and region-preserving site bijection as above,
+    \uses{def:area_law_regional_relabelling,def:area_law_ground_entropy}
+    For configurations $\sigma,\tau:A\to\{0,\ldots,q-1\}$, write
+    $\rho_A^\Omega(\sigma,\tau)$ for the $(\sigma,\tau)$ matrix entry of the
+    reduction $\rho_A$ of Definition~\ref{def:area_law_ground_entropy} formed
+    from the vector $\Omega$. For every vector and region-preserving site
+    bijection as above, and all $\sigma',\tau':A'\to\{0,\ldots,q-1\}$,
     \begin{align}
-        \|\Omega'\|     & =\|\Omega\|,                                     \\
-        \rho_{A'}^{\Omega'}(\sigma',\tau')
-                        & =\rho_A^\Omega(\sigma'\circ e_A,\tau'\circ e_A), \\
-        S_{\Omega'}(A') & =S_\Omega(A).
+        \|\Omega'\|                        & =\|\Omega\|,
+        \label{eq:area_law_relabel_norm}                                                      \\
+        \rho_{A'}^{\Omega'}(\sigma',\tau') & =\rho_A^\Omega(\sigma'\circ e_A,\tau'\circ e_A),
+        \label{eq:area_law_relabel_reduction}                                                 \\
+        S_{\Omega'}(A')                    & =S_\Omega(A).
+        \label{eq:area_law_relabel_entropy}
     \end{align}
     These identities hold without normalization or spectral assumptions,
     including empty regions and complements. They express the finite tensor-factor
     conventions of \cite[Section~2]{OpenAI2026AreaLaw} in the induced-domain coordinates.
 \end{theorem}
 \begin{proof}\leanok
-    Relabelling permutes the Euclidean configuration coordinates, preserving the
-    norm. The site bijection preserves the region and its complement. Splitting a
-    configuration before or after relabelling therefore gives the same pair of
-    regional configurations. The partial trace changes coordinates on both
-    factors, while its complementary sum is unchanged by the complementary
-    bijection. This gives the reduction formula. Reindexing the regional matrix
-    preserves its eigenvalues and hence its von Neumann entropy.
+    For $\sigma:A\to\{0,\ldots,q-1\}$ and
+    $\upsilon:\Lambda\setminus A\to\{0,\ldots,q-1\}$, write $\sigma\sqcup\upsilon$
+    for the configuration on $\Lambda$ that restricts to $\sigma$ and $\upsilon$.
+    Since $\sigma'\mapsto\sigma'\circ e$ is a bijection of configuration sets,
+    \begin{align}
+        \|\Omega'\|^2 & =\sum_{\sigma'}|\Omega(\sigma'\circ e)|^2
+        =\sum_\sigma|\Omega(\sigma)|^2=\|\Omega\|^2,
+    \end{align}
+    which is (\ref{eq:area_law_relabel_norm}). Because $e$ maps $A$ onto $A'$ and
+    $\Lambda\setminus A$ onto $\Lambda'\setminus A'$, splitting before or after
+    relabelling agrees:
+    \begin{align}
+        (\sigma'\sqcup\upsilon')\circ e
+         & =(\sigma'\circ e_A)\sqcup(\upsilon'\circ e_B).
+        \label{eq:area_law_relabel_split}
+    \end{align}
+    Substituting (\ref{eq:area_law_relabel_split}) into the partial trace and
+    reindexing the complementary sum by the bijection $\upsilon'\mapsto\upsilon'\circ e_B$,
+    \begin{align}
+        \rho_{A'}^{\Omega'}(\sigma',\tau')
+         & =\sum_{\upsilon'}\Omega'(\sigma'\sqcup\upsilon')\,
+        \overline{\Omega'(\tau'\sqcup\upsilon')}                                           \\
+         & =\sum_{\upsilon'}\Omega\big((\sigma'\circ e_A)\sqcup(\upsilon'\circ e_B)\big)\,
+        \overline{\Omega\big((\tau'\circ e_A)\sqcup(\upsilon'\circ e_B)\big)}              \\
+         & =\sum_{\upsilon}\Omega\big((\sigma'\circ e_A)\sqcup\upsilon\big)\,
+        \overline{\Omega\big((\tau'\circ e_A)\sqcup\upsilon\big)}
+        =\rho_A^\Omega(\sigma'\circ e_A,\tau'\circ e_A),
+    \end{align}
+    which is (\ref{eq:area_law_relabel_reduction}). Thus
+    $\rho_{A'}^{\Omega'}=P\rho_A^\Omega P^{-1}$ for the permutation matrix $P$ of
+    $\sigma'\mapsto\sigma'\circ e_A$. Conjugation preserves the eigenvalues, so
+    (\ref{eq:area_law_relabel_entropy}) follows.
 \end{proof}

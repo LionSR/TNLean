@@ -18,8 +18,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 2 (`sec:prelim`), lines 10–25, finite tensor-factor
 conventions. Source revision:
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-Independently proved from the manuscript and existing QICLean APIs;
-no upstream Lean proof text is reused.
+Independently proved from the manuscript and existing QICLean partial-trace
+and entropy results; no upstream Lean proof text is reused.
 -/
 
 open scoped ComplexOrder
