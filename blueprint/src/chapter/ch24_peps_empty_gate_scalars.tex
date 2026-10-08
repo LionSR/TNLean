@@ -1,0 +1,57 @@
+\section{Scalars from gates with no participants}
+\label{sec:peps_empty_gate_scalars}
+
+\begin{definition}[Empty-participant scalar]
+    \label{def:peps_empty_gate_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar}
+    \leanok
+    For each gate with no participants, sum its original monomial
+    coefficients. Let $s$ be the product of these sums over the
+    chronological circuit. All other operations contribute the factor $1$.
+    An empty monomial family contributes $0$.
+\end{definition}
+
+\begin{theorem}[The scalar part of the chronological residual]
+    \label{thm:peps_empty_gate_scalar_residual}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_emptyGateScalar_le_one,
+      TNLean.PEPS.PairEffect.SourceCircuit.eval_heq_emptyGateScalar_smul_id_of_isEmpty,
+      TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_all_eval_heq_emptyGateScalar}
+    \leanok
+    \uses{def:peps_empty_gate_scalar}
+    The scalar satisfies $|s|\leq 1$. When all original parties are
+    selected, the restriction of the chronological residual to the
+    remaining scalar tensor factor is multiplication by $s$.
+    In particular, a circuit on an empty party set acts on the empty
+    tensor product as multiplication by $s$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the chronological circuit. Composition multiplies the
+    scalar factors. Operations at selected parties and their source
+    registers do not alter the remaining scalar factor. A gate with
+    no participants contributes exactly its coefficient sum. Its
+    contractivity bounds the modulus of this sum by $1$, and the
+    product remains contractive.
+\end{proof}
+
+\begin{theorem}[Absorption into an existing party tensor]
+    \label{thm:peps_network_scalar_absorption}
+    \lean{TNLean.PEPS.DependentBondNetwork.network_mul_at_vertex}
+    \leanok
+    Let $A$ be a finite tensor network, let $p$ be one of its vertices,
+    and let $c\in\mathbb C$. Multiplying the local tensor at $p$ by
+    $c$ multiplies the contraction by $c$. The bonds and their dimensions
+    are unchanged. This applies also when $c=0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    At each virtual configuration, the vertex product acquires precisely
+    the factor $c$. Pull this factor out of the finite sum.
+\end{proof}
+
+These statements justify retaining the scalar from empty-participant gates
+until the final absorption step in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 565--588.
+The absorption statement specifies an existing vertex; it makes no claim
+that an arbitrary scalar is the contraction of a network with no vertices.
