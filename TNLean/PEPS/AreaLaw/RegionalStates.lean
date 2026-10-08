@@ -25,28 +25,6 @@ No gap or locality assumption is needed for these finite-dimensional identities.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/sections/01-preliminaries.tex
-Labels: sec:prelim.
-Independently formalized; no upstream Lean proof text reused.
-Provenance-ID: 8739-tnlean.peps.arealaw.reducedstate_possemidef
-Downstream declaration: TNLean.PEPS.AreaLaw.reducedState_posSemidef
-Provenance-ID: 8739-tnlean.peps.arealaw.trace_reducedstate
-Downstream declaration: TNLean.PEPS.AreaLaw.trace_reducedState
-Provenance-ID: 8739-tnlean.peps.arealaw.trace_reducedstate_eq_one
-Downstream declaration: TNLean.PEPS.AreaLaw.trace_reducedState_eq_one
-Provenance-ID: 8739-tnlean.peps.arealaw.regionalentropy_nonneg
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_nonneg
-Provenance-ID: 8739-tnlean.peps.arealaw.regionalentropy_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_empty
-Provenance-ID: 8739-tnlean.peps.arealaw.regionalentropy_univ
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy_univ
--/
-
 open scoped ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
