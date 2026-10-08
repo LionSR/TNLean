@@ -24,6 +24,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{lem:peps_frame_split_forms}
     \lean{TNLean.PEPS.EncodedFrame.sheetSplit,
         TNLean.PEPS.EncodedFrame.threeSplit,
+        TNLean.PEPS.EncodedFrame.threeSplit_fst,
+        TNLean.PEPS.EncodedFrame.threeSplit_snd,
         TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_sheetSplit,
         TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_threeSplit,
         TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators,
@@ -34,7 +36,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal
         H_{\Lambda\setminus S}$, and, for disjoint $T$ and $E$ with
     $U=\Lambda\setminus(T\cup E)$, with $\mathcal H_T\otimes\mathcal H_E\otimes
-        \mathcal H_U$. An operator acting on the sites of $S$ is $A'\otimes\id$, an
+        \mathcal H_U$. The latter identification reads a configuration $c$ as
+    $((c|_T,c|_E),c|_U)$. An operator acting on the sites of $S$ is
+    $A'\otimes\id$, an
     operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
     acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
     of $E$ is $\id_T\otimes A'\otimes\id_U$.
@@ -292,6 +296,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{lem:peps_front_registers}
     \lean{TNLean.PEPS.PairEffect.matL,
         TNLean.PEPS.PairEffect.matL_apply,
+        TNLean.PEPS.EncodedFrame.act_eq_matL,
         TNLean.PEPS.PairEffect.ofLp_matL,
         TNLean.PEPS.PairEffect.norm_matL,
         TNLean.PEPS.PairEffect.matL_add,
@@ -316,7 +321,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\C^\gamma$) defines a local map of a party $p$ on registers of $p$ of these
     dimensions, of norm at most $\lVert A\rVert$. Placed in front of an
     arbitrary list of further registers, its operator is $A\otimes\id$ in
-    these identifications.
+    these identifications. For any finite row and column index sets, the
+    action of a matrix and its associated continuous linear operator agree:
+    both send $\psi$ to the vector with coordinate
+    $\sum_i A_{ji}\psi_i$ at $j$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -519,10 +527,24 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.sourceCount_tagSplit,
         TNLean.PEPS.EncodedFrame.isAllowed_tagMerge,
         TNLean.PEPS.EncodedFrame.usesOnly_tagMerge,
-        TNLean.PEPS.EncodedFrame.sourceCount_tagMerge}
+        TNLean.PEPS.EncodedFrame.sourceCount_tagMerge,
+        TNLean.PEPS.EncodedFrame.eval_relabelHead,
+        TNLean.PEPS.EncodedFrame.mem_partSites_fst,
+        TNLean.PEPS.EncodedFrame.mem_partSites_snd,
+        TNLean.PEPS.EncodedFrame.nodup_partSites_fst,
+        TNLean.PEPS.EncodedFrame.nodup_partSites_snd,
+        TNLean.PEPS.EncodedFrame.partStepApp,
+        TNLean.PEPS.EncodedFrame.unpartStepApp,
+        TNLean.PEPS.EncodedFrame.eval_partStepApp,
+        TNLean.PEPS.EncodedFrame.eval_unpartStepApp}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         def:peps_monomial_parties}
+    For a list of sites $\ell$ and a condition $f$, let $\ell_+$ and
+    $\ell_-$ retain the sites satisfying $f$ and not satisfying $f$,
+    respectively, in their original order. Thus $x\in\ell_+$ exactly when
+    $x\in\ell$ and $f(x)$, and $x\in\ell_-$ exactly when $x\in\ell$ and
+    $\neg f(x)$. If $\ell$ has no repeated site, neither part has one.
     The following compositions of exchanges of adjacent tensor factors are
     allowed monomials that use no party and no pair resource, and each sends
     product basis vectors to the indicated product basis vectors: moving the
@@ -531,6 +553,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     interchanging blocks of registers; splitting the tag registers of a
     concatenated list of holes into those of the two parts, and merging them.
     These reorderings may be performed before arbitrary untouched registers.
+    One step of the site partition starts with a register $x$ followed by
+    the already separated lists $A,B$: it leaves $x$ first in $A$ if selected,
+    and otherwise moves it past $A$ to the front of $B$. The inverse step
+    reverses this move.
     Adjoining or removing an empty trailing list is an identity and uses no
     party or pair resource. Naming a register with an equal owner label moves
     nothing. If a second list of holes is a reordering of the first, with
@@ -548,8 +574,26 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Each composition is built by induction on the lists, one register or one
-    block at a time, and its operator is computed on product vectors. For a
+    \uses{thm:peps_register_exchange}
+    Each composition is built by induction on the lists. For the partition
+    step, let $A,B$ be two site lists and $C$ an arbitrary untouched register
+    list. In concatenations below, site lists and sites denote their raw
+    register lists and individual raw registers. Write $J_{A,C}$ for the
+    isometry separating concatenated
+    lists, and let $(A,C)$ denote their concatenation. For the product basis
+    vectors $u=\ket{c(x)}$, $a=\ket c_A$, $b=\ket c_B$ and any $y$ in the
+    memory of $C$, put $t=J_{B,C}^{-1}(b\otimes y)$ and
+    $z=J_{A,(B,C)}^{-1}(a\otimes t)$. The selected and unselected steps satisfy
+    \begin{align}
+        \Pi_+(u\otimes z) & =u\otimes z,\notag                         \\
+        \Pi_-(u\otimes z) & =J_{A,(x,B,C)}^{-1}(a\otimes(u\otimes t)).
+        \label{eq:peps_register_partition_step}
+    \end{align}
+    The inverse steps read (\ref{eq:peps_register_partition_step}) from right
+    to left. They are the identity and the move of $x$ back past $A$,
+    respectively. This proves the partition identities by induction; the
+    two lists are obtained by retaining sites with the indicated condition,
+    which gives the membership and non-repetition assertions. For a
     reordering of the holes, induct on the reordering: an exchange of two
     adjacent holes is an exchange of their tag registers, and the raw parts of
     the encodings of the two holes commute by disjointness of supports.
@@ -557,18 +601,104 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     so induction on the added list preserves each of the stated properties.
 \end{proof}
 
-\begin{lemma}[Grouped monomials on the registers of a frame]
-    \label{lem:peps_grouped_monomial_placement}
-    \lean{TNLean.PEPS.EncodedFrame.listT,
+\begin{theorem}[Coordinates of ordered region registers]
+    \label{thm:peps_region_register_coordinates}
+    \lean{TNLean.PEPS.EncodedFrame.mem_listT,
+        TNLean.PEPS.EncodedFrame.mem_listR,
+        TNLean.PEPS.EncodedFrame.mem_listU,
+        TNLean.PEPS.EncodedFrame.mem_listE,
+        TNLean.PEPS.EncodedFrame.listT,
+        TNLean.PEPS.EncodedFrame.listR,
         TNLean.PEPS.EncodedFrame.listU,
         TNLean.PEPS.EncodedFrame.listE,
-        TNLean.PEPS.EncodedFrame.groupWord,
+        TNLean.PEPS.EncodedFrame.nodup_listT,
+        TNLean.PEPS.EncodedFrame.nodup_listU,
+        TNLean.PEPS.EncodedFrame.equivT,
+        TNLean.PEPS.EncodedFrame.equivU,
+        TNLean.PEPS.EncodedFrame.groupIso_listT_siteVec,
+        TNLean.PEPS.EncodedFrame.groupIso_listU_siteVec}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates}
+    Let $\ell$ be any list of sites, $T,E\subseteq\Lambda$, and
+    $U=\Lambda\setminus(T\cup E)$. Retain the sites of $T$ in $\ell_T$ and
+    the remaining sites in $\ell_R$; then retain the sites of $U$ in $\ell_R$
+    to obtain $\ell_U$, with the remaining sites forming $\ell_E$.
+    All these lists keep their original order.
+    If $\ell$ contains every site of $\Lambda$, then
+    \begin{align}
+        x\in\ell_T & \iff x\in T,\notag    \\
+        x\in\ell_R & \iff x\notin T,\notag \\
+        x\in\ell_U & \iff x\in U.
+    \end{align}
+    If also $T\cap E=\varnothing$, then $x\in\ell_E$ if and only if $x\in E$.
+    If $\ell$ has no repetitions, neither $\ell_T$ nor $\ell_U$ has any;
+    this assertion does not require $\ell$ to contain every site.
+
+    When $\ell$ contains every site exactly once, taking the site at a
+    position gives bijections from the positions of $\ell_T$ to $T$ and of
+    $\ell_U$ to $U$. For every configuration $c$ and any assignment of
+    owners to the sites, the corresponding grouping isometries $G_T,G_U$
+    satisfy
+    \begin{align}
+        G_T\ket c_{\ell_T} & =\ket{c|_T},\notag \\
+        G_U\ket c_{\ell_U} & =\ket{c|_U}
+        \label{eq:peps_region_grouping_basis}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_register_reorderings,lem:peps_frame_registers_coordinates}
+    Filtering gives the membership assertions and preserves the absence of
+    repetitions. Outside $T$, membership in $T\cup E$ is membership in $E$;
+    disjointness ensures that all sites of $E$ remain. Completeness and
+    non-repetition make the position maps bijective. The canonical coordinate
+    identification sends a product basis vector to the configuration read
+    along that position map, giving (\ref{eq:peps_region_grouping_basis}).
+\end{proof}
+
+\begin{theorem}[Reconstructing a configuration from its restrictions]
+    \label{thm:peps_region_configuration}
+    \lean{TNLean.PEPS.EncodedFrame.merge_restrict_T,
+        TNLean.PEPS.EncodedFrame.merge_restrict_U,
+        TNLean.PEPS.EncodedFrame.merge_of_mem_E,
+        TNLean.PEPS.EncodedFrame.merge_eq_iff,
+        TNLean.PEPS.EncodedFrame.merge,
+        TNLean.PEPS.EncodedFrame.merge_self_of_mem_union}
+    \leanok
+    \uses{lem:peps_frame_split_forms}
+    Let $T,E\subseteq\Lambda$ be disjoint and
+    $U=\Lambda\setminus(T\cup E)$. For $a\in[q]^T$, $b\in[q]^U$, and
+    $c\in[q]^\Lambda$, define $m(a,b;c)$ by the inverse of the three-part
+    coordinate identification applied to $((a,c|_E),b)$. Its restrictions are
+    \begin{align}
+        m(a,b;c)|_T & =a,\notag    \\
+        m(a,b;c)|_E & =c|_E,\notag \\
+        m(a,b;c)|_U & =b.
+        \label{eq:peps_region_reconstruction}
+    \end{align}
+    For every configuration $c'$, these restrictions characterize it:
+    $c'=m(a,b;c)$ if and only if
+    $(c'|_T,c'|_U)=(a,b)$ and $c'|_E=c|_E$.
+    In particular, $c^u=m(c|_T,u;c)$ equals $c$ on $T\cup E$ and equals
+    $u$ on $U$, for any $u\in[q]^U$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The inverse coordinate map assigns the prescribed value on each of the
+    three disjoint regions, proving (\ref{eq:peps_region_reconstruction}).
+    Every site belongs to exactly one region, so equality of the restrictions
+    is equivalent to equality of the configurations. Taking $a=c|_T$ gives
+    the last assertion.
+\end{proof}
+
+\begin{lemma}[Grouped monomials on the registers of a frame]
+    \label{lem:peps_grouped_monomial_placement}
+    \lean{TNLean.PEPS.EncodedFrame.groupWord,
         TNLean.PEPS.EncodedFrame.ungroupWord,
         TNLean.PEPS.EncodedFrame.eval_groupWord,
         TNLean.PEPS.EncodedFrame.eval_ungroupWord,
         TNLean.PEPS.EncodedFrame.groupWord_props,
         TNLean.PEPS.EncodedFrame.ungroupWord_props,
-        TNLean.PEPS.EncodedFrame.merge,
         TNLean.PEPS.EncodedFrame.relabelRest,
         TNLean.PEPS.EncodedFrame.relabelRest_props,
         TNLean.PEPS.EncodedFrame.eval_place,
@@ -595,11 +725,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    On the product basis vector of a configuration $c$, grouping gives
+    \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration}
+    By (\ref{eq:peps_region_grouping_basis}), on the product basis vector of
+    a configuration $c$, grouping gives
     $\ket{c|_T}\otimes\ket{c|_U}$ in front of the remaining registers; the map
     gives $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket a\otimes\ket b$; ungrouping
     turns each term into the basis vector of the configuration equal to $a$
-    on $T$, to $c$ on $E$ and to $b$ on $U$. These are the columns of
+    on $T$, to $c$ on $E$ and to $b$ on $U$, namely $m(a,b;c)$ by
+    (\ref{eq:peps_region_reconstruction}). These are the columns of
     $\id_{\rm tags}\otimes(\id_E\otimes M)$, and both sides are linear.
 \end{proof}
 
@@ -1007,12 +1140,52 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     so the result is the basis vector of the renamed configuration.
 \end{proof}
 
+\begin{theorem}[Coordinates on two copies of a region]
+    \label{thm:peps_two_region_coordinates}
+    \lean{TNLean.PEPS.EncodedFrame.pairUIso_siteVec,
+        TNLean.PEPS.EncodedFrame.pairUIso_symm_single,
+        TNLean.PEPS.EncodedFrame.mem_of_mem_sitesR,
+        TNLean.PEPS.EncodedFrame.sitesU,
+        TNLean.PEPS.EncodedFrame.sitesR,
+        TNLean.PEPS.EncodedFrame.pairUIso}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
+        thm:peps_region_configuration}
+    Let $T,E\subseteq\Lambda$ and $U=\Lambda\setminus(T\cup E)$, with two
+    arbitrary assignments of raw owners. Retain the sites of $U$ in the
+    fixed site order; every site in the complementary list belongs to
+    $T\cup E$. Let $\ket c_{U,j}$ be the product basis vector on these raw
+    registers on sheet $j$, and let $\iota_U$ be the inverse of the canonical
+    isometry separating their two consecutive lists. Grouping both lists
+    gives an isometry $Q_U$ to $\C^{[q]^U\times[q]^U}$ satisfying
+    \begin{align}
+        Q_U\iota_U(\ket{c_1}_{U,1}\otimes\ket{c_2}_{U,2})
+         & =\ket{c_1|_U,c_2|_U}.
+        \label{eq:peps_two_region_basis}
+    \end{align}
+    If $T\cap E=\varnothing$, take any configurations $c_1,c_2$ and
+    $u_1,u_2\in[q]^U$, and set $c_j^{u_j}=m(c_j|_T,u_j;c_j)$. Then
+    \begin{align}
+        Q_U^{-1}\ket{u_1,u_2}
+         & =\iota_U(\ket{c_1^{u_1}}_{U,1}\otimes\ket{c_2^{u_2}}_{U,2}).
+        \label{eq:peps_two_region_inverse}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration,
+        lem:peps_frame_registers_coordinates}
+    Group the two lists by their position bijections and identify the tensor
+    product of their coordinate spaces with the space indexed by pairs of
+    configurations. This proves (\ref{eq:peps_two_region_basis}). The
+    complementary list contains only sites outside $U$. For the inverse,
+    $c_j^{u_j}|_U=u_j$ by (\ref{eq:peps_region_reconstruction}); substitute
+    into (\ref{eq:peps_two_region_basis}) and apply $Q_U^{-1}$.
+\end{proof}
+
 \begin{lemma}[The corrections on the registers of two frames]
     \label{lem:peps_exchange_correction_word}
-    \lean{TNLean.PEPS.EncodedFrame.sitesU,
-        TNLean.PEPS.EncodedFrame.sitesR,
-        TNLean.PEPS.EncodedFrame.pairUIso,
-        TNLean.PEPS.EncodedFrame.correctionLayoutWord,
+    \lean{TNLean.PEPS.EncodedFrame.correctionLayoutWord,
         TNLean.PEPS.EncodedFrame.eval_correctionLayoutWord,
         TNLean.PEPS.EncodedFrame.twoSheetPlace,
         TNLean.PEPS.EncodedFrame.sum_single_merge₂,
@@ -1032,10 +1205,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    As for the grouped monomials on one frame: on a product basis vector the
+    \uses{thm:peps_two_region_coordinates,thm:peps_region_configuration}
+    By (\ref{eq:peps_two_region_basis}) and
+    (\ref{eq:peps_two_region_inverse}), on a product basis vector the
     moved registers carry the two configurations on $U$, the contraction
     gives the column of $W$, and moving back gives the basis vectors with
-    these configurations replaced.
+    these configurations replaced. The reconstructed configurations agree
+    with the originals on $T\cup E$, so the remaining raw registers and
+    all tags are unchanged.
 \end{proof}
 
 \begin{theorem}[Two-sheet exchange: bounded change]
