@@ -188,7 +188,7 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hdD : D * D ≤ d ^
     fun _ => Pi.single ⟨0, hd0⟩ 1, funext fun s => ?_⟩
   · have hc := (isCircuitOn_pairLayerOp hN hr fun k => hKw (Wp k) (hWu k)).mul
       (isCircuitOn_blockLayerOp hN fun k => (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k)))
-    refine (hc.mono ?_).isLocalCircuitOfDepth
+    refine (hc.mono ?_).isBondCircuitOfDepth
     have : Kw ≤ Kw * L := Nat.le_mul_of_pos_right _ hL1
     nlinarith
   · exact blockMatVector_pairFamilyVector_eq_mulVec hd0 hN hr hdig X ω

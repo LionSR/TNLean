@@ -1,0 +1,107 @@
+{
+  "checked_commit": "7c86e17188bef2d40d429b2eb64b959f41cc4b49",
+  "main_commit": "73d266fa0a8b13f5091da668e1734bdef6bc8c6d",
+  "prior_public_head": "57f47ded932c2bda43a4f2155bfc99ae332ce61a",
+  "production_tests_and_pins_unchanged": true,
+  "commands": [
+    {
+      "head": "7c86e17188bef2d40d429b2eb64b959f41cc4b49",
+      "file": "aggregate",
+      "sha256": null,
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation.AngularResetWidth"
+      ],
+      "exit_code": 0,
+      "seconds": 1.2164362749899738,
+      "log": "width-current-main-7c86e17-0.log",
+      "log_sha256": "d3b430623ea9192cd68fdf163237ec363aaaafc89410170afafd2b97e1c095a1"
+    },
+    {
+      "head": "7c86e17188bef2d40d429b2eb64b959f41cc4b49",
+      "file": "TNLean/PEPS/Approximation/AngularResetWidth.lean",
+      "sha256": "9e3b1073f41e67166b468c044ffd119a95dfda7da7e48f93eeab407d77562688",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS/Approximation/AngularResetWidth.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 3.11575800999708,
+      "log": "width-current-main-7c86e17-1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "head": "7c86e17188bef2d40d429b2eb64b959f41cc4b49",
+      "file": "TNLeanTest/PEPS/AngularResetWidth.lean",
+      "sha256": "1070bcd4e7023580340ae18bf7ae7de1011e6fb2e1b09ea541a6a43992d8708d",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/AngularResetWidth.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.7251330509898253,
+      "log": "width-current-main-7c86e17-2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "head": "7c86e17188bef2d40d429b2eb64b959f41cc4b49",
+      "file": "TNLeanTest/PEPS/AngularResetWidthAxioms.lean",
+      "sha256": "362b4deecd696f05f1ec3abb70068f4e2320200b47ebab712898e57b443d62ee",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLeanTest/PEPS/AngularResetWidthAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.4433942660107277,
+      "log": "width-current-main-7c86e17-3.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "head": "7c86e17188bef2d40d429b2eb64b959f41cc4b49",
+      "file": "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean",
+      "sha256": "d71150e7fcfbe4b138bac0894acd112877581b5c27659ae48bcc766b2d161900",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "docs/provenance/evidence/8766-angular-reset-width/AngularResetWidthAxioms.lean"
+      ],
+      "exit_code": 0,
+      "seconds": 2.299605883003096,
+      "log": "width-current-main-7c86e17-4.log",
+      "log_sha256": "69834f44cff219c1ae47f213a954ba349414eaab464a8f32c3f7f0bcf058b6fc"
+    }
+  ],
+  "integration": "Resolved generated Approximation import conflict by preserving AngularResetWidth and ColumnSelection, then regenerated and checked every import aggregator. Native and four strict checks pass; fresh full hosted CI remains required. Original logs retained locally."
+}
