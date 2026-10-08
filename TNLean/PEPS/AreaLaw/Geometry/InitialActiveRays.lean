@@ -71,7 +71,7 @@ private theorem exists_distinct_local_sector_contact {J I : Type*} [Finite J]
     ∃ s t : J, σ s = i ∧ σ t ≠ i ∧ x ∈ Q s ∩ Q t := by
   classical
   let K := {i : I // i ∈ Set.range σ}
-  letI : Finite K := (Set.finite_range σ).to_subtype
+  let : Finite K := (Set.finite_range σ).to_subtype
   let E : K → Set (ℝ × ℝ) := fun j ↦ ⋃ s : {s : J // σ s = j.val}, Q s.val
   have hEclosed (j : K) : IsClosed (E j) :=
     isClosed_iUnion_of_finite fun s ↦ hQclosed s.val
@@ -166,6 +166,7 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
   have hcenter : cellFanCenter oSmall ℓ (0, 0) = v := by
     simp [cellFanCenter, oSmall, r]
   have hQclosed (s : J) : IsClosed (Q s) := by
+    change IsClosed (cellFanPolygon oSmall ℓ (0, 0) (fun _ ↦ true) s).region
     rw [← (cellFanPolygon_interior_nonempty_and_closure_eq
       oSmall ℓ (0, 0) (fun _ ↦ true) s).2]
     exact isClosed_closure
@@ -187,7 +188,9 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
         o k₀ Z C a b hC h₀ k z v hk₀ hz hv)).1.2 i
   have hsub (s : J) : Q s ⊆ B (σ s) := by
     intro x hx
-    exact ((hdecomp (σ s)).symm ▸ Set.mem_iUnion.mpr ⟨⟨s, rfl⟩, hx⟩).1
+    exact ((hdecomp (σ s)).symm ▸
+      (show x ∈ ⋃ t : {t : J // σ t = σ s}, Q t.val from
+        Set.mem_iUnion.mpr ⟨⟨s, rfl⟩, hx⟩)).1
   change ∀ x ∈ Metric.ball v r, (∃ i : I, x ∈ frontier (B i)) ↔
     ∃ s t : J,
       cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s =
@@ -209,7 +212,7 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
           by_contra hne
           rcases hadj with h | h
           · exact hn ⟨s, t, h, hne⟩
-          · exact hn ⟨t, s, h, hne.symm⟩
+          · exact hn ⟨t, s, h, Ne.symm hne⟩
         obtain ⟨j, hj⟩ := (exists_unique_initialRegion_of_no_active_sector
           o k₀ Z C a b hC h₀ k z v hk₀ hz hv hno).exists
         have hxU : x ∈ interior (B j) := hj (Metric.ball_subset_closedBall hxball)
@@ -217,7 +220,7 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
         by_cases hij : i = j
         · exact (mem_frontier_iff_notMem_interior hxB).mp hxfront (hij.symm ▸ hxU)
         · have hxj := mem_frontier_of_mem_disjoint_regular (hBregular i)
-            (hpair hij.symm) (interior_subset hxU) hxB
+            (hpair (Ne.symm hij)) (interior_subset hxU) hxB
           exact (mem_frontier_iff_notMem_interior (interior_subset hxU)).mp hxj hxU
       obtain ⟨s, t, hadj, hne⟩ := hchange
       refine ⟨s, t, hadj, hne, ?_⟩
@@ -239,9 +242,15 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
       rcases cellFanPolygons_nontrivial_inter_cases
           oSmall ℓ (0, 0) (fun _ ↦ true) s t hst hcontact with h | h
       · refine ⟨s, t, h.1, hσne, ?_⟩
-        simpa only [hcenter] using h.2 ▸ (show x ∈ Q s ∩ Q t from ⟨hxs, hxt⟩)
+        have hxseg : x ∈ segment ℝ (cellFanCenter oSmall ℓ (0, 0))
+            (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s) :=
+          h.2 ▸ (show x ∈ Q s ∩ Q t from ⟨hxs, hxt⟩)
+        simpa only [hcenter] using hxseg
       · refine ⟨t, s, h.1, hσne.symm, ?_⟩
-        simpa only [hcenter] using h.2 ▸ (show x ∈ Q s ∩ Q t from ⟨hxs, hxt⟩)
+        have hxseg : x ∈ segment ℝ (cellFanCenter oSmall ℓ (0, 0))
+            (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) t) :=
+          h.2 ▸ (show x ∈ Q s ∩ Q t from ⟨hxs, hxt⟩)
+        simpa only [hcenter] using hxseg
   · rintro ⟨s, t, hadj, hne, hxradial⟩
     have hxQ : x ∈ Q s ∩ Q t := by
       rw [cellFanPolygons_inter_eq]

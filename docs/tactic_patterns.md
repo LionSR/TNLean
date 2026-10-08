@@ -5768,3 +5768,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   CellFans is public as `norm_sub_cellFanCenter_of_mem_base`, so concentric
   restriction uses the same actual base without another coordinate argument.
   The three existing callers are renamed; both complete proofs are unchanged.
+
+### Radial membership from triangle contact — candidate (2026-10-08)
+
+- **Pattern:** Transport membership in two intersecting fan triangles through
+  their contact equality, with an explicit radial-segment type, before
+  identifying the fan center with the marked point.
+- **Seen:** The two contact orientations in
+  `initialRegion_frontier_near_mark_iff_active_radial` in
+  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`.
+- **Abstraction:** Two branches in one file are below the promotion threshold.
+  The explicit intermediate statements keep the geometric argument readable.
+  A further consumer should first seek a shared contact-membership lemma.
+- **Notes:** The two branches use the existing intersection classification;
+  neither repeats a coordinate calculation.
