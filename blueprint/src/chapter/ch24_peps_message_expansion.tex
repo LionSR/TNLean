@@ -30,6 +30,7 @@ no bound on the spectator dimension occurs.
     contractions, containing no pair source. On $x\otimes y$ its action is
     \begin{align}
         x\otimes y\longmapsto \langle e_i,x\rangle e_i\otimes y,
+        \label{eq:peps_message_summand_action}
     \end{align}
     where the first output register is assigned to the receiver.
 \end{theorem}
@@ -37,7 +38,7 @@ no bound on the spectator dimension occurs.
     \leanok
     \uses{def:peps_local_message_summand}
     The bra has norm at most $\|e_i\|=1$, and preparation of $e_i$ is an
-    isometry. Their composition has the displayed action. Both operations
+    isometry. Their composition has the action~(\ref{eq:peps_message_summand_action}). Both operations
     are local at their prescribed parties.
 \end{proof}
 
@@ -51,6 +52,7 @@ no bound on the spectator dimension occurs.
     \begin{align}
         \sum_{i\in I} |e_i\rangle_b\langle e_i|_a\otimes I_K
         =I_{H\otimes K}.
+        \label{eq:peps_exact_message_identity}
     \end{align}
     This includes zero-dimensional transmitted spaces.
 \end{theorem}
@@ -64,23 +66,33 @@ no bound on the spectator dimension occurs.
 \begin{definition}[Prepending and composing monomials]
     \label{def:peps_compose_actual_monomials}
     \lean{TNLean.PEPS.PairEffect.PartyChain.prependWord}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.comp}
+    \leanok
+    Prepend a word to the initial word of a monomial. To compose two monomials
+    with matching intermediate registers, retain the first monomial's effects
+    in their original order and append the second monomial at its final word.
+\end{definition}
+
+\begin{theorem}[Operators and pair effects of composed monomials]
+    \label{thm:peps_compose_actual_monomials}
     \lean{TNLean.PEPS.PairEffect.PartyChain.eval_prependWord}
     \lean{TNLean.PEPS.PairEffect.PartyChain.isAllowed_prependWord}
     \lean{TNLean.PEPS.PairEffect.PartyChain.effectCount_prependWord}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.comp}
     \lean{TNLean.PEPS.PairEffect.PartyChain.eval_comp}
     \lean{TNLean.PEPS.PairEffect.PartyChain.isAllowed_comp}
     \lean{TNLean.PEPS.PairEffect.PartyChain.effectCount_comp}
     \leanok
+    \uses{def:peps_compose_actual_monomials}
     An allowed monomial may be preceded by an allowed word containing no pair
     effects, without changing its number of pair effects. More generally,
     two monomials with matching intermediate registers have a chronological
     composition. Its operator is the composition of their operators, its
     pair-effect count is the sum of their counts, and it is allowed whenever
     both original monomials are allowed.
-\end{definition}
+\end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:peps_compose_actual_monomials}
     Prepend the word to the initial word of the monomial. For composition,
     retain the first monomial's successive effects in their original order
     and append the second monomial at its final word. Induction on the first
@@ -107,7 +119,7 @@ no bound on the spectator dimension occurs.
     \leanok
     \uses{thm:peps_exact_message_identity}
     The expansion is indexed once by each basis vector. Its operator is the
-    sum of the weighted monomial operators, so the preceding identity
+    sum of the weighted monomial operators, so~(\ref{eq:peps_exact_message_identity})
     applies directly. Counting the unit coefficients proves both assertions
     about size.
 \end{proof}
@@ -141,7 +153,7 @@ no bound on the spectator dimension occurs.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:peps_compose_actual_monomials}
+    \uses{thm:peps_compose_actual_monomials}
     Distribute the two finite operator sums and use the exact operator
     identity for monomial composition. Counting the ordered pairs gives
     the length formula. Since $|c_jd_k|=|c_j||d_k|$, the coefficient
