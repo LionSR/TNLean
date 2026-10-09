@@ -11,14 +11,18 @@
       "name": "TNLean",
       "slug": "LionSR/TNLean",
       "checkout": ".",
-      "primary": true
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
     },
     {
       "name": "QICLean",
       "slug": "LionSR/QICLean",
       "checkout": "../QICLean",
       "checkoutEnv": "QICLEAN_DIR",
-      "prefix": "Q"
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
     }
   ],
   "tracker": 8733,
