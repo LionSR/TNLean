@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
+
+- **Pattern:** unfold charge-ball membership, identify the induced domain graph,
+  apply the ambient-depth variation bound, and reverse the absolute difference.
+- **Seen:** Four copies in `Scan/GoodSampling.lean`, `Scan/SplitIntervals.lean`,
+  `Scan/PhysicalChargeAncestry.lean`, and `Scan/BadHistoryProbability.lean`.
+- **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  in `TNLean/PEPS/AreaLaw/Scan/GoodSampling.lean`.
+- **Refactor:** All five callers use the shared lemma; the private copy in
+  `SplitIntervals.lean` is removed. No import edge or theorem hypothesis changes.
+
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
 - **Pattern:** Identify the all-halves two-by-two density matrix with one half
