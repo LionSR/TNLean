@@ -27,6 +27,7 @@ import multiprocessing
 import os
 import re
 import sys
+import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -264,6 +265,26 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
     assert not facts["escaped"], (name, width, facts["escaped"])
 
 
+PAGE_LOAD_TIMEOUT_MS = 300_000
+
+
+def _load_page(page: Page, base_url: str, name: str) -> None:
+    """Navigate and finish an actual graph within one original page deadline."""
+    deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
+    page.goto(f"{base_url}/{name}", wait_until="domcontentloaded",
+              timeout=PAGE_LOAD_TIMEOUT_MS)
+    if name.startswith("dep_graph_"):
+        remaining_ms = (deadline - time.monotonic()) * 1000
+        if remaining_ms <= 0:
+            raise TimeoutError(f"{name}: graph exceeded the original page deadline")
+        page.wait_for_function(
+            "() => { const graph = document.getElementById('graph');"
+            " return graph && graph.dataset.graphvizReady === 'true'"
+            " && graph.querySelector('svg'); }",
+            timeout=remaining_ms,
+        )
+
+
 def _check_pages(base_url: str, names: list[str],
                  mathjax: tuple[str, bytes, str]) -> int:
     """Open each named page in one browser and return how much was typeset."""
@@ -298,16 +319,9 @@ def _check_pages(base_url: str, names: list[str],
         page.set_default_timeout(120_000)
         page.route(mathjax_glob, fulfill_mathjax)
         for name in names:
-            # Parsing the largest chapters can itself take minutes on a loaded
-            # runner while the other browsers typeset, as in the equation test.
-            # The dependency-graph document is heavier still: it carries every
-            # node's statement and proof on one page, so its parse alone can
-            # outlast a chapter's, and under the parallel browsers above it has
-            # reached the content budget.  It is given a longer one; the
-            # reader-facing assertions below are unchanged.
-            goto_timeout = 600_000 if name.startswith("dep_graph") else 300_000
-            page.goto(f"{base_url}/{name}",
-                      wait_until="domcontentloaded", timeout=goto_timeout)
+            # The graph worker must finish too; navigation and graph completion
+            # share the original 300-second page budget.
+            _load_page(page, base_url, name)
             # Proofs are folded away by default; a folded proof has no width,
             # so its displays would escape measurement.
             page.add_style_tag(content=".proof_content { display: block !important; }")
