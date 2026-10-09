@@ -260,6 +260,21 @@ theorem holeEncoder_norm_eq_projector (R : Fin n → Finset V) (hR : Monotone R)
   rw [(coordinateRangeProjector_isStarProjection _).isSelfAdjoint.star_eq,
     (coordinateRangeProjector_isStarProjection _).isIdempotentElem.eq]
 
+/-- The one-hole encoder preserves the physical Hilbert norm on the span of the
+original regional cylinders. This is a consequence of the projector Gram identity
+in polynomial-PEPS, `05-frames.tex`, `eq:encoder-contraction`, lines 61–64;
+the blueprint statement is `thm:peps_hole_encoder_norm_on_span`.
+-/
+theorem holeEncoder_norm_eq_of_mem (R : Fin n → Finset V) (hR : Monotone R)
+    (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
+    (zero : (v : V) → Out v)
+    (x : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ)
+    (hx : x ∈ ⨆ j, dependentRegionCylinder (R j) (S j)) :
+    ‖WithLp.toLp 2 (holeEncoder R hR S zero *ᵥ x)‖ = ‖WithLp.toLp 2 x‖ := by
+  exact (holeEncoder_norm_eq_projector R hR S zero x).trans
+    (congrArg (fun y ↦ ‖WithLp.toLp 2 y‖)
+      ((coordinateRangeProjector_mulVec_eq_self_iff _ x).mpr hx))
+
 /-- Contractivity holds on every physical vector, without a reference-state assumption. -/
 theorem holeEncoder_norm_le (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
