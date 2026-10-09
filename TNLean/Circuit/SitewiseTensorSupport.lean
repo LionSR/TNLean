@@ -62,7 +62,7 @@ theorem reindex_kronecker_mem_supportedOperators
   ext x y
   exact Finset.prod_mul_distrib.symm
   all_goals simp only [Matrix.zero_kronecker, Matrix.kronecker_zero,
-    Matrix.reindex_apply, Matrix.submatrix_zero, Submodule.zero_mem, implies_true]
+    Matrix.reindex_apply, Matrix.submatrix_zero, Pi.zero_apply, Submodule.zero_mem, implies_true]
   done
 
 end QuantumCircuit
