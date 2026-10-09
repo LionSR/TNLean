@@ -86,6 +86,7 @@ import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
 import TNLean.PEPS.Approximation.ExteriorPhysicalDimension
 import TNLean.PEPS.Approximation.ExteriorSourceContraction
+import TNLean.PEPS.Approximation.FamilyPhysicalOwnerColumns
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import TNLean.PEPS.Approximation.FamilySourceOnlyReduction
 import TNLean.PEPS.Approximation.FiniteInputMemory
