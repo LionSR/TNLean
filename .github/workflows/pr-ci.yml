@@ -770,12 +770,17 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
-      - name: Check QICLean conjugator import compatibility strictly
-        run: >
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/QICConjugatorCompatibility.lean
+      - name: Check QICLean import compatibility strictly
+        run: |
+          set -e
+          lake --fail-fast build QICLean.Probability.PoissonWordSpatialGrowth
+          for file in TNLeanTest/QICConjugatorCompatibility.lean \
+              TNLeanTest/QICPoissonCompatibility.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test uniform angular reset width and standard axioms strictly
         run: |
