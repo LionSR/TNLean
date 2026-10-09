@@ -185,10 +185,6 @@ example (h : LocalHamiltonian domain 2 0 1) (Ω : StateSpace domain 2) (Δ : ℝ
         (augmentOperator 2 aux (∑ i, h.positiveTerm Δ Ω i)) := by
   rw [CollarScan.replicaEnergy_actualEnergyTerms]
   congr 2
-  apply Finset.sum_congr rfl
-  intro i _
-  simp [CollarScan.truncatedEnergyTerm, truncatedConstraint, scan,
-    CollarScan.truncationSet, setDist]
 
 private def pathDomain : Finset (ℤ × ℤ) := {(0, 0), (1, 0), (2, 0), (4, 0)}
 private def p0 : Site pathDomain := ⟨(0, 0), by simp [pathDomain]⟩
@@ -240,11 +236,17 @@ example (h : LocalHamiltonian pathDomain 2 0 1) (Ω : StateSpace pathDomain 2) (
   rw [origin_anchor]
   apply Finset.mem_map.mpr
   refine ⟨p1, ?_, rfl⟩
+  have hcomponent : p1 ∈ componentFinset (domainGraph pathDomain) p0 :=
+    Finset.mem_filter.mpr ⟨Finset.mem_univ _, path_adjacent.reachable⟩
   simpa [designatedSupport, pathScan, CollarScan.truncationSet, setDist,
-    island_distance, componentFinset] using path_adjacent.reachable
+    island_distance] using hcomponent
 
 example : p1 ∉ QuantumCircuit.graphBall (domainGraph pathDomain) p0 0 := by
-  simp [QuantumCircuit.graphBall, p0, p1]
+  intro hmem
+  have heq : p0 = p1 := SimpleGraph.edist_eq_zero_iff.mp
+    (le_antisymm (QuantumCircuit.mem_graphBall.mp hmem) bot_le)
+  have hcoord : (0 : ℤ) = 1 := congrArg (fun x : Site pathDomain => x.val.1) heq
+  exact zero_ne_one hcoord
 
 private theorem path_distance_two : (domainGraph pathDomain).edist p0 p2 = 2 := by
   have h12 : (domainGraph pathDomain).Adj p1 p2 := by norm_num [domainGraph, p1, p2]
@@ -255,20 +257,24 @@ private theorem path_distance_two : (domainGraph pathDomain).edist p0 p2 = 2 := 
       _ = 2 := by rw [SimpleGraph.edist_eq_one_iff_adj.mpr path_adjacent,
         SimpleGraph.edist_eq_one_iff_adj.mpr h12]; norm_num
   have hnot : ¬ (domainGraph pathDomain).edist p0 p2 ≤ (1 : ℕ∞) := by
-    rw [SimpleGraph.edist_le_one_iff_adj_or_eq]
-    norm_num [domainGraph, p0, p2]
+    intro hd
+    rcases SimpleGraph.edist_le_one_iff_adj_or_eq.mp hd with hadj | heq
+    · norm_num [domainGraph, p0, p2] at hadj
+    · have hcoord : (0 : ℤ) = 2 := congrArg (fun x : Site pathDomain => x.val.1) heq
+      norm_num at hcoord
   have hfinite : (domainGraph pathDomain).edist p0 p2 ≠ ⊤ :=
     ne_top_of_le_ne_top (by simp) hle
   have hcast := ENat.natCast_toNat hfinite
-  have hnle := ENat.toNat_le_of_le_natCast hle
+  have hnle : ((domainGraph pathDomain).edist p0 p2).toNat ≤ (2 : ℕ) :=
+    ENat.toNat_le_of_le_natCast (n := 2) hle
   have hnnot : ¬ ((domainGraph pathDomain).edist p0 p2).toNat ≤ 1 := by
     intro hn
     apply hnot
     rw [← hcast]
     exact_mod_cast hn
-  have hn : ((domainGraph pathDomain).edist p0 p2).toNat = 2 := by omega
-  rw [← hcast, hn]
-  rfl
+  have hn : ((domainGraph pathDomain).edist p0 p2).toNat = 2 :=
+    le_antisymm hnle (Nat.succ_le_of_lt (lt_of_not_ge hnnot))
+  exact hcast.symm.trans (congrArg (fun n : ℕ => (n : ℕ∞)) hn)
 
 -- Finite distance two gives radius one, strictly above the base radius zero.
 example (h : LocalHamiltonian pathDomain 2 0 1) (Ω : StateSpace pathDomain 2) (Δ : ℝ) :
@@ -279,9 +285,11 @@ example (h : LocalHamiltonian pathDomain 2 0 1) (Ω : StateSpace pathDomain 2) (
   rw [origin_anchor]
   apply Finset.mem_map.mpr
   refine ⟨p1, ?_, rfl⟩
+  have hball : p1 ∈ QuantumCircuit.graphBall (domainGraph pathDomain) p0 1 :=
+    QuantumCircuit.mem_graphBall.mpr
+      (SimpleGraph.edist_le_one_iff_adj_or_eq.mpr (Or.inl path_adjacent))
   simpa [designatedSupport, pathScan, CollarScan.truncationSet, setDist,
-    path_distance_two, truncationRadius, QuantumCircuit.graphBall] using
-    (SimpleGraph.edist_le_one_iff_adj_or_eq.mpr (Or.inl path_adjacent))
+    path_distance_two, truncationRadius] using hball
 
 -- The exact support field supplies both existing transport compatibility seams.
 example {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
