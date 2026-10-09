@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialWeakRectangleShellEntropy
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
+import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 
 /-!
 # Initial entropy estimate for the rounded bootstrap collar
@@ -28,28 +29,6 @@ text is reused.
 -/
 
 namespace TNLean.PEPS.AreaLaw
-
-/-- Powers of the rounded sublinear scale obey an explicit homogeneous bound.
-Auxiliary to the rounded collar in `08-scanner.tex`, lines 32–41 and 705–729,
-at the manuscript revision stated above. -/
-theorem floor_rpow_ceil_mul_rpow_le {C₂ η e : ℝ} (hC₂ : 0 ≤ C₂)
-    (hη : 0 ≤ η) (he : 0 ≤ e) (s : ℕ) (hs : 1 ≤ s) :
-    (Nat.floor ((Nat.ceil (C₂ * (s : ℝ)) : ℝ) ^ η) : ℝ) ^ e ≤
-      (C₂ + 1) ^ (η * e) * (s : ℝ) ^ (η * e) := by
-  have hs₁ : (1 : ℝ) ≤ s := by exact_mod_cast hs
-  have hceil : (Nat.ceil (C₂ * (s : ℝ)) : ℝ) ≤ (C₂ + 1) * (s : ℝ) := by
-    have hlt := Nat.ceil_lt_add_one (mul_nonneg hC₂ (Nat.cast_nonneg s))
-    nlinarith
-  have hfloor : (Nat.floor ((Nat.ceil (C₂ * (s : ℝ)) : ℝ) ^ η) : ℝ) ≤
-      ((C₂ + 1) * (s : ℝ)) ^ η :=
-    (Nat.floor_le (by positivity)).trans
-      (Real.rpow_le_rpow (by positivity) hceil hη)
-  calc
-    _ ≤ (((C₂ + 1) * (s : ℝ)) ^ η) ^ e :=
-      Real.rpow_le_rpow (by positivity) hfloor he
-    _ = ((C₂ + 1) * (s : ℝ)) ^ (η * e) :=
-      (Real.rpow_mul (by positivity) η e).symm
-    _ = _ := Real.mul_rpow (by positivity) (by positivity)
 
 /-- The initial exponent controls all sufficiently large actual rounded collars,
 with one threshold before the safety parameter and original ground vector.
@@ -76,19 +55,17 @@ theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
     exists_regionalEntropy_weak_rectangle_shell_le_rpow q R hq hJ hΔ
   refine ⟨C, e₀, hC, he₀, he₀₁, ?_⟩
   intro C₂ hC₂
-  obtain ⟨_, _, hℓ, hℓ₁, _⟩ := Scan.BootstrapParameters.parameter_bounds he₀ he₀₁
-  obtain ⟨N, hN⟩ := Scan.exists_two_mul_floor_rpow_ceil_mul_le hC₂
-    (sub_pos.mpr hℓ₁) (sub_lt_self 1 hℓ)
-  refine ⟨max N 1, le_max_right _ _, ?_⟩
+  obtain ⟨_, _, _, hℓ₁, _⟩ := Scan.BootstrapParameters.parameter_bounds he₀ he₀₁
+  obtain ⟨N, hN₁, hN⟩ := Scan.exists_bootstrap_collar_clearance hC₂ he₀ he₀₁
+  refine ⟨N, hN₁, ?_⟩
   intro D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe hs
   dsimp only
   intro j hj
-  have hs₁ : 1 ≤ Q.size := (le_max_right N 1).trans hs
-  have htwo := hN Q.size ((le_max_left N 1).trans hs)
+  have hs₁ : 1 ≤ Q.size := hN₁.trans hs
+  obtain ⟨_, htwo, hclearance⟩ := hN Q.size hs
   have hL : Nat.floor ((Nat.ceil (C₂ * (Q.size : ℝ)) : ℝ) ^
       (1 - Scan.BootstrapParameters.ell e₀)) ≤ Q.size := by omega
-  have hbudget := Scan.mul_collar_add_collar_le_of_two_mul_le
-    (show 1 ≤ D₀ by omega) htwo
+  have hbudget := hclearance D₀ (show 1 ≤ D₀ by omega)
   have hpower := floor_rpow_ceil_mul_rpow_le hC₂.le
     (sub_pos.mpr hℓ₁).le he₀.le Q.size hs₁
   have hden : 0 < (2 : ℝ) ^ e₀ - 1 :=

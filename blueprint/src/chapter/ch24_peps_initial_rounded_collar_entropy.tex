@@ -57,17 +57,15 @@ input to the proof of Proposition~9.5, lines~693--729.
 \end{theorem}
 \begin{proof}
     \uses{thm:area_law_initial_rectangle_shell_entropy,
-        thm:area_law_bootstrap_margins,thm:area_law_rounded_collar_half,
-        thm:area_law_collar_scalar_clearance,thm:area_law_rounded_collar_power}
+        thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
+        thm:area_law_rounded_collar_power}
     Choose $C$ and $e_0$ from
     Theorem~\ref{thm:area_law_initial_rectangle_shell_entropy}.
     The fixed parameter bounds give $0<\ell<1$, and hence $0<\eta<1$.
-    For each $C_2>0$, Theorem~\ref{thm:area_law_rounded_collar_half}
-    supplies a threshold for which $2L_s\le s$; enlarge it to ensure
-    $N\ge1$.
-    Therefore $L_s\le s$ and, for every allowed safety parameter,
-    Theorem~\ref{thm:area_law_collar_scalar_clearance} gives
-    $D_0L_s+L_s\le D_0s$. The initial shell estimate and the homogeneous
+    For each $C_2>0$, Theorem~\ref{thm:area_law_bootstrap_collar_clearance}
+    supplies a threshold $N\ge1$ for which $2L_s\le s$ and
+    $D_0L_s+L_s\le D_0s$ for every allowed safety parameter.
+    In particular, $L_s\le s$. The initial shell estimate and the homogeneous
     bound now give
     \begin{align}
         S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)

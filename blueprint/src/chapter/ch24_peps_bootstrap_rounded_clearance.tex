@@ -49,10 +49,11 @@ numerical estimates supply a sufficient clearance budget.
     \uses{def:area_law_bootstrap_parameters}
     Fix real numbers $C_2>0$ and $0<e_0<1$, and let
     $\ell=(1-e_0)/200000$, as in the fixed bootstrap parameters.
-    There is an integer $N\in\mathbb N$, depending only on $C_2$ and
+    There is an integer $N\ge1$, depending only on $C_2$ and
     $e_0$, such that for every $s\in\mathbb N$ with $s\ge N$, on setting
     $n_s=\lceil C_2s\rceil$ and $L_s=\lfloor n_s^{1-\ell}\rfloor$, one
-    has, for every $D_0\in\mathbb N$ with $D_0\ge1$,
+    has $L_s\ge1$ and $2L_s\le s$, and for every
+    $D_0\in\mathbb N$ with $D_0\ge1$,
     \begin{align}
         D_0L_s+L_s\le D_0s.
     \end{align}
@@ -64,7 +65,9 @@ numerical estimates supply a sufficient clearance budget.
     The fixed parameter bounds give $0<\ell<1$, so $0<1-\ell<1$.
     Apply Theorem~\ref{thm:area_law_rounded_collar_half} with
     $\eta=1-\ell$ to choose $N$ depending only on $C_2$ and $e_0$.
-    For every $s\ge N$, this gives $2L_s\le s$. For each $D_0\ge1$,
+    Enlarge $N$ to at least one. Since $C_2s>0$, the integer $n_s$
+    is at least one, so $L_s\ge1$. For every $s\ge N$, one also has
+    $2L_s\le s$. For each $D_0\ge1$,
     Theorem~\ref{thm:area_law_collar_scalar_clearance} now gives the
     asserted budget without changing $N$.
 \end{proof}

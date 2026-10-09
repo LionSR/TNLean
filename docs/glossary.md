@@ -3397,9 +3397,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   to the covering-square clearance budget.
 - **Fixed bootstrap parameters:** for `C₂ > 0` and `0 < e₀ < 1`, put
   `ℓ = (1 − e₀)/200000` and `L_s = ⌊⌈C₂s⌉^(1 − ℓ)⌋`.
-  There is one threshold `N(C₂, e₀)`, chosen before every natural side
-  length `s` and every natural safety parameter `D₀ ≥ 1`, such that
-  `D₀L_s + L_s ≤ D₀s` whenever `s ≥ N`. The initial exponent fixes `ℓ`
+  There is one threshold `N(C₂, e₀) ≥ 1`, chosen before every natural
+  side length `s` and every natural safety parameter `D₀ ≥ 1`, such that
+  `1 ≤ L_s`, `2L_s ≤ s`, and `D₀L_s + L_s ≤ D₀s` whenever `s ≥ N`. The initial exponent fixes `ℓ`
   throughout the entropy-exponent iteration; the threshold is independent
   of the current entropy exponent and all physical data.
 - **Source:** OpenAI's September 24, 2026 area-law manuscript,
@@ -3412,7 +3412,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declarations:** `TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le` and
   `TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/RoundedScalePower.lean` and
+  `TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean`.
 - **Meaning:** for fixed `q,R,J,Δ`, one initial constant `C` and exponent
   `e₀` precede `C₂` and all physical instance data. For each positive `C₂`,
   one threshold precedes every safety parameter and ground vector. The
@@ -3421,3 +3422,20 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Scope:** the initial-exponent shell input to the proof of Proposition 9.5,
   not its safe-box exponent improvement. Clearance and the dyadic cap are
   derived; both estimates concern the original ground vector.
+
+## Uniform conditional entropy of rounded shells
+
+- **Declarations:** `Scan.rounded_shell_coefficient_uniform_le` and
+  `exists_regionalEntropy_rounded_shell_le_uniform_rpow`, in the
+  `TNLean.PEPS.AreaLaw` namespace.
+- **Defined in:** `Scan/RoundedScalePower.lean` and `RoundedShellEntropy.lean`.
+- **Meaning:** fix the enlargement constant and initial exponent. One
+  threshold precedes the positive lower exponent, current exponent, pointwise
+  coefficient and every physical instance. The same unit vector's rounded
+  shell obeys the coefficient formed from the two exponent endpoints.
+- **Hypothesis:** the pointwise safe-rectangle entropy estimate at the current
+  exponent is supplied explicitly. Its coefficient is allowed to be any real
+  number; nonnegativity follows from the positive-size parent estimate.
+- **Scope:** a conditional covering estimate, not the physical exponent
+  improvement in Proposition 9.5. The rounded-power theorem is shared without
+  changing its public name, statement or proof.
