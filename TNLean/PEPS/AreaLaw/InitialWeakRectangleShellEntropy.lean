@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy
 import TNLean.PEPS.AreaLaw.WeakRectangleShellEntropy
+import Mathlib.Data.Nat.Log
 
 /-!
 # Uniform weak-rectangle shell entropy at the initial exponent
@@ -33,7 +34,8 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 namespace TNLean.PEPS.AreaLaw
 
 /-- One initial safe-box constant and exponent control all actual weak-rectangle
-shells satisfying the cap and clearance conditions. The physical vector is the
+shells satisfying the clearance conditions. The dyadic cap is chosen inside
+the proof; the zero-thickness shell is included. The physical vector is the
 original gapped ground vector throughout.
 Source: `02-initial.tex`, lines 590–604, and `08-scanner.tex`, lines 717–729,
 at the pinned manuscript revision stated above. -/
@@ -45,8 +47,7 @@ theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
           (E₀ : ℝ) (Ω : StateSpace Λ q),
           IsGappedGroundState Λ q h.operator E₀ Ω Δ →
           ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
-            ∀ j L K : ℕ, j ≤ L → L ≤ Q.size →
-              2 ^ K ≤ L → L < 2 ^ (K + 1) →
+            ∀ j L : ℕ, j ≤ L → L ≤ Q.size →
               D₀ * L + L ≤ D₀ * Q.size →
               regionalEntropy Λ q Ω
                 (A.filter fun x ↦ x.1 ∈ (Q.dilate j).toFinset \ Q.toFinset) ≤
@@ -55,9 +56,15 @@ theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
   obtain ⟨C, e₀, hC, he₀, he₀₁, hrect⟩ :=
     exists_regionalEntropy_safe_rect_le_rpow q R hq hJ hΔ
   refine ⟨C, e₀, hC, he₀, he₀₁, ?_⟩
-  intro D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe j L K hj hL hlo hhi hbudget
-  exact IntRect.regionalEntropy_shell_le_of_safe_box
-    Λ q D₀ Ω hgs.1 A Q hsafe j L K hj hL hlo hhi hbudget
-    e₀ C he₀ hC (hrect D₀ hD₀ Λ h E₀ Ω hgs A)
+  intro D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe j L hj hL hbudget
+  by_cases hLzero : L = 0
+  · have hjzero : j = 0 := by omega
+    simp [hjzero, hLzero, regionalEntropy_empty Λ q Ω hgs.1,
+      Real.zero_rpow (ne_of_gt he₀)]
+  · exact IntRect.regionalEntropy_shell_le_of_safe_box
+      Λ q D₀ Ω hgs.1 A Q hsafe j L (Nat.log 2 L) hj hL
+      (Nat.pow_log_le_self 2 hLzero)
+      (Nat.lt_pow_succ_log_self (b := 2) (by decide) L) hbudget
+      e₀ C he₀ hC (hrect D₀ hD₀ Λ h E₀ Ω hgs A)
 
 end TNLean.PEPS.AreaLaw

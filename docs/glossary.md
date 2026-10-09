@@ -3372,8 +3372,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   rectangle and its actual dyadically covered shell. These witnesses precede
   the safety parameter D₀ > 2R + 10, domain, Hamiltonian, energy, ground vector,
   cut, rectangle and shell scales. The shell estimate has coefficient
-  C * (24 + 64/(2^e₀ - 1)) and factor size(Q) * L^e₀ under the cap and
-  scalar clearance conditions of the conditional shell theorem.
+  C * (24 + 64/(2^e₀ - 1)) and factor size(Q) * L^e₀ under the scalar
+  clearance conditions. The dyadic cap is chosen within the proof, and the
+  zero-thickness shell is included.
 - **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
   Proposition 3.3, 02-initial.tex, lines 590–604, and the proof of
   Proposition 9.5, 08-scanner.tex, lines 717–729, at

@@ -16,8 +16,8 @@
     at energy $E_0$ with full-system projector gap $\Delta$.
     Let $A\subseteq\Lambda$ be any cut, let $Q$ be any safe integer
     rectangle, and put $s=\operatorname{size}(Q)$. For all
-    $j,L,K\in\mathbb N$ satisfying $j\le L\le s$,
-    $2^K\le L<2^{K+1}$ and $D_0L+L\le D_0s$, one has
+    $j,L\in\mathbb N$ satisfying $j\le L\le s$ and
+    $D_0L+L\le D_0s$, one has
     \begin{align}
         S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)
          & \le C\left(24+\frac{64}{2^{e_0}-1}\right)sL^{e_0}.
@@ -40,8 +40,11 @@
         S_\Omega(A\cap P)
          & \le C\operatorname{size}(P)^{1+e_0}.
     \end{align}
+    If $L=0$, then $j=0$, the shell is empty, and both sides of the
+    desired inequality vanish. If $L>0$, choose
+    $K=\lfloor\log_2L\rfloor$, so that $2^K\le L<2^{K+1}$.
     Apply Theorem~\ref{thm:area_law_rectangle_shell_entropy} with this
-    pointwise estimate, the normalization of $\Omega$, and the stated
-    shell cap and clearance conditions. It gives the asserted bound with
+    dyadic cap, the pointwise estimate, the normalization of $\Omega$,
+    and the stated clearance conditions. It gives the asserted bound with
     the same $C$ and $e_0$.
 \end{proof}
