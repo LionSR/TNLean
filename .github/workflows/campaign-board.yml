@@ -50,7 +50,7 @@ jobs:
       - name: Fetch the published snapshot
         # Unchanged pull requests reuse its file statistics, which keeps the
         # job within the token's hourly quota. A missing snapshot is fine.
-        run: curl -fsSL https://sirui-lu.com/TNLean/openai-area-law-peps-proof/data.json -o previous.json || true
+        run: curl -fsSL --retry 3 --retry-delay 10 --retry-all-errors https://sirui-lu.com/TNLean/openai-area-law-peps-proof/data.json -o previous.json || true
 
       - name: Collect the snapshot
         env:

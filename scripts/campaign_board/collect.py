@@ -130,11 +130,17 @@ def count_sorry(source: str) -> int:
 
 
 def raw_file(repo_slug: str, path: str, ref: str) -> str:
-    """A file at a commit, or the empty string when it does not exist there."""
+    """A file at a commit, or the empty string when it does not exist there.
+
+    Only a missing file reads as empty. Any other failure is raised, so that a
+    failed fetch never produces statistics that the snapshot cache would keep.
+    """
     try:
         return run("gh", "api", f"repos/{repo_slug}/contents/{path}?ref={ref}", "-H", "Accept: application/vnd.github.raw")
-    except subprocess.CalledProcessError:
-        return ""
+    except subprocess.CalledProcessError as err:
+        if re.search(r"\b404\b|Not Found", str(err)):
+            return ""
+        raise
 
 
 # ------------------------------------------------------------------------- issues
