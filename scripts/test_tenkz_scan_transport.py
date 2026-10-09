@@ -24,11 +24,16 @@ def atoms(picture):
     return {name: ((int(row), int(col)), label) for row, col, name, label in found}
 
 
-def wires(picture):
+def wire_ends(picture):
+    """Read native relative endpoints without dropping their offset directions."""
     return re.findall(
         r"\\tnwire\[kind=string, stroke=dotted, dir=to, name=\w+\]"
-        r"\{(\w+)\}\{(\w+)\}", picture,
+        r"\{0\.5 (n) of (\w+)\}\{0\.5 (sw|se) of (\w+)\}", picture,
     )
+
+
+def wires(picture):
+    return [(start, end) for _, start, _, end in wire_ends(picture)]
 
 
 class ScanTransportDiagram(unittest.TestCase):
@@ -106,6 +111,22 @@ class ScanTransportDiagram(unittest.TestCase):
                 for other_row, other_col in positions[i + 1:]:
                     self.assertGreaterEqual(max(abs(row - other_row), abs(col - other_col)), 2)
             self.assertNotIn(r"\tnmark", picture)
+
+    def test_strings_have_separate_tips_outside_each_root(self):
+        # tenkz's crossing police counts shared bare-center endpoints as an
+        # undeclared string crossing, even when a box later hides the meeting.
+        # Face addresses on these cell-backed boxes still resolve to the cell
+        # center. Relative addresses are needed to separate the incoming tips.
+        for picture in self.pictures:
+            nodes = atoms(picture)
+            tips = []
+            for start_dir, start, end_dir, end in wire_ends(picture):
+                self.assertEqual(start_dir, "n")
+                side = "sw" if nodes[start][0][1] < nodes[end][0][1] else "se"
+                self.assertEqual(end_dir, side)
+                tips.extend(((start, start_dir), (end, end_dir)))
+            self.assertEqual(len(tips), len(set(tips)))
+            self.assertNotIn("cross=", picture)
 
     def test_scope_and_exact_history_relabeling(self):
         compact = re.sub(r"\s+", " ", self.text)

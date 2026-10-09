@@ -192,13 +192,26 @@ theorem entropyGain_eq_sum_oldFourierCoherentIntegral (t : ℝ) (k : ℕ)
   unfold entropyGain
   apply Finset.sum_congr rfl
   intro h _
-  have hcont (g : Fin K) : Continuous fun θ : SiteConfig n → ℂ =>
-      ∑ c, (D.choiceTree h).weight c *
-        moveEta n (D.old h g) (D.move h c g) ((EuclideanSpace.equiv _ ℂ).symm θ) :=
+  let f (g : Fin K) (θ : SiteConfig n → ℂ) : ℝ :=
+    ∑ c, (D.choiceTree h).weight c *
+      moveEta n (D.old h g) (D.move h c g) ((EuclideanSpace.equiv _ ℂ).symm θ)
+  have hcont (g : Fin K) : Continuous (f g) :=
     continuous_finsetSum _ fun c _ =>
       continuous_const.mul (continuous_moveEta (D.old h g) (D.move h c g))
-  rw [D.oldFourierCoherentIntegral_sum n t k pre p h Finset.univ _ (fun g _ => hcont g)]
-  simp only [Finset.mul_sum, oldFourierCoherentIntegral]
+  have hsymbol : D.choiceEntropySymbol n h = (fun θ => ∑ g, f g θ) := rfl
+  have hsum :
+      D.oldFourierCoherentIntegral n t k pre p h (D.choiceEntropySymbol n h) =
+        ∑ g, D.oldFourierCoherentIntegral n t k pre p h (f g) :=
+    (congrArg (D.oldFourierCoherentIntegral n t k pre p h) hsymbol).trans
+      (D.oldFourierCoherentIntegral_sum n t k pre p h Finset.univ f
+        (fun g _ => hcont g))
+  change (∑ g, D.histTree.weight h *
+      D.oldFourierCoherentIntegral n t k pre p h (f g)) =
+    D.histTree.weight h *
+      D.oldFourierCoherentIntegral n t k pre p h (D.choiceEntropySymbol n h)
+  exact (Finset.mul_sum Finset.univ
+    (fun g => D.oldFourierCoherentIntegral n t k pre p h (f g)) (D.histTree.weight h)).symm.trans
+      (congrArg (fun x : ℝ => D.histTree.weight h * x) hsum.symm)
 
 end ReplicaTransport.TransportData
 end TensorPower

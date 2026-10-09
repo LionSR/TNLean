@@ -161,9 +161,21 @@ theorem designatedSplitIncidenceCost_eq_sum_splitEta {k L : ℕ}
       ((S.chargeTransportData histTree choiceTree).old h g).SplitsToF (E.support i) :=
     hcase.imp_right And.left
   rw [hsupport i] at hcase' ⊢
-  simpa only [chargeEntropyCost, TransportData.leafPart, chargeTransportData,
-    ite_not] using physical_incidence_sum n (S.oldChargeState h g)
-      (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) hcase' θ
+  have hphysical := physical_incidence_sum n (S.oldChargeState h g)
+    (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) hcase' θ
+  have hconditional (P : Prop) (η : ℝ) :
+      (if P then 0 else η) = (if ¬ P then η else 0) := by
+    by_cases hP : P
+    · rw [ite_eq_left hP, ite_eq_right (show ¬ ¬ P from fun hn => hn hP)]
+    · rw [ite_eq_right hP, ite_eq_left hP]
+  have hsplit := hphysical.trans (hconditional
+    ((augmentedPartition (S.oldChargeState h g)).Contains
+      ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
+        ⟨Sum.inl, Sum.inl_injective⟩))
+    (splitBandEta n (augmentedPartition (S.oldChargeState h g))
+      ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
+        ⟨Sum.inl, Sum.inl_injective⟩) θ))
+  simpa only [chargeEntropyCost, TransportData.leafPart, chargeTransportData] using hsplit
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

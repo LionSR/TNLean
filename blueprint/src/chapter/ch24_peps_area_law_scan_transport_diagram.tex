@@ -34,22 +34,25 @@ terminal metrics. The endpoint substitutions are
     % A_ij = A_(extendHistory h_i c_j). The two C boxes are the same fixed tree.
     % All labels are inside boxes. Empty grid rows and columns separate them;
     % no warning, label, bounding-box, or equation check is disabled.
+    % Native relative endpoints keep incoming strings separate outside each
+    % root box: bare names would meet at its center and violate the string
+    % crossing rule, even though the opaque box would hide that meeting.
     \tenkzkernel
     \begin{tenkzequation}
         \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, west=none, east=none]
             \tn[at=(1,2), name=fillOldRoot, skin=box]{T_k}
             \tn[at=(3,1), name=fillOldZero, skin=box]{A_0}
             \tn[at=(3,3), name=fillOldOne, skin=box]{A_1}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=fillOldPathZero]{fillOldZero}{fillOldRoot}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=fillOldPathOne]{fillOldOne}{fillOldRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillOldPathZero]{0.5 n of fillOldZero}{0.5 sw of fillOldRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillOldPathOne]{0.5 n of fillOldOne}{0.5 se of fillOldRoot}
         \end{tenkz}
         $\xrightarrow{\mathrm{fill}}$
         \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, west=none, east=none]
             \tn[at=(1,2), name=fillNewRoot, skin=box]{T_k}
             \tn[at=(3,1), name=fillNewZero, skin=box]{\widetilde A_0}
             \tn[at=(3,3), name=fillNewOne, skin=box]{\widetilde A_1}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=fillNewPathZero]{fillNewZero}{fillNewRoot}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=fillNewPathOne]{fillNewOne}{fillNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillNewPathZero]{0.5 n of fillNewZero}{0.5 sw of fillNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillNewPathOne]{0.5 n of fillNewOne}{0.5 se of fillNewRoot}
         \end{tenkz}
     \end{tenkzequation}
     \begin{tenkzequation}
@@ -57,8 +60,8 @@ terminal metrics. The endpoint substitutions are
             \tn[at=(1,2), name=chargeOldRoot, skin=box]{T_k}
             \tn[at=(3,1), name=chargeOldZero, skin=box]{\widetilde A_0}
             \tn[at=(3,3), name=chargeOldOne, skin=box]{\widetilde A_1}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeOldPathZero]{chargeOldZero}{chargeOldRoot}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeOldPathOne]{chargeOldOne}{chargeOldRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeOldPathZero]{0.5 n of chargeOldZero}{0.5 sw of chargeOldRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeOldPathOne]{0.5 n of chargeOldOne}{0.5 se of chargeOldRoot}
         \end{tenkz}
         $\xrightarrow{\mathrm{charge}}$
         \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=7, bonds=none, west=none, east=none]
@@ -69,12 +72,12 @@ terminal metrics. The endpoint substitutions are
             \tn[at=(5,3), name=chargeNewZeroOne, skin=box]{A_{01}}
             \tn[at=(5,5), name=chargeNewOneZero, skin=box]{A_{10}}
             \tn[at=(5,7), name=chargeNewOneOne, skin=box]{A_{11}}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewHistoryZero]{chargeNewChoiceZero}{chargeNewRoot}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewHistoryOne]{chargeNewChoiceOne}{chargeNewRoot}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathZeroZero]{chargeNewZeroZero}{chargeNewChoiceZero}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathZeroOne]{chargeNewZeroOne}{chargeNewChoiceZero}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathOneZero]{chargeNewOneZero}{chargeNewChoiceOne}
-            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathOneOne]{chargeNewOneOne}{chargeNewChoiceOne}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewHistoryZero]{0.5 n of chargeNewChoiceZero}{0.5 sw of chargeNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewHistoryOne]{0.5 n of chargeNewChoiceOne}{0.5 se of chargeNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathZeroZero]{0.5 n of chargeNewZeroZero}{0.5 sw of chargeNewChoiceZero}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathZeroOne]{0.5 n of chargeNewZeroOne}{0.5 se of chargeNewChoiceZero}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathOneZero]{0.5 n of chargeNewOneZero}{0.5 sw of chargeNewChoiceOne}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathOneOne]{0.5 n of chargeNewOneOne}{0.5 se of chargeNewChoiceOne}
         \end{tenkz}
     \end{tenkzequation}
     \caption{Schematic of the recursive scan trees in
