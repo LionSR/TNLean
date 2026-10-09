@@ -152,6 +152,22 @@ unchanged. The corrected endpoint frames and corrected Schmidt input identities
 use these elementary constructions; they do not require the Gaussian physical
 error estimate merely to identify their coordinates or source vectors.
 
+`CorrectedSourcePartition` owns `Word.IsTensorPartitioned`, formerly
+`Word.HasTensorPartition`: after grouping a Boolean owner map, the operator
+factors into two allowed source-free local words of norm at most one, with
+equality on the entire input memory. In `CorrectedInputReordering`,
+`SourceCircuit.hasTensorPartition_reordered_partial` and
+`SourceCircuit.hasTensorPartition_prepared_reordered_partial` become
+`SourceCircuit.isTensorPartitioned_reordered_partial` and
+`SourceCircuit.isTensorPartitioned_prepared_reordered_partial`, respectively.
+In `LocalSchmidtOutput`, `Word.hasSchmidtOutput_of_hasTensorPartition` becomes
+`Word.hasSchmidtOutput_of_isTensorPartitioned`. All consumers, including
+`CorrectedSchmidtOutput`, and the corresponding blueprint tags use these names.
+The hypotheses and proofs are unchanged except for identifier substitutions;
+reversing those substitutions recovers the original mathematical declarations.
+No otherwise-dead compatibility alias is retained after migrating all
+consumers, in accordance with the repository policy.
+
 ## Archive exclusion
 
 `TNLean/Archive/` is intentionally outside the production manifest and is not

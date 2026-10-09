@@ -30,11 +30,11 @@ TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_int
 
 Provenance-ID: 8769-physical-sourcegaussianphysicalintegrability-02
 Downstream declaration:
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/SourceGaussianPhysicalIntegrability.html#TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian
+TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian
 
 Provenance-ID: 8769-physical-sourcegaussianphysicalintegrability-03
 Downstream declaration:
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/SourceGaussianPhysicalIntegrability.html#TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian
+TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian
 
 -/
 

@@ -285,8 +285,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Actual local factors of the rearranged composition]
     \label{thm:peps_reordered_local_factors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.hasTensorPartition_reordered_partial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.hasTensorPartition_prepared_reordered_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_reordered_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_prepared_reordered_partial}
     \leanok
     Suppose the circuit is allowed. After the common rearrangement, its
     selectively prepared residual factors across the affected/exterior
@@ -460,7 +460,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Applying the two actual local factors]
     \label{thm:peps_local_schmidt_output}
-    \lean{TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_hasTensorPartition}
+    \lean{TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_isTensorPartitioned}
     \leanok
     If a composition factors into actual allowed source-free local words, and
     its inputs admit~(\ref{eq:peps_frames_input_schmidt}), then its outputs
