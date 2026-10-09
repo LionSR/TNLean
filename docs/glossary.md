@@ -3309,3 +3309,14 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
+
+## Weighted template shell coverings
+
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
+  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
+  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
+  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
+  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
+  of Lemma 9.4, not safe clearance or a regional entropy theorem.
