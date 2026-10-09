@@ -728,6 +728,36 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                elif step.get('name') == 'Check swapped doubled-interaction norm and standard axioms strictly':
+                    # This exact check follows its freshly built target and
+                    # every cache guard; other strict checks still follow the root build.
+                    target_step = self.steps[i - 1]
+                    self.assertEqual(target_step.get('name'),
+                                     'Check swapped doubled-interaction norm early')
+                    self.assertLess(prune, i - 1)
+                    self.assertLess(i, build)
+                    for checked_step in (target_step, step):
+                        self.assertNotIn('if', checked_step)
+                        self.assertNotIn('continue-on-error', checked_step)
+                    target_run = target_step['run']
+                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
+                    target = 'lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm:olean'
+                    self.assertLess(target_run.index(cache_guard), target_run.index(target))
+                    self.assertIn('set -eo pipefail', target_run)
+                    self.assertIn('tee -a "$RUNNER_TEMP/lake-build.log"', target_run)
+                    self.assertEqual(step['timeout-minutes'], 4)
+                    self.assertEqual(step['env']['LEAN_NUM_THREADS'], 1)
+                    run = step['run']
+                    self.assertIn('timeout --signal=INT --kill-after=5s 90s lake env lean -j1', run)
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true']:
+                        self.assertIn(flag, run)
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLean/PEPS/Approximation/SheetSwapDoubledTermNorm.lean',
+                        'TNLeanTest/SheetSwapDoubledTermNormAxioms.lean'])
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
