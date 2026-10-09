@@ -1,0 +1,66 @@
+% Source relocation proposal; native verification remains pending.
+
+\section{Party restrictions after changing owner labels}
+
+Let $P$ and $Q$ be sets of owner labels. A finite composition $W$ contains
+local operations, exchanges, and operations beside untouched registers.
+Write $\Pi(W)$ for its participating parties: these include the owners of
+all occurring registers and the assigned party of every local operation,
+including a scalar operation on an empty register list. For $f:P\to Q$,
+write $W^f$ for the composition obtained by changing each owner $p$ to
+$f(p)$ while preserving the register spaces and chronological order.
+
+\begin{definition}[Selection of one party]
+    \label{def:peps_single_party_selector}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partySelector}
+    For $q\in Q$, define $\chi_q:Q\to\{\mathrm{false},\mathrm{true}\}$
+    by $\chi_q(x)=\mathrm{true}$ exactly when $x=q$.
+\end{definition}
+
+\begin{theorem}[Participating parties after changing owner labels]
+    \label{thm:peps_source_free_owner_parties}
+    \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil}
+    \uses{def:peps_owner_composition}
+    If $W$ contains no pair-source preparation, then
+    $\Pi(W^f)=f(\Pi(W))$. No injectivity assumption on $f$ is required.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_owner_composition}
+    Induct on the composition. The owners of a relabelled register list
+    are the image of its original owners. Images commute with unions
+    for composition and with adjoining a named party for local maps,
+    exchanges, and untouched registers. The pair-source case is excluded
+    by hypothesis. This also retains named scalar local operations.
+\end{proof}
+
+\begin{theorem}[Restriction to an owner outside the relabelling range]
+    \label{thm:peps_owner_disjoint_restriction}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
+    \uses{def:peps_single_party_selector,def:peps_owner_composition}
+    Suppose that $W$ contains no pair-source preparation and that
+    $f(p)\ne q$ for every $p\in P$. Let $V$ be the restriction of $W^f$
+    to the owner $q$. Then $\Pi(V)=\varnothing$, and its operator is
+    $\operatorname{id}_{\C}$ under the canonical identification of the
+    empty input and output register memories with $\C$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_free_owner_parties,thm:peps_party_restriction,
+        def:peps_single_party_selector}
+    The participating parties are
+    $\Pi(V)=\{x\in f(\Pi(W)):x=q\}=\varnothing$.
+    A composition with no participating party has empty input and output
+    register lists and acts as their identity. In particular, it cannot
+    contain a scalar local operation with a named party.
+\end{proof}
+
+% Source: 04-compression.tex, lines 233--267 and 351--381.
+These auxiliary identities concern the separated local operations in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+For the all-party private preparation, every original party has its own
+owner in $P\sqcup\{\bot\}$. Its restriction to $\bot$ is therefore the
+scalar identity. Adjoining fixed source registers requires, in addition,
+that none of those registers has exterior owner $\bot$. The subsequent
+residual composition can contribute a separate scalar from operations on
+empty memories; that scalar is not determined by the preparation identity.

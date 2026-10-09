@@ -78,6 +78,7 @@ import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyLocalMaps
 import TNLean.PEPS.Approximation.PartyPartition
+import TNLean.PEPS.Approximation.PartySelector
 import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
@@ -122,6 +123,7 @@ import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
 import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordOwnerMap
+import TNLean.PEPS.Approximation.WordOwnerRestriction
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
