@@ -728,6 +728,36 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                elif step.get('name') == 'Check canonical Schmidt--Bell sources and exact-name axioms strictly':
+                    # The preceding step rebuilds the full import closure under
+                    # the cache guard, so this strict re-elaboration is safe
+                    # before the root build. No generic exemption.
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    builder = self.steps[i - 1]
+                    self.assertEqual(builder['name'],
+                                     'Build canonical Schmidt--Bell initial vectors early')
+                    self.assertIn('test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean',
+                                  builder['run'])
+                    self.assertIn('lake --fail-fast build '
+                                  'TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector',
+                                  builder['run'])
+                    run = step['run']
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true']:
+                        self.assertIn(flag, run)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLean/PEPS/AreaLaw/GlobalSchmidtBellPrevector.lean',
+                        'TNLean/PEPS/AreaLaw/FiniteSetTruncationSchmidtBellPrevector.lean',
+                        'TNLeanTest/GlobalSchmidtBellPrevectorAxioms.lean'])
+                    imports = (ROOT / 'TNLeanTest/GlobalSchmidtBellPrevectorAxioms.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')],
+                                     ['import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector',
+                                      'import Lean.Elab.Command',
+                                      'import Lean.Util.CollectAxioms'])
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
