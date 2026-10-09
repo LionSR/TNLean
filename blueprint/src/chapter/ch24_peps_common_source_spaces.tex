@@ -138,6 +138,36 @@
     contraction bound.
 \end{proof}
 
+\begin{theorem}[Local contractions with a prepared tail]
+    \label{thm:peps_source_cons_mapL}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL}
+    \uses{def:peps_source_inventory,def:peps_source_expansion}
+    Let $p\ne q$ be parties, $A:U\to U'$ and $B:V\to V'$ be
+    contractions, $\eta\in U\otimes V$, and $T$ be a finite source list.
+    For every spectator memory $\mathcal H$, there is an allowed
+    composition $D$ containing no sources such that
+    $D P_{S,\mathcal H}=P_{S',\mathcal H}$, where $S$ and $S'$ are
+    obtained by adjoining $s$ and $s'$, respectively, before $T$.
+    The source $s$ has
+    endpoint spaces $U,V$ and vector $\eta$, and $s'$ has the same
+    parties, endpoint spaces $U',V'$ and vector $(A\otimes B)\eta$.
+    Neither the pair vector nor the tail is required to be normalized.
+    This is an auxiliary consequence of the local contraction step in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Manuscript: 04-compression.tex, lines 253--267.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_map_source_pair,def:peps_source_inventory}
+    Apply $A$ and $B$ only to the two registers of the first pair, with
+    identities on the prepared tail and the spectator memory.
+    By~(\ref{eq:peps_map_source_pair}),
+    $D P_{s,\mathcal H_T\otimes\mathcal H}
+        =P_{s',\mathcal H_T\otimes\mathcal H}$.
+    Composing on the right with $P_{T,\mathcal H}$ gives the asserted
+    identity. The two local maps are contractions and create no source.
+\end{proof}
+
 \begin{theorem}[Common spaces for normalized source lists]
     \label{thm:peps_common_source_lists}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.common_ofSlots_expands}
@@ -162,7 +192,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_map_source_pair,
+    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_source_cons_mapL,
         thm:peps_source_expansion_operations}
     Put every list in the reference order using
     Theorem~\ref{thm:peps_source_ordering}. At each half of each pair,
@@ -300,7 +330,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_finite_pair_coordinates,thm:peps_map_source_pair,
+    \uses{thm:peps_finite_pair_coordinates,thm:peps_source_cons_mapL,
         thm:peps_source_expansion_operations}
     Apply Theorem~\ref{thm:peps_finite_pair_coordinates} at each pair
     slot. Apply $f_e$ and $g_e$ locally to the two halves of that slot,

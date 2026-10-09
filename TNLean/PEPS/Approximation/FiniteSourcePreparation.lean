@@ -31,23 +31,6 @@ namespace TNLean.PEPS.PairEffect.SourceInventory
 
 variable {P ι : Type}
 
-/-- Include both halves of one source by local isometries while retaining the tail.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267. -/
-private theorem pair_cons_mapIsometry_expands (r : PairSource P) (U V U' V' : HSpace)
-    (f : U →ₗᵢ[ℂ] U') (g : V →ₗᵢ[ℂ] V') (η : U ⊗[ℂ] V) (T : SourceInventory P) :
-    Expands (⟨r.left, r.right, r.distinct, U, V, η⟩ :: T)
-      (⟨r.left, r.right, r.distinct, U', V', TensorProduct.mapIsometry f g η⟩ :: T) := by
-  intro ℓ
-  obtain ⟨hw, hs⟩ := Word.mapPair_spec r.left r.right f.toContinuousLinearMap
-    g.toContinuousLinearMap (LinearIsometry.norm_toContinuousLinearMap_le _)
-    (LinearIsometry.norm_toContinuousLinearMap_le _) (T.layout ++ ℓ)
-  refine ⟨Word.mapPair r.left r.right f.toContinuousLinearMap g.toContinuousLinearMap
-    (T.layout ++ ℓ), hw, hs, ?_⟩
-  have h := Word.eval_mapPair_source r.distinct f.toContinuousLinearMap
-    g.toContinuousLinearMap η (T.layout ++ ℓ)
-  simp only [← TensorProduct.toContinuousLinearMap_mapIsometry] at h
-  exact (comp_assoc _ _ _).symm.trans (congrArg (· ∘L (T.prepare ℓ).eval) h)
-
 /-- Applying the isometric inclusions in each pair slot recovers the preparation
 of the included vectors, using only local isometries.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267. -/
@@ -61,11 +44,14 @@ theorem ofSlots_mapIsometry_expands (R : SourceInventory P)
   | nil => exact Expands.refl []
   | cons r R ih =>
       rw [ofSlots_cons, ofSlots_cons]
-      exact (pair_cons_mapIsometry_expands r (U 0) (V 0) (U' 0) (V' 0)
-        (f 0) (g 0) (η 0) _).trans
-        (Expands.cons _ (ih (fun i ↦ U i.succ) (fun i ↦ V i.succ)
-          (fun i ↦ U' i.succ) (fun i ↦ V' i.succ) (fun i ↦ f i.succ)
-          (fun i ↦ g i.succ) (fun i ↦ η i.succ)))
+      simpa only [← TensorProduct.toContinuousLinearMap_mapIsometry] using
+        (Expands.cons_mapL r (U 0) (V 0) (U' 0) (V' 0)
+          (f 0).toContinuousLinearMap (g 0).toContinuousLinearMap
+          (LinearIsometry.norm_toContinuousLinearMap_le _)
+          (LinearIsometry.norm_toContinuousLinearMap_le _) (η 0) _).trans
+          (Expands.cons _ (ih (fun i ↦ U i.succ) (fun i ↦ V i.succ)
+            (fun i ↦ U' i.succ) (fun i ↦ V' i.succ) (fun i ↦ f i.succ)
+            (fun i ↦ g i.succ) (fun i ↦ η i.succ)))
 
 /-- A finite family of source preparations has common finite coordinate spaces
 at every endpoint. The coordinate vectors retain their exact norms, and local
