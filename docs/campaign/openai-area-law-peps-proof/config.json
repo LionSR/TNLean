@@ -89,7 +89,17 @@
           "physics": "The global gap limits how much the eigenvalues of a region's reduced state fluctuate on a logarithmic scale. Optimizing products of positive operators on nested rectangles, and bounding the result in two ways, turns this into a discount on conditional entropy.",
           "delivers": "A box of side <i>r</i> far from the cut has <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup> with <i>e</i>₀ &lt; 1. The volume bound would be <i>r</i>².",
           "figure": "box-exponent",
-          "caption": "Entropy bounds for a box of side <i>r</i> on log–log axes, where each exponent becomes a slope. The volume bound has slope 2, this stage gives slope 1 + <i>e</i>₀ (drawn at <i>e</i>₀ = ½), and the area law is the dashed slope 1 that the later stages reach."
+          "caption": "Entropy bounds for a box of side <i>r</i> on log–log axes, where each exponent becomes a slope. The volume bound has slope 2, this stage gives slope 1 + <i>e</i>₀ (drawn at <i>e</i>₀ = ½), and the area law is the dashed slope 1 that the later stages reach.",
+          "diagrams": [
+            {
+              "src": "diagrams/tilt.svg",
+              "caption": "Proof of Lemma <i>lem:tail</i>. Reweighting a state Ψ by <i>F</i> = ρ<sup>−<i>u</i>/2</sup> on a block <i>B</i> and tracing out the rest (the joined leg) gives σ = ρ<sup>1−<i>u</i></sup>/<i>M</i>(<i>u</i>). Only terms crossing the cut feel <i>F</i>, so by the gap the tilted vector stays close to Ψ, which pins the fluctuations of −log <i>p<sub>j</sub></i>."
+            },
+            {
+              "src": "diagrams/staircase.svg",
+              "caption": "Section 2: the norm <i>N</i> = ‖<i>L<sub>m</sub></i>⋯<i>L</i><sub>1</sub>Ω‖ of a staircase of positive filters <i>L<sub>j</sub></i> on nested regions <i>X<sub>j</sub></i> ⊃ <i>X</i> (drawn for <i>m</i> = 2; <i>T<sub>j</sub></i> are the shells). Bounding −2 log <i>N</i> from above and below gives the discount on <i>S</i>(<i>X</i> | buffer)."
+            }
+          ]
         },
         {
           "title": "Make the Hamiltonian local and positive",
@@ -101,7 +111,17 @@
           "physics": "Lieb–Robinson bounds in the lattice's own graph distance and a smooth spectral filter with stretched-exponentially decaying Fourier tails rewrite the Hamiltonian as a sum of positive local pieces.",
           "delivers": "Positive operators that each annihilate Ω and have rapidly decaying spatial tails, and whose sum has a global gap.",
           "figure": "filter",
-          "caption": "Left: the spectrum of <i>H</i> as a rug, with the isolated ground energy and the gap. The filter vanishes at <i>E</i>₀ and is flat above the gap, so each piece annihilates Ω. Right: on a log scale the filter's Fourier tail falls below every power law, which keeps each piece quasi-local."
+          "caption": "Left: the spectrum of <i>H</i> as a rug, with the isolated ground energy and the gap. The filter vanishes at <i>E</i>₀ and is flat above the gap, so each piece annihilates Ω. Right: on a log scale the filter's Fourier tail falls below every power law, which keeps each piece quasi-local.",
+          "diagrams": [
+            {
+              "src": "diagrams/constraint.svg",
+              "caption": "Equation <i>eq:quasilocal-positive</i>. Each constraint <i>k<sub>i</sub></i>, 0 ≤ <i>k<sub>i</sub></i> ≤ <i>I</i>, annihilates Ω exactly and is supported, up to error <i>C</i>e<sup>−<i>cl</i><sup>α</sup></sup>, on the ball <i>N<sub>l</sub></i>(<i>a<sub>i</sub></i>). Their sum has the gap <i>g</i>."
+            },
+            {
+              "src": "diagrams/truncation.svg",
+              "caption": "Equation <i>eq:quasilocal-ce</i>: truncating an operator to a ball traces out everything outside (the loop) and puts back the normalized identity there."
+            }
+          ]
         },
         {
           "title": "Replicas trade information against energy",
@@ -116,7 +136,21 @@
           "physics": "Take many copies of Ω in the symmetric subspace, entangled with an auxiliary pair, and filter them by an inverse power of an operator that interpolates as a small region changes sides. Per copy, the log-norm of the filtered vector approaches a combination of entropies. Schur–Weyl labels and trees of matrix geometric means carry out this bookkeeping.",
           "delivers": "The decrease of the log-norm bounds conditional mutual information from below, and the same states bound the energy spent. An entangled-pair projection gives an upper comparison. The gap gives a lower one, because low energy forces most copies into Ω.",
           "figure": "replicas",
-          "caption": "As the number <i>m</i> of copies grows, the log-norm per copy of the filtered vector settles at a combination of entropies (dashed). Comparing this limit with the energy spent is what bounds the conditional mutual information."
+          "caption": "As the number <i>m</i> of copies grows, the log-norm per copy of the filtered vector settles at a combination of entropies (dashed). Comparing this limit with the energy spent is what bounds the conditional mutual information.",
+          "diagrams": [
+            {
+              "src": "diagrams/movement.svg",
+              "caption": "Lemma <i>lem:movement</i>, <i>eq:conditional-movement</i>. Filtering a piece <i>x</i> of a pure state θ through the <i>U</i> side and then the <i>P</i> side loses norm at the rate η = <i>I</i>(<i>x</i> : <i>F</i> | <i>U</i>) = <i>I</i>(<i>x</i> : <i>F</i> | <i>P</i>)."
+            },
+            {
+              "src": "diagrams/prevector.svg",
+              "caption": "Equation <i>comparator:prevector</i>, drawn for <i>k</i> = 3 copies: each copy of Ω̃ comes with a maximally entangled pair on <i>C</i> and <i>R</i>, and π<sub><i>R</i></sub><sup>λ</sup> keeps one Schur–Weyl sector of the <i>R</i> registers."
+            },
+            {
+              "src": "diagrams/bell-pin.svg",
+              "caption": "Equation <i>comparator:bell-pin</i>, one copy. Projecting the target <i>X</i> and the register <i>C</i> onto the pair <i>B</i> moves the target's Schmidt index onto <i>R</i>: ψ is Ω̃ with <i>X</i> relabelled <i>R</i>, restricted to the typical set. The factor √<i>z</i>/<i>d</i><sub>*</sub> per copy is the upper comparison."
+            }
+          ]
         },
         {
           "title": "Scan a collar",
@@ -128,7 +162,13 @@
           "physics": "Sweep the partition through a collar along a finite randomized schedule, so that each interaction term is rarely cut. Applied repeatedly, the two norm comparisons first improve the box exponent and then bound the information that crosses the collar.",
           "delivers": "The mutual information between <i>A</i>∩<i>T</i> and the region beyond a collar of width <i>n</i><sup>1−ε</sup> is at most <i>C n</i><sup>1−ε</sup>, for templates <i>T</i> with <i>O</i>(<i>n</i>) boundary.",
           "figure": "collar-scan",
-          "caption": "Five steps of the sweep as small multiples. The partition (orange) crosses the collar (grey) at a different position in each step, chosen by a randomized schedule, so each interaction term is cut in only a few steps."
+          "caption": "Five steps of the sweep as small multiples. The partition (orange) crosses the collar (grey) at a different position in each step, chosen by a randomized schedule, so each interaction term is cut in only a few steps.",
+          "diagrams": [
+            {
+              "src": "diagrams/collar-state.svg",
+              "caption": "Proposition <i>prop:collar</i> bounds the mutual information of this reduced state: the target <i>X</i> and the region Λ∖<i>S</i><sub>0</sub> beyond the collar, with the collar <i>Y</i> traced out. The scan gives <i>I</i>(<i>X</i> : Λ∖<i>S</i><sub>0</sub>) ≤ <i>C n</i><sup>1−ε</sup>."
+            }
+          ]
         },
         {
           "title": "Amplify the information bound",
@@ -138,7 +178,13 @@
           "physics": "Typical spectral subspaces give an operator that restores the target from an auxiliary reference. Localized products of the positive constraints suppress its excited part, and polar decomposition turns it into a unitary that acts only near the target.",
           "delivers": "Widening the collar by a sublinear amount makes the leaked information smaller than any fixed inverse power of <i>n</i>.",
           "figure": "amplify",
-          "caption": "Information leaked past the collar against its width, on a log scale. The scan leaves at most <i>C n</i><sup>1−ε</sup>. Widening the collar by a sublinear amount drives the leak below every fixed inverse power of <i>n</i>."
+          "caption": "Information leaked past the collar against its width, on a log scale. The scan leaves at most <i>C n</i><sup>1−ε</sup>. Widening the collar by a sublinear amount drives the leak below every fixed inverse power of <i>n</i>.",
+          "diagrams": [
+            {
+              "src": "diagrams/restore.svg",
+              "caption": "Equations <i>eq:amplification-swapped-state</i>, <i>eq:amplification-restored-state</i> and <i>eq:amplification-unitary-error</i>. In φ the target's content sits in the reference <i>e</i>′ and <i>X</i>, <i>s</i>′ are blank. A unitary <i>U</i>′ supported on <i>s</i>′ and the neighbourhood <i>N</i><sub>2<i>r</i></sub>(<i>S</i><sub>0</sub>) (drawn on the legs <i>X</i>, <i>Y</i>) brings φ within <i>C n</i><sup>−<i>K</i>/2</sup> of η = Ω ⊗ (purification of ρ<sub><i>X</i></sub>). It never touches <i>e</i>′ or the far region, which is why their correlation with <i>X</i> becomes tiny."
+            }
+          ]
         },
         {
           "title": "Arrange regions so the entropies cancel",
@@ -150,7 +196,13 @@
           "physics": "Remove <i>O</i>(|∂<i>A</i>|) sites and split the rest of <i>A</i> into two ordered families of regions. A collar separates each region from the outside and from the earlier regions of its family. Narrow strips and recursive repairs at point contacts make this work for arbitrary cuts, including domains with holes.",
           "delivers": "Two applications of the entropy chain rule cancel the entropy of every region, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors. This is the area law.",
           "figure": "cancel",
-          "caption": "The region <i>A</i> drawn cell by cell. A boundary layer <i>D</i> of <i>O</i>(|∂<i>A</i>|) sites is removed (solid squares), and the rest is cut into two ordered families of strips. In the entropy chain rule each strip's entropy is added once and removed once, leaving |<i>D</i>| log <i>q</i> plus summable errors."
+          "caption": "The region <i>A</i> drawn cell by cell. A boundary layer <i>D</i> of <i>O</i>(|∂<i>A</i>|) sites is removed (solid squares), and the rest is cut into two ordered families of strips. In the entropy chain rule each strip's entropy is added once and removed once, leaving |<i>D</i>| log <i>q</i> plus summable errors.",
+          "diagrams": [
+            {
+              "src": "diagrams/purity.svg",
+              "caption": "Lemma <i>geometry:cancellation</i>. For the pure state ψ on <i>B A<sub>f</sub> A</i><sub>1−<i>f</i></sub> <i>D</i>, the two reduced states shown have the same nonzero spectrum, so <i>S</i>(<i>B A<sub>f</sub></i>) = <i>S</i>(<i>D A</i><sub>1−<i>f</i></sub>). This is the step that lets the two chain rules cancel."
+            }
+          ]
         }
       ]
     },
@@ -171,7 +223,13 @@
           "physics": "Two regions separated by a buffer that tapers linearly toward finitely many points, and stays wider than a large multiple of log <i>L</i>, are almost independent. The proof adds cells one at a time using the two tile families of the area law. Gaussian filtering with the gap resets the cost after each annular step.",
           "delivers": "Mutual information at most <i>L</i><sup>−<i>p</i></sup>, so the owner of the buffer can split its purification into two factors with small error.",
           "figure": "angular",
-          "caption": "Two regions <i>X</i> and <i>Y</i> separated by a buffer that narrows linearly toward a point but never drops below a large multiple of log <i>L</i> (orange). Their mutual information is at most a fixed inverse power of <i>L</i>."
+          "caption": "Two regions <i>X</i> and <i>Y</i> separated by a buffer that narrows linearly toward a point but never drops below a large multiple of log <i>L</i> (orange). Their mutual information is at most a fixed inverse power of <i>L</i>.",
+          "diagrams": [
+            {
+              "src": "diagrams/splitting.svg",
+              "caption": "Lemma <i>lem:splitting</i>. If <i>T</i> and <i>E</i> share information <i>b</i>, the party holding the buffer <i>U</i> has an isometry <i>V</i> splitting its part into <i>𝓑<sub>T</sub></i> and <i>𝓑<sub>E</sub></i> so that the state is within √<i>b</i> of a product <i>s</i> ⊗ <i>s</i>′. The new dimensions are unbounded."
+            }
+          ]
         },
         {
           "title": "Small patches with polynomial rank",
@@ -184,8 +242,8 @@
           "caption": "Left: nested squares around a square of side about log <i>L</i>. Right: the inside rank of each subspace in the orthogonal sum, as bars. Their total is polynomial in <i>L</i>, so the label fits in a small register.",
           "diagrams": [
             {
-              "src": "diagrams/patch-split.svg",
-              "caption": "In tensor-network notation: up to small error, Ω, with its indices grouped into inside and outside, is an inside tensor <i>V</i> contracted with an outside tensor <i>W</i> through one bond carrying the label (<i>j</i>, ℓ). That bond has dimension Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>."
+              "src": "diagrams/encoder.svg",
+              "caption": "Equations <i>eq:hole-encoder</i> and <i>eq:frame-vector</i>: the frame vector Ω<sub>𝓕</sub> = <i>K</i>Ω. The encoder <i>K</i> acts only on the hole <i>Q</i><sup>+</sup> and writes which cylinder and which inside vector (<i>j</i>, ℓ) into an open tag register 𝓙 of dimension Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>. The paper does not claim a finite-rank cut at one fixed boundary; the radius varies with <i>j</i>."
             }
           ]
         },
@@ -199,7 +257,17 @@
           "physics": "The elementary operations change which party owns a region, create or retire a party, and exchange registers between two copies of the state. Each uses only private maps and normalized bipartite vectors, which may be highly entangled.",
           "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol.",
           "figure": "moves",
-          "caption": "The three elementary moves, each drawn before and after: a region passes from party <i>a</i> to party <i>b</i>; a party splits off a new party or retires; a register (orange) moves between two copies of the state."
+          "caption": "The three elementary moves, each drawn before and after: a region passes from party <i>a</i> to party <i>b</i>; a party splits off a new party or retires; a register (orange) moves between two copies of the state.",
+          "diagrams": [
+            {
+              "src": "diagrams/birth.svg",
+              "caption": "Lemma <i>lem:birth</i>, read bottom to top. The owner of <i>T</i> and <i>U</i> splits with <i>V</i>, consumes <i>s</i> on <i>T𝓑<sub>T</sub></i>, emits a fresh pair source |<i>s</i>⟩ whose <i>T</i> half belongs to the new party, and recombines with <i>V</i><sup>†</sup>. Error at most <i>L</i><sup>−30</sup>."
+            },
+            {
+              "src": "diagrams/rewrite.svg",
+              "caption": "Lemma <i>lem:small-rewrite</i>: a small patch is re-encoded by <i>M</i> = <i>K</i><sub>new</sub><i>P<sub>m</sub></i>⋯<i>P</i><sub>1</sub><i>K</i><sub>old</sub><sup>†</sup>, with error at most (<i>m</i> + <i>r</i><sub>old</sub>)ε."
+            }
+          ]
         },
         {
           "title": "A dyadic distribution protocol",
@@ -221,8 +289,8 @@
           "delivers": "A trace-norm error independent of every private dimension, and an operator network with polynomial bonds on the party graph.",
           "diagrams": [
             {
-              "src": "diagrams/pair-compress.svg",
-              "caption": "The density operator of a pair resource on parties <i>a</i> and <i>b</i> (legs up: ket, legs down: bra) is replaced by a sum of product operators <i>X<sub>k</sub></i> ⊗ <i>Y<sub>k</sub></i>, which is a two-site operator network whose bond <i>k</i> runs over polynomially many values."
+              "src": "diagrams/source-replacement.svg",
+              "caption": "Equation <i>eq:compression-random-source</i>. The source operator <i>X</i> = |η⟩⟨η̃| between parties <i>P</i> and <i>Q</i> (ket and bra may come from different branches) equals, in expectation, a sum of <i>k</i> Gaussian product operators <i>U<sub>j</sub></i> ⊗ <i>V<sub>j</sub></i>, a two-party network with one bond <i>j</i> of polynomial size. Single samples are not close; the error ≤ <i>L</i><sup>−<i>p</i></sup> holds for the contracted density σ (Theorem <i>thm:compression</i>)."
             }
           ]
         },
@@ -239,8 +307,12 @@
           "caption": "The links between parents and children on an 8 × 8 grid, routed first along a row and then along a column. Stroke width counts the links that share each lattice edge, which sets the bond dimension there.",
           "diagrams": [
             {
+              "src": "diagrams/ket-column.svg",
+              "caption": "Lemma <i>lem:columns</i>: fixing the input legs of the compressed operator network σ to one product vector |<i>z</i>⟩ gives a ket network <i>v</i> = σ|<i>z</i>⟩ with the same bonds, and some such column satisfies min<sub>θ</sub>‖<i>v</i>/‖<i>v</i>‖ − e<sup><i>i</i>θ</sup>Ω‖ ≤ 2η."
+            },
+            {
               "src": "diagrams/peps-sheet.svg",
-              "caption": "The output: one tensor <i>A<sub>v</sub></i> per site of the open grid, bonds contracted along lattice edges, one physical leg per site. Each bond has dimension at most <i>C L<sup>c</sup></i>."
+              "caption": "The result, as defined in the introduction: one tensor <i>A<sub>v</sub></i> per site of the open <i>L</i>×<i>L</i> grid, bonds along grid edges, one physical leg per site, bond dimension at most <i>C L<sup>c</sup></i>."
             }
           ]
         }
@@ -269,7 +341,7 @@
           "diagrams": [
             {
               "src": "diagrams/peps-tensor.svg",
-              "caption": "The tensor at site <i>v</i> of a PEPS: four virtual indices <i>u</i>, <i>l</i>, <i>d</i>, <i>r</i> in the sheet, contracted with the neighbouring tensors, and one physical index pointing out of it. The papers allow a different tensor at every site."
+              "caption": "The paper's PEPS: on each edge <i>e</i> the pair Σ<sub><i>a</i></sub>|<i>a</i>⟩|<i>a</i>⟩ of dimension <i>D<sub>e</sub></i>, and at each vertex an arbitrary linear map <i>A<sub>v</sub></i> from the incident bonds to ℂ<sup><i>q</i></sup>, drawn here as a tensor with four bond legs <i>u</i>, <i>l</i>, <i>d</i>, <i>r</i> and one physical leg. Boundary sites have fewer bonds."
             }
           ]
         }

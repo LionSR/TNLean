@@ -1,0 +1,24 @@
+% Area-law manuscript, comparator:bell-pin (07-comparators.tex,
+% lines 241-290), one copy: projecting X and C onto B_XC moves the target's
+% Schmidt index onto R; psi is the typical truncation with X relabelled R.
+\[
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(3,1), skin=box, wide=2, name=o,
+        ports={90@1:physical, 90@2:physical}]{\widetilde\Omega}
+    \tn[at=(3,3), skin=box, wide=2, name=bell,
+        ports={90@1:physical, 90@2:physical}]{\mathrm{Bell}}
+    \tn[at=(2,2), skin=box, wide=2, name=cap,
+        ports={270@1:physical, 270@2:physical}]{B^{\dagger}}
+    \tn[at=(1,2), skin=box, wide=2, name=cup,
+        ports={90@1:physical:$X$, 90@2:physical:$C$}]{B}
+    \tn[at=(1,1), skin=none, name=w, ports={270:physical, 90:physical:$w$}]{}
+    \tn[at=(1,4), skin=none, name=r, ports={270:physical, 90:physical:$R$}]{}
+    \tnwire{o.90@2}{cap.270@1} \tnwire{bell.90@1}{cap.270@2}
+    \tnwire{o.90@1}{w.270} \tnwire{bell.90@2}{r.270}
+  \end{tenkz}
+  \;=\;\frac{\sqrt z}{d_*}\;
+  \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+    \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical:$X$, 90@2:physical:$C$}]{B}
+    \tn[at=(1,3), skin=box, wide=2, ports={90@1:physical:$R$, 90@2:physical:$w$}]{\psi}
+  \end{tenkz}
+\]

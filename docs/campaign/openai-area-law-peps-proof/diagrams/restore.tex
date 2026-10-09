@@ -1,0 +1,21 @@
+% Area-law manuscript, eq:amplification-swapped-state,
+% eq:amplification-restored-state and eq:amplification-unitary-error
+% (09-amplification.tex): a unitary U' on s' and the sites near S_0
+% maps phi to within C n^{-K/2} of eta = Omega (x) (purification of rho_X).
+\[
+  \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none]
+    \tn[at=(2,1), skin=tri, name=z1, ports={90:physical}]{0}
+    \tn[at=(2,2), skin=tri, name=z2, ports={90:physical}]{0}
+    \tn[at=(2,3), skin=box, wide=3, name=o,
+        ports={90@1:physical, 90@2:physical:$Z'$, 90@3:physical:$e'$}]{\Omega}
+    \tn[at=(1,1), skin=box, wide=3, name=u,
+        ports={270@1:physical, 270@2:physical, 270@3:physical,
+               90@1:physical:$s'$, 90@2:physical:$X$, 90@3:physical:$Y$}]{U'}
+    \tnwire{z1.90}{u.270@1} \tnwire{z2.90}{u.270@2} \tnwire{o.90@1}{u.270@3}
+  \end{tenkz}
+  \;\approx\;
+  \begin{tenkz}[rows={wire}, cols=5, bonds=none]
+    \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical:$s'$, 90@2:physical:$e'$}]{\sqrt{\rho_X}}
+    \tn[at=(1,3), skin=box, wide=3, ports={90@1:physical:$X$, 90@2:physical:$Y$, 90@3:physical:$Z'$}]{\Omega}
+  \end{tenkz}
+\]

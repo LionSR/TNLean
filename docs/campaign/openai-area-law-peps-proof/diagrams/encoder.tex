@@ -1,0 +1,16 @@
+% PEPS manuscript, eq:hole-encoder and eq:frame-vector (05-frames.tex):
+% Omega_F = K Omega, with K supported on the hole Q+ and an open tag
+% register J of dimension sum_j d_j <= C L^c.
+\[
+  \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+    \tn[at=(1,1), skin=box, wide=3, ports={90@1:physical:$Q^+$, 90@2:physical:$\mathcal J$, 90@3:physical:$\Lambda\setminus Q^+$}]{\Omega_{\mathcal F}}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+    \tn[at=(2,1), skin=box, wide=3, name=o,
+        ports={90@1:physical, 90@3:physical:$\Lambda\setminus Q^+$}]{\Omega}
+    \tn[at=(1,1), skin=box, wide=2, name=k,
+        ports={270@1:physical, 90@1:physical:$Q^+$, 90@2:physical:$\mathcal J$}]{K}
+    \tnwire{o.90@1}{k.270@1}
+  \end{tenkz}
+\]

@@ -1,0 +1,21 @@
+% Area-law manuscript, Lemma geometry:cancellation (10-geometry.tex,
+% lines 26-48): for the pure state psi on B A_f A_{1-f} D, the reduced
+% states on B A_f and on D A_{1-f} have the same nonzero spectrum, so
+% S(B A_f) = S(D A_{1-f}).
+\[
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+    \tn[at=(1,1), skin=box, wide=4, name=k,
+        ports={90@1:physical:$B$, 90@2:physical:$A_f$, 270@3:physical, 270@4:physical}]{\psi}
+    \tn[at=(2,1), skin=box, wide=4, name=b,
+        ports={270@1:physical, 270@2:physical, 90@3:physical, 90@4:physical}]{\overline{\psi}}
+    \tnwire{k.270@3}{b.90@3} \tnwire{k.270@4}{b.90@4}
+  \end{tenkz}
+  \quad\overset{\mathrm{spec}}{\simeq}\quad
+  \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+    \tn[at=(1,1), skin=box, wide=4, name=k,
+        ports={270@1:physical, 270@2:physical, 90@3:physical:$A_{1-f}$, 90@4:physical:$D$}]{\psi}
+    \tn[at=(2,1), skin=box, wide=4, name=b,
+        ports={90@1:physical, 90@2:physical, 270@3:physical, 270@4:physical}]{\overline{\psi}}
+    \tnwire{k.270@1}{b.90@1} \tnwire{k.270@2}{b.90@2}
+  \end{tenkz}
+\]

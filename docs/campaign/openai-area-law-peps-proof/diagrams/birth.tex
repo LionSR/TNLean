@@ -1,0 +1,28 @@
+% PEPS manuscript, Lemma lem:birth (05-frames.tex, eq:birth-map):
+% B = V^dagger (|s><s|_{T B_T} (x) id) V, with V = id_{TE} (x) V on U.
+% Read bottom to top; the pair source |s> is the only shared resource.
+\[
+  \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(5,1), skin=box, wide=4, name=o,
+        ports={90@1:physical, 90@2:physical, 90@4:physical}]{\Omega}
+    \tn[at=(4,2), skin=box, wide=2, name=v,
+        ports={270@1:physical, 90@1:physical, 90@2:physical}]{V}
+    \tn[at=(3,1), skin=box, wide=2, name=b,
+        ports={270@1:physical, 270@2:physical}]{\langle s|}
+    \tn[at=(2,1), skin=box, wide=2, name=k,
+        ports={90@1:physical:$T$, 90@2:physical}]{|s\rangle}
+    \tn[at=(1,2), skin=box, wide=2, name=w,
+        ports={270@1:physical, 270@2:physical, 90@1:physical:$U$}]{V^{\dagger}}
+    \tnwire{o.90@1}{b.270@1}
+    \tnwire{o.90@2}{v.270@1}
+    \tnwire{v.90@1}{b.270@2}
+    \tnwire{k.90@2}{w.270@1}
+    \tnwire{v.90@2}{w.270@2}
+    \tn[at=(1,4), skin=none, name=e, ports={270:physical, 90:physical:$E$}]{}
+    \tnwire{o.90@4}{e.270}
+  \end{tenkz}
+  \;\approx\;
+  \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+    \tn[at=(1,1), skin=box, wide=3, ports={90@1:physical:$T$, 90@2:physical:$U$, 90@3:physical:$E$}]{\Omega}
+  \end{tenkz}
+\]

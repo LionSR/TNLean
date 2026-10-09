@@ -30,7 +30,7 @@ DOCUMENT = r"""\documentclass[varwidth,border=2pt]{standalone}
 """
 
 
-def build(source: pathlib.Path, work: pathlib.Path) -> pathlib.Path:
+def build(source: pathlib.Path, work: pathlib.Path) -> pathlib.Path | None:
     tex = work / (source.stem + ".tex")
     tex.write_text(DOCUMENT % source.read_text())
     env = {**os.environ, "TEXINPUTS": f"{TENKZ}//{os.pathsep}{os.environ.get('TEXINPUTS', '')}"}
@@ -38,7 +38,8 @@ def build(source: pathlib.Path, work: pathlib.Path) -> pathlib.Path:
                          cwd=work, env=env, capture_output=True, text=True)
     if run.returncode:
         errors = [ln for ln in run.stdout.splitlines() if ln.startswith("!") or "Error" in ln]
-        sys.exit(f"{source}: xelatex failed\n" + "\n".join(errors[:8]))
+        print(f"{source}: xelatex failed\n  " + "\n  ".join(errors[:6]), file=sys.stderr)
+        return None
     svg = source.with_suffix(".svg")
     subprocess.run(["pdftocairo", "-svg", str(tex.with_suffix(".pdf")), str(svg)], check=True)
     return svg
@@ -54,8 +55,10 @@ def main() -> None:
             sys.exit(f"{tool} is not on PATH")
     sources = sorted((pathlib.Path(sys.argv[1]) / "diagrams").glob("*.tex"))
     with tempfile.TemporaryDirectory() as tmp:
-        for source in sources:
-            print(build(source, pathlib.Path(tmp)))
+        failed = [source for source in sources if build(source, pathlib.Path(tmp)) is None]
+    if failed:
+        sys.exit(f"{len(failed)} of {len(sources)} diagrams failed")
+    print(f"built {len(sources)} diagrams")
 
 
 if __name__ == "__main__":
