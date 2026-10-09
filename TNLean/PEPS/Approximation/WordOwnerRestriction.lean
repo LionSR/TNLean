@@ -51,8 +51,9 @@ theorem Word.parties_mapOwner_of_sources_nil (f : P → Q) {a b : Layout P}
   | frame r w ih =>
       simp only [mapOwner, parties, ih hs, Finset.image_insert]
 
-/-- The actual residual of a gate not incident to a selected party acts as
-identity on that party's empty gate memory.
+/-- The restriction of a relabelled source-free word to a party outside the range
+of the relabelling has no participating parties and acts as the identity on the
+empty memory.
 Source: polynomial-PEPS 04-compression.tex, lines 233–251 and 351–381. -/
 theorem Word.restrict_mapOwner_eval_eq_id_of_disjoint (f : P → Q) (q : Q)
     {a b : Layout P} (w : Word a b) (hs : w.sources = [])
