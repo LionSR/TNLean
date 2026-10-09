@@ -116,6 +116,7 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -224,6 +225,7 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   workflow_dispatch:
 
 concurrency:
@@ -375,6 +377,7 @@ jobs:
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
+              - 'scripts/test_tenkz_stationary_density.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -920,6 +923,14 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
+
+      - name: Test stationary physical densities
+        timeout-minutes: 2
+        run: >
+          lake env lean -j 1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/StationaryPhysicalDensity.lean
 
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
@@ -1543,6 +1554,11 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         timeout-minutes: 2
         run: python3 scripts/test_tenkz_string_endpoints.py
+
+      - name: Test stationary physical density contractions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_stationary_density.py
 
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
