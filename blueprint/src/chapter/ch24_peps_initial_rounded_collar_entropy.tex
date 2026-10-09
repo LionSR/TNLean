@@ -8,6 +8,7 @@ input to the proof of Proposition~9.5, lines~693--729.
 \begin{theorem}[A homogeneous bound for the rounded scale]
     \label{thm:area_law_rounded_collar_power}
     \lean{TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le}
+    \leanok
     Let $C_2,\eta,e\ge0$ be real numbers, and let $s\in\mathbb N$ with
     $s\ge1$. Put $L_s=\lfloor\lceil C_2s\rceil^\eta\rfloor$. Then
     \begin{align}
@@ -15,6 +16,7 @@ input to the proof of Proposition~9.5, lines~693--729.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     The ceiling estimate gives
     $\lceil C_2s\rceil<C_2s+1\le(C_2+1)s$.
     Since both exponents are nonnegative, monotonicity of real powers gives
@@ -28,6 +30,7 @@ input to the proof of Proposition~9.5, lines~693--729.
 \begin{theorem}[Uniform initial entropy of the rounded collar]
     \label{thm:area_law_initial_rounded_collar_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow}
+    \leanok
     \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
         def:area_law_safe_rectangle,def:area_law_bootstrap_parameters}
     Fix a local dimension $q\ge1$, an interaction range $R\in\mathbb N$,
@@ -56,6 +59,7 @@ input to the proof of Proposition~9.5, lines~693--729.
     still requires the remaining physical comparison argument.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_initial_rectangle_shell_entropy,
         thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
         thm:area_law_rounded_collar_power}
