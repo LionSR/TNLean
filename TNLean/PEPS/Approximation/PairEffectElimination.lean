@@ -30,11 +30,13 @@ averages over insertion positions writes `G'_m` as a weighted sum of at most `K 
 contractions, with unchanged absolute coefficient sum.
 
 The model here has no parties: the effect-free pieces `F_i` of an `EffectChain` are arbitrary
-contractions.  The statements of Lemma 5.1 about parties (the expansion of `G'_m` uses only
-local contractions and normalized pair sources, its additional registers are owned by the
-original participating parties, and sources on one pair of parties combine into one) are
-proved in `TNLean.PEPS.Approximation.PartyLayout`, where monomials are placed on parties and
-their effect chains are the `EffectChain`s of this file.
+contractions.  Two statements of Lemma 5.1 about parties (the expansion of `G'_m` uses only
+local contractions and normalized pair sources, and its additional registers are owned by the
+original participating parties) are proved in `TNLean.PEPS.Approximation.PartyLayout`, where
+monomials are placed on parties and their effect chains are the `EffectChain`s of this file.
+The last clause, that all sources on one pair of parties combine into one, is proved for
+arbitrary source occurrences in `TNLean.PEPS.Approximation.PairEffectSourcePreparation` by
+`partyPairEffectElimination_with_grouped_sources`.
 
 ## Main definitions
 

@@ -1,0 +1,239 @@
+\section{Minimum norm of regularized regional filters}
+\label{sec:peps_regularized_patch_minimum}
+
+Let $V$ be a finite ordered set of sites, with finite-dimensional coordinate
+Hilbert spaces $\mathcal H_v$, and set
+$\mathcal H_X=\bigotimes_{v\in X}\mathcal H_v$.
+The empty tensor product is $\C$.
+For $X\subseteq V$, use the regional extension $\widehat K_X$ of
+Definition~\ref{def:peps_regional_operator_extension}.
+Fix regions $X_0,\ldots,X_{m-1}$ and a unit vector $\Omega\in\mathcal H_V$.
+The following argument proves attainment and the elementary norm bounds in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized variational problem}
+of the September 24, 2026 polynomial-PEPS manuscript.
+% Source: 03-patches.tex, lines 51--114, commit
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are the finite-dimensional minimum and elementary bounds only, not
+% stationarity, energy, slow regulator growth, retained rank, or Proposition 4.1.
+
+\begin{definition}[Feasible densities and ordered filters]
+    \label{def:peps_regularized_patch_objective}
+    \lean{
+        TNLean.PEPS.regularizedPatchDomain,
+        TNLean.PEPS.regularizedPatchFilter,
+        TNLean.PEPS.regularizedPatchOperator,
+        TNLean.PEPS.regularizedPatchOutput,
+        TNLean.PEPS.regularizedPatchObjective
+    }
+    \leanok
+    \uses{def:peps_regional_operator_extension}
+    Let $b>0$ and $a_0,\ldots,a_{m-1}\in\R$, and put $A=\sum_j a_j$. Define
+    \begin{align*}
+        \mathcal D & =\prod_{j=0}^{m-1}
+        \{x_j\in\operatorname{End}(\mathcal H_{X_j}):x_j\ge0,\ \tr x_j=1\},         \\
+        K_j(x)     & =(x_j+bI_{X_j})^{-a_j/2},\qquad L_j(x)=\widehat{K_j(x)}_{X_j}, \\
+        M(x)       & =L_{m-1}(x)\cdots L_0(x),                                      \\
+        \Psi(x)    & =M(x)\Omega,\qquad F(x)=\|\Psi(x)\|.
+    \end{align*}
+    The densities are independent for different indices, including indices
+    with the same region. The powers act on the full regional space.
+    For $m=0$, the product is the identity and $F=1$.
+
+    In the special case of two occurrences $X_0=X_1=X$, write
+    $K_j=(x_j+bI_X)^{-a_j/2}$. The upper line below carries $\mathcal H_X$;
+    the lower line carries the complementary tensor factor
+    $\mathcal H_{V\setminus X}$, which may be one-dimensional.
+    This picture illustrates repeated support only; the general family of
+    regions remains arbitrary.
+    % Formula: ((K_1 tensor I)(K_0 tensor I) Omega)_{i,alpha}
+    % = sum_{j,k} (K_1)_{i,j}(K_0)_{j,k} Omega_{k,alpha}.
+    % Source: 03-patches.tex lines 73--90 at adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+    % Ink-to-index map: upper row is the repeated regional physical space;
+    % lower row is its complement. Omega has those two physical output legs.
+    % Each K_j acts only on the upper row; the aligned lower I is the
+    % complementary identity in that factor. Action starts at Omega on the right.
+    % Contractions: the four internal physical wires; no swaps or crossings.
+    % Open legs: i on the upper left and alpha on the lower left.
+    % Boundary signature: phys:w, phys:w; output lies in H_X tensor H_(V\X).
+    % This repeated-region example assumes no commutation and asserts no nesting
+    % condition for the general family of regions.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none]
+            \tn[at=(1,1), name=filterone, skin=box,
+                ports={180:physical, 0:physical}]{K_1}
+            \tn[at=(1,3), name=filterzero, skin=box,
+                ports={180:physical, 0:physical}]{K_0}
+            \tn[at=(2,1), name=identityone, skin=box,
+                ports={180:physical, 0:physical}]{I}
+            \tn[at=(2,3), name=identityzero, skin=box,
+                ports={180:physical, 0:physical}]{I}
+            \tn[at=(1,5), name=reference, skin=box, wires=2,
+                ports={180@1:physical, 180@2:physical}]{\Omega}
+            \tnwire[name=insideoutput]{open w}{filterone.180}
+            \tnwire{filterone.0}{filterzero.180}
+            \tnwire{filterzero.0}{reference.180@1}
+            \tnwire[name=outsideoutput]{open w}{identityone.180}
+            \tnwire{identityone.0}{identityzero.180}
+            \tnwire{identityzero.0}{reference.180@2}
+            \tnmark[form=label, label pos=n]{on insideoutput 0.5}{$i$}
+            \tnmark[form=label, label pos=s]{on outsideoutput 0.5}{$\alpha$}
+        \end{tenkz}
+    \end{center}
+    Reading from $\Omega$ on the right, $K_0\otimes I$ acts first and
+    $K_1\otimes I$ acts second. Thus the displayed output is
+    $\Psi(x)=(K_1\otimes I)(K_0\otimes I)\Omega$.
+\end{definition}
+
+For a qubit example, take $X=V$, $b=1$, $a_0=a_1=2$,
+$x_0=\ketbra{0}{0}$ and $x_1=\ketbra{+}{+}$, where
+$\ket{+}=(\ket{0}+\ket{1})/\sqrt2$. Then
+\[
+    K_0=\begin{pmatrix}1/2&0\\0&1\end{pmatrix},\qquad
+    K_1=\begin{pmatrix}3/4&-1/4\\-1/4&3/4\end{pmatrix}.
+\]
+The product order matters:
+$(K_1K_0)_{01}=-1/4$, whereas $(K_0K_1)_{01}=-1/8$.
+The complementary space is $\C$ in this example, so the lower identities
+are scalar identities.
+
+
+\begin{lemma}[Compactness and continuity]
+    \label{lem:peps_regularized_patch_compact_continuous}
+    \lean{
+        TNLean.PEPS.isCompact_regularizedPatchDomain,
+        TNLean.PEPS.regularizedPatchDomain_nonempty,
+        TNLean.PEPS.continuousOn_regularizedPatchFilter,
+        TNLean.PEPS.continuousOn_regularizedPatchObjective
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_objective}
+    The set $\mathcal D$ is compact and nonempty. Each $L_j$ and the
+    objective $F$ are continuous on $\mathcal D$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regional_extension_norm}
+    In finite dimension, the positive semidefinite trace-one matrices form a
+    compact set. Their finite product is compact. Since $\|\Omega\|=1$,
+    some global configuration has a nonzero coefficient in $\Omega$.
+    Restricting that configuration to each region gives
+    $d_j=\dim\mathcal H_{X_j}>0$. The densities $I_{X_j}/d_j$ prove
+    nonemptiness. For $b>0$, the shifted matrices are positive definite,
+    and their fixed real powers vary continuously. Identity extension,
+    finite ordered multiplication, evaluation on $\Omega$, and the norm
+    preserve continuity.
+\end{proof}
+
+\begin{theorem}[Bounds for every feasible tuple]
+    \label{thm:peps_regularized_patch_bounds}
+    \lean{
+        TNLean.PEPS.regularizedPatchFilter_norm_bounds,
+        TNLean.PEPS.regularizedPatchObjective_bounds,
+        TNLean.PEPS.regularizedPatchObjective_pos
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_objective}
+    Suppose $a_j\ge0$ for every $j$.
+    For every $x\in\mathcal D$, every $j$, and every $\xi\in\mathcal H_V$,
+    \[
+        (1+b)^{-a_j/2}\|\xi\|
+        \le\|L_j(x)\xi\|\le b^{-a_j/2}\|\xi\|.
+    \]
+    Consequently, every $x\in\mathcal D$ satisfies
+    \[
+        0<(1+b)^{-A/2}\le F(x)\le b^{-A/2}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regional_extension_norm}
+    A positive semidefinite trace-one matrix satisfies $0\le x_j\le I$.
+    The eigenvalues of $x_j+bI$ therefore lie in $[b,1+b]$.
+    The negative power has operator norm at most $b^{-a_j/2}$, while its
+    inverse has norm at most $(1+b)^{a_j/2}$.
+    Apply the identity-extension inequality to the factor and its inverse
+    to obtain the upper and lower bounds. Apply these bounds successively
+    in the order $L_0,\ldots,L_{m-1}$, and use $\|\Omega\|=1$.
+    This argument never exchanges two factors.
+\end{proof}
+
+\begin{definition}[Minimum and normalization]
+    \label{def:peps_regularized_patch_minimum}
+    \lean{
+        TNLean.PEPS.regularizedPatchMinimum,
+        TNLean.PEPS.normalizedRegularizedPatchOutput
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_objective}
+    Define the minimum value and normalized output by
+    \[
+        N=\inf_{x\in\mathcal D}F(x),\qquad
+        \widehat\Psi(x)=F(x)^{-1}\Psi(x).
+    \]
+    Under the nonnegative-weight hypothesis, the preceding theorem makes
+    this normalization well defined for every feasible tuple.
+\end{definition}
+
+\begin{theorem}[Attainment and common value]
+    \label{thm:peps_regularized_patch_minimum}
+    \lean{
+        TNLean.PEPS.exists_isMinOn_regularizedPatchObjective,
+        TNLean.PEPS.regularizedPatchObjective_eq_minimum,
+        TNLean.PEPS.regularizedPatchMinimum_bounds,
+        TNLean.PEPS.regularizedPatchMinimum_pos,
+        TNLean.PEPS.norm_normalizedRegularizedPatchOutput,
+        TNLean.PEPS.normalizedRegularizedPatchOutput_eq_minimum_smul
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_minimum}
+    There exists $x_*\in\mathcal D$ such that $F(x_*)\le F(x)$ for all
+    $x\in\mathcal D$. Every feasible minimizer has objective value $N$.
+    If all $a_j\ge0$, then
+    \[
+        0<(1+b)^{-A/2}\le N\le b^{-A/2},\qquad
+        \|\widehat\Psi(x)\|=1\quad(x\in\mathcal D).
+    \]
+    At every feasible minimizer $x_*$,
+    $\widehat\Psi(x_*)=N^{-1}M(x_*)\Omega$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_regularized_patch_compact_continuous,thm:peps_regularized_patch_bounds}
+    A continuous real-valued function on a nonempty compact set attains
+    its minimum. The value at any minimizing point is the least element
+    of $F(\mathcal D)$, hence its infimum. Apply the bounds for every
+    feasible tuple at a minimizer. Positivity permits division by $F(x)$;
+    at a minimizer this divisor equals $N$.
+\end{proof}
+
+\begin{corollary}[Exponential regularization]
+    \label{cor:peps_regularized_patch_exp_bounds}
+    \lean{
+        TNLean.PEPS.regularizedPatchObjective_exp_bounds,
+        TNLean.PEPS.regularizedPatchMinimum_exp_bounds
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_minimum}
+    Assume all $a_j\ge0$ and set $b=e^{-R}$. For every real $R$ and
+    every feasible tuple $x$,
+    \[
+        (1+e^{-R})^{-A/2}\le F(x)\le e^{RA/2}.
+    \]
+    For $R\ge0$, the minimum satisfies
+    \[
+        2^{-A/2}\le N\le e^{RA/2}.
+    \]
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regularized_patch_bounds,thm:peps_regularized_patch_minimum}
+    Substitute $b=e^{-R}>0$. If $R\ge0$, then $1+e^{-R}\le2$,
+    so the nonpositive exponent $-A/2$ gives
+    $(1+e^{-R})^{-A/2}\ge2^{-A/2}$.
+\end{proof}
+
+The argument allows empty or repeated regions, zero weights, and singular
+densities. Neither nestedness of the regions nor commutation of their
+filters is required. It gives the same minimum value for every minimizer,
+without asserting uniqueness or smooth dependence of a minimizer on $R$.

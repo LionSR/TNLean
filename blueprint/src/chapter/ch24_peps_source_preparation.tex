@@ -24,9 +24,32 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Move the first register of the second list past the first list by
-    adjacent exchanges, then repeat for the remaining registers of the
-    second list. Induction on the lists gives the tensor identity.
+    Write $(A,C)$ for the list $A$ followed by $C$, and let $J_{A,C}$
+    identify its memory with $\mathcal H_A\otimes\mathcal H_C$.
+    For a register $r$ with vector
+    $x$ and vectors $a\in\mathcal H_A$, $c\in\mathcal H_C$, the move
+    $M_{r;A,C}$ of $r$ past $A$ satisfies
+    \begin{align}
+        M_{r;A,C}J_{A,(r,C)}^{-1}(a\otimes(x\otimes c))
+         & =x\otimes J_{A,C}^{-1}(a\otimes c).
+        \label{eq:peps_register_head_move}
+    \end{align}
+    Induct on $A$: after moving $r$ through the tail, exchange it with
+    the first register. The empty-list case is the scalar unit identity.
+    Next induct on $B$, composing this move for its first register with
+    the exchange of the remaining lists, while leaving that register
+    untouched. The resulting exchange $X_{A,B;C}$ satisfies, for
+    $b\in\mathcal H_B$,
+    \begin{align}
+        X_{A,B;C}J_{A,(B,C)}^{-1}
+        \bigl(a\otimes J_{B,C}^{-1}(b\otimes c)\bigr)
+         & =J_{B,(A,C)}^{-1}
+        \bigl(b\otimes J_{A,C}^{-1}(a\otimes c)\bigr),
+        \label{eq:peps_register_block_exchange}
+    \end{align}
+    The identities extend from elementary tensors by linearity. Only
+    adjacent exchanges and identities are used, so the composition is allowed
+    and has no sources.
 \end{proof}
 
 \begin{definition}[The sources of a composition]
@@ -55,6 +78,8 @@
     Its two registers remain assigned to $p$ and $q$, respectively.
     For a finite list $S=(s_1,\ldots,s_m)$ of pair sources, let
     $\mathcal H_S$ be the tensor product of their registers in list order.
+    The list is normalized when $\|\eta_j\|=1$ for every source in $S$;
+    the empty list is normalized.
     Its preparation on a memory $\mathcal H$ is the map
     \begin{align}
         P_{S,\mathcal H}:\mathcal H & \longrightarrow\mathcal H_S\otimes\mathcal H,
@@ -125,26 +150,52 @@
 \begin{definition}[Expansion of a preparation]
     \label{def:peps_source_expansion}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.refl}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.trans}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.reverse}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.swap}
     \lean{TNLean.PEPS.PairEffect.PairSource.partyPair}
     \lean{TNLean.PEPS.PairEffect.PairSource.reverse}
     \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_reverse}
     \lean{TNLean.PEPS.PairEffect.PairSource.norm_reverse_vector}
-    \lean{TNLean.PEPS.PairEffect.eval_swap_reversedSource}
     \leanok
     \uses{def:peps_source_inventory}
     A source list $G$ expands to $S$ when, beside every spectator memory
     $\mathcal H$, there is an allowed composition $E$ with no source
     preparations such that $E\circ P_{G,\mathcal H}=P_{S,\mathcal H}$.
-    Expansion is reflexive and transitive, and remains valid upon adjoining
-    a common source. Exchanging two successive sources, or reversing the
-    endpoint order of a source and exchanging its two half-spaces, gives
-    such an expansion.
+    The unordered pair of a source with endpoints $p,q$ is $\{p,q\}$.
+    Reversing that source exchanges its endpoints and sends its vector
+    through the isometry $\mathcal U\otimes\mathcal V\to
+        \mathcal V\otimes\mathcal U$; its unordered pair and norm are unchanged.
 \end{definition}
+
+\begin{theorem}[Composition and reordering of expansions]
+    \label{thm:peps_source_expansion_operations}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.refl}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.trans}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.reverse}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.swap}
+    \lean{TNLean.PEPS.PairEffect.eval_swap_reversedSource}
+    \leanok
+    \uses{def:peps_source_expansion}
+    Expansion is reflexive and transitive, and remains valid upon placing
+    a common source first in both lists. A list beginning with two sources
+    $t,s$ expands to the list beginning with $s,t$ and the same remaining
+    sources. A list beginning with the reversal of $s$ expands to the list
+    beginning with $s$ and the same remaining sources.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_register_exchange,thm:peps_source_preparation}
+    Identity maps and composition prove reflexivity and transitivity.
+    Tensor an expansion $E$ with the identity on a common first source's
+    registers, using the prescribed associativity maps, to obtain $E_s$.
+    Writing $(s,G)$ for $s$ followed by $G$, the preparation identity in
+    Theorem~\ref{thm:peps_source_preparation} gives
+    $E_sP_{(s,G),\mathcal H}=P_{(s,S),\mathcal H}$ whenever
+    $EP_{G,\mathcal H}=P_{S,\mathcal H}$.
+    For successive sources, exchange their entire register lists using
+    (\ref{eq:peps_register_block_exchange}). For a reversed source,
+    exchange its two registers; applying the tensor exchange twice is the
+    identity. Each construction is allowed and contains no sources.
+\end{proof}
 
 \begin{theorem}[One source for each participating pair]
     \label{thm:peps_grouped_sources}
@@ -175,7 +226,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_preparation,thm:peps_register_exchange}
+    \uses{thm:peps_source_preparation,thm:peps_source_expansion_operations,thm:peps_register_exchange}
     Insert the sources successively. Exchange tensor factors to bring
     together the sources with a prescribed unordered pair of owners;
     reverse the order of the two half-spaces when necessary. Replace two

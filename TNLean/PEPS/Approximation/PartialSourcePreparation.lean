@@ -15,40 +15,9 @@ at least one affected endpoint. Their owners and coordinate halfspaces are fixed
 before a monomial is chosen; their vectors are the actual vectors of that monomial.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–417.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-thm:compression.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-fixed-preparation-partialpositions
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialPositions
-
-Provenance-ID: 8769-fixed-preparation-mem_partialpositions_iff
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.mem_partialPositions_iff
-
-Provenance-ID: 8769-fixed-preparation-partialslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialSlots
-
-Provenance-ID: 8769-fixed-preparation-partialslotequiv
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv
-
-Provenance-ID: 8769-fixed-preparation-partialslotequiv_apply
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialSlotEquiv_apply
-
-Provenance-ID: 8769-fixed-preparation-layout_partialslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots
-
-Provenance-ID: 8769-fixed-preparation-partialslot_spec
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.partialSlot_spec
-
-Provenance-ID: 8769-fixed-preparation-layout_partialslots_eq
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.layout_partialSlots_eq
-
-Provenance-ID: 8769-fixed-preparation-exists_partial_source_preparation
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.exists_partial_source_preparation
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
