@@ -34,6 +34,7 @@ variable {V H ι : Type} [Fintype V] [DecidableEq V] {K : ℕ}
   (E : EnergyTerms V n ι) (good : H → Prop) (t : ℝ)
   (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
 
+omit [Fintype ι] [∀ v, NeZero (n v)] in
 private theorem sum_splitLeaves (i : ι) (F : (Σ h, Option (C h)) → ℝ) :
     (∑ j ∈ D.splitLeaves E i, F j) =
       (∑ h, if ⟨h, none⟩ ∈ D.splitLeaves E i then F ⟨h, none⟩ else 0) +
@@ -56,10 +57,11 @@ theorem transportScanRound_splitWeight {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) (i
   classical
   have hp' : ((projIcc (0 : ℝ) 1 zero_le_one p : I) : ℝ) = p :=
     congrArg Subtype.val (projIcc_of_mem _ hp)
+  unfold ScanRound.splitWeight
+  dsimp only [transportScanRound]
   rw [TransportData.splitWeight, sum_splitLeaves]
   simp only [TransportData.tree, MeanTree.weight_interpTree_old,
     MeanTree.weight_interpTree_new, hp']
-  rfl
 
 /-- The inner energy sum retains each terminal probability and its own old or new
 state, with the literal `η^(1/8)` symbol. -/
@@ -70,35 +72,36 @@ theorem transportScanRound_termEnergy (hD : D.IsAdmissible) (ht : 0 ≤ t)
       ∑ j ∈ D.splitLeaves E i,
         (D.tree (projIcc (0 : ℝ) 1 zero_le_one p)).weight j *
           ∫ u, Transport.fourierWeight u *
-            realCoherentIntegral k (base n) (D.state n t k (pre k) p j u)
+            realCoherentIntegral k (TransportData.base n) (D.state n t k (pre k) p j u)
               (fun θ => D.splitEta E i j ((EuclideanSpace.equiv _ ℂ).symm θ) ^
                 (1 / 8 : ℝ)) := by
   classical
   have hp' : ((projIcc (0 : ℝ) 1 zero_le_one p : I) : ℝ) = p :=
     congrArg Subtype.val (projIcc_of_mem _ hp)
+  unfold ScanRound.termEnergy
+  dsimp only [transportScanRound]
   rw [sum_splitLeaves]
   simp only [TransportData.tree, MeanTree.weight_interpTree_old,
     MeanTree.weight_interpTree_new, hp']
-  unfold ScanRound.termEnergy
   apply congrArg₂ (· + ·)
   · apply Finset.sum_congr rfl
     intro h _
-    change (if _ then _ else _) = (if _ then _ else _)
-    split_ifs with hi
-    · exact congrArg (fun x : ℝ => (1 - p) * D.histTree.weight h * x)
-        (integral_transportScanRound_old D n E good t pre hD ht k hcomm p h
+    by_cases hi : (⟨h, none⟩ : Σ h, Option (C h)) ∈ D.splitLeaves E i
+    · simp only [hi, ↓reduceIte]
+      exact congrArg (fun x : ℝ => (1 - p) * D.histTree.weight h * x)
+        (D.integral_transportLeafMeasure n t k (pre k) p ⟨h, none⟩ hD ht hcomm
           (D.continuous_splitEta_rpow E i ⟨h, none⟩))
-    · rfl
+    · simp only [hi, ↓reduceIte]
   · apply Finset.sum_congr rfl
     intro h _
     apply Finset.sum_congr rfl
     intro c _
-    change (if _ then _ else _) = (if _ then _ else _)
-    split_ifs with hi
-    · exact congrArg (fun x : ℝ => p * D.histTree.weight h * (D.choiceTree h).weight c * x)
-        (integral_transportScanRound_new D n E good t pre hD ht k hcomm p h c
+    by_cases hi : (⟨h, some c⟩ : Σ h, Option (C h)) ∈ D.splitLeaves E i
+    · simp only [hi, ↓reduceIte]
+      exact congrArg (fun x : ℝ => p * D.histTree.weight h * (D.choiceTree h).weight c * x)
+        (D.integral_transportLeafMeasure n t k (pre k) p ⟨h, some c⟩ hD ht hcomm
           (D.continuous_splitEta_rpow E i ⟨h, some c⟩))
-    · rfl
+    · simp only [hi, ↓reduceIte]
 
 /-- The scanner energy sum equals the existing transport energy error, retaining
 both split-probability factors. The closed-interval guard is essential. -/
