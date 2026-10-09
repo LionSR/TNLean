@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Integer quotient-interval cardinality — promoted (2026-10-09)
+
+- **Pattern:** bound the cardinality of an integer quotient interval by
+  monotonicity of division and the two endpoint remainder inequalities.
+- **Seen:** two coordinate estimates in each of
+  `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
+  `TNLean/PEPS/AreaLaw/Geometry/QuotientIntervals.lean`.
+- **Notes:** the divisor is positive and the endpoints are ordered; negative
+  endpoints are allowed. The existing statement and proof are unchanged,
+  and both counting modules use the shared theorem.
+
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
 - **Pattern:** Identify the all-halves two-by-two density matrix with one half
