@@ -229,30 +229,30 @@ contraction of local tensors is a separate assertion.
     \leanok
     Let a finite distributed construction begin in a product of normalized
     party vectors. Suppose its original gates are contractions, its number of
-    nonprivate gates is at most $M$, and each party participates in at most $b$
+    nonprivate gates is at most $M$, and each party participates in at most $\ell$
     such gates. All private spaces are finite-dimensional, without numerical
     dimension bounds. Let the physical dimension at each party be at most
     $D\ge1$.
 
-    Fix $0<\epsilon\le1$. Suppose the actual monomial list for each original
+    Fix $0<\varepsilon\le1$. Suppose the actual monomial list for each original
     nonprivate gate approximates that gate in operator norm within
-    $\delta_a=\epsilon/(16\max(1,M))$. Its monomials are allowed, each has at
+    $\delta_a=\varepsilon/(16\max(1,M))$. Its monomials are allowed, each has at
     most $r$ pair effects, and its absolute coefficient sum is at most $B\ge1$.
     Rescale each such list by $(1+\delta_a)^{-1}$ to obtain a contraction
     circuit $W$. Set
     \begin{align}
-        \delta_e & =\frac{\epsilon}{8\max(1,M)},                                 &
+        \delta_e & =\frac{\varepsilon}{8\max(1,M)},                              &
         m        & =\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1.
     \end{align}
     Apply the constructed pair-effect replacement of length $m$ to $W$, and
     let $N$ be the number of sources of the resulting circuit. With
     \begin{align}
-        Q & =B^{4b}D^4,                                                            &
-        k & =\left\lceil\left(\frac{8\max(1,N)Q}{\epsilon}\right)^2\right\rceil+1,
+        Q & =B^{4\ell}D^4,                                                            &
+        k & =\left\lceil\left(\frac{8\max(1,N)Q}{\varepsilon}\right)^2\right\rceil+1,
     \end{align}
     there are normalized Schmidt data for these actual sources and a Gaussian
     sample of size $k$ whose sampled physical operator $\widehat\rho$ satisfies
-    $\|\widehat\rho-\rho_G\|_1\le\epsilon$. Here $\rho_G$ is the physical
+    $\|\widehat\rho-\rho_G\|_1\le\varepsilon$. Here $\rho_G$ is the physical
     density computed from the original gate operators, with all private
     registers traced out.
 \end{theorem}
@@ -263,13 +263,13 @@ contraction of local tensors is a separate assertion.
     original party memories. Rescaling preserves the original gate
     occurrences and participating sets, and does not increase the coefficient
     sums or pair-effect counts. The actual sampling theorem applied to $W$
-    therefore gives $\|\widehat\rho-\rho_W\|_1\le3\epsilon/4$ with the
+    therefore gives $\|\widehat\rho-\rho_W\|_1\le3\varepsilon/4$ with the
     stated replacement and sample counts. The local approximation estimate
-    gives $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\epsilon/4$. Thus
+    gives $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\varepsilon/4$. Thus
     \begin{align}
         \|\widehat\rho-\rho_G\|_1
          & \le\|\widehat\rho-\rho_W\|_1+\|\rho_W-\rho_G\|_1
-        \le\epsilon.
+        \le\varepsilon.
     \end{align}
 \end{proof}
 
