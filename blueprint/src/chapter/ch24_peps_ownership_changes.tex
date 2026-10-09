@@ -795,6 +795,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Exchanging supported operators]
     \label{thm:peps_sheet_swap_supported_exchange}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
+    \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
     $(\mathbb C^q)^{\otimes\Lambda}$ supported on $R$. Then
@@ -806,7 +807,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \texttt{02-information.tex}, lines 416--424.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Split each sheet into $R$ and its complement. The support assumptions give
     $A=A_R\otimes I$ and $B=B_R\otimes I$. The swap interchanges the two
     copies of $R$ and fixes the complementary factors. Thus both sides have
