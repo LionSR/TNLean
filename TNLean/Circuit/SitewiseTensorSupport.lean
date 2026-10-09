@@ -59,6 +59,7 @@ theorem reindex_kronecker_mem_supportedOperators
   intro i hi
   simp only [hm i (fun h ↦ hi (Or.inl h)), hn i (fun h ↦ hi (Or.inr h)),
     Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
+  ext x y
   done
 
 end QuantumCircuit
