@@ -6170,3 +6170,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   remains necessary: a general local operation on empty registers may still
   name a participating party. The corpus scanner was run; unrelated reported
   patterns are outside this change.
+
+### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
+
+- **Pattern:** transport a matrix-vector equation through the configuration
+  isometry, then pass between Euclidean vectors and their coordinate functions.
+- **Seen:** the energy equation, simultaneous symmetry and two auxiliary
+  projection equations in `PEPS/AreaLaw/GlobalSchmidtBellPrevector.lean`.
+- **Abstraction:** all four equations use one local arbitrary-matrix transport
+  lemma, itself an application of
+  `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
+  `Algebra/MatrixReindexGap.lean`.
+- **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
+  corollary is appropriate if the same conversion occurs in another module;
+  the underlying matrix-action identity is already shared.

@@ -191,6 +191,73 @@ $\mu$ labels.
     $g(1-|\langle\Omega,\widetilde\Omega\rangle|^2)\le2\epsilon_n$.
 \end{proof}
 
+\begin{theorem}[A common auxiliary label in physical coordinates]
+    \label{thm:al_global_schmidt_bell_prevector}
+    \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector}
+    Let $V$ be a finite set of physical sites with local dimension $q>0$,
+    and let $\Omega$ be a unit vector satisfying $H\Omega=E\Omega$.
+    Fix $X\subseteq V$. In a spectral basis of the reduced density on $X$,
+    select a set $F$ of positive total mass $z$, and write $d=|F|$.
+    Let $\psi\in\mathcal H_{X^c}\otimes\mathbb C^d$ be the normalized
+    selected Schmidt vector, with reduced density $\rho$ on $\mathbb C^d$.
+    There is one sequence of irreducible labels $\lambda_k$ such that the
+    following assertions hold. Put
+    \begin{align}
+        \omega_d & =d^{-1/2}\sum_{a=1}^d|a,a\rangle,\qquad
+        L_k=P_{\lambda_k},                                 \\
+        \xi_k    & =(I\otimes I\otimes L_k)
+        (\Omega^{\otimes k}\otimes\omega_d^{\otimes k}),\qquad
+        \overline H_k=k^{-1}\sum_{j=1}^k H_j.
+    \end{align}
+    Here all factors are identified with the configurations of the original
+    sites and two additional auxiliary sites. For every $k>0$,
+    \begin{align}
+        \xi_k                 & \ne0,\qquad \|\xi_k\|\le1,\qquad
+        (\overline H_k\otimes I)\xi_k=E\xi_k,                    \\
+        P_{\mathrm{sym}}\xi_k & =\xi_k,\qquad
+        (I\otimes L_k\otimes I)\xi_k=\xi_k,\qquad
+        (I\otimes I\otimes L_k)\xi_k=\xi_k.
+    \end{align}
+    The symmetry projection permutes all physical and auxiliary copies
+    simultaneously; the two other projections act on the complete auxiliary
+    copy registers. Moreover, eventually in $k$,
+    \begin{align}
+        \|(I\otimes L_k)\psi^{\otimes k}\|^2
+                                   & \ge\frac1{2(k+1)^{d^2}}, \\
+        \log\dim\lambda_k-kS(\rho) & =o(k).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Positive selected mass normalizes the selected Schmidt vector.
+    The common-label selection for its actual auxiliary marginal gives the
+    polynomial mass bound and entropy asymptotic. Impose this same label on
+    the uniform auxiliary pair and the original physical vector. Its energy
+    equation follows from that of $\Omega$, while the two auxiliary
+    memberships and simultaneous symmetry follow from the Bell pair.
+    Finally, the configuration isometry carries these equations, the norm
+    and nonvanishing to the original sites and the two auxiliary sites.
+\end{proof}
+
+\begin{theorem}[The initial vector for the truncated Hamiltonian]
+    \label{thm:al_truncation_schmidt_bell_prevector}
+    \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
+    \uses{thm:al_truncation, thm:al_global_schmidt_bell_prevector}
+    Under the hypotheses of Theorem~\ref{thm:al_truncation}, the same constant
+    $C_1$, truncated Hamiltonian $\widetilde H$, ground energy $e$ and unit
+    ground vector $\widetilde\Omega$ satisfy all of its support,
+    perturbation, gap and distance conclusions. For every region $X$ and
+    every positive-mass selection of the actual reduced spectrum of
+    $\widetilde\Omega$, this same vector also supplies the sequence and
+    all the conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
+    with $H=\widetilde H$ and $E=e$.
+\end{theorem}
+\begin{proof}
+    First choose the constant and witnesses of
+    Theorem~\ref{thm:al_truncation}. Apply
+    Theorem~\ref{thm:al_global_schmidt_bell_prevector} to their exact ground
+    vector and energy equation, separately for each spectral selection.
+\end{proof}
+
 For $X\subseteq S_0$ let $b_X$ be the number of edges with exactly one endpoint
 in $X$, let $\mathcal C_X$ be the labels whose designated support meets both
 $X$ and its complement, and put $d_i=q^{|\widetilde X_i|}$ and

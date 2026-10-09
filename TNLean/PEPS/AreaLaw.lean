@@ -20,7 +20,9 @@ import TNLean.PEPS.AreaLaw.EntropyDimension
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
+import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.Geometry
+import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting

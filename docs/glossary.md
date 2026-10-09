@@ -3328,3 +3328,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
   for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
   of Lemma 9.4, not safe clearance or a regional entropy theorem.
+
+### Common-label initial vectors in physical coordinates
+
+| Declaration | Mathematical content | Source and scope |
+|---|---|---|
+| `TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector` | An actual positive-mass spectral restriction chooses one label sequence; the initial vector built from the original exact eigenvector has nonzero norm at most one, exact mean energy, simultaneous copy symmetry and both literal auxiliary projection equations. The same labels have polynomial selected-vector mass and the auxiliary entropy asymptotic. | Area-law `comparator:prevector` and `comparator:high-label`, lines 130–147 and 240–281. Identification of the transported auxiliary operators with singleton site-label projectors is separate. |
+| `TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap` | The same finite-set truncation constant, Hamiltonian and ground vector retain their support, gap and distance estimates and supply the common-label initial vector for every positive-mass spectral selection. | Area-law `prop:truncation` composed with the preceding result. The exact energy equation belongs to the truncated Hamiltonian. |
