@@ -4,6 +4,7 @@
 \begin{theorem}[Boundary entropy from birth-target information]
     \label{thm:area_law_birth_information_boundary}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_birth_information_estimates}
+    \leanok
     \uses{def:area_law_ground_entropy,def:area_law_two_family_partition}
     Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\ge1$ be an integer,
     and let $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
@@ -45,7 +46,7 @@
     and birth targets, the stated estimates, and the uniform choice of their
     constants remain separate requirements for the full area law.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_boundary_assembly}
     Since $Y_i\subseteq A$ and $Y_i\cap P_i=\varnothing$, the birth
     target is disjoint from the entire subsystem $J_i$.
