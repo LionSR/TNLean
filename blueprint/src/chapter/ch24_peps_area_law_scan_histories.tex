@@ -440,3 +440,187 @@ The following finite construction follows
     weights before quantum state transport. It does not construct the remaining
     scanner data fields or the bad-history probability bound.
 \end{proof}
+
+\begin{theorem}[Physical nesting across bands]
+    \label{thm:al_scan_band_nesting}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_of_initial_assigned,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_near_middle_subset_later_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_near_middle_subset_later_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_near_middle_subset_later_old_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_near_middle_subset_later_state_near}
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_physical_partition}
+    Every initial side assignment survives all subsequent fills and charges.
+    For bands $g<g'$, and for arbitrary independent histories and times,
+    $P_{0,g}\cup Y_g\subset P_{0,g'}$. The inclusion holds both after a
+    completed fill--charge pair and immediately before a charge, including
+    comparisons between these two kinds of status.
+\end{theorem}
+\begin{proof}\leanok
+    Moves only assign previously unassigned sites. Thus a site in
+    $P_{0,g}\cup Y_g$ lies in $A$ and has depth at most $8gm+5m+r_g$.
+    Since $r_g<m$ and $g<g'$, this is at most $8g'm+m+r_{g'}$.
+    The site was therefore initially near in band $g'$ and remains there.
+    This argument does not require a time horizon or a good history.
+\end{proof}
+
+\begin{theorem}[Separation of opposite and distinct front intervals]
+    \label{thm:al_scan_front_separation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_intervals_opposite_disjoint,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_intervals_unique}
+    \leanok
+    \uses{thm:al_scan_unconditional_split_interval,def:al_scan_actual_histories}
+    Suppose $n>0$, $1\le D$, $r_0\le D$, $4D\le m$, and at most $nm$ fills
+    have occurred. At the offsets of one history, any physical depth belongs
+    to at most one of the band--side intervals
+    $[j-r_0,j+D+2r_0]$, interpreted with the side's orientation.
+    In comparing opposite sides of the same band, the offsets agree.
+\end{theorem}
+\begin{proof}\leanok
+    Each front advances through at most $m$ rows. Opposite fronts start
+    $4m-1$ apart; allowing both advances and both leads still leaves a
+    positive gap because $2D+4r_0\le6D<2m-1$.
+    Distinct bands have centers spaced by $8m$. Their offsets vary through
+    fewer than $m$ rows, so their possible front intervals are disjoint.
+\end{proof}
+
+\begin{definition}[Physical terminal split]
+    \label{def:al_scan_terminal_split}
+    \lean{TNLean.PEPS.AreaLaw.Scan.IsTerminalSplit}
+    \leanok
+    \uses{def:al_scan_physical_partition}
+    A support splits band $g$ on one side when it meets $Y_g$ and that
+    receiving side, misses the opposite side, and is contained in a single
+    physical part of every other band. This is the physical terminal split
+    rule of \cite[Section~7]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Actual incidence is a unique terminal split]
+    \label{thm:al_scan_terminal_split}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_unique_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_unique_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_ball_other_band_initial_part,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_ball_other_band_initial_part,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_isTerminalSplit_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_isTerminalSplit_domainGraph}
+    \leanok
+    \uses{def:al_scan_terminal_split,def:al_scan_designated_incidence,
+        thm:al_scan_front_separation,thm:al_scan_band_nesting,
+        thm:al_scan_designated_sampling,thm:al_scan_unconditional_split_interval}
+    Assume the ambient row bound, physical cut clearance, $8Km\le L$,
+    $n>0$, $1\le D$, $r_0\le D$, and $4D\le m$.
+    Every designated receiving--middle incidence is a terminal split with
+    a unique band and side. For a completed history of $k$ pairs require
+    $k\le nm$; for its pre-charge status require $k+1\le nm$.
+\end{theorem}
+\begin{proof}\leanok
+    The actual middle lies in the original compact truncation set. Hence an
+    incident designated support is its radius-$r_0$ graph ball, and clearance
+    places it wholly in $A$. Its anchor satisfies the unconditional split
+    interval. Separation makes the splitting band and side unique.
+    A ball meeting the middle of band $g$ lies within $2r_0$ in depth of a
+    point between that band's initial cutoffs. It is therefore wholly in the
+    initial far side of every earlier band and in the initial near side of
+    every later band. Persistence gives containment in one actual part of
+    each other band. No quantum commutation conclusion is asserted here.
+\end{proof}
+
+\begin{theorem}[Number of labelled terminal split occurrences]
+    \label{thm:al_scan_split_count}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_state_designatedSplitIncidence_le_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_old_designatedSplitIncidence_le_domainGraph}
+    \leanok
+    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_terminal_split,
+        def:al_scan_designated_incidence}
+    Suppose $n,m\ge2$, $1\le D$, $r_0\le D$, $4(D+2r_0)\le m$,
+    $8Km\le L$, and the ambient row and cut-clearance bounds hold.
+    If at most $\mu$ interaction labels have any fixed anchor, then
+    \begin{align}
+        \sum_g\sum_{s\in\{P,V\}}
+        \#\{i:\text{$i$ has a receiving--middle incidence at $(g,s)$}\}
+        \le 10KnD\mu.
+    \end{align}
+    This holds for completed histories with $k\le nm$ and for their
+    pre-charge statuses with $k+1\le nm$. Distinct labels with the same
+    anchor are counted separately.
+\end{theorem}
+\begin{proof}\leanok
+    Each incident anchor lies in $[j-r_0,j+D+2r_0]$. Its unsigned depth
+    remains between $1$ and $L$, by the expanded margin condition.
+    The interval has $D+3r_0+1\le5D$ rows, each containing at most $n$
+    actual sites and at most $\mu$ labels per site. Summing over the two
+    sides and $K$ bands gives the bound. The terminal split count is bounded
+    by the same count, since terminal splitting implies incidence.
+\end{proof}
+
+\begin{definition}[Auxiliary factors and actual quantum-region moves]
+    \label{def:al_scan_augmented_partitions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedState,
+        TNLean.PEPS.AreaLaw.Scan.augmentedPartition,
+        TNLean.PEPS.AreaLaw.Scan.augmentedMove,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumHistoryPartition,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData}
+    \uses{def:al_scan_actual_histories}
+    Adjoin the fixed factors $C$ and $R$ to the physical near and far sides:
+    $P=C\sqcup P_0$, $Y=Y_0$, and $F=R\sqcup V_0$.
+    The target $X$ remains in $P_0$; it is not removed from the near region.
+    An enabled charge with selected ball $B$ transfers exactly $B\cap Y_0$
+    to the selected side. A blank slot or a ball not meeting both that side
+    and the middle makes no move. History and conditional-choice mean trees
+    retain their supplied shapes.
+\end{definition}
+
+\begin{theorem}[Actual augmented partitions and charge transitions]
+    \label{thm:al_scan_augmented_transitions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedPartition_isPartition,
+        TNLean.PEPS.AreaLaw.Scan.augmentedPartition_nested,
+        TNLean.PEPS.AreaLaw.Scan.augmentedMove_isValid,
+        TNLean.PEPS.AreaLaw.Scan.augmentedMove_apply,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_isValid,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_apply,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_new}
+    \uses{def:al_scan_augmented_partitions}
+    The augmented regions partition all physical and auxiliary factors.
+    Every charge transfers a subset of the middle, and its new partition
+    equals the actual partition of the extended physical history.
+    If $P_0\cup Y_0\subseteq P'_0$, then $P\cup Y\subseteq P'$.
+\end{theorem}
+\begin{proof}
+    The auxiliary factors stay on their assigned sides. The actual charge
+    changes precisely the previously unassigned sites of its selected ball.
+\end{proof}
+
+\begin{theorem}[Nested bands commute on the symmetric replica space]
+    \label{thm:al_scan_nested_band_metrics}
+    \lean{TensorPower.ReplicaTransport.bandMetric_commute_on_symmetric_of_nested,
+        TensorPower.ReplicaTransport.commute_symBandMetric_of_nested,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.commute_quantumHistoryPartition,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_crossBandCommute}
+    \uses{thm:al_scan_augmented_transitions}
+    Suppose every factor has positive dimension, $t\ge0$, and
+    $(P,Y,F)$ and $(P',Y',F')$ are partitions satisfying
+    $P\cup Y\subseteq P'$. For every replica count, their band metrics
+    \begin{align}
+        A  & =(W_P^{-1}W_F^{-1}W_Y)^2,         &
+        A' & =(W_{P'}^{-1}W_{F'}^{-1}W_{Y'})^2
+    \end{align}
+    commute on the symmetric replica space. Their extensions by the identity
+    on its orthogonal complement commute globally. Consequently, actual
+    scanner bands satisfy cross-band commutation for arbitrary independent
+    histories, times, and completed or pre-charge statuses, including every
+    pair of terminal leaves of a charge round.
+\end{theorem}
+\begin{proof}
+    Let $\Pi$ be the symmetric projection. Every regional metric and its
+    inverse commutes with $\Pi$. Complementary central label functions agree
+    after multiplication by $\Pi$, so $W_F^{-1}\Pi=W_{P\cup Y}^{-1}\Pi$.
+    This substitution is valid inside products because each intervening
+    factor preserves the range of $\Pi$.
+    Each of $P$, $Y$, and $P\cup Y$ is contained in $P'$ and disjoint from
+    $Y'$ and $F'$. Centrality for nested and disjoint regions makes the
+    resulting factors commute with all three factors of $A'$.
+    Physical cross-band nesting applies to each old/completed status pair.
+    No commutation assertion on the orthogonal complement is required for
+    the original band metrics.
+\end{proof}

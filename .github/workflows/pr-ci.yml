@@ -616,6 +616,41 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build physical cross-band commutation early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build +TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check physical cross-band production modules strictly
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/AugmentedPartition.lean \
+              TNLean/PEPS/AreaLaw/Scan/NestedBandMetric.lean \
+              TNLean/PEPS/AreaLaw/Scan/PhysicalBandCommutation.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test physical cross-band commutation strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PhysicalBandCommutation.lean
+
+      - name: Audit physical cross-band commutation axioms
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PhysicalBandCommutationAxioms.lean
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -810,6 +845,22 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/ActualScanPhysicalSampling.lean
+
+      - name: Test two active physical scan bands
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualBandGeometry.lean
+
+      - name: Audit actual band geometry axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualBandGeometryAxioms.lean
 
       - name: Test actual offset counts and history marginals
         timeout-minutes: 2
