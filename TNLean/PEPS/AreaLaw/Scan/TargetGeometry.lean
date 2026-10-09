@@ -62,8 +62,10 @@ theorem source_target_geometry (E : ScannerExponents) (T : Finset (ℤ × ℤ))
   have hprefix : depthPrefix S.A (fun x ↦ ambientDepth T hT x.val) 0 =
       S.A.filter fun x ↦ x.val ∈ T := by
     ext x
-    simp only [depthPrefix, Finset.mem_filter,
-      ambientDepth_le_iff_mem_dilation T hT x.val 0, ambientDilation_zero]
+    simp only [depthPrefix, Finset.mem_filter]
+    refine and_congr_right fun _ ↦ ?_
+    change ambientDepth T hT x.val ≤ ((0 : ℕ) : ℤ) ↔ x.val ∈ T
+    rw [ambientDepth_le_iff_mem_dilation, ambientDilation_zero]
   refine ⟨?_, ?_, ?_⟩
   · have hcardR : ((S.truncationSet (E.L S.n)).card : ℝ) ≤
         (T.card : ℝ) + (S.n : ℝ) * E.L S.n := by exact_mod_cast hcard
