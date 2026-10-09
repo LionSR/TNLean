@@ -185,6 +185,19 @@ class GraphSourceTests(unittest.TestCase):
         self.assertIn("attr('type') == 'javascript/worker'", source)
         self.assertIn("this._worker = new Worker(blobURL)", source)
 
+    def test_worker_is_created_synchronously_before_initialization(self):
+        source = (BUNDLE / "static/d3-graphviz.js").read_text(encoding="utf-8")
+        constructor = source.split("function Graphviz(selection, options) {", 1)[1]
+        constructor = constructor.split("\n    function graphviz(", 1)[0]
+        self.assertLess(constructor.index("this._worker = new Worker(blobURL)"),
+                        constructor.index("initViz.call(this)"))
+        self.assertLess(constructor.index("initViz.call(this)"),
+                        constructor.index("selection.node().__graphviz__ = this"))
+        selection = source.split("function selection_graphviz(options) {", 1)[1]
+        selection = selection.split("\n    function selection_selectWithoutDataPropagation", 1)[0]
+        self.assertLess(selection.index("g = new Graphviz(this, options)"),
+                        selection.index("return g;"))
+
     def test_small_upstream_page_retains_graph_and_adds_completion(self):
         source = _fixture_source()
         prepared = renderer._prepare_dependency_graph(source)
@@ -335,6 +348,46 @@ class GraphDeadlineTests(unittest.TestCase):
         self.assertEqual(len(events), 20)
         self.assertTrue(events[0].startswith("console.error: event 5:"))
         self.assertTrue(all(len(event) <= len("console.error: ") + 2000 for event in events))
+
+    def test_latest_graph_context_survives_event_eviction(self):
+        failure = TimeoutError("graph wait timed out")
+        page = _Page(failure, emitted=(
+            ("console", SimpleNamespace(type="info", text="[blueprint-graph] initializing")),
+            ("worker", SimpleNamespace(url="blob:http://local/old-worker")),
+            ("console", SimpleNamespace(type="info", text="[blueprint-graph] layoutStart")),
+            ("worker", SimpleNamespace(url="blob:http://local/latest-worker")),
+        ) + tuple(
+            ("console", SimpleNamespace(type="warning", text=f"unrelated warning {i}"))
+            for i in range(25)
+        ))
+        with patch.object(reader.time, "monotonic", side_effect=[100.0, 110.0]):
+            with self.assertRaises(TimeoutError) as caught:
+                reader._load_page(page, "http://local", "dep_graph_document.html")
+        self.assertIs(caught.exception, failure)
+        context, history = failure.__notes__[0].split("; graph context: ", 1)[1].split(
+            "; events: ", 1)
+        self.assertEqual(json.loads(context), {
+            "phase": "layoutStart", "worker": "blob:http://local/latest-worker"})
+        events = json.loads(history)
+        self.assertEqual(len(events), 20)
+        self.assertTrue(all(event.startswith("console.warning: unrelated warning")
+                            for event in events))
+        self.assertEqual(page.listeners, {})
+
+    def test_graph_context_is_bounded_and_error_text_is_not_a_phase(self):
+        failure = TimeoutError("graph wait timed out")
+        page = _Page(failure, emitted=(
+            ("console", SimpleNamespace(type="info", text="[blueprint-graph] " + "p" * 4000)),
+            ("worker", SimpleNamespace(url="w" * 4000)),
+            ("console", SimpleNamespace(type="error", text="[blueprint-graph] worker failed")),
+        ))
+        with patch.object(reader.time, "monotonic", side_effect=[100.0, 110.0]):
+            with self.assertRaises(TimeoutError):
+                reader._load_page(page, "http://local", "dep_graph_document.html")
+        context = failure.__notes__[0].split("; graph context: ", 1)[1].split(
+            "; events: ", 1)[0]
+        self.assertEqual(json.loads(context), {"phase": "p" * 2000, "worker": "w" * 2000})
+        self.assertEqual(page.listeners, {})
 
 
 if __name__ == "__main__":
