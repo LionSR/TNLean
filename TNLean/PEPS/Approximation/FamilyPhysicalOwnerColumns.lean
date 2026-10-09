@@ -28,6 +28,8 @@ private theorem familyPhysicalListBasis_owner_column_heq
         (fun j ↦ y (f (ps.get j))))
       (familyPhysicalListBasis δ (ps.map f)
         (fun j ↦ y ((ps.map f).get j))) := by
-  done
+  induction ps with
+  | cons p ps ih => done
+  | nil => done
 
 end TNLean.PEPS.PairEffect
