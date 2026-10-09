@@ -31,7 +31,7 @@ def discontinuousDefect (p : ℝ) : ℝ :=
 /-- Away from the two exceptional points the defect is the original identity. -/
 theorem discontinuousDefect_eq {p : ℝ} (hzero : p ≠ 0) (hhalf : p ≠ 1 / 2) :
     discontinuousDefect p = p :=
-  if_neg (not_or.mpr ⟨hzero, hhalf⟩)
+  ite_eq_right (not_or.mpr ⟨hzero, hhalf⟩)
 
 /-- The original pointwise defect, including its exceptional values, lies in `(0, 1]`. -/
 theorem discontinuousDefect_bounded {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) :
@@ -143,7 +143,9 @@ theorem discontinuousDefect_telescope :
       intro r _
       push_cast
       ring)
-  simpa using h
+  simp at h
+  rw [Fin.sum_univ_two]
+  linarith
 
 end
 
