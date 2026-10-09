@@ -1,7 +1,0 @@
-{
-  "scope": "The focused web document contains only the incoming PEPS chapters. Its named graph is the source-partition ancestry graph. The unmodified full configuration is retained as texra-blueprint.full.toml; the full-source graph and routing are checked separately.",
-  "original_named_graph": "ft_equal_gauge",
-  "focused_named_graph": "source_partition",
-  "original_sha256": "45d3ce74a65e46254ae36562f6d4bc283d0b08920288a987926a131c5933b2e6",
-  "focused_sha256": "4ba3b142f7ba9e49b95b81df86f0e54b55390b8cb7c326c3cfe40f1844cd79af"
-}

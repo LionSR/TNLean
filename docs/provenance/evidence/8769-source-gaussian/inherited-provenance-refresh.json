@@ -1,8 +1,0 @@
-[
-  {
-    "id": "8769-source-corrections-selectedsourcecontraction-01",
-    "declaration": "TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected",
-    "path": "TNLean/PEPS/Approximation/SelectedSourceContraction.lean",
-    "shard": "docs/provenance/openai-math.d/8769-source-corrections.json"
-  }
-]
