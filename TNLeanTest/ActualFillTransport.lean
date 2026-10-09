@@ -100,18 +100,14 @@ example (g r k : ℕ) (σ : PhysicalPartition V)
 example (g r : ℕ) (σ : PhysicalPartition V) (x : V)
     (hslot : fillSlot S.A S.depth S.n (S.lower g r) (S.upper g r) false 0 = some x) :
     S.quantumFillMove g r 0 σ = augmentedMove σ false {x} := by
-  simpa [CollarScan.quantumFillMove, fillSide, fillCount] using
-    congrArg (fun slot => match slot with
-      | none => Move.stay
-      | some y => augmentedMove σ false {y}) hslot
+  simp only [CollarScan.quantumFillMove, show fillSide 0 = false from rfl,
+    show fillCount 0 false = 0 from rfl, hslot]
 
 example (g r : ℕ) (σ : PhysicalPartition V) (x : V)
     (hslot : fillSlot S.A S.depth S.n (S.lower g r) (S.upper g r) true 0 = some x) :
     S.quantumFillMove g r 1 σ = augmentedMove σ true {x} := by
-  simpa [CollarScan.quantumFillMove, fillSide, fillCount] using
-    congrArg (fun slot => match slot with
-      | none => Move.stay
-      | some y => augmentedMove σ true {y}) hslot
+  simp only [CollarScan.quantumFillMove, show fillSide 1 = true from rfl,
+    show fillCount 1 true = 0 from rfl, hslot]
 
 example (g r k : ℕ) (σ : PhysicalPartition V) (x : V) (old : Bool)
     (hslot : fillSlot S.A S.depth S.n (S.lower g r) (S.upper g r)
