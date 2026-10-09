@@ -49,9 +49,10 @@ parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
 accounting of the defect energy at the selected point, and the three
 comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
-one displayed conclusion of an input and cites its source line; no field
-asserts more than the cited statement. The constants depend only on the fixed
-exponents and on the constants of the inputs, as in the source.
+the relevant input conclusion and cites its source passage. In particular,
+the transported-measure mass equality is required only for interior
+interpolation parameters. The constants depend only on the fixed exponents
+and on the constants of the inputs, as in the source.
 
 Two harmless differences in the bookkeeping are recorded. The continuity
 input bounds the change of the shell entropies by
@@ -60,6 +61,29 @@ $n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
 marginal parameter is bounded with logarithmic power $12$, coming from the
 crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
 source writes an unspecified power $C$.
+
+\section{Parameter domain of the transported measures}
+
+The transported states of Proposition~7.4 are density matrices for
+$0<p<1$ (\path{06-transport.tex}, lines~393--400), so the combined
+Fourier--coherent measures have mass $1/2$ there. At $p=1$ an old terminal
+leaf has weight $(1-p)w_h=0$, and at $p=0$ a new terminal leaf has weight
+$pw_hq_{c\mid h}=0$. The totalized normalized derivative map contains the
+factor $\pi_j^{-1}$ and is zero when $\pi_j=0$. Its transported state and
+combined measure are then zero. Requiring mass $1/2$ for every real $p$
+would therefore exclude the literal transported measures.
+
+The mass hypotheses now have the interior domain $0<p<1$. The measures
+remain defined at every parameter; no replacement probability measure is
+assigned to an inactive leaf. The charge-defect bound and the old- and
+new-leaf energy estimates use the mass hypothesis only in the interior.
+The integral over
+$[0,1]$ uses the interior bounds and continuity of the charge defect,
+since the two boundary points have Lebesgue measure zero. The logarithmic
+norm remains continuous on $[0,1]$, and its matching boundary values,
+initial and final comparisons, and integrated entropy conclusions are
+unchanged. This domain correction does not construct the transported
+measures or remove the remaining scanner-input restriction.
 
 \section{Finite history construction now available}
 
@@ -195,8 +219,29 @@ agree with the corresponding tree evaluations for positive definite inputs.
     gives the singleton fill trees and their endpoints.}
 These tree identities do not construct the initial quantum prevector or
 identify the history-tree inputs with its transported quantum states.
-Quantum entropy-cost transport and the complete scanner data package remain
-open.
+A pointwise entropy sampling candidate now specializes the actual
+nonnegative move-cost inequality to regional conditional mutual information.
+Every trial set is first intersected with the old middle; the receiving side
+and the old pure vector are kept fixed while charge choices are averaged.
+Disabled choices and empty moved sets have equal zero entropy, without
+identifying their distinct move constructors. This candidate depends on the
+coordinated canonical regional strong-subadditivity dependency update and
+remains pending complete hosted validation. A further source-only candidate
+identifies the incidence sum with terminal split entropy using support
+compatibility derived from the actual geometry. It integrates the pointwise
+inequality against the same actual old transported state for all conditional
+choices, retaining the exact Fourier and coherent integrals. The resulting
+entropy gain dominates the good-history split defect with coefficient
+$[2(C_1+1)nD]^{-1}$. The history weight in this derivative expression has no
+terminal old-edge factor $1-p$. For a nonzero symmetric common prevector and
+an interior interpolation parameter, the combined integral has mass $1/2$.
+None of these candidates is claimed kernel-checked here.
+\footnote{The integrated candidate is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
+Constructing the scanner's measure-valued fields, an initial prevector,
+typical sectors and comparator budgets, and the complete scanner data package
+remain open. A direct inequality for the canonical integrals does not alone
+construct those measure-valued fields.
 
 The missing direct near--far case is now excluded from the actual geometry.
 The near side lies in the truncation set, so a designated support meeting
@@ -209,6 +254,36 @@ split rule. No good-history condition is used.
 The auxiliary factors remain outside the physical supports. The augmented
 finite-tree compatibility condition therefore holds for every old and new
 leaf of an actual charge round.
+
+A deterministic-fill candidate now uses the same recursive history tree
+and a singleton conditional tree. Its move transfers exactly the scheduled
+singleton's unassigned part, and the new partition is the following charge's
+old partition. The adjacent fill and charge roots agree without reassociation
+of matrix means. The corrected endpoint proofs, their quantum regressions,
+and the fill support specialization still await complete compilation.
+Only the three concrete scheduled-slot calculations have been checked
+separately; they do not validate the quantum statements.
+
+The physical cardinality and logarithmic-dimension bounds are checked.
+For physical dimension $q\ge1$, the explicit cap is
+$\ell=1+(2r_0+1)^2\log q\ge1$. Fills transfer at most one site and charges
+at most $(2r_0+1)^2$ sites. A designated support has the same bound when its
+actual partition is nonconstant on that support: initial far-side persistence
+and $8Km\le L$ give a physical singleton cut crossing it, hence reduce its
+truncation radius to $r_0$. No support compatibility, good-history, row-bound,
+clearance, or time-horizon assumption is needed for this reduction.
+Unsplit supports remain unbounded. For the rounded radius
+$r_0=\lceil C_r(\log n)^2\rceil$, $C_r\ge0$, the checked eventual estimate is
+$\ell\le[1+(2C_r+3)^2\log q](\log n)^4$, with threshold chosen independently
+of the domain, scanner, labels, and histories.
+
+The corresponding quantum transport statements identify moved subsystems
+with embedded physical middle differences, so auxiliary-factor dimensions
+do not enter their proposed cap. For designated supports this statement
+requires a nonempty actual split-leaf set. These quantum specializations
+remain source-only; the physical estimates do not validate them. The
+transport smallness requirement on $a\ell$, the initial prevector,
+comparator estimates, and full scanner data construction remain separate.
 
 \section{Elimination}
 

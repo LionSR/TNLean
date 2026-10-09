@@ -1,0 +1,93 @@
+% Source: openai/math@adc7f124, 06-transport.tex, lines 257--286;
+% HistoryMeanTree.lean fixes the actual binary parenthesizations.
+% Checked identities: historyMeanTree_eval_succ, fill_interpRoot_zero,
+% fill_interpRoot_one, charge_interpRoot_zero, charge_interpRoot_one.
+% Physical metric identifications: FillTransportEndpoints.lean at f84f568b,
+% actualFillData_rootPath_one_eq_charge_zero and
+% charge_rootPath_one_eq_actualFillData_zero. These repaired candidates remain
+% kernel-pending; this explanatory component adds no proof-status markers.
+% The notation h \frown c below is extendHistory h c in the source.
+
+Write $T_k$ for the recursive history tree and $C$ for the fixed charge-choice
+tree of Definition~\ref{def:al_scan_history_mean_tree}. Fix positive local
+dimensions, a replica count, and $t\ge0$. Let $A_h$ be the completed-history metric and
+$\widetilde A_h$ its pre-charge metric. Write $h\frown c$ for the history
+obtained by appending charge $c$, and $T[A]$ for a tree evaluated at its
+terminal metrics. The endpoint substitutions are
+\begin{align}
+    T_k[A_h] & \xrightarrow{\mathrm{fill}} T_k[\widetilde A_h]
+    \xrightarrow{\mathrm{charge}} T_k\bigl[C[A_{h\frown c}]\bigr]
+    =T_{k+1}[A_{h\frown c}].
+    \label{eq:al_scan_recursive_substitution}
+\end{align}
+
+\begin{figure}[ht]
+    \centering
+    % Evaluation schematic, not a tensor contraction. Each box denotes a
+    % whole fixed tree (T_k or C) or a terminal matrix (A_i or A_ij).
+    % A dotted string abbreviates an evaluation path, directed toward the
+    % root box. It is not an index: no contracted or open tensor legs occur,
+    % so every panel has empty tensor boundary signature.
+    % Two representative histories and two representative charges are drawn;
+    % no claim is made that either actual finite tree has only two leaves.
+    % A_i = A_(h_i); tilde A_i = tilde A_(h_i);
+    % A_ij = A_(extendHistory h_i c_j). The two C boxes are the same fixed tree.
+    % All labels are inside boxes. Empty grid rows and columns separate them;
+    % no warning, label, bounding-box, or equation check is disabled.
+    \tenkzkernel
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, west=none, east=none]
+            \tn[at=(1,2), name=fillOldRoot, skin=box]{T_k}
+            \tn[at=(3,1), name=fillOldZero, skin=box]{A_0}
+            \tn[at=(3,3), name=fillOldOne, skin=box]{A_1}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillOldPathZero]{fillOldZero}{fillOldRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillOldPathOne]{fillOldOne}{fillOldRoot}
+        \end{tenkz}
+        $\xrightarrow{\mathrm{fill}}$
+        \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, west=none, east=none]
+            \tn[at=(1,2), name=fillNewRoot, skin=box]{T_k}
+            \tn[at=(3,1), name=fillNewZero, skin=box]{\widetilde A_0}
+            \tn[at=(3,3), name=fillNewOne, skin=box]{\widetilde A_1}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillNewPathZero]{fillNewZero}{fillNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=fillNewPathOne]{fillNewOne}{fillNewRoot}
+        \end{tenkz}
+    \end{tenkzequation}
+    \begin{tenkzequation}
+        \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, west=none, east=none]
+            \tn[at=(1,2), name=chargeOldRoot, skin=box]{T_k}
+            \tn[at=(3,1), name=chargeOldZero, skin=box]{\widetilde A_0}
+            \tn[at=(3,3), name=chargeOldOne, skin=box]{\widetilde A_1}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeOldPathZero]{chargeOldZero}{chargeOldRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeOldPathOne]{chargeOldOne}{chargeOldRoot}
+        \end{tenkz}
+        $\xrightarrow{\mathrm{charge}}$
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=7, bonds=none, west=none, east=none]
+            \tn[at=(1,4), name=chargeNewRoot, skin=box]{T_k}
+            \tn[at=(3,2), name=chargeNewChoiceZero, skin=box]{C}
+            \tn[at=(3,6), name=chargeNewChoiceOne, skin=box]{C}
+            \tn[at=(5,1), name=chargeNewZeroZero, skin=box]{A_{00}}
+            \tn[at=(5,3), name=chargeNewZeroOne, skin=box]{A_{01}}
+            \tn[at=(5,5), name=chargeNewOneZero, skin=box]{A_{10}}
+            \tn[at=(5,7), name=chargeNewOneOne, skin=box]{A_{11}}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewHistoryZero]{chargeNewChoiceZero}{chargeNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewHistoryOne]{chargeNewChoiceOne}{chargeNewRoot}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathZeroZero]{chargeNewZeroZero}{chargeNewChoiceZero}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathZeroOne]{chargeNewZeroOne}{chargeNewChoiceZero}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathOneZero]{chargeNewOneZero}{chargeNewChoiceOne}
+            \tnwire[kind=string, stroke=dotted, dir=to, name=chargeNewPathOneOne]{chargeNewOneOne}{chargeNewChoiceOne}
+        \end{tenkz}
+    \end{tenkzequation}
+    \caption{Schematic of the recursive scan trees in
+        (\ref{eq:al_scan_recursive_substitution}). Here $A_i=A_{h_i}$,
+        $\widetilde A_i=\widetilde A_{h_i}$, and
+        $A_{ij}=A_{h_i\frown c_j}$. Dotted arrows abbreviate whole evaluation
+        paths; only two histories and two choices per history are shown.
+        The deterministic fill changes terminal metrics on the same tree.
+        The charge attaches the same fixed choice tree at every history leaf
+        and relabels $(h,c)$ by $h\frown c$, giving $T_{k+1}$.
+        Every internal geometric mean retains its specified weight and
+        parenthesization. No reassociation or replacement by an independent
+        uniform average is used; the endpoint identities are those of
+        Theorem~\ref{thm:al_scan_history_mean_tree_endpoints}.}
+    \label{fig:al_scan_recursive_transport}
+\end{figure}

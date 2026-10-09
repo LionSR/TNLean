@@ -237,6 +237,11 @@ histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
 (Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~2.3); it is
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
+The finite transported measures are required to have mass $1/2$ only for
+$0<p<1$, where the source's terminal weights are positive. The logarithmic norm is
+continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
+and comparison properties. No mass equality is required at an inactive
+terminal leaf.
 
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
@@ -265,9 +270,12 @@ proposition itself, which remains open until the scan data are constructed.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Integrating the derivative of the logarithmic norm of each charge round
-    over $p\in[\epsilon/2,\epsilon]$ and summing over rounds bounds the
-    integrated charge defect by the telescoped entropy budget. Averaging over
+    Integrate the logarithmic norm derivative over $[0,1]$ in every round,
+    retaining the nonnegative charge contribution on
+    $[\epsilon/2,\epsilon]$. Interior bounds and continuity make the charge
+    defect integrable; changing its values at $0$ and $1$ does not change
+    the integral. Continuity of the logarithmic norm and the matching
+    values at successive rounds give the telescoped entropy budget. Averaging over
     the $nm$ charge rounds and the parameter interval selects a round and a
     parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$. At that point
     H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf

@@ -16,8 +16,8 @@ the content of Lemma 9.1 (`scanner:histories`); the transported states and their
 energy estimates are Proposition 7.4 (`prop:transport`); the norm comparisons are
 Proposition 8.1 (`prop:comparators`). Following the source, Proposition 9.2 *uses* those
 results. Here their conclusions are recorded as explicit fields of `ScanRound` and `ScanData`;
-each field cites the source line it transcribes. No field asserts anything beyond the cited
-statement.
+each field cites the relevant source passage. The mass-`1/2` hypotheses on transported measures
+are restricted to interior parameters; the norm comparisons retain their endpoint values.
 
 **Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
 Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for one scan as fields instead of deriving them
@@ -29,9 +29,11 @@ Proposition 9.2 restricted to those conclusions. Documented in
 
 For a terminal leaf `j` the source integrates a function of `θ` against
 `m_s(u) du dμ_{σ_{j,u}}(θ)` (`06-transport.tex`, lines 407–420). That measure on the unit
-sphere `Θ` of the one-copy space, of total mass `2s = 1/2`, is recorded as one finite measure
-(`ScanRound.μOld`, `ScanRound.μNew`), indexed by the replica count `k` and the common
-interpolation parameter `p`.
+sphere `Θ` of the one-copy space is recorded as one finite measure (`ScanRound.μOld`,
+`ScanRound.μNew`), indexed by the replica count `k` and the common interpolation parameter `p`.
+Its mass is `2s = 1/2` for `0 < p < 1`, where the source's terminal weights are positive
+(`06-transport.tex`, lines 393–400). No mass equality is imposed at inactive terminal leaves
+at the endpoints. Endpoint norm continuity and the integrated entropy inequality are retained.
 
 ## References
 
@@ -367,11 +369,18 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   /-- The choice-averaged gain sums one move entropy per band, each bounded by
   `C (log n)^{C_l}` (lines 434–440), so it is at most `C K (log n)^{C_l}`. -/
   choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ κ.C * X.K n * Real.log n ^ κ.Cl
-  /- Leaf measures: `m_s(u) du dμ_σ` has mass `2s = 1/2` (line 440). -/
+  /- Leaf measures: for `0 < p < 1`, `m_s(u) du dμ_σ` has mass `2s = 1/2`
+  (`06-transport.tex`, lines 393–400; `08-scanner.tex`, line 440). -/
   isFiniteMeasure_μOld : ∀ r k p h, IsFiniteMeasure ((round r).μOld k p h)
   isFiniteMeasure_μNew : ∀ r k p h c, IsFiniteMeasure ((round r).μNew k p h c)
-  μOld_real_univ : ∀ r k p h, ((round r).μOld k p h).real Set.univ = 1 / 2
-  μNew_real_univ : ∀ r k p h c, ((round r).μNew k p h c).real Set.univ = 1 / 2
+  /-- The old-leaf measure has mass `1/2` for `0 < p < 1`
+  (`06-transport.tex`, lines 393–400; `08-scanner.tex`, line 440). -/
+  μOld_real_univ : ∀ r k, ∀ p ∈ Set.Ioo (0 : ℝ) 1, ∀ h,
+    ((round r).μOld k p h).real Set.univ = 1 / 2
+  /-- The new-leaf measure has mass `1/2` for `0 < p < 1`
+  (`06-transport.tex`, lines 393–400; `08-scanner.tex`, line 440). -/
+  μNew_real_univ : ∀ r k, ∀ p ∈ Set.Ioo (0 : ℝ) 1, ∀ h c,
+    ((round r).μNew k p h c).real Set.univ = 1 / 2
   /-- The old-leaf integrands are continuous in the interior parameter (lines 488–490). -/
   continuousOn_chargeDefect : ∀ r k, ContinuousOn ((round r).chargeDefect k) (Set.Ioo 0 1)
   /- Proposition 7.4 (`prop:transport`, `06-transport.tex`, lines 377–433). -/

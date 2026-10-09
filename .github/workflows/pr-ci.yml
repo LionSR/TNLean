@@ -87,6 +87,7 @@ on:
       - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
+      - 'scripts/test_tenkz_scan_transport.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
@@ -191,6 +192,7 @@ on:
       - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
+      - 'scripts/test_tenkz_scan_transport.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
@@ -338,6 +340,7 @@ jobs:
               - 'scripts/test_blueprint_search_web.py'
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
+              - 'scripts/test_tenkz_scan_transport.py'
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
@@ -664,6 +667,140 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PhysicalBandCommutationAxioms.lean
 
+      - name: Check actual charge entropy production modules strictly
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/ActualChargeData.lean \
+              TNLean/PEPS/AreaLaw/Scan/RegionalMoveEntropy.lean \
+              TNLean/PEPS/AreaLaw/Scan/ChargeEntropyCost.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test actual charge entropy strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualChargeEntropy.lean
+
+      - name: Audit actual charge entropy axioms
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualChargeEntropyAxioms.lean
+
+      - name: Check actual old-state entropy production modules strictly
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/SplitEntropyCost.lean \
+              TNLean/PEPS/AreaLaw/Scan/OldStateIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualEntropySampling.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test actual old-state entropy integration
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualTransportedEntropy.lean
+
+      - name: Audit actual old-state entropy integration axioms
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualTransportedEntropyAxioms.lean
+
+      - name: Check actual deterministic fill production modules strictly
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/FillTransport.lean \
+              TNLean/PEPS/AreaLaw/Scan/FillTransportEndpoints.lean \
+              TNLean/PEPS/AreaLaw/Scan/FillSupportCompatibility.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Audit actual deterministic fill axioms
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualFillTransportAxioms.lean
+
+      - name: Check actual physical dimension modules strictly
+        timeout-minutes: 8
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/SubsystemSize.lean \
+              TNLean/PEPS/AreaLaw/Scan/SplitSupportSize.lean \
+              TNLean/PEPS/AreaLaw/Scan/SubsystemDimension.lean \
+              TNLean/PEPS/AreaLaw/Scan/SubsystemDimensionScale.lean \
+              TNLean/PEPS/AreaLaw/Scan/TransportDimension.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Audit actual physical and transport dimension axioms
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLeanTest/ActualSubsystemDimensionAxioms.lean \
+              TNLeanTest/ActualTransportDimensionAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Check actual energy and transport production modules strictly
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      # TNLeanTest is not a Lake library: register every construction/type/endpoint
+      # regression and foundational-dependency guard explicitly after the production build.
+      - name: Test actual energy and transport signatures and axioms strictly
+        timeout-minutes: 7
+        run: |
+          set -eo pipefail
+          for source in TNLeanTest/ActualEnergyTerms.lean \
+              TNLeanTest/ActualEnergyTermsAxioms.lean \
+              TNLeanTest/ActualTransportEstimates.lean \
+              TNLeanTest/ActualTransportEstimatesAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Test capped dyadic partition strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -850,16 +987,24 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/ActualScanHistories.lean
 
-      - name: Test jointly satisfiable physical scan sampling
-        timeout-minutes: 2
-        run: >
-          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/ActualScanPhysicalSampling.lean
-
-      - name: Test shared physical scan geometry and support classification
+      - name: Test physical sampling and transported entropy on shared geometry
         timeout-minutes: 5
+        run: |
+          set -e
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          for example in ActualScanPhysicalSamplingData ActualScanPhysicalSampling ActualTransportedEntropyPhysical; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env bash -c \
+              'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" "TNLeanTest/$example.lean"
+          done
+
+      - name: Test shared physical scan geometry, supports and deterministic fills
+        timeout-minutes: 9
         run: |
           set -e
           # Compile the shared physical data once, outside the production cache.
@@ -867,7 +1012,8 @@ jobs:
           test_root="$(mktemp -d)"
           trap 'rm -rf "$test_root"' EXIT
           mkdir -p "$test_root/TNLeanTest"
-          for example in ActualBandGeometryData ActualBandGeometry ActualSupportClassification; do
+          for example in ActualBandGeometryData ActualBandGeometry ActualSupportClassification \
+              ActualFillTransport ActualSubsystemDimension; do
             timeout --signal=INT --kill-after=5s 90s lake env bash -c \
               'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
               -- "$test_root" -j1 \
@@ -1729,6 +1875,11 @@ jobs:
       - name: Test canonical fixed-point diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_canonical_pairs.py
+
+      - name: Test recursive scan transport schematic source
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_scan_transport.py
 
       - name: Test tenkz blueprint sweep unit selection
         if: env.TEX_CHANGED == 'true'

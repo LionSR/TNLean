@@ -127,8 +127,10 @@ lemma termEnergy_nonneg (r : Fin (X.rounds n)) (k : ℕ) {p : ℝ} (hp : p ∈ I
     · exact le_rfl
 
 open Classical in
-/-- Old good leaves: Hölder's inequality over histories, split terms and `θ` (lines 495–501). -/
-lemma goodOld_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) {N : ℝ} (hN : 0 < N)
+/-- Old good leaves: Hölder's inequality over histories, split terms and `θ` at an interior
+interpolation parameter (`08-scanner.tex`, lines 495–501). -/
+lemma goodOld_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ Ioo (0 : ℝ) 1)
+    {N : ℝ} (hN : 0 < N)
     (hcard : ∀ h, ((Finset.univ.filter fun i ↦ (S.round r).splitOld i h).card : ℝ) ≤ N) :
     (∑ h, if (S.round r).good h then (S.round r).w h * ∑ i,
         (if (S.round r).splitOld i h then
@@ -149,7 +151,7 @@ lemma goodOld_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) {N : ℝ} (hN : 0 < 
   have hJI : ∀ x, J x ≤ I x ^ (1 / 8 : ℝ) := fun x ↦ by
     have h := integral_rpow_le_of_holder (R.μOld k p x.1) (S.measurable_etaOld r x.2 x.1)
       (S.etaOld_nonneg r x.2 x.1) (S.etaOld_le r x.2 x.1)
-    rw [S.μOld_real_univ r k p x.1] at h
+    rw [S.μOld_real_univ r k p hp x.1] at h
     have h1 : (1 / 2 : ℝ) ^ (7 / 8 : ℝ) ≤ 1 := Real.rpow_le_one (by norm_num) (by norm_num)
       (by norm_num)
     calc J x ≤ _ := h
@@ -263,7 +265,7 @@ theorem energySum_le {C₁ : ℝ} (hn : ScaleFacts X n C₁) (r : Fin (X.rounds 
             have := S.isFiniteMeasure_μNew r k p h c
             exact sum_ite_mul_le _ (mul_nonneg (mul_nonneg hp.1.le (S.w_nonneg r h))
               (S.q_nonneg r h c)) _ hb
-              (fun i _ ↦ integral_rpow_le_half _ (S.μNew_real_univ r k p h c)
+              (fun i _ ↦ integral_rpow_le_half _ (S.μNew_real_univ r k p hp h c)
                 (S.etaNew_nonneg r i h c) (S.etaNew_le r i h c))
               (S.card_splitNew_le r h c)
       _ = ∑ h, p * (N * (E ^ (1 / 8 : ℝ) / 2)) * R.w h * ∑ c, R.q h c :=
@@ -294,12 +296,12 @@ theorem energySum_le {C₁ : ℝ} (hn : ScaleFacts X n C₁) (r : Fin (X.rounds 
     · simp only [hg, ↓reduceIte, zero_add]
       calc _ ≤ (1 - p) * R.w h * (N * (E ^ (1 / 8 : ℝ) / 2)) :=
             sum_ite_mul_le _ (mul_nonneg (by linarith [hp.2]) hw) _ hb
-              (fun i _ ↦ integral_rpow_le_half _ (S.μOld_real_univ r k p h)
+              (fun i _ ↦ integral_rpow_le_half _ (S.μOld_real_univ r k p hp h)
                 (S.etaOld_nonneg r i h) (S.etaOld_le r i h))
               (S.card_splitOld_le r h)
         _ ≤ R.w h * (N * (E ^ (1 / 8 : ℝ) / 2)) :=
             mul_le_mul_of_nonneg_right (by nlinarith [hp.1]) (by positivity)
-  have hgood := S.goodOld_le r k p hN (S.card_splitOld_le r)
+  have hgood := S.goodOld_le r k p hp hN (S.card_splitOld_le r)
   have hbad : (∑ h, if R.good h then (0 : ℝ) else R.w h * (N * (E ^ (1 / 8 : ℝ) / 2))) ≤
       (n : ℝ) ^ (-200 : ℝ) * (N * (E ^ (1 / 8 : ℝ) / 2)) := by
     have : (∑ h, if R.good h then (0 : ℝ) else R.w h * (N * (E ^ (1 / 8 : ℝ) / 2))) =
