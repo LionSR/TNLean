@@ -27,6 +27,7 @@ representation of that operator is a separate statement.
 
 \begin{definition}[Orthonormal coordinates of selected discarded registers]
     \label{def:peps_restricted_discard_basis}
+    \uses{thm:peps_finite_register_memories}
     \lean{TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis}
     \leanok
     Under the assumptions of Theorem~\ref{thm:peps_finite_register_memories},
@@ -37,6 +38,7 @@ representation of that operator is a separate statement.
 
 \begin{definition}[Exterior physical coordinates]
     \label{def:peps_exterior_family_physical_basis}
+    \uses{def:peps_family_physical_output,thm:peps_affected_original_dimensions}
     \lean{TNLean.PEPS.PairEffect.exteriorFamilyPhysicalBasis}
     \leanok
     Let $P$ be the finite set of parties, listed without repetition, and
@@ -91,16 +93,40 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_corrected_schmidt_output,thm:peps_gaussian_separated_physical_bound,thm:peps_local_schmidt_output_coordinates}
+    \uses{thm:peps_actual_corrected_schmidt_output,thm:peps_gaussian_separated_physical_bound,thm:peps_local_schmidt_output_coordinates,def:peps_separated_physical_density,thm:peps_gaussian_branch_density_bound}
     Construct the actual local-word Schmidt output representation
-    independently for $\xi$ and $\zeta$. The canonical output-coordinate
-    identities identify each original prepared output vector with the
-    separated physical coordinates of those local words. Reindex the two
-    corrected-coordinate sums by the original occurrences in $S$.
-    Thus the original partial branch operator is exactly the separated
-    physical operator with the original Gaussian coefficient products.
-    Its established integrability and Gaussian estimate give
-    (\ref{eq:peps_actual_branch_bound}).
+    independently for $\xi$ and $\zeta$. Denote their separated ket and
+    bra outputs by $\Psi_u$ and $\Phi_v$, as in
+    Definition~\ref{def:peps_separated_physical_density}.
+    At each original occurrence $s\in S$, let $\xi_s,\zeta_s$ be the
+    selected local labels and let $\delta_s^{\xi_s,\zeta_s}(\omega)$ be
+    the centered correction in Schmidt coordinates. For assignments
+    $u,v$ of pairs of Schmidt indices at these occurrences, put
+    \begin{align}
+        Z^{\xi,\zeta}_{u,v}(\omega)
+         & =\prod_{s\in S}
+        \bigl(\delta_s^{\xi_s,\zeta_s}(\omega)\bigr)_{u_s,v_s}.
+        \label{eq:peps_actual_branch_coefficients}
+    \end{align}
+    The canonical output-coordinate identities identify each original
+    prepared output vector with the separated coordinates of those
+    local words. Reindex both corrected-coordinate sums by the original
+    occurrences in $S$. Tracing both discarded memories gives
+    \begin{align}
+        M_{\xi,\zeta}(\omega)
+         & =\operatorname{tr}_{\mathrm{disc}}
+        \sum_{u,v}Z^{\xi,\zeta}_{u,v}(\omega)
+        |\Psi_u\rangle\langle\Phi_v|
+        =M\bigl(Z^{\xi,\zeta}(\omega)\bigr).
+        \label{eq:peps_actual_branch_identification}
+    \end{align}
+    Here $M(z)$ is the operator in
+    Definition~\ref{def:peps_separated_physical_density}, and
+    $\operatorname{tr}_{\mathrm{disc}}$ traces both discarded memories.
+    Apply Theorem~\ref{thm:peps_gaussian_separated_physical_bound}
+    to~(\ref{eq:peps_actual_branch_identification}) with the coefficients
+    in~(\ref{eq:peps_actual_branch_coefficients}) to obtain integrability
+    and~(\ref{eq:peps_actual_branch_bound}).
 \end{proof}
 
 \begin{theorem}[Expected norm of the actual corrected term]
@@ -174,7 +200,7 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis}
+    \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis,def:peps_restricted_discard_basis}
     Use the original affected and complementary physical tensor bases.
     Finite dimensionality of each discarded register supplies the two
     regional discarded bases. Their dimensions do not enter
@@ -384,7 +410,7 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_effect_stack_polynomial}
+    \uses{thm:peps_effect_stack_polynomial,thm:peps_source_only_resources}
     Raise the nonnegative stack bound to the fixed integer power $r$ and
     multiply by the bound for $K$. The replacement construction has at
     most $Km^r$ monomials at each original gate occurrence; inserted
