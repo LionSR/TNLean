@@ -1,5 +1,0 @@
-import SourceGateDensityRegression
-#print axioms TNLean.PEPS.PairEffect.DensityRegression.inputMatrix_not_isHermitian
-#print axioms TNLean.PEPS.PairEffect.DensityRegression.proper_families_bra_phase
-#print axioms TNLean.PEPS.PairEffect.DensityRegression.endpoint_families_in_proper_hyperplane
-#print axioms TNLean.PEPS.PairEffect.DensityRegression.zero_slots_weighted_gate
