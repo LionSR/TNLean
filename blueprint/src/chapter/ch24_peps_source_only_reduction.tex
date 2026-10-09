@@ -293,8 +293,6 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.familyPhysicalOutputLayout}
     \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
     \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRestrictedPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout}
     \leanok
     \uses{def:peps_party_layout}
     Let the original physical space at party $p$ be $H_p=\C^{d_p}$,
@@ -320,11 +318,6 @@ dimensions.
 
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
-    \lean{TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout_le}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout_apply}
-    \lean{TNLean.PEPS.PairEffect.card_familyRegionalPhysicalIndex}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
     \leanok
     \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
@@ -343,13 +336,6 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout}
-    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv}
-    \lean{TNLean.PEPS.PairEffect.length_filter_region}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_owners}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv}
-    \lean{TNLean.PEPS.PairEffect.norm_familyRegionalPhysicalReadout_le_one}
     \uses{thm:peps_source_only_density_error}
     Selecting owned physical registers filters the original party
     ordering. Its tensor basis is indexed by one choice of $d_p$ values

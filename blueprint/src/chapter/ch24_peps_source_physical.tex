@@ -604,8 +604,6 @@ inner-product discard spaces.
 
 \begin{definition}[Concatenating two partitioned layouts]
     \label{def:peps_append_partition}
-    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso}
-    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso_tmul}
     \leanok
     Given four ordered layouts $a_+,a_-,b_+,b_-$, canonically regroup
     \begin{align}
@@ -619,7 +617,6 @@ inner-product discard spaces.
 
 \begin{theorem}[Partition commutes with concatenation]
     \label{thm:peps_partition_append}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_tmul}
     \leanok
     \uses{def:peps_append_partition}
     Let a Boolean owner map partition two layouts $a,b$. Concatenating their
