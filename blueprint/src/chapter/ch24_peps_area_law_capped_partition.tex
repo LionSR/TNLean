@@ -107,10 +107,10 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card}
     \leanok
     Let $a,b,u\in\mathbb Z$ with $a\le b$ and $u>0$. Then
-    \[
+    \begin{align}
         u\,\#\bigl([\lfloor a/u\rfloor,\lfloor b/u\rfloor]\cap\mathbb Z\bigr)
         \le b-a+2u.
-    \]
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     The interval contains $\lfloor b/u\rfloor-\lfloor a/u\rfloor+1$ integers.
@@ -128,9 +128,9 @@
     rectangle, let $s$ be its size, and put $u=2^k$ for $k\in\mathbb N$.
     If $M_k(Q)$ is the set of indices of dyadic squares meeting both $Q$
     and its complement, then
-    \[
+    \begin{align}
         u\,\#M_k(Q)\le4s+8u.
-    \]
+    \end{align}
     This is the boundary-line count used in
     \cite[proof of Proposition~9.5, lines~717--729]{OpenAI2026AreaLaw}.
 \end{theorem}
@@ -143,9 +143,9 @@
     An outside point in the same square crosses one of the four sides of $Q$.
     Monotonicity of integer division then forces the corresponding index
     coordinate to equal an endpoint of $X$ or $Y$. Consequently
-    \[
+    \begin{align}
         \#M_k(Q)\le2\#X+2\#Y.
-    \]
+    \end{align}
     The quotient-interval estimate gives
     $u\,\#M_k(Q)\le2(x_1-x_0)+2(y_1-y_0)+8u\le4s+8u$.
 \end{proof}
