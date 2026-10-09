@@ -1,0 +1,54 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Circuit.LocalCircuit
+import Mathlib.Logic.Equiv.Fin.Basic
+import Mathlib.Logic.Equiv.Prod
+
+/-!
+# Tensoring physical sites
+
+The two configuration functions are paired at each original site, using the
+canonical finite-product encoding. Tensoring two supported operators then
+gives an operator on the union of their original supports, with local
+dimension equal to the product of the two original local dimensions.
+
+## References
+
+OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
+September 24, 2026, `02-information.tex`, lines 416–424 and 513–524,
+revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`: the doubled Hamiltonians
+have the original physical interaction supports.
+-/
+
+open scoped Kronecker
+
+namespace QuantumCircuit
+
+/-- Pair the two configuration values at every original site, encoding a pair
+by `finProdFinEquiv`.
+
+Source: polynomial-PEPS, `02-information.tex`, lines 416–424. -/
+def sitePairConfigurationEquiv (ι : Type*) (d e : ℕ) :
+    ((ι → Fin d) × (ι → Fin e)) ≃ (ι → Fin (d * e)) :=
+  (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin d) (fun _ ↦ Fin e)).symm.trans
+    (Equiv.arrowCongr (Equiv.refl ι) finProdFinEquiv)
+
+/-- Tensoring two physical operators and pairing their local coordinates
+preserves the union of their original supports. Empty site sets and zero
+local dimensions are included.
+
+Source: polynomial-PEPS, `02-information.tex`, lines 416–424 and 513–524. -/
+theorem reindex_kronecker_mem_supportedOperators
+    {ι : Type*} [Fintype ι] {d e : ℕ} {S T : Set ι}
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    {B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
+    (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators e T) :
+    Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
+      (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T) := by
+  refine Submodule.span_induction₂ ?_ ?_ ?_ ?_ ?_ ?_ ?_ hA hB
+  done
+
+end QuantumCircuit
