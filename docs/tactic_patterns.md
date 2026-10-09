@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
+
+- **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
+  its boundary dart, cut the walk at the first endpoint of the dart, and show that the
+  dart is an edge of the edge boundary no farther from the start than the walk is long.
+- **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
+- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
+  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+  region and the shortened walk; the three call sites use it.
+- **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
+  analogue for an arbitrary graph in the extended graph distance.
+
 ### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
 
 - **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with

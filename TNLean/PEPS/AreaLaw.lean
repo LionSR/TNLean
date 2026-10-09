@@ -47,6 +47,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
 import TNLean.PEPS.AreaLaw.Scan
+import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
