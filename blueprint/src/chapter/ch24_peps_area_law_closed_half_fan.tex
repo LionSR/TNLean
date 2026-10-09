@@ -9,12 +9,12 @@ carrying the same color remain distinct.
 
 % Source: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
 % 10-geometry.tex, geometry:initial-stars, lines 352--370, and
-% prop:two-families, lines 308--323. Completion marks await ordinary
-% checks of the production declarations.
+% prop:two-families, lines 308--323.
 
 \begin{definition}[Retained pieces in the smaller closed square]
     \label{def:area_law_fan_closed_half_piece}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanClosedHalfPiece}
+    \leanok
     \uses{def:area_law_fan_cut_piece}
     Let $o\in\R^2$, $\ell\in\N$, $z\in\Z^2$ and the colors
     $f_i\in\{0,1\}$ be arbitrary. Use the center $c$, half-side
@@ -35,12 +35,14 @@ carrying the same color remain distinct.
 \begin{theorem}[Intersection in the smaller closed square]
     \label{thm:area_law_fan_closed_half_intersection}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_closedHalfBall_nonempty_of_adj}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
     If $i,j$ are consecutive perimeter positions with $f_i=f_j$, then
     $K_i\cap K_j$ is nonempty. Either $j=\tau(i)$
     or $i=\tau(j)$ is permitted, and the change set may be empty.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece,
         thm:area_law_cell_fan_successor_iff,
         thm:area_law_cell_fan_base_radius,
@@ -64,10 +66,12 @@ carrying the same color remain distinct.
 \begin{theorem}[Connectedness of a retained piece]
     \label{thm:area_law_fan_closed_half_piece_connected}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanClosedHalfPiece_isConnected}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece}
     Every $K_i$ is nonempty and connected.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece,
         thm:area_law_fan_cut_piece_connected,
         thm:area_law_fan_radial_union_deletion_convex}
@@ -83,6 +87,7 @@ carrying the same color remain distinct.
 \begin{theorem}[Connectedness of a retained run]
     \label{thm:area_law_fan_closed_half_run_connected}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_cut_inter_closedHalfBall_isConnected}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
     Retain an adjacency between consecutive triangles precisely when
     their colors agree. For any connected component $R$ of this graph,
@@ -91,6 +96,7 @@ carrying the same color remain distinct.
     and connected. Components carrying the same color remain distinct.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs,
         thm:area_law_fan_closed_half_piece_connected,
         thm:area_law_fan_closed_half_intersection}
