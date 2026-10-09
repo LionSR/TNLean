@@ -68,7 +68,7 @@ theorem log_surprisalMoment_truncated_reducedState_le
       (e : ℂ) • Ωt := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
     exact heig
-  simpa only [hθ, ← hB] using
+  simpa only [hθ, ← hB, regionalEntropy] using
     (Entropy.log_surprisalMoment_cut_le (n := fun _ : Site Λ => q) (B := X)
       (fun i => S.truncatedEnergyTerm_isSupportedOn h Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
@@ -104,7 +104,7 @@ theorem surprisalTail_truncated_reducedState_le
       (e : ℂ) • Ωt := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
     exact heig
-  simpa only [hθ, ← hB] using
+  simpa only [hθ, ← hB, regionalEntropy] using
     (Entropy.surprisalTail_cut_le (n := fun _ : Site Λ => q) (B := X)
       (fun i => S.truncatedEnergyTerm_isSupportedOn h Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
