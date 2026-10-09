@@ -39,7 +39,8 @@ theorem Template.sum_rpow_cappedDyadicPartition_core_le {Ctpl : ℝ} {n s₀ : �
       (s := P) (t := Finset.range (K + 1))
       (fun c hc ↦ Finset.mem_range.mpr
         (Nat.lt_succ_of_le ((mem_cappedDyadicPartition _ _ _ _).mp hc).1))
-      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)) using 1 <;> simp [a]
+      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)) using 1
+    simp [a]
   have hcap : (2 : ℝ) ^ K * a K ≤ 18 * n := by
     dsimp [a, P]
     exact_mod_cast T.card_cappedDyadicPartition_at_cap_le (by linarith) K hhi

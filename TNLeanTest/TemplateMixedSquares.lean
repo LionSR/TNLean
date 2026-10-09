@@ -297,9 +297,10 @@ example (e : ℝ) (he : 0 < e) :
 example (e : ℝ) (he : 0 < e) :
     ∑ c ∈ cappedDyadicPartition (unitSquareTemplate 1 (by decide)).points 0,
       ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
-        (18 + 4 / ((2 : ℝ) ^ e - 1)) * 48 * (1 : ℝ) ^ e :=
-  (unitSquareTemplate 1 (by decide)).sum_rpow_cappedDyadicPartition_core_le
-    (by norm_num) 0 (by decide) (by decide) e he
+        (18 + 4 / ((2 : ℝ) ^ e - 1)) * 48 * (1 : ℝ) ^ e := by
+  convert (unitSquareTemplate 1 (by decide)).sum_rpow_cappedDyadicPartition_core_le
+    (by norm_num) 0 (by decide) (by decide) e he using 1
+  norm_num
 
 -- The exact dyadic scale has one occupied cap square.
 example (e : ℝ) (he : 0 < e) :
