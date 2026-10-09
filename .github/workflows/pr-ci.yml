@@ -639,6 +639,31 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      # Keep the source-target build in the shared changed-module timing log.
+      - name: Build actual target typical window early
+        timeout-minutes: 10
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          LEAN_NUM_THREADS=1 lake --fail-fast build \
+            +TNLean.PEPS.AreaLaw.Scan.TargetGeometry:olean \
+            +TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check actual target typical window strictly
+        timeout-minutes: 7
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/TargetGeometry.lean \
+              TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean \
+              TNLeanTest/TargetTypicalWindow.lean \
+              TNLeanTest/TargetTypicalWindowAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          done
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
