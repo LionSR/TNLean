@@ -164,3 +164,40 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
     $1<\log_M\lambda<2$. Theorem~\ref{thm:area_law_box_entropy_safety}
     gives the same bound at every integer safety parameter $D_0>2R+10$.
 \end{proof}
+
+\begin{theorem}[Safety inside a dilated rectangle]
+    \label{thm:area_law_safe_rectangle_dilation}
+    \lean{TNLean.PEPS.AreaLaw.IsSafe.of_subset_dilate}
+    \leanok
+    \uses{def:area_law_safe_rectangle}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $A\subseteq\Lambda$,
+    and let $Z$ be the endpoints of its crossing edges. Let
+    $D_0,j\in\mathbb N$, and let $Q,Q'$ be integer rectangles, each
+    a product of two finite nonempty integer intervals. Suppose that
+    every point of $Q$ has sup-norm distance greater than
+    $D_0\operatorname{size}(Q)$ from every point of $Z$, and that
+    \begin{align}
+        Q' & \subseteq Q^{+j},              \\
+        D_0\operatorname{size}(Q')+j
+           & \le D_0\operatorname{size}(Q).
+    \end{align}
+    Then every point of $Q'$ has sup-norm distance greater than
+    $D_0\operatorname{size}(Q')$ from every point of $Z$.
+    Here the size counts sites along the longer axis and
+    $Q^{+j}=Q+([-j,j]^2\cap\mathbb Z^2)$.
+    This is the clearance step in
+    \cite[proof of Proposition~9.5, lines~723--729]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_safe_rectangle}
+    Suppose that $p\in Q'$ and $z\in Z$ satisfy
+    $\|p-z\|_\infty\le D_0\operatorname{size}(Q')$.
+    The containment and radius inequality give
+    \begin{align}
+        z\in Q^{+(j+D_0\operatorname{size}(Q'))}
+         & \subseteq Q^{+D_0\operatorname{size}(Q)}.
+    \end{align}
+    Thus some $v\in Q$ satisfies
+    $\|v-z\|_\infty\le D_0\operatorname{size}(Q)$,
+    contrary to the assumed safety of $Q$.
+\end{proof}
