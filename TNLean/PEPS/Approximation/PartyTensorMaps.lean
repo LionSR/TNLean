@@ -16,43 +16,6 @@ Source: polynomial-PEPS manuscript, September 24, 2026, Theorem 5.2,
 `04-compression.tex`, equation `eq:compression-source-gate`, lines 233–251.
 -/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-partytensormaps-layout.atparty
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.atParty
-
-Provenance-ID: 8769-partytensormaps-partylayout
-Downstream declaration: TNLean.PEPS.PairEffect.partyLayout
-
-Provenance-ID: 8769-partytensormaps-tensorpartymaps
-Downstream declaration: TNLean.PEPS.PairEffect.tensorPartyMaps
-
-Provenance-ID: 8769-partytensormaps-tensorpartymaps_cons_tmul
-Downstream declaration: TNLean.PEPS.PairEffect.tensorPartyMaps_cons_tmul
-
-Provenance-ID: 8769-partytensormaps-partylayout_eq_of_atparty_eq
-Downstream declaration: TNLean.PEPS.PairEffect.partyLayout_eq_of_atParty_eq
-
-Provenance-ID: 8769-partytensormaps-tensorpartymaps_heq
-Downstream declaration: TNLean.PEPS.PairEffect.tensorPartyMaps_heq
-
-Provenance-ID: 8769-partytensormaps-layout.conj_memcongr_heq
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.conj_memCongr_heq
-
-Provenance-ID: 8769-partytensormaps-layout.norm_conj_memcongr
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.norm_conj_memCongr
-
-Provenance-ID: 8769-partytensormaps-layout.eq_conj_memcongr_of_heq
-Downstream declaration: TNLean.PEPS.PairEffect.Layout.eq_conj_memCongr_of_heq
-
-Provenance-ID: 8769-partytensormaps-norm_tensorpartymaps_le_one
-Downstream declaration: TNLean.PEPS.PairEffect.norm_tensorPartyMaps_le_one
--/
-
 noncomputable section
 
 open scoped InnerProductSpace TensorProduct

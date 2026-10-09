@@ -1,0 +1,79 @@
+\section{Disjoint interiors of the initial regions}
+\label{sec:area_law_initial_region_interiors}
+
+The initial regions in \cite[Section~11]{OpenAI2026AreaLaw} may share
+boundary segments or isolated points. Their open interiors are disjoint.
+
+% Source: 10-geometry.tex, prop:two-families, lines 154--177,
+% 212--218 and 299--323, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These assertions concern the initial family before repairs.
+
+\begin{theorem}[Distinct runs have disjoint interiors]
+    \label{thm:area_law_fan_run_disjoint_interiors}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_disjoint_interiors}
+    \leanok
+    \uses{def:area_law_fan_runs}
+    Fix any translated dyadic square, optional midpoint mask and assignment
+    of two colors to its fan triangles. If $R\ne T$ are two runs, then
+    $\operatorname{int}(T_R)\cap\operatorname{int}(T_T)=\varnothing$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections,
+        def:area_law_fan_runs}
+    A real segment in the plane is nowhere dense: it is closed, and the
+    affine span of its two endpoints is proper, so its interior is empty.
+    Distinct runs have disjoint sets of constituent triangles. For every
+    triangle $P_e$ in $R$ and $P_f$ in $T$, their intersection is either
+    an actual radial segment or the common center. In either case it is
+    nowhere dense. Since both runs have finitely many triangles,
+    \begin{align}
+        T_R\cap T_T
+         & \subseteq\bigcup_{e\in R}\bigcup_{f\in T}(P_e\cap P_f)
+    \end{align}
+    is nowhere dense. Hence its interior, which equals
+    $\operatorname{int}(T_R)\cap\operatorname{int}(T_T)$, is empty.
+\end{proof}
+
+\begin{theorem}[Pairwise disjoint initial open regions]
+    \label{thm:area_law_initial_open_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_initial_open_regions}
+    Fix an arbitrary origin, finite endpoint set, integer width $C\ge 2$
+    and initial layer $k_0\ge 50{,}000{,}000$, with arbitrary valid
+    residue choices at every layer. For any distinct actual initial
+    identifiers $i,j$,
+    $\operatorname{int}(X_i^0)\cap\operatorname{int}(X_j^0)=\varnothing$.
+    No nonemptiness condition on the endpoint set is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fan_run_disjoint_interiors,
+        thm:area_law_primary_fine_cell_cover,thm:area_law_fine_cells_disjoint,
+        thm:area_law_dummy_layer_disjoint,thm:area_law_fan_run_cover,
+        def:area_law_initial_birth_regions}
+    A half-open dyadic square $Q$ is convex with nonempty interior, so
+    $\overline{\operatorname{int}(Q)}=\overline Q$. Suppose that $Q$
+    is disjoint from each half-open cell $T_i$ in an opposing family.
+    Since $\operatorname{int}(Q)$ is open, it is also disjoint from each
+    closure $\overline{T_i}$, and thus from their union. The open set
+    $U=\operatorname{int}\bigl(\bigcup_i\overline{T_i}\bigr)$ is
+    therefore disjoint from $\operatorname{int}(Q)$, hence from its
+    closure:
+    \begin{align}
+        \overline Q\cap\operatorname{int}\Bigl(\bigcup_i\overline{T_i}\Bigr)
+         & =\varnothing.
+    \end{align}
+    Union over the first family's cells to obtain disjoint interiors
+    of the two unions of closures.
+
+    Each primary is exactly a finite union of closed nonbelt fine cells,
+    while every run is contained in its own closed cell. Different
+    primary identifiers cannot share an indexed nonbelt cell: a cell
+    has one layer and one primary pitch index. A belt cell cannot be
+    such a nonbelt cell. Distinct indexed actual fine cells are disjoint
+    before closure, so the preceding closure argument treats all
+    different-cell cases. Later cells are likewise disjoint from the
+    half-open dummy neighborhood; the same two open-set closure steps
+    treat dummy contacts. The only remaining case is two distinct runs
+    in one cell, for which the first theorem applies.
+\end{proof}

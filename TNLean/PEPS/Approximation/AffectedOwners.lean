@@ -16,34 +16,9 @@ required.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 383–427.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-selective-owners-affectedowner
-Downstream declaration: TNLean.PEPS.PairEffect.affectedOwner
-
-Provenance-ID: 8769-selective-owners-affectedowner_eq_none
-Downstream declaration: TNLean.PEPS.PairEffect.affectedOwner_eq_none
-
-Provenance-ID: 8769-selective-owners-affectedowner_eq_iff
-Downstream declaration: TNLean.PEPS.PairEffect.affectedOwner_eq_iff
-
-Provenance-ID: 8769-selective-owners-pairsource.affectedowner_ne_iff
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.affectedOwner_ne_iff
-
-Provenance-ID: 8769-selective-owners-sourceinventory.mem_mapowner_affectedowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner_affectedOwner
-
-Provenance-ID: 8769-selective-owners-sourceinventory.map_partypair_affectedowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_affectedOwner
-
-Provenance-ID: 8769-selective-owners-sourceinventory.mapowner_affectedowner_eq_nil_iff
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mapOwner_affectedOwner_eq_nil_iff
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 namespace TNLean.PEPS.PairEffect

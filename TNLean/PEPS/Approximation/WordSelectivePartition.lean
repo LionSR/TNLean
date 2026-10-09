@@ -17,16 +17,9 @@ contractions are chosen before the vectors supplied to the free source registers
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, source preparation at lines 246–251 and separation on all
 free inputs at lines 409–434.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-fixed-selective-exists_selective_partition_of_word
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_selective_partition_of_word
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

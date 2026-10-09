@@ -78,7 +78,7 @@ to `e₁` and `e₂`, respectively. Both composites vanish. This uses the shared
 The projector used by the construction is the projector onto the image, not
 the sandwich of the old projector by the complementary projection.
 
-## Scope and provenance
+## Scope
 
 These results supply the linear-algebra step at arbitrary nested regions.
 They do not construct the source's optimizing filters, establish the spectral
@@ -86,34 +86,3 @@ inside-rank inputs, prove the approximation error, or complete Proposition 4.1.
 The first-head expansion of noncommuting contractions is separate work.
 The result here uses inside projectors; no formal rank-one basis expansion of
 each inside projector is claimed by this batch.
-
-The issue-owned ledger is
-`docs/provenance/openai-math.d/orthogonalization8767.json`, separate from the
-nested-square geometry ledger. Its 24 original-proof rows reference the
-published immutable source revision `93f9f7e5b3d713e672579a20cc3ac62b5a62f41d`, with tree
-`e8e1a002def36e6bfb0336dd26d4e399876aa125`. That tree and every published file match the frozen local source
-commit `248645e5de94a8c6eba91e1bc5e0305a6d374655` exactly.
-
-The evidence directory
-`docs/provenance/evidence/8767-nested-cylinder-orthogonalization/` preserves the
-actual strict compiler invocations, byte-exact stdout/stderr, before-and-after
-source-closure hashes, and an audit of the 66 imported TNLean/QICLean modules.
-All 24 public declarations have complete printed kernel-dependency reports;
-only `propext`, `Classical.choice`, and `Quot.sound` occur. Both production
-modules, their import aggregator, the edge-case regressions, and the exact
-counterexamples passed with package options, Mathlib standard linters,
-warnings as errors, one compiler thread, and a 90-second module limit.
-
-These runs preceded publication; their hashes and the identical Git trees
-establish that the published proof bytes are the checked bytes. No Lean
-compiler ran during evidence finalization. The axiom collector suppresses only
-the hash-command style warning required to print those reports, without
-suppressing any production linter. No dependency trace or hash was fabricated.
-
-The 29 compatible-cache tests, nine import-generator tests, seven build-timing
-tests, and five dependency-free Lake invalidation cases also passed, together
-with text/name style, blueprint source synchronization, exact-rational diagram
-checks, pinned LaTeX formatting, and visual review of the three-page chapter.
-The two strict regression steps follow the full library build in CI.
-Focused local checks are not a full Lake build, aggregate declaration check,
-or exact-head CI pass; those acceptance gates remain required.

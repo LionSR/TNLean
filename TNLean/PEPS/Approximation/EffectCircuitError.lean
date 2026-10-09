@@ -21,8 +21,6 @@ thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
 
-Provenance-ID: 8769-approximate-physical-effectcircuiterror-01
-TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one
 -/
 
 

@@ -1,0 +1,746 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 101--160 and 173,
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Checked declarations: LocalChannelOscillation at 436daa61 and
+% ExponentialChannelShells at 73381fcb; SpectatorOscillationSupport at 54772a7c.
+% GraphChannelOscillation production passed native compilation at 02ec325d.
+% GraphChannelEventKernel is checked at 12209d14.
+% GraphChannelWeightedRow is checked at b2760934: one public definition and
+% three public theorems, with four private helpers incorporated in the proofs.
+% Its two actual-channel composition theorems are read at c57fda1d.
+% This leaf covers initial support, finite-radius physical shells, and
+% one-event and finite event-family increments with exact component support.
+% It also gives uniform weighted rows of the actual finite incidence kernel.
+% It does not assert an infinite-radius limit or propagation under
+% retained Poisson clocks.
+
+\section{Finite channel oscillation bounds}
+\label{sec:al_channel_propagation}
+
+Use the physical space $\mathcal H=(\C^q)^{\otimes I}$, with $q>0$,
+and the arbitrary finite spectator $\mathcal K=\C^J$ from
+Section~\ref{sec:al_channel_shell_oscillation}; the dimension of
+$\mathcal K$ may be zero. Fix a positive contraction $0\le k\le\mathbb 1$
+on $\mathcal H$ and increasing regions $(K_l)_{l\ge0}$, so
+$K_l\subseteq K_m$ whenever $l\le m$. Write
+$\mathcal E_l=\mathcal E_{K_l}$ for the localized root channel of
+Definition~\ref{def:al_local_root_channel}, and $\Delta_l$ for its
+shells from Definition~\ref{def:al_local_channel_shell}.
+For every site $y\in I$, use the oscillation $d_y$ of
+Definition~\ref{def:qc_site_oscillation}.
+Throughout, $B$ is an arbitrary complex operator on
+$\mathcal H\otimes\mathcal K$, without a Hermiticity assumption.
+All norms are Euclidean operator norms.
+
+\subsection{Initial oscillation from physical support}
+
+For a physical region $S\subseteq I$, write $\mathcal A_S$ for the
+physical operators supported on $S$. Let $E_S^{\mathcal K}$ be the
+expectation of Definition~\ref{def:qc_spectator_expectation}, which
+retains $S$ and leaves both spectator indices unchanged.
+For $a,b\in J$, write $B_{ab}$ for the physical matrix with entries
+$(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
+
+\begin{theorem}[Physical support and spectator expectation]
+    \label{thm:al_spectator_support_fixed}
+    \uses{def:qc_spectator_expectation,def:qc_local_circuit}
+    \lean{QuantumCircuit.spectatorSiteExpectation_eq_self_iff}
+    \leanok
+    For every region $S\subseteq I$,
+    \begin{align}
+        E_S^{\mathcal K}(B)=B
+         & \quad\Longleftrightarrow\quad
+        \forall a,b\in J,\ B_{ab}\in\mathcal A_S.
+        \label{eq:al_propagation_support_fixed}
+    \end{align}
+    This equivalence remains valid for matrices with an arbitrary
+    spectator index set $J$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:qc_spectator_expectation,lem:qc_site_expectation_properties}
+    By~(\ref{eq:qc_spectator_blocks}), the fixed-point condition is
+    equivalent to $E_S(B_{ab})=B_{ab}$ for every $a,b\in J$.
+    Each $E_S(B_{ab})$ belongs to $\mathcal A_S$, proving the forward
+    implication. Conversely, $E_S$ fixes every matrix in
+    $\mathcal A_S$, so equality holds in every matrix entry.
+\end{proof}
+
+\begin{theorem}[Vanishing oscillation outside the physical support]
+    \label{thm:al_spectator_support_oscillation_zero}
+    \uses{def:qc_site_oscillation,def:qc_local_circuit}
+    \lean{QuantumCircuit.siteOscillation_eq_zero_of_not_mem_support}
+    \leanok
+    Suppose $B_{ab}\in\mathcal A_S$ for every $a,b\in J$.
+    If $y\notin S$, then $d_y(B)=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_spectator_support_fixed,thm:qc_spectator_commutant,
+        thm:qc_site_oscillation_commutant}
+    Theorem~\ref{thm:al_spectator_support_fixed} gives
+    $E_S^{\mathcal K}(B)=B$. Every $U\in\mathcal A_{\{y\}}$
+    belongs to $\mathcal A_{I\setminus S}$, hence
+    $[B,\widehat U]=[E_S^{\mathcal K}(B),\widehat U]=0$ by
+    Theorem~\ref{thm:qc_spectator_commutant}.
+    Theorem~\ref{thm:qc_site_oscillation_commutant} now gives
+    $d_y(B)=0$.
+\end{proof}
+
+\begin{theorem}[Initial oscillation bounded by the support indicator]
+    \label{thm:al_spectator_support_indicator}
+    \uses{def:qc_site_oscillation,def:qc_local_circuit}
+    \lean{QuantumCircuit.siteOscillation_le_support_indicator}
+    \leanok
+    Suppose $B_{ab}\in\mathcal A_S$ for every $a,b\in J$.
+    For every $y\in I$,
+    \begin{align}
+        d_y(B) & \le2\|B\|\mathbf1_S(y),
+        \label{eq:al_propagation_support_indicator}
+    \end{align}
+    where $\mathbf1_S(y)$ is one on $S$ and zero outside $S$.
+    This is the initial support estimate in
+    \cite[Section~10]{OpenAI2026AreaLaw}, for arbitrary finite
+    spectators and arbitrary complex $B$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_spectator_support_oscillation_zero,
+        thm:qc_site_oscillation_bounds}
+    If $y\in S$, apply $d_y(B)\le2\|B\|$ from
+    Theorem~\ref{thm:qc_site_oscillation_bounds}.
+    If $y\notin S$, both sides of
+    (\ref{eq:al_propagation_support_indicator}) are zero by
+    Theorem~\ref{thm:al_spectator_support_oscillation_zero}.
+\end{proof}
+
+\subsection{Coefficients from the localization errors}
+
+\begin{definition}[Shell coefficients from localization errors]
+    \label{def:al_channel_shell_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound}
+    \leanok
+    For a real sequence $(\varepsilon_l)_{l\ge0}$, define
+    \begin{align}
+        \eta_0 & =2,
+        \label{eq:al_propagation_coefficient_zero}
+    \end{align}
+    \begin{align}
+        \eta_{l+1} & =4\bigl(\sqrt{\varepsilon_{l+1}}
+        +\sqrt{\varepsilon_l}\bigr).
+        \label{eq:al_propagation_coefficient_successor}
+    \end{align}
+    Here the square root of a negative real number is interpreted as
+    zero. Every localization-error inequality below forces its error
+    bound to be nonnegative at the radius in question.
+\end{definition}
+
+\begin{theorem}[Nonnegativity of the shell coefficients]
+    \label{thm:al_channel_shell_coefficient_nonneg}
+    \uses{def:al_channel_shell_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound_nonneg}
+    \leanok
+    For every real sequence $(\varepsilon_l)$ and every $l\ge0$,
+    the coefficient $\eta_l$ is nonnegative.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_channel_shell_coefficient}
+    The zeroth coefficient is two, and each successor coefficient
+    is four times a sum of nonnegative square roots.
+\end{proof}
+
+\begin{theorem}[Finite-radius physical shell bound]
+    \label{thm:al_channel_shell_finite_bound}
+    \uses{def:al_local_channel_shell,def:qc_site_oscillation,
+        def:al_channel_shell_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_le_sum_siteOscillation}
+    \leanok
+    Fix $l\in\N$ and a real sequence $(\varepsilon_j)$.
+    Suppose that, for every integer $j$ with $0\le j\le l$,
+    \begin{align}
+        \|k-E_{K_j}(k)\| & \le\varepsilon_j.
+        \label{eq:al_propagation_finite_error}
+    \end{align}
+    Then
+    \begin{align}
+        \|\Delta_l(B)\| & \le\eta_l\sum_{z\in K_l}d_z(B).
+        \label{eq:al_propagation_finite_shell}
+    \end{align}
+    In particular, if $\|k-E_{K_j}(k)\|=0$ for every
+    $0\le j\le L$, then $\Delta_j(B)=0$ for $1\le j\le L$.
+    The zeroth shell still has coefficient $\eta_0=2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_shell_oscillation,def:al_channel_shell_coefficient}
+    At $l=0$, apply~(\ref{eq:al_shell_zero_oscillation}).
+    At $l=m+1$, use the error inequalities at $m+1$ and $m$ in
+    (\ref{eq:al_shell_successor_oscillation}), with coefficient
+    (\ref{eq:al_propagation_coefficient_successor}).
+    When both errors are zero, this coefficient is zero, and the
+    shell has norm zero. The definition of $\eta_0$ is independent
+    of the errors.
+\end{proof}
+
+\begin{theorem}[Finite one-event oscillation increment]
+    \label{thm:al_channel_finite_increment}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,
+        def:al_channel_shell_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le}
+    \leanok
+    Fix $n\in\N$, $y\in I$, and a real sequence $(\varepsilon_l)$.
+    Suppose that $\|k-E_{K_l}(k)\|\le\varepsilon_l$ for every
+    integer $l$ with $0\le l\le n$. Then
+    \begin{align}
+        \label{eq:al_propagation_finite_increment}
+        d_y(\mathcal E_n(B))
+         & \le d_y(B)+2\sum_{0\le l\le n,\ y\in K_l}
+        \eta_l\sum_{z\in K_l}d_z(B).
+    \end{align}
+    Every regional sum is evaluated on the original operator $B$.
+    This is the finite-radius one-event estimate underlying
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_shell_finite_bound,
+        thm:al_channel_shell_coefficient_nonneg,
+        thm:al_root_channel_outside_oscillation,
+        thm:qc_site_oscillation_seminorm,
+        thm:qc_site_oscillation_bounds,def:al_local_channel_shell}
+    Put $a_l=\eta_l\sum_{z\in K_l}d_z(B)$, which is nonnegative.
+    Induct on $n$. If $y\notin K_n$, then
+    $d_y(\mathcal E_n(B))\le d_y(B)$ by
+    Theorem~\ref{thm:al_root_channel_outside_oscillation}, and the
+    nonnegative sum in~(\ref{eq:al_propagation_finite_increment})
+    preserves this inequality.
+    At $n=0$ with $y\in K_0$, write
+    $\mathcal E_0(B)=B+\Delta_0(B)$ to obtain
+    \begin{align}
+        d_y(\mathcal E_0(B))
+         & \le d_y(B)+d_y(\Delta_0(B))\le d_y(B)+2a_0.
+        \label{eq:al_propagation_increment_zero}
+    \end{align}
+    For the successor step with $y\in K_{n+1}$, the identity
+    $\mathcal E_{n+1}(B)=\mathcal E_n(B)+\Delta_{n+1}(B)$ gives
+    \begin{align}
+        d_y(\mathcal E_{n+1}(B))
+         & \le d_y(\mathcal E_n(B))+2\|\Delta_{n+1}(B)\|
+        \le d_y(\mathcal E_n(B))+2a_{n+1}.
+        \label{eq:al_propagation_increment_step}
+    \end{align}
+    Restrict the error assumptions to radii at most $n$ and apply
+    the induction hypothesis to the first term in
+    (\ref{eq:al_propagation_increment_step}). The new term is
+    exactly the contribution of $n+1$ to the filtered sum.
+\end{proof}
+
+\subsection{Stretched-exponential localization errors}
+
+\begin{theorem}[Explicit stretched-exponential shell coefficients]
+    \label{thm:al_channel_shell_coefficient_exp}
+    \uses{def:al_channel_shell_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound_le_exp}
+    \leanok
+    Let $C\ge0$, $c>0$, and $0<\alpha\le1$. Set
+    $\varepsilon_l=C\exp(-cl^\alpha)$ and
+    \begin{align}
+        A & =2+8\sqrt C\exp(c/2), & b & =c/2.
+        \label{eq:al_propagation_exp_constants}
+    \end{align}
+    For every $l\in\N$,
+    \begin{align}
+        \eta_l & \le A\exp(-bl^\alpha).
+        \label{eq:al_propagation_exp_coefficient}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_channel_shell_coefficient}
+    The identity $\sqrt{C\exp(-cl^\alpha)}
+        =\sqrt C\exp(-bl^\alpha)$ rewrites each successor coefficient.
+    Since $0<\alpha\le1$, one has $(l+1)^\alpha\le l^\alpha+1$,
+    and therefore
+    \begin{align}
+        \exp(-bl^\alpha)
+         & \le\exp(b)\exp(-b(l+1)^\alpha).
+        \label{eq:al_propagation_exp_previous}
+    \end{align}
+    Also $1\le\exp(b)$. Apply this inequality and
+    (\ref{eq:al_propagation_exp_previous}) to the two square roots
+    in~(\ref{eq:al_propagation_coefficient_successor}) to obtain
+    \begin{align}
+        \eta_{l+1}
+         & \le8\sqrt C\exp(b)\exp(-b(l+1)^\alpha)
+        \le A\exp(-b(l+1)^\alpha).
+        \label{eq:al_propagation_exp_successor}
+    \end{align}
+    At radius zero, $0^\alpha=0$ and $\eta_0=2\le A$, proving
+    (\ref{eq:al_propagation_exp_coefficient}) there as well.
+\end{proof}
+
+\begin{theorem}[Stretched-exponential physical shell bound]
+    \label{thm:al_channel_shell_exp_bound}
+    \uses{def:al_local_channel_shell,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_le_exp_sum_siteOscillation}
+    \leanok
+    Let $C\ge0$, $c>0$, and $0<\alpha\le1$, and take $A,b$ from
+    (\ref{eq:al_propagation_exp_constants}). Fix $l\in\N$.
+    Suppose that, for every integer $j$ with $0\le j\le l$,
+    \begin{align}
+        \|k-E_{K_j}(k)\| & \le C\exp(-cj^\alpha).
+        \label{eq:al_propagation_exp_error}
+    \end{align}
+    Then
+    \begin{align}
+        \|\Delta_l(B)\|
+         & \le A\exp(-bl^\alpha)\sum_{z\in K_l}d_z(B).
+        \label{eq:al_propagation_exp_shell}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_shell_finite_bound,
+        thm:al_channel_shell_coefficient_exp,thm:qc_site_oscillation_bounds}
+    Apply~(\ref{eq:al_propagation_finite_shell}) with
+    $\varepsilon_j=C\exp(-cj^\alpha)$. Bound its coefficient by
+    (\ref{eq:al_propagation_exp_coefficient}) and use
+    $\sum_{z\in K_l}d_z(B)\ge0$.
+\end{proof}
+
+\begin{theorem}[Stretched-exponential finite one-event increment]
+    \label{thm:al_channel_exp_increment}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_exp}
+    \leanok
+    Let $C\ge0$, $c>0$, and $0<\alpha\le1$, and take $A,b$ from
+    (\ref{eq:al_propagation_exp_constants}). Fix $n\in\N$ and
+    $y\in I$. Suppose that
+    $\|k-E_{K_l}(k)\|\le C\exp(-cl^\alpha)$ for every integer
+    $l$ with $0\le l\le n$. Then
+    \begin{align}
+        \label{eq:al_propagation_exp_increment}
+        d_y(\mathcal E_n(B))
+         & \le d_y(B)+2\sum_{0\le l\le n,\ y\in K_l}
+        A\exp(-bl^\alpha)\sum_{z\in K_l}d_z(B).
+    \end{align}
+    The estimate holds uniformly over all finite spectators and all
+    complex operators $B$ under the stated finite set of error bounds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_finite_increment,
+        thm:al_channel_shell_coefficient_exp,thm:qc_site_oscillation_bounds}
+    Apply~(\ref{eq:al_propagation_finite_increment}) with
+    $\varepsilon_l=C\exp(-cl^\alpha)$. For each included radius,
+    multiply~(\ref{eq:al_propagation_exp_coefficient}) by the
+    nonnegative sum $\sum_{z\in K_l}d_z(B)$, and sum over exactly
+    those radii with $0\le l\le n$ and $y\in K_l$.
+\end{proof}
+
+\subsection{The full channel on an anchor component}
+
+Use the graph notation from Section~\ref{sec:qc_component_channel}:
+$G$ is a simple graph on $I$, $a\in I$ is an anchor, $d_G$ is the
+extended graph distance, $C(a)$ is the connected component of $a$,
+and $N_l(a)=\{z\in I:d_G(a,z)\le l\}$.
+Write $R_a$ for the maximum distance from $a$ to a vertex in $C(a)$.
+Equivalently, maximize over all vertices after assigning zero distance
+to unreachable vertices. Let $\mathcal E_k$ be the full root channel
+in~(\ref{eq:qc_component_root_channel}).
+
+\begin{theorem}[Full-channel increment with an explicit finite cutoff]
+    \label{thm:al_graph_channel_exp_increment}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,
+        def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_exp_of_component_support}
+    \leanok
+    Suppose $0\le k\le\mathbb 1$ and $k\in\mathcal A_{C(a)}$.
+    Let $C\ge0$, $c>0$, $0<\alpha\le1$, and take $A,b$ from
+    (\ref{eq:al_propagation_exp_constants}). Fix an integer
+    $n\ge R_a$. Suppose that
+    $\|k-E_{N_l(a)}(k)\|\le C\exp(-cl^\alpha)$ for every integer
+    $l$ with $0\le l\le n$. Then, for every $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_graph_increment}
+        d_y(\mathcal E_k(B))
+         & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
+        A\exp(-bl^\alpha)\sum_{z\in N_l(a)}d_z(B).
+    \end{align}
+    All regional sums use the original operator $B$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_exp_increment,thm:qc_graph_ball_stabilization,
+        thm:qc_component_channel_stabilization}
+    Apply Theorem~\ref{thm:al_channel_exp_increment} to the increasing
+    regions $K_l=N_l(a)$. Since $n\ge R_a$ and
+    $k\in\mathcal A_{C(a)}$, exact component localization gives
+    $\mathcal E_{N_n(a)}(B)=\mathcal E_k(B)$ by
+    Theorem~\ref{thm:qc_component_channel_stabilization}.
+    Substitute this identity into~(\ref{eq:al_propagation_exp_increment})
+    and rewrite $y\in N_l(a)$ as $d_G(a,y)\le l$.
+\end{proof}
+
+\subsection{Finite families of channel events}
+
+Let $F$ be a finite set of event labels, with an anchor $a_i\in I$
+for each $i\in F$. The anchors need not be distinct. For $l\in\N$
+and $y,z\in I$, set
+\begin{align}
+    \label{eq:al_propagation_ball_count}
+    m_l(y,z) & =\bigl|\{i\in F:y,z\in N_l(a_i)\}\bigr|.
+\end{align}
+This counts labels, so distinct labels at the same anchor contribute
+separately.
+
+\begin{theorem}[Finite shell sums as counts of labels]
+    \label{thm:al_graph_shell_sum_cardinality}
+    \lean{TNLean.PEPS.AreaLaw.sum_graphBall_shell_eq_sum_card}
+    \leanok
+    Let $(w_l)_{l\ge0}$ be any real sequence and let
+    $(v_z)_{z\in I}$ be any family of real numbers. For every
+    $n\in\N$ and $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_shell_count}
+        \sum_{i\in F}\sum_{0\le l\le n,\ d_G(a_i,y)\le l}
+        w_l\sum_{z\in N_l(a_i)}v_z
+         & =\sum_{l=0}^{n}w_l\sum_{z\in I}m_l(y,z)v_z.
+    \end{align}
+    Both the weights $w_l$ and the site values $v_z$ may have either
+    sign.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Replace the radius filter by the indicator of $y\in N_l(a_i)$
+    and interchange the finite sums over $i$ and $l$. For each
+    fixed radius, interchange the finite sums over labels and sites:
+    \begin{align}
+        \label{eq:al_propagation_count_reorder}
+        \sum_{i\in F}\mathbf1_{N_l(a_i)}(y)
+        \sum_{z\in N_l(a_i)}v_z
+         & =\sum_{z\in I}\left(\sum_{i\in F}
+        \mathbf1_{N_l(a_i)}(y)\mathbf1_{N_l(a_i)}(z)\right)v_z.
+    \end{align}
+    The inner sum on the right of
+    (\ref{eq:al_propagation_count_reorder}) is $m_l(y,z)$ by
+    (\ref{eq:al_propagation_ball_count}). Multiply by $w_l$ and sum
+    over $0\le l\le n$ to obtain~(\ref{eq:al_propagation_shell_count}).
+\end{proof}
+
+\begin{theorem}[Sum of full-channel oscillation increments]
+    \label{thm:al_graph_event_increment_cardinality}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,
+        def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_exp_card}
+    \leanok
+    For each $i\in F$, let $k_i$ be a positive contraction supported
+    on $C(a_i)$, and let $\mathcal E_i=\mathcal E_{k_i}$ be its full
+    root channel. Let $C\ge0$, $c>0$, and $0<\alpha\le1$, and use
+    $A,b$ from~(\ref{eq:al_propagation_exp_constants}).
+    Fix a common cutoff $n\in\N$ satisfying $n\ge R_{a_i}$ for
+    every $i\in F$. Suppose that, for every $i\in F$ and every
+    integer $l$ with $0\le l\le n$,
+    \begin{align}
+        \label{eq:al_propagation_family_error}
+        \|k_i-E_{N_l(a_i)}(k_i)\| & \le C\exp(-cl^\alpha).
+    \end{align}
+    Then, for every $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_family_increment}
+        \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
+         & \le2A\sum_{l=0}^{n}\exp(-bl^\alpha)
+        \sum_{z\in I}m_l(y,z)d_z(B).
+    \end{align}
+    Each channel and every site oscillation on the right act on the
+    same original operator $B$. The estimate holds for arbitrary
+    finite spectators and arbitrary complex $B$. This is the finite
+    event-label sum in \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_graph_channel_exp_increment,
+        thm:al_graph_shell_sum_cardinality}
+    Apply Theorem~\ref{thm:al_graph_channel_exp_increment} to each
+    $k_i$ with the common cutoff $n$. Subtract $d_y(B)$ from each
+    resulting inequality and sum over $i\in F$:
+    \begin{align}
+        \label{eq:al_propagation_family_shells}
+        \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
+         & \le2\sum_{i\in F}\sum_{0\le l\le n,\ d_G(a_i,y)\le l}
+        A\exp(-bl^\alpha)\sum_{z\in N_l(a_i)}d_z(B).
+    \end{align}
+    Use~(\ref{eq:al_propagation_shell_count}) with
+    $w_l=A\exp(-bl^\alpha)$ and $v_z=d_z(B)$ in
+    (\ref{eq:al_propagation_family_shells}), and factor out $A$.
+\end{proof}
+
+\subsection{Uniform weighted rows of the finite event kernel}
+
+Continue to count event labels by $m_l(y,z)$ from
+(\ref{eq:al_propagation_ball_count}). Write $d_G^0(y,z)$ for the
+graph distance when $y,z$ are connected and for zero when they are
+disconnected. The balls $N_l(x)$ continue to use the extended distance
+$d_G$, so an unreachable vertex belongs to no finite ball about $x$.
+
+\begin{definition}[Finite graph-channel event kernel]
+    \label{def:al_graph_event_kernel}
+    \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel}
+    \leanok
+    For real parameters $D,b,\alpha$ and a cutoff $N\in\N$, define
+    \begin{align}
+        \label{eq:al_propagation_event_kernel}
+        \mathsf A^{(N)}_{yz}
+         & =D\sum_{l=0}^{N}\exp(-bl^\alpha)m_l(y,z).
+    \end{align}
+    For arbitrary real exponents, use $0^0=1$ and $0^\alpha=0$ when
+    $\alpha\ne0$.
+    With $D=2A$ and $N=n$, the right side of
+    (\ref{eq:al_propagation_family_increment}) is
+    $\sum_{z\in I}\mathsf A^{(n)}_{yz}d_z(B)$.
+\end{definition}
+
+\begin{theorem}[Vanishing kernel between distinct components]
+    \label{thm:al_graph_kernel_disconnected}
+    \uses{def:al_graph_event_kernel}
+    \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel_eq_zero_of_not_reachable}
+    \leanok
+    If $y,z$ are in different connected components of $G$, then
+    $\mathsf A^{(N)}_{yz}=0$ for every cutoff $N$ and every choice
+    of real $D,b,\alpha$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_graph_event_kernel}
+    If $y,z\in N_l(a_i)$ for some label $i$, the triangle inequality
+    gives $d_G(y,z)\le d_G(y,a_i)+d_G(a_i,z)\le2l$.
+    This would place $y,z$ in the same component.
+    Thus $m_l(y,z)=0$ for every radius $l$, and
+    (\ref{eq:al_propagation_event_kernel}) vanishes.
+\end{proof}
+
+\begin{theorem}[Finite weighted row bound from ball growth]
+    \label{thm:al_graph_kernel_finite_row}
+    \uses{def:al_graph_event_kernel}
+    \lean{TNLean.PEPS.AreaLaw.sum_graphChannelEventKernel_mul_exp_le}
+    \leanok
+    Let $D,K,\mu\ge0$ and $b,\alpha>0$, and set
+    \begin{align}
+        \label{eq:al_propagation_row_weight}
+        \theta & =\frac{b}{2\,2^\alpha}.
+    \end{align}
+    Suppose that every site $x\in I$ and radius $l\in\N$ satisfy
+    \begin{align}
+        \label{eq:al_propagation_ball_growth}
+        |N_l(x)| & \le K(l+1)^2,
+    \end{align}
+    and that every site $x\in I$ satisfies
+    \begin{align}
+        \label{eq:al_propagation_anchor_fiber}
+        |\{i\in F:a_i=x\}| & \le\mu.
+    \end{align}
+    Then, for every cutoff $N\in\N$ and site $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_finite_row}
+        \sum_{z\in I}\mathsf A^{(N)}_{yz}
+        \exp\bigl(\theta(d_G^0(y,z))^\alpha\bigr)
+         & \le D\mu K^2\sum_{l=0}^{N}(l+1)^4\exp\bigl(-(b/2)l^\alpha\bigr).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_graph_event_kernel,thm:al_graph_shell_sum_cardinality}
+    Fix $y$, and put
+    $\Lambda_l(y)=\{i\in F:y\in N_l(a_i)\}$.
+    Symmetry of graph distance and counting each anchor fiber give
+    \begin{align}
+        \label{eq:al_propagation_anchor_count}
+        |\Lambda_l(y)|
+         & =\sum_{x\in N_l(y)}|\{i\in F:a_i=x\}|
+        \le\mu K(l+1)^2.
+    \end{align}
+    If $i\in\Lambda_l(y)$ and $z\in N_l(a_i)$, then
+    $d_G^0(y,z)\le2l$. Since $\alpha>0$,
+    $\theta(d_G^0(y,z))^\alpha\le(b/2)l^\alpha$, whence
+    \begin{align}
+        \label{eq:al_propagation_weighted_term}
+        \exp(-bl^\alpha)\exp\bigl(\theta(d_G^0(y,z))^\alpha\bigr)
+         & \le\exp\bigl(-(b/2)l^\alpha\bigr).
+    \end{align}
+    Summing~(\ref{eq:al_propagation_weighted_term}) over $N_l(a_i)$
+    and using~(\ref{eq:al_propagation_ball_growth}) bounds the
+    contribution of this label by
+    $K(l+1)^2\exp(-(b/2)l^\alpha)$.
+    Apply~(\ref{eq:al_propagation_shell_count}) to express the row
+    as a finite sum over labels and radii. The label bound gives
+    \begin{align}
+        \label{eq:al_propagation_row_count}
+        \sum_{z\in I}\mathsf A^{(N)}_{yz}
+        \exp\bigl(\theta(d_G^0(y,z))^\alpha\bigr)
+         & \le D\sum_{l=0}^{N}K(l+1)^2
+        \exp\bigl(-(b/2)l^\alpha\bigr)|\Lambda_l(y)|.
+    \end{align}
+    Insert~(\ref{eq:al_propagation_anchor_count}) into
+    (\ref{eq:al_propagation_row_count}) and collect the factors.
+    The two quadratic factors count sites in a ball and labels whose
+    balls contain $y$, respectively.
+\end{proof}
+
+\begin{theorem}[A uniform weighted row constant]
+    \label{thm:al_graph_kernel_uniform_row}
+    \uses{def:al_graph_event_kernel}
+    \lean{TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_weighted_row_le}
+    \leanok
+    For every choice of real constants $D,K,\mu\ge0$ and
+    $b,\alpha>0$, there exists $V\ge0$ with the following property.
+    For every finite site set $I$, every finite label set $F$, every
+    simple graph $G$ on $I$, and every anchor family $(a_i)_{i\in F}$,
+    assume that~(\ref{eq:al_propagation_ball_growth}) holds for all
+    sites and radii and~(\ref{eq:al_propagation_anchor_fiber}) holds
+    for all sites. Then, for every $N\in\N$ and $y\in I$,
+    \begin{align}
+        \label{eq:al_propagation_uniform_row}
+        \sum_{z\in I}\mathsf A^{(N)}_{yz}
+        \exp\left(\frac{b}{2\,2^\alpha}(d_G^0(y,z))^\alpha\right)
+         & \le V.
+    \end{align}
+    Thus $V$ depends only on $D,K,\mu,b,\alpha$, and is chosen
+    before the site set, label set, graph, anchors, cutoff, and site
+    $y$. This is the finite-kernel weighted row estimate of
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_graph_kernel_finite_row,lem:al_truncation_error}
+    The polynomial and finite-shell estimates used in
+    Lemma~\ref{lem:al_truncation_error}, with exponent coefficient
+    $b/4$, give constants $M,S\ge0$ depending only on $b,\alpha$.
+    For every $u\ge0$ and every $N\in\N$, they satisfy
+    \begin{align}
+        \label{eq:al_propagation_polynomial_bound}
+        (u+1)^2\exp\bigl(-(b/4)u^\alpha\bigr) & \le M,
+    \end{align}
+    \begin{align}
+        \label{eq:al_propagation_series_bound}
+        \sum_{l=0}^{N}(l+1)^2
+        \exp\bigl(-(b/4)\lfloor l/2\rfloor^\alpha\bigr) & \le S.
+    \end{align}
+    For~(\ref{eq:al_propagation_series_bound}), use truncation radius
+    zero and a finite range of length $N+1$.
+    Split the exponent $-(b/2)l^\alpha$ into two equal parts.
+    Apply~(\ref{eq:al_propagation_polynomial_bound}) to one factor
+    and use $\lfloor l/2\rfloor\le l$ for the other to obtain
+    \begin{align}
+        \label{eq:al_propagation_fourth_power}
+        (l+1)^4\exp\bigl(-(b/2)l^\alpha\bigr)
+         & \le M(l+1)^2\exp\bigl(-(b/4)\lfloor l/2\rfloor^\alpha\bigr).
+    \end{align}
+    Sum~(\ref{eq:al_propagation_fourth_power}) through $N$ and apply
+    (\ref{eq:al_propagation_series_bound}); the result is at most
+    $MS$. Choose $V=D\mu K^2MS$ before fixing any finite sets,
+    graph, or anchors. For every subsequent choice satisfying the
+    ball and anchor-fiber bounds,
+    Theorem~\ref{thm:al_graph_kernel_finite_row} now gives
+    (\ref{eq:al_propagation_uniform_row}).
+\end{proof}
+
+\subsection{Kernel bounds for actual channel families}
+
+\begin{theorem}[Kernel domination of actual channel increments]
+    \label{thm:al_actual_channel_kernel_domination}
+    \uses{def:al_graph_event_kernel,def:al_local_root_channel,
+        def:qc_site_oscillation,def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel}
+    \leanok
+    For every $i\in F$, let $k_i$ be a positive contraction supported
+    on $C(a_i)$ and put $\mathcal E_i=\mathcal E_{k_i}$.
+    Let $C\ge0$, $c>0$, and $0<\alpha\le1$.
+    Take $A=2+8\sqrt C\exp(c/2)$ and use the kernel
+    (\ref{eq:al_propagation_event_kernel}) with $D=2A$ and $b=c/2$.
+    Fix $N\in\N$ with $N\ge R_{a_i}$ for every $i\in F$.
+    Suppose that
+    $\|k_i-E_{N_l(a_i)}(k_i)\|\le C\exp(-cl^\alpha)$ for every
+    $i\in F$ and every integer $l$ with $0\le l\le N$.
+    Then, for every $y\in I$ and every operator $B$,
+    \begin{align}
+        \label{eq:al_propagation_actual_domination}
+        \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
+         & \le\sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B).
+    \end{align}
+    The spectator is any finite-dimensional space, and $B$ is any
+    complex operator on the physical space together with that spectator.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_graph_event_increment_cardinality,def:al_graph_event_kernel}
+    Apply Theorem~\ref{thm:al_graph_event_increment_cardinality} with
+    cutoff $n=N$. By~(\ref{eq:al_propagation_event_kernel}) and
+    interchange of the two finite sums,
+    \begin{align}
+        \label{eq:al_propagation_actual_reorder}
+        \sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B)
+         & =2A\sum_{l=0}^{N}\exp\bigl(-(c/2)l^\alpha\bigr)
+        \sum_{z\in I}m_l(y,z)d_z(B).
+    \end{align}
+    Substitute~(\ref{eq:al_propagation_actual_reorder}) into
+    (\ref{eq:al_propagation_family_increment}).
+\end{proof}
+
+\begin{theorem}[Uniform weighted rows and actual channel increments]
+    \label{thm:al_actual_channel_uniform_bounds}
+    \uses{def:al_graph_event_kernel,def:al_local_root_channel,
+        def:qc_site_oscillation,def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_bounds_of_component_support}
+    \leanok
+    For every choice of real constants $C,K,\mu\ge0$, $c>0$, and
+    $0<\alpha\le1$, there is a number $R\ge0$ with the following
+    property. Choose any finite site set $I$, finite label set $F$,
+    finite spectator index set $J$, and local dimension $q\in\N$
+    with $q>0$.
+    Let $G$ be any simple graph on $I$ and $(a_i)_{i\in F}$ any
+    anchor family. For each $i\in F$, let $k_i$ be a positive
+    contraction on $(\C^q)^{\otimes I}$ supported on $C(a_i)$,
+    and put $\mathcal E_i=\mathcal E_{k_i}$.
+    Assume the ball bound~(\ref{eq:al_propagation_ball_growth}) for
+    every site and radius, and the anchor-fiber bound
+    (\ref{eq:al_propagation_anchor_fiber}) for every site.
+    Set $A=2+8\sqrt C\exp(c/2)$, and use
+    (\ref{eq:al_propagation_event_kernel}) with $D=2A$ and $b=c/2$.
+
+    For every cutoff $N\in\N$ satisfying $N\ge R_{a_i}$ for all
+    $i\in F$, assume that
+    $\|k_i-E_{N_l(a_i)}(k_i)\|\le C\exp(-cl^\alpha)$ for all
+    $i\in F$ and all integers $l$ with $0\le l\le N$.
+    Then the following two conclusions hold. Every $y\in I$ satisfies
+    \begin{align}
+        \label{eq:al_propagation_actual_row}
+        \sum_{z\in I}\mathsf A^{(N)}_{yz}
+        \exp\left(\frac{c}{4\,2^\alpha}(d_G^0(y,z))^\alpha\right)
+         & \le R.
+    \end{align}
+    For every $y\in I$ and every complex operator $B$ on
+    $(\C^q)^{\otimes I}\otimes\C^J$,
+    \begin{align}
+        \label{eq:al_propagation_actual_increment}
+        \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
+         & \le\sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B).
+    \end{align}
+    The constant $R$ depends only on $C,K,\mu,c,\alpha$.
+    It is chosen before $I,F,J,q,G$, the anchors, the effects $k_i$,
+    the cutoff, and the input operator.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_graph_kernel_uniform_row,
+        thm:al_actual_channel_kernel_domination}
+    Apply Theorem~\ref{thm:al_graph_kernel_uniform_row} with
+    $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$.
+    These parameters satisfy $D\ge0$ and $b>0$, so it supplies a
+    constant $R$ before any finite sets, graph, or channels are chosen.
+    For each subsequent admissible choice, its row bound gives
+    (\ref{eq:al_propagation_actual_row}), since
+    $(c/2)/(2\,2^\alpha)=c/(4\,2^\alpha)$.
+    Theorem~\ref{thm:al_actual_channel_kernel_domination} supplies
+    (\ref{eq:al_propagation_actual_increment}) for every $y,B$ under
+    the stated support, cutoff, and localization hypotheses.
+\end{proof}

@@ -6,27 +6,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.SourceChoiceCost
 import TNLean.PEPS.Approximation.SourceCircuitLocations
 
-/-! # Products of the exact scalar costs at touched gate occurrences -/
+/-! # Products of the exact scalar costs at touched gate occurrences
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-choice-cost.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-product-sourcecircuit.sum_norm_coefficient_eq_prod
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_eq_prod
-
-Provenance-ID: 8769-chronological-product-sourcecircuit.sum_norm_coefficient_le_pow_card
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_le_pow_card
-
-Provenance-ID: 8769-chronological-product-sourcecircuit.sum_norm_coefficient_mul_conj_eq_prod_sq
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_eq_prod_sq
-
-Provenance-ID: 8769-chronological-product-sourcecircuit.sum_norm_coefficient_mul_conj_le_pow_card
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
