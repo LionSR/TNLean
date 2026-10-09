@@ -6171,6 +6171,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   name a participating party. The corpus scanner was run; unrelated reported
   patterns are outside this change.
 
+### Prescribed slopes of actual fan edges — promoted (2026-10-09)
+
+- **Pattern:** Extract the base and final radial slopes from the actual
+  fan-triangle constructor.
+- **Seen:** Three actual-fan specializations across
+  `PEPS/AreaLaw/Geometry/InitialRegionBoundaries.lean` and
+  `PEPS/AreaLaw/Geometry/InitialStarFrontiers.lean`. The radial exclusion in
+  the nonemptiness argument needs the same constructor field.
+- **Abstraction:** `cellFanPolygon_base_and_radial_isAllowedSlope` in
+  `Geometry/CellFanSlopes.lean` gives both directions for arbitrary optional
+  midpoint subdivisions. The constructor extraction is proved once; its
+  existing complete proof is transferred unchanged.
+- **Notes:** The two old extraction proofs and the private single-radial
+  wrapper are removed. Existing callers select the required component of
+  the shared theorem. No new tactic or geometric hypothesis is introduced.
+
 ### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
 
 - **Pattern:** transport a matrix-vector equation through the configuration
