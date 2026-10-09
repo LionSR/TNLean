@@ -18,8 +18,8 @@ The supplied family, good-history predicate and history weights are unchanged.
 Neither continuity in the scan parameter nor measurability of a measure-valued
 kernel is assumed. Zero supplied vectors and zero copies are included.
 
-This source-only, uncompiled candidate depends on the pending upstream literal
-measure API. It does not construct the other scanner fields or a physical vector.
+These results concern the scalar defect of a supplied round; they do not
+construct the other scanner fields or a physical vector.
 
 Source: *A two-dimensional area law from a global spectral gap*, Proposition 7.4,
 `06-transport.tex`, lines 364–434, and `08-scanner.tex`, lines 416–451.

@@ -16,8 +16,7 @@ good-history predicate and history weights. Zero vectors and zero copies are
 included. The actual charge identity also gives an independent route through
 the scalar charge-defect theorem to closed-interval integrability.
 
-This source-only, uncompiled candidate depends on the pending upstream literal
-measure API. It supplies parameter regularity, without constructing all scanner
+These results supply parameter regularity, without constructing all scanner
 fields, comparators, a physical common vector or a ground state.
 
 Source: *A two-dimensional area law from a global spectral gap*, Proposition 7.4,

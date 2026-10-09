@@ -241,7 +241,7 @@ The finite transported measures are required to have mass $1/2$ only for
 $0<p<1$, where the source's terminal weights are positive. The logarithmic norm is
 continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
 and comparison properties. No mass equality is required at an inactive
-terminal leaf. The charge defect is assumed almost everywhere strongly
+terminal leaf. The charge defect is assumed almost everywhere
 measurable in the interior; its existing nonnegative upper bound then gives
 integrability on the closed interval.
 
@@ -275,17 +275,33 @@ integrability on the closed interval.
 \begin{proof}
     Integrate the logarithmic norm derivative over $[0,1]$ in every round,
     retaining the nonnegative charge contribution on
-    $[\epsilon/2,\epsilon]$. Interior almost-everywhere strong measurability
+    $[\epsilon/2,\epsilon]$. Interior almost-everywhere measurability
     and the nonnegative upper bound make the charge defect integrable; the
     two endpoint values do not change the integral. The integral comparison
     retains continuity of the logarithmic norm on $[0,1]$, its derivative
     at every interior point, and the pointwise gain inequality. Matching
     successive endpoint values give the telescoped entropy budget.
-    Finite averaging chooses a charge round with the required integral bound.
-    If its defect exceeded the threshold everywhere on the parameter interval,
-    the integral of the integrable difference would be strictly positive,
-    contradicting that bound. Thus the exact inequality
-    $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ holds at one common parameter.
+    Write $T$ for the charge rounds, so $|T|=nm$, and let
+    $\mathcal Q_{r,k}(p)$ be the defect in round $r$. With
+    $c_k=KnD(\delta_n+\rho_k)$, the normalized entropy budget gives
+    \begin{align}
+        \sum_{r\in T}\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp
+        \le |T|\frac{\epsilon}{2}c_k.
+        \label{eq:al_scanner_charge_sum}
+    \end{align}
+    Since $T\ne\varnothing$, finite averaging in~(\ref{eq:al_scanner_charge_sum})
+    gives $r\in T$ with
+    $\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp\le(\epsilon/2)c_k$.
+    If $\mathcal Q_{r,k}(p)>c_k$ for every $p\in[\epsilon/2,\epsilon]$,
+    integrability and $\epsilon>0$ imply
+    \begin{align}
+        0 & < \int_{\epsilon/2}^{\epsilon}
+        \bigl(\mathcal Q_{r,k}(p)-c_k\bigr)\,dp \notag \\
+          & = \int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp
+        -\frac{\epsilon}{2}c_k\le0, \notag
+    \end{align}
+    a contradiction. Hence some $p_k\in[\epsilon/2,\epsilon]$ satisfies
+    $\mathcal Q_{r,k}(p_k)/(KnD)\le\delta_n+\rho_k$.
     At that point
     H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
     energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and

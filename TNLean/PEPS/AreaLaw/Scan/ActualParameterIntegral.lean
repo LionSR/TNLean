@@ -14,8 +14,8 @@ actual admissibility and cross-band commutation theorems therefore give AE
 strong measurability and interval integrability of the literal old-state
 scalar charge defect, for every supplied pre-vector and replica count.
 
-Only the accepted transport expectation APIs are used. This does not construct
-scanner leaf measures, the other scanner fields, or a physical common vector.
+The scalar integrals follow from the transport-expectation theorems. This does not
+construct scanner leaf measures, the other scanner fields, or a physical common vector.
 -/
 
 open scoped BigOperators

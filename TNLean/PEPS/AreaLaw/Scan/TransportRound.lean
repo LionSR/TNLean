@@ -16,8 +16,6 @@ leaves of one transport datum. Both use the same supplied replica vector and roo
 path. History and conditional-choice weights remain outside these measures.
 This is data for one round, not a construction of `ScanData` or a choice of prevector.
 
-The pending upstream `LeafMeasure` import makes this a source-only, uncompiled
-candidate until the upstream API is accepted and a dependency update is authorized.
 No parameter-continuity or comparator assertion follows from fixed-parameter finiteness.
 
 Source: *A two-dimensional area law from a global spectral gap*, Proposition 7.4,

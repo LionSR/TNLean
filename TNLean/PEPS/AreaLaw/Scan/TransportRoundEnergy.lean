@@ -13,8 +13,7 @@ probability factors in the scanner energy sum with the existing transport error.
 The parameter is restricted to `[0,1]`: the transport tree clamps real parameters,
 whereas the scanner's displayed old and new weights use `1-p` and `p` directly.
 
-This is an uncompiled, acceptance-dependent consumer of the pending upstream
-measure API. It neither chooses an eigenvector nor asserts a zero-copy eigenvalue.
+No eigenvector is chosen, and no zero-copy eigenvalue is asserted.
 Source: *A two-dimensional area law from a global spectral gap*,
 `06-transport.tex`, displays `transport:terminal-weights` and `transport:energy`.
 -/

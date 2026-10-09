@@ -17,8 +17,7 @@ state, root norm and replica energy. Admissibility and cross-band commutation ar
 derived from the existing actual geometry. No integrability, mass or scalar
 transport identity is supplied as a certificate.
 
-This source-only candidate is uncompiled and depends on acceptance of the pending
-upstream measure API. It advances the measure-valued round edge of scanner assembly,
+These constructions give the measures for individual fill and charge rounds,
 without constructing `ScanData`, a physical prevector, comparator or ground state.
 Fixed-parameter finiteness gives no continuity in the interpolation parameter.
 
