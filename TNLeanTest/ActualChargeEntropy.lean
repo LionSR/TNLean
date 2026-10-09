@@ -19,6 +19,7 @@ set_option autoImplicit false
 open TensorPower TensorPower.ReplicaTransport
 open Entropy (SiteConfig)
 open scoped BigOperators
+open TNLean.PEPS.AreaLaw (designatedSupport)
 open TNLean.PEPS.AreaLaw.Scan
 
 namespace TNLeanTest.ActualChargeEntropy
@@ -53,11 +54,13 @@ example : (Move.toP (∅ : Finset (Fin 2))) ≠ Move.stay := by
 
 example (n : V → ℕ) (π : PYF V) (θ : EuclideanSpace ℂ (SiteConfig n)) :
     moveEta n π (.toP ∅) θ = moveEta n π .stay θ := by
-  simp [moveEta]
+  change moveEta n π (.toP ∅) θ = 0
+  exact moveEta_toP_empty n π θ
 
 example (n : V → ℕ) (π : PYF V) (θ : EuclideanSpace ℂ (SiteConfig n)) :
     moveEta n π (.toF ∅) θ = moveEta n π .stay θ := by
-  simp [moveEta]
+  change moveEta n π (.toF ∅) θ = 0
+  exact moveEta_toF_empty n π θ
 
 -- A blank actual padded slot is a genuine stay and has zero entropy.
 example (S : CollarScan V I) (n : V ⊕ Bool → ℕ) (g r k : ℕ)
