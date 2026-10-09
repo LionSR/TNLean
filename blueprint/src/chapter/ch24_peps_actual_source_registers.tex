@@ -1,5 +1,3 @@
-% Auxiliary actual-source identity; native verification remains pending.
-
 \section{The exterior source memory when all parties are selected}
 
 Let $P$ be the set of original parties and let $W$ be a finite source
@@ -12,6 +10,7 @@ $\bot$ denotes the exterior owner.
 \begin{definition}[Fixed all-party source registers]
     \label{def:peps_all_party_source_registers}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceLayout}
+    \leanok
     \uses{def:peps_partial_fixed_positions,def:peps_affected_owner}
     Let $\mathcal E_W$ be the source occurrences in their original
     preparation order. Define $R_W$ to be the concatenation, in that order,
@@ -24,13 +23,14 @@ $\bot$ denotes the exterior owner.
 \begin{theorem}[No exterior source registers for the all-party selection]
     \label{thm:peps_all_party_source_exterior_empty}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_allResidualSourceLayout_isNone}
+    \leanok
     \uses{def:peps_all_party_source_registers}
     The sublist of $R_W$ consisting of registers at owner
     $\bot$ is empty. This holds for every source circuit,
     including when $P$ or the source inventory is empty.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_all_party_source_registers,thm:peps_partial_fixed_layout,
         def:peps_affected_owner}
     A register in $R_W$ belongs to one of the two halves of an actual
