@@ -814,6 +814,28 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     the same matrix entries in the product basis.
 \end{proof}
 
+\begin{theorem}[Cancellation of a noncrossing doubled interaction]
+    \label{thm:peps_sheet_swap_doubled_cancellation}
+    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
+    Let $V$ be a finite site set, $q\geq0$ a local dimension, and
+    $R,S\subseteq V$. Let $A$ be an operator supported on $S$, and let
+    $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
+    or $S\cap R=\varnothing$, then
+    \[
+        F_R(A\otimes I+I\otimes A)F_R^*
+        =A\otimes I+I\otimes A.
+    \]
+    This is the noncrossing cancellation used in the boundary perturbation
+    argument of \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
+    If $S\subseteq R$, the swap exchanges the two tensor summands.
+    If $S\cap R=\varnothing$, it commutes with each summand.
+    In either case their sum commutes with $F_R$, and unitarity gives
+    the stated conjugation identity.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
