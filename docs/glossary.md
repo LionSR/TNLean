@@ -3413,10 +3413,11 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Declarations:** `TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le` and
   `TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean`.
-- **Meaning:** the initial constant and exponent are uniform in all physical
-  data. For each positive enlargement constant, one threshold precedes every
-  safety parameter and ground vector. The actual rounded collar has shell
-  entropy bounded by a constant times `s^(1+(1-ell(e₀))*e₀)`.
+- **Meaning:** for fixed `q,R,J,Δ`, one initial constant `C` and exponent
+  `e₀` precede `C₂` and all physical instance data. For each positive `C₂`,
+  one threshold precedes every safety parameter and ground vector. The
+  actual shell bound is
+  `C*(24+64/(2^e₀-1))*(C₂+1)^((1-ell(e₀))*e₀)*s^(1+(1-ell(e₀))*e₀)`.
 - **Scope:** the initial-exponent shell input to the proof of Proposition 9.5,
   not its safe-box exponent improvement. Clearance and the dyadic cap are
   derived; both estimates concern the original ground vector.
