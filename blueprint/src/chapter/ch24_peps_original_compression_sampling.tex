@@ -12,6 +12,7 @@ contraction of local tensors is a separate assertion.
     \label{def:peps_distributed_construction}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction}
     \leanok
+    \uses{def:peps_original_circuit}
     A distributed construction has a finite nonempty set $P$ of parties.
     For each $p\in P$, it specifies a finite-dimensional initial private
     memory $H_p$ and a unit vector $x_p\in H_p$. It also specifies a physical
@@ -38,6 +39,7 @@ contraction of local tensors is a separate assertion.
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.input,
         TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity}
     \leanok
+    \uses{def:peps_distributed_construction}
     The input of a distributed construction is the normalized product
     $\psi=\bigotimes_{p\in P}x_p$. Its physical density is
     \begin{align}
@@ -83,7 +85,8 @@ contraction of local tensors is a separate assertion.
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy}
     The bound $\max\{1,M\}\le CL^n$ follows from $C,L\ge1$.
-    Apply the earlier scalar accuracy estimate with this enlarged count,
+    Apply Theorem~\ref{thm:peps_approximate_gate_real_accuracy}
+    with this enlarged count,
     and divide by its positive denominator.
 \end{proof}
 
@@ -103,8 +106,8 @@ contraction of local tensors is a separate assertion.
     \leanok
     \uses{thm:peps_fixed_power_gate_budget}
     Only the inequality bounding each local operator difference changes.
-    Apply transitivity with the displayed scalar estimate at every original
-    occurrence. All the other local hypotheses are unchanged.
+    Apply Theorem~\ref{thm:peps_fixed_power_gate_budget} and transitivity
+    at every original occurrence. All the other local hypotheses are unchanged.
 \end{proof}
 
 \begin{theorem}[A positive polynomial coefficient bound]
@@ -149,8 +152,8 @@ contraction of local tensors is a separate assertion.
     \uses{thm:peps_physical_first_occurrences}
     \leanok
     Take a common bound on the finitely many original gate lists. The
-    expansion estimate for effect replacement then gives the coefficient
-    bound. The final exchange of physical and auxiliary registers
+    coefficient estimate of Theorem~\ref{thm:peps_physical_first_occurrences}
+    then gives the bound. The final exchange of physical and auxiliary registers
     introduces no gate and changes no coefficient.
 \end{proof}
 
@@ -275,7 +278,6 @@ contraction of local tensors is a separate assertion.
 \begin{theorem}[Explicit polynomial dimensions of the replacement links]
     \label{thm:peps_physical_first_link_polynomial}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
-    \uses{thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial,thm:peps_source_alphabet_polynomial}
     \leanok
     Let an original circuit have at most $N$ nonprivate gate occurrences,
     each with at most $b$ participants. Suppose each gate has at most $K$
@@ -320,12 +322,15 @@ contraction of local tensors is a separate assertion.
 \end{theorem}
 \begin{proof}
     \leanok
-    Effect elimination gives at most
+    \uses{thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial,thm:peps_source_alphabet_polynomial}
+    Theorem~\ref{thm:peps_physical_first_branch_polynomial} gives at most
     $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ actual branches per gate.
     There are at most $N\binom b2$ actual source occurrences, so the
-    sample-count estimate gives $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$.
+    estimate of Theorem~\ref{thm:peps_physical_first_sample_polynomial}
+    gives $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$.
     A star alphabet has cardinality equal to the square of its gate's
     branch count; a sample alphabet has cardinality $k$. Apply the
-    polynomial alphabet bound to these two estimates. The use of
+    bound of Theorem~\ref{thm:peps_source_alphabet_polynomial}
+    to these two estimates. The use of
     $C_{\mathrm{src}}\geq1$ includes circuits without sources.
 \end{proof}

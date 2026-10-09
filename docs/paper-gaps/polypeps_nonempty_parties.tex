@@ -9,10 +9,11 @@
 \date{2026-10-08}
 \begin{document}
 \maketitle
-\gapnote{clarification}{resolved}
+\gapnote{local-correction}{resolved}
 
 Theorem~5.2 of the September 24, 2026 polynomial-PEPS manuscript concerns
-compression to an operator tensor network with one node per party.
+compression to an operator tensor network with one node per party
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 The statement does not explicitly require the party set to be nonempty.
 The formalization adopts this requirement once, in the definition of a
 \emph{distributed construction}. It is the intended convention needed by
@@ -21,7 +22,8 @@ printed statement includes this qualifier.
 
 \paragraph{The scalar boundary case.}
 The preliminaries state that empty tensor products have dimension one
-(\texttt{01-preliminaries.tex}, lines 5--7).
+(\texttt{01-preliminaries.tex}, lines 5--7)
+\cite[preliminaries]{OpenAI2026PolynomialPEPS}.
 Accordingly, a circuit on no parties can still act on $\mathbb C$ by a scalar
 contraction $c$. Starting from the empty product input $1$, its physical
 density is the scalar $|c|^2$. An operator tensor network with no nodes or
@@ -36,11 +38,13 @@ A distributed construction has a finite nonempty set of parties.
 The original memories are finite-dimensional, the initial vector is a
 product of normalized party vectors, and the circuit retains the private
 output registers until the final trace, exactly as in
-\texttt{04-compression.tex}, lines 17--30 and 137--151.
+\texttt{04-compression.tex}, lines 17--30 and 137--151
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 No additional bound is imposed on private dimensions.
 The network construction chooses local tensors at existing parties and
 absorbs scalar coefficients and averaging factors into them
-(lines 565--578). In particular, the scalar contributed by a gate with no
+(lines 565--578) \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+In particular, the scalar contributed by a gate with no
 participating parties can be absorbed at any existing party, without
 introducing a node or a virtual link.
 
@@ -56,6 +60,10 @@ so this convention does not change those applications.
 The cited source is the manuscript at
 \href{https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a}{\texttt{openai/math@adc7f1241b42}},
 \emph{Polynomial PEPS approximation of gapped square-grid ground states},
-the preliminaries and the section on distributed density compression.
+the preliminaries and the section on distributed density compression
+\cite{OpenAI2026PolynomialPEPS}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}
