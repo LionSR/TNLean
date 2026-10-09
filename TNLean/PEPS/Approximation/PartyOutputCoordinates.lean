@@ -72,9 +72,7 @@ end Layout
 
 /-- Equality of the two register lists preserves concatenated memory vectors.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267.
-This consolidates the append transports used in the corrected-source development
-[PR #8912](https://github.com/LionSR/TNLean/pull/8912); its private copy is removed
-when that development is integrated. -/
+This consolidates the append transports used in the corrected-source development. -/
 theorem Layout.appendIso_symm_tmul_heq {a b a' b' : Layout P}
     (ha : a = a') (hb : b = b') {x : Mem a} {x' : Mem a'}
     {y : Mem b} {y' : Mem b'} (hx : HEq x x') (hy : HEq y y') :
