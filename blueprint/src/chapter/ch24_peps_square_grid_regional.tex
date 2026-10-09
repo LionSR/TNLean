@@ -38,6 +38,21 @@
     $\lfloor B\rfloor$.
 \end{proof}
 
+\begin{theorem}[Number of square-lattice edges]
+    \label{thm:peps_square_edge_count}
+    \lean{TNLean.PEPS.card_squareLatticeEdges_le}
+    Let $L\ge0$ be an integer. The nearest-neighbor graph on
+    $\{0,\ldots,L-1\}^2$, with open boundary, has at most $2L^2$ edges.
+    This is the elementary counting bound used in the doubled-Hamiltonian
+    boundary estimate of \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    Orient every horizontal edge to the right and every vertical edge upward.
+    Each edge is determined by its initial vertex and its orientation.
+    There are $L^2$ vertices and two orientations, so the edge set injects
+    into a set of cardinality $2L^2$. This argument also includes $L=0,1$.
+\end{proof}
+
 \begin{theorem}[Regional density and entropy]
     \label{thm:peps_square_regional_density}
     \lean{TNLean.PEPS.Approximation.squareComplementConfigEquiv,TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype,TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity,TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor}
