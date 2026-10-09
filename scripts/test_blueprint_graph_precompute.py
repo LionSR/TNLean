@@ -8,12 +8,14 @@ The graph reader keeps its original 300-second deadline.
 
 from __future__ import annotations
 
+import contextlib
 import json
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
@@ -225,6 +227,114 @@ class GraphPrecomputationTests(unittest.TestCase):
                     self.assertEqual(renderer._validate_dependency_graph_svg(
                         dot, ET.tostring(root, encoding="unicode"), source), (3, 2))
                     self.assertEqual(link.get(attribute), url)
+
+
+class GraphBrowserCoverageTests(unittest.TestCase):
+    def test_main_checks_exact_coverage_after_serial_and_parallel_content(self):
+        names = ["index.html", "chapter.html", "dep_graph_document.html",
+                 "dep_graph_chapter_27.html"]
+        for jobs in (1, 2):
+            for omit_full in (False, True):
+                events = []
+
+                def check(base_url, batch, mathjax):
+                    events.append(("checked", list(batch)))
+                    checked = [name for name in batch
+                               if not (omit_full and name == "dep_graph_document.html")]
+                    return len(checked), checked
+
+                class Pool:
+                    def __init__(self, *args, **kwargs):
+                        pass
+
+                    def __enter__(self):
+                        return self
+
+                    def __exit__(self, *args):
+                        events.append(("pool closed", None))
+
+                    def submit(self, function, *args):
+                        result = function(*args)
+                        return SimpleNamespace(result=lambda: result)
+
+                with self.subTest(jobs=jobs, omit_full=omit_full), tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    for name in names:
+                        (root / name).write_text("fixture", encoding="utf-8")
+                    with patch.object(sys, "argv", ["reader", "--web-root", temporary,
+                                                   "--jobs", str(jobs)]), \
+                            patch.object(reader, "_assert_generated_source"), \
+                            patch.object(reader, "_mathjax_bundle", return_value=("url", b"", "type")), \
+                            patch.object(reader, "serve", return_value=contextlib.nullcontext("http://local")), \
+                            patch.object(reader, "_check_pages", side_effect=check), \
+                            patch.object(reader, "ProcessPoolExecutor", Pool), patch("builtins.print") as output:
+                        if omit_full:
+                            with self.assertRaisesRegex(AssertionError, "dep_graph_document.html"):
+                                reader.main()
+                            output.assert_not_called()
+                        else:
+                            self.assertEqual(reader.main(), 0)
+                            result = json.loads(output.call_args.args[0])
+                            self.assertEqual(result["browser_pages"], len(names))
+                            self.assertEqual(result["skipped_pages"], [])
+                            self.assertEqual(result["checked_graph_pages"], sorted(names[2:]))
+                    self.assertEqual(events[-1], ("checked", sorted(names[2:])))
+                    if jobs == 2:
+                        self.assertEqual(events[-2], ("pool closed", None))
+
+    def test_every_generated_page_must_complete_including_full_and_large_graphs(self):
+        names = ["index.html", "dep_graph_document.html", "dep_graph_chapter_27.html"]
+        pages = [Path(name) for name in names]
+        reader._assert_browser_coverage(pages, list(reversed(names)))
+        for missing in names:
+            with self.subTest(missing=missing), self.assertRaisesRegex(
+                    AssertionError, "incomplete blueprint browser coverage"):
+                reader._assert_browser_coverage(pages, [name for name in names if name != missing])
+
+    def test_full_graph_cannot_disappear_from_generated_inventory(self):
+        with self.assertRaisesRegex(AssertionError, "required full-document graph"):
+            reader._assert_browser_coverage([Path("index.html")], ["index.html"])
+
+    def test_duplicate_or_unexpected_acknowledgements_fail(self):
+        names = ["index.html", "dep_graph_document.html"]
+        for extra in ("index.html", "unknown.html"):
+            with self.subTest(extra=extra), self.assertRaisesRegex(
+                    AssertionError, "unexpected or duplicate"):
+                reader._assert_browser_coverage([Path(name) for name in names], names + [extra])
+
+    def test_page_acknowledgement_follows_both_viewport_checks(self):
+        events = []
+        page = SimpleNamespace(
+            set_default_timeout=lambda *args: None,
+            route=lambda *args: None,
+            add_style_tag=lambda **kwargs: None,
+            evaluate=lambda *args: {"typeset": 3},
+            set_viewport_size=lambda value: events.append(("viewport", value["width"])),
+            wait_for_timeout=lambda *args: None,
+        )
+        browser = SimpleNamespace(new_page=lambda **kwargs: page,
+                                  close=lambda: events.append(("close", None)))
+        playwright = SimpleNamespace(chromium=SimpleNamespace(launch=lambda: browser))
+        names = ["index.html", "dep_graph_document.html"]
+        with patch.object(reader, "sync_playwright", return_value=contextlib.nullcontext(playwright)), \
+                patch.object(reader, "_load_page", side_effect=lambda p, url, name: events.append(("load", name))), \
+                patch.object(reader, "_settle"), patch.object(reader, "_assert_reader_text"), \
+                patch.object(reader, "_assert_page_owns_no_sideways_scroll",
+                             side_effect=lambda name, width, value: events.append(("checked", name, width))):
+            self.assertEqual(reader._check_pages("http://local", names,
+                             ("http://local/mathjax.js", b"", "text/javascript")), (6, names))
+        self.assertEqual([event for event in events if event[0] == "checked"], [
+            ("checked", name, width) for name in names
+            for width in (reader.MOBILE_WIDTH, reader.DESKTOP_WIDTH)])
+        self.assertEqual(events[-1], ("close", None))
+        with patch.object(reader, "sync_playwright", return_value=contextlib.nullcontext(playwright)), \
+                patch.object(reader, "_load_page"), patch.object(reader, "_settle"), \
+                patch.object(reader, "_assert_reader_text"), \
+                patch.object(reader, "_assert_page_owns_no_sideways_scroll",
+                             side_effect=AssertionError("viewport failed")):
+            with self.assertRaisesRegex(AssertionError, "viewport failed"):
+                reader._check_pages("http://local", names,
+                                    ("http://local/mathjax.js", b"", "text/javascript"))
 
 
 _PRECOMPUTED_SNAPSHOT = """() => {
