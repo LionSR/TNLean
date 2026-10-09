@@ -98,10 +98,7 @@ theorem bad_bandState_has_long_chargeAncestry_domainGraph
   obtain ⟨events, he⟩ := S.bandState_has_chargeAncestry_domainGraph hT hgraph hdepth
     g r choices hL hclear k side x hxA hx
   refine ⟨events, he, he.bad_length_and_time S hn ?_ hbad⟩
-  intro i y hy
-  have hball : (domainGraph Λ).edist (S.anchor i) y ≤ (S.r₀ : ℕ∞) := by
-    simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hy
-  simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hball
+  exact S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth
 
 end CollarScan
 
