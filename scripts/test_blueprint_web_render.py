@@ -267,13 +267,22 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
 
 PAGE_LOAD_TIMEOUT_MS = 300_000
 
+# A dependency-graph page lays out the whole blueprint graph in a worker before
+# it sets graphvizReady, and that graph only grows as the blueprint does.  Even
+# run on its own uncontended processor (the serial graph pass), the full-document
+# layout now needs more than the original five-minute page deadline, so the graph
+# pages get a budget of their own.  Content pages keep the shorter deadline.
+GRAPH_LAYOUT_TIMEOUT_MS = 600_000
+
 
 def _load_page(page: Page, base_url: str, name: str) -> None:
-    """Navigate and finish an actual graph within one original page deadline."""
-    deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
+    """Navigate and finish an actual graph within this page's load deadline."""
+    is_graph = name.startswith("dep_graph_")
+    budget_ms = GRAPH_LAYOUT_TIMEOUT_MS if is_graph else PAGE_LOAD_TIMEOUT_MS
+    deadline = time.monotonic() + budget_ms / 1000
     page.goto(f"{base_url}/{name}", wait_until="domcontentloaded",
-              timeout=PAGE_LOAD_TIMEOUT_MS)
-    if name.startswith("dep_graph_"):
+              timeout=budget_ms)
+    if is_graph:
         remaining_ms = (deadline - time.monotonic()) * 1000
         if remaining_ms <= 0:
             raise TimeoutError(f"{name}: graph exceeded the original page deadline")
