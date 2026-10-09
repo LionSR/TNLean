@@ -91,10 +91,10 @@ ground expectation, and takes the absolute value:
 
 \begin{lemma}[Square roots and local channels]
     \label{lem:al_quasilocal_roots}
-    \lean{TNLean.PEPS.AreaLaw.sqrt_mul_exp_neg, TNLean.PEPS.AreaLaw.quasilocalRoots,
-        TNLean.PEPS.AreaLaw.rootChannel_kronecker_eq_self_of_commute}
+    \lean{TNLean.PEPS.AreaLaw.sqrt_mul_exp_neg, TNLean.PEPS.AreaLaw.quasilocalRoots}
     \leanok
-    \uses{thm:al_positive_replacement, lem:al_site_expectation_order}
+    \uses{thm:al_positive_replacement, lem:al_site_expectation_order,
+        thm:al_root_channel_commutant}
     Let $G_i=(I-k_i)^{1/2}$, $K_i=k_i^{1/2}$, $G_{i,l}=(I-k_{i,l})^{1/2}$ and
     $K_{i,l}=k_{i,l}^{1/2}$. These are positive contractions, $G_i\Omega=\Omega$,
     $K_i\Omega=0$, $G_{i,l}^2+K_{i,l}^2=I$, and
@@ -107,7 +107,8 @@ ground expectation, and takes the absolute value:
     uniformly in the auxiliary dimension. The map $\mathcal E_{i,l}$ fixes every
     operator commuting with all operators acting on $N_l(a_i)$, and
     $\mathcal E_{i,l}\otimes\mathrm{id}$ fixes every operator commuting with
-    $A\otimes I$ for all operators $A$ acting on $N_l(a_i)$.
+    $A\otimes I$ for all operators $A$ acting on $N_l(a_i)$
+    (Theorem~\ref{thm:al_root_channel_commutant}).
 \end{lemma}
 \begin{proof}\leanok
     The square-root estimate $\|U^{1/2}-V^{1/2}\|\le\|U-V\|^{1/2}$ gives the
@@ -242,28 +243,26 @@ $\mu_R=2^{v_R-1}$. In this setting the counting hypotheses of the previous
 sections are consequences of the lattice geometry, and the constants depend
 only on the parameters named below.
 
-\begin{lemma}[Counting on an induced lattice domain]
-    \label{lem:al_lattice_counts}
+\begin{theorem}[Counting on an induced lattice domain]
+    \label{thm:al_lattice_counts}
     \lean{TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
-        TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le,
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
         TNLean.PEPS.AreaLaw.card_cutEdges_le_card_edgeBoundary}
     \leanok
     \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
-        lem:area_domain_graph_counts}
-    Graph balls and spheres of radius $d$ in $\Lambda$ have at most
-    $2(d+1)^2$ sites. Every support has graph diameter at most $R$
-    and at most $v_R$ sites, at most $\mu_R$ supports contain a given site, at most
-    $\mu_R$ labels share an anchor, and
-    $\sum_{i:\,x\in X_i}\|h_i\|\le\mu_RJ$ for every site $x$ when $J\ge0$. The
-    pairs $(u,v)$ of adjacent sites with $u\in X$ and $v\notin X$ number at most
-    $|\partial_\Lambda X|$.
-\end{lemma}
+        lem:area_domain_graph_counts, thm:area_law_crossing_supports}
+    Graph balls of radius $d$ in $\Lambda$ have at most $2(d+1)^2$ sites, at
+    most $\mu_R$ supports contain a given site
+    (Theorem~\ref{thm:area_law_crossing_supports}), at most $\mu_R$ labels share an
+    anchor, and the pairs $(u,v)$ of adjacent sites with $u\in X$ and
+    $v\notin X$ number at most $|\partial_\Lambda X|$. The sphere bound, the
+    diameter and size bounds for supports and the site budget are
+    Lemma~\ref{lem:area_domain_graph_counts}.
+\end{theorem}
 \begin{proof}\leanok
     Adjacent sites are at ambient $\ell^1$ distance one, so a graph ball lies in
-    an ambient lattice ball and the exact diamond count applies. The sphere,
-    diameter, support-size and site-budget bounds are
-    Lemma~\ref{lem:area_domain_graph_counts}. Supports and anchors are counted
+    an ambient lattice ball and the exact diamond count applies. Supports and
+    anchors are counted
     by the interaction budgets of Theorem~\ref{thm:area_diamond_budget}, and
     every label anchored at $x$ has a support containing $x$. The map
     $(u,v)\mapsto\{u,v\}$ is injective on the pairs crossing $X$.
@@ -273,7 +272,7 @@ only on the parameters named below.
     \label{thm:al_lattice_positive_replacement}
     \lean{TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints}
     \leanok
-    \uses{thm:al_positive_replacement, lem:al_lattice_counts, def:area_law_ground_entropy}
+    \uses{thm:al_positive_replacement, lem:area_domain_graph_counts, def:area_law_ground_entropy}
     Fix an integer $p\ge1$, put $\alpha=p/(p+1)$, and fix $R\ge0$, $J\ge0$ and
     $\Delta>0$. There are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$,
     such that for every $q\ge1$, every finite domain, interaction, choice of
@@ -284,8 +283,7 @@ only on the parameters named below.
         \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
     \end{align}
     so $H_F=\sum_ik_i$ satisfies $H_F\ge g(I-P_\Omega)$ with $g=\Delta/c_*$ and
-    $H_F\Omega=0$: it has the unique ground vector $\Omega$, ground energy zero,
-    and gap at least $g$. For every integer $l\ge0$ the operator
+    $H_F\Omega=0$. For every integer $l\ge0$ the operator
     $k_{i,l}=E_{i,l}(k_i)$ lies in $[0,I]$ and satisfies
     $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts on
     the connected component of $a_i$. This is Proposition~4.3 of
@@ -294,14 +292,15 @@ only on the parameters named below.
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:al_positive_replacement} with $v_R$, $b_0=\mu_RJ$ and
     sphere growth $2(d+1)^2$, whose hypotheses on the graph are supplied by
-    Lemma~\ref{lem:al_lattice_counts}.
+    Lemma~\ref{lem:area_domain_graph_counts}.
 \end{proof}
 
-\begin{lemma}[Square roots and local channels on an induced lattice domain]
-    \label{lem:al_lattice_quasilocal_roots}
+\begin{theorem}[Square roots and local channels on an induced lattice domain]
+    \label{thm:al_lattice_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
     \leanok
-    \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement}
+    \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement,
+        thm:al_root_channel_commutant}
     With $p,R,J,\Delta$ as in Theorem~\ref{thm:al_lattice_positive_replacement}
     there are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, such that the
     roots $G_i$, $K_i$, $G_{i,l}$, $K_{i,l}$ and the channels $\mathcal E_i$,
@@ -311,7 +310,7 @@ only on the parameters named below.
     $\|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|\le Ce^{-cl^\alpha}$ and
     $\|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le Ce^{-cl^\alpha}$
     for every auxiliary system. This is Lemma~4.4 of \cite{OpenAI2026AreaLaw}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Insert the tail $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$ into
     Lemma~\ref{lem:al_quasilocal_roots} and use
@@ -322,23 +321,26 @@ only on the parameters named below.
     \label{thm:al_lattice_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation}
     \leanok
-    \uses{thm:al_truncation, lem:al_lattice_counts, def:area_law_ground_entropy}
+    \uses{thm:al_truncation, thm:al_lattice_counts, lem:area_domain_graph_counts, def:area_law_ground_entropy}
     Take $p=1$ in Theorem~\ref{thm:al_lattice_positive_replacement}, so
     $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
     $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
     $n\ge2$ and every set $S_0$ of sites with $|S_0|\le C_0n^2$, the truncation
-    with $r_0=\lceil C_1(\log n)^2\rceil$ has all conclusions of
-    Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$, and each truncated term
-    acts on its designated support. This is the truncation part of
+    with $r_0=\lceil C_1(\log n)^2\rceil$ has the conclusions of
+    Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$ other than uniqueness:
+    it has a unit ground vector $\widetilde\Omega$ satisfying the stated gap,
+    vector and trace-distance estimates, and each truncated term acts on its
+    designated support. Uniqueness of $\widetilde\Omega$ is not stated here. This is the truncation part of
     Proposition~4.5 of \cite{OpenAI2026AreaLaw}, which assumes $S_0$ nonempty
     and $C_0>0$.
 \end{theorem}
 \begin{proof}\leanok
     The gapped ground vector gives $H\Omega=E_0\Omega$ and
     $H-E_0I\ge\Delta(I-P_\Omega)$. Apply Theorem~\ref{thm:al_truncation} with
-    $v_R$ sites per support, site budget $\mu_RJ$, sphere growth $2(d+1)^2$,
-    ball growth $2(d+1)^2$ and at most $\mu_R$ labels per anchor, all supplied
-    by Lemma~\ref{lem:al_lattice_counts}.
+    $v_R$ sites per support, site budget $\mu_RJ$ and sphere growth
+    $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}, and ball growth
+    $2(d+1)^2$ and at most $\mu_R$ labels per anchor from
+    Theorem~\ref{thm:al_lattice_counts}.
 \end{proof}
 
 \begin{theorem}[Crossing count and cut budget on an induced lattice domain]
@@ -346,7 +348,7 @@ only on the parameters named below.
     \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
         TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
     \leanok
-    \uses{thm:al_crossing_budget, lem:al_lattice_counts}
+    \uses{thm:al_crossing_budget, thm:al_lattice_counts}
     For $q\ge1$ there is $C\ge0$, depending only on $q$ and $R$, such that for
     every finite domain, every choice of anchors, every $S_0$, every $r_0$ and every
     $X\subseteq S_0$, with $b_X=|\partial_\Lambda X|$, every designated support
@@ -357,7 +359,7 @@ only on the parameters named below.
         \log d_i\le C(r_0+1)^2\quad(i\in\mathcal C_X),\qquad
         \mathcal B_X\le C(1+b_X)(r_0+1)^6.
     \end{align}
-    Moreover, for $C_1,C_2\ge0$ there is $C$, depending only on
+    For $C_1,C_2\ge0$ there is $C$, depending only on
     $q,R,C_1,C_2$, such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$,
     $D\ge1$ and $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This
     is the crossing count and cut budget of Proposition~4.5 of
@@ -365,10 +367,12 @@ only on the parameters named below.
 \end{theorem}
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:al_crossing_budget} with $K_b=2$ and $\mu=\mu_R$,
-    whose hypotheses are supplied by Lemma~\ref{lem:al_lattice_counts}; the
+    whose hypotheses are supplied by Theorem~\ref{thm:al_lattice_counts}; the
     ordered cut edges are counted by $|\partial_\Lambda X|$. The second bound
     inserts $r_0=\lceil C_1(\log n)^2\rceil$ into the third inequality.
 \end{proof}
+
+\input{chapter/ch24_peps_area_law_scan_histories}
 
 \section{The scanner estimate from its inputs}
 \label{sec:al_scanner}

@@ -18,6 +18,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
 import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
+import TNLean.PEPS.AreaLaw.Geometry.CellFanRadialIncidence
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRays
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
@@ -37,7 +38,9 @@ import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.FanAffineCoordinates
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.FanRadialConvexity
 import TNLean.PEPS.AreaLaw.Geometry.FanRegularity
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
@@ -62,6 +65,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
+import TNLean.PEPS.AreaLaw.Geometry.MeshSegmentClearance
 import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
@@ -76,6 +80,8 @@ import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
+import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
+import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCounts
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
@@ -84,4 +90,5 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRowBounds
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
+import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 import TNLean.PEPS.AreaLaw.Geometry.Templates
