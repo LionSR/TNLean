@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.WeakRectangleShellEntropy
@@ -75,7 +76,7 @@ theorem exists_regionalEntropy_rounded_shell_le_uniform_rpow
     (mul_nonneg_iff_of_pos_right (Real.rpow_pos_of_pos hspos (1 + e))).mp
       ((regionalEntropy_nonneg Λ q Ω hΩ (rectRegion A Q)).trans (hbox Q hsafe))
   obtain ⟨hLpos, htwo, hclearance⟩ := hN Q.size hs
-  have hL : L ≤ Q.size := by omega
+  have hL : L ≤ Q.size := (Nat.le_mul_of_pos_left L zero_lt_two).trans htwo
   have hbudget : D₀ * L + L ≤ D₀ * Q.size := hclearance D₀ hD₀
   have hshell := IntRect.regionalEntropy_shell_le_of_safe_box
     Λ q D₀ Ω hΩ A Q hsafe j L (Nat.log 2 L) hj hL
