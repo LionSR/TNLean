@@ -115,13 +115,13 @@ example {q : ℕ} {Cr : ℝ} (hq : 1 ≤ q) (hCr : 0 ≤ Cr)
       ∀ ℓ : ℝ, 1 ≤ ℓ → ℓ ≤ transportLogDimBound q (roundedLogRadius Cr n) →
         Cent * ℓ ^ eent ≤ C * (Real.log n) ^ Cl ∧
           Cen * ℓ ^ een ≤ C * (Real.log n) ^ Cl :=
-  exists_transportCoefficients_log_bound hq hCr Cent eent Cen een
+  exists_transport_coefficients_log_bound hq hCr Cent eent Cen een
 
 -- Dimension one and zero radius coefficient still allow mixed-sign exponents.
 example : ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∀ n : ℕ, 1 ≤ Real.log n →
     (-3 : ℝ) * (1 : ℝ) ^ (-2 : ℝ) ≤ C * (Real.log n) ^ Cl ∧
       (2 : ℝ) * (1 : ℝ) ^ (3 : ℝ) ≤ C * (Real.log n) ^ Cl := by
-  obtain ⟨C, Cl, hC, hCl, hbound⟩ := exists_transportCoefficients_log_bound
+  obtain ⟨C, Cl, hC, hCl, hbound⟩ := exists_transport_coefficients_log_bound
     (q := 1) (Cr := 0) (by norm_num) (by norm_num) (-3) (-2) 2 3
   refine ⟨C, Cl, hC, hCl, fun n hn ↦ ?_⟩
   exact hbound n hn 1 le_rfl (by simp [transportLogDimBound])

@@ -78,7 +78,7 @@ theorem exists_transportLogDimBound_log_four {q : ℕ} {Cr : ℝ}
 chosen before the system size and every physical subsystem. The coefficients
 and exponents may have either sign. The physical dimension and radius
 coefficient remain fixed, as in `08-scanner.tex`, lines 49 and 358–359. -/
-theorem exists_transportCoefficients_log_bound {q : ℕ} {Cr : ℝ}
+theorem exists_transport_coefficients_log_bound {q : ℕ} {Cr : ℝ}
     (hq : 1 ≤ q) (hCr : 0 ≤ Cr) (Cent eent Cen een : ℝ) :
     ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∀ n : ℕ, 1 ≤ Real.log n →
       ∀ ℓ : ℝ, 1 ≤ ℓ → ℓ ≤ transportLogDimBound q (roundedLogRadius Cr n) →

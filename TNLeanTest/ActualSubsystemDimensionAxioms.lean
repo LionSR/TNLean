@@ -66,10 +66,10 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms exists_transportLogDimBound_log_four
 
-/-- info: 'TNLean.PEPS.AreaLaw.Scan.exists_transportCoefficients_log_bound'
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.exists_transport_coefficients_log_bound'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms exists_transportCoefficients_log_bound
+#print axioms exists_transport_coefficients_log_bound
 
 /-- info: 'TNLean.PEPS.AreaLaw.Scan.transportLogDimBound_le_radius_sq'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/

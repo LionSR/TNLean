@@ -15,7 +15,7 @@ arbitrary real transport constants `Cent`, `eent`, `Cen`, `een`. Let
 - `Cl = 4 E`
 - `C = 1 + (|Cent| + |Cen|) A^E`
 
-Then `C ≥ 1`, `Cl ≥ 0`, and `exists_transportCoefficients_log_bound` gives
+Then `C ≥ 1`, `Cl ≥ 0`, and `exists_transport_coefficients_log_bound` gives
 both coefficient inequalities for every `n` with `log n ≥ 1` and every
 `1 ≤ ℓ ≤ transportLogDimBound q (roundedLogRadius Cr n)`. Thus `C` and `Cl`
 are chosen before `n`, the domain, scanner, labels, auxiliary dimensions,
