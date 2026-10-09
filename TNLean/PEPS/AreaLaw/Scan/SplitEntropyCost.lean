@@ -175,8 +175,8 @@ theorem designatedSplitIncidenceCost_eq_sum_splitEta {k L : ℕ}
     (splitBandEta n (augmentedPartition (S.oldChargeState h g))
       ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩) θ))
-  set_option pp.all true in
-    simpa only [chargeEntropyCost, TransportData.leafPart, chargeTransportData] using hsplit
+  delta chargeEntropyCost TransportData.leafPart chargeTransportData
+  exact hsplit
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan
