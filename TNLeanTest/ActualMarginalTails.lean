@@ -56,7 +56,7 @@ private theorem retained_support :
     designatedSupport (⊤ : SimpleGraph (Fin 2)) ∅ 0 0 = Finset.univ := by
   classical
   have hdist : setDist (⊤ : SimpleGraph (Fin 2)) ∅ 0 = ⊤ := by simp [setDist]
-  rw [designatedSupport, hdist, if_pos rfl]
+  rw [designatedSupport, hdist, ite_eq_left rfl]
   apply Finset.eq_univ_of_forall
   intro x
   apply Finset.mem_filter.mpr
@@ -72,8 +72,7 @@ private theorem repeated_crossing_labels :
   classical
   apply Finset.eq_univ_of_forall
   intro i
-  apply Finset.mem_filter.mpr
-  refine ⟨Finset.mem_univ _, ?_⟩
+  simp only [crossingLabels, Finset.mem_filter, Finset.mem_univ, true_and]
   rw [retained_support]
   exact ⟨⟨0, Finset.mem_univ _, by simp⟩, ⟨1, Finset.mem_univ _, by decide⟩⟩
 
