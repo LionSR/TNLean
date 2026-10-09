@@ -41,6 +41,9 @@ import TNLean.Circuit.SelectedZeroRegisterSupport
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SiteExpectation
 import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Circuit.SiteOscillation
+import TNLean.Circuit.SpectatorOscillationSupport
+import TNLean.Circuit.SpectatorSiteExpectation
 import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.Teleportation
 import TNLean.Circuit.UniformPostselection

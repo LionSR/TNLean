@@ -21,10 +21,10 @@ from pathlib import Path
 from playwright.sync_api import Page, Route, sync_playwright
 
 
-EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3]
+EXPECTED_PICTURE_COUNTS = [2] * 9 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3]
 PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
 EXPECTED_WRAPPER_COUNTS = {
-    "ch-symmetry.html": 8,
+    "ch-symmetry.html": 9,
     "ch-mpdo.html": 4,
     "ch-mpdo_rfp.html": 7,
 }
@@ -60,14 +60,37 @@ def _read_tex_tree(path: Path, source_root: Path) -> str:
     return re.sub(r"\\input\{([^}]+)\}", expand, source)
 
 
+def _assert_continuous_picture_labels(pictures: list[str]) -> None:
+    """Check the physical and virtual labels, including adjoint orientation."""
+    assert len(pictures) == 2, pictures
+    # Generated alt attributes escape TeX backslashes; source strings do not.
+    left, right = (
+        " ".join(picture.replace(r"\\", "\\").split()) for picture in pictures
+    )
+    assert left.count(r"\tn[") == 2, left
+    assert right.count(r"\tn[") == 3, right
+    assert r"ports={90:physical:$i$}]{u(t)}" in left, left
+    assert r"ports={180:virtual, 0:virtual}]{A}" in left, left
+    virtual_labels = (
+        r"\tn[skin=ring]{V(t)}",
+        r"\tn[ports={90:physical:$i$}]{A}",
+        r"\tn[skin=ring]{V(t)^\dagger}",
+    )
+    for label in virtual_labels:
+        assert label in right, (label, right)
+    positions = [right.index(label) for label in virtual_labels]
+    assert positions == sorted(positions), right
+
+
 def _assert_source_linked_groups(repo_root: Path) -> None:
     """Pin every migrated sibling-picture row to its TeX source wrapper."""
-    symmetry = (
-        repo_root / "blueprint/src/chapter/ch12_symmetry_virtual_and_cohomology.tex"
-    ).read_text(encoding="utf-8")
-    symmetry += (
-        repo_root / "blueprint/src/chapter/ch12_symmetry_string_order.tex"
-    ).read_text(encoding="utf-8")
+    source_root = repo_root / "blueprint/src"
+    symmetry = _read_tex_tree(
+        source_root / "chapter/ch12_symmetry_virtual_and_cohomology.tex", source_root
+    )
+    symmetry += _read_tex_tree(
+        source_root / "chapter/ch12_symmetry_string_order.tex", source_root
+    )
     symmetry_bodies = _tenkzequation_bodies(symmetry)
     symmetry_anchors = (
         r"\tn[species=operator, label pos=w, ports={90:physical:$i$}]{U(g)}",
@@ -78,13 +101,26 @@ def _assert_source_linked_groups(repo_root: Path) -> None:
         "Condition C1, lines 328--334, is",
         "Condition C2, lines 335--340, is",
         r"$\;=\;\mu\,$",
+        r"\tn[species=operator, label pos=w, ports={90:physical:$i$}]{u(t)}",
     )
     assert len(symmetry_bodies) == len(symmetry_anchors), len(symmetry_bodies)
     for body, anchor in zip(symmetry_bodies, symmetry_anchors, strict=True):
         assert anchor in body, anchor
         assert body.count(r"\begin{tenkz}") == 2, anchor
 
-    source_root = repo_root / "blueprint/src"
+    continuous = (
+        source_root / "chapter/ch12_symmetry_string_order_continuous.tex"
+    ).read_text(encoding="utf-8")
+    continuous_bodies = _tenkzequation_bodies(continuous)
+    assert len(continuous_bodies) == 1, len(continuous_bodies)
+    assert symmetry_bodies[-1] == continuous_bodies[0]
+    _assert_continuous_picture_labels(re.findall(
+        r"\\begin\{tenkz\}[\s\S]*?\\end\{tenkz\}", continuous_bodies[0]
+    ))
+    assert re.search(
+        r"\\end\{tenkz\}\s*=\s*\\begin\{tenkz\}", continuous_bodies[0]
+    ), "continuous covariance must retain its equality operator"
+
     blocked = _read_tex_tree(
         source_root / "chapter/ch21_mpdo_rfp_blocked_rfp.tex", source_root
     )
@@ -266,6 +302,23 @@ def _equation_facts(page: Page) -> list[dict[str, object]]:
           };
         })"""
     )
+
+
+def _assert_continuous_symmetry_equation(page: Page) -> None:
+    """Tie the extra symmetry wrapper to its theorem and generated labels."""
+    owner = page.locator('[id="thm:continuous_physical_generator"]')
+    assert owner.count() == 1, "missing or duplicate continuous-generator theorem"
+    equation = owner.locator(".tenkz-equation")
+    assert equation.count() == 1, "continuous generator needs exactly one equation row"
+    pictures = equation.locator(":scope > .tenkz-equation-row > .tenkz-pic")
+    alts = pictures.evaluate_all("nodes => nodes.map(node => node.getAttribute('alt'))")
+    assert all(isinstance(alt, str) for alt in alts), alts
+    _assert_continuous_picture_labels(alts)
+    assert "=" in equation.inner_text(), "continuous covariance lost its equality operator"
+    index = equation.evaluate(
+        "node => [...document.querySelectorAll('.tenkz-equation')].indexOf(node)"
+    )
+    assert index == EXPECTED_WRAPPER_COUNTS["ch-symmetry.html"] - 1, index
 
 
 def _assert_desktop_rows(page: Page) -> None:
@@ -677,6 +730,8 @@ def main() -> int:
                 filename,
                 visibility,
             )
+            if filename == "ch-symmetry.html":
+                _assert_continuous_symmetry_equation(page)
             if filename in EXPECTED_WRAPPER_COUNTS:
                 assert equations.count() == EXPECTED_WRAPPER_COUNTS[filename]
                 collected.extend(_equation_facts(page))

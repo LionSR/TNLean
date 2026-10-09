@@ -1,0 +1,98 @@
+\section{The marked points of belt cells}
+\label{sec:area_law_belt_marks}
+
+The belt construction marks each cell at its center, corners and side
+midpoints. We first count these actual points for a finite family of cells
+at one scale, as in \cite[Section~11]{OpenAI2026AreaLaw}.
+Coincident points contribute only once to the union.
+
+% Source: 10-geometry.tex, lines 325--330; the final estimate also uses
+% geometry:belt-count, lines 220--228. Minimum incident scales and the
+% initial-star statement are separate results.
+
+\begin{definition}[The nine marks of one cell]
+    \label{def:area_law_belt_cell_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellMarks}
+    \leanok
+    \uses{def:area_law_dyadic_cells}
+    For a cell $C_{\ell,z}=o+t(z+[0,1)^2)$, where $t=2^\ell$, put
+    \begin{align}
+        M_{\ell,z}
+         & =\left\{o+t\left(z+\frac e2\right):
+        e\in\{0,1,2\}^2\right\}.
+    \end{align}
+    These are its four corners, four side midpoints and center.
+\end{definition}
+
+\begin{definition}[The union of cell marks]
+    \label{def:area_law_belt_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltMarks}
+    \leanok
+    \uses{def:area_law_belt_cell_marks}
+    For any finite cell-index set $F\subset\mathbb Z^2$, define
+    \begin{align}
+        M_\ell(F) & =\bigcup_{z\in F}M_{\ell,z}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Marks lie in their closed cell]
+    \label{thm:area_law_belt_marks_closed_cell}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellMarks_subset_closure_dyadicCell}
+    \leanok
+    \uses{def:area_law_belt_cell_marks}
+    Every point of $M_{\ell,z}$ belongs to $\overline{C_{\ell,z}}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures}
+    Each coordinate of $e/2$ lies in $[0,1]$, so both coordinates
+    of the mark lie in the corresponding closed cell intervals.
+\end{proof}
+
+\begin{theorem}[Exact cell-mark count]
+    \label{thm:area_law_belt_cell_mark_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_beltCellMarks}
+    \leanok
+    \uses{def:area_law_belt_cell_marks}
+    For every origin, scale and cell index, $|M_{\ell,z}|=9$.
+\end{theorem}
+\begin{proof}\leanok
+    The side $2^\ell$ is positive. Thus distinct elements of
+    $\{0,1,2\}^2$ give distinct points, and there are nine such elements.
+\end{proof}
+
+\begin{theorem}[Count of the union of marks]
+    \label{thm:area_law_belt_mark_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le}
+    \leanok
+    \uses{def:area_law_belt_marks}
+    For every finite cell-index set $F$, including the empty set,
+    \begin{align}
+        |M_\ell(F)| & \le9|F|.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_belt_cell_mark_count}
+    The cardinality of a finite union is at most the sum of the
+    cardinalities of its members. Each member has nine points.
+\end{proof}
+
+\begin{theorem}[Sparse shifts bound the actual marks]
+    \label{thm:area_law_sparse_belt_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift}
+    \leanok
+    \uses{def:area_law_belt_marks,def:area_law_belt_cells,
+        def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
+    Let $F_k(a,b)$ be the actual belt-cell indices in the refined
+    layer for the selected coordinate residues $a,b$. There is a pair
+    of residues such that
+    \begin{align}
+        |M_{\ell_k}(F_k(a,b))|
+         & \le576(2C_0+1)^2|\partial_\Lambda A|\,2^{-\delta_0 k/2}.
+    \end{align}
+    The estimate is uniform in the finite domain, cut, origin and scale.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_belt_mark_count,thm:area_law_sparse_dyadic_belts}
+    Choose the pair of residues supplied by the sparse-belt estimate,
+    then multiply its cell count by nine. The coefficient is $9\cdot64=576$.
+\end{proof}

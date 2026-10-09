@@ -1,0 +1,286 @@
+\section{Joint contractions of the free source inputs}
+\label{sec:peps_source_block_contraction}
+
+Fix ordered source slots with halfspaces $U_e,V_e$ and joint register
+space $\mathcal S$, as in Definition~\ref{def:peps_source_slots}.
+All source and physical input coordinates in this section remain free.
+This gives the contractions used in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 383--468.
+
+% The operators below come from the specified allowed compositions.
+% Constructing the affected and exterior compositions from circuit chronology,
+% and deriving the corrected-subset error estimate, remain separate obligations.
+% Individual prepared-matrix contraction bounds are not used to infer a
+% contraction bound on their combined matrix.
+
+\begin{definition}[Bases of source and input registers]
+    \label{def:peps_source_slot_basis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_apply}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis_apply}
+    \leanok
+    \uses{def:peps_joint_source_vector}
+    Choose finite orthonormal bases $(u_{e,r})_{r\in I_e}$ of $U_e$
+    and $(v_{e,s})_{s\in J_e}$ of $V_e$. Let
+    $\mathcal A=\prod_e(I_e\times J_e)$.
+    The orthonormal basis of $\mathcal S$ indexed by $a\in\mathcal A$
+    consists of
+    \begin{align}
+        s_a & =\Phi\bigl((u_{e,a_e^{(1)}}\otimes
+        v_{e,a_e^{(2)}})_e\bigr).
+        \label{eq:peps_source_slot_basis}
+    \end{align}
+    The empty source list has its single basis vector $1\in\C$.
+    If $(f_j)_{j\in N}$ is an orthonormal basis of the original
+    input memory $\mathcal H$, the resulting orthonormal basis of
+    $\mathcal S\otimes\mathcal H$ is indexed by $(a,j)$ and satisfies
+    \begin{align}
+        s_a\otimes f_j
+         & =Q_{(u_{e,a_e^{(1)}}\otimes v_{e,a_e^{(2)}})_e,\mathcal H}f_j.
+        \label{eq:peps_source_input_basis}
+    \end{align}
+    Both formulas use the canonical associativity identifications.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_preparation_sums}
+    Induct on the ordered slots. Tensor the bases of the first two
+    halfspaces with the basis already constructed for the remaining
+    slots, and identify a full assignment with its first component
+    and its restriction to the remaining slots. Tensor products and
+    isometric identifications preserve orthonormal bases. This gives
+    (\ref{eq:peps_source_slot_basis}); tensoring with the input basis
+    and applying the preparation identity gives
+    (\ref{eq:peps_source_input_basis}).
+\end{proof}
+
+\begin{definition}[The complete free-input matrix]
+    \label{def:peps_free_source_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix}
+    \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply}
+    \leanok
+    \uses{def:peps_source_slot_basis,def:peps_prepared_matrix,def:peps_prepared_density_coefficient}
+    Let $T:\mathcal S\otimes\mathcal H\to\mathcal K$ be the
+    operator of a composition, and choose an orthonormal output
+    basis $(g_k)_{k\in M}$. Its complete matrix $A_T$ has row index
+    $k\in M$ and column index $(a,j)\in\mathcal A\times N$:
+    \begin{align}
+        A_T(k,(a,j)) & =\langle g_k,T(s_a\otimes f_j)\rangle
+        =K_T(a)_{kj}.
+        \label{eq:peps_free_source_matrix}
+    \end{align}
+    Here $K_T(a)$ is the actual prepared matrix of
+    Definition~\ref{def:peps_prepared_density_coefficient}.
+\end{definition}
+
+\begin{theorem}[Joint contraction of all source inputs]
+    \label{thm:peps_free_source_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}
+    \leanok
+    \uses{def:peps_free_source_matrix}
+    If $T$ is an allowed composition, then $\|A_T\|\le1$ in the
+    Euclidean operator norm. This bounds its action on arbitrary
+    superpositions of the source and physical input coordinates,
+    independently of the number of slots and their dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_party_layout,def:peps_source_slot_basis}
+    The complete matrix is the matrix of the same operator $T$ in
+    orthonormal input and output bases. Coordinate maps preserve
+    norms, so $\|A_T\|=\|T\|\le1$.
+\end{proof}
+
+\begin{theorem}[The bra-adjoint--ket contraction]
+    \label{thm:peps_free_source_overlap}
+    \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one}
+    \leanok
+    \uses{def:peps_free_source_matrix}
+    Let $T$ and $T'$ be compositions with a common output
+    memory and output basis. Their source lists, source spaces,
+    source bases, and physical input memories and bases may differ.
+    Write $A=A_T$ and $B=A_{T'}$, and let $a,b$ denote the respective
+    source assignments. Then the rectangular matrix $O=B^\dagger A$
+    satisfies
+    \begin{align}
+        O_{(b,j),(a,i)} & =(K_{T'}(b)^\dagger K_T(a))_{ji}.
+        \label{eq:peps_free_source_overlap}
+    \end{align}
+    Thus the bra source assignment and its physical input index form
+    the row index of $O$. If both compositions are allowed, then
+    $\|O\|\le1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_free_source_contraction}
+    Multiplying the matrices in (\ref{eq:peps_free_source_matrix})
+    gives (\ref{eq:peps_free_source_overlap}). The norm bound follows
+    from $\|B^\dagger A\|\le\|B^\dagger\|\|A\|=\|B\|\|A\|\le1$.
+\end{proof}
+
+\begin{theorem}[Tracing a prepared density coefficient]
+    \label{thm:peps_free_source_trace}
+    \lean{TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq}
+    \lean{TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix}
+    \leanok
+    \uses{def:peps_free_source_matrix,def:peps_prepared_density_coefficient}
+    With the ket and bra input coordinates as above, let
+    $\rho\in\C^{N\times N'}$ be any rectangular matrix. No
+    contraction assumption on $T$ or $T'$ is needed for the identity
+    \begin{align}
+        \tr\bigl(K_T(a)\rho K_{T'}(b)^\dagger\bigr)
+         & =\sum_{i\in N}\sum_{j\in N'}
+        \rho_{ij}\,O_{(b,j),(a,i)}.
+        \label{eq:peps_free_source_trace}
+    \end{align}
+    When the two branches have common source spaces and physical
+    input coordinates, this is the trace of
+    $C_{T,T'}(\rho;a,b)$ from
+    Definition~\ref{def:peps_prepared_density_coefficient}, with
+    independent endpoint bases on the two sides.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_free_source_overlap}
+    Cyclicity of the rectangular trace gives
+    $\tr(K_T(a)\rho K_{T'}(b)^\dagger)
+        =\tr(\rho K_{T'}(b)^\dagger K_T(a))$.
+    Expand the trace and substitute the block identity
+    (\ref{eq:peps_free_source_overlap}).
+\end{proof}
+
+\begin{definition}[Pair labels of the actual slots]
+    \label{def:peps_source_pair_index}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv_apply}
+    \leanok
+    \uses{def:peps_source_inventory}
+    Let $R$ be a source list whose unordered pair labels are distinct
+    and contain every unordered pair of distinct parties exactly once.
+    Sending a slot to the unordered pair of its actual source is a
+    bijection from its slot indices to
+    $\{\{p,q\}:p,q\in P,\ p\ne q\}$.
+    This identification depends only on the parties of each source.
+\end{definition}
+
+\begin{theorem}[Number of pair-source slots]
+    \label{thm:peps_source_pair_count}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.length_eq_choose}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.length_le_card_sq}
+    \leanok
+    \uses{def:peps_source_pair_index}
+    If $P$ is finite and $R$ has the pair coverage and distinctness
+    in Definition~\ref{def:peps_source_pair_index}, then
+    $|R|=\binom{|P|}{2}\le|P|^2$.
+    This includes empty and singleton party sets.
+    These are the pair slots used in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 565--585.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_pair_index}
+    Count the unordered pairs of distinct elements under the stated
+    bijection. Their number is $\binom{|P|}{2}$, which is at most
+    $|P|^2$.
+\end{proof}
+\begin{definition}[Local maps on source slots]
+    \label{def:peps_source_slot_maps}
+    \lean{TNLean.PEPS.PairEffect.Word.mapSourceSlots}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_party_layout}
+    For each slot $e$, let $L_e:U_e\to U'_e$ and
+    $M_e:V_e\to V'_e$ be continuous linear maps. Apply these maps
+    to the corresponding source registers and leave the original
+    input memory $\mathcal H$ unchanged. Denote the resulting
+    composition by $F_{L,M}$. This composition depends on the maps
+    and the ordered slots, but not on the prepared source vectors.
+\end{definition}
+
+\begin{theorem}[Action of the local source maps]
+    \label{thm:peps_source_slot_maps}
+    \lean{TNLean.PEPS.PairEffect.Word.mapSourceSlots_spec}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_mapSourceSlots_prepareSlots}
+    \leanok
+    \uses{def:peps_source_slot_maps,def:peps_source_slots}
+    For every family $\eta_e\in U_e\otimes V_e$,
+    \begin{align}
+        F_{L,M}Q_{\eta,\mathcal H}
+         & =Q_{((L_e\otimes M_e)\eta_e)_e,\mathcal H}.
+        \label{eq:peps_source_slot_maps}
+    \end{align}
+    If $\|L_e\|,\|M_e\|\le1$ for every slot, the composition
+    $F_{L,M}$ is allowed and contains no source preparations.
+    The identity requires neither these norm bounds nor normalization
+    of the vectors $\eta_e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_map_source_pair,thm:peps_source_preparation}
+    Induct on the ordered source slots. Apply the two endpoint maps
+    of the first source, and then apply the construction to the
+    remaining sources while leaving those first two registers fixed.
+    Moving the remaining preparation past these fixed registers gives
+    (\ref{eq:peps_source_slot_maps}). Each constituent is a local map,
+    and its allowedness follows from the corresponding endpoint norm
+    bound.
+\end{proof}
+
+\begin{definition}[The complete matrix in source frames]
+    \label{def:peps_source_frame_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceFrameMatrix}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceFrameMatrix_eq_freeSourceMatrix}
+    \leanok
+    \uses{def:peps_source_slot_maps,def:peps_free_source_matrix}
+    Let $T:\mathcal S'\otimes\mathcal H\to\mathcal K$ be a
+    composition on the target halfspaces $U'_e,V'_e$. Use the finite
+    orthonormal bases of $U_e,V_e$ and the physical input and output
+    bases already specified. Define
+    \begin{align}
+        A_T^{L,M}(k,(a,j))
+         & =\left\langle g_k,
+        TQ_{(L_eu_{e,a_e^{(1)}}\otimes
+                M_ev_{e,a_e^{(2)}})_e,\mathcal H}f_j\right\rangle.
+        \label{eq:peps_source_frame_matrix}
+    \end{align}
+    This is the complete free-input matrix of $T F_{L,M}$:
+    \begin{align}
+        A_T^{L,M} & =A_{TF_{L,M}}.
+        \label{eq:peps_source_frame_matrix_composition}
+    \end{align}
+    The images of the endpoint maps need not span the target
+    halfspaces.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_slot_maps}
+    Evaluate (\ref{eq:peps_source_slot_maps}) on each elementary
+    endpoint-basis preparation and each physical input basis vector.
+    The resulting columns agree with
+    (\ref{eq:peps_source_frame_matrix}).
+\end{proof}
+
+\begin{theorem}[Joint contraction in source frames]
+    \label{thm:peps_source_frame_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_sourceFrameMatrix_le_one}
+    \leanok
+    \uses{def:peps_source_frame_matrix}
+    Assume that $T$ is allowed and that each $L_e$ and $M_e$ is a
+    contraction. Then $\|A_T^{L,M}\|\le1$ in the Euclidean operator norm.
+    In particular, this applies to isometric inclusions of proper
+    Schmidt subspaces. No orthonormal basis of the target halfspaces
+    is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_slot_maps,thm:peps_free_source_contraction}
+    Each $L_e$ and $M_e$ is a contraction, so the composition
+    $TF_{L,M}$ is allowed. By (\ref{eq:peps_source_frame_matrix_composition})
+    and Theorem~\ref{thm:peps_free_source_contraction},
+    \begin{align*}
+        \|A_T^{L,M}\| & =\|A_{TF_{L,M}}\|\le1.
+    \end{align*}
+\end{proof}

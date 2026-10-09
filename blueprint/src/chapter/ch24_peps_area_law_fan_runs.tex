@@ -1,0 +1,92 @@
+\section{Merging equal-colored triangles in a cell}
+\label{sec:area_law_fan_runs}
+
+Fix a fan in one dyadic square $Q$ and assign each triangle one of the
+two colors $0,1$. The merging below applies to every such assignment;
+see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 313--318. This is the within-cell
+% merging step. The assignment across actual opposing regions is separate.
+
+\begin{definition}[Runs and their regions]
+    \label{def:area_law_fan_runs}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunGraph,
+        TNLean.PEPS.AreaLaw.Geometry.CellFanRun,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Write $[a_e,b_e]$ for the elementary perimeter segment of triangle
+    $P_e$, oriented counterclockwise, and let $\lambda(e)\in\{0,1\}$
+    be its color. Two distinct triangles are adjacent when
+    $b_e=a_{e'}$ or $b_{e'}=a_e$. Retain an adjacency precisely when
+    the two colors agree. A run is a connected component of this
+    retained graph. Its region is
+    \begin{align}
+        T_R=\bigcup_{e\in R}P_e.
+    \end{align}
+    Distinct components remain distinct identifiers, including when
+    their colors agree.
+\end{definition}
+
+\begin{theorem}[Color constancy on a run]
+    \label{thm:area_law_fan_run_color}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_color_eq}
+    \leanok
+    \uses{def:area_law_fan_runs}
+    Any two triangles in the same run have the same color.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_fan_runs}
+    Along every retained edge the colors agree. Following a finite
+    path in a component gives the assertion.
+\end{proof}
+
+\begin{theorem}[Exact cover by run regions]
+    \label{thm:area_law_fan_run_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_cover}
+    \leanok
+    \uses{def:area_law_fan_runs}
+    The run regions cover exactly the closed square:
+    \begin{align}
+        Q=\bigcup_R T_R.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_fan_runs,thm:area_law_cell_fan_cover}
+    Every elementary segment belongs to one component. Thus the
+    union of all run regions is the union of all fan triangles, which
+    is $Q$.
+\end{proof}
+
+\begin{theorem}[Colors across adjacent distinct runs]
+    \label{thm:area_law_fan_run_opposite}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_adjacent_colors_ne}
+    \leanok
+    \uses{def:area_law_fan_runs}
+    Suppose that two adjacent fan triangles belong to distinct runs.
+    Their colors are different, and hence are opposite members of
+    $\{0,1\}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_fan_runs}
+    If their colors agreed, their adjacency would be retained and
+    they would lie in the same component.
+\end{proof}
+
+\begin{theorem}[A monochromatic fan gives one whole-cell region]
+    \label{thm:area_law_fan_run_monochromatic}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_all_equal}
+    \leanok
+    \uses{def:area_law_fan_runs}
+    If every triangle has the same color, all triangles have the same
+    run identifier, and every run region is the whole closed square.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_fan_runs,thm:area_law_cell_fan_cover}
+    The one or two elementary segments on each side are connected
+    in their perimeter order. The last segment of each side is
+    adjacent to the first segment of the next side, including the
+    fourth-to-first transition. Under constant coloring all these
+    adjacencies are retained, so the graph is connected. Its single
+    component contains every triangle, whose union is $Q$.
+\end{proof}
