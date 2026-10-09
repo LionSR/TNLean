@@ -323,5 +323,120 @@ The following finite construction follows
 \end{proof}
 
 % The actual designated-support composition is included above.
-% It does not prove the bad-history ancestry tail, offset dilution of split
-% events, cross-band commutation, or a complete construction of ScanData.
+% The bad-history ancestry tail, cross-band commutation, and complete
+% construction of ScanData remain separate.
+
+
+\begin{theorem}[Unconditional assigned-site lead and split intervals]
+    \label{thm:al_scan_unconditional_split_interval}
+    \lean{TNLean.PEPS.AreaLaw.Scan.fillSlot_depth,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_mono_succ,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.selected_anchor_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState_assigned_lead,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_assigned_lead,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState_front_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_split_anchor_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_split_anchor_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_depth_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_split_anchor_bounds_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_split_anchor_bounds_domainGraph}
+    \leanok
+    \uses{def:al_scan_actual_histories,thm:al_scan_consumed_slots,thm:al_scan_ambient_rows}
+    For every finite actual history and every assigned site of $A$, its oriented
+    depth is at most $j+D+r_0$, where $j$ is its side's current nominal front.
+    This holds both for completed histories and immediately before a charge.
+    Assume the ambient row bound through $L$, $8Km\le L$, and the stated
+    clearance of $T$ from the physical cut endpoints. If a radius-$r_0$ ball
+    meets a receiving side and the middle, its anchor's oriented depth $d_a$ satisfies
+    \begin{align}
+        j-r_0\le d_a\le j+D+2r_0.
+    \end{align}
+    No good-history assumption is imposed. The exterior $\Lambda\setminus A$
+    is not subject to the assigned-site lead bound.
+\end{theorem}
+\begin{proof}\leanok
+    Induct on the actual evaluator. A fill assigns only its scheduled row;
+    a selected charge anchor is at most $j+D$, and its ball adds at most $r_0$.
+    Later fronts do not decrease. An old middle site lies beyond the completed
+    rows, giving the lower split-anchor bound. An assigned site in the ball gives
+    the upper bound. The middle remains in the original compact collar, so cut
+    clearance places the entire ball in $A$; ambient depth variation follows
+    from induced graph distance. These conclusions hold for all finite history
+    lengths, hence throughout the manuscript's finite scan horizon.
+\end{proof}
+
+\begin{theorem}[Finite uniform-offset counting]
+    \label{thm:al_scan_offset_count}
+    \lean{TNLean.PEPS.AreaLaw.Scan.sum_historyWeight_offset_mem,
+        TNLean.PEPS.AreaLaw.Scan.sum_historyWeight_mul_eq_sum_extendHistory,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_injective_offset,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_front_interval_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_event_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_exists_band_side_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.historyWeight_mixture_event_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.split_interval_band_unique}
+    \leanok
+    \uses{def:al_scan_actual_histories,thm:al_scan_history_weights}
+    At fixed band, side and front time, at most $a+b+1$ offsets place a fixed
+    depth in $[j-a,j+b]$. Every history event contained in that interval event
+    therefore has probability at most $(a+b+1)/m$, regardless of its dependence
+    on later choices. If $a+b\le m$, the centers' spacing $8m$ allows at most
+    one band on each side to reach the fixed depth, even across different offsets.
+    The union over both sides and all bands has probability at most
+    $2(a+b+1)/m$. Common convex mixtures preserve the bound.
+\end{theorem}
+\begin{proof}\leanok
+    The front is affine with coefficient $1$ or $-1$ in its offset. Inject it
+    into the integer interval $[d-b,d+a]$. The exact marginal of an offset set
+    is its cardinality divided by $m$. Reindexing a new history into its old
+    prefix and last charge gives exactly the leaf weights $w_hq_c$; this
+    identity holds for every real-valued function of the new history. For a fixed side the possible band is
+    deterministic, because two different band centers cannot both be reached
+    after allowing all offsets. Sum the two side bounds. This uses marginal
+    domination, not independence of a state-dependent splitting event.
+\end{proof}
+
+\begin{definition}[Designated receiving--middle incidence]
+    \label{def:al_scan_designated_incidence}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidence}
+    \leanok
+    \uses{def:al_scan_actual_histories,thm:al_scan_designated_sampling}
+    A label has a receiving--middle incidence if its designated truncated support
+    meets a receiving side and the actual middle of one band. The terminal
+    split event of \cite[Section~7, terminal split rule]{OpenAI2026AreaLaw}
+    additionally requires exactly one receiving side and containment in a single
+    part of every other band, so it is contained in this incidence event.
+    These are the physical statuses $P_0,Y,V$ underlying $P=CP_0,Y,F=RV$.
+    No dilution is asserted for arbitrary entropy cuts such as $U=P_0\setminus X$,
+    whose fixed inner boundary is not a terminal metric split.
+\end{definition}
+
+\begin{theorem}[Actual designated-support dilution]
+    \label{thm:al_scan_designated_dilution}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSupport_eq_ball_of_state_split,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designated_split_dilution_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designated_split_dilution_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_domainGraph}
+    \leanok
+    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_offset_count,
+        def:al_scan_designated_incidence,thm:al_scan_designated_sampling}
+    Suppose $n,m,D>0$, $C_1>0$, $r_0\le D$, $4D\le m$, $8Km\le L$, and the
+    actual ambient row and cut-clearance hypotheses hold. For every label, the
+    total classical weight of designated receiving--middle incidences in any
+    band is at most
+    \begin{align}
+        2(D+3r_0+1)/m\le 10D/m.
+    \end{align}
+    This bound holds for the old and new distributions of every fill or charge
+    round, and for every common mixture parameter $p\in[0,1]$.
+\end{theorem}
+\begin{proof}\leanok
+    The actual middle lies in the compact truncation set. The accepted
+    variable-radius truncation result thus identifies every incident designated
+    support with its radius-$r_0$ ball. Apply the preceding interval theorem with
+    $a=r_0$ and $b=D+2r_0$; their sum is at most $m$. Apply the finite offset
+    union bound and then convexity. The estimate concerns classical history
+    weights before quantum state transport. It does not construct the remaining
+    scanner data fields or the bad-history probability bound.
+\end{proof}
