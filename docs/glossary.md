@@ -803,11 +803,45 @@ normalizations.
   inter-factor commutation, uniqueness, or smooth optimizer is assumed.
   Stationarity, energy, later regulator-growth and retained-rank estimates,
   and the full adaptive patch constraint are outside this result.
-- **Verification boundary:** the minimum module passed a strict local check
-  with the accepted QICLean shifted-density dependency. The original-proof
-  ledger remains planned pending immutable native source/evidence publication;
-  full-build and exact-head CI gates remain separate. See
-  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
+- **Scope:** see
+  [the formalization scope](formalization/peps-regularized-patch-minimum.md).
+
+#### `TNLean.PEPS.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean` and
+  `RegularizedPatchStationarity.lean`.
+- **Meaning:** unitary conjugation changes exactly one indexed feasible density.
+  The actual output derivative along `exp(tB)`, for skew-Hermitian `B`, is the
+  original reverse-product insertion of `BKⱼ − KⱼB`. Every feasible `IsMinOn`
+  minimizer has zero real inner product of that insertion with its output.
+- **Source:** the September 24, 2026 manuscript,
+  [`03-patches.tex`, lines 134–149](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L134-L149).
+- **Sanctioned consequences:** feasibility of each coordinate curve, exact
+  unitary covariance of the full-space shifted power, and the unstripped
+  first variation. Arbitrary real weights and singular densities are allowed.
+- **Caveats:** repeated regions retain independent variables. Feasibility alone
+  does not imply stationarity. There is no optimizer choice, pairwise filter
+  commutation, descending local commutation, or KKT conclusion.
+- **Verification boundary:** see the exact-source gates and scope in
+  [coordinate first variation](formalization/peps-regularized-patch-stationarity.md).
+
+#### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean`.
+- **Meaning:** `FiniteProduct.reducedPure` of the same normalized final filtered
+  vector for every region, after the explicit univ-subtype/global configuration
+  isometry. These are canonical reduced states, not freely supplied densities.
+- **Source:** the September 24, 2026 manuscript,
+  [`03-patches.tex`, lines 91–99](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L91-L99).
+- **Sanctioned consequences:** positivity and the complex-valued identity
+  `⟨φ, ι_X(K)φ⟩ = Tr(ρ_X K)` for arbitrary complex `K`; trace one for a unit
+  input, nonnegative weights, positive shift, and feasible tuple. Heterogeneous
+  local dimensions and the empty region are included.
+- **Caveats:** the coordinate variable `xⱼ` need not equal `ρ_Xⱼ`. Zero weight
+  does not constrain that density to commute with the final marginal.
+  No intermediate filtered vector is substituted for the final state.
+- **Scope:** see
+  [the source-facing scope](formalization/peps-regularized-patch-stationarity.md).
 
 #### `TNLean.PEPS.IsRegionParentInteraction`
 

@@ -24,6 +24,23 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Single-qubit plus-state positivity — promoted (2026-10-08)
+
+- **Pattern:** Identify the all-halves two-by-two density matrix with one half
+  of the outer product of the vector `![1, 1]`, then apply
+  `Matrix.posSemidef_vecMulVec_self_star` and nonnegative scalar multiplication.
+- **Seen:** Three copies in `TNLeanTest/RegularizedPatchStationarity.lean`,
+  `RegularizedPatchNoncommuting.lean`, and `RegularizedPatchZeroWeight.lean`.
+- **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
+  `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
+  The three regressions use the shared density and positivity result directly.
+- **Notes:** The former private `density`/`density_psd`,
+  `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
+  pairs are removed. The singularity, noncommutation, first-variation, and
+  zero-weight assertions are unchanged after unfolding the shared density.
+  The four fixture files shrink by 14 lines. No new tactic or compatibility
+  alias is introduced.
+
 ### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
 
 - **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
@@ -6072,6 +6089,26 @@ spectral split → block extraction → MPV calculation → strict bounds
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
+
+### Coordinate exponential and canonical partial trace — candidate (2026-10-07)
+
+- **Pattern:** replace one indexed factor in a reverse product by a linear
+  insertion, use exact unitary covariance before differentiation, and apply
+  Fermat's theorem to the squared norm of the actual output. Separately,
+  transport the actual regional lift through the existing configuration
+  equivalence and pair its pure state by the existing partial trace.
+- **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
+  `RegularizedPatchStationarity`, and `RegularizedPatchMarginal`.
+- **Abstraction:** the coordinate module factors the insertion linear map once;
+  the marginal module exposes one full-region/global configuration isometry and
+  one arbitrary-complex expectation theorem. Existing real-power covariance,
+  exponential derivative, and finite-product reduced-state results are reused.
+- **Notes:** these are distinct proofs, not three copies of one tactic block.
+  No custom tactic or new optimizer/state structure is justified. Keep the
+  actual product order and complex inner-product orientation explicit; neither
+  trace-duality nor descending commutation is inferred by this pattern.
+  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
+  thresholds.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)

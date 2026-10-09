@@ -95,6 +95,7 @@ on:
       - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -199,6 +200,7 @@ on:
       - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -346,6 +348,7 @@ jobs:
               - 'scripts/test_tenkz_canonical_pairs.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
+              - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -747,12 +750,23 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TwoFamilyEntropy.lean
 
-      - name: Test actual regularized patch minimum regressions strictly
+      - name: Test regularized patch minimum and coordinate first variation strictly
         run: |
-          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
-            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+          set -e
+          # The patch tests import a shared support module. Keep its object in a
+          # fresh overlay outside the production cache, so other TNLeanTest
+          # overlays are not shadowed by a TNLeanTest directory in the build tree.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest/Support"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
+          flags="-DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true"
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
+            -o "$test_root/TNLeanTest/Support/SingleQubitConfig.olean" \
+            TNLeanTest/Support/SingleQubitConfig.lean
+          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
+              RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
               "TNLeanTest/$example.lean"
           done
 
@@ -1459,6 +1473,10 @@ jobs:
       - name: Check regular parent and intersection diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_parent_spanning.py
+
+      - name: Check ordered coordinate insertion diagram
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_patch_stationarity.py
 
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'
