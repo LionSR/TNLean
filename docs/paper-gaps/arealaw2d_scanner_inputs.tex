@@ -94,9 +94,25 @@ applies to the designated support itself, and the expected-cost lower bound
 also holds for its band--side--label incidences.\footnote{The composition is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_domainGraph},
     using \leanid{TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingLabels}.}
-The ancestry estimate for bad histories, dilution of split events by the
-offsets, all remaining geometric conclusions, and the transported-state
-estimates are also outside this finite-history construction.
+The unconditional assigned-site lead is now derived from the actual evaluator.
+Together with consumed-row coverage, it confines each receiving--middle
+incidence to an anchor interval of width $D+3r_0+1$. Actual affine offset
+counting, exact uniform offset marginals, and the separation of band centers
+give total incidence weight at most $10D/m$, separately for old and new
+histories and for their common convex mixtures in fill and charge rounds.
+The designated support is identified with its base-radius ball from the
+actual middle's containment in the truncation set. No good-history or
+state-dependent independence assumption enters this dilution estimate.
+\footnote{The charge and fill mixture statements are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_domainGraph}
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_domainGraph}.}
+The bounded incidence event contains the terminal metric split event of
+\path{06-transport.tex}, lines~336--352. It is not an arbitrary entropy cut
+such as $U=P_0\setminus X$, and it is not yet an identification of the
+arbitrary split predicates stored in the scanner data package with concrete
+transported-state measures. The ancestry estimate for bad histories,
+the remaining geometric conclusions, and the transported-state estimates
+remain outside this finite-history construction.
 
 \section{Elimination}
 
