@@ -122,21 +122,42 @@ example (j : Fin (2 * S.n * S.m)) :
 variable [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 
 -- Both actual trees, including blank choices, survive the dependent interleaving.
+-- The round data carries the choice-family cast, so the comparison is heterogeneous.
 example (hm : 0 < S.m) (hM : 0 < S.M) (h0 : 0 < 2 * S.n * S.m) :
-    S.actualRoundData hm hM ⟨0, h0⟩ = S.actualFillData hm hM 0 := by
-  simp [CollarScan.actualRoundData, CollarScan.actualRoundChoice, IsChargeRound]
+    HEq (S.actualRoundData hm hM ⟨0, h0⟩) (S.actualFillData hm hM 0) := by
+  refine S.actualRoundData_induction hm hM ⟨0, h0⟩
+    (fun _ _ _ D => HEq D (S.actualFillData hm hM 0)) ?_ ?_
+  · intro hj
+    exact absurd hj (by decide)
+  · intro _
+    rfl
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h1 : 1 < 2 * S.n * S.m) :
-    S.actualRoundData hm hM ⟨1, h1⟩ = S.actualChargeData hm hM 0 := by
-  simp [CollarScan.actualRoundData, CollarScan.actualRoundChoice, IsChargeRound]
+    HEq (S.actualRoundData hm hM ⟨1, h1⟩) (S.actualChargeData hm hM 0) := by
+  refine S.actualRoundData_induction hm hM ⟨1, h1⟩
+    (fun _ _ _ D => HEq D (S.actualChargeData hm hM 0)) ?_ ?_
+  · intro _
+    rfl
+  · intro hnj
+    exact absurd (by decide) hnj
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h2 : 2 < 2 * S.n * S.m) :
-    S.actualRoundData hm hM ⟨2, h2⟩ = S.actualFillData hm hM 1 := by
-  simp [CollarScan.actualRoundData, CollarScan.actualRoundChoice, IsChargeRound]
+    HEq (S.actualRoundData hm hM ⟨2, h2⟩) (S.actualFillData hm hM 1) := by
+  refine S.actualRoundData_induction hm hM ⟨2, h2⟩
+    (fun _ _ _ D => HEq D (S.actualFillData hm hM 1)) ?_ ?_
+  · intro hj
+    exact absurd hj (by decide)
+  · intro _
+    rfl
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h3 : 3 < 2 * S.n * S.m) :
-    S.actualRoundData hm hM ⟨3, h3⟩ = S.actualChargeData hm hM 1 := by
-  simp [CollarScan.actualRoundData, CollarScan.actualRoundChoice, IsChargeRound]
+    HEq (S.actualRoundData hm hM ⟨3, h3⟩) (S.actualChargeData hm hM 1) := by
+  refine S.actualRoundData_induction hm hM ⟨3, h3⟩
+    (fun _ _ _ D => HEq D (S.actualChargeData hm hM 1)) ?_ ?_
+  · intro _
+    rfl
+  · intro hnj
+    exact absurd (by decide) hnj
 
 -- The generic parity branches do not rely on evaluating a small concrete round.
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
@@ -231,18 +252,48 @@ example (hm : 0 < S.m) (hM : 0 < S.M)
     (n : V ⊕ Bool → ℕ) [∀ v, NeZero (n v)] {t : ℝ} (ht : 0 ≤ t) (k : ℕ) :
     (S.actualRoundData hm hM ⟨0, h0⟩).rootPath n t k 1 =
       (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 0 := by
-  simpa [CollarScan.actualRoundData, CollarScan.actualRoundChoice, IsChargeRound,
-    CollarScan.actualChargeData] using
-      S.actualFillData_rootPath_one_eq_charge_zero hm hM 0 n ht k
+  have e0 : (S.actualRoundData hm hM ⟨0, h0⟩).rootPath n t k 1 =
+      (S.actualFillData hm hM 0).rootPath n t k 1 := by
+    refine S.actualRoundData_induction hm hM ⟨0, h0⟩
+      (fun _ _ _ D => D.rootPath n t k 1 = (S.actualFillData hm hM 0).rootPath n t k 1) ?_ ?_
+    · intro hj
+      exact absurd hj (by decide)
+    · intro _
+      rfl
+  have e1 : (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 0 =
+      (S.actualChargeData hm hM 0).rootPath n t k 0 := by
+    refine S.actualRoundData_induction hm hM ⟨1, h1⟩
+      (fun _ _ _ D => D.rootPath n t k 0 = (S.actualChargeData hm hM 0).rootPath n t k 0) ?_ ?_
+    · intro _
+      rfl
+    · intro hnj
+      exact absurd (by decide) hnj
+  rw [e0, e1]
+  exact S.actualFillData_rootPath_one_eq_charge_zero hm hM 0 n ht k
 
 example (hm : 0 < S.m) (hM : 0 < S.M)
     (h1 : 1 < 2 * S.n * S.m) (h2 : 2 < 2 * S.n * S.m)
     (n : V ⊕ Bool → ℕ) [∀ v, NeZero (n v)] {t : ℝ} (ht : 0 ≤ t) (k : ℕ) :
     (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 1 =
       (S.actualRoundData hm hM ⟨2, h2⟩).rootPath n t k 0 := by
-  simpa [CollarScan.actualRoundData, CollarScan.actualRoundChoice, IsChargeRound,
-    CollarScan.actualChargeData] using
-      S.charge_rootPath_one_eq_actualFillData_zero hm hM 0 n ht k
+  have e1 : (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 1 =
+      (S.actualChargeData hm hM 0).rootPath n t k 1 := by
+    refine S.actualRoundData_induction hm hM ⟨1, h1⟩
+      (fun _ _ _ D => D.rootPath n t k 1 = (S.actualChargeData hm hM 0).rootPath n t k 1) ?_ ?_
+    · intro _
+      rfl
+    · intro hnj
+      exact absurd (by decide) hnj
+  have e2 : (S.actualRoundData hm hM ⟨2, h2⟩).rootPath n t k 0 =
+      (S.actualFillData hm hM 1).rootPath n t k 0 := by
+    refine S.actualRoundData_induction hm hM ⟨2, h2⟩
+      (fun _ _ _ D => D.rootPath n t k 0 = (S.actualFillData hm hM 1).rootPath n t k 0) ?_ ?_
+    · intro hj
+      exact absurd hj (by decide)
+    · intro _
+      rfl
+  rw [e1, e2]
+  exact S.charge_rootPath_one_eq_actualFillData_zero hm hM 0 n ht k
 
 end DependentFamily
 
@@ -276,7 +327,7 @@ example :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = domainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
