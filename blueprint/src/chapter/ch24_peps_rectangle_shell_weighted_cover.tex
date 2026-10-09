@@ -66,10 +66,10 @@
     \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition}
     Let $Q$ be a nonempty integer rectangle and put $s=\operatorname{size}(Q)$. Let $j,L,K\in\N$
     satisfy $j\le L\le s$ and $2^K\le L<2^{K+1}$, and let $e>0$.
-    Set $S=Q^{+j}\setminus Q$, with both rectangles viewed as sets of
+    Set $S_j=Q^{+j}\setminus Q$, with both rectangles viewed as sets of
     lattice sites. Then the capped maximal-contained dyadic partition satisfies
     \begin{align}
-        \sum_{(k,z)\in\mathcal P_K(S)}(2^k)^{1+e}
+        \sum_{(k,z)\in\mathcal P_K(S_j)}(2^k)^{1+e}
          & \le \left(24+\frac{64}{2^e-1}\right)sL^e.
     \end{align}
     This is the geometric weighted covering estimate used in
@@ -81,10 +81,11 @@
         thm:area_law_rectangle_shell_selected_count,
         thm:area_law_capped_sum_by_scale,thm:area_law_weighted_dyadic_sum}
     Let $N_k$ denote the number of selected squares of scale $k$.
-    The rectangle-shell counting estimates give
+    The rectangle-shell counting estimates give the following bounds.
+    The second holds for every $k$ with $0\le k<K$.
     \begin{align}
-        2^K N_K & \le24s,                 \\
-        2^k N_k & \le64s\qquad(0\le k<K).
+        2^K N_K & \le24s, \\
+        2^k N_k & \le64s.
     \end{align}
     For the second estimate, the required bounds are
     $j\le L\le s$ and $2^{k+1}\le2^K\le L\le s$.
@@ -92,7 +93,7 @@
     Grouping the selected squares by scale and applying the finite weighted
     dyadic sum with cap budget $24s$ and lower-scale budget $64s$ gives
     \begin{align}
-        \sum_{(k,z)\in\mathcal P_K(S)}(2^k)^{1+e}
+        \sum_{(k,z)\in\mathcal P_K(S_j)}(2^k)^{1+e}
          & =\sum_{k=0}^{K}N_k(2^k)^{1+e}                \\
          & \le\left(24s+\frac{64s}{2^e-1}\right)(2^K)^e \\
          & \le\left(24+\frac{64}{2^e-1}\right)sL^e.
