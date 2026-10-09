@@ -1,4 +1,4 @@
-\section{Finite bad-history probability}
+\section{Bad-history probability}
 \label{sec:al_scan_bad_histories}
 
 Keep the actual finite histories and physical graph from the preceding section.
@@ -7,7 +7,7 @@ fill--charge pairs, so the charge at index $t$ sees the front after $t+1$ fills.
 All probabilities in this section are classical finite-history probabilities.
 The estimates formalize the finite ancestry argument of
 \cite[Section~9, charge ancestry and availability]{OpenAI2026AreaLaw}; the
-asymptotic scale specialization is distinguished at the end.
+asymptotic scale specialization is proved below.
 
 \begin{theorem}[Ancestry extracted from actual assignments]
     \label{thm:al_scan_actual_ancestry}
@@ -363,7 +363,94 @@ asymptotic scale specialization is distinguished at the end.
     \label{fig:al_scan_three_charge_ancestry}
 \end{figure}
 
-The eventual bound by $n^{-200}$ still requires the explicit floor and ceiling
-scale choices and sufficiently-large-$n$ estimates. Identifying transported
-entropy gains and constructing the remaining scanner inputs are separate
-mathematical steps; this finite probability estimate does not assert them.
+\begin{lemma}[Rounded logarithmic radius]
+    \label{lem:al_scan_rounded_radius}
+    \lean{TNLean.PEPS.AreaLaw.Scan.roundedLogRadius,
+        TNLean.PEPS.AreaLaw.Scan.isLittleO_roundedLogRadius_rpow,
+        TNLean.PEPS.AreaLaw.Scan.eventually_const_mul_roundedLogRadius_le_rpow,
+        TNLean.PEPS.AreaLaw.Scan.eventually_roundedLogRadius_le_rpow,
+        TNLean.PEPS.AreaLaw.Scan.eventually_const_mul_roundedLogRadius_cube_le_rpow,
+        TNLean.PEPS.AreaLaw.Scan.eventually_one_le_roundedLogRadius}
+    \leanok
+    Fix $C_r\ge0$ and $r(n)=\lceil C_r(\log n)^2\rceil$.
+    For every $\varepsilon>0$, one has $r(n)=o(n^\varepsilon)$.
+    Consequently, for every fixed real $A$, both
+    $Ar(n)\le n^\varepsilon$ and $Ar(n)^3\le n^\varepsilon$
+    hold for sufficiently large $n$. If $C_r>0$, then $r(n)\ge1$
+    for sufficiently large $n$.
+\end{lemma}
+\begin{proof}\leanok
+    The ceiling differs from the nonnegative squared logarithm by less than one.
+    Every fixed power of the logarithm is negligible relative to every positive
+    power of $n$. Apply this first with exponent $\varepsilon$ and then with
+    exponent $\varepsilon/3$ before cubing.
+\end{proof}
+
+\begin{lemma}[A fixed ancestry cutoff]
+    \label{lem:al_scan_fixed_ancestry_cutoff}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.badChargeRatio_le_radius_cube,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.source_lengths_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.geometricBadTail_le_power,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.badHistory_prefactor_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.badHistory_power_le}
+    \leanok
+    \uses{thm:al_scan_bad_geometric_tail}
+    Write $b$ for the fixed anchor multiplicity bound. For $n,D,r>0$ and
+    $M\ge C_1nD$, where $C_1>0$, the actual ratio satisfies
+    \begin{align}
+        0\le\rho\le \frac{117e b}{2C_1}\frac{r^3}{D}.
+    \end{align}
+    If $n\ge1$, $a\ge0$, $4rJ\le D$, and $\rho\le n^{-a}$, then
+    \begin{align}
+        \sum_{\substack{0\le s\le N \\D<4rs}}\rho^s
+        \le (N+1)n^{-aJ}.
+    \end{align}
+    If moreover $K,L,m\le n$, $|T|\le C_Tn^2$, $C_T\ge0$, and $N=nm$, then
+    \begin{align}
+        2K(|T|+nL)(N+1)^2\le8(C_T+1)n^7.
+    \end{align}
+    For $n\ge8(C_T+1)$ and $p+8\le aJ$, this prefactor times
+    $n^{-aJ}$ is at most $n^{-p}$.
+\end{lemma}
+\begin{proof}\leanok
+    For $r\ge1$ the lattice diamond factor is at most $13r^2$.
+    Cancel $n$ against the padded capacity. Every retained length is at least
+    $J$, and there are at most $N+1$ lengths. Bound $N+1$ by $2n^2$ and absorb
+    the remaining fixed constant into one additional power of $n$.
+\end{proof}
+
+\begin{theorem}[Bad-history probability at the source scales]
+    \label{thm:al_scan_bad_history_inverse_power}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_badHistory_bound_le_rpow,
+        TNLean.PEPS.AreaLaw.Scan.eventually_bad_history_probability_le}
+    \leanok
+    \uses{thm:al_scan_bad_geometric_tail,lem:al_scan_rounded_radius,
+        lem:al_scan_fixed_ancestry_cutoff}
+    Fix $0<\ell$, $0<\kappa<\mu<1-\ell$, $C_r,C_1>0$, $C_T\ge0$,
+    a finite anchor multiplicity bound $b$, and a real exponent $p$.
+    Set
+    \begin{align}
+        r & =\lceil C_r(\log n)^2\rceil, & D                      & =\lceil n^\kappa\rceil,
+          & m                            & =\lfloor n^\mu\rfloor,                           \\
+        L & =\lfloor n^{1-\ell}\rfloor,  & K                      & =\lfloor L/(8m)\rfloor,
+          & M                            & =\lceil C_1nD\rceil.
+    \end{align}
+    For all sufficiently large $n$, uniformly over finite lattice domains,
+    nonempty targets with $|T|\le C_Tn^2$, and actual scanners satisfying
+    the ambient row bound, the cut clearance above, and anchor multiplicity
+    at most $b$, the probability that any prefix through $nm$ fill--charge
+    pairs has bad lead on either side in any band is at most $n^{-p}$.
+    In particular $p=200$ gives the bad-history exponent in Lemma~9.1.
+\end{theorem}
+\begin{proof}\leanok
+    Choose an integer $J$ with $p+8\le\kappa J/2$, before choosing $n$ or
+    the physical domain. The rounded-radius estimates imply eventually
+    $\rho\le n^{-\kappa/2}$ and $4rJ\le D$. The source floors give
+    $K,L,m\le n$. Apply the fixed-cutoff estimate to the actual finite-history
+    union bound. The same good-prefix event controls the old-charge states,
+    since a scheduled fill cannot create a bad lead.
+\end{proof}
+
+Identifying transported entropy gains and constructing the remaining scanner
+inputs are separate mathematical steps. The probability estimate concerns
+actual classical histories and does not identify their quantum entropy costs.

@@ -134,11 +134,16 @@ coordinate event. This gives a sharper ratio than the source's loose
 predecessor-inclusive estimate.\footnote{The all-time finite statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}.}
 
-The eventual specialization to $n^{-200}$ still requires the explicit floor
-and ceiling scan scales and sufficiently-large-$n$ inequalities. The remaining
-geometric conclusions and transported-state estimates also remain separate.
-In particular, a finite ancestry tail does not identify the quantum entropy
-costs or construct the complete scanner data package.
+The rounded source scales now give arbitrary inverse-power decay of this
+actual all-prefix probability, uniformly in the finite domain, target, label
+family, and scanner. The threshold is chosen from the fixed exponents and
+constants alone. In particular, the actual bad-history probability is at most
+$n^{-200}$ for sufficiently large $n$.\footnote{The result is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_bad_history_probability_le}.}
+This closes the classical asymptotic probability estimate. The remaining
+geometric conclusions and transported-state estimates remain separate;
+identifying quantum entropy costs and constructing the entire scanner data
+package are not consequences of a probability bound alone.
 
 \section{Elimination}
 

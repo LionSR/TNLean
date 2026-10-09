@@ -855,6 +855,22 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PhysicalBadHistory.lean
 
+      - name: Test rounded logarithmic scan radius
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/RadiusAsymptotics.lean
+
+      - name: Test actual inverse-power bad-history probability
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/BadHistoryDecay.lean
+
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
       - name: Test GHZ sector-probability obstruction
