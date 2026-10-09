@@ -9,21 +9,10 @@ open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 
 private def regions : Fin 1 → Finset Unit := fun _ ↦ Finset.univ
 
-private noncomputable def plusDensity : Matrix (Fin 2) (Fin 2) ℂ :=
-  !![1 / 2, 1 / 2; 1 / 2, 1 / 2]
-
 private def zeroDensity : Matrix (Fin 2) (Fin 2) ℂ := !![1, 0; 0, 0]
 
 private noncomputable def densities (_ : Fin 1) : Matrix Config Config ℂ :=
   Matrix.reindex configEquiv configEquiv plusDensity
-
-private theorem plusDensity_posSemidef : plusDensity.PosSemidef := by
-  have h : plusDensity = (1 / 2 : ℝ) • Matrix.vecMulVec ![1, 1] (star ![1, 1]) := by
-    ext i j
-    fin_cases i <;> fin_cases j <;> norm_num [plusDensity, Matrix.vecMulVec]
-  rw [h]
-  exact (Matrix.posSemidef_vecMulVec_self_star ![1, 1]).smul
-    (by norm_num : (0 : ℝ) ≤ 1 / 2)
 
 private theorem densities_feasible :
     densities ∈ regularizedPatchDomain (Out := fun _ : Unit ↦ Fin 2) regions := by

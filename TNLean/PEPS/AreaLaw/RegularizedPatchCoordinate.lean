@@ -10,9 +10,10 @@ import QICLean.Analysis.CfcConjugation
 # A unitary change of one regularized density
 
 An index selects one occurrence of a region, even when regions repeat. Unitary
-conjugation preserves the actual density domain, and its shifted real power
-conjugates exactly. The insertion map replaces that one factor in the actual
-reverse ordered product, leaving all other factors fixed.
+conjugation preserves the product of trace-one positive semidefinite density
+domains, and its shifted real power conjugates exactly. The insertion map
+replaces that one factor in the reverse ordered product of regularized regional
+filters, leaving all other factors fixed.
 
 Source: OpenAI `03-patches.tex`, lines 134–146, commit
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -105,8 +106,8 @@ private noncomputable def dependentRegionLiftLinear (R : Finset V) :
     simp [dependentRegionOperatorLift, Matrix.reindex_apply, mul_assoc]
 
 open Classical in
-/-- Insert a local matrix in the selected factor of the actual reverse ordered
-product and apply it to the original vector. -/
+/-- Insert a local matrix in the selected factor of the reverse ordered
+regularized filter product and apply it to the original vector. -/
 noncomputable def regularizedPatchInsertion (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
@@ -131,7 +132,7 @@ theorem regularizedPatchInsertion_apply (a : Fin m → ℝ) (b : ℝ)
 
 
 open Classical in
-/-- Changing a density changes only the corresponding factor in the actual output. -/
+/-- Changing a density changes only the corresponding factor in the ordered filtered output. -/
 theorem regularizedPatchOutput_coordinateUpdate (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
@@ -153,7 +154,7 @@ theorem regularizedPatchOutput_coordinateUpdate (a : Fin m → ℝ) {b : ℝ} (h
       Function.update_of_ne h]
 
 open Classical in
-/-- Inserting the unchanged local power recovers the actual filtered output. -/
+/-- Inserting the unchanged local power recovers the ordered filtered output. -/
 theorem regularizedPatchInsertion_self (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)

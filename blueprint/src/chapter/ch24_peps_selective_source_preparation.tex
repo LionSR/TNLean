@@ -1,0 +1,421 @@
+\section{Free source inputs and untouched exterior gates}
+
+The separation argument in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 342--434, uses corrected source
+registers as free inputs. Exact sources internal to either side are
+prepared there, while gates wholly in the exterior retain their
+complete operators. We give the corresponding exact constructions.
+
+% These entries provide the gate data, selective preparation, and owner
+% identifications. The chronological partially expanded circuit and the
+% corrected-subset trace-norm estimate are separate obligations.
+
+\subsection{Finite gate expansions}
+
+\begin{definition}[A gate with common finite source positions]
+    \label{def:peps_prepared_source_gate}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_party_registers}
+    Fix a finite branch set $\Xi$, coefficients $c_\xi\in\C$, and
+    input and output register lists $a,b$ on the gate's participating
+    party set $P$. Common finite source data consist of an ordered list
+    $E$ containing each unordered pair of distinct parties exactly once,
+    spaces $U_e=\C^{u_e}$ and $V_e=\C^{v_e}$, normalized vectors
+    $\eta_{\xi,e}\in U_e\otimes V_e$, and allowed compositions
+    $T_\xi:\mathcal S\otimes\mathcal H_a\to\mathcal H_b$
+    containing no pair preparations. Here $\mathcal S$ is the memory of
+    all source registers in their prescribed order. Write
+    $F_\xi=T_\xi Q_{\eta_\xi,\mathcal H_a}$ and
+    \begin{align}
+        G & =\sum_{\xi\in\Xi}c_\xi F_\xi,
+        \label{eq:peps_prepared_gate_sum}
+    \end{align}
+    and require $\|G\|\leq1$. The coefficients are fixed before these
+    data are chosen. Completion by unused pairs is taken only over the
+    participating parties $P$ of this gate.
+\end{definition}
+
+\begin{theorem}[Prepared branches and the complete gate]
+    \label{thm:peps_prepared_gate_properties}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord_isAllowed}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.sources_branchWord}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_eval_le_one}
+    \leanok
+    \uses{def:peps_prepared_source_gate}
+    Each $F_\xi$ is an allowed composition. Its ordered source list is
+    precisely the list of prescribed pairs with spaces $U_e,V_e$ and
+    vectors $\eta_{\xi,e}$. The complete sum $G$, with its original
+    scalar coefficients, is a contraction.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_source_preparation,def:peps_prepared_source_gate}
+    Normalization makes the source preparation allowed. Compose it with
+    $T_\xi$, whose source list is empty. Thus the only sources are the
+    prescribed preparations. The bound on $G$ is part of the gate data.
+\end{proof}
+
+\begin{theorem}[Construction from the original branch operators]
+    \label{thm:peps_prepared_gate_exists}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_preparedSourceGate}
+    \leanok
+    \uses{def:peps_prepared_source_gate}
+    Suppose $P$ and $\Xi$ are finite, each $W_\xi:a\to b$ is an
+    allowed composition, and
+    $\|\sum_{\xi\in\Xi}c_\xi W_\xi\|\leq1$.
+    There are common finite source data with the same coefficients
+    $c_\xi$ for which $G=\sum_{\xi\in\Xi}c_\xi W_\xi$ exactly.
+    No nonemptiness assumption on $\Xi$ is needed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_finite_source_gate}
+    Apply Theorem~\ref{thm:peps_finite_source_gate} to the original
+    branch compositions. It gives common finite spaces, normalized
+    vectors, and allowed compositions without sources, with
+    $T_\xi Q_{\eta_\xi,\mathcal H_a}=W_\xi$ for each $\xi$.
+    Substitution in (\ref{eq:peps_prepared_gate_sum}) preserves the
+    original sum and therefore its contraction bound.
+\end{proof}
+
+\subsection{Affected parties and the exterior}
+
+\begin{definition}[Keeping affected owners distinct]
+    \label{def:peps_affected_owner}
+    \lean{TNLean.PEPS.PairEffect.affectedOwner}
+    \lean{TNLean.PEPS.PairEffect.affectedOwner_eq_none}
+    \leanok
+    Let $\mathcal A\subseteq P$ have decidable membership. Set
+    $Q=\mathcal A\sqcup\{*\}$, where $*$ denotes the exterior, and
+    define $g:P\to Q$ by
+    \begin{align}
+        g(p) & =
+        \begin{cases}
+            p, & p\in\mathcal A,    \\
+            *, & p\notin\mathcal A.
+        \end{cases}
+        \label{eq:peps_affected_owner}
+    \end{align}
+    Thus $g(p)=*$ exactly when $p$ is exterior.
+\end{definition}
+
+\begin{theorem}[Equality of grouped owners]
+    \label{thm:peps_affected_owner_equality}
+    \lean{TNLean.PEPS.PairEffect.affectedOwner_eq_iff}
+    \lean{TNLean.PEPS.PairEffect.PairSource.affectedOwner_ne_iff}
+    \leanok
+    \uses{def:peps_affected_owner}
+    One has $g(p)=g(q)$ exactly when $p=q$ or both parties are
+    exterior. Consequently, for distinct source endpoints $p,q$,
+    $g(p)\neq g(q)$ exactly when at least one endpoint belongs to
+    $\mathcal A$. Both corrected pairs within $\mathcal A$ and pairs
+    crossing to its exterior remain between distinct owners.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_affected_owner}
+    Separate the four possibilities for membership of $p,q$ in
+    $\mathcal A$. Two affected images agree only when their original
+    parties agree; an affected image cannot equal $*$.
+\end{proof}
+
+\begin{theorem}[The surviving ordered source occurrences]
+    \label{thm:peps_affected_source_occurrences}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner_affectedOwner}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_affectedOwner}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_affectedOwner_eq_nil_iff}
+    \leanok
+    \uses{def:peps_affected_owner,def:peps_owner_sources}
+    A source occurs in $S_g$ precisely when it is obtained from an
+    occurrence $s=(p,q;U,V;\eta)$ in $S$ with at least one affected
+    endpoint, by replacing its owners with $g(p),g(q)$. Its spaces and
+    vector are unchanged. The ordered pair labels are obtained by
+    filtering $S$ by this same condition and then applying $g$ to both
+    endpoints. Order and multiplicity are retained, even when different
+    original pairs acquire the same image. In particular, $S_g$ is
+    empty exactly when both endpoints of every original source are
+    exterior.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_owner_sources,thm:peps_owner_sources_internal,
+        thm:peps_affected_owner_equality}
+    Substitute the distinct-owner criterion of
+    Theorem~\ref{thm:peps_affected_owner_equality} into the occurrence
+    description of $S_g$. Induction on the original source list gives
+    the ordered pair-label identity. The empty-list criterion follows
+    from Theorem~\ref{thm:peps_owner_sources_internal}.
+\end{proof}
+
+\begin{definition}[Retaining a complete operation at one grouped owner]
+    \label{def:peps_grouped_block_map}
+    \lean{TNLean.PEPS.PairEffect.Word.groupedBlockMap}
+    \leanok
+    \uses{def:peps_owner_layout,def:peps_party_layout}
+    Let $f:P\to Q$, and suppose every register in $a$ and $b$ has
+    owner image $q\in Q$. For $D:\mathcal H_a\to\mathcal H_b$,
+    regard $R_{f,b}DR_{f,a}^{-1}$ as a local operation at $q$ and
+    leave the spectator list $\ell$ untouched. This gives an actual
+    composition $D^f_{\ell}:(a\ell)^f\to(b\ell)^f$.
+\end{definition}
+
+\begin{theorem}[Exact action of an untouched aggregate]
+    \label{thm:peps_grouped_block_map}
+    \lean{TNLean.PEPS.PairEffect.Word.groupedBlockMap_spec}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_groupedBlockMap}
+    \leanok
+    \uses{def:peps_grouped_block_map}
+    The complete operation satisfies
+    \begin{align}
+        D^f_{\ell}R_{f,a\ell}
+         & =R_{f,b\ell}C_{b,\ell}^{-1}
+        (D\otimes I_{\mathcal H_\ell})C_{a,\ell}.
+        \label{eq:peps_grouped_block_action}
+    \end{align}
+    If $\|D\|\leq1$, this composition is allowed and contains no pair
+    sources. For $f=g$ and $q=*$, this retains an exterior gate as its
+    original aggregate contraction, without expanding its branch sum.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_owner_concatenation,def:peps_grouped_block_map}
+    Apply the concatenation identity for the canonical owner
+    isometries. The two isometries conjugating $D$ cancel with the
+    corresponding input and output identifications, giving
+    (\ref{eq:peps_grouped_block_action}). Conjugation by isometries
+    preserves the contraction bound. A local operation creates no
+    pair sources.
+\end{proof}
+
+\begin{theorem}[Grouping preserves the weighted gate sum]
+    \label{thm:peps_grouped_gate_sum}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_sum_mapOwner_comp}
+    \leanok
+    \uses{def:peps_owner_composition}
+    For a finite family of compositions $F_\xi:a\to b$ and arbitrary
+    coefficients $c_\xi\in\C$,
+    \begin{align}
+        \left(\sum_\xi c_\xi F_\xi^f\right)R_{f,a}
+         & =R_{f,b}\left(\sum_\xi c_\xi F_\xi\right).
+        \label{eq:peps_grouped_gate_sum}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_owner_composition}
+    Sum the exact identity $F_\xi^fR_{f,a}=R_{f,b}F_\xi$ with
+    coefficients $c_\xi$. Composition is linear on both sides.
+\end{proof}
+
+\begin{definition}[The complete gate after grouping]
+    \label{def:peps_prepared_gate_grouped}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners}
+    \leanok
+    \uses{def:peps_prepared_source_gate,def:peps_owner_layout}
+    For common finite source data and any map $f:P\to Q$, define
+    the grouped aggregate by $G^f=R_{f,b}GR_{f,a}^{-1}$.
+\end{definition}
+
+\begin{theorem}[The original expansion and aggregate norm after grouping]
+    \label{thm:peps_prepared_gate_grouped}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners_eq_sum}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_evalAtOwners_le_one}
+    \leanok
+    \uses{def:peps_prepared_gate_grouped,def:peps_owner_composition}
+    The exact branch expansion is $G^f=\sum_\xi c_\xi F_\xi^f$,
+    and $\|G^f\|\leq1$. This bound comes from the original
+    aggregate contraction and does not involve
+    $\sum_\xi|c_\xi|$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_properties}
+    Compose (\ref{eq:peps_grouped_gate_sum}) with $R_{f,a}^{-1}$.
+    Both canonical owner maps are isometries, so conjugating the
+    aggregate preserves its norm bound.
+\end{proof}
+
+\subsection{Preparing only the fixed sources}
+
+\begin{definition}[The selected original source positions]
+    \label{def:peps_selected_source_positions}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSources}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_selectedSources_eq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.freeSlotLayout}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_selectedSources}
+    \leanok
+    \uses{def:peps_source_slots}
+    Let $E$ be an ordered list of pair positions, with halfspaces
+    $U_e,V_e$, and let $E_{\rm free}\subseteq E$ be selected. The
+    selected source list retains these occurrences in their original
+    order, with their original endpoint parties and the prescribed
+    spaces and vectors. Its register layout is independent of those
+    vectors. Denote its memory by $\mathcal S_{\rm free}$ and the
+    memory of all positions by $\mathcal S$.
+\end{definition}
+
+\begin{definition}[Selective source preparation]
+    \label{def:peps_selective_preparation}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareSelected}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareFreeSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.fillSourceVectors}
+    \leanok
+    \uses{def:peps_selected_source_positions}
+    Fix vectors $\eta_e\in U_e\otimes V_e$ only at positions outside
+    $E_{\rm free}$. Define
+    $\Phi_\eta:\mathcal S_{\rm free}\otimes\mathcal H_\ell
+        \to\mathcal S\otimes\mathcal H_\ell$ by preparing the fixed
+    sources and retaining all free registers in their original
+    positions. This is one actual composition, independent of the
+    vectors later supplied to the free registers.
+
+    For an arbitrary family $\zeta_e\in U_e\otimes V_e$, write
+    $Q^{\rm free}_{\zeta,\mathcal H_\ell}$ for preparation at just
+    the free positions. The completed family $\theta$ has
+    $\theta_e=\zeta_e$ at free positions and $\theta_e=\eta_e$
+    elsewhere.
+\end{definition}
+
+\begin{theorem}[Only the fixed sources are prepared]
+    \label{thm:peps_selective_preparation_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepareSelected}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sources_prepareSelected}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected}
+    \leanok
+    \uses{def:peps_selective_preparation}
+    The source list of $\Phi_\eta$ is exactly the list of fixed
+    original positions, in their original order, with vectors
+    $\eta_e$. In particular, each prepared source has the original
+    endpoint parties and halfspaces of its fixed position. If every
+    fixed vector has norm one, then $\Phi_\eta$ is allowed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_selective_preparation,def:peps_selected_source_positions}
+    Induct on the source list. At a free position, retain the two
+    registers and apply the construction to the remaining positions.
+    At a fixed position, prepare its source after the remaining
+    positions. The source inventory records precisely this fixed
+    occurrence. Its preparation is allowed by normalization.
+\end{proof}
+
+\begin{theorem}[Uniform recovery of every completed preparation]
+    \label{thm:peps_selective_preparation_recovery}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots}
+    \leanok
+    \uses{def:peps_selective_preparation}
+    For every family of free vectors, without a normalization
+    assumption,
+    \begin{align}
+        \Phi_\eta Q^{\rm free}_{\zeta,\mathcal H_\ell}
+         & =Q_{\theta,\mathcal H_\ell}.
+        \label{eq:peps_selective_recovery}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_selective_preparation,thm:peps_source_preparation}
+    Induct on the ordered positions. At a free head, preparation of
+    its vector commutes with the operations on the remaining
+    registers. At a fixed head, both sides prepare the same fixed
+    vector. In each case the induction hypothesis gives the equality
+    for the remaining positions. The empty source list gives the
+    identity on the original input memory.
+\end{proof}
+
+\begin{theorem}[Two contractions independent of the free source vectors]
+    \label{thm:peps_selective_partition}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_selective_partition}
+    \leanok
+    \uses{def:peps_selective_preparation,def:peps_party_partition}
+    Let $f:P\to\{0,1\}$ specify two sides. Suppose every fixed
+    source has both endpoints on the same side and has norm one.
+    Let $T:\mathcal S\otimes\mathcal H_\ell\to\mathcal H_{\ell'}$
+    be an allowed composition containing no pair sources. There are
+    two allowed compositions $A_+,A_-$, containing no pair sources and
+    each having norm at most one, such that
+    \begin{align}
+        J_{f,\ell'}T\Phi_\eta
+         & =(A_+\otimes A_-)J_{f,L},
+        \label{eq:peps_selective_partition} \\
+        J_{f,\ell'}TQ_{\theta,\mathcal H_\ell}
+         & =(A_+\otimes A_-)J_{f,L}
+        Q^{\rm free}_{\zeta,\mathcal H_\ell}.
+        \label{eq:peps_selective_all_vectors}
+    \end{align}
+    Here $L$ is the free-source register list followed by $\ell$, and
+    $J_{f,L}$ is its canonical partition isometry. The same two
+    compositions work for every family $\zeta$ of free vectors.
+    Thus the contraction bounds apply on all free inputs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_selective_preparation_sources,
+        thm:peps_internal_source_factorization,
+        thm:peps_selective_preparation_recovery}
+    The only sources in $T\Phi_\eta$ are the fixed original
+    positions. They are internal by hypothesis. Apply
+    Theorem~\ref{thm:peps_internal_source_factorization} to obtain
+    (\ref{eq:peps_selective_partition}) and the two contraction
+    bounds. Compose that identity with
+    $Q^{\rm free}_{\zeta,\mathcal H_\ell}$ and use
+    (\ref{eq:peps_selective_recovery}) to obtain
+    (\ref{eq:peps_selective_all_vectors}). The factors were chosen
+    before $\zeta$.
+\end{proof}
+
+\subsection{Operations beside untouched registers}
+
+\begin{definition}[Extension by spectator registers]
+    \label{def:peps_append_spectators}
+    \lean{TNLean.PEPS.PairEffect.Word.appendTail}
+    \leanok
+    \uses{def:peps_party_layout,thm:peps_register_exchange}
+    Given an actual composition $W:a\to b$ and a spectator list
+    $\ell$, move $\ell$ before $a$, perform $W$ while leaving those
+    registers unchanged, and move them back after $b$. Denote the
+    resulting composition $a\ell\to b\ell$ by $W_{\ell}$.
+\end{definition}
+
+\begin{theorem}[Exact spectator extension]
+    \label{thm:peps_append_spectators}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_appendTail}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_appendTail}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_appendTail}
+    \leanok
+    \uses{def:peps_append_spectators}
+    The spectator extension has exactly the same ordered source list
+    as $W$, is allowed whenever $W$ is allowed, and satisfies
+    \begin{align}
+        W_{\ell}C_{a,\ell}^{-1}
+         & =C_{b,\ell}^{-1}(W\otimes I_{\mathcal H_\ell}).
+        \label{eq:peps_append_spectators}
+    \end{align}
+    The operator identity holds without norm or normalization
+    assumptions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_register_exchange,thm:peps_source_preparation}
+    On an elementary input $x\otimes y$, the first exchange gives
+    $y\otimes x$, the framed composition gives $y\otimes Wx$, and
+    the last exchange gives $Wx\otimes y$. Linearity gives
+    (\ref{eq:peps_append_spectators}). Exchanges create no sources,
+    and leaving a register unchanged preserves the source list and
+    allowedness of the operations on the other registers.
+\end{proof}

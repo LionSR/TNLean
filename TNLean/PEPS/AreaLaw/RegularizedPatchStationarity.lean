@@ -10,13 +10,14 @@ import Mathlib.Analysis.Calculus.LocalExtr.Basic
 import Mathlib.Analysis.InnerProductSpace.Calculus
 
 /-!
-# First variation at the actual regularized minimum
+# First variation at a minimum of the ordered regularized norm
 
 The curve conjugating one indexed density by `exp(t B)` is feasible for every
 real `t` when `B` is skew-Hermitian. Exact covariance differentiates its filter
 without differentiating a matrix power. Fermat's theorem for the squared norm
-then gives the genuine ordered-product first-variation identity at every
-feasible minimizer. No minimizing selection or nesting is assumed.
+then gives the ordered-product first-variation identity at every feasible
+minimizer of the norm of the reverse ordered regularized filter product applied
+to the original vector. No minimizing selection or nesting is assumed.
 
 Source: OpenAI `03-patches.tex`, lines 134–153, commit
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -46,7 +47,7 @@ noncomputable def regularizedPatchUnitaryCurve (j : Fin m)
   simp [hB]
 
 open Classical in
-/-- The true filtered output along a coordinate-unitary curve has derivative
+/-- The ordered filtered output along a coordinate-unitary curve has derivative
 obtained by inserting the local commutator in its original position. -/
 theorem hasDerivAt_regularizedPatchOutput_coordinateUpdate
     (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
@@ -76,9 +77,10 @@ theorem hasDerivAt_regularizedPatchOutput_coordinateUpdate
       (regularizedPatchUnitaryCurve regions j B hB t)
 
 open Classical in
-/-- Every actual feasible minimizer has zero real pairing with the ordered
-insertion of each skew-Hermitian commutator. This is a first variation, and does
-not assert commutation of local densities or different filters. -/
+/-- Every feasible minimizer of the ordered regularized norm has zero real
+pairing with the ordered insertion of each skew-Hermitian commutator. This is
+a first variation, and does not assert commutation of local densities or different
+filters. -/
 theorem regularizedPatchFirstVariation_eq_zero
     (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))

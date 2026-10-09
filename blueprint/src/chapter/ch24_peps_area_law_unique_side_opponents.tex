@@ -1,0 +1,120 @@
+\section{Uniqueness of the opposing region}
+\label{sec:area_law_unique_side_opponents}
+
+The preceding existence assertion can be sharpened to uniqueness of the
+opposing fine cell or dummy neighborhood. This identifies the region
+containing an elementary side, before assigning primary or fan-run labels;
+see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 299--310 for elementary geometry and
+% lines 299--316 for the opposing region; prop:two-families,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are scoped assertions about actual cells, not the full proposition.
+
+\begin{theorem}[Elementary sides lie on a nondegenerate square boundary]
+    \label{thm:area_law_elementary_side_boundary_geometry}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_corner}
+    Fix an origin $o\in\mathbb R^2$, a natural exponent $\ell$, a signed
+    cell index $z\in\mathbb Z^2$, and any optional midpoint subdivision
+    of the sides of $Q_\ell(z)$. Put $t=2^\ell$, $p=o+tz$ and
+    $q=p+(t,t)$. For the ordered endpoints $a,b$ of every elementary
+    segment, one has $a\ne b$ and either
+    \begin{align}
+        a_1=b_1\in\{p_1,q_1\},
+    \end{align}
+    or
+    \begin{align}
+        a_2=b_2\in\{p_2,q_2\}.
+    \end{align}
+    No layer-membership or late-scale assumption is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unsplit_side_endpoints,
+        thm:area_law_elementary_side_geometry}
+    Each whole side has length $t>0$ and a constant coordinate equal
+    to a boundary coordinate of the square. An elementary segment is
+    either this whole side or one of its two midpoint halves. Its
+    endpoints retain that constant coordinate and differ in the other
+    coordinate by $t$ or $t/2$.
+\end{proof}
+
+\begin{theorem}[Unique opposing fine cell or dummy neighborhood]
+    \label{thm:area_law_unique_elementary_side_opponent}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
+    Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
+    integer width $C_0\ge2$ and natural indices $k_0\le k$ with
+    $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ index an actual fine
+    cell. For any elementary segment $e=[a_i,b_i]$ of this cell under
+    its actual midpoint subdivision relative to $k_0$, consider the
+    identifiers
+    \begin{align}
+        \mathcal I=\{\star\}\sqcup
+        \{(h,w):h\ge k_0,\ w\in F_{h,\ell_h},\ (h,w)\ne(k,z)\}.
+    \end{align}
+    Associate to them the closed regions
+    \begin{align}
+        R_\star=\overline{N_{k_0}},\qquad
+        R_{(h,w)}=\overline{Q_{\ell_h}(w)}.
+    \end{align}
+    There is exactly one $P\in\mathcal I$ such that $e\subseteq R_P$.
+    The dummy neighborhood is a single region even when several coarse
+    cells contribute to it. No further lower bound on the opposing
+    layer index is imposed beyond $h\ge k_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_elementary_side_opponent,
+        thm:area_law_elementary_side_boundary_geometry,
+        thm:area_law_fine_cells_disjoint,thm:area_law_dummy_layer_disjoint,
+        thm:area_law_fine_cell_containment,thm:area_law_dyadic_closures,
+        thm:area_law_elementary_corner_endpoint,
+        thm:area_law_dummy_corner_elementary_side,
+        thm:area_law_cell_fan_mark_vertices,
+        thm:area_law_belt_marks_closed_cell}
+    Existence follows from the preceding opposing-region theorem.
+    To prove uniqueness, put $x=(a_i+b_i)/2$. The segment is
+    nondegenerate and lies on one side of the reference square, so
+    $x$ is interior to that side in its tangential coordinate.
+
+    Suppose first that two distinct actual fine cells contain the
+    whole segment in their closures. Their interiors and the interior
+    of the reference cell are pairwise disjoint. Neither opposing
+    square can have a corner at $x$, since an opposing corner on an
+    elementary segment must be an endpoint. Consequently the
+    tangential coordinate of $x$ lies strictly between the two
+    tangential bounds of each opposing square.
+
+    Write $x=(\xi,\eta)$ in tangential and normal coordinates, and
+    write the closures of the reference square and the two opposing
+    squares as $[u_j,v_j]\times[u'_j,v'_j]$ for $j=0,1,2$. Then
+    \begin{align}
+        \xi  & \in(u_0,v_0)\cap(u_1,v_1)\cap(u_2,v_2),       \\
+        \eta & \in[u'_0,v'_0]\cap[u'_1,v'_1]\cap[u'_2,v'_2].
+    \end{align}
+    Since the tangential open intervals overlap, pairwise disjoint
+    interiors force the normal open intervals $(u'_j,v'_j)$ to be
+    pairwise disjoint. Each of them has positive length and contains
+    $(\eta-\epsilon,\eta)$ or $(\eta,\eta+\epsilon)$ for some
+    $\epsilon>0$. Two of the three therefore meet, a contradiction.
+    Interchanging the coordinates handles a horizontal elementary
+    segment.
+
+    If both the dummy neighborhood and a distinct actual fine cell
+    contain the segment, the finite union defining the dummy
+    neighborhood supplies a contributing closed coarse cell
+    containing $x$. Its interior is disjoint from both fine-cell
+    interiors because their layer indices are at least $k_0$.
+    A dummy corner on the elementary segment is again an endpoint,
+    so $x$ is not such a corner. The same three-rectangle argument
+    gives a contradiction. Thus the existing opposing identifier
+    is unique.
+\end{proof}
+
+These assertions identify the opposing actual fine cell or dummy
+neighborhood. Their composition with primary identifiers and fan-run
+labels, the isolated-star construction and the complete two-family
+partition remain further obligations.
