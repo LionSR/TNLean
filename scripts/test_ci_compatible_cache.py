@@ -162,7 +162,7 @@ Test nested-cylinder orthogonalization edge cases strictly
 Test projected-image cylinder counterexamples strictly
 Check conditional two-family entropy integration strictly
 Check two-family entropy integration strictly
-Test actual regularized patch minimum regressions strictly
+Test regularized patch minimum and coordinate first variation strictly
 Check QICLean import compatibility strictly
 Test uniform angular reset width and standard axioms strictly
 Test actual rectangular local-window regression strictly

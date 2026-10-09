@@ -40,7 +40,7 @@ asymptotic scale specialization is proved below.
     assignment, choose a same-side predecessor in that ball. The ball meets the
     old middle, hence the cut clearance places the whole ball inside $A$.
     This includes far-side predecessors despite the exterior initially being far.
-    Recurse on an earlier assignment, or terminate at the preceding fill.
+    Repeat the argument for an earlier assignment, or stop at the preceding fill.
     The resulting path family deliberately also permits selected charges that
     made no move; only containment of actual assignments in this family is used.
 \end{proof}
@@ -114,7 +114,7 @@ asymptotic scale specialization is proved below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Recursively choose a nearby labelled anchor and continue from it. The finite
+    Inductively choose a nearby labelled anchor and continue from it. The finite
     union has at most $B$ choices at each step. Fiber counting retains label
     multiplicity, and an induced graph ball injects into the ambient lattice
     diamond. Counting labels alone suffices because predecessor witnesses do
@@ -301,7 +301,7 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.geometricBadTail_mono,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}
     \leanok
-    \uses{thm:al_scan_bad_all_times,thm:al_scan_binomial_cancellation}
+    \uses{thm:al_scan_bad_all_times,thm:al_scan_binomial_cancellation,thm:al_scan_timed_path_count}
     If additionally $r>0$, set
     \begin{align}
         \rho=\frac{9e\,nrB}{2M}.
