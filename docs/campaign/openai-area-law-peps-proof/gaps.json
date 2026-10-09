@@ -55,7 +55,8 @@
         "TNLean": [
           8823,
           8932,
-          8943
+          8943,
+          9061
         ]
       },
       "claims": "Lemma 6.3 rewrites the state near a small patch where ownership changes. It states that (1) the rewrite map is a contraction that moves the old reference state close to the new one, and (2) up to error L^−a the map is a polynomial sum of operations that the compression theorem allows.",
