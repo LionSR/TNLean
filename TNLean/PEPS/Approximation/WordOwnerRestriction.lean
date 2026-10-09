@@ -16,11 +16,12 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 342–381.
 -/
 
 noncomputable section
-open ContinuousLinearMap
 namespace TNLean.PEPS.PairEffect
 variable {P Q : Type}
 
 open Classical in
+/-- The owners of a relabelled register list are the image of its original owners.
+Source: polynomial-PEPS 04-compression.tex, lines 233–251. -/
 private theorem owners_mapOwner_image (f : P → Q) (a : Layout P) :
     ((Layout.mapOwner f a).map Reg.owner).toFinset =
       (a.map Reg.owner).toFinset.image f := by
@@ -51,24 +52,24 @@ theorem Word.parties_mapOwner_of_sources_nil (f : P → Q) {a b : Layout P}
       simp only [mapOwner, parties, ih hs, Finset.image_insert]
 
 /-- The actual residual of a gate not incident to a selected party acts as
-identity on that party's empty gate memory. No choice of monomial can affect it.
+identity on that party's empty gate memory.
 Source: polynomial-PEPS 04-compression.tex, lines 233–251 and 351–381. -/
 theorem Word.restrict_mapOwner_eval_eq_id_of_disjoint (f : P → Q) (q : Q)
     {a b : Layout P} (w : Word a b) (hs : w.sources = [])
     (hf : ∀ p, f p ≠ q) :
-    let v := (w.mapOwner f).restrict (SourceCircuit.partySelector q)
+    let v := (w.mapOwner f).restrict (partySelector q)
       (by simp [Word.sources_mapOwner, hs])
     v.parties = ∅ ∧ HEq v.eval (ContinuousLinearMap.id ℂ ℂ) := by
   classical
   dsimp only
-  have hp : ((w.mapOwner f).restrict (SourceCircuit.partySelector q)
+  have hp : ((w.mapOwner f).restrict (partySelector q)
       (by simp [Word.sources_mapOwner, hs])).parties = ∅ := by
     rw [Word.parties_restrict, Word.parties_mapOwner_of_sources_nil f w hs]
     apply Finset.eq_empty_iff_forall_notMem.mpr
     intro x hx
     obtain ⟨hx, hsel⟩ := Finset.mem_filter.mp hx
     obtain ⟨p, _, rfl⟩ := Finset.mem_image.mp hx
-    exact hf p (by simpa only [SourceCircuit.partySelector, decide_eq_true_eq] using hsel)
+    exact hf p (by simpa only [partySelector, decide_eq_true_eq] using hsel)
   exact ⟨hp, (Word.eq_nil_and_eval_eq_id_of_parties_eq_empty _ hp).2.2⟩
 
 end TNLean.PEPS.PairEffect

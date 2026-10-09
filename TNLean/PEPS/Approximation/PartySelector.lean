@@ -12,7 +12,7 @@ party. Source: polynomial-PEPS, `04-compression.tex`, lines 233–251 and 351–
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.PEPS.PairEffect
 variable {P : Type}
 
 /-- Select one original party while retaining its exact label.
@@ -21,4 +21,4 @@ def partySelector (p : P) : P → Bool := by
   classical
   exact fun q => decide (q = p)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.PEPS.PairEffect

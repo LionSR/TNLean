@@ -2,7 +2,7 @@
 
 Let $P$ and $Q$ be sets of owner labels. A finite composition $W$ contains
 local operations, exchanges, and operations beside untouched registers.
-Write $\Pi(W)$ for its participating parties: these include the owners of
+Write $P_W$ for its participating parties: these include the owners of
 all occurring registers and the assigned party of every local operation,
 including a scalar operation on an empty register list. For $f:P\to Q$,
 write $W^f$ for the composition obtained by changing each owner $p$ to
@@ -10,7 +10,7 @@ $f(p)$ while preserving the register spaces and chronological order.
 
 \begin{definition}[Selection of one party]
     \label{def:peps_single_party_selector}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partySelector}
+    \lean{TNLean.PEPS.PairEffect.partySelector}
     \leanok
     For $q\in Q$, define $\chi_q:Q\to\{\mathrm{false},\mathrm{true}\}$
     by $\chi_q(x)=\mathrm{true}$ exactly when $x=q$.
@@ -22,7 +22,7 @@ $f(p)$ while preserving the register spaces and chronological order.
     \leanok
     \uses{def:peps_owner_composition}
     If $W$ contains no pair-source preparation, then
-    $\Pi(W^f)=f(\Pi(W))$. No injectivity assumption on $f$ is required.
+    $P_{W^f}=f(P_W)$. No injectivity assumption on $f$ is required.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -41,16 +41,16 @@ $f(p)$ while preserving the register spaces and chronological order.
     \uses{def:peps_single_party_selector,def:peps_owner_composition}
     Suppose that $W$ contains no pair-source preparation and that
     $f(p)\ne q$ for every $p\in P$. Let $V$ be the restriction of $W^f$
-    to the owner $q$. Then $\Pi(V)=\varnothing$, and its operator is
+    to the owner $q$. Then $P_V=\varnothing$, and its operator is
     $\operatorname{id}_{\C}$ under the canonical identification of the
     empty input and output register memories with $\C$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_free_owner_parties,thm:peps_party_restriction,
-        def:peps_single_party_selector}
+        def:peps_single_party_selector,thm:peps_party_factorization}
     The participating parties are
-    $\Pi(V)=\{x\in f(\Pi(W)):x=q\}=\varnothing$.
+    $P_V=\{x\in f(P_W):x=q\}=\varnothing$.
     A composition with no participating party has empty input and output
     register lists and acts as their identity. In particular, it cannot
     contain a scalar local operation with a named party.
