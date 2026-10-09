@@ -165,6 +165,7 @@ import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
+import TNLean.PEPS.Approximation.PureSourceMatrix
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.RoutedContraction
