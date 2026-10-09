@@ -153,17 +153,19 @@
     \uses{def:strictly-equivalent-symmetry,
         def:mpdo_vertical_one_site_actions}
     Fix $d,D$, two finite-chain operator symmetries $\mathcal S,\mathcal T$,
-    and a unitary $Q\in\MN{d}$ with $Q^2=I$. Suppose that, for every local tensor $\mathcal W$ of these dimensions,
-    $\mathcal W$ is $\mathcal S$-invariant if and only if
+    and a unitary $Q\in\MN{d}$ with $Q^2=I$. Suppose that, for every local
+    tensor $\mathcal W$ with physical dimension $d$ and any virtual
+    dimension, $\mathcal W$ is $\mathcal S$-invariant if and only if
     $Q\mathcal W$ is $\mathcal T$-invariant. Then a continuous MPU path
     of virtual dimension $D$ from $\mathcal U$ to $\mathcal V$ with
     $\mathcal S$-invariance exists if and only if such a path from
     $Q\mathcal U$ to $Q\mathcal V$ with $\mathcal T$-invariance exists.
-    The common virtual dimension is fixed; stabilization remains outside
-    this statement \cite{gap:mpu_equivalence_fixed_bond,
-        gap:mpu_symmetry_ancilla_transport}.
     If the endpoints are in canonical form, the same equivalence holds
-    for strict equivalence under the corresponding symmetries.
+    for strict equivalence under the corresponding symmetries; this
+    comparison connects padded representatives in a shared ambient
+    virtual dimension, while identity-ancilla stabilization remains
+    outside the statement \cite{gap:mpu_equivalence_fixed_bond,
+        gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -195,8 +197,10 @@
     $\widetilde{\mathcal U},\widetilde{\mathcal V}$ under adjunction.
     The analogous equivalence holds for swap-combined transposition and
     transposition. Strict equivalence under conjugation is preserved.
-    These comparisons concern fixed-bond strict paths; the stabilized
-    source comparison remains outside this statement
+    These comparisons fix the endpoints' virtual dimension, while the
+    strict-equivalence relation itself connects padded representatives in a
+    shared ambient virtual dimension; identity-ancilla stabilization remains
+    outside this statement
     \cite{gap:mpu_equivalence_fixed_bond,
         gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}
@@ -244,16 +248,17 @@
         def:mpdo_vertical_one_site_actions}
     Fix $d,D$, finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary involution $Q\in\MN{d}$. For every $k>0$, suppose that
-    every local tensor $\mathcal W$ of physical dimension $d^k$ and
-    virtual dimension $D$ is invariant under the blocked symmetry
+    every local tensor $\mathcal W$ of physical dimension $d^k$ and any
+    virtual dimension is invariant under the blocked symmetry
     $\mathcal S^{[k]}$ if and only if
     $Q^{\otimes k}\mathcal W$ is invariant under $\mathcal T^{[k]}$.
     Then the existence of a common positive blocking length making
     $\mathcal U^{[k]},\mathcal V^{[k]}$ strictly equivalent under
     $\mathcal S^{[k]}$ is equivalent to the existence of such a length
     making $(Q\mathcal U)^{[k]},(Q\mathcal V)^{[k]}$ strictly equivalent
-    under $\mathcal T^{[k]}$. No identity ancillas or unequal virtual
-    dimensions are included in this comparison
+    under $\mathcal T^{[k]}$. The strict-equivalence relation connects
+    padded representatives in a shared ambient virtual dimension; no
+    identity ancillas are included in this comparison
     \cite{gap:mpu_equivalence_fixed_bond,
         gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}

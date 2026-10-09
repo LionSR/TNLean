@@ -157,7 +157,7 @@ theorem swapCombined_fixed_iff_leftMul {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- The physical swap converts swap-combined adjunction into adjunction.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
-theorem isInvariantUnderSymmetry_shiftSwapDagger_iff (U : MPOTensor (d * d) D) :
+theorem isInvariantUnderSymmetry_shiftSwapDagger_iff {E : ℕ} (U : MPOTensor (d * d) E) :
     IsInvariantUnderSymmetry (shiftSwapDaggerSymmetry d) U ↔
       IsInvariantUnderSymmetry (daggerSymmetry (d * d))
         (U.ketLeftMul (shiftPhysicalSwap d)) := by
@@ -172,7 +172,7 @@ theorem isInvariantUnderSymmetry_shiftSwapDagger_iff (U : MPOTensor (d * d) D) :
 
 /-- The physical swap converts swap-combined transposition into transposition.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
-theorem isInvariantUnderSymmetry_shiftSwapTranspose_iff (U : MPOTensor (d * d) D) :
+theorem isInvariantUnderSymmetry_shiftSwapTranspose_iff {E : ℕ} (U : MPOTensor (d * d) E) :
     IsInvariantUnderSymmetry (shiftSwapTransposeSymmetry d) U ↔
       IsInvariantUnderSymmetry (transposeSymmetry (d * d))
         (U.ketLeftMul (shiftPhysicalSwap d)) := by
@@ -187,7 +187,7 @@ theorem isInvariantUnderSymmetry_shiftSwapTranspose_iff (U : MPOTensor (d * d) D
 /-- The physical swap preserves entrywise conjugation invariance.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem isInvariantUnderSymmetry_conjugation_ketLeftMul_swap_iff
-    (U : MPOTensor (d * d) D) :
+    {E : ℕ} (U : MPOTensor (d * d) E) :
     IsInvariantUnderSymmetry (conjugationSymmetry (d * d)) U ↔
       IsInvariantUnderSymmetry (conjugationSymmetry (d * d))
         (U.ketLeftMul (shiftPhysicalSwap d)) := by

@@ -135,8 +135,8 @@ private theorem blocked_chainSwap_map_star (d k N : ℕ) :
   simp [sitewisePhysicalMatrix, MPSTensor.blockKron, shiftPhysicalSwap,
     Equiv.Perm.permMatrix, PEquiv.toMatrix_apply]
 
-private theorem block_swap_dagger_invariance_iff (d k : ℕ)
-    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) D) :
+private theorem block_swap_dagger_invariance_iff (d k : ℕ) {E : ℕ}
+    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) E) :
     IsInvariantUnderSymmetry ((shiftSwapDaggerSymmetry d).block k) W ↔
       IsInvariantUnderSymmetry ((daggerSymmetry (d * d)).block k)
         (W.ketLeftMul (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
@@ -147,8 +147,8 @@ private theorem block_swap_dagger_invariance_iff (d k : ℕ)
   apply swapCombined_fixed_iff_leftMul _ _ (blocked_chainSwap_mul_self d k N)
   rw [Matrix.conjTranspose_mul, blocked_chainSwap_conjTranspose]
 
-private theorem block_swap_transpose_invariance_iff (d k : ℕ)
-    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) D) :
+private theorem block_swap_transpose_invariance_iff (d k : ℕ) {E : ℕ}
+    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) E) :
     IsInvariantUnderSymmetry ((shiftSwapTransposeSymmetry d).block k) W ↔
       IsInvariantUnderSymmetry ((transposeSymmetry (d * d)).block k)
         (W.ketLeftMul (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
@@ -159,8 +159,8 @@ private theorem block_swap_transpose_invariance_iff (d k : ℕ)
   apply swapCombined_fixed_iff_leftMul _ _ (blocked_chainSwap_mul_self d k N)
   rw [Matrix.transpose_mul, blocked_chainSwap_transpose]
 
-private theorem block_conjugation_invariance_iff (d k : ℕ)
-    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) D) :
+private theorem block_conjugation_invariance_iff (d k : ℕ) {E : ℕ}
+    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) E) :
     IsInvariantUnderSymmetry ((conjugationSymmetry (d * d)).block k) W ↔
       IsInvariantUnderSymmetry ((conjugationSymmetry (d * d)).block k)
         (W.ketLeftMul (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by

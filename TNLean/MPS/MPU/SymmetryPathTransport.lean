@@ -15,9 +15,10 @@ An involutive one-site unitary acts continuously on local tensors. If this
 action carries one operator symmetry to another, it also carries continuous
 paths satisfying the first symmetry to paths satisfying the second.
 
-**Scope restriction (fixed virtual dimension):** These results concern paths
-in one fixed ambient virtual dimension, as in the current strict-equivalence
-definition. They do not compare unequal raw virtual dimensions. See
+**Scope restriction (shared ambient virtual dimension):** The strict-equivalence
+definition connects padded tensors in a common ambient virtual dimension. The
+symmetry correspondence transported here is therefore required at every bond
+dimension, not only the raw one. See
 `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
 **Scope restriction (no identity ancillas):** The equivalence comparisons
@@ -87,7 +88,7 @@ theorem joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul
     (S T : FiniteChainOperatorSymmetry d)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hQQ : Q * Q = 1)
-    (hST : ∀ W : MPOTensor d D,
+    (hST : ∀ {E : ℕ} (W : MPOTensor d E),
       IsInvariantUnderSymmetry S W ↔ IsInvariantUnderSymmetry T (W.ketLeftMul Q))
     (U V : MPOTensor d D) :
     JoinedIn {W : MPOTensor d D | IsMPU W ∧ IsInvariantUnderSymmetry S W} U V ↔
@@ -104,38 +105,58 @@ theorem joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul
     simpa only [ketLeftMul_involutive Q hQQ U, ketLeftMul_involutive Q hQQ V] using
       joinedIn_ketLeftMul T S Q hQ hTS h
 
+/-- The one-site ket action commutes with adjoining unused bond directions:
+both sides left-multiply every physical slice by `Q` inside the same bond
+block. -/
+private theorem ketLeftMul_padBond (U : MPOTensor d D)
+    (Q : Matrix (Fin d) (Fin d) ℂ) (D' : ℕ) (h : D ≤ D') :
+    (padBond U D' h).ketLeftMul Q = padBond (U.ketLeftMul Q) D' h := by
+  funext i j
+  simp only [ketLeftMul, padBond]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  exact Finset.sum_congr rfl fun k _ => by rw [Matrix.mul_smul, Matrix.smul_mul]
+
+/-- Reindexing both physical legs by the trivial equivalence `(finCongr rfl).symm`
+is the identity. -/
+private theorem reindexPhysical_finCongr_rfl (U : MPOTensor d D) :
+    reindexPhysical (finCongr (rfl : d = d)).symm U = U := by
+  funext i j
+  simp [reindexPhysical, finCongr_refl]
+
 /-- An involutive one-site unitary identifies strict symmetry-preserving
-equivalence for two symmetries whose invariant tensors it identifies.
-Canonical form is preserved at both endpoints; intermediate tensors need
-only generate MPUs and satisfy the corresponding symmetry.
+equivalence for two symmetries whose invariant tensors it identifies at every
+bond dimension. Canonical form is preserved at both endpoints; intermediate
+tensors need only generate MPUs and satisfy the corresponding symmetry.
 
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem strictlyEquivalentUnderSymmetry_iff_ketLeftMul
     (S T : FiniteChainOperatorSymmetry d)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hQQ : Q * Q = 1)
-    (hST : ∀ W : MPOTensor d D,
+    (hST : ∀ {E : ℕ} (W : MPOTensor d E),
       IsInvariantUnderSymmetry S W ↔ IsInvariantUnderSymmetry T (W.ketLeftMul Q))
     (U V : MPOTensor d D) :
     StrictlyEquivalentUnderSymmetry S U V rfl ↔
       StrictlyEquivalentUnderSymmetry T (U.ketLeftMul Q) (V.ketLeftMul Q) rfl := by
-  change (MPSTensor.IsMPUCanonicalForm U.toMPSTensor ∧
-    MPSTensor.IsMPUCanonicalForm V.toMPSTensor ∧
-    JoinedIn {W : MPOTensor d D | IsMPU W ∧ IsInvariantUnderSymmetry S W} U V) ↔ _
+  unfold StrictlyEquivalentUnderSymmetry
   constructor
-  · intro h
-    refine ⟨isMPUCanonicalForm_ketLeftMul U h.1 Q hQ,
-      isMPUCanonicalForm_ketLeftMul V h.2.1 Q hQ, ?_⟩
-    exact (joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul S T Q hQ hQQ hST U V).mp
-      h.2.2
-  · intro h
-    refine ⟨?_, ?_, ?_⟩
+  · rintro ⟨hU, hV, D', ha, hb, hpath⟩
+    rw [reindexPhysical_finCongr_rfl] at hpath
+    refine ⟨isMPUCanonicalForm_ketLeftMul U hU Q hQ,
+      isMPUCanonicalForm_ketLeftMul V hV Q hQ, D', ha, hb, ?_⟩
+    rw [reindexPhysical_finCongr_rfl, ← ketLeftMul_padBond, ← ketLeftMul_padBond]
+    exact (joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul S T Q hQ hQQ hST
+      (padBond U D' ha) (padBond V D' hb)).mp hpath
+  · rintro ⟨hU', hV', D', ha, hb, hpath⟩
+    rw [reindexPhysical_finCongr_rfl, ← ketLeftMul_padBond, ← ketLeftMul_padBond] at hpath
+    refine ⟨?_, ?_, D', ha, hb, ?_⟩
     · simpa only [ketLeftMul_involutive Q hQQ U] using
-        isMPUCanonicalForm_ketLeftMul (U.ketLeftMul Q) h.1 Q hQ
+        isMPUCanonicalForm_ketLeftMul (U.ketLeftMul Q) hU' Q hQ
     · simpa only [ketLeftMul_involutive Q hQQ V] using
-        isMPUCanonicalForm_ketLeftMul (V.ketLeftMul Q) h.2.1 Q hQ
-    · exact (joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul S T Q hQ hQQ hST U V).mpr
-        h.2.2
+        isMPUCanonicalForm_ketLeftMul (V.ketLeftMul Q) hV' Q hQ
+    · rw [reindexPhysical_finCongr_rfl]
+      exact (joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul S T Q hQ hQQ hST
+        (padBond U D' ha) (padBond V D' hb)).mpr hpath
 
 private theorem evalWord_ketLeftMul_ofFn
     (W : MPOTensor d D) (Q : Matrix (Fin d) (Fin d) ℂ) :
@@ -189,7 +210,7 @@ theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul
     (S T : FiniteChainOperatorSymmetry d)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hQQ : Q * Q = 1)
-    (hST : ∀ k : ℕ, 0 < k → ∀ W : MPOTensor (MPSTensor.blockPhysDim d k) D,
+    (hST : ∀ k : ℕ, 0 < k → ∀ {E : ℕ} (W : MPOTensor (MPSTensor.blockPhysDim d k) E),
       IsInvariantUnderSymmetry (S.block k) W ↔
         IsInvariantUnderSymmetry (T.block k) (W.ketLeftMul (MPSTensor.blockKron k Q)))
     (U V : MPOTensor d D) :
