@@ -1,9 +1,0 @@
-{
-  "command": [
-    "/tmp/qic-regional-blueprint-env/bin/python",
-    "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-main-blueprint-stziqphq/scoped_web_check.py"
-  ],
-  "cwd": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-source-main-blueprint-stziqphq",
-  "returncode": 1,
-  "seconds": 0.19451154200942256
-}
