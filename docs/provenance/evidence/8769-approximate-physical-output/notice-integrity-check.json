@@ -1,8 +1,0 @@
-{
-  "public_declarations": 75,
-  "files": 13,
-  "canonical_notice_check": true,
-  "declarations_present": true,
-  "no_forbidden_proof_tokens": true,
-  "proof_token_preservation_except_exact_shared_helper_promotion": true
-}

@@ -1,5 +1,0 @@
-{
-  "tn_proof_revision": "5b5d83dd93ba9727b3238db48a7ebf6a97dbc04b",
-  "qic_source_revision": "035e5cc6f208e7b069132ef8eff8c8afbfa012d9",
-  "scope": "Source-only blueprint snapshot against checked QIC integration candidate. Final dependency pins and exact integration commit will be synchronized after the checked handoff. No Lake artifacts copied."
-}

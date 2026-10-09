@@ -1,6 +1,0 @@
-{
-  "note": "The full-root declaration check used the first formatted snapshot. The only subsequent source change shortened a theorem heading; the exact declaration list is byte-identical to the final render.",
-  "first_snapshot": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-message-resource-bounds-blueprint-k0otp6ox",
-  "final_snapshot": "/var/folders/d1/qpfb8kqs3dj482nzfg_0yvkc0000gn/T/tnlean-message-resource-bounds-blueprint-d1xzps12",
-  "declaration_lists_identical": true
-}
