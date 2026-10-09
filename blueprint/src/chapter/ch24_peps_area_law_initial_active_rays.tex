@@ -131,6 +131,7 @@ interfaces in the local construction of
 \begin{corollary}[Actual frontiers as restricted directed rays]
     \label{thm:area_law_initial_active_ray_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_ray}
+    \leanok
     \uses{thm:area_law_actual_sector_assignment,
         def:area_law_initial_birth_regions,def:area_law_cell_fan_successor}
     Retain the origin, endpoint set, width, initial layer, arbitrary
@@ -153,7 +154,7 @@ interfaces in the local construction of
     Identifiers may occur in several separated sectors; the change set
     records successive sectors without identifying such occurrences.
 \end{corollary}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_initial_active_radial_closed,
         thm:area_law_cell_fan_successor_iff,
         thm:area_law_cell_fan_radial_ray_restriction}
