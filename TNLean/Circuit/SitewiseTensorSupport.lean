@@ -56,6 +56,7 @@ theorem reindex_kronecker_mem_supportedOperators
   rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
   refine Submodule.subset_span
     ⟨fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i), ?_, ?_⟩
+  intro i hi
   done
 
 end QuantumCircuit
