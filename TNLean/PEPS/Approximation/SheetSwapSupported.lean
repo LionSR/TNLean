@@ -37,6 +37,7 @@ theorem sheetSwapOp_mul_kronecker_of_mem_supportedOperators
   obtain ⟨B', hB'⟩ := exists_kronecker_one_of_mem_supportedOperators hB
   rw [sheetSwapOp, PEquiv.toMatrix_toPEquiv_mul,
     PEquiv.mul_toMatrix_toPEquiv, sheetSwap_symm]
+  ext ⟨y₁, y₂⟩ ⟨r₁, r₂⟩
   done
 
 end TNLean.PEPS.EncodedFrame
