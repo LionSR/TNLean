@@ -6038,3 +6038,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
+
+### Owners of fixed pair-source registers — candidate (2026-10-09)
+
+- **Pattern:** From membership in a fixed source-register layout, use
+  `List.mem_flatMap` to identify the pair, `List.mem_ofFn` to identify its
+  slot index, and `PairSource.layout` to choose its left or right owner.
+- **Seen:** `SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id` in
+  `PEPS/Approximation/EndpointWordRestriction.lean` and
+  `SourceCircuit.restrict_allResidualSourceLayout_isNone` in
+  `PEPS/Approximation/ActualSourceEmptyOwner.lean` (the latter is proposed
+  separately in #8999). These are two mathematical uses across two files,
+  rather than copies of one source proposal.
+- **Abstraction:** At a third occurrence, prefer an ordinary lemma stating
+  that every owner in `SourceInventory.slotLayout R U V` is the left or
+  right owner of some slot `R.get i`. The assigned register spaces are
+  irrelevant to that conclusion. A selector-exclusion corollary can then
+  reuse that owner description.
+- **Notes:** The rule of three is not yet met, so no new helper or tactic is
+  added. The endpoint word's separate participating-party support proof
+  remains necessary: a general local operation on empty registers may still
+  name a participating party. The corpus scanner was run; unrelated reported
+  patterns are outside this change.
