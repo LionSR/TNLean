@@ -512,8 +512,9 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles \
             TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover \
             TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
+            TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-          for source in TNLeanTest/TemplateMixedSquares.lean TNLeanTest/TemplateCutBoundary.lean; do
+          for source in TNLeanTest/TemplateMixedSquares.lean TNLeanTest/TemplateCutBoundary.lean TNLeanTest/TemplateEntropy.lean; do
             timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \

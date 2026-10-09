@@ -3285,3 +3285,19 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
   for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
   of Lemma 9.4, not safe clearance or a regional entropy theorem.
+
+## Conditional entropy of template regions
+
+- `biUnion_rectRegion_cappedDyadicPartition` and
+  `pairwiseDisjoint_rectRegion_cappedDyadicPartition` identify the actual
+  disjoint physical rectangle cover, including missing sites and disconnected domains.
+- `Template.regionalEntropy_core_le_of_safe_box`,
+  `Template.regionalEntropy_shell_le_of_safe_box`, and
+  `Template.regionalEntropy_prefix_le_of_safe_box` compose actual regional
+  subadditivity, derived safety, and the weighted covering estimates. A partial
+  final row costs at most `n * log q`.
+- `exists_template_entropy_bounds_of_arbitrary_safe_box` assumes the safe-box
+  estimate for every exponent in `(0,1)` and every safe native rectangle. It
+  chooses the corresponding constant before the template and scales. This is
+  the conditional entropy component of Lemma 9.4, not a derivation of the
+  arbitrary-exponent input or a completion marker for the full source lemma.

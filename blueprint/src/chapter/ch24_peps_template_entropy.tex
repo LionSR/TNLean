@@ -202,3 +202,71 @@
     \]
     using $2^e>1$ and $2^K\le L$.
 \end{proof}
+
+\section{Entropy from a uniform safe-box estimate}
+
+\begin{theorem}[Physical dyadic partition and subadditivity]
+    \label{thm:area_template_physical_dyadic_entropy}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.biUnion_rectRegion_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
+        TNLean.PEPS.AreaLaw.Geometry.regionalEntropy_filter_le_sum_rectRegion}
+    \uses{thm:area_template_dyadic_rectangle}
+    For a finite lattice set $S$, the native rectangle regions $A\cap Q$
+    of its actual capped dyadic partition are pairwise disjoint and their
+    union is $A\cap S$. For a normalized physical vector $\Omega$,
+    \[
+        S_\Omega(A\cap S)\le\sum_Q S_\Omega(A\cap Q).
+    \]
+    Sites absent from the physical domain do not contribute to these regions.
+\end{theorem}
+\begin{proof}
+    Intersect the ambient covering and its pairwise disjointness with $A$.
+    Apply finite disjoint-union subadditivity to the actual regional
+    reductions, starting with the empty region, whose entropy is zero.
+\end{proof}
+
+\begin{theorem}[Conditional template and shell entropy bounds]
+    \label{thm:area_template_safe_box_entropy}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_core_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_shell_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_prefix_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.exists_template_entropy_bounds_of_arbitrary_safe_box}
+    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_safe_rectangles,
+        thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
+        thm:area_template_partial_row}
+    Fix a finite physical domain, a cut $A$, a normalized vector $\Omega$,
+    local dimension $q\ge1$, and a native safety parameter $D_0\ge1$.
+    Assume explicitly that for every $\varepsilon\in(0,1)$ there is
+    $C_\varepsilon\ge0$ such that every safe native rectangle satisfies
+    \[
+        S_\Omega(A\cap Q)\le C_\varepsilon
+        \operatorname{size}(Q)^{1+\varepsilon}.
+    \]
+    Fix $e\in(0,1)$. The same constant $C_e$, independent of the template,
+    works for all separated templates with $C_{\rm tpl}\ge24$.
+    With a core cap $2^{K_0}\le s_0<2^{K_0+1}$ and a shell cap
+    $2^K\le L<2^{K+1}$, where $j\le L\le s_0$, one has
+    \begin{align*}
+        S_\Omega(A\cap T)
+         & \le C_e\left(18+\frac{4}{2^e-1}\right)ns_0^e, \\
+        S_\Omega(A\cap(T_j\setminus T))
+         & \le C_e\left(2+\frac{14}{2^e-1}\right)nL^e.
+    \end{align*}
+    If $1\le j\le L$ and $Y\subseteq T_j\setminus T_{j-1}$ is arbitrary,
+    the entropy of $A\cap((T_{j-1}\setminus T)\cup Y)$ is at most the
+    displayed shell bound plus $n\log q$.
+    The fixed-exponent statements require only the safe-box estimate at that
+    exponent and $e>0$. The quantified statement retains the source range
+    $0<e<1$ and the uniform choice of $C_e$.
+\end{theorem}
+\begin{proof}
+    Every selected square is safe by separation and the scale bounds.
+    Apply the safe-box estimate to its physical rectangle region, sum by
+    subadditivity, and use the actual weighted core and shell estimates.
+    For a prefix, first use the shell estimate at depth $j-1$, then add
+    the proved partial-row cost $n\log q$.
+    The uniform constant is chosen from the safe-box hypothesis before any
+    template or scale is selected. This composes the conditional entropy
+    step of \cite[Lemma~9.4]{OpenAI2026AreaLaw}; it does not derive the
+    safe-box hypothesis from an initial existential exponent.
+\end{proof}
