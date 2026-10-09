@@ -88,6 +88,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_dual_rectangle.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
@@ -95,6 +96,8 @@ on:
       - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_patch_stationarity.py'
+      - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -192,6 +195,7 @@ on:
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_tenkz_dual_rectangle.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
@@ -199,6 +203,8 @@ on:
       - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
+      - 'scripts/test_tenkz_patch_stationarity.py'
+      - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -339,6 +345,7 @@ jobs:
               - 'scripts/tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_pic.py'
+              - 'scripts/test_tenkz_dual_rectangle.py'
               - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
@@ -346,6 +353,8 @@ jobs:
               - 'scripts/test_tenkz_canonical_pairs.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
+              - 'scripts/test_tenkz_patch_stationarity.py'
+              - 'scripts/test_tenkz_region_coordinates.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -654,6 +663,34 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateMixedSquares.lean
 
+      - name: Test exact nearest-neighbor crossing budget strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingBudget.lean
+
+      - name: Test crossing-budget standard axioms strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingBudgetAxioms.lean
+
+      - name: Test concrete one-edge crossing regression strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingOneEdge.lean
+
+      - name: Test template clearance strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateClearance.lean
+
       - name: Test concrete hole encoder and standard axioms strictly
         run: |
           for file in TNLeanTest/HoleEncoder.lean TNLeanTest/HoleEncoderAxioms.lean TNLeanTest/RegionOperatorEmbedding.lean TNLeanTest/RegionOperatorEmbeddingAxioms.lean; do
@@ -731,21 +768,37 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TwoFamilyEntropy.lean
 
-      - name: Test actual regularized patch minimum regressions strictly
+      - name: Test regularized patch minimum and coordinate first variation strictly
         run: |
-          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
-            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+          set -e
+          # The patch tests import a shared support module. Keep its object in a
+          # fresh overlay outside the production cache, so other TNLeanTest
+          # overlays are not shadowed by a TNLeanTest directory in the build tree.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest/Support"
+          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
+          flags="-DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true"
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
+            -o "$test_root/TNLeanTest/Support/SingleQubitConfig.olean" \
+            TNLeanTest/Support/SingleQubitConfig.lean
+          for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
+              DependentRegionCoordinates RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
               "TNLeanTest/$example.lean"
           done
 
-      - name: Check QICLean conjugator import compatibility strictly
-        run: >
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/QICConjugatorCompatibility.lean
+      - name: Check QICLean import compatibility strictly
+        run: |
+          set -e
+          lake --fail-fast build QICLean.Probability.PoissonWordSpatialGrowth
+          for file in TNLeanTest/QICConjugatorCompatibility.lean \
+              TNLeanTest/QICPoissonCompatibility.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test uniform angular reset width and standard axioms strictly
         run: |
@@ -778,6 +831,38 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateBoundary.lean
+
+      - name: Test actual scan histories strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanHistories.lean
+
+      - name: Test jointly satisfiable physical scan sampling
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanPhysicalSampling.lean
+
+      - name: Test actual offset counts and history marginals
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualOffsetDilution.lean
+
+      - name: Audit actual designated dilution axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanDilutionAxioms.lean
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
@@ -1387,6 +1472,7 @@ jobs:
         run: python3 scripts/test_tenkz_pic.py
 
       - name: Test finite rectangular dual geometry
+        if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_dual_rectangle.py
 
       - name: Test quantum-double local-term diagrams and nonabelian formulas
@@ -1406,6 +1492,27 @@ jobs:
       - name: Check regular parent and intersection diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_parent_spanning.py
+
+      - name: Check ordered coordinate insertion diagram
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_patch_stationarity.py
+
+      - name: Check regional basis-relabelling diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: >
+          python3 scripts/test_tenkz_region_coordinates.py
+          --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
+
+      - name: Preserve regional coordinate diagrams for review
+        if: success() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: region-coordinate-diagrams-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/region-coordinate-diagrams/tenkz-*.svg
+            ${{ runner.temp }}/region-coordinate-diagrams/cache/tenkz-*.tnlog
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'

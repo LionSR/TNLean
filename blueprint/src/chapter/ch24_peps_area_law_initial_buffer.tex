@@ -8,9 +8,25 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
 
 \begin{definition}[Safe rectangles]
     \label{def:area_law_safe_rectangle}
-    \lean{TNLean.PEPS.AreaLaw.IntRect, TNLean.PEPS.AreaLaw.IntRect.size,
-        TNLean.PEPS.AreaLaw.IntRect.dilate, TNLean.PEPS.AreaLaw.IsSafe,
-        TNLean.PEPS.AreaLaw.rectRegion}
+    \lean{TNLean.PEPS.AreaLaw.IntRect,
+        TNLean.PEPS.AreaLaw.IntRect.size,
+        TNLean.PEPS.AreaLaw.IntRect.dilate,
+        TNLean.PEPS.AreaLaw.IsSafe,
+        TNLean.PEPS.AreaLaw.rectRegion,
+        TNLean.PEPS.AreaLaw.supDist,
+        TNLean.PEPS.AreaLaw.IntRect.toFinset,
+        TNLean.PEPS.AreaLaw.IntRect.mem_toFinset,
+        TNLean.PEPS.AreaLaw.IntRect.one_le_size,
+        TNLean.PEPS.AreaLaw.IntRect.width_le_size,
+        TNLean.PEPS.AreaLaw.IntRect.height_le_size,
+        TNLean.PEPS.AreaLaw.IntRect.mem_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.toFinset_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.dilate_zero,
+        TNLean.PEPS.AreaLaw.IntRect.dilate_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.toFinset_dilate_mono,
+        TNLean.PEPS.AreaLaw.IntRect.mem_dilate_of_supDist_le,
+        TNLean.PEPS.AreaLaw.mem_rectRegion,
+        TNLean.PEPS.AreaLaw.rectRegion_dilate_mono}
     \leanok
     \uses{def:area_law_hamiltonian}
     Let $A\subseteq\Lambda$ and let $Z$ be the set of endpoints of the edges
@@ -35,6 +51,12 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     supports containing a site.
 \end{theorem}
 \begin{proof}\leanok
+    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
+        TNLean.PEPS.AreaLaw.supDist_le_latticeL1Distance,
+        TNLean.PEPS.AreaLaw.supDist_le_of_walk,
+        TNLean.PEPS.AreaLaw.Splits,
+        TNLean.PEPS.AreaLaw.exists_of_splits_rectRegion,
+        TNLean.PEPS.AreaLaw.card_dilate_sdiff_le}
     If a support had a site $x\in A\cap Q$ and a site outside $A$, a walk of
     length at most $R$ between them would cross an edge of the cut at sup-norm
     distance at most $R<D_0\operatorname{size}(Q)$ from $Q$. The ambient
@@ -47,8 +69,7 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
 
 \begin{theorem}[Conditional entropy in a buffered rectangle]
     \label{thm:area_law_initial_buffer}
-    \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer,
-        TNLean.PEPS.AreaLaw.condEntropy_le_initialBuffer_of_constants}
+    \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer}
     \leanok
     \uses{thm:area_law_buffer_contours, thm:area_law_marginal_tails,
         def:area_law_ground_entropy}
@@ -66,6 +87,18 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_buffer_contours}
+    \lean{TNLean.PEPS.AreaLaw.condEntropy_le_initialBuffer_of_constants,
+        TNLean.PEPS.AreaLaw.sum_range_succ_eq_sum_Icc,
+        TNLean.PEPS.AreaLaw.supportDim_le,
+        TNLean.PEPS.AreaLaw.one_le_supportDim,
+        TNLean.PEPS.AreaLaw.cutLogBudget_le_card,
+        TNLean.PEPS.AreaLaw.bufferCrossConst,
+        TNLean.PEPS.AreaLaw.bufferBudgetConst,
+        TNLean.PEPS.AreaLaw.bufferCrossConst_nonneg,
+        TNLean.PEPS.AreaLaw.one_le_bufferBudgetConst,
+        TNLean.PEPS.AreaLaw.harmonic_weight_le_half,
+        TNLean.PEPS.AreaLaw.harmonic_weight_ratio_le,
+        TNLean.PEPS.AreaLaw.le_tailRadius_of_le}
     Put $D=R+1$, $m=\lfloor(C_{\mathrm{pad}}-1)r/D\rfloor$ and
     $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
     Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits

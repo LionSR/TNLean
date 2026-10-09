@@ -724,6 +724,8 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/TemplateCutBoundary.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')], [
                         'import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles',
+                        'import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary',
+                        'import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance',
                         'import Mathlib.Data.Rat.Floor'])
                 elif step.get('name') == 'Check labelled open coefficients early':
                     self.assertLess(prune, i)

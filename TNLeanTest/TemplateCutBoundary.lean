@@ -1,4 +1,6 @@
 import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
+import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
+import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
 import Mathlib.Data.Rat.Floor
 
 /-!
@@ -346,7 +348,7 @@ example : (rectRegion disconnectedCut (latticeDyadicRect 0 (1, 0))).Nonempty := 
   refine ⟨⟨(1, 0), by simp [disconnectedDomain]⟩, ?_⟩
   simp [mem_rectRegion, disconnectedCut, IntRect.mem_toFinset, latticeDyadicRect]
 
--- The physical-domain adapter includes no sites absent from the ambient square.
+-- The physical intersection includes no sites absent from the ambient square.
 example : rectRegion disconnectedCut (latticeDyadicRect 0 (-3, 2)) = ∅ := by
   apply Finset.eq_empty_iff_forall_notMem.mpr
   intro x hx
@@ -367,3 +369,46 @@ run_cmd do
     for ax in axioms do
       unless [``propext, ``Classical.choice, ``Quot.sound].contains ax do
         throwError "{name} uses unexpected axiom {ax}"
+-- The whole side-two cell lies in the maximal permitted dilation.
+private theorem thinDiagonal_cell_subset : latticeDyadicCell 1 (0, 0) ⊆
+    ambientDilation thinDiagonalTemplate.points 3 := by
+  intro q hq
+  have hq' := (mem_latticeDyadicCell_iff_bounds 1 (0, 0) q).mp hq
+  norm_num at hq'
+  apply mem_ambientDilation_iff.mpr
+  refine ⟨(0, 0), by simp [thinDiagonalTemplate, thinDiagonalSample], ?_⟩
+  norm_num
+  omega
+
+-- Nonvacuous strict clearance for a whole side-two cell in the actual thin template.
+example (p : ℤ × ℤ) (hp : p ∈ latticeDyadicCell 1 (0, 0)) :
+    (2 : ℝ) < max |(p.1 : ℝ) - 20| |(p.2 : ℝ) - 0| := by
+  simpa using separated.side_lt_dist_of_mem_ambientDilation
+    (by norm_num) (by omega : 3 ≤ 3) (by omega : 2 ≤ 3) (thinDiagonal_cell_subset hp)
+    (by simp : (20, 0) ∈ ({(20, 0), (21, 0)} : Finset (ℤ × ℤ)))
+
+-- Instantiate the full natural clearance theorem at both endpoints of a
+-- genuine physical crossing edge in the remote two-site component. Neither
+-- separation nor containment is assumed: both were proved for this fixture.
+example (p : ℤ × ℤ) (hp : p ∈ latticeDyadicCell 1 (0, 0)) :
+    2 < max (p.1 - 20).natAbs p.2.natAbs ∧
+      2 < max (p.1 - 21).natAbs p.2.natAbs := by
+  classical
+  let z : Site disconnectedDomain := ⟨(20, 0), by simp [disconnectedDomain]⟩
+  let w : Site disconnectedDomain := ⟨(21, 0), by simp [disconnectedDomain]⟩
+  have he : s(z, w) ∈ edgeBoundary disconnectedDomain disconnectedCut := by
+    apply Finset.mem_filter.mpr
+    constructor
+    · apply SimpleGraph.mem_edgeFinset.mpr
+      change (domainGraph disconnectedDomain).Adj z w
+      decide
+    · exact ⟨z, by simp [disconnectedCut, z], w, by simp [disconnectedCut, w], rfl⟩
+  have hsep : thinDiagonalTemplate.IsSeparated ((1 : ℕ) : ℝ)
+      (boundaryEndpoints disconnectedDomain disconnectedCut) := by
+    simpa only [Nat.cast_one] using disconnected_separated
+  have h := hsep.dyadicCell_clearance (D₀ := 1)
+    (by omega) (by omega : 3 ≤ 3) (by norm_num : 2 ^ 1 ≤ 3)
+    thinDiagonal_cell_subset s(z, w) he
+  constructor
+  · simpa [z] using h z (by simp) p hp
+  · simpa [w] using h w (by simp) p hp

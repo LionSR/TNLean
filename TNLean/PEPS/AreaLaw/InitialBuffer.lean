@@ -20,7 +20,7 @@ depending only on `q, R, J, Δ`.
 The finite-dimensional argument (optimized filters, stationarity, the energy estimate, the
 prefix norm comparison and Schmidt pinning) is `Entropy.two_mul_condEntropy_le` in QICLean.
 This module supplies its lattice hypotheses: the nested contours
-`X_j = A ∩ Q₀^{+d_j}`, `d_j = r + j D`, `D = 2R + 3`, the single-split property, the crossing
+`X_j = A ∩ Q₀^{+d_j}`, `d_j = r + j D`, `D = R + 1`, the single-split property, the crossing
 budgets `≤ C (r + d_j)`, the harmonic weights `a_j = 2/(Z_r (r + d_j))` of total mass two, and
 the choice of `C_pad` making `Z_r` large uniformly in `r`.
 

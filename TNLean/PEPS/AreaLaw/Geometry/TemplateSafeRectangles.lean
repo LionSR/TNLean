@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
+import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
 
 /-!
 # Safe native rectangles in template coverings
@@ -40,16 +41,12 @@ def latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) : IntRect where
     have : 0 < (2 : ℤ) ^ k := by positivity
     omega
 
-/-- The adapter preserves every lattice point, including negative coordinates.
+/-- The rectangle has exactly the dyadic cell’s lattice points, including negative coordinates.
 Source: Lemma 9.4, lines 641–649. -/
 @[simp] theorem toFinset_latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) :
     (latticeDyadicRect k z).toFinset = latticeDyadicCell k z := by
-  rcases z with ⟨a, b⟩
-  ext p
-  rw [IntRect.mem_toFinset, mem_latticeDyadicCell]
-  simp only [latticeDyadicRect, dyadicAncestor, Prod.mk.injEq,
-    Int.ediv_eq_iff_of_pos (by positivity : 0 < (2 : ℤ) ^ k)]
-  omega
+  rw [latticeDyadicCell_eq_Icc_product]
+  rfl
 
 /-- Rectangle size counts sites along an axis, so a side-`2^k` cell has size
 exactly `2^k`, rather than its coordinate diameter `2^k - 1`. -/
@@ -72,38 +69,11 @@ private theorem cast_supDist (p z : ℤ × ℤ) :
     (supDist p z : ℝ) = max |(p.1 : ℝ) - z.1| |(p.2 : ℝ) - z.2| := by
   simp only [supDist, Nat.cast_max, Nat.cast_natAbs, Int.cast_abs, Int.cast_sub]
 
-private theorem supDist_triangle (p x z : ℤ × ℤ) :
-    supDist p z ≤ supDist p x + supDist x z := by
-  have hx := Int.natAbs_add_le (p.1 - x.1) (x.1 - z.1)
-  have hy := Int.natAbs_add_le (p.2 - x.2) (x.2 - z.2)
-  simp only [sub_add_sub_cancel] at hx hy
-  exact max_le
-    (hx.trans (Nat.add_le_add (le_max_left _ _) (le_max_left _ _)))
-    (hy.trans (Nat.add_le_add (le_max_right _ _) (le_max_right _ _)))
-
-private theorem separated_dilation_clearance {Ctpl : ℝ} {n s₀ D₀ : ℕ}
-    {T : Template Ctpl n s₀} {Z : Finset (ℤ × ℤ)}
-    (hsep : T.IsSeparated D₀ Z) (hD : 1 ≤ D₀)
-    (j : ℕ) (hj : j ≤ s₀) {x z : ℤ × ℤ}
-    (hx : x ∈ ambientDilation T.points j) (hz : z ∈ Z) :
-    D₀ * s₀ < supDist x z := by
-  obtain ⟨p, hp, hcoord⟩ := mem_ambientDilation_iff.mp hx
-  have hnear : supDist p x ≤ j := by
-    simp only [supDist]
-    omega
-  have hsep' : 4 * D₀ * s₀ < supDist p z := by
-    have h := hsep p hp z hz
-    rw [← cast_supDist] at h
-    exact_mod_cast h
-  rw [Nat.mul_assoc] at hsep'
-  have htri := (supDist_triangle p x z).trans (Nat.add_le_add_right hnear _)
-  have hscale : s₀ ≤ D₀ * s₀ := by
-    simpa only [one_mul] using Nat.mul_le_mul_right s₀ hD
-  omega
-
 /-- Every sufficiently small native rectangle contained in a permitted dilation
 is safe, with safety derived from template separation. This is the clearance
-step of Lemma 9.4, lines 651–655, and uses no geometric regularity premise. -/
+step of Lemma 9.4, lines 651–655, and uses no geometric regularity premise.
+For separation bounds written as real literals, specify `(T := T) (D₀ := D₀)`
+when applying this theorem or its core and shell consequences. -/
 theorem Template.IsSeparated.isSafe_of_subset_ambientDilation
     {Ctpl : ℝ} {n s₀ D₀ : ℕ} {T : Template Ctpl n s₀}
     {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
@@ -112,9 +82,11 @@ theorem Template.IsSeparated.isSafe_of_subset_ambientDilation
     (hQ : Q.toFinset ⊆ ambientDilation T.points j) (hsize : Q.size ≤ s₀) :
     IsSafe Λ A D₀ Q := by
   intro e he z hz p hp
-  exact (Nat.mul_le_mul_left D₀ hsize).trans_lt
-    (separated_dilation_clearance hsep hD j hj (hQ hp)
-      (mem_boundaryEndpoints_of_mem_edgeBoundary he hz))
+  have hclear := hsep.side_lt_dist_of_mem_ambientDilation
+    (by exact_mod_cast hD) hj hsize (hQ hp)
+    (mem_boundaryEndpoints_of_mem_edgeBoundary he hz)
+  rw [← cast_supDist] at hclear
+  exact_mod_cast hclear
 
 /-- Every cell of the actual capped core partition is a safe native rectangle.
 Containment and size are derived from selection, not assumed of the cover.
