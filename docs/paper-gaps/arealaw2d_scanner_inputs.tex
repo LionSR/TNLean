@@ -78,7 +78,7 @@ remain defined at every parameter; no replacement probability measure is
 assigned to an inactive leaf. The charge-defect bound and the old- and
 new-leaf energy estimates use the mass hypothesis only in the interior.
 The integral over
-$[0,1]$ uses the interior bounds and continuity of the charge defect,
+$[0,1]$ uses the interior bounds and interior continuity of the charge defect,
 since the two boundary points have Lebesgue measure zero. The logarithmic
 norm remains continuous on $[0,1]$, and its matching boundary values,
 initial and final comparisons, and integrated entropy conclusions are
@@ -105,8 +105,8 @@ The probabilities are classical history weights, not the transported
 state measures. Nonnegative costs depending on band, receiving side, and
 moved subset also satisfy the corresponding expected-cost lower bound,
 by summing the disjoint labelled events within each band and then summing
-the bands. Identifying these costs
-with the transported conditional entropies remains a separate step.
+the bands. The identification of these costs with the transported conditional
+entropies is established below.
 \footnote{The physical sampling statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}.}
 
@@ -219,24 +219,21 @@ agree with the corresponding tree evaluations for positive definite inputs.
     gives the singleton fill trees and their endpoints.}
 These tree identities do not construct the initial quantum prevector or
 identify the history-tree inputs with its transported quantum states.
-A pointwise entropy sampling candidate now specializes the actual
+The pointwise entropy sampling theorem specializes the actual
 nonnegative move-cost inequality to regional conditional mutual information.
 Every trial set is first intersected with the old middle; the receiving side
 and the old pure vector are kept fixed while charge choices are averaged.
 Disabled choices and empty moved sets have equal zero entropy, without
-identifying their distinct move constructors. This candidate depends on the
-coordinated canonical regional strong-subadditivity dependency update and
-remains pending complete hosted validation. A further source-only candidate
-identifies the incidence sum with terminal split entropy using support
-compatibility derived from the actual geometry. It integrates the pointwise
-inequality against the same actual old transported state for all conditional
+identifying their distinct move constructors. Support compatibility derived
+from the actual geometry identifies the incidence sum with terminal split
+entropy. The pointwise inequality is then integrated against the same actual
+old transported state for all conditional
 choices, retaining the exact Fourier and coherent integrals. The resulting
 entropy gain dominates the good-history split defect with coefficient
 $[2(C_1+1)nD]^{-1}$. The history weight in this derivative expression has no
 terminal old-edge factor $1-p$. For a nonzero symmetric common prevector and
 an interior interpolation parameter, the combined integral has mass $1/2$.
-None of these candidates is claimed kernel-checked here.
-\footnote{The integrated candidate is
+\footnote{The integrated inequality is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
 Constructing the scanner's measure-valued fields, an initial prevector,
 typical sectors and comparator budgets, and the complete scanner data package
@@ -255,14 +252,13 @@ The auxiliary factors remain outside the physical supports. The augmented
 finite-tree compatibility condition therefore holds for every old and new
 leaf of an actual charge round.
 
-A deterministic-fill candidate now uses the same recursive history tree
-and a singleton conditional tree. Its move transfers exactly the scheduled
-singleton's unassigned part, and the new partition is the following charge's
-old partition. The adjacent fill and charge roots agree without reassociation
-of matrix means. The corrected endpoint proofs, their quantum regressions,
-and the fill support specialization still await complete compilation.
-Only the three concrete scheduled-slot calculations have been checked
-separately; they do not validate the quantum statements.
+The deterministic fill uses the same recursive history tree and a
+singleton conditional tree. Its move transfers exactly the scheduled
+singleton's unassigned part, and the new partition is the following
+charge's old partition. Admissibility, cross-band commutation and
+designated-support compatibility are derived from the actual scan.
+The adjacent fill and charge roots agree without reassociation of
+matrix means.
 
 The physical cardinality and logarithmic-dimension bounds are checked.
 For physical dimension $q\ge1$, the explicit cap is
@@ -277,13 +273,28 @@ $r_0=\lceil C_r(\log n)^2\rceil$, $C_r\ge0$, the checked eventual estimate is
 $\ell\le[1+(2C_r+3)^2\log q](\log n)^4$, with threshold chosen independently
 of the domain, scanner, labels, and histories.
 
-The corresponding quantum transport statements identify moved subsystems
-with embedded physical middle differences, so auxiliary-factor dimensions
-do not enter their proposed cap. For designated supports this statement
-requires a nonempty actual split-leaf set. These quantum specializations
-remain source-only; the physical estimates do not validate them. The
-transport smallness requirement on $a\ell$, the initial prevector,
-comparator estimates, and full scanner data construction remain separate.
+The quantum transport statements identify moved subsystems with embedded
+physical middle differences, so auxiliary-factor dimensions do not enter
+their cap. A designated support has this cap when its actual split-leaf
+set is nonempty; no bound is imposed on supports that never split.
+
+The actual truncated positive constraints, extended by the identities on
+both auxiliary factors, are positive contractions with their designated
+physical supports. Their replica sum is exactly the copy mean of the
+augmented truncated Hamiltonian. For both actual fill and charge rounds,
+Proposition~7.4 now gives the logarithmic-norm derivative, entropy lower
+bound and energy upper bound for $0<p<1$, and the integrated entropy
+bound for $0\le p_0\le p_1\le1$.
+\footnote{The actual specializations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph}
+    and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph}.}
+They require a supplied nonzero symmetric prevector and the smallness
+condition $a\ell\le c_0$. Only the energy bound additionally requires
+that prevector to be an eigenvector of the actual augmented truncated
+replica Hamiltonian. The initial physical prevector, typical sectors,
+comparator estimates, the scanner's measure-valued fields and the
+complete scanner data construction remain open.
 
 \section{Elimination}
 

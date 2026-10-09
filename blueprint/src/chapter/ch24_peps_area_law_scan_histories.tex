@@ -925,6 +925,7 @@ The following finite construction follows
         TensorPower.ReplicaTransport.moveEta_toF_empty,
         TensorPower.ReplicaTransport.moveEta_toP_eq_entropy_difference,
         TensorPower.ReplicaTransport.moveEta_toF_eq_entropy_difference}
+    \leanok
     Let $(P,Y,F)$ partition all tensor factors, let $x\subseteq Y$, and
     let $\theta$ be a pure vector. With regional entropies of its reduced
     pure-state matrices, a move to $P$ has entropy
@@ -938,7 +939,7 @@ The following finite construction follows
     Both empty moves have zero entropy. These balanced identities and
     inequalities require no normalization of $\theta$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The moved set and the two old receiving sides are pairwise disjoint,
     so regional strong subadditivity gives nonnegativity. Purity identifies
     the entropy of $F\cup P$ with that of $Y$, and the entropy of
@@ -948,6 +949,7 @@ The following finite construction follows
 \begin{definition}[Regional entropy cost at an actual old history]
     \label{def:al_scan_charge_entropy_cost}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeEntropyCost}
+    \leanok
     \uses{def:al_scan_augmented_partitions}
     Fix an actual old history $h$ and a pure vector $\theta$ on the
     physical and auxiliary factors. For a physical trial set $B$, band $g$
@@ -971,6 +973,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeEntropyCost_eq_cmi_of_subset,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_eta,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeMoveCost_chargeEntropyCost}
+    \leanok
     \uses{thm:al_scan_regional_move_entropy,def:al_scan_charge_entropy_cost,
         thm:al_scan_augmented_transitions}
     Every trial cost is nonnegative. If $B\subseteq Y_{h,g}$, its moved
@@ -983,7 +986,7 @@ The following finite construction follows
     \end{align}
     The old partition and the vector $\theta$ are the same for every choice.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The intersection with the old middle gives a valid move for every trial
     set. An enabled actual charge removes its selected ball's old-middle
     part. A disabled charge stays put; its removed set is empty and both
@@ -993,6 +996,7 @@ The following finite construction follows
 \begin{theorem}[Actual charge sampling of regional entropy]
     \label{thm:al_scan_charge_entropy_sampling}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedEntropyCost_le_expected_chargeEta_domainGraph}
+    \leanok
     \uses{thm:al_scan_designated_move_cost,thm:al_scan_actual_charge_entropy}
     Under the physical good-history sampling hypotheses of
     Theorem~\ref{thm:al_scan_designated_move_cost}, let $D_i$ be the actual
@@ -1008,7 +1012,7 @@ The following finite construction follows
     sum to one when $M>0$. The inequality is pointwise before coherent-state
     and Fourier integration.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Apply Theorem~\ref{thm:al_scan_designated_move_cost} to the nonnegative
     regional entropy costs, and use
     Theorem~\ref{thm:al_scan_actual_charge_entropy} for the realized moves.
@@ -1018,6 +1022,7 @@ The following finite construction follows
 \begin{definition}[Transport data on the recursive charge trees]
     \label{def:al_scan_actual_charge_data}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeData}
+    \leanok
     \uses{def:al_scan_augmented_partitions,def:al_scan_history_mean_tree}
     For $m,M>0$, place the actual old charge partitions and actual
     selected-side moves on the recursive physical history tree. At each
@@ -1028,13 +1033,14 @@ The following finite construction follows
 \begin{theorem}[Admissibility of the actual charge trees]
     \label{thm:al_scan_actual_charge_admissible}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeData_isAdmissible}
+    \leanok
     \uses{def:al_scan_actual_charge_data,thm:al_scan_augmented_transitions,
         thm:al_scan_history_mean_tree_endpoints}
     If $m,M>0$, every history and conditional-choice leaf has positive
     weight. All old regions partition the physical and auxiliary factors,
     and every actual move transfers a subset of the old middle.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The recursive history weights are $m^{-K}(2M)^{-Kk}$ and the conditional
     weights are $(2M)^{-K}$, both positive. The partition and move assertions
     follow from Theorem~\ref{thm:al_scan_augmented_transitions}.
@@ -1120,12 +1126,11 @@ The following finite construction follows
     are the completed statuses of the extended histories.
 \end{proof}
 
-% The following entropy identities are source-only candidates. Their exact
-% canonical dependency closure and kernel validation remain pending.
 \begin{theorem}[Incidences and terminal split entropy]
     \label{thm:al_scan_incidence_split_entropy}
     \lean{TensorPower.ReplicaTransport.incidence_sum_eq_splitBandEta,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidenceCost_eq_sum_splitEta}
+    \leanok
     \uses{def:al_scan_charge_entropy_cost,thm:al_scan_augmented_supports}
     Suppose the physically embedded designated supports are compatible with
     the terminal partitions. At each old history and each pure vector,
@@ -1137,7 +1142,7 @@ The following finite construction follows
     \end{align}
     Distinct labels are retained even when their supports coincide.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     A support contained in one part has no receiving-middle incidence.
     Otherwise compatibility gives exactly one receiving side and the middle.
     The conditional mutual information for that side is precisely its split
@@ -1148,6 +1153,7 @@ The following finite construction follows
     \label{def:al_scan_old_entropy_integral}
     \lean{TensorPower.ReplicaTransport.TransportData.oldFourierCoherentIntegral,
         TensorPower.ReplicaTransport.TransportData.choiceEntropySymbol}
+    \leanok
     \uses{def:al_scan_actual_charge_data}
     At history $h$, let $\rho_{h,\varnothing}(p,u)$ be its old transported
     state, let $\beta(u)$ be the Fourier weight, and let $\mathcal H_\rho$
@@ -1175,6 +1181,7 @@ The following finite construction follows
         TensorPower.ReplicaTransport.TransportData.continuous_choiceEntropySymbol,
         TensorPower.ReplicaTransport.TransportData.choiceEntropySymbol_nonneg,
         TensorPower.ReplicaTransport.TransportData.entropyGain_eq_sum_oldFourierCoherentIntegral}
+    \leanok
     \uses{def:al_scan_old_entropy_integral}
     Continuous symbols are integrable. Finite continuous sums and scalar
     multiplication pass through the same old-state integral. For admissible
@@ -1189,7 +1196,7 @@ The following finite construction follows
     $J_h(1)=1/2$. The entropy-gain formula uses the history weight $w_h$,
     without the old terminal edge factor $1-p$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Positive coherent density preserves pointwise order. Continuity supplies
     coherent integrability, and the coherent-average trace identity together
     with transported trace integrability supplies Fourier integrability.
@@ -1204,6 +1211,7 @@ The following finite construction follows
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.good_sum_splitEta_le_choiceEntropySymbol_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect}
+    \leanok
     \uses{def:al_scan_old_entropy_integral,def:al_scan_actual_charge_data}
     Assume the physical sampling hypotheses of
     Theorem~\ref{thm:al_scan_charge_entropy_sampling}, positive offset and
@@ -1227,7 +1235,7 @@ The following finite construction follows
     round. They do not construct the common prevector or the remaining
     comparator and scanner estimates.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_augmented_supports,thm:al_scan_actual_charge_admissible,
         thm:al_scan_charge_entropy_sampling,thm:al_scan_incidence_split_entropy,
         thm:al_scan_old_entropy_integral}
@@ -1238,13 +1246,12 @@ The following finite construction follows
     entropy is nonnegative. The exact entropy-gain identity gives the result.
 \end{proof}
 
-% The deterministic-fill specialization below awaits compilation against
-% the pinned replica-transport dependency closure.
 \begin{definition}[Actual deterministic fill transport]
     \label{def:al_scan_actual_fill_transport}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumFillMove,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillData}
+    \leanok
     \uses{def:al_scan_history_mean_tree,def:al_scan_augmented_partitions}
     At fill index $k$, read the scheduled padded row slot in each band.
     A blank slot makes no move. If the slot contains $x$, transfer
@@ -1263,6 +1270,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_leafPart,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_crossBandCommute,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillData_isAdmissible}
+    \leanok
     \uses{def:al_scan_actual_fill_transport}
     With positive offset and charge capacities, the actual fill tree has
     positive history weights and conditional probability one. Every move
@@ -1272,7 +1280,7 @@ The following finite construction follows
     distinct bands commute on the symmetric replica subspace, across
     independent histories and either old or new status.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     A blank slot is the identity. An occupied slot assigns only the
     singleton's unassigned part, so the augmented partition agrees with
     the physical update. Exact history weights give positivity, and the
@@ -1292,6 +1300,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillData_rootPath_zero,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillData_rootPath_one,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.charge_rootPath_one_eq_actualFillData_zero}
+    \leanok
     \uses{thm:al_scan_actual_fill_admission,thm:al_scan_history_mean_tree_endpoints}
     Assume positive offset and charge capacities, positive local dimensions,
     and $t\geq0$. The ordered product of band metrics at every completed or
@@ -1302,7 +1311,7 @@ The following finite construction follows
     The charge root at parameter one equals the next fill root at parameter
     zero, with the recursively substituted history tree.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Products of commuting positive definite band metrics are positive
     definite. A singleton conditional tree changes only its leaf input.
     The endpoints of the geometric mean therefore give both fill endpoints
@@ -1316,6 +1325,7 @@ The following finite construction follows
 \begin{theorem}[Designated supports at actual fill leaves]
     \label{thm:al_scan_actual_fill_supports}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_supportCompatible_domainGraph}
+    \leanok
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_augmented_supports}
     Under the geometric hypotheses of
     Theorem~\ref{thm:al_scan_support_classification}, with
@@ -1323,7 +1333,7 @@ The following finite construction follows
     compatibility condition at both terminal statuses of a deterministic
     fill. The history tree may be any supplied finite tree.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Old leaves are completed statuses and new leaves are pre-charge
     statuses. Their physical support classifications follow from the
     geometric hypotheses. Embedding in the physical tensor factors
@@ -1440,7 +1450,6 @@ The following finite construction follows
     $1\le\log^4 n$ and $\log q\ge0$. Finally $\log n\to\infty$.
 \end{proof}
 
-% The following specialization awaits its pinned quantum dependency closure.
 \begin{theorem}[Actual transport dimension hypotheses]
     \label{thm:al_scan_actual_transport_dimension}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedMove_subsystem,
@@ -1453,6 +1462,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_logDim_move_le_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_logDim_support_le_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_logDim_support_le_domainGraph}
+    \leanok
     \uses{thm:al_scan_physical_subsystem_dimension}
     Give every physical factor dimension $q\ge1$, with arbitrary sizes
     for $C$ and $R$. In every actual fill or charge round, each moved
@@ -1461,7 +1471,7 @@ The following finite construction follows
     whose split-leaf set is nonempty. No bound is imposed on a support
     contained in one part at every terminal leaf.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The moved subsystem is the physical old middle minus the physical new
     middle. Its physical embedding adds neither $C$ nor $R$.
     A split leaf supplies a band in which the physical support is not
@@ -1469,7 +1479,6 @@ The following finite construction follows
     bounds to the corresponding completed or pre-charge status.
 \end{proof}
 
-% The following construction awaits its pinned quantum dependency closure.
 \begin{definition}[Actual augmented energy terms]
     \label{def:al_scan_actual_energy_terms}
     \lean{TNLean.PEPS.AreaLaw.LocalHamiltonian.positiveTerm,
@@ -1478,6 +1487,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.augmentOperator,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.truncatedEnergyTerm,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualEnergyTerms}
+    \leanok
     For a local interaction $H=\sum_i h_i$, a unit vector $\Omega$, and
     $\Delta>0$, put
     $M_i=\mathcal F_{1,\Delta/2}(H,h_i)-\langle\Omega,h_i\Omega\rangle I$
@@ -1501,6 +1511,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualEnergyTerms_spec,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualEnergyTerms,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.replicaEnergy_actualEnergyTerms}
+    \leanok
     \uses{def:al_scan_actual_energy_terms}
     Suppose $q\ge1$, the scanner graph is the induced domain graph,
     and each anchor lies in its labelled interaction support.
@@ -1511,7 +1522,7 @@ The following finite construction follows
     The statement includes components disjoint from $S_0$ and the
     convention $S_0=\varnothing$, which retains every constraint.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The centered filter has norm at most
     $\|h_i\|(\|f_{1,\Delta/2}\|_1+1)$, so normalization and the
     absolute value give a positive contraction. Admissibility places
@@ -1524,11 +1535,11 @@ The following finite construction follows
 \end{proof}
 
 % Direct specializations of QICLean at 7224037, ReplicaTransport/Transport.lean.
-% Source-only: compilation against the pinned quantum closure remains pending.
 \begin{theorem}[Entropy and energy transport in an actual scan round]
     \label{thm:al_scan_actual_transport_estimates}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph}
+    \leanok
     \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data,
         def:al_scan_actual_energy_terms,def:al_scan_physical_dimension_cap}
     The following assertion holds separately for an actual fill round and
@@ -1668,7 +1679,7 @@ The following finite construction follows
     The sequences are chosen before $r,\mathrm{pre},p,p_0,p_1,E_0$.
     The eigenvector equation is required only in the third conclusion.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,
         thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,
         thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,

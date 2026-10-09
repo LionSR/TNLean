@@ -2,10 +2,10 @@
 % HistoryMeanTree.lean fixes the actual binary parenthesizations.
 % Checked identities: historyMeanTree_eval_succ, fill_interpRoot_zero,
 % fill_interpRoot_one, charge_interpRoot_zero, charge_interpRoot_one.
-% Physical metric identifications: FillTransportEndpoints.lean at f84f568b,
+% Physical metric identifications: FillTransportEndpoints.lean,
 % actualFillData_rootPath_one_eq_charge_zero and
-% charge_rootPath_one_eq_actualFillData_zero. These repaired candidates remain
-% kernel-pending; this explanatory component adds no proof-status markers.
+% charge_rootPath_one_eq_actualFillData_zero.
+% This explanatory component adds no separate proof-status markers.
 % The notation h \frown c below is extendHistory h c in the source.
 
 Write $T_k$ for the recursive history tree and $C$ for the fixed charge-choice
@@ -91,6 +91,6 @@ terminal metrics. The endpoint substitutions are
         Every internal geometric mean retains its specified weight and
         parenthesization. No reassociation or replacement by an independent
         uniform average is used; the endpoint identities are those of
-        Theorem~\ref{thm:al_scan_history_mean_tree_endpoints}.}
+        Theorem~\ref{thm:al_scan_actual_fill_endpoints}.}
     \label{fig:al_scan_recursive_transport}
 \end{figure}

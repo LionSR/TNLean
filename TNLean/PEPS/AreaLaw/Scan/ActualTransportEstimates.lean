@@ -19,10 +19,11 @@ cross-band commutation and logarithmic dimensions are derived from the existing
 constructions. The physical logarithmic cap is independent of both auxiliary sizes.
 
 Universal constants precede all physical data. After the data and interpolation
-scale are fixed, the logarithmic error and vanishing remainder are uniform in
-replica count, supplied nonzero symmetric vector, interpolation parameter and
-energy eigenvalue. Only the energy clause assumes that the supplied vector is
-an eigenvector of the actual augmented truncated replica Hamiltonian.
+scale are fixed, one logarithmic-error sequence and one vanishing-remainder
+sequence work for every replica count. Their bounds are independent of the
+supplied nonzero symmetric vector, interpolation parameter and energy eigenvalue.
+Only the energy clause assumes that the supplied vector is an eigenvector of
+the actual augmented truncated replica Hamiltonian.
 
 No physical pre-vector, ground state of the truncated Hamiltonian, comparator,
 or complete scanner data is constructed here.
