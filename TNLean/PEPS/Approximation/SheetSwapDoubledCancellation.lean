@@ -39,6 +39,8 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
   classical
   have hunit : sheetSwapOp q R * (sheetSwapOp q R)ᴴ = 1 :=
     Matrix.mem_unitaryGroup_iff.mp (sheetSwap q R).permMatrix_mem_unitaryGroup
+  suffices hcomm : Commute (sheetSwapOp q R) (doubledHamiltonian A) by
+    rw [hcomm.eq, Matrix.mul_assoc, hunit, Matrix.mul_one]
   done
 
 end TNLean.PEPS.EncodedFrame
