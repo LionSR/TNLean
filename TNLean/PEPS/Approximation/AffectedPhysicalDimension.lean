@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import TNLean.PEPS.Approximation.AffectedOwners
-import TNLean.PEPS.Approximation.LayoutOwnerMap
+import TNLean.PEPS.Approximation.OwnerMemoryTransport
 
 /-!
 # Physical dimensions after the affected-party identifications
@@ -41,19 +41,6 @@ TNLean.PEPS.PairEffect.finrank_affectedFamilyPhysicalLayout
 noncomputable section
 namespace TNLean.PEPS.PairEffect.Layout
 variable {P Q : Type}
-
-/-- Selecting registers after an owner map is the owner map of the selected
-original registers. Source: polynomial-PEPS Theorem 5.2,
-`04-compression.tex`, lines 342–364 and 409–450. -/
-theorem restrict_mapOwner (f : P → Q) (g : Q → Bool) (a : Layout P) :
-    restrict g (mapOwner f a) = mapOwner f (restrict (fun p ↦ g (f p)) a) := by
-  simp [restrict, mapOwner, List.filter_map, Function.comp_def]
-
-/-- The canonical isometry of the selected memories before and after relabelling.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–450. -/
-def restrictMapOwnerIso (f : P → Q) (g : Q → Bool) (a : Layout P) :
-    Mem (restrict (fun p ↦ g (f p)) a) ≃ₗᵢ[ℂ] Mem (restrict g (mapOwner f a)) :=
-  (mapOwnerIso f _).trans (memCongr (restrict_mapOwner f g a).symm)
 
 /-- The second owner map distinguishes exactly the original affected parties. -/
 private theorem affectedOwner_isSome (A : P → Bool) (p : P) :

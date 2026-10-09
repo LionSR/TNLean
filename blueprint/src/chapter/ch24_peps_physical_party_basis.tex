@@ -1,0 +1,216 @@
+% Auxiliary coordinate statements for polynomial PEPS compression.
+% These statements do not assert the sampled-contraction identity or Theorem 5.2.
+
+\subsection{Physical bases and party grouping}
+
+Let $P$ be a finite party set and let $p_1,\ldots,p_m$ be an
+ordering containing each party exactly once. For a register list $a$,
+write $M(a)$ for its right-associated tensor memory, including a terminal
+factor $\C$, and $a_p$ for the registers owned by $p$, in their original
+order. The canonical isometry $G_a$ successively partitions off
+$a_{p_1},\ldots,a_{p_m}$, identifying $M(a)$ with
+$M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
+
+\begin{definition}[Party tensor bases]
+    \label{def:peps_party_tensor_basis}
+    \lean{TNLean.PEPS.PairEffect.partyListBasis,
+        TNLean.PEPS.PairEffect.partyLabelledBasis}
+    \leanok
+    \uses{def:peps_party_layout}
+    For each $p$, let $b_p$ be an orthonormal basis of $M(a_p)$,
+    indexed by a finite set $I_p$. The ordered party basis has column
+    $b_{p_1}(x_{p_1})\otimes\cdots\otimes b_{p_m}(x_{p_m})\otimes1$,
+    indexed by assignments $x_p\in I_p$. For an empty ordering,
+    its single column is the scalar $1$.
+\end{definition}
+
+\begin{definition}[Party bases on the original register order]
+    \label{def:peps_party_grouped_basis}
+    \lean{TNLean.PEPS.PairEffect.partyGroupedBasis}
+    \leanok
+    \uses{def:peps_party_tensor_basis}
+    Transport the ordered party basis by $G_a^{-1}$. Its column on the
+    original register memory is
+    \begin{align}
+        B^a_x=G_a^{-1}
+        \bigl(b_{p_1}(x_{p_1})\otimes\cdots
+        \otimes b_{p_m}(x_{p_m})\otimes1\bigr).
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Singleton physical memory of each party]
+    \label{thm:peps_singleton_physical_memory}
+    \lean{TNLean.PEPS.PairEffect.atParty_familyPhysicalLayout_of_mem}
+    \leanok
+    Let an ordered list of parties have no repetitions. For any party
+    $p$ in this list, selecting its physical registers gives exactly
+    its one register $H_p$, with memory $H_p\otimes\C$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Selecting a party filters the given list by equality with $p$.
+    Since $p$ occurs exactly once, the filtered register list is the
+    singleton containing its physical register.
+\end{proof}
+
+\begin{definition}[Physical basis at an individual party]
+    \label{def:peps_singleton_physical_basis}
+    \lean{TNLean.PEPS.PairEffect.familyPhysicalPartyBasis}
+    \leanok
+    \uses{thm:peps_singleton_physical_memory}
+    On the physical memory $H_p\otimes\C$ of party $p$, take the
+    orthonormal basis with columns $b_p(j)=e_{p,j}\otimes1$.
+    This is the standard basis transported by the inverse of the
+    right scalar-unit isometry.
+\end{definition}
+
+\begin{theorem}[Partitioning a single selected register]
+    \label{thm:peps_selected_head_partition}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
+    \leanok
+    Let the first register have owner $p$ and Hilbert space $H$, and
+    let every remaining register have an owner different from $p$.
+    Write $K$ for the memory of the remaining registers. Under the
+    canonical partition into the registers of $p$ and their complement,
+    every $e\in H$ and $y\in K$ satisfy
+    \begin{align}
+        e\otimes y\longmapsto(e\otimes1)\otimes y.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Partition the remaining registers first. Their selected memory is
+    $\C$, so $y$ is sent to $1\otimes y$. Adjoining the first register
+    and applying the associativity isometry gives the stated formula.
+\end{proof}
+
+\begin{theorem}[Grouping prescribed physical columns in arbitrary local coordinates]
+    \label{thm:peps_basis_physical_columns_local_coordinates}
+    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
+    \leanok
+    \uses{def:peps_family_physical_output,def:peps_party_tensor_basis}
+    Let $P$ be an arbitrary set of parties, let $d_p$ be arbitrary
+    nonnegative integers, and let $\mathbf p=(p_0,\ldots,p_{m-1})$
+    be an ordered list without repetitions. Put
+    $a=a_{\mathbf d}(\mathbf p)$, with register $\C^{d_{p_j}}$
+    at the party in position $j$. For each party $p$, let $b_p$
+    be an orthonormal basis of the complete memory $M(a_p)$,
+    indexed by a finite set $I_p$. Let
+    $x\in\prod_{p\in P}\{0,\ldots,d_p-1\}$ and
+    $y\in\prod_{p\in P} I_p$.
+
+    Suppose that, at every party in $\mathbf p$, the canonical
+    singleton-memory identification sends $b_p(y_p)$ to
+    $e_{x_p}\otimes1$. Then grouping the prescribed physical tensor
+    column gives the ordered column of these local bases:
+    \begin{align}
+        G_{\mathbf p,a}\,
+        b_{\mathbf d,\mathbf p}\bigl((x_{p_j})_{j=0}^{m-1}\bigr)
+        = b_{a,\mathbf p}\bigl((y_{p_j})_{j=0}^{m-1}\bigr).
+    \end{align}
+    Here $b_{\mathbf d,\mathbf p}$ is the ordered Euclidean tensor
+    basis, $G_{\mathbf p,a}$ successively separates the complete memories
+    in the listed order, and $b_{a,\mathbf p}$ is the ordered tensor
+    basis formed from $b_{p_0},\ldots,b_{p_{m-1}}$.
+    The local index sets need not be the physical index sets.
+    No coverage of all of $P$ is required: the list covers the owners
+    of $a$ by construction. The empty list and zero local dimensions
+    are included, with quantification over the indicated assignments.
+    Both ordered memories retain their terminal scalar factor $\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_selected_head_partition,def:peps_party_tensor_basis}
+    Induct on the length of the ordered list. For the empty list,
+    both columns are $1\in\C$. At a nonempty list, its first
+    party does not occur in the tail. The selected-register partition
+    therefore separates its physical column as $e_{x_p}\otimes1$.
+    Apply the induction hypothesis to the tail. The prescribed physical
+    column thus groups as the ordered tensor product of its singleton
+    columns. By the given identifications, these are precisely
+    $b_{p_j}(y_{p_j})$ at every listed party. The ordered tensor basis
+    has the same column,
+    \begin{align}
+        b_{p_0}(y_{p_0})\otimes\cdots\otimes
+        b_{p_{m-1}}(y_{p_{m-1}})\otimes1.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Compatibility of physical and party coordinates]
+    \label{thm:peps_family_physical_party_basis}
+    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis_eq_partyGroupedBasis}
+    \leanok
+    Let the physical register list $a$ and the singleton bases $b_p$
+    be as above. For every physical assignment $x$,
+    \begin{align}
+        G_a E_x
+         & =(e_{p_1,x_{p_1}}\otimes1)\otimes\cdots
+        \otimes(e_{p_m,x_{p_m}}\otimes1)\otimes1.
+    \end{align}
+    Thus the labelled physical basis equals the party basis on the
+    original register order. No positivity of $d_p$ is required.
+    If some $d_p=0$, the assignment set and both bases are empty.
+    If $P$ is empty, both tensor products are the scalar $1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_party_grouped_basis,def:peps_family_physical_output,
+        def:peps_singleton_physical_basis,thm:peps_selected_head_partition}
+    First consider any ordered list without repetitions, retaining
+    only its physical registers. Induct on this list. For the empty
+    list, both memories are $\C$ with basis vector $1$. In the
+    induction step, no remaining register is owned by the first party.
+    Theorem~\ref{thm:peps_selected_head_partition} separates its basis
+    vector as $e_{p,j}\otimes1$, leaving the ordered physical basis
+    vector on the tail. Apply the induction hypothesis to that tail.
+    When the list exhausts $P$, transporting the resulting equality
+    by $G_a^{-1}$ gives equality of the two bases.
+\end{proof}
+
+\begin{definition}[Joint physical and private basis of one party]
+    \label{def:peps_party_local_output_basis}
+    \lean{TNLean.PEPS.PairEffect.partyLocalOutputBasis}
+    \leanok
+    For register lists $a,c$, choose orthonormal bases $b_p$ of
+    $M(a_p)$ and $f_p$ of $M(c_p)$, indexed respectively by finite
+    sets $X_p$ and $F_p$. Let $J_{u,v}:M(u\mathbin{+\!+}v)
+        \longrightarrow M(u)\otimes M(v)$ be the canonical concatenation
+    isometry. The joint basis at party $p$ has column
+    $J_{a_p,c_p}^{-1}(b_p(x_p)\otimes f_p(y_p))$, under the
+    identification $(a\mathbin{+\!+}c)_p=a_p\mathbin{+\!+}c_p$.
+\end{definition}
+
+\begin{theorem}[Concatenating physical and private party bases]
+    \label{thm:peps_party_grouped_basis_append}
+    \lean{TNLean.PEPS.PairEffect.partyGroupedBasis_append}
+    \leanok
+    With the joint local bases just defined, let $B^{a+c}$ denote
+    their party basis on $M(a\mathbin{+\!+}c)$, and let $B^a,B^c$
+    be the separately transported party bases. Then for all
+    assignments $x_p\in X_p$ and $y_p\in F_p$,
+    \begin{align}
+        B^{a+c}_{(x,y)}=J_{a,c}^{-1}(B^a_x\otimes B^c_y).
+    \end{align}
+    The index $(x,y)$ denotes the assignment $p\mapsto(x_p,y_p)$;
+    equivalently, this is equality of the two bases after the canonical
+    separation of the two assignment families.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_party_grouped_basis,def:peps_party_local_output_basis}
+    Induct on the ordered party list. Partitioning a concatenation
+    first partitions each list and then regroups its four factors,
+    joining the two selected memories and the two complementary
+    memories. The selected vector is the stated joint local column.
+    Apply the induction hypothesis to the two complementary lists,
+    and transport by $G_{a+c}^{-1}$. For the empty list all memories
+    are scalar and the assertion reduces to multiplication in $\C$.
+\end{proof}
+
+These coordinate identities apply to the local contractions in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 137--151 and 565--588.

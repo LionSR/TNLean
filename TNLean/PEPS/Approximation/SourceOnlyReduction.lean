@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.PEPS.Approximation.EffectCircuitDensity
 import TNLean.PEPS.Approximation.EffectCircuitLocations
-import TNLean.PEPS.Approximation.PhysicalReadout
+import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 
 /-! # Source-only reduction of a distributed physical density
 
@@ -181,10 +181,10 @@ theorem rectangularTraceNorm_sourceOnly_regional_density_sub_le_half
     (H : P → HSpace) (x : ∀ p, H p) (hx : ∀ p, ‖x p‖ = 1)
     (priv : Layout P) [FiniteDimensional ℂ (Mem priv).carrier]
     (w : OriginalCircuit (ProductInput.wholePartyLayout H)
-      (physicalOutputLayout d Finset.univ.toList priv))
+      (familyPhysicalOutputLayout (fun _ ↦ d) Finset.univ.toList priv))
     (hb : w.IsExpansionBounded r S) (hcount : w.nonprivateCount ≤ M) (A : Finset P) :
     let ψ := (ProductInput.ofAllParties H x hx).vector
-    let K := regionalPhysicalReadout d Finset.univ.toList (Finset.nodup_toList _)
+    let K := familyRegionalPhysicalReadout (fun _ ↦ d) Finset.univ.toList (Finset.nodup_toList _)
       (fun p ↦ Finset.mem_toList.mpr (Finset.mem_univ p)) priv A
     Matrix.rectangularTraceNorm
       (w.produce.replacementPhysicalDensity (sourceGateBudget_pos hε M)
@@ -192,7 +192,7 @@ theorem rectangularTraceNorm_sourceOnly_regional_density_sub_le_half
         Matrix.partialTraceRight (Matrix.euclideanOuterProduct (K (w.eval ψ)) (K (w.eval ψ)))) ≤
       ε / 2 :=
   w.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le hε hb hcount
-    (regionalPhysicalReadout d Finset.univ.toList (Finset.nodup_toList _)
+    (familyRegionalPhysicalReadout (fun _ ↦ d) Finset.univ.toList (Finset.nodup_toList _)
       (fun p ↦ Finset.mem_toList.mpr (Finset.mem_univ p)) priv A) _
     (ProductInput.norm_vector _).le
 end TNLean.PEPS.PairEffect.OriginalCircuit

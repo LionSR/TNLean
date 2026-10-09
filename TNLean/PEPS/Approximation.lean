@@ -102,6 +102,7 @@ import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalSchmidtOutput
@@ -112,6 +113,7 @@ import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
+import TNLean.PEPS.Approximation.OwnerMemoryTransport
 import TNLean.PEPS.Approximation.OwnerOutputCoordinates
 import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
@@ -125,16 +127,22 @@ import TNLean.PEPS.Approximation.PartialSourceDensity
 import TNLean.PEPS.Approximation.PartialSourceEvaluation
 import TNLean.PEPS.Approximation.PartialSourceInventory
 import TNLean.PEPS.Approximation.PartialSourcePreparation
+import TNLean.PEPS.Approximation.PartitionOwnerNaturality
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyChainComposition
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGateComposition
+import TNLean.PEPS.Approximation.PartyGroupedBasis
 import TNLean.PEPS.Approximation.PartyGrouping
+import TNLean.PEPS.Approximation.PartyGroupingTransport
+import TNLean.PEPS.Approximation.PartyLabelledCoordinates
 import TNLean.PEPS.Approximation.PartyLayout
 import TNLean.PEPS.Approximation.PartyLocalMaps
+import TNLean.PEPS.Approximation.PartyOutputCoordinates
 import TNLean.PEPS.Approximation.PartyPartition
 import TNLean.PEPS.Approximation.PartyPartitionAppend
+import TNLean.PEPS.Approximation.PartyTensorCoordinates
 import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
@@ -147,7 +155,6 @@ import TNLean.PEPS.Approximation.PhysicalFirstNetworkResources
 import TNLean.PEPS.Approximation.PhysicalFirstPolynomial
 import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalOutputContraction
-import TNLean.PEPS.Approximation.PhysicalReadout
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
@@ -226,6 +233,7 @@ import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
 import TNLean.PEPS.Approximation.TransferGateExpansion
 import TNLean.PEPS.Approximation.TwoSheetExchange
+import TNLean.PEPS.Approximation.UnitMemoryCoordinates
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.VectorColumn
 import TNLean.PEPS.Approximation.WeightedPhysicalSource
