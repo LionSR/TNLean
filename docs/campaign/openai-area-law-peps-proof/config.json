@@ -97,7 +97,7 @@
             8747
           ],
           "physics": "Lieb–Robinson bounds in the lattice's own graph distance and a smooth spectral filter with stretched-exponentially decaying Fourier tails rewrite the Hamiltonian as a sum of positive local pieces.",
-          "delivers": "Positive operators that each annihilate Ω, keep a global gap together, and have rapidly decaying spatial tails."
+          "delivers": "Positive operators that each annihilate Ω and have rapidly decaying spatial tails, and whose sum has a global gap."
         },
         {
           "title": "Replicas trade information against energy",
@@ -147,7 +147,7 @@
       "paper": "peps",
       "eyebrow": "Part II · PEPS manuscript, 56 pages",
       "heading": "How the PEPS is built",
-      "intro": "The construction hands the ground state out among parties, one for each dyadic square, until every site has its own party. Parties may act arbitrarily on what they hold, and each interacts with boundedly many others over its lifetime. Compressing the shared resources gives polynomial bonds, and routing the links places them on the original grid.",
+      "intro": "The construction distributes the ground state among parties, one for each dyadic square, until every site has its own party. Parties may act arbitrarily on what they hold, and each interacts with boundedly many others over its lifetime. Compressing the shared resources gives polynomial bonds, and routing the links places them on the original grid.",
       "stages": [
         {
           "title": "Information fades with angular separation",
@@ -209,7 +209,7 @@
     {
       "id": "found",
       "paper": null,
-      "eyebrow": "Shared ground",
+      "eyebrow": "Common to both manuscripts",
       "heading": "Foundations both proofs use",
       "intro": "",
       "stages": [
