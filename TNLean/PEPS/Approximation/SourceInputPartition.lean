@@ -108,6 +108,22 @@ def freeSourceVector (R : SourceInventory P) (U V : Fin R.length → HSpace)
   Layout.memCongr (layout_selectedSources_eq R U V free η (fun _ ↦ 0))
     (vector (selectedSources R U V free η))
 
+/-- The joint free-source vector depends only on the selected positions.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434. -/
+theorem freeSourceVector_congr {P : Type} (R : SourceInventory P)
+    (U V : Fin R.length → HSpace) (free : Fin R.length → Bool)
+    (η ζ : ∀ i, U i ⊗[ℂ] V i) (h : ∀ i, free i = true → η i = ζ i) :
+    freeSourceVector R U V free η = freeSourceVector R U V free ζ := by
+  have hs : selectedSources R U V free η = selectedSources R U V free ζ := by
+    simp only [selectedSources_eq_map]
+    apply List.map_congr_left
+    intro i hi
+    rw [h i (List.mem_filter.mp hi).2]
+  apply eq_of_heq
+  exact (Layout.memCongr_apply_heq _ _).trans
+    ((by rw [hs] : HEq (vector (selectedSources R U V free η))
+      (vector (selectedSources R U V free ζ))).trans (Layout.memCongr_apply_heq _ _).symm)
+
 /-- Preparing the free sources is tensoring with their actual joint vector. -/
 theorem eval_prepareFreeSlots_eq_appendIso_symm (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (free : Fin R.length → Bool)

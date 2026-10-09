@@ -131,6 +131,43 @@ These changes retain the physical dimensions and coordinate order used in
 Theorem 5.2. They do not establish the identification of the sampled operator
 with a contraction of local tensors.
 
+## PEPS tensor-memory identifications
+
+`PEPS.Approximation.UnitMemoryCoordinates` identifies an empty final tensor
+memory with the scalar field. Its theorem
+`Layout.memCongr_append_nil_appendIso_symm_tmul` states that adjoining a scalar
+and identifying the empty final register list gives scalar multiplication on
+the preceding memory. The spectator-register construction in `WordAppendTail`
+uses this theorem directly. Its former private copy `appendIso_nil_tmul` is
+removed; no public declaration is removed or renamed.
+
+## Corrected source coordinates and vectors
+
+`PEPS.Approximation.SourceCircuitSourceOrder` owns the paired Schmidt
+coordinates at the selected original source occurrences, alongside their
+coordinate dimensions. These finite index sets are independent of the Gaussian
+source law. `SourceInputPartition` owns the joint vector of the selected sources
+and the equality showing that changing unselected positions leaves this vector
+unchanged. The corrected endpoint frames and corrected Schmidt input identities
+use these elementary constructions; they do not require the Gaussian physical
+error estimate merely to identify their coordinates or source vectors.
+
+`CorrectedSourcePartition` owns `Word.IsTensorPartitioned`, formerly
+`Word.HasTensorPartition`: after grouping a Boolean owner map, the operator
+factors into two allowed source-free local words of norm at most one, with
+equality on the entire input memory. In `CorrectedInputReordering`,
+`SourceCircuit.hasTensorPartition_reordered_partial` and
+`SourceCircuit.hasTensorPartition_prepared_reordered_partial` become
+`SourceCircuit.isTensorPartitioned_reordered_partial` and
+`SourceCircuit.isTensorPartitioned_prepared_reordered_partial`, respectively.
+In `LocalSchmidtOutput`, `Word.hasSchmidtOutput_of_hasTensorPartition` becomes
+`Word.hasSchmidtOutput_of_isTensorPartitioned`. All consumers, including
+`CorrectedSchmidtOutput`, and the corresponding blueprint tags use these names.
+The hypotheses and proofs are unchanged except for identifier substitutions;
+reversing those substitutions recovers the original mathematical declarations.
+No otherwise-dead compatibility alias is retained after migrating all
+consumers, in accordance with the repository policy.
+
 ## Archive exclusion
 
 `TNLean/Archive/` is intentionally outside the production manifest and is not

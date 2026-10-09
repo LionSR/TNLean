@@ -24,7 +24,7 @@ Independently formalized; no upstream Lean proof text reused.
 Provenance-ID: 8769-source-resource-localschmidtoutput-01
 TNLean.PEPS.PairEffect.Word.HasSchmidtOutput
 Provenance-ID: 8769-source-resource-localschmidtoutput-02
-TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_hasTensorPartition
+TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_isTensorPartitioned
 -/
 
 
@@ -116,9 +116,9 @@ private theorem exists_mappedInputFrames {Q I : Type} [Fintype I]
   rfl
 
 /-- Apply the two actual local words to the transported Schmidt input sum. -/
-theorem hasSchmidtOutput_of_hasTensorPartition {Q I : Type} [Fintype I]
+theorem hasSchmidtOutput_of_isTensorPartitioned {Q I : Type} [Fintype I]
     (f : Q → Bool) (C T out : Layout Q) (v : Word (C ++ T) out)
-    (hv : Word.HasTensorPartition f v)
+    (hv : Word.IsTensorPartitioned f v)
     (frame : EuclideanSpace ℂ I →ₗᵢ[ℂ] Mem (Layout.mapOwner f C))
     (x : I → Mem C) (y : Mem T)
     (hx : ∀ i, frame (EuclideanSpace.basisFun I ℂ i) = Layout.mapOwnerIso f C (x i))

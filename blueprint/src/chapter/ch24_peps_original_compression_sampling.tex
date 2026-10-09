@@ -149,7 +149,7 @@ contraction of local tensors is a separate assertion.
     coefficient sum at most $B$.
 \end{theorem}
 \begin{proof}
-    \uses{thm:peps_physical_first_occurrences}
+    \uses{thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
     \leanok
     Take a common bound on the finitely many original gate lists. The
     coefficient estimate of Theorem~\ref{thm:peps_physical_first_occurrences}
@@ -161,8 +161,6 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_sampled_original_density}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
     \leanok
-    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
-        thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
     Let $W$ be a circuit on a finite party set $P$, with initial vector
     $\psi=\bigotimes_{p\in P}\psi_p$, where each $\psi_p$ is normalized
     in the whole initial private memory of party $p$. The final physical

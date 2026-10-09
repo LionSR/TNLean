@@ -69,6 +69,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{theorem}[Finite-dimensional discarded registers]
     \label{thm:peps_auxiliary_register_finiteness}
+    \uses{thm:peps_circuit_effect_error}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_registers}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem}
@@ -81,6 +82,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 \end{theorem}
 
 \begin{proof}
+    \uses{thm:peps_finite_register_memories}
     \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_append}
     \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_mapOwner}
     \lean{TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_registers_sources_prepStack}

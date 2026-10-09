@@ -93,6 +93,8 @@ import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteRegisterMemories
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
+import TNLean.PEPS.Approximation.FrameBoundedChanges
+import TNLean.PEPS.Approximation.FrameRegisters
 import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GateCoefficientBounds
 import TNLean.PEPS.Approximation.GaussianPhysicalSource
@@ -164,6 +166,7 @@ import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
 import TNLean.PEPS.Approximation.RegionalStates
+import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SelectedSourceContraction
@@ -176,6 +179,7 @@ import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
+import TNLean.PEPS.Approximation.SiteRegisters
 import TNLean.PEPS.Approximation.SourceAlphabetPolynomial
 import TNLean.PEPS.Approximation.SourceApproximation
 import TNLean.PEPS.Approximation.SourceBlockMatrix
@@ -233,6 +237,7 @@ import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
 import TNLean.PEPS.Approximation.TransferGateExpansion
 import TNLean.PEPS.Approximation.TwoSheetExchange
+import TNLean.PEPS.Approximation.TwoSheetRegisters
 import TNLean.PEPS.Approximation.UnitMemoryCoordinates
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.VectorColumn

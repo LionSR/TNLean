@@ -30,11 +30,11 @@ TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity
 
 Provenance-ID: 8769-physical-sourcegaussianbranchdensity-02
 Downstream declaration:
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/SourceGaussianBranchDensity.html#TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity
+TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity
 
 Provenance-ID: 8769-physical-sourcegaussianbranchdensity-03
 Downstream declaration:
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/SourceGaussianBranchDensity.html#TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum
+TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum
 
 -/
 
