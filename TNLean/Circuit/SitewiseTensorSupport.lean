@@ -52,8 +52,9 @@ theorem reindex_kronecker_mem_supportedOperators
     (p := fun A B _ _ ↦
       Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
         (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T))
-    ?_ ?_ ?_ ?_ ?_ ?_ ?_ hA hB
-  · rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
+    ?mem ?zeroL ?zeroR ?addL ?addR ?smulL ?smulR hA hB
+  case mem =>
+    rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
     refine Submodule.subset_span
       ⟨fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i), ?_, ?_⟩
     · intro i hi
@@ -61,11 +62,13 @@ theorem reindex_kronecker_mem_supportedOperators
         Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
     · ext x y
       exact Finset.prod_mul_distrib.symm
-  all_goals simp only [Matrix.zero_kronecker, Matrix.kronecker_zero,
-    Matrix.reindex_apply, Matrix.submatrix_zero, Pi.zero_apply, Submodule.zero_mem, implies_true]
-  all_goals simp only [Matrix.add_kronecker, Matrix.kronecker_add,
-    Matrix.smul_kronecker, Matrix.kronecker_smul, Matrix.submatrix_add,
-    Matrix.submatrix_smul, Pi.add_apply, Pi.smul_apply]
-  all_goals aesop (add safe apply Submodule.add_mem) (add safe apply Submodule.smul_mem)
+  case zeroL => intro y _; rw [Matrix.zero_kronecker]; exact Submodule.zero_mem _
+  case zeroR => intro x _; rw [Matrix.kronecker_zero]; exact Submodule.zero_mem _
+  case addL =>
+    intro x y z _ _ _ hxz hyz; rw [Matrix.add_kronecker]; exact Submodule.add_mem _ hxz hyz
+  case addR =>
+    intro x y z _ _ _ hxy hxz; rw [Matrix.kronecker_add]; exact Submodule.add_mem _ hxy hxz
+  case smulL => intro r x y _ _ hxy; rw [Matrix.smul_kronecker]; exact Submodule.smul_mem _ r hxy
+  case smulR => intro r x y _ _ hxy; rw [Matrix.kronecker_smul]; exact Submodule.smul_mem _ r hxy
 
 end QuantumCircuit
