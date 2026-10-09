@@ -26,28 +26,69 @@ DECL_REPLACEMENTS["MPSTensor.exponentialconvergenceofprimitive"] = (
 # tag otherwise makes the complete graph layout run on the browser thread.
 _GRAPH_HPCC_TAG = '<script src="js/hpcc.min.js"></script>'
 _GRAPH_WORKER_TAG = '<script src="js/hpcc.min.js" type="javascript/worker"></script>'
+_GRAPH_RENDER_START = 'graphContainer.graphviz({useWorker: true})\n    .width(width)'
+_GRAPH_DIAGNOSTIC_START = """const graphElement = graphContainer.node();
+function graphPhase(phase) {
+    graphElement.dataset.graphvizPhase = phase;
+    console.info("[blueprint-graph] " + phase);
+}
+function graphFailure(error) {
+    graphElement.dataset.graphvizError = String(error && error.message || error);
+    graphPhase("error");
+    console.error("[blueprint-graph] " + graphElement.dataset.graphvizError);
+}
+graphPhase("initializing");
+const graphviz = graphContainer.graphviz({useWorker: true});
+graphviz.onerror(graphFailure);
+if (graphviz._worker) {
+    graphviz._worker.addEventListener("error", function (event) {
+        graphFailure(event.message || "Graphviz worker failed");
+    });
+    graphviz._worker.addEventListener("messageerror", function () {
+        graphFailure("Graphviz worker message could not be read");
+    });
+}
+for (const phase of ["initEnd", "layoutStart", "layoutEnd", "dataExtractEnd",
+                     "dataProcessPass1End", "dataProcessPass2End",
+                     "renderStart", "renderEnd"]) {
+    graphviz.on(phase + ".diagnostics", function () { graphPhase(phase); });
+}
+graphviz
+    .width(width)"""
 _GRAPH_END_HANDLER = '.on("end", interactive);'
 _GRAPH_READY_HANDLER = """.on("end", function () {
-      interactive();
-      document.getElementById("graph").dataset.graphvizReady = "true";
+      try {
+        interactive();
+        graphElement.dataset.graphvizReady = "true";
+        graphPhase("complete");
+      } catch (error) {
+        graphFailure(error);
+        throw error;
+      }
     });"""
 
 
 def _prepare_dependency_graph(source: str) -> str:
     """Enable the bundled worker and record completion of graph interaction.
 
-    These two substitutions belong to the pinned upstream template. A changed
-    template must be reviewed rather than silently losing either correction.
+    These substitutions belong to the pinned upstream template. A changed
+    template must be reviewed rather than silently losing the worker,
+    completion check, or diagnostics.
     """
     if (source.count(_GRAPH_WORKER_TAG) == 1
+            and source.count(_GRAPH_DIAGNOSTIC_START) == 1
             and source.count(_GRAPH_READY_HANDLER) == 1
-            and _GRAPH_HPCC_TAG not in source and _GRAPH_END_HANDLER not in source):
+            and _GRAPH_HPCC_TAG not in source and _GRAPH_END_HANDLER not in source
+            and _GRAPH_RENDER_START not in source):
         return source
     if (source.count(_GRAPH_HPCC_TAG) != 1
+            or source.count(_GRAPH_RENDER_START) != 1
             or source.count(_GRAPH_END_HANDLER) != 1
-            or _GRAPH_WORKER_TAG in source or _GRAPH_READY_HANDLER in source):
+            or _GRAPH_WORKER_TAG in source or _GRAPH_READY_HANDLER in source
+            or _GRAPH_DIAGNOSTIC_START in source):
         raise ValueError("Dependency graph differs from the pinned worker template")
     return source.replace(_GRAPH_HPCC_TAG, _GRAPH_WORKER_TAG, 1).replace(
+        _GRAPH_RENDER_START, _GRAPH_DIAGNOSTIC_START, 1).replace(
         _GRAPH_END_HANDLER, _GRAPH_READY_HANDLER, 1)
 
 

@@ -271,18 +271,53 @@ PAGE_LOAD_TIMEOUT_MS = 300_000
 def _load_page(page: Page, base_url: str, name: str) -> None:
     """Navigate and finish an actual graph within one original page deadline."""
     deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
-    page.goto(f"{base_url}/{name}", wait_until="domcontentloaded",
-              timeout=PAGE_LOAD_TIMEOUT_MS)
-    if name.startswith("dep_graph_"):
-        remaining_ms = (deadline - time.monotonic()) * 1000
-        if remaining_ms <= 0:
-            raise TimeoutError(f"{name}: graph exceeded the original page deadline")
-        page.wait_for_function(
-            "() => { const graph = document.getElementById('graph');"
-            " return graph && graph.dataset.graphvizReady === 'true'"
-            " && graph.querySelector('svg'); }",
-            timeout=remaining_ms,
-        )
+    url = f"{base_url}/{name}"
+    events: list[str] = []
+
+    def remember(kind: str, text: str) -> None:
+        events.append(f"{kind}: {text[:2000]}")
+        del events[:-20]
+
+    def page_error(error) -> None:
+        remember("pageerror", str(error))
+
+    def console_message(message) -> None:
+        if message.type in ("error", "warning") or message.text.startswith("[blueprint-graph]"):
+            remember(f"console.{message.type}", message.text)
+
+    def worker_started(worker) -> None:
+        remember("worker", worker.url)
+
+    listeners = (("pageerror", page_error), ("console", console_message),
+                 ("worker", worker_started))
+    for event, callback in listeners:
+        page.on(event, callback)
+    try:
+        page.goto(url, wait_until="domcontentloaded", timeout=PAGE_LOAD_TIMEOUT_MS)
+        if name.startswith("dep_graph_"):
+            remaining_ms = (deadline - time.monotonic()) * 1000
+            if remaining_ms <= 0:
+                raise TimeoutError(f"{name}: graph exceeded the original page deadline")
+            terminal = page.wait_for_function(
+                "() => { const graph = document.getElementById('graph');"
+                " return graph && (graph.dataset.graphvizError"
+                " || (graph.dataset.graphvizReady === 'true'"
+                " && !!graph.querySelector('svg'))); }",
+                timeout=remaining_ms,
+            )
+            result = terminal.json_value()
+            terminal.dispose()
+            if result is not True:
+                raise RuntimeError(f"Graphviz failed: {result}")
+    except Exception as error:
+        # Retain the original exception and its type.  Do not evaluate the
+        # page after a timeout: its main thread may itself be unresponsive.
+        error.add_note(f"Blueprint page {name}; URL {url}; events: "
+                       + json.dumps(events, ensure_ascii=False))
+        raise
+    finally:
+        for event, callback in listeners:
+            page.remove_listener(event, callback)
 
 
 def _check_pages(base_url: str, names: list[str],

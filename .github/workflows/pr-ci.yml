@@ -1649,6 +1649,11 @@ jobs:
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
 
+      - name: Test dependency graph rendering and terminal errors
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
+
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
       - name: Test generated blueprint pages
