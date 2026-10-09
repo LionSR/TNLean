@@ -71,6 +71,7 @@ on:
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -178,6 +179,7 @@ on:
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -339,6 +341,7 @@ jobs:
               - 'scripts/generate_badges.py'
               - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
+              - 'scripts/test_blueprint_graph_worker.py'
               - 'scripts/add_blueprint_search.py'
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
@@ -1623,6 +1626,14 @@ jobs:
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
 
+      # A zero exit status says the build ran, not that the pages read. This
+      # opens every generated page and measures what a reader would meet.
+      - name: Test generated blueprint pages
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
       - name: Preserve failed blueprint render
         if: failure() && env.TEX_CHANGED == 'true'
         uses: actions/upload-artifact@v7
@@ -1630,12 +1641,6 @@ jobs:
           name: blueprint-render-failure
           path: blueprint/web
           retention-days: 3
-
-      # A zero exit status says the build ran, not that the pages read. This
-      # opens every generated page and measures what a reader would meet.
-      - name: Test generated blueprint pages
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Test Blueprint declaration scanner
         run: python3 scripts/test_blueprint_lean_sync.py
