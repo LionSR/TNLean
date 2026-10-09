@@ -273,7 +273,7 @@ only on the parameters named below.
     \label{thm:al_lattice_positive_replacement}
     \lean{TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints}
     \leanok
-    \uses{thm:al_positive_replacement, lem:al_lattice_counts, def:area_law_ground_entropy}
+    \uses{thm:al_positive_replacement, lem:area_domain_graph_counts, def:area_law_ground_entropy}
     Fix an integer $p\ge1$, put $\alpha=p/(p+1)$, and fix $R\ge0$, $J\ge0$ and
     $\Delta>0$. There are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$,
     such that for every $q\ge1$, every finite domain, interaction, choice of
@@ -322,7 +322,7 @@ only on the parameters named below.
     \label{thm:al_lattice_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation}
     \leanok
-    \uses{thm:al_truncation, lem:al_lattice_counts, def:area_law_ground_entropy}
+    \uses{thm:al_truncation, lem:al_lattice_counts, lem:area_domain_graph_counts, def:area_law_ground_entropy}
     Take $p=1$ in Theorem~\ref{thm:al_lattice_positive_replacement}, so
     $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
     $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
