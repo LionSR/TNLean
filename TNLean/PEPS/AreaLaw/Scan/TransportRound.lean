@@ -131,6 +131,7 @@ theorem transportScanRound_active (hD : D.IsAdmissible) (ht : 0 ≤ t)
     (h : H) :
     ((transportScanRound D n E good t pre).μOld k 0 h).real univ = 1 / 2 ∧
       ∀ c, ((transportScanRound D n E good t pre).μNew k 1 h c).real univ = 1 / 2 := by
+  dsimp only [transportScanRound]
   constructor
   · apply D.transportLeafMeasure_real_univ_of_weight_ne_zero n t k (pre k) 0
       ⟨h, none⟩ hD ht hcomm hsym hpre
