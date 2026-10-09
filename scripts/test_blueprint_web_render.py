@@ -266,14 +266,22 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
 
 
 PAGE_LOAD_TIMEOUT_MS = 300_000
+# A dependency-graph page lays out the whole graph in a browser worker, and
+# the graph pages render serially on an otherwise idle processor (see main).
+# Laying out the full project graph can still outlast a content page, so the
+# uncontended graph pass gets a larger wall-clock budget than the per-content
+# deadline rather than racing the same 300 seconds.
+GRAPH_LOAD_TIMEOUT_MS = 900_000
 
 
 def _load_page(page: Page, base_url: str, name: str) -> None:
-    """Navigate and finish an actual graph within one original page deadline."""
-    deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
+    """Navigate and finish an actual graph within its own page deadline."""
+    is_graph = name.startswith("dep_graph_")
+    budget_ms = GRAPH_LOAD_TIMEOUT_MS if is_graph else PAGE_LOAD_TIMEOUT_MS
+    deadline = time.monotonic() + budget_ms / 1000
     page.goto(f"{base_url}/{name}", wait_until="domcontentloaded",
-              timeout=PAGE_LOAD_TIMEOUT_MS)
-    if name.startswith("dep_graph_"):
+              timeout=budget_ms)
+    if is_graph:
         remaining_ms = (deadline - time.monotonic()) * 1000
         if remaining_ms <= 0:
             raise TimeoutError(f"{name}: graph exceeded the original page deadline")
@@ -320,7 +328,7 @@ def _check_pages(base_url: str, names: list[str],
         page.route(mathjax_glob, fulfill_mathjax)
         for name in names:
             # The graph worker must finish too; navigation and graph completion
-            # share the original 300-second page budget.
+            # share this page's load budget (larger for the graph pages).
             _load_page(page, base_url, name)
             # Proofs are folded away by default; a folded proof has no width,
             # so its displays would escape measurement.
