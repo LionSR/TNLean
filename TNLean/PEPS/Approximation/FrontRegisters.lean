@@ -119,6 +119,12 @@ theorem matL_apply [DecidableEq β] (A : Matrix α β ℂ) (x : EuclideanSpace �
     matL A x i = (A *ᵥ x.ofLp) i :=
   rfl
 
+/-- `matL A` on a standard basis vector is the corresponding column of `A`. -/
+theorem matL_single_apply [DecidableEq β] (A : Matrix α β ℂ) (j : β) (i : α) :
+    matL A (EuclideanSpace.single j (1 : ℂ)) i = A i j := by
+  rw [matL_apply, PiLp.ofLp_single, Matrix.mulVec_single_one]
+  rfl
+
 /-- The operator norm of `matL A` is the operator norm of `A`. -/
 theorem norm_matL [DecidableEq β] (A : Matrix α β ℂ) : ‖matL A‖ = ‖A‖ :=
   rfl
@@ -177,6 +183,17 @@ theorem appendIso_nil_apply (ℓ : Layout P) (w : Mem ℓ) :
 theorem appendIso_one_tmul (r : Reg P) (ℓ : Layout P) (x : r.space) (w : Mem ℓ) :
     appendIso [r] ℓ (x ⊗ₜ w) = (x ⊗ₜ (1 : ℂ)) ⊗ₜ w := by
   simp [appendIso, LinearIsometryEquiv.lTensor]
+
+/-- The inverse of the concatenation with the empty layout is the scalar action. -/
+theorem appendIso_nil_symm_tmul (ℓ : Layout P) (a : ℂ) (w : Mem ℓ) :
+    (appendIso ([] : Layout P) ℓ).symm (a ⊗ₜ w) = a • w := by
+  change TensorProduct.lidIsometry ℂ (Mem ℓ) (a ⊗ₜ w) = _
+  simp
+
+/-- The inverse of the concatenation of one register on pure tensors. -/
+theorem appendIso_one_symm_tmul (r : Reg P) (ℓ : Layout P) (x : r.space) (w : Mem ℓ) :
+    (appendIso [r] ℓ).symm ((x ⊗ₜ (1 : ℂ)) ⊗ₜ w) = (x ⊗ₜ w : Mem (r :: ℓ)) := by
+  rw [LinearIsometryEquiv.symm_apply_eq, appendIso_one_tmul]
 
 /-- Concatenation of two registers on pure tensors. -/
 theorem appendIso_two_tmul (r r' : Reg P) (ℓ : Layout P) (x : r.space) (y : r'.space)
