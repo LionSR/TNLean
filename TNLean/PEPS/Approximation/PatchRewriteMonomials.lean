@@ -53,7 +53,8 @@ specialize `D`.
 
 ## Main results
 
-* `EncodedFrame.SmallPatchRewrite.liftBranch_apply`, `EncodedFrame.SmallPatchRewrite.liftBranch_mul`.
+* `EncodedFrame.SmallPatchRewrite.liftBranch_apply`,
+  `EncodedFrame.SmallPatchRewrite.liftBranch_mul`: the tag block of a branch.
 * `EncodedFrame.SmallPatchRewrite.exists_termChain`: a product term as an allowed monomial.
 * `EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx`: the second assertion of
   Lemma 6.3, with the count `N k^{2m}`.
@@ -202,8 +203,8 @@ theorem tagBraWord_props (tail : Layout Party) {S : Set Party} :
         (tagBraWord l b tail).sourceCount = 0
   | [], _, _ => ⟨trivial, trivial, rfl⟩
   | h :: l, hS, b => by
-      obtain ⟨h₁, h₂, h₃⟩ := tagBraWord_props tail l (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh'))
-        b.2
+      obtain ⟨h₁, h₂, h₃⟩ := tagBraWord_props tail l
+        (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh')) b.2
       exact ⟨⟨norm_regBra_le _ _, h₁⟩, ⟨hS h List.mem_cons_self, h₂⟩,
         by simp [tagBraWord, Word.sourceCount, h₃]⟩
 
@@ -213,8 +214,8 @@ theorem tagKetWord_props (tail : Layout Party) {S : Set Party} :
         (tagKetWord l a tail).sourceCount = 0
   | [], _, _ => ⟨trivial, trivial, rfl⟩
   | h :: l, hS, a => by
-      obtain ⟨h₁, h₂, h₃⟩ := tagKetWord_props tail l (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh'))
-        a.2
+      obtain ⟨h₁, h₂, h₃⟩ := tagKetWord_props tail l
+        (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh')) a.2
       exact ⟨⟨h₁, norm_regKet_le _ _⟩, ⟨h₂, hS h List.mem_cons_self⟩,
         by simp [tagKetWord, Word.sourceCount, h₃]⟩
 
@@ -365,6 +366,13 @@ theorem act_sum {m n κ : Type*} [Fintype n] [Fintype κ] (A : κ → Matrix m n
     (ψ : EuclideanSpace ℂ n) : act (∑ k, A k) ψ = ∑ k, act (A k) ψ := by
   ext i
   simp [act, Matrix.sum_mulVec]
+
+omit [NeZero q] in
+/-- The truncation rank grows with the number of branches. -/
+theorem truncationRank_mono {N N' g δ : ℝ} (hN : 0 ≤ N) (hNN' : N ≤ N') (hg : 0 ≤ g)
+    (hδ : 0 < δ) : truncationRank N g δ ≤ truncationRank N' g δ := by
+  unfold truncationRank
+  gcongr
 
 theorem exists_of_mem_encSteps {s : Step ι q} : (l : List (Hole pos q Party)) →
     (t : TagSpace l) → s ∈ encSteps l t → ∃ h ∈ l, ∃ j, s.sites = h.patch.tagSample j
@@ -605,12 +613,6 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
     rw [liftBranch_sum_smul, act_sum, Finset.smul_sum]
     refine Finset.sum_congr rfl fun ii _ => ?_
     rw [act_smul, ← hM₅, smul_smul, smul_smul, mul_assoc]
-
-omit [NeZero q] in
-theorem truncationRank_mono {N N' g δ : ℝ} (hN : 0 ≤ N) (hNN' : N ≤ N') (hg : 0 ≤ g)
-    (hδ : 0 < δ) : truncationRank N g δ ≤ truncationRank N' g δ := by
-  unfold truncationRank
-  gcongr
 
 /-- **Lemma 6.3, the count with the number of cylinder terms as a parameter.** If every affected
 hole and every additional patch has at most `D` cylinder terms, the expansion of

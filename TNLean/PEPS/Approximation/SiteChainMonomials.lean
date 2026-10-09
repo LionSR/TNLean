@@ -158,14 +158,14 @@ section ZeroChain
 
 variable [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type}
 
-theorem notMem_compl_union_singleton {x y : ι} :
+private theorem notMem_compl_union_singleton {x y : ι} :
     y ∉ (({x} : Finset ι) ∪ ({x} : Finset ι)ᶜ)ᶜ := by
   simp only [Finset.mem_compl, Finset.mem_union, not_not]
   by_cases h : y = x
   · exact Or.inl (Finset.mem_singleton.mpr h)
   · exact Or.inr (by simpa using h)
 
-theorem pairwise_zeroBlock {W : List ι} (hW : W.Nodup) :
+private theorem pairwise_zeroBlock {W : List ι} (hW : W.Nodup) :
     (W.map (zeroBlock (q := q))).Pairwise fun b b' => ∀ x, x ∈ b.E ∨ x ∈ b'.E := by
   rw [List.pairwise_map]
   refine hW.imp fun {x y} hxy z => ?_
@@ -230,7 +230,7 @@ section GroupBlock
 
 variable [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type}
 
-theorem eq_of_card_le_two {P : Finset Party} (hP : P.card ≤ 2) {a b c : Party} (ha : a ∈ P)
+private theorem eq_of_card_le_two {P : Finset Party} (hP : P.card ≤ 2) {a b c : Party} (ha : a ∈ P)
     (hb : b ∈ P) (hc : c ∈ P) (hba : b ≠ a) (hca : c ≠ a) : b = c := by
   classical
   by_contra hbc
@@ -481,12 +481,12 @@ theorem fixedOut_iff (x : ι) :
 
 end OpenLegs
 
-theorem ite_ite_mul_eq {A A' C C' : Prop} {_ : Decidable A} {_ : Decidable A'} {_ : Decidable C}
-    {_ : Decidable C'} (hA : A ↔ A') (hC : C ↔ C') (X : ℂ) :
+private theorem ite_ite_mul_eq {A A' C C' : Prop} {_ : Decidable A} {_ : Decidable A'}
+    {_ : Decidable C} {_ : Decidable C'} (hA : A ↔ A') (hC : C ↔ C') (X : ℂ) :
     (if A then (if C then (1 : ℂ) else 0) * X else 0) = if A' ∧ C' then X else 0 := by
   by_cases hA' : A' <;> by_cases hC' : C' <;> simp [hA, hC, hA', hC']
 
-theorem list_prod_map_ite_one {α : Type*} (p : α → Prop) [DecidablePred p] (L : List α)
+private theorem list_prod_map_ite_one {α : Type*} (p : α → Prop) [DecidablePred p] (L : List α)
     {_ : Decidable (∀ y ∈ L, p y)} :
     (L.map fun y => if p y then (1 : ℂ) else 0).prod = if ∀ y ∈ L, p y then 1 else 0 := by
   split_ifs with h
