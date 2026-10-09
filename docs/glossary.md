@@ -803,11 +803,45 @@ normalizations.
   inter-factor commutation, uniqueness, or smooth optimizer is assumed.
   Stationarity, energy, later regulator-growth and retained-rank estimates,
   and the full adaptive patch constraint are outside this result.
-- **Verification boundary:** the minimum module passed a strict local check
-  with the accepted QICLean shifted-density dependency. The original-proof
-  ledger remains planned pending immutable native source/evidence publication;
-  full-build and exact-head CI gates remain separate. See
-  [the formalization scope and gates](formalization/peps-regularized-patch-minimum.md).
+- **Scope:** see
+  [the formalization scope](formalization/peps-regularized-patch-minimum.md).
+
+#### `TNLean.PEPS.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean` and
+  `RegularizedPatchStationarity.lean`.
+- **Meaning:** unitary conjugation changes exactly one indexed feasible density.
+  The actual output derivative along `exp(tB)`, for skew-Hermitian `B`, is the
+  original reverse-product insertion of `BKⱼ − KⱼB`. Every feasible `IsMinOn`
+  minimizer has zero real inner product of that insertion with its output.
+- **Source:** the September 24, 2026 manuscript,
+  [`03-patches.tex`, lines 134–149](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L134-L149).
+- **Sanctioned consequences:** feasibility of each coordinate curve, exact
+  unitary covariance of the full-space shifted power, and the unstripped
+  first variation. Arbitrary real weights and singular densities are allowed.
+- **Caveats:** repeated regions retain independent variables. Feasibility alone
+  does not imply stationarity. There is no optimizer choice, pairwise filter
+  commutation, descending local commutation, or KKT conclusion.
+- **Verification boundary:** see the exact-source gates and scope in
+  [coordinate first variation](formalization/peps-regularized-patch-stationarity.md).
+
+#### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
+
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean`.
+- **Meaning:** `FiniteProduct.reducedPure` of the same normalized final filtered
+  vector for every region, after the explicit univ-subtype/global configuration
+  isometry. These are canonical reduced states, not freely supplied densities.
+- **Source:** the September 24, 2026 manuscript,
+  [`03-patches.tex`, lines 91–99](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L91-L99).
+- **Sanctioned consequences:** positivity and the complex-valued identity
+  `⟨φ, ι_X(K)φ⟩ = Tr(ρ_X K)` for arbitrary complex `K`; trace one for a unit
+  input, nonnegative weights, positive shift, and feasible tuple. Heterogeneous
+  local dimensions and the empty region are included.
+- **Caveats:** the coordinate variable `xⱼ` need not equal `ρ_Xⱼ`. Zero weight
+  does not constrain that density to commute with the final marginal.
+  No intermediate filtered vector is substituted for the final state.
+- **Scope:** see
+  [the source-facing scope](formalization/peps-regularized-patch-stationarity.md).
 
 #### `TNLean.PEPS.IsRegionParentInteraction`
 
@@ -3110,6 +3144,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `QuantumCircuit.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `TNLean/Circuit/LiebRobinson/GraphLocalization.lean`. |
 | `TNLean.PEPS.AreaLaw.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e q^{|X|})` of a cut, summed over the admissible supports meeting both `A` and its complement | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; the lattice instance of QICLean's `Entropy.cutLogBudget`, bounded by the number of crossing supports in `cutLogBudget_le_card`. |
 | `TNLean.PEPS.AreaLaw.concentrationWidth` | The width `32 √((1 + J/Δ) ℬ_A) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}` | Area-law `02-initial.tex`, lines 207–212; an explicit width in terms of `ℬ_A`, used in `LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`. |
+| `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |
+| `TNLean.PEPS.AreaLaw.typicalWidthConstant` | The constant `C_M = 32 √((1 + J/Δ) C) (M + (e/2 + log 2)/log 2)` with `C = tailParameterConstant q R` | Area-law `02-initial.tex`, lines 207–212; depends only on `q, R, J, Δ, M`; bounds the concentration width by `C_M √(1 + |∂_Λ A|) log(n+2)` in `concentrationWidth_le`. |
 | `TNLean.PEPS.AreaLaw.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
 | `TNLean.PEPS.AreaLaw.IsSafe` | The sup-norm distance from the rectangle `Q` to every endpoint of an edge crossing `A` exceeds `D₀ · size Q` | Area-law `02-initial.tex`, lines 220–228; vacuous when no edge crosses `A`, matching the source's infinite distance to the empty set. The source's standing condition `D₀ > 2R + 10` is a hypothesis of the theorems, not of the predicate. |
 | `TNLean.PEPS.AreaLaw.rectRegion` | The physical region `A ∩ Q` of an ambient rectangle | Area-law `02-initial.tex`, lines 232–233; sites of `Q` missing from the domain or from `A` are absent. |

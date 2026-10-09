@@ -196,8 +196,9 @@ def rewrite [NeZero q] : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ :=
 theorem norm_affectedRewrite_le_one [NeZero q] : ‖R.affectedRewrite‖ ≤ 1 := by
   have h2 := norm_frameEncoder_le_one R.disjoint_old.right
   rw [← l2_opNorm_conjTranspose] at h2
-  exact l2_opNorm_mul_le_one (l2_opNorm_mul_le_one (norm_frameEncoder_le_one R.disjoint_new.right)
-    (norm_projProd_le_one R.patches)) h2
+  exact l2_opNorm_mul_le_one _ _
+    (l2_opNorm_mul_le_one _ _ (norm_frameEncoder_le_one R.disjoint_new.right)
+      (norm_projProd_le_one R.patches)) h2
 
 /-- **The canonical rewrite is a contraction.**
 

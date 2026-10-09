@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-07T21:30Z",
+  "reviewedAt": "2026-10-08T15:56Z",
   "entries": [
     {
       "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
@@ -25,7 +25,7 @@
       "id": "docs/paper-gaps/polypeps_ownership_change_monomials.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved-pending",
       "paper": "peps",
       "result": "Lemmas 6.5–6.6",
       "title": "Birth, death and exchange as allowed operations",
@@ -33,13 +33,14 @@
       "prs": {
         "TNLean": [
           8855,
-          8917
+          8917,
+          8943
         ]
       },
       "claims": "Handing a region from one party to another (birth or death), or swapping ownership between two copies of the state (exchange), costs reference error at most L^−30 (4L^−30 for the exchange), provided the region shares information at most L^−60 with its surroundings. Each move involves only the named parties.",
-      "found": "Both lemmas are proved with exactly the paper's hypotheses, including the canonical maps, their contractivity and both error bounds. On the party model built in #8843, with the registers of each region held by one party grouped into one register, the birth is proved to be a private map, one shared state and a private map, and the death the same with one shared effect. The exchange corrections are proved to be one private map on such grouped registers. The paper has one register per site, and the grouped registers are not yet identified with the registers of a frame. Also unstated is that the exchange's renaming is a reordering of registers. It is proved to keep every register with its party, but writing it as a reordering needs the same list with one register per site and per tag.",
-      "impact": "No problem with the paper has been found. What remains is to place the grouped monomials on the registers of a frame and to restate the renaming step of the exchange.",
-      "plan": "List the registers of a frame one per site and per tag, identified with the canonical coordinates. Move and group the registers of each region by reorderings and private unitaries, so that the birth, death and correction monomials act on that list, and write the exchange's renaming as a reordering of it."
+      "found": "Both lemmas are proved with exactly the paper's hypotheses, including the canonical maps, their contractivity and both error bounds. The moves were first proved as allowed operations only with the registers of each region grouped into one register. #8943 lists the registers of a frame one per site and per tag, each held by its owner, identifies them with the canonical coordinates, and proves the moves on that list: the birth is an allowed operation on the two named parties with one shared state, the death the same with one shared effect, and the exchange is the renaming, written as a reordering of registers that keeps every register with its party, followed by one private map. Each has the canonical map as its operator and the paper's reference error. No hypotheses were added.",
+      "impact": "None. Lemmas 6.5 and 6.6 are formalized as stated once #8943 reaches main.",
+      "plan": "Merge #8943."
     },
     {
       "id": "docs/paper-gaps/polypeps_small_rewrite_monomials.tex",
@@ -53,13 +54,14 @@
       "prs": {
         "TNLean": [
           8823,
-          8932
+          8932,
+          8943
         ]
       },
       "claims": "Lemma 6.3 rewrites the state near a small patch where ownership changes. It states that (1) the rewrite map is a contraction that moves the old reference state close to the new one, and (2) up to error L^−a the map is a polynomial sum of operations that the compression theorem allows.",
-      "found": "Part (1) is proved with exactly the paper's hypotheses. For part (2), Lean proves the branch expansion, the owner bookkeeping, the network of each branch with no wire from a vertex to itself, its truncation by Lemma 6.2 with error 2m/√k and at most k^(2m) terms independent of the site dimensions, and the final rescaling: for every δ > 0 there is a contraction within δ of the rewrite that is a sum of explicit product terms. Two steps are not yet formalized. Each product term is not yet written as an allowed monomial of Theorem 5.2, because the frame's registers have no layout by owner with one register per site and per tag. The term count is not yet polynomial in L, because the patches do not carry the bound on the number of cylinder terms from Proposition 4.1.",
-      "impact": "No problem with the paper has been found. What remains is the register layout of a frame and carrying the cylinder-term bound of Proposition 4.1 into the patch data.",
-      "plan": "List the frame's registers one per site and per tag, identified with the canonical coordinates, and read each product term as an allowed party chain with the front-register calculus already used for Lemmas 6.5 and 6.6. Carry the bound on the number of cylinder terms from Proposition 4.1, with bounded numbers of patches and affected holes, to make the count of terms polynomial in L."
+      "found": "Part (1) is proved with exactly the paper's hypotheses. For part (2), Lean proves the branch expansion, the owner bookkeeping, the network of each branch with no wire from a vertex to itself, its truncation by Lemma 6.2 with error 2m/√k and at most k^(2m) terms independent of the site dimensions, and the final rescaling: for every δ > 0 there is a contraction within δ of the rewrite that is a sum of explicit product terms. Two steps are not yet formalized. Each product term is not yet written as an allowed monomial of Theorem 5.2. The registers of a frame, one per site and per tag, are now listed and identified with the canonical coordinates (#8943), with reorderings that bring any set of registers together; what remains is to read each product term as an allowed operation on them. The term count is not yet polynomial in L, because the patches do not carry the bound on the number of cylinder terms from Proposition 4.1.",
+      "impact": "No problem with the paper has been found. What remains is reading the product terms as allowed operations on the registers of a frame, and carrying the cylinder-term bound of Proposition 4.1 into the patch data.",
+      "plan": "On the registers of the frames (#8943), read each product term as an allowed party chain with the reorderings and the front-register calculus already used for Lemmas 6.5 and 6.6. Carry the bound on the number of cylinder terms from Proposition 4.1, with bounded numbers of patches and affected holes, to make the count of terms polynomial in L."
     },
     {
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
@@ -163,6 +165,26 @@
       "found": "The proof uses four properties of that network: every anchor lies on the padded grid, each dyadic block carries boundedly many parties, each party has boundedly many links, and linked anchors are close relative to their scale. The protocol of Proposition 7.1 is not yet formalized, so Lean proves the lemma for every party network with these four properties: congestion at most 8(2c+1)BΔ after folding, and the routed network is exactly a PEPS on the open square with bond dimension at most max(D,1)^(8(2c+1)BΔ).",
       "impact": "No problem with the paper has been found. The paper's lemma is the case of its own network, once that network is shown to have the four properties.",
       "plan": "Formalize Proposition 7.1 and attach its parties to the anchors of the dyadic blocks. The first property follows from the attachment, the other three from items 1–3 of Proposition 7.1."
+    },
+    {
+      "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",
+      "repo": "QICLean",
+      "kind": "narrower",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Proposition 7.4",
+      "title": "Commutation of the transport metrics",
+      "issue": 8752,
+      "prs": {
+        "QICLean": [
+          689,
+          695
+        ]
+      },
+      "claims": "Proposition 7.4 bounds how entropy and energy change as the replicas are transported across several bands. It assumes that the operators of different bands commute on the symmetric subspace of the replicas.",
+      "found": "The first Lean version required commutation on the whole tensor power, which is stronger. It can fail when two regions overlap without nesting: for three qubits, an explicit commutator is nonzero on the full tensor power and zero on the symmetric subspace. QICLean now restricts the operators to the symmetric subspace and assumes exactly the paper's condition.",
+      "impact": "None. The paper's hypothesis was the right one, and the first formal version was stricter than needed.",
+      "plan": "Nothing further."
     }
   ],
   "checked": [
