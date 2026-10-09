@@ -119,7 +119,7 @@ example (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) {Ctpl : ℝ} {n s₀ D
     (e : ℝ) (he : 0 < e) :
     regionalEntropy Λ 1 (basisState Λ 1 fun _ ↦ 0)
       (A.filter fun x ↦ x.1 ∈ (ambientDilation T.points (s₀ - 1) \ T.points) ∪ Y) ≤ 0 := by
-  simpa only [zero_mul, Real.log_one, mul_zero, add_zero] using
+  simpa only [zero_mul, Nat.cast_one, Real.log_one, mul_zero, add_zero] using
     Template.regionalEntropy_prefix_le_of_safe_box Λ 1 D₀ (by decide)
       (basisState Λ 1 fun _ ↦ 0) (norm_basisState _ _ _) A T hC hsep hD
       s₀ s₀ K T.s₀_pos le_rfl le_rfl hlo hhi Y hY e 0 he (le_refl _)
