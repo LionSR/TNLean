@@ -30,14 +30,17 @@ set_option linter.hashCommand false
 #guard_msgs (whitespace := lax) in
 #print axioms TensorPower.ReplicaTransport.TransportData.oldFourierCoherentIntegral_one
 
+open TensorPower.ReplicaTransport.TransportData in
 /-- info: 'TensorPower.ReplicaTransport.TransportData.entropyGain_eq_sum_oldFourierCoherentIntegral' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms TensorPower.ReplicaTransport.TransportData.entropyGain_eq_sum_oldFourierCoherentIntegral
+#print axioms entropyGain_eq_sum_oldFourierCoherentIntegral
 
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 /-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.good_sum_splitEta_le_choiceEntropySymbol_domainGraph' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.good_sum_splitEta_le_choiceEntropySymbol_domainGraph
+#print axioms good_sum_splitEta_le_choiceEntropySymbol_domainGraph
 
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 /-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph
+#print axioms actualChargeEntropyDefect_le_entropyGain_domainGraph

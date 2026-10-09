@@ -31,9 +31,12 @@ set_option linter.hashCommand false
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeMoveCost_chargeEntropyCost
 
-/-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedEntropyCost_le_expected_chargeEta_domainGraph' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedEntropyCost_le_expected_chargeEta_domainGraph' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedEntropyCost_le_expected_chargeEta_domainGraph
+#print axioms good_designatedEntropyCost_le_expected_chargeEta_domainGraph
 
 /-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeData_isAdmissible' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
