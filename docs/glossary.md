@@ -3309,3 +3309,20 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
+
+## Partial rectangle layer entropy
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean`.
+- **Meaning:** let `Q` be a nonempty integer rectangle of size `s`, let
+  `1 ≤ j ≤ s`, and let `Y ⊆ Q^{+j} \ Q^{+(j−1)}` be arbitrary. For a
+  normalized pure state `Ω` with local dimension `q ≥ 1` and any physical
+  region `A`, put `R = A ∩ (Q^{+(j−1)} \ Q)` and `B = A ∩ Y`. Then
+  `|S_Ω(R ∪ B) − S_Ω(R)| ≤ 12s log q`.
+- **Source:** the partial-row argument of OpenAI's September 24, 2026 area-law
+  manuscript, [Lemma 9.4, `08-scanner.tex`, lines 666–667](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L666-L667),
+  and its use in the [rectangle covering argument for Proposition 9.5, lines 717–729](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L717-L729).
+- **Scope:** this is a partial-layer auxiliary estimate. It includes `q = 1`,
+  an empty `Y`, thin rectangles and missing physical sites. Only normalization,
+  the local dimension and the rectangle layer count enter the bound; no safety,
+  template separation or Hamiltonian assumption is needed.
