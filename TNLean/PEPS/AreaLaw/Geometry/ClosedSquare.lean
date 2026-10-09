@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import Mathlib.Basic.Real.Basic
 import Mathlib.Algebra.Order.Floor.Ring
-import Mathlib.Tactic
+import Mathlib.Tactic.GCongr
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
 
 /-!
 # Closed-square samples and their crossing edges
@@ -73,22 +75,18 @@ private theorem mem_rectangleBoundaryEdges {Λ : Finset (ℤ × ℤ)}
   simp only [rectangleBoundaryEdges, Finset.mem_union, Finset.mem_image]
   rcases hxy with ⟨h₂, h₁ | h₁⟩ | ⟨h₁, h₂ | h₂⟩
   · refine Or.inl (Or.inl (Or.inr ⟨x.1.2, Finset.mem_Icc.mpr hx.2, ?_⟩))
-    have hb : x.1.1 = b.1 := by omega
     apply Sym2.eq_iff.mpr
     left
     constructor <;> apply Prod.ext <;> dsimp <;> omega
   · refine Or.inl (Or.inl (Or.inl ⟨x.1.2, Finset.mem_Icc.mpr hx.2, ?_⟩))
-    have ha : x.1.1 = a.1 := by omega
     apply Sym2.eq_iff.mpr
     left
     constructor <;> apply Prod.ext <;> dsimp <;> omega
   · refine Or.inr ⟨x.1.1, Finset.mem_Icc.mpr hx.1, ?_⟩
-    have hb : x.1.2 = b.2 := by omega
     apply Sym2.eq_iff.mpr
     left
     constructor <;> apply Prod.ext <;> dsimp <;> omega
   · refine Or.inl (Or.inr ⟨x.1.1, Finset.mem_Icc.mpr hx.1, ?_⟩)
-    have ha : x.1.2 = a.2 := by omega
     apply Sym2.eq_iff.mpr
     left
     constructor <;> apply Prod.ext <;> dsimp <;> omega

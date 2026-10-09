@@ -71,12 +71,19 @@ and does not add edges to the induced graph.
     larger radial distance.
 \end{theorem}
 \begin{proof}\leanok
-    One coordinate of adjacent sites differs by one and the other is equal.
-    The triangle inequality bounds each coordinate distance from $c$ at $y$
-    by its value at $x$ plus one. Apply the same inequality with $x,y$
-    interchanged to bound the radial difference. The definition of an
-    unordered crossing edge gives the two opposite membership alternatives;
-    substituting $\rho(x)\le r$ for membership yields
+    One coordinate of adjacent sites differs by one and the other is equal,
+    so $|x_a-y_a|\le1$. For $a=1,2$ the triangle inequality gives
+    \begin{align*}
+        |y_a-c_a|\le|x_a-c_a|+|x_a-y_a|\le\rho(x)+1,
+    \end{align*}
+    hence $\rho(y)\le\rho(x)+1$; interchanging $x$ and $y$ gives
+    $|\rho(x)-\rho(y)|\le1$. An unordered pair crosses $A$ exactly when
+    \begin{align*}
+        (x\in A\wedge y\notin A)\vee(y\in A\wedge x\notin A).
+    \end{align*}
+    For $A=K(c,r)$, membership of a site $z$ is $\rho(z)\le r$, and the
+    disjunction becomes
+    $(\rho(x)\le r<\rho(y))\vee(\rho(y)\le r<\rho(x))$, which is
     (\ref{eq:peps_square_crossing_interval}).
 \end{proof}
 
@@ -105,7 +112,6 @@ and does not add edges to the induced graph.
     For every $r\ge0$, the number of unordered induced edges crossing the
     sampled square satisfies
     $|\partial_\Lambda K(c,r)|\le8r+4$.
-    If $0\le r\le2u$, then $|\partial_\Lambda K(c,r)|\le16u+4$.
 \end{theorem}
 \begin{proof}\leanok
     A horizontal crossing edge lies on an integer row meeting
@@ -113,9 +119,8 @@ and does not add edges to the induced graph.
     one at each end of the integer interval inside the square. An interval of
     length $2r$ contains at most $2r+1$ integers. The same argument applies to
     vertical edges. Hence the total is at most
-    $2(2r+1)+2(2r+1)=8r+4$; replacing $r$ by its bound $2u$ gives the second
-    assertion. Removing sites outside $\Lambda$ cannot create an induced
-    crossing edge.
+    $2(2r+1)+2(2r+1)=8r+4$. Removing sites outside $\Lambda$ cannot create
+    an induced crossing edge.
 \end{proof}
 
 \begin{definition}[Nested square patches]
