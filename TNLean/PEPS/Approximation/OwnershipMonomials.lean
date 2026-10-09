@@ -174,7 +174,7 @@ theorem isAllowed_birthPrivateWord (P : Party) {V : Matrix (BT × BE) U ℂ} (hV
   have h := norm_birthKernel_le_one hV hs
   have h' := h
   rw [← l2_opNorm_conjTranspose] at h'
-  exact l2_opNorm_mul_le_one h' h
+  exact l2_opNorm_mul_le_one _ _ h' h
 
 omit [DecidableEq BT] [DecidableEq T] in
 /-- The death monomial is allowed: its private maps are contractions and its pair effect is
@@ -616,7 +616,7 @@ set_option synthInstance.maxSize 512 in
 /-- The corrections `W` of an exchange form a contraction. -/
 theorem norm_correctionMatrix_le_one (σ : SplittingData q T E) (A : Finset ι) :
     ‖correctionMatrix σ A‖ ≤ 1 :=
-  l2_opNorm_mul_le_one (l2_opNorm_conjTranspose_mul_mul_le_one
+  l2_opNorm_mul_le_one _ _ (l2_opNorm_conjTranspose_mul_mul_le_one
     (IsIsometry.kronecker σ.V σ.V σ.isIsometry σ.isIsometry).l2_opNorm_le_one
     (l2_opNorm_toMatrix_toPEquiv_le _)) (l2_opNorm_toMatrix_toPEquiv_le _)
 
