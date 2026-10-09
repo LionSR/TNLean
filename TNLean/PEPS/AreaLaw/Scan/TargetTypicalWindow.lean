@@ -64,8 +64,8 @@ theorem target_typicalSet_bounds {Λ : Finset (ℤ × ℤ)} {q : ℕ}
       (Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
         (regionalEntropy Λ q Ωt X) w) at hz
     rw [hE] at hz
-    simpa only [Matrix.IsHermitian.spectralRestrictionMass, Finset.sum_empty,
-      lt_self_iff_false] using hz
+    simp only [Matrix.IsHermitian.spectralRestrictionMass, Finset.sum_empty,
+      lt_self_iff_false] at hz
   · intro i hi
     exact ⟨(Entropy.mem_typicalSet.mp hi).1, Entropy.exp_le_of_mem_typicalSet hi⟩
 
