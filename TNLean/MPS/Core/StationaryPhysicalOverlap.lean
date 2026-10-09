@@ -48,11 +48,12 @@ theorem stationaryBlockDensity_eq_mul_conjTranspose
 /-- The physical purity is bounded below uniformly in N by D⁻². The
 Cauchy–Schwarz bound is applied on the virtual pair space, whose dimension
 does not grow with N. Source: arXiv:0802.0447, proof of Theorem 2, lines 316–320. -/
-theorem inv_sq_le_purity_stationaryBlockDensity [NeZero D]
+theorem inv_sq_le_purity_stationaryBlockDensity
     (A : MPSTensor d D) {Λ : Matrix (Fin D) (Fin D) ℂ}
     (hΛ : Λ.PosSemidef) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : Kraus.transferMap A 1 = 1) (N : ℕ) :
     (D : ℝ)⁻¹ ^ 2 ≤ (Matrix.trace (stationaryBlockDensity A Λ N ^ 2)).re := by
+  have : NeZero D := ⟨by rintro rfl; simp at hΛtr⟩
   let S := CFC.sqrt (Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))
   let F := physicalMatrix (blockTensor A N) * S
   have hρ : stationaryBlockDensity A Λ N = F * Fᴴ :=

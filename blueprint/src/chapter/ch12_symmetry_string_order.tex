@@ -370,10 +370,7 @@ virtual-boundary nondecay and virtual local covariance.
     \label{thm:pgwsvc08_physical_symmetry}
     \lean{MPSTensor.stationaryBlockDensity_invariant_iff_spectralRadius_eq_one}
     \leanok
-    \uses{thm:irreducible_twisted_spectral_radius,
-        lem:irreducible_twisted_transfer_reduction,
-        thm:stationary_density_purity, thm:stationary_density_overlap,
-        thm:stationary_density_covariance}
+    \uses{def:stationary_physical_block_density}
     This is Theorem~2 of~\cite{PerezGarcia2008StringOrder} for a fixed
     physical unitary $u$. Suppose $\Lambda>0$, $\tr\Lambda=1$,
     $\E_A(\Id)=\Id$, and $\E_A^*(\Lambda)=\Lambda$. Assume that
@@ -393,7 +390,9 @@ virtual-boundary nondecay and virtual local covariance.
     \leanok
     \uses{lem:canonical_fixed_space_irreducible,
         thm:irreducible_twisted_spectral_radius,
-        lem:irreducible_twisted_transfer_reduction}
+        lem:irreducible_twisted_transfer_reduction,
+        thm:stationary_density_purity, thm:stationary_density_overlap,
+        thm:stationary_density_covariance}
     By Lemma~\ref{lem:canonical_fixed_space_irreducible}, the source purity
     hypothesis makes $\E_A$ irreducible.
     If $\rho(\E_u)=1$, Theorem~\ref{thm:irreducible_twisted_spectral_radius}

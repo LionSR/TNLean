@@ -2,10 +2,7 @@
 
 \begin{definition}[Stationary physical block density]
     \label{def:stationary_physical_block_density}
-    \lean{MPSTensor.stationaryBlockDensity,
-        MPSTensor.physicalMatrix_mul_conjTranspose_apply,
-        MPSTensor.stationaryBlockDensity_apply,
-        MPSTensor.stationaryBlockDensity_word}
+    \lean{MPSTensor.stationaryBlockDensity}
     \leanok
     \uses{def:mps_tensor}
     Let $A$ be a tensor of bond dimension $D$ and let $\Lambda\in\MN{D}$.
@@ -16,10 +13,7 @@
         \qquad A_s=A_{s_0}\cdots A_{s_{N-1}}.
         \label{eq:stationary_density_entries}
     \end{align}
-    If $P_N(s,(a,b))=(A_s)_{ab}$ and
-    $K=\Lambda^{\mathsf T}\otimes\Id_D$, then
-    $\varrho_N=P_NKP_N^\dagger$. The upper and lower physical legs remain
-    open, while the virtual boundary is contracted with $\Lambda$:
+    The upper and lower physical legs remain open, while the virtual boundary is contracted with $\Lambda$:
     % Formula: (rho_N)_{s,t} = sum_{a,b,c} Lambda_{a,b}
     % (A_s)_{b,c} conjugate((A_t)_{a,c}).
     % Source verdict: Papers/0802.0447/StringOrder-v10.tex, lines 297--323;
@@ -43,6 +37,28 @@
     \end{center}
     % TENKZ-STATIONARY-DENSITY-END
 \end{definition}
+
+\begin{lemma}[Factorization of the stationary density]
+    \label{lem:stationary_density_factorization}
+    \lean{MPSTensor.physicalMatrix_mul_conjTranspose_apply,
+        MPSTensor.stationaryBlockDensity_apply,
+        MPSTensor.stationaryBlockDensity_word}
+    \leanok
+    \uses{def:stationary_physical_block_density}
+    Let $P_N$ be the $d^N\times D^2$ matrix with entries
+    $P_N(s,(a,b))=(A_s)_{ab}$, and let $K=\Lambda^{\mathsf T}\otimes\Id_D$.
+    Then $\varrho_N(A,\Lambda)=P_NKP_N^\dagger$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For matrices $B,C$ indexed by the same letters, the entry $(s,t)$ of
+    $P_BP_C^\dagger$ is $\sum_{a,b}(B_s)_{ab}\overline{(C_t)_{ab}}
+    =\tr(B_sC_t^\dagger)$. Multiplying by $K$ on the right replaces each
+    $B_s$ by $\Lambda A_s$, so the entry $(s,t)$ of $P_NKP_N^\dagger$ is
+    $\tr(\Lambda A_sA_t^\dagger)$, which is
+    (\ref{eq:stationary_density_entries}).
+\end{proof}
 
 \begin{theorem}[Stationary density expectation of a physical observable]
     \label{thm:stationary_density_observable}
@@ -94,6 +110,7 @@
 
 \begin{proof}
     \leanok
+    \uses{lem:stationary_density_factorization}
     Positivity and the rank bound follow from $\varrho_N=P_NKP_N^\dagger$
     with $K\geq0$ on the $D^2$-dimensional virtual pair space. Its trace is
     $\tr(\Lambda\E_A^N(\Id))=1$. Summation over the rightmost letter in
@@ -108,7 +125,7 @@
         MPSTensor.inv_sq_le_purity_stationaryBlockDensity}
     \leanok
     \uses{thm:stationary_density_consistency}
-    If $D>0$, $\Lambda\geq0$, $\tr\Lambda=1$, and $\E_A(\Id)=\Id$, then
+    If $\Lambda\geq0$, $\tr\Lambda=1$, and $\E_A(\Id)=\Id$, then
     \begin{align}
         D^{-2} & \leq\tr(\varrho_N(A,\Lambda)^2).
         \label{eq:stationary_density_purity}
@@ -119,6 +136,7 @@
 
 \begin{proof}
     \leanok
+    \uses{lem:stationary_density_factorization}
     Put $F_N=P_N\sqrt K$, so $\varrho_N=F_NF_N^\dagger$.
     The matrix $G_N=F_N^\dagger F_N$ has dimension $D^2$ and satisfies
     $\tr G_N=1$ and $\tr(G_N^2)=\tr(\varrho_N^2)$.
@@ -169,6 +187,7 @@
 
 \begin{proof}
     \leanok
+    \uses{lem:stationary_density_factorization}
     Cyclicity of the trace moves the physical factors in
     $\tr(P_N^AK(P_N^A)^\dagger P_N^BK(P_N^B)^\dagger)$ onto the virtual
     pair space. Expanding the mixed transfer iterate gives
