@@ -66,6 +66,6 @@ theorem reindex_kronecker_mem_supportedOperators
   all_goals simp only [Matrix.add_kronecker, Matrix.kronecker_add,
     Matrix.smul_kronecker, Matrix.kronecker_smul, Matrix.submatrix_add,
     Matrix.submatrix_smul, Pi.add_apply, Pi.smul_apply]
-  done
+  all_goals aesop (add safe apply Submodule.add_mem) (add safe apply Submodule.smul_mem)
 
 end QuantumCircuit
