@@ -3,6 +3,7 @@
 \begin{definition}[Integer rectangles of dyadic cells]
     \label{def:area_template_dyadic_rectangle}
     \lean{TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect}
+    \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_lattice_dyadic_square}
     For $k\in\N$ and $z\in\Z^2$, let
     \begin{align}
@@ -18,6 +19,7 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.toFinset_latticeDyadicRect,
         TNLean.PEPS.AreaLaw.Geometry.size_latticeDyadicRect,
         TNLean.PEPS.AreaLaw.Geometry.rectRegion_latticeDyadicRect}
+    \leanok
     \uses{def:area_template_dyadic_rectangle,def:area_law_ground_entropy}
     For every $k\in\N$ and $z\in\Z^2$, the lattice points of $R_{k,z}$
     are exactly $C_{k,z}$, and $\operatorname{size}(R_{k,z})=2^k$.
@@ -25,6 +27,7 @@
     its physical region is $A\cap C_{k,z}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:area_template_dyadic_rectangle,def:area_law_lattice_dyadic_square}
     The half-open coordinate interval from $2^kz_i$ to $2^k(z_i+1)$
     contains exactly the integers from $2^kz_i$ to $2^kz_i+2^k-1$.
@@ -37,6 +40,7 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.biUnion_rectRegion_cappedDyadicPartition,
         TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
         TNLean.PEPS.AreaLaw.Geometry.regionalEntropy_filter_le_sum_rectRegion}
+    \leanok
     \uses{def:area_law_capped_dyadic_partition,
         def:area_template_dyadic_rectangle,def:area_law_ground_entropy}
     Fix a finite lattice domain $\Lambda$, a region $A\subseteq\Lambda$,
@@ -52,6 +56,7 @@
     \cite[Lemma~9.4, lines~651--664]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_capped_dyadic_partition,
         thm:area_template_dyadic_rectangle}
     The selected ambient squares partition $S$. Intersecting them with
@@ -63,6 +68,7 @@
 \begin{theorem}[Safe selected squares in a rectangle shell]
     \label{thm:area_law_rectangle_shell_safe_cells}
     \lean{TNLean.PEPS.AreaLaw.IsSafe.isSafe_cappedDyadicPartition_shell}
+    \leanok
     \uses{def:area_law_safe_rectangle,def:area_template_dyadic_rectangle,
         def:area_law_capped_dyadic_partition}
     Fix a finite lattice domain $\Lambda$, a physical region $A$, and
@@ -78,6 +84,7 @@
     \cite[proof of Proposition~9.5, lines~723--729]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_capped_dyadic_partition,
         thm:area_template_dyadic_rectangle,thm:area_law_safe_rectangle_dilation}
     A selected square $R_{k,z}$ is contained in $Q^{+j}$ and has
@@ -92,6 +99,7 @@
 \begin{theorem}[Entropy from safe selected squares]
     \label{thm:area_law_capped_dyadic_entropy_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.regionalEntropy_filter_le_weighted_cover}
+    \leanok
     \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle,
         def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
     Fix a finite lattice domain $\Lambda$ with local dimension $q$,
@@ -111,6 +119,7 @@
     \cite[proof of Lemma~9.4, lines~651--664]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_template_physical_dyadic_entropy,
         thm:area_template_dyadic_rectangle}
     The physical regions $A\cap R_{k,z}$ are pairwise disjoint and
@@ -127,6 +136,7 @@
 \begin{theorem}[Rectangle-shell entropy from a safe-box estimate]
     \label{thm:area_law_rectangle_shell_entropy}
     \lean{TNLean.PEPS.AreaLaw.IntRect.regionalEntropy_shell_le_of_safe_box}
+    \leanok
     \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle}
     Fix a finite lattice domain $\Lambda$ with local dimension $q$,
     a unit physical vector $\Omega$, a region $A$, and $D_0\in\N$.
@@ -147,6 +157,7 @@
     % This auxiliary estimate does not assert the one-step entropy improvement.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_capped_dyadic_entropy_cover,
         thm:area_law_rectangle_shell_safe_cells,
         thm:area_law_rectangle_shell_weighted_cover}
