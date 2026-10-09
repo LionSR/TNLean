@@ -619,8 +619,21 @@ jobs:
       - name: Build physical cross-band commutation early
         run: |
           set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build Lean project and capture timings
+        run: |
+          set -eo pipefail
+          # Check the String Order capstones before unrelated library targets.
+          lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder \
+            TNLean.MPS.Examples.StringOrderScalarPhase \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          {
+            lake build
+            lake build lint_style
+          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Check physical cross-band production modules strictly
         timeout-minutes: 5
@@ -650,18 +663,6 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PhysicalBandCommutationAxioms.lean
-
-      - name: Build Lean project and capture timings
-        run: |
-          set -eo pipefail
-          # Check the String Order capstones before unrelated library targets.
-          lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder \
-            TNLean.MPS.Examples.StringOrderScalarPhase \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-          {
-            lake build
-            lake build lint_style
-          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Test capped dyadic partition strictly
         run: >

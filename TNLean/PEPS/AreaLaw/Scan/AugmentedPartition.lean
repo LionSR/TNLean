@@ -52,9 +52,14 @@ theorem augmentedPartition_nested {σ τ : PhysicalPartition V}
   cases x with
   | inl x =>
     have hx' : x ∈ receiving σ false ∪ middle σ := by
-      simpa [augmentedPartition, augmentedState, receiving, middle] using hx
-    simpa [augmentedPartition, augmentedState, receiving] using h hx'
-  | inr b => cases b <;> simp_all [augmentedPartition, augmentedState, receiving, middle]
+      simpa only [augmentedPartition, receiving, middle, Finset.mem_union,
+        Finset.mem_filter, Finset.mem_univ, true_and, augmentedState, Sum.elim_inl] using hx
+    simpa only [augmentedPartition, receiving, Finset.mem_filter, Finset.mem_univ,
+      true_and, augmentedState, Sum.elim_inl] using h hx'
+  | inr b =>
+    cases b <;> simp_all only [augmentedPartition, receiving, middle, Finset.mem_union,
+      Finset.mem_filter, Finset.mem_univ, true_and, augmentedState, Sum.elim_inr,
+      Option.some.injEq, Bool.true_eq_false, reduceCtorEq, or_self]
 
 /-- Move the unassigned physical part only; auxiliary factors never move. -/
 def augmentedMove (σ : PhysicalPartition V) (side : Bool) (B : Finset V) : Move (V ⊕ Bool) :=
@@ -69,22 +74,26 @@ theorem augmentedMove_isValid (σ : PhysicalPartition V) (side : Bool) (B : Fins
   all_goals
     intro x hx
     obtain ⟨y, hy, rfl⟩ := Finset.mem_map.mp hx
-    simpa [augmentedPartition, augmentedState, middle] using (Finset.mem_inter.mp hy).2
+    simpa only [augmentedPartition, middle, Finset.mem_filter, Finset.mem_univ,
+      true_and, augmentedState, Sum.elim_inl] using (Finset.mem_inter.mp hy).2
 
 /-- Applying the physical move agrees with assigning its previously unassigned sites. -/
 theorem augmentedMove_apply (σ : PhysicalPartition V) (side : Bool) (B : Finset V) :
     (augmentedMove σ side B).apply (augmentedPartition σ) =
       augmentedPartition (assign σ side B) := by
   cases side <;> simp only [augmentedMove, Bool.false_eq_true, ↓reduceIte,
-    Move.apply, augmentedPartition] <;> congr 1 <;> ext x <;> cases x with
+    Move.apply, augmentedPartition] <;> congr 1 <;> ext x <;>
+    simp only [receiving, middle, Finset.mem_union, Finset.mem_sdiff,
+      Finset.mem_map, Finset.mem_inter, Finset.mem_filter, Finset.mem_univ,
+      true_and, Function.Embedding.coeFn_mk] <;> cases x with
   | inl x =>
+    simp only [augmentedState, Sum.elim_inl, Sum.inl.injEq, exists_eq_right]
     cases hx : σ x with
-    | none =>
-      by_cases hB : x ∈ B <;> simp [augmentedMove, Move.apply, augmentedPartition,
-        augmentedState, receiving, middle, assign, hx, hB]
-    | some b => cases b <;> simp [augmentedMove, Move.apply, augmentedPartition,
-        augmentedState, receiving, middle, assign, hx]
-  | inr b => cases b <;> simp [augmentedMove, Move.apply, augmentedPartition,
-      augmentedState, receiving, middle, assign]
+    | none => by_cases hB : x ∈ B <;> simp only [assign, hx, hB] <;> simp
+    | some b => cases b <;> simp only [assign, hx] <;> simp
+  | inr b =>
+    cases b <;> simp only [augmentedState, Sum.elim_inr, Sum.inl_ne_inr,
+      and_false, exists_false, Option.some.injEq, Bool.false_eq_true,
+      Bool.true_eq_false, reduceCtorEq] <;> simp
 
 end TNLean.PEPS.AreaLaw.Scan

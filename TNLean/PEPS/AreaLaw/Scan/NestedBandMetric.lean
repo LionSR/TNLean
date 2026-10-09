@@ -38,9 +38,9 @@ private theorem product_mul_projection_congr {ι : Type*} [Fintype ι]
 private theorem labelObservable_mul_symProj_compl (k : ℕ) (Q : Finset V)
     (f : IrrepLabel (Equiv.Perm (Fin k)) → ℝ) :
     labelObservable (subsystemPerm k (fun v => Fin (n v)) Q) f *
-        symProj (copyPerm (SiteConfig n) k) =
+        symProj (copyPerm (Entropy.SiteConfig n) k) =
       labelObservable (subsystemPerm k (fun v => Fin (n v)) Qᶜ) f *
-        symProj (copyPerm (SiteConfig n) k) := by
+        symProj (copyPerm (Entropy.SiteConfig n) k) := by
   simp only [labelObservable, Finset.sum_mul]
   refine Finset.sum_congr rfl fun l _ => ?_
   rw [smul_mul_assoc, smul_mul_assoc, labelProj_mul_symProj_compl]
@@ -55,7 +55,7 @@ private theorem commute_labelObservable_of_subset (k : ℕ) {Q Q' : Finset V}
 
 private theorem commute_symProj_labelObservable (k : ℕ) (Q : Finset V)
     (f : IrrepLabel (Equiv.Perm (Fin k)) → ℝ) :
-    Commute (symProj (copyPerm (SiteConfig n) k))
+    Commute (symProj (copyPerm (Entropy.SiteConfig n) k))
       (labelObservable (subsystemPerm k (fun v => Fin (n v)) Q) f) :=
   commute_symProj_of_forall_commute_permOp fun s =>
     commute_copyPerm_labelObservable k Q f s
@@ -74,8 +74,9 @@ private theorem commute_labelObservable_bandMetric (ht : 0 ≤ t) (k : ℕ)
     (fun l => (replicaLabelWeight (fun v => Fin (n v)) t l)⁻¹)
   have hY := commute_replicaMetric_of_disjoint' (n := n) k
     (hπ.1.mono_left hQ) f (replicaLabelWeight (fun v => Fin (n v)) t)
-  simpa only [bandMetric, leafMetric, leafRoot, replicaMetric_inv_eq ht,
-    replicaMetric] using ((hP.mul_right hF).mul_right hY).pow_right 2
+  unfold bandMetric leafMetric leafRoot
+  rw [replicaMetric_inv_eq ht, replicaMetric_inv_eq ht]
+  exact ((hP.mul_right hF).mul_right hY).pow_right 2
 
 /-- Physical ordered partitions have commuting band metrics on the symmetric
 replica subspace. The complement substitution is made only after multiplication
@@ -104,23 +105,26 @@ theorem bandMetric_commute_on_symmetric_of_nested (ht : 0 ≤ t) (k : ℕ)
     have hP := commute_labelObservable_bandMetric (n := n) ht k hπ' (Q := π.P)
       (Finset.subset_union_left.trans h)
       (fun l => (replicaLabelWeight (fun v => Fin (n v)) t l)⁻¹)
-    have hF := commute_labelObservable_bandMetric (n := n) ht k hπ' (Q := π.Fᶜ) (by simpa only [hFc] using h)
+    have hF := commute_labelObservable_bandMetric (n := n) ht k hπ' (Q := π.Fᶜ)
+      (by simpa only [hFc] using h)
       (fun l => (replicaLabelWeight (fun v => Fin (n v)) t l)⁻¹)
     have hY := commute_labelObservable_bandMetric (n := n) ht k hπ' (Q := π.Y)
       (Finset.subset_union_right.trans h) (replicaLabelWeight (fun v => Fin (n v)) t)
-    simpa only [bandMetric, leafMetric, leafRoot, πm, replicaMetric_inv_eq ht,
-      replicaMetric] using ((hP.mul_left hF).mul_left hY).pow_left 2
-  have heq : bandMetric n t k π * symProj (copyPerm (SiteConfig n) k) =
-      bandMetric n t k πm * symProj (copyPerm (SiteConfig n) k) := by
+    change Commute (leafRoot n t k π.P π.Y π.Fᶜ ^ 2) (bandMetric n t k π')
+    unfold leafRoot
+    rw [replicaMetric_inv_eq ht, replicaMetric_inv_eq ht]
+    exact ((hP.mul_left hF).mul_left hY).pow_left 2
+  have heq : bandMetric n t k π * symProj (copyPerm (Entropy.SiteConfig n) k) =
+      bandMetric n t k πm * symProj (copyPerm (Entropy.SiteConfig n) k) := by
     have hi := labelObservable_mul_symProj_compl (n := n) k π.F
       (fun l => (replicaLabelWeight (fun v => Fin (n v)) t l)⁻¹)
-    have hroot : leafRoot n t k π.P π.Y π.F * symProj (copyPerm (SiteConfig n) k) =
-        leafRoot n t k π.P π.Y π.Fᶜ * symProj (copyPerm (SiteConfig n) k) := by
+    have hroot : leafRoot n t k π.P π.Y π.F * symProj (copyPerm (Entropy.SiteConfig n) k) =
+        leafRoot n t k π.P π.Y π.Fᶜ * symProj (copyPerm (Entropy.SiteConfig n) k) := by
       simp only [leafRoot, replicaMetric_inv_eq ht, replicaMetric]
       exact product_mul_projection_congr
         (product_mul_projection_congr rfl hi (commute_symProj_labelObservable k _ _))
         rfl (commute_symProj_labelObservable k _ _)
-    have hc : Commute (symProj (copyPerm (SiteConfig n) k))
+    have hc : Commute (symProj (copyPerm (Entropy.SiteConfig n) k))
         (leafRoot n t k π.P π.Y π.Fᶜ) := by
       simp only [leafRoot, replicaMetric_inv_eq ht, replicaMetric]
       exact ((commute_symProj_labelObservable k _ _).mul_right
@@ -129,18 +133,18 @@ theorem bandMetric_commute_on_symmetric_of_nested (ht : 0 ≤ t) (k : ℕ)
     simpa only [bandMetric, leafMetric, πm, pow_two] using
       product_mul_projection_congr hroot hroot hc
   intro w hw
-  have hwE := symProj_mulVec_of_mem (copyPerm (SiteConfig n) k) hw
+  have hwE := symProj_mulVec_of_mem (copyPerm (Entropy.SiteConfig n) k) hw
   have hc := commute_symProj_bandMetric (n := n) t k π'
   have hright : (bandMetric n t k π * bandMetric n t k π') *
-      symProj (copyPerm (SiteConfig n) k) =
+      symProj (copyPerm (Entropy.SiteConfig n) k) =
       (bandMetric n t k π' * bandMetric n t k π) *
-        symProj (copyPerm (SiteConfig n) k) := by
+        symProj (copyPerm (Entropy.SiteConfig n) k) := by
     calc
       _ = (bandMetric n t k πm * bandMetric n t k π') *
-          symProj (copyPerm (SiteConfig n) k) :=
+          symProj (copyPerm (Entropy.SiteConfig n) k) :=
         product_mul_projection_congr heq rfl hc
       _ = (bandMetric n t k π' * bandMetric n t k πm) *
-          symProj (copyPerm (SiteConfig n) k) := by rw [hcomm.eq]
+          symProj (copyPerm (Entropy.SiteConfig n) k) := by rw [hcomm.eq]
       _ = _ := by rw [mul_assoc, ← heq, mul_assoc]
   have hv := congrArg (fun M => M *ᵥ w) hright
   simpa only [← Matrix.mulVec_mulVec, hwE] using hv
