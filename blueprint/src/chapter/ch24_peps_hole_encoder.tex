@@ -209,10 +209,11 @@ of the September 24, 2026 polynomial-PEPS manuscript.
 
 % Source: 05-frames.tex, eq:encoder-contraction, lines 61--64, at
 % adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% Auxiliary consequence; native verification of the new declaration is pending.
+% Auxiliary consequence of the projected-norm identity.
 \begin{theorem}[Norm preservation on the cylinder span]
     \label{thm:peps_hole_encoder_norm_on_span}
     \lean{TNLean.PEPS.holeEncoder_norm_eq_of_mem}
+    \leanok
     \uses{def:peps_hole_encoder}
     For the encoding $K$ of Definition~\ref{def:peps_hole_encoder}, every
     $\psi\in\mathcal E$ satisfies $\|K\psi\|=\|\psi\|$.
@@ -220,6 +221,7 @@ of the September 24, 2026 polynomial-PEPS manuscript.
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/05-frames.tex\#L61-L64}{one-hole encoding construction}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_hole_encoder_norm,def:peps_coordinate_projector}
     Since $\psi\in\mathcal E$, its orthogonal projection satisfies
     $P_{\mathcal E}\psi=\psi$. Hence
