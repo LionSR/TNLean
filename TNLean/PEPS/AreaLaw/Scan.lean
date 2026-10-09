@@ -10,11 +10,22 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
+import TNLean.PEPS.AreaLaw.Scan.AncestryCover
+import TNLean.PEPS.AreaLaw.Scan.AncestryGeometry
+import TNLean.PEPS.AreaLaw.Scan.AncestryLead
 import TNLean.PEPS.AreaLaw.Scan.AssignedLead
+import TNLean.PEPS.AreaLaw.Scan.BadHistoryGeometricTail
+import TNLean.PEPS.AreaLaw.Scan.BadHistoryProbability
+import TNLean.PEPS.AreaLaw.Scan.BadHistoryTimeUnion
+import TNLean.PEPS.AreaLaw.Scan.BadHistoryUnion
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scan.Budgets
+import TNLean.PEPS.AreaLaw.Scan.ChargeAncestry
+import TNLean.PEPS.AreaLaw.Scan.ChargeBinomialBound
+import TNLean.PEPS.AreaLaw.Scan.ChargePathCounting
 import TNLean.PEPS.AreaLaw.Scan.ChargeSlots
+import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.Scan.DesignatedDilution
 import TNLean.PEPS.AreaLaw.Scan.DesignatedMoveCost
@@ -25,10 +36,14 @@ import TNLean.PEPS.AreaLaw.Scan.ExpectedMoveCost
 import TNLean.PEPS.AreaLaw.Scan.ExponentBootstrap
 import TNLean.PEPS.AreaLaw.Scan.FillCoverage
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
+import TNLean.PEPS.AreaLaw.Scan.HistoryPrefixes
 import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
+import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
 import TNLean.PEPS.AreaLaw.Scan.Scanner
+import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
 import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
+import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths
