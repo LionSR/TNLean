@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
 import QICLean.Representation.ReplicaTransport.Setup
+import Mathlib.Data.Fintype.Sum
 
 /-!
 # Auxiliary factors and physical scanner partitions
@@ -52,14 +53,21 @@ theorem augmentedPartition_nested {σ τ : PhysicalPartition V}
   cases x with
   | inl x =>
     have hx' : x ∈ receiving σ false ∪ middle σ := by
-      simpa only [augmentedPartition, receiving, middle, Finset.mem_union,
-        Finset.mem_filter, Finset.mem_univ, true_and, augmentedState, Sum.elim_inl] using hx
-    simpa only [augmentedPartition, receiving, Finset.mem_filter, Finset.mem_univ,
-      true_and, augmentedState, Sum.elim_inl] using h hx'
+      rcases Finset.mem_union.mp hx with hx | hx
+      · exact Finset.mem_union_left _
+          (Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hx).2⟩)
+      · exact Finset.mem_union_right _
+          (Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hx).2⟩)
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp (h hx')).2⟩
   | inr b =>
-    cases b <;> simp_all only [augmentedPartition, receiving, middle, Finset.mem_union,
-      Finset.mem_filter, Finset.mem_univ, true_and, augmentedState, Sum.elim_inr,
-      Option.some.injEq, Bool.true_eq_false, reduceCtorEq, or_self]
+    cases b with
+    | false => exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, rfl⟩
+    | true =>
+      rcases Finset.mem_union.mp hx with hx | hx
+      · have hf : (some true : Option Bool) = some false := (Finset.mem_filter.mp hx).2
+        cases hf
+      · have hf : (some true : Option Bool) = none := (Finset.mem_filter.mp hx).2
+        cases hf
 
 /-- Move the unassigned physical part only; auxiliary factors never move. -/
 def augmentedMove (σ : PhysicalPartition V) (side : Bool) (B : Finset V) : Move (V ⊕ Bool) :=
@@ -74,8 +82,8 @@ theorem augmentedMove_isValid (σ : PhysicalPartition V) (side : Bool) (B : Fins
   all_goals
     intro x hx
     obtain ⟨y, hy, rfl⟩ := Finset.mem_map.mp hx
-    simpa only [augmentedPartition, middle, Finset.mem_filter, Finset.mem_univ,
-      true_and, augmentedState, Sum.elim_inl] using (Finset.mem_inter.mp hy).2
+    exact Finset.mem_filter.mpr
+      ⟨Finset.mem_univ _, (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2⟩
 
 /-- Applying the physical move agrees with assigning its previously unassigned sites. -/
 theorem augmentedMove_apply (σ : PhysicalPartition V) (side : Bool) (B : Finset V) :

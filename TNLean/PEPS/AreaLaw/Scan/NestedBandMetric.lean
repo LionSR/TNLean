@@ -120,13 +120,15 @@ theorem bandMetric_commute_on_symmetric_of_nested (ht : 0 ≤ t) (k : ℕ)
       (fun l => (replicaLabelWeight (fun v => Fin (n v)) t l)⁻¹)
     have hroot : leafRoot n t k π.P π.Y π.F * symProj (copyPerm (Entropy.SiteConfig n) k) =
         leafRoot n t k π.P π.Y π.Fᶜ * symProj (copyPerm (Entropy.SiteConfig n) k) := by
-      simp only [leafRoot, replicaMetric_inv_eq ht, replicaMetric]
+      unfold leafRoot
+      simp only [replicaMetric_inv_eq ht]
       exact product_mul_projection_congr
         (product_mul_projection_congr rfl hi (commute_symProj_labelObservable k _ _))
         rfl (commute_symProj_labelObservable k _ _)
     have hc : Commute (symProj (copyPerm (Entropy.SiteConfig n) k))
         (leafRoot n t k π.P π.Y π.Fᶜ) := by
-      simp only [leafRoot, replicaMetric_inv_eq ht, replicaMetric]
+      unfold leafRoot
+      simp only [replicaMetric_inv_eq ht]
       exact ((commute_symProj_labelObservable k _ _).mul_right
         (commute_symProj_labelObservable k _ _)).mul_right
         (commute_symProj_labelObservable k _ _)
