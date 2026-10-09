@@ -142,14 +142,22 @@ example (hm : 0 < S.m) (hM : 0 < S.M) (h3 : 3 < 2 * S.n * S.m) :
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (hj : IsChargeRound j.val) :
     HEq (S.actualRoundData hm hM j) (S.actualChargeData hm hM (j.val / 2)) := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
-    ite_eq_left hj, dite_eq_left hj, heq_eq_eq]
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => HEq D (S.actualChargeData hm hM (j.val / 2))) ?_ ?_
+  · intro _
+    rfl
+  · intro hnj
+    exact (hnj hj).elim
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (hj : ¬IsChargeRound j.val) :
     HEq (S.actualRoundData hm hM j) (S.actualFillData hm hM (j.val / 2)) := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
-    ite_eq_right hj, dite_eq_right hj, heq_eq_eq]
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => HEq D (S.actualFillData hm hM (j.val / 2))) ?_ ?_
+  · intro hcharge
+    exact (hj hcharge).elim
+  · intro _
+    rfl
 
 -- The split-leaf operation also survives the abstract dependent casts.
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
@@ -157,16 +165,26 @@ example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (i : ι) (hj : IsChargeRound j.val) :
     ((S.actualRoundData hm hM j).splitLeaves E i).card =
       ((S.actualChargeData hm hM (j.val / 2)).splitLeaves E i).card := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
-    ite_eq_left hj, dite_eq_left hj]
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => (D.splitLeaves E i).card =
+      ((S.actualChargeData hm hM (j.val / 2)).splitLeaves E i).card) ?_ ?_
+  · intro _
+    rfl
+  · intro hnj
+    exact (hnj hj).elim
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (n : V ⊕ Bool → ℕ) {ι : Type*} (E : EnergyTerms (V ⊕ Bool) n ι)
     (i : ι) (hj : ¬IsChargeRound j.val) :
     ((S.actualRoundData hm hM j).splitLeaves E i).card =
       ((S.actualFillData hm hM (j.val / 2)).splitLeaves E i).card := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
-    ite_eq_right hj, dite_eq_right hj]
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => (D.splitLeaves E i).card =
+      ((S.actualFillData hm hM (j.val / 2)).splitLeaves E i).card) ?_ ?_
+  · intro hcharge
+    exact (hj hcharge).elim
+  · intro _
+    rfl
 
 section RoundIndices
 

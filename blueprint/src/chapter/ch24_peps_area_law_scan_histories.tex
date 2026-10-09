@@ -1723,7 +1723,8 @@ The following finite construction follows
     \label{def:al_scan_actual_round_family}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundChoice,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_induction}
     \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
     For a fixed scanner with $m,M>0$, index its rounds by integers
     $0\le j<2nm$ and put $s_j=\lfloor j/2\rfloor$.
@@ -1742,7 +1743,9 @@ The following finite construction follows
     $j$. Thus round zero is a fill, rounds zero and one both have empty
     charge history, and rounds two and three both have one completed
     charge. Every round has exactly $K$ bands. Empty physical moves
-    remain among these rounds.
+    remain among these rounds. A property depending on the conditional-choice
+    sets and transport data can be proved separately for the fill and charge
+    cases, identifying their conditional-choice sets with $\mathcal C_{j,h}$.
 \end{definition}
 
 \begin{theorem}[Common transport errors for all actual scan rounds]
