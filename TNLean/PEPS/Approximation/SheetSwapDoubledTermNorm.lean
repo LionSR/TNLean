@@ -37,12 +37,17 @@ theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
   have hdouble : ‖doubledHamiltonian A‖ ≤ ‖A‖ + ‖A‖ :=
     (norm_add_le _ _).trans (add_le_add (l2_opNorm_kronecker_one_le A)
       (l2_opNorm_one_kronecker_rect_le A))
-  have hconj := norm_mul_le_of_le
-    (norm_mul_le_of_le (norm_sheetSwapOp_le_one (q := q) R) hdouble)
-    ((l2_opNorm_conjTranspose (sheetSwapOp q R)).trans_le
-      (norm_sheetSwapOp_le_one (q := q) R))
-  linarith [norm_sub_le
-    (sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ)
-    (doubledHamiltonian A)]
+  have hconj : ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ‖
+      ≤ ‖A‖ + ‖A‖ :=
+    (norm_mul_le_of_le
+      (norm_mul_le_of_le (norm_sheetSwapOp_le_one (q := q) R) hdouble)
+      ((l2_opNorm_conjTranspose (sheetSwapOp q R)).trans_le
+        (norm_sheetSwapOp_le_one (q := q) R))).trans (le_of_eq (by ring))
+  calc ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ
+          - doubledHamiltonian A‖
+      ≤ ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ‖
+        + ‖doubledHamiltonian A‖ := norm_sub_le _ _
+    _ ≤ (‖A‖ + ‖A‖) + (‖A‖ + ‖A‖) := add_le_add hconj hdouble
+    _ = 4 * ‖A‖ := by ring
 
 end TNLean.PEPS.EncodedFrame
