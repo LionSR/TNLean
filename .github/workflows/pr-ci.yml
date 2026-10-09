@@ -503,6 +503,13 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check paired-coordinate sheet-swap support early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapSiteSupport:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Check sitewise tensor support early
         run: |
           set -eo pipefail
@@ -644,6 +651,20 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check paired-coordinate sheet-swap support and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapSiteSupport.lean \
+              TNLeanTest/SheetSwapSiteSupportAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       - name: Check sitewise tensor support and standard axioms strictly
         timeout-minutes: 4

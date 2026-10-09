@@ -792,6 +792,26 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     copies of $S$ both $F_S$ and $R_1\otimes R_2$ act on different factors.
 \end{proof}
 
+\begin{theorem}[Support of the swap in paired coordinates]
+\label{thm:peps_sheet_swap_paired_site_support}
+\lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators}
+\uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+Let $\Lambda$ be a finite set, let $q\geq0$ be an integer, and let
+$R\subseteq\Lambda$. Identify two configurations of local dimension $q$
+with one configuration of local dimension $q^2$ by pairing the two values
+at each site. In these coordinates, the sheet swap $F_R$ is supported on
+$R$. The assertion includes empty regions and empty configuration spaces.
+This is the local support property used for the doubled Hamiltonian in
+\cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+At a site outside $R$, the permutation fixes the paired coordinate.
+At a site in $R$, it exchanges the two entries of that coordinate.
+Thus the permutation fixes the complement and its action on $R$ depends
+only on the coordinates in $R$. Its permutation matrix is therefore
+supported on $R$.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
