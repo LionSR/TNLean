@@ -18,6 +18,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
 import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
+import TNLean.PEPS.AreaLaw.Geometry.CellFanRadialIncidence
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRays
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
@@ -37,7 +38,9 @@ import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
+import TNLean.PEPS.AreaLaw.Geometry.FanAffineCoordinates
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.FanRadialConvexity
 import TNLean.PEPS.AreaLaw.Geometry.FanRegularity
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
@@ -62,6 +65,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
 import TNLean.PEPS.AreaLaw.Geometry.MeshGeometry
+import TNLean.PEPS.AreaLaw.Geometry.MeshSegmentClearance
 import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
