@@ -24,6 +24,8 @@ import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.BondEmbedding
+import TNLean.MPS.Preparation.CanonicalFixedPoint
+import TNLean.MPS.Preparation.CanonicalOneCopyState
 import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.CoherentBlockTreePreparation
 import TNLean.MPS.Preparation.CoherentGroundspaceConversion
@@ -47,7 +49,6 @@ import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
 import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.ExactSectorEncoder
 import TNLean.MPS.Preparation.ExplicitPreparationScale
-import TNLean.MPS.Preparation.FiniteRingCommutatorRecursion
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
@@ -126,7 +127,9 @@ import TNLean.MPS.Preparation.RectangularWindowMixing
 import TNLean.MPS.Preparation.RectangularWindowPreparation
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
+import TNLean.MPS.Preparation.RelativePolarCompression
 import TNLean.MPS.Preparation.RelativePositivePart
+import TNLean.MPS.Preparation.RelativeSecondOrderOverlap
 import TNLean.MPS.Preparation.RemainderBlocks
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.RepeatedBlockError
@@ -137,6 +140,7 @@ import TNLean.MPS.Preparation.RepeatedOverlappingBlockWeights
 import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap
+import TNLean.MPS.Preparation.SectorCopyCoordinates
 import TNLean.MPS.Preparation.SectorEncoder
 import TNLean.MPS.Preparation.SectorEncoderCompilation
 import TNLean.MPS.Preparation.SectorEncoderGroundspace

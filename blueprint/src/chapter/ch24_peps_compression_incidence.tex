@@ -1,0 +1,363 @@
+\section{Finite incidence in distributed PEPS compression}
+\label{sec:peps_compression_incidence}
+The finite counting statements below are those used in the proof of
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{04-compression.tex}, lines 342--381 and 565--588.
+% These entries formalize finite prerequisites only. Full circuit expansion,
+% tensor evaluation, virtual dimensions and quantum/sampling composition remain open.
+
+\begin{definition}[Source-position endpoints]
+    \label{def:compression_source_endpoints}
+    \lean{TNLean.PEPS.Approximation.sourceEndpoints}
+    \lean{TNLean.PEPS.Approximation.mem_sourceEndpoints}
+    \leanok
+    For an index set of source positions, let $e\mapsto(a_e,b_e)$ assign an ordered pair of parties. Define $E_e=\{a_e,b_e\}$. Thus $p\in E_e$ if and only if $p=a_e$ or $p=b_e$; coincident endpoints are counted once.
+\end{definition}
+
+\begin{definition}[Corrected parties]
+    \label{def:compression_corrected_parties}
+    \lean{TNLean.PEPS.Approximation.correctedParties}
+    \lean{TNLean.PEPS.Approximation.mem_correctedParties}
+    \leanok
+    For a finite set $S$ of source positions, define $A_S=\bigcup_{e\in S}E_e$. Membership means that $p$ is an endpoint of some position $e\in S$. No monomial label is selected by $S$.
+\end{definition}
+
+\begin{definition}[Lifetime gate incidence]
+    \label{def:compression_lifetime_gates}
+    \lean{TNLean.PEPS.Approximation.incidentGates}
+    \lean{TNLean.PEPS.Approximation.mem_incidentGates}
+    \leanok
+    Let $G$ be a finite set of nonprivate gate occurrences and let $P_g$ be the finite participant set of occurrence $g$. Identifiers distinguish repeated occurrences of the same operation. Define $G(p)=\{g\in G:p\in P_g\}$ using the entire gate list.
+\end{definition}
+
+\begin{definition}[Gates touching a party set]
+    \label{def:compression_touching_gates}
+    \lean{TNLean.PEPS.Approximation.gatesTouching}
+    \lean{TNLean.PEPS.Approximation.mem_gatesTouching}
+    \leanok
+    For a finite party set $A$, define $\Gamma(A)=\bigcup_{p\in A}G(p)$. Thus $g\in\Gamma(A)$ precisely when $g\in G$ and some $p\in A$ participates in $g$.
+\end{definition}
+
+\begin{theorem}[Endpoint count at one source position]
+    \label{thm:compression_endpoint_count}
+    \lean{TNLean.PEPS.Approximation.card_sourceEndpoints_le}
+    \leanok
+    Every source position satisfies $|E_e|\le2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_source_endpoints}
+    A set containing two specified elements has cardinality at most two.
+\end{proof}
+
+\begin{theorem}[Corrected-party count]
+    \label{thm:compression_corrected_party_count}
+    \lean{TNLean.PEPS.Approximation.card_correctedParties_le}
+    \leanok
+    For every finite correction set $S$, $|A_S|\le2|S|$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_corrected_parties,thm:compression_endpoint_count}
+    The cardinality of a finite union is at most the sum of the constituent cardinalities, so $|A_S|\le\sum_{e\in S}|E_e|\le2|S|$.
+\end{proof}
+
+\begin{theorem}[Lifetime bound for touching gates]
+    \label{thm:compression_touching_gate_count}
+    \lean{TNLean.PEPS.Approximation.card_gatesTouching_le}
+    \leanok
+    If $|G(p)|\le b$ for every $p\in A$, then $|\Gamma(A)|\le b|A|$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_touching_gates}
+    Use $|\Gamma(A)|\le\sum_{p\in A}|G(p)|\le b|A|$.
+\end{proof}
+
+\begin{theorem}[Affected-gate count for corrected positions]
+    \label{thm:compression_affected_gate_count}
+    \lean{TNLean.PEPS.Approximation.card_gatesTouching_correctedParties_le}
+    \leanok
+    If $|G(p)|\le b$ for every $p\in A_S$, then $|\Gamma(A_S)|\le2b|S|$. This includes touching gates with no selected position of their own.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_touching_gate_count,thm:compression_corrected_party_count}
+    The two finite-union bounds give $|\Gamma(A_S)|\le b|A_S|\le2b|S|$.
+\end{proof}
+
+\begin{theorem}[Owner of a corrected source position]
+    \label{thm:compression_corrected_owner}
+    \lean{TNLean.PEPS.Approximation.owner_mem_gatesTouching_correctedParties}
+    \leanok
+    Let $o(e)$ be the owner of a source position. If $e\in S$, $o(e)\in G$, and $a_e\in P_{o(e)}$, then $o(e)\in\Gamma(A_S)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_corrected_parties,def:compression_touching_gates}
+    The party $a_e$ belongs to $A_S$ and participates in $o(e)$, giving the required witness.
+\end{proof}
+
+\begin{theorem}[Exterior gates avoid corrected parties]
+    \label{thm:compression_exterior_disjoint}
+    \lean{TNLean.PEPS.Approximation.disjoint_participants_of_not_mem_gatesTouching}
+    \leanok
+    If $g\in G\setminus\Gamma(A)$, then $P_g\cap A=\varnothing$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_touching_gates}
+    A common party would witness $g\in\Gamma(A)$, a contradiction.
+\end{proof}
+
+\begin{definition}[Pair-sample labels]
+    \label{def:compression_pair_labels}
+    \lean{TNLean.PEPS.Approximation.pairSampleLabels}
+    \lean{TNLean.PEPS.Approximation.mem_pairSampleLabels}
+    \lean{TNLean.PEPS.Approximation.mk_mem_pairSampleLabels}
+    \leanok
+    For a finite party set $P$, let $U(P)$ be the unordered pairs of distinct elements of $P$. Equivalently, an unordered pair belongs to $U(P)$ when both its endpoints lie in $P$ and it is not diagonal. The pair $\{p,q\}$ belongs to $U(P)$ precisely when $p,q\in P$ and $p\ne q$.
+\end{definition}
+
+\begin{definition}[Star and sample label sets]
+    \label{def:compression_gate_labels}
+    \lean{TNLean.PEPS.Approximation.gateLinkLabels}
+    \leanok
+    For a specified root $r$, define the disjoint label set $T(P,r)=(P\setminus\{r\})\sqcup U(P)$. The first summand indexes star links and the second indexes sample links.
+\end{definition}
+
+\begin{definition}[Gate-local link endpoints]
+    \label{def:compression_gate_link_parties}
+    \lean{TNLean.PEPS.Approximation.gateLinkParties}
+    \leanok
+    For a star label $q$ put $F(r,q)=\{r,q\}$. For a sample label $\{p,q\}$ put $F(r,\{p,q\})=\{p,q\}$. The two cases retain their disjoint summand labels.
+\end{definition}
+
+\begin{definition}[Links tagged by gate occurrence]
+    \label{def:compression_gate_links}
+    \lean{TNLean.PEPS.Approximation.linksAtGate}
+    \lean{TNLean.PEPS.Approximation.mem_linksAtGate}
+    \leanok
+    For chosen roots $r_g$, define $\mathcal L_g=\{(g,t):t\in T(P_g,r_g)\}$. The gate tag preserves distinct occurrences even if their participant sets and operations agree.
+\end{definition}
+
+\begin{definition}[Distributed link family]
+    \label{def:compression_distributed_links}
+    \lean{TNLean.PEPS.Approximation.distributedLinks}
+    \lean{TNLean.PEPS.Approximation.mem_distributedLinks}
+    \leanok
+    Define $\mathcal L=\bigcup_{g\in G}\mathcal L_g$. A pair $(g,t)$ belongs to $\mathcal L$ exactly when $g\in G$ and $t\in T(P_g,r_g)$. Parallel links remain distinct.
+\end{definition}
+
+\begin{definition}[Tagged link endpoints]
+    \label{def:compression_distributed_link_parties}
+    \lean{TNLean.PEPS.Approximation.distributedLinkParties}
+    \leanok
+    For a tagged link $\ell=(g,t)$ define $V(\ell)=F(r_g,t)$.
+\end{definition}
+
+\begin{definition}[Distributed party incidence]
+    \label{def:compression_distributed_incidence}
+    \lean{TNLean.PEPS.Approximation.incidentDistributedLinks}
+    \leanok
+    Define $I(p)=\{\ell\in\mathcal L:p\in V(\ell)\}$. Parallel links are counted separately.
+\end{definition}
+
+\begin{definition}[Gate-local party incidence]
+    \label{def:compression_gate_label_incidence}
+    \lean{TNLean.PEPS.Approximation.incidentGateLinkLabels}
+    \leanok
+    Define $T_p(P,r)=\{t\in T(P,r):p\in F(r,t)\}$.
+\end{definition}
+
+\begin{definition}[Tagged incidence at one gate]
+    \label{def:compression_gate_incidence}
+    \lean{TNLean.PEPS.Approximation.incidentLinksAtGate}
+    \leanok
+    Define $\mathcal L_g(p)=\{\ell\in\mathcal L_g:p\in V(\ell)\}$.
+\end{definition}
+
+\begin{theorem}[Number of pair-sample labels]
+    \label{thm:compression_pair_label_count}
+    \lean{TNLean.PEPS.Approximation.card_pairSampleLabels}
+    \leanok
+    If $|P|=n$, then $|U(P)|=\binom n2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_pair_labels}
+    The off-diagonal ordered pairs map two-to-one onto unordered pairs, giving $|U(P)|=n(n-1)/2=\binom n2$.
+\end{proof}
+
+\begin{theorem}[Sample links incident to a participant]
+    \label{thm:compression_pair_incidence}
+    \lean{TNLean.PEPS.Approximation.filter_pairSampleLabels_eq_map}
+    \lean{TNLean.PEPS.Approximation.card_filter_pairSampleLabels}
+    \leanok
+    If $p\in P$, then the sample labels containing $p$ are exactly the image of $P\setminus\{p\}$ under $q\mapsto\{p,q\}$. Consequently their number is $|P|-1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_pair_labels}
+    The map is injective. Every distinct unordered pair containing $p$ has a unique other endpoint in $P\setminus\{p\}$.
+\end{proof}
+
+\begin{theorem}[Number of links at one gate]
+    \label{thm:compression_gate_label_count}
+    \lean{TNLean.PEPS.Approximation.card_gateLinkLabels}
+    \lean{TNLean.PEPS.Approximation.card_gateLinkLabels_le}
+    \leanok
+    If $r\in P$ and $|P|=n$, then $|T(P,r)|=n-1+\binom n2$. If $n\le b$, this is at most $b-1+\binom b2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_gate_labels,thm:compression_pair_label_count}
+    Add the cardinalities of the disjoint star and sample summands. The two cardinality terms are monotone in $n$.
+\end{proof}
+
+\begin{theorem}[Gate-local incidence bound]
+    \label{thm:compression_gate_incidence_bound}
+    \lean{TNLean.PEPS.Approximation.card_incidentGateLinkLabels_le}
+    \leanok
+    If $r,p\in P$, then $|T_p(P,r)|\le2(|P|-1)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_gate_label_incidence,thm:compression_pair_incidence}
+    The star contribution is at most the whole star size $|P|-1$. The sample contribution is exactly $|P|-1$.
+\end{proof}
+
+\begin{theorem}[Gate-local endpoint locality]
+    \label{thm:compression_gate_locality}
+    \lean{TNLean.PEPS.Approximation.gateLinkParties_subset}
+    \leanok
+    If $r\in P$ and $t\in T(P,r)$, then $F(r,t)\subseteq P$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_gate_labels,def:compression_gate_link_parties}
+    A star label lies in $P\setminus\{r\}$, and a sample label has both endpoints in $P$.
+\end{proof}
+
+\begin{theorem}[Distinct link endpoints]
+    \label{thm:compression_gate_two_endpoints}
+    \lean{TNLean.PEPS.Approximation.card_gateLinkParties}
+    \leanok
+    For every $t\in T(P,r)$, $|F(r,t)|=2$. Root membership in $P$ is not needed for this count.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_gate_labels,def:compression_gate_link_parties}
+    Star labels exclude the root; sample labels are off-diagonal.
+\end{proof}
+
+\begin{theorem}[Tagging preserves cardinalities]
+    \label{thm:compression_tagging_cardinality}
+    \lean{TNLean.PEPS.Approximation.card_linksAtGate}
+    \lean{TNLean.PEPS.Approximation.card_incidentLinksAtGate}
+    \leanok
+    For every gate occurrence $g$ and party $p$, $|\mathcal L_g|=|T(P_g,r_g)|$ and $|\mathcal L_g(p)|=|T_p(P_g,r_g)|$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_gate_links,def:compression_gate_incidence}
+    The injection $t\mapsto(g,t)$ preserves cardinality, including after filtering by party incidence.
+\end{proof}
+
+\begin{theorem}[Original-gate locality of distributed links]
+    \label{thm:compression_original_gate_locality}
+    \lean{TNLean.PEPS.Approximation.distributedLinkParties_subset}
+    \lean{TNLean.PEPS.Approximation.exists_common_gate_of_mem_distributedLinkParties}
+    \leanok
+    Suppose $r_g\in P_g$ for every $g\in G$. If $\ell=(g,t)\in\mathcal L$, then $V(\ell)\subseteq P_g$. In particular any two endpoints $p,q\in V(\ell)$ participate in a common original occurrence $g\in G$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_gate_locality,def:compression_distributed_links}
+    The gate tag witnesses $g\in G$, and gate-local endpoint locality supplies both participant memberships.
+\end{proof}
+
+\begin{theorem}[Two endpoints of each distributed link]
+    \label{thm:compression_distributed_two_endpoints}
+    \lean{TNLean.PEPS.Approximation.card_distributedLinkParties}
+    \leanok
+    Every $\ell\in\mathcal L$ satisfies $|V(\ell)|=2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_gate_two_endpoints,def:compression_distributed_links}
+    Apply the gate-local count to the label certified by membership in $\mathcal L$.
+\end{proof}
+
+\begin{theorem}[Lifetime containment of incident links]
+    \label{thm:compression_incidence_containment}
+    \lean{TNLean.PEPS.Approximation.incidentDistributedLinks_subset}
+    \leanok
+    Suppose $r_g\in P_g$ for every $g\in G$. Then $I(p)\subseteq\bigcup_{g\in G(p)}\mathcal L_g(p)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_original_gate_locality,def:compression_gate_incidence}
+    For an incident link the original gate tag belongs to $G$, and locality puts $p$ in that gate's participant set.
+\end{proof}
+
+\begin{theorem}[Bounded distributed incidence]
+    \label{thm:compression_distributed_incidence_bound}
+    \lean{TNLean.PEPS.Approximation.card_incidentDistributedLinks_le}
+    \leanok
+    Suppose $r_g\in P_g$ and $|P_g|\le b$ for every $g\in G$. For a party $p$ with $|G(p)|\le b$, the constructed link family satisfies $|I(p)|\le2b(b-1)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,thm:compression_tagging_cardinality}
+    Each participating gate contributes at most $2(b-1)$ links incident to $p$. Taking their union gives $|I(p)|\le\sum_{g\in G(p)}|\mathcal L_g(p)|\le2b(b-1)$.
+\end{proof}
+
+\begin{definition}[Ket and bra coefficient cost]
+    \label{def:compression_coefficient_cost}
+    \lean{TNLean.PEPS.Approximation.ketBraCoefficientCost}
+    \leanok
+    For a finite label set $\Xi$ and nonnegative coefficient weights $a_\xi$, put $W(\Xi,a)=(\sum_{\xi\in\Xi}a_\xi)^2$.
+\end{definition}
+
+\begin{theorem}[Double coefficient sum]
+    \label{thm:compression_double_coefficient_sum}
+    \lean{TNLean.PEPS.Approximation.ketBraCoefficientCost_eq_sum}
+    \leanok
+    The coefficient cost satisfies $W(\Xi,a)=\sum_{\xi\in\Xi}\sum_{\zeta\in\Xi}a_\xi a_\zeta$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_coefficient_cost}
+    Expand the product of the two finite sums.
+\end{proof}
+
+\begin{definition}[Affected-position choice cost]
+    \label{def:compression_position_choice_cost}
+    \lean{TNLean.PEPS.Approximation.correctedPositionChoiceCost}
+    \leanok
+    For finite gate label sets $\Xi_g$, nonnegative weights $a_{g,\xi}$ and intended physical dimensions $n_p\in\mathbb N$, define\begin{align}\mathcal C(S)=\left(\prod_{g\in\Gamma(A_S)}W(\Xi_g,a_g)\right)\left(\prod_{p\in A_S}n_p^2\right).\label{eq:compression_incidence_choice_cost}\end{align}Exterior gate coefficients and exterior physical dimensions are absent from these products.
+\end{definition}
+
+\begin{theorem}[Corrected-position weighted choice bound]
+    \label{thm:compression_position_choice_bound}
+    \lean{TNLean.PEPS.Approximation.correctedPositionChoiceCost_le}
+    \leanok
+    Suppose $B,d\ge1$, $|G(p)|\le b$ for every $p\in A_S$, $\sum_{\xi\in\Xi_g}a_{g,\xi}\le B$ for every $g\in\Gamma(A_S)$, and $n_p\le d$ for every $p\in A_S$. Then $\mathcal C(S)\le(B^{4b}d^4)^{|S|}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:compression_position_choice_cost,thm:compression_affected_gate_count,thm:compression_corrected_party_count}
+    The coefficient product is at most $B^{2|\Gamma(A_S)|}\le B^{4b|S|}$, and the physical-entry product is at most $d^{2|A_S|}\le d^{4|S|}$. Multiply the bounds and collect the common exponent $|S|$.
+\end{proof}
+
+\begin{theorem}[Explicit monomial enclosure of the choice base]
+    \label{thm:compression_choice_monomial_bound}
+    \lean{TNLean.PEPS.Approximation.compressionChoiceBase_le_of_monomial_bounds}
+    \leanok
+    Let $L,B,d,C,D$ be nonnegative real numbers and $a,c,b\in\mathbb N$. If $B\le CL^a$ and $d\le DL^c$, then $B^{4b}d^4\le C^{4b}D^4L^{4ba+4c}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Raise each monomial bound to its nonnegative integer power and multiply; the powers of $L$ add.
+\end{proof}

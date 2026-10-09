@@ -1,6 +1,6 @@
 # Nested-square geometry for the PEPS patch construction
 
-This batch isolates the finite geometry used in the proof of Proposition 4.1
+This note isolates the finite geometry used in the proof of Proposition 4.1
 of the September 24, 2026 manuscript *Polynomial PEPS approximation of gapped
 square-grid ground states*. Its source is
 [`03-patches.tex` at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex).
@@ -67,7 +67,7 @@ The first inequality uses the proved crossing-edge counts. The second uses
 to the actual sampled boundaries. It does not identify the weighted sum with
 any Hamiltonian energy increment; that analytic argument is still required.
 
-## Scope and verification
+## Scope
 
 These are geometric inputs to the paper's patch argument. They do not prove
 the Hamiltonian energy estimate, construct the low-energy filters, establish
@@ -75,17 +75,6 @@ a minimizing vector or a Schmidt-rank bound, or complete Proposition 4.1.
 In particular, no energy bound is assumed as a field or replaced by a scalar
 inequality with the same numerical constant.
 
-Thirteen principal results have persistent regression guards. The local
-checks used the
-package linter options and warnings as errors, with a 90-second bound per
-module. They are not a full local Lake build or an aggregate declaration check;
-those acceptance checks remain with exact-head CI.
-
-The new production modules, their import router, both regression files, and
-all-declaration dependency/interface reports passed. The 29 compatible-cache
-workflow tests, four exact-rational diagram tests, source-level blueprint
-synchronization, native diagram audit, and pinned LaTeX formatting checks also
-passed. The recorded compile checks preceded source publication; per-file hashes
-and identical Git trees establish that the published proof bytes are the ones
-checked. No source or generated dependency cache metadata was rewritten to
-manufacture a cache hit.
+The geometric statements have regression checks in
+`TNLeanTest/NestedPatchGeometry.lean` and kernel-dependency guards in
+`TNLeanTest/NestedPatchGeometryAxioms.lean`.

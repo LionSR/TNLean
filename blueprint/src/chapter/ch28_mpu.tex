@@ -111,6 +111,55 @@ closing a chain of $N$ copies of $\mathcal U$.
     condition in \cite[Section~III, equation~(10)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{example}[A tensor unitary on odd rings only]
+    \label{ex:mpu_odd_ring_tensor}
+    \lean{MPOTensor.oddRingTensor, MPOTensor.mpo_oddRingTensor_eq,
+        MPOTensor.oddRingMap_injective,
+        MPOTensor.mpo_oddRingTensor_mem_unitaryGroup_of_odd,
+        MPOTensor.mpo_oddRingTensor_not_mem_unitaryGroup_of_even,
+        MPOTensor.not_isMPU_oddRingTensor,
+        MPOTensor.rightRank_oddRingTensor, MPOTensor.leftRank_oddRingTensor}
+    \leanok
+    \uses{def:mpu, def:mpu_right_rank}
+    Let $d=D=3$ with indices in $\mathbb Z_3$ and $M^{ij}=|{-(i+j)})(j|$. The
+    operator on $N\geq1$ sites is the matrix of the map $j\mapsto i$,
+    $i_n=-(j_{n-1}+j_n)$, which is $\mathbb Z_3$-linear, injective for odd $N$, and
+    not injective for even $N$. Hence $M^{(N)}$ is unitary for odd $N$ and not
+    unitary for even $N$ (at $N=2$ the inputs $01$ and $10$ have the same image
+    $22$), so the tensor does not generate matrix product unitaries.
+    Its ranks are $r=9$ and $\ell=3$.
+    % Source: Şahinoğlu, Shukla, Bi, Chen, arXiv:1704.01943, Section 6, which
+    % states the properties from the transfer tensor; the kernel argument is the
+    % chapter's.
+\end{example}
+
+\begin{example}[The next-nearest-neighbour controlled-$Z$ tensor]
+    \label{ex:mpu_controlled_z_tensor}
+    \lean{MPOTensor.czTensor, MPOTensor.mpo_czTensor_apply, MPOTensor.mpo_czTensor_apply',
+        MPOTensor.czTensor_isMPU, MPOTensor.not_isMPUSimple_czTensor,
+        MPOTensor.blockTensor_czTensor_two_simple_witnesses,
+        MPOTensor.blockTensor_czTensor_two_isMPUSimple,
+        MPOTensor.rightRank_czTensor, MPOTensor.leftRank_czTensor,
+        MPOTensor.rightRank_blockTensor_czTensor_two,
+        MPOTensor.leftRank_blockTensor_czTensor_two,
+        MPOTensor.isMPUSimple_of_rankOne_diagonal}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking, def:mpu_right_rank}
+    Let $d=2$, $D=4$, bond indices $\alpha=(\alpha_1,\alpha_2)\in\{0,1\}^2$, and
+    $U^{ij}_{\alpha\beta}=\delta_{ij}\delta_{\alpha_2\beta_1}\delta_{\beta_2i}(-1)^{\alpha_1i}$.
+    For $N\geq1$ the operator on $N$ sites is diagonal with entries
+    $\prod_n(-1)^{i_ni_{n+2}}$ (indices modulo $N$), so the tensor generates matrix
+    product unitaries, and
+    for $N\geq3$ the product of controlled-$Z$ gates between next-nearest
+    neighbours. The tensor is not simple, its blocking of two sites is simple
+    with boundary vectors $\Omega$ and $\Omega/4$, and the ranks are $r=\ell=4$
+    for the tensor and for its blocking. The simplicity of the blocking follows
+    from a general criterion: a tensor whose double-layer letters are
+    $\delta_{ij}|X_i)(Y_i|$ with $(Y_i|X_k)=(Y_i|b)(a|X_k)$ and $(a|X_i)(Y_i|b)=1$
+    is simple with boundary vectors $a,b$.
+    % Source: the chapter's Example 4.9 (not in arXiv:1703.09188).
+\end{example}
+
 \begin{center}
     % Formula: U^{(N)}_{\sigma,\tau}=\tr(\mathcal U^{\sigma_1\tau_1}\cdots
     % \mathcal U^{\sigma_N\tau_N}), the periodic operator whose unitarity for
@@ -2759,10 +2808,15 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceY₁_apply, MPOTensor.sourceZ₁_apply,
         MPOTensor.sourceX₂_apply, MPOTensor.sourceY₂_apply,
         MPOTensor.sourceZ₂_apply, MPOTensor.SourceFactors,
-        MPOTensor.sourceFactors}
+        MPOTensor.sourceFactors, MPOTensor.sourceFactorsOf, MPOTensor.sourceGramOf,
+        MPOTensor.sourceX₁Of, MPOTensor.sourceY₁Of, MPOTensor.sourceZ₁Of,
+        MPOTensor.sourceX₂Of, MPOTensor.sourceY₂Of, MPOTensor.sourceZ₂Of,
+        MPOTensor.sourceFactors_eq_sourceFactorsOf}
     \leanok
     \uses{def:mpu_source_svd_data, thm:mpu_source_gram_posdef}
-    Let $\rho\in\MN{D}$ be positive definite. Define
+    Let $\rho\in\MN{D}$ be positive definite and let compact decompositions of
+    the two source cuts be given (any; the chosen ones of
+    Definition~\ref{def:mpu_source_svd_data} are one value). Define
     \begin{align}
         X_1 & =V_1^\dagger A^{-1/2},
             & Y_1                    & =A^{1/2}D_1U_1,
@@ -2801,6 +2855,90 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         X_2^\dagger X_2 & =V_2V_2^\dagger=\Id_\ell,             \\
         Y_2Z_2          & =D_2U_2U_2^\dagger D_2^{-1}=\Id_\ell.
     \end{align}
+\end{proof}
+
+\begin{theorem}[Change of decomposition]
+    \label{thm:mpu_source_factors_change_of_svd}
+    \lean{MPOTensor.SourceCutSVD.conjTranspose_mul_V_eq,
+        MPOTensor.SourceCutSVD.conjTranspose_mul_U_eq,
+        MPOTensor.SourceCutSVD.relatingUnitary_mul_V,
+        MPOTensor.SourceCutSVD.exists_unitary_relating,
+        MPOTensor.SourceCutSVD.relatingUnitary,
+        MPOTensor.sourceX₁Of_eq_of_V_eq, MPOTensor.sourceY₁Of_eq_of_V_eq,
+        MPOTensor.sourceZ₁Of_eq_of_V_eq, MPOTensor.sourceX₂Of_eq_of_V_eq,
+        MPOTensor.sourceY₂Of_eq_of_V_eq, MPOTensor.sourceZ₂Of_eq_of_V_eq,
+        MPOTensor.sourceU_sourceV_sourceFactorsOf_relatingUnitary,
+        MPOTensor.sourceU_sourceFactorsOf_eq,
+        Matrix.IsHermitian.cfc_eq_of_eq_unitary_conj}
+    \leanok
+    \uses{def:mpu_source_svd_data, def:mpu_weighted_source_factors, def:mpu_source_uv}
+    Two compact decompositions $M=V^\dagger DU=V'^\dagger D'U'$ of one source cut
+    have $V^\dagger V=V'^\dagger V'$ and $U^\dagger U=U'^\dagger U'$, and $x=V'V^\dagger$ is a
+    unitary of the intermediate space with $V'=xV$ and $D'U'=xDU$. With the
+    unitaries $x_1$, $x_2$ of the two cuts, the factors built from the second
+    decompositions are $X_i'=X_ix_i^\dagger$, $Y_i'=x_iY_i$, $Z_i'=Z_ix_i^\dagger$, and
+    the gates are $u'=(x_2\otimes x_1)u$ and $v'=v(x_1^\dagger\otimes x_2^\dagger)$. The
+    source does not fix a decomposition (line 479: "using a singular value
+    decomposition, we can write"); this theorem shows that none of its gate
+    statements depends on the choice.
+    % Source lines: paper_v2.tex 479--502; the theorem itself is not in the source.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpu_weighted_source_factors}
+    From $UU^\dagger=\Id$ and the invertibility of $D$, $V^\dagger=MU^\dagger D^{-1}$,
+    and $V'^\dagger V'M=M$; hence $V'^\dagger V'\,V^\dagger V=V^\dagger V$, and by symmetry
+    the other product; both projections are Hermitian, so they are equal. Then
+    $x=V'V^\dagger$ is unitary with $xV=V'$ and $D'U'=V'M=xVM=xDU$. The compressed
+    metric transforms as $A'=x_1Ax_1^\dagger$, and the continuous functional
+    calculus commutes with a unitary conjugation, so $A'^{\pm1/2}=x_1A^{\pm1/2}x_1^\dagger$;
+    the factor and gate identities follow by substitution.
+\end{proof}
+
+\begin{theorem}[The gate statements hold for every decomposition]
+    \label{thm:mpu_gate_statements_any_svd}
+    \lean{MPOTensor.TwoSiteStandardFormData.ofGateGauges,
+        MPOTensor.IsMPUCanonicalFormII.sourceU_sourceFactorsOf_isIsometry,
+        MPOTensor.IsMPUCanonicalFormII.isMPUSimple_iff_sourceU_sourceFactorsOf_isUnitaryBetween,
+        MPOTensor.IsMPUCanonicalFormII.isMPUSimple_iff_sourceV_sourceFactorsOf_isUnitaryBetween,
+        MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_sourceFactorsOf,
+        MPOTensor.IsMPUCanonicalFormII.exists_source_gate_unitary_gauges_of_mpo_eq_sourceFactorsOf,
+        MPOTensor.SourceFactors.mpo_two_reindex_eq_sourceV_mul_sourceU_swap,
+        MPOTensor.exists_source_factor_unitary_gauges_of_virtualSandwich,
+        MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges_sourceFactorsOf,
+        MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges_sourceFactorsOf}
+    \leanok
+    \uses{thm:mpu_source_factors_change_of_svd, lemuisometry, ThmFund1, SF, FundamentalMPU,
+        thm:mpu_fundamental_gates_necessity, thm:mpu_fundamental_gates_sufficiency}
+    Let $\mathcal U$ be a matrix product unitary in canonical form II with
+    $\rho$ its fixed matrix, and let the factors and gates be built from any
+    compact decompositions of its two source cuts. Then $u$ is an isometry;
+    $\mathcal U$ is simple if and only if $u$ is unitary, if and only if $v$ is
+    unitary; if $\mathcal U$ is simple, its two-site block carries standard-form
+    data with these gates; and if $\mathcal U$, $\mathcal V$ are simple, in
+    canonical form II, of the same bond dimension, with equal periodic
+    operators at every length greater than one, then for any decompositions of the cuts of each there are
+    identifications of the rank spaces and unitaries $x$, $y$ with
+    $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ and
+    $v_{\mathcal V}=v_{\mathcal U}(y^\dagger\otimes x^\dagger)$; conversely, gates so
+    related give equal operators on every ring of even length. The two-site
+    operator is $v$ times the swapped $u$ for the factors of any decomposition,
+    and the factor relations under a bond unitary hold for any decompositions
+    of the two tensors. Standard-form data transport along gate gauges: from data with gates $u,v$ and unitaries
+    $x$, $y$ one obtains data with gates $(x\otimes y)u$, $v(y^\dagger\otimes x^\dagger)$.
+    % Source: the source never fixes a decomposition (line 479); these are its
+    % gate statements, lines 545--622 and 624--648, for every choice.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_source_factors_change_of_svd}
+    The gates of any choice are those of the fixed choice multiplied by the
+    unitaries $x_2\otimes x_1$ and $x_1^\dagger\otimes x_2^\dagger$; isometry and
+    unitarity are preserved, the standard-form data transport along the gauge,
+    and the gate relation of the fundamental theorem composes with the
+    change-of-decomposition unitaries of each tensor.
 \end{proof}
 
 \begin{theorem}[Source-cut factorizations]
@@ -4952,6 +5090,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_canonical_form_nonzero_weights,gap:mpu_canonical_form_full_support}.
 \end{definition}
 
+\begin{theorem}[Canonical form from canonical form II]
+    \label{thm:mpu_canonical_form_of_cfii}
+    \lean{MPOTensor.IsMPUCanonicalFormII.isMPUCanonicalForm}
+    \leanok
+    \uses{def:mpu_canonical_form, def:cpsv_cfii}
+    Let $d\geq1$. A matrix product unitary tensor in canonical form II is in
+    canonical form.
+\end{theorem}
+
+\begin{proof}\leanok
+    Canonical form II gives a block decomposition of $d^{-1/2}\mathcal U$ with
+    normal blocks filling the bond space; a normal block is irreducible with a
+    transfer map of spectral radius one, so the same blocks with the weights
+    multiplied by $d^{1/2}$ decompose $\mathcal U$ as canonical form requires.
+\end{proof}
+
+\begin{theorem}[Canonical form up to similarity]
+    \label{thm:mpu_canonical_form_similar_cfii}
+    \lean{MPOTensor.IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm}
+    \leanok
+    \uses{def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu}
+    Let $d,D\geq1$ and let $\mathcal U$ be a matrix product unitary tensor in
+    canonical form. There is an invertible $X$ on the bond space such that the
+    tensor with letters $XU^{ij}X^{-1}$ is in canonical form II; it generates
+    the same operators.
+    % Source: paper_v2.tex lines 294 and 356 (a normal tensor can be gauged to
+    % canonical form II, assumed without loss of generality).
+\end{theorem}
+
+\begin{proof}\leanok
+    The normalized tensor $d^{-1/2}\mathcal U$ is normal. The adjoint transfer
+    map of a normal tensor has a positive definite fixed point $\sigma$, and
+    $\sigma^{1/2}(\cdot)\sigma^{-1/2}$ makes the tensor left-canonical and keeps
+    it normal; a unitary then diagonalizes the positive definite fixed point of
+    the transfer map, and division by its trace gives trace one. The result is
+    a one-block canonical-form-II datum with that fixed matrix.
+\end{proof}
+
 \begin{theorem}[Normality of an MPU in canonical form]
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm}
@@ -6351,9 +6527,91 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unblocked all-length wording. Its converse has the odd-length parity
     obstruction of Theorem~\ref{thm:mpu_standard_form_parity_obstruction};
     the blocked-family interpretation is distinguished in
-    \cite{gap:mpu_standard_form_parity_gap}.
+    \cite{gap:mpu_standard_form_parity_gap}. The correct form of this
+    theorem is Theorem~\ref{thm:mpu_fundamental_letters} together with
+    Theorems~\ref{thm:mpu_fundamental_gates_necessity}
+    and~\ref{thm:mpu_fundamental_gates_sufficiency}: equality of the
+    operators at every length is equivalent to a unitary conjugation of the
+    letters, the gate relations follow from it, and the gate relations give
+    equality of the operators on rings of even length only.
+    % The source's converse from the half-factor relations alone has no
+    % formal counterpart; this entry therefore keeps \notready.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
+
+\begin{theorem}[Fundamental theorem of MPU, letters]
+    \label{thm:mpu_fundamental_letters}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mpo_eq_iff_exists_unitary_conj,
+        MPOTensor.mpo_eq_of_unitary_conj}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpo_family}
+    Let $\mathcal U$ and $\mathcal V$ be tensors in canonical form II with
+    bond dimensions $D_1$ and $D_2$. Then $U^{(N)}=V^{(N)}$ for every
+    $N\ge 2$ if and only if $D_1=D_2$ and there is a unitary $z$ on
+    $\mathbb C^{D_1}$ with $V^{ij}=zU^{ij}z^\dagger$ for all $i,j$.
+    % Source: paper_v2.tex 624--648 with the remark at 647--648 that $z$ is
+    % unitary; the letter-level equivalence itself is not printed in the source.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_cfii_equal_periodic_virtual_unitary}
+    The forward direction is the unitary virtual gauge obtained from equal
+    operators. For the converse, conjugating every letter by $z$ leaves each
+    trace $\operatorname{tr}(V^{i_1j_1}\cdots V^{i_Nj_N})$ unchanged.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem of MPU, gates, necessity]
+    \label{thm:mpu_fundamental_gates_necessity}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_source_gate_unitary_gauges_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.eq_virtualSandwich_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.fundamentalTheorem}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
+        def:mpu_virtual_sandwich}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    of the same bond dimension with $U^{(N)}=V^{(N)}$ for every $N\ge2$. Then
+    $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise for a unitary $z$, the
+    source ranks of the two tensors agree, and after identifying the rank
+    spaces there are unitaries $x$ on $\mathbb C^{\ell}$ and $y$ on
+    $\mathbb C^{r}$ with $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ and
+    $v_{\mathcal V}=v_{\mathcal U}(y^\dagger\otimes x^\dagger)$, the gates
+    being those of the selected factorizations.
+    % Source: paper_v2.tex 624--648, equation SFuu and the contraction of SFvv.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_fundamental_letters,
+        thm:mpu_source_gates_virtual_unitary_gauge}
+    Theorem~\ref{thm:mpu_fundamental_letters} gives $z$; the selected source
+    gates of a unitary virtual conjugate are related to the transported gates
+    by unitaries on the two rank spaces.
+\end{proof}
+
+\begin{theorem}[Fundamental theorem of MPU, gates, sufficiency]
+    \label{thm:mpu_fundamental_gates_sufficiency}
+    \lean{MPOTensor.TwoSiteStandardFormData.mpo_eq_of_gate_gauges,
+        MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges,
+        MPOTensor.IsMPUCanonicalFormII.mpo_blockTwo_eq_of_source_gate_gauges,
+        MPOTensor.TwoSiteStandardFormData.reindexRanks,
+        MPOTensor.siteProduct}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    of the same bond dimension whose selected source gates satisfy, after an
+    identification of the rank spaces, $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$
+    and $v_{\mathcal V}=v_{\mathcal U}(y^\dagger\otimes x^\dagger)$ for
+    unitaries $x$, $y$. Then $U^{(2N)}=V^{(2N)}$ for every $N\ge1$. The same
+    holds for any two tensors carrying two-site standard-form data with gates
+    so related on the same internal legs.
+    % Source: paper_v2.tex 624--648, the "if" direction read for the standard
+    % forms; the parity obstruction limits it to even lengths.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpu_standard_form_parity_obstruction}
+    Write both operators as the two-layer circuit of the standard form. In
+    the circuit of $\mathcal V$ the unitary placed on the internal leg of
+    each site by the layer of $u$ meets its adjoint placed there by the layer
+    of $v$, so the circuits coincide. The relabelling of the rank spaces is
+    transported through the standard-form data.
+\end{proof}
 
 \begin{theorem}[Scalar invariance of the double layer]
     \label{thm:mpu_double_layer_scalar_invariance}
@@ -6403,6 +6661,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite{gap:mpu_standard_form_parity_gap}.
 \end{theorem}
 
+
 \begin{proof}\leanok
     \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
         thm:mpu_double_layer_scalar_invariance, thm:mpu_identity_tensor_simple,
@@ -6417,6 +6676,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \mathcal V_2 & =\mathcal U_2, &
         U^{(3)}      & =I_8,          & V^{(3)} & =-I_8.
     \end{align}
+\end{proof}
+\begin{theorem}[The parity gates coincide]
+    \label{thm:mpu_parity_gates_coincide}
+    \lean{MPOTensor.parityIdentitySourceFactors, MPOTensor.parityNegativeSourceFactors,
+        MPOTensor.sourceU_parity_eq, MPOTensor.sourceV_parity_eq,
+        MPOTensor.parityIdentityTensor_exists_canonicalFormII,
+        MPOTensor.parityNegativeIdentityTensor_exists_canonicalFormII,
+        MPOTensor.rightRank_parityIdentityTensor, MPOTensor.leftRank_parityIdentityTensor,
+        MPOTensor.rightRank_parityNegativeIdentityTensor,
+        MPOTensor.leftRank_parityNegativeIdentityTensor}
+    \leanok
+    \uses{thm:mpu_standard_form_parity_obstruction, def:mpu_right_rank}
+    The two tensors of the parity obstruction are in canonical form II with
+    $\rho=1$, and have cut matrices $\pm I_2$ and ranks $r=\ell=2$. With the factors $X_1=X_2=I$, $Y_1=Y_2=Z_1=Z_2=I$ for the identity
+    tensor and $X_1=X_2=I$, $Y_1=Y_2=Z_1=Z_2=-I$ for its negative, both satisfying the
+    six factor identities with $\rho=1$, the gates $u$ and $v$ computed from the
+    factors are the same for both tensors: $u_{(l,r),(i_1i_2)}=\delta_{li_1}\delta_{ri_2}$
+    and $v_{(j_1j_2),(r,l)}=\delta_{j_1r}\delta_{j_2l}$.
+    % Source: the chapter's parity example; gap note mpu_standard_form_parity_gap.tex
+    % (which places the signs on $X$ instead; both choices give identity gates).
+\end{theorem}
+
+\begin{proof}\leanok
+    With bond dimension one the gate formulas $u=Y_2Y_1$ and $v=X_1X_2$ have one
+    term each, and $(-I)(-I)=I$.
 \end{proof}
 
 \begin{remark}
@@ -6578,11 +6862,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Index]
     \label{def:index}
-    \notready
+    \lean{MPOTensor.IsMPU.index_eq_logb_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.index_eq_logb_rightRank_div_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.rightRank_mul_leftRank_blockTensor_of_isMPUCanonicalForm}
+    \leanok
     \discussion{6014}
-    \uses{ThmFund1, thm:mpu_bounded_simple_blocking}
-    Let $k$ be any blocking length for which $\mathcal U_k$ is simple, and let
-    $r$ and $\ell$ be its right and left source-cut ranks. The source index is
+    \uses{ThmFund1, thm:mpu_bounded_simple_blocking, def:mpu_canonical_form,
+        thm:mpu_canonical_form_similar_cfii}
+    Let $\mathcal U$ be a tensor in canonical form generating matrix product
+    unitaries, let $k\geq1$ be any blocking length for which $\mathcal U_k$ is
+    simple, and let $r$ and $\ell$ be its right and left source-cut ranks. The
+    source index is
     \begin{align}
         \operatorname{ind}(\mathcal U)
          & =\frac12(\log_2 r-\log_2\ell).
@@ -6593,8 +6883,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =\log_2\frac{r}{d^k}
         =-\log_2\frac{\ell}{d^k}.
     \end{align}
-    This is the unrestricted definition of
-    \cite[Definition~IV.1]{Cirac2017MPU}.
+    This is the definition of \cite[Definition~IV.1]{Cirac2017MPU}, stated there
+    for a tensor in canonical form with the ranks of its simple blocking, after
+    the source has assumed without loss of generality that the tensor is in
+    canonical form II (lines 294 and 356). The index of every matrix product
+    unitary is taken through a canonical-form-II representative; for a tensor in
+    canonical form this value is the displayed expression in the ranks of its
+    own blocking, since these ranks are invariant under the similarity to
+    canonical form II.
     % Source lines: paper_v2.tex 681--688.
 \end{definition}
 
@@ -6742,20 +7038,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proposition}[Well-definedness of the index]
     \label{index-well-defined}
-    \notready
+    \lean{MPOTensor.IsMPU.blockTensor_add_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.leftRank_blockTensor_add_of_isMPUCanonicalForm,
+        MPOTensor.IsMPU.blockTensor_isMPUSimple_of_isMPUCanonicalForm}
+    \leanok
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings}
-    The source index is independent of the chosen simple blocking. More
-    precisely, if $k\geq k_0$ and both $\mathcal U_{k_0}$ and $\mathcal U_k$
-    are simple, then
+    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings, thm:mpu_canonical_form_similar_cfii}
+    Let $\mathcal U$ be a tensor in canonical form generating matrix product
+    unitaries. The source index is independent of the chosen simple blocking.
+    More precisely, if $k\geq k_0\geq1$ and $\mathcal U_{k_0}$ is simple, then
+    $\mathcal U_k$ is simple and
     \begin{align}
         r_k    & =d^{k-k_0}r_{k_0},    &
         \ell_k & =d^{k-k_0}\ell_{k_0}.
     \end{align}
-    This is the unrestricted statement of
-    \cite[Proposition~IV.2]{Cirac2017MPU}.
+    This is \cite[Proposition~IV.2]{Cirac2017MPU} for a tensor in canonical
+    form, the hypothesis under which the source defines the index.
+    % **Local fix (rank-product exponent):** the source's proof prints
+    % $r_k\ell_k=d^k$; it is $d^{2k}$. Documented in
+    % docs/paper-gaps/mpu_blocking_rank_product_exponent.tex.
     % Source lines: paper_v2.tex 690--704.
 \end{proposition}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_similar_cfii, thm:mpu_virtual_sandwich_blocking,
+        prop:mpu_admissible_index_well_defined}
+    Pass to the similar tensor in canonical form II, which has the same
+    operators, the same simple blockings and the same ranks; for it the
+    statement is the canonical-form-II version.
+\end{proof}
 
 \begin{theorem}[Well-definedness on a canonical-form-II representative]
     \label{prop:mpu_admissible_index_well_defined}
@@ -7242,21 +7553,33 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Strict equivalence]
     \label{def:strictly-equivalent-tensors}
-    \lean{MPOTensor.StrictlyEquivalent}
+    \lean{MPOTensor.StrictlyEquivalent, MPOTensor.padBond,
+        MPOTensor.StrictlyEquivalent.of_fixedBond}
     \leanok
     \uses{def:mpu, def:mpu_physical_reindexing, def:mpu_canonical_form}
-    Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be
-    canonical-form MPU tensors with physical dimensions $d_a$ and $d_b$. Given
-    an equality $h\colon d_a=d_b$, reindex $\mathcal U$ from $d_a$ to $d_b$
-    along $h^{-1}$. The tensors are strictly equivalent with respect to $h$ if
-    there is a continuous path $\mathcal W(p)$, $p\in[0,1]$, in the fixed-bond
-    MPU locus such that
+    Let $\mathcal U$ and $\mathcal V$ be canonical-form MPU tensors with
+    physical dimensions $d_a$ and $d_b$ and virtual bond dimensions $D_a$ and
+    $D_b$. For a tensor $\mathcal U$ of bond dimension $D$ and $D'\geq D$,
+    write $\mathcal U_{\uparrow D'}$ for the tensor of
+    bond dimension $D'$ whose letters are those of $\mathcal U$ in the upper
+    left $D\times D$ corner and zero on the adjoined directions; adjoining
+    unused bond directions changes no periodic operator of positive length.
+    Given an equality $h\colon d_a=d_b$, reindex $\mathcal U$ from $d_a$ to
+    $d_b$ along $h^{-1}$. The tensors are strictly equivalent with respect to
+    $h$ if there are $D'\geq\max(D_a,D_b)$ and a continuous path
+    $\mathcal W(p)$, $p\in[0,1]$, of MPU tensors of bond dimension $D'$ such
+    that
     \begin{align}
-        \mathcal W(0) & =\operatorname{reind}_{h^{-1}}(\mathcal U), \\
-        \mathcal W(1) & =\mathcal V.
+        \mathcal W(0) & =\operatorname{reind}_{h^{-1}}(\mathcal U_{\uparrow D'}), \\
+        \mathcal W(1) & =\mathcal V_{\uparrow D'}.
     \end{align}
-    Only the canonical-form requirement is relaxed along the path, matching the
-    fixed-bond interpretation of \cite[lines~708--714]{Cirac2017MPU}.
+    Only the canonical-form requirement is relaxed along the path
+    \cite[lines~708--714]{Cirac2017MPU}. When $D_a=D_b=D$, a path of MPU
+    tensors of bond dimension $D$ from $\mathcal U$ to $\mathcal V$ witnesses
+    strict equivalence with $D'=D$.
+    % **Local fix:** the source does not say in which bond space the path runs
+    % when $D_a\neq D_b$; its canonical form admits the adjoined directions and
+    % ours does not. Documented in docs/paper-gaps/mpu_equivalence_fixed_bond.tex.
 \end{definition}
 
 \begin{theorem}[Normalized transfer data under identity ancillas]
@@ -7300,7 +7623,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.Equivalent}
     \leanok
     \uses{def:mpu, def:strictly-equivalent-tensors, lem:mpu_blocking}
-    Fix a virtual bond dimension $D$. Let $\mathcal U$ and $\mathcal V$ be MPU
+    Let $\mathcal U$ and $\mathcal V$ be MPU
     tensors with physical dimensions $d_a$ and $d_b$. They are equivalent if
     there are a
     positive blocking length $k$ and coprime positive integers $p_a,p_b$ with
@@ -7313,8 +7636,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \mathcal U^{(p)} & =\mathcal U\otimes\Id_p.
     \end{align}
-    This provides the fixed-bond formulation of
-    \cite[lines~716--724]{Cirac2017MPU}.
+    As in \cite[lines~716--724]{Cirac2017MPU}, canonical form of the blocked
+    tensors with ancilla is a condition of the definition.
 \end{definition}
 
 \begin{definition}[Admissible equivalence and path datum]
@@ -8330,6 +8653,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     multiplication by these matrices preserves rank. Apply this observation to
     each source-cut formula in
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
+\end{proof}
+
+\begin{theorem}[Blocking, simplicity and ranks under a bond similarity]
+    \label{thm:mpu_virtual_sandwich_blocking}
+    \lean{MPOTensor.blockTensor_virtualSandwich, MPOTensor.isMPUSimple_virtualSandwich_iff,
+        MPOTensor.mpo_virtualSandwich, MPOTensor.IsMPU.virtualSandwich,
+        MPOTensor.rightRank_blockTensor_virtualSandwich,
+        MPOTensor.leftRank_blockTensor_virtualSandwich}
+    \leanok
+    \uses{thm:mpu_virtual_sandwich_source_ranks, def:mpu_simple, def:mpdo_physical_blocking}
+    Let $A,B$ be square matrices on the bond space with $BA=I$. The tensor with
+    letters $AU^{ij}B$ has the blockings $A\,U_L\,B$, the same periodic
+    operators as $\mathcal U$, and is simple if and only if $\mathcal U$ is;
+    the ranks of its blockings equal those of $\mathcal U$.
+    % Source: paper_v2.tex, Proposition IV.5, lines 773--804.
+\end{theorem}
+
+\begin{proof}\leanok
+    The letters of a blocking are products, and $BA=I$ telescopes; the trace is
+    cyclic; the double layer is conjugated by $\bar A\otimes A$, which carries
+    the boundary vectors along; the ranks by the source-ranks theorem.
 \end{proof}
 
 \begin{theorem}[Source factors under a unitary virtual conjugation]
@@ -9387,22 +9731,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{definition}[Strict equivalence under a symmetry]
     \label{def:strictly-equivalent-symmetry}
-    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry,
+        MPOTensor.StrictlyEquivalentUnderSymmetry.of_fixedBond}
     \leanok
     \discussion{6948}
     \uses{def:strictly-equivalent-tensors, def:mpu_finite_chain_operator_symmetry}
     % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
     % operator on the right-hand side. Invariance requires the original MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    Fix a virtual bond dimension $D$. Two canonical-form tensors $\mathcal U$
+    Two canonical-form tensors $\mathcal U$
     and $\mathcal V$ are strictly equivalent under a symmetry $\mathcal S$ if
-    they have the same physical dimension and there is a continuous path
-    $\mathcal W(p)$ of fixed-bond MPU tensors from $\mathcal U$ to $\mathcal V$,
+    they have the same physical dimension and, for some common bond dimension
+    $D'$ as in Definition~\ref{def:strictly-equivalent-tensors}, there is a
+    continuous path $\mathcal W(p)$ of MPU tensors of bond dimension $D'$ from
+    $\mathcal U_{\uparrow D'}$ to $\mathcal V_{\uparrow D'}$,
     not necessarily in canonical form, such that
     \begin{align}
         \mathcal S[W^{(N)}(p)] & =W^{(N)}(p)
     \end{align}
-    for every $p\in[0,1]$ and every applicable chain length $N$.
+    for every $p\in[0,1]$ and every applicable chain length $N$. When
+    $\mathcal U$ and $\mathcal V$ have one bond dimension $D$, such a path of
+    bond dimension $D$ from $\mathcal U$ to $\mathcal V$ witnesses the relation
+    with $D'=D$.
     % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
 
@@ -9453,18 +9803,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1356--1366.
 \end{definition}
 
-\begin{definition}[Fixed-bond coherent-family equivalence under a symmetry]
+\begin{definition}[Coherent-family equivalence under a symmetry]
     \label{def:mpu_coherent_family_equivalent_symmetry}
     \lean{MPOTensor.EquivalentUnderSymmetry}
     \leanok
     \discussion{7015}
     \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors,
         def:mpu_coherent_symmetry_family, def:mpu_blocked_finite_chain_symmetry}
-    % **Scope restriction (fixed bond and coherent family):** the symmetry is
+    % **Scope restriction (coherent family):** the symmetry is
     % supplied at every physical dimension and semiconjugates the canonical
     % identity-ancilla embeddings. Documented in
     % docs/paper-gaps/mpu_symmetry_ancilla_transport.tex.
-    Fix a virtual bond dimension $D$, and let $\mathcal U$ and $\mathcal V$
+    Let $\mathcal U$ and $\mathcal V$
     have physical dimensions $d_a$ and $d_b$. They are coherently equivalent
     under a dimension-indexed symmetry family $\mathcal S$ if they are MPUs and
     there are a positive blocking length $k$ and coprime positive ancilla
@@ -9484,7 +9834,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu_coherent_family_equivalent_symmetry, def:equivalent-tensors,
         lem:mpu_strict_symmetry_equivalence_forget}
-    Fixed-bond equivalence under a coherent symmetry family implies ordinary
+    Equivalence under a coherent symmetry family implies ordinary
     equivalence after the same ancillas and blocking.
 \end{theorem}
 
@@ -10587,6 +10937,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 1988--1995.
 \end{definition}
+
+\begin{theorem}[The shift products $U_2$ and $U_3$ are strictly equivalent]
+    \label{thm:mpu_shift_products_strictly_equivalent}
+    \lean{MPOTensor.shiftExampleU₂_strictlyEquivalent_shiftExampleU₃,
+        MPOTensor.shiftExampleU₂_isMPUCanonicalForm,
+        MPOTensor.shiftExampleU₃_isMPUCanonicalForm,
+        MPOTensor.IsMPU.conjugatePhysical, MPOTensor.IsMPU.bondConj}
+    \leanok
+    \uses{threeMPU, def:strictly-equivalent-tensors, thm:mpu_canonical_form_of_cfii,
+        thm:mpu-continuous-unitary-swap-path}
+    For $d\geq1$ the tensors $U_2=T^\dagger\otimes T$ and $U_3=T\otimes T^\dagger$ are in
+    canonical form and strictly equivalent, with no bond directions adjoined.
+    Conjugating the physical legs of a tensor by a unitary, or its bond space by a
+    unitary, preserves the matrix product unitary property.
+    % Source: paper_v2.tex, lines 1980--2001 and 2138--2151, where the source joins
+    % the ancilla-dressed $\widetilde U_{2,3}$ by one physical path; here $U_2$ and
+    % $U_3$ themselves are joined by a physical path followed by a bond path.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_of_cfii, thm:mpu-continuous-unitary-swap-path}
+    The letter of $U_3$ at the exchanged physical indices is the letter of $U_2$
+    conjugated on the bond by the factor exchange $\mathbb S$. Let $\mathbb S(x)$,
+    $x\in[0,1]$, be the continuous unitary path from the identity to $\mathbb S$.
+    The path $x\mapsto\mathbb S(x)$ acting on the physical legs of $U_2$ ends at
+    $U_2$ with its two spins exchanged; the path $x\mapsto\mathbb S(x)(\cdot)\mathbb S(x)^\dagger$
+    on the bond space then ends at $U_3$. Every point generates matrix product
+    unitaries, since $\mathbb S(x)^{\otimes N}U^{(N)}\mathbb S(x)^{\dagger\otimes N}$ is
+    unitary and bond conjugation changes no operator. Canonical form of the
+    endpoints: the shift is in canonical form II, so are its physical adjoint
+    and the tensor products, hence they are in canonical form.
+\end{proof}
 
 \begin{definition}[Trace-normalized shift weight]
     \label{def:mpu_shift_trace_weight}
@@ -16740,4 +17122,400 @@ completion from compatible forward and inverse finite-local actions.
     The support hypothesis supplies a finite forward propagation neighborhood,
     while the unit-translation formula supplies translation covariance.  These
     are exactly the two defining properties of a one-dimensional QCA.
+\end{proof}
+
+\begin{definition}[Coordinates on a consecutive integer interval]
+    \label{def:local_interval_coordinates}
+    \lean{SpinChain.intervalCoordinates, SpinChain.intervalCoordinates_apply}
+    \leanok
+    \uses{def:mpu_finite_chain_realization}
+    For $a\in\mathbb Z$ and $N\geq0$, put
+    $I(a,N)=\{a,a+1,\ldots,a+N-1\}$. The site numbering $i\mapsto a+i$
+    identifies configurations on $I(a,N)$ with length-$N$ configurations.
+    Reindexing both matrix coordinates gives a star-algebra equivalence
+    $C_{a,N}:\mathcal A_{I(a,N)}\to M_{d^N}(\mathbb C)$.
+    Explicitly, $C_{a,N}(X)_{\sigma\tau}=X_{\widetilde\sigma\widetilde\tau}$,
+    where $\widetilde\sigma(a+i)=\sigma_i$.
+    This includes $N=0$ and the one-dimensional algebra on the empty interval.
+\end{definition}
+
+\begin{theorem}[Local inclusions in interval coordinates]
+    \label{thm:local_interval_coordinate_inclusion}
+    \lean{SpinChain.finiteChainRegion_subset_expanded,
+        SpinChain.intervalCoordinates_localInclusion_apply}
+    \leanok
+    Let $b,c\geq0$, $I=I(a,N)$ and $J=I(a-b,b+N+c)$. Then $I\subseteq J$.
+    For configurations $\sigma,\tau$ on $b+N+c$ consecutive sites,
+    \begin{align}
+        C_{a-b,b+N+c}(\iota_{I,J}(X))_{\sigma\tau}
+         & =C_{a,N}(X)_{\sigma|_M\,\tau|_M}
+        \prod_{i\notin M}\delta_{\sigma_i,\tau_i},
+    \end{align}
+    where $M=\{b,b+1,\ldots,b+N-1\}$ and $\sigma|_M$ denotes the
+    configuration $i\mapsto\sigma_{b+i}$ on $N$ sites.
+    This is the identity-tensor inclusion of \cite[Appendix]{Cirac2017MPU}
+    expressed in increasing integer-site coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates, def:qca_local_inclusion}
+    Restriction to $I$ selects the middle $N$ coordinates. Equality of the
+    two configurations on $J\setminus I$ is equality on all added sites.
+    Substitute these identifications into the local inclusion formula.
+\end{proof}
+
+\begin{theorem}[Consecutive observables in the quasi-local algebra]
+    \label{thm:quasi_local_interval_observable}
+    \lean{SpinChain.quasiLocalIntervalObservable,
+        SpinChain.quasiLocalIntervalObservable_apply,
+        SpinChain.norm_quasiLocalIntervalObservable}
+    \leanok
+    For $d>0$ and $a\in\mathbb Z$, coordinate transport and the finite-region
+    inclusion give a star-algebra inclusion
+    $j_{a,k}:M_{d^k}(\mathbb C)\to\mathcal A$, including $k=0$.
+    It preserves the matrix operator norm: $\|j_{a,k}(X)\|=\|X\|$.
+    This is the interval observable convention in
+    \cite[Section~3]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates, def:qca_quasi_local_observable}
+    The coordinate equivalence is isometric between the finite matrix
+    algebras, and the finite-region inclusion preserves norm in the completion.
+\end{proof}
+
+\begin{definition}[Compatible finite-region states]
+    \label{def:qca_compatible_local_state}
+    \lean{SpinChain.CompatibleLocalState,
+        SpinChain.CompatibleLocalState.functional,
+        SpinChain.CompatibleLocalState.compatible,
+        SpinChain.CompatibleLocalState.norm_le,
+        SpinChain.CompatibleLocalState.map_one,
+        SpinChain.CompatibleLocalState.nonneg_star_mul_self}
+    \leanok
+    \uses{def:qca_local_algebra}
+    A compatible family of finite-region states consists of complex-linear
+    functionals $f_\Lambda\colon\mathcal A_\Lambda\to\C$, indexed by finite
+    regions $\Lambda\Subset\Z$, such that, for every inclusion
+    $\Lambda\subseteq\Gamma$ and every $X\in\mathcal A_\Lambda$,
+    \begin{align}
+        f_\Gamma(\iota_{\Lambda,\Gamma}(X)) & =f_\Lambda(X),
+                                            & |f_\Lambda(X)|         & \leq\lVert X\rVert, \\
+        f_\Lambda(I)                        & =1,
+                                            & f_\Lambda(X^\dagger X) & \geq0.
+    \end{align}
+\end{definition}
+
+\begin{definition}[Algebraic extension of compatible states]
+    \label{def:qca_compatible_state_algebraic_extension}
+    \lean{SpinChain.CompatibleLocalState.algebraicFunctional,
+        SpinChain.CompatibleLocalState.algebraicContinuousFunctional}
+    \leanok
+    \uses{def:qca_compatible_local_state, def:qca_algebraic_local_algebra,
+        def:qca_algebraic_local_normed_star_algebra}
+    Compatibility determines a complex-linear functional
+    $f_{\mathrm{loc}}\colon\mathcal A_{\mathrm{loc}}\to\C$ by
+    $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
+    For $d>0$, this functional is continuous in the operator-norm topology.
+\end{definition}
+
+\begin{theorem}[Contractivity of the algebraic extension]
+    \label{thm:qca_compatible_state_algebraic_bound}
+    \lean{SpinChain.CompatibleLocalState.algebraicFunctional_localObservable,
+        SpinChain.CompatibleLocalState.algebraicFunctional_norm_le}
+    \leanok
+    \uses{def:qca_compatible_state_algebraic_extension}
+    For every finite region $\Lambda$ and $X\in\mathcal A_\Lambda$,
+    $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
+    If $d>0$, then $|f_{\mathrm{loc}}(A)|\leq\lVert A\rVert$ for every
+    $A\in\mathcal A_{\mathrm{loc}}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:qca_compatible_state_algebraic_extension,
+        def:qca_algebraic_local_operator_norm}
+    The direct-limit property gives the stated values. Every algebraic local
+    observable has a finite-region representative, and its norm is the norm
+    of that representative. Thus
+    $|f_{\mathrm{loc}}(\iota_\Lambda(X))|
+        =|f_\Lambda(X)|\leq\lVert X\rVert=\lVert\iota_\Lambda(X)\rVert$.
+\end{proof}
+
+\begin{definition}[Continuous extension to the quasi-local algebra]
+    \label{def:qca_compatible_state_completion}
+    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional}
+    \leanok
+    \uses{def:qca_quasi_local_algebra,
+        thm:qca_compatible_state_algebraic_bound}
+    For $d>0$, let $\omega\colon\mathcal A\to\C$ be the continuous linear
+    extension of $f_{\mathrm{loc}}$ to the operator-norm completion.
+\end{definition}
+
+\begin{theorem}[Evaluation of the continuous extension]
+    \label{thm:qca_compatible_state_evaluation}
+    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_algebraicToQuasiLocal,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_quasiLocalObservable}
+    \leanok
+    \uses{def:qca_compatible_state_completion, def:qca_quasi_local_observable}
+    For every algebraic local observable $A$, one has
+    $\omega(j(A))=f_{\mathrm{loc}}(A)$. For every finite region $\Lambda$ and
+    $X\in\mathcal A_\Lambda$, one has $\omega(j_\Lambda(X))=f_\Lambda(X)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:qca_compatible_state_completion,
+        thm:qca_compatible_state_algebraic_bound}
+    Continuous extension preserves the values on the original normed space.
+    Apply this to $A=\iota_\Lambda(X)$ for the finite-region formula.
+\end{proof}
+
+\begin{theorem}[Unique positive normalized extension]
+    \label{thm:qca_compatible_state_extension}
+    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_nonneg_star_mul_self,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_one,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_norm_le,
+        SpinChain.CompatibleLocalState.norm_quasiLocalFunctional,
+        SpinChain.CompatibleLocalState.quasiLocalFunctional_unique,
+        SpinChain.CompatibleLocalState.existsUnique_quasiLocalFunctional}
+    \leanok
+    \uses{def:qca_compatible_state_completion}
+    Every compatible family of finite-region states, with $d>0$, has a unique
+    continuous complex-linear extension $\omega\colon\mathcal A\to\C$
+    with the prescribed finite-region values. It satisfies
+    $\omega(I)=1$, $\lVert\omega\rVert=1$, and, for every $A\in\mathcal A$,
+    $|\omega(A)|\leq\lVert A\rVert$ and $\omega(A^\dagger A)\geq0$.
+    Compatibility of the finite-region functionals is an explicit hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:qca_compatible_state_evaluation,
+        thm:qca_compatible_state_algebraic_bound,
+        def:qca_quasi_local_algebra,
+        def:qca_algebraic_local_algebra}
+    The sets defined by $|\omega(A)|\leq\lVert A\rVert$ and
+    $\omega(A^\dagger A)\geq0$ are closed, since multiplication, involution,
+    and $\omega$ are continuous. These inequalities hold on the dense
+    algebraic local subalgebra, hence on its completion. Evaluation at a
+    finite-region identity gives $\omega(I)=1$ and
+    $1\leq\lVert\omega\rVert$; contractivity gives the reverse inequality.
+    Two continuous extensions agree on all finite-region observables,
+    then on the algebraic local algebra, and therefore on its completion.
+\end{proof}
+
+\begin{definition}[States and pure states of the quasi-local algebra]
+    \label{def:qca_state_space_purity}
+    \lean{SpinChain.quasiLocalStateSpace, SpinChain.IsPureQuasiLocalState}
+    \leanok
+    Let $d>0$, and let $\mathcal A_d$ denote the quasi-local observable algebra.
+    Its state space consists of all continuous complex-linear functionals
+    $\omega$ such that $\|\omega\|=1$, $\omega(I)=1$, and
+    $\omega(X^*X)\ge0$ for every $X\in\mathcal A_d$.
+    A state is pure if it is an extreme point of this set, viewed as a real
+    convex set. Translation invariance is not required of these functionals.
+    These are the state and purity conventions in
+    \cite[Section~1 and Section~3]{Nachtergaele1996Spectral}.
+\end{definition}
+
+\begin{theorem}[Support in convex constituents]
+    \label{thm:qca_state_convex_support}
+    \lean{SpinChain.quasiLocalState_left_apply_eq_zero_of_convex_decomposition,
+        SpinChain.quasiLocalState_left_projection_eq_one_of_convex_decomposition}
+    \leanok
+    Let $\phi,\psi$ be states, let $0<t<1$, and set
+    $\omega=(1-t)\phi+t\psi$.
+    If $\omega(X^*X)=0$, then $\phi(X^*X)=0$.
+    If $\omega$ is a state, $P=P^*=P^2$, and $\omega(P)=1$, then
+    $\phi(P)=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:qca_state_space_purity}
+    Positivity gives two nonnegative real numbers whose strictly positive
+    weighted sum is zero, so both numbers vanish. Apply this to $I-P$;
+    $(I-P)^*(I-P)=I-P$ and normalization gives the projection assertion.
+\end{proof}
+
+\begin{theorem}[Purity from unique supported-state determination]
+    \label{thm:qca_purity_of_supported_uniqueness}
+    \lean{SpinChain.isPureQuasiLocalState_of_unique_supported_state}
+    \leanok
+    Let $\omega$ be a state, and let $(P_i)_{i\in J}$ be any family of
+    self-adjoint projections with $\omega(P_i)=1$.
+    Suppose every state $\phi$ satisfying $\phi(P_i)=1$ for every $i\in J$
+    equals $\omega$. Then $\omega$ is pure.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:qca_state_convex_support, def:qca_state_space_purity}
+    In a nontrivial convex decomposition of $\omega$, each constituent
+    has expectation one on every $P_i$. The uniqueness hypothesis forces
+    the left constituent to equal $\omega$, which is the extreme-point
+    condition.
+\end{proof}
+
+\begin{theorem}[Convexity of the quasi-local state space]
+    \label{thm:quasi_local_state_space_convex}
+    \lean{SpinChain.convex_quasiLocalStateSpace}
+    \leanok
+    The normalized positive continuous functionals on the quasi-local algebra
+    form a convex set over the real numbers.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qca_state_space_purity}
+    If $\varphi,\psi$ are states and $a,b\geq0$ satisfy $a+b=1$, then
+    $\|a\varphi+b\psi\|\leq a+b=1$ and $(a\varphi+b\psi)(I)=1$.
+    Since $\|I\|=1$, evaluation at the identity gives the reverse norm bound.
+    Positivity follows by taking the same convex combination of their
+    nonnegative values on adjoint squares.
+\end{proof}
+
+\begin{theorem}[Pure states in finite convex decompositions]
+    \label{thm:finite_pure_state_decomposition}
+    \lean{SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition}
+    \leanok
+    Let $\varphi$ be pure among all states of the quasi-local algebra.
+    Suppose that $\omega_i$ are states indexed by a finite set, that
+    $w_i\geq0$ and $\sum_iw_i=1$, and that
+    $\varphi=\sum_iw_i\omega_i$. Then $\varphi=\omega_i$ for some $i$.
+    No translation-invariance condition is imposed on these states.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:quasi_local_state_space_convex, def:qca_state_space_purity}
+    The state $\varphi$ belongs to the convex hull of the $\omega_i$.
+    This hull is contained in the full state space, so extremality in the
+    state space implies extremality in the smaller hull. Every extreme
+    point of the convex hull of a finite set belongs to that set.
+\end{proof}
+
+\begin{lemma}[Expansion of a consecutive blocked interval]
+    \label{lem:qca_blocking_interval_region}
+    \lean{SpinChain.expandedRegion_finiteChainRegion}
+    \leanok
+    For $L>0$, $a\in\mathbb Z$ and $N\geq0$, the expansion of the
+    blocked interval $I(a,N)$ is
+    \begin{align}
+        \widehat{I(a,N)}_L=I(aL,NL).
+    \end{align}
+    Negative starts and the empty interval are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:local_interval_coordinates, def:qca_expanded_region}
+    Euclidean division by $L$ shows that the quotient $q=\lfloor z/L\rfloor$ of an integer $z$
+    satisfies $a\leq q<a+N$ exactly when $aL\leq z<(a+N)L$.
+\end{proof}
+
+\begin{theorem}[Finite blocking in consecutive matrix coordinates]
+    \label{thm:qca_blocking_interval_coordinates}
+    \lean{SpinChain.intervalCoordinates_localBlocking}
+    \leanok
+    Let $L>0$, $d\geq0$, $a\in\mathbb Z$ and $N\geq0$.
+    Let $e_{N,L}$ decode the $N$ blocked spins into $NL$ consecutive
+    spins, placing residue $r$ of blocked site $i$ at site $Li+r$.
+    Define the matrix reindexing
+    $\mathcal R_{N,L}(X)_{\sigma\tau}
+        =X_{e_{N,L}^{-1}(\sigma),e_{N,L}^{-1}(\tau)}$.
+    Then
+    \begin{align}
+        C^{(d)}_{aL,NL}\,\mathcal B_L
+        \bigl((C^{(d^L)}_{a,N})^{-1}(X)\bigr)
+        =\mathcal R_{N,L}(X).
+    \end{align}
+    Here the target region is identified using
+    $\widehat{I(a,N)}_L=I(aL,NL)$. This expresses the site grouping of
+    \cite[Appendix, lines~2308 and 2313--2320]{Cirac2017MPU}
+    in consecutive interval coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qca_blocking_interval_region, def:local_interval_coordinates,
+        def:qca_configuration_blocking, thm:qca_local_blocking_formulas}
+    The site $L(a+i)+r$ has interval coordinate $Li+r$ relative to $aL$.
+    Thus decoding followed by consecutive numbering agrees with flattening
+    the blocked configurations. Apply this identity to both matrix indices.
+\end{proof}
+
+\begin{theorem}[Blocking of quasi-local interval observables]
+    \label{thm:qca_blocking_quasi_local_interval}
+    \lean{SpinChain.quasiLocalBlocking_quasiLocalIntervalObservable}
+    \leanok
+    For $d>0$, $L>0$, $a\in\mathbb Z$, $N\geq0$ and
+    $X\in M_{(d^L)^N}(\mathbb C)$,
+    \begin{align}
+        \overline{\mathcal B}_L
+        \bigl(j^{(d^L)}_{a,N}(X)\bigr)
+        =j^{(d)}_{aL,NL}\bigl(\mathcal R_{N,L}(X)\bigr).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qca_blocking_interval_coordinates,
+        lem:qca_quasi_local_blocking_formulas,
+        thm:quasi_local_interval_observable}
+    Evaluate the completed blocking equivalence on the finite interval
+    representative, then apply the finite coordinate identity.
+\end{proof}
+\begin{definition}[Transport of functionals by a star-algebra equivalence]
+    \label{def:qca_functional_star_equivalence}
+    \lean{SpinChain.quasiLocalFunctionalCongr,
+        SpinChain.quasiLocalFunctionalCongr_apply}
+    \leanok
+    Let $d_1,d_2>0$ and let
+    $e:\mathcal A_{d_1}\to\mathcal A_{d_2}$ be a star-algebra isomorphism.
+    The induced continuous complex-linear equivalence between functional
+    spaces is $T_e\omega=\omega\circ e^{-1}$; thus
+    $(T_e\omega)(X)=\omega(e^{-1}X)$.
+\end{definition}
+
+\begin{theorem}[Star-algebra equivalence preserves states and purity]
+    \label{thm:qca_state_purity_star_equivalence}
+    \lean{SpinChain.norm_quasiLocalFunctionalCongr,
+        SpinChain.quasiLocalFunctionalCongr_mem_stateSpace_iff,
+        SpinChain.quasiLocalFunctionalCongr_image_stateSpace,
+        SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff}
+    \leanok
+    Under the preceding hypotheses, $\|T_e\omega\|=\|\omega\|$.
+    Moreover, $T_e$ maps the entire state space of $\mathcal A_{d_1}$ onto
+    the entire state space of $\mathcal A_{d_2}$, and $T_e\omega$ is pure
+    if and only if $\omega$ is pure. No translation invariance is assumed.
+    Purity has the meaning used in
+    \cite[Section~3, lines~1469--1482]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qca_functional_star_equivalence,def:qca_state_space_purity}
+    A star-algebra isomorphism of complex C-star algebras is isometric.
+    Inverse precomposition therefore preserves the dual norm. It also
+    preserves the identity and adjoint squares, so it maps the state spaces
+    onto one another. Its restriction to real scalars is a linear
+    equivalence, and linear equivalences carry extreme points to extreme
+    points.
+\end{proof}
+
+\begin{definition}[A blocked-chain functional on the original lattice]
+    \label{def:qca_blocking_functional}
+    \lean{SpinChain.quasiLocalBlockingFunctional,
+        SpinChain.quasiLocalBlockingFunctional_apply}
+    \leanok
+    Let $d,L>0$ and let
+    $\mathcal B_L:\mathcal A_{d^L}\to\mathcal A_d$ be the site-blocking
+    isomorphism. A continuous functional $\omega$ on the blocked chain
+    defines the original-lattice functional
+    $T_L\omega=\omega\circ\mathcal B_L^{-1}$.
+    This is the state transport associated with the regrouping of sites in
+    \cite[lines~825--836]{Nachtergaele1996Spectral}.
+    \uses{def:qca_functional_star_equivalence,def:qca_quasi_local_blocking}
+\end{definition}
+
+\begin{theorem}[Site grouping preserves states and purity]
+    \label{thm:qca_blocking_state_purity}
+    \lean{SpinChain.norm_quasiLocalBlockingFunctional,
+        SpinChain.quasiLocalBlockingFunctional_mem_stateSpace_iff,
+        SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff}
+    \leanok
+    The functional $T_L\omega$ has the same norm as $\omega$, is a state
+    exactly when $\omega$ is a state, and is pure exactly when $\omega$ is
+    pure. This applies to all state functionals, without an invariance
+    condition under translations.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qca_blocking_functional,thm:qca_state_purity_star_equivalence}
+    Apply the star-algebra equivalence theorem to $\mathcal B_L$.
 \end{proof}

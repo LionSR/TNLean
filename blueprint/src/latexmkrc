@@ -2,11 +2,23 @@
 # the pdf version of the blueprint
 $pdf_mode = 1;
 $pdflatex = 'xelatex -synctex=1';
+# The full volume exhausts XeTeX's default string pool while recording the
+# generated names of its many TikZ/Tenkz objects. This is runtime capacity;
+# no format rebuild is needed. Keep an explicit caller override intact.
+$ENV{'pool_size'} //= 12500000;
 @default_files = ('print.tex');
 use Cwd qw(abs_path);
 use File::Spec;
 my $tenkz_root = $ENV{'TENKZ_ROOT'} // '../../.deps/tenkz';
 $tenkz_root = abs_path($tenkz_root) // File::Spec->rel2abs($tenkz_root);
+# MiKTeX reads TEXINPUTS with ';' and needs a Windows path; under MSYS or Cygwin
+# perl, abs_path gives a Unix-style path, which cygpath converts.
+my $windows = ($^O =~ /^(MSWin32|msys|cygwin)$/);
+if ($windows && $^O ne 'MSWin32') {
+  my $converted = `cygpath -m "$tenkz_root"`;
+  chomp $converted;
+  $tenkz_root = $converted if $converted ne '';
+}
 $ENV{'TEXINPUTS'} =
-  "$tenkz_root/tex/tenkz//:"
+  "$tenkz_root/tex/tenkz//" . ($windows ? ';' : ':')
   . ($ENV{'TEXINPUTS'} // '');

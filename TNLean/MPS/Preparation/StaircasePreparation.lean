@@ -11,10 +11,11 @@ import TNLean.MPS.Preparation.Staircase
 # Exact preparation of an open-boundary MPS by a linear-size staircase
 
 Let `ψ` be a normalized open-boundary matrix product state of `N` sites with physical dimension
-`d` and bond dimension `D ≤ d^k`. Then `ψ = U |0 ⋯ 0⟩` for a unitary `U` that is a product of at
-most `N - k + 2` gates, each acting on at most `k + 1` consecutive sites
+`d` and bond dimension `D ≤ d^k`. Then `ψ = U |0 ⋯ 0⟩` for a unitary `U` that is a product of
+at most `max 1 (N - k)` gates, each acting on at most `k + 1` consecutive sites
 (`MPSPreparation.exists_isWindowProduct_mulVec_eq_of_hasOBCRep`). For `D ≤ d` and `N ≥ 2` these
-are at most `N + 1` gates on neighbouring sites
+are at most `N - 1` gates on neighbouring sites, the count of the sequential scheme without an
+ancilla of arXiv:quant-ph/0608197, Section 5.2
 (`MPSPreparation.exists_isPairProduct_mulVec_eq_of_hasOBCRep`).
 
 ## Proof
@@ -24,11 +25,13 @@ singular value decompositions of arXiv:2307.01696, eq. (14), write
 `ψ(σ) = (Q₀(σ₀) ⋯ Q_{N-1}(σ_{N-1}) r')₀`, where every site `Q_p` is isometric on its right
 bond and the left bond of `Q₀` is one-dimensional (`MPSPreparation.exists_isometric_chain`). The
 bond levels `Fin D` are encoded injectively in the configurations of `k` sites, which is
-possible since `D ≤ d^k`. The first gate prepares the boundary vector `r'` on the last `k`
-sites, and the staircase of arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1
+possible since `D ≤ d^k`. A unitary on the last `k` sites prepares the boundary vector `r'`,
+and the staircase of arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1
 (`MPSPreparation.exists_staircase_isWindowProduct`) then moves the bond register one site to the
 left at each step, leaving one physical site behind; each step embeds one isometry `Q_p` into a
-unitary on `k + 1` consecutive sites. When `N ≤ k` a single unitary on all the sites suffices.
+unitary on `k + 1` consecutive sites. The preparation of `r'` is absorbed into the first step,
+and the unitary on the first `k` sites extending the remaining chain into the last step. When
+`N ≤ k` a single unitary on all the sites suffices.
 
 The norm of `ψ` is one because the circuit is unitary; this is the deterministic setting of
 arXiv:quant-ph/0501096 and of arXiv:quant-ph/0608197, lines 1553--1554.
@@ -67,21 +70,21 @@ theorem exists_unitary_apply_zero (hd : 0 < d) {M : ℕ} {v : Cfg d M → ℂ}
 
 /-- **Exact preparation of an open-boundary MPS by gates on `k + 1` consecutive sites.** A
 normalized open-boundary matrix product state of `N` sites with bond dimension `D ≤ d^k` is
-`U |0 ⋯ 0⟩` for a unitary `U` that is a product of at most `N - k + 2` gates, each acting on at
-most `k + 1` consecutive sites of the open chain.
+`U |0 ⋯ 0⟩` for a unitary `U` that is a product of at most `max 1 (N - k)` gates, each acting on
+at most `k + 1` consecutive sites of the open chain.
 
 arXiv:quant-ph/0501096, eq. `induction` and the embedding of each isometry into a unitary;
 arXiv:2307.01696, eq. (14) and paragraph "The sequential-RG circuit" ("this sequential circuit
 comprises `q` sites"), with Fig. 1. -/
 theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
     (hDk : D ≤ d ^ k) {ψ : Cfg d N → ℂ} (hψ : HasOBCRep D ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) :
-    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ, IsWindowProduct d N (k + 1) (N - k + 2) U ∧
+    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ, IsWindowProduct d N (k + 1) (max 1 (N - k)) U ∧
       U *ᵥ (productVector fun _ => Pi.single ⟨0, hd⟩ 1) = ψ := by
   classical
   by_cases hNk : N ≤ k
   · obtain ⟨W, hW, hWψ⟩ := exists_unitary_apply_zero hd hnorm
     refine ⟨W, (IsWindowProduct.of_isWindowGate (isWindowGate_of_le (by omega) hW)).mono
-      (by omega), funext fun σ => ?_⟩
+      (le_max_left _ _), funext fun σ => ?_⟩
     rw [mulVec_productVector_single_zero hd, hWψ]
   have hkN : k ≤ N := by omega
   obtain ⟨B, rfl⟩ := hψ
@@ -120,8 +123,11 @@ theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
     simp only [last] at this
     omega)
   refine ⟨U * embedOp last Wr, ?_, funext fun σ => ?_⟩
-  · exact (hU.mul (IsWindowProduct.of_isWindowGate
-      (isWindowGate_embedOp (by omega) hlast (a := N - k) (fun _ => rfl) hWr))).mono le_rfl
+  · refine hU _ (embedOp_mem_unitary hlast hWr)
+      (supportedOperators_mono ?_ (embedOp_mem_supportedOperators hlast Wr))
+    rintro _ ⟨j, rfl⟩
+    simp only [windowSites, Set.mem_ofPred_eq, last]
+    omega
   have hext : ∀ u : Cfg d k,
       Function.extend last u (fun _ => (⟨0, hd⟩ : Fin d)) = inputCfg hd N u := by
     intro u
@@ -148,15 +154,21 @@ theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
 
 /-- **Exact preparation of an open-boundary MPS of bond dimension at most `d` by two-site
 gates.** On a chain of `N ≥ 2` sites, a normalized open-boundary matrix product state with bond
-dimension `D ≤ d` is `U |0 ⋯ 0⟩` for a unitary `U` that is a product of at most `N + 1` gates,
+dimension `D ≤ d` is `U |0 ⋯ 0⟩` for a unitary `U` that is a product of at most `N - 1` gates,
 each acting on two neighbouring sites.
 
-arXiv:quant-ph/0608197, Theorem "Sequential generation without ancilla" (lines 1589--1595), and
-arXiv:quant-ph/0501096, eq. `induction`; this is the case `k = 1` of
-`MPSPreparation.exists_isWindowProduct_mulVec_eq_of_hasOBCRep`. -/
+This is the circuit form of the deterministic direction of arXiv:quant-ph/0608197, Section 5.2,
+Theorem "Sequential generation without ancilla" (lines 1580--1595), whose scheme applies `N - 1`
+operations on the neighbouring pairs of sites; the case `k = 1` of
+`MPSPreparation.exists_isWindowProduct_mulVec_eq_of_hasOBCRep`. The source theorem itself is
+`MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff`.
+
+**Local fix (two sites):** the hypothesis `N ≥ 2` is absent from the source theorem but needed
+by its scheme, since a chain of one site has no neighbouring pairs; documented in
+`docs/paper-gaps/pgvwc07_sequential_no_ancilla_two_sites.tex`. -/
 theorem exists_isPairProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D : ℕ} (hN : 2 ≤ N)
     (hDd : D ≤ d) {ψ : Cfg d N → ℂ} (hψ : HasOBCRep D ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) :
-    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ, IsPairProduct d N (N + 1) U ∧
+    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ, IsPairProduct d N (N - 1) U ∧
       U *ᵥ (productVector fun _ => Pi.single ⟨0, hd⟩ 1) = ψ := by
   obtain ⟨U, hU, hUψ⟩ :=
     exists_isWindowProduct_mulVec_eq_of_hasOBCRep hd (k := 1) (by simpa using hDd) hψ hnorm

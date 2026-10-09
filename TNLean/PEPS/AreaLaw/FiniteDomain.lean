@@ -33,66 +33,6 @@ Neither connectedness nor the absence of holes is assumed.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: eq:hamiltonian.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  01-preliminaries.tex
-Labels: sec:prelim.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  08-scanner.tex
-Labels: scanner:template.
-Provenance-ID: 8738-tnlean.peps.arealaw.site
-Downstream declaration: TNLean.PEPS.AreaLaw.Site
-Provenance-ID: 8738-tnlean.peps.arealaw.configuration
-Downstream declaration: TNLean.PEPS.AreaLaw.Configuration
-Provenance-ID: 8738-tnlean.peps.arealaw.domaingraph
-Downstream declaration: TNLean.PEPS.AreaLaw.domainGraph
-Provenance-ID: 8738-tnlean.peps.arealaw.isadmissiblesupport
-Downstream declaration: TNLean.PEPS.AreaLaw.IsAdmissibleSupport
-Provenance-ID: 8738-tnlean.peps.arealaw.admissiblesupport
-Downstream declaration: TNLean.PEPS.AreaLaw.AdmissibleSupport
-Provenance-ID: 8738-tnlean.peps.arealaw.graphneighborhood
-Downstream declaration: TNLean.PEPS.AreaLaw.graphNeighborhood
-Provenance-ID: 8738-tnlean.peps.arealaw.edgeboundary
-Downstream declaration: TNLean.PEPS.AreaLaw.edgeBoundary
-Provenance-ID: 8738-tnlean.peps.arealaw.ambientdilation
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientDilation
-Provenance-ID: 8738-tnlean.peps.arealaw.configurationsplit
-Downstream declaration: TNLean.PEPS.AreaLaw.configurationSplit
-Provenance-ID: 8738-tnlean.peps.arealaw.card_configuration
-Downstream declaration: TNLean.PEPS.AreaLaw.card_configuration
-Provenance-ID: 8738-tnlean.peps.arealaw.edgeboundary_empty
-Downstream declaration: TNLean.PEPS.AreaLaw.edgeBoundary_empty
-Provenance-ID: 8738-tnlean.peps.arealaw.edgeboundary_univ
-Downstream declaration: TNLean.PEPS.AreaLaw.edgeBoundary_univ
-Provenance-ID: 8738-tnlean.peps.arealaw.isadmissiblesupport_singleton
-Downstream declaration: TNLean.PEPS.AreaLaw.isAdmissibleSupport_singleton
-Provenance-ID: 8738-tnlean.peps.arealaw.exists_walk_length_le_iff_edist_le
-Downstream declaration: TNLean.PEPS.AreaLaw.exists_walk_length_le_iff_edist_le
-Provenance-ID: 8738-tnlean.peps.arealaw.isadmissiblesupport_zero_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.isAdmissibleSupport_zero_iff
-Provenance-ID: 8738-tnlean.peps.arealaw.isadmissiblesupport_pair_of_adj
-Downstream declaration: TNLean.PEPS.AreaLaw.isAdmissibleSupport_pair_of_adj
-Provenance-ID: 8738-tnlean.peps.arealaw.ambientdilation_zero
-Downstream declaration: TNLean.PEPS.AreaLaw.ambientDilation_zero
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- Sites of a finite induced domain. Source: area-law Theorem 1.1. -/
@@ -218,6 +158,22 @@ theorem isAdmissibleSupport_pair_of_adj {Λ : Finset (ℤ × ℤ)}
   simp only [IsAdmissibleSupport]
   simp_rw [exists_walk_length_le_iff_edist_le]
   simp [SimpleGraph.edist_le_one_iff_adj_or_eq, h, h.symm]
+
+/-- A walk in the induced domain from a site of `A` to a site outside `A` crosses an edge
+`{u, v}` of the cut with `u ∈ A` and `v ∉ A`, and its initial segment joins the starting
+site to `u` in at most as many steps. Source: area-law Section 1, definition of `∂Λ A`. -/
+theorem exists_edgeBoundary_of_walk {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {x y : Site Λ} (p : (domainGraph Λ).Walk x y) (hx : x ∈ A) (hy : y ∉ A) :
+    ∃ u v, u ∈ A ∧ v ∉ A ∧ s(u, v) ∈ edgeBoundary Λ A ∧
+      ∃ p' : (domainGraph Λ).Walk x u, p'.length ≤ p.length := by
+  classical
+  obtain ⟨d, hd, hdA, hdA'⟩ := p.exists_boundary_dart (A : Set (Site Λ)) hx hy
+  have hsupp := p.dart_fst_mem_support_of_mem_darts hd
+  refine ⟨d.fst, d.snd, hdA, hdA', ?_, p.takeUntil d.fst hsupp,
+    p.length_takeUntil_le_length hsupp⟩
+  simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
+    SimpleGraph.mem_edgeSet]
+  exact ⟨d.adj, d.fst, hdA, d.snd, hdA', rfl⟩
 
 /-- Zero ambient dilation changes no lattice points. -/
 @[simp] theorem ambientDilation_zero (T : Finset (ℤ × ℤ)) : ambientDilation T 0 = T := by

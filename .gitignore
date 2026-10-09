@@ -106,5 +106,5 @@ __pycache__/
 # Agent tool workspace state
 .texra/
 
-# Local verification records are not publication material.
+# Local provenance records and verification outputs
 **/provenance/

@@ -21,8 +21,10 @@ import TNLean.Circuit.ExactSubspaceAmplification
 import TNLean.Circuit.ExpectationBounds
 import TNLean.Circuit.GHZState
 import TNLean.Circuit.Gates
+import TNLean.Circuit.Geometry
 import TNLean.Circuit.ImageReflectionCircuit
 import TNLean.Circuit.InitializedRegisterProjection
+import TNLean.Circuit.LiebRobinson
 import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct
@@ -37,6 +39,11 @@ import TNLean.Circuit.SelectedZeroRegisterReflection
 import TNLean.Circuit.SelectedZeroRegisterReflectionPool
 import TNLean.Circuit.SelectedZeroRegisterSupport
 import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SiteExpectation
+import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Circuit.SiteOscillation
+import TNLean.Circuit.SpectatorOscillationSupport
+import TNLean.Circuit.SpectatorSiteExpectation
 import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.Teleportation
 import TNLean.Circuit.UniformPostselection

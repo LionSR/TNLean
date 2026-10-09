@@ -1,0 +1,115 @@
+\section{Physical consequences of the square-grid correspondence}
+
+\begin{theorem}[Equality of physical vectors and errors]
+    \label{thm:peps_square_vector_error}
+    \lean{TNLean.PEPS.Approximation.squareGridStateIsometry,TNLean.PEPS.Approximation.vector_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.vector_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.norm_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.nonzero_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.normalized_error_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.normalized_error_vectorTensorToGraphTensor}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    The physical coordinates are identical in both presentations, so the coordinate
+    identification is a linear isometry. The transported contraction equals the
+    original vector $\Phi$. In particular its norm and nonvanishing are unchanged,
+    and so is every error $\|\|\Phi\|^{-1}\Phi-z\Omega\|$, for every vector
+    $\Omega$ of the common Euclidean space and every $z\in\C$.
+    The equality includes $\Phi=0$ with the convention $0^{-1}=0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    Apply coordinatewise equality of the contractions in their common Euclidean space.
+\end{proof}
+
+\begin{theorem}[Dimension constraints and crossing edges]
+    \label{thm:peps_square_bonds_boundary}
+    \lean{TNLean.PEPS.Approximation.graphBondDim_forall,TNLean.PEPS.Approximation.vectorTensorToGraphTensor_bondDim_pos,TNLean.PEPS.Approximation.maxBondDim_le_iff,TNLean.PEPS.Approximation.maxBondDim_real_le_iff,TNLean.PEPS.Approximation.forwardSquareBoundaryEquiv,TNLean.PEPS.Approximation.forwardSquareBoundary_card}
+    \leanok
+    \uses{def:peps_square_edge_correspondence}
+    Any pointwise condition on $D_e$ is equivalent to the same condition on the
+    transported dimensions. For $B\in\N$, the maximum bond dimension is at most
+    $B$ exactly when each transported bond dimension is at most $B$, and the same
+    equivalence holds for every real threshold $B\ge0$.
+    For every region $R\subseteq\Lambda$, the edge correspondence restricts to
+    a bijection of crossing edges and preserves their cardinality.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_square_edge_correspondence}
+    Every edge retains its dimension and its two endpoints. The empty maximum is
+    zero. For a real threshold $B\ge0$, compare natural dimensions with
+    $\lfloor B\rfloor$.
+\end{proof}
+
+\begin{theorem}[Regional density and entropy]
+    \label{thm:peps_square_regional_density}
+    \lean{TNLean.PEPS.Approximation.squareComplementConfigEquiv,TNLean.PEPS.Approximation.regionReducedDensity_eq_piSubtype,TNLean.PEPS.Approximation.regionReducedDensity_eq_pinnedReducedDensity,TNLean.PEPS.Approximation.regionReducedDensity_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.regionReducedDensity_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_pinnedTensorToGraphTensor,TNLean.PEPS.Approximation.entropy_vectorTensorToGraphTensor}
+    \leanok
+    \uses{thm:peps_square_grid_contraction}
+    For every region $R$, the two contractions have equal unnormalized reduced
+    densities $\tr_{R^c}|\Phi\rangle\langle\Phi|$ and equal von Neumann entropies
+    of these densities. The densities have trace $\|\Phi\|^2$, so the entropy is
+    the entanglement entropy of the region only when $\|\Phi\|=1$.
+    Writing the complement as a finite-set difference or as nonmembership gives
+    the same partial trace after the coordinatewise identification of complement
+    configurations.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_grid_contraction,def:peps_pinned_regional_matrix}
+    With $M_{x,z}=\Phi(x\cup z)$ as in
+    Definition~\ref{def:peps_pinned_regional_matrix},
+    \begin{align}
+        \tr_{R^c}|\Phi\rangle\langle\Phi|
+         & =\sum_{z}M_{\cdot,z}M_{\cdot,z}^\dagger=MM^\dagger,
+        \label{eq:peps_square_regional_gram}
+    \end{align}
+    and the coefficient equality of the two contractions gives the same matrix $M$
+    for both. The complement $R^c$ is indexed either by $\Lambda\setminus R$ as a
+    finite set or by the sites not in $R$; the bijection between the two index
+    sets maps a configuration $z$ to the configuration with the same value at
+    every site, so it reindexes the sum in (\ref{eq:peps_square_regional_gram}).
+    Equal matrices have equal von Neumann entropies.
+\end{proof}
+
+\begin{definition}[The source approximation constraints]
+    \label{def:peps_source_approximation_constraints}
+    \lean{TNLean.PEPS.Approximation.Pinned.HasPEPSApproximation,TNLean.PEPS.Approximation.Vector.PhaseErrorAtMost}
+    \leanok
+    \uses{def:peps_square_local_presentations}
+    Fix a target vector $\Omega$. The physical-first approximation constraint asks
+    for positive $D_e\le CL^c$, a nonzero contraction $\Phi$, and a phase $\theta$
+    with $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$. The virtual-first
+    phase-error predicate concerns vectors only: for vectors $x,\Omega$ and
+    $\varepsilon\in\mathbb R$ it asks for a phase $\theta$ that minimizes the
+    normalized error of $x$ against $e^{i\varphi}\Omega$ over all real $\varphi$ and
+    attains error at most $\varepsilon$. Bond-dimension bounds and nonvanishing of
+    the contraction are separate hypotheses in that presentation.
+\end{definition}
+
+\begin{theorem}[Transfer of supplied approximation witnesses]
+    \label{thm:peps_square_approximation_transfer}
+    \lean{TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max}
+    \leanok
+    \uses{def:peps_source_approximation_constraints,thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
+    For every target vector $\Omega$, an approximation witness in either source
+    presentation gives a graph PEPS on the original open square with the same positive dimensions, bound $CL^c$,
+    and error $L^{-1}$. The entire minimizing-phase condition is preserved for the
+    virtual-first presentation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
+    Use the transported tensor. Its dimensions are identical edge by edge; substitute
+    the equality of its vector in the nonzero and phase-error conditions.
+\end{proof}
+
+
+\begin{definition}[Physical-first regional coefficient matrix]
+    \label{def:peps_pinned_regional_matrix}
+    \lean{TNLean.PEPS.Approximation.Pinned.RegionConfiguration,TNLean.PEPS.Approximation.Pinned.joinConfigurations,TNLean.PEPS.Approximation.Pinned.coefficientMatrix,TNLean.PEPS.Approximation.Pinned.reducedDensity}
+    \leanok
+    \uses{def:peps_forward_square_edges,def:peps_square_local_presentations}
+    Let $\Omega$ be a vector on the sites $\Lambda$ of the square and
+    $R\subseteq\Lambda$. For configurations $x$ on $R$ and $z$ on $R^c$, let
+    $x\cup z$ be their joined configuration and set $M_{x,z}=\Omega(x\cup z)$. The
+    unnormalized regional density of $\Omega$ is $MM^\dagger$. For $\Omega=\Phi$
+    it equals the partial trace in Theorem~\ref{thm:peps_square_regional_density}.
+\end{definition}

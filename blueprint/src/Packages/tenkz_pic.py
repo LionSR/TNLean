@@ -171,7 +171,7 @@ def _tex_env() -> dict[str, str]:
     """Compile environment: pinned tenkz package on TEXINPUTS (spec §1.5)."""
 
     env = os.environ.copy()
-    env["TEXINPUTS"] = str(_tenkz_dir()) + "//:" + env.get("TEXINPUTS", "")
+    env["TEXINPUTS"] = str(_tenkz_dir()) + "//" + os.pathsep + env.get("TEXINPUTS", "")
     kpsewhich = shutil.which("kpsewhich")
     if kpsewhich is None:
         return env

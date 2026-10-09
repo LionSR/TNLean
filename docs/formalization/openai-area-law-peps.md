@@ -106,10 +106,63 @@ on the source's two separate orders: any interleaving preserves both.
 requirement `p/(p+1) > 1 − 10⁻⁶`. Parameter-dependent initial box exponents are
 not identified with the final choices.
 
+`Geometry.DistanceLayers` proves the endpoint-distance and nonadjacent-layer
+estimates for the actual closed dyadic layers. The product metric on `ℝ × ℝ`
+is the sup metric. For every origin, nonnegative scale `k`, finite endpoint
+set `Z`, and nonnegative integer radius `C`, each point in a layer closure
+has distance at least `C * 2^k` from every endpoint and distance at most
+`2 * (C + 1) * 2^k` from some endpoint. Existence of that endpoint follows
+from layer membership, so no nonemptiness hypothesis is added to the
+distance theorem. This gives the corresponding two bounds for the infimum
+distance to `Z`.
+
+The separation estimate is pointwise for every pair of points in the two
+layer closures. When `h ≥ k + 2`, their distance is at least
+`(C - 1) / 2 * 2^h`. This is positive for the source radius `C ≥ 2`; the
+proved inequality also includes smaller radii, when its lower bound may
+be nonpositive. Empty layers are allowed. These results establish the
+source's `geometry:layer-distance` and `geometry:nonadjacent` estimates;
+contacts, simultaneous repairs, and the two-family construction remain
+separate proof obligations.
+
+`Geometry.fineLayerIndices` subdivides each actual half-open layer cell
+into cells at a finer dyadic scale. For fine exponent `ℓ ≤ k`, its set of
+indices is exactly the set of fine cells meeting the layer, with cardinality
+`4^(k−ℓ)` times the coarse-cell count. The fixed fine and pitch exponents
+are `floor(ζk)` and `floor((1+δ₀)k)`. Both arguments are nonnegative, so
+these are ordinary integer floors. The fine-cell side divides the layer
+side, which divides the pitch, at every nonnegative scale.
+
+Coordinate-residue averaging acts on this predetermined fine-cell set.
+The modulus is the exact pitch-to-cell ratio. The endpoint count and
+averaging give coefficient `16*(2*C₀+1)^2`; the two floor losses cost a
+factor of four. Thus `exists_sparse_dyadic_belt_shift` proves the source's
+`geometry:belt-count` estimate with the explicit bound
+`64*(2*C₀+1)^2*b*2^(-δ₀*k/2)`. The coefficient is fixed after the radius
+and before the domain, cut, origin, and scale. Empty endpoint sets and
+layers are included. Primary-tile geometry, contacts, repairs, birth separation, and
+the two-family construction remain open.
+
+The three dyadic sides are uniformly separated at large scales. For every
+fixed real factor `M`, one threshold chosen independently of the domain and
+cut gives `M t_k ≤ r_k` and `M r_k ≤ s_k` for every later scale. An explicit
+threshold for the factor `2^d` is `10^7 d`. This proves the scale-separation
+passage in Section 11, lines 200–207. The later geometric constructions remain
+separate obligations.
+
+For every real exponent `p`, the polynomially weighted decay
+`(k+1)^p*2^(-δ₀*k/2)` is eventually bounded by `2^(-δ₀*k/4)` and is summable.
+One positive constant bounds the sum over every finite set of scales. These
+numerical estimates are independent of the domain, cut, origin, and initial
+scale. They supply the series estimate used in Section 11, lines 668–692;
+the descendant count and the construction and count of actual repairs remain
+unproved. In particular, these auxiliary results do not prove the full
+`geometry:total-repairs` statement.
+
 The real-centred closed-square samples and the nested radii used by the
 polynomial-PEPS patch argument are treated in the
-[nested-square geometry audit](peps-nested-patch-geometry.md). That batch
-concerns induced crossing edges and two-site supports; the source's energy,
+[nested-square patch geometry](peps-nested-patch-geometry.md). These lemmas
+concern induced crossing edges and two-site supports; the source's energy,
 filter, and rank arguments remain separate obligations.
 
 ## Mathematical coverage
@@ -117,15 +170,22 @@ filter, and rank arguments remain separate obligations.
 | Source label | Present status | Remaining mathematical work |
 |---|---|---|
 | Area-law `eq:hamiltonian` | Model defined | Local counting and analytic consequences. |
+| Area-law `sec:prelim` | Regional positivity, squared-norm trace, unit trace, entropy nonnegativity, empty/full entropy, and norm/entropy invariance under site relabelling proved | Complementary entropy, continuity conventions, and the native Hamiltonian transport. |
 | Area-law `thm:area` | Target proposition defined | Faithful full proof, #8759 and its prerequisites. |
-| Area-law `cor:rectangles` | Graph and configuration identification proved | Hamiltonian and entropy transport and the boundary estimates. |
-| Area-law `scanner:template` | Template data defined | Geometric and entropy bounds, #8754 and #8758. |
-| Area-law `geometry:cancellation` | Ordered partition data defined | Generic entropy cancellation, #8760. |
+| Area-law `cor:rectangles` | Graph and configuration identification and vertex-boundary comparisons proved; vertex entropy bounds proved assuming the uniform edge area law | Hamiltonian and entropy transport and the unconditional area-law theorem. |
+| Area-law `scanner:template` | Template area bound, depth-layer bound, and mixed dyadic-square counts proved for the actual polygon model | Entropy bounds, #8758. |
+| Area-law `geometry:cancellation` | Proved for a pure state on any finite tensor product, with its finite-domain lattice specialization | None. |
 | Area-law `geometry:exponent-gaps` | Exact arithmetic proved | Applications at uniform thresholds. |
+| Area-law `geometry:belt-count` | Actual fine-cell layer refinement and count, dyadic scale divisibility, residue selection, sparse-belt decay, and polynomial-factor absorption proved | Primary-tile geometry, contacts, repairs, and birth separation. |
+| Area-law `geometry:total-repairs` | Polynomial absorption, summability, and a uniform numerical bound on finite scale sums proved as auxiliary results | Descendant bounds, the repair construction, and comparison of actual repairs with this series. |
+| Area-law `geometry:layer-distance` | Lower and upper endpoint-distance bounds for actual layer closures proved | Use in the later region construction. |
+| Area-law `geometry:nonadjacent` | Pointwise separation of actual layer closures proved | Use in contact and repair estimates. |
+| Area-law `prop:two-families` | Translated dyadic cells, nested neighborhoods, exact layer unions, closure formulas, uniform cell counts, exhaustion, endpoint-distance bounds, nonadjacent-layer separation, primary regions, belts, cell contacts, side matching, cell fans, and initial regions proved | Simultaneous repairs, birth separation, and the full partition. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
 
 Defining a target proposition does not prove the corresponding theorem. The
-source-labelled headline theorems have no `\leanok` marks in the blueprint.
+source-labelled area-law and PEPS approximation headline theorems have no
+`\leanok` marks in the blueprint.
 Neither statement assumes an area law, a PEPS approximation, a subregion gap,
 frustration freedom, commutativity, or translation invariance.
 

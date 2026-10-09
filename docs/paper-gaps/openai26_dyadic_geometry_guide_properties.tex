@@ -1,0 +1,262 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{Guide Properties in the Angular Separation of Dyadic Repaintings}
+\author{}
+\date{2026-10-07; resolved 2026-10-08; interface labels, sampled guides
+    and one ratio for all generic displacements 2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source statement}
+
+Section~7 of the September 24, 2026 polynomial PEPS manuscript\footnote{%
+\url{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/main.tex},
+file \texttt{06-geometry.tex}, lines 254--319.}
+repaints an aligned square $S=(nr,ns)+[0,n]^2$ of the dyadic hierarchy from its
+old label $A$ to its final label $B$. Along each edge it uses the normal ratio
+$x=d/w(s)$ with $w(s)=10^{-3}\min(s,n-s)$, and it runs a central birth, seven
+elementary births and deaths per edge, and one lens exchange per edge. Lemma~7.2
+asserts that there is one constant $a_0>0$ such that, for every birth or death
+among these operations and for every point $y$ of the closure of its changed
+region,
+\begin{align}
+    \operatorname{dist}\bigl(y,\overline{\{f\ne P_\circ\}}\bigr)
+        &\ge a_0\min\{n,d_{\mathcal V}(y)\},
+    \label{eq:openai26_dyadic_geometry_guide_properties_clearance}
+\end{align}
+where $f$ is the surrounding guide of the schedule, $P_\circ$ the surrounding
+label, and $d_{\mathcal V}$ the distance from the marked points. For a lens
+exchange the point $y$ ranges instead over the closure of the positions that are
+not common $C$ on the two guides before the exchange, and the obstructing set is
+the boundary of the lens $Y=\{-7<x<-7/2\}$:
+$\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$.
+
+\section{The earlier formal statement}
+
+Initially the schedule of guides was not constructed. The
+estimate~(\ref{eq:openai26_dyadic_geometry_guide_properties_clearance}) was
+proved with $a_0=1/5000$ for every guide having the properties that the source's
+proof uses:
+\begin{itemize}
+    \item for an edge birth or death, the guides before, after and surrounding
+    the operation carry the source's normal words on the band $\{-8<x<2\}$, and
+    the guides before and after agree off that band;
+    \item for the central birth, the surrounding guide equals $A$ on the open
+    square;
+    \item for the lens exchange, the main guide equals $C$ on the exterior band
+    $\{-8<x<0\}$, and the auxiliary guide carries the auxiliary word on
+    $\{-8<x<2\}$ and equals $C$ off it.
+\end{itemize}
+The square is placed at the origin. These are the
+declarations \leanid{TNLean.PEPS.Approximation.BandOperation.clearance},
+\leanid{TNLean.PEPS.Approximation.centralBirth_clearance} and
+\leanid{TNLean.PEPS.Approximation.lensExchange_clearance}.
+
+The source derives the listed properties at lines 227--241: the bands
+$\{-8<x<2\}$ along distinct edges are disjoint, so the operations along one edge
+do not meet those along another, and the exterior part of a band stays in one
+neighboring square, which carries a constant label. The disjointness is proved
+as \leanid{TNLean.PEPS.Approximation.disjoint_edgeBand}. The formal statements
+therefore cover the source's operations once the guides are built, and no
+hypothesis absent from the source's argument is used. A translate of $S$ only
+translates the coordinates, and sup distances are translation invariant.
+
+\section{Resolution}
+
+The schedule of guides is now constructed, and Lemma~7.2 is proved for it on
+every square of the hierarchy, with $a_0=1/5000$.
+
+The starting guide of a repainting of $S=[0,n]^2$ is any labelling of the plane
+that is $A$ on the open square and carries one label $C_e$ on the open exterior
+neighboring square across each edge~$e$. The guide after the central birth is
+$B$ on the central region. The guide after the edges of a list $E$ have been
+completed replaces the band $\{-8<x<2\}$ of each completed edge by the word
+$C_e\mid B$ at $0$. During the construction along an edge~$e$, the main and
+auxiliary guides are the completed guide and the uniform guide $C_e$ with the
+band $\{-8<x<2\}$ of $e$ replaced by the current normal word. These are the
+declarations \leanid{TNLean.PEPS.Approximation.RepaintingBaseline},
+\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide},
+\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide} and
+\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide}.
+
+The derivation of the guide properties at lines 227--241 is proved: by the
+band disjointness, on the band of an edge not yet completed the completed guide
+carries $C_e\mid A\mid B$ at $0,1$
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_edgeStartWord});
+the lens exchange produces the main word
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_mainGuide});
+consecutive elementary operations on one sheet match; and after the four edges
+the open square carries $B$ while every point outside the closed square keeps
+its starting label. The estimates are transported to the translate
+$(nr,ns)+[0,n]^2$ of the square, whose starting guide is uniform on $n$-blocks,
+and stated in the source's form with closures:
+\leanid{TNLean.PEPS.Approximation.blockRepainting_central},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep} and
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange}. Their only
+hypothesis is $n>0$; the block labels and the final label are arbitrary.
+
+One convention remains, and it follows the source's own. A guide of the source
+is specified by its open polygonal chambers, and its labels are read at the
+lattice sites, the cell centers $(i+\tfrac12,j+\tfrac12)$, after one small
+generic displacement (lines 62--80). A formal guide is a labelling of the whole
+plane, and the estimates are proved for the labellings that the schedule
+specifies at each operation; within one edge construction consecutive labellings
+match exactly. Twice the schedule passes to a labelling that agrees with the one
+reached only off finitely many curves. At the start of the construction along an
+edge~$e$, the completed guide is replaced by the main guide with the starting
+word $C_e\mid A\mid B$, which agrees with it off the curves $x=0$ and $x=1$ of
+the band of $e$
+(\leanid{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start}).
+At the end of a repainting, the final guide is replaced by the block guide of
+the next repainting, which agrees with it off the boundary of the repainted
+square (\leanid{TNLean.PEPS.Approximation.blockRepainting_final}).
+
+These replacements matter for the formal changed regions: the set where two
+labellings differ is sensitive to their values on a curve, and if the labelling
+reached at the start of an edge were carried through the operations unchanged,
+the curve $x=1$ would enter the changed region of a main death and the estimate
+would fail there. The estimates are therefore not claimed for every labelling
+that agrees with the schedule's off these curves. The replacements do not matter
+for the source: the labellings represent the same partition into open chambers,
+and no lattice site lies on the curves. A cell center is never on the boundary
+of an aligned square of integer side, and never on the curves $x=0$ or $x=1$ of
+the band of one of its edges: there $d$ is a half-odd integer, so $d\ne0$ and
+$1000d$ is an integer, while $1000\,w(s)=\min(s,n-s)$ is a half-odd integer
+(\leanid{TNLean.PEPS.Approximation.IsCellCenter.mem_openSquare_or_notMem_closedSquare},
+\leanid{TNLean.PEPS.Approximation.IsCellCenter.notMem_edgeInterface}). Hence the
+labels at every lattice site are unchanged by both replacements
+(\leanid{TNLean.PEPS.Approximation.blockRepainting_start_site},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_final_site}). This is the
+source's sampling convention, not a hypothesis of the formal statements.
+
+\section{Labels on the interface curves}
+
+On an interface curve $x=t$ of a band the formal words take the label for
+$x\ge t$. The source reads a guide on a boundary after one small generic
+displacement $v$ into an incident chamber. The normal coordinate $d$ points into
+the square, and the curves have slopes at most $8/1000$ in the edge coordinates.
+So a displacement whose two components are not small relative to each other
+crosses to the side $x>t$ along two edges of a square and to the side $x<t$ along
+the other two, and the formal labellings and the source's sampled guides differ on
+the interface curves of two edges.
+
+The estimates do not depend on this difference. Say that a labelling $f'$ reads
+$f$ after the displacement $v$ if $f'(p)=f(p+\varepsilon v)$ for every point $p$ and
+all sufficiently small $\varepsilon>0$. If $f_1'$, $f_2'$ read $f_1$, $f_2$ after the
+same $v$ and $f_1=f_2$ near $p$, then $f_1'(p)=f_2'(p)$. Hence the set where
+$f_1'\ne f_2'$ lies in the closure of the set where $f_1\ne f_2$, the set where
+$f'\ne c$ lies in the closure of the set where $f\ne c$, and the same holds for the
+positions that are not common $C$. Every estimate of Lemma~7.2 is stated for these
+closures, so each passes from the formal labellings to every reading of them, for
+every displacement $v$
+(\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.closure_ne_subset},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep_of_reading},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange_of_reading}).
+
+Readings of the formal labellings exist and are unique, for every displacement.
+Along a ray $p+\varepsilon v$ the coordinates, the band width and the normal
+coordinates agree for small $\varepsilon>0$ with affine functions of $\varepsilon$,
+whose signs are then eventually constant; the bands, the central region, the sup
+squares and the blocks are finite combinations of strict inequalities and floors of
+such functions, so every formal labelling, and every one homogenized on finitely many
+open squares, is eventually constant along every ray
+(\leanid{TNLean.PEPS.Approximation.isRayConstant_blockSchedule},
+\leanid{TNLean.PEPS.Approximation.IsRayConstant.exists_isDisplacedReading},
+\leanid{TNLean.PEPS.Approximation.IsDisplacedReading.unique}). The region of a label
+in a reading lies in the closure of its region in the labelling, so a true vertex of a
+reading is a true vertex of the labelling, and the outer holes of the readings of the
+temporary guides are disjoint
+(\leanid{TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}).
+
+\section{The sampled guides are the readings}
+
+The source's sampled guides are identified with these readings. The open chamber of
+a label of a labelling $f$ is the interior of the region of $f$ with that label, and
+the guide sampled from the chambers of $f$ after $v$ takes at $p$ the label of the
+chamber containing $p+\varepsilon v$ for all small $\varepsilon>0$
+(\leanid{TNLean.PEPS.Approximation.IsChamberSampling}). A sampled guide is a reading.
+This models the source's open polygonal chambers as the interiors of the label regions
+of the formal labellings. The model is faithful because the formal guides agree with
+the source's chamber descriptions on every open chamber, merging adjacent chambers that
+carry one label does not change the sampled label, and a label confined to boundaries
+is never sampled, as line 77 of the source requires. What is proved about the chambers
+is the next paragraph: the formal guides are constant off a locally finite family of
+lines.
+
+Every guide of the schedule, the block guide, every guide of the repainting of a
+block, and each of these homogenized on finitely many open squares, is constant near
+every point off a set that lies, near every point, in finitely many lines whose normals
+are $(\pm t,1000)$ or $(1000,\pm t)$ with $t$ in
+$T=\{-8,-6,-5,-4,-3,-2,-1,0,1,2\}$; the values $-8$ and $2$ bound only the region of
+a band that a word replaces. Indeed the interface curve $x=t$ of a band is
+$1000\,d=t\min(s,n-s)$, a union of two segments; the edges, the grid lines and the
+sides of the treated squares are lines with $t=0$; the grid lines form a locally finite
+family; and a strict inequality between continuous functions, a bound on $d/w(s)$ off
+$w(s)=0$, and the integer part of a coordinate are constant off the sets where the two
+sides agree or the coordinate is a grid value
+(\leanid{TNLean.PEPS.Approximation.HasLineWalls},
+\leanid{TNLean.PEPS.Approximation.hasLineWalls_schedule}). So the open chambers of a
+formal guide are the open sets on which it is constant, off a locally finite family of
+segments. A displacement $v$ is generic if it is parallel to none of these lines, that
+is, if it avoids finitely many lines through the origin; $(1,1)$ is generic, and so is
+every nonzero multiple of a generic vector. A line not parallel to $v$ meets the ray
+$p+\varepsilon v$ in at most one point, so for generic $v$ the ray leaves the walls at
+once and lies, for all small $\varepsilon>0$, in one open chamber
+(\leanid{TNLean.PEPS.Approximation.IsLocallyInLines.eventually_notMem}). Hence for
+every generic $v$ the sampled guide of every guide of the schedule exists, is unique,
+and equals its reading
+(\leanid{TNLean.PEPS.Approximation.isChamberSampling_schedule},
+\leanid{TNLean.PEPS.Approximation.exists_isChamberSampling_blockRepainting}), and the
+same holds for the guides point treated about one grid corner
+(\leanid{TNLean.PEPS.Approximation.isChamberSampling_pointTreated}). The estimates of
+Lemma~7.2 hold for the sampled guides with $a_0=1/5000$
+(\leanid{TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_mainStep_of_chamberSampling},
+\leanid{TNLean.PEPS.Approximation.blockRepainting_exchange_of_chamberSampling}).
+The estimates need no hypothesis beyond $n>0$; the genericity of the displacement,
+which the source assumes, is used only for the existence of the sampled guides.
+
+The uniform footprint ratios of the point treatment and of the block guides also hold
+for the readings, with holes at the true vertices of the readings, and with one ratio
+$\nu$ for all generic displacements. The source chooses $K_0$, then $\epsilon_0$, then
+$\nu$, and only afterwards the clearance $a$ and the information scale $D$ (lines
+559--563), while the displacement is chosen after all the guides are specified (lines
+73--77); so its $\nu$ must serve every generic displacement. A reading takes only
+values of the labelling, and a reading of a relabelled similar image of a template is
+the same image of a reading of the template; the templates are eventually constant
+along rays, so their readings serve as templates. Each template is constant off walls
+on lines with normals in the finite set of the previous paragraph. If $v$ and $w$ lie
+strictly on the same side of each of these finitely many directions, then for every
+point $p$ and all small $\varepsilon>0$ the segment from $p+\varepsilon v$ to
+$p+\varepsilon w$ crosses no wall: a wall through $p$ separates neither $v$ from $w$,
+and the other walls near $p$ stay away from $p$. Along that segment the template is
+locally constant, hence constant, so its readings after $v$ and after $w$ agree
+(\leanid{TNLean.PEPS.Approximation.HasLineWalls.eventually_eq_of_sameSide}). Hence a
+template has at most one reading for each pattern of sides, and only finitely many
+readings after generic displacements
+(\leanid{TNLean.PEPS.Approximation.HasLineWalls.finite_genericReadings}). The
+compactness argument applied to these finitely many readings gives one ratio for all
+generic displacements
+(\leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading},
+\leanid{TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading},
+\leanid{TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}).
+
+Nothing of Lemma~7.2 or of its sampling convention remains open.
+
+\end{document}

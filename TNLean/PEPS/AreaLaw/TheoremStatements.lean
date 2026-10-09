@@ -31,26 +31,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped ComplexOrder
 
-/-
-Source: September 24, 2026.
-Independently formalized; no upstream Lean proof text reused.
-Manuscript:
-  preprints/
-  A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
-  build/
-  sections/
-  00-introduction.tex
-Labels: thm:area, eq:area-law.
-Provenance-ID: 8738-tnlean.peps.arealaw.reducedstate
-Downstream declaration: TNLean.PEPS.AreaLaw.reducedState
-Provenance-ID: 8738-tnlean.peps.arealaw.reducedstate_ishermitian
-Downstream declaration: TNLean.PEPS.AreaLaw.reducedState_isHermitian
-Provenance-ID: 8738-tnlean.peps.arealaw.regionalentropy
-Downstream declaration: TNLean.PEPS.AreaLaw.regionalEntropy
-Provenance-ID: 8738-tnlean.peps.arealaw.uniformarealaw
-Downstream declaration: TNLean.PEPS.AreaLaw.UniformAreaLaw
--/
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The reduced pure-state matrix obtained by tracing over complementary
@@ -62,13 +42,21 @@ noncomputable def reducedState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     ((Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x))).submatrix
       (configurationSplit Λ q A).symm (configurationSplit Λ q A).symm)
 
+/-- Regional reductions of a pure vector are positive semidefinite.
+Source: area-law `sec:prelim`, lines 10–25, normalized density operators
+and partial trace; the positivity statement does not require normalization. -/
+theorem reducedState_posSemidef (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
+    (reducedState Λ q Ω A).PosSemidef :=
+  ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
+    (configurationSplit Λ q A).symm).partialTraceRight
+
 /-- Regional pure-state matrices are Hermitian, also for empty regions and
 singular marginals. -/
 theorem reducedState_isHermitian (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
     (reducedState Λ q Ω A).IsHermitian :=
-  ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
-    (configurationSplit Λ q A).symm).partialTraceRight.isHermitian
+  (reducedState_posSemidef Λ q Ω A).isHermitian
 
 /-- Entanglement entropy with natural logarithms and the convention `0 log 0 = 0`.
 Source: area-law Section 1, definition of `SΩ(A)`. -/
