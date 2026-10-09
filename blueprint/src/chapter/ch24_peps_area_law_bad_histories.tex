@@ -325,18 +325,21 @@ asymptotic scale specialization is proved below.
     \centering
     % Physical-site diagram, not a tensor contraction: no wires or open ports.
     % Columns are ambient depths 32..39 in the active path component.
-    % Rows follow the three selected radius-one charges; the front stays 33.
+    % Populated rows follow the three radius-one charges; the front stays 33.
+    % Empty wire rows reserve space for the north-facing charge labels.
     % Enclosures have members 33..35, 35..37, 37..39, respectively.
     \tenkzkernel
-    \begin{tenkz}[rows={wire,wire,wire}, cols=8, bonds=none, west=none, east=none]
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=8, bonds=none, west=none, east=none]
         \tn[skin=box]{32} & \tn[skin=box, name=scanFirstRow33]{33} &
         \tn[skin=box]{34} & \tn[skin=box]{35} &
         \tn[skin=box]{36} & \tn[skin=box]{37} &
         \tn[skin=box]{38} & \tn[skin=box]{39} \\
+        \\
         \tn[skin=box]{32} & \tn[skin=box]{33} &
         \tn[skin=box]{34} & \tn[skin=box]{35} &
         \tn[skin=box]{36} & \tn[skin=box]{37} &
         \tn[skin=box]{38} & \tn[skin=box]{39} \\
+        \\
         \tn[skin=box]{32} & \tn[skin=box, name=scanFront]{33} &
         \tn[skin=box]{34} & \tn[skin=box]{35} &
         \tn[skin=box]{36} & \tn[skin=box, name=scanGoodThreshold]{37} &
@@ -344,9 +347,9 @@ asymptotic scale specialization is proved below.
         \tnmark[form=enclosure, species=selected, tint, name=scanCharge34,
             label pos=n]{(1,2)..(1,4)}{$B_1(34)$}
         \tnmark[form=enclosure, species=selected, tint, name=scanCharge36,
-            label pos=n]{(2,4)..(2,6)}{$B_1(36)$}
+            label pos=n]{(3,4)..(3,6)}{$B_1(36)$}
         \tnmark[form=enclosure, species=selected, tint, name=scanCharge38,
-            label pos=n]{(3,6)..(3,8)}{$B_1(38)$}
+            label pos=n]{(5,6)..(5,8)}{$B_1(38)$}
         \tnmark[form=label, label pos=s]{scanFront}{$j=33$}
         \tnmark[form=label, label pos=s]{scanGoodThreshold}{$j+D/2$}
         \tnmark[form=label, label pos=s]{scanBadEndpoint}{$39>37$}

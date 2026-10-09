@@ -22,13 +22,21 @@ class ScanAncestryDiagram(unittest.TestCase):
     def test_native_site_rows(self):
         labels = re.findall(r"\\tn(?:\[[^\]]*\])?\{(\d+)\}", self.picture)
         self.assertEqual(list(map(int, labels)), list(range(32, 40)) * 3)
+        self.assertIn("rows={wire,wire,wire,wire,wire}", self.compact)
+        rows = self.picture.split(r"\\")
+        self.assertEqual(len(rows), 5)
+        for row in (0, 2, 4):
+            self.assertEqual(re.findall(r"\\tn(?:\[[^\]]*\])?\{(\d+)\}", rows[row]),
+                             list(map(str, range(32, 40))))
+        for row in (1, 3):
+            self.assertFalse(rows[row].strip())
         self.assertIn("bonds=none", self.compact)
         self.assertIn("west=none,east=none", self.compact)
         self.assertNotIn("\\tnwire", self.picture)
         self.assertNotIn("ports=", self.picture)
 
     def test_actual_radius_one_balls(self):
-        for row, anchor, first, last in ((1, 34, 2, 4), (2, 36, 4, 6), (3, 38, 6, 8)):
+        for row, anchor, first, last in ((1, 34, 2, 4), (3, 36, 4, 6), (5, 38, 6, 8)):
             pattern = (rf"\\tnmark\[[^\]]*name=scanCharge{anchor},[^\]]*\]"
                        rf"\{{\({row},{first}\)\.\.\({row},{last}\)\}}\{{\$B_1\({anchor}\)\$\}}")
             self.assertRegex(self.compact, pattern)
