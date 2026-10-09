@@ -107,6 +107,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{theorem}[Grouping prescribed physical columns in arbitrary local coordinates]
     \label{thm:peps_basis_physical_columns_local_coordinates}
     \lean{TNLean.PEPS.PairEffect.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
+    \leanok
     \uses{def:peps_family_physical_output,def:peps_party_tensor_basis}
     Let $P$ be an arbitrary set of parties, let $d_p$ be arbitrary
     nonnegative integers, and let $\mathbf p=(p_0,\ldots,p_{m-1})$
@@ -138,7 +139,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     Both ordered memories retain their terminal scalar factor $\C$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_selected_head_partition,def:peps_party_tensor_basis}
     Induct on the length of the ordered list. For the empty list,
     both columns are $1\in\C$. At a nonempty list, its first
