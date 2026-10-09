@@ -29,7 +29,10 @@ private theorem familyPhysicalListBasis_owner_column_heq
       (familyPhysicalListBasis δ (ps.map f)
         (fun j ↦ y ((ps.map f).get j))) := by
   induction ps with
-  | cons p ps ih => done
+  | cons p ps ih =>
+      simp only [List.map_cons, familyPhysicalListBasis, OrthonormalBasis.reindex_apply,
+        OrthonormalBasis.tensorProduct_apply']
+      done
   | nil => done
 
 end TNLean.PEPS.PairEffect
