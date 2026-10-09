@@ -638,6 +638,69 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Check parameter integrability sources strictly
+        timeout-minutes: 8
+        run: |
+          set -e
+          for source in TNLean/PEPS/AreaLaw/Scan/OldStateParameterIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualParameterIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/Defs.lean \
+              TNLean/PEPS/AreaLaw/Scan/EntropyBalance.lean \
+              TNLean/PEPS/AreaLaw/Scan/Selection.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test actual parameter integrability and discontinuous selection
+        timeout-minutes: 5
+        run: |
+          set -e
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          for example in ActualParameterIntegral ScanIntegrableSelection ScanParameterIntegralAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env bash -c \
+              'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" "TNLeanTest/$example.lean"
+          done
+
+      - name: Check literal round measure and regularity sources strictly
+        timeout-minutes: 8
+        run: |
+          set -e
+          for source in TNLean/PEPS/AreaLaw/Scan/TransportRound.lean \
+              TNLean/PEPS/AreaLaw/Scan/TransportRoundEnergy.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean \
+              TNLean/PEPS/AreaLaw/Scan/TransportRoundParameterIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualRoundParameterIntegral.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test literal round measures and parameter integrability
+        timeout-minutes: 7
+        run: |
+          set -e
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          for example in ActualScanMeasures ActualScanMeasuresAxioms \
+              ActualRoundParameterIntegral ActualRoundParameterIntegralAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env bash -c \
+              'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" "TNLeanTest/$example.lean"
+          done
+
       - name: Check physical cross-band production modules strictly
         timeout-minutes: 5
         run: |

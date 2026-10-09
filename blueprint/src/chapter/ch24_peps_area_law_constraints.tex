@@ -241,19 +241,22 @@ The finite transported measures are required to have mass $1/2$ only for
 $0<p<1$, where the source's terminal weights are positive. The logarithmic norm is
 continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
 and comparison properties. No mass equality is required at an inactive
-terminal leaf.
+terminal leaf. The charge defect is assumed almost everywhere strongly
+measurable in the interior; its existing nonnegative upper bound then gives
+integrability on the closed interval.
 
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
         TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts,
         TNLean.PEPS.AreaLaw.Scan.exists_budgets,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.intervalIntegrable_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
         TNLean.PEPS.AreaLaw.Scan.exists_selected_density,
         TNLean.PEPS.AreaLaw.Scan.ScanData.energySum_le,
         TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
         TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
-    \leanok
+    % Parameter-integrability revision awaits compilation.
     There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
     $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 2.3 and
@@ -269,15 +272,21 @@ terminal leaf.
         \label{eq:al_scanner_energy}
     \end{align}
 \end{theorem}
-\begin{proof}\leanok
+\begin{proof}
     Integrate the logarithmic norm derivative over $[0,1]$ in every round,
     retaining the nonnegative charge contribution on
-    $[\epsilon/2,\epsilon]$. Bounds and continuity on $(0,1)$ make the charge
-    defect integrable; changing its values at $0$ and $1$ does not change
-    the integral. Continuity of the logarithmic norm and the matching
-    values at successive rounds give the telescoped entropy budget. Averaging over
-    the $nm$ charge rounds and the parameter interval selects a round and a
-    parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$. At that point
+    $[\epsilon/2,\epsilon]$. Interior almost-everywhere strong measurability
+    and the nonnegative upper bound make the charge defect integrable; the
+    two endpoint values do not change the integral. The integral comparison
+    retains continuity of the logarithmic norm on $[0,1]$, its derivative
+    at every interior point, and the pointwise gain inequality. Matching
+    successive endpoint values give the telescoped entropy budget.
+    Finite averaging chooses a charge round with the required integral bound.
+    If its defect exceeded the threshold everywhere on the parameter interval,
+    the integral of the integrable difference would be strictly positive,
+    contradicting that bound. Thus the exact inequality
+    $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ holds at one common parameter.
+    At that point
     H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
     energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and
     bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
