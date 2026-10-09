@@ -39,8 +39,8 @@
       },
       "claims": "Handing a region from one party to another (birth or death), or swapping ownership between two copies of the state (exchange), costs reference error at most L^−30 (4L^−30 for the exchange), provided the region shares information at most L^−60 with its surroundings. Each move involves only the named parties.",
       "found": "Both lemmas are proved with exactly the paper's hypotheses, including the canonical maps, their contractivity and both error bounds. The moves were first proved as allowed operations only with the registers of each region grouped into one register. #8943 lists the registers of a frame one per site and per tag, each held by its owner, identifies them with the canonical coordinates, and proves the moves on that list: the birth is an allowed operation on the two named parties with one shared state, the death the same with one shared effect, and the exchange is the renaming, written as a reordering of registers that keeps every register with its party, followed by one private map. Each has the canonical map as its operator and the paper's reference error. No hypotheses were added.",
-      "impact": "None. Lemmas 6.5 and 6.6 are formalized as stated once #8943 and its base #8853 reach main.",
-      "plan": "Merge #8943 after #8853."
+      "impact": "None. Lemmas 6.5 and 6.6 are formalized as stated once #8943 reaches main.",
+      "plan": "Merge #8943."
     },
     {
       "id": "docs/paper-gaps/polypeps_small_rewrite_monomials.tex",
