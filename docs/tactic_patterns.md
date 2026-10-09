@@ -3658,6 +3658,18 @@ three-plaquette output measurement, and the routed reunion measurement.
   2026-10-06) proves simplicity from three scalar pairings; the shift's own simplicity proof
   (`rightShiftTensor_isMPUSimple`) has this form and could be replaced by it.
 
+### Nonnegative barycentric coordinates — candidate (2026-10-08)
+
+- **Pattern:** Obtain nonnegativity of every barycentric coordinate from
+  membership in the convex hull of an affine basis.
+- **Seen:** Four local coordinate arguments in
+  `PEPS/AreaLaw/Geometry/FanRadialConvexity.lean`.
+- **Current reuse:** All four use Mathlib's
+  `AffineBasis.convexHull_eq_nonneg_coord` directly. They lie in one file,
+  so the two-file promotion threshold has not been reached.
+- **Promotion trigger:** If this extraction recurs in another module, prefer
+  a lemma giving the coordinate inequalities over a new tactic.
+
 ### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
 
 - **Pattern:** Choose one cell in the finite closed neighborhood union, then
@@ -6063,19 +6075,34 @@ spectral split → block extraction → MPV calculation → strict bounds
   restriction uses the same actual base without another coordinate argument.
   The three existing callers are renamed; both complete proofs are unchanged.
 
-### Radial membership from triangle contact — candidate (2026-10-08)
+### Radial membership from triangle contact — promoted (2026-10-08)
 
 - **Pattern:** Transport membership in two intersecting fan triangles through
-  their contact equality, with an explicit radial-segment type, before
-  identifying the fan center with the marked point.
+  their contact equality, with an explicit radial-segment type.
 - **Seen:** The two contact orientations in
   `initialRegion_frontier_near_mark_iff_active_radial` in
-  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`.
-- **Abstraction:** Two branches in one file are below the promotion threshold.
-  The explicit intermediate statements keep the geometric argument readable.
-  A further consumer should first seek a shared contact-membership lemma.
-- **Notes:** The two branches use the existing intersection classification;
-  neither repeats a coordinate calculation.
+  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`, and the unequal-slot branch in
+  `Geometry/CellFanRadialIncidence.lean`.
+- **Abstraction:** The public `cellFanPolygons_nontrivial_inter_cases` in
+  `FanRunContacts.lean` supplies the full geometric intersection classification.
+  Each consumer obtains typed radial membership by ordinary equality transport.
+- **Notes:** All three occurrences already share the classification theorem.
+  No additional helper or tactic is needed for equality substitution, and no
+  coordinate calculation is copied.
+
+### Vertex segments in a fan triangle — promoted (2026-10-08)
+
+- **Pattern:** Contain a segment from the fan center to a perimeter vertex in
+  the triangle's convex hull.
+- **Seen:** Three applications in `Geometry/CellFanRadialIncidence.lean` and
+  two in `Geometry/InitialSectorColors.lean`.
+- **Abstraction:** All five applications directly use Mathlib's
+  `segment_subset_convexHull`. The scalar field and the three-vertex set are
+  specified when inference requires them; start and end membership witnesses
+  select the required segment.
+- **Notes:** The mathematical containment is already shared. A further wrapper
+  would add fan parameters without removing a geometric calculation, so the
+  direct applications remain unchanged.
 
 ### Ordered regularized regional filters — candidate (2026-10-07)
 
@@ -6121,6 +6148,28 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Owners of fixed pair-source registers — candidate (2026-10-09)
+
+- **Pattern:** From membership in a fixed source-register layout, use
+  `List.mem_flatMap` to identify the pair, `List.mem_ofFn` to identify its
+  slot index, and `PairSource.layout` to choose its left or right owner.
+- **Seen:** `SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id` in
+  `PEPS/Approximation/EndpointWordRestriction.lean` and
+  `SourceCircuit.restrict_allResidualSourceLayout_isNone` in
+  `PEPS/Approximation/ActualSourceEmptyOwner.lean` (the latter is proposed
+  separately in #8999). These are two mathematical uses across two files,
+  rather than copies of one source proposal.
+- **Abstraction:** At a third occurrence, prefer an ordinary lemma stating
+  that every owner in `SourceInventory.slotLayout R U V` is the left or
+  right owner of some slot `R.get i`. The assigned register spaces are
+  irrelevant to that conclusion. A selector-exclusion corollary can then
+  reuse that owner description.
+- **Notes:** The rule of three is not yet met, so no new helper or tactic is
+  added. The endpoint word's separate participating-party support proof
+  remains necessary: a general local operation on empty registers may still
+  name a participating party. The corpus scanner was run; unrelated reported
+  patterns are outside this change.
 
 ### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
 
