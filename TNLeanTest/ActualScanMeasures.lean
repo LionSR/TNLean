@@ -38,8 +38,10 @@ example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) :
 
 -- Finiteness at all real parameters and all natural replica counts.
 example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) :
-    IsFiniteMeasure ((S.actualFillScanRound hm hM s n E a pre).μOld k p h) :=
-  inferInstance
+    IsFiniteMeasure ((S.actualFillScanRound hm hM s n E a pre).μOld k p h) := by
+  change IsFiniteMeasure
+    ((S.actualFillData hm hM s).transportLeafMeasure n (a / 2) k (pre k) p ⟨h, none⟩)
+  infer_instance
 
 -- Exact canonical measure, with no history or conditional-choice weight inside it.
 example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : Unit) :
@@ -48,8 +50,10 @@ example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : Unit) :
 
 -- Finiteness at all real parameters and all natural replica counts.
 example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : Unit) :
-    IsFiniteMeasure ((S.actualFillScanRound hm hM s n E a pre).μNew k p h c) :=
-  inferInstance
+    IsFiniteMeasure ((S.actualFillScanRound hm hM s n E a pre).μNew k p h c) := by
+  change IsFiniteMeasure
+    ((S.actualFillData hm hM s).transportLeafMeasure n (a / 2) k (pre k) p ⟨h, some c⟩)
+  infer_instance
 
 -- Zero replicas retain the Fourier factor one half for a nonzero symmetric scalar.
 example (ha : 0 ≤ a)
@@ -105,8 +109,10 @@ example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) :
 
 -- Finiteness at all real parameters and all natural replica counts.
 example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) :
-    IsFiniteMeasure ((S.actualChargeScanRound hm hM s n E a pre).μOld k p h) :=
-  inferInstance
+    IsFiniteMeasure ((S.actualChargeScanRound hm hM s n E a pre).μOld k p h) := by
+  change IsFiniteMeasure
+    ((S.actualChargeData hm hM s).transportLeafMeasure n (a / 2) k (pre k) p ⟨h, none⟩)
+  infer_instance
 
 -- Exact canonical measure, with no history or conditional-choice weight inside it.
 example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : ChargeChoices S.K S.M) :
@@ -115,8 +121,10 @@ example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : ChargeChoices S.K S
 
 -- Finiteness at all real parameters and all natural replica counts.
 example (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : ChargeChoices S.K S.M) :
-    IsFiniteMeasure ((S.actualChargeScanRound hm hM s n E a pre).μNew k p h c) :=
-  inferInstance
+    IsFiniteMeasure ((S.actualChargeScanRound hm hM s n E a pre).μNew k p h c) := by
+  change IsFiniteMeasure
+    ((S.actualChargeData hm hM s).transportLeafMeasure n (a / 2) k (pre k) p ⟨h, some c⟩)
+  infer_instance
 
 -- Zero replicas retain the Fourier factor one half for a nonzero symmetric scalar.
 example (ha : 0 ≤ a)
