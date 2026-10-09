@@ -214,15 +214,9 @@ theorem subset_of_isSafe (hsafe : IsSafe Λ A D₀ Q) (hR : R < D₀) {S : Finse
   intro w hwS
   by_contra hwA
   obtain ⟨p, hp⟩ := hS.2 v hvS w hwS
-  obtain ⟨d, hd, hdA, hdA'⟩ := p.exists_boundary_dart (A : Set (Site Λ)) hvA hwA
-  have hsupp := p.dart_fst_mem_support_of_mem_darts hd
-  have hlen := (p.length_takeUntil_le_length hsupp).trans hp
-  have hdist := supDist_le_of_walk (p.takeUntil d.fst hsupp) hlen
-  have he : s(d.fst, d.snd) ∈ edgeBoundary Λ A := by
-    simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
-      SimpleGraph.mem_edgeSet]
-    exact ⟨d.adj, d.fst, hdA, d.snd, hdA', rfl⟩
-  have := hsafe _ he d.fst (Sym2.mem_mk_left _ _) v.1 hvQ
+  obtain ⟨u, u', -, -, he, p', hp'⟩ := exists_edgeBoundary_of_walk p hvA hwA
+  have hdist := supDist_le_of_walk p' (hp'.trans hp)
+  have := hsafe _ he u (Sym2.mem_mk_left _ _) v.1 hvQ
   have hsize := Q.one_le_size
   have : D₀ ≤ D₀ * Q.size := Nat.le_mul_of_pos_right D₀ hsize
   omega

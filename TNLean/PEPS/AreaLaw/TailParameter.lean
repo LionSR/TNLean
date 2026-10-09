@@ -71,15 +71,9 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
     simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨⟨v, hvX, hvA⟩, w, hwX, hwA⟩ := hX
     obtain ⟨p, hp⟩ := X.2.2 v hvX w hwX
-    obtain ⟨d, hd, hdA, hdA'⟩ := p.exists_boundary_dart (A : Set (Site Λ)) hvA hwA
-    have hsupp := p.dart_fst_mem_support_of_mem_darts hd
-    have hlen := (p.length_takeUntil_le_length hsupp).trans hp
-    refine Finset.mem_biUnion.mpr ⟨s(d.fst, d.snd), ?_, ?_⟩
-    · simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
-        SimpleGraph.mem_edgeSet]
-      exact ⟨d.adj, d.fst, hdA, d.snd, hdA', rfl⟩
-    · exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, d.fst, Sym2.mem_mk_left _ _, hdA, v, hvX,
-        (p.takeUntil d.fst hsupp).reverse, by simpa using hlen⟩
+    obtain ⟨u, u', huA, -, he, p', hp'⟩ := exists_edgeBoundary_of_walk p hvA hwA
+    exact Finset.mem_biUnion.mpr ⟨s(u, u'), he, Finset.mem_filter.mpr ⟨Finset.mem_univ _, u,
+      Sym2.mem_mk_left _ _, huA, v, hvX, p'.reverse, by simpa using hp'.trans hp⟩⟩
   have hcard : ∀ e ∈ edgeBoundary Λ A,
       (near e).card ≤ (1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
     intro e he
