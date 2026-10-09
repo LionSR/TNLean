@@ -106,7 +106,7 @@ inner-product discard spaces.
     \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputMatrix_le_one}
     \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputMatrix_le}
     \leanok
-    \uses{def:peps_physical_output_matrix,thm:peps_physical_gram_contraction}
+    \uses{def:peps_physical_output_matrix,def:peps_physical_gram}
     For an arbitrary rectangular matrix $\rho:H'\to H$,
     \begin{align}
         \bigl[\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\bigr]_{xy}
@@ -152,7 +152,7 @@ inner-product discard spaces.
     \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputFrameMatrix_le_one}
     \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le}
     \leanok
-    \uses{def:peps_physical_frames,thm:peps_exterior_contraction}
+    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction}
     For allowed words, the three matrices in
     Definition~\ref{def:peps_physical_frames} have operator norm at most one.
     For every rectangular $Z$,
@@ -244,6 +244,7 @@ inner-product discard spaces.
     $Y\times Y$ block of $M(z)$ equals
     \begin{align}
         M(z)_{xy}=\operatorname{tr}_{D'}(K_{V',G}W_{xy}(z)K_{W',G'}^\dagger).
+        \label{eq:peps_separated_physical_density_block}
     \end{align}
     This equality requires no allowedness assumption on the words and no
     normalization of the real weight families.
@@ -253,14 +254,14 @@ inner-product discard spaces.
     Expand the finite Schmidt sums and both discard traces. The trace
     over $D$ is the weighted source matrix from
     Theorem~\ref{thm:peps_weighted_physical_source_identity}; the remaining
-    trace is exactly the exterior action displayed above.
+    trace gives~(\ref{eq:peps_separated_physical_density_block}).
 \end{proof}
 
 \begin{theorem}[Expected exterior trace norm under diagonal covariance]
     \label{thm:peps_weighted_physical_source_bound}
     \lean{TNLean.PEPS.PairEffect.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
     \leanok
-    \uses{thm:peps_physical_frame_contraction,thm:peps_separated_physical_density_blocks}
+    \uses{thm:peps_physical_frame_contraction,def:peps_separated_physical_density}
     Assume all four words are allowed. Let $p_i,p'_l,\tau_t,\tau'_u$ be
     nonnegative probability weights and let $\kappa\geq0$. On a probability
     space, suppose every $z_{il}\overline{z_{i'l'}}$ is integrable and
@@ -310,7 +311,7 @@ inner-product discard spaces.
         \mathbb E_k\|M(Z)_{xy}\|_1 & \leq k^{-|S|/2},       \\
         \mathbb E_k\|M(Z)\|_1      & \leq |X|^2 k^{-|S|/2}.
     \end{align}
-    The full trace norm and every block trace norm are integrable.
+    The full trace norm is integrable.
     Neither estimate depends on the exterior physical dimension or either
     discard dimension.
 \end{theorem}
@@ -472,7 +473,7 @@ inner-product discard spaces.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
     \leanok
-    \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density}
+    \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density,thm:peps_actual_physical_integrability}
     If the affected set meets $S$, the two sums defining $B_{\xi\zeta}$ may
     be indexed by $\mathcal I_S$ using the actual retained-slot bijection.
     At $e\in S$ the coefficient reads exactly the original local labels
