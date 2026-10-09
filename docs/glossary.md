@@ -3362,3 +3362,24 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   lemma itself permits arbitrary real C and e. The final shell theorem
   assumes the pointwise safe-box estimate and derives the selected squares'
   safety and covering; it does not prove the physical exponent improvement.
+
+## Initial-exponent entropy of rectangle shells
+
+- **Declarations:** TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow
+  and TNLean.PEPS.AreaLaw.exists_regionalEntropy_weak_rectangle_shell_le_rpow.
+- **Meaning:** for fixed q ≥ 1, R, J ≥ 0 and Δ > 0, one nonnegative constant
+  C and one exponent 0 < e₀ < 1 bound the physical entropy of every safe
+  rectangle and its actual dyadically covered shell. These witnesses precede
+  the safety parameter D₀ > 2R + 10, domain, Hamiltonian, energy, ground vector,
+  cut, rectangle and shell scales. The shell estimate has coefficient
+  C * (24 + 64/(2^e₀ - 1)) and factor size(Q) * L^e₀ under the cap and
+  scalar clearance conditions of the conditional shell theorem.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Proposition 3.3, 02-initial.tex, lines 590–604, and the proof of
+  Proposition 9.5, 08-scanner.tex, lines 717–729, at
+  openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+- **Scope:** the safe-rectangle estimate is obtained from the original
+  gapped ground state, and the shell estimate uses that same vector and
+  those same witnesses. This is the initial existential-exponent consequence;
+  the arbitrary-exponent estimate and physical exponent improvement remain
+  separate results.
