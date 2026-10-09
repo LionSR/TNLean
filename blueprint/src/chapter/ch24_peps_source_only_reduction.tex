@@ -320,14 +320,13 @@ dimensions.
 
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
-    \lean{TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout_le}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout_apply}
-    \lean{TNLean.PEPS.PairEffect.card_familyRegionalPhysicalIndex}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
     \leanok
-    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
+    \uses{def:peps_family_physical_output,
+        thm:peps_source_only_density_error,
+        thm:peps_basis_physical_list_restriction,
+        thm:peps_basis_physical_dimensions,
+        thm:peps_basis_regional_readouts}
     The actual physical memory selected by the original party set $A$
     has dimension
     \begin{align}
@@ -343,14 +342,13 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout}
-    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv}
-    \lean{TNLean.PEPS.PairEffect.length_filter_region}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_owners}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv}
-    \lean{TNLean.PEPS.PairEffect.norm_familyRegionalPhysicalReadout_le_one}
-    \uses{thm:peps_source_only_density_error}
+    \uses{thm:peps_source_only_density_error,
+        def:peps_basis_physical_readouts,
+        def:peps_basis_region_coordinates,
+        thm:peps_basis_physical_dimensions,
+        thm:peps_basis_physical_list_restriction,
+        def:peps_family_physical_output,
+        thm:peps_basis_regional_readouts}
     Selecting owned physical registers filters the original party
     ordering. Its tensor basis is indexed by one choice of $d_p$ values
     at each $p\in A$, so its cardinality is $\prod_{p\in A}d_p$.

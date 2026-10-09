@@ -419,9 +419,9 @@ excluded explicitly.
 
 \begin{definition}[Physical coordinates of a region]
     \label{def:peps_basis_region_coordinates}
-    \uses{def:peps_family_physical_output,thm:peps_basis_physical_list_restriction}
-    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv,
-        TNLean.PEPS.PairEffect.familyRestrictedPhysicalBasis}
+    \uses{def:peps_family_physical_output,
+        thm:peps_basis_physical_list_restriction}
+    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv}
     \leanok
     Suppose $\mathbf p$ has no repetitions and contains every party
     of $P$, and let $A\subseteq P$ be finite. Reading the party at
@@ -471,10 +471,10 @@ excluded explicitly.
 \end{proof}
 
 \begin{definition}[Physical and regional coordinate isometries]
+    \uses{def:peps_family_physical_output}
     \label{def:peps_basis_physical_readouts}
     \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout,
-        TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv,
-        TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout}
+        TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv}
     \leanok
     For any set $P$ and finite $A\subseteq P$, splitting an assignment
     into its restrictions to $A$ and $P\setminus A$ is a bijection,
