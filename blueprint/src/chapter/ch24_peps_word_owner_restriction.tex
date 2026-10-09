@@ -20,25 +20,33 @@ $f(p)$ while preserving the register spaces and chronological order.
     \label{thm:peps_source_free_owner_parties}
     \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil}
     \leanok
-    \uses{def:peps_owner_composition}
+    \uses{def:peps_owner_composition,def:peps_party_registers}
     If $W$ contains no pair-source preparation, then
     $\operatorname{Part}(W^f)=f(\operatorname{Part}(W))$. No injectivity assumption on $f$ is required.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_owner_composition}
+    \uses{def:peps_owner_composition,def:peps_party_registers}
     Induct on the composition. The owners of a relabelled register list
-    are the image of its original owners. Images commute with unions
-    for composition and with adjoining a named party for local maps,
-    exchanges, and untouched registers. The pair-source case is excluded
-    by hypothesis. This also retains named scalar local operations.
+    are the image of its original owners. For a composition, the induction
+    hypotheses give
+    \begin{align*}
+        \operatorname{Part}((W_1;W_2)^f)
+         & =f(\operatorname{Part}(W_1))\cup f(\operatorname{Part}(W_2)) \\
+         & =f(\operatorname{Part}(W_1)\cup\operatorname{Part}(W_2)).
+    \end{align*}
+    Local maps, exchanges, and operations beside untouched registers use
+    $f(\{p\}\cup S)=\{f(p)\}\cup f(S)$. The pair-source case is excluded
+    by hypothesis. Named scalar local operations are included by the same
+    identity, even when their register lists are empty.
 \end{proof}
 
 \begin{theorem}[Restriction to an owner outside the relabelling range]
     \label{thm:peps_owner_disjoint_restriction}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
     \leanok
-    \uses{def:peps_single_party_selector,def:peps_owner_composition}
+    \uses{def:peps_single_party_selector,def:peps_owner_composition,
+        def:peps_party_registers}
     Suppose that $W$ contains no pair-source preparation and that
     $f(p)\ne q$ for every $p\in P$. Let $V$ be the restriction of $W^f$
     to the owner $q$. Then $\operatorname{Part}(V)=\varnothing$, and its operator is
