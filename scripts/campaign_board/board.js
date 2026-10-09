@@ -241,13 +241,22 @@
     if (G.reviewedAt) box.append(el("p", { class: "note", text: `Summaries last reviewed ${new Date(G.reviewedAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}. They paraphrase the paper-gap notes, which are authoritative.` }));
   })();
 
+  /* ---------- inline tensor-network equations ---------- */
+  // A {{tn:name}} token in stage text is a word-sized tenkz equation set on the line.
+  const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}/g, (m, name) => {
+    const d = (D.inlineDiagrams || {})[name];
+    if (!d) return "";
+    return `<img class="tni" src="${d.src}" alt="${esc(name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.25)}"` : ""}>`;
+  });
+
   /* ---------- proof routes ---------- */
   (function renderRoutes() {
     const assigned = new Set();
     for (const route of C.routes) {
       const container = el("div", { class: "route" });
       $("routes").append(el("section", { class: "part" },
-        el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: route.intro }) : null),
+        el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: tnText(route.intro) }) : null),
         container));
       route.stages.forEach((st, idx) => {
         const items = st.issues.map(n => byNum.get(n)).filter(Boolean);
@@ -278,7 +287,7 @@
         let figure = null;
         if (draw) {
           const svg = sv("svg", { role: "img", "aria-label": st.figureAlt || st.title });
-          figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: st.caption }) : null);
+          figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: tnText(st.caption) }) : null);
           try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
         }
         // Tensor-network diagrams compiled from the campaign's tenkz sources.
@@ -288,7 +297,7 @@
           const alt = (d.alt || d.caption || st.title).replace(/<[^>]+>/g, "");
           return el("figure", { class: "sfig tnfig" },
             el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
-            d.caption ? el("figcaption", { html: d.caption }) : null);
+            d.caption ? el("figcaption", { html: tnText(d.caption) }) : null);
         }).filter(Boolean);
         const figs = figure || tnFigs.length ? el("div", { class: "figs" }, ...tnFigs, figure) : null;
         container.append(el("div", { class: "stage" },
@@ -299,8 +308,8 @@
               statusPill(status), ...gapBadges),
             el("div", { class: figs ? "lead hasfig" : "lead" },
               el("div", { class: "txt" },
-                el("p", { class: "phys", html: st.physics }),
-                el("p", { class: "out", html: "<b>Delivers.</b> " + st.delivers })),
+                el("p", { class: "phys", html: tnText(st.physics) }),
+                el("p", { class: "out", html: '<span class="sc">Delivers</span> ' + tnText(st.delivers) })),
               figs),
             el("div", { class: "meta" },
               el("div", { class: "box" }, el("h4", { text: results.length ? `Paper results (${results.length})` : "Paper results" }),

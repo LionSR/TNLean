@@ -17,7 +17,7 @@ directory here.
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
 | `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
-| `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them |
+| `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the word-sized equations set inside sentences |
 
 The area-law and PEPS campaign in `openai-area-law-peps-proof/` is served at
 `https://sirui-lu.com/TNLean/openai-area-law-peps-proof/` and regenerated hourly by
@@ -86,7 +86,15 @@ python3 scripts/campaign_board/build_diagrams.py docs/campaign/openai-area-law-p
 ```
 
 which needs `xelatex` (with TikZ, `hobby` and `spath3`) and `pdftocairo`, and
-commit the resulting SVGs; the hourly job only inlines them. tenkz audits
+commit the resulting SVGs; the hourly job only inlines them.
+
+A sentence can carry its own diagram equation. Write `{{tn:NAME}}` in a stage's
+`physics`, `delivers`, or a caption, and the equation in
+`diagrams/inline/NAME.tex` is set on the line, the way Tufte sets word-sized
+graphics into text. Inline sources are compiled in running mathematics; give
+each picture `size=l` so the names inside its boxes are set at text size and
+stay legible at word size. Prefer an inline equation to a margin diagram that
+would repeat it, and keep margin diagrams for the arguments too tall for a line. tenkz audits
 equations written with `=` only, so an approximate relation is set as two
 pictures with `\approx` between them.
 

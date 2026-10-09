@@ -1,0 +1,11 @@
+% PEPS, lem:splitting (05-frames.tex, eq:frame-splitting).
+\begin{tenkz}[size=l, rows={wire,wire}, cols=4, bonds=none]
+  \tn[at=(2,1), skin=box, wide=4, name=o, ports={90@1:physical:$T$, 90@2:physical, 90@4:physical:$E$}]{\Omega}
+  \tn[at=(1,2), skin=box, wide=2, name=v, ports={270@1:physical, 90@1:physical, 90@2:physical}]{V}
+  \tnwire{o.90@2}{v.270@1}
+\end{tenkz}
+\approx
+\begin{tenkz}[size=l, rows={wire}, cols=4, bonds=none]
+  \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical:$T$, 90@2:physical}]{s}
+  \tn[at=(1,3), skin=box, wide=2, ports={90@1:physical, 90@2:physical:$E$}]{s'}
+\end{tenkz}

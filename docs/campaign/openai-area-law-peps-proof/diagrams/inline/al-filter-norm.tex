@@ -1,0 +1,8 @@
+% Area law, Section 2 (02-initial.tex, lines 337-344): N = ||L_m ... L_1 Omega||.
+N=\Bigl\|
+\begin{tenkz}[size=l, rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(2,1), skin=box, wide=2, name=o, ports={90@1:physical, 90@2:physical}]{\Omega}
+  \tn[at=(1,1), skin=box, name=l, ports={270:physical, 90:physical}]{L_m\cdots L_1}
+  \tnwire{o.90@1}{l.270}
+\end{tenkz}
+\Bigr\|

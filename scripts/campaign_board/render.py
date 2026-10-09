@@ -28,6 +28,7 @@ WORKFLOW = ".github/workflows/campaign-board.yml"
 
 
 DIAGRAM_SLOT = re.compile(r"\{\{DIAGRAM:([^}]+)\}\}")
+INLINE_SLOT = re.compile(r"\{\{tn:([A-Za-z0-9_-]+)\}\}")
 
 
 def diagram(campaign_dir: pathlib.Path, path: str) -> dict:
@@ -45,6 +46,12 @@ def diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
     return {d["src"]: diagram(campaign_dir, d["src"])
             for route in config["routes"] for stage in route["stages"]
             for d in stage.get("diagrams", [])}
+
+
+def inline_diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
+    """Inline every {{tn:name}} equation the configuration's text uses, keyed by name."""
+    names = set(INLINE_SLOT.findall(json.dumps(config, ensure_ascii=False)))
+    return {name: diagram(campaign_dir, f"diagrams/inline/{name}.svg") for name in sorted(names)}
 
 
 def intro_html(campaign_dir: pathlib.Path) -> str:
@@ -69,6 +76,7 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
     blob_url = f"https://github.com/{primary['slug']}/blob/main/"
     gaps_rel = gaps_path.resolve().relative_to(ROOT).as_posix()
     data["diagrams"] = diagrams(campaign_dir, config)
+    data["inlineDiagrams"] = inline_diagrams(campaign_dir, config)
     data.update({
         "config": config,
         "gaps": json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []},

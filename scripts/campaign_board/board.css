@@ -107,10 +107,12 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .stage .secs { font: 12px var(--f-mono); color: var(--muted); }
 .stage .lead { display: grid; gap: 14px 32px; align-items: start; }
 .stage .lead .txt { display: grid; gap: 10px; min-width: 0; }
-@media (min-width: 980px) { .stage .lead.hasfig { grid-template-columns: minmax(0, 72ch) minmax(260px, 400px); } }
-.stage .phys { margin: 0; max-width: 72ch; }
-.stage .out { margin: 0; max-width: 72ch; font-size: 13.5px; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--soft); border-radius: 0 6px 6px 0; }
-.stage .out b { font-weight: 600; }
+@media (min-width: 980px) { .stage .lead.hasfig { grid-template-columns: minmax(0, 66ch) minmax(260px, 380px); } }
+/* The proof is read, not scanned: serif text at reading size, equations set on the line
+   (img.tni), the outcome introduced by small capitals rather than boxed. */
+.stage .phys, .stage .out { margin: 0; max-width: 66ch; font: 17px/1.6 var(--f-display); }
+.stage .sc { font-variant: small-caps; letter-spacing: 0.06em; font-weight: 600; }
+img.tni { display: inline; vertical-align: middle; max-width: 100%; height: auto; margin: 3px 0.15em; }
 .stage .meta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 20px; }
 @media (max-width: 760px) { .stage .meta { grid-template-columns: minmax(0, 1fr); } }
 .stage .box { min-width: 0; display: grid; gap: 6px; align-content: start; }
@@ -237,8 +239,8 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 /* stage figures: Tufte-style margin schematics drawn by a campaign's figures.js */
 .stage .figs { display: grid; gap: 22px; min-width: 0; }
 .tnfig img, img.tnimg { display: block; max-width: 100%; height: auto; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.tnfig img, img.tnimg) { filter: invert(0.9); } }
-:root[data-theme="dark"] :is(.tnfig img, img.tnimg) { filter: invert(0.9); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.tnfig img, img.tnimg, img.tni) { filter: invert(0.9); } }
+:root[data-theme="dark"] :is(.tnfig img, img.tnimg, img.tni) { filter: invert(0.9); }
 .sfig { margin: 0; display: grid; gap: 6px; min-width: 0; max-width: 400px; }
 .sfig svg { display: block; width: 100%; height: auto; overflow: visible; }
 .sfig figcaption { font: italic 13px/1.45 var(--f-display); color: var(--muted); }

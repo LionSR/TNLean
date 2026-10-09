@@ -3,8 +3,11 @@
 
     python3 scripts/campaign_board/build_diagrams.py CAMPAIGN_DIR
 
-Each CAMPAIGN_DIR/diagrams/NAME.tex holds one tenkz picture body. It is
-compiled in a standalone document with the pinned tenkz package (fetch it
+Each CAMPAIGN_DIR/diagrams/NAME.tex holds one tenkz picture body, set as a
+display. Each CAMPAIGN_DIR/diagrams/inline/NAME.tex holds a short equation
+set in running mathematics, so tenkz chooses its denser inline size class;
+the board places these inside sentences. Every source is compiled in a
+standalone document with the pinned tenkz package (fetch it
 with `python3 scripts/fetch_tenkz.py`) along the blueprint's route, xelatex
 to PDF and pdftocairo to SVG, and written to CAMPAIGN_DIR/diagrams/NAME.svg.
 The SVGs are committed, so the hourly board job needs no TeX installation;
@@ -28,11 +31,13 @@ DOCUMENT = r"""\documentclass[varwidth,border=2pt]{standalone}
 %s
 \end{document}
 """
+INLINE = "$%s$"
 
 
 def build(source: pathlib.Path, work: pathlib.Path) -> pathlib.Path | None:
     tex = work / (source.stem + ".tex")
-    tex.write_text(DOCUMENT % source.read_text())
+    body = source.read_text()
+    tex.write_text(DOCUMENT % (INLINE % body.strip() if source.parent.name == "inline" else body))
     env = {**os.environ, "TEXINPUTS": f"{TENKZ}//{os.pathsep}{os.environ.get('TEXINPUTS', '')}"}
     run = subprocess.run(["xelatex", "-interaction=nonstopmode", "-halt-on-error", tex.name],
                          cwd=work, env=env, capture_output=True, text=True)
@@ -53,7 +58,8 @@ def main() -> None:
     for tool in ("xelatex", "pdftocairo"):
         if shutil.which(tool) is None:
             sys.exit(f"{tool} is not on PATH")
-    sources = sorted((pathlib.Path(sys.argv[1]) / "diagrams").glob("*.tex"))
+    root = pathlib.Path(sys.argv[1]) / "diagrams"
+    sources = sorted(root.glob("*.tex")) + sorted((root / "inline").glob("*.tex"))
     with tempfile.TemporaryDirectory() as tmp:
         failed = [source for source in sources if build(source, pathlib.Path(tmp)) is None]
     if failed:

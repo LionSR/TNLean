@@ -1,0 +1,11 @@
+% PEPS, eq:compression-random-source (04-compression.tex, lines 293-302).
+\begin{tenkz}[size=l, rows={wire,wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical, 90@2:physical}]{\eta}
+  \tn[at=(2,1), skin=box, wide=2, ports={270@1:physical, 270@2:physical}]{\widetilde\eta^{\,\dagger}}
+\end{tenkz}
+=\mathbb E\,\frac1k
+\begin{tenkz}[size=l, rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), name=u, skin=box, ports={0:virtual, 90:physical, 270:physical}]{U_j}
+  \tn[at=(1,2), name=w, skin=box, ports={180:virtual, 90:physical, 270:physical}]{V_j}
+  \tnbond[name=j]{u.0}{w.180}
+\end{tenkz}

@@ -1,0 +1,7 @@
+% PEPS, eq:hole-encoder and eq:frame-vector (05-frames.tex).
+\Omega_{\mathcal F}=
+\begin{tenkz}[size=l, rows={wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,1), skin=box, wide=3, name=o, ports={90@1:physical, 90@3:physical}]{\Omega}
+  \tn[at=(1,1), skin=box, wide=2, name=k, ports={270@1:physical, 90@1:physical:$Q^+$, 90@2:physical:$\mathcal J$}]{K}
+  \tnwire{o.90@1}{k.270@1}
+\end{tenkz}

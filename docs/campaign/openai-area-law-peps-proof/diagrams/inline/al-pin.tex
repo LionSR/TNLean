@@ -1,0 +1,13 @@
+% Area law, from comparator:bell-pin (07-comparators.tex, lines 241-290):
+% contracting X and C with the pair B_XC leaves (sqrt z / d_*) psi, the
+% typical truncation of Omega~ with X relabelled R.
+\begin{tenkz}[size=l, rows={wire,wire}, cols=4, bonds=none]
+  \tn[at=(2,1), skin=box, wide=2, name=o, ports={90@1:physical, 90@2:physical}]{\widetilde\Omega}
+  \tn[at=(2,3), skin=box, wide=2, name=b, ports={90@1:physical, 90@2:physical:$R$}]{\mathrm{Bell}}
+  \tn[at=(1,2), skin=box, wide=2, name=c, ports={270@1:physical, 270@2:physical}]{B^{\dagger}}
+  \tnwire{o.90@2}{c.270@1} \tnwire{b.90@1}{c.270@2}
+\end{tenkz}
+=\frac{\sqrt z}{d_*}
+\begin{tenkz}[size=l, rows={wire}, cols=2, bonds=none]
+  \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical, 90@2:physical:$R$}]{\psi}
+\end{tenkz}
