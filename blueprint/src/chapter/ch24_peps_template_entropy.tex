@@ -244,8 +244,7 @@
     \]
     Fix $e\in(0,1)$. The same constant $C_e$, independent of the template,
     works for all separated templates with $C_{\rm tpl}\ge24$.
-    With a core cap $2^{K_0}\le s_0<2^{K_0+1}$ and a shell cap
-    $2^K\le L<2^{K+1}$, where $j\le L\le s_0$, one has
+    For every $1\le L\le s_0$ and $0\le j\le L$, one has
     \begin{align*}
         S_\Omega(A\cap T)
          & \le C_e\left(18+\frac{4}{2^e-1}\right)ns_0^e, \\
@@ -266,7 +265,10 @@
     For a prefix, first use the shell estimate at depth $j-1$, then add
     the proved partial-row cost $n\log q$.
     The uniform constant is chosen from the safe-box hypothesis before any
-    template or scale is selected. This composes the conditional entropy
+    template or scale is selected. The quantified theorem chooses the caps
+    as $\lfloor\log_2 s_0\rfloor$ and $\lfloor\log_2 L\rfloor$; the
+    natural-logarithm inequalities give the required comparable powers of two.
+    This composes the conditional entropy
     step of \cite[Lemma~9.4]{OpenAI2026AreaLaw}; it does not derive the
     safe-box hypothesis from an initial existential exponent.
 \end{proof}

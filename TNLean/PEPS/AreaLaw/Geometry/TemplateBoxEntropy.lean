@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Data.Nat.Log
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover
 import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
@@ -170,14 +171,13 @@ theorem exists_template_entropy_bounds_of_arbitrary_safe_box
     (e : ℝ) (he : 0 < e) (he₁ : e < 1) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
       24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
-      (∀ K : ℕ, 2 ^ K ≤ s₀ → s₀ < 2 ^ (K + 1) →
-        regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
-          C * (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e) ∧
-      (∀ j L K : ℕ, j ≤ L → L ≤ s₀ → 2 ^ K ≤ L → L < 2 ^ (K + 1) →
+      (regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
+        C * (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e) ∧
+      (∀ j L : ℕ, 1 ≤ L → j ≤ L → L ≤ s₀ →
         regionalEntropy Λ q Ω
           (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤
           C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e) ∧
-      (∀ j L K : ℕ, 1 ≤ j → j ≤ L → L ≤ s₀ → 2 ^ K ≤ L → L < 2 ^ (K + 1) →
+      (∀ j L : ℕ, 1 ≤ j → j ≤ L → L ≤ s₀ →
         ∀ Y : Finset (ℤ × ℤ),
           Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1) →
           regionalEntropy Λ q Ω
@@ -187,14 +187,16 @@ theorem exists_template_entropy_bounds_of_arbitrary_safe_box
   refine ⟨C, hCbox, ?_⟩
   intro Ctpl n s₀ T hC hsep
   refine ⟨?_, ?_, ?_⟩
-  · intro K hlo hhi
-    exact Template.regionalEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
-      K hlo hhi e C he hCbox hb
-  · intro j L K hj hL hlo hhi
+  · exact Template.regionalEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
+      (Nat.log 2 s₀) (Nat.pow_log_le_self 2 (Nat.ne_of_gt T.s₀_pos))
+      (Nat.lt_pow_succ_log_self (by decide) s₀) e C he hCbox hb
+  · intro j L hLpos hj hL
     exact Template.regionalEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
-      j L K hj hL hlo hhi e C he hCbox hb
-  · intro j L K hj hjL hL hlo hhi Y hY
+      j L (Nat.log 2 L) hj hL (Nat.pow_log_le_self 2 (by omega))
+      (Nat.lt_pow_succ_log_self (by decide) L) e C he hCbox hb
+  · intro j L hj hjL hL Y hY
     exact Template.regionalEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T hC hsep hD
-      j L K hj hjL hL hlo hhi Y hY e C he hCbox hb
+      j L (Nat.log 2 L) hj hjL hL (Nat.pow_log_le_self 2 (by omega))
+      (Nat.lt_pow_succ_log_self (by decide) L) Y hY e C he hCbox hb
 
 end TNLean.PEPS.AreaLaw.Geometry
