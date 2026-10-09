@@ -40,7 +40,7 @@ THEOREM_KINDS = r"Theorem|Lemma|Proposition|Corollary|Definition|Remark"
 
 # --------------------------------------------------------------------------- tools
 
-TRANSIENT = re.compile(r"rate limit|secondary|abuse|timed? ?out|50[234]|Something went wrong|EOF|connection reset", re.I)
+TRANSIENT = re.compile(r"rate limit|secondary|abuse|timed? ?out|50[0234]|Something went wrong|EOF|connection reset", re.I)
 
 
 class CommandError(subprocess.CalledProcessError):
@@ -266,7 +266,7 @@ def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None)
                 "closes": sorted(closing & campaign_issues),
                 "refs": sorted((referenced & campaign_issues) - closing),
                 "ci": (rollup[0]["commit"]["statusCheckRollup"] or {}).get("state") if rollup else None,
-                **(cache.get((repo["name"], p["number"], p["headRefOid"]))
+                **(cache.get((repo["name"], p["number"], p["headRefOid"], p["baseRefOid"]))
                    or file_stats(repo["slug"], p["number"], p["headRefOid"], p["baseRefOid"])),
             })
     return sorted(prs, key=lambda p: (p["repo"], p["number"]))
@@ -373,8 +373,10 @@ def previous_stats() -> dict:
         prs = json.loads(pathlib.Path(path).read_text()).get("prs", [])
     except json.JSONDecodeError:
         return {}
-    return {(p["repo"], p["number"], p.get("headRefOid")): {k: p[k] for k in STAT_KEYS}
-            for p in prs if p.get("headRefOid") and all(k in p for k in STAT_KEYS)}
+    # The file statistics depend on the base commit as well as the head: the
+    # diff of an open pull request moves with its base branch.
+    return {(p["repo"], p["number"], p.get("headRefOid"), p.get("baseRefOid")): {k: p[k] for k in STAT_KEYS}
+            for p in prs if p.get("headRefOid") and p.get("baseRefOid") and all(k in p for k in STAT_KEYS)}
 
 
 def collect(campaign_dir: pathlib.Path) -> dict:
