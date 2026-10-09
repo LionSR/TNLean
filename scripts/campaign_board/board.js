@@ -281,17 +281,23 @@
           figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: st.caption }) : null);
           try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
         }
+        // A tensor-network diagram compiled from the campaign's tenkz sources.
+        const tn = st.diagram && (D.diagrams || {})[st.diagram];
+        const diagram = tn ? el("figure", { class: "sfig tnfig" },
+          el("img", { src: tn.src, alt: st.diagramAlt || st.diagramCaption || st.title, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
+          st.diagramCaption ? el("figcaption", { html: st.diagramCaption }) : null) : null;
+        const figs = figure || diagram ? el("div", { class: "figs" }, diagram, figure) : null;
         container.append(el("div", { class: "stage" },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },
             el("div", { class: "head" }, el("h3", { text: st.title }),
               sections.length ? el("span", { class: "secs", text: sections.length > 1 ? `§§${sections[0]}–${sections[sections.length - 1]}` : `§${sections[0]}` }) : null,
               statusPill(status), ...gapBadges),
-            el("div", { class: figure ? "lead hasfig" : "lead" },
+            el("div", { class: figs ? "lead hasfig" : "lead" },
               el("div", { class: "txt" },
                 el("p", { class: "phys", html: st.physics }),
                 el("p", { class: "out", html: "<b>Delivers.</b> " + st.delivers })),
-              figure),
+              figs),
             el("div", { class: "meta" },
               el("div", { class: "box" }, el("h4", { text: results.length ? `Paper results (${results.length})` : "Paper results" }),
                 results.length ? resultList : el("span", { class: "muted", text: "Shared definitions; no named result." })),

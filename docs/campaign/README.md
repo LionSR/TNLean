@@ -17,6 +17,7 @@ directory here.
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
 | `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
+| `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them |
 
 The area-law and PEPS campaign in `openai-area-law-peps-proof/` is served at
 `https://sirui-lu.com/TNLean/openai-area-law-peps-proof/` and regenerated hourly by
@@ -54,7 +55,7 @@ markers. Use it to decide whether `gaps.json` needs a new entry.
 | `leanDirs` | Directories of the primary repository whose Lean files are listed on the page |
 | `statementPR` | Optional pull request that states the headline theorems in Lean |
 | `resultNames` | Display names for results whose table row gives none, keyed by source label |
-| `routes` | The proof as a sequence of stages. A route has an `eyebrow`, `heading`, `intro`, the `paper` whose results it shows, and `stages`, each with a `title`, its `issues`, a `physics` paragraph, what it `delivers`, and optionally the `figure` (a key of `figures.js`) drawn beside the text with its `caption` |
+| `routes` | The proof as a sequence of stages. A route has an `eyebrow`, `heading`, `intro`, the `paper` whose results it shows, and `stages`, each with a `title`, its `issues`, a `physics` paragraph, what it `delivers`, and optionally the `figure` (a key of `figures.js`) drawn beside the text with its `caption`, and a tensor-network `diagram` (a path such as `diagrams/NAME.svg`) with its `diagramCaption` |
 | `glossary` | Pairs of term and definition |
 
 A result table is any markdown table in a stream tracker body whose first two
@@ -73,6 +74,21 @@ in `board.css` (`h`, `g`, `k`, `a`, `c` for strokes; `fa`, `fl`, `fs`, `fk`,
 `fm`, `fc` for fills; `t`, `m`, `big`, `on`, `halo` for text) so the figures
 follow the light and dark themes. Curves show shapes, not data; the caption
 says what is schematic.
+
+Tensor-network diagrams are written in [tenkz](https://github.com/LionSR/tenkz),
+the package the blueprint draws its diagrams with, so a tensor, bond or
+physical leg looks the same on the board as in the blueprint. Each
+`diagrams/NAME.tex` holds one picture body. Compile them with
+
+```bash
+python3 scripts/fetch_tenkz.py
+python3 scripts/campaign_board/build_diagrams.py docs/campaign/openai-area-law-peps-proof
+```
+
+which needs `xelatex` (with TikZ, `hobby` and `spath3`) and `pdftocairo`, and
+commit the resulting SVGs; the hourly job only inlines them. tenkz audits
+equations written with `=` only, so an approximate relation is set as two
+pictures with `\approx` between them.
 
 ## `gaps.json`
 

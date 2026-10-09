@@ -7,20 +7,40 @@ Writes OUT_DIR/index.html, a self-contained page whose only external requests
 are Google Fonts, and OUT_DIR/data.json, the snapshot with the campaign's
 configuration and gap summaries merged in.
 
-CAMPAIGN_DIR provides config.json, gaps.json, and optionally intro.html and
-figures.js (the stage figures named in config.json); the page shell,
+CAMPAIGN_DIR provides config.json, gaps.json, and optionally intro.html,
+figures.js (the stage figures named in config.json) and the tensor-network
+diagrams under diagrams/ that stages name, which are inlined as data URIs and
+are compiled by build_diagrams.py; the page shell,
 stylesheet and script are shared by every campaign and live next to this file.
 """
 from __future__ import annotations
 
+import base64
 import html
 import json
 import pathlib
+import re
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WORKFLOW = ".github/workflows/campaign-board.yml"
+
+
+def diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
+    """Inline every stage diagram as a data URI with its natural width in points."""
+    out = {}
+    for route in config["routes"]:
+        for stage in route["stages"]:
+            if "diagram" not in stage:
+                continue
+            svg = (campaign_dir / stage["diagram"]).read_bytes()
+            width = re.search(rb'<svg[^>]*\bwidth="([0-9.]+)', svg)
+            out[stage["diagram"]] = {
+                "src": "data:image/svg+xml;base64," + base64.b64encode(svg).decode("ascii"),
+                "width": float(width.group(1)) if width else None,
+            }
+    return out
 
 
 def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pathlib.Path) -> pathlib.Path:
@@ -30,6 +50,7 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
     primary = next(r for r in config["repos"] if r.get("primary"))
     blob_url = f"https://github.com/{primary['slug']}/blob/main/"
     gaps_rel = gaps_path.resolve().relative_to(ROOT).as_posix()
+    data["diagrams"] = diagrams(campaign_dir, config)
     data.update({
         "config": config,
         "gaps": json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []},

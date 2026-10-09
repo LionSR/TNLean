@@ -274,30 +274,6 @@ window.campaignFigures = (function () {
       text(svg, 160, 112, "a party meets only its parent and siblings: two adjacent scales", "", "middle");
     },
 
-    /* PEPS, stage 5: replacing a pair resource by a short sum of products. */
-    compress(svg) {
-      view(svg, 320, 150);
-      const y = 62;
-      line(svg, 34, y, 112, y, "c thick");
-      for (const x of [34, 112]) { dot(svg, x, y, 9, "fs"); add(svg, "circle", { cx: x, cy: y, r: 9 }, "k"); }
-      text(svg, 34, y + 4, "a", "m t", "middle"); text(svg, 112, y + 4, "b", "m t", "middle");
-      text(svg, 73, y - 16, "rank unbounded", "", "middle");
-      text(svg, 73, y + 32, "pair resource", "t", "middle");
-      text(svg, 150, y + 5, "≈ Σ", "m t big", "middle");
-      for (let k = 0; k < 4; k++) {
-        const yy = 22 + k * 22;
-        add(svg, "circle", { cx: 192, cy: yy, r: 5 }, "k"); add(svg, "circle", { cx: 236, cy: yy, r: 5 }, "k");
-        text(svg, 214, yy + 4, "⊗", "", "middle");
-      }
-      text(svg, 214, 112, "⋮", "", "middle");
-      text(svg, 192, 8, "at *a*", "", "middle");
-      text(svg, 236, 8, "at *b*", "", "middle");
-      line(svg, 256, 17, 256, 115);
-      text(svg, 262, 62, "poly(*L*)", "t");
-      text(svg, 262, 74, "terms");
-      text(svg, 214, 136, "products, no shared bond", "", "middle");
-    },
-
     /* PEPS, stage 6: links between dyadic parties routed along rows and columns. */
     routing(svg) {
       view(svg, 320, 190);

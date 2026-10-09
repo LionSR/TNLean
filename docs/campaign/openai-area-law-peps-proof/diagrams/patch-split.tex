@@ -1,0 +1,14 @@
+% Near a small square, the ground vector is close to a sum over labels
+% (j, l) of an inside vector V tensored with an outside vector W.
+\[
+  \begin{tenkz}[cols=1]
+    \tn[skin=box, ports={60:physical:$\mathrm{out}$, 120:physical:$\mathrm{in}$}]{\Omega}
+  \end{tenkz}
+  \;\approx\;
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+    \tn[at=(1,1), name=v, skin=box, ports={0:virtual, 90:physical:$\mathrm{in}$}]{V}
+    \tn[at=(1,2), name=w, skin=box, ports={180:virtual, 90:physical:$\mathrm{out}$}]{W}
+    \tnbond[name=jl]{v.0}{w.180}
+    \tnmark[form=label, label pos=s]{on jl 0.5}{${(j{,}\ell)}$}
+  \end{tenkz}
+\]
