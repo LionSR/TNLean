@@ -41,7 +41,7 @@ def latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) : IntRect where
     have : 0 < (2 : ℤ) ^ k := by positivity
     omega
 
-/-- The adapter preserves every lattice point, including negative coordinates.
+/-- The rectangle has exactly the dyadic cell’s lattice points, including negative coordinates.
 Source: Lemma 9.4, lines 641–649. -/
 @[simp] theorem toFinset_latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) :
     (latticeDyadicRect k z).toFinset = latticeDyadicCell k z := by
@@ -71,7 +71,9 @@ private theorem cast_supDist (p z : ℤ × ℤ) :
 
 /-- Every sufficiently small native rectangle contained in a permitted dilation
 is safe, with safety derived from template separation. This is the clearance
-step of Lemma 9.4, lines 651–655, and uses no geometric regularity premise. -/
+step of Lemma 9.4, lines 651–655, and uses no geometric regularity premise.
+For separation bounds written as real literals, specify `(T := T) (D₀ := D₀)`
+when applying this theorem or its core and shell consequences. -/
 theorem Template.IsSeparated.isSafe_of_subset_ambientDilation
     {Ctpl : ℝ} {n s₀ D₀ : ℕ} {T : Template Ctpl n s₀}
     {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}

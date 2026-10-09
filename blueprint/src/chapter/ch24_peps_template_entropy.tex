@@ -69,11 +69,42 @@
     The same formula includes $K=0$, when the lower sum is empty.
 \end{proof}
 
+\begin{theorem}[Summation of selected dyadic squares by scale]
+    \label{thm:area_law_capped_sum_by_scale}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_cappedDyadicPartition_by_scale}
+    \leanok
+    \uses{def:area_law_capped_dyadic_partition}
+    Let $S\subseteq\mathbb Z^2$ be finite, let $K\in\mathbb N$, and let
+    $f:\mathbb N\to\mathbb R$ be arbitrary. Then
+    \begin{align}
+        \sum_{(r,z)\in\mathcal P_K(S)} f(r)
+         & =\sum_{k=0}^{K}
+        \#\{(r,z)\in\mathcal P_K(S):r=k\}\,f(k).
+    \end{align}
+    This is the finite summation by scale used in the covering argument of
+    \cite[Lemma~9.4, lines~656--664]{OpenAI2026AreaLaw}.
+    The identity includes $S=\varnothing$ and $K=0$ and imposes no sign
+    condition on $f$.
+\end{theorem}
+\begin{proof}\leanok
+    \leanok
+    \uses{thm:area_law_capped_dyadic_partition}
+    Membership in $\mathcal P_K(S)$ implies $r\le K$. Group its finitely
+    many terms according to $r$. On each group with $r=k$, the summand is
+    the constant $f(k)$, so
+    \begin{align}
+        \sum_{\substack{(r,z)\in\mathcal P_K(S)      \\r=k}}f(k)
+         & =\#\{(r,z)\in\mathcal P_K(S):r=k\}\,f(k).
+    \end{align}
+    Summing over $k=0,\ldots,K$ gives the identity.
+\end{proof}
+
 \section{Safe rectangles in template coverings}
 
 \begin{definition}[Native rectangles of dyadic cells]
     \label{def:area_template_dyadic_rectangle}
     \lean{TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect}
+    \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_lattice_dyadic_square}
     For $k\ge0$ and $z\in\mathbb Z^2$, let $R_{k,z}$ have coordinate intervals
     from $2^kz_i$ to $2^kz_i+2^k-1$, inclusive.
@@ -84,11 +115,12 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.toFinset_latticeDyadicRect,
         TNLean.PEPS.AreaLaw.Geometry.size_latticeDyadicRect,
         TNLean.PEPS.AreaLaw.Geometry.rectRegion_latticeDyadicRect}
+    \leanok
     \uses{def:area_template_dyadic_rectangle}
     The lattice points of $R_{k,z}$ are exactly $C_{k,z}$,
     its size is $2^k$, and its physical region is $A\cap C_{k,z}$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Integer division by the positive integer $2^k$ identifies the closed
     integer interval with the corresponding half-open dyadic interval.
     Each coordinate interval contains exactly $2^k$ sites.
@@ -99,6 +131,7 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_shell}
+    \leanok
     \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,
         thm:area_law_capped_dyadic_partition}
     Let $T$ be separated from the cut, let $D_0\ge1$ be an integer, and let
@@ -108,13 +141,14 @@
     The standing choice $D_0>2R+10$ implies $D_0\ge1$.
     This is the clearance step of~\cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
+    \uses{lem:area_law_template_dyadic_clearance,thm:area_law_capped_dyadic_partition}
     For $x\in Q\subseteq T_j$, choose $p\in T$ with
     $\|p-x\|_\infty\le j$. For every cut endpoint $z$,
-    \[
+    \begin{align}
         4D_0s_0<\|p-z\|_\infty
         \le j+\|x-z\|_\infty.
-    \]
+    \end{align}
     Since $j\le s_0\le D_0s_0$, this gives
     $D_0\operatorname{size}(Q)\le D_0s_0<\|x-z\|_\infty$.
     Selected cells are contained in the partitioned set, and their sizes
@@ -125,19 +159,21 @@
 \begin{theorem}[Weighted covering of the template core]
     \label{thm:area_law_template_weighted_core_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le}
-    \uses{thm:area_law_template_core_selected_count,thm:area_law_weighted_dyadic_sum}
+    \leanok
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     Let $T$ be a template with $C_{\rm tpl}\ge24$, let $e>0$, and choose
     $K\ge0$ with $2^K\le s_0<2^{K+1}$. For the actual capped dyadic
     partition $\mathcal P$ of $T$,
-    \[
+    \begin{align}
         \sum_{Q\in\mathcal P}\operatorname{side}(Q)^{1+e}
         \le \left(18+\frac{4}{2^e-1}\right)n s_0^e.
-    \]
+    \end{align}
     This is the core-covering moment estimate in
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}. It requires neither separation
     from a physical cut nor an entropy hypothesis.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_core_selected_count,thm:area_law_weighted_dyadic_sum,thm:area_law_capped_sum_by_scale}
     Group the selected squares by scale. Their side budgets are $18n$ at
     scale $K$ and $4n$ below it. Apply the finite weighted dyadic-sum
     estimate, factor out $n$, and use $(2^K)^e\le s_0^e$.

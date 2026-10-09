@@ -63,6 +63,7 @@ theorem latticeL1Distance_le_one_of_adj {Λ : Finset (ℤ × ℤ)} {x y : Site �
 `dist_∞`. -/
 def supDist (a b : ℤ × ℤ) : ℕ := max (a.1 - b.1).natAbs (a.2 - b.2).natAbs
 
+/-- The sup-norm distance is bounded by the lattice path distance. -/
 theorem supDist_le_latticeL1Distance (a b : ℤ × ℤ) : supDist a b ≤ latticeL1Distance a b := by
   simp only [supDist, latticeL1Distance]
   omega
@@ -98,6 +99,7 @@ variable (Q : IntRect)
 /-- The lattice points of a rectangle. -/
 def toFinset : Finset (ℤ × ℤ) := Finset.Icc Q.x₀ Q.x₁ ×ˢ Finset.Icc Q.y₀ Q.y₁
 
+/-- Membership in the rectangle is given by its four coordinate inequalities. -/
 theorem mem_toFinset {Q : IntRect} {p : ℤ × ℤ} :
     p ∈ Q.toFinset ↔ Q.x₀ ≤ p.1 ∧ p.1 ≤ Q.x₁ ∧ Q.y₀ ≤ p.2 ∧ p.2 ≤ Q.y₁ := by
   simp [toFinset, and_assoc]
@@ -106,16 +108,19 @@ theorem mem_toFinset {Q : IntRect} {p : ℤ × ℤ} :
 Source: `02-initial.tex`, lines 223–224. -/
 def size : ℕ := max (Q.x₁ + 1 - Q.x₀).toNat (Q.y₁ + 1 - Q.y₀).toNat
 
+/-- A nonempty integer rectangle has size at least one. -/
 theorem one_le_size : 1 ≤ Q.size := by
   have := Q.hx
   simp only [size]
   omega
 
+/-- The number of horizontal sites is bounded by the rectangle size. -/
 theorem width_le_size : Q.x₁ + 1 - Q.x₀ ≤ Q.size := by
   have := Q.hx
   simp only [size]
   omega
 
+/-- The number of vertical sites is bounded by the rectangle size. -/
 theorem height_le_size : Q.y₁ + 1 - Q.y₀ ≤ Q.size := by
   have := Q.hy
   simp only [size]
@@ -131,6 +136,7 @@ def dilate (d : ℕ) : IntRect where
   hx := by have := Q.hx; omega
   hy := by have := Q.hy; omega
 
+/-- Membership in the dilation is given by the expanded coordinate intervals. -/
 theorem mem_dilate {Q : IntRect} {d : ℕ} {p : ℤ × ℤ} :
     p ∈ (Q.dilate d).toFinset ↔
       Q.x₀ - d ≤ p.1 ∧ p.1 ≤ Q.x₁ + d ∧ Q.y₀ - d ≤ p.2 ∧ p.2 ≤ Q.y₁ + d :=
@@ -153,13 +159,16 @@ theorem toFinset_dilate (d : ℕ) : (Q.dilate d).toFinset = ambientDilation Q.to
   · rintro ⟨x, ⟨hx1, hx2, hx3, hx4⟩, ⟨h1, h2⟩, h3, h4⟩
     omega
 
+/-- Dilation by zero leaves the rectangle unchanged. -/
 @[simp] theorem dilate_zero : Q.dilate 0 = Q := by
   cases Q; simp [dilate]
 
+/-- Successive dilations add their radii. -/
 theorem dilate_dilate (d e : ℕ) : (Q.dilate d).dilate e = Q.dilate (d + e) := by
   simp only [dilate, Nat.cast_add, mk.injEq]
   omega
 
+/-- The lattice points of a dilation increase with its radius. -/
 theorem toFinset_dilate_mono {d e : ℕ} (h : d ≤ e) :
     (Q.dilate d).toFinset ⊆ (Q.dilate e).toFinset := by
   intro p hp
@@ -191,10 +200,12 @@ lines 232–233. -/
 def rectRegion {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q : IntRect) : Finset (Site Λ) :=
   A.filter fun x ↦ x.1 ∈ Q.toFinset
 
+/-- The physical rectangle region consists of cut sites lying in the rectangle. -/
 theorem mem_rectRegion {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {Q : IntRect} {x : Site Λ} :
     x ∈ rectRegion A Q ↔ x ∈ A ∧ x.1 ∈ Q.toFinset :=
   Finset.mem_filter
 
+/-- The physical rectangle region increases with the dilation radius. -/
 theorem rectRegion_dilate_mono {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q : IntRect)
     {d e : ℕ} (h : d ≤ e) : rectRegion A (Q.dilate d) ⊆ rectRegion A (Q.dilate e) := by
   intro x hx

@@ -317,3 +317,11 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le
+
+-- The shared scale grouping identity permits arbitrary signed weights.
+run_cmd do
+  let axioms ← Lean.collectAxioms
+    ``TNLean.PEPS.AreaLaw.Geometry.sum_cappedDyadicPartition_by_scale
+  for ax in axioms do
+    unless [``propext, ``Classical.choice, ``Quot.sound].contains ax do
+      throwError "Unexpected grouping axiom {ax}"

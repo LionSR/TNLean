@@ -59,6 +59,7 @@ theorem supportDim_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q) (X :
   exact Nat.pow_le_pow_right hq (card_support_le_diamond (G := domainGraph Λ) Subtype.val
     Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) X.1 R X.2.2)
 
+/-- Every admissible support has positive Hilbert-space dimension when the local dimension is positive. -/
 theorem one_le_supportDim {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q)
     (X : AdmissibleSupport Λ R) : 1 ≤ Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 := by
   rw [Entropy.supportDim, Finset.prod_const]
@@ -133,9 +134,11 @@ noncomputable def bufferCrossConst (R : ℕ) : ℝ :=
 noncomputable def bufferBudgetConst (q R : ℕ) : ℝ :=
   1 + bufferCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2
 
+/-- The coefficient in the contour crossing bound is nonnegative. -/
 theorem bufferCrossConst_nonneg (R : ℕ) : 0 ≤ bufferCrossConst R := by
   unfold bufferCrossConst; positivity
 
+/-- The contour logarithmic budget coefficient is at least one. -/
 theorem one_le_bufferBudgetConst (q R : ℕ) : 1 ≤ bufferBudgetConst q R := by
   unfold bufferBudgetConst
   have := mul_nonneg (bufferCrossConst_nonneg R)

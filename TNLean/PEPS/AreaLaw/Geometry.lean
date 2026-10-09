@@ -15,6 +15,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
+import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartitionByScale
 import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
