@@ -242,8 +242,8 @@ $\mu_R=2^{v_R-1}$. In this setting the counting hypotheses of the previous
 sections are consequences of the lattice geometry, and the constants depend
 only on the parameters named below.
 
-\begin{lemma}[Counting on an induced lattice domain]
-    \label{lem:al_lattice_counts}
+\begin{theorem}[Counting on an induced lattice domain]
+    \label{thm:al_lattice_counts}
     \lean{TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
         TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le,
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
@@ -251,19 +251,17 @@ only on the parameters named below.
     \leanok
     \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
         lem:area_domain_graph_counts}
-    Graph balls and spheres of radius $d$ in $\Lambda$ have at most
-    $2(d+1)^2$ sites. Every support has graph diameter at most $R$
-    and at most $v_R$ sites, at most $\mu_R$ supports contain a given site, at most
-    $\mu_R$ labels share an anchor, and
-    $\sum_{i:\,x\in X_i}\|h_i\|\le\mu_RJ$ for every site $x$ when $J\ge0$. The
-    pairs $(u,v)$ of adjacent sites with $u\in X$ and $v\notin X$ number at most
-    $|\partial_\Lambda X|$.
-\end{lemma}
+    Graph balls of radius $d$ in $\Lambda$ have at most $2(d+1)^2$ sites, at
+    most $\mu_R$ supports contain a given site, at most $\mu_R$ labels share an
+    anchor, and the pairs $(u,v)$ of adjacent sites with $u\in X$ and
+    $v\notin X$ number at most $|\partial_\Lambda X|$. The sphere bound, the
+    diameter and size bounds for supports and the site budget are
+    Lemma~\ref{lem:area_domain_graph_counts}.
+\end{theorem}
 \begin{proof}\leanok
     Adjacent sites are at ambient $\ell^1$ distance one, so a graph ball lies in
-    an ambient lattice ball and the exact diamond count applies. The sphere,
-    diameter, support-size and site-budget bounds are
-    Lemma~\ref{lem:area_domain_graph_counts}. Supports and anchors are counted
+    an ambient lattice ball and the exact diamond count applies. Supports and
+    anchors are counted
     by the interaction budgets of Theorem~\ref{thm:area_diamond_budget}, and
     every label anchored at $x$ has a support containing $x$. The map
     $(u,v)\mapsto\{u,v\}$ is injective on the pairs crossing $X$.
@@ -297,8 +295,8 @@ only on the parameters named below.
     Lemma~\ref{lem:area_domain_graph_counts}.
 \end{proof}
 
-\begin{lemma}[Square roots and local channels on an induced lattice domain]
-    \label{lem:al_lattice_quasilocal_roots}
+\begin{theorem}[Square roots and local channels on an induced lattice domain]
+    \label{thm:al_lattice_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
     \leanok
     \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement}
@@ -311,7 +309,7 @@ only on the parameters named below.
     $\|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|\le Ce^{-cl^\alpha}$ and
     $\|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le Ce^{-cl^\alpha}$
     for every auxiliary system. This is Lemma~4.4 of \cite{OpenAI2026AreaLaw}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Insert the tail $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$ into
     Lemma~\ref{lem:al_quasilocal_roots} and use
@@ -322,7 +320,7 @@ only on the parameters named below.
     \label{thm:al_lattice_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation}
     \leanok
-    \uses{thm:al_truncation, lem:al_lattice_counts, lem:area_domain_graph_counts, def:area_law_ground_entropy}
+    \uses{thm:al_truncation, thm:al_lattice_counts, lem:area_domain_graph_counts, def:area_law_ground_entropy}
     Take $p=1$ in Theorem~\ref{thm:al_lattice_positive_replacement}, so
     $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
     $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
@@ -339,7 +337,7 @@ only on the parameters named below.
     $v_R$ sites per support, site budget $\mu_RJ$ and sphere growth
     $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}, and ball growth
     $2(d+1)^2$ and at most $\mu_R$ labels per anchor from
-    Lemma~\ref{lem:al_lattice_counts}.
+    Theorem~\ref{thm:al_lattice_counts}.
 \end{proof}
 
 \begin{theorem}[Crossing count and cut budget on an induced lattice domain]
@@ -347,7 +345,7 @@ only on the parameters named below.
     \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
         TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
     \leanok
-    \uses{thm:al_crossing_budget, lem:al_lattice_counts}
+    \uses{thm:al_crossing_budget, thm:al_lattice_counts}
     For $q\ge1$ there is $C\ge0$, depending only on $q$ and $R$, such that for
     every finite domain, every choice of anchors, every $S_0$, every $r_0$ and every
     $X\subseteq S_0$, with $b_X=|\partial_\Lambda X|$, every designated support
@@ -366,7 +364,7 @@ only on the parameters named below.
 \end{theorem}
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:al_crossing_budget} with $K_b=2$ and $\mu=\mu_R$,
-    whose hypotheses are supplied by Lemma~\ref{lem:al_lattice_counts}; the
+    whose hypotheses are supplied by Theorem~\ref{thm:al_lattice_counts}; the
     ordered cut edges are counted by $|\partial_\Lambda X|$. The second bound
     inserts $r_0=\lceil C_1(\log n)^2\rceil$ into the third inequality.
 \end{proof}
