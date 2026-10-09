@@ -15,11 +15,11 @@ An involutive one-site unitary acts continuously on local tensors. If this
 action carries one operator symmetry to another, it also carries continuous
 paths satisfying the first symmetry to paths satisfying the second.
 
-**Scope restriction (shared ambient virtual dimension):** The strict-equivalence
-definition connects padded tensors in a common ambient virtual dimension. The
-symmetry correspondence transported here is therefore required at every bond
-dimension, not only the raw one. See
-`docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
+The strict-equivalence definition compares two tensors after unused bond
+directions are adjoined up to a common bond dimension, a resolved local
+convention recorded in `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`. The
+symmetry correspondence transported here is therefore assumed at every bond
+dimension, and the endpoints may have different bond dimensions.
 
 **Scope restriction (no identity ancillas):** The equivalence comparisons
 `strictlyEquivalentUnderSymmetry_iff_ketLeftMul` and
