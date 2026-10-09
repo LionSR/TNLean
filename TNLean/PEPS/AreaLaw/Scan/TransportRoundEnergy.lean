@@ -62,6 +62,17 @@ theorem transportScanRound_splitWeight {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) (i
   rw [TransportData.splitWeight, sum_splitLeaves]
   simp only [TransportData.tree, MeanTree.weight_interpTree_old,
     MeanTree.weight_interpTree_new, hp']
+  apply congrArg₂ (· + ·)
+  · apply Finset.sum_congr rfl
+    intro h _
+    by_cases hi : (⟨h, none⟩ : Σ h, Option (C h)) ∈ D.splitLeaves E i <;>
+      simp only [hi, ↓reduceIte]
+  · apply Finset.sum_congr rfl
+    intro h _
+    apply Finset.sum_congr rfl
+    intro c _
+    by_cases hi : (⟨h, some c⟩ : Σ h, Option (C h)) ∈ D.splitLeaves E i <;>
+      simp only [hi, ↓reduceIte]
 
 /-- The inner energy sum retains each terminal probability and its own old or new
 state, with the literal `η^(1/8)` symbol. -/
