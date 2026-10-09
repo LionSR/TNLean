@@ -186,6 +186,38 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     $x\otimes y$.
 \end{proof}
 
+% Exact auxiliary statement. Native verification is pending.
+% Source: polynomial-PEPS, 04-compression.tex, lines 565--588.
+\begin{theorem}[Grouping a party with no registers]
+    \label{thm:peps_basis_empty_first_party}
+    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_cons_of_owners_mem_tail_heq}
+    \uses{def:peps_party_partition}
+    Let $(q,\mathbf q)$ be an ordered list of distinct parties, and let
+    $a$ be a register list whose owners all belong to $\mathbf q$.
+    Under the canonical identifications $a_q=\varnothing$ and
+    $a_{\bar q}=a$, every $x\in M(a)$ satisfies
+    \begin{align}
+        G_{(q,\mathbf q),a}x=1\otimes G_{\mathbf q,a}x.
+    \end{align}
+    The register spaces are arbitrary, the list $\mathbf q$ may be empty,
+    and the identity also holds for the zero vector. Both grouped
+    memories retain their terminal scalar factor; for an empty tail
+    the right side is $1\otimes x$ with $x\in\C$.
+    This is the empty exterior factor used in the proof of
+    Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_basis_empty_selection,
+        thm:peps_basis_grouping_equality,
+        thm:peps_basis_first_party_grouping}
+    Since the order has no repetitions and all owners lie in the tail,
+    the first party owns no register. The partition identity therefore
+    gives $U_q^a x=1\otimes x$. Apply the first-party grouping identity
+    to this tensor and identify the complementary register list with $a$.
+    The resulting tail isometry is $G_{\mathbf q,a}$.
+\end{proof}
+
 \begin{definition}[Joining two partitioned memories]
     \label{def:peps_basis_partition_join}
     \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso,
