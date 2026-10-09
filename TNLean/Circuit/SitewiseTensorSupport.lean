@@ -53,14 +53,14 @@ theorem reindex_kronecker_mem_supportedOperators
       Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
         (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T))
     ?_ ?_ ?_ ?_ ?_ ?_ ?_ hA hB
-  rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
-  refine Submodule.subset_span
-    ⟨fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i), ?_, ?_⟩
-  intro i hi
-  simp only [hm i (fun h ↦ hi (Or.inl h)), hn i (fun h ↦ hi (Or.inr h)),
-    Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
-  ext x y
-  exact Finset.prod_mul_distrib.symm
+  · rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
+    refine Submodule.subset_span
+      ⟨fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i), ?_, ?_⟩
+    · intro i hi
+      simp only [hm i (fun h ↦ hi (Or.inl h)), hn i (fun h ↦ hi (Or.inr h)),
+        Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
+    · ext x y
+      exact Finset.prod_mul_distrib.symm
   all_goals simp only [Matrix.zero_kronecker, Matrix.kronecker_zero,
     Matrix.reindex_apply, Matrix.submatrix_zero, Pi.zero_apply, Submodule.zero_mem, implies_true]
   all_goals simp only [Matrix.add_kronecker, Matrix.kronecker_add,
