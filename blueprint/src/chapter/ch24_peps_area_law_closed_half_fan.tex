@@ -127,6 +127,7 @@ carrying the same color remain distinct.
 \begin{theorem}[Connected components in the smaller closed square]
     \label{thm:area_law_closed_half_fan_components}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_closedHalf_connectedComponents_equiv}
+    \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
     Retain the arbitrary origin, natural exponent, cell index and binary
     coloring of Definition~\ref{def:area_law_fan_closed_half_piece}.
@@ -153,7 +154,7 @@ carrying the same color remain distinct.
     This is a local ingredient of the initial-star construction in
     \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_fan_closed_half_run_connected,
         thm:area_law_fan_cut_runs_disjoint,
         thm:area_law_fan_run_cover,
