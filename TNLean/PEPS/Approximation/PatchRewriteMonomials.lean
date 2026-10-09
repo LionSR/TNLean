@@ -547,6 +547,100 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
     simp only [Matrix.mul_assoc]
     rw [← mul_kronecker_mul, one_mul, ← mul_kronecker_mul, one_mul, liftBranch_mul]
 
+/-- **Lemma 6.3, the rewrite as a sum of allowed monomials.** Under the four conditions of
+Lemma 6.3, for every `δ > 0` (for instance `δ = L^{-a}`) let `N` be the number of branches, `m`
+the number of additional patches and `k = ⌈(4 N m / δ)²⌉ + 1`. There are a contraction `M_δ` with
+`‖M_δ - M‖ ≤ δ` and an expansion `M_δ = ∑_t c_t M_t` into at most `N k^{2m}` monomials `M_t` from
+the registers of `F_old` to those of `F_new` (one register per site and per tag, each held by its
+owner), each allowed in the sense of Theorem 5.2, using only the specified parties, with at most
+`2m` normalized pair sources and at most `2m` normalized pair effects, and with coefficients
+`|c_t| ≤ 1`. The expansion is read in canonical coordinates.
+
+With `norm_act_refVec_sub_le_of_approx` and `rewrite_error_le_inv_pow_twenty`, the choice
+`δ = L^{-30}` gives the reference-vector error `O(L^{-20})` of the final assertion of Lemma 6.3.
+The count `N k^{2m}` is polynomial in `L` once `N` is; see
+`exists_allowed_monomial_approx_of_card_le` and the scope restriction in the module docstring.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
+proof lines 254–341. -/
+theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+      G.length ≤ Fintype.card R.Branch *
+        truncationRank (Fintype.card R.Branch) ((2 * R.patches.length : ℕ) : ℝ) δ ^
+          (2 * R.patches.length) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.sourceCount ≤ 2 * R.patches.length ∧
+        p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
+      ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
+        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
+          act Ma (R.oldFrame.regIso z) := by
+  obtain ⟨r, e, c, -, he, hc, hcard, h1, h2⟩ := R.exists_contractive_approx hR hδ
+  choose σ M hσ hM₁ hM₂ hM₃ hM₄ hM₅ using fun (β : R.Branch)
+    (ii : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r β v)) =>
+      R.exists_termChain hR β (e β) (he β) ii
+  set a : ℂ := (((1 + δ / 2)⁻¹ : ℝ) : ℂ) with ha
+  have hna : ‖a‖ ≤ 1 := by
+    rw [ha, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by positivity)]
+    exact inv_le_one_of_one_le₀ (by linarith)
+  let κ := Σ β : R.Branch, ((v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) →
+    Fin (r β v))
+  refine ⟨(Finset.univ : Finset κ).toList.map fun t => (a * c t.1 t.2 * σ t.1 t.2, M t.1 t.2),
+    ?_, ?_, _, h1, h2, fun z => ?_⟩
+  · rw [List.length_map, Finset.length_toList, Finset.card_univ, Fintype.card_sigma]
+    calc _ ≤ ∑ _β : R.Branch, truncationRank (Fintype.card R.Branch)
+          ((2 * R.patches.length : ℕ) : ℝ) δ ^ (2 * R.patches.length) :=
+          Finset.sum_le_sum fun β _ => hcard β
+      _ = _ := by rw [Finset.sum_const, Finset.card_univ, smul_eq_mul]
+  · intro p hp
+    obtain ⟨t, -, rfl⟩ := List.mem_map.mp hp
+    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₃ _ _, hM₄ _ _⟩
+    rw [norm_mul, norm_mul]
+    calc _ ≤ (1 : ℝ) * 1 * 1 := mul_le_mul (mul_le_mul hna (hc _ _) (norm_nonneg _) zero_le_one)
+          (hσ _ _) (norm_nonneg _) (by norm_num)
+      _ = 1 := by norm_num
+  · rw [List.map_map, Finset.sum_map_toList, act_smul, act_sum, Finset.smul_sum]
+    simp only [Function.comp_apply]
+    rw [Fintype.sum_sigma]
+    refine Finset.sum_congr rfl fun β _ => ?_
+    rw [liftBranch_sum_smul, act_sum, Finset.smul_sum]
+    refine Finset.sum_congr rfl fun ii _ => ?_
+    rw [act_smul, ← hM₅, smul_smul, smul_smul, mul_assoc]
+
+omit [NeZero q] in
+theorem truncationRank_mono {N N' g δ : ℝ} (hN : 0 ≤ N) (hNN' : N ≤ N') (hg : 0 ≤ g)
+    (hδ : 0 < δ) : truncationRank N g δ ≤ truncationRank N' g δ := by
+  unfold truncationRank
+  gcongr
+
+/-- **Lemma 6.3, the count with the number of cylinder terms as a parameter.** If every affected
+hole and every additional patch has at most `D` cylinder terms, the expansion of
+`exists_allowed_monomial_approx` has at most `D^E k'^{2m}` allowed monomials, with
+`E = r_new + m + r_old` and `k' = ⌈(4 D^E m / δ)²⌉ + 1`. For `δ = L^{-a}`, this count is polynomial
+in `L` when `D ≤ C L^c` (the cylinder-term bound `∑_j d_j ≤ C L^c` of Proposition 4.1) and `m`,
+`r_old`, `r_new` are bounded.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
+proof lines 254–257 and 331–342. -/
+theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ} (hδ : 0 < δ)
+    {D : ℕ} (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ D)
+    (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ D)
+    (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ D) :
+    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+      G.length ≤ D ^ (R.newAffected.length + R.patches.length + R.oldAffected.length) *
+        truncationRank ((D ^ (R.newAffected.length + R.patches.length +
+          R.oldAffected.length) : ℕ) : ℝ) ((2 * R.patches.length : ℕ) : ℝ) δ ^
+          (2 * R.patches.length) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.sourceCount ≤ 2 * R.patches.length ∧
+        p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
+      ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
+        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
+          act Ma (R.oldFrame.regIso z) := by
+  obtain ⟨G, hG, rest⟩ := R.exists_allowed_monomial_approx hR hδ
+  have hN := R.card_branch_le hnew hpatch hold
+  refine ⟨G, hG.trans (Nat.mul_le_mul hN (Nat.pow_le_pow_left ?_ _)), rest⟩
+  exact truncationRank_mono (Nat.cast_nonneg _) (by exact_mod_cast hN) (Nat.cast_nonneg _) hδ
+
 end SmallPatchRewrite
 
 end Terms
