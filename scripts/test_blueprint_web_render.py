@@ -265,7 +265,12 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
     assert not facts["escaped"], (name, width, facts["escaped"])
 
 
-PAGE_LOAD_TIMEOUT_MS = 300_000
+# The dependency-graph page lays out the whole blueprint graph in a browser
+# worker before it sets graphvizReady, and that graph keeps growing as chapters
+# are added. The layout now needs more than the original five minutes, so the
+# per-page deadline is raised to ten to leave headroom for further growth while
+# still catching a page that never settles.
+PAGE_LOAD_TIMEOUT_MS = 600_000
 
 
 def _load_page(page: Page, base_url: str, name: str) -> None:
