@@ -75,6 +75,7 @@ preparation of matrix product states.
 \begin{definition}[Pairing local coordinates]
     \label{def:qc_site_pair_coordinates}
     \lean{QuantumCircuit.sitePairConfigurationEquiv}
+    \leanok
     Let $I$ be a finite set of sites and let $d,e\geq0$ be integers. At each
     site identify $(a,b)\in\{0,\dots,d-1\}\times\{0,\dots,e-1\}$ with
     $ea+b\in\{0,\dots,de-1\}$. Applied at every site, this gives a bijection
@@ -85,6 +86,7 @@ preparation of matrix product states.
 \begin{theorem}[Support of a tensor product on paired sites]
     \label{thm:qc_site_pair_tensor_support}
     \lean{QuantumCircuit.reindex_kronecker_mem_supportedOperators}
+    \leanok
     \uses{def:qc_local_circuit,def:qc_site_pair_coordinates}
     Let $S,T\subseteq I$. If $A$ on $(\C^d)^{\otimes I}$ is supported on
     $S$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T$, then the matrix
@@ -95,6 +97,7 @@ preparation of matrix product states.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     By bilinearity, it suffices to consider
     $A=\bigotimes_i A_i$ and $B=\bigotimes_i B_i$, with $A_i=I$ off $S$
     and $B_i=I$ off $T$. Pairing the local coordinates identifies their
