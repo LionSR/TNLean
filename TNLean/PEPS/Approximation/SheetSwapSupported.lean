@@ -40,7 +40,7 @@ theorem sheetSwapOp_mul_kronecker_of_mem_supportedOperators
   ext ⟨y₁, y₂⟩ ⟨r₁, r₂⟩
   simp only [submatrix_apply, kroneckerMap_apply, id]
   simp only [apply_eq_submatrix_apply A (sheetSplit q R),
-    apply_eq_submatrix_apply B (sheetSplit q R), hA', hB', kroneckerMap_apply,
-    sheetSplit_sheetSwap_fst, sheetSplit_sheetSwap_snd, mul_assoc, mul_left_comm]
+    apply_eq_submatrix_apply B (sheetSplit q R)]
+  done
 
 end TNLean.PEPS.EncodedFrame
