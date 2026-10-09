@@ -179,7 +179,7 @@ theorem norm_birthEffect_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry
   classical
   have h := norm_pairSource_le_one (E := E) (BE := BE) hs
   rw [← l2_opNorm_conjTranspose] at h
-  exact l2_opNorm_mul_le_one h (norm_one_kronecker_le_one hV)
+  exact l2_opNorm_mul_le_one _ _ h (norm_one_kronecker_le_one hV)
 
 omit [DecidableEq BT] in
 /-- **The canonical map is a contraction** (`05-frames.tex`, line 427). -/
@@ -189,7 +189,7 @@ theorem norm_birthOp_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry)
   have h := norm_birthEffect_le_one (E := E) hV hs
   have h' := h
   rw [← l2_opNorm_conjTranspose] at h'
-  exact l2_opNorm_mul_le_one h' h
+  exact l2_opNorm_mul_le_one _ _ h' h
 
 omit [DecidableEq BT] in
 /-- **Reference error of the canonical map** (`05-frames.tex`, lines 427–433). For an isometry
