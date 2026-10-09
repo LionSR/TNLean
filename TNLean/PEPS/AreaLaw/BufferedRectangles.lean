@@ -291,6 +291,21 @@ theorem card_dilate_sdiff_le (Q : IntRect) {d k : ℕ} (hk : k ≤ d) :
     Int.toNat_of_nonneg (by omega), Int.toNat_of_nonneg (by omega)]
   nlinarith
 
+/-- At most `μ_R = 2^{v_R - 1}` admissible supports of range `R` contain a given site, with
+`v_R = 1 + 2 R (R + 1)`. Source: `01-preliminaries.tex`, lines 95–102. -/
+theorem card_admissibleSupport_containing_le (v : Site Λ) :
+    (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card ≤
+      2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
+  classical
+  have h := card_supports_containing_le_diamond (G := domainGraph Λ) Subtype.val
+    Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h)
+    (Finset.univ.image fun X : AdmissibleSupport Λ R ↦ X.1) R (by
+      intro S hS a ha x hx
+      obtain ⟨X, -, rfl⟩ := Finset.mem_image.mp hS
+      exact X.2.2 a ha x hx) v
+  refine le_trans ?_ h
+  rw [Finset.filter_image, Finset.card_image_of_injective _ Subtype.val_injective]
+
 /-- **The crossing count of one contour.** Let `Q` be safe with `R < D₀`, and let
 `Q₀^{+d} ⊆ Q` with `R + 1 ≤ d`. At most `8 (R + 1) μ_R (size Q₀ + d)` admissible supports are
 split by `A ∩ Q₀^{+d}`, where `μ_R = 2^{v_R - 1}` bounds the number of admissible supports
@@ -318,28 +333,14 @@ theorem card_crossingTerms_rectRegion_le (hsafe : IsSafe Λ A D₀ Q) (hR : R < 
     obtain ⟨p, hp⟩ := X.2.2 v hvS w hwS
     exact Q₀.toFinset_dilate_mono (by omega)
       (IntRect.mem_dilate_of_supDist_le hv' (supDist_le_of_walk p hp))
-  -- supports containing a site
-  have hcont : ∀ v : Site Λ,
-      (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card ≤ μ := by
-    intro v
-    have h := card_supports_containing_le_diamond (G := domainGraph Λ) Subtype.val
-      Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h)
-      (Finset.univ.image fun X : AdmissibleSupport Λ R ↦ X.1) R (by
-        intro S hS a ha x hx
-        obtain ⟨X, -, rfl⟩ := Finset.mem_image.mp hS
-        exact X.2.2 a ha x hx) v
-    refine le_trans ?_ h
-    rw [Finset.filter_image]
-    rw [Finset.card_image_of_injective _ Subtype.val_injective]
   -- sites of the layer
   have hsites : sites.card ≤ layer.card := by
     refine Finset.card_le_card_of_injOn Subtype.val (fun v hv ↦ ?_) Subtype.val_injective.injOn
     exact (Finset.mem_filter.mp hv).2
   have hlayer := card_dilate_sdiff_le Q₀ hd
   calc _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ ∑ v ∈ sites, (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card :=
-        Finset.card_biUnion_le
-    _ ≤ sites.card * μ := Finset.sum_le_card_nsmul _ _ _ fun v _ ↦ hcont v
+    _ ≤ sites.card * μ :=
+        Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦ card_admissibleSupport_containing_le v
     _ ≤ 4 * (R + 1) * (Q₀.size + 2 * d) * μ := Nat.mul_le_mul_right _ (hsites.trans hlayer)
     _ ≤ 4 * (R + 1) * (2 * (Q₀.size + d)) * μ := by
         gcongr

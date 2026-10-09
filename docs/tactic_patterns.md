@@ -6050,3 +6050,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+
+### Crossing edge on a walk that leaves a region — candidate (2026-10-09)
+
+- **Pattern:** a walk of length at most `R` in the induced domain starts in a region and
+  ends outside it; take its boundary dart, cut the walk at the first endpoint of the
+  dart, and show that the dart is an edge of the edge boundary within distance `R` of
+  the start.
+- **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
+- **Abstraction:** one lemma producing the boundary edge, its endpoint in the region and
+  the shortened walk; `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean`
+  is the analogue in the extended graph distance and does not give the walk form.
+- **Notes:** three occurrences across three files, so the next use should be preceded by
+  the lemma and the three call sites refactored.
