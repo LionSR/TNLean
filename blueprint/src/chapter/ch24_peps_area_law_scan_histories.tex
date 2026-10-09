@@ -1534,7 +1534,7 @@ The following finite construction follows
     identity extension and of the copy mean gives both sum identities.
 \end{proof}
 
-% Source-only addition, 2026-10-09: declaration and proof verification pending.
+% Physical marginal estimates for one supplied truncated ground vector.
 % This is the explicit-ground-state specialization of Lemma 3.1, not a
 % construction of the truncated ground vector or of ScanData.
 % Source: 02-initial.tex, lines 34--69; 03-quasilocal.tex, lines 417--426;
@@ -1543,6 +1543,7 @@ The following finite construction follows
     \label{thm:al_scan_actual_marginal_tails}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_reducedState_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.surprisalTail_truncated_reducedState_le}
+    \leanok
     \uses{def:al_scan_actual_energy_terms,def:area_law_ground_entropy,
         thm:al_exact_cut_budget}
     Let $q\ge1$, let $H=\sum_i h_i$ be a local Hamiltonian of range $R$
@@ -1584,7 +1585,7 @@ The following finite construction follows
     \end{align}
     The same $e$ and $\widetilde\Omega$ are used for every cut.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_actual_energy_terms,thm:area_law_cut_marginal,
         thm:al_exact_cut_budget}
     The physical truncated terms are positive contractions supported on

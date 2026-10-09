@@ -296,13 +296,11 @@ replica Hamiltonian. The initial physical prevector, typical sectors,
 comparator estimates, the scanner's measure-valued fields and the
 complete scanner data construction remain open.
 
-\section{Truncated physical marginal estimates awaiting verification}
+\section{Truncated physical marginal estimates}
 
-The source-only addition in
+The moment and tail estimates of Lemma~3.1 are established in
 \path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean}
-states the moment and tail estimates of Lemma~3.1 for every actual
-regional state of one supplied truncated ground vector. It remains
-uncompiled and is not marked verified in the blueprint.
+for every actual regional state of one supplied truncated ground vector.
 The terms are the actual positive constraints centered at the original
 unit vector $\Omega$, truncated near the scanner's compact set.
 Writing $\widetilde H=\sum_i\widetilde h_i$, the explicit hypothesis is
@@ -317,8 +315,7 @@ The resulting tail parameter is $2/g$, and the entropy center is the
 entropy of the actual marginal of this same $\widetilde\Omega$ for every cut.
 The exact budget preserves every original label, including repeated
 supports and zero terms; complementary cuts have the same budget, and
-the empty and full cuts have budget one. The source-only budget identities
-also await verification.
+the empty and full cuts have budget one.
 
 This is an explicit-ground-state specialization, not the source proposition
 with its original hypotheses. It neither produces the truncated ground

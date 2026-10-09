@@ -218,7 +218,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     labels.
 \end{proof}
 
-% Source-only additions, 2026-10-09: declaration and proof verification pending.
+% Exact-budget identities preserve the original finite label family.
 % These identities do not assert the lattice-specialized budget producer.
 \begin{theorem}[Exact cut budget and complementary cuts]
     \label{thm:al_exact_cut_budget}
@@ -229,6 +229,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
         TNLean.PEPS.AreaLaw.crossingLabels_univ,
         TNLean.PEPS.AreaLaw.cutBudget_empty,
         TNLean.PEPS.AreaLaw.cutBudget_univ}
+    \leanok
     \uses{thm:al_crossing_budget}
     Let $V$ be the vertex set of a finite graph, let $I$ be a finite label
     set with anchors $a_i\in V$, and let $q,r_0\in\mathbb N$ and
@@ -250,7 +251,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     No containment $X\subseteq S_0$ is required. Repeated designated
     supports and zero terms keep their original labels.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The crossing conditions on each original label agree, and
     $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$. Exchanging the two
     sides of the cut exchanges the two witnesses of crossing. Every
