@@ -33,12 +33,14 @@ on:
       - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
+      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -90,6 +92,7 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -98,6 +101,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -139,12 +143,14 @@ on:
       - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
+      - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
+      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -190,6 +196,7 @@ on:
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
+      - 'scripts/test_tenkz_canonical_pairs.py'
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -198,6 +205,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_seams.py'
       - 'scripts/test_tenkz_peps_regular_reblocking.py'
       - 'scripts/test_tenkz_quantum_double_local_terms.py'
+      - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
       - 'scripts/check_peps_four_cut_blueprint.py'
@@ -296,12 +304,14 @@ jobs:
               - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
+              - 'scripts/test_pr_ci_base_snapshot.py'
               - 'scripts/lake_build_locked.sh'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
+              - 'scripts/test_ci_fixture_overlay.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
             blueprint:
@@ -333,6 +343,7 @@ jobs:
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
+              - 'scripts/test_tenkz_canonical_pairs.py'
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -341,6 +352,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_seams.py'
               - 'scripts/test_tenkz_peps_regular_reblocking.py'
               - 'scripts/test_tenkz_quantum_double_local_terms.py'
+              - 'scripts/test_tenkz_quantum_double_source_construction.py'
               - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
               - 'scripts/check_peps_four_cut_blueprint.py'
@@ -480,6 +492,39 @@ jobs:
             --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
           python3 scripts/ci_compatible_cache.py prune
 
+      # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check finite rectangular dual geometry early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean \
+            +TNLean.PEPS.TorusDualWinding:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          for source in TNLean/PEPS/TorusDualRectangle.lean \
+              TNLean/PEPS/TorusDualRectangleFlux.lean TNLeanTest/TorusDualRectangle.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Check labelled open coefficients early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          : > "$RUNNER_TEMP/collared-open-check.log"
+          for source in TNLeanTest/LabelledOpenCoefficient.lean \
+              TNLean/PEPS/LabelledOpenCoefficient.lean TNLean/PEPS/TorusLabelledOpenCoefficient.lean \
+              TNLean/PEPS/TorusDualCollar.lean TNLean/PEPS/TorusDualOpenDeformation.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/collared-open-check.log"
+          done
+          python3 scripts/check_collared_open_axioms.py "$RUNNER_TEMP/collared-open-check.log"
+
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
       # Export only the explicit QIC allowlist and hashes, never the whole workspace.
@@ -541,6 +586,12 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build capped dyadic partition early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build rectangular local-window preparation targets early
         run: |
           set -eo pipefail
@@ -549,6 +600,20 @@ jobs:
             +TNLean.MPS.Preparation.InhomogeneousChoiResidual:olean \
             +TNLean.MPS.Preparation.WindowMixingPreparation:olean \
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build template layers early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build template mixed-square estimates early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
@@ -562,6 +627,48 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test capped dyadic partition strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CappedDyadicPartition.lean
+
+      - name: Test template mixed-square counts strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateMixedSquares.lean
+
+      - name: Test exact nearest-neighbor crossing budget strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingBudget.lean
+
+      - name: Test crossing-budget standard axioms strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingBudgetAxioms.lean
+
+      - name: Test concrete one-edge crossing regression strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingOneEdge.lean
+
+      - name: Test template clearance strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateClearance.lean
 
       - name: Test concrete hole encoder and standard axioms strictly
         run: |
@@ -580,6 +687,38 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
 
+      - name: Test partial-row entropy strictly
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateEntropy.lean
+
+      - name: Test square-grid vector, regional and approximation transport
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/SquareGridRegionalStates.lean
+
+      - name: Test lattice vertex-boundary conventions strictly
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/AreaLawVertexBoundaries.lean
+
+      - name: Test physical template boundaries strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateCutBoundary.lean
+
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -594,6 +733,20 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/NestedCylinderCounterexamples.lean
 
+      - name: Check conditional two-family entropy integration strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ConditionalTwoFamilyEntropy.lean
+
+      - name: Check two-family entropy integration strictly
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TwoFamilyEntropy.lean
+
       - name: Test actual regularized patch minimum regressions strictly
         run: |
           for example in RegularizedPatchMinimum RegularizedPatchNoncommuting; do
@@ -603,12 +756,17 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
-      - name: Check QICLean conjugator import compatibility strictly
-        run: >
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/QICConjugatorCompatibility.lean
+      - name: Check QICLean import compatibility strictly
+        run: |
+          set -e
+          lake --fail-fast build QICLean.Probability.PoissonWordSpatialGrowth
+          for file in TNLeanTest/QICConjugatorCompatibility.lean \
+              TNLeanTest/QICPoissonCompatibility.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test uniform angular reset width and standard axioms strictly
         run: |
@@ -625,6 +783,54 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/RectangularWindowMixing.lean
+
+      - name: Test template rows strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateRows.lean
+
+      - name: Test template boundary strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateBoundary.lean
+
+      - name: Test actual scan histories strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanHistories.lean
+
+      - name: Test jointly satisfiable physical scan sampling
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanPhysicalSampling.lean
+
+      - name: Test actual offset counts and history marginals
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualOffsetDilution.lean
+
+      - name: Audit actual designated dilution axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanDilutionAxioms.lean
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
@@ -715,6 +921,14 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/OperatorClosurePowerSum.lean
 
+      - name: Test canonical fixed-point pairs
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/CanonicalFixedPoint.lean
+
       - name: Test structure coefficients, cocycles, and boundary examples
         timeout-minutes: 5
         run: |
@@ -725,6 +939,17 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
+
+      - name: Build continuous physical string-order targets
+        run: lake build TNLean.MPS.Symmetry.ContinuousStringOrder
+
+      - name: Test continuous physical string order strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ContinuousStringOrder.lean
 
       - name: Test example physical states and operators
         timeout-minutes: 5
@@ -757,9 +982,11 @@ jobs:
           test_root="$(mktemp -d)"
           trap 'rm -rf "$test_root"' EXIT
           mkdir -p "$test_root/TNLeanTest"
-          export LEAN_PATH="$test_root${LEAN_PATH:+:$LEAN_PATH}"
-          for example in TorusDualFluxString TorusDualFluxParent QuantumDoublePhysicalTerms; do
-            lake env lean \
+          for example in TorusDualFluxString TorusDualFluxParent TorusDualRectangle QuantumDoublePhysicalTerms; do
+            # Lake prepends package paths. Put the overlay first so an existing
+            # TNLeanTest directory cannot shadow the fresh fixtures.
+            lake env bash -c 'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               -o "$test_root/TNLeanTest/$example.olean" \
@@ -791,6 +1018,18 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test exact square-grid PEPS representations and finite exceptions
+        timeout-minutes: 3
+        run: |
+          set -e
+          for example in ExactTreeRepresentation SquareLatticeConnectivity \
+              ExactTreeRepresentationAxioms ExactSmallSizeApproximation ExactFiniteException; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/PEPS/Approximation/$example.lean"
+          done
+
       - name: Test algebraic preparation import boundary
         timeout-minutes: 2
         run: >
@@ -799,7 +1038,7 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
 
-      - name: Test area-law graph interaction foundations
+      - name: Test area-law foundations and physical oscillations
         timeout-minutes: 2
         run: |
           set -e
@@ -810,23 +1049,41 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
+          for file in scripts/spectator_site_expectation_regression.lean \
+              TNLeanTest/SiteOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannels.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalRootChannelsAxioms.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelShellOscillation.lean \
+              TNLeanTest/Circuit/LiebRobinson/GraphBallStabilization.lean \
+              TNLeanTest/SpectatorOscillationSupport.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LocalChannelOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ExponentialChannelShells.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ComponentChannelOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelOscillation.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelEventKernel.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Check changed Lean compilation times
         id: compilation-time
         if: github.event_name == 'pull_request'
         env:
-          BASE_REF_NAME: ${{ github.event.pull_request.base.ref }}
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
         run: |
           set -o pipefail
           timing_status=0
           archive_build_failed=false
-          git fetch --no-tags origin \
-            "+refs/heads/$BASE_REF_NAME:refs/remotes/origin/$BASE_REF_NAME" \
-            || timing_status=$?
+          git fetch --no-tags origin "$BASE_REF" || timing_status=$?
+          if [ "$timing_status" -eq 0 ]; then
+            git merge-base --is-ancestor "$BASE_REF" HEAD || timing_status=$?
+          fi
           if [ "$timing_status" -eq 0 ]; then
             git -c core.quotePath=false diff \
-              --merge-base --name-only --diff-filter=AMR "$BASE_REF" -- '*.lean' \
+              --name-only --diff-filter=AMR "$BASE_REF" HEAD -- '*.lean' \
               > "$RUNNER_TEMP/changed-lean-files.txt" \
               || timing_status=$?
           fi
@@ -929,6 +1186,8 @@ jobs:
         needs.changes.outputs.workflow == 'true'
       )
     runs-on: ubuntu-latest
+    env:
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
     permissions:
       contents: read
     steps:
@@ -957,7 +1216,11 @@ jobs:
         run: |
           python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
           python3 scripts/test_ci_compatible_cache.py
+          python3 scripts/test_pr_ci_base_snapshot.py
           python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
+
+      - name: Test CI fixture import overlay
+        run: python3 scripts/test_ci_fixture_overlay.py
 
       - name: Check local cache-seeding shell syntax
         run: |
@@ -981,15 +1244,15 @@ jobs:
       - name: Fetch pull-request base for the debt ratchet
         if: github.event_name == 'pull_request'
         run: |
-          git fetch --no-tags origin \
-            "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
+          git fetch --no-tags origin "$BASE_REF"
+          git merge-base --is-ancestor "$BASE_REF" HEAD
 
       - name: Reject new numbered-sequel modules (pull request)
         if: github.event_name == 'pull_request'
         run: >
           python3 scripts/check_numbered_lean_files.py
           --root .
-          --base-ref "origin/${{ github.event.pull_request.base.ref }}"
+          --base-ref "$BASE_REF"
 
       - name: Reject new numbered-sequel modules (push)
         if: github.event_name == 'push'
@@ -1045,6 +1308,8 @@ jobs:
     if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.result == 'success')"
     runs-on: ubuntu-latest
     env:
+      # This SHA belongs to the checked-out PR merge, even if its base branch advances.
+      BASE_REF: ${{ github.event.pull_request.base.sha }}
       # TeX-facing steps run only when blueprint sources changed (always on
       # push/dispatch); the Lean-blueprint sync checks run on Lean-only
       # changes too.
@@ -1056,6 +1321,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Fetch immutable PR base for blueprint comparisons
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin "$BASE_REF"
+          git merge-base --is-ancestor "$BASE_REF" HEAD
 
       - name: Test tenkz render-cache pruning
         run: python3 scripts/test_prune_tenkz_render_cache.py
@@ -1080,38 +1351,42 @@ jobs:
 
       - name: Check reader-facing prose patterns
         if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
           python3 scripts/check_reader_facing_prose.py --root . --diff-base "$BASE_REF" --ci
 
       - name: Detect changed Lean files
         id: changed-lean-files
         if: github.event_name == 'pull_request'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
-          git fetch --no-tags origin "+refs/heads/${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}"
-          changed_lean_paths="$(git diff --merge-base --name-only "$BASE_REF" -- \
+          changed_lean_paths="$(git diff --name-only "$BASE_REF" HEAD -- \
             TNLean.lean 'TNLean/**/*.lean' lakefile.* lean-toolchain lake-manifest.json)"
           if [ -n "$changed_lean_paths" ]; then
             has_changed_lean=true
           else
             has_changed_lean=false
+            # Inspect both sides of renames, including removed declaration markers.
+            # Capture the diff before iterating so a Git error fails the step.
+            changed_tex_paths="$(git diff --no-renames --name-only "$BASE_REF" HEAD -- \
+              'blueprint/src/**/*.tex' 'blueprint/src/*.tex')"
             while IFS= read -r tex_file; do
+              [ -n "$tex_file" ] || continue
               if [ -f "$tex_file" ] && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' "$tex_file"; then
                 has_changed_lean=true
                 break
               fi
-              base_tex="$(git show "$BASE_REF:$tex_file" 2>/dev/null || true)"
+              # Added paths have no base blob; failures reading existing blobs
+              # must not silently remove declaration coverage.
+              base_tex_path="$(git ls-tree --name-only "$BASE_REF" -- "$tex_file")"
+              base_tex=""
+              if [ -n "$base_tex_path" ]; then
+                base_tex="$(git show "$BASE_REF:$tex_file")"
+              fi
               if [ -n "$base_tex" ] \
                   && grep -Eq '\\lean\{|\\uses\{|\\leanok|\\notready' <<< "$base_tex"; then
                 has_changed_lean=true
                 break
               fi
-            done < <(git diff --merge-base --name-only "$BASE_REF" -- \
-              'blueprint/src/**/*.tex' 'blueprint/src/*.tex')
+            done <<< "$changed_tex_paths"
           fi
           echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
 
@@ -1164,9 +1439,14 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_pic.py
 
+      - name: Test finite rectangular dual geometry
+        run: python3 scripts/test_tenkz_dual_rectangle.py
+
       - name: Test quantum-double local-term diagrams and nonabelian formulas
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_quantum_double_local_terms.py
+        run: |
+          python3 scripts/test_tenkz_quantum_double_local_terms.py
+          python3 scripts/test_tenkz_quantum_double_source_construction.py
 
       - name: Test source-linked PEPS torus geometry
         if: env.TEX_CHANGED == 'true'
@@ -1274,6 +1554,10 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/prune_tenkz_render_cache.py
 
+      - name: Test canonical fixed-point diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_canonical_pairs.py
+
       - name: Test tenkz blueprint sweep unit selection
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_blueprint_sweep.py
@@ -1331,17 +1615,15 @@ jobs:
         if: steps.lean-decls.outcome == 'success'
         run: python3 scripts/blueprint_lean_sync.py --root . --ci --report-duplicate-tags
 
-      - name: Fetch PR base ref for diff
+      - name: Verify immutable PR base for diff
         id: fetch-base-ref
         if: github.event_name == 'pull_request' && steps.changed-lean-files.outputs.has_changed_lean == 'true'
-        env:
-          BASE_REF: ${{ github.event.pull_request.base.ref }}
-        run: git fetch --no-tags origin "$BASE_REF"
+        run: |
+          git cat-file -e "$BASE_REF^{commit}"
+          git merge-base --is-ancestor "$BASE_REF" HEAD
 
       - name: Error on changed Lean declarations missing blueprint entries
         if: github.event_name == 'pull_request' && steps.changed-lean-files.outputs.has_changed_lean == 'true'
-        env:
-          BASE_REF: origin/${{ github.event.pull_request.base.ref }}
         run: |
           python3 - <<'PY'
           import os
@@ -1353,10 +1635,10 @@ jobs:
               [
                   "git",
                   "diff",
-                  "--merge-base",
                   "--name-only",
                   "--diff-filter=AMR",
                   base_ref,
+                  "HEAD",
                   "--",
                   "TNLean.lean",
                   "TNLean/**/*.lean",

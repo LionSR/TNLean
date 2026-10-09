@@ -1,0 +1,41 @@
+\section{Entropy cost of a partial depth row}
+
+\begin{theorem}[Regional increment bound]
+    \label{thm:area_partial_row_increment}
+    \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\Omega$ be a unit vector on a finite lattice domain with local dimension
+    $q$. For disjoint regions $R,B$, one has
+    \begin{align}
+        |S_\Omega(R\cup B)-S_\Omega(R)| & \le S_\Omega(B).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Subadditivity gives the upper increment bound. Applying it to $(R\cup B)^c$ and $B$, then using purity,
+    gives $S_\Omega(R)\le S_\Omega(R\cup B)+S_\Omega(B)$.
+\end{proof}
+
+\begin{theorem}[Partial template row]
+    \label{thm:area_template_partial_row}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le}
+    \leanok
+    \uses{def:area_law_ground_entropy,def:area_law_template}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, let $1\le j\le s_0$,
+    and let $Y\subseteq T_j\setminus T_{j-1}$. For a unit vector $\Omega$,
+    local dimension $q\ge1$, and any physical region $A$, one has
+    \begin{align}
+        \left|S_\Omega\bigl(A\cap((T_{j-1}\setminus T)\cup Y)\bigr)
+        -S_\Omega\bigl(A\cap(T_{j-1}\setminus T)\bigr)\right|
+        \le n\log q.
+    \end{align}
+    This is the partial-row entropy step in the proof of
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_partial_row_increment,thm:area_law_entropy_dimension,thm:area_law_template_depth_layers}
+    Set $R=A\cap(T_{j-1}\setminus T)$ and $B=A\cap Y$.
+    These regions are disjoint and $|B|\le |Y|\le n$.
+    The regional increment bound and $S_\Omega(B)\le|B|\log q$
+    (Theorem~\ref{thm:area_law_entropy_dimension}) give the claim since $\log q\ge0$.
+\end{proof}

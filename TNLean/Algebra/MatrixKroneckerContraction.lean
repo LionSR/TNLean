@@ -51,8 +51,9 @@ variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n'] [
   [DecidableEq n] [DecidableEq m'] [DecidableEq n']
 
 omit [DecidableEq m'] in
-/-- `‖1 ⊗ B‖ ≤ ‖B‖`. -/
-theorem l2_opNorm_one_kronecker_le (B : Matrix m' n ℂ) :
+/-- `‖1 ⊗ B‖ ≤ ‖B‖` for a rectangular matrix `B`; the square case is QICLean's
+`Matrix.l2_opNorm_one_kronecker_le`. -/
+theorem l2_opNorm_one_kronecker_rect_le (B : Matrix m' n ℂ) :
     ‖(1 : Matrix m m ℂ) ⊗ₖ B‖ ≤ ‖B‖ := by
   have h : (1 : Matrix m m ℂ) ⊗ₖ B =
       reindex (Equiv.prodComm m' m) (Equiv.prodComm n m) (B ⊗ₖ (1 : Matrix m m ℂ)) := by
@@ -70,7 +71,7 @@ theorem l2_opNorm_kronecker_le (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) :
     rw [← mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
   rw [h]
   exact (l2_opNorm_mul _ _).trans (mul_le_mul (l2_opNorm_kronecker_one_le A)
-    (l2_opNorm_one_kronecker_le B) (norm_nonneg _) (norm_nonneg _))
+    (l2_opNorm_one_kronecker_rect_le B) (norm_nonneg _) (norm_nonneg _))
 
 omit [DecidableEq m'] [DecidableEq n'] in
 /-- The Kronecker product of two contractions is a contraction. -/

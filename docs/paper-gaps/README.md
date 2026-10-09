@@ -1144,3 +1144,11 @@ is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
 Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
 construction of that package from the scan geometry and the transported states
 remains open.
+
+### Two-dimensional area law: nondegenerate template pieces
+
+[arealaw2d_nondegenerate_templates.tex](arealaw2d_nondegenerate_templates.tex)
+records that the closed convex rectangles and triangles of Definition 9.3 of
+the September 24, 2026 two-dimensional area-law manuscript are read in the
+ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
+orthogonal rectangle sides, as a convention built into the permitted polygons.

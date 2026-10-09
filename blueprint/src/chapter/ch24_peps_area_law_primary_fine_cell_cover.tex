@@ -1,0 +1,52 @@
+\section{The closed fine-cell cover of a primary region}
+\label{sec:area_law_primary_fine_cell_cover}
+
+The primary regions in \cite[Section~11]{OpenAI2026AreaLaw} have an exact
+decomposition into whole closed non-belt fine cells. One primary identifier
+is retained even when its region is disconnected.
+
+% Source: 10-geometry.tex, prop:two-families, lines 212--218 and 299--323,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is a local decomposition, not the full two-family proposition.
+
+\begin{theorem}[Primary region as a finite union of closed fine cells]
+    \label{thm:area_law_primary_fine_cell_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_nonbeltCell_closure}
+    \leanok
+    \uses{def:area_law_primary_regions,def:area_law_belt_cells,
+        def:area_law_nonbelt_pitch_index}
+    Fix an arbitrary common origin, finite endpoint set and nonnegative
+    integer neighborhood width. Let $k,\ell,p$ be natural exponents with
+    $\ell\le k$ and $\ell\le p$, and put $m=2^{p-\ell}$. Choose canonical
+    residues $0\le a,b<m$. Denote the actual fine-layer index set by
+    $F_{k,\ell}$ and its belt subset by $\mathcal B$.
+    For each signed pitch index $J\in\mathbb Z^2$, the primary birth region
+    satisfies
+    \begin{align}
+        \overline{D_k\cap U_J}
+        =\bigcup_{\substack{z\in F_{k,\ell}\setminus\mathcal B \\j(z)=J}}
+        \overline{Q_\ell(z)}.
+    \end{align}
+    The equality includes empty layers, non-retained pitch indices,
+    disconnected regions and the case $p=\ell$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_nonbelt_primary_containment,thm:area_law_fine_layer_count}
+    Each closed non-belt fine cell with shifted pitch index $J$ lies in
+    the primary birth region, giving one inclusion. For the other,
+    choose the actual half-open fine cell containing a point of
+    $D_k\cap U_J$. In either coordinate, let $z$ be its integer index
+    and $J$ the pitch index, and put $r=z-a-mJ$ for the corresponding
+    residue shift $a$. The strict pitch inequalities and the half-open
+    cell inequalities imply $1\le r<m$. Euclidean division therefore
+    gives $\lfloor(z-a)/m\rfloor=J$, and the residue is different from the belt residue.
+    Doing this in both coordinates places the chosen cell in the indicated
+    finite union. That union is closed, so it also contains
+    $\overline{D_k\cap U_J}$. If $p=\ell$, the inequalities $1\le r<m$
+    have no solution and both sides are empty.
+\end{proof}
+
+The equality supplies actual fine-cell witnesses for later interface
+arguments. A disconnected primary may have several isolated contacts with
+another region; two arbitrary common points do not by themselves specify
+a nondegenerate interface segment.

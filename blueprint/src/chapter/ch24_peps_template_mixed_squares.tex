@@ -1,0 +1,157 @@
+\subsection{Mixed-square counts for template shells}
+
+% This is the mixed-square prerequisite, not the complete entropy lemma.
+\begin{theorem}[Mixed squares of finite unions and differences]
+    \label{thm:area_law_mixed_dyadic_boolean}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_bounds,
+        TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_empty,
+        TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_biUnion_subset,
+        TNLean.PEPS.AreaLaw.Geometry.card_mixedDyadicIndices_biUnion_le,
+        TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_sdiff_subset,
+        TNLean.PEPS.AreaLaw.Geometry.card_mixedDyadicIndices_sdiff_le}
+    \leanok
+    \uses{def:area_law_lattice_dyadic_square,def:area_law_mixed_dyadic_square}
+    Put $u=2^k$. The integer sites of $C_{k,z}$ satisfy
+    $uz_i\le x_i<uz_i+u$ in each coordinate. For arbitrary finite lattice
+    sets and finite unions,
+    \begin{align}
+        M_k(\varnothing)             & =\varnothing,                \\
+        M_k\Bigl(\bigcup_a S_a\Bigr) & \subseteq\bigcup_a M_k(S_a), \\
+        M_k(S\setminus U)            & \subseteq M_k(S)\cup M_k(U).
+    \end{align}
+    In particular, the corresponding mixed-square counts are subadditive.
+\end{theorem}
+\begin{proof}\leanok
+    An inside site of a union belongs to one constituent, whereas an outside
+    site lies outside every constituent. For a difference, the inside site
+    lies in $S$ and outside $U$. An outside site either lies outside $S$ or
+    belongs to $U$. The same two sites therefore witness mixedness for one
+    of the defining sets.
+\end{proof}
+
+\begin{theorem}[Row displacement under integer dilation]
+    \label{thm:area_law_template_dilated_row_displacement}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_row_within,
+        TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_in_row_within}
+    \leanok
+    For an actual sampled template piece $S_a=P_a\cap\Z^2$, let
+    $(x,y)\in(S_a)_j$. If row $z$ is occupied and $|z-y|\le d$, there is
+    $(w,z)\in(S_a)_j$ with $|w-x|\le d$. The same assertion holds for
+    the undilated sample.
+\end{theorem}
+\begin{proof}\leanok
+    The four pairs of integer supporting inequalities describe the sampled
+    rows. Their slopes belong to $\{-1,0,1\}$, so clamping $x$ into the
+    occupied target row changes it by at most $d$. For the dilated piece,
+    first clamp the original source row into the target window of radius
+    $j$. Consecutiveness of occupied source rows keeps this row occupied.
+    Apply the preceding displacement estimate, then clamp the horizontal
+    coordinate into the resulting integer interval of radius $j$.
+\end{proof}
+
+\begin{theorem}[Mixed squares of one dilated piece]
+    \label{thm:area_law_template_piece_mixed_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_sample_dilation_le}
+    \leanok
+    \uses{def:area_law_mixed_dyadic_square,thm:area_law_template_dilated_row_displacement}
+    For every actual sampled template piece $S_a$ of diameter at most $s_0$,
+    every integer $j\ge0$ and $u=2^k$,
+    \begin{align}
+        u|M_k((S_a)_j)|\le24(s_0+j+u).
+    \end{align}
+    Empty samples and thin polygons are included. This gives the estimate
+    in the proof of \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_dilated_row_displacement}
+    In an interior block of $u$ rows, every row is occupied. Moving an
+    inside site and the two endpoints of a reference row by at most $u$
+    shows that a mixed square has column index within two of an endpoint's
+    column index. Thus at most ten columns occur in each interior block.
+    For the first and last occupied blocks, count all columns meeting the
+    diameter enclosure. If $N_x,N_y$ count the enclosure's column and row
+    blocks, respectively, then
+    \begin{align}
+        |M_k((S_a)_j)| & \le2N_x+10N_y, \\
+        uN_x,\ uN_y    & \le2s_0+2j+2u.
+    \end{align}
+    Combining these inequalities gives the stated bound. The empty sample
+    has no mixed squares.
+\end{proof}
+
+\begin{theorem}[Mixed squares of a template and its shell]
+    \label{thm:area_law_template_shell_mixed_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_pieceCount_le,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_le,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_le,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_shell_le}
+    \leanok
+    \uses{thm:area_law_template_piece_mixed_count,thm:area_law_mixed_dyadic_boolean}
+    Let $T$ be an actual template with $N_0$ pieces. For every $j\ge0$,
+    \begin{align}
+        u|M_k(T_j)|\le24N_0(s_0+j+u).
+    \end{align}
+    If $C_{\rm tpl}\ge24$ and $0\le j\le s_0$, then
+    \begin{align}
+        u|M_k(T)|              & \le n+24N_0u, \\
+        u|M_k(T_j)|            & \le2n+24N_0u, \\
+        u|M_k(T_j\setminus T)| & \le3n+48N_0u.
+    \end{align}
+    No disjointness or connectedness of the pieces is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_piece_mixed_count,thm:area_law_mixed_dyadic_boolean}
+    Integer dilation commutes with the actual finite union of sampled
+    pieces. Sum the piece estimates and apply
+    $24N_0(s_0+1)\le n$. The difference bound is the sum of the core and
+    dilated-template bounds.
+\end{proof}
+
+\begin{theorem}[Selected shell squares below the cap]
+    \label{thm:area_law_template_shell_selected_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_below_cap_le}
+    \leanok
+    \uses{thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
+    Suppose $C_{\rm tpl}\ge24$, $0\le j\le s_0$, $k<K$ and $u=2^k\le s_0$.
+    The number $N_k$ of selected squares of side $u$ in the capped partition
+    of $T_j\setminus T$ satisfies $uN_k\le14n$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
+    Each selected square has a mixed parent, and each parent has four
+    children. Hence $uN_k\le2(2u)|M_{k+1}(T_j\setminus T)|$.
+    The mixed-square estimate and $24N_0u\le n$ give
+    $uN_k\le2(3n+96N_0u)\le14n$.
+\end{proof}
+
+\begin{theorem}[Selected core squares at and below the cap]
+    \label{thm:area_law_template_core_selected_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_at_cap_le,
+        TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_below_cap_le}
+    \leanok
+    \uses{thm:area_law_template_area,thm:area_law_capped_dyadic_partition,
+        thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, and suppose
+    $2^K\le s_0<2^{K+1}$. Write $N_k$ for the number of selected squares
+    of side $2^k$ in the capped partition of $T$. Then
+    \begin{align}
+        2^K N_K & \le18n,             \\
+        2^k N_k & \le4n \qquad (k<K).
+    \end{align}
+    This proves the geometric core-covering counts in the proof of
+    Lemma~9.4. No separation from a cut is needed for these counts.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_area,thm:area_law_capped_dyadic_partition,
+        thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
+    The cap squares are disjoint, so
+    $4^K N_K\le |T|\le9ns_0\le18n2^K$.
+    Below the cap, every selected square has a mixed parent and each
+    parent has four children. Since $2^{k+1}\le2^K\le s_0$,
+    \begin{align}
+        2^k N_k
+         & \le2\bigl(2^{k+1}|M_{k+1}(T)|\bigr)   \\
+         & \le2\bigl(n+24N_0 2^{k+1}\bigr)\le4n,
+    \end{align}
+    where $24N_0s_0\le n$ follows from the template scale inequality.
+\end{proof}

@@ -1,0 +1,109 @@
+\section{Distances between dyadic layers}
+\label{sec:area_law_layer_distance}
+
+Retain the cells, neighborhoods and layers of
+Definition~\ref{def:area_law_dyadic_layers}. The origin $o\in\mathbb R^2$ is
+arbitrary, $Z\subset\mathbb Z^2$ is finite, and $C_0\ge0$ is an integer.
+All scale indices are nonnegative integers. Distances in the plane are taken
+in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
+
+\begin{theorem}[Distances between closed cells]
+    \label{thm:area_law_dyadic_cell_distance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_le,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicCell_dist_lower}
+    \leanok
+    \uses{def:area_law_dyadic_cells}
+    Let $u,v\in\mathbb Z^2$, $x\in\overline{C_{k,u}}$, and
+    $y\in\overline{C_{k,v}}$. If $|u_i-v_i|\le C_0$ for both coordinates
+    $i\in\{1,2\}$, then
+    \begin{align}
+        d_\infty(x,y) & \le (C_0+1)2^k.
+    \end{align}
+    If $|u_i-v_i|>C_0$ in at least one coordinate, then
+    \begin{align}
+        C_0 2^k & \le d_\infty(x,y).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures}
+    Each coordinate of a closed cell lies in its closed interval of length
+    $2^k$. Indices differing by at most $C_0$ therefore give coordinate
+    distances at most $(C_0+1)2^k$. If two integer indices differ by more
+    than $C_0$, they differ by at least $C_0+1$; the corresponding closed
+    intervals are separated by at least $C_0 2^k$. Taking the maximum of
+    the two coordinate distances proves both bounds.
+\end{proof}
+
+% Source: geometry:layer-distance in Section 11.
+\begin{theorem}[Distance from a layer to the endpoints]
+    \label{thm:area_law_dyadic_layer_distance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_lower,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_exists_dist_le,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    For every $x\in\overline{D_k}$ and every $z\in Z$,
+    \begin{align}
+        C_0 2^k & \le d_\infty(x,z).
+    \end{align}
+    For every $x\in\overline{D_k}$ there is a point $z_*\in Z$ such that
+    \begin{align}
+        d_\infty(x,z_*) & \le 2(C_0+1)2^k.
+    \end{align}
+    In particular, the existence of such an $x$ implies $Z\ne\varnothing$.
+    Writing $d_\infty(x,Z)=\inf_{z\in Z}d_\infty(x,z)$, one obtains
+    \begin{align}
+        C_0 2^k & \le d_\infty(x,Z) \le 2(C_0+1)2^k.
+    \end{align}
+    This is the layer-distance estimate in
+    \cite[Section~11]{OpenAI2026AreaLaw}. Empty layers are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures,thm:area_law_dyadic_indices,
+        thm:area_law_dyadic_cell_distance}
+    The closure of the layer is a finite union of closed scale-$k$ cells.
+    A layer index lies outside $P_k$, so it differs from every occupied
+    index in at least one coordinate by more than $C_0$. Applying the
+    closed-cell lower bound to the cell containing $z$ proves the first
+    inequality.
+
+    The inclusion $D_k\subseteq N_{k+1}$ persists after taking closures.
+    A closed cell in $N_{k+1}$ has an index within $C_0$ of an occupied
+    index. Choose a point $z_*$ of $Z$ in the latter cell and apply the
+    closed-cell upper bound at scale $k+1$. Its side length is $2^{k+1}$,
+    giving the second inequality. The infimum is bounded below by the
+    first inequality and above by the distance to $z_*$.
+\end{proof}
+
+% Source: geometry:nonadjacent in Section 11.
+\begin{theorem}[Separation of nonadjacent layers]
+    \label{thm:area_law_dyadic_nonadjacent}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_separation,
+        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    For every pair of scales $k,h$, every $x\in\overline{D_k}$, and every
+    $y\in\overline{D_h}$,
+    \begin{align}
+        C_0 2^h-2(C_0+1)2^k & \le d_\infty(x,y).
+    \end{align}
+    If $h\ge k+2$, then
+    \begin{align}
+        \frac{C_0-1}{2}2^h & \le d_\infty(x,y).
+    \end{align}
+    This is the nonadjacent-layer estimate in
+    \cite[Section~11]{OpenAI2026AreaLaw}. The last lower bound is positive
+    under the source's choice $C_0\ge2$. Both inequalities hold for every
+    $C_0\ge0$, including when the stated lower bound is nonpositive.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_layer_distance}
+    Choose $z\in Z$ with $d_\infty(x,z)\le2(C_0+1)2^k$. The endpoint
+    lower bound gives $d_\infty(y,z)\ge C_0 2^h$. The triangle inequality
+    proves the first assertion. If $h\ge k+2$, then $4\cdot2^k\le2^h$,
+    and hence
+    \begin{align}
+        C_0 2^h-2(C_0+1)2^k & \ge \frac{C_0-1}{2}2^h.
+    \end{align}
+    This proves the second assertion.
+\end{proof}

@@ -102,7 +102,9 @@ private theorem IsMPU.exists_canonical_index_value
 
 /-- The index of a positive-dimensional matrix product unitary is the index
 of a reduced canonical-form-II representative. This does not identify the
-source-cut ranks of an unreduced presentation. CPSV17, Definition IV.1,
+source-cut ranks of an unreduced presentation; for a tensor in canonical form,
+`IsMPU.index_eq_logb_of_isMPUCanonicalForm` (IndexOfCanonicalForm.lean) computes the
+index from the ranks of its own simple blockings. CPSV17, Definition IV.1,
 lines 681–688; see `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
 noncomputable def IsMPU.index
     {d D : ℕ} [NeZero d] [NeZero D]
