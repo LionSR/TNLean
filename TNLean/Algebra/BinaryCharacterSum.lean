@@ -51,7 +51,9 @@ theorem neg_one_pow_mul_neg_one_pow_self {R : Type*} [Monoid R] [HasDistribNeg R
 /-- The sign character `x ↦ (-1) ^ x.val` of `ZMod 2` takes addition to multiplication. -/
 theorem ZMod.neg_one_pow_val_add {R : Type*} [Monoid R] [HasDistribNeg R] (x y : ZMod 2) :
     (-1 : R) ^ (x + y).val = (-1) ^ x.val * (-1) ^ y.val := by
-  rw [← pow_add, ZMod.val_add, ← neg_one_pow_eq_pow_mod_two]
+  rw [← pow_add, ZMod.val_add]
+  conv_rhs => rw [← Nat.mod_add_div (x.val + y.val) 2, pow_add, pow_mul, neg_one_sq, one_pow,
+    mul_one]
 
 namespace Fintype
 
