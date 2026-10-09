@@ -1,0 +1,49 @@
+% Auxiliary actual-source identity; native verification remains pending.
+
+\section{The exterior source memory when all parties are selected}
+
+Let $P$ be the set of original parties and let $W$ be a finite source
+circuit. Each source occurrence $e$ has distinct endpoints $p_e,q_e\in P$
+and prescribed complex halfspaces $\C^{u_e}$ and $\C^{v_e}$, whose dimensions
+may be zero. When every party is selected, write $\widehat P=P\sqcup\{\bot\}$
+for the owner set. An original endpoint $p$ retains its own owner, and
+$\bot$ denotes the exterior owner.
+
+\begin{definition}[Fixed all-party source registers]
+    \label{def:peps_all_party_source_registers}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceLayout}
+    \uses{def:peps_partial_fixed_positions,def:peps_affected_owner}
+    Let $\mathcal E_W$ be the source occurrences in their original
+    preparation order. Define $R_W$ to be the concatenation, in that order,
+    of the two-register lists
+    $[(p_e,\C^{u_e}),(q_e,\C^{v_e})]$ for $e\in\mathcal E_W$.
+    Its owners and spaces depend only on the original circuit, before
+    a monomial or a prepared source vector is chosen.
+\end{definition}
+
+\begin{theorem}[No exterior source registers for the all-party selection]
+    \label{thm:peps_all_party_source_exterior_empty}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_allResidualSourceLayout_isNone}
+    \uses{def:peps_all_party_source_registers}
+    The sublist of $R_W$ consisting of registers at owner
+    $\bot$ is empty. This holds for every source circuit,
+    including when $P$ or the source inventory is empty.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_all_party_source_registers,thm:peps_partial_fixed_layout,
+        def:peps_affected_owner}
+    A register in $R_W$ belongs to one of the two halves of an actual
+    source occurrence. The source-slot specification identifies its
+    owner with the affected owner of the corresponding original
+    endpoint. Under the all-party selection this is
+    $p\in P$, which is distinct from $\bot$. No register is therefore retained by the
+    exterior selection.
+\end{proof}
+
+This identity concerns the fixed source registers in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 253--267 and 342--434.
+The exterior memory of this empty register list is the scalar space
+$\C$. The identity does not remove the scalar contributed by source-free
+operations on an empty memory.
