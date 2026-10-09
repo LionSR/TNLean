@@ -56,7 +56,7 @@ theorem Template.card_cappedDyadicPartition_shell_at_cap_le {Ctpl : ℝ} {n s₀
     (hj : j ≤ L) (hL : L ≤ s₀) (hcap : L < 2 ^ (K + 1)) :
     2 ^ K * ((cappedDyadicPartition (ambientDilation T.points j \ T.points) K).filter
       (fun c ↦ c.1 = K)).card ≤ 2 * n := by
-  have ha := card_cappedDyadicPartition_at_cap_le
+  have ha := Geometry.card_cappedDyadicPartition_at_cap_le
     (ambientDilation T.points j \ T.points) K
   have hs := T.card_shell_le hC j (hj.trans hL)
   have hp : 4 ^ K = 2 ^ K * 2 ^ K := by
@@ -90,7 +90,8 @@ theorem Template.sum_rpow_cappedDyadicPartition_shell_le {Ctpl : ℝ} {n s₀ : 
       (s := P) (t := Finset.range (K + 1))
       (fun c hc ↦ Finset.mem_range.mpr
         (Nat.lt_succ_of_le ((mem_cappedDyadicPartition _ _ _ _).mp hc).1))
-      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)) using 1 <;> simp [a]
+      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)) using 1
+    simp [a]
   have hfactor (k : ℕ) : a k * ((2 : ℝ) ^ k) ^ (1 + e) =
       ((2 : ℝ) ^ k * a k) * ((2 : ℝ) ^ k) ^ e := by
     rw [Real.rpow_add (by positivity), Real.rpow_one]

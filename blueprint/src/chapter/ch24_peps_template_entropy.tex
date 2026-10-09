@@ -61,7 +61,7 @@
     \label{thm:area_template_shell_cap}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le,TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le}
     \leanok
-    \uses{def:area_law_template}
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     Let $T$ be a template with $C_{\rm tpl}\ge24$ and $0\le j\le L\le s_0$.
     Then $|T_j\setminus T|\le nj$. If $L<2^{K+1}$, the number $a_K$ of
     cap-scale squares in the capped dyadic partition of $T_j\setminus T$
@@ -77,27 +77,27 @@
     \label{thm:area_template_weighted_shell}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le}
     \leanok
-    \uses{def:area_law_template}
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     Let $T$ be a template with $C_{\rm tpl}\ge24$,
     $0\le j\le L\le s_0$, $2^K\le L<2^{K+1}$, and $e>0$.
     For the maximal contained dyadic squares $Q$ of $T_j\setminus T$ with
     side capped at $2^K$, one has
-    \[
+    \begin{align}
         \sum_Q \operatorname{side}(Q)^{1+e}
         \le \left(2+\frac{14}{2^e-1}\right)nL^e.
-    \]
+    \end{align}
     This is the weighted covering step of
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count}
+    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_dyadic_partition}
     Write $a_k$ for the number of selected squares of side $2^k$.
     The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
     The cap bound gives $2^K a_K\le2n$. Hence
-    \[
+    \begin{align}
         \sum_{k=0}^K a_k(2^k)^{1+e}
         \le14n\sum_{k=0}^{K-1}(2^e)^k+2n(2^K)^e
         \le\left(2+\frac{14}{2^e-1}\right)nL^e,
-    \]
+    \end{align}
     using $2^e>1$ and $2^K\le L$.
 \end{proof}
