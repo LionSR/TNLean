@@ -186,11 +186,11 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     $x\otimes y$.
 \end{proof}
 
-% Exact auxiliary statement. Native verification is pending.
 % Source: polynomial-PEPS, 04-compression.tex, lines 565--588.
 \begin{theorem}[Grouping a party with no registers]
     \label{thm:peps_basis_empty_first_party}
     \lean{TNLean.PEPS.PairEffect.groupByPartyIso_cons_of_owners_mem_tail_heq}
+    \leanok
     \uses{def:peps_party_partition}
     Let $(q,\mathbf q)$ be an ordered list of distinct parties, and let
     $a$ be a register list whose owners all belong to $\mathbf q$.
@@ -208,6 +208,7 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_basis_empty_selection,
         thm:peps_basis_grouping_equality,
         thm:peps_basis_first_party_grouping}
