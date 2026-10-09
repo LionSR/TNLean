@@ -36,6 +36,31 @@ theorem card_squareLatticeEdges_le (L : ℕ) :
         (e.1.1, decide (IsHorizontalSquareLatticeEdge e))) by
     simpa [SquareLatticeVertex, pow_two, Nat.mul_comm] using
       Fintype.card_le_of_injective _ hinj
-  done
+  intro e e' h
+  simp only [Prod.mk.injEq, decide_eq_decide] at h
+  obtain ⟨hvertex, hiff⟩ := h
+  have hfst : e.1.1.1 = e'.1.1.1 := congrArg Prod.fst hvertex
+  have hsnd : e.1.1.2 = e'.1.1.2 := congrArg Prod.snd hvertex
+  have hsnd2 : e.1.2 = e'.1.2 := by
+    by_cases hH : IsHorizontalSquareLatticeEdge e
+    · have hH' : IsHorizontalSquareLatticeEdge e' := hiff.1 hH
+      obtain ⟨hcy, hcx⟩ := horizontalSquareLatticeEdge_coords e hH
+      obtain ⟨hcy', hcx'⟩ := horizontalSquareLatticeEdge_coords e' hH'
+      refine Prod.ext_iff.mpr ⟨Fin.ext ?_, ?_⟩
+      · have hv : e.1.1.1.1 = e'.1.1.1.1 := congrArg Fin.val hfst
+        omega
+      · rw [← hcy, ← hcy']; exact hsnd
+    · have hV : IsVerticalSquareLatticeEdge e :=
+        (squareLatticeEdge_horizontal_or_vertical e).resolve_left hH
+      have hH' : ¬ IsHorizontalSquareLatticeEdge e' := fun c => hH (hiff.2 c)
+      have hV' : IsVerticalSquareLatticeEdge e' :=
+        (squareLatticeEdge_horizontal_or_vertical e').resolve_left hH'
+      obtain ⟨hcx, hcy⟩ := verticalSquareLatticeEdge_coords e hV
+      obtain ⟨hcx', hcy'⟩ := verticalSquareLatticeEdge_coords e' hV'
+      refine Prod.ext_iff.mpr ⟨?_, Fin.ext ?_⟩
+      · rw [← hcx, ← hcx']; exact hfst
+      · have hv : e.1.1.2.1 = e'.1.1.2.1 := congrArg Fin.val hsnd
+        omega
+  exact Subtype.ext (Prod.ext_iff.mpr ⟨hvertex, hsnd2⟩)
 
 end TNLean.PEPS
