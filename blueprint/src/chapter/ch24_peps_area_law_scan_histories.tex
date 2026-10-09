@@ -1,0 +1,327 @@
+\section{Finite collar histories and good-history sampling}
+\label{sec:al_finite_scan_histories}
+
+Fix a finite domain $\Lambda\subset\mathbb Z^2$, a color $A\subset\Lambda$,
+and a nonempty finite target $T\subset\mathbb Z^2$. Write
+$d(x)=\min_{t\in T}\|x-t\|_\infty$ and $T_j=T+[-j,j]^2_{\mathbb Z}$.
+The graph metric is that of the induced nearest-neighbor graph on $\Lambda$.
+The following finite construction follows
+\cite[Section~9, moving partitions]{OpenAI2026AreaLaw}.
+
+\begin{definition}[Physical partitions and padded fill slots]
+    \label{def:al_scan_physical_partition}
+    \lean{TNLean.PEPS.AreaLaw.Scan.PhysicalPartition,
+        TNLean.PEPS.AreaLaw.Scan.middle,
+        TNLean.PEPS.AreaLaw.Scan.receiving,
+        TNLean.PEPS.AreaLaw.Scan.assign,
+        TNLean.PEPS.AreaLaw.Scan.initialPartition,
+        TNLean.PEPS.AreaLaw.Scan.orientedDepth,
+        TNLean.PEPS.AreaLaw.Scan.initialFront,
+        TNLean.PEPS.AreaLaw.Scan.fillCount,
+        TNLean.PEPS.AreaLaw.Scan.fillSide,
+        TNLean.PEPS.AreaLaw.Scan.nominalFront,
+        TNLean.PEPS.AreaLaw.Scan.depthRow,
+        TNLean.PEPS.AreaLaw.Scan.orientedRow,
+        TNLean.PEPS.AreaLaw.Scan.fillSlot,
+        TNLean.PEPS.AreaLaw.Scan.fill,
+        TNLean.PEPS.AreaLaw.Scan.charge}
+    \leanok
+    A physical partition assigns each site to the near side $P_0$, the middle
+    $Y$, or the far side $V$. For cutoffs $u<v$, initially
+    $P_0=\{x\in A:d(x)\le u\}$ and
+    $V=(\Lambda\setminus A)\cup\{x\in A:d(x)>v\}$.
+    Order each positive-depth row once and pad it to $n$ slots. Sites outside
+    $A$ and absent entries are blank. The far side visits rows in decreasing
+    depth, using the same fixed order within each row.
+    Fills alternate near, far, starting near. After $k$ fills the two consumed
+    slot counts are $t_P=\lfloor(k+1)/2\rfloor$ and $t_F=\lfloor k/2\rfloor$;
+    the oriented fronts are
+    $j_P=u+1+\lfloor t_P/n\rfloor$ and $j_F=-v+\lfloor t_F/n\rfloor$.
+    A move of a set $B$ transfers only $B\cap Y$ to its receiving side.
+    A charge transfers this set only if $B$ meets both that side and $Y$.
+\end{definition}
+
+\begin{theorem}[Consumed slots and the actual middle]
+    \label{thm:al_scan_consumed_slots}
+    \lean{TNLean.PEPS.AreaLaw.Scan.assign_eq_none,
+        TNLean.PEPS.AreaLaw.Scan.middle_assign_subset,
+        TNLean.PEPS.AreaLaw.Scan.middle_sdiff_middle_assign,
+        TNLean.PEPS.AreaLaw.Scan.assign_of_assigned,
+        TNLean.PEPS.AreaLaw.Scan.fillCount_succ,
+        TNLean.PEPS.AreaLaw.Scan.mem_depthRow,
+        TNLean.PEPS.AreaLaw.Scan.mem_orientedRow,
+        TNLean.PEPS.AreaLaw.Scan.fill_blank,
+        TNLean.PEPS.AreaLaw.Scan.fill_assigned,
+        TNLean.PEPS.AreaLaw.Scan.charge_moves_middle_part,
+        TNLean.PEPS.AreaLaw.Scan.exists_fillSlot,
+        TNLean.PEPS.AreaLaw.Scan.fill_at_side_index,
+        TNLean.PEPS.AreaLaw.Scan.side_index_lt,
+        TNLean.PEPS.AreaLaw.Scan.initial_middle_depth,
+        TNLean.PEPS.AreaLaw.Scan.nominalFront_le_of_unconsumed}
+    \leanok
+    \uses{def:al_scan_physical_partition}
+    A blank or already assigned fill slot makes no physical move but increases
+    its receiving side's consumed count by one. Assignments never change sides,
+    and the middle only decreases. For a selected set $B$, the removed middle
+    is exactly $B\cap Y$. If all rows have at most $n$ sites, a site remaining
+    in the middle after $k$ fills has oriented depth at least the corresponding
+    nominal front.
+\end{theorem}
+\begin{proof}\leanok
+    If a site's row is completed, its fixed index is less than $n$, so it occurs
+    in a consumed slot. A site initially outside the middle never enters it,
+    and consuming its slot removes it from the middle regardless of earlier
+    charges. Near slot $t$ is consumed at fill $2t$, far slot $t$ at fill $2t+1$.
+\end{proof}
+
+\begin{definition}[Finite histories and their physical partitions]
+    \label{def:al_scan_actual_histories}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.M,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.lower,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.upper,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.ball,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.candidates,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.selected,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeStep,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.pairStep,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState,
+        TNLean.PEPS.AreaLaw.Scan.ChargeChoices,
+        TNLean.PEPS.AreaLaw.Scan.History,
+        TNLean.PEPS.AreaLaw.Scan.extendHistory,
+        TNLean.PEPS.AreaLaw.Scan.chargeWeight,
+        TNLean.PEPS.AreaLaw.Scan.historyWeight}
+    \leanok
+    \uses{def:al_scan_physical_partition}
+    For each band $0\le g<K$, choose an independent uniform offset
+    $r_g\in\{0,\ldots,m-1\}$ and set
+    $u_g=8gm+m+r_g$, $v_g=8gm+5m+r_g$.
+    Each charge chooses, independently in every band, a uniform side and a
+    uniform slot among $M$ fixed slots. A history after $k$ fill--charge pairs
+    consists of these $K$ offsets and $kK$ side--slot choices.
+    Its classical weight is $m^{-K}(2M)^{-Kk}$; a new charge has weight
+    $(2M)^{-K}$. Evaluate each history recursively: first perform the next
+    prescribed fill, then the chosen charge at the resulting front.
+    A nonblank labelled slot selects its graph $r_0$-ball; a blank slot makes
+    no move.
+\end{definition}
+
+\begin{theorem}[Normalized classical histories and deterministic fronts]
+    \label{thm:al_scan_history_weights}
+    \lean{TNLean.PEPS.AreaLaw.Scan.card_history,
+        TNLean.PEPS.AreaLaw.Scan.chargeWeight_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.historyWeight_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.sum_chargeWeight,
+        TNLean.PEPS.AreaLaw.Scan.sum_historyWeight,
+        TNLean.PEPS.AreaLaw.Scan.historyWeight_extendHistory,
+        TNLean.PEPS.AreaLaw.Scan.sum_historyWeight_extendHistory,
+        TNLean.PEPS.AreaLaw.Scan.sum_chargeWeight_band,
+        TNLean.PEPS.AreaLaw.Scan.sum_historyWeight_extendHistory_band,
+        TNLean.PEPS.AreaLaw.Scan.sum_historyWeight_offset,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_extendHistory,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_extendHistory,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeStep_moves_middle_part,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState_unassigned,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_initial_none,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_front_le}
+    \leanok
+    \uses{def:al_scan_actual_histories,thm:al_scan_consumed_slots}
+    For $m,M>0$, the history weights are nonnegative and sum to one.
+    Extending a history multiplies its weight by $(2M)^{-K}$.
+    Each band's offset has marginal probability $1/m$, even after subsequent
+    charges; each side--slot pair at the next charge has conditional probability
+    $1/(2M)$. Charges leave the nominal fronts unchanged.
+    At every old charge history, each unassigned site lies on or beyond both
+    oriented nominal fronts, provided its row has at most $n$ sites.
+\end{theorem}
+\begin{proof}\leanok
+    There are $m^K(2M)^{Kk}$ histories and $(2M)^K$ possible new charges.
+    Fixing one coordinate divides the corresponding count by $m$ or $2M$.
+    Induction on the recorded choices shows that every surviving middle site
+    was initially unassigned and avoids every consumed fill slot. Apply
+    Theorem~\ref{thm:al_scan_consumed_slots}.
+\end{proof}
+
+\begin{theorem}[Ambient rows and graph-ball localization]
+    \label{thm:al_scan_ambient_rows}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ambientSupDistance,
+        TNLean.PEPS.AreaLaw.Scan.ambientDepth,
+        TNLean.PEPS.AreaLaw.Scan.ambientDepth_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le,
+        TNLean.PEPS.AreaLaw.Scan.ambientDepth_le_iff_mem_dilation,
+        TNLean.PEPS.AreaLaw.Scan.ambientDepth_eq_iff_mem_dilation_sdiff,
+        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_walk_length,
+        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_of_edist_le,
+        TNLean.PEPS.AreaLaw.Scan.ambientSupDistance_le_one_of_domainGraph_adj,
+        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.depthRow_ambientDepth_length_le,
+        TNLean.PEPS.AreaLaw.Scan.depthRow_ambientDepth_length_le_of_row_bound,
+        TNLean.PEPS.AreaLaw.Scan.domainGraph_ball_subset_of_clearance}
+    \leanok
+    For positive $d$, the ambient depth row is $T_d\setminus T_{d-1}$;
+    its physical part has no larger cardinality. Graph distance bounds depth
+    variation: $|d(x)-d(y)|\le d_\Lambda(x,y)$.
+    Let $Z$ be the actual endpoints of edges crossing $A$.
+    If $\operatorname{dist}_\infty(T,Z)>2L+10r_0$, every graph $r_0$-ball
+    meeting $A\cap T_L$ is wholly contained in $A$.
+\end{theorem}
+\begin{proof}\leanok
+    Minimize the integer sup-norm distance over $T$.
+    Each lattice edge changes that minimum by at most one; sum along a
+    shortest graph walk. If a ball meeting $A\cap T_L$ leaves $A$, a path
+    of length at most $2r_0$ within the two radii crosses an edge with an
+    endpoint of depth at most $L+2r_0$, contradicting the clearance.
+\end{proof}
+
+\begin{theorem}[Uniform labelled charge capacity]
+    \label{thm:al_scan_charge_capacity}
+    \lean{TNLean.PEPS.AreaLaw.Scan.chargeCandidates,
+        TNLean.PEPS.AreaLaw.Scan.mem_chargeCandidates,
+        TNLean.PEPS.AreaLaw.Scan.card_chargeCandidates_le,
+        TNLean.PEPS.AreaLaw.Scan.chargeSlotCount,
+        TNLean.PEPS.AreaLaw.Scan.card_chargeCandidates_le_chargeSlotCount,
+        TNLean.PEPS.AreaLaw.Scan.orderedChargeCandidates,
+        TNLean.PEPS.AreaLaw.Scan.paddedChargeSlot,
+        TNLean.PEPS.AreaLaw.Scan.mem_of_paddedChargeSlot_eq_some,
+        TNLean.PEPS.AreaLaw.Scan.paddedChargeSlot_eq_none_iff,
+        TNLean.PEPS.AreaLaw.Scan.existsUnique_paddedChargeSlot,
+        TNLean.PEPS.AreaLaw.Scan.existsUnique_orderedChargeSlot,
+        TNLean.PEPS.AreaLaw.Scan.chargeSlotCount_pos,
+        TNLean.PEPS.AreaLaw.Scan.chargeSlotCount_le,
+        TNLean.PEPS.AreaLaw.Scan.chargeSlotWeight_lower_bound,
+        TNLean.PEPS.AreaLaw.Scan.fillCount_div_le_window,
+        TNLean.PEPS.AreaLaw.Scan.bandChargeInterval_bounds,
+        TNLean.PEPS.AreaLaw.Scan.bandChargeInterval_row_bound,
+        TNLean.PEPS.AreaLaw.Scan.card_bandChargeCandidates_le_chargeSlotCount}
+    \leanok
+    \uses{def:al_scan_actual_histories,thm:al_scan_ambient_rows}
+    Suppose $n,m\ge2$, $D\ge1$, $r_0\le D$, $4D\le m$, $8Km\le L$, and at
+    most $nm$ fills are consumed. Assume $|T_d\setminus T_{d-1}|\le n$ for
+    $1\le d\le L$, and at most $\mu$ labels have any fixed anchor.
+    Each charge interval $[j-r_0,j+D]$ visits only unsigned depths in $[1,L]$.
+    Its number of labels is at most $(D+r_0+1)n\mu\le3\mu nD$.
+    Thus $C_1\ge3\mu$ permits padding every list to $M=\lceil C_1nD\rceil$,
+    with a unique slot for every label, including labels with equal anchors.
+    If $C_1>0$, then $M\le(C_1+1)nD$ and
+    $1/(2M)\ge[2(C_1+1)]^{-1}/(nD)$.
+\end{theorem}
+\begin{proof}\leanok
+    Sum the row cardinalities, then sum the anchor fibers. Either nominal front
+    advances at most $m$ rows; the band cutoffs and $4D\le m$ keep the entire
+    candidate interval in the collar. Ordering distinct labels gives distinct
+    slots. Finally $\lceil C_1nD\rceil\le C_1nD+1\le(C_1+1)nD$.
+\end{proof}
+
+\begin{theorem}[Actual ball sampling on a good history]
+    \label{thm:al_scan_good_ball_sampling}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodOldHistory,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_anchor_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.existsUnique_selected_of_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.selected_split_sampling,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_depth_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}
+    \leanok
+    \uses{thm:al_scan_history_weights,thm:al_scan_ambient_rows,thm:al_scan_charge_capacity}
+    Retain the capacity and clearance assumptions, and suppose $2r_0\le D$.
+    An old charge history is good when every assigned site \emph{of $A$}
+    has oriented depth at most $j+D/2$ on its receiving side.
+    For every labelled graph $r_0$-ball meeting that side and the actual middle,
+    the anchor lies in $[j-r_0,j+D]$. Its labelled slot is unique.
+    Choosing this side and slot has probability exactly $1/(2M)$, at least
+    $c/(nD)$ for $c=1/[2(C_1+1)]>0$, and the extended physical history removes
+    exactly the ball's old $Y$-part from $Y$.
+\end{theorem}
+\begin{proof}\leanok
+    An unassigned site has oriented depth at least $j$, so the anchor has depth
+    at least $j-r_0$. The ball lies in $A$ by clearance; an assigned site of
+    the ball therefore has depth at most $j+D/2$, giving anchor depth at most
+    $j+D/2+r_0\le j+D$. The unique-slot and classical marginal formulas give
+    the probability. The actual charge transition transfers precisely the
+    selected ball intersected with the old middle.
+\end{proof}
+
+\begin{theorem}[Actual sampling of truncated designated supports]
+    \label{thm:al_scan_designated_sampling}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.middle_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSupport_eq_ball_of_split,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_domainGraph}
+    \leanok
+    \uses{thm:al_crossing_budget,thm:al_scan_good_ball_sampling}
+    Set $S_0=A\cap T_L$ and retain the good-history sampling assumptions.
+    Every truncated designated support meeting a receiving side and the old
+    middle is a graph $r_0$-ball. Its labelled side--slot event has probability
+    exactly $1/(2M)\ge c/(nD)$, and the actual extended history removes exactly
+    the designated support's old unassigned part.
+\end{theorem}
+\begin{proof}\leanok
+    The actual old middle is contained in $S_0$. The receiving-side witness
+    lies outside that middle, so the designated support crosses a subset of
+    $S_0$. Theorem~\ref{thm:al_crossing_budget} identifies its truncation radius
+    with $r_0$, including the potentially variable-radius and disconnected
+    cases. Apply Theorem~\ref{thm:al_scan_good_ball_sampling} to this equal ball.
+\end{proof}
+
+\begin{theorem}[Expected cost of the actual charge moves]
+    \label{thm:al_scan_expected_move_cost}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidences,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.mem_splitIncidences,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeMoveCost,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidenceCost,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidenceCost_band_le_expected_chargeMoveCost,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidenceCost_le_expected_chargeMoveCost,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_splitIncidenceCost_le_expected_chargeMoveCost_domainGraph}
+    \leanok
+    \uses{thm:al_scan_good_ball_sampling}
+    Under the good-history sampling assumptions, let $F_{g,s}(B)\ge0$ be a
+    nonnegative cost of a finite set of physical sites moved toward side $s$
+    in band $g$.
+    Sum $F_{g,s}(B_i\cap Y_g)$ over every splitting incidence $(g,s,i)$,
+    where $s$ is the receiving side and $B_i$ is the labelled charge ball.
+    If $\Delta_g(c)$ is the actual set removed from $Y_g$ by the simultaneous
+    charge choice $c$ and $s_g(c)$ its selected side, then
+    \begin{align}
+        \frac{1}{2M}\sum_{(g,s,i)\ \mathrm{split}} F_{g,s}(B_i\cap Y_g)
+         & \le \sum_c q_c\sum_g F_{g,s_g(c)}(\Delta_g(c)).
+        \label{eq:al_scan_expected_move_cost}
+    \end{align}
+    For $C_1>0$, the left coefficient may be replaced by
+    $1/[2(C_1+1)nD]$. Labels sharing an anchor retain separate summands.
+\end{theorem}
+\begin{proof}\leanok
+    For each band and realized side--slot pair, at most one labelled incidence
+    is selected. Its cost is the cost of the actual removed middle set.
+    All other event contributions are zero, and the realized cost is
+    nonnegative. Sum this pointwise inequality against the classical choice
+    weights, use the $1/(2M)$ marginal for each available labelled slot,
+    and interchange the finite sums over choices and bands.
+\end{proof}
+
+\begin{theorem}[Expected cost for the truncated designated supports]
+    \label{thm:al_scan_designated_move_cost}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidences,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.mem_designatedSplitIncidences,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidences_subset_splitIncidences,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidenceCost,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidenceCost_le_splitIncidenceCost,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph}
+    \leanok
+    \uses{thm:al_scan_designated_sampling,thm:al_scan_expected_move_cost}
+    The expected-cost lower bound also holds with the sum restricted to
+    splitting incidences of the truncated designated supports, using their
+    actual old middle parts. The cost may depend on the band and receiving
+    side, and repeated labels remain distinct.
+\end{theorem}
+\begin{proof}\leanok
+    Every splitting designated support equals its charge ball, so its
+    incidence and cost occur in the ball-incidence sum. All costs are
+    nonnegative. Restrict that sum and apply
+    Theorem~\ref{thm:al_scan_expected_move_cost}.
+\end{proof}
+
+% The actual designated-support composition is included above.
+% It does not prove the bad-history ancestry tail, offset dilution of split
+% events, cross-band commutation, or a complete construction of ScanData.

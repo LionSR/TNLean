@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
+import TNLean.PEPS.AreaLaw.ConditionalEstimates
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
@@ -34,6 +35,7 @@ import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.ProductGroundState
 import TNLean.PEPS.AreaLaw.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.RectangularDomain
+import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
