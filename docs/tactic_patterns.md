@@ -24,6 +24,27 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Local contractions on the first prepared pair — promoted (2026-10-09)
+
+- **Pattern:** use `Word.mapPair_spec` to obtain an allowed source-free word,
+  use `Word.eval_mapPair_source` to transform the first pair vector, and compose
+  the identity on the right with the unchanged tail preparation.
+- **Seen:** former private proofs `pair_cons_mapIsometry_expands` in
+  `TNLean/PEPS/Approximation/FiniteSourcePreparation.lean` and
+  `common_pair_cons_expands` in
+  `TNLean/PEPS/Approximation/CommonSourcePreparation.lean`.
+- **Abstraction:** the theorem
+  `TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL` in
+  [SourcePairMaps.lean](../TNLean/PEPS/Approximation/SourcePairMaps.lean) takes the two
+  continuous linear maps and their operator-norm bounds. Issue #8973 requests
+  the common lemma; the two private copies are removed, rather than retained
+  as aliases. Both existing family theorem statements remain unchanged.
+- **Refactor:** `SourceInventory.common_ofSlots_expands` and
+  `SourceInventory.ofSlots_mapIsometry_expands` specialize the shared lemma.
+- **Notes:** the lemma retains the same tail for every spectator layout, and requires no
+  source normalization, finite dimension or nonzero space. No tactic or new
+  simp attribute is introduced.
+
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
 - **Pattern:** Identify the all-halves two-by-two density matrix with one half
@@ -6121,22 +6142,3 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
-
-### Local contractions on the first prepared pair — shared lemma (2026-10-09)
-
-- **Pattern:** use `Word.mapPair_spec` to obtain an allowed source-free word,
-  use `Word.eval_mapPair_source` to transform the first pair vector, and compose
-  the identity on the right with the unchanged tail preparation.
-- **Seen:** `pair_cons_mapIsometry_expands` in
-  `TNLean/PEPS/Approximation/FiniteSourcePreparation.lean` and
-  `common_pair_cons_expands` in
-  `TNLean/PEPS/Approximation/CommonSourcePreparation.lean`.
-- **Abstraction:** the theorem
-  `SourceInventory.Expands.cons_mapL` in `SourcePairMaps.lean` takes the two
-  continuous linear maps and their operator-norm bounds. Issue #8973 requests
-  the common lemma; the two private copies are removed, rather than retained
-  as aliases. Both existing family theorem statements remain unchanged.
-- **Notes:** both family proofs specialize this lemma. The
-  lemma retains the same tail for every spectator layout, and requires no
-  source normalization, finite dimension or nonzero space. No tactic or new
-  simp attribute is introduced.
