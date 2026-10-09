@@ -37,7 +37,7 @@ uses no party and no pair source; each operator is computed on product vectors.
 
 noncomputable section
 
-open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
+open scoped InnerProductSpace TensorProduct
 
 /-! ### Reassociating blocks of registers -/
 

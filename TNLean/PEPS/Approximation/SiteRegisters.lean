@@ -61,7 +61,7 @@ Every word built here is allowed, uses no party and no pair source.
 
 noncomputable section
 
-open scoped InnerProductSpace TensorProduct Kronecker
+open scoped InnerProductSpace TensorProduct
 
 /-! ### Reorderings use no party and no pair source -/
 

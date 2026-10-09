@@ -221,6 +221,10 @@ norm of matrices, rectangular ones included.
     \lean{TNLean.PEPS.EncodedFrame.siteRegs,
         TNLean.PEPS.EncodedFrame.tagRegs,
         TNLean.PEPS.EncodedFrame.sites,
+        TNLean.PEPS.EncodedFrame.nodup_sites,
+        TNLean.PEPS.EncodedFrame.mem_sites,
+        TNLean.PEPS.EncodedFrame.sitesEquiv,
+        TNLean.PEPS.EncodedFrame.owner_siteRegs,
         TNLean.PEPS.EncodedFrame.layoutRegs,
         TNLean.PEPS.EncodedFrame.Frame.regs,
         TNLean.PEPS.EncodedFrame.Frame.map_owner_regs}
@@ -230,7 +234,11 @@ norm of matrices, rectangular ones included.
             J_a}$ for each hole $a$, held by the party holding its tag, listed in
     the order of the holes, followed by one raw register $\C^q$ for each site
     $x\in\Lambda$, held by the raw owner of $x$, listed in a fixed order of
-    the sites. Their tensor product is the memory of these registers in the
+    the sites. This list contains every site exactly once, so taking the
+    site at a position gives a bijection from its positions to $\Lambda$.
+    More generally, if all sites in any list have raw owner $p$, every raw
+    register of that list is owned by $p$. The tensor product of the frame's
+    registers is its memory in the
     sense of Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}. This is the
     sheet of \texttt{05-frames.tex}, lines 13--20, with one raw register at
     each site and a specified owner for each register, together with the tags
@@ -240,6 +248,7 @@ norm of matrices, rectangular ones included.
 \begin{lemma}[Canonical coordinates of the registers]
     \label{lem:peps_frame_registers_coordinates}
     \lean{TNLean.PEPS.EncodedFrame.siteVec,
+        TNLean.PEPS.EncodedFrame.siteVec_congr,
         TNLean.PEPS.EncodedFrame.siteIsoList,
         TNLean.PEPS.EncodedFrame.siteIsoList_siteVec,
         TNLean.PEPS.EncodedFrame.groupIso,
@@ -263,6 +272,9 @@ norm of matrices, rectangular ones included.
     the same way. These are the canonical site and sheet coordinates of
     \texttt{05-frames.tex}, lines 94--96, in which vectors are compared while
     the owners of their registers are specified separately.
+    For any list $\ell$ of sites, including lists with repetitions, write
+    $\ket c_\ell$ for its product basis vector. If $c(x)=c'(x)$ for every
+    site in $\ell$, then $\ket c_\ell=\ket{c'}_\ell$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -270,6 +282,8 @@ norm of matrices, rectangular ones included.
         \C^\beta$ with $\C^{\alpha\times\beta}$ at each step; product basis
     vectors are sent to standard basis vectors, and a list of distinct sites
     enumerating $A$ gives a bijection between its positions and $A$.
+    Configurations agreeing on a list give the same basis vector at every
+    position, hence the same product vector, even if sites repeat.
 \end{proof}
 
 \begin{definition}[Data and conditions of a small-patch rewrite]
