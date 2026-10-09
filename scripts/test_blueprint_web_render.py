@@ -367,7 +367,16 @@ def main() -> int:
     pages = _generated_pages(root)
     _assert_generated_source(pages)
 
-    batches = _balanced_batches(pages, max(1, args.jobs))
+    # The whole-document dependency graph gathers every statement of the
+    # blueprint into one graph; laying out that many nodes with the bundled
+    # WASM graphviz does not finish within a browser page budget, so opening
+    # it would block on the completion wait added in _load_page. Its worker
+    # wiring is still checked statically above and by
+    # scripts/test_blueprint_graph_worker.py, and the per-chapter graphs,
+    # which do complete, are still opened and waited on below.
+    rendered = [page for page in pages if page.name != "dep_graph_document.html"]
+
+    batches = _balanced_batches(rendered, max(1, args.jobs))
     mathjax = _mathjax_bundle(root)
     with serve(root) as base_url:
         if len(batches) == 1:
