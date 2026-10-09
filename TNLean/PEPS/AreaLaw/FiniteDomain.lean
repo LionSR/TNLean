@@ -159,6 +159,22 @@ theorem isAdmissibleSupport_pair_of_adj {Λ : Finset (ℤ × ℤ)}
   simp_rw [exists_walk_length_le_iff_edist_le]
   simp [SimpleGraph.edist_le_one_iff_adj_or_eq, h, h.symm]
 
+/-- A walk in the induced domain from a site of `A` to a site outside `A` crosses an edge
+`{u, v}` of the cut with `u ∈ A` and `v ∉ A`, and its initial segment joins the starting
+site to `u` in at most as many steps. Source: area-law Section 1, definition of `∂Λ A`. -/
+theorem exists_edgeBoundary_of_walk {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {x y : Site Λ} (p : (domainGraph Λ).Walk x y) (hx : x ∈ A) (hy : y ∉ A) :
+    ∃ u v, u ∈ A ∧ v ∉ A ∧ s(u, v) ∈ edgeBoundary Λ A ∧
+      ∃ p' : (domainGraph Λ).Walk x u, p'.length ≤ p.length := by
+  classical
+  obtain ⟨d, hd, hdA, hdA'⟩ := p.exists_boundary_dart (A : Set (Site Λ)) hx hy
+  have hsupp := p.dart_fst_mem_support_of_mem_darts hd
+  refine ⟨d.fst, d.snd, hdA, hdA', ?_, p.takeUntil d.fst hsupp,
+    p.length_takeUntil_le_length hsupp⟩
+  simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
+    SimpleGraph.mem_edgeSet]
+  exact ⟨d.adj, d.fst, hdA, d.snd, hdA', rfl⟩
+
 /-- Zero ambient dilation changes no lattice points. -/
 @[simp] theorem ambientDilation_zero (T : Finset (ℤ × ℤ)) : ambientDilation T 0 = T := by
   simp [ambientDilation]

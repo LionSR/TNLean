@@ -391,7 +391,7 @@ example : (rectRegion disconnectedCut (latticeDyadicRect 0 (1, 0))).Nonempty := 
   refine ⟨⟨(1, 0), by simp [disconnectedDomain]⟩, ?_⟩
   simp [mem_rectRegion, disconnectedCut, IntRect.mem_toFinset, latticeDyadicRect]
 
--- The physical-domain adapter includes no sites absent from the ambient square.
+-- The physical intersection includes no sites absent from the ambient square.
 example : rectRegion disconnectedCut (latticeDyadicRect 0 (-3, 2)) = ∅ := by
   apply Finset.eq_empty_iff_forall_notMem.mpr
   intro x hx

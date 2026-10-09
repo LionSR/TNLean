@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCounts
 import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
+import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartitionByScale
 
 /-!
 # Weighted dyadic covering of the actual template core
@@ -34,13 +35,8 @@ theorem Template.sum_rpow_cappedDyadicPartition_core_le {Ctpl : ℝ} {n s₀ : �
   let a (k : ℕ) : ℝ := ((P.filter fun c ↦ c.1 = k).card : ℝ)
   have hgroup : (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) =
       ∑ k ∈ Finset.range (K + 1), a k * ((2 : ℝ) ^ k) ^ (1 + e) := by
-    symm
-    convert Finset.sum_fiberwise_of_maps_to' (g := Prod.fst)
-      (s := P) (t := Finset.range (K + 1))
-      (fun c hc ↦ Finset.mem_range.mpr
-        (Nat.lt_succ_of_le ((mem_cappedDyadicPartition _ _ _ _).mp hc).1))
-      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)) using 1
-    simp [a]
+    exact sum_cappedDyadicPartition_by_scale T.points K
+      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e))
   have hcap : (2 : ℝ) ^ K * a K ≤ 18 * n := by
     dsimp [a, P]
     exact_mod_cast T.card_cappedDyadicPartition_at_cap_le (by linarith) K hhi

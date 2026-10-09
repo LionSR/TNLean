@@ -148,6 +148,7 @@ noncomputable def skewSymbol (Λ : Finset (ℤ × ℤ)) (q : ℕ) (t : ℝ) (P Y
       localLift Λ q P (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ P)) *
       localLift Λ q Y (cfc (TensorPower.suppRpow t) (reducedState Λ q θ Y))) *ᵥ θ.ofLp)
 
+/-- The lattice skew symbol equals the marked scalar symbol on the physical tensor product. -/
 theorem skewSymbol_eq_markedScalarSymbol (t : ℝ) (P Y : Finset (Site Λ))
     (h : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (θ : StateSpace Λ q) :
     skewSymbol Λ q t P Y h θ =

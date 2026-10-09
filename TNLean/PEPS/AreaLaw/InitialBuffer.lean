@@ -20,7 +20,7 @@ depending only on `q, R, J, Δ`.
 The finite-dimensional argument (optimized filters, stationarity, the energy estimate, the
 prefix norm comparison and Schmidt pinning) is `Entropy.two_mul_condEntropy_le` in QICLean.
 This module supplies its lattice hypotheses: the nested contours
-`X_j = A ∩ Q₀^{+d_j}`, `d_j = r + j D`, `D = 2R + 3`, the single-split property, the crossing
+`X_j = A ∩ Q₀^{+d_j}`, `d_j = r + j D`, `D = R + 1`, the single-split property, the crossing
 budgets `≤ C (r + d_j)`, the harmonic weights `a_j = 2/(Z_r (r + d_j))` of total mass two, and
 the choice of `C_pad` making `Z_r` large uniformly in `r`.
 
@@ -59,6 +59,7 @@ theorem supportDim_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q) (X :
   exact Nat.pow_le_pow_right hq (card_support_le_diamond (G := domainGraph Λ) Subtype.val
     Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) X.1 R X.2.2)
 
+/-- Every admissible support has positive Hilbert-space dimension when the local dimension is positive. -/
 theorem one_le_supportDim {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q)
     (X : AdmissibleSupport Λ R) : 1 ≤ Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 := by
   rw [Entropy.supportDim, Finset.prod_const]
@@ -133,9 +134,11 @@ noncomputable def bufferCrossConst (R : ℕ) : ℝ :=
 noncomputable def bufferBudgetConst (q R : ℕ) : ℝ :=
   1 + bufferCrossConst R * Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2
 
+/-- The coefficient in the contour crossing bound is nonnegative. -/
 theorem bufferCrossConst_nonneg (R : ℕ) : 0 ≤ bufferCrossConst R := by
   unfold bufferCrossConst; positivity
 
+/-- The contour logarithmic budget coefficient is at least one. -/
 theorem one_le_bufferBudgetConst (q R : ℕ) : 1 ≤ bufferBudgetConst q R := by
   unfold bufferBudgetConst
   have := mul_nonneg (bufferCrossConst_nonneg R)
