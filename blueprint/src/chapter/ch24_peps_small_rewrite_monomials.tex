@@ -1,0 +1,338 @@
+\section{Small-patch rewrites as allowed monomials}
+\label{sec:peps_small_rewrite_monomials}
+The statements below formalize the last step of the proof of the second
+assertion of Lemma~6.3 of \cite{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{05-frames.tex}, lines 262--273 and 306--316: every product term of the
+truncated branch expansion
+(Theorem~\ref{thm:peps_frame_small_rewrite_product_terms}) is a monomial
+allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} on the registers of the
+frames, one register per site and per tag
+(Definition~\ref{def:peps_frame_registers}). The number of monomials is bounded
+by the number of branches times $k^{2m}$; it is polynomial in $L$ once the
+number of cylinder terms of each patch is, which is the bound of Proposition~4.1
+of \cite{OpenAI2026PolynomialPEPS} not carried by the patch data
+\cite{gap:polypeps_small_rewrite_monomials}.
+
+Throughout, $\Lambda$ is a finite set of sites, each with a raw register
+$\C^q$, and operators on $\mathcal H_\Lambda$ are written in the canonical
+coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
+
+\begin{lemma}[A rank-one map on two registers with a change of owners]
+    \label{lem:peps_rank_one_chain}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.append,
+        TNLean.PEPS.PairEffect.PartyChain.eval_append,
+        TNLean.PEPS.PairEffect.PartyChain.append_props,
+        TNLean.PEPS.PairEffect.braLocal,
+        TNLean.PEPS.PairEffect.ketLocal,
+        TNLean.PEPS.PairEffect.norm_braLocal_le,
+        TNLean.PEPS.PairEffect.norm_ketLocal_le,
+        TNLean.PEPS.PairEffect.owner_of_mem_pair,
+        TNLean.PEPS.PairEffect.owner_of_mem_nil,
+        TNLean.PEPS.PairEffect.braChain,
+        TNLean.PEPS.PairEffect.ketWord,
+        TNLean.PEPS.PairEffect.rankOneChain,
+        TNLean.PEPS.PairEffect.eval_braChain,
+        TNLean.PEPS.PairEffect.pairHeadIso_ketWord,
+        TNLean.PEPS.PairEffect.matL_vecMulVec_star,
+        TNLean.PEPS.PairEffect.pairHeadIso_rankOneChain,
+        TNLean.PEPS.PairEffect.rankOneChain_props}
+    \leanok
+    \uses{def:peps_party_monomial,def:peps_monomial_parties,
+        thm:peps_monomial_composition_counts,lem:peps_front_registers}
+    Two allowed monomials on parties applied in succession form an allowed
+    monomial; if both use only parties of a set $S$, so does their
+    composition, and the numbers of pair sources and of pair effects add up.
+    Let $v,w\in\C^\alpha\otimes\C^\beta$ be unit vectors. On a register
+    $\C^\alpha$ of a party $p_A$ and a register $\C^\beta$ of a party $p_B$,
+    the map $\ket v\bra w$, with output registers held by $p_A'$ and $p_B'$
+    and every other register untouched, is an allowed monomial using only
+    $p_A,p_B,p_A',p_B'$: the bra $\bra w$ is a normalized pair effect if
+    $p_A\ne p_B$ and a private contraction at $p_A$ otherwise, and the ket
+    $\ket v$ is a normalized pair source if $p_A'\ne p_B'$ and a private
+    preparation at $p_A'$ otherwise. It has at most one pair source, none if
+    $p_A'=p_B'$, and at most one pair effect, none if $p_A=p_B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The composition of two monomials appends the second to the last
+    source-only composition of the first. The bra applied to $y\otimes t$
+    gives $\langle w,y\rangle t$, and the ket applied to $t$ gives
+    $v\otimes t$; their composite is $\langle w,y\rangle v\otimes
+        t=(\ket v\bra w\,y)\otimes t$. A private contraction or preparation
+    by a unit vector has norm at most one.
+\end{proof}
+
+\begin{definition}[Rank-one blocks]
+    \label{def:peps_rank_one_block}
+    \lean{TNLean.PEPS.EncodedFrame.RankOneBlock,
+        TNLean.PEPS.EncodedFrame.RankOneBlock.op,
+        TNLean.PEPS.EncodedFrame.RankOneBlock.ketAt,
+        TNLean.PEPS.EncodedFrame.RankOneBlock.braAt,
+        TNLean.PEPS.EncodedFrame.RankOneBlock.op_apply,
+        TNLean.PEPS.EncodedFrame.RankOneBlock.ketAt_congr,
+        TNLean.PEPS.EncodedFrame.RankOneBlock.braAt_congr,
+        TNLean.PEPS.EncodedFrame.zeroPair,
+        TNLean.PEPS.EncodedFrame.norm_zeroPair,
+        TNLean.PEPS.EncodedFrame.zeroPair_apply,
+        TNLean.PEPS.EncodedFrame.zeroBlock,
+        TNLean.PEPS.EncodedFrame.zeroBlock_ketAt,
+        TNLean.PEPS.EncodedFrame.zeroBlock_braAt,
+        TNLean.PEPS.EncodedFrame.emptyBlock,
+        TNLean.PEPS.EncodedFrame.emptyBlock_ketAt,
+        TNLean.PEPS.EncodedFrame.emptyBlock_braAt,
+        TNLean.PEPS.EncodedFrame.emptyBlock_op}
+    \leanok
+    \uses{lem:peps_grouped_monomial_placement}
+    A rank-one block consists of disjoint sets $T,E\subseteq\Lambda$, with
+    $U=\Lambda\setminus(T\cup E)$, and two vectors $v,w$ on
+    $[q]^T\times[q]^U$. Its operator is $\ket v\bra w$ on the sites of
+    $T\cup U$ tensored with the identity on $E$; its entry at
+    configurations $c',c$ is $v(c'|_T,c'|_U)\,\overline{w(c|_T,c|_U)}$ when
+    $c'$ and $c$ agree on $E$, and $0$ otherwise. The one-site zero block of
+    a site $x$ has $T=\{x\}$, $U=\emptyset$ and $v=w=\ket0$, so its operator
+    is $\ket0\bra0$ at $x$. The trivial block has $T=U=\emptyset$, and its
+    operator is the identity.
+\end{definition}
+
+\begin{lemma}[Products of disjoint blocks]
+    \label{lem:peps_rank_one_block_products}
+    \lean{TNLean.PEPS.EncodedFrame.RankOneBlock.prod_op_apply}
+    \leanok
+    \uses{def:peps_rank_one_block}
+    Let $b_1,\dots,b_r$ be rank-one blocks such that every site lies in
+    $E_{b_i}$ for all $i$ but at most one. The entry of the product of their
+    operators at configurations $c',c$ is
+    $\prod_iv_{b_i}(c')\,\overline{w_{b_i}(c)}$ when $c'$ and $c$ agree on
+    $\bigcap_iE_{b_i}$, and $0$ otherwise, where $v_b(c)$ and $w_b(c)$ denote
+    the vectors of $b$ read on the restrictions of $c$.
+\end{lemma}
+
+\begin{proof}\leanok
+    By induction on $r$. In the entry of $\mathrm{op}(b_1)\,X$, where $X$ is the
+    product of the remaining operators, only the intermediate configuration
+    equal to $c'$ on $E_{b_1}$ and to $c$ elsewhere contributes, since every
+    site outside $E_{b_1}$ lies in every $E_{b_i}$ with $i\ge2$; the vectors of
+    each block depend only on the configuration outside its set $E$.
+\end{proof}
+
+\begin{lemma}[Rank-one blocks as allowed monomials on a frame]
+    \label{lem:peps_rank_one_block_monomial}
+    \lean{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_chain,
+        TNLean.PEPS.EncodedFrame.exists_pairVec,
+        TNLean.PEPS.EncodedFrame.exists_groupBlock,
+        TNLean.PEPS.EncodedFrame.conjVec,
+        TNLean.PEPS.EncodedFrame.norm_conjVec,
+        TNLean.PEPS.EncodedFrame.zeroGroupVec,
+        TNLean.PEPS.EncodedFrame.norm_zeroGroupVec,
+        TNLean.PEPS.EncodedFrame.zeroGroupVec_apply,
+        TNLean.PEPS.EncodedFrame.exists_braVertexBlock,
+        TNLean.PEPS.EncodedFrame.exists_ketVertexBlock,
+        TNLean.PEPS.EncodedFrame.prod_map_one_kronecker,
+        TNLean.PEPS.EncodedFrame.exists_chain_listProd,
+        TNLean.PEPS.EncodedFrame.exists_zeroChain}
+    \leanok
+    \uses{lem:peps_rank_one_chain,def:peps_rank_one_block,
+        lem:peps_grouped_monomial_placement}
+    Let $b$ be a rank-one block with unit vectors $v,w$, let the raw registers
+    of $T$ be held by $p_A$ before and by $p_A'$ after, those of $U$ by $p_B$
+    and $p_B'$, and those of $E$ by the same party before and after. Then
+    $\id_{\rm tags}\otimes\mathrm{op}(b)$ is the operator of an allowed
+    monomial between the registers of the frame with the owners before and
+    those after, using only $p_A,p_B,p_A',p_B'$, with at most one pair source
+    and at most one pair effect. Consequently:
+    \begin{enumerate}
+        \item if a nonempty set $O$ of sites has raw owners in a set of at
+              most two parties of $S$, then for unit vectors $v,w$ on $[q]^O$
+              the operator $\ket v\bra w$ on $O$, tensored with the identity,
+              is such a monomial using only parties of $S$, with the same
+              owners before and after;
+        \item for distinct sites $x_1,\dots,x_r$ outside of which two owner
+              assignments agree, the product of the one-site zero blocks of
+              the $x_i$ is the operator of an allowed monomial from the
+              registers with the first owners to those with the second,
+              using only the owners of the $x_i$ and no pair resource;
+        \item a product of operators of allowed monomials on the same
+              registers, each using only parties of $S$, is the operator of an
+              allowed monomial using only parties of $S$, with the pair
+              sources and pair effects added up.
+    \end{enumerate}
+    If $O$ is empty, a covector or vector on $[q]^O$ is a scalar of modulus at
+    most one.
+\end{lemma}
+
+\begin{proof}\leanok
+    Group the registers of $T$ and of $U$, apply the rank-one map of
+    Lemma~\ref{lem:peps_rank_one_chain} and ungroup, by
+    Lemma~\ref{lem:peps_grouped_monomial_placement}. For a set $O$ with owners
+    in $\{p,p'\}$, take $T$ the sites of $O$ held by the owner of a chosen site
+    and $E=\Lambda\setminus O$; a vector on $[q]^O$ is a vector of the same
+    norm on $[q]^T\times[q]^U$. For one-site zero blocks, proceed site by site,
+    contracting with $\bra0$ at the old owner and preparing $\ket0$ at the new
+    owner. Products are compositions.
+\end{proof}
+
+\begin{lemma}[A product term as a product of blocks]
+    \label{lem:peps_product_term_blocks}
+    \lean{TNLean.PEPS.SiteChain.eq_of_not_earlierTouch,
+        TNLean.PEPS.SiteChain.eq_of_not_laterTouch,
+        TNLean.PEPS.SiteChain.eq_of_isOpen_inl,
+        TNLean.PEPS.SiteChain.eq_of_isOpen_inr,
+        TNLean.PEPS.SiteChain.not_untouched_of_isOpen,
+        TNLean.PEPS.SiteChain.fixedIn_iff,
+        TNLean.PEPS.SiteChain.fixedOut_iff,
+        TNLean.PEPS.SiteChain.prod_braBlocks_apply,
+        TNLean.PEPS.SiteChain.prod_ketBlocks_apply,
+        TNLean.PEPS.SiteChain.prod_zeroBlocks_apply,
+        TNLean.PEPS.SiteChain.termOp_eq_smul_prod}
+    \leanok
+    \uses{lem:peps_frame_chain_network,lem:peps_frame_chain_truncation,
+        lem:peps_rank_one_block_products}
+    In the network of a chain $L_0\cdots L_{n-1}$ of rank-one site operators,
+    an open input leg at a site belongs to one bra vertex, the bra of the
+    factor applied first among those containing the site, and an open output
+    leg to one ket vertex. A site has a fixed input leg exactly when some
+    factor contains it and it is an open input leg of no bra, and dually for
+    outputs. Choose one vector of the truncation on every open-leg group, and
+    let $W$ be the set of sites contained in some factor. Then the product term
+    equals $\sigma\,K_1\cdots K_n\,Z\,B_1\cdots B_n$, where $B_j$ is the block
+    $\ket0\bra{w_j}$ on the open input legs of the $j$-th bra, $w_j$ being
+    the conjugate of its covector, $K_j$ is the block $\ket{v_j}\bra0$ on the
+    open output legs of the $j$-th ket, $Z$ is the product of the one-site zero
+    blocks of $W$, and $\sigma$ is the product of the values of the vectors on
+    the vertices without open legs.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_rank_one_block_products} the blocks $B_j$ have
+    entry $\prod_j\overline{w_j(c)}$ when $b$ equals $c$ off the open input
+    legs and vanishes on them; $Z$ has entry $1$ when its configurations agree
+    off $W$ and vanish on $W$; the blocks $K_j$ have entry $\prod_jv_j(c')$
+    when $c'$ agrees with the intermediate configuration off the open output
+    legs and the latter vanishes on them. Summing over the two intermediate
+    configurations leaves one term, which is nonzero exactly when $c'$ and $c$
+    agree off $W$, $c$ vanishes at the fixed input legs and $c'$ at the fixed
+    output legs; these are the conditions of the product term.
+\end{proof}
+
+\begin{lemma}[The tag maps of a branch]
+    \label{lem:peps_frame_tag_change}
+    \lean{TNLean.PEPS.EncodedFrame.layoutIso_eq_act_of_basis,
+        TNLean.PEPS.EncodedFrame.regBra,
+        TNLean.PEPS.EncodedFrame.regKet,
+        TNLean.PEPS.EncodedFrame.norm_regBra_le,
+        TNLean.PEPS.EncodedFrame.norm_regKet_le,
+        TNLean.PEPS.EncodedFrame.tagBraWord,
+        TNLean.PEPS.EncodedFrame.tagKetWord,
+        TNLean.PEPS.EncodedFrame.eval_tagBraWord,
+        TNLean.PEPS.EncodedFrame.eval_tagKetWord,
+        TNLean.PEPS.EncodedFrame.tagBraWord_props,
+        TNLean.PEPS.EncodedFrame.tagKetWord_props,
+        TNLean.PEPS.EncodedFrame.tagChangeWord,
+        TNLean.PEPS.EncodedFrame.eval_tagChangeWord,
+        TNLean.PEPS.EncodedFrame.tagChangeWord_props,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_apply,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_mul,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_sum_smul,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_smul,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.layoutIso_tagChangeWord}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
+        lem:peps_register_reorderings,lem:peps_front_registers,
+        def:peps_monomial_parties,lem:peps_frame_branches}
+    For a branch $(a,s,b)$, contracting the tag registers of the affected old
+    holes with $\bra b$ and preparing those of the affected new holes in
+    $\ket a$, each at its tag owner, is an allowed monomial using only the
+    affected tag owners and no pair resource. In canonical coordinates it acts
+    as $\ket a\bra b\otimes\id$ on the affected tags and the raw registers,
+    extended by the identity on the untouched tags, and placing a matrix $Y$ on
+    the raw registers in this tag block equals this operator after
+    $\id\otimes Y$.
+\end{lemma}
+
+\begin{proof}\leanok
+    On the basis vector $\ket\tau\otimes\ket c$ the monomial gives
+    $\delta_{\tau_{\rm aff},b}\ket{\tau_{\rm unt},a}\otimes\ket c$; an
+    operator between the registers of two frames is determined by its values
+    on basis vectors.
+\end{proof}
+
+\begin{theorem}[Small-patch rewrite: product terms as allowed monomials]
+    \label{thm:peps_frame_small_rewrite_term_monomial}
+    \lean{TNLean.PEPS.EncodedFrame.exists_of_mem_encSteps,
+        TNLean.PEPS.EncodedFrame.exists_of_mem_decSteps,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.owners_mem_parties_of_mem_branchSteps,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.owners_mem_parties_of_not_untouched,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.ownerOld_eq_ownerNew_of_untouched,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_open_vertices_le,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_termChain}
+    \leanok
+    \uses{lem:peps_frame_branch_network,lem:peps_frame_wires,
+        lem:peps_rank_one_block_monomial,lem:peps_product_term_blocks,
+        lem:peps_frame_tag_change}
+    Assume the four conditions of Lemma~6.3, fix a branch $(a,s,b)$, and
+    choose a unit vector on every open-leg group of its network. Then the
+    product term placed in the tag block, $\ket a\bra b\otimes T\otimes\id$,
+    is $\sigma$ times the operator of an allowed monomial from the registers
+    of $\mathcal F_{\rm old}$ to those of $\mathcal F_{\rm new}$, with
+    $\lvert\sigma\rvert\le1$. The monomial uses only the specified parties and
+    has at most $2m$ normalized pair sources and at most $2m$ normalized pair
+    effects (\texttt{05-frames.tex}, lines 262--273 and 306--316).
+\end{theorem}
+
+\begin{proof}\leanok
+    Write the product term as in
+    Lemma~\ref{lem:peps_product_term_blocks}. The open input legs of a patch
+    bra have at most two old owners and the open output legs of a patch ket at
+    most two new owners, all in the specified list
+    (Lemma~\ref{lem:peps_frame_branch_network}); every site contained in a
+    selected square lies in the physical sample of a patch or an affected
+    hole, so its old and new owners belong to the list; a site in no selected
+    square keeps its owner (Lemma~\ref{lem:peps_frame_wires}). Apply
+    Lemma~\ref{lem:peps_rank_one_block_monomial} to the blocks $B_j$ with the
+    old owners, to $Z$ changing the old owners into the new ones, and to the
+    blocks $K_j$ with the new owners, and follow with the tag maps of
+    Lemma~\ref{lem:peps_frame_tag_change}. Only patch vertices have open legs,
+    and there are at most $2m$ of them.
+\end{proof}
+
+\begin{theorem}[Small-patch rewrite: expansion into allowed monomials]
+    \label{thm:peps_frame_small_rewrite_monomials}
+    \lean{TNLean.PEPS.EncodedFrame.act_smul,
+        TNLean.PEPS.EncodedFrame.act_sum,
+        TNLean.PEPS.EncodedFrame.truncationRank_mono,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_of_card_le}
+    \leanok
+    \uses{def:peps_party_monomial,thm:peps_frame_small_rewrite_product_terms,
+        thm:peps_frame_small_rewrite_term_monomial,lem:peps_frame_branches}
+    Assume the four conditions of Lemma~6.3, let $\delta>0$, let $N$ be the
+    number of branches and $k=\lceil(4Nm/\delta)^2\rceil+1$. There are a
+    contraction $M_\delta$ with $\lVert M_\delta-M\rVert\le\delta$ and an
+    expansion $M_\delta=\sum_tc_tM_t$ into at most $Nk^{2m}$ allowed monomials
+    $M_t$ from the registers of $\mathcal F_{\rm old}$ to those of
+    $\mathcal F_{\rm new}$, using only the specified parties, each with at
+    most $2m$ normalized pair sources and at most $2m$ normalized pair
+    effects, and with $\lvert c_t\rvert\le1$. If every affected hole and every
+    additional patch has at most $D$ cylinder terms, the number of monomials
+    is at most $D^Ek'^{2m}$ with $E=r_{\rm new}+m+r_{\rm old}$ and
+    $k'=\lceil(4D^Em/\delta)^2\rceil+1$.
+
+    This is the second assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}
+    (\texttt{05-frames.tex}, lines 214--217) with the count of monomials in
+    terms of $N$, or of the number $D$ of cylinder terms; it is polynomial in
+    $L$ for $\delta=L^{-a}$ when $D\le CL^c$ and $m$, $r_{\rm old}$ and
+    $r_{\rm new}$ are bounded. The bound $D\le CL^c$ is the cylinder-term
+    bound of Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, which the
+    patch data do not carry \cite{gap:polypeps_small_rewrite_monomials}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
+        \bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\id$ from
+    Theorem~\ref{thm:peps_frame_small_rewrite_product_terms} and replace each
+    placed product term by $\sigma_{\beta,i}$ times its monomial from
+    Theorem~\ref{thm:peps_frame_small_rewrite_term_monomial}; the coefficients
+    $(1+\tfrac12\delta)^{-1}c_{\beta,i}\sigma_{\beta,i}$ have modulus at most
+    one. Each branch carries at most $k^{2m}$ terms. The branch count is at
+    most $D^E$, and $k$ increases with $N$.
+\end{proof}
