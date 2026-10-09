@@ -236,8 +236,9 @@ example (h : LocalHamiltonian pathDomain 2 0 1) (Ω : StateSpace pathDomain 2) (
   rw [origin_anchor]
   apply Finset.mem_map.mpr
   refine ⟨p1, ?_, rfl⟩
-  have hcomponent : p1 ∈ componentFinset (domainGraph pathDomain) p0 :=
-    Finset.mem_filter.mpr ⟨Finset.mem_univ _, path_adjacent.reachable⟩
+  have hcomponent : p1 ∈ componentFinset (domainGraph pathDomain) p0 := by
+    classical
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, path_adjacent.reachable⟩
   simpa [designatedSupport, pathScan, CollarScan.truncationSet, setDist,
     island_distance] using hcomponent
 
