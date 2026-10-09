@@ -60,7 +60,7 @@ theorem entropy_le_of_replica_comparisons
     have hloss : C * (τ + d k / τ) * S ≤
         C * (τ + (E + rₑ k) / τ) * S :=
       mul_le_mul_of_nonneg_right
-        (mul_le_mul_of_nonneg_left (add_le_add_left hquot τ) hC) hS
+        (mul_le_mul_of_nonneg_left (add_le_add (le_refl τ) hquot) hC) hS
     have hsplit : C * (τ + (E + rₑ k) / τ) * S =
         C * (τ + E / τ) * S + (C / τ) * S * rₑ k := by ring
     rw [hsplit] at hloss
@@ -91,10 +91,10 @@ theorem exists_bootstrap_comparison_loss_threshold (C Cₑ : ℝ) {e₀ : ℝ}
   have hτlimit : Tendsto
       (fun n : ℕ ↦ (n : ℝ) ^ (-BootstrapParameters.nu e₀ / 4))
       atTop (𝓝 0) := by
-    simpa only [Function.comp_apply, neg_div] using
-      (tendsto_rpow_neg_atTop (div_pos hν (by norm_num : (0 : ℝ) < 4))).comp
-        (tendsto_natCast_atTop_atTop :
-          Tendsto (fun n : ℕ ↦ (n : ℝ)) atTop atTop)
+    have h := (tendsto_rpow_neg_atTop (div_pos hν (by norm_num : (0 : ℝ) < 4))).comp
+      (tendsto_natCast_atTop_atTop : Tendsto (fun n : ℕ ↦ (n : ℝ)) atTop atTop)
+    refine h.congr' (Eventually.of_forall fun n ↦ ?_)
+    simp only [Function.comp_apply, neg_div]
   have hlimit : Tendsto
       (fun n : ℕ ↦ C * (1 + Cₑ) * (n : ℝ) ^ (-BootstrapParameters.nu e₀ / 4))
       atTop (𝓝 0) := by
