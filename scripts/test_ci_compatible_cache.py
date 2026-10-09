@@ -746,7 +746,8 @@ class WorkflowTests(unittest.TestCase):
                     self.assertEqual(checked.split(), [
                         'TNLeanTest/TemplateMixedSquares.lean', 'TNLeanTest/TemplateCutBoundary.lean'])
                     expected = {
-                        'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover'],
+                        'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover',
+                            'TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover'],
                         'TemplateCutBoundary': [
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary',
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateClearance',

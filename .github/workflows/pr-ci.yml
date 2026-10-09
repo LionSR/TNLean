@@ -511,6 +511,7 @@ jobs:
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
           lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles \
             TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover \
+            TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
           for source in TNLeanTest/TemplateMixedSquares.lean TNLeanTest/TemplateCutBoundary.lean; do
             timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
@@ -518,6 +519,13 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "$source"
           done
+      - name: Build template mixed-square and weighted covering estimates early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Check finite rectangular dual geometry early
         run: |
@@ -633,13 +641,6 @@ jobs:
         run: |
           set -eo pipefail
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Build template mixed-square estimates early
-        timeout-minutes: 5
-        run: |
-          set -eo pipefail
-          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
