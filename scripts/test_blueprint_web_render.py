@@ -274,6 +274,7 @@ def _load_page(page: Page, base_url: str, name: str) -> None:
     deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
     url = f"{base_url}/{name}"
     events: list[str] = []
+    graph_context: dict[str, str | None] = {"phase": None, "worker": None}
 
     def remember(kind: str, text: str) -> None:
         events.append(f"{kind}: {text[:2000]}")
@@ -283,10 +284,16 @@ def _load_page(page: Page, base_url: str, name: str) -> None:
         remember("pageerror", str(error))
 
     def console_message(message) -> None:
+        # Only graphPhase's info messages name a phase; graphFailure also
+        # emits the error text with this prefix at the error level.
+        prefix = "[blueprint-graph] "
+        if message.type == "info" and message.text.startswith(prefix):
+            graph_context["phase"] = message.text[len(prefix):][:2000]
         if message.type in ("error", "warning") or message.text.startswith("[blueprint-graph]"):
             remember(f"console.{message.type}", message.text)
 
     def worker_started(worker) -> None:
+        graph_context["worker"] = worker.url[:2000]
         remember("worker", worker.url)
 
     listeners = (("pageerror", page_error), ("console", console_message),
@@ -313,7 +320,9 @@ def _load_page(page: Page, base_url: str, name: str) -> None:
     except Exception as error:
         # Retain the original exception and its type.  Do not evaluate the
         # page after a timeout: its main thread may itself be unresponsive.
-        error.add_note(f"Blueprint page {name}; URL {url}; events: "
+        error.add_note(f"Blueprint page {name}; URL {url}; graph context: "
+                       + json.dumps(graph_context, ensure_ascii=False)
+                       + "; events: "
                        + json.dumps(events, ensure_ascii=False))
         raise
     finally:

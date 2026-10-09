@@ -53,6 +53,11 @@ function graphFailure(error) {
 _GRAPH_DIAGNOSTIC_START = _GRAPH_DIAGNOSTICS + """graphPhase("initializing");
 const graphviz = graphContainer.graphviz({useWorker: true});
 graphviz.onerror(graphFailure);
+// In plastexdepgraph 0.0.5's bundled d3-graphviz, selection_graphviz calls
+// new Graphviz synchronously. Its constructor assigns _worker before
+// initViz starts worker initialization and before returning the instance.
+// Attach now: waiting for initEnd would miss initialization failures.
+// The source regression checks this private-field contract on bundle bumps.
 if (graphviz._worker) {
     graphviz._worker.addEventListener("error", function (event) {
         graphFailure(event.message || "Graphviz worker failed");
