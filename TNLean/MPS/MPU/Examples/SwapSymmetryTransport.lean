@@ -14,11 +14,6 @@ Multiplication by the local swap converts swap-combined adjunction and
 transposition into ordinary adjunction and transposition. It preserves
 entrywise conjugation. The same multiplication transports continuous paths.
 
-**Scope restriction:** path comparisons in this module use one fixed ambient
-bond dimension. The comparison of all three source examples, whose canonical
-bond dimensions differ, still requires a relation permitting common ambient
-representatives. See `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
-
 **Scope restriction (no identity ancillas):** The strict comparisons
 `strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff`,
 `strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff` and
@@ -44,7 +39,7 @@ open scoped Matrix
 
 namespace MPOTensor
 
-variable {d D : ℕ}
+variable {d D Da Db : ℕ}
 
 /-- Pointwise equivalent invariance equations at the same applicable chain
 lengths give equivalent symmetry-invariance predicates.
@@ -203,10 +198,10 @@ theorem isInvariantUnderSymmetry_conjugation_ketLeftMul_swap_iff
       congrArg (fun X ↦ sitewisePhysicalMatrix (shiftPhysicalSwap d) N * X) h
 
 /-- Swap multiplication identifies strict equivalence under swap-combined
-adjunction with strict equivalence under adjunction, at fixed bond dimension.
+adjunction with strict equivalence under adjunction.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff
-    (U V : MPOTensor (d * d) D) :
+    (U : MPOTensor (d * d) Da) (V : MPOTensor (d * d) Db) :
     StrictlyEquivalentUnderSymmetry (shiftSwapDaggerSymmetry d) U V rfl ↔
       StrictlyEquivalentUnderSymmetry (daggerSymmetry (d * d))
         (U.ketLeftMul (shiftPhysicalSwap d)) (V.ketLeftMul (shiftPhysicalSwap d)) rfl :=
@@ -215,10 +210,10 @@ theorem strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff
     isInvariantUnderSymmetry_shiftSwapDagger_iff U V
 
 /-- Swap multiplication identifies strict equivalence under swap-combined
-transposition with strict equivalence under transposition, at fixed bond dimension.
+transposition with strict equivalence under transposition.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff
-    (U V : MPOTensor (d * d) D) :
+    (U : MPOTensor (d * d) Da) (V : MPOTensor (d * d) Db) :
     StrictlyEquivalentUnderSymmetry (shiftSwapTransposeSymmetry d) U V rfl ↔
       StrictlyEquivalentUnderSymmetry (transposeSymmetry (d * d))
         (U.ketLeftMul (shiftPhysicalSwap d)) (V.ketLeftMul (shiftPhysicalSwap d)) rfl :=
@@ -227,10 +222,10 @@ theorem strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff
     isInvariantUnderSymmetry_shiftSwapTranspose_iff U V
 
 /-- Swap multiplication preserves strict equivalence under entrywise
-conjugation, at fixed bond dimension.
+conjugation.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff
-    (U V : MPOTensor (d * d) D) :
+    (U : MPOTensor (d * d) Da) (V : MPOTensor (d * d) Db) :
     StrictlyEquivalentUnderSymmetry (conjugationSymmetry (d * d)) U V rfl ↔
       StrictlyEquivalentUnderSymmetry (conjugationSymmetry (d * d))
         (U.ketLeftMul (shiftPhysicalSwap d)) (V.ketLeftMul (shiftPhysicalSwap d)) rfl :=

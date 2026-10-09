@@ -38,7 +38,7 @@ open scoped Matrix BigOperators
 
 namespace MPOTensor
 
-variable {d D : ℕ}
+variable {d D Da Db : ℕ}
 
 /-- A fixed one-site left action is continuous on local MPO tensors.
 
@@ -113,8 +113,7 @@ private theorem ketLeftMul_padBond (U : MPOTensor d D)
     (padBond U D' h).ketLeftMul Q = padBond (U.ketLeftMul Q) D' h := by
   funext i j
   simp only [ketLeftMul, padBond]
-  rw [Finset.mul_sum, Finset.sum_mul]
-  exact Finset.sum_congr rfl fun k _ => by rw [Matrix.mul_smul, Matrix.smul_mul]
+  simp only [Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_smul, Matrix.smul_mul]
 
 /-- Reindexing both physical legs by the trivial equivalence `(finCongr rfl).symm`
 is the identity. -/
@@ -135,7 +134,7 @@ theorem strictlyEquivalentUnderSymmetry_iff_ketLeftMul
     (hQQ : Q * Q = 1)
     (hST : ∀ {E : ℕ} (W : MPOTensor d E),
       IsInvariantUnderSymmetry S W ↔ IsInvariantUnderSymmetry T (W.ketLeftMul Q))
-    (U V : MPOTensor d D) :
+    (U : MPOTensor d Da) (V : MPOTensor d Db) :
     StrictlyEquivalentUnderSymmetry S U V rfl ↔
       StrictlyEquivalentUnderSymmetry T (U.ketLeftMul Q) (V.ketLeftMul Q) rfl := by
   unfold StrictlyEquivalentUnderSymmetry
@@ -202,7 +201,7 @@ theorem blockTensor_ketLeftMul (W : MPOTensor d D)
 /-- The one-site involution also identifies strict symmetry-preserving
 equivalence after some common positive blocking length. The symmetry
 correspondence is required on all tensors in each blocked physical space.
-No ancilla action or unequal-bond comparison is asserted.
+No ancilla action is asserted.
 
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085,
 and Definition `def:equivalent-symmetry`, lines 1356--1366. -/
@@ -213,7 +212,7 @@ theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul
     (hST : ∀ k : ℕ, 0 < k → ∀ {E : ℕ} (W : MPOTensor (MPSTensor.blockPhysDim d k) E),
       IsInvariantUnderSymmetry (S.block k) W ↔
         IsInvariantUnderSymmetry (T.block k) (W.ketLeftMul (MPSTensor.blockKron k Q)))
-    (U V : MPOTensor d D) :
+    (U : MPOTensor d Da) (V : MPOTensor d Db) :
     (∃ k > 0, StrictlyEquivalentUnderSymmetry (S.block k)
       (blockTensor U k) (blockTensor V k) rfl) ↔
       (∃ k > 0, StrictlyEquivalentUnderSymmetry (T.block k)

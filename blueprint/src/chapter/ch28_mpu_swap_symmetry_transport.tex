@@ -145,27 +145,29 @@
     normalization, and distributes over the canonical block decomposition.
 \end{proof}
 
-\begin{theorem}[Transport of fixed-bond symmetry-preserving paths]
-    \label{thm:mpu_fixed_bond_symmetry_path_transport}
+\begin{theorem}[Transport of symmetry-preserving paths]
+    \label{thm:mpu_symmetry_path_transport}
     \lean{MPOTensor.joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul,
         MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul}
     \leanok
     \uses{def:strictly-equivalent-symmetry,
         def:mpdo_vertical_one_site_actions}
-    Fix $d,D$, two finite-chain operator symmetries $\mathcal S,\mathcal T$,
+    Fix $d$, two finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary $Q\in\MN{d}$ with $Q^2=I$. Suppose that, for every local
     tensor $\mathcal W$ with physical dimension $d$ and any virtual
     dimension, $\mathcal W$ is $\mathcal S$-invariant if and only if
-    $Q\mathcal W$ is $\mathcal T$-invariant. Then a continuous MPU path
-    of virtual dimension $D$ from $\mathcal U$ to $\mathcal V$ with
+    $Q\mathcal W$ is $\mathcal T$-invariant. Then, for tensors
+    $\mathcal U,\mathcal V$ of a common virtual dimension, a continuous MPU
+    path of that virtual dimension from $\mathcal U$ to $\mathcal V$ with
     $\mathcal S$-invariance exists if and only if such a path from
     $Q\mathcal U$ to $Q\mathcal V$ with $\mathcal T$-invariance exists.
-    If the endpoints are in canonical form, the same equivalence holds
-    for strict equivalence under the corresponding symmetries; this
-    comparison connects padded representatives in a shared ambient
-    virtual dimension, while identity-ancilla stabilization remains
-    outside the statement \cite{gap:mpu_equivalence_fixed_bond,
-        gap:mpu_symmetry_ancilla_transport}.
+    For tensors $\mathcal U,\mathcal V$ of possibly different virtual
+    dimensions, strict equivalence under $\mathcal S$ is equivalent to
+    strict equivalence of $Q\mathcal U,Q\mathcal V$ under $\mathcal T$;
+    both relations compare the tensors after unused virtual directions are
+    adjoined up to a common dimension \cite{gap:mpu_equivalence_fixed_bond}.
+    Identity-ancilla stabilization is outside the statement
+    \cite{gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -176,40 +178,37 @@
     $p\mapsto Q\mathcal W(p)$ is continuous and has the required
     endpoints and symmetry. Its periodic operators are
     $Q^{\otimes N}W^{(N)}(p)$ and are unitary. Applying the same involution
-    proves the converse. Canonical form is preserved at both endpoints by
+    proves the converse. For strict equivalence, apply this to the paths
+    between the enlarged tensors; the action of $Q$ commutes with adjoining
+    unused virtual directions. Canonical form is preserved at both endpoints by
     Theorem~\ref{thm:mpu_canonical_form_physical_left_action}.
 \end{proof}
 
-\begin{theorem}[Strict swap comparison in a fixed virtual dimension]
-    \label{thm:mpu_fixed_bond_strict_swap_comparison}
+\begin{theorem}[Strict swap comparison]
+    \label{thm:mpu_strict_swap_comparison}
     \lean{MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff}
     \leanok
     \uses{def:strictly-equivalent-symmetry,
         def:mpu_swap_comparison_symmetries, threeMPU2}
-    Fix a virtual dimension $D$. Let $\mathcal U,\mathcal V$ have two
-    $d$-dimensional physical spins and this same virtual dimension, and
-    write $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
+    Let $\mathcal U,\mathcal V$ have two $d$-dimensional physical spins,
+    and write $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
     $\widetilde{\mathcal V}=\mathbb S\mathcal V$. Strict equivalence of
     $\mathcal U,\mathcal V$ under swap-combined adjunction is equivalent
     to strict equivalence of
     $\widetilde{\mathcal U},\widetilde{\mathcal V}$ under adjunction.
     The analogous equivalence holds for swap-combined transposition and
     transposition. Strict equivalence under conjugation is preserved.
-    These comparisons fix the endpoints' virtual dimension, while the
-    strict-equivalence relation itself connects padded representatives in a
-    shared ambient virtual dimension; identity-ancilla stabilization remains
-    outside this statement
-    \cite{gap:mpu_equivalence_fixed_bond,
-        gap:mpu_symmetry_ancilla_transport}.
+    Identity-ancilla stabilization is outside this statement
+    \cite{gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_one_sided_swap_invariance,
-        thm:mpu_fixed_bond_symmetry_path_transport,
+        thm:mpu_symmetry_path_transport,
         thm:threeMPU2_chain_formulas}
-    Apply Theorem~\ref{thm:mpu_fixed_bond_symmetry_path_transport} with
+    Apply Theorem~\ref{thm:mpu_symmetry_path_transport} with
     $Q=\mathbb S$. The swap is a unitary involution, and the three
     required invariance equivalences are precisely those of
     Theorem~\ref{thm:mpu_one_sided_swap_invariance}.
@@ -246,7 +245,7 @@
     \uses{def:mpu_blocked_finite_chain_symmetry,
         def:strictly-equivalent-symmetry,
         def:mpdo_vertical_one_site_actions}
-    Fix $d,D$, finite-chain operator symmetries $\mathcal S,\mathcal T$,
+    Fix $d$, finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary involution $Q\in\MN{d}$. For every $k>0$, suppose that
     every local tensor $\mathcal W$ of physical dimension $d^k$ and any
     virtual dimension is invariant under the blocked symmetry
@@ -256,19 +255,16 @@
     $\mathcal U^{[k]},\mathcal V^{[k]}$ strictly equivalent under
     $\mathcal S^{[k]}$ is equivalent to the existence of such a length
     making $(Q\mathcal U)^{[k]},(Q\mathcal V)^{[k]}$ strictly equivalent
-    under $\mathcal T^{[k]}$. The strict-equivalence relation connects
-    padded representatives in a shared ambient virtual dimension; no
-    identity ancillas are included in this comparison
-    \cite{gap:mpu_equivalence_fixed_bond,
-        gap:mpu_symmetry_ancilla_transport}.
+    under $\mathcal T^{[k]}$. No identity ancillas are included in this
+    comparison \cite{gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_fixed_bond_symmetry_path_transport,
+    \uses{thm:mpu_symmetry_path_transport,
         thm:mpu_physical_left_action_blocking}
     Fix a positive blocking length $k$. The matrix $Q^{\otimes k}$ is
     again a unitary involution, so apply
-    Theorem~\ref{thm:mpu_fixed_bond_symmetry_path_transport} in the
+    Theorem~\ref{thm:mpu_symmetry_path_transport} in the
     blocked physical space. Identify the transformed endpoints using
     (\ref{eq:mpu_left_action_blocking}), and then take the existential
     quantifier over $k>0$.
@@ -283,8 +279,8 @@
     \uses{def:mpu_blocked_finite_chain_symmetry,
         def:mpu_swap_comparison_symmetries,
         def:strictly-equivalent-symmetry, threeMPU2}
-    Fix a virtual dimension $D$ and tensors $\mathcal U,\mathcal V$ with
-    two $d$-dimensional physical spins. Put
+    Let $\mathcal U,\mathcal V$ be tensors with two $d$-dimensional
+    physical spins. Put
     $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
     $\widetilde{\mathcal V}=\mathbb S\mathcal V$. The existence of a
     positive common blocking length for strict equivalence of
@@ -292,10 +288,8 @@
     adjunction is equivalent to the existence of such a length for
     $\widetilde{\mathcal U}^{[k]},\widetilde{\mathcal V}^{[k]}$ under
     blocked adjunction. The analogous statements hold for transposition
-    and conjugation. Each path retains virtual dimension $D$; no ancilla
-    enlargement is asserted
-    \cite{gap:mpu_equivalence_fixed_bond,
-        gap:mpu_symmetry_ancilla_transport}.
+    and conjugation. No ancilla enlargement is asserted
+    \cite{gap:mpu_symmetry_ancilla_transport}.
 \end{theorem}
 
 \begin{proof}\leanok

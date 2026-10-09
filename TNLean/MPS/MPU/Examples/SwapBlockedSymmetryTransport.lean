@@ -12,10 +12,11 @@ The one-sided swap transformation commutes with blocking. Consequently it
 identifies the three symmetry-preserving path comparisons after an arbitrary
 common positive blocking length.
 
-**Scope restriction:** the ambient bond dimension is fixed, and no identity
-ancillas are introduced. These statements are distinct from unrestricted
-stabilized equivalence. See `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`
-and `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+**Scope restriction (no identity ancillas):** the blocked comparisons in this
+module introduce no identity ancillas. They are distinct from the source's
+stabilized equivalence under a symmetry (arXiv:1703.09188, Definition
+`def:equivalent-symmetry`, lines 1356--1366). See
+`docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
 
 **Local fix (one-sided swap):** equation `threeMPU2` uses one-sided
 multiplication \(\widetilde U_N=S_NU_N\), while the conjugation paragraph in
@@ -29,7 +30,7 @@ open scoped Matrix BigOperators
 
 namespace MPOTensor
 
-variable {d D : ℕ}
+variable {d D Da Db : ℕ}
 
 private theorem reindex_sitewisePhysicalMatrix_blockKron
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
@@ -181,7 +182,7 @@ strict equivalence under swap-combined adjunction with that under adjunction.
 The same blocking length works in both directions.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_shiftSwapDagger_iff
-    (U V : MPOTensor (d * d) D) :
+    (U : MPOTensor (d * d) Da) (V : MPOTensor (d * d) Db) :
     (∃ k > 0, StrictlyEquivalentUnderSymmetry ((shiftSwapDaggerSymmetry d).block k)
       (blockTensor U k) (blockTensor V k) rfl) ↔
       (∃ k > 0, StrictlyEquivalentUnderSymmetry ((daggerSymmetry (d * d)).block k)
@@ -196,7 +197,7 @@ strict equivalence under swap-combined transposition with that under transpositi
 The same blocking length works in both directions.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_shiftSwapTranspose_iff
-    (U V : MPOTensor (d * d) D) :
+    (U : MPOTensor (d * d) Da) (V : MPOTensor (d * d) Db) :
     (∃ k > 0, StrictlyEquivalentUnderSymmetry ((shiftSwapTransposeSymmetry d).block k)
       (blockTensor U k) (blockTensor V k) rfl) ↔
       (∃ k > 0, StrictlyEquivalentUnderSymmetry ((transposeSymmetry (d * d)).block k)
@@ -211,7 +212,7 @@ strict equivalence under entrywise conjugation. The same blocking length works
 in both directions.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_conjugation_swap_iff
-    (U V : MPOTensor (d * d) D) :
+    (U : MPOTensor (d * d) Da) (V : MPOTensor (d * d) Db) :
     (∃ k > 0, StrictlyEquivalentUnderSymmetry ((conjugationSymmetry (d * d)).block k)
       (blockTensor U k) (blockTensor V k) rfl) ↔
       (∃ k > 0, StrictlyEquivalentUnderSymmetry ((conjugationSymmetry (d * d)).block k)
