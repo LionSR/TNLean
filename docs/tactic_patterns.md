@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
+
+- **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
+  its boundary dart, cut the walk at the first endpoint of the dart, and show that the
+  dart is an edge of the edge boundary no farther from the start than the walk is long.
+- **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
+- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
+  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+  region and the shortened walk; the three call sites use it.
+- **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
+  analogue for an arbitrary graph in the extended graph distance.
+
 ### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
 
 - **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with
@@ -6038,3 +6052,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
+
+
+### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
+
+- **Pattern:** apply `Real.sSup_le` with the nonnegativity of the target supremum,
+  unpack a regional-entropy witness, and include its region in the target collection.
+- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`,
+  `boxEntropy_mono` and `boxEntropy_antitone`.
+- **Abstraction:** both proofs already use `Real.sSup_le`. A further helper is deferred
+  until the same inclusion argument occurs in another module.
+- **Notes:** the nonnegativity argument also covers an empty collection; an additional
+  nonemptiness hypothesis would unnecessarily restrict these statements.

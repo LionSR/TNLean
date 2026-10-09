@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAux
 import QICLean.Analysis.MatrixFramePerturbation
+import QICLean.Analysis.RectangularTraceNorm
 import QICLean.Analysis.RootChannel
 
 /-!
@@ -20,7 +21,8 @@ contraction, and products of contractions are contractions.
 * `Matrix.l2_opNorm_reindex_le`: relabelling rows and columns of a rectangular matrix.
 * `Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_le_one`: `‖Aᴴ A‖ ≤ 1` gives `‖A‖ ≤ 1`.
 * `Matrix.IsIsometry.l2_opNorm_le_one`: an isometry is a contraction.
-* `Matrix.l2_opNorm_mul_le_one`, `Matrix.l2_opNorm_list_prod_le_one`: products of contractions.
+* `Matrix.l2_opNorm_list_prod_le_one`: finite products of contractions, using QICLean's
+  `Matrix.l2_opNorm_mul_le_one` for two factors.
 * `Matrix.l2_opNorm_conjTranspose_mul_mul_le_one`: `‖Aᴴ F A‖ ≤ 1` for contractions `A` and `F`.
 * `Matrix.l2_opNorm_le_of_blocks`: the operator norm of a block-diagonal matrix is at most the
   largest Hilbert--Schmidt norm of its diagonal blocks.
@@ -69,15 +71,10 @@ theorem IsIsometry.l2_opNorm_le_one {A : Matrix m n ℂ} (hA : A.IsIsometry) : �
   l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
     rw [show Aᴴ * A = 1 from hA]; exact (IsStarProjection.one _).norm_le)
 
-/-- The product of two contractions is a contraction. -/
-theorem l2_opNorm_mul_le_one {l : Type*} [Fintype l] [DecidableEq l] {A : Matrix m n ℂ}
-    {B : Matrix n l ℂ} (hA : ‖A‖ ≤ 1) (hB : ‖B‖ ≤ 1) : ‖A * B‖ ≤ 1 :=
-  (l2_opNorm_mul A B).trans ((mul_le_mul hA hB (norm_nonneg B) zero_le_one).trans_eq (one_mul 1))
-
 /-- Compressing a contraction `F` by a contraction `A` gives a contraction `Aᴴ F A`. -/
 theorem l2_opNorm_conjTranspose_mul_mul_le_one [DecidableEq m] {A : Matrix m n ℂ}
     {F : Matrix m m ℂ} (hA : ‖A‖ ≤ 1) (hF : ‖F‖ ≤ 1) : ‖Aᴴ * F * A‖ ≤ 1 :=
-  l2_opNorm_mul_le_one (l2_opNorm_mul_le_one (by rwa [l2_opNorm_conjTranspose]) hF) hA
+  l2_opNorm_mul_le_one _ _ (l2_opNorm_mul_le_one _ _ (by rwa [l2_opNorm_conjTranspose]) hF) hA
 
 /-- The product of a list of contractions is a contraction. -/
 theorem l2_opNorm_list_prod_le_one :
@@ -85,7 +82,7 @@ theorem l2_opNorm_list_prod_le_one :
   | [], _ => (IsStarProjection.one (Matrix n n ℂ)).norm_le
   | A :: l, h => by
     rw [List.prod_cons]
-    exact l2_opNorm_mul_le_one (h A List.mem_cons_self)
+    exact l2_opNorm_mul_le_one _ _ (h A List.mem_cons_self)
       (l2_opNorm_list_prod_le_one l fun B hB => h B (List.mem_cons_of_mem _ hB))
 
 /-- **Block-diagonal operator norm.** If `Y a b` vanishes unless the labels `u a` and `u' b`
