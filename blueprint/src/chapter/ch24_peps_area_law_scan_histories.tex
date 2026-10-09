@@ -974,13 +974,12 @@ The following finite construction follows
     band. Initial assignments persist through all subsequent moves.
 \end{proof}
 
-% The following finite-tree specialization is source-reviewed and awaits
-% compilation against the pinned replica-transport dependency closure.
 \begin{theorem}[Compatibility of augmented physical supports]
     \label{thm:al_scan_augmented_supports}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedPartition_contains_of_constant,
         TNLean.PEPS.AreaLaw.Scan.IsTerminalSplit.augmented,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_supportCompatible_domainGraph}
+    \leanok
     \uses{def:al_scan_augmented_partitions}
     Under the hypotheses of Theorem~\ref{thm:al_scan_support_classification},
     adjoin $C$ to the near side and $R$ to the far side, leaving every
@@ -991,6 +990,7 @@ The following finite construction follows
     supplied finite history and conditional-choice mean trees.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:al_scan_support_classification,thm:al_scan_augmented_transitions}
     Inclusion into the physical tensor factors preserves containment,
     nonempty intersections, and disjointness. The auxiliary factors do not

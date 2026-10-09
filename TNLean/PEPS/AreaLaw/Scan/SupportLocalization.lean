@@ -55,25 +55,20 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
       _ = ((2 * r₀ : ℕ) : ℕ∞) := by simp [two_mul]
   obtain ⟨p, hp⟩ := SimpleGraph.exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (ENat.natCast_ne_top (2 * r₀)) hyx)
-  obtain ⟨d, hd, hdA, hdout⟩ := p.exists_boundary_dart (A : Set (Site Λ)) hyA hxA
-  have hmem := p.dart_fst_mem_support_of_mem_darts hd
-  have hyd : (domainGraph Λ).edist y d.fst ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
+  obtain ⟨u, w, -, -, hcut, p', hp'⟩ := exists_edgeBoundary_of_walk p hyA hxA
+  have hyd : (domainGraph Λ).edist y u ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
     calc
-      (domainGraph Λ).edist y d.fst ≤ (p.takeUntil d.fst hmem).length :=
-        SimpleGraph.edist_le _
-      _ ≤ p.length := by exact_mod_cast p.length_takeUntil_le_length hmem
+      (domainGraph Λ).edist y u ≤ p'.length := SimpleGraph.edist_le _
+      _ ≤ p.length := by exact_mod_cast hp'
       _ = (domainGraph Λ).edist y x := hp
       _ ≤ ((2 * r₀ : ℕ) : ℕ∞) := hyx
   have hvariation := abs_ambientDepth_sub_le_domainGraph T hT hyd
-  have hcut : s(d.fst, d.snd) ∈ edgeBoundary Λ A := by
-    refine Finset.mem_filter.mpr ⟨?_, d.fst, hdA, d.snd, hdout, rfl⟩
-    simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using d.adj
-  have hz : d.fst.val ∈ Geometry.boundaryEndpoints Λ A := by
-    refine Finset.mem_image.mpr ⟨d.fst, ?_, rfl⟩
-    exact Finset.mem_biUnion.mpr ⟨s(d.fst, d.snd), hcut, by simp⟩
-  obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (ambientSupDistance d.fst.val)
-  have hseparate := hclear t ht d.fst.val hz
-  have hdeep : ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientDepth T hT d.fst.val := by
+  have hz : u.val ∈ Geometry.boundaryEndpoints Λ A := by
+    refine Finset.mem_image.mpr ⟨u, ?_, rfl⟩
+    exact Finset.mem_biUnion.mpr ⟨s(u, w), hcut, by simp⟩
+  obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (ambientSupDistance u.val)
+  have hseparate := hclear t ht u.val hz
+  have hdeep : ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientDepth T hT u.val := by
     rw [ambientDepth, hmin]
     simpa only [ambientSupDistance, abs_sub_comm] using hseparate
   rw [abs_le] at hvariation
