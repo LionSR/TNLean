@@ -292,9 +292,25 @@ bound for $0\le p_0\le p_1\le1$.
 They require a supplied nonzero symmetric prevector and the smallness
 condition $a\ell\le c_0$. Only the energy bound additionally requires
 that prevector to be an eigenvector of the actual augmented truncated
-replica Hamiltonian. The initial physical prevector, typical sectors,
-comparator estimates, the scanner's measure-valued fields and the
-complete scanner data construction remain open.
+replica Hamiltonian.
+
+Collecting all $2nm$ actual rounds into one finite family, with history length
+$\lfloor j/2\rfloor$, even fills and odd charges, one band count $K$, and
+one augmented energy family, gives the finite-family form of Proposition~7.4
+with common nonnegative errors chosen before the round, replica count,
+supplied vector, interpolation parameter, and eigenvalue. Its entropy error has the all-count bound
+$0\le\beta_k\le C_\beta\log(k+2)$ with $C_\beta\ge0$, and its nonnegative
+energy remainder tends to zero.
+\footnote{The finite-family statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph}.}
+The auxiliary dimensions remain arbitrary and fixed before these errors.
+At zero copies the replica Hamiltonian is zero, so its eigenvector premise
+for a nonzero supplied vector forces $E_0=0$; no identification with a fixed
+physical ground energy follows.
+
+The initial physical prevector, typical sectors, comparator estimates, the
+scanner's measure-valued fields and the complete scanner data construction
+remain open.
 
 \section{Elimination}
 

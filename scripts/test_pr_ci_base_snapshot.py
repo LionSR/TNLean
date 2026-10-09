@@ -279,6 +279,31 @@ class ImmutableBaseTests(unittest.TestCase):
         self.run_step(TIMING_NAME)
         self.assertEqual(self.output.read_text(), "result=error\n")
 
+    def test_early_actual_round_timings_reach_the_final_failure_gate(self):
+        source = "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean"
+        module = "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport"
+        self.write(source, "theorem synthetic_timed_source : True := by trivial\n")
+        self.commit("add synthetic changed actual-round module")
+        log = self.runtime / "lake-build.log"
+        for facet, seconds, later in (
+            ("", 50, f"Replayed {module} (1s)\nBuild completed successfully (2 jobs).\n"),
+            (":olean", 51, "Build completed successfully (9713 jobs).\n"),
+        ):
+            with self.subTest(facet=facet, seconds=seconds):
+                log.write_text(f"Built {module}{facet} ({seconds}s)\n")
+                with log.open("a") as stream:
+                    stream.write(later)
+                before = log.read_bytes()
+                result = self.run_step(TIMING_NAME)
+                self.assertEqual(self.output.read_text(), "result=limit\n")
+                self.assertEqual(log.read_bytes(), before)
+                self.assertEqual((self.runtime / "changed-lean-files.txt").read_text(), source + "\n")
+                self.assertIn(f"::error file={source}::{module}{facet} compiled in {seconds}.000s",
+                              result.stdout)
+                enforced = self.run_step(ENFORCE, check=False, extra_env={"TIMING_RESULT": "limit"})
+                self.assertNotEqual(enforced.returncode, 0)
+                self.assertIn("50-second compilation limit", enforced.stdout)
+
     def test_timing_fetch_diff_and_invalid_base_errors(self):
         (self.runtime / "lake-build.log").write_text("")
         for command in ("fetch", "diff"):

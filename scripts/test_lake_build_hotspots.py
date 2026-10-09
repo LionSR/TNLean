@@ -99,6 +99,41 @@ class LakeBuildHotspotTests(unittest.TestCase):
             ),
         )
 
+    def assert_early_actual_round_timing_fails(self, early: str, later: str,
+                                             job: str, seconds: float) -> None:
+        module = "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport"
+        source = "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean"
+        with tempfile.TemporaryDirectory() as directory:
+            log = Path(directory) / "lake-build.log"
+            changed = Path(directory) / "changed.txt"
+            log.write_text(early, encoding="utf-8")
+            with log.open("a", encoding="utf-8") as stream:
+                stream.write(later)
+            changed.write_text(source + "\n", encoding="utf-8")
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                status = hotspots.main([str(log), "--changed-files-from", str(changed)])
+            jobs = hotspots.changed_jobs(hotspots.parse_timed_jobs(log.read_text()), [source])
+        self.assertEqual(status, 50)
+        self.assertEqual(status, hotspots.TIMING_LIMIT_EXIT)
+        self.assertEqual(jobs[0], hotspots.TimedJob(job, seconds))
+        self.assertIn(f"::error file={source}::{job} compiled in {seconds:.3f}s "
+                      "(warning at 25s, error at 50s)", output.getvalue())
+        self.assertTrue(all(item.job.partition(":")[0] == module for item in jobs))
+
+    def test_early_fifty_second_actual_round_build_survives_later_replay(self) -> None:
+        module = "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport"
+        self.assert_early_actual_round_timing_fails(
+            f"✔ [1/1] Built {module} (50s)\n",
+            f"✔ [1/2] Replayed {module} (1s)\nBuild completed successfully (2 jobs).\n",
+            module, 50.0)
+
+    def test_early_fifty_one_second_actual_round_olean_survives_silent_root(self) -> None:
+        job = "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport:olean"
+        self.assert_early_actual_round_timing_fails(
+            f"✔ [1/1] Built {job} (51s)\n",
+            "Build completed successfully (9713 jobs).\n", job, 51.0)
+
     def test_changed_file_gate_ignores_unmodified_slow_modules(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             log = Path(directory) / "lake.log"

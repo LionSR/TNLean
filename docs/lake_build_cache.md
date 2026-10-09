@@ -177,8 +177,9 @@ changes. This prevents historical or removed unreachable modules from satisfying
 regression imports. Unchanged QIC proof artifacts and unchanged Gametheory and
 checkdecls modules remain reusable; no `.trace` or `.hash` is rewritten.
 
-The ordinary full `lake build`, linter target, and all existing checks still run
-before direct Lean regressions. The guard verifies that the default TNLean root
+The ordinary full `lake build`, linter target, and all existing checks still run.
+Apart from the narrowly guarded early checks below, direct Lean regressions
+follow the full root build. The guard verifies that the default TNLean root
 imports `QICLean`, ensuring its aggregator closure is rebuilt normally. This is
 an optimization candidate, not evidence of a cache hit or measured speedup. It
 does not relax `seed_lake_build.sh` or the stricter local seeding policy.
@@ -220,5 +221,26 @@ explicit Mathlib cache guard. Its fail-fast Lake target is
 modules and their complete import closures are rebuilt before strict elaboration.
 The regression prints eight axiom audits; `check_collared_open_axioms.py` requires
 all eight and rejects every axiom outside `propext`, `Classical.choice`, and
-`Quot.sound`, including `sorryAx`. All other direct Lean regressions remain after
-the full root build. No dependency pin or artifact provenance rule changes.
+`Quot.sound`, including `sorryAx`.
+
+### Focused actual-round transport checks before the root build
+
+The actual finite-round transport checks also follow cache setup and provenance
+pruning. A prebuilt `Mathlib.olean` is required before one single-threaded,
+fail-fast Lake build of `ActualRoundTransport:olean` and
+`FillTransportEndpoints:olean`. The second target supplies the endpoint
+identities used by the adjacency regressions; the first target alone does not
+include that module. Their complete import closures precede the two strict
+actual-round production and fixture steps. Each strict file retains its
+90-second limit, one thread, strict options, and warnings-as-errors policy.
+
+The focused build appends both output streams to the same
+`$RUNNER_TEMP/lake-build.log` used by the full root and final timing collector.
+An early timed build therefore remains subject to the changed-module
+50-second failure threshold even if the root later replays it quickly or emits
+no further record. Exact workflow guards check the two targets, their import
+coverage, order, resources, failure behavior, and append-only timing path.
+
+All other direct Lean regressions remain after the full root build. The root,
+String Order capstones, style checks, and final timing gate remain required.
+These early checks do not relax dependency pinning or artifact provenance rules.
