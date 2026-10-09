@@ -107,6 +107,13 @@ def sourceDims : {a b : Layout P} → (w : SourceCircuit a b) → sourceLocation
   | _, _, .swap .. => fun e ↦ nomatch e.1
   | _, _, .frame _ w => sourceDims w
 
+/-- Both independent Schmidt endpoint indices at every selected original source position.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–434. -/
+abbrev CorrectedSchmidtCoordinates {P : Type} {a b : Layout P}
+    (w : SourceCircuit a b) (S : Finset (sourceLocations w)) :=
+  ∀ e : S, Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2) ×
+    Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2)
+
 /-- The actual source record at an original position, when that position remains
 nonlocal after grouping the exterior parties. Untouched gates need no branch
 label. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–417. -/

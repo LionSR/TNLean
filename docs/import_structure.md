@@ -141,6 +141,17 @@ the preceding memory. The spectator-register construction in `WordAppendTail`
 uses this theorem directly. Its former private copy `appendIso_nil_tmul` is
 removed; no public declaration is removed or renamed.
 
+## Corrected source coordinates and vectors
+
+`PEPS.Approximation.SourceCircuitSourceOrder` owns the paired Schmidt
+coordinates at the selected original source occurrences, alongside their
+coordinate dimensions. These finite index sets are independent of the Gaussian
+source law. `SourceInputPartition` owns the joint vector of the selected sources
+and the equality showing that changing unselected positions leaves this vector
+unchanged. The corrected endpoint frames and corrected Schmidt input identities
+use these elementary constructions; they do not require the Gaussian physical
+error estimate merely to identify their coordinates or source vectors.
+
 ## Archive exclusion
 
 `TNLean/Archive/` is intentionally outside the production manifest and is not
