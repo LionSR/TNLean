@@ -10,6 +10,7 @@ for the planar geometry.
 \begin{theorem}[Clipping a unit segment]
     \label{thm:area_law_unit_segment_ball_clipping}
     \lean{TNLean.PEPS.AreaLaw.Geometry.segment_inter_closedBall_of_dist_eq_one}
+    \leanok
     Let $E$ be a real normed space and let $a,b\in E$ satisfy
     $\|b-a\|=1$. If $0\le\eta\le1$, then
     \begin{align}
@@ -17,7 +18,7 @@ for the planar geometry.
          & = [a,(1-\eta)a+\eta b].
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Write a point of $[a,b]$ as $(1-t)a+tb$, where $0\le t\le1$.
     Its distance from $a$ is $t\|b-a\|=t$. It therefore belongs to
     the closed ball precisely when $0\le t\le\eta$.
