@@ -15,25 +15,9 @@ used as its original contraction without opening its monomial expansion.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 351–417.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate and eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-selective-aggregate-word.groupedblockmap
-Downstream declaration: TNLean.PEPS.PairEffect.Word.groupedBlockMap
-
-Provenance-ID: 8769-selective-aggregate-word.groupedblockmap_spec
-Downstream declaration: TNLean.PEPS.PairEffect.Word.groupedBlockMap_spec
-
-Provenance-ID: 8769-selective-aggregate-word.eval_groupedblockmap
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_groupedBlockMap
-
-Provenance-ID: 8769-selective-aggregate-word.eval_sum_mapowner_comp
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_sum_mapOwner_comp
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

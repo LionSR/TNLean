@@ -76,9 +76,6 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_nil}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_cons}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_append}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_partyPair_mapOwner}
     \leanok
     \uses{def:peps_source_inventory}
     A source $s=(p,q;U,V;\eta)$ remains between distinct owners
@@ -87,14 +84,28 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     For an ordered source list $S$, let $S_f$ be the list of these
     surviving records in their original order. This operation preserves
     the empty list and concatenation.
+\end{definition}
 
+\begin{theorem}[Surviving pair labels after grouping]
+    \label{thm:peps_owner_source_pairs}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_mapOwner}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_partyPair_mapOwner}
+    \leanok
+    \uses{def:peps_owner_sources}
     The unordered pair labels of $S_f$ are obtained by applying $f$
     to both endpoints of each original pair and removing the diagonal
     images. Their multiplicities are retained: different original pairs
     may acquire the same new label. Thus a pair $k$ occurs in $S_f$
     exactly when it is non-diagonal and is the image of some pair
     occurring in $S$.
-\end{definition}
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on $S$. A source with endpoints $p,q$ contributes the label
+    $\{f(p),f(q)\}$ precisely when $f(p)\ne f(q)$, and nothing otherwise;
+    concatenation of lists corresponds to concatenation of label lists.
+\end{proof}
 
 \begin{theorem}[Normalization and the absence of crossing sources]
     \label{thm:peps_owner_sources_internal}

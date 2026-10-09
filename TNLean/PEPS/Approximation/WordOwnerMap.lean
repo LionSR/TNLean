@@ -17,28 +17,9 @@ only pairs with distinct new owners remain in the pair-source inventory.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, the affected and exterior calculations, lines 383–448.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-party-coarsening-word-word.mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.Word.mapOwner
-
-Provenance-ID: 8769-party-coarsening-word-word.isallowed_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.Word.isAllowed_mapOwner
-
-Provenance-ID: 8769-party-coarsening-word-word.sources_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.Word.sources_mapOwner
-
-Provenance-ID: 8769-party-coarsening-word-word.eval_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_mapOwner
-
-Provenance-ID: 8769-party-coarsening-word-word.eval_mapowner_comp
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_mapOwner_comp
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

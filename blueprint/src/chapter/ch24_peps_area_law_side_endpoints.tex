@@ -1,0 +1,44 @@
+\section{Ordered endpoints of a whole cell side}
+\label{sec:area_law_side_endpoints}
+
+The four sides of a dyadic square are traversed counterclockwise, starting
+with the right side. The resulting endpoint identities hold at every
+natural scale and every integer cell index; see
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 299--306, prop:two-families,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Whole-side coordinates and corner witnesses]
+    \label{thm:area_law_unsplit_side_endpoints}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_coordinates,
+        TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_are_corners}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_corner}
+    Fix an origin $o\in\mathbb R^2$, natural exponent $\ell$ and
+    integer cell index $z\in\mathbb Z^2$. Put $t=2^\ell$ and
+    $q=o+tz$. If $(a_s,b_s)$ is the ordered pair of endpoints of
+    the unsplit side $s\in\{0,1,2,3\}$, then
+    \begin{align}
+        (a_0,b_0) & =((q_1+t,q_2),(q_1+t,q_2+t)), \\
+        (a_1,b_1) & =((q_1+t,q_2+t),(q_1,q_2+t)), \\
+        (a_2,b_2) & =((q_1,q_2+t),(q_1,q_2)),     \\
+        (a_3,b_3) & =((q_1,q_2),(q_1+t,q_2)).
+    \end{align}
+    In particular, for every $s$ there exist
+    $\varepsilon_s,\eta_s\in\{0,1\}^2$ such that
+    \begin{align}
+        a_s=o+t(z+\varepsilon_s),\qquad
+        b_s=o+t(z+\eta_s).
+    \end{align}
+    Thus both endpoints are actual corners of the same dyadic cell.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_corner}
+    Substitute the four side indices into the affine parametrization
+    of the fan boundary. The resulting coordinate pairs are those
+    displayed above. The corner pairs $(\varepsilon_s,\eta_s)$,
+    in the same order, are
+    $((1,0),(1,1))$, $((1,1),(0,1))$,
+    $((0,1),(0,0))$ and $((0,0),(1,0))$.
+\end{proof}

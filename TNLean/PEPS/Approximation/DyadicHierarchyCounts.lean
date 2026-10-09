@@ -10,6 +10,7 @@ import Mathlib.Data.Fintype.Prod
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
+import TNLean.PEPS.Approximation.DyadicAnchors
 
 /-!
 # Counting the padded dyadic hierarchy
@@ -25,16 +26,16 @@ This file proves the geometric counts behind Proposition 7.1 (`prop:protocol`), 
 
 * the hierarchy has `(4 ^ (k + 1) - 1) / 3` squares, hence `O(L ^ 2)`;
 * the repaintings and the junctions over all scales number `O(N ^ 2) = O(L ^ 2)`, so `M` times
-  their number is `O(M L ^ 2)`, in particular at most `C M L ^ 3`; the schedule itself is not
-  formalized;
-* the integer address `eq:geometry-addresses` of a square lies in the square and in
-  `{0, …, N - 1}`, and, one coordinate at a time, blocks at scales `j' ≤ j + 1` whose closed
-  intervals are within distance `g` have address coordinates within `g + 3 · 2 ^ j`;
+  their number is `O(M L ^ 2)`, in particular at most `C M L ^ 3`; the number of changes per
+  repainting, which counts gates of the protocol, is not treated here;
+* the integer address `eq:geometry-addresses` of a square, the dyadic anchor `dyadicAnchor` of
+  the routing step (§8.3, `eq:anchors`), lies in `{0, …, N - 1}`, and, one coordinate at a time,
+  blocks at scales `j' ≤ j + 1` whose closed intervals are within distance `g` have address
+  coordinates within `g + 3 · 2 ^ j`, so the owners of a repainted block, of its neighbors and
+  of their parents are at the same or adjacent scales and at address distance `O(n)`;
 * one coordinate of the count of blocks meeting an interval, an ingredient of the bounded
-  lifetime participation; the active-label invariant itself is not formalized.
-
-The address coincides with the dyadic anchor of the routing step (§8.3, `eq:anchors`); the two
-definitions are to be unified when that development lands.
+  lifetime participation. The guide part of the active-label invariant is in
+  `TNLean.PEPS.Approximation.DyadicLevelSchedule`; its part on tags is not treated here.
 
 ## References
 
@@ -157,62 +158,79 @@ theorem three_mul_schedule_le_cube {k L : ℕ} (hk : 2 ^ k < 2 * L) (M : ℕ) :
 
 /-! ### Addresses -/
 
-/-- One coordinate of the integer address of a square of side `2 ^ j` with block index `r`:
-`2 ^ j r + 2 ^ (j - 1)` for `j ≥ 1`, and `r` for `j = 0`.
+/-- The addresses of the hierarchy of `[0, 2 ^ k] ^ 2`, the dyadic anchors of its blocks, lie in
+`{0, …, 2 ^ k - 1}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-addresses`,
-`06-geometry.tex:633–642`. -/
-def squareAddress (j r : ℕ) : ℕ := if j = 0 then r else 2 ^ j * r + 2 ^ (j - 1)
-
-/-- The address lies in its square: `2 ^ j r ≤ a < 2 ^ j r + 2 ^ j`. -/
-theorem squareAddress_mem (j r : ℕ) :
-    2 ^ j * r ≤ squareAddress j r ∧ squareAddress j r < 2 ^ j * r + 2 ^ j := by
-  rcases Nat.eq_zero_or_pos j with rfl | hj
-  · simp [squareAddress]
-  · have hlt : 2 ^ (j - 1) < 2 ^ j := Nat.pow_lt_pow_right (by norm_num) (by omega)
-    simp only [squareAddress, hj.ne', ite_false]
-    exact ⟨Nat.le_add_right _ _, Nat.add_lt_add_left hlt _⟩
-
-/-- The addresses of the hierarchy of `[0, 2 ^ k] ^ 2` lie in `{0, …, 2 ^ k - 1}`.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:645–646`. -/
-theorem squareAddress_lt {k j r : ℕ} (hj : j ≤ k) (hr : r < 2 ^ (k - j)) :
-    squareAddress j r < 2 ^ k := by
-  have h := (squareAddress_mem j r).2
-  have : 2 ^ j * r + 2 ^ j ≤ 2 ^ k := by
-    calc 2 ^ j * r + 2 ^ j = 2 ^ j * (r + 1) := by ring
-      _ ≤ 2 ^ j * 2 ^ (k - j) := Nat.mul_le_mul_left _ hr
-      _ = 2 ^ k := by rw [← pow_add, Nat.add_sub_cancel' hj]
-  omega
+`06-geometry.tex:633–646`. -/
+theorem dyadicAnchor_lt_two_pow {k j r : ℕ} (hj : j ≤ k) (hr : r < 2 ^ (k - j)) :
+    dyadicAnchor j r < 2 ^ k := by
+  refine dyadicAnchor_lt ?_
+  calc 2 ^ j * (r + 1) ≤ 2 ^ j * 2 ^ (k - j) := Nat.mul_le_mul_left _ hr
+    _ = 2 ^ k := by rw [← pow_add, Nat.add_sub_cancel' hj]
 
 /-- **Address locality.** If the closed interval of a block of side `2 ^ j` starts within `g`
 after the end of a block of side `2 ^ j'`, then its address exceeds the other address by less
 than `g + 2 ^ j + 2 ^ j'`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:585–588, 643–645`. -/
-theorem squareAddress_lt_add {j r j' r' g : ℕ} (h : 2 ^ j * r ≤ 2 ^ j' * r' + 2 ^ j' + g) :
-    squareAddress j r < squareAddress j' r' + g + 2 ^ j + 2 ^ j' := by
-  have h1 := squareAddress_mem j r
-  have h2 := squareAddress_mem j' r'
+theorem dyadicAnchor_lt_add {j r j' r' g : ℕ} (h : 2 ^ j * r ≤ 2 ^ j' * r' + 2 ^ j' + g) :
+    dyadicAnchor j r < dyadicAnchor j' r' + g + 2 ^ j + 2 ^ j' := by
+  have h1 := dyadicAnchor_mem_block j r
+  have h2 := dyadicAnchor_mem_block j' r'
+  rw [mul_add, mul_one] at h1 h2
   linarith [h1.1, h1.2, h2.1, h2.2]
 
 /-- **Address coordinates of nearby blocks at scales `j' ≤ j + 1`.** If two blocks of sides
 `2 ^ j` and `2 ^ j'`, with `j' ≤ j + 1`, have closed intervals within distance `g` in one
 coordinate, their address coordinates differ by less than `g + 3 · 2 ^ j`. It is an ingredient
-of Proposition 7.1, item 3; that linked parties are at the same or adjacent scales and within
-distance `O(n)` is not proved here.
+of Proposition 7.1, item 3; see `dyadicAnchor_dist_lt_of_adjacent` for the owners of a
+repainting.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 3,
 `06-geometry.tex:34–37`, and `06-geometry.tex:643–645`. -/
-theorem squareAddress_dist_lt {j r j' r' g : ℕ} (hj : j' ≤ j + 1)
+theorem dyadicAnchor_dist_lt {j r j' r' g : ℕ} (hj : j' ≤ j + 1)
     (h : 2 ^ j * r ≤ 2 ^ j' * r' + 2 ^ j' + g) (h' : 2 ^ j' * r' ≤ 2 ^ j * r + 2 ^ j + g) :
-    squareAddress j r < squareAddress j' r' + g + 3 * 2 ^ j ∧
-      squareAddress j' r' < squareAddress j r + g + 3 * 2 ^ j := by
+    dyadicAnchor j r < dyadicAnchor j' r' + g + 3 * 2 ^ j ∧
+      dyadicAnchor j' r' < dyadicAnchor j r + g + 3 * 2 ^ j := by
   have hp : 2 ^ j' ≤ 2 * 2 ^ j := by
     rw [← pow_succ']; exact Nat.pow_le_pow_right two_pos hj
-  have a := squareAddress_lt_add h
-  have b := squareAddress_lt_add h'
+  have a := dyadicAnchor_lt_add h
+  have b := dyadicAnchor_lt_add h'
   constructor <;> linarith
+
+/-- **Parties of a repainting, one coordinate.** Let two blocks of side `2 ^ j` have adjacent or
+equal indices `q, q'`. Each of them, or its parent of side `2 ^ (j + 1)`, has an address
+coordinate within `3 · 2 ^ (j + 1)` of the other's: the owners and old owners of a repainted
+block and of its neighbors are at the same or adjacent scales and at address distance `O(n)`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 3,
+`06-geometry.tex:34–37`, and `06-geometry.tex:585–592, 643–645`. -/
+theorem dyadicAnchor_dist_lt_of_adjacent {j q q' : ℕ} (hq : q ≤ q' + 1) (hq' : q' ≤ q + 1)
+    {j₁ a₁ j₂ a₂ : ℕ} (h₁ : (j₁ = j ∧ a₁ = q) ∨ (j₁ = j + 1 ∧ a₁ = q / 2))
+    (h₂ : (j₂ = j ∧ a₂ = q') ∨ (j₂ = j + 1 ∧ a₂ = q' / 2)) :
+    dyadicAnchor j₁ a₁ < dyadicAnchor j₂ a₂ + 3 * 2 ^ (j + 1) ∧
+      dyadicAnchor j₂ a₂ < dyadicAnchor j₁ a₁ + 3 * 2 ^ (j + 1) := by
+  have hP : 2 ^ (j + 1) = 2 * 2 ^ j := pow_succ' 2 j
+  have hP0 : 0 < 2 ^ j := pow_pos two_pos j
+  -- each party's closed interval contains the block's own interval `[2 ^ j q, 2 ^ j (q + 1)]`
+  have hint : ∀ {i a q : ℕ}, (i = j ∧ a = q) ∨ (i = j + 1 ∧ a = q / 2) →
+      2 ^ i * a ≤ 2 ^ j * q ∧ 2 ^ j * q + 2 ^ j ≤ 2 ^ i * a + 2 ^ i ∧ i ≤ j + 1 ∧
+        2 ^ i ≤ 2 ^ (j + 1) := by
+    rintro i a q (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+    · exact ⟨le_rfl, le_rfl, Nat.le_succ _, Nat.pow_le_pow_right two_pos (Nat.le_succ _)⟩
+    · have h1 : 2 * (q / 2) ≤ q := Nat.mul_div_le q 2
+      have h2 : q < 2 * (q / 2) + 2 := by omega
+      refine ⟨?_, ?_, le_rfl, le_rfl⟩
+      · rw [hP]; nlinarith [Nat.mul_le_mul_left (2 ^ j) h1]
+      · rw [hP]; nlinarith [Nat.mul_le_mul_left (2 ^ j) h2]
+  obtain ⟨a1, b1, c1, d1⟩ := hint h₁
+  obtain ⟨a2, b2, c2, d2⟩ := hint h₂
+  have e1 : 2 ^ j * q ≤ 2 ^ j * q' + 2 ^ j := by nlinarith
+  have e2 : 2 ^ j * q' ≤ 2 ^ j * q + 2 ^ j := by nlinarith
+  have k1 := dyadicAnchor_lt_add (j := j₁) (r := a₁) (j' := j₂) (r' := a₂) (g := 0) (by omega)
+  have k2 := dyadicAnchor_lt_add (j := j₂) (r := a₂) (j' := j₁) (r' := a₁) (g := 0) (by omega)
+  constructor <;> omega
 
 /-! ### Bounded lifetime incidence -/
 
