@@ -1,0 +1,120 @@
+\subsection{Ambient boundaries of template dilations}
+\label{sec:area_law_template_boundary}
+
+Write $\mathcal N(p)$ for the four nearest neighbors of $p\in\mathbb Z^2$.
+For a finite set $S$, its ambient boundary $\partial S$ consists of unordered
+nearest-neighbor edges with one endpoint in $S$ and the other outside $S$.
+These are ambient lattice edges; they are not boundary edges of an intersection
+with a physical cut.
+
+\begin{definition}[Finite enclosure of the ambient boundary]
+    \label{def:area_law_ambient_boundary}
+    \leanok
+    \lean{
+        TNLean.PEPS.AreaLaw.latticeNeighbors,
+        TNLean.PEPS.AreaLaw.ambientBoundaryRegion,
+        TNLean.PEPS.AreaLaw.ambientBoundary
+    }
+    \uses{def:area_law_template}
+    Regard $S$ as a subset of its unit sup-norm dilation $S_1$.
+    Take its unordered crossing edges in the induced nearest-neighbor graph
+    on $S_1$, and map the endpoints back to $\mathbb Z^2$.
+\end{definition}
+
+\begin{lemma}[Exact crossing edges and four neighbors]
+    \label{lem:area_law_ambient_boundary_crossing}
+    \leanok
+    \lean{
+        TNLean.PEPS.AreaLaw.mem_latticeNeighbors_iff,
+        TNLean.PEPS.AreaLaw.card_latticeNeighbors_le,
+        TNLean.PEPS.AreaLaw.neighbor_mem_ambientDilation_succ,
+        TNLean.PEPS.AreaLaw.card_ambientBoundary,
+        TNLean.PEPS.AreaLaw.mem_ambientBoundary_iff,
+        TNLean.PEPS.AreaLaw.ambientBoundary_orientation_unique,
+        TNLean.PEPS.AreaLaw.ambientBoundary_empty
+    }
+    \uses{def:area_law_ambient_boundary,thm:area_law_dilation_rows_union}
+    The boundary consists exactly of edges $\{p,q\}$ with
+    $p\in S$, $q\notin S$, and $q\in\mathcal N(p)$.
+    The inside--outside orientation is unique, and mapping back from the
+    finite enclosure preserves the number of unordered edges.
+    Each point has at most four neighbors; a nearest-neighbor step from
+    $S_r$ lies in $S_{r+1}$. The empty set has empty boundary.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Every neighbor of a point of $S$ lies in $S_1$, so the enclosure loses
+    no crossing edge. Its inclusion into the lattice is injective, as is
+    the induced map on unordered pairs. The endpoint in $S$ determines the
+    orientation uniquely. The four neighbors change exactly one coordinate
+    by one, proving the radius assertion.
+\end{proof}
+
+\begin{lemma}[Counting boundary edges from either endpoint]
+    \label{lem:area_law_ambient_boundary_layers}
+    \leanok
+    \lean{
+        TNLean.PEPS.AreaLaw.latticeNeighbors_symm,
+        TNLean.PEPS.AreaLaw.card_ambientBoundary_le_of_endpoint_cover,
+        TNLean.PEPS.AreaLaw.card_ambientBoundary_le_outer_layer,
+        TNLean.PEPS.AreaLaw.card_ambientBoundary_dilation_le_layer
+    }
+    \uses{lem:area_law_ambient_boundary_crossing}
+    The neighbor relation is symmetric. If a finite set $R$ meets every edge
+    of $\partial S$, then $|\partial S|\le4|R|$. In particular,
+    \begin{align}
+        |\partial S|   & \le4|S_1\setminus S|,                   \\
+        |\partial S_j| & \le4|S_j\setminus S_{j-1}|\quad(j\ge1).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Cover the crossing edges by the four incident edges at each point of $R$.
+    For the first bound use the outside endpoints. For the second, an inside
+    endpoint in $S_{j-1}$ would put its outside neighbor in $S_j$, a
+    contradiction. No connectedness or nonemptiness assumption is needed.
+\end{proof}
+
+\begin{lemma}[Boundaries of set differences]
+    \label{lem:area_law_ambient_boundary_difference}
+    \leanok
+    \lean{
+        TNLean.PEPS.AreaLaw.ambientBoundary_sdiff_subset,
+        TNLean.PEPS.AreaLaw.card_ambientBoundary_sdiff_le
+    }
+    \uses{lem:area_law_ambient_boundary_crossing}
+    For finite lattice sets $S,U$,
+    \begin{align}
+        \partial(S\setminus U)   & \subseteq\partial S\cup\partial U, \\
+        |\partial(S\setminus U)| & \le|\partial S|+|\partial U|.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    An edge leaving $S\setminus U$ either leaves $S$ or enters $U$.
+    Count the union of these two sets of unordered edges.
+\end{proof}
+
+\begin{lemma}[Template ambient boundary bounds]
+    \label{lem:area_law_template_ambient_boundary}
+    \leanok
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.template_boundary_card_le,
+        TNLean.PEPS.AreaLaw.Geometry.template_shell_boundary_card_le
+    }
+    \uses{def:area_law_template,thm:area_law_template_depth_layers,
+        lem:area_law_ambient_boundary_layers,lem:area_law_ambient_boundary_difference}
+    If $C_{\rm tpl}\ge24$ and $0\le j\le s_0$, then
+    \begin{align}
+        |\partial T_j|             & \le4n, \\
+        |\partial(T_j\setminus T)| & \le8n.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    For positive $j$, count inside endpoints in $T_j\setminus T_{j-1}$
+    and apply the depth-layer bound. At $j=0$, use outside endpoints in
+    $T_1\setminus T$; the template assumption $s_0\ge1$ permits this layer.
+    Thus the largest radius $s_0$ never needs a bound at radius $s_0+1$.
+    Apply the set-difference estimate for the shell.
+\end{proof}

@@ -23,8 +23,7 @@ the normal words of the main and auxiliary sheets. This file formalizes:
   `dist(y, {f ≠ P∘}) ≥ a₀ min(n, d_V(y))` for every point `y` of the closed changed region of
   the central birth and of each elementary edge birth or death, and the clearance
   `dist(y, ∂Y) ≥ a₀ min(n, d_V(y))` for every point `y` of the closed noncommon-`C` set of the
-  lens exchange; the changed regions have diameter at most `n`;
-* the Lipschitz step of the outer-hole enlargement used in the point treatment.
+  lens exchange; the changed regions have diameter at most `n`.
 
 Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
@@ -32,23 +31,19 @@ Labels are elements of an arbitrary type `ι`, and nothing assumes `A`, `B`, `C`
 source's nominal labels may coincide (`06-geometry.tex:168–169`), and identifying labels only
 shrinks the obstructing sets (`06-geometry.tex:315–318`).
 
-**Scope restriction (guide properties assumed; `S` at the origin):** the source states
-Lemma 7.2 for the guides of its schedule. The clearance theorems `BandOperation.clearance`,
-`centralBirth_clearance` and `lensExchange_clearance` are instead stated for every guide with
-the properties the source's proof uses (`06-geometry.tex:276–299`): the source's normal word
-on the band `-8 < x < 2` and no change off it (edge operations), the label `A` on the open
-square (central birth), and the label `C` on the exterior band `-8 < x < 0` (main sheet of the
-exchange). The source derives these properties from the disjointness of the bands
-(`06-geometry.tex:227–241`), proved as `disjoint_edgeBand`; the schedule itself, and so
-this derivation, is not formalized. The square is `S = [0, n] ^ 2`; an aligned square
-`(n r, n s) + [0, n] ^ 2` is its translate, and sup distances are translation invariant.
-Documented in `docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex`.
+The clearance theorems `BandOperation.clearance`, `centralBirth_clearance` and
+`lensExchange_clearance` hold for every guide with the properties that the source's proof uses
+(`06-geometry.tex:276–299`): the operation's normal word on the band `-8 < x < 2` and no change
+off it (edge operations), the label `A` on the open square (central birth), and the label `C` on
+the exterior band `-8 < x < 0` (main sheet of the exchange). The guides of the schedule are
+constructed, and shown to have these properties, in
+`TNLean.PEPS.Approximation.DyadicRepaintingSchedule`; Lemma 7.2 for the repainting of every
+block of the hierarchy is in `TNLean.PEPS.Approximation.DyadicLevelSchedule`.
 
 ## References
 
 * Polynomial-PEPS manuscript (Sept 24 2026), §7, `06-geometry.tex`: the edge construction
-  (lines 155–241), Lemma 7.2 `lem:geometry-angular` (lines 254–319), and the point-treatment
-  estimates (lines 357–415).
+  (lines 155–241) and Lemma 7.2 `lem:geometry-angular` (lines 254–319).
 -/
 
 namespace TNLean.PEPS.Approximation
@@ -58,10 +53,11 @@ open Set Metric SquareEdge
 /-! ### Normal words of the edge construction -/
 
 /-- A normal word: label `c` below the first interface, then at each interface `t` the label
-switches to the paired label. On an interface itself the label to its right is taken. The
-source instead samples labels after one generic displacement (`06-geometry.tex:72–77`); the
-two conventions differ only on the interface curves, and no clearance below depends on the
-values there.
+switches to the paired label. On an interface itself the label for `x ≥ t` is taken. The
+source instead reads labels after one small generic displacement (`06-geometry.tex:72–77`),
+which on two of the four edges of a square takes the label for `x < t`. The estimates of
+Lemma 7.2 are stated for closures, and they pass to every reading of these labellings after a
+small displacement in `TNLean.PEPS.Approximation.DyadicGuideReadings`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:161–170, 193–197`. -/
 noncomputable def bandWord {ι : Type*} (c : ι) : List (ℝ × ι) → ℝ → ι
@@ -216,8 +212,8 @@ or death of the edge construction, every point `y` of the closure of the changed
 ambient sup distance at least `a₀ min(n, d_V(y))` from every position of a label other than `P∘` in
 the surrounding guide. Here the guides `fb` (before) and `fa` (after) have the operation's normal
 words on the band `-8 < x < 2` and agree off it, and the surrounding guide `fs` has the surrounding
-word on that band. These guide properties are assumed rather than derived from the schedule (see the
-module's scope restriction).
+word on that band. The guides of the schedule have these properties
+(`RepaintingBaseline.clearance_auxStep`, `RepaintingBaseline.clearance_mainStep`).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma 7.2 `lem:geometry-angular`,
 equation `eq:geometry-birth-clearance`, `06-geometry.tex:254–264, 283–293`. -/
@@ -644,40 +640,5 @@ theorem lensExchange_clearance {ι : Type*} {n : ℝ} (e : SquareEdge) {A B C : 
         (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num) hy hlt
       rcases hzC with ⟨-, -, h1, h2⟩ | ⟨-, -, h1, h2⟩ <;> obtain ⟨-, -, h3, h4⟩ := hzY <;>
         nlinarith
-
-/-! ### Point treatment: the outer-hole enlargement -/
-
-/-- **Lipschitz step of the outer-hole enlargement.** Let `g` (the distance from the lens boundary)
-and `h` (the mark distance) be `1`-Lipschitz, let `t > 0`, and suppose `2 ε₀ (a + 1) ≤ a / 2`. If a
-hole center `c` has the tapered clearance `g c ≥ a max(t, min(n, h c))`, then every point `x` with
-`|x - c| ≤ 2 ε₀ t` has `g x ≥ (a / 2) max(t, min(n, h x))`. This is the arithmetic step used in the
-point treatment; the instantiation with the lens-boundary distance and the mark distance, and the
-birth-side enlargement of `06-geometry.tex:368–373`, are not formalized here.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:405–415`. -/
-theorem tapered_clearance_of_center {X : Type*} [PseudoMetricSpace X] {g h : X → ℝ}
-    (hg : ∀ x c, g c ≤ g x + dist x c) (hh : ∀ x c, h x ≤ h c + dist x c)
-    {a ε t n : ℝ} (ha : 0 < a) (ht : 0 < t) (haε : 2 * ε * (a + 1) ≤ a / 2)
-    {x c : X} (hc : a * max t (min n (h c)) ≤ g c) (hx : dist x c ≤ 2 * ε * t) :
-    a / 2 * max t (min n (h x)) ≤ g x := by
-  set δ := dist x c
-  have hδ : 0 ≤ δ := dist_nonneg
-  have hQ : max t (min n (h x)) ≤ max t (min n (h c)) + δ := by
-    refine max_le (by linarith [le_max_left t (min n (h c))]) ?_
-    have := hh x c
-    rcases le_total n (h c) with h1 | h1
-    · have : min n (h x) ≤ n := min_le_left _ _
-      have : n = min n (h c) := (min_eq_left h1).symm
-      linarith [le_max_right t (min n (h c))]
-    · have : min n (h x) ≤ h x := min_le_right _ _
-      have : h c = min n (h c) := (min_eq_right h1).symm
-      linarith [le_max_right t (min n (h c))]
-  have htQ : t ≤ max t (min n (h x)) := le_max_left _ _
-  have h1 := hg x c
-  have h2 : a * max t (min n (h x)) ≤ a * max t (min n (h c)) + a * δ := by nlinarith
-  have h3 : (a + 1) * δ ≤ (a + 1) * (2 * ε * t) := mul_le_mul_of_nonneg_left hx (by linarith)
-  have h4 : (a + 1) * (2 * ε * t) ≤ a / 2 * t := by nlinarith
-  have h5 : a / 2 * t ≤ a / 2 * max t (min n (h x)) := mul_le_mul_of_nonneg_left htQ (by linarith)
-  nlinarith
 
 end TNLean.PEPS.Approximation

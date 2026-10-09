@@ -244,10 +244,11 @@ theorem localGate_mem_unitary :
     g.localGate ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary (pair_injective g.near_ne_far) g.u_mem_unitary
 
-theorem localGate_mem_supportedOperators : g.localGate ∈ supportedOperators d (bond g.near) := by
+theorem localGate_mem_supportedOperators :
+    g.localGate ∈ supportedOperators d (ringBond g.near) := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.near_ne_far) g.u
   rw [Matrix.range_cons_cons_empty] at this
-  rw [bond, near, add_natCast_succ]
+  rw [ringBond, near, add_natCast_succ]
   exact this
 
 theorem a_ne_far : g.a ≠ g.far := by
@@ -267,7 +268,7 @@ theorem op_mem_supportedOperators : g.op ∈ supportedOperators d {g.a, g.far} :
 
 theorem far_mem_span : g.far ∈ g.span := ⟨2 * g.L + 1, le_rfl, rfl⟩
 
-theorem bond_near_subset_span : bond g.near ⊆ g.span := by
+theorem bond_near_subset_span : ringBond g.near ⊆ g.span := by
   rintro i (rfl | rfl)
   · exact ⟨2 * g.L, by omega, rfl⟩
   · rw [near, add_natCast_succ]; exact ⟨2 * g.L + 1, le_rfl, rfl⟩
@@ -286,13 +287,13 @@ theorem allSites_there_subset_span : allSites g.there ⊆ g.span :=
 theorem allSites_back_subset_span : allSites g.back ⊆ g.span :=
   (allSites_backwardChain_subset _ _ _).trans fun _ ⟨j, hj, hi⟩ => ⟨j, by omega, hi⟩
 
-theorem disjoint_cleared_bond_near : Disjoint (g.cleared : Set (Fin N)) (bond g.near) := by
+theorem disjoint_cleared_bond_near : Disjoint (g.cleared : Set (Fin N)) (ringBond g.near) := by
   have hL := g.lt
   rw [Set.disjoint_left]
   intro i hi hi'
   obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
   have hj := Finset.mem_range.mp hj
-  rw [bond, near, add_natCast_succ] at hi'
+  rw [ringBond, near, add_natCast_succ] at hi'
   rcases hi' with hi' | hi'
   · exact add_natCast_ne g.a (by omega) (by omega) (by omega) hi'
   · exact add_natCast_ne g.a (by omega) hL (by omega) hi'
@@ -321,7 +322,7 @@ variable {gs : List (LongRangeGate d N)}
 
 include hgs in
 theorem pairwise_disjoint_bond :
-    gs.Pairwise fun g g' => Disjoint (bond g.near) (bond g'.near) :=
+    gs.Pairwise fun g g' => Disjoint (ringBond g.near) (ringBond g'.near) :=
   hgs.imp fun {g g'} h => h.mono g.bond_near_subset_span g'.bond_near_subset_span
 
 /-- The layer of the gates `u` on the neighbouring pairs `{a + 2L, a + 2L + 1}`. -/
@@ -385,7 +386,7 @@ theorem isZeroOn_localLayer {w : (Fin N → Fin d) → ℂ}
     (list_prod_mem_supportedOperators _ fun A hA => ?_)
   obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
   refine supportedOperators_mono
-    (show bond g'.near ⊆ ((g.cleared : Set (Fin N)))ᶜ from fun i hi hi' => ?_)
+    (show ringBond g'.near ⊆ ((g.cleared : Set (Fin N)))ᶜ from fun i hi hi' => ?_)
     g'.localGate_mem_supportedOperators
   by_cases hgg : g = g'
   · subst hgg

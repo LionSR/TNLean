@@ -22,46 +22,9 @@ leaves only internal sources to be prepared after grouping the parties.
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, selective free inputs and internal preparations,
 lines 409–434.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-selective-prep-sourceinventory.selectedsources
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.selectedSources
-
-Provenance-ID: 8769-selective-prep-sourceinventory.layout_selectedsources_eq
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.layout_selectedSources_eq
-
-Provenance-ID: 8769-selective-prep-sourceinventory.freeslotlayout
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.freeSlotLayout
-
-Provenance-ID: 8769-selective-prep-sourceinventory.prepareselected
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.prepareSelected
-
-Provenance-ID: 8769-selective-prep-sourceinventory.preparefreeslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.prepareFreeSlots
-
-Provenance-ID: 8769-selective-prep-sourceinventory.fillsourcevectors
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.fillSourceVectors
-
-Provenance-ID: 8769-selective-prep-sourceinventory.isallowed_prepareselected
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepareSelected
-
-Provenance-ID: 8769-selective-prep-sourceinventory.sources_prepareselected
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.sources_prepareSelected
-
-Provenance-ID: 8769-selective-prep-sourceinventory.eval_prepareselected_preparefreeslots
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots
-
-Provenance-ID: 8769-selective-prep-sourceinventory.mem_selectedsources
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mem_selectedSources
-
-Provenance-ID: 8769-selective-prep-sourceinventory.mem_sources_prepareselected
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

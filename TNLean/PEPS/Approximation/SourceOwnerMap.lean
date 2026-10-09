@@ -17,43 +17,9 @@ new pair labels is asserted.
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, the separation into affected and exterior parties,
 lines 383–427.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-party-coarsening-inventory-pairsource.mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.PairSource.mapOwner
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mapOwner
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mapowner_nil
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mapOwner_nil
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mapowner_cons
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mapOwner_cons
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mapowner_append
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mapOwner_append
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mem_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.isnormalized.mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.IsNormalized.mapOwner
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mapowner_eq_nil_iff
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mapOwner_eq_nil_iff
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.map_partypair_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_mapOwner
-
-Provenance-ID: 8769-party-coarsening-inventory-sourceinventory.mem_partypair_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.mem_partyPair_mapOwner
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

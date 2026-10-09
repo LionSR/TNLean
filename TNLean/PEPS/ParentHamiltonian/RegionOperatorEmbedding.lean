@@ -22,23 +22,6 @@ lines 2003–2011, and the local gates of arXiv:2307.01696, before Theorem 1;
 the comparison itself is proved here by its matrix coefficients.
 -/
 
-/-!
-Manuscript context: September 24, 2026, 05-frames.tex, sec:frames,
-eq:hole-projector and eq:hole-encoder, lines 13–97.
-Manuscript commit: adc7f1241b42e322a6451854ab7e4b4c146bf78a
-Original comparison of existing definitions needed by the regional operator
-construction; no upstream Lean proof text reused.
-
-Provenance-ID: region-embedding8770-tnlean.peps.agreeoff_region_iff
-Downstream declaration: TNLean.PEPS.agreeOff_region_iff
-
-Provenance-ID: region-embedding8770-tnlean.peps.regionlocalterm_eq_embedop
-Downstream declaration: TNLean.PEPS.regionLocalTerm_eq_embedOp
-
-Provenance-ID: region-embedding8770-tnlean.peps.dependentregionoperatorlift_eq_reindex_embedop
-Downstream declaration: TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp
--/
-
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V] {d : ℕ}

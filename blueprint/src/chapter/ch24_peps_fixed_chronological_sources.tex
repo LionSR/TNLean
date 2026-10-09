@@ -16,11 +16,11 @@ common free inputs used in the two separated contractions in
     \uses{thm:peps_partial_source_order}
     Let $\mathcal E$ be the original ordered source positions and let
     $\mathcal A$ be the affected parties. Retain the ordered sublist
-    \[
+    \begin{align}
         \mathcal E_{\mathcal A}
         =\{e\in\mathcal E:
         p_e\in\mathcal A\text{ or }q_e\in\mathcal A\}.
-    \]
+    \end{align}
     Write $r=|\mathcal E_{\mathcal A}|$. Reading this sublist in order
     gives a bijection from $\{0,\ldots,r-1\}$ to its positions.
     The reference source list assigns to the corresponding position
@@ -67,19 +67,19 @@ common free inputs used in the two separated contractions in
     \uses{thm:peps_partial_fixed_layout,thm:peps_source_preparation}
     Let the chronological composition be allowed. For every partial
     choice $\xi$ there are unit vectors
-    \[
+    \begin{align}
         \eta_{\xi,i}\in
         \C^{u_{e_i}}\otimes\C^{v_{e_i}},
         \qquad 0\leq i<r,
-    \]
+    \end{align}
     and an allowed composition $V_\xi$ containing no pair sources,
     such that the actual ordered source list of the partial branch
     consists exactly of these vectors at the reference positions.
     If $P_{\eta_\xi}$ prepares them and leaves the original input
     registers unchanged, then
-    \[
+    \begin{align}
         W_\xi=V_\xi P_{\eta_\xi}.
-    \]
+    \end{align}
     The input register list of $V_\xi$ is the common source layout
     followed by the grouped original inputs. Its output register list
     is the grouped original output list. Both lists are independent
@@ -90,7 +90,7 @@ common free inputs used in the two separated contractions in
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,
-        thm:peps_source_preparation}
+        thm:peps_source_preparation,thm:peps_common_source_lists}
     Equal ordered layouts identify the two halfspaces at each source
     position. Transport the actual normalized source vectors along
     these identifications. The resulting reference list is exactly
@@ -113,10 +113,10 @@ common free inputs used in the two separated contractions in
     the original vector of source position $e=(g,j)$ at local label
     $\alpha\in\Xi_g$. At the retained reference index $i$, with
     original position $e_i=(g_i,j_i)$, define
-    \[
+    \begin{align}
         \eta^{\mathrm{orig}}_{\xi,i}
         :=\nu_{e_i,\xi_{g_i}}.
-    \]
+    \end{align}
     Both sides belong to the fixed coordinate space
     $\C^{u_{e_i}}\otimes\C^{v_{e_i}}$.
 \end{definition}
@@ -147,7 +147,7 @@ common free inputs used in the two separated contractions in
 \begin{proof}
     \leanok
     \uses{thm:peps_source_circuit_incidence,thm:peps_partial_source_order,
-        thm:peps_partial_fixed_preparation}
+        thm:peps_partial_fixed_layout,thm:peps_partial_fixed_preparation}
     A retained endpoint belongs to its owning gate, so that gate is
     touched. Induction on the chronological composition recovers its
     chosen local label and original vector. At a gate the vector is
@@ -168,28 +168,28 @@ common free inputs used in the two separated contractions in
     list, containing every source that crosses the division. Let
     $P_{\mathrm{fix}}$ prepare the original source vectors at the
     remaining positions. There are an allowed composition $V$
-    containing no pair sources, and two allowed compositions $A,B$
+    containing no pair sources, and two allowed compositions $A_+,A_-$
     containing no pair sources, such that
-    \[
-        \|A\|\leq1,\qquad \|B\|\leq1,
+    \begin{align}
+        \|A_+\|\leq1,\qquad \|A_-\|\leq1,
         \qquad
         J_{\mathrm{out}}VP_{\mathrm{fix}}
-        =(A\otimes B)J_{\mathrm{free}}.
-    \]
+        =(A_+\otimes A_-)J_{\mathrm{free}}.
+    \end{align}
     Here $J_{\mathrm{free}}$ and $J_{\mathrm{out}}$ group the input
     and output registers by side. The equality holds on the entire
-    free input space. The maps $V,A,B$ can be chosen before any
+    free input space. The maps $V,A_+,A_-$ can be chosen before any
     vectors are supplied at the free source positions.
 
     More precisely, for every family $\zeta$ of vectors at those
     positions, let $P_\zeta^{\mathrm{free}}$ prepare that family and
     let $P_{\mathrm{fill}(\zeta)}$ prepare the whole source list,
     retaining the original vectors at fixed positions. Then
-    \[
+    \begin{align}
         J_{\mathrm{out}}VP_{\mathrm{fill}(\zeta)}
-        =(A\otimes B)J_{\mathrm{free}}
+        =(A_+\otimes A_-)J_{\mathrm{free}}
         P_\zeta^{\mathrm{free}}.
-    \]
+    \end{align}
     Taking the original source vectors gives the same equality with
     $VP_{\mathrm{fill}(\zeta)}=W$.
 \end{theorem}

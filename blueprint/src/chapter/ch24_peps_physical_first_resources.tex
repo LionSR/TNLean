@@ -96,24 +96,32 @@ physical operator with a contraction of local tensors.
     exchange changes neither branch labels nor coefficient sums.
 \end{proof}
 
-\begin{definition}[Original gate occurrences and network locality]
+\begin{definition}[Original gate occurrences]
     \label{def:peps_physical_first_original_locality}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.physicalFirstReplacementLocationsEquiv}
+    \leanok
+    \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
+    Let $E$ be the bijection from original nonprivate gate occurrences to
+    physical-first replacement gate occurrences obtained by composing the
+    correspondences for effect elimination and the physical output exchange.
+\end{definition}
+
+\begin{theorem}[Original participants and link locality]
+    \label{thm:peps_physical_first_original_locality}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
-    \leanok
-    The original nonprivate gate occurrences are in bijection with those of
-    the physical-first replacement, preserving their participating sets.
-    Choose any collection of replacement gate occurrences and a root assignment
-    on all replacement occurrences whose value participates at every retained
-    occurrence. Every star or sample link in the
-    resulting construction joins two parties that participate in a common
-    gate of the original circuit.
-\end{definition}
+    \uses{def:peps_physical_first_original_locality}
+    The bijection $E$ preserves participating sets. Choose any collection of
+    replacement gate occurrences and a root assignment on all replacement
+    occurrences whose value participates at every retained occurrence.
+    Every star or sample link in the resulting construction joins two parties
+    that participate in a common gate of the original circuit.
+\end{theorem}
 \begin{proof}
-    \leanok
-    Compose the gate correspondence for effect elimination with that for the
-    physical output exchange. A link's gate label places both endpoints in
+    \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences,
+        thm:compression_original_gate_locality}
+    The two gate correspondences preserve participating sets, so their
+    composition does as well. A link's gate label places both endpoints in
     its replacement gate's participating set; the correspondence identifies
     this set with the original one.
 \end{proof}
@@ -130,7 +138,7 @@ physical operator with a contraction of local tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:peps_physical_first_original_locality}
+    \uses{thm:peps_physical_first_original_locality}
     The gate correspondence preserves arity and lifetime participation.
     Discarding some gate occurrences can only reduce the latter count.
     Each participating gate contributes at most $b-1$ star links and $b-1$
@@ -164,6 +172,7 @@ physical operator with a contraction of local tensors.
     count, hence at most $C_M^2L^{2u}$. At a sample link it is exactly
     $k\leq C_kL^v$. Since $L\geq1$, increase either exponent to
     $\max(2u,v)$ and bound its nonnegative coefficient by $C_M^2+C_k$.
-    These are precisely the star and sample alphabets of Theorem~5.2,
-    lines 565--588 of the compression argument.
+    % Source: 04-compression.tex, lines 565--588.
+    These are the star and sample alphabets in
+    \cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 \end{proof}

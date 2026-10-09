@@ -15,31 +15,9 @@ remain as aggregate contractions on the exterior memory.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 351–417.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-thm:compression.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-evaluation-word.eval_sum_appendtail
-Downstream declaration: TNLean.PEPS.PairEffect.Word.eval_sum_appendTail
-
-Provenance-ID: 8769-chronological-evaluation-sourcecircuit.eval_partial_gate
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.eval_partial_gate
-
-Provenance-ID: 8769-chronological-evaluation-sourcecircuit.expandedeval
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.expandedEval
-
-Provenance-ID: 8769-chronological-evaluation-sourcecircuit.expandedeval_comp
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_comp
-
-Provenance-ID: 8769-chronological-evaluation-sourcecircuit.expandedeval_frame
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_frame
-
-Provenance-ID: 8769-chronological-evaluation-sourcecircuit.expandedeval_mapowner
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_mapOwner
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

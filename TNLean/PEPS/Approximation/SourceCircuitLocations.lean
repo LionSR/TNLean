@@ -15,55 +15,9 @@ belong to the actual participant set of that occurrence.
 
 Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, lines 342–364.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-subset-expansion.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.gatelocations
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.gateLocations
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.gatelocationsfintype
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.gateLocationsFintype
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.slotcount
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.slotCount
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.sourcelocations
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceLocations
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.sourcelocationsfintype
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.sourceLocationsFintype
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.participants
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.participants
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.endpoints
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.endpoints
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.endpoints_mem_participants
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.endpoints_mem_participants
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.endpoints_ne
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.endpoints_ne
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.branchlabels
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.branchLabels
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.branchlabelsfintype
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.branchLabelsFintype
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.branchcoefficient
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.istouched
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.IsTouched
-
-Provenance-ID: 8769-chronological-positions-sourcecircuit.istouched_gate_iff
-Downstream declaration: TNLean.PEPS.PairEffect.SourceCircuit.isTouched_gate_iff
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
