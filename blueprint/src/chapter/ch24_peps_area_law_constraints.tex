@@ -152,7 +152,9 @@ $\mu$ labels.
         TNLean.PEPS.AreaLaw.truncatedConstraint_mem_Icc,
         TNLean.PEPS.AreaLaw.exists_finiteSetTruncation,
         TNLean.PEPS.AreaLaw.kernelExponent_one,
-        TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_of_gap}
+        TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_of_gap,
+        Matrix.PosSemidef.eq_inner_smul_of_gap,
+        Matrix.PosSemidef.eigenspace_eq_span_of_gap}
     \leanok
     \uses{lem:al_truncation_error, thm:al_positive_replacement}
     Use Theorem~\ref{thm:al_positive_replacement} with $p=1$, so $\alpha=1/2$,
@@ -177,6 +179,12 @@ $\mu$ labels.
     energy is an eigenvector, every vector orthogonal to it has energy at
     least $g-\epsilon_n$, and the gap of $H_F$ at $\widetilde\Omega$ gives
     $g(1-|\langle\Omega,\widetilde\Omega\rangle|^2)\le2\epsilon_n$.
+    The ground vector is unique because any eigenvector $\psi$ of $\widetilde H$ at
+    the ground energy, minus its component $\langle\widetilde\Omega,\psi\rangle
+    \widetilde\Omega$, is again such an eigenvector and is orthogonal to
+    $\widetilde\Omega$; the gap inequality bounds its energy above the ground
+    energy, which is zero, from below by $g/2$ times its squared norm, so it
+    vanishes.
 \end{proof}
 
 For $X\subseteq S_0$ let $b_X$ be the number of edges with exactly one endpoint

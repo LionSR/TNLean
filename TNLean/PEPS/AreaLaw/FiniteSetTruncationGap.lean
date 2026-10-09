@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.TruncationRadius
+import QICLean.Analysis.PositiveGapUniqueness
 
 /-!
 # The truncated Hamiltonian keeps a unique gapped ground vector
@@ -20,6 +21,11 @@ trace distance at most `√(2 ε_n / g)`.
 
 * `TNLean.PEPS.AreaLaw.exists_finiteSetTruncation`: Proposition 4.5, first part, for any
   family of constraints with the conclusions of Proposition 4.3 at `p = 1`.
+
+The gap inequality `H' - e₀ I ≥ (g/2) (I - |Ω₀⟩⟨Ω₀|)` in the conclusion makes `Ω₀` the unique
+ground vector up to a scalar: `Matrix.PosSemidef.eq_inner_smul_of_gap` shows that every vector
+`ψ` with `H' ψ = e₀ ψ` equals `⟪Ω₀, ψ⟫ Ω₀`, and `Matrix.PosSemidef.eigenspace_eq_span_of_gap`
+identifies the eigenspace of `H'` at `e₀` with the line spanned by `Ω₀`.
 
 ## References
 
