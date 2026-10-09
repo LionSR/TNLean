@@ -24,59 +24,6 @@ crossing edges by `8 * r + 4`, without connectedness or unclipped-square assumpt
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-!
-## Original proof provenance
-
-Source: September 24, 2026,
-preprints/
-Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/
-build/sections/03-patches.tex,
-sec:patches and prop:patch; independently formalized;
-no upstream Lean proof text reused.
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.closedsquaresample
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.closedSquareSample
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.closedsquaresample_mono
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.closedSquareSample_mono
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_iff_int
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_int
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.card_edgeboundary_closedsquaresample_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.squareradius
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.squareRadius
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_iff_radius
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_iff_radius
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.abs_coordinate_sub_le_one_of_adj
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.abs_coordinate_sub_le_one_of_adj
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.mem_closedsquaresample_of_adj
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_closedSquareSample_of_adj
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.abs_squareradius_sub_le_one_of_adj
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_one_of_adj
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.mem_edgeboundary_pair_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_pair_iff
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.mem_edgeboundary_closedsquaresample_iff
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.mem_edgeBoundary_closedSquareSample_iff
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.card_closedsquaresample_le
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le
-
-Provenance-ID: 8767-tnlean.peps.arealaw.geometry.card_closedsquaresample_le_eightyone
-Downstream declaration: TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_le_eightyOne
--/
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The domain sites in the closed real square of center `c` and radius `r`.
