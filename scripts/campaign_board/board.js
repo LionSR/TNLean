@@ -138,7 +138,8 @@
   );
 
   /* ---------- the libraries doing the work ---------- */
-  const libs = C.repos.filter(r => r.homepage);
+  const libs = C.repos.filter(r => r.homepage)
+    .map(r => ({ ...r, homepage: r.homepage.replace(/\/?$/, "/") }));
   if (libs.length) {
     $("libs").append("Formalized in the open-source Lean 4 libraries ",
       ...libs.flatMap((r, k) => [k ? " and " : "", el("a", { href: r.homepage, text: r.name }), " (", ext(`https://github.com/${r.slug}`, "GitHub"), ")"]),
