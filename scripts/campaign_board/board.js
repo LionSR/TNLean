@@ -14,7 +14,7 @@
     error: ["Error in the paper", "A printed claim fails as stated. It needs a correction and possibly a new argument."],
     "missing-step": ["Missing step", "The paper omits a nontrivial step. The claim may hold, but the argument is incomplete."],
     narrower: ["Lean narrower than the paper", "Lean currently proves a restricted version. The paper's argument appears sound, and the remaining work is formalization."],
-    convention: ["Convention", "A degenerate case, such as a zero dimension or an empty set, is read as the authors evidently intend."]
+    convention: ["Convention", "A degenerate case, such as a zero dimension or an empty set, is read as the authors intend."]
   };
   const GAP_STATUS = { open: ["Open", "st-draft"], "resolved-pending": ["Resolved in an open PR", "st-review"], resolved: ["Resolved", "st-done"] };
 
