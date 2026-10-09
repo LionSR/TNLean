@@ -230,34 +230,44 @@ theorem pairHeadIso_rankOneChain (pA pB pA' pB' : P) (v w : EuclideanSpace ℂ (
   | add a b ha hb => simp only [map_add, ha, hb]
 
 omit [DecidableEq α] [DecidableEq β] in
-/-- The rank-one chain of two unit vectors is allowed, uses only the four owners, and has at
-most one pair source and at most one pair effect. -/
+/-- The rank-one chain of two unit vectors is allowed and uses only the four owners. It has at
+most one pair source, and none when `p_A' = p_B'`, and at most one pair effect, and none when
+`p_A = p_B`. -/
 theorem rankOneChain_props (pA pB pA' pB' : P) {v w : EuclideanSpace ℂ (α × β)} (hv : ‖v‖ = 1)
     (hw : ‖w‖ = 1) (ℓ : Layout P) {S : Set P} (hA : pA ∈ S) (hB : pB ∈ S) (hA' : pA' ∈ S)
     (hB' : pB' ∈ S) :
     (rankOneChain pA pB pA' pB' v w ℓ).IsAllowed ∧
       (rankOneChain pA pB pA' pB' v w ℓ).UsesOnly S ∧
       (rankOneChain pA pB pA' pB' v w ℓ).sourceCount ≤ 1 ∧
-      (rankOneChain pA pB pA' pB' v w ℓ).toEffectChain.effectCount ≤ 1 := by
+      (pA' = pB' → (rankOneChain pA pB pA' pB' v w ℓ).sourceCount = 0) ∧
+      (rankOneChain pA pB pA' pB' v w ℓ).toEffectChain.effectCount ≤ 1 ∧
+      (pA = pB → (rankOneChain pA pB pA' pB' v w ℓ).toEffectChain.effectCount = 0) := by
   have hk : (ketWord pA' pB' v ℓ).IsAllowed ∧ (ketWord pA' pB' v ℓ).UsesOnly S ∧
-      (ketWord pA' pB' v ℓ).sourceCount ≤ 1 := by
+      (ketWord pA' pB' v ℓ).sourceCount ≤ 1 ∧
+      (pA' = pB' → (ketWord pA' pB' v ℓ).sourceCount = 0) := by
     unfold ketWord
     split_ifs with h
-    · exact ⟨(norm_ketLocal_le _ _ _).trans hv.le, hA', Nat.zero_le _⟩
-    · exact ⟨(norm_pairVec v).trans hv, ⟨hA', hB'⟩, le_rfl⟩
+    · exact ⟨(norm_ketLocal_le _ _ _).trans hv.le, hA', Nat.zero_le _, fun _ => rfl⟩
+    · exact ⟨(norm_pairVec v).trans hv, ⟨hA', hB'⟩, le_rfl, fun h' => absurd h' h⟩
   have hb : (braChain pA pB w ℓ).IsAllowed ∧ (braChain pA pB w ℓ).UsesOnly S ∧
       (braChain pA pB w ℓ).sourceCount = 0 ∧
-      (braChain pA pB w ℓ).toEffectChain.effectCount ≤ 1 := by
+      (braChain pA pB w ℓ).toEffectChain.effectCount ≤ 1 ∧
+      (pA = pB → (braChain pA pB w ℓ).toEffectChain.effectCount = 0) := by
     unfold braChain
     split_ifs with h
-    · exact ⟨(norm_braLocal_le _ _ _).trans hw.le, hA, rfl, Nat.zero_le _⟩
-    · exact ⟨⟨trivial, hw, trivial⟩, ⟨hA, hB, trivial, trivial⟩, rfl, le_rfl⟩
+    · exact ⟨(norm_braLocal_le _ _ _).trans hw.le, hA, rfl, Nat.zero_le _, fun _ => rfl⟩
+    · exact ⟨⟨trivial, hw, trivial⟩, ⟨hA, hB, trivial, trivial⟩, rfl, le_rfl,
+        fun h' => absurd h' h⟩
   obtain ⟨h₁, h₂, h₃, h₄⟩ := PartyChain.postcomp_props S _ _ hk.1 hk.2.1 hb.1 hb.2.1
-  refine ⟨h₁, h₂, ?_, ?_⟩
+  refine ⟨h₁, h₂, ?_, fun h => ?_, ?_, fun h => ?_⟩
   · rw [rankOneChain, h₃, hb.2.2.1, zero_add]
-    exact hk.2.2
+    exact hk.2.2.1
+  · rw [rankOneChain, h₃, hb.2.2.1, zero_add]
+    exact hk.2.2.2 h
   · rw [rankOneChain, h₄]
-    exact hb.2.2.2
+    exact hb.2.2.2.1
+  · rw [rankOneChain, h₄]
+    exact hb.2.2.2.2 h
 
 end TNLean.PEPS.PairEffect
 
@@ -443,9 +453,9 @@ variable {pos : ι → ℝ × ℝ} {Party : Type}
 and the sites of `E` by the same party before and after. For unit vectors `v` and `w`, the
 operator `1_tags ⊗ |v⟩⟨w|_{T ∪ U} ⊗ 1_E` is, in canonical coordinates, the operator of an
 allowed monomial from the registers of the frame with owners `own` to those with owners `own'`
-that uses only `p_A`, `p_B`, `p_A'` and `p_B'`, with at most one normalized pair source and at
-most one normalized pair effect. It groups the registers of `T` and of `U`, applies
-`rankOneChain`, and ungroups.
+that uses only `p_A`, `p_B`, `p_A'` and `p_B'`, with at most one normalized pair source, none
+when `p_A' = p_B'`, and at most one normalized pair effect, none when `p_A = p_B`. It groups
+the registers of `T` and of `U`, applies `rankOneChain`, and ungroups.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 306–316: each group
 vector on at most two owners is a normalized pair state or effect, or a private map. -/
@@ -456,12 +466,13 @@ theorem exists_rankOneBlock_chain [NeZero q] (l : List (Hole pos q Party)) (own 
     (hv : ‖b.ket‖ = 1) (hw : ‖b.bra‖ = 1) {S : Set Party} (hSA : pA ∈ S) (hSB : pB ∈ S)
     (hSA' : pA' ∈ S) (hSB' : pB' ∈ S) :
     ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own'),
-      M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ 1 ∧ M.toEffectChain.effectCount ≤ 1 ∧
+      M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ 1 ∧ (pA' = pB' → M.sourceCount = 0) ∧
+      M.toEffectChain.effectCount ≤ 1 ∧ (pA = pB → M.toEffectChain.effectCount = 0) ∧
       ∀ z, layoutIso l own' (M.toEffectChain.eval z) =
         act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
   set Mm := rankOneChain pA pB pA' pB' b.ket b.bra
     (tagRegs l ++ siteRegs q own (listE (sites ι) b.T b.E))
-  obtain ⟨m₁, m₂, m₃, m₄⟩ := rankOneChain_props pA pB pA' pB' hv hw
+  obtain ⟨m₁, m₂, m₃, m₃', m₄, m₄'⟩ := rankOneChain_props pA pB pA' pB' hv hw
     (tagRegs l ++ siteRegs q own (listE (sites ι) b.T b.E)) hSA hSB hSA' hSB'
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) own nodup_sites mem_sites (tagRegs l) hA hB
     (V := S) hSA hSB
@@ -476,13 +487,13 @@ theorem exists_rankOneBlock_chain [NeZero q] (l : List (Hole pos q Party)) (own 
     ⟨r.usesOnly _, u₂⟩ m₁ m₂
   let G := groupWord (q := q) own nodup_sites mem_sites (tagRegs l) hA hB
   obtain ⟨q₁, q₂, q₃, q₄⟩ := PartyChain.precomp_props G S g₁ g₂ (Mm.postcomp tail) p₁ p₂
-  refine ⟨(Mm.postcomp tail).precomp G, q₁, q₂, ?_, ?_, fun z => ?_⟩
-  · rw [q₃, p₃, g₃]
-    change 0 + (Mm.sourceCount + (Word.sourceCount _ + Word.sourceCount _)) ≤ 1
+  have hsrc : ((Mm.postcomp tail).precomp G).sourceCount = Mm.sourceCount := by
+    rw [q₃, p₃, g₃]
+    change 0 + (Mm.sourceCount + (Word.sourceCount _ + Word.sourceCount _)) = _
     rw [r.sourceCount_eq, u₃]
-    simpa using m₃
-  · rw [q₄, p₄]
-    exact m₄
+    simp
+  refine ⟨(Mm.postcomp tail).precomp G, q₁, q₂, hsrc ▸ m₃, fun h => hsrc ▸ m₃' h,
+    (q₄.trans p₄) ▸ m₄, fun h => (q₄.trans p₄) ▸ m₄' h, fun z => ?_⟩
   · rw [PartyChain.eval_precomp, PartyChain.eval_postcomp]
     exact layoutIso_place l own own' b.disj hA hB hA' hB' hE Mm.toEffectChain.eval _
       (pairHeadIso_rankOneChain pA pB pA' pB' b.ket b.bra _) z
