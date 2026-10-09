@@ -101,7 +101,60 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \leanok
     Partition the remaining registers first. Their selected memory is
     $\C$, so $y$ is sent to $1\otimes y$. Adjoining the first register
-    and applying the associativity isometry gives the stated formula.
+    and applying the associativity isometry gives
+    $e\otimes y\mapsto(e\otimes1)\otimes y$.
+\end{proof}
+
+\begin{theorem}[Grouping prescribed physical columns in arbitrary local coordinates]
+    \label{thm:peps_basis_physical_columns_local_coordinates}
+    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
+    \leanok
+    \uses{def:peps_family_physical_output,def:peps_party_tensor_basis}
+    Let $P$ be an arbitrary set of parties, let $d_p$ be arbitrary
+    nonnegative integers, and let $\mathbf p=(p_0,\ldots,p_{m-1})$
+    be an ordered list without repetitions. Put
+    $a=a_{\mathbf d}(\mathbf p)$, with register $\C^{d_{p_j}}$
+    at the party in position $j$. For each party $p$, let $b_p$
+    be an orthonormal basis of the complete memory $M(a_p)$,
+    indexed by a finite set $I_p$. Let
+    $x\in\prod_{p\in P}\{0,\ldots,d_p-1\}$ and
+    $y\in\prod_{p\in P} I_p$.
+
+    Suppose that, at every party in $\mathbf p$, the canonical
+    singleton-memory identification sends $b_p(y_p)$ to
+    $e_{x_p}\otimes1$. Then grouping the prescribed physical tensor
+    column gives the ordered column of these local bases:
+    \begin{align}
+        G_{\mathbf p,a}\,
+        b_{\mathbf d,\mathbf p}\bigl((x_{p_j})_{j=0}^{m-1}\bigr)
+        = b_{a,\mathbf p}\bigl((y_{p_j})_{j=0}^{m-1}\bigr).
+    \end{align}
+    Here $b_{\mathbf d,\mathbf p}$ is the ordered Euclidean tensor
+    basis, $G_{\mathbf p,a}$ successively separates the complete memories
+    in the listed order, and $b_{a,\mathbf p}$ is the ordered tensor
+    basis formed from $b_{p_0},\ldots,b_{p_{m-1}}$.
+    The local index sets need not be the physical index sets.
+    No coverage of all of $P$ is required: the list covers the owners
+    of $a$ by construction. The empty list and zero local dimensions
+    are included, with quantification over the indicated assignments.
+    Both ordered memories retain their terminal scalar factor $\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_selected_head_partition,def:peps_party_tensor_basis}
+    Induct on the length of the ordered list. For the empty list,
+    both columns are $1\in\C$. At a nonempty list, its first
+    party does not occur in the tail. The selected-register partition
+    therefore separates its physical column as $e_{x_p}\otimes1$.
+    Apply the induction hypothesis to the tail. The prescribed physical
+    column thus groups as the ordered tensor product of its singleton
+    columns. By the given identifications, these are precisely
+    $b_{p_j}(y_{p_j})$ at every listed party. The ordered tensor basis
+    has the same column,
+    \begin{align}
+        b_{p_0}(y_{p_0})\otimes\cdots\otimes
+        b_{p_{m-1}}(y_{p_{m-1}})\otimes1.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Compatibility of physical and party coordinates]

@@ -24,6 +24,67 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Empty final tensor memory — promoted (2026-10-09)
+
+- **Pattern:** identify the tensor product with an empty final memory with
+  scalar multiplication on the preceding memory.
+- **Seen:** `WordAppendTail.lean` and `UnitMemoryCoordinates.lean` contained
+  the same induction on the register list and its tensor vectors.
+- **Abstraction:** `Layout.memCongr_append_nil_appendIso_symm_tmul` in
+  `UnitMemoryCoordinates.lean`.
+- **Refactor:** the spectator-register construction imports and uses this
+  public theorem; its duplicate private proof is removed.
+- **Notes:** the statement includes arbitrary complex scalars and arbitrary
+  register lists, including the empty list. No additional hypothesis is needed.
+
+### Tensor memory identifications under equality — promoted (2026-10-09)
+
+- **Pattern:** identify equal tail register lists before adjoining a fixed head,
+  or identify equal selected and complementary lists before applying the head
+  associativity/exchange maps; addition respects the same identification.
+- **Seen:** the head congruence proof occurred in `LayoutOwnerMap.lean`,
+  `WordAppendTail.lean`, and `UnitMemoryCoordinates.lean`; the partition
+  congruences occurred in `PartyPartition.lean` and `PartyPartitionAppend.lean`.
+- **Abstraction:** `Layout.memCongr_cons_tmul`, `Layout.selectedHead_heq`,
+  `Layout.complementaryHead_heq`, and `Layout.add_heq` in `PartyPartition.lean`.
+- **Refactor:** remove the duplicate private proofs and use the shared
+  declarations. The more general private Hilbert-space congruences in
+  `PartitionOwnerNaturality.lean` retain their cross-owner applications.
+- **Notes:** no additional hypothesis or compatibility alias. The public
+  lemmas and callers pass the full native build; the strict imported-lemma
+  audit reports only `propext`, `Classical.choice`, and `Quot.sound`.
+
+### Single-qubit plus-state positivity — promoted (2026-10-08)
+
+- **Pattern:** Identify the all-halves two-by-two density matrix with one half
+  of the outer product of the vector `![1, 1]`, then apply
+  `Matrix.posSemidef_vecMulVec_self_star` and nonnegative scalar multiplication.
+- **Seen:** Three copies in `TNLeanTest/RegularizedPatchStationarity.lean`,
+  `RegularizedPatchNoncommuting.lean`, and `RegularizedPatchZeroWeight.lean`.
+- **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
+  `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
+  The three regressions use the shared density and positivity result directly.
+- **Notes:** The former private `density`/`density_psd`,
+  `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
+  pairs are removed. The singularity, noncommutation, first-variation, and
+  zero-weight assertions are unchanged after unfolding the shared density.
+  The four fixture files shrink by 14 lines. No new tactic or compatibility
+  alias is introduced.
+
+### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
+
+- **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
+  its boundary dart, cut the walk at the first endpoint of the dart, and show that the
+  dart is an edge of the edge boundary no farther from the start than the walk is long.
+- **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
+- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
+  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+  region and the shortened walk; the three call sites use it.
+- **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
+  analogue for an arbitrary graph in the extended graph distance.
+
 ### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
 
 - **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with
@@ -3573,6 +3634,26 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
+### reordering words of a party layout — promoted
+
+- **Pattern:** a word of exchanges of tensor factors, built by recursion or
+  composition, gets a lemma that it is allowed, uses any given parties and has
+  no pair source, followed by three one-line projections.
+- **Helper:** the predicate `PairEffect.Word.IsReordering` with the simp lemmas
+  `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
+  `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
+  `IsReordering.isAllowed`, `IsReordering.usesOnly` and
+  `IsReordering.sourceCount_eq`, in
+  `TNLean/PEPS/Approximation/SiteRegisters.lean`.
+- **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
+  `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
+  `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
+  by `simp [w]`; a word with local maps passes the projections to `simp` as
+  conditional rewrites.
+- **Notes:** when a recursive word's type differs from the type of its
+  unfolding only up to definitions such as `siteRegs`, `simp` cannot match
+  `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
+
 ## Candidates
 
 ### Operator norm in orthonormal coordinates — candidate (2026-10-07)
@@ -6038,3 +6119,35 @@ spectral split → block extraction → MPV calculation → strict bounds
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
+
+### Coordinate exponential and canonical partial trace — candidate (2026-10-07)
+
+- **Pattern:** replace one indexed factor in a reverse product by a linear
+  insertion, use exact unitary covariance before differentiation, and apply
+  Fermat's theorem to the squared norm of the actual output. Separately,
+  transport the actual regional lift through the existing configuration
+  equivalence and pair its pure state by the existing partial trace.
+- **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
+  `RegularizedPatchStationarity`, and `RegularizedPatchMarginal`.
+- **Abstraction:** the coordinate module factors the insertion linear map once;
+  the marginal module exposes one full-region/global configuration isometry and
+  one arbitrary-complex expectation theorem. Existing real-power covariance,
+  exponential derivative, and finite-product reduced-state results are reused.
+- **Notes:** these are distinct proofs, not three copies of one tactic block.
+  No custom tactic or new optimizer/state structure is justified. Keep the
+  actual product order and complex inner-product orientation explicit; neither
+  trace-duality nor descending commutation is inferred by this pattern.
+  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
+  thresholds.
+
+
+### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
+
+- **Pattern:** apply `Real.sSup_le` with the nonnegativity of the target supremum,
+  unpack a regional-entropy witness, and include its region in the target collection.
+- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`,
+  `boxEntropy_mono` and `boxEntropy_antitone`.
+- **Abstraction:** both proofs already use `Real.sSup_le`. A further helper is deferred
+  until the same inclusion argument occurs in another module.
+- **Notes:** the nonnegativity argument also covers an empty collection; an additional
+  nonemptiness hypothesis would unnecessarily restrict these statements.

@@ -27,13 +27,6 @@ theorem memCongr_symm {a b : Layout P} (h : a = b) :
   cases h
   rfl
 
-private theorem memCongr_cons_tmul (r : Reg P) {a b : Layout P} (h : a = b)
-    (x : r.space) (y : Mem a) :
-    memCongr (congrArg (List.cons r) h) (x ⊗ₜ[ℂ] y) =
-      x ⊗ₜ[ℂ] memCongr h y := by
-  cases h
-  rfl
-
 /-- Appending the scalar unit is the literal identification with an empty final
 memory. Source: polynomial-PEPS, `04-compression.tex`, lines 246–267. -/
 theorem memCongr_append_nil_appendIso_symm_tmul (a : Layout P) (x : Mem a) (z : ℂ) :

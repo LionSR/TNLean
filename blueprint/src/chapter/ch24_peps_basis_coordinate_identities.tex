@@ -39,6 +39,43 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     equalities of the same vectors or isometries.
 \end{proof}
 
+
+\begin{theorem}[Equality identifications with a head register]
+    \label{thm:peps_basis_head_memory_congruence}
+    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_cons_tmul}
+    \leanok
+    \uses{thm:peps_basis_memory_equalities}
+    Let $r$ be a register with space $U$, let $a=b$ be equal register
+    lists, and let $u\in U$ and $x\in M(a)$. Then
+    $E_{ra=rb}(u\otimes x)=u\otimes E_{a=b}x$.
+\end{theorem}
+\begin{proof}\leanok
+    Identify the equal tail lists. Both sides are $u\otimes x$.
+\end{proof}
+
+\begin{theorem}[Head tensor identifications under equality of memories]
+    \label{thm:peps_basis_head_memory_equalities}
+    \lean{TNLean.PEPS.PairEffect.Layout.selectedHead_heq,
+        TNLean.PEPS.PairEffect.Layout.complementaryHead_heq,
+        TNLean.PEPS.PairEffect.Layout.add_heq}
+    \leanok
+    Let $r$ be a register with space $U$, let $a=a'$ and $b=b'$ be
+    equal register lists, and suppose $z\in M(a)\otimes M(b)$ and
+    $z'\in M(a')\otimes M(b')$ agree after these identifications.
+    Write $\alpha$ for the tensor associativity isometry and $L$ for
+    the isometry exchanging the first two factors. For every $u\in U$,
+    after identifying the memories,
+    $\alpha^{-1}(u\otimes z)=\alpha^{-1}(u\otimes z')$ and
+    $L(u\otimes z)=L(u\otimes z')$.
+    More generally, for equal complex inner product
+    spaces $A=B$ and vectors $x,y\in A$ and $x',y'\in B$ agreeing
+    under this equality, $x+y$ agrees with $x'+y'$.
+\end{theorem}
+\begin{proof}\leanok
+    Identify the equal lists or spaces and their equal vectors.
+    Each pair is then the same tensor or sum.
+\end{proof}
+
 \begin{theorem}[The final scalar factor]
     \label{thm:peps_basis_final_scalar}
     \lean{TNLean.PEPS.PairEffect.Layout.memCongr_append_nil_appendIso_symm_tmul,
@@ -58,18 +95,33 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     second assertion.
 \end{proof}
 
-\begin{definition}[Restriction after changing owner labels]
-    \label{def:peps_basis_owner_restriction}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrictMapOwnerIso,
-        TNLean.PEPS.PairEffect.Layout.restrict_mapOwner}
+Let $q:P\to Q$ be any map. Write $q_*a$ for the register list
+obtained by replacing each owner $p$ by $q(p)$, retaining the
+ordered register spaces, and let $T_q^a:M(a)\to M(q_*a)$ be the
+tensor product of their identity maps.
+
+\begin{theorem}[Restriction after changing owner labels]
+    \label{thm:peps_basis_owner_restriction}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_mapOwner}
     \leanok
-    Let $q:P\to Q$ be any map. Write $q_*a$ for the register list
-    obtained by replacing each owner $p$ by $q(p)$, retaining the
-    ordered register spaces, and let $T_q^a:M(a)\to M(q_*a)$ be the
-    tensor product of their identity maps. For a selection $g$ on $Q$,
-    $(q_*a)_g=q_*(a_{g\circ q})$. The selected-memory isometry
+    For any selection $g$ on $Q$, one has $(q_*a)_g=q_*(a_{g\circ q})$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Selecting a register after changing its owner retains it precisely
+    when its original owner satisfies $g\circ q$. The ordered spaces
+    on the two sides therefore agree.
+\end{proof}
+
+\begin{definition}[Selected memory under changing owner labels]
+    \label{def:peps_basis_owner_restriction}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrictMapOwnerIso}
+    \leanok
+    \uses{thm:peps_basis_owner_restriction}
+    The selected-memory isometry
     $T_{q,g}^a:M(a_{g\circ q})\to M((q_*a)_g)$ is $T_q^{a_{g\circ q}}$
-    followed by the identification of these equal register lists.
+    followed by the identification of the equal register lists in
+    Theorem~\ref{thm:peps_basis_owner_restriction}.
 \end{definition}
 
 \begin{theorem}[Changing owners preserves memory vectors]
@@ -100,6 +152,7 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     \begin{align}
         U_g^{q_*a}T_q^a x
          & =(T_{q,g}^a\otimes T_{q,\bar g}^a)U_{g\circ q}^a x.
+        \label{eq:peps_basis_owner_partition}
     \end{align}
     After identifying the selected and complementary tensor spaces,
     this is the same vector as $U_{g\circ q}^a x$.
@@ -112,7 +165,7 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     before and after relabelling. Use the corresponding associativity
     or exchange isometry, and apply the induction hypothesis to the
     tail. The selected-memory isometries preserve the underlying
-    vectors, giving the displayed identity.
+    vectors, giving~(\ref{eq:peps_basis_owner_partition}).
 \end{proof}
 
 \begin{theorem}[A partition with no selected registers]
