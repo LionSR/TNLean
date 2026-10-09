@@ -8,6 +8,7 @@ import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
+import Mathlib.Tactic.WLOG
 
 /-!
 # Separated nested square patches
