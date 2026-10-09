@@ -32,14 +32,6 @@ open ContinuousLinearMap
 
 variable {P : Type}
 
-/-- Equality of the remaining layouts leaves the first tensor factor unchanged. -/
-private theorem memCongr_cons_tmul (r : Reg P) {a b : Layout P} (h : a = b)
-    (x : r.space) (y : Mem a) :
-    Layout.memCongr (congrArg (List.cons r) h) (x ⊗ₜ y) =
-      x ⊗ₜ Layout.memCongr h y := by
-  cases h
-  rfl
-
 /-- An empty final memory is the scalar tensor factor. -/
 private theorem appendIso_nil_tmul (a : Layout P) (x : Mem a) (z : ℂ) :
     Layout.memCongr (List.append_nil a) ((appendIso a []).symm (x ⊗ₜ z)) = z • x := by
@@ -48,7 +40,7 @@ private theorem appendIso_nil_tmul (a : Layout P) (x : Mem a) (z : ℂ) :
   | cons r a ih =>
       induction x using TensorProduct.inductionOn with
       | tmul u v =>
-          rw [appendIso_symm_cons_tmul, memCongr_cons_tmul r (List.append_nil a), ih]
+          rw [appendIso_symm_cons_tmul, Layout.memCongr_cons_tmul r (List.append_nil a), ih]
           exact TensorProduct.tmul_smul z u v
       | add x y hx hy => simp only [TensorProduct.add_tmul, map_add, hx, hy, smul_add]
 
