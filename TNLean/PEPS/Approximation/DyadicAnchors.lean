@@ -33,7 +33,7 @@ namespace TNLean.PEPS.Approximation
 
 /-- The least power of two which is at least `L`.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:104–105`. -/
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:103`. -/
 def paddedSide (L : ℕ) : ℕ := 2 ^ Nat.clog 2 L
 
 /-- The padded side is at least the genuine side. -/
@@ -46,7 +46,7 @@ theorem paddedSide_le_of_le_pow {L k : ℕ} (h : L ≤ 2 ^ k) : paddedSide L ≤
 
 /-- The padded side is less than twice the genuine side.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:104`:
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.3, `07-assembly.tex:103`:
 “Let `N` be the least power of two with `N ≥ L`, so `N < 2L`.” -/
 theorem paddedSide_lt_two_mul {L : ℕ} (hL : 0 < L) : paddedSide L < 2 * L := by
   rcases Nat.lt_or_ge 1 L with h | h
@@ -62,10 +62,11 @@ theorem paddedSide_lt_two_mul {L : ℕ} (hL : 0 < L) : paddedSide L < 2 * L := b
 
 /-! ### Dyadic anchors -/
 
-/-- One coordinate of the anchor of a dyadic block of side `2 ^ j` with block index `r`.
+/-- One coordinate of the anchor of a dyadic block of side `2 ^ j` with block index `r`. It is
+also one coordinate of the integer address of that square in the distribution protocol.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:anchors`,
-`07-assembly.tex:108–112`. -/
+`07-assembly.tex:108–112`, and equation `eq:geometry-addresses`, `06-geometry.tex:633–642`. -/
 def dyadicAnchor (j r : ℕ) : ℕ := if j = 0 then r else 2 ^ j * r + 2 ^ (j - 1)
 
 /-- A nonunit anchor coordinate is the odd multiple `2 ^ (j - 1) (2 r + 1)`. -/

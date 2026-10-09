@@ -45,7 +45,7 @@ noncomputable def pairChannel (hN : 2 ≤ N) {r : Fin N → ℕ}
   rectangularKrausMap fun a => embedOp (pairData i (i + 1) (left_ne_right hN i)) (A i a)
 
 private theorem pairData_site_mem_bond {i : Fin N} (hne : i ≠ i + 1)
-    (a : Fin (k + k)) : (layout N k).site (pairData i (i + 1) hne a) ∈ bond i := by
+    (a : Fin (k + k)) : (layout N k).site (pairData i (i + 1) hne a) ∈ ringBond i := by
   refine Fin.addCases (fun t => ?_) (fun t => ?_) a
   · rw [pairData_left, site_data]
     exact Set.mem_insert i _
@@ -56,7 +56,7 @@ private theorem pair_kraus_mem_supportedOperators (hN : 2 ≤ N) {r : Fin N → 
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
     (i : Fin N) (a : Fin (r i)) :
     embedOp (pairData i (i + 1) (left_ne_right hN i)) (A i a) ∈
-      supportedOperators d ((layout N k).site ⁻¹' bond i) := by
+      supportedOperators d ((layout N k).site ⁻¹' ringBond i) := by
   apply supportedOperators_mono _
     (embedOp_mem_supportedOperators (pairData i (i + 1) (left_ne_right hN i)).injective _)
   rintro x ⟨j, rfl⟩
@@ -65,7 +65,7 @@ private theorem pair_kraus_mem_supportedOperators (hN : 2 ≤ N) {r : Fin N → 
 /-- Channels placed on distinct bonds of a matching commute. -/
 theorem pairChannel_commute (hN : 2 ≤ N) {r : Fin N → ℕ}
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
-    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint bond) :
+    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) :
     (K : Set (Fin N)).Pairwise (Function.onFun Commute (pairChannel hN A)) := by
   intro i hi j hj hij
   apply commute_rectangularKrausMap
@@ -77,7 +77,7 @@ theorem pairChannel_commute (hN : 2 ≤ N) {r : Fin N → ℕ}
 /-- The concrete product of the data-register channels on a matching. -/
 noncomputable def matchingChannel (hN : 2 ≤ N) {r : Fin N → ℕ}
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
-    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint bond) :
+    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) :
     Module.End ℂ (Matrix (Fin (N * (1 + k + k)) → Fin d)
       (Fin (N * (1 + k + k)) → Fin d) ℂ) :=
   K.noncommProd (pairChannel hN A) (pairChannel_commute hN A K hK)
@@ -86,7 +86,7 @@ noncomputable def matchingChannel (hN : 2 ≤ N) {r : Fin N → ℕ}
 routing, and therefore has physical depth at most `2 * k`. -/
 theorem matchingChannel_isPhysicalPortProtocol (hN : 2 ≤ N) {r : Fin N → ℕ}
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
-    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint bond)
+    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond)
     (hA : ∀ i ∈ K, ∑ a, (A i a)ᴴ * A i a = 1) :
     IsPhysicalPortProtocol (layout N k) (2 * k) (matchingChannel hN A K hK) := by
   unfold matchingChannel
@@ -147,7 +147,7 @@ The fallback density is used only outside the code, after the registers are colo
 theorem exists_bounded_matching_simulation {d B m N : ℕ} [NeZero N]
     (hd : 2 ≤ d) (hm : m ≤ B) (hN : 2 ≤ N)
     (Φ : Fin N → Module.End ℂ (Matrix (Fin m × Fin m) (Fin m × Fin m) ℂ))
-    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint bond)
+    (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond)
     (hΦ : ∀ i ∈ K, IsKrausCPTP (Φ i))
     (ρ : Matrix (Fin m × Fin m) (Fin m × Fin m) ℂ)
     (hρ : ρ.PosSemidef) (htr : trace ρ = 1) :

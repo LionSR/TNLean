@@ -16,16 +16,9 @@ need not be a contraction for this identity.
 
 Source: polynomial-PEPS manuscript, September 24, 2026,
 `04-compression.tex`, equation `eq:compression-source-gate`, lines 233–267.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-gate-word.exists_common_source_gate
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_common_source_gate
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

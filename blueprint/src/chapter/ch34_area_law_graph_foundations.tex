@@ -1,0 +1,182 @@
+\chapter{Interaction counting in lattice domains}
+\label{ch:area_graph_foundations}
+
+% Independent auxiliary results for the 2026 area-law paper.
+% Exact counting and target coefficients are added below; the last section
+% specializes graph-distance propagation (Lemma 4.1) to lattice domains.
+
+Let $G$ be a graph on a site set $V$. Graph distance $d_G$ takes the value
+$\infty$ between different components. All walks below remain in $G$;
+they need not remain in an interaction support. These are the counting
+ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
+
+\section{Walks through overlapping supports}
+
+\begin{theorem}[Interaction-chain walk]
+    \label{thm:area_chain_walk}
+    \lean{TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain,
+        TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain}
+    \leanok
+    Assign a nonnegative integer range $r(X)$ to each support $X\subseteq V$. Let
+    $X_0,\ldots,X_m$ satisfy $X_j\cap X_{j+1}\ne\varnothing$, and suppose
+    any two sites of $X_j$ can be joined by a walk in $G$ of length at most $r(X_j)$.
+    If $x\in X_0$ and $y\in X_m$, there is a walk from $x$ to $y$ of length
+    at most $\sum_{j=0}^m r(X_j)$. For the common range $R$, this is
+    $(m+1)R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Induct on $m$. For $m=0$, use the range condition on $X_0$.
+    Otherwise choose $z\in X_0\cap X_1$. Concatenate the walk from $x$
+    to $z$ in the range condition with the inductively constructed walk
+    from $z$ to $y$. Walk lengths add.
+\end{proof}
+
+\begin{theorem}[Distance and component restrictions]
+    \label{thm:area_chain_components}
+    \uses{thm:area_chain_walk}
+    \lean{TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain,
+        TNLean.PEPS.AreaLaw.reachable_of_isChain,
+        TNLean.PEPS.AreaLaw.connectedComponent_eq_of_isChain,
+        TNLean.PEPS.AreaLaw.not_isChain_of_connectedComponent_ne,
+        TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top,
+        TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist}
+    \leanok
+    Under the common-range hypotheses of Theorem~\ref{thm:area_chain_walk},
+    $d_G(x,y)\le(m+1)R$, and $x,y$ belong to the same connected component.
+    Consequently no such chain exists when the components differ,
+    when $d_G(x,y)=\infty$, or when $(m+1)R<d_G(x,y)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_chain_walk}
+    The constructed walk proves reachability, equality of components, and
+    the upper bound on distance. Each exclusion contradicts one of these
+    conclusions. The bound counts the initial support even when $m=0$.
+\end{proof}
+
+\section{Ambient lattice counting}
+
+\begin{definition}[Integer lattice displacement]
+    \label{def:area_lattice_displacement}
+    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance,
+        TNLean.PEPS.AreaLaw.latticeL1Distance_self}
+    \leanok
+    For $a,b\in\Z^2$, set
+    $\ell(a,b)=|a_1-b_1|+|a_2-b_2|$. In particular, $\ell(a,a)=0$.
+\end{definition}
+
+\begin{theorem}[Walk displacement]
+    \label{thm:area_walk_displacement}
+    \uses{def:area_lattice_displacement}
+    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_triangle,
+        TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length,
+        TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le}
+    \leanok
+    The function $\ell$ satisfies the triangle inequality. Let
+    $\iota:V\to\Z^2$ assign integer coordinates such that each graph edge
+    has displacement at most one. A walk $p$ from $a$ to $b$ then satisfies
+    $\ell(\iota(a),\iota(b))\le |p|$. If $d_G(a,b)\le R<\infty$, the
+    displacement is at most $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Coordinate absolute values satisfy the triangle inequality. Induct
+    over the edges of the walk and add the one-step displacement bounds.
+    For finite graph distance, choose a shortest walk.
+\end{proof}
+
+The exact ambient cardinality and its graph-ball consequences are given in
+Theorem~\ref{thm:area_diamond_count}.
+
+\section{Original-support budgets}
+
+\begin{theorem}[Supports containing a specified site]
+    \label{thm:area_support_count}
+    \lean{TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase,
+        TNLean.PEPS.AreaLaw.card_supportFamily_le_pow}
+    \leanok
+    Let $B$ be a finite neighborhood and let $\mathcal F$ be a finite family of
+    distinct subsets of $B$, each containing $a$. Then
+    $|\mathcal F|\le2^{|B\setminus\{a\}|}$. If $a\in B$, this equals
+    $2^{|B|-1}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Deleting $a$ maps the family injectively into the power set of
+    $B\setminus\{a\}$. Inserting $a$ recovers the original support.
+\end{proof}
+
+\begin{theorem}[Per-site interaction weight]
+    \label{thm:area_site_weight}
+    \uses{thm:area_support_count}
+    \lean{TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le}
+    \leanok
+    Let $\mathcal F$ be a finite family of distinct supports, with weights
+    $w_X\le J$ and $J\ge0$. Suppose each support containing $a$ is contained
+    in $B$, where $a\in B$. Then
+    $\sum_{X\in\mathcal F:\,a\in X}w_X\le2^{|B|-1}J$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_support_count}
+    Bound each summand by $J$ and apply the count to the subfamily
+    containing $a$. The nonnegative factor $J$ preserves the inequality.
+\end{proof}
+
+\begin{theorem}[Weights meeting a region]
+    \label{thm:area_region_weight}
+    \lean{TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights,
+        TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le}
+    \leanok
+    For nonnegative weights on a finite family of distinct supports and
+    any finite region $S$,
+    \begin{align}
+        \sum_{X\in\mathcal F:\,X\cap S\ne\varnothing}w_X
+         & \le\sum_{a\in S}\sum_{X\in\mathcal F:\,a\in X}w_X.
+        \label{eq:area_region_weight}
+    \end{align}
+    If each inner site sum is at most $b$, the left side of
+    (\ref{eq:area_region_weight}) is at most $|S|b$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A support meeting $S$ is counted at least once on the right; all
+    additional occurrences have nonnegative weight. Interchange the
+    two finite sums, then apply the site budget.
+\end{proof}
+
+\begin{definition}[Interaction-chain weight]
+    \label{def:area_chain_weight}
+    \lean{TNLean.PEPS.AreaLaw.interactionChainWeightSum}
+    \leanok
+    For a finite family $\mathcal F$ and weights $w_X$, define recursively
+    \begin{align}
+        W_0(X) & =1,\label{eq:area_chain_initial}
+    \end{align}
+    \begin{align}
+        W_{n+1}(X) & =\sum_{Y\in\mathcal F:\,Y\cap X\ne\varnothing}w_YW_n(Y).
+        \label{eq:area_chain_step}
+    \end{align}
+    Repeated supports are permitted in the chain.
+\end{definition}
+
+\begin{theorem}[Uniform chain-weight growth]
+    \label{thm:area_chain_growth}
+    \uses{thm:area_region_weight,def:area_chain_weight}
+    \lean{TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow}
+    \leanok
+    Suppose the original weights are nonnegative, every original support
+    has cardinality at most $v$, and every site budget is at most $b\ge0$.
+    Then $W_n(X)\le(vb)^n$ for each $X\in\mathcal F$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_region_weight,def:area_chain_weight}
+    Induct on $n$. For the step, bound every $W_n(Y)$ in
+    (\ref{eq:area_chain_step}) by $(vb)^n$. The weights of supports meeting
+    $X$ sum to at most $|X|b\le vb$, giving the next power.
+\end{proof}
+
+\input{chapter/ch34_area_law_diamond_counting}
+\input{chapter/ch34_area_law_graph_propagation}

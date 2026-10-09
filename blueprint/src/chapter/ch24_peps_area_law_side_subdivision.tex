@@ -1,0 +1,48 @@
+\section{Opposing corners divide a side only at its midpoint}
+\label{sec:area_law_side_subdivision}
+
+The subdivisions induced by actual opposing cells follow from the
+common dyadic origin and neighboring-layer locality; see
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 299--306 and 352--356. This proves
+% the possible subdivision points, not constancy of the opposing region.
+
+\begin{definition}[The corners of a dyadic cell]
+    \label{def:area_law_cell_corner}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCellCorner}
+    \leanok
+    \uses{def:area_law_dyadic_cells}
+    For origin $o$, natural exponent $\ell$, integer cell index $z$
+    and $\varepsilon\in\{0,1\}^2$, the corresponding corner is
+    $o+2^\ell(z+\varepsilon)$.
+\end{definition}
+
+\begin{theorem}[An opposing corner on a cell side]
+    \label{thm:area_law_corner_side_subdivision}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_side}
+    \leanok
+    \uses{def:area_law_cell_corner,def:area_law_cell_fan,
+        def:area_law_fine_layer_indices}
+    Fix a common origin $o$, finite endpoint set $Z$ and integer
+    width $C_0\ge2$. Let $z$ and $w$ index actual fine cells of layers
+    $k$ and $h$, respectively, with $k\ge50\,000\,000$. Write $[a,b]$
+    for any whole side of the cell indexed by $z$. If a corner $x$
+    of the cell indexed by $w$ belongs to $[a,b]$, then
+    $x=a$, $x=(a+b)/2$, or $x=b$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_corner,def:area_law_cell_fan,
+        thm:area_law_dyadic_closures,thm:area_law_fine_cell_containment,
+        thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
+        def:area_law_affine_mesh,thm:area_law_cell_fan_mark_vertices,
+        thm:area_law_belt_marks_closed_cell}
+    The shared point belongs to both closed layers, so
+    $h\le k+1$ and $k\le h+1$. If $\ell_j$ is the fine exponent
+    of layer $j$, it follows that $\ell_k\le\ell_h+1$.
+    Put $t=2^{\ell_k}$. The integer coordinates of the opposing
+    corner place it on $o+(t/2)\mathbb Z^2$. Along the reference
+    side its varying coordinate, measured from $a$ in units of
+    $t/2$, is therefore an integer between $0$ and $2$. These
+    three integers give the two endpoints and the midpoint.
+\end{proof}

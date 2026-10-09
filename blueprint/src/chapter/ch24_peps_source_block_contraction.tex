@@ -61,7 +61,7 @@ This gives the contractions used in
     \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix}
     \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply}
     \leanok
-    \uses{def:peps_source_slot_basis,def:peps_prepared_matrix}
+    \uses{def:peps_source_slot_basis,def:peps_prepared_matrix,def:peps_prepared_density_coefficient}
     Let $T:\mathcal S\otimes\mathcal H\to\mathcal K$ be the
     operator of a composition, and choose an orthonormal output
     basis $(g_k)_{k\in M}$. Its complete matrix $A_T$ has row index
@@ -246,7 +246,11 @@ This gives the contractions used in
                 M_ev_{e,a_e^{(2)}})_e,\mathcal H}f_j\right\rangle.
         \label{eq:peps_source_frame_matrix}
     \end{align}
-    This is the complete free-input matrix of $T F_{L,M}$.
+    This is the complete free-input matrix of $T F_{L,M}$:
+    \begin{align}
+        A_T^{L,M} & =A_{TF_{L,M}}.
+        \label{eq:peps_source_frame_matrix_composition}
+    \end{align}
     The images of the endpoint maps need not span the target
     halfspaces.
 \end{definition}
@@ -273,6 +277,10 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{thm:peps_source_slot_maps,thm:peps_free_source_contraction}
-    The composition $T F_{L,M}$ is allowed. Apply the joint
-    contraction bound to its complete free-input matrix.
+    Each $L_e$ and $M_e$ is a contraction, so the composition
+    $TF_{L,M}$ is allowed. By (\ref{eq:peps_source_frame_matrix_composition})
+    and Theorem~\ref{thm:peps_free_source_contraction},
+    \begin{align*}
+        \|A_T^{L,M}\| & =\|A_{TF_{L,M}}\|\le1.
+    \end{align*}
 \end{proof}
