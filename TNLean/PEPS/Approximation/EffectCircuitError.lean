@@ -17,15 +17,6 @@ Source: polynomial-PEPS, `04-compression.tex`, revision
 
 /-!
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-thm:compression; Theorem 5.2 and its proof.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized; no upstream Lean proof text reused.
-
--/
-
-
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.

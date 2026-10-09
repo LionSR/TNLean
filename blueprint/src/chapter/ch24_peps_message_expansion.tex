@@ -11,6 +11,7 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.PEPS.PairEffect.Word.localDiscard}
     \lean{TNLean.PEPS.PairEffect.Word.transferTerm}
     \leanok
+    \uses{def:peps_party_layout}
     For a vector $u\in H$ at a party $a$, the local bra is
     $\langle u|\otimes I$, acting on $H\otimes K$ and discarding the $H$
     register. For parties $a,b$ and an orthonormal basis $(e_i)_{i\in I}$
@@ -169,6 +170,7 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.PEPS.PairEffect.MessageMonomial.effectCount}
     \lean{TNLean.PEPS.PairEffect.MessageMonomial.expand}
     \leanok
+    \uses{def:peps_party_monomial}
     A monomial with messages is a chronological composition of the
     existing source-and-effect monomials and finite-dimensional register
     transfers. A transfer is the identity on a register's Hilbert space,
@@ -247,6 +249,7 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     \lean{TNLean.PEPS.PairEffect.MessageGate,
         TNLean.PEPS.PairEffect.MessageGate.eval}
     \leanok
+    \uses{def:peps_message_monomial}
     A weighted gate list is a finite ordered list
     $L=((c_j,M_j))_{j=0}^{K-1}$, where each $M_j:H_a\to H_b$ is such a
     monomial and $c_j\in\C$. Its operator is $G_L=\sum_j c_jM_j$.

@@ -40,7 +40,7 @@ open ContinuousLinearMap
 namespace TNLean.PEPS.PairEffect.EffectCircuit
 variable {P : Type}
 
-/-- Original gate operators, indexed recursively by the existing chronology.
+/-- Original gate operators, one for each occurrence of the chronology.
 Composition keeps repeated occurrences distinct. -/
 @[reducible] def GateMaps : {a b : Layout P} → EffectCircuit a b → Type
   | _, _, .id _ => PUnit
