@@ -96,7 +96,7 @@ trace-norm estimates do not involve private dimensions.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:peps_rescaled_original}
+    \uses{def:peps_rescaled_original,def:peps_rescaled_occurrences}
     The occurrence correspondence preserves each participating set.
     The monomials and their pair effects are identical, and
     (\ref{eq:peps_rescaled_coefficient_sum}) bounds the new coefficient sums.
@@ -168,9 +168,20 @@ trace-norm estimates do not involve private dimensions.
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_chronological_error,thm:peps_original_operator_contraction}
-    Both output vectors have norm at most one. Their reduced pure
-    densities differ in trace norm by at most twice their vector distance.
-    Apply the operator error to $x$ and then the stated scalar budget.
+    Put $u=K\widetilde W_\delta x$ and $v=KW_Gx$.
+    Contractivity and the isometry $K$ give $\|u\|,\|v\|\le1$.
+    Therefore
+    \begin{align}
+        \|\widetilde\rho_\delta(x)-\rho_G(x)\|_1
+         & =\bigl\|\operatorname{Tr}_{\rm discard}
+        (|u\rangle\langle u|-|v\rangle\langle v|)\bigr\|_1
+        \le2\|u-v\|                                \\
+         & \le2\|\widetilde W_\delta-W_G\|\,\|x\|
+        \le4\delta N.
+        \label{eq:peps_approximate_density_error}
+    \end{align}
+    Substitute the prescribed scalar budget into
+    (\ref{eq:peps_approximate_density_error}).
 \end{proof}
 
 \begin{theorem}[Natural inverse-power accuracy]

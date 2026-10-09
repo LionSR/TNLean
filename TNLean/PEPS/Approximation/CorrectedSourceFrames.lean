@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourceInputFrames
 import TNLean.PEPS.Approximation.SourceGaussianContraction
-import TNLean.PEPS.Approximation.GaussianPhysicalSource
 
 /-!
 # Input isometries from the original corrected sources
@@ -28,32 +27,11 @@ Provenance-ID: 8769-source-resource-correctedsourceframes-01
 TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame
 Provenance-ID: 8769-source-resource-correctedsourceframes-02
 TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame_basis
-Provenance-ID: 8769-source-resource-correctedsourceframes-03
-TNLean.PEPS.PairEffect.SourceInventory.freeSourceVector_congr
 -/
 
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect.SourceInventory
-
-/-- The joint free-source vector depends only on the selected positions. -/
-theorem freeSourceVector_congr {P : Type} (R : SourceInventory P)
-    (U V : Fin R.length → HSpace) (free : Fin R.length → Bool)
-    (η ζ : ∀ i, U i ⊗[ℂ] V i) (h : ∀ i, free i = true → η i = ζ i) :
-    freeSourceVector R U V free η = freeSourceVector R U V free ζ := by
-  have hs : selectedSources R U V free η = selectedSources R U V free ζ := by
-    simp only [selectedSources_eq_map]
-    apply List.map_congr_left
-    intro i hi
-    rw [h i (List.mem_filter.mp hi).2]
-  apply eq_of_heq
-  exact (Layout.memCongr_apply_heq _ _).trans
-    ((by rw [hs] : HEq (vector (selectedSources R U V free η))
-      (vector (selectedSources R U V free ζ))).trans (Layout.memCongr_apply_heq _ _).symm)
-
-end TNLean.PEPS.PairEffect.SourceInventory
-
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 open SourceInventory TNLean.PEPS.Approximation
 variable {P : Type} {a b : Layout P}

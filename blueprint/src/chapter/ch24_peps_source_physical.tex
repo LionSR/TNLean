@@ -42,9 +42,11 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    The coordinate functional has norm at most one, $J$ is isometric,
-    and an allowed word evaluates to a contraction. Orthonormal coordinates
-    preserve the operator norm.
+    \uses{def:peps_physical_component}
+    Since $C_{x,V}=(\langle x|\otimes I_D)JV$, the coordinate
+    functional, the isometry $J$ and the allowed word give
+    $\|C_{x,V}\|\leq\|\langle x|\otimes I_D\|\,\|J\|\,\|V\|\leq1$.
+    Orthonormal coordinates preserve this bound.
 \end{proof}
 
 \begin{definition}[Mixed physical Gram operator]
@@ -78,9 +80,14 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Cauchy--Schwarz to the defining inner product and use both
-    component contraction bounds. Passing to orthonormal coordinates preserves
-    this estimate.
+    \uses{thm:peps_physical_component_contraction}
+    By Cauchy--Schwarz and
+    Theorem~\ref{thm:peps_physical_component_contraction},
+    $|\langle t,Os\rangle|
+        =|\langle C_{y,W}t,C_{x,V}s\rangle|
+        \leq\|C_{y,W}t\|\,\|C_{x,V}s\|
+        \leq\|t\|\,\|s\|$.
+    Passing to orthonormal coordinates preserves this estimate.
 \end{proof}
 
 \begin{definition}[Joint physical and discarded output coordinates]
@@ -99,7 +106,7 @@ inner-product discard spaces.
     \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputMatrix_le_one}
     \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputMatrix_le}
     \leanok
-    \uses{def:peps_physical_output_matrix,thm:peps_physical_gram_contraction}
+    \uses{def:peps_physical_output_matrix,def:peps_physical_gram}
     For an arbitrary rectangular matrix $\rho:H'\to H$,
     \begin{align}
         \bigl[\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\bigr]_{xy}
@@ -129,7 +136,9 @@ inner-product discard spaces.
     \leanok
     \uses{def:peps_physical_component,def:peps_physical_gram}
     Let $F:\C^n\to H$ and $F':\C^{n'}\to H'$ be linear isometries.
-    Replace the input coordinate maps above by $F,F'$, respectively. Thus
+    Replace the orthonormal input coordinate maps of
+    Definitions~\ref{def:peps_physical_component} and~\ref{def:peps_physical_gram}
+    by $F,F'$, respectively. Thus
     \begin{align}
         A_{x,V,F} & =[C_{x,V}F],                               &
         O_{ji}    & =\langle C_{y,W}F'e'_j,C_{x,V}Fe_i\rangle, &
@@ -145,7 +154,7 @@ inner-product discard spaces.
     \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputFrameMatrix_le_one}
     \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le}
     \leanok
-    \uses{def:peps_physical_frames,thm:peps_exterior_contraction}
+    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction}
     For allowed words, the three matrices in
     Definition~\ref{def:peps_physical_frames} have operator norm at most one.
     For every rectangular $Z$,
@@ -237,6 +246,7 @@ inner-product discard spaces.
     $Y\times Y$ block of $M(z)$ equals
     \begin{align}
         M(z)_{xy}=\operatorname{tr}_{D'}(K_{V',G}W_{xy}(z)K_{W',G'}^\dagger).
+        \label{eq:peps_separated_physical_density_block}
     \end{align}
     This equality requires no allowedness assumption on the words and no
     normalization of the real weight families.
@@ -246,14 +256,14 @@ inner-product discard spaces.
     Expand the finite Schmidt sums and both discard traces. The trace
     over $D$ is the weighted source matrix from
     Theorem~\ref{thm:peps_weighted_physical_source_identity}; the remaining
-    trace is exactly the exterior action displayed above.
+    trace gives~(\ref{eq:peps_separated_physical_density_block}).
 \end{proof}
 
 \begin{theorem}[Expected exterior trace norm under diagonal covariance]
     \label{thm:peps_weighted_physical_source_bound}
     \lean{TNLean.PEPS.PairEffect.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
     \leanok
-    \uses{thm:peps_physical_frame_contraction,thm:peps_separated_physical_density_blocks}
+    \uses{thm:peps_physical_frame_contraction,def:peps_separated_physical_density}
     Assume all four words are allowed. Let $p_i,p'_l,\tau_t,\tau'_u$ be
     nonnegative probability weights and let $\kappa\geq0$. On a probability
     space, suppose every $z_{il}\overline{z_{i'l'}}$ is integrable and
@@ -303,7 +313,7 @@ inner-product discard spaces.
         \mathbb E_k\|M(Z)_{xy}\|_1 & \leq k^{-|S|/2},       \\
         \mathbb E_k\|M(Z)\|_1      & \leq |X|^2 k^{-|S|/2}.
     \end{align}
-    The full trace norm and every block trace norm are integrable.
+    The full trace norm is integrable.
     Neither estimate depends on the exterior physical dimension or either
     discard dimension.
 \end{theorem}
@@ -465,7 +475,7 @@ inner-product discard spaces.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
     \leanok
-    \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density}
+    \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density,thm:peps_actual_physical_integrability}
     If the affected set meets $S$, the two sums defining $B_{\xi\zeta}$ may
     be indexed by $\mathcal I_S$ using the actual retained-slot bijection.
     At $e\in S$ the coefficient reads exactly the original local labels
@@ -602,6 +612,34 @@ inner-product discard spaces.
     free-source memory, with the exterior owners kept together.
 \end{proof}
 
+% This common equality entry has the same three owners as the coordinate
+% development. On integration, retain its canonical coordinate-chapter home
+% and cite that entry here, rather than repeat its declaration tags.
+Write $M(a)$ for the tensor memory of a register list $a$.
+
+\begin{theorem}[Head tensor identifications under equality of memories]
+    \label{thm:peps_basis_head_memory_equalities}
+    \lean{TNLean.PEPS.PairEffect.Layout.selectedHead_heq,
+        TNLean.PEPS.PairEffect.Layout.complementaryHead_heq,
+        TNLean.PEPS.PairEffect.Layout.add_heq}
+    \leanok
+    Let $r$ be a register with space $U$, let $a=a'$ and $b=b'$ be
+    equal register lists, and suppose $z\in M(a)\otimes M(b)$ and
+    $z'\in M(a')\otimes M(b')$ agree after these identifications.
+    Write $\alpha$ for the tensor associativity isometry and $L$ for
+    the isometry exchanging the first two factors. For every $u\in U$,
+    after identifying the memories,
+    $\alpha^{-1}(u\otimes z)=\alpha^{-1}(u\otimes z')$ and
+    $L(u\otimes z)=L(u\otimes z')$.
+    More generally, for equal complex inner product
+    spaces $A=B$ and vectors $x,y\in A$ and $x',y'\in B$ agreeing
+    under this equality, $x+y$ agrees with $x'+y'$.
+\end{theorem}
+\begin{proof}\leanok
+    Identify the equal lists or spaces and their equal vectors.
+    Each pair is then the same tensor or sum.
+\end{proof}
+
 \begin{definition}[Concatenating two partitioned layouts]
     \label{def:peps_append_partition}
     \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso}
@@ -630,6 +668,7 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_basis_head_memory_equalities}
     Induct on the first layout. For a head register on either side,
     use the defining partition isometry and the four-factor regrouping.
     The empty layout contributes its scalar factor.

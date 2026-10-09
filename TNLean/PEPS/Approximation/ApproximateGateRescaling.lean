@@ -10,8 +10,8 @@ import TNLean.PEPS.Approximation.ApproximateGateEvaluation
 
 Multiply all coefficients of each prescribed gate expansion by the same
 factor `(1 + δ)⁻¹`. The monomials, their order and their local operations are
-unchanged. The resulting expansion is a contraction and defines an original
-circuit in the existing syntax, on exactly the same input and output layouts.
+unchanged. The resulting expansion is a contraction circuit on exactly the
+same input and output layouts.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 590–600.
 -/
@@ -87,8 +87,8 @@ theorem isAllowed_rescalePartyGate {a b : Layout P} (δ : ℝ) (L : PartyGate a 
 
 namespace EffectCircuit
 /-- Construct the contraction chronology from its actual approximate lists.
-Only coefficients change; original private maps and all register layouts remain
-literal constituents of the existing original-circuit syntax. -/
+Only coefficients change; the original private operations and every register
+layout are unchanged. -/
 def rescaledOriginal {δ : ℝ} (hδ : 0 ≤ δ) :
     {a b : Layout P} → (w : EffectCircuit a b) → (G : w.GateMaps) →
       w.IsGateApproximation δ G → OriginalCircuit a b

@@ -271,7 +271,10 @@ namespace OriginalCircuit
 /-- The original gate-count budget controls the exact-source physical output
 of the constructed physical-first replacement. The input and physical spaces
 retain their actual dimensions.
-Source: polynomial-PEPS, `04-compression.tex`, lines 199–227 and 338–355. -/
+Source: polynomial-PEPS, `04-compression.tex`, lines 199–227 and 338–355.
+
+Formalization convention: the `DecidableEq X` instance is available classically
+for every finite physical index set; it imposes no mathematical restriction. -/
 theorem rectangularTraceNorm_physicalFirst_density_sub_le_half
     {n : Type} [Fintype n] [DecidableEq X]
     {r M : ℕ} {S ε : ℝ} (hε : 0 < ε)
