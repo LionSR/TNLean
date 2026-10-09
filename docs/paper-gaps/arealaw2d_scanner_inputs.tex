@@ -298,7 +298,7 @@ complete scanner data construction remain open.
 
 \section{Truncated physical marginal estimates}
 
-The moment and tail estimates of Lemma~3.1 are established in
+The moment and tail estimates of \cite[Lemma~3.1]{OpenAI2026AreaLaw} are established in
 \path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean}
 for every actual regional state of one supplied truncated ground vector.
 The terms are the actual positive constraints centered at the original
@@ -309,6 +309,7 @@ Writing $\widetilde H=\sum_i\widetilde h_i$, the explicit hypothesis is
     \widetilde H\widetilde\Omega & =e\widetilde\Omega, \\
     \widetilde H-eI              & \ge(g/2)
     (I-|\widetilde\Omega\rangle\langle\widetilde\Omega|),
+    \label{eq:arealaw2d_scanner_inputs_marginal_gap}
 \end{align}
 where $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$.
 The resulting tail parameter is $2/g$, and the entropy center is the
@@ -317,13 +318,15 @@ The exact budget preserves every original label, including repeated
 supports and zero terms; complementary cuts have the same budget, and
 the empty and full cuts have budget one.
 
-This is an explicit-ground-state specialization, not the source proposition
-with its original hypotheses. It neither produces the truncated ground
-vector nor asserts a kernel equation for each individual term. Its gap
-assumption concerns the physical sum, before either auxiliary identity
-extension. Empty truncation sets and retained disconnected components are
-allowed; an arbitrary cut inside a retained component can still have
-crossing labels.
+The application of Lemma~3.1 preserves its unit-norm, eigenvector and gap
+hypotheses exactly as in (\ref{eq:arealaw2d_scanner_inputs_marginal_gap}).
+Constructing a witness $(e,\widetilde\Omega)$ of these hypotheses for the
+scanner's truncated physical Hamiltonian remains part of the
+Proposition~9.2 construction. No kernel equation for each individual term
+is asserted. The gap hypothesis concerns the physical sum, before either
+auxiliary identity extension. Empty truncation sets and retained disconnected
+components are allowed; an arbitrary cut inside a retained component can still
+have crossing labels.
 
 The remaining source-facing construction must obtain one $e$ and
 $\widetilde\Omega$ from the physical truncation theorem, identify that

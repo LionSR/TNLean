@@ -87,7 +87,7 @@ example : (∑ _i : Fin 2, (0 : Matrix (Fin 2 → Fin 1) (Fin 2 → Fin 1) ℂ))
   norm_num [cutBudget, repeated_crossing_labels]
 
 -- Qubit supports have dimension four: both copies of their positive logarithmic
--- contribution must survive, rather than a deduplicated single contribution.
+-- contribution are counted separately, although the designated supports are equal.
 private theorem repeated_qubit_budget :
     cutBudget 2 (⊤ : SimpleGraph (Fin 2)) ∅ 0 (fun _ : Fin 2 => 0) {0} =
       1 + 2 * Real.log (Real.exp 1 * 4) ^ 2 := by
