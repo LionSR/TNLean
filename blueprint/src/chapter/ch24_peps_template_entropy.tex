@@ -46,25 +46,26 @@
 \begin{theorem}[From side budgets to a dyadic moment]
     \label{thm:area_law_weighted_dyadic_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.sum_weighted_dyadic_rpow_le}
+    \leanok
     Let $K\ge0$ be an integer, $e>0$, $B\ge0$, $A\in\mathbb R$, and
     $a_k\in\mathbb R$. Suppose $2^K a_K\le A$ and $2^k a_k\le B$ for
     $0\le k<K$. Then
-    \[
+    \begin{align}
         \sum_{k=0}^{K} a_k(2^k)^{1+e}
         \le \left(A+\frac{B}{2^e-1}\right)(2^K)^e.
-    \]
+    \end{align}
     This is the finite summation step in
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; template counting and the entropy
     application are separate statements.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Factor each summand as $(2^k a_k)(2^k)^e$. The cap contributes at most
     $A(2^K)^e$. Since $2^e>1$, the lower scales contribute at most
-    \[
+    \begin{align}
         B\sum_{k=0}^{K-1}(2^e)^k
         =B\frac{(2^e)^K-1}{2^e-1}
         \le\frac{B}{2^e-1}(2^K)^e.
-    \]
+    \end{align}
     The same formula includes $K=0$, when the lower sum is empty.
 \end{proof}
 
