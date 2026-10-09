@@ -137,17 +137,6 @@ theorem norm_ketLocal_le (p p' : P) (v : EuclideanSpace ℂ (α × β)) :
     (LinearIsometry.norm_toContinuousLinearMap_le _)).trans ?_
   exact mul_le_of_le_one_left (norm_nonneg _) norm_id_le
 
-theorem owner_of_mem_pair {p p' : P} {X Y : HSpace} (h : p = p') :
-    ∀ r ∈ ([⟨p, X⟩, ⟨p', Y⟩] : Layout P), r.owner = p := by
-  intro r hr
-  simp only [List.mem_cons, List.not_mem_nil, or_false] at hr
-  rcases hr with rfl | rfl
-  · rfl
-  · exact h.symm
-
-theorem owner_of_mem_nil {p : P} : ∀ r ∈ ([] : Layout P), r.owner = p :=
-  fun _ hr => absurd hr List.not_mem_nil
-
 open Classical in
 /-- The bra `⟨w|` on two front registers: a normalized pair effect when the two owners differ,
 and a private contraction otherwise. -/
@@ -288,6 +277,7 @@ structure RankOneBlock where
   T : Finset ι
   /-- The sites outside the block. -/
   E : Finset ι
+  /-- The first part of the block lies in the block. -/
   disj : Disjoint T E
   /-- The output vector. -/
   ket : EuclideanSpace ℂ ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
@@ -385,7 +375,8 @@ theorem prod_op_apply : (bs : List (RankOneBlock ι q)) →
 
 end RankOneBlock
 
-/-- The basis vector of the zero configuration on `(T → Fin q) × (U → Fin q)`. -/
+/-- The basis vector of the zero configuration on `(T → Fin q) × (U → Fin q)`, the analogue of
+`zeroVec` on the two parts of a block. -/
 def zeroPair [NeZero q] (T E : Finset ι) :
     EuclideanSpace ℂ ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) :=
   EuclideanSpace.single (0, 0) 1

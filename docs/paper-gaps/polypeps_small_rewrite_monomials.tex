@@ -19,7 +19,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source lemma}
 
@@ -139,7 +139,7 @@ Hence $M_\delta$ is a sum of allowed monomials on the registers of the frames,
 with coefficients of modulus at most one.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx}.}
 
-What remains is the polynomial count. The formal statement gives at most
+The polynomial count is formalized as well. The formal statement gives at most
 $Nk^{2m}$ monomials with $k=\lceil(4Nm/\delta)^2\rceil+1$, where $N$ is the
 number of branches; when every affected hole and every patch has at most $D$
 cylinder terms, $N\le D^{\,r_{\rm new}+m+r_{\rm old}}$ and the count is at most
@@ -148,13 +148,34 @@ $k'=\lceil(4D^{E}m/\delta)^2\rceil+1$.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le},
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_of_card_le}.}
 The source's bound $N\le L^{C_1}$ (lines~331--332) and its total $Nk^{g_0}$
-(lines~341--342) need two further inputs that the formal data do not carry:
-(a) $D\le CL^{c}$, which is the polynomial bound on the number $\sum_jd_j$ of
-cylinder terms of Proposition~4.1 (the formal patches record the cylinder data
-but not this bound); and (b) bounded $m$, $r_{\rm old}$ and $r_{\rm new}$, which
-the source has from the bounded number of affected holes and patches. With
-both, $N$ and $k$ are polynomial in $L$ for $\delta=L^{-a}$, and so is the
-total number of monomials.
+(lines~341--342) use two standing bounds of the setting: (a) the projectors of
+every hole and every patch are sums of $\sum_jd_j$ cylinder projectors, with
+$\sum_jd_j$ bounded by one fixed power of $L$
+(\path{05-frames.tex}, lines~34--46, applied to the patch projectors at
+lines~254--256); and (b) $m$, $r_{\rm old}$ and $r_{\rm new}$ are bounded, by
+the hypotheses of the lemma (lines~189--192). With $\sum_jd_j\le CL^{c}$,
+$m,r_{\rm old},r_{\rm new}\le b$, $L\ge1$ and $\delta=L^{-a}$, the formal count
+is at most
+\[
+  (C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}\,
+  L^{3bc+4b(3bc+\lceil a\rceil)},
+\]
+a polynomial in $L$ whose coefficient and degree depend only on $C$, $c$, $b$
+and $a$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial}.}
+Bound (a) is a choice made in the source's setting, so it enters the formal
+statement as a hypothesis on the cylinder data of the rewrite; that the choice
+can be made is Proposition~4.1, which is a separate result.
+
+Two differences in form remain, and neither changes the statement. Each formal
+monomial has at most $2m$ normalized pair sources and $2m$ normalized pair
+effects, one of each per patch vertex with open legs, since the zero side of a
+two-owner block is also prepared and contracted as a pair vector; the source
+counts one per open-leg group, and Theorem~5.2 asks only for a bounded number.
+The expansion into monomials is stated in the canonical coordinates in which
+the tags of the untouched holes come first in both frames, as the source
+compares frames after the canonical identification of tag orderings
+(lines~74--75 and~84--85).
 
 The formal frames record the pairwise disjointness of the physical outer
 footprints of holes rather than of the outer squares in the plane; the source
@@ -167,13 +188,11 @@ the canonical rewrite becomes a contraction between frames with arbitrary tag
 orderings, with the same reference error. This is the canonical identification
 of tag orderings of Definition~6.1, and it is formalized.
 
-\section{Elimination plan}
+\section{Resolution}
 
-Formalize Proposition~4.1 with its cylinder-term bound $\sum_jd_j\le CL^{c}$
-and carry this bound on the patch and hole data, so that every affected hole
-and every additional patch of the rewrite has at most $CL^{c}$ cylinder terms.
-With $m$, $r_{\rm old}$ and $r_{\rm new}$ bounded, the count of the formal
-statement with $D=CL^{c}$ and $\delta=L^{-a}$ is then polynomial in $L$, which
-gives the second assertion of Lemma~6.3 with its polynomial count.
+Both assertions of Lemma~6.3 are formalized with the source's hypotheses and
+the standing bounds of its setting. The scope restriction recorded in earlier
+versions of this note, first the reading of the product terms as allowed
+monomials and then the polynomial count, is removed.
 
 \end{document}

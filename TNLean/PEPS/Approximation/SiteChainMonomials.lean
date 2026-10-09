@@ -76,10 +76,8 @@ def zeroBlock (x : ι) : RankOneBlock ι q :=
   ⟨{x}, {x}ᶜ, disjoint_compl_right, zeroPair _ _, zeroPair _ _⟩
 
 theorem zeroBlock_ketAt (x : ι) (c : ι → Fin q) :
-    (zeroBlock x).ketAt c = if c x = 0 then 1 else 0 := by
-  rw [RankOneBlock.ketAt, zeroBlock]
-  erw [zeroPair_apply _ _ disjoint_compl_right c]
-  simp
+    (zeroBlock x).ketAt c = if c x = 0 then 1 else 0 :=
+  (zeroPair_apply _ _ disjoint_compl_right c).trans (by simp)
 
 theorem zeroBlock_braAt (x : ι) (c : ι → Fin q) :
     (zeroBlock x).braAt c = if c x = 0 then 1 else 0 :=
@@ -89,10 +87,8 @@ theorem zeroBlock_braAt (x : ι) (c : ι → Fin q) :
 def emptyBlock : RankOneBlock ι q :=
   ⟨∅, Finset.univ, Finset.disjoint_empty_left _, zeroPair _ _, zeroPair _ _⟩
 
-theorem emptyBlock_ketAt (c : ι → Fin q) : (emptyBlock : RankOneBlock ι q).ketAt c = 1 := by
-  rw [RankOneBlock.ketAt, emptyBlock]
-  erw [zeroPair_apply _ _ (Finset.disjoint_empty_left _) c]
-  simp
+theorem emptyBlock_ketAt (c : ι → Fin q) : (emptyBlock : RankOneBlock ι q).ketAt c = 1 :=
+  (zeroPair_apply _ _ (Finset.disjoint_empty_left _) c).trans (by simp)
 
 theorem emptyBlock_braAt (c : ι → Fin q) : (emptyBlock : RankOneBlock ι q).braAt c = 1 :=
   emptyBlock_ketAt c
@@ -232,16 +228,8 @@ variable [NeZero q] {pos : ι → ℝ × ℝ} {Party : Type}
 
 private theorem eq_of_card_le_two {P : Finset Party} (hP : P.card ≤ 2) {a b c : Party} (ha : a ∈ P)
     (hb : b ∈ P) (hc : c ∈ P) (hba : b ≠ a) (hca : c ≠ a) : b = c := by
-  classical
   by_contra hbc
-  have h3 : ({a, b, c} : Finset Party).card = 3 := by
-    rw [Finset.card_insert_of_notMem (by simp [hba.symm, hca.symm]),
-      Finset.card_pair hbc]
-  have : ({a, b, c} : Finset Party) ⊆ P := by
-    intro y hy
-    simp only [Finset.mem_insert, Finset.mem_singleton] at hy
-    rcases hy with rfl | rfl | rfl <;> assumption
-  have := Finset.card_le_card this
+  have := Finset.two_lt_card_iff.mpr ⟨a, b, c, ha, hb, hc, hba.symm, hca.symm, hbc⟩
   omega
 
 /-- **A block on a group of sites with at most two owners.** Let `O` be a nonempty group of
@@ -298,15 +286,8 @@ theorem exists_groupBlock (l : List (Hole pos q Party)) (own : ι → Party) (S 
     (hvb.trans hw) (hS x₀ hx₀) hpB (hS x₀ hx₀) hpB
   exact ⟨b, fun x => by simp [b, E], hvk', hvb', M, m₁, m₂, m₃, m₄, m₅⟩
 
-/-- The complex conjugate of a vector. -/
-def conjVec {κ : Type} [Fintype κ] (f : EuclideanSpace ℂ κ) : EuclideanSpace ℂ κ :=
-  WithLp.toLp 2 fun d => star (f d)
-
-theorem norm_conjVec {κ : Type} [Fintype κ] (f : EuclideanSpace ℂ κ) : ‖conjVec f‖ = ‖f‖ := by
-  rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-  simp [conjVec]
-
-/-- The basis vector of the zero configuration of a group of sites. -/
+/-- The basis vector of the zero configuration of a group of sites, the analogue of `zeroVec`
+and `zeroPair` on the configurations of the group. -/
 def zeroGroupVec (O : ι → Prop) [DecidablePred O] : EuclideanSpace ℂ ({x // O x} → Fin q) :=
   EuclideanSpace.single 0 1
 
@@ -343,13 +324,18 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
   classical
   by_cases hne : ∃ x, O x
   · obtain ⟨P, hP, hPO⟩ := hO hne
+    have hfo : Orthonormal ℂ fun _ : Unit => f := by
+      rw [orthonormal_iff_ite]
+      intro _ _
+      simp [inner_self_eq_norm_sq_to_K, hf]
     obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
       ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) (zeroGroupVec O)
-      (conjVec f) (norm_zeroGroupVec O) ((norm_conjVec f).trans hf)
+      (WholeGroup.conjFamily (fun _ : Unit => f) ()) (norm_zeroGroupVec O)
+      ((WholeGroup.orthonormal_conjFamily hfo).1 ())
     refine ⟨b, 1, by simp, hbE, fun c => by rw [hbK, zeroGroupVec_apply], fun c => ?_, M, m₁,
       m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
-    rw [hbB, conjVec]
-    simp
+    rw [hbB]
+    simp [WholeGroup.conjFamily]
   · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
       fun c => ?_, .final (.id _), trivial, trivial, Nat.zero_le _, Nat.zero_le _, fun z => ?_⟩
     · rw [← hf]

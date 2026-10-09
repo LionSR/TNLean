@@ -9,9 +9,9 @@ allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} on the registers of the
 frames, one register per site and per tag
 (Definition~\ref{def:peps_frame_registers}). The number of monomials is bounded
 by the number of branches times $k^{2m}$; it is polynomial in $L$ once the
-number of cylinder terms of each patch is, which is the bound of Proposition~4.1
-of \cite{OpenAI2026PolynomialPEPS} not carried by the patch data
-\cite{gap:polypeps_small_rewrite_monomials}.
+number of cylinder terms of each patch and each affected hole is and $m$,
+$r_{\rm old}$ and $r_{\rm new}$ are bounded, which is
+Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
 Throughout, $\Lambda$ is a finite set of sites, each with a raw register
 $\C^q$, and operators on $\mathcal H_\Lambda$ are written in the canonical
@@ -120,8 +120,6 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     \lean{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_chain,
         TNLean.PEPS.EncodedFrame.exists_pairVec,
         TNLean.PEPS.EncodedFrame.exists_groupBlock,
-        TNLean.PEPS.EncodedFrame.conjVec,
-        TNLean.PEPS.EncodedFrame.norm_conjVec,
         TNLean.PEPS.EncodedFrame.zeroGroupVec,
         TNLean.PEPS.EncodedFrame.norm_zeroGroupVec,
         TNLean.PEPS.EncodedFrame.zeroGroupVec_apply,
@@ -317,13 +315,15 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     is at most $D^Ek'^{2m}$ with $E=r_{\rm new}+m+r_{\rm old}$ and
     $k'=\lceil(4D^Em/\delta)^2\rceil+1$.
 
-    This is the second assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}
-    (\texttt{05-frames.tex}, lines 214--217) with the count of monomials in
-    terms of $N$, or of the number $D$ of cylinder terms; it is polynomial in
-    $L$ for $\delta=L^{-a}$ when $D\le CL^c$ and $m$, $r_{\rm old}$ and
-    $r_{\rm new}$ are bounded. The bound $D\le CL^c$ is the cylinder-term
-    bound of Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, which the
-    patch data do not carry \cite{gap:polypeps_small_rewrite_monomials}.
+    This formalizes the second assertion of
+    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+    lines 214--217) except for the polynomial count, which is stated here with
+    $N$ or $D$ as a parameter. The count is polynomial in $L$ for
+    $\delta=L^{-a}$ when $D\le CL^c$ and $m$, $r_{\rm old}$ and
+    $r_{\rm new}$ are bounded
+    (Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}). The expansion is
+    stated in the canonical coordinates of the two frames, the tags of the
+    untouched holes first.
 \end{theorem}
 
 \begin{proof}\leanok

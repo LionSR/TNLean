@@ -38,13 +38,17 @@ monomials with coefficients of modulus at most one (`exists_allowed_monomial_app
 is the number of branches and `k` the truncation rank; if every hole and every patch has at most
 `D` cylinder terms, `N ≤ D^{r_new + m + r_old}` (`exists_allowed_monomial_approx_of_card_le`).
 
-**Scope restriction (polynomial count):** the count `N k^{2m}` is polynomial in `L` for
-`δ = L^{-a}` once `D ≤ C L^c` and `m`, `r_old`, `r_new` are bounded; the patch data do not record
-the cylinder-term bound `∑_j d_j ≤ C L^c` of Proposition 4.1 (`03-patches.tex`, lines 24–49), so
-`exists_allowed_monomial_approx_of_card_le` states the count with `D` as an explicit parameter.
-Documented in `docs/paper-gaps/polypeps_small_rewrite_monomials.tex`. Elimination: carry the
-bound of Proposition 4.1 on the patch and hole data once Proposition 4.1 is formalized, and
-specialize `D`.
+The frame construction fixes projectors whose numbers `∑_j d_j` of cylinder terms are bounded by
+one fixed power of `L` (`05-frames.tex`, lines 34–46), and Lemma 6.3 has boundedly many patches
+and affected holes. Under these standing bounds, `D ≤ C L^c` and `m`, `r_old`, `r_new ≤ b`, the
+choice `δ = L^{-a}` gives at most `K L^e` monomials, with `K` and `e` explicit in `C`, `c`, `b` and
+`a` (`exists_allowed_monomial_approx_polynomial`). This is the second assertion of Lemma 6.3.
+
+The expansion is stated in the canonical coordinates of the two frames, the tags of the untouched
+holes first; the source compares frames after the canonical identification of tag orderings
+(`05-frames.tex`, lines 74–75 and 84–85). Each monomial has at most `2m` pair sources and `2m`
+pair effects, one of each per patch vertex with open legs, rather than one per open-leg group;
+the source requires only a bounded number.
 
 ## Main definitions
 
@@ -60,12 +64,15 @@ specialize `D`.
   Lemma 6.3, with the count `N k^{2m}`.
 * `EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_of_card_le`: the same, with the
   number of cylinder terms as an explicit parameter.
+* `EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial`: the second assertion
+  of Lemma 6.3, with a count polynomial in `L`.
 
 ## References
 
 * Polynomial-PEPS manuscript (September 24, 2026), Lemma 6.3 `lem:small-rewrite`,
-  `05-frames.tex`, lines 214–217; proof lines 254–341, in particular lines 262–273 and 306–316;
-  allowed monomials, `04-compression.tex`, lines 32–35.
+  `05-frames.tex`, lines 188–217; proof lines 254–342, in particular lines 262–273 and 306–316;
+  the bound on the cylinder terms, lines 34–46; allowed monomials, `04-compression.tex`,
+  lines 32–35.
 
 Source text: `openai/math` at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, file
 `preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/`
@@ -298,26 +305,6 @@ theorem liftBranch_mul (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin q)
   simp only [kroneckerMap_apply, Matrix.one_apply_eq, one_mul]
   split_ifs <;> simp
 
-theorem liftBranch_sum_smul (β : R.Branch) {κ : Type*} [Fintype κ] (a : κ → ℂ)
-    (Y : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    R.liftBranch β (∑ k, a k • Y k) = ∑ k, a k • R.liftBranch β (Y k) := by
-  ext x y
-  simp only [liftBranch, reindex_apply, submatrix_apply, Matrix.sum_apply, Matrix.smul_apply,
-    kroneckerMap_apply, tagLift, of_apply, smul_eq_mul]
-  split_ifs
-  · rw [Finset.sum_mul]
-    exact Finset.sum_congr rfl fun _ _ => mul_assoc (G := ℂ) _ _ _
-  · simp only [zero_mul, mul_zero, Finset.sum_const_zero]
-
-theorem liftBranch_smul (β : R.Branch) (a : ℂ) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    R.liftBranch β (a • Y) = a • R.liftBranch β Y := by
-  ext x y
-  simp only [liftBranch, reindex_apply, submatrix_apply, Matrix.smul_apply,
-    kroneckerMap_apply, tagLift, of_apply, smul_eq_mul]
-  split_ifs
-  · simp only [mul_assoc]
-  · simp only [zero_mul, mul_zero]
-
 /-- **The tag maps of a branch as a word.** Contracting the affected old tags with `⟨b|` and
 preparing the affected new tags in `|a⟩` acts, in canonical coordinates, as the tag block
 `|a⟩⟨b| ⊗ 1` of the branch. -/
@@ -354,25 +341,6 @@ end SmallPatchRewrite
 section Terms
 
 variable [NeZero q]
-
-omit [Fintype ι] [DecidableEq ι] [NeZero q] in
-theorem act_smul {m n : Type*} [Fintype n] (a : ℂ) (A : Matrix m n ℂ)
-    (ψ : EuclideanSpace ℂ n) : act (a • A) ψ = a • act A ψ := by
-  ext i
-  simp [act, Matrix.smul_mulVec]
-
-omit [Fintype ι] [DecidableEq ι] [NeZero q] in
-theorem act_sum {m n κ : Type*} [Fintype n] [Fintype κ] (A : κ → Matrix m n ℂ)
-    (ψ : EuclideanSpace ℂ n) : act (∑ k, A k) ψ = ∑ k, act (A k) ψ := by
-  ext i
-  simp [act, Matrix.sum_mulVec]
-
-omit [NeZero q] in
-/-- The truncation rank grows with the number of branches. -/
-theorem truncationRank_mono {N N' g δ : ℝ} (hN : 0 ≤ N) (hNN' : N ≤ N') (hg : 0 ≤ g)
-    (hδ : 0 < δ) : truncationRank N g δ ≤ truncationRank N' g δ := by
-  unfold truncationRank
-  gcongr
 
 theorem exists_of_mem_encSteps {s : Step ι q} : (l : List (Hole pos q Party)) →
     (t : TagSpace l) → s ∈ encSteps l t → ∃ h ∈ l, ∃ j, s.sites = h.patch.tagSample j
@@ -566,8 +534,8 @@ owner), each allowed in the sense of Theorem 5.2, using only the specified parti
 
 With `norm_act_refVec_sub_le_of_approx` and `rewrite_error_le_inv_pow_twenty`, the choice
 `δ = L^{-30}` gives the reference-vector error `O(L^{-20})` of the final assertion of Lemma 6.3.
-The count `N k^{2m}` is polynomial in `L` once `N` is; see
-`exists_allowed_monomial_approx_of_card_le` and the scope restriction in the module docstring.
+For `δ = L^{-a}`, the count `N k^{2m}` is polynomial in `L` once `N` is and `m` is bounded; see
+`exists_allowed_monomial_approx_polynomial`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
 proof lines 254–341. -/
@@ -618,11 +586,11 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
 hole and every additional patch has at most `D` cylinder terms, the expansion of
 `exists_allowed_monomial_approx` has at most `D^E k'^{2m}` allowed monomials, with
 `E = r_new + m + r_old` and `k' = ⌈(4 D^E m / δ)²⌉ + 1`. For `δ = L^{-a}`, this count is polynomial
-in `L` when `D ≤ C L^c` (the cylinder-term bound `∑_j d_j ≤ C L^c` of Proposition 4.1) and `m`,
-`r_old`, `r_new` are bounded.
+in `L` when `D ≤ C L^c` (the bound on `∑_j d_j` of the frame construction) and `m`, `r_old`,
+`r_new` are bounded; see `exists_allowed_monomial_approx_polynomial`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
-proof lines 254–257 and 331–342. -/
+proof lines 254–257 and 331–342; the bound on `∑_j d_j`, lines 34–46. -/
 theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ} (hδ : 0 < δ)
     {D : ℕ} (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ D)
     (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ D)
@@ -641,7 +609,81 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
   obtain ⟨G, hG, rest⟩ := R.exists_allowed_monomial_approx hR hδ
   have hN := R.card_branch_le hnew hpatch hold
   refine ⟨G, hG.trans (Nat.mul_le_mul hN (Nat.pow_le_pow_left ?_ _)), rest⟩
-  exact truncationRank_mono (Nat.cast_nonneg _) (by exact_mod_cast hN) (Nat.cast_nonneg _) hδ
+  exact truncationRank_mono (Nat.cast_nonneg _) (by exact_mod_cast hN) (Nat.cast_nonneg _) le_rfl hδ
+
+/-- **Lemma 6.3, second assertion: the polynomial count.** Let `L ≥ 1`, and suppose that every
+affected hole and every additional patch has at most `C L^c` cylinder terms (the standing bound
+`∑_j d_j ≤ C L^c` on the projectors chosen in the frame construction) and that there are at most
+`b` additional patches, at most `b` affected old holes and at most `b` affected new holes. For
+every real `a`, the canonical contraction `M` admits a contraction `M_a` with
+`‖M_a - M‖ ≤ L^{-a}` and an expansion `M_a = ∑_t c_t M_t` into at most `K L^e` monomials allowed
+by Theorem 5.2, using only the specified parties, each with at most `2b` normalized pair sources
+and at most `2b` normalized pair effects, and with `|c_t| ≤ 1`. Here
+`K = (C + 1)^{3b} (16 b² (C + 1)^{6b} + 1)^{2b}` and `e = 3bc + 4b(3bc + ⌈a⌉)` depend only on
+`C`, `c`, `b` and `a`. The expansion is read in canonical coordinates, the tags of the untouched
+holes first, as in the canonical identification of tag orderings of the source.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–217; the
+bound on the cylinder terms, lines 34–46; proof lines 331–342. -/
+theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L : ℕ}
+    (hL : 1 ≤ L) (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
+    (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
+    (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
+    (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
+    (hrnew : R.newAffected.length ≤ b) (a : ℝ) :
+    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+      G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+        L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+      ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
+        ‖Ma - R.rewrite‖ ≤ (L : ℝ) ^ (-a) ∧
+        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
+          act Ma (R.oldFrame.regIso z) := by
+  set B := (C + 1) * L ^ c with hBdef
+  have hL0 : 0 < L := hL
+  have hB1 : 1 ≤ B := Nat.one_le_iff_ne_zero.mpr (by positivity)
+  have hCB : C * L ^ c ≤ B := Nat.mul_le_mul_right _ (Nat.le_succ C)
+  have hδ : (0 : ℝ) < (L : ℝ) ^ (-a) := Real.rpow_pos_of_pos (by exact_mod_cast hL0) _
+  obtain ⟨G, hG, hGp, rest⟩ := R.exists_allowed_monomial_approx_of_card_le hR hδ (D := B)
+    (fun h hh => (hnew h hh).trans hCB) (fun P hP => (hpatch P hP).trans hCB)
+    (fun h hh => (hold h hh).trans hCB)
+  have hN : B ^ (R.newAffected.length + R.patches.length + R.oldAffected.length) ≤
+      B ^ (3 * b) := Nat.pow_le_pow_right hB1 (by omega)
+  set X := 4 * b * B ^ (3 * b) * L ^ ⌈a⌉₊ with hX
+  have hk : truncationRank ((B ^ (R.newAffected.length + R.patches.length +
+      R.oldAffected.length) : ℕ) : ℝ) ((2 * R.patches.length : ℕ) : ℝ) ((L : ℝ) ^ (-a)) ≤
+      X ^ 2 + 1 := by
+    refine (truncationRank_mono (Nat.cast_nonneg _) (Nat.cast_le.mpr hN) (Nat.cast_nonneg _)
+      (Nat.cast_le.mpr (Nat.mul_le_mul_left 2 hm)) hδ).trans ?_
+    refine Nat.add_le_add_right (Nat.ceil_le.mpr ?_) 1
+    have hLa : (L : ℝ) ^ a ≤ (L : ℝ) ^ ⌈a⌉₊ := by
+      rw [← Real.rpow_natCast]
+      exact Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast hL) (Nat.le_ceil a)
+    have hdiv : 2 * ((B ^ (3 * b) : ℕ) : ℝ) * ((2 * b : ℕ) : ℝ) / (L : ℝ) ^ (-a) =
+        4 * b * (B : ℝ) ^ (3 * b) * (L : ℝ) ^ a := by
+      rw [Real.rpow_neg (Nat.cast_nonneg _), div_inv_eq_mul]
+      push_cast
+      ring
+    rw [hdiv, hX]
+    push_cast
+    gcongr
+  have hP : 1 ≤ L ^ (2 * (3 * b * c + ⌈a⌉₊)) := Nat.one_le_pow _ _ hL0
+  have hX2 : X ^ 2 + 1 ≤ (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) * L ^ (2 * (3 * b * c + ⌈a⌉₊)) := by
+    have : X ^ 2 = 16 * b ^ 2 * (C + 1) ^ (6 * b) * L ^ (2 * (3 * b * c + ⌈a⌉₊)) := by
+      rw [hX, hBdef, mul_pow (C + 1) (L ^ c)]
+      ring
+    rw [this, add_mul, one_mul]
+    exact Nat.add_le_add_left hP _
+  refine ⟨G, ?_, fun p hp => ?_, rest⟩
+  · refine hG.trans ((Nat.mul_le_mul hN ((Nat.pow_le_pow_left hk _).trans
+      (Nat.pow_le_pow_right (Nat.succ_pos _) (Nat.mul_le_mul_left 2 hm)))).trans ?_)
+    calc B ^ (3 * b) * (X ^ 2 + 1) ^ (2 * b)
+        ≤ B ^ (3 * b) * ((16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) *
+            L ^ (2 * (3 * b * c + ⌈a⌉₊))) ^ (2 * b) := by gcongr
+      _ = _ := by rw [hBdef, mul_pow (C + 1) (L ^ c), mul_pow _ (L ^ _)]; ring
+  · obtain ⟨h₁, h₂, h₃, h₄, h₅⟩ := hGp p hp
+    exact ⟨h₁, h₂, h₃, h₄.trans (by omega), h₅.trans (by omega)⟩
 
 end SmallPatchRewrite
 

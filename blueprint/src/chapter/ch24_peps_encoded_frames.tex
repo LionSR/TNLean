@@ -6,8 +6,9 @@ Lemma~6.3 of \cite{OpenAI2026PolynomialPEPS}, September 24, 2026,
 with one register per site and per tag, together with the steps of the proof
 of the second assertion listed below. The expansion of the branches into
 allowed monomials on these registers is in
-Section~\ref{sec:peps_small_rewrite_monomials}; the polynomial count of the
-monomials is recorded in \cite{gap:polypeps_small_rewrite_monomials}.
+Section~\ref{sec:peps_small_rewrite_monomials}, and the second assertion with
+its polynomial count is
+Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
 Throughout, $\Lambda$ is a finite set of sites with positions in the plane,
 each site carries a raw register $\C^q$ with $q\ge1$, and
@@ -641,6 +642,8 @@ norm of matrices, rectangular ones included.
 \begin{theorem}[Small-patch rewrite: approximation by product terms]
     \label{thm:peps_frame_small_rewrite_product_terms}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranchLinearMap,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranchLinearMap_apply,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_sub,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_liftBranch_le,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}
@@ -664,9 +667,9 @@ norm of matrices, rectangular ones included.
     truncation and rescaling steps of the proof of the second assertion of
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}. The reading of the product
     terms as allowed monomials is
-    Theorem~\ref{thm:peps_frame_small_rewrite_monomials}; a polynomial bound
-    on $N$ is not part of this statement
-    \cite{gap:polypeps_small_rewrite_monomials}.
+    Theorem~\ref{thm:peps_frame_small_rewrite_monomials}, and the polynomial
+    bound on the number of terms is
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -677,12 +680,18 @@ norm of matrices, rectangular ones included.
 
 \begin{theorem}[Small-patch rewrite: polynomial approximation]
     \label{thm:peps_frame_small_rewrite_polynomial}
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial}
+    \leanok
     \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,
         lem:peps_frame_wires,lem:peps_frame_rescale,
         lem:peps_frame_approx_reference,thm:peps_group_tensor,
         thm:peps_frame_small_rewrite_product_terms,
         thm:peps_frame_small_rewrite_monomials}
-    Under the four conditions, for every fixed $a>0$ the canonical map $M$
+    In the setting of the frame construction, where the projector of every
+    hole and every additional patch is a sum of $\sum_jd_j\le CL^c$
+    cylinder projectors for fixed $C$ and $c$ (\texttt{05-frames.tex}, lines
+    34--46), assume the four conditions with boundedly many affected holes and
+    additional patches. Then for every fixed $a>0$ the canonical map $M$
     admits a contractive approximation $M_a$ with $\lVert M_a-M\rVert\le
         L^{-a}$ and a polynomial sum expansion into monomials allowed by
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, using only the specified
@@ -691,7 +700,7 @@ norm of matrices, rectangular ones included.
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Expand $M$ into its polynomially many branches. In a branch
     $\beta=(a,s,b)$, let the old affected holes carry the terms with selected
     squares $D^{\rm old}_t$ and unit vectors $u_t$, the new affected holes
@@ -730,8 +739,11 @@ norm of matrices, rectangular ones included.
     (Theorem~\ref{thm:peps_frame_small_rewrite_product_terms}), and the
     reading of each product term as an allowed monomial on the registers of
     the frames, with at most $Nk^{2m}$ monomials, in
-    Theorem~\ref{thm:peps_frame_small_rewrite_monomials}. The bound
-    $N\le L^{C_1}$ on the number of branches uses the cylinder-term bound of
-    Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, which the patch data
-    do not carry; see \cite{gap:polypeps_small_rewrite_monomials}.
+    Theorem~\ref{thm:peps_frame_small_rewrite_monomials}. With
+    $\sum_jd_j\le CL^c$ and $m,r_{\rm old},r_{\rm new}\le b$, the number of
+    branches is at most $\bigl((C+1)L^c\bigr)^{3b}$, and for $\delta=L^{-a}$,
+    $L\ge1$ the count is at most
+    $(C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}L^{3bc+4b(3bc+\lceil
+                a\rceil)}$, with at most $2b$ normalized pair sources and $2b$ normalized
+    pair effects in each monomial \cite{gap:polypeps_small_rewrite_monomials}.
 \end{proof}
