@@ -62,8 +62,8 @@ example (θ : SiteConfig dimensions → ℂ) :
     ((1 / (2 * (scan.C₁ + 1))) / ((scan.n : ℝ) * scan.D)) *
         (∑ i, (scan.actualChargeData (by norm_num) capacity_pos 0).splitEta
           terms i ⟨history, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)) ≤
-      (scan.actualChargeData (by norm_num) capacity_pos 0).
-        choiceEntropySymbol dimensions history θ := by
+      (scan.actualChargeData (by norm_num) capacity_pos 0).choiceEntropySymbol
+        dimensions history θ := by
   exact CollarScan.good_sum_splitEta_le_choiceEntropySymbol_domainGraph
     target_nonempty scan rfl rfl (by norm_num) capacity_pos history dimensions terms
     (fun _ => rfl) (L := 256) (μ := 1)

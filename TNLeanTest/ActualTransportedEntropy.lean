@@ -46,8 +46,7 @@ private def zeroBandHistory (k : ℕ) :
     History zeroBandScan.K zeroBandScan.m zeroBandScan.M k :=
   ⟨Fin.elim0, fun _ => Fin.elim0⟩
 
-example : (zeroBandScan.actualChargeData zeroBandScan_m_pos zeroBandScan_M_pos 2).
-    IsAdmissible :=
+example : (zeroBandScan.actualChargeData zeroBandScan_m_pos zeroBandScan_M_pos 2).IsAdmissible :=
   zeroBandScan.actualChargeData_isAdmissible zeroBandScan_m_pos zeroBandScan_M_pos 2
 
 example : historyWeight (zeroBandHistory 2) = 1 := by
@@ -56,8 +55,8 @@ example : historyWeight (zeroBandHistory 2) = 1 := by
 -- This zero-band conclusion is inhabited; no premise asks for an impossible band.
 example (n : Fin 1 ⊕ Bool → ℕ) [∀ v, NeZero (n v)] (t : ℝ) (r : ℕ)
     (pre : Config r (fun v => Fin (n v)) → ℂ) (p : ℝ) :
-    (zeroBandScan.actualChargeData zeroBandScan_m_pos zeroBandScan_M_pos 2).
-      entropyGain n t r pre p = 0 := by
+    (zeroBandScan.actualChargeData zeroBandScan_m_pos zeroBandScan_M_pos 2).entropyGain
+      n t r pre p = 0 := by
   unfold TransportData.entropyGain
   apply Finset.sum_eq_zero
   intro h _
@@ -86,7 +85,7 @@ example (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M) (k : ℕ)
     (pre : Config r (fun v => Fin (n v)) → ℂ) (h : History S.K S.m S.M k)
     (f : (SiteConfig n → ℂ) → ℝ) :
     (S.actualChargeData hm hM k).oldFourierCoherentIntegral n t r pre 1 h f =
-      ∫ u, Matrix.Transport.fourierWeight u * realCoherentIntegral r (base n)
+      ∫ u, Matrix.Transport.fourierWeight u * realCoherentIntegral r (TransportData.base n)
         ((S.actualChargeData hm hM k).state n t r pre 1 ⟨h, none⟩ u) f := rfl
 
 -- Choice-dependent symbols are integrated against one common old state.
@@ -100,9 +99,13 @@ example (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M) (k : ℕ)
         (fun θ => ∑ c, chargeWeight c * f c θ) =
       ∑ c, chargeWeight c *
         (S.actualChargeData hm hM k).oldFourierCoherentIntegral n t r pre p h (f c) := by
-  rw [TransportData.oldFourierCoherentIntegral_sum _ _ _ _ _ _ _ Finset.univ _
-    (fun c _ => continuous_const.mul (hf c))]
-  simp only [TransportData.oldFourierCoherentIntegral_const_mul]
+  refine ((S.actualChargeData hm hM k).oldFourierCoherentIntegral_sum n t r pre p h
+    Finset.univ (fun c θ => chargeWeight c * f c θ)
+    (fun c _ => continuous_const.mul (hf c))).trans ?_
+  apply Finset.sum_congr rfl
+  intro c _
+  exact (S.actualChargeData hm hM k).oldFourierCoherentIntegral_const_mul
+    n t r pre p h (chargeWeight c) (f c)
 
 -- A constant has mass c/2 on actual trees, with all source-state premises retained.
 example (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M) (k : ℕ)
@@ -118,7 +121,7 @@ example (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M) (k : ℕ)
     (S.chargeTransportData_crossBandCommute _ _ n ht r) hsym hpre hp h
   have hscale := (S.actualChargeData hm hM k).oldFourierCoherentIntegral_const_mul
     n t r pre p h c (fun _ => 1)
-  simpa only [mul_one, hmass, div_eq_mul_inv] using hscale
+  simpa only [mul_one, hmass, div_eq_mul_inv, one_mul] using hscale
 
 -- Terminal old leaves do carry the old-edge factor.
 example (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M) (k : ℕ)
@@ -158,7 +161,15 @@ example (S : CollarScan V (Fin 2)) (hm : 0 < S.m) (hM : 0 < S.M) (k : ℕ)
     (θ : EuclideanSpace ℂ (SiteConfig n)) :
     (∑ i, (S.actualChargeData hm hM k).splitEta E i ⟨h, none⟩ θ) =
       2 * (S.actualChargeData hm hM k).splitEta E 0 ⟨h, none⟩ θ := by
-  simp only [Fin.sum_univ_two, TransportData.splitEta, hsupport]
+  classical
+  let D := S.actualChargeData hm hM k
+  have hsplit : D.splitEta E 1 ⟨h, none⟩ θ = D.splitEta E 0 ⟨h, none⟩ θ := by
+    delta TransportData.splitEta
+    exact congrArg (fun B : Finset (V ⊕ Bool) =>
+      ∑ g ∈ Finset.univ.filter (fun g => ¬ (D.leafPart ⟨h, none⟩ g).Contains B),
+        splitBandEta n (D.leafPart ⟨h, none⟩ g) B θ) hsupport
+  change (∑ i, D.splitEta E i ⟨h, none⟩ θ) = 2 * D.splitEta E 0 ⟨h, none⟩ θ
+  rw [Fin.sum_univ_two, hsplit]
   ring
 
 -- The actual old endpoint is the same retained history-tree evaluation.
