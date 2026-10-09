@@ -100,31 +100,6 @@ private theorem appendPartitionIso_heq {a₁ a₂ a₁' a₂' : Layout P}
   cases hx
   rfl
 
-private theorem selectedHead_heq (r : Reg P) {a b a' b' : Layout P}
-    (ha : a = a') (hb : b = b') (x : r.space)
-    {y : Mem a ⊗[ℂ] Mem b} {z : Mem a' ⊗[ℂ] Mem b'} (h : HEq y z) :
-    HEq ((TensorProduct.assocIsometry ℂ r.space (Mem a) (Mem b)).symm (x ⊗ₜ[ℂ] y))
-      ((TensorProduct.assocIsometry ℂ r.space (Mem a') (Mem b')).symm (x ⊗ₜ[ℂ] z)) := by
-  cases ha
-  cases hb
-  cases h
-  rfl
-
-private theorem complementaryHead_heq (r : Reg P) {a b a' b' : Layout P}
-    (ha : a = a') (hb : b = b') (x : r.space)
-    {y : Mem a ⊗[ℂ] Mem b} {z : Mem a' ⊗[ℂ] Mem b'} (h : HEq y z) :
-    HEq (leftCommIso r.space (Mem a) (Mem b) (x ⊗ₜ[ℂ] y))
-      (leftCommIso r.space (Mem a') (Mem b') (x ⊗ₜ[ℂ] z)) := by
-  cases ha
-  cases hb
-  cases h
-  rfl
-
-private theorem add_heq {A B : HSpace} (h : A = B) {x y : A} {x' y' : B}
-    (hx : HEq x x') (hy : HEq y y') : HEq (x + y) (x' + y') := by
-  cases h
-  exact heq_of_eq (congrArg₂ (· + ·) (eq_of_heq hx) (eq_of_heq hy))
-
 /-- Partitioning a concatenation agrees with partitioning each list and then
 joining its selected and complementary parts. The heterogeneous equality
 records precisely the two list identities `restrict_append`. -/

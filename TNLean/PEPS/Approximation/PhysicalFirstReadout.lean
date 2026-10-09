@@ -23,6 +23,9 @@ count and physical error budget. The physical basis is arbitrary, and may be
 the labelled tensor basis for unequal original local dimensions. The private
 memory is finite-dimensional and has no numerical dimension bound.
 
+Equality of finite coordinate indices is decided classically. This classical
+convention imposes no restriction on the finite physical index set.
+
 Source: polynomial-PEPS, `04-compression.tex`, lines 199–227 and 338–355.
 -/
 

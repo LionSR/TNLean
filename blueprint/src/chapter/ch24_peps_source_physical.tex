@@ -42,9 +42,11 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    The coordinate functional has norm at most one, $J$ is isometric,
-    and an allowed word evaluates to a contraction. Orthonormal coordinates
-    preserve the operator norm.
+    \uses{def:peps_physical_component}
+    Since $C_{x,V}=(\langle x|\otimes I_D)JV$, the coordinate
+    functional, the isometry $J$ and the allowed word give
+    $\|C_{x,V}\|\leq\|\langle x|\otimes I_D\|\,\|J\|\,\|V\|\leq1$.
+    Orthonormal coordinates preserve this bound.
 \end{proof}
 
 \begin{definition}[Mixed physical Gram operator]
@@ -78,9 +80,14 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Cauchy--Schwarz to the defining inner product and use both
-    component contraction bounds. Passing to orthonormal coordinates preserves
-    this estimate.
+    \uses{thm:peps_physical_component_contraction}
+    By Cauchy--Schwarz and
+    Theorem~\ref{thm:peps_physical_component_contraction},
+    $|\langle t,Os\rangle|
+        =|\langle C_{y,W}t,C_{x,V}s\rangle|
+        \leq\|C_{y,W}t\|\,\|C_{x,V}s\|
+        \leq\|t\|\,\|s\|$.
+    Passing to orthonormal coordinates preserves this estimate.
 \end{proof}
 
 \begin{definition}[Joint physical and discarded output coordinates]
@@ -603,9 +610,8 @@ inner-product discard spaces.
 \end{proof}
 
 \begin{definition}[Concatenating two partitioned layouts]
+    \uses{def:peps_basis_partition_join}
     \label{def:peps_append_partition}
-    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso}
-    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso_tmul}
     \leanok
     Given four ordered layouts $a_+,a_-,b_+,b_-$, canonically regroup
     \begin{align}
@@ -619,9 +625,9 @@ inner-product discard spaces.
 
 \begin{theorem}[Partition commutes with concatenation]
     \label{thm:peps_partition_append}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_tmul}
     \leanok
-    \uses{def:peps_append_partition}
+    \uses{def:peps_append_partition,
+        thm:peps_basis_partition_concat}
     Let a Boolean owner map partition two layouts $a,b$. Concatenating their
     memory vectors and then partitioning the resulting layout gives the
     same vector as partitioning each layout first and applying
@@ -630,6 +636,7 @@ inner-product discard spaces.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_basis_head_memory_equalities}
     Induct on the first layout. For a head register on either side,
     use the defining partition isometry and the four-factor regrouping.
     The empty layout contributes its scalar factor.

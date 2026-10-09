@@ -49,6 +49,23 @@ abstracted — record why, so it is not re-proposed).
   unchanged. The related three-factor estimate in the symmetry development has
   different hypotheses and is outside this two-factor statement.
 
+### Tensor memory identifications under equality — promoted (2026-10-09)
+
+- **Pattern:** identify equal tail register lists before adjoining a fixed head,
+  or identify equal selected and complementary lists before applying the head
+  associativity/exchange maps; addition respects the same identification.
+- **Seen:** the head congruence proof occurred in `LayoutOwnerMap.lean`,
+  `WordAppendTail.lean`, and `UnitMemoryCoordinates.lean`; the partition
+  congruences occurred in `PartyPartition.lean` and `PartyPartitionAppend.lean`.
+- **Abstraction:** `Layout.memCongr_cons_tmul`, `Layout.selectedHead_heq`,
+  `Layout.complementaryHead_heq`, and `Layout.add_heq` in `PartyPartition.lean`.
+- **Refactor:** remove the duplicate private proofs and use the shared
+  declarations. The more general private Hilbert-space congruences in
+  `PartitionOwnerNaturality.lean` retain their cross-owner applications.
+- **Notes:** no additional hypothesis or compatibility alias; fresh native
+  verification of the public promotions and callers is pending.
+
+
 ### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
 
 - **Pattern:** a walk in the induced domain starts in a region and ends outside it; take

@@ -10,8 +10,8 @@ import TNLean.PEPS.Approximation.ApproximateGateEvaluation
 
 Multiply all coefficients of each prescribed gate expansion by the same
 factor `(1 + δ)⁻¹`. The monomials, their order and their local operations are
-unchanged. The resulting expansion is a contraction and defines an original
-circuit in the existing syntax, on exactly the same input and output layouts.
+unchanged. The resulting expansion is a contraction circuit on exactly the
+same input and output layouts.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 590–600.
 -/
