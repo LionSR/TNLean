@@ -6122,7 +6122,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
 
-### Local contractions on the first prepared pair — candidate (2026-10-09)
+### Local contractions on the first prepared pair — shared lemma (2026-10-09)
 
 - **Pattern:** use `Word.mapPair_spec` to obtain an allowed source-free word,
   use `Word.eval_mapPair_source` to transform the first pair vector, and compose
@@ -6131,12 +6131,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/PEPS/Approximation/FiniteSourcePreparation.lean` and
   `common_pair_cons_expands` in
   `TNLean/PEPS/Approximation/CommonSourcePreparation.lean`.
-- **Abstraction:** the proposed theorem
+- **Abstraction:** the theorem
   `SourceInventory.Expands.cons_mapL` in `SourcePairMaps.lean` takes the two
   continuous linear maps and their operator-norm bounds. Issue #8973 requests
   the common lemma; the two private copies are removed, rather than retained
   as aliases. Both existing family theorem statements remain unchanged.
-- **Notes:** the proposed refactor awaits ordinary Lean verification. The
+- **Notes:** both family proofs specialize this lemma. The
   lemma retains the same tail for every spectator layout, and requires no
   source normalization, finite dimension or nonzero space. No tactic or new
   simp attribute is introduced.

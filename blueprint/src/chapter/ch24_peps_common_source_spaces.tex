@@ -141,6 +141,7 @@
 \begin{theorem}[Local contractions with a prepared tail]
     \label{thm:peps_source_cons_mapL}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL}
+    \leanok
     \uses{def:peps_source_inventory,def:peps_source_expansion}
     Let $p\ne q$ be parties, $A:U\to U'$ and $B:V\to V'$ be
     contractions, $\eta\in U\otimes V$, and $T$ be a finite source list.
@@ -158,6 +159,7 @@
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_map_source_pair,def:peps_source_inventory}
     Apply $A$ and $B$ only to the two registers of the first pair, with
     identities on the prepared tail and the spectator memory.
