@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Empty final tensor memory — promoted (2026-10-09)
+
+- **Pattern:** identify the tensor product with an empty final memory with
+  scalar multiplication on the preceding memory.
+- **Seen:** `WordAppendTail.lean` and `UnitMemoryCoordinates.lean` contained
+  the same induction on the register list and its tensor vectors.
+- **Abstraction:** `Layout.memCongr_append_nil_appendIso_symm_tmul` in
+  `UnitMemoryCoordinates.lean`.
+- **Refactor:** the spectator-register construction imports and uses this
+  public theorem; its duplicate private proof is removed.
+- **Notes:** the statement includes arbitrary complex scalars and arbitrary
+  register lists, including the empty list. No additional hypothesis is needed.
+
 ### Tensor memory identifications under equality — promoted (2026-10-09)
 
 - **Pattern:** identify equal tail register lists before adjoining a fixed head,
