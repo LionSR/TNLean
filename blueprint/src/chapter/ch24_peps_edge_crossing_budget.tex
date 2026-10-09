@@ -1,0 +1,86 @@
+\subsection{Exact nearest-neighbor crossing sums}
+\label{sec:area_law_edge_crossing_budget}
+
+\begin{definition}[On-site and nearest-neighbor supports]
+    \label{def:area_law_nearest_neighbor_support}
+    \lean{TNLean.PEPS.AreaLaw.nearestNeighborSupport}
+    \leanok
+    \uses{def:area_law_domain}
+    Let $\Lambda\subset\mathbb Z^2$ be finite and let $E_\Lambda$ be its
+    unordered nearest-neighbor edges. Index supports by the disjoint union
+    $I=\Lambda\sqcup E_\Lambda$, assigning $S_v=\{v\}$ to a site and
+    $S_{\{x,y\}}=\{x,y\}$ to an edge. For $A\subseteq\Lambda$, put
+    $C(A)=\{i\in I:S_i\cap A\ne\varnothing,\ S_i\setminus A\ne\varnothing\}$.
+\end{definition}
+
+\begin{theorem}[One inside endpoint]
+    \label{thm:area_law_crossing_inside_endpoint}
+    \lean{
+        TNLean.PEPS.AreaLaw.not_mem_crossingTerms_singleton,
+        TNLean.PEPS.AreaLaw.pair_inter_eq_singleton_of_crossing,
+        TNLean.PEPS.AreaLaw.card_pair_insideConfig_of_crossing
+    }
+    \leanok
+    A singleton cannot meet both sides of a cut in any finite set.
+    If $\{x,y\}$ meets both sides of $A$, then
+    $\{x,y\}\cap A=\{v\}$ for exactly one endpoint $v$.
+    For an alphabet of cardinality $q\ge0$, the set of configurations on
+    this intersection has cardinality $q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $x\in A$, the crossing condition forces $y\notin A$;
+    otherwise it forces $y\in A$. A function on a singleton is determined
+    by its value at the unique point, including when the alphabet is empty.
+\end{proof}
+
+\begin{theorem}[Crossing supports and unordered edges]
+    \label{thm:area_law_crossing_support_count}
+    \lean{
+        TNLean.PEPS.AreaLaw.inl_not_mem_crossingTerms,
+        TNLean.PEPS.AreaLaw.inr_mem_crossingTerms_iff,
+        TNLean.PEPS.AreaLaw.card_nearestNeighbor_insideConfig,
+        TNLean.PEPS.AreaLaw.card_crossingTerms_nearestNeighbor
+    }
+    \leanok
+    \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
+    For every $A\subseteq\Lambda$, no on-site index belongs to $C(A)$,
+    and an edge index belongs to $C(A)$ exactly when the edge lies in
+    $\partial_\Lambda A$. Consequently $|C(A)|=|\partial_\Lambda A|$.
+    For every $i\in C(A)$ and every integer $q\ge0$, the configuration
+    set on $S_i\cap A$ has cardinality $q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_crossing_inside_endpoint}
+    Choose any linear order on $\Lambda$ and write each edge in increasing
+    endpoint order. Forgetting this order maps crossing edge indices to
+    unordered boundary edges. Equality of unordered pairs either identifies
+    both endpoints or swaps them; the swap contradicts their strict order.
+    Every boundary edge has an increasing ordering, so this map is bijective.
+    The configuration count follows from the unique inside endpoint.
+\end{proof}
+
+\begin{theorem}[Exact weighted crossing sum]
+    \label{thm:area_law_nearest_neighbor_budget}
+    \lean{TNLean.PEPS.AreaLaw.nearestNeighbor_crossing_budget}
+    \leanok
+    \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
+    Let $m,q\ge0$ be integers, $A_j\subseteq\Lambda$ for $0\le j<m$,
+    and let $a_j,J\in\mathbb R$. If $d_{ij}$ denotes the cardinality of
+    the configuration set on $S_i\cap A_j$ for an alphabet of size $q$, then
+    \begin{align}
+        \sum_{j=0}^{m-1}a_j^2\sum_{i\in C(A_j)}d_{ij}^2J
+         & =q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda A_j|.
+        \label{eq:area_law_exact_crossing_sum}
+    \end{align}
+    This is the combinatorial identity used in the nearest-neighbor
+    matrix-unit estimate of \cite[Section~4]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_crossing_support_count}
+    Every summand in the inner sum has $d_{ij}=q$, and there are exactly
+    $|\partial_\Lambda A_j|$ such summands. Substitute these identities
+    and factor out $q^2J$.
+\end{proof}

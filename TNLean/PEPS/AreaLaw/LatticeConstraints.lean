@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
 import TNLean.PEPS.AreaLaw.LatticeCounts
 import TNLean.PEPS.AreaLaw.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
@@ -150,8 +151,7 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
   refine ⟨h1, h2, h3, h4, h5, h6, h7.trans hε, h8, h9, h10, fun κ _ _ B => ?_, h12⟩
   obtain ⟨b1, b2, b3, b4⟩ := h11 κ B
   refine ⟨b1, b2, b3, b4.trans (le_of_eq ?_), fun hB =>
-    rootChannel_kronecker_eq_self_of_commute _ (siteExpectation_nonneg _ (hk i).1)
-      (siteExpectation_le_one _ (hk i).2.1) (siteExpectation_mem_supportedOperators _ _) B hB⟩
+    localRootChannel_eq_self_of_forall_commute _ (hk i).1 (hk i).2.1 hB⟩
   rw [hsq]; simp only [ε]; ring
 
 /-- **Truncation near a finite set on a lattice domain** (Proposition 4.5, `prop:truncation`,

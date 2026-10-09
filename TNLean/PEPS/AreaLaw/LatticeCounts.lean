@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.GraphPropagation
 
@@ -15,15 +16,14 @@ counts of Section 2: graph balls and spheres of radius `d` have at most a consta
 `μ_R = 2 ^ (v_R - 1)` supports contain a given site, so at most `μ_R` labels share an
 anchor and the norms of the terms meeting a site sum to at most `μ_R J`. The sphere,
 support-diameter, support-size and site-budget counts are proved in
-`TNLean.PEPS.AreaLaw.GraphPropagation`; this file adds the remaining counts on the induced
-nearest-neighbour graph of an arbitrary finite domain, holes and disconnected components
-included, from the ambient diamond count `eq:ball-count`.
+`TNLean.PEPS.AreaLaw.GraphPropagation`, and the count of supports containing a site is
+`TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le`; this file adds the remaining
+counts on the induced nearest-neighbour graph of an arbitrary finite domain, holes and
+disconnected components included, from the ambient diamond count `eq:ball-count`.
 
 ## Main results
 
 * `TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le`: `|N_d(x)| ≤ 2 (d + 1)²`.
-* `TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le`: at most `μ_R` supports
-  contain a site.
 * `TNLean.PEPS.AreaLaw.card_anchor_fiber_le`: at most `μ_R` labels per anchor.
 * `TNLean.PEPS.AreaLaw.card_cutEdges_le_card_edgeBoundary`: ordered cut edges are counted by
   the unordered edge boundary `∂_Λ X`.
@@ -56,25 +56,6 @@ theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
     exact_mod_cast h
   nlinarith
 
-/-- At most `μ_R = 2 ^ (v_R - 1)` admissible supports contain a given site
-(`01-preliminaries.tex`, lines 94–101). -/
-theorem card_admissibleSupport_containing_le (R : ℕ) (x : Site Λ) :
-    (Finset.univ.filter fun X : AdmissibleSupport Λ R => x ∈ X.1).card ≤
-      2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
-  classical
-  set F : Finset (Finset (Site Λ)) :=
-    Finset.univ.map (Function.Embedding.subtype (IsAdmissibleSupport Λ R))
-  have hF : ∀ Y ∈ F, ∀ a ∈ Y, ∀ z ∈ Y, ∃ p : (domainGraph Λ).Walk a z, p.length ≤ R := by
-    intro Y hY
-    obtain ⟨X, -, rfl⟩ := Finset.mem_map.mp hY
-    exact X.2.2
-  have hmap : (Finset.univ.filter fun X : AdmissibleSupport Λ R => x ∈ X.1).map
-      (Function.Embedding.subtype _) = F.filter fun Y => x ∈ Y := by
-    rw [Finset.filter_map]; rfl
-  rw [← Finset.card_map (Function.Embedding.subtype _), hmap]
-  exact card_supports_containing_le_diamond Subtype.val Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) F R hF x
-
 /-- **Anchor multiplicity**: if every label is anchored inside its support, at most `μ_R`
 labels share an anchor (`03-quasilocal.tex`, lines 30–33). -/
 theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
@@ -82,7 +63,7 @@ theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
     (Finset.univ.filter fun X => a X = x).card ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
   (Finset.card_le_card fun X hX => by
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hX ⊢
-    exact hX ▸ ha X).trans (card_admissibleSupport_containing_le R x)
+    exact hX ▸ ha X).trans (card_admissibleSupport_containing_le (R := R) x)
 
 /-- Ordered cut edges `(u, v)`, `u ∈ X`, `v ∉ X`, are no more numerous than the unordered
 edges of `∂_Λ X` (`03-quasilocal.tex`, line 436). -/
