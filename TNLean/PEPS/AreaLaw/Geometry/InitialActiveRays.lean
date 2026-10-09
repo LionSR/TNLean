@@ -140,9 +140,8 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
     let oSmall := (v.1 - r, v.2 - r)
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
     let I := InitialRegionIndex o k₀ Z C a b hC h₀
-    let σ : J → I := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     ∀ x ∈ Metric.ball v r,
       (∃ i : I, x ∈ frontier (initialBirthRegion o k₀ Z C a b hC h₀ i)) ↔
       ∃ s t : J,
@@ -157,8 +156,8 @@ theorem initialRegion_frontier_near_mark_iff_active_radial
   let oSmall := (v.1 - r, v.2 - r)
   let J := CellFanSlot (fun _ : Fin 4 ↦ true)
   let I := InitialRegionIndex o k₀ Z C a b hC h₀
-  let σ : J → I := Classical.choose
-    (exists_unique_initialRegion_sector_assignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  let σ : J → I :=
+    initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
   let Q : J → Set (ℝ × ℝ) := fun s ↦
     (cellFanPolygon oSmall ℓ (0, 0) (fun _ ↦ true) s).region
   let B : I → Set (ℝ × ℝ) := initialBirthRegion o k₀ Z C a b hC h₀
@@ -283,9 +282,8 @@ theorem initialRegion_frontier_small_closedBall_iff_active_radial
     let oSmall := (v.1 - r, v.2 - r)
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
     let I := InitialRegionIndex o k₀ Z C a b hC h₀
-    let σ : J → I := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     ∀ x ∈ Metric.closedBall v (r / 2),
       (∃ i : I, x ∈ frontier (initialBirthRegion o k₀ Z C a b hC h₀ i)) ↔
       ∃ s t : J,
