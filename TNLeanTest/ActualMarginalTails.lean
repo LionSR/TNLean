@@ -15,6 +15,8 @@ label type, zero local dimension, and two repeated labels on a retained componen
 at local dimensions one and two, including zero operators. The existential
 signature and its consumers construct one witness from the original Hamiltonian,
 including empty truncation sets and the empty domain at local dimension one.
+The same witness retains both energy upper bounds and its phase and trace-distance
+closeness to the original vector while controlling complementary cuts.
 A nonzero-energy singleton and a two-dimensional spectator separate the physical
 projector gap from identity extension.
 -/
@@ -169,7 +171,7 @@ example {Λ : Finset (ℤ × ℤ)} {R : ℕ} {J Δ e : ℝ}
 
 -- This exact signature forces Ctr before q, the instance and scan, retains the
 -- original Hamiltonian ground-state premise and source radius/cardinality bounds,
--- and chooses one e/Ωt before both universal cut families.
+-- and chooses one e/Ωt with energy, phase and trace bounds before both cut families.
 example
     (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
     ∃ Ctr : ℝ, 0 < Ctr ∧
@@ -184,10 +186,16 @@ example
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         ((S.truncationSet L).card : ℝ) ≤ C₀ * (S.n : ℝ) ^ 2 →
         let g := Δ / positiveNormalization 1 (Δ / 2) J
+        let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let B : Finset (Site Λ) → ℝ :=
           fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          0 ≤ e ∧ e ≤ ε ∧
+          (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+          Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
+              (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+            Real.sqrt (2 * ε / g) ∧
           (∀ (X : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B X) →
             Real.log (Entropy.surprisalMoment
@@ -202,7 +210,8 @@ example
   CollarScan.exists_truncated_reducedState_moment_tail_bounds R hJ hΔ hC₀
 
 -- An empty truncation set discharges the size premise with C₀ = 0, even in a
--- nonempty domain. A single constructed vector controls X and Xᶜ simultaneously.
+-- nonempty domain. A single constructed vector retains both projected energy bounds,
+-- phase/trace closeness, and simultaneous control of X and Xᶜ.
 private theorem empty_truncation_witness (R : ℕ) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ Ctr : ℝ, 0 < Ctr ∧
@@ -213,9 +222,15 @@ private theorem empty_truncation_witness (R : ℕ) {J Δ : ℝ}
         ∀ L : ℕ, 2 ≤ S.n → S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         S.truncationSet L = ∅ →
         let g := Δ / positiveNormalization 1 (Δ / 2) J
+        let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let B := fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          0 ≤ e ∧ e ≤ (S.n : ℝ) ^ (-1000 : ℝ) ∧ e ≤ g / 4 ∧
+          (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+          Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
+              (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+            Real.sqrt (2 * ε / g) ∧
           ∀ (X : Finset (Site Λ)) (w : ℝ),
             (Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
                 (regionalEntropy Λ q Ωt X) w ≤
@@ -229,9 +244,10 @@ private theorem empty_truncation_witness (R : ℕ) {J Δ : ℝ}
     CollarScan.exists_truncated_reducedState_moment_tail_bounds R hJ hΔ (le_refl (0 : ℝ))
   refine ⟨Ctr, hCtr, ?_⟩
   intro q _ Λ h S E₀ Ω hgs hgraph hanchor L hn hr hS₀
-  obtain ⟨e, Ωt, htrgs, _, htail⟩ :=
+  obtain ⟨e, Ωt, htrgs, he0, he, hphase, htrace, _, htail⟩ :=
     htr Λ h S E₀ Ω hgs hgraph hanchor L hn hr (by simp [hS₀])
-  refine ⟨e, Ωt, htrgs, fun X w => ⟨htail X w, ?_⟩⟩
+  refine ⟨e, Ωt, htrgs, he0, he.trans (min_le_left _ _),
+    he.trans (min_le_right _ _), hphase, htrace, fun X w => ⟨htail X w, ?_⟩⟩
   simpa only [cutBudget_compl] using htail Xᶜ (-w)
 
 -- The empty physical domain at local dimension one needs neither a nonempty

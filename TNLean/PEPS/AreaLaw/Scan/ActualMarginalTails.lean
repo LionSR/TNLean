@@ -21,6 +21,8 @@ support label retained. No cut containment, history condition, termwise kernel
 equation or auxiliary identity extension enters the ground-state hypothesis.
 The existential theorem obtains a single truncated ground vector from the original
 Hamiltonian's ground-state hypothesis and the source cardinality and radius bounds.
+The same witness retains its nonnegative small energy and the phase-adjusted vector
+and trace-distance bounds from the original ground vector.
 Its truncation constant is chosen before every physical instance and scan, independently
 of the scanner's charge-slot constant `S.C₁`. Uniform geometric budget estimates and
 auxiliary-system prevector constructions remain separate statements.
@@ -120,7 +122,10 @@ theorem surprisalTail_truncated_reducedState_le
 /-- One physical truncated ground vector satisfies both marginal estimates for every cut.
 The constant `Ctr` depends only on `R, J, Δ, C₀` and is independent of the scanner's
 charge-slot constant `S.C₁`. The original `Ω` still centers every positive constraint;
-only the global projector-gap inequality subtracts the new energy `e`.
+only the global projector-gap inequality subtracts the new energy `e`. The same
+pair retains `0 ≤ e ≤ ε`, phase-adjusted distance at most `2 * √(ε / g)` from
+`Ω`, and trace distance at most `√(2 * ε / g)`, where
+`ε = min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)`.
 
 Source: Proposition 4.5 (`03-quasilocal.tex`, lines 405–433 and 457–505), followed by
 Lemma 3.1 as used in `08-scanner.tex`, lines 400–414. Empty domains, empty truncation
@@ -140,10 +145,16 @@ theorem exists_truncated_reducedState_moment_tail_bounds
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         ((S.truncationSet L).card : ℝ) ≤ C₀ * (S.n : ℝ) ^ 2 →
         let g := Δ / positiveNormalization 1 (Δ / 2) J
+        let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let B : Finset (Site Λ) → ℝ :=
           fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          0 ≤ e ∧ e ≤ ε ∧
+          (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+          Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
+              (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+            Real.sqrt (2 * ε / g) ∧
           (∀ (X : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B X) →
             Real.log (Entropy.surprisalMoment
@@ -160,7 +171,7 @@ theorem exists_truncated_reducedState_moment_tail_bounds
   refine ⟨Ctr, hCtr, ?_⟩
   intro q _ Λ h S E₀ Ω hgs hgraph hanchor L hn hr hcard
   have hΩ : ‖Ω‖ = 1 := hgs.1
-  obtain ⟨_, _, _, e, Ωt, hΩt, heig, _, _, hgap, _, _⟩ :=
+  obtain ⟨_, _, _, e, Ωt, hΩt, heig, he0, he, hgap, hphase, htrace⟩ :=
     htr Λ h S.anchor hanchor E₀ Ω hgs (S.n : ℝ) (by exact_mod_cast hn)
       (S.truncationSet L) hcard
   have hterm (i : AdmissibleSupport Λ R) :
@@ -181,7 +192,7 @@ theorem exists_truncated_reducedState_moment_tail_bounds
     apply Matrix.isGappedGroundState_iff.mpr
     rw [hsum]
     exact ⟨hΩt, heig, hgap⟩
-  refine ⟨e, Ωt, htrgs, ?_, ?_⟩
+  refine ⟨e, Ωt, htrgs, he0, he, hphase, htrace, ?_, ?_⟩
   · intro X u hu
     exact S.log_surprisalMoment_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L
       htrgs X hu

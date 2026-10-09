@@ -337,9 +337,22 @@ The graph, set, radius and centered constraints agree term by term with the
 physical truncation theorem. Its unit-norm, eigenvector and positive
 semidefinite gap conclusions therefore give the actual physical
 $\widetilde H$ in (\ref{eq:arealaw2d_scanner_inputs_marginal_gap}).
-The resulting single pair is chosen before all cuts and satisfies both
-marginal inequalities for every cut. No truncated spectral or tail
-hypothesis is supplied.
+The resulting single pair is chosen before all cuts. With
+$\epsilon_n=\min\{n^{-1000},g/4\}$, retain the quantitative conclusions
+of Proposition~4.5 for this same pair:
+\begin{align}
+    0 & \le e\le\epsilon_n,      \\
+    \|\widetilde\Omega-\mathrm e^{i\theta}\Omega\|
+      & \le2\sqrt{\epsilon_n/g}, \\
+    \frac12\bigl\||\widetilde\Omega\rangle\langle\widetilde\Omega|
+    -|\Omega\rangle\langle\Omega|\bigr\|_1
+      & \le\sqrt{2\epsilon_n/g}.
+    \label{eq:arealaw2d_scanner_inputs_marginal_closeness}
+\end{align}
+Here $\theta$ is a suitable real phase. This same vector satisfies both marginal
+inequalities for every cut; no truncated spectral, energy-smallness,
+closeness or tail hypothesis is supplied. In particular, $e\le n^{-1000}$
+and $e\le g/4$ hold without a second choice of ground vector.
 
 No kernel equation for each individual term is asserted, and $e$ is not
 assumed to vanish. The original $\Omega$ remains the filter center.
