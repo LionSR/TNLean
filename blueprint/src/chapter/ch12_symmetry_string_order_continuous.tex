@@ -1,0 +1,307 @@
+\subsection{Continuous effective symmetries and identity endpoints}
+\label{sec:continuous_effective_string_order}
+
+The infinitesimal condition in
+\cite[lines~331--359]{PerezGarcia2008StringOrder} is
+$M(H)=[E,H\otimes\Id-\Id\otimes\overline H]=0$ for Hermitian $H$.
+Every scalar Hermitian matrix belongs to this kernel. Here an effective
+generator means $H\notin\C\Id$; Theorem~\ref{thm:continuous_generator_string_order}
+proves that such a generator produces a nonscalar physical symmetry and
+string order with identity endpoints, as suggested by
+\cite[lines~291--296]{PerezGarcia2008StringOrder}.
+% Scope: only the forward implication from a nonscalar Hermitian generator
+% is asserted. No classification of all ambient physical stabilizers, or
+% converse to the effective-generator criterion, is claimed here.
+
+\begin{definition}[Row-vectorized Kraus columns and doubled generator]
+    \label{def:row_kraus_generator}
+    \lean{MPSTensor.krausRowMatrix, MPSTensor.rowTransferMatrix,
+        MPSTensor.rowAdjointGenerator}
+    \leanok
+    \uses{def:mps_tensor}
+    For $A=\{A^i\}_{i=0}^{d-1}$, let $F:\C^d\to\C^{D\times D}$
+    have column $i$ equal to the row-vectorization of $A^i$:
+    \begin{align}
+        F_{(a,b),i} & =(A^i)_{ab},\notag                      \\
+        E           & =\sum_i A^i\otimes\overline{A^i},\notag \\
+        L_H         & =H\otimes\Id-\Id\otimes\overline H.
+        \label{eq:symmetry_row_generator}
+    \end{align}
+    The row-vectorization convention is $(\opvec_r X)_{(a,b)}=X_{ab}$.
+    Thus $E\opvec_r X=\opvec_r\E_A(X)$.
+\end{definition}
+
+\begin{theorem}[Realignment of the transfer and Choi commutators]
+    \label{thm:row_transfer_gram_realignment}
+    \lean{MPSTensor.krausRowMatrix_gram_apply,
+        MPSTensor.krausRowMatrix_gram_commutator_apply,
+        MPSTensor.commute_rowTransferMatrix_iff_commute_krausGram,
+        MPSTensor.rowAdjointGenerator_mul_apply,
+        MPSTensor.mul_rowAdjointGenerator_apply}
+    \leanok
+    \uses{def:row_kraus_generator}
+    The Choi Gram matrix $G=FF^\dagger$ and the transfer matrix $E$ have
+    different index pairings. For all virtual indices $a,b,c,e$,
+    \begin{align}
+        G_{(a,b),(c,e)} & =E_{(a,c),(b,e)}.
+        \label{eq:symmetry_gram_realignment}
+    \end{align}
+    If $H=H^\dagger$, their commutators satisfy
+    \begin{align}
+        [L_H,G]_{(a,b),(c,e)} & =[L_H,E]_{(a,c),(b,e)}.
+        \label{eq:symmetry_commutator_realignment}
+    \end{align}
+    Consequently $[L_H,E]=0$ if and only if $[L_H,FF^\dagger]=0$.
+\end{theorem}
+\begin{proof}\leanok
+    Expanding the Gram product gives
+    $G_{(a,b),(c,e)}=\sum_i(A^i)_{ab}\overline{(A^i)_{ce}}$,
+    which is (\ref{eq:symmetry_gram_realignment}). For any doubled matrix
+    $X$ and pair indices $p,q$, the two actions of $L_H$ are
+    \begin{align}
+        (L_HX)_{(a,b),q}
+         & =\sum_r H_{ar}X_{(r,b),q}
+        -\sum_r\overline{H_{br}}X_{(a,r),q},\notag \\
+        (XL_H)_{p,(c,e)}
+         & =\sum_r X_{p,(r,e)}H_{rc}
+        -\sum_r X_{p,(c,r)}\overline{H_{re}}.
+        \notag
+    \end{align}
+    Substitute (\ref{eq:symmetry_gram_realignment}) and
+    $\overline{H_{br}}=H_{rb}$ into the difference of these sums to obtain
+    (\ref{eq:symmetry_commutator_realignment}). Realignment permutes the
+    four indices, so the two commutators vanish simultaneously.
+\end{proof}
+
+\begin{theorem}[Physical transpose and virtual conjugation]
+    \label{thm:row_physical_virtual_actions}
+    \lean{MPSTensor.krausRowMatrix_mul_apply,
+        MPSTensor.rowAdjointGenerator_mul_krausRowMatrix_apply,
+        MPSTensor.infinitesimal_physical_covariance_of_intertwiner,
+        MPSTensor.rowAdjointGenerator_isHermitian,
+        MPSTensor.doubledVirtual_mul_krausRowMatrix_apply}
+    \leanok
+    \uses{def:row_kraus_generator}
+    For a physical matrix $K_0$ and a virtual matrix $V$,
+    \begin{align}
+        (FK_0)_{(a,b),i}
+         & =\left(\sum_j(K_0^{\top})_{ij}A^j\right)_{ab},\notag \\
+        \bigl((V\otimes\overline V)F\bigr)_{(a,b),i}
+         & =(VA^iV^\dagger)_{ab}.
+        \label{eq:symmetry_row_actions}
+    \end{align}
+    If $H=H^\dagger$, then $L_H=L_H^\dagger$ and
+    $(L_HF)_{(a,b),i}=(HA^i-A^iH)_{ab}$.
+    Hence $FK_0=L_HF$ implies
+    $\sum_j(K_0^{\top})_{ij}A^j=HA^i-A^iH$ for every $i$.
+\end{theorem}
+\begin{proof}\leanok
+    The first identity in (\ref{eq:symmetry_row_actions}) is matrix
+    multiplication with $(K_0^\top)_{ij}=(K_0)_{ji}$.
+    The second expands as
+    $\sum_{c,e}V_{ac}(A^i)_{ce}\overline{V_{be}}$.
+    For the infinitesimal identity use
+    $\overline{H_{be}}=H_{eb}$ in the second tensor-factor action.
+    Taking adjoints of the tensor factors gives $L_H^\dagger=L_H$.
+\end{proof}
+
+\begin{theorem}[One Hermitian generator for the physical action]
+    \label{thm:continuous_physical_generator}
+    \lean{MPSTensor.exists_hermitian_physical_generator,
+        MPSTensor.condC1_hermitianUnitaryPath_of_intertwiner}
+    \leanok
+    \uses{def:row_kraus_generator, def:condC1}
+    Let $H=H^\dagger$ and $[L_H,E]=0$. There is a Hermitian physical
+    matrix $K$ such that, for every physical index $i$ and real $t$,
+    \begin{align}
+        \sum_jK_{ij}A^j     & =HA^i-A^iH,\notag     \\
+        \sum_j u(t)_{ij}A^j & =V(t)A^iV(t)^\dagger,
+        \label{eq:symmetry_continuous_covariance}
+    \end{align}
+    where $u(t)=e^{itK}$ and $V(t)=e^{itH}$. Both paths are continuous
+    unitary representations of $(\R,+)$.
+    The construction allows arbitrary linear dependence among the $A^i$.
+
+    The physical operation $u(t)$ on the open physical leg equals the two
+    virtual operations $V(t)$ and $V(t)^\dagger$:
+    % Formula/source: (eq:symmetry_continuous_covariance), the exponential
+    % specialization of C1 in Papers/0802.0447/StringOrder-v10.tex,
+    % lines 331--359: sum_j u(t)_{ij} A^j = V(t) A^i V(t)^dagger.
+    % Ink-to-index map: i is open above u(t) on the left and above A on
+    % the right. The physical bond u(t)--A sums j. The west/east outer
+    % legs carry the free matrix indices a,b on each side.
+    % Contracted legs: one physical bond on the left; the two virtual
+    % gauge bonds on the right. Both sides are rank-three local tensors.
+    % Boundary signature: virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0 on both sides.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,ket}, cols=1]
+            \tn[species=operator, label pos=w, ports={90:physical:$i$}]{u(t)} \\
+            \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
+        \end{tenkz}
+        =
+        \begin{tenkz}[boundary=open]
+            \tn[skin=ring]{V(t)} & \tn[ports={90:physical:$i$}]{A} &
+            \tn[skin=ring]{V(t)^\dagger}
+        \end{tenkz}.
+    \end{tenkzequation}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:row_transfer_gram_realignment, thm:row_physical_virtual_actions}
+    By Theorem~\ref{thm:row_transfer_gram_realignment}, $L_H$ commutes
+    with $G=FF^\dagger$. The Hermitian lift criterion of the companion
+    quantum-channel volume~\cite[``Hermitian intertwiners of rectangular
+        matrices'']{QICLean2026Blueprint} gives
+    \begin{align}
+        K_0 & =F^\dagger G^+L_HF,
+            & K_0^\dagger         & =K_0,
+            & FK_0                & =L_HF.
+        \label{eq:symmetry_supported_generator}
+    \end{align}
+    Set $K=K_0^\top$. Theorem~\ref{thm:row_physical_virtual_actions}
+    gives the infinitesimal relation, and $K$ is Hermitian because $K_0$ is.
+    Intertwining passes to powers and then to the exponential series:
+    \begin{align}
+        Fe^{itK_0}     & =e^{itL_H}F
+        =(e^{itH}\otimes\overline{e^{itH}})F,\notag \\
+        e^{itK_0^\top} & =(e^{itK_0})^\top.
+        \notag
+    \end{align}
+    The tensor-exponential identity is proved in
+    \cite[``Hermitian exponential paths'']{QICLean2026Blueprint}.
+    Applying (\ref{eq:symmetry_row_actions}) yields
+    (\ref{eq:symmetry_continuous_covariance}).
+    The same exponential identities give continuity, unitarity, and the
+    group laws for all real parameters.
+
+    The support convention in (\ref{eq:symmetry_supported_generator}) is
+    $K_0|_{\ker F}=0$. For the physical generator this becomes
+    $K|_{\overline{\ker F}}=0$: if $Fv=0$, then
+    $K\overline v=\overline{K_0v}=0$.
+    Thus $u(t)$ is the identity on $\overline{\ker F}$.
+\end{proof}
+
+\begin{theorem}[Scalar physical commutator rigidity]
+    \label{thm:scalar_physical_commutator_rigidity}
+    \lean{MPSTensor.eq_scalar_of_scalar_commutator_action}
+    \leanok
+    \uses{def:transfer_map}
+    Suppose $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$,
+    $\tr\Lambda=1$, and every fixed matrix of $\E_A$ is scalar.
+    If $HA^i-A^iH=cA^i$ for every $i$, then $c=0$ and $H\in\C\Id$.
+    Neither $H$ nor $\Lambda$ needs to be Hermitian for this assertion.
+\end{theorem}
+\begin{proof}\leanok
+    Multiplying each commutator by $(A^i)^\dagger$ and summing gives
+    \begin{align}
+        H-\E_A(H)
+         & =\sum_i(HA^i-A^iH)(A^i)^\dagger=c\Id.
+        \notag
+    \end{align}
+    Stationarity implies $\tr(\Lambda\E_A(H))=\tr(\Lambda H)$.
+    Taking the $\Lambda$-weighted trace therefore gives $0=c\tr\Lambda=c$.
+    Hence $H$ is fixed by $\E_A$ and is scalar by hypothesis.
+\end{proof}
+
+\begin{theorem}[Complex string limit with identity endpoints]
+    \label{thm:identity_endpoint_complex_limit}
+    \lean{MPSTensor.physicalStringOrderParam_identity_tendsto}
+    \leanok
+    \uses{def:physical_string_order_param}
+    Let $D>0$, let $\E_A$ be irreducible and peripheral-primitive, and
+    suppose $\E_A(\Id)=\Id$, $\Lambda>0$, $\tr\Lambda=1$, and
+    $\E_A^*(\Lambda)=\Lambda$.
+    If $V$ is unitary and $\sum_j u_{ij}A^j=VA^iV^\dagger$ for every $i$,
+    then the complex correlator itself converges:
+    \begin{align}
+        S_N(\Id,\Id,u)
+         & \longrightarrow
+        \overline{\tr(\Lambda V)}\,\tr(\Lambda V)
+        =|\tr(\Lambda V)|^2.
+        \label{eq:symmetry_identity_endpoint_limit}
+    \end{align}
+    No additional invariance assumption on $\Lambda$ is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_string_phase_retaining_asymptotics}
+    Apply Theorem~\ref{thm:physical_string_phase_retaining_asymptotics}
+    with $x=y=\Id$ and phase $\mu=1$. Since $\E_1=\E_A$,
+    unitality and stationarity give
+    \begin{align}
+        \alpha_{\Id} & =\tr(\Lambda V^\dagger),\notag       \\
+        \beta_{\Id}  & =\tr(\Lambda\E_A(V))=\tr(\Lambda V).
+        \notag
+    \end{align}
+    Hermiticity of $\Lambda$ and trace cyclicity imply
+    $\tr(\Lambda V^\dagger)=\overline{\tr(\Lambda V)}$.
+    The factor $\mu^N$ is identically one, so no phase adjustment occurs
+    in (\ref{eq:symmetry_identity_endpoint_limit}).
+\end{proof}
+
+\begin{theorem}[Nonvanishing trace near the identity]
+    \label{thm:virtual_path_trace_nonzero}
+    \lean{MPSTensor.eventually_trace_virtualPath_ne_zero}
+    \leanok
+    Let $\tr\Lambda=1$, and let $V:\R\to\MN{D}$ be continuous at zero
+    with $V(0)=\Id$. Then $\tr(\Lambda V(t))\ne0$ for all $t$ in
+    some neighborhood of zero.
+\end{theorem}
+\begin{proof}\leanok
+    The function $t\mapsto\tr(\Lambda V(t))$ is continuous at zero and
+    has value $1$ there. The complement of $\{0\}$ is open in $\C$.
+\end{proof}
+
+\begin{theorem}[Effective continuous generators give physical string order]
+    \label{thm:continuous_generator_string_order}
+    \lean{MPSTensor.pureCanonical_continuous_generator_identity_endpoints,
+        MPSTensor.hasPhysicalStringOrder_of_continuous_generator}
+    \leanok
+    \uses{def:row_kraus_generator, def:condC1,
+        def:has_physical_string_order}
+    Let $D>0$, $\E_A(\Id)=\Id$, $\Lambda>0$, $\tr\Lambda=1$, and
+    $\E_A^*(\Lambda)=\Lambda$. Assume the simple-peripheral purity
+    property: whenever $X\ne0$, $|\lambda|=1$, and
+    $\E_A(X)=\lambda X$, one has $\lambda=1$ and $X\in\C\Id$.
+    Let $H=H^\dagger$, $H\notin\C\Id$, and $[L_H,E]=0$.
+
+    There is a nonscalar Hermitian physical generator $K$ such that
+    $u(t)=e^{itK}$ is unitary and satisfies
+    (\ref{eq:symmetry_continuous_covariance}) with $V(t)=e^{itH}$
+    for every real $t$.
+    There is $\varepsilon>0$ such that for every $0<|t|<\varepsilon$,
+    $u(t)\notin\C\Id$ and
+    \begin{align}
+        \lim_{N\to\infty}S_N(\Id,\Id,u(t))
+         & =|\tr(\Lambda e^{itH})|^2>0.
+        \label{eq:symmetry_continuous_string_limit}
+    \end{align}
+    In particular, $A$ has physical string order with Hermitian identity
+    endpoints in the sense of Definition~\ref{def:has_physical_string_order}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:continuous_physical_generator,
+        thm:scalar_physical_commutator_rigidity,
+        thm:physical_block_order_pure_canonical,
+        thm:virtual_path_trace_nonzero,
+        thm:identity_endpoint_complex_limit}
+    Obtain $K$ from Theorem~\ref{thm:continuous_physical_generator}.
+    Purity makes every fixed matrix scalar. If $K=c\Id$, the
+    infinitesimal relation in (\ref{eq:symmetry_continuous_covariance})
+    becomes $HA^i-A^iH=cA^i$ for every $i$.
+    Theorem~\ref{thm:scalar_physical_commutator_rigidity} would force
+    $H\in\C\Id$, a contradiction. Thus $K$ is nonscalar.
+
+    The nonscalar-exponential theorem in
+    \cite[``Hermitian exponential paths'']{QICLean2026Blueprint} gives
+    $u(t)\notin\C\Id$ throughout a punctured neighborhood of zero.
+    Theorem~\ref{thm:virtual_path_trace_nonzero} gives
+    $\tr(\Lambda V(t))\ne0$ in a neighborhood of zero.
+    Canonical purity implies irreducibility and peripheral primitivity,
+    as in Theorem~\ref{thm:physical_block_order_pure_canonical}.
+    Intersect the two neighborhoods and apply
+    Theorem~\ref{thm:identity_endpoint_complex_limit} to obtain
+    (\ref{eq:symmetry_continuous_string_limit}). Taking absolute values
+    gives the positive limiting magnitude required for physical string
+    order, with the same fixed operators $x=y=\Id$.
+\end{proof}

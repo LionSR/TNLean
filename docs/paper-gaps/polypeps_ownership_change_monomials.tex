@@ -1,0 +1,160 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+
+\title{Bounded-Change Expansions of Births, Deaths and Exchanges}
+\author{}
+\date{2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source lemmas}
+
+Lemmas~6.5 and~6.6 of the polynomial PEPS approximation manuscript of
+September~24, 2026 (\path{05-frames.tex}, lines~396--570) change the ownership
+of registers of encoded frames.
+
+\emph{Lemma~6.5 (homogeneous birth and death).} In an encoded frame
+$\mathcal F$, let $T$ be a set of raw sites owned by a party $P_\circ$ and
+disjoint from every outer hole footprint, and put
+$E=\{x:\text{the raw owner of }x\neq P_\circ\}\cup H^+(\mathcal F)$ and
+$U=\Lambda\setminus(T\cup E)$. If $I_\Omega(T:E)\le L^{-60}$, changing the owner
+of $T$ to $Q_\circ$, with every hole, encoding and tag owner kept, ``is a bounded
+change involving only $P_\circ,Q_\circ$, with reference-vector error at most
+$L^{-30}$''; the reversed death obeys the same bound when the conditions hold in
+the frame after the death.
+
+\emph{Lemma~6.6 (two-sheet exchange).} For two encoded frames and a region $Y$
+such that every hole's outer square lies on one side of $\partial Y$, with
+$Z=\{x:\text{the two old raw owners of }x\text{ are not both }P_\circ\}\cup
+H^+(\mathcal F_1)\cup H^+(\mathcal F_2)$, $T=Z\cap Y$, $E=Z\setminus Y$ and
+$U=\Lambda\setminus Z$: if $I_\Omega(T:E)\le L^{-60}$, exchanging the raw
+ownership assignments and the encoded holes inside $Y$ ``can be implemented by
+private contractions and register renaming, with reference-vector error at most
+$4L^{-30}$'', using $P_\circ$ and the owners of the renamed registers and tags,
+hence is a bounded change in the sense of Theorem~5.2.
+
+In both lemmas the information bound is a hypothesis; it is supplied later by the
+manuscript's proposition \texttt{prop:angular}.
+
+\section{What the formal statements cover}
+
+Both lemmas are formalized with exactly their source hypotheses, the information
+bound included.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.Frame.birth},
+\leanid{TNLean.PEPS.EncodedFrame.Frame.death},
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange} and
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames}.}
+The formal statements produce the canonical maps of the proofs and prove:
+\begin{enumerate}
+\item for the birth and the death, that the canonical map
+  $B=\mathcal V^\dagger(\ket s\bra s_{T\mathcal B_T}\otimes\mathrm{id}_{E\mathcal
+  B_E})\mathcal V$ is a Hermitian contraction, that it acts as the identity on
+  $E$ and on all tags, that it commutes with every hole encoder, and that the
+  reference error is at most $L^{-30}$; the map factors as
+  $B=(\mathcal V^\dagger S)(S^\dagger\mathcal V)$, where $S$ inserts the single
+  normalized vector $s$ on $T\mathcal B_T$, and every register on which $B$ acts
+  lies outside $E$, so it is held by $P_\circ$ before the birth and by $P_\circ$
+  or $Q_\circ$ after it; since the frames before and after differ only in raw
+  owners, their encodings and reference vectors coincide, so the change of owner
+  itself is carried entirely by the bounded-change clause below;
+\item for the exchange, the exact identity $\mathcal RK_{\rm in}=K_{\rm out}F_{Y\cap
+  \Lambda}$ for the renaming $\mathcal R$, the identity $D_UF_T=(\mathcal
+  V^{\otimes2})^\dagger F_{T\mathcal B_T}\mathcal V^{\otimes2}$, the identity
+  $CK_{\rm in}=K_{\rm out}D_UF_T$ for $C=D_UF_A\mathcal R$, contractivity of $C$,
+  and the error bound $4L^{-30}$ on the product of the two encoded reference
+  vectors, which are not assumed normalized; the corrections $D_U$ and $F_A$
+  act on the registers of $U$ alone, which are held by $P_\circ$ on both sheets
+  before and after the exchange, and the renaming keeps every register at its
+  party.
+\end{enumerate}
+
+The bounded-change clauses are formalized on the registers of the frames, as
+the source has them: one raw register $\mathbb C^q$ per site and one register
+per tag, each held by its owner (\path{05-frames.tex}, lines~15--20 and
+Definition~6.1), with their tensor product identified with the canonical
+coordinates of the tags and the sheet in which the encodings
+act.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.layoutRegs},
+\leanid{TNLean.PEPS.EncodedFrame.layoutIso},
+\leanid{TNLean.PEPS.EncodedFrame.Frame.regs},
+\leanid{TNLean.PEPS.EncodedFrame.Frame.regIso}.}
+A monomial is a composition of contractions acting on registers of one party,
+normalized pair sources and normalized pair effects on registers of two named
+parties, and exchanges of tensor factors, as for Lemma~5.1.
+\begin{enumerate}
+\item The birth is an allowed monomial from the registers of $\mathcal F$ to
+  those of the frame in which $T$ is owned by $Q_\circ$, using only $P_\circ$
+  and $Q_\circ$ and at most one normalized pair source, whose operator in
+  canonical coordinates is $\mathrm{id}_{\rm tags}\otimes B$; its
+  reference-vector error, read on the registers, is at most $L^{-30}$. It
+  moves the registers of $T$ and of $U$ in front by exchanges of tensor
+  factors, groups each block into one register by a unitary at its owner
+  $P_\circ$, applies the private contraction $\bra s(\mathrm{id}_T\otimes V)$
+  at $P_\circ$, the pair source $s$ on $T$ held by $Q_\circ$ and $\mathcal
+  B_T$ held by $P_\circ$, and the private contraction $V^\dagger$ at
+  $P_\circ$, and ungroups $T$ at $Q_\circ$ and $U$ at $P_\circ$. For
+  $Q_\circ=P_\circ$ the middle step is the single private contraction
+  $K^\dagger K$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.Frame.birth_bounded}.}
+\item The death is the same with one normalized pair effect $\bra s$ on $T$
+  held by $Q_\circ$ and $\mathcal B_T$ held by $P_\circ$ and no pair
+  source.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.Frame.death_bounded}.}
+\item The exchange is the renaming $\mathcal R$, written as a word of
+  exchanges of tensor factors that splits the tags of each frame into those of
+  the holes outside and inside $Y$, moves the raw registers of the sites in
+  $Y$ next to the inside tags, exchanges these blocks between the sheets and
+  merges back, followed by one private contraction at $P_\circ$ on the raw
+  registers of $U$ of both sheets. It uses only $P_\circ$ and no pair
+  resource, its operator in canonical coordinates is $C=D_UF_A\mathcal R$,
+  and its reference-vector error is at most $4L^{-30}$. For frames whose holes
+  are listed in any order, the canonical identification of tag orderings is
+  itself a word of exchanges of tensor factors, and the composite has operator
+  $CG$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_bounded},
+\leanid{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded}.}
+\end{enumerate}
+The renaming moves no register to another party. The source's assertion that
+the exchange uses $P_\circ$ and the owners of the renamed registers and tags is
+satisfied with the stronger property that only $P_\circ$ is used, since
+exchanges of tensor factors involve no party.
+
+The formal frames record the outer footprints of holes by their physical
+samples. The source's condition that every outer square lies on one side of
+$\partial Y$ enters as a classification of the holes as outside or inside $Y$,
+which is part of the data, together with its consequence for the samples: the
+sample of a hole classified as outside avoids $Y$, and that of a hole
+classified as inside lies in $Y$. A hole whose outer square has empty sample is
+compatible with both sides, so the side read from the plane must be supplied,
+and the formal statement accepts it. This is a representation of the source
+hypothesis, not an additional one.
+
+\section{Resolution}
+
+An earlier version of the formal statements proved the bounded-change clauses
+only on a layout in which the raw registers of $T$, and those of $U$, were
+grouped into one register each, followed by an arbitrary list of untouched
+registers, and identified the renaming of the exchange with an identification
+of tensor factors rather than a composition of exchanges. The list of the
+registers of a frame, one per site and per tag, and its identification with
+the canonical coordinates are now constructed, together with the words that
+move and group registers and the words that implement the renaming and the
+corrections. Composing the grouped monomials with these words gives the
+statements above, with the hypotheses of Lemmas~6.5 and~6.6. No restriction
+remains.
+
+\end{document}

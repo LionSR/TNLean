@@ -288,10 +288,10 @@ theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : �
   have hpost : P.postMeasurement m = P.preMeasurement :=
     outcomeProj_mulVec_of_isEmpty m _
   have hcirc : IsCircuitOn (Set.univ : Set (Fin N)) T (circuitOp P.first) :=
-    IsCircuitOn.mono ⟨P.first, rfl, fun _ _ _ _ => Set.subset_univ _, rfl⟩ hT
+    IsBondCircuitOn.mono ⟨P.first, rfl, fun _ _ _ _ => Set.subset_univ _, rfl⟩ hT
   refine ⟨fun i => star (P.correction m i),
     fun i => Unitary.star_mem (P.correction_mem_unitary m i),
-    _, hcirc.isLocalCircuitOfDepth, Function.update P.initial 0 (c⁻¹ • P.initial 0), ?_⟩
+    _, hcirc.isBondCircuitOfDepth, Function.update P.initial 0 (c⁻¹ • P.initial 0), ?_⟩
   rw [← smul_productVector, mulVec_smul]
   have hψ : ψ = c⁻¹ • P.output m := by rw [hc, smul_smul, inv_mul_cancel₀ hc0, one_smul]
   rw [hψ, mulVec_smul, MeasurementProtocol.output, mulVec_mulVec, hpost]

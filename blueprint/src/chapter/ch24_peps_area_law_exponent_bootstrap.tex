@@ -1,0 +1,105 @@
+\subsection{Finite improvement of the box exponent}
+\label{sec:area_law_exponent_bootstrap}
+
+\begin{definition}[Fixed parameters for exponent improvement]
+    \label{def:area_law_bootstrap_parameters}
+    \lean{
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.g0,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.mu,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.nu,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.ell,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.kappa
+    }
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    For $e_0\in\mathbb R$, set $e_*=2\cdot10^{-6}$; the parameters used in
+    the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw} are
+    \begin{align}
+        g_0  & =\frac{1-e_0}{2}, & \mu    & =1-g_0,              & \nu & =\frac{g_0}{1000},
+        \label{eq:area_law_bootstrap_parameters}                                            \\
+        \ell & =\frac{\nu}{100}, & \kappa & =\min\{\ell,e_*/4\}.
+        \label{eq:area_law_bootstrap_separation}
+    \end{align}
+    These parameters remain fixed as the entropy exponent decreases.
+\end{definition}
+
+\begin{theorem}[Margins in the exponent estimates]
+    \label{thm:area_law_bootstrap_margins}
+    \lean{
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.density_exponents,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.energy_exponents,
+        TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.comparison_exponents
+    }
+    \leanok
+    \uses{def:area_law_bootstrap_parameters}
+    With the parameters of (\ref{eq:area_law_bootstrap_parameters}) and
+    (\ref{eq:area_law_bootstrap_separation}), the condition $0<e_0<1$ gives
+    $0<g_0<1/2$, $0<\ell<1$, and $\kappa>0$.
+    If $e_0<1$ and $e\le e_0$, the density-error exponents satisfy
+    \begin{align}
+        e_0-\mu+\nu & =-0.999g_0,
+                    & -\frac{g_0-\ell}{4}+\nu & =-0.2489975g_0,
+        \label{eq:area_law_bootstrap_density_values}            \\
+        e-\mu+\nu   & <-0.24g_0,
+                    & -\frac{g_0-\ell}{4}+\nu & <-0.24g_0.
+        \label{eq:area_law_bootstrap_density_margin}
+    \end{align}
+    For $e_0<1$, write $p=\ell+2\kappa$ for the energy-prefactor exponent. Then
+    \begin{align}
+        p & \le0.00003g_0, & p-\nu & <-\nu/2, & p-0.03g_0 & <-\nu/2.
+        \label{eq:area_law_bootstrap_energy_margin}
+    \end{align}
+    For $e_0>0$ and $e>e_*$, one has $\kappa<(1-\ell)e$ and
+    $g_0-\ell-\nu/4<1$.
+\end{theorem}
+\begin{proof}\leanok
+    If $0<e_0<1$, then $g_0=(1-e_0)/2$ lies in $(0,1/2)$. Hence
+    $\ell=g_0/100000$ lies in $(0,1)$, and $\kappa=\min\{\ell,e_*/4\}>0$.
+    Substituting (\ref{eq:area_law_bootstrap_parameters}) and
+    (\ref{eq:area_law_bootstrap_separation}) gives
+    (\ref{eq:area_law_bootstrap_density_values}). Since $g_0>0$ when $e_0<1$,
+    the identities imply (\ref{eq:area_law_bootstrap_density_margin}) for
+    $e\le e_0$. The bound $\kappa\le\ell$ gives
+    (\ref{eq:area_law_bootstrap_energy_margin}). For the comparison bounds,
+    substitute the same formulas and use $\kappa\le e_*/4$, $e>e_*$, and
+    $e_0>0$.
+\end{proof}
+
+\begin{theorem}[Uniform bounds after finitely many exponent improvements]
+    \label{thm:area_law_finite_exponent_improvement}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement}
+    \leanok
+    \uses{def:area_law_bootstrap_parameters}
+    Fix $0<e_0<1$, set $e_*=2\cdot10^{-6}$, and take $\ell$ from
+    (\ref{eq:area_law_bootstrap_separation}).
+    Let $F_i:\mathbb N\to\mathbb R$ be an arbitrary family, and suppose there
+    are constants $V\ge0$ and $C_0>0$ such that, for every $i$ and $r\ge1$,
+    \begin{align}
+        F_i(r) & \le Vr^2, & F_i(r) & \le C_0r^{1+e_0}.
+        \label{eq:area_law_bootstrap_initial}
+    \end{align}
+    Assume the following implication for every $e_*<e\le e_0$: if there is a
+    constant $C_e>0$ such that $F_i(r)\le C_er^{1+e}$ for every $i$ and
+    $r\ge1$, then there are a constant $C'_e>0$ and an integer $N_e$ such that
+    \begin{align}
+        F_i(r) & \le C'_er^{1+(1-\ell)e}
+        \label{eq:area_law_bootstrap_step}
+    \end{align}
+    for every $i$ and $r\ge N_e$. Then there is one constant $C>0$ such that
+    $F_i(r)\le Cr^{1+e_*}$ for every $i$ and every $r\ge1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_bootstrap_margins}
+    Write $a=1-\ell$, so $0<a<1$. At each improvement, enlarge the constant
+    using the quadratic bound in (\ref{eq:area_law_bootstrap_initial}) to include
+    $1\le r<N_e$. The enlarged constant is independent of $i$.
+    Starting at $e_0$, apply (\ref{eq:area_law_bootstrap_step}) while the current
+    exponent exceeds $e_*$. Since $a^ne_0\to0$, only finitely many steps are
+    needed. Once $a^ne_0\le e_*$, the inequality
+    $r^{1+a^ne_0}\le r^{1+e_*}$ for $r\ge1$ gives the result.
+\end{proof}
+
+% This is the conditional finite iteration in the proof of Proposition 9.5.
+% Its one-step analytic implication remains a hypothesis; the source
+% proposition is not marked as proved by this entry.

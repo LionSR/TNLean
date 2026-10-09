@@ -1,0 +1,90 @@
+\section{Contacts between actual fine cells}
+\label{sec:area_law_cell_contacts}
+
+Fix an origin $o$, finite endpoint set $Z$ and nonnegative integer width
+$C_0$. Retain the fine exponents $\ell_k$ and index sets $F_{k,\ell_k}$,
+and write $Q_{k,z}=C_{\ell_k,z}$ for an actual fine cell. The common
+dyadic origin restricts positive-length contacts to whole sides and
+midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 173--181, 299--306 and 352--356.
+% The statements below concern indexed fine cells and optional midpoint
+% halves. Matching under the actual mask and opposing-region labels
+% remain further obligations; the full two-family proposition is not tagged.
+
+\begin{definition}[Whole sides of a dyadic cell]
+    \label{def:area_law_dyadic_cell_side}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCellSide}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    For every exponent $\ell\ge0$ and cell index $z$, number the
+    coordinate sides of $\overline{C_{\ell,z}}$ counterclockwise,
+    starting with the right side. If $a_{\ell,z,s}$ and $b_{\ell,z,s}$
+    are the corresponding unsplit fan endpoints, put
+    $S_{\ell,z,s}=[a_{\ell,z,s},b_{\ell,z,s}]$.
+    Side indices are read modulo four. Writing $a=a_{\ell,z,s}$ and
+    $b=b_{\ell,z,s}$, its midpoint halves are
+    $H_{\ell,z,s,0}=[a,(a+b)/2]$ and
+    $H_{\ell,z,s,1}=[(a+b)/2,b]$.
+\end{definition}
+
+\begin{theorem}[Distinct actual fine cells are disjoint]
+    \label{thm:area_law_fine_cells_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_cells_disjoint}
+    \leanok
+    \uses{def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
+    For arbitrary $C_0\ge0$ and layer indices $k,h$, suppose that
+    $z\in F_{k,\ell_k}$, $w\in F_{h,\ell_h}$ and $(k,z)\ne(h,w)$.
+    Then $Q_{k,z}\cap Q_{h,w}=\varnothing$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_indices,thm:area_law_layer_pairwise_disjoint,
+        thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales}
+    If $k=h$, the unique cell-index criterion implies that any common
+    point would give $z=w$. If $k\ne h$, the two fine cells belong to
+    the disjoint half-open layers $D_k$ and $D_h$, since
+    $\ell_k\le k$ and $\ell_h\le h$.
+\end{proof}
+
+\begin{theorem}[Positive-length contact between fine cells]
+    \label{thm:area_law_fine_cell_contact}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact}
+    \leanok
+    \uses{def:area_law_dyadic_cell_side,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Suppose that $C_0\ge2$, $k\ge50\,000\,000$, $z\in F_{k,\ell_k}$,
+    $w\in F_{h,\ell_h}$ and $(k,z)\ne(h,w)$. If
+    $I=\overline{Q_{k,z}}\cap\overline{Q_{h,w}}$ contains two distinct
+    points, there are opposite side indices $s,t$, with $t=s+2$ modulo
+    four, for which one of the following alternatives holds:
+    \begin{enumerate}
+        \item $\ell_k=\ell_h$ and
+              $I=S_{\ell_k,z,s}=S_{\ell_h,w,t}$.
+        \item $\ell_h=\ell_k+1$ and
+              $I=S_{\ell_k,z,s}=H_{\ell_h,w,t,n}$ for some $n\in\{0,1\}$.
+        \item $\ell_k=\ell_h+1$ and
+              $I=S_{\ell_h,w,t}=H_{\ell_k,z,s,n}$ for some $n\in\{0,1\}$.
+    \end{enumerate}
+    The opposing index $h$ is unrestricted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_fine_cells_disjoint,thm:area_law_fine_cell_containment,
+        thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
+        thm:area_law_dyadic_closures,def:area_law_dyadic_cell_side}
+    A common point belongs to both closed layers. The nearby-layer
+    estimate gives $h\le k+1$ and $k\le h+1$, so the fine exponents
+    differ by at most one. Order the cells by their fine exponents.
+    In units of the smaller side, translate the larger cell's lower
+    corner to the origin. The two half-open cells are then
+    $\lbrack a,a+1)\times\lbrack b,b+1)$ and $\lbrack 0,m)^2$, where $a,b$ are integers
+    and $m\in\{1,2\}$.
+
+    Closed contact gives $-1\le a,b\le m$. Disjointness excludes
+    $0\le a,b<m$, and two distinct common points exclude the case
+    where both coordinates lie in $\{-1,m\}$. Thus one coordinate
+    equals $-1$ or $m$, while the other is an integer in $\lbrack 0,m)$.
+    The common set is therefore a whole smaller side on the opposite
+    coordinate side of the larger square. For $m=1$ it is the whole
+    larger side; for $m=2$ it is one of its midpoint halves. Swapping
+    the two cells gives the third alternative.
+\end{proof}

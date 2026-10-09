@@ -1,0 +1,184 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+
+\title{Allowed Monomials in the Small-Patch Rewrite}
+\author{}
+\date{2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source lemma}
+
+Lemma~6.3 of the polynomial PEPS approximation manuscript of September~24,
+2026 (\path{05-frames.tex}, lines~188--219) considers old and new one-sheet
+encoded frames that agree outside boundedly many affected holes, and $m$
+additional square patches satisfying four conditions: (i) the patch outer
+squares and the affected holes avoid the outer footprints of the untouched
+holes; (ii) the patch inner squares cover every site whose raw owner changes
+and the whole outer footprint of every affected hole; (iii) in each patch
+outer square, the sites outside the old inner holes have at most two old
+owners, and the sites outside the new inner holes have at most two new owners;
+(iv) all involved raw owners and affected tag owners belong to a specified
+bounded list of parties. The lemma asserts:
+\begin{enumerate}
+\item the canonical map $M=K_{\rm new}P_m\cdots P_1K_{\rm old}^{\dagger}$ is a
+  contraction with
+  $\|M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\|
+   \le(m+r_{\rm old})\varepsilon$;
+\item for every fixed $a>0$, $M$ has a contractive approximation $M_a$ with
+  $\|M_a-M\|\le L^{-a}$ and a polynomial expansion into monomials allowed by
+  Theorem~5.2, using only the specified parties.
+\end{enumerate}
+
+\section{What the formal statement covers}
+
+The first assertion is formalized with exactly the source hypotheses, for
+frames whose tags are listed in any order; the reference error uses only
+condition~(i).\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le},
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le}, and, for
+arbitrary tag orderings,
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}.}
+For the second assertion the following steps of the proof
+(\path{05-frames.tex}, lines~254--341) are formalized: the exact expansion of
+$M$ into complete branches and the count of branches; the site-level wire
+classification of every branch, for every choice of cylinder terms, including
+unequal radii, holes and patches with empty outer sample (whose identity term
+selects the empty square), and overlapping patches and holes; the summation of
+branchwise errors; the choice of the truncation rank $k$; and the final
+rescaling by $1+\tfrac12L^{-a}$.
+
+The residual network of a branch is also formalized. For a branch $(a,s,b)$,
+the raw operator $B_aC_sA_b^\dagger$ is an ordered product of rank-one
+operators $\ket{k}\bra{b}_S\otimes\mathbb{1}$: the encodings $\ket0\bra{u'_r}$ of the
+affected new holes, the patch terms $\ket{w_i}\bra{w_i}$, and the decodings
+$\ket{u_t}\bra0$ of the affected old holes. Every such product is the
+contraction of the network whose vertices are the bras and the kets of the
+factors, kept distinct, and whose wires join the output of a ket at a site to
+the next bra containing that site; open input legs are those of bras at sites
+reached by no earlier ket, open output legs those of kets at sites met by no
+later bra, the legs of the product zero vectors are fixed to $0$, and sites in
+no factor are passed through.\footnote{%
+\leanid{TNLean.PEPS.SiteChain.chainOp_apply}.}
+No wire joins a vertex to itself and every vertex tensor is normalized, so
+Lemma~6.2 applies with one group per vertex. An operator read off from a tensor
+on the open-leg groups is that tensor, reshaped as a matrix, tensored with the
+identity on the untouched sites, so its operator norm is at most the
+Hilbert--Schmidt norm of the tensor, with no factor depending on the site
+dimensions.\footnote{%
+\leanid{TNLean.PEPS.SiteChain.norm_approxOp_le},
+\leanid{TNLean.PEPS.SiteChain.exists_chainOp_truncation}.}
+Under the four conditions only the patch bras and kets have open legs, so there
+are at most $g=2m$ groups; the open inputs of a patch bra have at most two old
+owners and the open outputs of a patch ket at most two new owners, all in the
+specified list. Hence every branch is approximated within $2m/\sqrt k$ by at most
+$k^{2m}$ product terms with coefficients of modulus at most one, and for every
+$\delta>0$ (for instance $\delta=L^{-a}$) the rescaled sum
+$M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
+\bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\mathbb{1}$ is a contraction with
+$\|M_\delta-M\|\le\delta$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation},
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}.}
+Each product term $T_{\beta,i}$ is an explicit tensor product of normalized
+vectors on the open output groups of the patch kets, normalized covectors on the
+open input groups of the patch bras, product zero vectors on the selected hole
+squares, and identities.
+
+Not formalized is the last reading of the proof (lines~306--316): that each
+product term, together with the tag basis vectors, is the operator of a monomial
+allowed by Theorem~5.2. Allowed monomials are available on party layouts:
+compositions of contractions on registers of one party, normalized pair sources
+and normalized pair effects on registers of two named parties, and exchanges of
+tensor factors, as used for Lemma~5.1 and for the bounded-change clauses of
+Lemmas~6.5 and~6.6 (\path{polypeps_ownership_change_monomials.tex}). The
+registers of a frame are listed as the source has them, one raw register per
+site and one register per tag, each held by its owner, and their tensor product
+is identified with the canonical coordinates in which the rewrite
+acts.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.layoutRegs},
+\leanid{TNLean.PEPS.EncodedFrame.layoutIso},
+\leanid{TNLean.PEPS.EncodedFrame.layoutIso_layoutVec}.}
+Words of exchanges of tensor factors move the registers of any set of sites, or
+the tags of any sublist of holes, into contiguous blocks, and a private unitary
+groups a block held by one party into one register; a map acting on grouped
+registers is then read on the registers of the frame, as is done for the births,
+deaths and exchanges.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.partWord},
+\leanid{TNLean.PEPS.EncodedFrame.groupWord},
+\leanid{TNLean.PEPS.EncodedFrame.tagSplit},
+\leanid{TNLean.PEPS.EncodedFrame.layoutIso_place}.}
+What is missing is the identification of each product term with an allowed
+party chain on those registers: the open-leg group vectors as normalized pair
+sources and effects (or private maps) on the registers of their at most two
+owners, the zero vectors and tag vectors as private maps, and the identities as
+untouched registers. The approximation statement is therefore formalized with
+the product terms in explicit tensor form, and the clause ``a polynomial
+expansion into allowed monomials'' is stated only through that form.
+
+The count of terms is also not yet polynomial in $L$. The formal statement
+gives at most $k^{2m}$ product terms per branch with
+$k=\lceil(4Nm/\delta)^2\rceil+1$, where $N$ is the number of branches. The
+branch count is bounded by $D^{\,r_{\rm new}+m+r_{\rm old}}$ when every
+affected hole and every patch has at most $D$ cylinder terms.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le}.}
+The source's bound $N\le L^{C_1}$ (lines~331--332) and its total
+$Nk^{g_0}$ (lines~341--342) need two further inputs that the formal data
+do not carry: (a) $D\le CL^{c}$, which is the polynomial bound on the number
+$\sum_jd_j$ of cylinder terms of Proposition~4.1 (the formal patches record
+the cylinder data but not this bound); and (b) bounded $m$, $r_{\rm old}$ and
+$r_{\rm new}$, which the source has from the bounded number of affected holes
+and patches. With both, $N$ and $k$ are polynomial in $L$ for $\delta=L^{-a}$,
+and so is the total number of terms.
+
+The formal frames record the pairwise disjointness of the physical outer
+footprints of holes rather than of the outer squares in the plane; the source
+condition implies the formal one, so this is a generalization. The rewrite is
+constructed in canonical coordinates in which the tags of the untouched holes
+come first in both frames. Since the encodings of holes with disjoint
+footprints commute, moving every tag to the new position of its hole is a
+relabelling of the tag basis that carries one encoding to the other; along it
+the canonical rewrite becomes a contraction between frames with arbitrary tag
+orderings, with the same reference error. This is the canonical identification
+of tag orderings of Definition~6.1, and it is formalized.
+
+\section{Elimination plan}
+
+On the register layout of an encoded frame, with one register per site and one
+per tag, identified with the canonical coordinates in which the rewrite acts,
+write each product term of the branch truncation as an allowed party chain: first the normalized group
+covectors on the open input groups (pair effects on the two old owners, or
+private maps for one owner), the zero bras and tag bras as private maps, then
+the zero kets and tag kets and the normalized group vectors on the open output
+groups (pair sources on the two new owners, or private maps), framed by the
+untouched registers. Read the explicit matrices with the front-register
+calculus already used for Lemmas~6.5 and~6.6, which identifies one or two
+Euclidean registers at the front of a layout with a coordinate space and
+evaluates a local map given by a matrix as that matrix tensored with the
+identity of the remaining registers,\footnote{%
+\leanid{TNLean.PEPS.PairEffect.matL},
+\leanid{TNLean.PEPS.PairEffect.oneIso},
+\leanid{TNLean.PEPS.PairEffect.twoIso},
+\leanid{TNLean.PEPS.PairEffect.eval_localMap}.}
+rather than a separate construction, and move the registers of each open-leg
+group in front with the reordering words above. For the polynomial count, carry the bound
+$\sum_jd_j\le CL^{c}$ of Proposition~4.1 on the patch and hole data, or state
+the source-labelled theorem with an explicit hypothesis $D\le CL^{c}$ on the
+number of cylinder terms, together with bounds on $m$, $r_{\rm old}$ and
+$r_{\rm new}$. The approximation theorem above then yields the second
+assertion of Lemma~6.3 with polynomially many allowed monomials.
+
+\end{document}

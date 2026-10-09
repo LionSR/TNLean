@@ -151,11 +151,12 @@ noncomputable def outsideWeyl (q : ℕ) [NeZero q] (K : Finset ι) (p : ι → Z
   rectKronecker fun x => if x ∈ K then 1 else localWeyl q (p x)
 
 /-- The product of the on-site Weyl operators at the sites of `S`. -/
-private noncomputable def partialWeyl [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
+noncomputable def partialWeyl [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
     Matrix (ι → Fin q) (ι → Fin q) ℂ :=
   rectKronecker fun x => if x ∈ S then localWeyl q (p x) else 1
 
-private theorem partialWeyl_mem_unitary [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
+/-- A product of on-site Weyl operators is unitary. -/
+theorem partialWeyl_mem_unitary [NeZero q] (S : Finset ι) (p : ι → ZMod q × ZMod q) :
     partialWeyl S p ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) := by
   have hU := fun x => localWeyl_mem_unitaryGroup (q := q) (p x)
   rw [Unitary.mem_iff]
@@ -172,7 +173,8 @@ private theorem partialWeyl_mem_unitary [NeZero q] (S : Finset ι) (p : ι → Z
     · exact Matrix.mem_unitaryGroup_iff.mp (hU x)
     · simp
 
-private theorem outsideWeyl_eq_partialWeyl [NeZero q] (K : Finset ι)
+/-- The outside Weyl operator is the Weyl product on the complementary sites. -/
+theorem outsideWeyl_eq_partialWeyl [NeZero q] (K : Finset ι)
     (p : ι → ZMod q × ZMod q) : outsideWeyl q K p = partialWeyl Kᶜ p := by
   simp only [outsideWeyl, partialWeyl, Finset.mem_compl]
   congr 1
@@ -456,7 +458,8 @@ theorem siteExpectationLM_isKrausCPTP [NeZero q] (K : Finset ι) :
 
 /-! ### Localization error through on-site commutators -/
 
-private theorem partialWeyl_insert [NeZero q] {S : Finset ι} {y : ι} (hy : y ∉ S)
+/-- Inserting one site multiplies by its on-site Weyl operator. -/
+theorem partialWeyl_insert [NeZero q] {S : Finset ι} {y : ι} (hy : y ∉ S)
     (p : ι → ZMod q × ZMod q) :
     partialWeyl (insert y S) p = partialWeyl {y} p * partialWeyl S p := by
   simp only [partialWeyl, rectKronecker_mul]
@@ -466,7 +469,8 @@ private theorem partialWeyl_insert [NeZero q] {S : Finset ι} {y : ι} (hy : y �
   · subst hxy; simp [hy]
   · by_cases hxS : x ∈ S <;> simp [hxy, hxS]
 
-private theorem partialWeyl_singleton_mem [NeZero q] (y : ι) (p : ι → ZMod q × ZMod q) :
+/-- A singleton Weyl product acts on that site. -/
+theorem partialWeyl_singleton_mem [NeZero q] (y : ι) (p : ι → ZMod q × ZMod q) :
     partialWeyl {y} p ∈ supportedOperators q ({y} : Set ι) :=
   rectKronecker_mem_supportedOperators fun x hx => by
     simp only [Set.mem_singleton_iff] at hx
@@ -474,7 +478,7 @@ private theorem partialWeyl_singleton_mem [NeZero q] (y : ι) (p : ι → ZMod q
 
 /-- The commutator with a product of unitaries is bounded by the sum of the
 commutators with the factors. -/
-private theorem norm_commutator_mul_le {R : Type*} [NormedRing R] [StarRing R] [CStarRing R]
+theorem norm_commutator_mul_le {R : Type*} [NormedRing R] [StarRing R] [CStarRing R]
     (B U V : R) (hU : U ∈ unitary R) (hV : V ∈ unitary R) :
     ‖B * (U * V) - U * V * B‖ ≤ ‖B * U - U * B‖ + ‖B * V - V * B‖ := by
   have h : B * (U * V) - U * V * B = (B * U - U * B) * V + U * (B * V - V * B) := by
