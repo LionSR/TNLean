@@ -31,7 +31,9 @@ noncomputable section
 
 private def dimensions : Site domain ⊕ Bool → ℕ := fun _ => 2
 
-private instance (v : Site domain ⊕ Bool) : NeZero (dimensions v) := ⟨by decide⟩
+private instance (v : Site domain ⊕ Bool) : NeZero (dimensions v) := ⟨by
+  change (2 : ℕ) ≠ 0
+  decide⟩
 
 private def terms : EnergyTerms (Site domain ⊕ Bool) dimensions (Fin 1) where
   term := fun _ => 0
