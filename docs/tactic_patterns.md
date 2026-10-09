@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Canonical initial sector assignment — promoted (2026-10-09)
+
+- **Pattern:** name the same unique assignment of the eight working sectors
+  to actual initial identifiers in a theorem statement and its proof.
+- **Seen:** ten bindings at the following declaration sites:
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorColors.lean:88`, with the remaining bindings at lines 104.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorRuns.lean:69`, with the remaining bindings at lines 86, 157, 173.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorComponents.lean:63`, with the remaining bindings at lines 83, 146, 168.
+- **Abstraction:** `initialSectorAssignment` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean` is exactly the
+  choice from `exists_unique_initialRegion_sector_assignment`, with the
+  original parameters and cell/mark hypotheses.
+- **Refactor:** the sector-color, run-assignment and no-active-sector
+  statements and proofs, together with both initial-component declarations,
+  use the same definition for their local assignment. The existing
+  `Classical.choose_spec` arguments are unchanged.
+- **Notes:** this names an existing assignment and introduces no new
+  geometric premise, identifier family or quotient of separated runs.
+
 ### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
 
 - **Pattern:** repeat the region of a fan triangle after deleting the actual

@@ -66,6 +66,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorAssignment
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorColors
+import TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorCycle
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorRuns
 import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers

@@ -140,3 +140,14 @@ This local construction is part of
     Finally, any other assignment has the same identifier on each
     nonempty working sector, and thus equals $\sigma$.
 \end{proof}
+
+\begin{definition}[Canonical initial sector assignment]
+    \label{def:area_law_initial_sector_assignment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialSectorAssignment}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment}
+    The initial-sector assignment is the unique function
+    $\sigma:\mathcal J\to\mathcal I$ satisfying the open working-triangle
+    containments and smaller closed-square decomposition of
+    Theorem~\ref{thm:area_law_actual_sector_assignment}.
+\end{definition}
