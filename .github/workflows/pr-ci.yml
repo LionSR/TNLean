@@ -773,6 +773,30 @@ jobs:
               "$source"
           done
 
+      - name: Check actual physical marginal production modules strictly
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/CrossingBudget.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test actual physical marginal regressions and axioms strictly
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLeanTest/ActualMarginalTails.lean \
+              TNLeanTest/ActualMarginalTailsAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Check actual energy and transport production modules strictly
         timeout-minutes: 4
         run: |

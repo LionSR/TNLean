@@ -296,6 +296,49 @@ replica Hamiltonian. The initial physical prevector, typical sectors,
 comparator estimates, the scanner's measure-valued fields and the
 complete scanner data construction remain open.
 
+\section{Truncated physical marginal estimates awaiting verification}
+
+The source-only addition in
+\path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean}
+states the moment and tail estimates of Lemma~3.1 for every actual
+regional state of one supplied truncated ground vector. It remains
+uncompiled and is not marked verified in the blueprint.
+The terms are the actual positive constraints centered at the original
+unit vector $\Omega$, truncated near the scanner's compact set.
+Writing $\widetilde H=\sum_i\widetilde h_i$, the explicit hypothesis is
+\begin{align}
+    \|\widetilde\Omega\|         & =1,                 \\
+    \widetilde H\widetilde\Omega & =e\widetilde\Omega, \\
+    \widetilde H-eI              & \ge(g/2)
+    (I-|\widetilde\Omega\rangle\langle\widetilde\Omega|),
+\end{align}
+where $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$.
+The resulting tail parameter is $2/g$, and the entropy center is the
+entropy of the actual marginal of this same $\widetilde\Omega$ for every cut.
+The exact budget preserves every original label, including repeated
+supports and zero terms; complementary cuts have the same budget, and
+the empty and full cuts have budget one. The source-only budget identities
+also await verification.
+
+This is an explicit-ground-state specialization, not the source proposition
+with its original hypotheses. It neither produces the truncated ground
+vector nor asserts a kernel equation for each individual term. Its gap
+assumption concerns the physical sum, before either auxiliary identity
+extension. Empty truncation sets and retained disconnected components are
+allowed; an arbitrary cut inside a retained component can still have
+crossing labels.
+
+The remaining source-facing construction must obtain one $e$ and
+$\widetilde\Omega$ from the physical truncation theorem, identify that
+same physical sum, and derive uniform cut budgets from the actual geometry.
+For the target typical spectrum, the bound is $C n(\log n)^{12}$ rather
+than the status bound $C nD(\log n)^{12}$ used elsewhere in the scan
+(\path{08-scanner.tex}, lines~400--414). The canonical target typical set,
+its positive mass and dimension, the initial prevector, the comparator
+estimates, and the scanner's measure-valued fields still have to be supplied.
+Neither this addition nor its budget identities construct the complete
+scanner data package or remove the restriction on Proposition~9.2.
+
 \section{Elimination}
 
 The restriction disappears once the data package is constructed from the

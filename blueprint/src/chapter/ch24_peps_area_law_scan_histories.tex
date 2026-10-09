@@ -1534,6 +1534,71 @@ The following finite construction follows
     identity extension and of the copy mean gives both sum identities.
 \end{proof}
 
+% Source-only addition, 2026-10-09: declaration and proof verification pending.
+% This is the explicit-ground-state specialization of Lemma 3.1, not a
+% construction of the truncated ground vector or of ScanData.
+% Source: 02-initial.tex, lines 34--69; 03-quasilocal.tex, lines 417--426;
+% 08-scanner.tex, lines 400--414, at openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Marginal tails of the truncated physical Hamiltonian]
+    \label{thm:al_scan_actual_marginal_tails}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_reducedState_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.surprisalTail_truncated_reducedState_le}
+    \uses{def:al_scan_actual_energy_terms,def:area_law_ground_entropy,
+        thm:al_exact_cut_budget}
+    Let $q\ge1$, let $H=\sum_i h_i$ be a local Hamiltonian of range $R$
+    and term norm bound $J\in\mathbb R$, and take $\|\Omega\|=1$ and
+    $\Delta>0$. Suppose the scanner graph is the induced domain graph
+    and each anchor lies in its labelled interaction support. For any
+    truncation depth $L\in\mathbb N$, let $\widetilde h_i$ be the physical
+    terms of Definition~\ref{def:al_scan_actual_energy_terms}, centered
+    using this same $\Omega$. Put
+    \begin{align}
+        \widetilde H & =\sum_i\widetilde h_i, \\
+        g            & =\Delta/c_*,           \\
+        \vartheta    & =2/g.
+    \end{align}
+    Assume a real $e$ and a unit vector $\widetilde\Omega$ satisfy
+    \begin{align}
+        \widetilde H\widetilde\Omega & =e\widetilde\Omega, \\
+        \widetilde H-eI              & \ge(g/2)
+        (I-|\widetilde\Omega\rangle\langle\widetilde\Omega|).
+        \label{eq:al_scan_truncated_gap}
+    \end{align}
+    For every cut $X\subseteq\Lambda$, put
+    $\rho_X=\operatorname{Tr}_{\Lambda\setminus X}
+        |\widetilde\Omega\rangle\langle\widetilde\Omega|$ and
+    $s_X=S_{\widetilde\Omega}(X)$. Let $K_X$ take the value $-\log p_j$
+    with probability $p_j$ for the positive eigenvalues $p_j$ of $\rho_X$,
+    and let $\mathcal B_X$ be the exact budget of the designated supports
+    for $S_0=\{x\in A:d(x)\le L\}$. For every real $u$ with
+    $|u|\le1/(32\sqrt{(1+\vartheta)\mathcal B_X})$,
+    \begin{align}
+        \log\mathbb E\,\mathrm e^{uK_X}
+         & \le us_X+512\mathrm e\vartheta\mathcal B_Xu^2.
+    \end{align}
+    For every real $w$,
+    \begin{align}
+        \Pr\{|K_X-s_X|>w\}
+         & \le\min\Bigl\{1,\,2\mathrm e^{\mathrm e/2}
+        \exp\Bigl(-\frac{w}{32\sqrt{(1+\vartheta)\mathcal B_X}}\Bigr)\Bigr\}.
+    \end{align}
+    The same $e$ and $\widetilde\Omega$ are used for every cut.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_actual_energy_terms,thm:area_law_cut_marginal,
+        thm:al_exact_cut_budget}
+    The physical truncated terms are positive contractions supported on
+    their designated sets, by Theorem~\ref{thm:al_scan_actual_energy_terms}.
+    Apply \cite[Lemma~3.1]{OpenAI2026AreaLaw} to their physical sum,
+    with term norm bound $1$ and gap $g/2>0$ from
+    (\ref{eq:al_scan_truncated_gap}). Its parameter is
+    $1/(g/2)=2/g$. Theorem~\ref{thm:area_law_cut_marginal} identifies its
+    marginal with $\rho_X$, and Theorem~\ref{thm:al_exact_cut_budget}
+    identifies its support budget with $\mathcal B_X$. The original
+    label set includes retained component terms even when the cut is
+    not contained in $S_0$.
+\end{proof}
+
 % Direct specializations of QICLean at 7224037, ReplicaTransport/Transport.lean.
 \begin{theorem}[Entropy and energy transport in an actual scan round]
     \label{thm:al_scan_actual_transport_estimates}
