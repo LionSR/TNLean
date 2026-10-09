@@ -53,6 +53,7 @@ theorem reindex_kronecker_mem_supportedOperators
       Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
         (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T))
     ?_ ?_ ?_ ?_ ?_ ?_ ?_ hA hB
+  rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
   done
 
 end QuantumCircuit
