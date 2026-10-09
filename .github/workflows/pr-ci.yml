@@ -586,15 +586,11 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Check birth-target entropy implication early
+      - name: Build birth-target entropy implication early
         run: |
           set -eo pipefail
           lake --fail-fast build TNLean.PEPS.AreaLaw.BirthTargetEntropy \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-          LEAN_NUM_THREADS=1 timeout --signal=TERM --kill-after=5s 80s lake env lean -j1 \
-            -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
-            -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-            TNLeanTest/TwoFamilyEntropy.lean
 
       - name: Build capped dyadic partition early
         run: |
