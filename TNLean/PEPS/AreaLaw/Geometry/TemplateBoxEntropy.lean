@@ -51,6 +51,8 @@ theorem pairwiseDisjoint_rectRegion_cappedDyadicPartition {Λ : Finset (ℤ × �
   intro a ha b hb hab
   apply Finset.disjoint_left.mpr
   intro x hxa hxb
+  change x ∈ rectRegion A (latticeDyadicRect a.1 a.2) at hxa
+  change x ∈ rectRegion A (latticeDyadicRect b.1 b.2) at hxb
   rw [rectRegion_latticeDyadicRect] at hxa hxb
   exact Finset.disjoint_left.mp (pairwiseDisjoint_cappedDyadicPartition S K ha hb hab)
     (Finset.mem_filter.mp hxa).2 (Finset.mem_filter.mp hxb).2
