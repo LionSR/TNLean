@@ -64,6 +64,127 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
     $K\otimes I_{U\setminus R}$.
 \end{definition}
 
+In the following statement and proof, we write $X$ for the region $R$ of
+Definition~\ref{def:peps_regional_operator_extension}, matching the patch
+notation below.
+
+% Supporting coordinate identities for the identity-extension and
+% partial-trace conventions of 03-patches.tex, lines 80--99, commit
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a; no new source theorem is asserted.
+\begin{theorem}[Local basis relabelling]
+    \label{thm:peps_regional_basis_relabelling}
+    \lean{
+        TNLean.PEPS.dependentRegionFinEquiv,
+        TNLean.PEPS.dependentGlobalFinEquiv,
+        TNLean.PEPS.dependentGlobalFinIsometry,
+        TNLean.PEPS.dependentGlobalFinIsometry_apply,
+        TNLean.PEPS.reindex_dependentRegionOperatorLift,
+        TNLean.PEPS.dependentGlobalFinIsometry_lift,
+        TNLean.PEPS.reindex_reducedPure_eq_regionState
+    }
+    \leanok
+    \uses{def:peps_regional_operator_extension}
+    Let $V$ be any finite ordered site set with finite alphabets $Y_v$,
+    and choose bijections $e_v:Y_v\to[n_v]$, where
+    $[n]=\{k\in\N:k<n\}$, so $[0]=\varnothing$.
+    Write $\mathcal H_X=\C^{\prod_{v\in X}Y_v}$.
+    For $X\subseteq V$, let $E_X$ be the induced unitary coordinate
+    relabelling, so $E_X\ket{(y_v)_{v\in X}}=
+        \ket{(e_v(y_v))_{v\in X}}$.
+    For every complex matrix $K$ on $\mathcal H_X$ and every
+    $\xi\in\mathcal H_V$,
+    \begin{align}
+        E_V\widehat K_XE_V^*
+         & =\widehat{E_XKE_X^*}_X,
+        \label{eq:peps_lift_basis_relabelling} \\
+        E_X\operatorname{Tr}_{V\setminus X}
+        \ketbra{\xi}{\xi}E_X^*
+         & =\operatorname{Tr}_{V\setminus X}
+        \ketbra{E_V\xi}{E_V\xi}.
+        \label{eq:peps_marginal_basis_relabelling}
+    \end{align}
+    The extension on the right of~(\ref{eq:peps_lift_basis_relabelling})
+    uses the relabelled bases. Equivalently,
+    $E_V(\widehat K_X\xi)=\widehat{E_XKE_X^*}_XE_V\xi$.
+    No Hermiticity or normalization is required; the identities include
+    empty regions, empty alphabets, and empty site sets.
+
+    Put $C=V\setminus X$ and $K'=E_XKE_X^*$.
+    Write $I'_C$ for the identity in the relabelled complementary basis.
+    In product coordinates $E_V=E_X\otimes E_C$, and
+    (\ref{eq:peps_lift_basis_relabelling}) is the following equality.
+    % Formula: (E_X tensor E_C)(K tensor I_C)(E_X^* tensor E_C^*)
+    % = (E_X K E_X^*) tensor I'_C = K' tensor I'_C.
+    % Ink-to-index map: upper row is H_X, lower row is H_C.
+    % E_X and E_C relabel the regional and complementary bases; starred
+    % boxes are their inverses. The middle lower box is exactly I_C.
+    % Contracted legs: two original-basis indices on each left-panel row.
+    % Open legs: i,j in the relabelled region and alpha,beta in its complement.
+    % Boundary signature in each panel: phys:w, phys:e, phys:w, phys:e.
+    % Both panels express the same operator in the same relabelled bases;
+    % this is a passive coordinate identity, not time evolution or commutation.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none]
+            \tn[at=(1,1), name=regionbasis, skin=box,
+                ports={180:physical, 0:physical}]{E_X}
+            \tn[at=(1,3), name=regionmatrix, skin=box,
+                ports={180:physical, 0:physical}]{K}
+            \tn[at=(1,5), name=regioninverse, skin=box,
+                ports={180:physical, 0:physical}]{E_X^*}
+            \tn[at=(2,1), name=complementbasis, skin=box,
+                ports={180:physical, 0:physical}]{E_C}
+            \tn[at=(2,3), name=complementidentity, skin=box,
+                ports={180:physical, 0:physical}]{I_C}
+            \tn[at=(2,5), name=complementinverse, skin=box,
+                ports={180:physical, 0:physical}]{E_C^*}
+            \tnwire[name=regionout]{open w}{regionbasis.180}
+            \tnwire{regionbasis.0}{regionmatrix.180}
+            \tnwire{regionmatrix.0}{regioninverse.180}
+            \tnwire[name=regionin]{regioninverse.0}{open e}
+            \tnwire[name=complementout]{open w}{complementbasis.180}
+            \tnwire{complementbasis.0}{complementidentity.180}
+            \tnwire{complementidentity.0}{complementinverse.180}
+            \tnwire[name=complementin]{complementinverse.0}{open e}
+            \tnmark[form=label, label pos=n]{on regionout 0.5}{$i$}
+            \tnmark[form=label, label pos=n]{on regionin 0.5}{$j$}
+            \tnmark[form=label, label pos=s]{on complementout 0.5}{$\alpha$}
+            \tnmark[form=label, label pos=s]{on complementin 0.5}{$\beta$}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+            \tn[at=(1,1), name=relabelledmatrix, skin=box,
+                ports={180:physical, 0:physical}]{K'}
+            \tn[at=(2,1), name=relabelledidentity, skin=box,
+                ports={180:physical, 0:physical}]{I'_C}
+            \tnwire[name=relabelledregionout]{open w}{relabelledmatrix.180}
+            \tnwire[name=relabelledregionin]{relabelledmatrix.0}{open e}
+            \tnwire[name=relabelledcomplementout]{open w}{relabelledidentity.180}
+            \tnwire[name=relabelledcomplementin]{relabelledidentity.0}{open e}
+            \tnmark[form=label, label pos=n]{on relabelledregionout 0.5}{$i$}
+            \tnmark[form=label, label pos=n]{on relabelledregionin 0.5}{$j$}
+            \tnmark[form=label, label pos=s]{on relabelledcomplementout 0.5}{$\alpha$}
+            \tnmark[form=label, label pos=s]{on relabelledcomplementin 0.5}{$\beta$}
+        \end{tenkz}
+    \end{tenkzequation}
+    The upper and lower lines carry the region and its complement.
+    Both panels represent the same operator after a change of coordinate labels.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_regional_operator_extension}
+    Restriction to $X$ and $C$ commutes with the sitewise bijections.
+    Thus conjugating $K\otimes I_C$ by $E_X\otimes E_C$ gives
+    $(E_XKE_X^*)\otimes I'_C$, proving
+    (\ref{eq:peps_lift_basis_relabelling}). In the partial trace,
+    $E_C$ only permutes the summed complementary configuration, while
+    $E_X$ relabels the two retained indices. This gives
+    (\ref{eq:peps_marginal_basis_relabelling}) for the same vector $\xi$.
+    These are the coordinate identities for the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L80-L99}{identity-extension and partial-trace conventions}
+    used by the regularized patch problem.
+\end{proof}
+
 \begin{theorem}[Algebra and slices of regional extensions]%
     \label{thm:peps_regional_extension_algebra}
     \lean{TNLean.PEPS.dependentRegionOperatorLift_one,

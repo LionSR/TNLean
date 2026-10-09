@@ -97,6 +97,7 @@ on:
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
+      - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -203,6 +204,7 @@ on:
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
+      - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -352,6 +354,7 @@ jobs:
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
+              - 'scripts/test_tenkz_region_coordinates.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -768,7 +771,7 @@ jobs:
             -o "$test_root/TNLeanTest/Support/SingleQubitConfig.olean" \
             TNLeanTest/Support/SingleQubitConfig.lean
           for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
-              RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
+              DependentRegionCoordinates RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
             LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
               "TNLeanTest/$example.lean"
           done
@@ -1481,6 +1484,23 @@ jobs:
       - name: Check ordered coordinate insertion diagram
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_patch_stationarity.py
+
+      - name: Check regional basis-relabelling diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: >
+          python3 scripts/test_tenkz_region_coordinates.py
+          --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
+
+      - name: Preserve regional coordinate diagrams for review
+        if: success() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: region-coordinate-diagrams-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/region-coordinate-diagrams/tenkz-*.svg
+            ${{ runner.temp }}/region-coordinate-diagrams/cache/tenkz-*.tnlog
+          if-no-files-found: error
+          retention-days: 3
 
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'
