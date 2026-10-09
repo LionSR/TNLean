@@ -89,7 +89,7 @@ theorem exists_rounded_clearance_threshold {C₂ Cr ell : ℝ}
     nlinarith
   have hsmall := (div_lt_iff₀ hn0).mp (hN n hnN)
   have htotal : 4 * (n : ℝ) ^ (1 - ell) + 20 * (Cr * Real.log n ^ 2 + 1) < s := by
-    have h := (div_le_iff₀ (show 0 < C₂ + 1 by positivity)).mpr hnupper
+    have h := (div_le_iff₀' (show 0 < C₂ + 1 by positivity)).mpr hnupper
     calc
       _ < (1 / (C₂ + 1)) * n := hsmall
       _ = (n : ℝ) / (C₂ + 1) := by ring
@@ -101,8 +101,9 @@ theorem exists_rounded_clearance_threshold {C₂ Cr ell : ℝ}
     have h : (4 : ℝ) * L + 20 * r₀ < s := by linarith
     exact_mod_cast h
   have hLone : 1 ≤ L := by
-    apply (Nat.le_floor_iff' (by decide : (1 : ℕ) ≠ 0)).mpr
-    exact Real.one_le_rpow (by exact_mod_cast hn1) (by linarith)
+    have h1 : (1 : ℝ) ≤ (n : ℝ) ^ (1 - ell) :=
+      Real.one_le_rpow (by exact_mod_cast hn1) (by linarith)
+    exact Nat.le_floor (by exact_mod_cast h1)
   refine ⟨hLone, by omega, ?_⟩
   intro D₀ hD₀
   have htwo : 2 * L ≤ s := by omega
