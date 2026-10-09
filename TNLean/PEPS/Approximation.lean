@@ -96,6 +96,7 @@ import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
 import TNLean.PEPS.Approximation.SiteRegisters
