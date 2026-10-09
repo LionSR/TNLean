@@ -42,6 +42,7 @@ import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FanAffineCoordinates
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.FanInactiveSeams
 import TNLean.PEPS.AreaLaw.Geometry.FanRadialConvexity
 import TNLean.PEPS.AreaLaw.Geometry.FanRadialPieces
 import TNLean.PEPS.AreaLaw.Geometry.FanRegularity

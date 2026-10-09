@@ -3575,6 +3575,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Unique radial through a noncentral fan point — candidate (2026-10-09)
+
+- **Pattern:** turn membership in two center-to-endpoint segments into a common
+  directed ray, then apply `cellFanEnd_sameRay_iff` to identify their slots.
+- **Seen:** two uses across `CellFanRadialIncidence.lean` and
+  `FanInactiveSeams.lean`, in `TNLean/PEPS/AreaLaw/Geometry/`.
+- **Abstraction:** a common noncentral radial-incidence lemma if a third use
+  appears; the shared endpoint-ray theorem already contains the geometry.
+- **Notes:** noncentrality is essential when composing the directed-ray
+  relations. The center remains in every triangle when no radial is removed.
+
+
 ### Operator norm in orthonormal coordinates — candidate (2026-10-07)
 
 - **Pattern:** Identify matrix multiplication in orthonormal coordinates with
