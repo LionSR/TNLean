@@ -44,7 +44,7 @@ markers. Use it to decide whether `gaps.json` needs a new entry.
 | `pageTitle`, `heading`, `lede`, `description` | Page title, main heading, opening paragraph and meta description |
 | `label` | GitHub label carried by the campaign's issues and pull requests |
 | `since` | Date the campaign started; unlabelled pull requests in companion repositories opened since then are included when they cite a campaign issue |
-| `repos` | Repositories, each with `name`, `slug`, local `checkout` path and optional `checkoutEnv` override and pull-request `prefix`; exactly one is `primary` and holds the issues |
+| `repos` | Repositories, each with `name`, `slug`, local `checkout` path and optional `checkoutEnv` override and pull-request `prefix`; exactly one is `primary` and holds the issues. A repository with a `homepage` and `description` is listed at the top of the page and in its library section, with links to its site, blueprint, API docs and GitHub |
 | `tracker` | The overall tracking issue. Its sub-issues that have sub-issues of their own become the streams |
 | `streamNames` | Optional display names for streams, keyed by issue number |
 | `papers` | Source papers, keyed by an id, each with a display `name` and the `stream` issue whose body holds its result table |
