@@ -60,7 +60,11 @@ theorem target_typicalSet_bounds {Λ : Finset (ℤ × ℤ)} {q : ℕ}
   refine ⟨sub_pos.mpr hδ, hzδ, hz, hz1, ?_, ?_⟩
   · apply Finset.nonempty_iff_ne_empty.mpr
     intro hE
-    simpa only [hE, Matrix.IsHermitian.spectralRestrictionMass, Finset.sum_empty,
+    change 0 < (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass
+      (Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
+        (regionalEntropy Λ q Ωt X) w) at hz
+    rw [hE] at hz
+    simpa only [Matrix.IsHermitian.spectralRestrictionMass, Finset.sum_empty,
       lt_self_iff_false] using hz
   · intro i hi
     exact ⟨(Entropy.mem_typicalSet.mp hi).1, Entropy.exp_le_of_mem_typicalSet hi⟩
