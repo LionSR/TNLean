@@ -348,4 +348,207 @@ theorem layoutIso_tagChangeWord (β : R.Branch) (own : ι → Party)
 
 end SmallPatchRewrite
 
+/-! ### Product terms as allowed monomials -/
+
+section Terms
+
+variable [NeZero q]
+
+omit [Fintype ι] [DecidableEq ι] [NeZero q] in
+theorem act_smul {m n : Type*} [Fintype n] (a : ℂ) (A : Matrix m n ℂ)
+    (ψ : EuclideanSpace ℂ n) : act (a • A) ψ = a • act A ψ := by
+  ext i
+  simp [act, Matrix.smul_mulVec]
+
+omit [Fintype ι] [DecidableEq ι] [NeZero q] in
+theorem act_sum {m n κ : Type*} [Fintype n] [Fintype κ] (A : κ → Matrix m n ℂ)
+    (ψ : EuclideanSpace ℂ n) : act (∑ k, A k) ψ = ∑ k, act (A k) ψ := by
+  ext i
+  simp [act, Matrix.sum_mulVec]
+
+theorem exists_of_mem_encSteps {s : Step ι q} : (l : List (Hole pos q Party)) →
+    (t : TagSpace l) → s ∈ encSteps l t → ∃ h ∈ l, ∃ j, s.sites = h.patch.tagSample j
+  | [], _, hs => absurd hs List.not_mem_nil
+  | h :: l, t, hs => by
+    rcases List.mem_cons.mp hs with rfl | hs
+    · exact ⟨h, List.mem_cons_self, t.1, rfl⟩
+    · obtain ⟨h', hh', j, hj⟩ := exists_of_mem_encSteps l t.2 hs
+      exact ⟨h', List.mem_cons_of_mem _ hh', j, hj⟩
+
+theorem exists_of_mem_decSteps {s : Step ι q} : (l : List (Hole pos q Party)) →
+    (t : TagSpace l) → s ∈ decSteps l t → ∃ h ∈ l, ∃ j, s.sites = h.patch.tagSample j
+  | [], _, hs => absurd hs List.not_mem_nil
+  | h :: l, t, hs => by
+    rcases List.mem_append.mp hs with hs | hs
+    · obtain ⟨h', hh', j, hj⟩ := exists_of_mem_decSteps l t.2 hs
+      exact ⟨h', List.mem_cons_of_mem _ hh', j, hj⟩
+    · rw [List.mem_singleton.mp hs]
+      exact ⟨h, List.mem_cons_self, t.1, rfl⟩
+
+namespace SmallPatchRewrite
+
+variable (R : SmallPatchRewrite pos q Party)
+
+/-- Every site of a step of a branch lies in the physical sample of a patch or of an affected
+hole, so by condition (iv) its old and new owners belong to the specified list. -/
+theorem owners_mem_parties_of_mem_branchSteps (hR : R.Conditions) (β : R.Branch)
+    {s : Step ι q} (hs : s ∈ R.branchSteps β) {x : ι} (hx : x ∈ s.sites) :
+    R.ownerOld x ∈ R.parties ∧ R.ownerNew x ∈ R.parties := by
+  rcases List.mem_append.mp hs with hs | hs
+  · rcases List.mem_append.mp hs with hs | hs
+    · obtain ⟨h, hh, j, hj⟩ := exists_of_mem_encSteps _ _ hs
+      obtain ⟨j', hj'⟩ := h.patch.exists_mem_sample_of_mem_tagSample (hj ▸ hx)
+      exact R.owners_mem_parties_of_mem_sample hR
+        (Or.inr ⟨h, List.mem_append_right _ hh, j', hj'⟩)
+    · obtain ⟨P, hP, j, hj, -, -⟩ := exists_of_mem_patchSteps _ _ hs
+      obtain ⟨j', hj'⟩ := P.exists_mem_sample_of_mem_tagSample (hj ▸ hx)
+      exact R.owners_mem_parties_of_mem_sample hR (Or.inl ⟨P, hP, j', hj'⟩)
+  · obtain ⟨h, hh, j, hj⟩ := exists_of_mem_decSteps _ _ hs
+    obtain ⟨j', hj'⟩ := h.patch.exists_mem_sample_of_mem_tagSample (hj ▸ hx)
+    exact R.owners_mem_parties_of_mem_sample hR
+      (Or.inr ⟨h, List.mem_append_left _ hh, j', hj'⟩)
+
+theorem owners_mem_parties_of_not_untouched (hR : R.Conditions) (β : R.Branch) {x : ι}
+    (hx : ¬Untouched (R.branchChain β) x) :
+    R.ownerOld x ∈ R.parties ∧ R.ownerNew x ∈ R.parties := by
+  simp only [Untouched, not_forall, not_not] at hx
+  obtain ⟨k, hk⟩ := hx
+  exact R.owners_mem_parties_of_mem_branchSteps hR β (List.getElem_mem (l := R.branchSteps β) k.2)
+    hk
+
+/-- **A site touched by no step of a branch keeps its owner**, by condition (ii). -/
+theorem ownerOld_eq_ownerNew_of_untouched (hR : R.Conditions) (β : R.Branch) {x : ι}
+    (hx : Untouched (R.branchChain β) x) : R.ownerOld x = R.ownerNew x := by
+  refine R.ownerOld_eq_ownerNew_of_direct hR β.2.1 fun hxP => ?_
+  obtain ⟨s, hs, hxs⟩ := (mem_patchSquares_iff _ _).mp hxP
+  obtain ⟨k, -, -, hk⟩ := exists_get_append₃_eq_mid (encSteps R.newAffected β.1)
+    (patchSteps R.patches β.2.1) (decSteps R.oldAffected β.2.2) hs
+  exact hx k (by
+    change x ∈ ((encSteps R.newAffected β.1 ++ patchSteps R.patches β.2.1 ++
+      decSteps R.oldAffected β.2.2).get k).sites
+    rw [hk]
+    exact hxs)
+
+/-- The vertices of a branch network with open legs are at most `2m`. -/
+theorem card_open_vertices_le (hR : R.Conditions) (β : R.Branch) :
+    (∑ j, if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0) +
+      (∑ j, if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0) ≤
+        2 * R.patches.length := by
+  classical
+  rw [← Fintype.sum_sum_type (f := fun v => if ∃ x, IsOpen (R.branchChain β) v x then 1 else 0),
+    Finset.sum_boole, Nat.cast_id]
+  refine (Finset.card_le_card fun v hv => ?_).trans (R.card_patchVertices_le β)
+  obtain ⟨x, hx⟩ := (Finset.mem_filter.mp hv).2
+  exact R.mem_patchVertices_of_isOpen hR β hx
+
+/-- **A product term of a branch as an allowed monomial.** Under the four conditions of
+Lemma 6.3, let `(a, s, b)` be a branch and let a unit vector be chosen on every open-leg group of
+its network (one of the orthonormal families of the whole-group truncation). Then the product
+term placed in the tag block, `|a⟩⟨b| ⊗ T ⊗ 1`, is `σ` times the operator of an allowed monomial
+from the registers of `F_old` to those of `F_new`, one register per site and per tag, with
+`|σ| ≤ 1`. The monomial uses only the specified parties and has at most `2m` normalized pair
+sources and at most `2m` normalized pair effects. It consumes the open inputs of each patch bra
+by its normalized covector at their at most two old owners, contracts every touched raw register
+with `⟨0|` at its old owner and prepares `|0⟩` at its new owner, prepares the open outputs of each
+patch ket by its normalized vector at their at most two new owners, and replaces the affected
+tags by `⟨b|` and `|a⟩` at their tag owners; every other register is untouched.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 262–273 and 306–316:
+after restoring the factored private maps and direct identities, each product term is precisely
+a monomial allowed by Theorem 5.2, with boundedly many pair states and effects and a coefficient
+of absolute value at most one. -/
+theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
+    {r : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length → ℕ}
+    (e : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r v) →
+      EuclideanSpace ℂ (Group (R.branchChain β) v))
+    (he : ∀ v, Orthonormal ℂ (e v))
+    (i : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r v)) :
+    ∃ (σ : ℂ) (M : PartyChain R.oldFrame.regs R.newFrame.regs), ‖σ‖ ≤ 1 ∧ M.IsAllowed ∧
+      M.UsesOnly (R.parties : Set Party) ∧ M.sourceCount ≤ 2 * R.patches.length ∧
+      M.toEffectChain.effectCount ≤ 2 * R.patches.length ∧
+      ∀ z, σ • R.newFrame.regIso (M.toEffectChain.eval z) =
+        act (R.liftBranch β (termOp (R.branchChain β) e i)) (R.oldFrame.regIso z) := by
+  set l := R.untouched ++ R.oldAffected
+  set S : Set Party := (R.parties : Set Party)
+  have hbra := fun j : Fin (R.branchSteps β).length =>
+    exists_braVertexBlock (q := q) l R.ownerOld S (IsOpen (R.branchChain β) (.inl j))
+      (fun _ => by
+        obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inl hR β j
+        exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.1⟩⟩)
+      (e (.inl j) (i (.inl j))) ((he _).1 _)
+  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₃ hMB₄ hMB₅ using hbra
+  have hket := fun j : Fin (R.branchSteps β).length =>
+    exists_ketVertexBlock (q := q) l R.ownerNew S (IsOpen (R.branchChain β) (.inr j))
+      (fun _ => by
+        obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inr hR β j
+        exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.2⟩⟩)
+      (e (.inr j) (i (.inr j))) ((he _).1 _)
+  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₃ hMK₄ hMK₅ using hket
+  set W := (sites ι).filter fun x => decide (¬Untouched (R.branchChain β) x) with hWdef
+  have hWn : W.Nodup := nodup_sites.filter _
+  have hW : ∀ x, x ∈ W ↔ ¬Untouched (R.branchChain β) x := fun x => by simp [hWdef, mem_sites]
+  obtain ⟨M₁, a₁, a₂, a₃, a₄, a₅⟩ := exists_chain_listProd (layoutIso l R.ownerOld) S
+    (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (B j).op)
+    (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
+    (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
+    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
+  obtain ⟨M₂, b₁, b₂, b₃, b₄, b₅⟩ := exists_zeroChain l S W hWn R.ownerOld R.ownerNew
+    (fun x hx => R.owners_mem_parties_of_not_untouched hR β ((hW x).mp hx))
+    (fun x hx => R.ownerOld_eq_ownerNew_of_untouched hR β (by simpa [hW] using hx))
+  obtain ⟨M₃, c₁, c₂, c₃, c₄, c₅⟩ := exists_chain_listProd (layoutIso l R.ownerNew) S
+    (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (K j).op)
+    (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
+    (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
+    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
+  set Wt := tagChangeWord R.untouched R.oldAffected R.newAffected β.2.2 β.1 R.ownerNew
+  obtain ⟨t₁, t₂, t₃⟩ := tagChangeWord_props R.untouched R.oldAffected R.newAffected β.2.2 β.1
+    R.ownerNew (S := S) (fun h hh => hR.tag_owners_mem h (List.mem_append_left _ hh))
+    (fun h hh => hR.tag_owners_mem h (List.mem_append_right _ hh))
+  obtain ⟨d₁, d₂, d₃, d₄⟩ := PartyChain.append_props S M₁ M₂ a₁ a₂ b₁ b₂
+  obtain ⟨e₁, e₂, e₃, e₄⟩ := PartyChain.append_props S (M₁.append M₂) M₃ d₁ d₂ c₁ c₂
+  obtain ⟨f₁, f₂, f₃, f₄⟩ := PartyChain.postcomp_props S ((M₁.append M₂).append M₃) Wt t₁ t₂
+    e₁ e₂
+  have hsum : ∀ g : Fin (R.branchSteps β).length → ℕ,
+      ((List.finRange _).map g).sum = ∑ j, g j := fun g => by
+    rw [← List.ofFn_eq_map, List.sum_ofFn]
+  have hcount := R.card_open_vertices_le hR β
+  rw [hsum] at a₃ a₄ c₃ c₄
+  refine ⟨(∏ j, sB j) * ∏ j, sK j, ((M₁.append M₂).append M₃).postcomp Wt, ?_, f₁, f₂, ?_, ?_,
+    fun z => ?_⟩
+  · rw [norm_mul, norm_prod, norm_prod]
+    calc _ ≤ (1 : ℝ) * 1 := mul_le_mul
+          (Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) fun j _ => hsB j)
+          (Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) fun j _ => hsK j)
+          (Finset.prod_nonneg fun _ _ => norm_nonneg _) zero_le_one
+      _ = 1 := one_mul 1
+  · rw [f₃, e₃, d₃, b₃, t₃]
+    change _ ≤ _ at hcount
+    omega
+  · rw [f₄, e₄, d₄, b₄]
+    omega
+  · have hT := termOp_eq_smul_prod (R.branchChain β) e i B K sB sK hBE hBK hBB hKE hKB hKK hWn hW
+    have hB : ((List.finRange _).map fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ
+        (B j).op).prod = 1 ⊗ₖ ((List.ofFn B).map RankOneBlock.op).prod := by
+      rw [prod_map_one_kronecker, List.ofFn_eq_map, List.map_map]
+      rfl
+    have hK : ((List.finRange _).map fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ
+        (K j).op).prod = 1 ⊗ₖ ((List.ofFn K).map RankOneBlock.op).prod := by
+      rw [prod_map_one_kronecker, List.ofFn_eq_map, List.map_map]
+      rfl
+    rw [hT, liftBranch_smul, act_smul]
+    congr 1
+    rw [PartyChain.eval_postcomp, ContinuousLinearMap.comp_apply, PartyChain.eval_append,
+      ContinuousLinearMap.comp_apply, PartyChain.eval_append, ContinuousLinearMap.comp_apply]
+    change layoutIso (R.untouched ++ R.newAffected) R.ownerNew
+        (Wt.eval (M₃.toEffectChain.eval (M₂.toEffectChain.eval (M₁.toEffectChain.eval z)))) =
+      act _ (layoutIso l R.ownerOld z)
+    rw [layoutIso_tagChangeWord, c₅, b₅, a₅, hB, hK, ← act_mul, ← act_mul, ← act_mul]
+    congr 1
+    simp only [Matrix.mul_assoc]
+    rw [← mul_kronecker_mul, one_mul, ← mul_kronecker_mul, one_mul, liftBranch_mul]
+
+end SmallPatchRewrite
+
+end Terms
+
 end TNLean.PEPS.EncodedFrame

@@ -298,6 +298,105 @@ theorem exists_groupBlock (l : List (Hole pos q Party)) (own : ι → Party) (S 
     (hvb.trans hw) (hS x₀ hx₀) hpB (hS x₀ hx₀) hpB
   exact ⟨b, fun x => by simp [b, E], hvk', hvb', M, m₁, m₂, m₃, m₄, m₅⟩
 
+/-- The complex conjugate of a vector. -/
+def conjVec {κ : Type} [Fintype κ] (f : EuclideanSpace ℂ κ) : EuclideanSpace ℂ κ :=
+  WithLp.toLp 2 fun d => star (f d)
+
+theorem norm_conjVec {κ : Type} [Fintype κ] (f : EuclideanSpace ℂ κ) : ‖conjVec f‖ = ‖f‖ := by
+  rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+  simp [conjVec]
+
+/-- The basis vector of the zero configuration of a group of sites. -/
+def zeroGroupVec (O : ι → Prop) [DecidablePred O] : EuclideanSpace ℂ ({x // O x} → Fin q) :=
+  EuclideanSpace.single 0 1
+
+theorem norm_zeroGroupVec (O : ι → Prop) [DecidablePred O] :
+    ‖zeroGroupVec (q := q) O‖ = 1 := by
+  simp [zeroGroupVec]
+
+omit [DecidableEq ι] in
+theorem zeroGroupVec_apply (O : ι → Prop) [DecidablePred O] (c : ι → Fin q) :
+    zeroGroupVec (q := q) O (fun x => c x.1) = if ∀ x, O x → c x = 0 then 1 else 0 := by
+  rw [zeroGroupVec, PiLp.single_apply]
+  congr 1
+  exact propext ⟨fun h x hx => congrFun h ⟨x, hx⟩, fun h => funext fun x => h x.1 x.2⟩
+
+/-- **The block of a bra vertex.** Let `f` be a unit vector on a group `O` of sites, read as the
+covector `⟨f|`. There are a block on the sites of `O` and a scalar `s` of modulus at most one
+with `f(c|_O) = s · \overline{w(c)}` and the zero vector as ket, whose operator
+`1_tags ⊗ |0⟩⟨w|_O ⊗ 1` is an allowed monomial using only the parties of `S`, with at most one pair
+source and one pair effect when `O` is nonempty and none otherwise. When `O` is nonempty its
+owners must lie in a set of at most two parties of `S`; the block is then that of
+`exists_groupBlock` and `s = 1`. When `O` is empty, the block is trivial and `s = f(·)`. -/
+theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party) (S : Set Party)
+    (O : ι → Prop) [DecidablePred O]
+    (hO : (∃ x, O x) → ∃ P : Finset Party, P.card ≤ 2 ∧ ∀ x, O x → own x ∈ P ∧ own x ∈ S)
+    (f : EuclideanSpace ℂ ({x // O x} → Fin q)) (hf : ‖f‖ = 1) :
+    ∃ (b : RankOneBlock ι q) (s : ℂ), ‖s‖ ≤ 1 ∧ (∀ x, x ∈ b.E ↔ ¬O x) ∧
+      (∀ c, b.ketAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
+      (∀ c, f (fun x => c x.1) = s * star (b.braAt c)) ∧
+      ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.toEffectChain.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        ∀ z, layoutIso l own (M.toEffectChain.eval z) =
+          act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
+  classical
+  by_cases hne : ∃ x, O x
+  · obtain ⟨P, hP, hPO⟩ := hO hne
+    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
+      ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) (zeroGroupVec O)
+      (conjVec f) (norm_zeroGroupVec O) ((norm_conjVec f).trans hf)
+    refine ⟨b, 1, by simp, hbE, fun c => by rw [hbK, zeroGroupVec_apply], fun c => ?_, M, m₁,
+      m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
+    rw [hbB, conjVec]
+    simp
+  · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
+      fun c => ?_, .final (.id _), trivial, trivial, Nat.zero_le _, Nat.zero_le _, fun z => ?_⟩
+    · rw [← hf]
+      exact PiLp.norm_apply_le f _
+    · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
+    · rw [emptyBlock_ketAt]
+      rw [ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_braAt, star_one, mul_one]
+      exact congrArg (fun d => f d) (funext fun (x : {x // O x}) => absurd ⟨x.1, x.2⟩ hne)
+    · rw [emptyBlock_op, one_kronecker_one, act_one]
+      rfl
+
+/-- **The block of a ket vertex.** The analogue of `exists_braVertexBlock` for the vector `|f⟩`:
+a block on the sites of `O` with zero bra and ket reading `f` up to a scalar `s` of modulus at
+most one. -/
+theorem exists_ketVertexBlock (l : List (Hole pos q Party)) (own : ι → Party) (S : Set Party)
+    (O : ι → Prop) [DecidablePred O]
+    (hO : (∃ x, O x) → ∃ P : Finset Party, P.card ≤ 2 ∧ ∀ x, O x → own x ∈ P ∧ own x ∈ S)
+    (f : EuclideanSpace ℂ ({x // O x} → Fin q)) (hf : ‖f‖ = 1) :
+    ∃ (b : RankOneBlock ι q) (s : ℂ), ‖s‖ ≤ 1 ∧ (∀ x, x ∈ b.E ↔ ¬O x) ∧
+      (∀ c, b.braAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
+      (∀ c, f (fun x => c x.1) = s * b.ketAt c) ∧
+      ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.toEffectChain.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        ∀ z, layoutIso l own (M.toEffectChain.eval z) =
+          act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
+  classical
+  by_cases hne : ∃ x, O x
+  · obtain ⟨P, hP, hPO⟩ := hO hne
+    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
+      ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) f (zeroGroupVec O) hf
+      (norm_zeroGroupVec O)
+    refine ⟨b, 1, by simp, hbE, fun c => by rw [hbB, zeroGroupVec_apply], fun c => by
+      rw [hbK, one_mul], M, m₁, m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
+  · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
+      fun c => ?_, .final (.id _), trivial, trivial, Nat.zero_le _, Nat.zero_le _, fun z => ?_⟩
+    · rw [← hf]
+      exact PiLp.norm_apply_le f _
+    · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
+    · rw [emptyBlock_braAt]
+      rw [ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_ketAt, mul_one]
+      exact congrArg (fun d => f d) (funext fun (x : {x // O x}) => absurd ⟨x.1, x.2⟩ hne)
+    · rw [emptyBlock_op, one_kronecker_one, act_one]
+      rfl
+
 end GroupBlock
 
 end TNLean.PEPS.EncodedFrame
