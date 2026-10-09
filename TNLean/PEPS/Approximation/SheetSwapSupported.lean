@@ -38,6 +38,7 @@ theorem sheetSwapOp_mul_kronecker_of_mem_supportedOperators
   rw [sheetSwapOp, PEquiv.toMatrix_toPEquiv_mul,
     PEquiv.mul_toMatrix_toPEquiv, sheetSwap_symm]
   ext ⟨y₁, y₂⟩ ⟨r₁, r₂⟩
+  simp only [submatrix_apply, kroneckerMap_apply, id]
   done
 
 end TNLean.PEPS.EncodedFrame
