@@ -34,6 +34,7 @@ theorem sheetSwapOp_mul_kronecker_of_mem_supportedOperators
     (hB : B ∈ supportedOperators q (R : Set ι)) :
     sheetSwapOp q R * (A ⊗ₖ B) = (B ⊗ₖ A) * sheetSwapOp q R := by
   obtain ⟨A', hA'⟩ := exists_kronecker_one_of_mem_supportedOperators hA
+  obtain ⟨B', hB'⟩ := exists_kronecker_one_of_mem_supportedOperators hB
   done
 
 end TNLean.PEPS.EncodedFrame
