@@ -1,0 +1,69 @@
+\section{Boundary entropy from birth-target information}
+\label{sec:area_law_birth_information}
+
+\begin{theorem}[Boundary entropy from birth-target information]
+    \label{thm:area_law_birth_information_boundary}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_birth_information_estimates}
+    \uses{def:area_law_ground_entropy,def:area_law_two_family_partition}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\ge1$ be an integer,
+    and let $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
+    Suppose
+    \begin{align*}
+        A=D\mathbin{\dot\cup}\bigcup_iX_i\subseteq\Lambda
+    \end{align*}
+    is a finite ordered two-family partition, with labels
+    $f_i\in\{0,1\}$. For each piece, put
+    \begin{align*}
+        P_i & =\bigcup_{j<i,\,f_j=f_i}X_j,
+            & J_i                          & =(\Lambda\setminus A)\cup P_i.
+    \end{align*}
+    Let $Y_i\subseteq\Lambda$ be birth targets satisfying
+    \begin{align*}
+        X_i & \subseteq Y_i\subseteq A,
+            & Y_i\cap P_i               & =\varnothing.
+    \end{align*}
+    The birth targets need not be pairwise disjoint.
+    Let $n_i\in\mathbb N$, $c_D,c_S\in\mathbb R$ and $c_I\ge0$.
+    Suppose that
+    \begin{align*}
+        I_\Omega(Y_i:J_i) & \le c_I n_i^{-100}\qquad\text{for every }i,                                \\
+        |D|               & \le c_D|\partial_\Lambda A|,
+                          & \sum_i n_i^{-100}                           & \le c_S|\partial_\Lambda A|.
+    \end{align*}
+    Here $I_\Omega(U:W)=S_\Omega(U)+S_\Omega(W)-S_\Omega(U\cup W)$
+    is ordinary mutual information of the actual regional reductions.
+    At a zero scale the weight is defined by $0^{-100}=0$;
+    only positive scales occur in the manuscript application.
+    Then
+    \begin{align*}
+        S_\Omega(A) & \le
+        \left(c_D\log q+\frac{c_Ic_S}{2}\right)|\partial_\Lambda A|.
+    \end{align*}
+    This is the conditional implication in the proof of
+    \cite[Theorem~1.1, lines~838--852 of Section~11]{OpenAI2026AreaLaw}.
+    For that application $Y_i=A\cap T_i$. The construction of the partition
+    and birth targets, the stated estimates, and the uniform choice of their
+    constants remain separate requirements for the full area law.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_boundary_assembly}
+    Since $Y_i\subseteq A$ and $Y_i\cap P_i=\varnothing$, the birth
+    target is disjoint from the entire subsystem $J_i$.
+    Discarding the part $Y_i\setminus X_i$ of its first system therefore gives
+    \begin{align*}
+        I_\Omega(X_i:J_i) & \le I_\Omega(Y_i:J_i)
+        \le c_I n_i^{-100}.
+    \end{align*}
+    Put $\varepsilon_i=c_I n_i^{-100}$. Because $c_I\ge0$,
+    \begin{align*}
+        \sum_i\varepsilon_i
+         & =c_I\sum_i n_i^{-100}
+        \le c_Ic_S|\partial_\Lambda A|.
+    \end{align*}
+    Apply Theorem~\ref{thm:area_law_boundary_assembly} with error coefficient
+    $c_Ic_S$ and residual coefficient $c_D$. That estimate combines the
+    two-family cancellation of Theorem~\ref{thm:area_law_two_family_entropy}
+    with the regional dimension bound of
+    Theorem~\ref{thm:area_law_entropy_dimension}, and gives the claimed
+    coefficient.
+\end{proof}
