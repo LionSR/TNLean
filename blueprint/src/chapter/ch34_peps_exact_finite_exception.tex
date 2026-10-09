@@ -1,0 +1,105 @@
+% The model dependency is the unchanged Basic.lean from TNLean #8788.
+\section{Removing finitely many exceptional sizes}
+\label{sec:peps_exact_finite_exception}
+
+For natural numbers $q,L$, real numbers $C,c$, and a vector $\Omega$ in the
+physical space $(\mathbb C^q)^{\otimes L^2}$ of the open $L\times L$ square,
+write $\mathcal A_{C,c}(L,\Omega)$ if there are a
+nonzero PEPS $\Phi$ on the original square graph and a real phase $\theta$
+such that every edge dimension satisfies $1\le D_e\le CL^c$ and
+\begin{align}
+    \bigl\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\bigr\|\le L^{-1}.
+    \label{eq:peps_finite_error}
+\end{align}
+The inverse and real-power conventions at zero do not affect any edge bound
+on the empty square; the error bound there uses $0^{-1}=0$.
+
+For real $J,\Delta$, let $\mathcal G_{q,J,\Delta}(L)$ be the set of triples
+$(H,E_0,\Omega)$ with the following properties. The Hamiltonian is a sum of
+site terms and nearest-neighbor edge terms supported on their designated
+sites or endpoints, each of operator norm at most $J$. Its total sum is
+Hermitian; individual terms need not be. The remaining conditions are
+\begin{align}
+    \|\Omega\| & =1,\label{eq:peps_finite_ground}                           \\
+    H\Omega    & =E_0\Omega,\notag                                          \\
+    H-E_0I     & \ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr).\notag
+\end{align}
+
+\begin{theorem}[Increasing the polynomial prefactor]
+    \label{thm:peps_prefactor_monotone}
+    \lean{TNLean.PEPS.Approximation.HasPEPSApproximation.mono_prefactor}
+    \leanok
+    Let $q,L$ be natural numbers, $C,C',c$ real numbers with $C\le C'$, and
+    $\Omega$ a vector on the open square. If $\mathcal A_{C,c}(L,\Omega)$,
+    then $\mathcal A_{C',c}(L,\Omega)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Keep the same PEPS and phase. For every edge, $D_e\le CL^c\le C'L^c$
+    because $L^c\ge0$. The normalized vector and its error are unchanged.
+\end{proof}
+
+\begin{theorem}[A uniform prefactor for every size]
+    \label{thm:peps_remove_finite_exceptions}
+    \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
+    \leanok
+    Fix integers $q\ge1$ and $L_0\ge0$, real $J,\Delta,C$, and $c\ge0$.
+    Suppose $\mathcal A_{C,c}(L,\Omega)$ holds for every integer
+    $L\ge\max\{2,L_0\}$ and every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
+    There is one $C'>0$ with $C'\ge C$ such that
+    $\mathcal A_{C',c}(L,\Omega)$ holds for every integer $L\ge2$ and every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$.
+    The exponent $c$ is unchanged, and $C'$ is independent of $L,H,E_0,\Omega$.
+    This is the finite-size argument
+    in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_uniform_small_size_approximation,thm:peps_prefactor_monotone}
+    Theorem~\ref{thm:peps_uniform_small_size_approximation} gives a positive
+    $C'\ge C$ covering all $2\le L<L_0$ and all unit vectors. Its choice is
+    $C'=\max\{C,q^{L_0^2}\}$. For $L<L_0$, apply that theorem using
+    $\|\Omega\|=1$ from~(\ref{eq:peps_finite_ground}). For $L\ge L_0$,
+    apply the assumed approximation and
+    Theorem~\ref{thm:peps_prefactor_monotone}. Both cases use the same $C'$.
+\end{proof}
+
+\begin{theorem}[Equivalence with the sufficiently large size statement]
+    \label{thm:peps_approximation_iff_large}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_iff_sufficiently_large}
+    \leanok
+    The uniform polynomial approximation assertion
+    \begin{align}
+         & \forall q\ge2\;\forall J,\Delta>0\;\exists C,c>0\;\label{eq:peps_finite_uniform} \\
+         & \quad\forall L\ge2\;
+        \forall(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L),\notag                           \\
+         & \qquad\mathcal A_{C,c}(L,\Omega)\notag
+    \end{align}
+    is equivalent to
+    \begin{align}
+         & \forall q\ge2\;\forall J,\Delta>0\;\exists C,c>0\;
+        \exists L_0\in\mathbb N\;\label{eq:peps_finite_large}     \\
+         & \quad\forall L\ge\max\{2,L_0\}\;
+        \forall(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L),\notag \\
+         & \qquad\mathcal A_{C,c}(L,\Omega).\notag
+    \end{align}
+    In both assertions, the constants are chosen before the size,
+    Hamiltonian, energy, and ground vector.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_remove_finite_exceptions}
+    Assertion~(\ref{eq:peps_finite_uniform}) gives
+    (\ref{eq:peps_finite_large}) with $L_0=0$ and the same constants.
+    Conversely, fix $q,J,\Delta$ and choose $C,c,L_0$ from
+    (\ref{eq:peps_finite_large}).
+    Theorem~\ref{thm:peps_remove_finite_exceptions} produces one positive
+    $C'\ge C$ for every $L\ge2$, with the same positive exponent $c$.
+    These constants prove~(\ref{eq:peps_finite_uniform}).
+\end{proof}
+
+% The equivalence does not prove either existence assertion on its own.
+% The sufficiently-large-size theorem remains an explicit open dependency.
+% No claim that the manuscript's main theorem has been formalized is made.

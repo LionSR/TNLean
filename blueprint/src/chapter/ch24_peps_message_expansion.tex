@@ -179,7 +179,7 @@ no bound on the spectator dimension occurs.
     \leanok
     The expansion $\mathcal E(M)$ evaluates exactly to the original
     monomial. If $M$ is allowed, every term is an allowed existing
-    monomial with exactly $r_M$ pair effects. Moreover,
+    monomial with exactly $r_M$ pair effects, and
     \begin{align}
         |\mathcal E(M)|
         =\sum_{(c,N)\in\mathcal E(M)}|c|
@@ -227,7 +227,8 @@ no bound on the spectator dimension occurs.
 Let $H_a,H_b$ be the input and output memories of a fixed finite set of
 participating parties. We use the monomials that permit local contractions,
 normalized pair sources and effects, and finite-dimensional transfers, as in
-\cite[Section~5, lines 32--43]{OpenAI2026PolynomialPEPS}.
+% Source: 04-compression.tex, lines 32--43.
+\cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 
 \begin{definition}[Weighted message monomials]
     \label{def:peps_message_gate}
@@ -262,7 +263,7 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     \leanok
     \uses{def:peps_message_gate_expand}
     The expanded list has operator $G_L$. If every $M_j$ is allowed, so is
-    every resulting monomial. If each $M_j$ has at most $r$ pair effects,
+    every resulting monomial. If every $M_j$ is allowed and has at most $r$ pair effects,
     the same bound holds for every resulting monomial.
 \end{theorem}
 \begin{proof}

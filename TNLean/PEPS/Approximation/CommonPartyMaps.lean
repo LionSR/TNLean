@@ -21,25 +21,9 @@ The construction does not assume common spaces or an operator factorization.
 Source: polynomial-PEPS manuscript, September 24, 2026, Theorem 5.2,
 `04-compression.tex`, equation `eq:compression-source-gate` and common private
 slot spaces, lines 233–267.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-source-gate.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-commonsource-partymaps-sourceinventory.exists_common_expansions
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.exists_common_expansions
-
-Provenance-ID: 8769-commonsource-partymaps-sourceinventory.exists_prepareslots_recovery
-Downstream declaration: TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_recovery
-
-Provenance-ID: 8769-commonsource-partymaps-word.exists_common_source_preparation
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_common_source_preparation
-
-Provenance-ID: 8769-commonsource-partymaps-word.exists_common_prepared_tensorpartymaps
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_common_prepared_tensorPartyMaps
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section
@@ -96,6 +80,34 @@ theorem SourceInventory.exists_prepareSlots_recovery (R S : SourceInventory P)
   refine ⟨d.castLayouts h rfl, (Word.isAllowed_castLayouts _ _ _).mpr hd,
     (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
   exact (eval_cast_middle _ _ h).trans he
+
+/-- Identifying both endpoint layouts of a recovery preserves the recovery identity.
+This is the fixed-memory identification in `04-compression.tex`, lines 260–267. -/
+private theorem eval_cast_recovery {a b c b' c' : Layout P} (u : Word a b) (d : Word b c)
+    (p : Word a c) (h : b = b') (h' : c = c') (he : d.eval ∘L u.eval = p.eval) :
+    (d.castLayouts h h').eval ∘L (u.castLayouts rfl h).eval = (p.castLayouts rfl h').eval := by
+  cases h
+  cases h'
+  exact he
+
+/-- An expansion between two slot inventories on the same pairs gives an allowed recovery
+between their preparations in the fixed slot layouts.
+Source: polynomial-PEPS manuscript, `04-compression.tex`, lines 260–267. -/
+theorem SourceInventory.exists_prepareSlots_expands (R : SourceInventory P)
+    (U V U' V' : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
+    (η' : ∀ i, U' i ⊗[ℂ] V' i)
+    (hE : (SourceInventory.ofSlots R U V η).Expands (SourceInventory.ofSlots R U' V' η'))
+    (ℓ : Layout P) :
+    ∃ d : Word (SourceInventory.slotLayout R U V ++ ℓ)
+        (SourceInventory.slotLayout R U' V' ++ ℓ),
+      d.IsAllowed ∧ d.sources = [] ∧
+        d.eval ∘L (SourceInventory.prepareSlots R U V η ℓ).eval =
+          (SourceInventory.prepareSlots R U' V' η' ℓ).eval := by
+  obtain ⟨d, hd, hds, he⟩ := hE ℓ
+  refine ⟨d.castLayouts (congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U V η _))
+      (congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U' V' η' (fun _ ↦ 0))),
+    (Word.isAllowed_castLayouts _ _ _).mpr hd, (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
+  exact eval_cast_recovery _ _ _ _ _ he
 
 /-- Prepare every monomial's sources in fixed private spaces, followed by allowed
 operations containing no sources. The common spaces are constructed from the monomials.
