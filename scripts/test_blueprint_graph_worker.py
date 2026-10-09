@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Source and deadline regressions for the pinned graph worker; no browser runs.
+"""Source, deadline and browser regressions for the pinned graph worker.
 
 --write-fixture DIR creates a three-node page with the real bundled JavaScript
-and WASM for a separately authorized, small browser check. It renders only the
+and WASM for a small browser check. It renders only the
 pinned Jinja template, without parsing or building the blueprint.
 
 --browser-smoke checks that graph and a malformed DOT graph in one browser.
