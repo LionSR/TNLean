@@ -1,27 +1,27 @@
-% Auxiliary register-restriction identities; verification marks withheld.
-
 \subsection{Restrictions with excluded registers}
 
 Let $P,Q$ be arbitrary sets of party labels. A register consists of
 an owner and a complex inner product space. For an ordered finite
-register list $a$, let $M(a)$ be its right-associated tensor memory,
+register list $\ell$, let $\mathcal H_\ell$ be its right-associated tensor memory,
 including a terminal factor $\C$; the empty list has memory $\C$.
-For a selection $f:Q\to\{0,1\}$, write $a_f$ for the ordered sublist
-of registers whose owners are selected. An owner map $q:P\to Q$
-changes the labels in $a$, retaining its spaces and order; denote
-the resulting list by $q_*a$.
+For a selection $f:Q\to\{0,1\}$, let $A=\{p\in Q:f(p)=1\}$ and
+write $\ell|_A$ for the ordered sublist of registers whose owners lie in $A$.
+An owner map $q:P\to Q$ changes the labels in $\ell$, retaining its
+spaces and order; denote the resulting list by $\ell^q$.
 
 \begin{theorem}[An owner map with no selected image]
     \label{thm:peps_excluded_mapped_owners}
     \lean{TNLean.PEPS.PairEffect.Layout.restrict_mapOwner_eq_nil}
+    \leanok
+    \uses{def:peps_party_registers,def:peps_owner_layout,def:peps_party_partition}
     Let $q:P\to Q$ be any map and $f:Q\to\{0,1\}$ any selection.
     Suppose $f(q(p))=0$ for every $p\in P$. Then, for every register
-    list $a$ with owners in $P$, the selected sublist $(q_*a)_f$
+    list $\ell$ with owners in $P$, the selected sublist $(\ell^q)|_A$
     is empty. No injectivity, finiteness, or nonemptiness assumption
     on the party sets is required.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     If a register belonged to the selected sublist, it would come
     from a register with some original owner $p\in P$ and would
     satisfy $f(q(p))=1$. This contradicts the hypothesis.
@@ -31,31 +31,41 @@ A source-free word is a finite composition of local linear operations,
 register exchanges, and identities, containing no pair-source
 preparations. Its restriction to selected parties retains their local
 operations and registers and restricts the exchanges accordingly.
-For a source-free word $W$ from register list $a$ to register list $b$,
-write $W|_f:M(a_f)\to M(b_f)$ for its selected operator. If $r$ is a
-spectator register list, write $\widetilde W$ for the word obtained
-by adjoining $r$ unchanged to every step of $W$, from $ra$ to $rb$.
+For a source-free word $W$ from register list $\ell$ to register list $m$,
+write $W|_A:\mathcal H_{\ell|_A}\to\mathcal H_{m|_A}$ for its selected
+operator. If $\rho$ is a spectator register list, write $\widetilde W$
+for the word obtained by adjoining $\rho$ unchanged to every step of $W$,
+from $\rho\ell$ to $\rho m$.
 Concatenation of register lists is denoted by juxtaposition.
 
 \begin{theorem}[Excluded spectator registers preserve the restriction]
     \label{thm:peps_excluded_spectator_restriction}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_frameList_eval_heq_of_eq_nil}
-    Let $f:Q\to\{0,1\}$ be any selection, let $r$ be a register
-    list with $r_f=\varnothing$, and let $W:a\to b$ be any
+    \leanok
+    \uses{def:peps_party_registers,def:peps_party_partition}
+    Let $f:Q\to\{0,1\}$ be any selection, let $\rho$ be a register
+    list with $\rho|_A=\varnothing$, and let $W:\ell\to m$ be any
     source-free word with owners in $Q$. Under the canonical
-    identifications $(ra)_f=a_f$ and $(rb)_f=b_f$,
-    $\widetilde W|_f=W|_f$. The retained input and output lists may
+    identifications $(\rho\ell)|_A=\ell|_A$ and $(\rho m)|_A=m|_A$,
+    $\widetilde W|_A=W|_A$. The retained input and output lists may
     be arbitrary. No contraction bound or nonzero-dimension
     assumption on the registers is imposed.
 \end{theorem}
 
-\begin{proof}
-    Induct on the spectator list $r$. For the empty list the two
-    words coincide. For a nonempty list, its first register is
-    excluded because $r_f=\varnothing$. Restricting the word framed
-    by this register gives the same selected operator as restricting
-    the remaining framed word. Apply the induction hypothesis to
-    the remaining spectator registers.
+\begin{proof}\leanok
+    \uses{thm:peps_party_restriction}
+    Induct on the spectator list $\rho$. For the empty list the two
+    words coincide. Write a nonempty list as $r\sigma$, and let
+    $W_\sigma$ denote $W$ with the remaining spectators $\sigma$.
+    The owner of $r$ is excluded because $\rho|_A=\varnothing$.
+    If $H_r$ is the register space, adjoining $r$ acts as
+    $\operatorname{id}_{H_r}\otimes W_\sigma$, and restriction gives
+    \begin{align}
+        (\operatorname{id}_{H_r}\otimes W_\sigma)|_A
+         & =W_\sigma|_A.
+        \label{eq:peps_excluded_head}
+    \end{align}
+    Apply the induction hypothesis to the remaining spectator registers.
 \end{proof}
 
 These identities concern the register selections used in

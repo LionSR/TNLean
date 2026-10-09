@@ -20,7 +20,6 @@ need not be empty.
 -/
 
 noncomputable section
-open ContinuousLinearMap
 namespace TNLean.PEPS.PairEffect.Word
 
 /-- Framing registers excluded by the selector preserves the selected operator.
