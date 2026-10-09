@@ -55,6 +55,22 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
   analogue for an arbitrary graph in the extended graph distance.
 
+### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
+
+- **Pattern:** repeat the region of a fan triangle after deleting the actual
+  successor color-change radials and intersecting with the open ball of
+  radius equal to the cell's half-side.
+- **Seen:** three descriptions across `FanInactiveSeams.lean` (the statement
+  and its local proof expression) and `FanRunConnectedness.lean`.
+- **Abstraction:** `cellFanCutPiece` in
+  `TNLean/PEPS/AreaLaw/Geometry/FanInactiveSeams.lean` names this common set.
+- **Refactor:** the inactive-radial statement and proof refer directly to the
+  definition; the connected-run proof uses it for its family of pieces and
+  unfolds it only in the final union identity.
+- **Notes:** the fan has all side midpoints, the colors lie in `Fin 2`, and
+  the radius and deleted radials are derived from the same actual cell and
+  coloring. No added hypothesis or more general construction is introduced.
+
 ### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
 
 - **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with
@@ -3626,6 +3642,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Unique radial through a noncentral fan point — candidate (2026-10-09)
+
+- **Pattern:** turn membership in two center-to-endpoint segments into a common
+  directed ray, then apply `cellFanEnd_sameRay_iff` to identify their slots.
+- **Seen:** two uses across `CellFanRadialIncidence.lean` and
+  `FanInactiveSeams.lean`, in `TNLean/PEPS/AreaLaw/Geometry/`.
+- **Abstraction:** a common noncentral radial-incidence lemma if a third use
+  appears; the shared endpoint-ray theorem already contains the geometry.
+- **Notes:** noncentrality is essential when composing the directed-ray
+  relations. The center remains in every triangle when no radial is removed.
+
+
 ### Operator norm in orthonormal coordinates — candidate (2026-10-07)
 
 - **Pattern:** Identify matrix multiplication in orthonormal coordinates with
@@ -6094,11 +6122,12 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The two contact orientations in
   `initialRegion_frontier_near_mark_iff_active_radial` in
   `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`, and the unequal-slot branch in
-  `Geometry/CellFanRadialIncidence.lean`.
+  `Geometry/CellFanRadialIncidence.lean`, followed by both orientations in
+  `Geometry/FanRunDisjointness.lean`.
 - **Abstraction:** The public `cellFanPolygons_nontrivial_inter_cases` in
   `FanRunContacts.lean` supplies the full geometric intersection classification.
   Each consumer obtains typed radial membership by ordinary equality transport.
-- **Notes:** All three occurrences already share the classification theorem.
+- **Notes:** All five occurrences share the classification theorem.
   No additional helper or tactic is needed for equality substitution, and no
   coordinate calculation is copied.
 
