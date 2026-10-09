@@ -41,6 +41,7 @@ private theorem not_middle_side_of_contains (π : PYF V) (hπ : π.IsPartition)
         (Finset.mem_inter.mp hy).2
   · exact Finset.disjoint_left.mp hπ.2.2.1 hxY (hF hxB)
 
+open Classical in
 /-- A contained support has no receiving-middle incidence. Otherwise its
 unique receiving side contributes precisely the split entropy. -/
 theorem incidence_sum_eq_splitBandEta (n : V → ℕ) (π : PYF V) (hπ : π.IsPartition)
@@ -100,6 +101,7 @@ private theorem lifted_inter_part (σ : PhysicalPartition V) (B : Finset V)
       Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hxp).2⟩⟩
 
 omit [Fintype I] [LinearOrder I] in
+open Classical in
 private theorem physical_incidence_sum (n : V ⊕ Bool → ℕ)
     (σ : PhysicalPartition V) (B : Finset V)
     (hcase : (augmentedPartition σ).Contains (B.map ⟨Sum.inl, Sum.inl_injective⟩) ∨

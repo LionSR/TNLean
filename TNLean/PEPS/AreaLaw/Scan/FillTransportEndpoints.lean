@@ -100,6 +100,10 @@ private theorem actualFillData_rootPath_eq (hm : 0 < S.m) (hM : 0 < S.M) (k : �
         (fun _ => fillChoiceTree) (fun h => S.quantumHistoryMetric n t replicas h false)
         (fun h _ => S.quantumHistoryMetric n t replicas h true)
         (Set.projIcc (0 : ℝ) 1 zero_le_one p) := by
+  have hold : (S.actualFillData hm hM k).oldMetric n t replicas =
+      fun h => S.quantumHistoryMetric n t replicas h false := by
+    funext h
+    exact S.fillTransportData_oldMetric _ n t replicas h
   have hnew : (S.actualFillData hm hM k).newMetric n t replicas =
       fun h (_ : Unit) => S.quantumHistoryMetric n t replicas h true := by
     funext h c
@@ -107,7 +111,7 @@ private theorem actualFillData_rootPath_eq (hm : 0 < S.m) (hM : 0 < S.M) (k : �
   change Matrix.Transport.interpRoot (historyMeanTree S.K S.m S.M hm hM k)
     (fun _ => fillChoiceTree) ((S.actualFillData hm hM k).oldMetric n t replicas)
     ((S.actualFillData hm hM k).newMetric n t replicas) _ = _
-  rw [hnew]
+  rw [hold, hnew]
 
 private theorem chargeTransportData_rootPath_eq {k : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
@@ -118,6 +122,10 @@ private theorem chargeTransportData_rootPath_eq {k : ℕ}
         (fun h => S.quantumHistoryMetric n t replicas h true)
         (fun h c => S.quantumHistoryMetric n t replicas (extendHistory h c) false)
         (Set.projIcc (0 : ℝ) 1 zero_le_one p) := by
+  have hold : (S.chargeTransportData histTree choiceTree).oldMetric n t replicas =
+      fun h => S.quantumHistoryMetric n t replicas h true := by
+    funext h
+    exact S.chargeTransportData_oldMetric histTree choiceTree n t replicas h
   have hnew : (S.chargeTransportData histTree choiceTree).newMetric n t replicas =
       fun h c => S.quantumHistoryMetric n t replicas (extendHistory h c) false := by
     funext h c
@@ -125,7 +133,7 @@ private theorem chargeTransportData_rootPath_eq {k : ℕ}
   change Matrix.Transport.interpRoot histTree choiceTree
     ((S.chargeTransportData histTree choiceTree).oldMetric n t replicas)
     ((S.chargeTransportData histTree choiceTree).newMetric n t replicas) _ = _
-  rw [hnew]
+  rw [hold, hnew]
 
 /-- The old endpoint of the actual fill is the existing history root evaluated
 at its completed physical metrics. -/

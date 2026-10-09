@@ -162,12 +162,14 @@ def choiceEntropySymbol (h : H) (θ : SiteConfig n → ℂ) : ℝ :=
   ∑ g, ∑ c, (D.choiceTree h).weight c *
     moveEta n (D.old h g) (D.move h c g) ((EuclideanSpace.equiv _ ℂ).symm θ)
 
+omit [DecidableEq H] [∀ v, NeZero (n v)] in
 /-- The actual finite choice entropy symbol is continuous. -/
 theorem continuous_choiceEntropySymbol (h : H) : Continuous (D.choiceEntropySymbol n h) := by
   unfold choiceEntropySymbol
   exact continuous_finsetSum _ fun g _ => continuous_finsetSum _ fun c _ =>
     continuous_const.mul (continuous_moveEta (D.old h g) (D.move h c g))
 
+omit [∀ v, NeZero (n v)] in
 /-- Admissible old partitions and valid moves make the choice symbol nonnegative. -/
 theorem choiceEntropySymbol_nonneg (hD : D.IsAdmissible) (h : H)
     (θ : SiteConfig n → ℂ) : 0 ≤ D.choiceEntropySymbol n h θ := by
@@ -195,7 +197,6 @@ theorem entropyGain_eq_sum_oldFourierCoherentIntegral (t : ℝ) (k : ℕ)
         moveEta n (D.old h g) (D.move h c g) ((EuclideanSpace.equiv _ ℂ).symm θ) :=
     continuous_finsetSum _ fun c _ =>
       continuous_const.mul (continuous_moveEta (D.old h g) (D.move h c g))
-  simp only [choiceEntropySymbol]
   rw [D.oldFourierCoherentIntegral_sum n t k pre p h Finset.univ _ (fun g _ => hcont g)]
   simp only [Finset.mul_sum, oldFourierCoherentIntegral]
 

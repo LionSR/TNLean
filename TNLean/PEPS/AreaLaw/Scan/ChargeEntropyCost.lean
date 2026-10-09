@@ -102,7 +102,7 @@ theorem quantumChargeMove_eta (g r k : ℕ) (c : Bool × Fin S.M)
     by_cases hi : (S.ball i ∩ receiving σ c.1).Nonempty ∧
         (S.ball i ∩ middle σ).Nonempty
     · rw [S.chargeStep_moves_middle_part g r k c σ i hs hi]
-      simp only [quantumChargeMove, hs, hi, ↓reduceIte]
+      simp only [quantumChargeMove, hs, hi]
       congr 1
       cases c.1 <;> simp [augmentedMove, Finset.inter_assoc]
     · have hstep : S.chargeStep g r k c σ = σ := by simp [chargeStep, hs, charge, hi]
