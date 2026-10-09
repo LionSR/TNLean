@@ -1,11 +1,11 @@
 \section{The exterior source memory when all parties are selected}
 
-Let $P$ be the set of original parties and let $W$ be a finite source
-circuit. Each source occurrence $e$ has distinct endpoints $p_e,q_e\in P$
+Let $P$ be the set of original parties and let $W$ be a finite chronological
+composition. Each source occurrence $e$ has distinct endpoints $p_e,q_e\in P$
 and prescribed complex halfspaces $\C^{u_e}$ and $\C^{v_e}$, whose dimensions
-may be zero. When every party is selected, write $\widehat P=P\sqcup\{\bot\}$
+may be zero. When every party is selected, write $Q=P\sqcup\{*\}$
 for the owner set. An original endpoint $p$ retains its own owner, and
-$\bot$ denotes the exterior owner.
+$*$ denotes the exterior owner.
 
 \begin{definition}[Fixed all-party source registers]
     \label{def:peps_all_party_source_registers}
@@ -16,7 +16,7 @@ $\bot$ denotes the exterior owner.
     preparation order. Define $R_W$ to be the concatenation, in that order,
     of the two-register lists
     $[(p_e,\C^{u_e}),(q_e,\C^{v_e})]$ for $e\in\mathcal E_W$.
-    Its owners and spaces depend only on the original circuit, before
+    Its owners and spaces depend only on the original composition, before
     a monomial or a prepared source vector is chosen.
 \end{definition}
 
@@ -26,7 +26,7 @@ $\bot$ denotes the exterior owner.
     \leanok
     \uses{def:peps_all_party_source_registers}
     The sublist of $R_W$ consisting of registers at owner
-    $\bot$ is empty. This holds for every source circuit,
+    $*$ is empty. This holds for every chronological composition,
     including when $P$ or the source inventory is empty.
 \end{theorem}
 
@@ -37,7 +37,7 @@ $\bot$ denotes the exterior owner.
     source occurrence. The source-slot specification identifies its
     owner with the affected owner of the corresponding original
     endpoint. Under the all-party selection this is
-    $p\in P$, which is distinct from $\bot$. No register is therefore retained by the
+    $p\in P$, which is distinct from $*$. No register is therefore retained by the
     exterior selection.
 \end{proof}
 
