@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLeanTest.ActualBandGeometryData
-import TNLean.PEPS.AreaLaw.Scan.SubsystemDimension
+import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 
 /-!
 # Actual physical-size and logarithmic-dimension regressions
@@ -107,5 +107,70 @@ example : (designatedSupport (⊤ : SimpleGraph Bool) ∅ 0 false).card = 2 ∧
   constructor
   · simp [designatedSupport, setDist, componentFinset]
   · exact ⟨some true, by simp⟩
+
+-- One common choice precedes n and every subsystem, with no sign restrictions.
+example {q : ℕ} {Cr : ℝ} (hq : 1 ≤ q) (hCr : 0 ≤ Cr)
+    (Cent eent Cen een : ℝ) :
+    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∀ n : ℕ, 1 ≤ Real.log n →
+      ∀ ℓ : ℝ, 1 ≤ ℓ → ℓ ≤ transportLogDimBound q (roundedLogRadius Cr n) →
+        Cent * ℓ ^ eent ≤ C * (Real.log n) ^ Cl ∧
+          Cen * ℓ ^ een ≤ C * (Real.log n) ^ Cl :=
+  exists_transportCoefficients_log_bound hq hCr Cent eent Cen een
+
+-- Dimension one and zero radius coefficient still allow mixed-sign exponents.
+example : ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∀ n : ℕ, 1 ≤ Real.log n →
+    (-3 : ℝ) * (1 : ℝ) ^ (-2 : ℝ) ≤ C * (Real.log n) ^ Cl ∧
+      (2 : ℝ) * (1 : ℝ) ^ (3 : ℝ) ≤ C * (Real.log n) ^ Cl := by
+  obtain ⟨C, Cl, hC, hCl, hbound⟩ := exists_transportCoefficients_log_bound
+    (q := 1) (Cr := 0) (by norm_num) (by norm_num) (-3) (-2) 2 3
+  refine ⟨C, Cl, hC, hCl, fun n hn ↦ ?_⟩
+  exact hbound n hn 1 le_rfl (by simp [transportLogDimBound])
+
+-- Negative powers reverse base monotonicity; normalizing the exponent is essential.
+example : (4 : ℝ) ^ (-1 : ℝ) < (1 : ℝ) ^ (-1 : ℝ) := by
+  norm_num [Real.rpow_neg_one]
+
+-- The lower bound on the subsystem cannot be dropped for negative exponents.
+example : (1 : ℝ) ^ (-1 : ℝ) < (1 / 2 : ℝ) ^ (-1 : ℝ) := by
+  norm_num [Real.rpow_neg_one]
+
+-- The large-log guard excludes n = 1, where every positive log power vanishes.
+example (C : ℝ) : C * (Real.log (1 : ℕ)) ^ (2 : ℝ) < transportLogDimBound 1 0 := by
+  norm_num [transportLogDimBound]
+
+-- The physical upper bound cannot be inferred merely from admissibility ℓ ≥ 1.
+example : 1 ≤ (2 : ℝ) ∧ transportLogDimBound 1 1 < 2 := by
+  norm_num [transportLogDimBound]
+
+-- The positive-radius bound is exact at radius one, including q = 1.
+example {q : ℕ} : transportLogDimBound q 1 = 1 + 9 * Real.log q := by
+  norm_num [transportLogDimBound]
+
+example {q : ℕ} {Cr c₀ : ℝ} (hq : 1 ≤ q) (hCr : 0 < Cr) (hc₀ : 0 < c₀) :
+    ∃ c : ℝ, 0 < c ∧ ∀ᶠ n : ℕ in Filter.atTop,
+      ∀ a : ℝ, 0 ≤ a → a * (roundedLogRadius Cr n : ℝ) ^ 2 ≤ c →
+        a * transportLogDimBound q (roundedLogRadius Cr n) ≤ c₀ := by
+  obtain ⟨c, hc, hbound⟩ := exists_pos_radius_smallness_threshold hq hc₀
+  refine ⟨c, hc, ?_⟩
+  filter_upwards [eventually_one_le_roundedLogRadius hCr] with n hn
+  exact hbound (roundedLogRadius Cr n) hn
+
+-- Zero rate and zero threshold are allowed by the pointwise conversion.
+example {q r : ℕ} (hq : 1 ≤ q) (hr : 1 ≤ r) :
+    (0 : ℝ) * transportLogDimBound q r ≤ 0 := by
+  exact mul_transportLogDimBound_le_of_radius_small hq hr (by norm_num) (by norm_num)
+
+-- Radius zero would make the radius premise vacuous for arbitrary positive rates.
+example : (2 : ℝ) * (0 : ℝ) ^ 2 ≤ 1 / (1 + 9 * Real.log (1 : ℕ)) ∧
+    ¬ (2 : ℝ) * transportLogDimBound 1 0 ≤ 1 := by
+  norm_num [transportLogDimBound]
+
+-- A negative rate reverses the dimension comparison, even at q = 1.
+example : (-1 : ℝ) * (2 : ℝ) ^ 2 ≤ (-2) / (1 + 9 * Real.log (1 : ℕ)) ∧
+    ¬ (-1 : ℝ) * transportLogDimBound 1 2 ≤ -2 := by
+  norm_num [transportLogDimBound]
+
+-- Cr = 0 does not eventually yield a positive radius.
+example (n : ℕ) : roundedLogRadius 0 n = 0 := by simp [roundedLogRadius]
 
 end TNLeanTest.ActualSubsystemDimension

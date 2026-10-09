@@ -1450,6 +1450,57 @@ The following finite construction follows
     $1\le\log^4 n$ and $\log q\ge0$. Finally $\log n\to\infty$.
 \end{proof}
 
+% These scalar conversions await hosted validation before receiving leanok tags.
+\begin{theorem}[Common logarithmic transport coefficients]
+    \label{thm:al_scan_transport_coefficients_log}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_transportCoefficients_log_bound}
+    \uses{def:al_scan_physical_dimension_cap}
+    Fix $q\ge1$, $C_r\ge0$, and real numbers
+    $c_{\mathrm{ent}},e_{\mathrm{ent}},c_{\mathrm{en}},e_{\mathrm{en}}$.
+    There are $C\ge1$ and $C_\ell\ge0$ such that, for every $n$ with
+    $\log n\ge1$ and every $1\le\ell\le\ell_q(\lceil C_r\log^2 n\rceil)$,
+    \begin{align*}
+        c_{\mathrm{ent}}\ell^{e_{\mathrm{ent}}}
+         & \le C(\log n)^{C_\ell}, &
+        c_{\mathrm{en}}\ell^{e_{\mathrm{en}}}
+         & \le C(\log n)^{C_\ell}.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_dimension_cap_log_four}
+    Put $E=\max(0,e_{\mathrm{ent}},e_{\mathrm{en}})$ and
+    $A=1+(2C_r+3)^2\log q$. Choose $C_\ell=4E$ and
+    $C=1+(|c_{\mathrm{ent}}|+|c_{\mathrm{en}}|)A^E$.
+    For either pair $(c,e)$, first use $\ell\ge1$ to increase the exponent
+    to $E$, and then use $E\ge0$ to increase the base:
+    \begin{align*}
+        c\ell^e\le |c|\ell^E
+        \le |c|[A(\log n)^4]^E
+        =|c|A^E(\log n)^{4E}
+        \le C(\log n)^{C_\ell}.
+    \end{align*}
+    Both constants depend only on the fixed parameters.
+\end{proof}
+
+\begin{theorem}[Radius smallness and physical dimension]
+    \label{thm:al_scan_radius_dimension_smallness}
+    \lean{TNLean.PEPS.AreaLaw.Scan.transportLogDimBound_le_radius_sq,
+        TNLean.PEPS.AreaLaw.Scan.mul_transportLogDimBound_le_of_radius_small,
+        TNLean.PEPS.AreaLaw.Scan.exists_pos_radius_smallness_threshold}
+    \uses{def:al_scan_physical_dimension_cap}
+    If $q\ge1$ and $r\ge1$, then $\ell_q(r)\le(1+9\log q)r^2$.
+    Consequently, for $a\ge0$ and any real $c_0$,
+    $ar^2\le c_0/(1+9\log q)$ implies $a\ell_q(r)\le c_0$.
+    If $c_0>0$, the radius-smallness threshold $c_0/(1+9\log q)$ is
+    positive and depends only on $q$ and $c_0$.
+\end{theorem}
+\begin{proof}
+    From $r\ge1$, obtain $2r+1\le3r$ and $1\le r^2$.
+    Hence $1+(2r+1)^2\log q\le(1+9\log q)r^2$.
+    Multiply by $a\ge0$ and apply the smallness premise.
+    The denominator is positive since $\log q\ge0$.
+\end{proof}
+
 \begin{theorem}[Actual transport dimension hypotheses]
     \label{thm:al_scan_actual_transport_dimension}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedMove_subsystem,
