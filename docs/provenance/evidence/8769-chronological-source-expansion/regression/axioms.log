@@ -1,9 +1,0 @@
-'TNLean.PEPS.PairEffect.SourceCircuitRegression.exterior_empty_branch' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.PairEffect.SourceCircuitRegression.repeated_touching_choices' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
-'TNLean.PEPS.PairEffect.SourceCircuitRegression.phase_partial_expansion' depends on axioms: [propext,
- Classical.choice,
- Quot.sound]
