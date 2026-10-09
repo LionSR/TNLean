@@ -95,7 +95,10 @@ theorem graphChannelEventKernel_eq_zero_of_not_reachable
     exact (not_le_of_gt (ENat.natCast_lt_top (2 * l))) h
   simp [graphChannelEventKernel, hempty]
 
-private theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
+/-- Counting bounded anchor fibers in a graph ball, using symmetry of extended
+distance. Source: area law, `09-amplification.tex`, lines 139–160 and 203–215.
+This exposes the existing counting proof for the omitted-event estimate. -/
+theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
     {μ : ℝ} (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (y : ι) (l : ℕ) :
     ((Finset.univ.filter fun i : κ => y ∈ graphBall G (a i) l).card : ℝ) ≤

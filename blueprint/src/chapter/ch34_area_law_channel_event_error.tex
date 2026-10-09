@@ -1,0 +1,144 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 101--121,
+% 135--139 and 203--215,
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% The physical module is GraphChannelEventError at
+% 790fecf554318e192bab19a2d06b35039bc762fc.
+% These are finite-radius one-event norm estimates. Spatial propagation,
+% summation over omitted anchors, and the expected omission bound are separate.
+
+\section{One-event errors from physical channel shells}
+\label{sec:al_channel_event_error}
+
+Let $I,J$ be finite sets and $q>0$. Put
+$\mathcal H=(\C^q)^{\otimes I}$ and $\mathcal K=\C^J$;
+$J$ may be empty. Let $0\le k\le\mathbb 1$ on $\mathcal H$,
+and write $E_K$ for the expectation retaining the physical sites
+in $K\subseteq I$. All operators $B$ on
+$\mathcal H\otimes\mathcal K$ below are arbitrary complex matrices,
+with the Euclidean operator norm.
+
+Use the full and localized root channels
+$\mathcal E_k$ and $\mathcal E_K$ from
+Definition~\ref{def:al_local_root_channel}. Explicitly, for
+$k_K=E_K(k)$ and $\widehat A=A\otimes\mathbb 1_{\mathcal K}$,
+\begin{align}
+    \mathcal E_K(B)
+     &=\widehat{\sqrt{\mathbb 1-k_K}}\,B\,
+         \widehat{\sqrt{\mathbb 1-k_K}}
+       +\widehat{\sqrt{k_K}}\,B\,\widehat{\sqrt{k_K}}.
+    \label{eq:al_event_local_channel}
+\end{align}
+The full channel is given by the same expression with $k$ in
+place of $k_K$. Write $d_z(B)$ for the physical-site oscillation
+of Definition~\ref{def:qc_site_oscillation}.
+
+Let $(K_l)_{l\ge0}$ be increasing subsets of $I$, and set
+$\mathcal E_l=\mathcal E_{K_l}$ and $\mathcal E_{-1}=\mathrm{id}$.
+The shells from Definition~\ref{def:al_local_channel_shell} are
+$\Delta_l=\mathcal E_l-\mathcal E_{l-1}$, including
+$\Delta_0=\mathcal E_0-\mathrm{id}$.
+For $C\ge0$, $c>0$ and $0<\alpha\le1$, put
+$A=2+8\sqrt C\exp(c/2)$ and $b=c/2$.
+These explicit constants give the finite-radius form of the
+shell estimate in \cite[\texttt{09-amplification.tex},
+lines 101--121]{OpenAI2026AreaLaw}.
+
+\begin{theorem}[Finite localized one-event error]
+    \label{thm:al_local_channel_event_error}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_self_le_exp_sum_siteOscillation}
+    \leanok
+    Fix $n\in\N$. Suppose that for every integer $0\le l\le n$,
+    \begin{align}
+        \|k-E_{K_l}(k)\|&\le C\exp(-cl^\alpha).
+        \label{eq:al_event_localization_error}
+    \end{align}
+    Then every $B$ satisfies
+    \begin{align}
+        \|\mathcal E_n(B)-B\|
+         &\le\sum_{l=0}^n A\exp(-bl^\alpha)
+             \sum_{z\in K_l}d_z(B).
+        \label{eq:al_event_local_error}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_local_channel_shell,thm:al_channel_shell_exp_bound}
+    By Theorem~\ref{thm:al_channel_shell_exp_bound}, each
+    $0\le l\le n$ satisfies
+    \begin{align}
+        \|\Delta_l(B)\|
+         &\le A\exp(-bl^\alpha)\sum_{z\in K_l}d_z(B).
+        \label{eq:al_event_shell_bound}
+    \end{align}
+    At $n=0$, the left side of~(\ref{eq:al_event_local_error})
+    is $\|\Delta_0(B)\|$, so
+    (\ref{eq:al_event_shell_bound}) proves the claim.
+    For the induction step, the same localization bounds apply
+    through radius $n$, and
+    \begin{align}
+        \|\mathcal E_{n+1}(B)-B\|
+         &\le\|\mathcal E_{n+1}(B)-\mathcal E_n(B)\|
+             +\|\mathcal E_n(B)-B\|\nonumber\\
+         &\le A\exp(-b(n+1)^\alpha)
+             \sum_{z\in K_{n+1}}d_z(B)
+             +\sum_{l=0}^n A\exp(-bl^\alpha)
+               \sum_{z\in K_l}d_z(B)\nonumber\\
+         &=\sum_{l=0}^{n+1}A\exp(-bl^\alpha)
+             \sum_{z\in K_l}d_z(B).
+        \label{eq:al_event_induction}
+    \end{align}
+    This proves~(\ref{eq:al_event_local_error}) by induction.
+\end{proof}
+
+Let $G$ be a simple graph on $I$, with extended graph distance
+$d_G$, and fix an anchor $a\in I$. Write
+$C(a)=\{z:d_G(a,z)<\infty\}$,
+$N_l(a)=\{z:d_G(a,z)\le l\}$, and
+$R_a=\max_{z\in C(a)}d_G(a,z)$.
+Thus unreachable vertices are excluded from every finite ball.
+All distances are measured in the supplied graph $G$.
+
+\begin{theorem}[Full-channel one-event error at a finite cutoff]
+    \label{thm:al_graph_channel_event_error}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,
+        def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_sub_self_le_exp_of_component_support}
+    \leanok
+    Suppose that $k$ is supported on $C(a)$, and fix an integer
+    $n\ge R_a$. Suppose that
+    $\|k-E_{N_l(a)}(k)\|\le C\exp(-cl^\alpha)$ for each integer
+    $0\le l\le n$. Then every $B$ satisfies
+    \begin{align}
+        \|\mathcal E_k(B)-B\|
+         &\le\sum_{l=0}^n A\exp(-bl^\alpha)
+             \sum_{z\in N_l(a)}d_z(B).
+        \label{eq:al_event_full_error}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_local_channel_event_error,thm:qc_graph_ball_stabilization,
+        thm:qc_component_channel_stabilization}
+    The graph balls increase with $l$, so apply
+    Theorem~\ref{thm:al_local_channel_event_error} with $K_l=N_l(a)$.
+    Since $n\ge R_a$ and $k$ is supported on $C(a)$,
+    Theorem~\ref{thm:qc_component_channel_stabilization} gives
+    $E_{N_n(a)}(k)=k$ and $\mathcal E_n(B)=\mathcal E_k(B)$.
+    Substitute this equality into~(\ref{eq:al_event_local_error}).
+\end{proof}
+
+The sums in~(\ref{eq:al_event_local_error}) and
+(\ref{eq:al_event_full_error}) use the shell coefficient
+$A\exp(-bl^\alpha)$ itself. At $C=0$ and $n=0$ this coefficient
+is $2$: exact localization of $k$ does not force its channel
+to fix $B$. For graph balls, only sites in the anchor component
+can contribute. The estimates hold uniformly over finite
+spectators and do not require $B$ to be Hermitian.
+
+Applied to the observable produced by an earlier retained word,
+(\ref{eq:al_event_full_error}) bounds an individual norm in
+Theorem~\ref{thm:al_channel_word_omission_telescope}.
+This supplies the shell-norm step for the coupled-product
+argument in \cite[\texttt{09-amplification.tex},
+lines 203--215]{OpenAI2026AreaLaw}.
