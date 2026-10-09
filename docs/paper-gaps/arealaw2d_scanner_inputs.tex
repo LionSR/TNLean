@@ -150,16 +150,43 @@ histories and times. Actual designated receiving--middle incidences satisfy the
 full terminal split rule in both completed and pre-charge statuses. Their
 labelled occurrence count is at most $10KnD\mu$, with anchor multiplicity
 $\mu$, under the expanded numerical margin $4(D+2r_0)\le m$.
-The approximation of actual prefixes by deterministic prefixes, their cut-edge
-bounds remain open. A separate candidate derives symmetric-replica
-metric commutation from this physical nesting, with the complementary
-metric substitution restricted to the symmetric projection throughout.
-Its local kernel validation is unavailable because the exact pinned replica
-and entropy dependency closure is not cached; it remains pending hosted
-validation. The candidate supplies actual quantum-region moves and proves
-their agreement with physical charge transitions. Its history and choice
-mean trees are still supplied: no assertion identifies their weights with
-the physical uniform history law or constructs the recursive matrix means.
+Actual completed and pre-charge statuses now have deterministic whole-row
+comparison prefixes from one nested family. Under $D\ge1$, $r_0\le D$,
+$4D\le m$, $8Km\le L$, the ambient row bound, and the respective $k\le nm$
+or $k+1\le nm$ horizon, the sets $U$ and $UY$ differ from their comparison
+prefixes by at most $3nD$ sites. The comparisons are inclusions in opposite
+directions: the near comparison is contained in $U$, while $UY$ is contained
+in its far comparison. The partially consumed row is counted in the error.
+With the source cut clearance, physical undirected cut-edge counts are at most
+$20nD$ for $U$ and $UY$, $40nD$ for $Y$, and $16nD$ for $P_0$ and $V$.
+These bounds are derived from the actual history evaluator and physical lattice
+geometry, without a prefix or cut-count hypothesis.\footnote{The physical
+    results are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_domainGraph}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_domainGraph}.}
+The symmetric-replica metric commutation candidate uses the complementary
+metric substitution only on the symmetric projection. It also supplies
+actual augmented quantum-region moves and their agreement with physical
+charge transitions. The quantum change remains pending complete hosted
+validation; this integration does not change that status.
+
+The initial-offset, charge-choice, and recursive history mean trees are now
+constructed, rather than supplied. Their leaf weights equal the actual
+uniform history law $m^{-K}(2M)^{-Kk}$, with charge weights $(2M)^{-K}$
+and deterministic fill weight one. Substitution constructs the next matrix
+mean tree without reassociation, and the old and new interpolation endpoints
+agree with the corresponding tree evaluations for positive definite inputs.
+\footnote{The construction and identities are in
+    \leanid{TNLean.PEPS.AreaLaw.Scan.historyMeanTree},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.historyMeanTree_weight},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.historyMeanTree_eval_succ},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_zero}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_one}; the same module
+    gives the singleton fill trees and their endpoints.}
+These tree identities do not construct the initial quantum prevector or
+identify the history-tree inputs with its transported quantum states.
 Quantum entropy-cost transport and the complete scanner data package remain
 open.
 

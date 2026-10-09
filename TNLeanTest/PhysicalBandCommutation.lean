@@ -45,7 +45,8 @@ example :
       permOp (subsystemPerm 2 (fun _ : Fin 2 => Fin 2) {1}) (Equiv.swap 0 1) := by
   intro h
   have hh := congrArg (fun M => M basisConfig basisConfig) h
-  simp only [permOp_apply_apply, if_neg first_swap_moves, if_pos second_swap_fixes] at hh
+  simp only [permOp_apply_apply, ite_eq_right first_swap_moves,
+    ite_eq_left second_swap_fixes] at hh
   exact zero_ne_one hh
 
 -- The corresponding basis vector is outside the symmetric subspace.
@@ -58,7 +59,7 @@ example : (Pi.single basisConfig (1 : ℂ)) ∉
     norm_num [copyPerm_apply, basisConfig] at hh
   have hh := congrFun (h (Equiv.swap 0 1)) basisConfig
   simp only [permOp_mulVec, Function.comp_apply, ← map_inv, Equiv.swap_inv] at hh
-  simp [Pi.single_apply, hm, Ne.symm hm] at hh
+  simp [hm] at hh
 
 -- The exact complementary central-projector identity retains the symmetric projection.
 example (l : IrrepLabel (Equiv.Perm (Fin 2))) :
@@ -83,20 +84,21 @@ private def scanner : CollarScan (Fin 3) (Fin 1) where
   C₁ := 1
 
 private def firstHistory : History scanner.K scanner.m scanner.M 0 :=
-  (fun _ => 0, Fin.elim0)
+  (fun _ => ⟨0, by decide⟩, Fin.elim0)
 
 private def secondHistory : History scanner.K scanner.m scanner.M 1 :=
-  (fun _ => 1, fun _ _ => (true, ⟨0, by norm_num [scanner, CollarScan.M, chargeSlotCount]⟩))
+  (fun _ => ⟨1, by decide⟩,
+    fun _ _ => (true, ⟨0, by norm_num [scanner, CollarScan.M, chargeSlotCount]⟩))
 
 -- Independent offsets/times and all four statuses use the same actual scanner.
 example (before before' : Bool) (replicas : ℕ) :
     Commute
       (symBandMetric (fun _ : Fin 3 ⊕ Bool => 2) (1 / 10) replicas
-        (scanner.quantumHistoryPartition firstHistory 0 before))
+        (scanner.quantumHistoryPartition firstHistory ⟨0, by decide⟩ before))
       (symBandMetric (fun _ : Fin 3 ⊕ Bool => 2) (1 / 10) replicas
-        (scanner.quantumHistoryPartition secondHistory 1 before')) :=
-  scanner.commute_quantumHistoryPartition firstHistory secondHistory 0 1 (by decide)
-    before before' _ (by norm_num) replicas
+        (scanner.quantumHistoryPartition secondHistory ⟨1, by decide⟩ before')) :=
+  scanner.commute_quantumHistoryPartition firstHistory secondHistory
+    ⟨0, by decide⟩ ⟨1, by decide⟩ (by decide) before before' _ (by norm_num) replicas
 
 -- A nonempty physical move sends only the middle site to the near side, retaining C and R.
 example :

@@ -831,6 +831,12 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateBoundary.lean
 
+      - name: Check recursive physical history mean trees
+        run: >-
+          timeout 90s lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/AreaLawHistoryMeanTree.lean
       - name: Test actual scan histories strictly and audit axioms
         timeout-minutes: 2
         run: >
@@ -862,6 +868,22 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/ActualBandGeometryAxioms.lean
+
+      - name: Test full and positive depth-prefix boundaries
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PEPS/AreaLaw/ScanPrefixBoundary.lean
+
+      - name: Audit actual prefix comparisons and physical cut axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ScanPrefixCutsAxioms.lean
 
       - name: Test actual offset counts and history marginals
         timeout-minutes: 2

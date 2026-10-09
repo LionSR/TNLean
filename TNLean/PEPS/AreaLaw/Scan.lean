@@ -42,6 +42,7 @@ import TNLean.PEPS.AreaLaw.Scan.ExpectedMoveCost
 import TNLean.PEPS.AreaLaw.Scan.ExponentBootstrap
 import TNLean.PEPS.AreaLaw.Scan.FillCoverage
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
+import TNLean.PEPS.AreaLaw.Scan.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scan.HistoryPrefixes
 import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.NestedBandMetric
@@ -50,12 +51,17 @@ import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
+import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
+import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
+import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
 import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
+import TNLean.PEPS.AreaLaw.Scan.StatusCutBounds
 import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths

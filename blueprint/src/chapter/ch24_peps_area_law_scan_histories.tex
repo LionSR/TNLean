@@ -624,3 +624,293 @@ The following finite construction follows
     No commutation assertion on the orthogonal complement is required for
     the original band metrics.
 \end{proof}
+
+\begin{definition}[Recursive physical history mean trees]
+    \label{def:al_scan_history_mean_tree}
+    \lean{TNLean.PEPS.AreaLaw.Scan.chargeChoiceTree,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree,
+        TNLean.PEPS.AreaLaw.Scan.fillChoiceTree}
+    For positive offset and slot capacities, choose a fixed binary uniform
+    tree for the finite initial offsets and a fixed binary uniform tree for
+    one simultaneous charge choice. A tree with $r+1$ leaves is constructed
+    recursively from a first leaf of weight $1/(r+1)$ and an $r$-leaf subtree
+    of total weight $r/(r+1)$. At every charge round, substitute the charge
+    tree at each existing history leaf and append that charge to its label.
+    Deterministic fills have a singleton conditional choice tree.
+\end{definition}
+
+\begin{theorem}[Exact history weights and matrix endpoints]
+    \label{thm:al_scan_history_mean_tree_endpoints}
+    \lean{TNLean.PEPS.AreaLaw.Scan.chargeChoiceTree_weight,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_weight,
+        TNLean.PEPS.AreaLaw.Scan.fillChoiceTree_weight,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_eval_succ,
+        TNLean.PEPS.AreaLaw.Scan.fillChoiceTree_eval,
+        TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_zero,
+        TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_one,
+        TNLean.PEPS.AreaLaw.Scan.fill_interpRoot_zero,
+        TNLean.PEPS.AreaLaw.Scan.fill_interpRoot_one,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_interp_weight_old,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_interp_weight_new}
+    \uses{def:al_scan_history_mean_tree}
+    Each charge leaf has weight $(2M)^{-K}$ and each history after $k$
+    charges has weight $m^{-K}(2M)^{-Kk}$. Interpolating a charge at
+    parameter $p$ gives terminal weights $(1-p)w_h$ and $pw_hq_c$.
+    For positive definite matrix inputs, the old endpoint is the previous
+    history tree evaluated at the old inputs; the new endpoint is exactly
+    the recursively substituted next tree evaluated at its new inputs.
+\end{theorem}
+\begin{proof}
+    Induct over the fixed finite uniform tree and then over charge rounds.
+    Distinct previous histories have disjoint sets of extended labels, so
+    leaf substitution multiplies the two actual weights. Evaluation of
+    substitution equals evaluation at the conditional roots, and the
+    geometric mean has the asserted positive definite endpoints.
+    No reassociation of matrix means, or identification from equal
+    classical distributions, is used. This statement does not construct
+    the initial quantum vector or identify transported entropy measures.
+\end{proof}
+\begin{theorem}[Physical cut boundaries and changed sites]
+    \label{thm:al_physical_cut_calculus}
+    \lean{TNLean.PEPS.AreaLaw.mem_edgeBoundary_pair_iff,
+        TNLean.PEPS.AreaLaw.edgeBoundary_compl,
+        TNLean.PEPS.AreaLaw.edgeBoundary_union_subset,
+        TNLean.PEPS.AreaLaw.edgeBoundary_sdiff_subset,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_union_le,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_sdiff_le,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_of_endpoint_cover,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_four_mul_card,
+        TNLean.PEPS.AreaLaw.edgeBoundary_subset_union_symmDiff,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_add_four_mul_symmDiff}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $\Lambda\subset\mathbb Z^2$ be finite and let $B,C\subseteq\Lambda$.
+    An unordered pair belongs to $\partial_\Lambda B$ exactly when its
+    sites are adjacent in the induced graph and exactly one belongs to $B$.
+    Complements are relative to $\Lambda$, and
+    \begin{align}
+        \partial_\Lambda(B^c)          & = \partial_\Lambda B, \\
+        \partial_\Lambda(B\cup C)      & \subseteq
+        \partial_\Lambda B\cup\partial_\Lambda C,              \\
+        \partial_\Lambda(B\setminus C) & \subseteq
+        \partial_\Lambda B\cup\partial_\Lambda C,              \\
+        \partial_\Lambda B             & \subseteq
+        \partial_\Lambda C\cup\partial_\Lambda(B\mathbin\triangle C).
+    \end{align}
+    Consequently the boundary cardinalities of $B\cup C$ and
+    $B\setminus C$ are at most
+    $|\partial_\Lambda B|+|\partial_\Lambda C|$.
+    If $R\subseteq\Lambda$ contains at least one site of each edge of
+    $\partial_\Lambda B$, then $|\partial_\Lambda B|\le4|R|$.
+    In particular,
+    \begin{align}
+        |\partial_\Lambda B| & \le4|B|, \\
+        |\partial_\Lambda B| & \le
+        |\partial_\Lambda C|+4|B\mathbin\triangle C|.
+    \end{align}
+    The last estimate is the changed-site bound in the proof of
+    \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_ambient_boundary_crossing}
+    Check membership of the two sites of each physical edge to obtain
+    the three inclusions and complement equality. Inclusion of the domain
+    into the lattice is injective on unordered pairs. Cover the image of
+    the crossing edges by the at most four incident lattice edges at each
+    site of $R$, giving $|\partial_\Lambda B|\le4|R|$.
+    Taking $R=B$ gives the first cardinality estimate. Apply the same
+    estimate to $B\mathbin\triangle C$ and count the union in the last
+    inclusion to obtain the changed-site bound.
+\end{proof}
+
+\begin{theorem}[Physical boundaries of depth prefixes]
+    \label{thm:al_scan_prefix_boundary}
+    \lean{TNLean.PEPS.AreaLaw.Scan.disjoint_ambientDilation_boundaryEndpoints_of_clearance,
+        TNLean.PEPS.AreaLaw.Scan.card_edgeBoundary_depthPrefix_le,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_eq_sdiff,
+        TNLean.PEPS.AreaLaw.Scan.card_edgeBoundary_positiveDepthPrefix_le}
+    \leanok
+    \uses{thm:al_scan_ambient_rows,def:area_law_cell_counts}
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, let $A\subseteq\Lambda$,
+    and let $Z$ consist of both sites of every edge of $\partial_\Lambda A$.
+    Fix integers $L\ge1$ and $n,r_0\ge0$, and suppose
+    $\|t-z\|_\infty>2L+10r_0$ for every $t\in T$ and $z\in Z$.
+    Every ambient dilation $T_j$ with $0\le j\le L$ is disjoint from $Z$.
+    Suppose further that $T$ is nonempty and that
+    $|T_d\setminus T_{d-1}|\le n$ for each integer $1\le d\le L$.
+    Set $\delta(x)=\min_{t\in T}\|x-t\|_\infty$.
+    For every integer $j\le L$, define
+    $P_j=\{x\in A:\delta(x)\le j\}$ and
+    $Q_j=\{x\in A:0<\delta(x)\le j\}$. Then
+    \begin{align}
+        Q_j                    & = P_j\setminus P_0, \\
+        |\partial_\Lambda P_j| & \le4n,              \\
+        |\partial_\Lambda Q_j| & \le8n.
+    \end{align}
+    The set identity holds for every integer-valued function $\delta$.
+    These are the full-row edge estimates used in
+    \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_physical_ambient_boundary,
+        lem:area_law_ambient_boundary_layers,thm:al_physical_cut_calculus}
+    A point of $T_j\cap Z$ would have sup-norm distance at most
+    $j\le L$ from $T$, contradicting the clearance.
+    For $j\ge0$, comparison with the ambient boundary gives
+    $|\partial_\Lambda P_j|\le|\partial T_j|$.
+    When $1\le j\le L$, each edge leaving $T_j$ has its inside site in
+    $T_j\setminus T_{j-1}$; at $j=0$, use its outside site in
+    $T_1\setminus T$. In either case the relevant row has at most $n$
+    sites, so its incident edges give the bound $4n$.
+    For $j<0$, nonnegativity of $\delta$ makes $P_j$ empty.
+    Finally $0<\delta(x)$ is equivalent to $\delta(x)\not\le0$, so
+    $Q_j=P_j\setminus P_0$. Subadditivity under set difference bounds
+    its boundary by $4n+4n=8n$.
+\end{proof}
+
+\begin{definition}[Whole-row comparison prefixes]
+    \label{def:al_scan_comparison_prefixes}
+    \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix,
+        TNLean.PEPS.AreaLaw.Scan.positiveNear,
+        TNLean.PEPS.AreaLaw.Scan.positiveNearMiddle}
+    \leanok
+    Write $d(x)=\operatorname{dist}_\infty(x,T)$ and set
+    \begin{align}
+        R_j & =\{x\in A:d(x)\le j\},   &
+        Q_j & =\{x\in A:0<d(x)\le j\}.
+    \end{align}
+    For a physical status $(P_0,Y,V)$, let $U=P_0\cap\{d>0\}$ and
+    $UY=(P_0\cup Y)\cap\{d>0\}$. These prefixes contain whole rows;
+    the partially consumed nominal row contributes to the error estimate.
+\end{definition}
+
+\begin{lemma}[One nested family and separated deterministic fronts]
+    \label{lem:al_scan_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix_mono,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_mono,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_leads_separated,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.prefix_uncertainty_rows}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Both $R_j$ and $Q_j$ are monotone in the integer cutoff $j$.
+    Suppose $n>0$, $D\ge1$, $r_0\le D$, $4D\le m$, and $8Km\le L$.
+    After $k\le nm$ consumed fills, put $w=D+r_0$ and let $j_N,j_F$
+    be the near and oriented far nominal fronts. Then
+    \begin{align}
+        j_N+w         & <-(j_F+w),      &
+        [j_N,j_N+w]   & \subseteq[1,L], &
+        [-j_F-w,-j_F] & \subseteq[1,L].
+    \end{align}
+    The same assertions apply to a pre-charge status using $k+1\le nm$.
+    All comparison prefixes therefore belong to one nested family,
+    including comparisons from unrelated histories and bands.
+\end{lemma}
+\begin{proof}\leanok
+    Either side consumes at most $nm$ slots and advances at most $m$ rows.
+    Substitute the actual band cutoffs $8gm+m+r$ and $8gm+5m+r$,
+    with $0\le r<m$. The stated scale inequalities separate the two
+    lead intervals and place both uncertainty intervals in the physical rows.
+\end{proof}
+
+\begin{theorem}[Actual statuses between deterministic prefixes]
+    \label{thm:al_scan_prefix_sandwich}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_sandwich,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_sandwich}
+    \leanok
+    \uses{lem:al_scan_prefix_family}
+    Under the preceding scale conditions, actual row padding bounds and
+    graph-ball depth variation give
+    \begin{align}
+        R_{j_N-1}    & \subseteq P_0\subseteq R_{j_N+w},      &
+        R_{-j_F-w-1} & \subseteq P_0\cup Y\subseteq R_{-j_F}.
+    \end{align}
+    These inclusions hold for completed and pre-charge histories within
+    their respective horizons, without a good-history hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    Initial exterior sites remain far. Every unassigned site is on or beyond
+    each nominal front, because all earlier slots were consumed. Assigned
+    sites of $A$ have oriented depth at most the relevant front plus $w$.
+    Separation rules out consumption by the opposite side. No assumption
+    that a partial far row is a prefix in the near-side row order is used.
+\end{proof}
+
+\begin{lemma}[Counting the uncertainty rows]
+    \label{lem:al_scan_prefix_counting}
+    \lean{TNLean.PEPS.AreaLaw.Scan.card_filter_symmDiff_prefix_le,
+        TNLean.PEPS.AreaLaw.Scan.prefix_sandwich_card_bounds}
+    \leanok
+    \uses{thm:al_scan_prefix_sandwich}
+    If $R_a\subseteq E\subseteq R_b$, every row of depths $a+1$ through
+    $b$ has at most $n$ sites, and $c\in\{a,b\}$, then for any fixed
+    site predicate $Z$,
+    \begin{align}
+        |(E\cap Z)\mathbin{\triangle}(R_c\cap Z)|
+         & \le \max(b-a,0)n.
+    \end{align}
+    The preceding sandwiches have $w+1=D+r_0+1\le3D$ uncertainty rows.
+    They give the same $3nD$ estimate before and after removing the target.
+\end{lemma}
+
+\begin{theorem}[Physical deterministic-prefix approximation]
+    \label{thm:al_scan_physical_prefix_approximation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_domainGraph}
+    \leanok
+    \uses{lem:al_scan_prefix_counting}
+    Let $T$ be nonempty, use its actual ambient depth and the induced physical
+    lattice graph, and assume each ambient layer $T_d\setminus T_{d-1}$ has
+    at most $n$ sites for $1\le d\le L$. Under the preceding scale and
+    horizon conditions, actual statuses satisfy
+    \begin{align}
+        Q_{j_N-1}                                & \subseteq U, & UY & \subseteq Q_{-j_F}, \\
+        |U\mathbin{\triangle}Q_{j_N-1}|          & \le3nD,      &
+        |UY\mathbin{\triangle}Q_{-j_F}|          & \le3nD,                                 \\
+        |P_0\mathbin{\triangle}R_{j_N-1}|        & \le3nD,      &
+        |(P_0\cup Y)\mathbin{\triangle}R_{-j_F}| & \le3nD.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Physical depth rows inject into the corresponding ambient layers.
+    Along a physical graph path, ambient depth varies by at most its length,
+    so actual radius-$r_0$ balls supply the depth-variation bound.
+    Apply the proved actual-history sandwiches and count their uncertainty rows.
+\end{proof}
+
+\begin{lemma}[Middle and far regions from the two near regions]
+    \label{lem:al_scan_status_differences}
+    \lean{TNLean.PEPS.AreaLaw.Scan.middle_eq_positiveNearMiddle_sdiff_positiveNear,
+        TNLean.PEPS.AreaLaw.Scan.receiving_far_eq_compl}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    If the physical middle has positive depth, then
+    $Y=UY\setminus U$. For every physical status,
+    $V=\Lambda\setminus(P_0\cup Y)$.
+\end{lemma}
+
+\begin{theorem}[All five physical status cuts]
+    \label{thm:al_scan_status_cuts}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_domainGraph}
+    \leanok
+    \uses{thm:al_scan_physical_prefix_approximation,
+        thm:al_scan_prefix_boundary,thm:al_physical_cut_calculus,
+        lem:al_scan_status_differences}
+    In addition to the physical prefix-approximation hypotheses, suppose
+    every endpoint of an actual cut edge of $A$ has ambient distance
+    greater than $2L+10r_0$ from $T$. Count each undirected physical edge once.
+    Every completed status with $k\le nm$ and every pre-charge status with
+    $k+1\le nm$ obeys
+    \begin{align}
+        |\partial U|   & \le20nD, & |\partial(UY)| & \le20nD, &
+        |\partial Y|   & \le40nD,                               \\
+        |\partial P_0| & \le16nD, & |\partial V|   & \le16nD.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    A full prefix has at most $4n$ physical boundary edges and a positive-depth
+    prefix has at most $8n$. Changing at most $3nD$ sites adds at most $12nD$
+    edges, since the physical graph has degree at most four. Use $D\ge1$,
+    subadditivity for $Y=UY\setminus U$, and complement invariance for $V$.
+\end{proof}

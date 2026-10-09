@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
+import TNLean.PEPS.AreaLaw.Scan.StatusCutBounds
 
 /-!
 # Two active physical bands with a genuine cut
@@ -19,7 +20,7 @@ Two distinct interaction labels deliberately share the first anchor.
 set_option autoImplicit false
 
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
-open scoped BigOperators
+open scoped BigOperators symmDiff
 
 namespace TNLeanTest.ActualBandGeometry
 noncomputable section
@@ -281,6 +282,50 @@ example : (∑ g : Fin scan.K, ∑ side : Bool,
   · intro x
     exact (Finset.card_filter_le _ _).trans (by simp)
   · exact clearance
+
+-- The completed physical theorem applies uniformly to every history in both
+-- genuine bands, not just to an empty or certificate-supplied geometry.
+example {k : ℕ} (h : History scan.K scan.m scan.M k) (hk : k ≤ scan.n * scan.m)
+    (g : Fin scan.K) :
+    ((positiveNear scan.depth (scan.state h g)) ∆ positiveDepthPrefix scan.A scan.depth
+      (scan.front g (h.1 g) k false - 1)).card ≤ 3 * scan.n * scan.D := by
+  exact (CollarScan.state_prefix_approximation_domainGraph target_nonempty scan rfl rfl
+    h g (by norm_num) hk (by norm_num) (by norm_num) (by norm_num)
+    (by norm_num : 8 * scan.K * scan.m ≤ 192) ambient_rows).2.2.2.2.1
+
+example {k : ℕ} (h : History scan.K scan.m scan.M k) (hk : k + 1 ≤ scan.n * scan.m)
+    (g : Fin scan.K) :
+    ((positiveNearMiddle scan.depth (scan.oldChargeState h g)) ∆
+      positiveDepthPrefix scan.A scan.depth (-scan.front g (h.1 g) (k + 1) true)).card ≤
+        3 * scan.n * scan.D := by
+  exact (CollarScan.oldChargeState_prefix_approximation_domainGraph
+    target_nonempty scan rfl rfl h g (by norm_num) hk (by norm_num) (by norm_num)
+    (by norm_num) (by norm_num : 8 * scan.K * scan.m ≤ 192) ambient_rows).2.2.2.2.2
+
+-- A consumed part of the current row is genuinely outside the whole-row
+-- comparison prefix. The additive one-row allowance is therefore necessary.
+example : p13 ∈ positiveNear scan.depth (scan.oldChargeState history 0) ∧
+    p13 ∉ positiveDepthPrefix scan.A scan.depth (scan.front 0 0 1 false - 1) := by
+  rw [old_state]
+  norm_num [positiveNear, positiveDepthPrefix, receiving, assign, CollarScan.state,
+    CollarScan.bandState, history, initialPartition, scan, target, ambientDepth,
+    ambientSupDistance, CollarScan.lower, CollarScan.upper, CollarScan.front,
+    nominalFront, initialFront, fillCount, p13, p1001, site_eq_iff]
+
+-- Every numerical, ambient-row and genuine-cut clearance hypothesis is
+-- discharged on this same two-band lattice fixture.
+example (g : Fin scan.K) :
+    (edgeBoundary domain (middle (scan.state history g))).card ≤ 40 * scan.n * scan.D := by
+  exact (CollarScan.state_cut_bounds_domainGraph target_nonempty scan rfl rfl history g
+    (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num)
+    (by norm_num : 8 * scan.K * scan.m ≤ 192) ambient_rows clearance).2.2.1
+
+example (g : Fin scan.K) :
+    (edgeBoundary domain (receiving (scan.oldChargeState history g) true)).card ≤
+      16 * scan.n * scan.D := by
+  exact (CollarScan.oldChargeState_cut_bounds_domainGraph target_nonempty scan rfl rfl history g
+    (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num)
+    (by norm_num : 8 * scan.K * scan.m ≤ 192) ambient_rows clearance).2.2.2.2
 
 end
 end TNLeanTest.ActualBandGeometry
