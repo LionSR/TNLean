@@ -59,9 +59,12 @@ import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection
+import TNLean.PEPS.AreaLaw.Scan.SideSeparation
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
 import TNLean.PEPS.AreaLaw.Scan.StatusCutBounds
+import TNLean.PEPS.AreaLaw.Scan.SupportClassification
+import TNLean.PEPS.AreaLaw.Scan.SupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths

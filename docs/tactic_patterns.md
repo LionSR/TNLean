@@ -6050,3 +6050,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+
+### Ambient depth variation on a scan ball — candidate (2026-10-09)
+
+- **Pattern:** convert filtered-ball membership to an induced-graph distance bound,
+  then apply `abs_ambientDepth_sub_le_domainGraph` and reverse the absolute difference.
+- **Seen:** `Scan/TerminalSplits.lean` has two occurrences; `Scan/SideSeparation.lean`
+  and the private depth-variation result in `Scan/SplitIntervals.lean` use the same conversion.
+- **Abstraction:** the new side-separation proofs share one private helper, so their
+  three applications do not repeat this conversion. The mathematical estimate is
+  already supplied by `abs_ambientDepth_sub_le_domainGraph`.
+- **Disposition:** a public scanner-ball specialization and migration of the older
+  callers is deferred. This support-classification change preserves those accepted
+  source files and isolates its dependency repair from a cross-file proof refactor.
+  The scanner-ball specialization is the remaining promotion candidate, rather than
+  a new tactic or a new geometric estimate.
