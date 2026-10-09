@@ -1,5 +1,4 @@
 % Auxiliary coordinate statements for polynomial PEPS compression.
-% All declaration and proof tags remain unmarked pending native checks.
 % These statements do not assert the sampled-contraction identity or Theorem 5.2.
 
 \subsection{Physical bases and party grouping}
@@ -16,6 +15,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \label{def:peps_party_tensor_basis}
     \lean{TNLean.PEPS.PairEffect.partyListBasis,
         TNLean.PEPS.PairEffect.partyLabelledBasis}
+    \leanok
     \uses{def:peps_party_layout}
     For each $p$, let $b_p$ be an orthonormal basis of $M(a_p)$,
     indexed by a finite set $I_p$. The ordered party basis has column
@@ -27,6 +27,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{definition}[Party bases on the original register order]
     \label{def:peps_party_grouped_basis}
     \lean{TNLean.PEPS.PairEffect.partyGroupedBasis}
+    \leanok
     \uses{def:peps_party_tensor_basis}
     Transport the ordered party basis by $G_a^{-1}$. Its column on the
     original register memory is
@@ -43,6 +44,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
         TNLean.PEPS.PairEffect.familyPhysicalOutputLayout,
         TNLean.PEPS.PairEffect.familyPhysicalListBasis,
         TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
+    \leanok
     \uses{def:peps_party_layout}
     Let the physical space at $p$ be $H_p=\C^{d_p}$, where $d_p$
     is a nonnegative integer, and denote its standard orthonormal
@@ -57,12 +59,14 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{theorem}[Singleton physical memory of each party]
     \label{thm:peps_singleton_physical_memory}
     \lean{TNLean.PEPS.PairEffect.atParty_familyPhysicalLayout_of_mem}
+    \leanok
     Let an ordered list of parties have no repetitions. For any party
     $p$ in this list, selecting its physical registers gives exactly
     its one register $H_p$, with memory $H_p\otimes\C$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Selecting a party filters the given list by equality with $p$.
     Since $p$ occurs exactly once, the filtered register list is the
     singleton containing its physical register.
@@ -71,6 +75,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{definition}[Physical basis at an individual party]
     \label{def:peps_singleton_physical_basis}
     \lean{TNLean.PEPS.PairEffect.familyPhysicalPartyBasis}
+    \leanok
     \uses{thm:peps_singleton_physical_memory}
     On the physical memory $H_p\otimes\C$ of party $p$, take the
     orthonormal basis with columns $b_p(j)=e_{p,j}\otimes1$.
@@ -81,6 +86,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{theorem}[Partitioning a single selected register]
     \label{thm:peps_selected_head_partition}
     \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
+    \leanok
     Let the first register have owner $p$ and Hilbert space $H$, and
     let every remaining register have an owner different from $p$.
     Write $K$ for the memory of the remaining registers. Under the
@@ -92,6 +98,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Partition the remaining registers first. Their selected memory is
     $\C$, so $y$ is sent to $1\otimes y$. Adjoining the first register
     and applying the associativity isometry gives the stated formula.
@@ -100,6 +107,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{theorem}[Compatibility of physical and party coordinates]
     \label{thm:peps_family_physical_party_basis}
     \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis_eq_partyGroupedBasis}
+    \leanok
     Let the physical register list $a$ and the singleton bases $b_p$
     be as above. For every physical assignment $x$,
     \begin{align}
@@ -114,6 +122,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:peps_party_grouped_basis,def:peps_family_physical_output,
         def:peps_singleton_physical_basis,thm:peps_selected_head_partition}
     First consider any ordered list without repetitions, retaining
@@ -130,6 +139,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{definition}[Joint physical and private basis of one party]
     \label{def:peps_party_local_output_basis}
     \lean{TNLean.PEPS.PairEffect.partyLocalOutputBasis}
+    \leanok
     For register lists $a,c$, choose orthonormal bases $b_p$ of
     $M(a_p)$ and $f_p$ of $M(c_p)$, indexed respectively by finite
     sets $X_p$ and $F_p$. Let $J_{u,v}:M(u\mathbin{+\!+}v)
@@ -142,6 +152,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \begin{theorem}[Concatenating physical and private party bases]
     \label{thm:peps_party_grouped_basis_append}
     \lean{TNLean.PEPS.PairEffect.partyGroupedBasis_append}
+    \leanok
     With the joint local bases just defined, let $B^{a+c}$ denote
     their party basis on $M(a\mathbin{+\!+}c)$, and let $B^a,B^c$
     be the separately transported party bases. Then for all
@@ -155,6 +166,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:peps_party_grouped_basis,def:peps_party_local_output_basis}
     Induct on the ordered party list. Partitioning a concatenation
     first partitions each list and then regroups its four factors,

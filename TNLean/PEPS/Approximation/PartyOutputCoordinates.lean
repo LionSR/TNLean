@@ -71,8 +71,10 @@ theorem partitionIso_selectedHead_of_tail_excluded_heq
 end Layout
 
 /-- Equality of the two register lists preserves concatenated memory vectors.
-This is the existing private append-transport lemma from FullBranchPreparation
-and EffectCircuitError. Its promotion will replace those copies on integration. -/
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267.
+This consolidates the append transports used in the corrected-source development
+[PR #8912](https://github.com/LionSR/TNLean/pull/8912); its private copy is removed
+when that development is integrated. -/
 theorem Layout.appendIso_symm_tmul_heq {a b a' b' : Layout P}
     (ha : a = a') (hb : b = b') {x : Mem a} {x' : Mem a'}
     {y : Mem b} {y' : Mem b'} (hx : HEq x x') (hy : HEq y y') :
@@ -156,7 +158,13 @@ private theorem orderedPartyVector_removeHead (p : P) (ps : List P) (a : Layout 
   · intro q hq
     exact removeHeadVector_heq p a v q (by intro h; exact hp (h ▸ hq))
 
-private theorem groupByPartyIso_cons_partition_tmul
+/-- Grouping a partitioned tensor retains the first party's vector and groups the
+complement over the ordered remaining parties. The list has no repetitions and
+covers every register owner; it need not contain every element of the party type.
+The tail memory is transported by the equality obtained on removing a party
+absent from the tail list.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–251. -/
+theorem groupByPartyIso_cons_partition_tmul
     (p : P) (ps : List P) (a : Layout P)
     (hn : (p :: ps).Nodup) (hc : ∀ r ∈ a, r.owner ∈ p :: ps)
     (x : Mem (Layout.atParty p a)) (y : Mem (Layout.withoutParty p a)) :
@@ -167,9 +175,25 @@ private theorem groupByPartyIso_cons_partition_tmul
         (groupByPartyIso ps (Layout.withoutParty p a) (List.nodup_cons.mp hn).2
           (Layout.owners_withoutParty hc) y) := by
   classical
-  erw [groupByPartyIso_cons, LinearIsometryEquiv.trans_apply,
-    LinearIsometryEquiv.apply_symm_apply, iso_lTensor_apply,
-    ContinuousLinearMap.lTensor_tmul]
+  change
+    (((groupByPartyIso ps (Layout.withoutParty p a) (List.nodup_cons.mp hn).2
+      (Layout.owners_withoutParty hc)).trans
+        (Layout.memCongr (partyLayout_withoutParty ps p a (List.nodup_cons.mp hn).1))).lTensor
+          (Mem (Layout.atParty p a)))
+      ((Layout.partitionIso (fun q => decide (q = p)) a)
+        ((Layout.partitionIso (fun q => decide (q = p)) a).symm (x ⊗ₜ[ℂ] y))) = _
+  rw [LinearIsometryEquiv.apply_symm_apply]
+  change
+    (((groupByPartyIso ps (Layout.withoutParty p a) (List.nodup_cons.mp hn).2
+      (Layout.owners_withoutParty hc)).trans
+        (Layout.memCongr (partyLayout_withoutParty ps p a (List.nodup_cons.mp hn).1))).lTensor
+          (Mem (Layout.atParty p a))) (x ⊗ₜ[ℂ] y) =
+      x ⊗ₜ[ℂ] Layout.memCongr
+        (partyLayout_withoutParty ps p a (List.nodup_cons.mp hn).1)
+        (groupByPartyIso ps (Layout.withoutParty p a) (List.nodup_cons.mp hn).2
+          (Layout.owners_withoutParty hc) y)
+  rw [iso_lTensor_apply]
+  rw [ContinuousLinearMap.lTensor_tmul]
   rfl
 
 private theorem groupByPartyIso_symm_orderedPartyVector_cons
@@ -264,7 +288,9 @@ private theorem groupByPartyIso_append_orderedPartyVector (ps : List P) (a b : L
         (Layout.partitionIso (fun q => decide (q = p)) (a ++ b)).symm hsplit'
       simp only [LinearIsometryEquiv.symm_apply_apply] at hin
       rw [hin]
-      erw [groupByPartyIso_cons_partition_tmul]
+      refine (groupByPartyIso_cons_partition_tmul p ps (a ++ b) hn
+        (fun r hr => (List.mem_append.mp hr).elim (ha r) (hb r))
+        (localJoinedVector a b v w p) (Layout.memCongr eab.symm z)).trans ?_
       change localJoinedVector a b v w p ⊗ₜ[ℂ] _ = _
       apply congrArg (fun t => localJoinedVector a b v w p ⊗ₜ[ℂ] t)
       apply eq_of_heq
@@ -344,25 +370,60 @@ private theorem groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector
             hf) B) i = B i := by
         rintro ft ft' rfl B i
         rfl
-      erw [LinearIsometryEquiv.coe_refl (R := ℂ) (E := ℂ)]
-      erw [hcast inferInstance _ (Subsingleton.elim _ _)
+      change (LinearIsometryEquiv.refl ℂ ℂ) _ = (1 : ℂ)
+      rw [LinearIsometryEquiv.coe_refl (R := ℂ) (E := ℂ)]
+      refine (hcast inferInstance _ (Subsingleton.elim _ _)
         (OrthonormalBasis.singleton I ℂ)
-        (fun i => x (([] : List P).get i))]
-      simp only [id_eq, OrthonormalBasis.singleton_apply]
-      rfl
+        (fun i => x (([] : List P).get i))).trans ?_
+      simp only [OrthonormalBasis.singleton_apply]
   | cons p ps ih =>
       rw [familyPhysicalListBasis, orderedPartyVector]
-      erw [((EuclideanSpace.basisFun (Fin (d p)) ℂ).tensorProduct
-        (familyPhysicalListBasis d ps)).reindex_apply
-          (Fin.consEquiv (fun i => Fin (d ((p :: ps).get i))))
-          (fun i => x ((p :: ps).get i)), OrthonormalBasis.tensorProduct_apply']
+      refine (congrArg
+        (fun z => groupByPartyIso (p :: ps) (familyPhysicalLayout d (p :: ps)) hn
+          (fun r hr => (familyPhysicalLayout_owners d (p :: ps)) ▸
+            (List.mem_map_of_mem (f := Reg.owner) hr)) z)
+        ((((EuclideanSpace.basisFun (Fin (d p)) ℂ).tensorProduct
+          (familyPhysicalListBasis d ps)).reindex_apply
+            (Fin.consEquiv (fun i => Fin (d ((p :: ps).get i))))
+            (fun i => x ((p :: ps).get i))).trans
+          (OrthonormalBasis.tensorProduct_apply'
+            (EuclideanSpace.basisFun (Fin (d p)) ℂ) (familyPhysicalListBasis d ps)
+            ((Fin.consEquiv (fun i => Fin (d ((p :: ps).get i)))).symm
+              (fun i => x ((p :: ps).get i)))))).trans ?_
       change groupByPartyIso (p :: ps) (familyPhysicalLayout d (p :: ps)) hn
           (fun r hr => (familyPhysicalLayout_owners d (p :: ps)) ▸
             (List.mem_map_of_mem (f := Reg.owner) hr))
           ((EuclideanSpace.basisFun (Fin (d p)) ℂ) (x p) ⊗ₜ[ℂ]
             familyPhysicalListBasis d ps (fun i => x (ps.get i))) =
         v p ⊗ₜ[ℂ] orderedPartyVector (familyPhysicalLayout d (p :: ps)) v ps
-      erw [groupByPartyIso_cons, LinearIsometryEquiv.trans_apply, iso_lTensor_apply]
+      change
+        (((groupByPartyIso ps
+          (Layout.withoutParty p (familyPhysicalLayout d (p :: ps)))
+          (List.nodup_cons.mp hn).2
+          (Layout.owners_withoutParty (fun r hr =>
+            (familyPhysicalLayout_owners d (p :: ps)) ▸
+              (List.mem_map_of_mem (f := Reg.owner) hr)))).trans
+            (Layout.memCongr (partyLayout_withoutParty ps p
+              (familyPhysicalLayout d (p :: ps)) (List.nodup_cons.mp hn).1))).lTensor
+                (Mem (Layout.atParty p (familyPhysicalLayout d (p :: ps)))))
+          ((Layout.partitionIso (fun q => decide (q = p))
+            (familyPhysicalLayout d (p :: ps)))
+            ((EuclideanSpace.basisFun (Fin (d p)) ℂ) (x p) ⊗ₜ[ℂ]
+              familyPhysicalListBasis d ps (fun i => x (ps.get i)))) =
+          v p ⊗ₜ[ℂ] orderedPartyVector (familyPhysicalLayout d (p :: ps)) v ps
+      refine (iso_lTensor_apply
+        ((groupByPartyIso ps
+          (Layout.withoutParty p (familyPhysicalLayout d (p :: ps)))
+          (List.nodup_cons.mp hn).2
+          (Layout.owners_withoutParty (fun r hr =>
+            (familyPhysicalLayout_owners d (p :: ps)) ▸
+              (List.mem_map_of_mem (f := Reg.owner) hr)))).trans
+            (Layout.memCongr (partyLayout_withoutParty ps p
+              (familyPhysicalLayout d (p :: ps)) (List.nodup_cons.mp hn).1)))
+        ((Layout.partitionIso (fun q => decide (q = p))
+          (familyPhysicalLayout d (p :: ps)))
+          ((EuclideanSpace.basisFun (Fin (d p)) ℂ) (x p) ⊗ₜ[ℂ]
+            familyPhysicalListBasis d ps (fun i => x (ps.get i))))).trans ?_
       have hW : Layout.withoutParty p (familyPhysicalLayout d (p :: ps)) =
           familyPhysicalLayout d ps := by
         simpa [Layout.withoutParty, restrict_familyPhysicalLayout] using
@@ -435,7 +496,21 @@ private theorem groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector
         eq_of_heq (hsplit.trans (Layout.memCongr_tmul_heq hP.symm hW.symm
           ((EuclideanSpace.basisFun (Fin (d p)) ℂ) (x p) ⊗ₜ[ℂ] (1 : ℂ))
           (familyPhysicalListBasis d ps (fun i => x (ps.get i)))).symm)
-      rw [hsplit', hx, ContinuousLinearMap.lTensor_tmul, isoL_apply,
+      rw [hsplit', hx]
+      change
+        (isoL ((groupByPartyIso ps
+          (Layout.withoutParty p (familyPhysicalLayout d (p :: ps)))
+          (List.nodup_cons.mp hn).2
+          (Layout.owners_withoutParty (fun r hr =>
+            (familyPhysicalLayout_owners d (p :: ps)) ▸
+              (List.mem_map_of_mem (f := Reg.owner) hr)))).trans
+            (Layout.memCongr (partyLayout_withoutParty ps p
+              (familyPhysicalLayout d (p :: ps)) (List.nodup_cons.mp hn).1)))).lTensor
+                (Mem (Layout.atParty p (familyPhysicalLayout d (p :: ps))))
+          (v p ⊗ₜ[ℂ] Layout.memCongr hW.symm
+            (familyPhysicalListBasis d ps (fun i => x (ps.get i)))) =
+          v p ⊗ₜ[ℂ] orderedPartyVector (familyPhysicalLayout d (p :: ps)) v ps
+      rw [ContinuousLinearMap.lTensor_tmul, isoL_apply,
         LinearIsometryEquiv.trans_apply, hGroupedTail,
         orderedPartyVector_removeHead p ps (familyPhysicalLayout d (p :: ps)) v
           (List.nodup_cons.mp hn).1]

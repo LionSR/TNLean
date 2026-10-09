@@ -3,7 +3,8 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.Approximation.PhysicalReadout
+import TNLean.PEPS.Approximation.PartyPartition
+import Mathlib.Data.List.NodupEquivFin
 
 /-! Physical registers with their original party-dependent dimensions.
 Source: polynomial-PEPS, `04-compression.tex:137–151`.
@@ -47,6 +48,25 @@ theorem restrict_familyPhysicalLayout (d : P → ℕ) (ps : List P) (mask : P �
     Layout.restrict mask (familyPhysicalLayout d ps) =
       familyPhysicalLayout d (ps.filter mask) := by
   simp [Layout.restrict, familyPhysicalLayout, List.filter_map, Function.comp_def]
+
+/-- An exhaustive ordering without repetitions contains each selected party once.
+Source: polynomial-PEPS, `04-compression.tex:18–25` and `233–251`. -/
+theorem length_filter_region [DecidableEq P] (ps : List P) (hps : ps.Nodup)
+    (hcover : ∀ p : P, p ∈ ps) (A : Finset P) :
+    (ps.filter fun p ↦ decide (p ∈ A)).length = A.card := by
+  have hset : (ps.filter fun p ↦ decide (p ∈ A)).toFinset = A := by
+    ext p
+    simp [hcover p]
+  exact (List.toFinset_card_of_nodup (hps.filter _)).symm.trans
+    (congrArg Finset.card hset)
+
+/-- The filtered positions enumerate exactly the original party labels in the region.
+Source: polynomial-PEPS, `04-compression.tex:233–251`. -/
+def filteredPartyEquiv [DecidableEq P] (ps : List P) (hps : ps.Nodup)
+    (hcover : ∀ p : P, p ∈ ps) (A : Finset P) :
+    Fin (ps.filter fun p ↦ decide (p ∈ A)).length ≃ {p // p ∈ A} :=
+  (List.Nodup.getEquiv _ (hps.filter _)).trans
+    (Equiv.subtypeEquivRight fun p ↦ by simp [hcover p])
 
 /-- The actual selected physical memory has tensor coordinates labelled by its
 original parties with their original dimensions.
@@ -136,11 +156,6 @@ Source: polynomial-PEPS, `04-compression.tex:137–151`. -/
 theorem familyPhysicalLayout_owners (d : P → ℕ) (ps : List P) :
     (familyPhysicalLayout d ps).map Reg.owner = ps := by
   simp [familyPhysicalLayout, Function.comp_def]
-
-/-- The fixed-dimension physical layout is the constant-family specialization.
-Source: polynomial-PEPS, `04-compression.tex:137–151`. -/
-theorem familyPhysicalLayout_const (d : ℕ) (ps : List P) :
-    familyPhysicalLayout (fun _ ↦ d) ps = physicalLayout d ps := rfl
 
 /-- Regional coordinates split the same original party-dependent configuration.
 Source: polynomial-PEPS, `04-compression.tex:137–151` and `223–251`. -/
