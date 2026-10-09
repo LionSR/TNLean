@@ -58,6 +58,34 @@ This local construction is part of
     ball with center $c$ and radius $\rho$.
 \end{proof}
 
+% Source: 10-geometry.tex, prop:two-families, lines 201--209;
+% geometry:initial-stars, lines 333--370, especially 352--370.
+
+\begin{lemma}[The closed half-radius scale]
+    \label{lem:area_law_initial_closed_half_radius}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closedHalf_radius_eq}
+    \uses{def:area_law_fine_belt_scales,thm:area_law_adjacent_fine_meshes}
+    Let $k\ge50{,}000{,}000$, write $\ell_k$ for its fine-cell exponent,
+    and put
+    \[
+        t_k=2^{\ell_k},\qquad r=\frac{2^{\ell_k-5}}2.
+    \]
+    Then
+    \[
+        \frac r2=\frac{t_k}{128}.
+    \]
+    Thus the closed half-radius square has half-side $t_k/128$.
+    This is the numerical scale relation used in the initial-star geometry
+    of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \uses{def:area_law_fine_belt_scales,thm:area_law_adjacent_fine_meshes}
+    The explicit lower bound on $k$ gives $\ell_k\ge5$.
+    Hence $2^{\ell_k}=32\,2^{\ell_k-5}$.
+    Dividing by $128$ and substituting the definition of $r$ proves
+    the stated identity.
+\end{proof}
+
 \begin{theorem}[Unique sector assignment and closed restriction]
     \label{thm:area_law_actual_sector_assignment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_assignment}
