@@ -6164,3 +6164,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   declarations move to this module; that extraction is coordinated with
   the template development. No sign condition on C or e is needed for
   the entropy summation itself.
+
+### Homogeneous bound for a rounded sublinear scale — candidate (2026-10-09)
+
+- **Pattern:** bound `ceil(C₂*s)` by `(C₂+1)*s` for `s>=1`, then use
+  monotonicity of nonnegative real powers and `Real.mul_rpow`.
+- **Seen:** `Scan/BootstrapRoundedClearance.lean` and
+  `InitialRoundedCollarEntropy.lean`.
+- **Abstraction:** `floor_rpow_ceil_mul_rpow_le` exposes the complete
+  homogeneous bound, including a further nonnegative power of the scale.
+- **Notes:** the clearance argument and physical entropy argument use
+  different final comparisons. There are two copies of the elementary
+  ceiling estimate; a third use should share that estimate rather than
+  copy it again. No custom tactic is needed.

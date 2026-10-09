@@ -668,6 +668,13 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.InitialWeakRectangleShellEntropy \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build initial rounded-collar entropy early
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.InitialRoundedCollarEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -729,6 +736,17 @@ jobs:
         run: |
           set -euo pipefail
           for file in TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean TNLeanTest/InitialWeakRectangleShellEntropyAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
+      - name: Check initial rounded-collar entropy strictly and audit axioms
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          for file in TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean TNLeanTest/BootstrapRoundedClearanceAxioms.lean TNLeanTest/InitialRoundedCollarEntropyAxioms.lean; do
             timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \

@@ -1,0 +1,80 @@
+\subsection{Initial entropy estimate for rounded collars}
+
+The rounded collar scale in \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw}
+allows the initial rectangle estimate to be expressed as a strict reduction
+of its exponent on the shell. The following statements provide this initial
+input to the proof of Proposition~9.5, lines~693--729.
+
+\begin{theorem}[A homogeneous bound for the rounded scale]
+    \label{thm:area_law_rounded_collar_power}
+    \lean{TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le}
+    Let $C_2,\eta,e\ge0$ be real numbers, and let $s\in\mathbb N$ with
+    $s\ge1$. Put $L_s=\lfloor\lceil C_2s\rceil^\eta\rfloor$. Then
+    \begin{align}
+        L_s^e\le(C_2+1)^{\eta e}s^{\eta e}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    The ceiling estimate gives
+    $\lceil C_2s\rceil<C_2s+1\le(C_2+1)s$.
+    Since both exponents are nonnegative, monotonicity of real powers gives
+    \begin{align}
+        L_s^e
+         & \le\bigl(((C_2+1)s)^\eta\bigr)^e
+        =(C_2+1)^{\eta e}s^{\eta e}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Uniform initial entropy of the rounded collar]
+    \label{thm:area_law_initial_rounded_collar_entropy}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow}
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
+        def:area_law_safe_rectangle,def:area_law_bootstrap_parameters}
+    Fix a local dimension $q\ge1$, an interaction range $R\in\mathbb N$,
+    a term norm bound $J\ge0$, and a gap $\Delta>0$.
+    There exist constants $C\ge0$ and $e_0\in(0,1)$, depending only on
+    $q,R,J,\Delta$, with the following property. For each real $C_2>0$
+    there is an integer threshold $N\ge1$, chosen before all safety
+    parameters and physical instances, such that the following holds.
+
+    Let $D_0>2R+10$ be an integer, let $\Lambda$ be any finite induced
+    square-lattice domain, and let $H$ be an admissible Hamiltonian on
+    $\Lambda$ with range $R$ and term norm bound $J$. Let $\Omega$ be
+    its normalized ground vector at energy $E_0$ with full-system
+    projector gap $\Delta$. Let $A\subseteq\Lambda$ be any cut and
+    $Q$ any safe integer rectangle of size $s\ge N$.
+    Put $\ell=(1-e_0)/200000$, $\eta=1-\ell$, and
+    $L_s=\lfloor\lceil C_2s\rceil^\eta\rfloor$. For every integer
+    $0\le j\le L_s$, one has
+    \begin{align}
+        S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)
+         & \le C\left(24+\frac{64}{2^{e_0}-1}\right)
+        (C_2+1)^{\eta e_0}s^{1+\eta e_0}.
+    \end{align}
+    The exponent $1+\eta e_0$ is strictly smaller than $1+e_0$.
+    This estimates the shell; the improvement of the safe-box exponent
+    still requires the remaining physical comparison argument.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_initial_rectangle_shell_entropy,
+        thm:area_law_bootstrap_margins,thm:area_law_rounded_collar_half,
+        thm:area_law_collar_scalar_clearance,thm:area_law_rounded_collar_power}
+    Choose $C$ and $e_0$ from
+    Theorem~\ref{thm:area_law_initial_rectangle_shell_entropy}.
+    The fixed parameter bounds give $0<\ell<1$, and hence $0<\eta<1$.
+    For each $C_2>0$, Theorem~\ref{thm:area_law_rounded_collar_half}
+    supplies a threshold $N\ge1$ for which $2L_s\le s$.
+    Therefore $L_s\le s$ and, for every allowed safety parameter,
+    Theorem~\ref{thm:area_law_collar_scalar_clearance} gives
+    $D_0L_s+L_s\le D_0s$. The initial shell estimate and the homogeneous
+    bound now give
+    \begin{align}
+        S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)
+         & \le C\left(24+\frac{64}{2^{e_0}-1}\right)sL_s^{e_0} \\
+         & \le C\left(24+\frac{64}{2^{e_0}-1}\right)
+        (C_2+1)^{\eta e_0}s^{1+\eta e_0}.
+    \end{align}
+    The same $C$, $e_0$, and $N$ apply to every physical instance in the
+    statement. Finally, $\ell e_0>0$ gives
+    $1+\eta e_0=1+e_0-\ell e_0<1+e_0$.
+\end{proof}
