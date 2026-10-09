@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.WordRestriction
+import TNLean.PEPS.Approximation.UnitMemoryCoordinates
 
 /-!
 # Operations beside spectator registers
@@ -32,18 +33,6 @@ open ContinuousLinearMap
 
 variable {P : Type}
 
-/-- An empty final memory is the scalar tensor factor. -/
-private theorem appendIso_nil_tmul (a : Layout P) (x : Mem a) (z : ℂ) :
-    Layout.memCongr (List.append_nil a) ((appendIso a []).symm (x ⊗ₜ z)) = z • x := by
-  induction a with
-  | nil => simp [appendIso, Layout.memCongr, mul_comm]
-  | cons r a ih =>
-      induction x using TensorProduct.inductionOn with
-      | tmul u v =>
-          rw [appendIso_symm_cons_tmul, Layout.memCongr_cons_tmul r (List.append_nil a), ih]
-          exact TensorProduct.tmul_smul z u v
-      | add x y hx hy => simp only [TensorProduct.add_tmul, map_add, hx, hy, smul_add]
-
 /-- Equality of the second layout commutes with regrouping the tensor factors. -/
 private theorem memCongr_append_right_tmul (a : Layout P) {b c : Layout P}
     (h : b = c) (x : Mem a) (y : Mem b) :
@@ -57,7 +46,8 @@ private theorem appendIso_nil_pair (a b : Layout P) (x : Mem a) (y : Mem b) :
     Layout.memCongr (congrArg (a ++ ·) (List.append_nil b))
       ((appendIso a (b ++ [])).symm (x ⊗ₜ (appendIso b []).symm (y ⊗ₜ (1 : ℂ)))) =
         (appendIso a b).symm (x ⊗ₜ y) := by
-  rw [memCongr_append_right_tmul a (List.append_nil b), appendIso_nil_tmul, one_smul]
+  rw [memCongr_append_right_tmul a (List.append_nil b),
+    Layout.memCongr_append_nil_appendIso_symm_tmul, one_smul]
 
 namespace Word
 
