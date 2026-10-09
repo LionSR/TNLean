@@ -127,43 +127,64 @@ example (j : Fin (2 * S.n * S.m)) :
 
 variable [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 
+-- Prove the history index equality before transporting the complete dependent data.
+private theorem actualRoundData_heq (hm : 0 < S.m) (hM : 0 < S.M)
+    (j : Fin (2 * S.n * S.m)) (s : ℕ) (hs : j.val / 2 = s) :
+    if IsChargeRound j.val then
+      HEq (S.actualRoundData hm hM j) (S.actualChargeData hm hM s)
+    else HEq (S.actualRoundData hm hM j) (S.actualFillData hm hM s) := by
+  subst s
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => if IsChargeRound j.val then
+      HEq D (S.actualChargeData hm hM (j.val / 2))
+      else HEq D (S.actualFillData hm hM (j.val / 2))) ?_ ?_
+  · intro hj
+    exact (ite_eq_left hj).mpr HEq.rfl
+  · intro hj
+    exact (ite_eq_right hj).mpr HEq.rfl
+
+private theorem actualRoundData_rootPath_eq (hm : 0 < S.m) (hM : 0 < S.M)
+    (j : Fin (2 * S.n * S.m)) (s : ℕ) (hs : j.val / 2 = s)
+    (n : V ⊕ Bool → ℕ) (t : ℝ) (k : ℕ) (p : ℝ) :
+    (S.actualRoundData hm hM j).rootPath n t k p =
+      if IsChargeRound j.val then (S.actualChargeData hm hM s).rootPath n t k p
+      else (S.actualFillData hm hM s).rootPath n t k p := by
+  subst s
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => D.rootPath n t k p =
+      if IsChargeRound j.val then
+        (S.actualChargeData hm hM (j.val / 2)).rootPath n t k p
+      else (S.actualFillData hm hM (j.val / 2)).rootPath n t k p) ?_ ?_
+  · intro hj
+    exact (ite_eq_left hj).symm
+  · intro hj
+    exact (ite_eq_right hj).symm
+
 -- Both actual trees, including blank choices, survive the dependent interleaving.
 -- The round data carries the choice-family cast, so the comparison is heterogeneous.
 example (hm : 0 < S.m) (hM : 0 < S.M) (h0 : 0 < 2 * S.n * S.m) :
     HEq (S.actualRoundData hm hM ⟨0, h0⟩) (S.actualFillData hm hM 0) := by
-  refine S.actualRoundData_induction hm hM ⟨0, h0⟩
-    (fun _ _ _ D => HEq D (S.actualFillData hm hM 0)) ?_ ?_
-  · intro hj
-    exact absurd hj (by decide)
-  · intro _
-    norm_num
+  have hj : ¬IsChargeRound 0 := by norm_num [IsChargeRound]
+  exact (ite_eq_right hj).mp
+    (actualRoundData_heq S hm hM ⟨0, h0⟩ 0 (by norm_num : (0 : ℕ) / 2 = 0))
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h1 : 1 < 2 * S.n * S.m) :
     HEq (S.actualRoundData hm hM ⟨1, h1⟩) (S.actualChargeData hm hM 0) := by
-  refine S.actualRoundData_induction hm hM ⟨1, h1⟩
-    (fun _ _ _ D => HEq D (S.actualChargeData hm hM 0)) ?_ ?_
-  · intro _
-    norm_num
-  · intro hnj
-    exact absurd (by decide) hnj
+  have hj : IsChargeRound 1 := by norm_num [IsChargeRound]
+  exact (ite_eq_left hj).mp
+    (actualRoundData_heq S hm hM ⟨1, h1⟩ 0 (by norm_num : (1 : ℕ) / 2 = 0))
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h2 : 2 < 2 * S.n * S.m) :
     HEq (S.actualRoundData hm hM ⟨2, h2⟩) (S.actualFillData hm hM 1) := by
-  refine S.actualRoundData_induction hm hM ⟨2, h2⟩
-    (fun _ _ _ D => HEq D (S.actualFillData hm hM 1)) ?_ ?_
-  · intro hj
-    exact absurd hj (by decide)
-  · intro _
-    norm_num
+  have hj : ¬IsChargeRound 2 := by norm_num [IsChargeRound]
+  exact (ite_eq_right hj).mp
+    (actualRoundData_heq S hm hM ⟨2, h2⟩ 1 (by norm_num : (2 : ℕ) / 2 = 1))
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h3 : 3 < 2 * S.n * S.m) :
     HEq (S.actualRoundData hm hM ⟨3, h3⟩) (S.actualChargeData hm hM 1) := by
-  refine S.actualRoundData_induction hm hM ⟨3, h3⟩
-    (fun _ _ _ D => HEq D (S.actualChargeData hm hM 1)) ?_ ?_
-  · intro _
-    norm_num
-  · intro hnj
-    exact absurd (by decide) hnj
+  have hj : IsChargeRound 3 := by norm_num [IsChargeRound]
+  exact (ite_eq_left hj).mp
+    (actualRoundData_heq S hm hM ⟨3, h3⟩ 1 (by norm_num : (3 : ℕ) / 2 = 1))
 
 -- The generic parity branches do not rely on evaluating a small concrete round.
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
@@ -258,48 +279,34 @@ example (hm : 0 < S.m) (hM : 0 < S.M)
     (n : V ⊕ Bool → ℕ) [∀ v, NeZero (n v)] {t : ℝ} (ht : 0 ≤ t) (k : ℕ) :
     (S.actualRoundData hm hM ⟨0, h0⟩).rootPath n t k 1 =
       (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 0 := by
-  have e0 : (S.actualRoundData hm hM ⟨0, h0⟩).rootPath n t k 1 =
-      (S.actualFillData hm hM 0).rootPath n t k 1 := by
-    refine S.actualRoundData_induction hm hM ⟨0, h0⟩
-      (fun _ _ _ D => D.rootPath n t k 1 = (S.actualFillData hm hM 0).rootPath n t k 1) ?_ ?_
-    · intro hj
-      exact absurd hj (by decide)
-    · intro _
-      norm_num
-  have e1 : (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 0 =
-      (S.actualChargeData hm hM 0).rootPath n t k 0 := by
-    refine S.actualRoundData_induction hm hM ⟨1, h1⟩
-      (fun _ _ _ D => D.rootPath n t k 0 = (S.actualChargeData hm hM 0).rootPath n t k 0) ?_ ?_
-    · intro _
-      norm_num
-    · intro hnj
-      exact absurd (by decide) hnj
-  rw [e0, e1]
-  exact S.actualFillData_rootPath_one_eq_charge_zero hm hM 0 n ht k
+  have hfill : ¬IsChargeRound 0 := by norm_num [IsChargeRound]
+  have hcharge : IsChargeRound 1 := by norm_num [IsChargeRound]
+  calc
+    _ = (S.actualFillData hm hM 0).rootPath n t k 1 :=
+      (actualRoundData_rootPath_eq S hm hM ⟨0, h0⟩ 0 (by norm_num : (0 : ℕ) / 2 = 0) n t k 1).trans
+        (ite_eq_right hfill)
+    _ = (S.actualChargeData hm hM 0).rootPath n t k 0 :=
+      S.actualFillData_rootPath_one_eq_charge_zero hm hM 0 n ht k
+    _ = _ := ((actualRoundData_rootPath_eq S hm hM ⟨1, h1⟩ 0
+        (by norm_num : (1 : ℕ) / 2 = 0) n t k 0).trans
+      (ite_eq_left hcharge)).symm
 
 example (hm : 0 < S.m) (hM : 0 < S.M)
     (h1 : 1 < 2 * S.n * S.m) (h2 : 2 < 2 * S.n * S.m)
     (n : V ⊕ Bool → ℕ) [∀ v, NeZero (n v)] {t : ℝ} (ht : 0 ≤ t) (k : ℕ) :
     (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 1 =
       (S.actualRoundData hm hM ⟨2, h2⟩).rootPath n t k 0 := by
-  have e1 : (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 1 =
-      (S.actualChargeData hm hM 0).rootPath n t k 1 := by
-    refine S.actualRoundData_induction hm hM ⟨1, h1⟩
-      (fun _ _ _ D => D.rootPath n t k 1 = (S.actualChargeData hm hM 0).rootPath n t k 1) ?_ ?_
-    · intro _
-      norm_num
-    · intro hnj
-      exact absurd (by decide) hnj
-  have e2 : (S.actualRoundData hm hM ⟨2, h2⟩).rootPath n t k 0 =
-      (S.actualFillData hm hM 1).rootPath n t k 0 := by
-    refine S.actualRoundData_induction hm hM ⟨2, h2⟩
-      (fun _ _ _ D => D.rootPath n t k 0 = (S.actualFillData hm hM 1).rootPath n t k 0) ?_ ?_
-    · intro hj
-      exact absurd hj (by decide)
-    · intro _
-      norm_num
-  rw [e1, e2]
-  exact S.charge_rootPath_one_eq_actualFillData_zero hm hM 0 n ht k
+  have hcharge : IsChargeRound 1 := by norm_num [IsChargeRound]
+  have hfill : ¬IsChargeRound 2 := by norm_num [IsChargeRound]
+  calc
+    _ = (S.actualChargeData hm hM 0).rootPath n t k 1 :=
+      (actualRoundData_rootPath_eq S hm hM ⟨1, h1⟩ 0 (by norm_num : (1 : ℕ) / 2 = 0) n t k 1).trans
+        (ite_eq_left hcharge)
+    _ = (S.actualFillData hm hM 1).rootPath n t k 0 :=
+      S.charge_rootPath_one_eq_actualFillData_zero hm hM 0 n ht k
+    _ = _ := ((actualRoundData_rootPath_eq S hm hM ⟨2, h2⟩ 1
+        (by norm_num : (2 : ℕ) / 2 = 1) n t k 0).trans
+      (ite_eq_right hfill)).symm
 
 end DependentFamily
 
