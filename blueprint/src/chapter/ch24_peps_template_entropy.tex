@@ -1,0 +1,103 @@
+\section{Entropy cost of a partial depth row}
+
+\begin{theorem}[Regional increment bound]
+    \label{thm:area_partial_row_increment}
+    \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\Omega$ be a unit vector on a finite lattice domain with local dimension
+    $q$. For disjoint regions $R,B$, one has
+    \begin{align}
+        |S_\Omega(R\cup B)-S_\Omega(R)| & \le S_\Omega(B).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Subadditivity gives
+    \[
+        S_\Omega(R\cup B)\le S_\Omega(R)+S_\Omega(B).
+    \]
+    Complements are taken in the physical domain. Since $R\cap B=\varnothing$,
+    \[
+        (R\cup B)^c\cap B=\varnothing,
+        \qquad (R\cup B)^c\cup B=R^c.
+    \]
+    Apply subadditivity to this disjoint union and use purity,
+    $S_\Omega(X)=S_\Omega(X^c)$, to obtain
+    \[
+        S_\Omega(R)=S_\Omega(R^c)
+        \le S_\Omega((R\cup B)^c)+S_\Omega(B)
+        =S_\Omega(R\cup B)+S_\Omega(B).
+    \]
+\end{proof}
+
+\begin{theorem}[Partial template row]
+    \label{thm:area_template_partial_row}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le}
+    \leanok
+    \uses{def:area_law_ground_entropy,def:area_law_template}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, let $1\le j\le s_0$,
+    and let $Y\subseteq T_j\setminus T_{j-1}$. For a unit vector $\Omega$,
+    local dimension $q\ge1$, and any physical region $A$, one has
+    \begin{align}
+        \left|S_\Omega\bigl(A\cap((T_{j-1}\setminus T)\cup Y)\bigr)
+        -S_\Omega\bigl(A\cap(T_{j-1}\setminus T)\bigr)\right|
+        \le n\log q.
+    \end{align}
+    This is the partial-row entropy step in the proof of
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_partial_row_increment,thm:area_law_entropy_dimension,thm:area_law_template_depth_layers}
+    Set $R=A\cap(T_{j-1}\setminus T)$ and $B=A\cap Y$.
+    These regions are disjoint and $|B|\le |Y|\le n$.
+    The regional increment bound and $S_\Omega(B)\le|B|\log q$
+    (Theorem~\ref{thm:area_law_entropy_dimension}) give the claim since $\log q\ge0$.
+\end{proof}
+
+
+\section{Weighted coverings of template shells}
+
+\begin{theorem}[Shell area and cap count]
+    \label{thm:area_template_shell_cap}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le,TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le}
+    \leanok
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$ and $0\le j\le L\le s_0$.
+    Then $|T_j\setminus T|\le nj$. If $L<2^{K+1}$, the number $a_K$ of
+    cap-scale squares in the capped dyadic partition of $T_j\setminus T$
+    satisfies $2^K a_K\le2n$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_depth_layers,thm:area_law_capped_dyadic_partition}
+    Sum the depth-layer estimates to obtain $|T_j\setminus T|\le nj$.
+    Disjointness gives $4^K a_K\le nj\le nL<2n2^K$; divide by $2^K>0$.
+\end{proof}
+
+\begin{theorem}[Weighted shell covering]
+    \label{thm:area_template_weighted_shell}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le}
+    \leanok
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$,
+    $0\le j\le L\le s_0$, $2^K\le L<2^{K+1}$, and $e>0$.
+    For the maximal contained dyadic squares $Q$ of $T_j\setminus T$ with
+    side capped at $2^K$, one has
+    \begin{align}
+        \sum_Q \operatorname{side}(Q)^{1+e}
+        \le \left(2+\frac{14}{2^e-1}\right)nL^e.
+    \end{align}
+    This is the weighted covering step of
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_dyadic_partition}
+    Write $a_k$ for the number of selected squares of side $2^k$.
+    The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
+    The cap bound gives $2^K a_K\le2n$. Hence
+    \begin{align}
+        \sum_{k=0}^K a_k(2^k)^{1+e}
+        \le14n\sum_{k=0}^{K-1}(2^e)^k+2n(2^K)^e
+        \le\left(2+\frac{14}{2^e-1}\right)nL^e,
+    \end{align}
+    using $2^e>1$ and $2^K\le L$.
+\end{proof}

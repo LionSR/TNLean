@@ -137,6 +137,21 @@
     C.sources ? el("span", {}, ext(C.sources, "Pinned sources")) : null
   );
 
+  /* ---------- the libraries doing the work ---------- */
+  const libs = C.repos.filter(r => r.homepage)
+    .map(r => ({ ...r, homepage: r.homepage.replace(/\/?$/, "/") }));
+  if (libs.length) {
+    $("libs").append("Formalized in the open-source Lean 4 libraries ",
+      ...libs.flatMap((r, k) => [k ? " and " : "", el("a", { href: r.homepage, text: r.name }), " (", ext(`https://github.com/${r.slug}`, "GitHub"), ")"]),
+      ".");
+    for (const r of libs) $("libcards").append(el("div", { class: "libcard" },
+      el("h3", {}, el("a", { href: r.homepage, text: r.name })),
+      el("p", { text: r.description || "" }),
+      el("div", { class: "links" },
+        el("a", { href: r.homepage, text: "Project site" }), el("a", { href: r.homepage + "blueprint/", text: "Blueprint" }),
+        el("a", { href: r.homepage + "docs/", text: "API docs" }), ext(`https://github.com/${r.slug}`, "GitHub"))));
+  } else $("libraries").hidden = true;
+
   /* ---------- headline cards from the intro ---------- */
   const statementPR = C.statementPR && D.prs.find(p => p.repo === PRIMARY.name && p.number === C.statementPR);
   for (const card of document.querySelectorAll(".thm[data-target]")) {

@@ -65,6 +65,11 @@ arbitrary family.
 
 Neither the block form of eq. (S5) nor the error estimate is formalized here.
 
+`TNLean.MPS.Preparation.CanonicalFixedPoint` identifies these matrices with the unique
+normalized faithful fixed points of the actual BNT canonical blocks.
+`TNLean.MPS.Preparation.CanonicalOneCopyState` uses the corrected coefficients at `N = qM`
+and proves the exact physical-vector identity for the assembled canonical tensor.
+
 ## Main declarations
 
 * `MPSTensor.embedPair` — the pair of a block, pushed into a larger bond space along a

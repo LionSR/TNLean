@@ -1,0 +1,102 @@
+\section{Cyclic order of the eight midpoint fan triangles}
+\label{sec:area_law_cell_fan_cycle}
+
+Let $Q$ be a translated dyadic square with arbitrary origin, natural
+exponent $\ell$ and signed integer cell index. Put $t=2^\ell$, and write
+$c$ for its center. Orient its four sides counterclockwise, with indices
+$s\in\{0,1,2,3\}$ and ordered endpoints $A_s,B_s$.
+When every side is divided at its midpoint, index the elementary bases by
+$\mathcal J=\{0,1,2,3\}\times\{0,1\}$, where the second index records
+the first or second half of the side. Write $a_i,b_i$ for the ordered
+endpoints of base $i$ and $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
+This is the perimeter order in the fan construction of
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% and geometry:initial-stars, lines 361--370;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are finite perimeter assertions, not the full isolated-star claim.
+
+\begin{definition}[Successor of an elementary base]
+    \label{def:area_law_cell_fan_successor}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanNext}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Number the eight bases by $e(s,h)=2s+h$ modulo $8$.
+    Let $\tau$ be the permutation obtained by increasing this number
+    by one. Equivalently,
+    \begin{align}
+        \tau(s,0) & =(s,1),   \\
+        \tau(s,1) & =(s+1,0),
+    \end{align}
+    where the side index is reduced modulo $4$.
+\end{definition}
+
+\begin{theorem}[Consecutive bases share their ordered endpoints]
+    \label{thm:area_law_cell_fan_successor_endpoints}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_eq_cellFanStart_next}
+    \leanok
+    \uses{def:area_law_cell_fan_successor}
+    For every $i\in\mathcal J$, the final endpoint of base $i$ is
+    the initial endpoint of its successor:
+    \begin{align}
+        b_i & =a_{\tau(i)}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan_successor,
+        thm:area_law_indexed_side_interpolation,
+        thm:area_law_unsplit_side_endpoints}
+    The ordered whole-side coordinates give $B_s=A_{s+1}$, with the
+    side index reduced modulo $4$. The indexed affine parameters give
+    \begin{align}
+        a_{(s,0)} & =A_s,         & b_{(s,0)} & =(A_s+B_s)/2, \\
+        a_{(s,1)} & =(A_s+B_s)/2, & b_{(s,1)} & =B_s.
+    \end{align}
+    The first pair meets the second pair at the midpoint of side $s$.
+    The second pair meets the first pair on side $s+1$ at $B_s=A_{s+1}$.
+    These are exactly the two cases in the successor definition,
+    including the transition from side $3$ to side $0$.
+\end{proof}
+
+\begin{theorem}[Distinct elementary bases have distinct final endpoints]
+    \label{thm:area_law_cell_fan_final_endpoint_injective}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_injective}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    More generally, choose any optional midpoint subdivision of the
+    four sides of $Q$, and let $\mathcal E$ index its elementary bases.
+    The map $i\mapsto b_i$ from $\mathcal E$ to the square perimeter
+    is injective.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius,
+        thm:area_law_fan_triangle_contact,
+        thm:area_law_elementary_side_boundary_geometry}
+    Suppose that $i\ne j$ and $b_i=b_j=p$. The center and $p$ belong
+    to both closed triangles. The base-radius identity gives
+    $\|p-c\|_\infty=t/2>0$, so these are two distinct intersection
+    points. The contact classification therefore gives either
+    $b_i=a_j$ or $b_j=a_i$. In the first case $a_j=b_j$; in the
+    second case $a_i=b_i$. Both contradict the nondegeneracy of the
+    corresponding elementary segment. Thus $i=j$.
+\end{proof}
+
+\begin{theorem}[Endpoint adjacency is exactly the successor relation]
+    \label{thm:area_law_cell_fan_successor_iff}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_eq_cellFanStart_iff}
+    \leanok
+    \uses{def:area_law_cell_fan_successor}
+    For $i,j\in\mathcal J$ in the all-midpoint fan,
+    \begin{align}
+        b_i=a_j & \quad\Longleftrightarrow\quad j=\tau(i).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_successor_endpoints,
+        thm:area_law_cell_fan_final_endpoint_injective}
+    Apply the successor endpoint identity at $\tau^{-1}(j)$ to obtain
+    $a_j=b_{\tau^{-1}(j)}$. If $b_i=a_j$, injectivity of final
+    endpoints gives $i=\tau^{-1}(j)$, and hence $j=\tau(i)$.
+    The reverse implication is the successor endpoint identity.
+\end{proof}

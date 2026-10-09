@@ -68,6 +68,7 @@ import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.FlatDensityEntropy
 import TNLean.Algebra.FlatDensityRenyiEntropy
+import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralizeDecide
@@ -88,6 +89,7 @@ import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
+import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
@@ -104,12 +106,14 @@ import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Algebra.MatrixProjectionReindex
+import TNLean.Algebra.MatrixRankOfFactor
 import TNLean.Algebra.MatrixReindexGap
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MatrixSylvesterBound
 import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MatrixUnitFactorization
+import TNLean.Algebra.MatrixUnitaryConjCFC
 import TNLean.Algebra.MonoidHomCommutingWeight
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
