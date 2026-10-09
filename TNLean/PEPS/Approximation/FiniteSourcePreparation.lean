@@ -44,7 +44,8 @@ theorem ofSlots_mapIsometry_expands (R : SourceInventory P)
   | nil => exact Expands.refl []
   | cons r R ih =>
       rw [ofSlots_cons, ofSlots_cons]
-      simpa only [← TensorProduct.toContinuousLinearMap_mapIsometry] using
+      simpa only [← TensorProduct.toContinuousLinearMap_mapIsometry,
+        LinearIsometry.coe_toContinuousLinearMap] using
         (Expands.cons_mapL r (U 0) (V 0) (U' 0) (V' 0)
           (f 0).toContinuousLinearMap (g 0).toContinuousLinearMap
           (LinearIsometry.norm_toContinuousLinearMap_le _)
