@@ -11,7 +11,8 @@ import Lean.Util.CollectAxioms
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl := ``TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+  let decl :=
+    ``TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
   unless (← Lean.getEnv).contains decl do
     throwError "Missing declaration {decl}"
   let axioms ← Lean.collectAxioms decl
