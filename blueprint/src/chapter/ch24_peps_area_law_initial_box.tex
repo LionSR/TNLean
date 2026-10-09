@@ -168,6 +168,7 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
 \begin{theorem}[Uniform entropy of physical safe rectangles]
     \label{thm:area_law_initial_safe_rectangle_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow}
+    \leanok
     \uses{thm:area_law_initial_box,def:area_law_box_entropy,
         def:area_law_hamiltonian,def:area_law_ground_entropy}
     Fix a local dimension $q\ge1$, an interaction range $R$, a term norm
@@ -194,7 +195,7 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
     This is the pointwise consequence of the safe-box supremum and
     \cite[Proposition~3.3]{OpenAI2026AreaLaw} at its initial exponent.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,
         def:area_law_box_entropy,thm:area_law_box_entropy_safety}
     The initial safe-box estimate supplies $C$ and $e_0\in(0,1)$
