@@ -513,6 +513,31 @@ private theorem groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector
         orderedPartyVector_removeHead p ps (familyPhysicalLayout d (p :: ps)) v
           (List.nodup_cons.mp hn).1]
 
+/-- Grouping a prescribed ordered physical basis column gives the ordered
+party basis column whenever the listed local columns are the corresponding
+physical singleton columns, including their terminal scalar unit. The local
+basis index family may be arbitrary. The party list has no repetitions, but
+need not contain every party; no positive-dimension assumption is imposed.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–151 and
+565–588. -/
+theorem groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis
+    {I : P → Type} [∀ p, Fintype (I p)]
+    (d : P → ℕ) (ps : List P) (hn : ps.Nodup)
+    (x : (p : P) → Fin (d p))
+    (b : ∀ p, OrthonormalBasis (I p) ℂ
+      (Mem (Layout.atParty p (familyPhysicalLayout d ps))))
+    (y : ∀ p, I p)
+    (hv : ∀ p ∈ ps, HEq (b p (y p))
+      ((EuclideanSpace.basisFun (Fin (d p)) ℂ) (x p) ⊗ₜ[ℂ] (1 : ℂ))) :
+    groupByPartyIso ps (familyPhysicalLayout d ps) hn
+        (fun _ hr => (familyPhysicalLayout_owners d ps) ▸
+          (List.mem_map_of_mem (f := Reg.owner) hr))
+        (familyPhysicalListBasis d ps (fun i => x (ps.get i))) =
+      partyListBasis (familyPhysicalLayout d ps) b ps (fun i => y (ps.get i)) := by
+  exact (groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector d ps hn x
+    (fun p => b p (y p)) hv).trans
+      (partyListBasis_eq_orderedPartyVector (familyPhysicalLayout d ps) b ps y).symm
+
 /-- The standard ordered physical basis is the product of the actual
 singleton party bases transported by the canonical grouping isometry.
 No equality between independently chosen bases is assumed. Source:
