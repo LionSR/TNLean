@@ -252,11 +252,11 @@ example (R : ℕ) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
   intro h S E₀ Ω hgs hgraph L hn hr
   have hanchor : ∀ i, S.anchor i ∈ i.val := by
     intro i
-    exact (Finset.not_mem_empty _ (S.anchor i).property).elim
+    exact (Finset.notMem_empty _ (S.anchor i).property).elim
   have hS₀ : S.truncationSet L = ∅ := by
-    apply Finset.eq_empty_iff_forall_not_mem.mpr
+    apply Finset.eq_empty_iff_forall_notMem.mpr
     intro x _
-    exact Finset.not_mem_empty _ x.property
+    exact Finset.notMem_empty _ x.property
   obtain ⟨e, Ωt, htrgs, _⟩ := htr ∅ h S E₀ Ω hgs hgraph hanchor L hn hr hS₀
   exact ⟨e, Ωt, htrgs⟩
 
@@ -265,8 +265,9 @@ example (R : ℕ) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
 example : Matrix.IsGappedGroundState (1 : Matrix (Fin 1) (Fin 1) ℂ) 1
     (EuclideanSpace.single 0 1) 3 := by
   apply Matrix.isGappedGroundState_iff.mpr
-  refine ⟨?_, by simp, ?_⟩
+  refine ⟨?_, ?_, ?_⟩
   · rw [PiLp.norm_single, norm_one]
+  · simp only [Matrix.one_mulVec, Complex.ofReal_one, one_smul]
   · have hp : Matrix.vecMulVec
         (WithLp.ofLp (EuclideanSpace.single 0 1 : EuclideanSpace ℂ (Fin 1)))
         (star (WithLp.ofLp (EuclideanSpace.single 0 1 : EuclideanSpace ℂ (Fin 1)))) = 1 := by
@@ -275,7 +276,7 @@ example : Matrix.IsGappedGroundState (1 : Matrix (Fin 1) (Fin 1) ℂ) 1
       fin_cases j
       simp [Matrix.vecMulVec, EuclideanSpace.single, PiLp.single_apply]
     simpa only [hp, Complex.ofReal_one, one_smul, sub_self, smul_zero] using
-      (Matrix.posSemidef_zero : (0 : Matrix (Fin 1) (Fin 1) ℂ).PosSemidef)
+      (Matrix.PosSemidef.zero : (0 : Matrix (Fin 1) (Fin 1) ℂ).PosSemidef)
 
 -- The same scalar Hamiltonian on a two-dimensional spectator does not have
 -- the one-vector projector gap: its orthogonal basis vector has zero energy.
@@ -293,7 +294,7 @@ example {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ} [NeZero q]
     (Ω : StateSpace Λ q) (L : ℕ) (i : AdmissibleSupport Λ R)
     (hfar : setDist S.graph (S.truncationSet L) (S.anchor i) = ⊤) :
     S.truncatedEnergyTerm h Ω Δ L i = h.positiveTerm Δ Ω i := by
-  simp only [CollarScan.truncatedEnergyTerm, truncatedConstraint, hfar, if_pos]
+  simp only [CollarScan.truncatedEnergyTerm, truncatedConstraint, ite_eq_left hfar]
 
 -- With an empty truncation set this retention applies to every original label.
 example {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ} [NeZero q]
