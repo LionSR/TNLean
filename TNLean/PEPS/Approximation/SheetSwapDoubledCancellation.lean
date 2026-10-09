@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.PEPS.Approximation.SheetSwapSupported
 import QICLean.Analysis.DoubledSystemGap
 
@@ -36,6 +37,8 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
     sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ =
       doubledHamiltonian A := by
   classical
+  have hunit : sheetSwapOp q R * (sheetSwapOp q R)ᴴ = 1 :=
+    Matrix.mem_unitaryGroup_iff.mp (sheetSwap q R).permMatrix_mem_unitaryGroup
   done
 
 end TNLean.PEPS.EncodedFrame
