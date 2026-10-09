@@ -72,6 +72,7 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
+import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision

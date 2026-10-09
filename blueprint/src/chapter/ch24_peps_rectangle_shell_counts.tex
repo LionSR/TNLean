@@ -1,0 +1,94 @@
+\subsection{Dyadic counts for rectangle shells}
+
+% Auxiliary geometric estimates for the covering argument in Proposition 9.5.
+% The entropy estimate and the exponent improvement require further arguments.
+The rectangle shell covering in
+\cite[proof of Proposition~9.5, lines~717--729]{OpenAI2026AreaLaw}
+uses the maximal contained squares of
+Definition~\ref{def:area_law_capped_dyadic_partition}.
+The following estimates give the total side lengths at and below the cap,
+uniformly in the aspect ratio of the rectangle.
+
+\begin{theorem}[Size of a dilated rectangle]
+    \label{thm:area_law_rectangle_dilate_size}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.size_dilate}
+    \leanok
+    \uses{def:area_law_safe_rectangle}
+    Let $Q$ be a nonempty integer rectangle and let $j\in\mathbb N$.
+    Then
+    \begin{align}
+        \operatorname{size}(Q^{+j})
+         & =\operatorname{size}(Q)+2j.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_safe_rectangle}
+    Write $Q=[x_0,x_1]\times[y_0,y_1]\cap\mathbb Z^2$.
+    Its side lengths are $x_1-x_0+1$ and $y_1-y_0+1$.
+    Dilation adds $2j$ to each, so their maximum also increases by $2j$.
+\end{proof}
+
+\begin{theorem}[Selected rectangle shell squares at the cap]
+    \label{thm:area_law_rectangle_shell_cap_count}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.card_cappedDyadicPartition_shell_at_cap_le}
+    \leanok
+    \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition}
+    Let $Q$ be a nonempty integer rectangle and put
+    $s=\operatorname{size}(Q)$.
+    Let $j,L,K\in\mathbb N$ satisfy $j\le L\le s$ and $L<2^{K+1}$.
+    Put $S_j=Q^{+j}\setminus Q$ and
+    $N_K=\#\{(r,z)\in\mathcal P_K(S_j):r=K\}$.
+    Then
+    \begin{align}
+        2^K N_K\le24s.
+    \end{align}
+    The estimate includes $j=0$ and $K=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_buffer_contours,thm:area_law_capped_dyadic_partition}
+    The boundary-layer count in the proof of
+    Theorem~\ref{thm:area_law_buffer_contours} gives
+    \begin{align}
+        |S_j|\le4j(s+2j)\le12sL.
+    \end{align}
+    Set $v=2^K$. The exact capped partition and $L<2v$ imply
+    \begin{align}
+        v^2N_K\le |S_j|\le12sL\le24sv.
+    \end{align}
+    Cancel $v>0$.
+\end{proof}
+
+\begin{theorem}[Selected rectangle shell squares below the cap]
+    \label{thm:area_law_rectangle_shell_selected_count}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.card_cappedDyadicPartition_shell_below_cap_le}
+    \leanok
+    \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition}
+    Let $Q$ be a nonempty integer rectangle and put
+    $s=\operatorname{size}(Q)$.
+    Let $j,K,k\in\mathbb N$ satisfy $j\le s$, $k<K$ and $2^{k+1}\le s$.
+    Put $S_j=Q^{+j}\setminus Q$ and
+    $N_k=\#\{(r,z)\in\mathcal P_K(S_j):r=k\}$.
+    Then
+    \begin{align}
+        2^kN_k\le64s.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_rectangle_dilate_size,
+        thm:area_law_rectangle_mixed_count,
+        thm:area_law_mixed_dyadic_boolean,
+        thm:area_law_capped_mixed_parents}
+    Set $u=2^{k+1}$. The mixed-square count for a difference, the rectangle
+    count and Theorem~\ref{thm:area_law_rectangle_dilate_size} give
+    \begin{align}
+        u\,\#M_{k+1}(S_j)
+         & \le u\,\#M_{k+1}(Q^{+j})+u\,\#M_{k+1}(Q) \\
+         & \le4(s+2j)+8u+4s+8u                      \\
+         & \le32s.
+    \end{align}
+    Each selected square below the cap has a mixed parent, and a parent
+    has four children. Hence
+    \begin{align}
+        2^kN_k\le2u\,\#M_{k+1}(S_j)\le64s.
+    \end{align}
+\end{proof}

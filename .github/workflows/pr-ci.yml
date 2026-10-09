@@ -627,6 +627,13 @@ jobs:
             TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rectangle shell counts early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template mixed-square estimates early
         timeout-minutes: 5
         run: |
@@ -651,6 +658,17 @@ jobs:
         run: |
           set -eo pipefail
           for file in TNLean/PEPS/AreaLaw/Geometry/QuotientIntervals.lean TNLean/PEPS/AreaLaw/Geometry/RectangleMixedSquares.lean TNLean/PEPS/AreaLaw/Geometry/TemplateDyadicRows.lean TNLeanTest/RectangleMixedSquaresAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
+      - name: Check rectangle shell counts strictly and audit axioms
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for file in TNLean/PEPS/AreaLaw/Geometry/RectangleShellCounts.lean TNLeanTest/RectangleShellCountsAxioms.lean; do
             timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
