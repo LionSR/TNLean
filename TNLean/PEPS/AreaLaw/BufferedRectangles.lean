@@ -35,7 +35,7 @@ contour meet a boundary layer of `Q₀^{+d}` of width `R + 1`, which has at most
 
 * `IntRect.toFinset_dilate`: `Q^{+d}` is the ambient dilation of `Q`.
 * `subset_of_isSafe`: an admissible support meeting `A` inside a safe rectangle lies in `A`.
-* `not_crosses_two_contours`: the single-split property of the contours.
+* `not_splits_two_contours`: the single-split property of the contours.
 * `card_crossingTerms_rectRegion_le`: the crossing count `≤ 8 (R + 1) μ_R (size Q₀ + d)`.
 
 ## References

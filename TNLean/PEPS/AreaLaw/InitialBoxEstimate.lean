@@ -15,7 +15,9 @@ import QICLean.Analysis.ScaleRecurrence
 `F_box(r)` is the supremum of `S_Ω(A ∩ Q)` over all finite-range Hamiltonians on finite
 domains with gapped ground vectors, all cuts `A`, and all safe rectangles `Q` of size at most
 `r`, at fixed `q, R, J, Δ` and safety parameter `D₀`. Proposition 3.3 of the area-law
-manuscript bounds it by `C r^{1 + e₀}` with `e₀ ∈ (0, 1)`.
+manuscript bounds it by `C r^{1 + e₀}` with `e₀ ∈ (0, 1)`. The constants depend only
+on `q, R, J, Δ` and work for every admissible safety parameter: the entropy decreases
+as `D₀` increases, so the estimate at `D₀ = 2 * R + 11` suffices.
 
 A safe parent of size at most `M r` is partitioned into at most `M²` children of size at most
 `r`. With `P = 2 C_pad + 1`, color the children by their chunk positions modulo `P`; the
@@ -97,6 +99,12 @@ theorem nonneg_of_mem_boxEntropyValues {r : ℕ} {s : ℝ}
 theorem boxEntropy_nonneg (r : ℕ) : 0 ≤ boxEntropy q R J Δ D₀ r :=
   Real.sSup_nonneg fun _ hs ↦ nonneg_of_mem_boxEntropyValues hs
 
+/-- `F_box(r) ≤ r² log q`. Source: `02-initial.tex`, line 594. -/
+theorem boxEntropy_le_sq_mul_log (hq : 1 ≤ q) (r : ℕ) :
+    boxEntropy q R J Δ D₀ r ≤ (r : ℝ) ^ 2 * Real.log q :=
+  Real.sSup_le (fun _ hs ↦ le_of_mem_boxEntropyValues hq hs)
+    (mul_nonneg (sq_nonneg _) (Real.log_nonneg (by exact_mod_cast hq)))
+
 /-- Every safe-box entropy is at most `F_box(r)`. -/
 theorem regionalEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
     (h : LocalHamiltonian Λ q R J) {E₀ : ℝ} {Ω : StateSpace Λ q}
@@ -111,6 +119,18 @@ theorem boxEntropy_mono (hq : 1 ≤ q) : Monotone (boxEntropy q R J Δ D₀) := 
   refine Real.sSup_le (fun s hs ↦ ?_) (boxEntropy_nonneg r')
   obtain ⟨Λ, h, E₀, Ω, A, Q, hgs, hsafe, hQ, rfl⟩ := hs
   exact regionalEntropy_le_boxEntropy hq h hgs hsafe (hQ.trans hrr)
+
+/-- The safe-box entropy decreases with the safety parameter. Increasing the threshold
+in the safety condition (`02-initial.tex`, lines 220–228) reduces the collection of
+rectangles in the supremum defining `F_box` (lines 590–594). -/
+theorem boxEntropy_antitone (hq : 1 ≤ q) (r : ℕ) :
+    Antitone (fun D₀ : ℕ => boxEntropy q R J Δ D₀ r) := by
+  intro D₀ D₁ hD
+  refine Real.sSup_le (fun s hs ↦ ?_) (boxEntropy_nonneg (D₀ := D₀) r)
+  obtain ⟨Λ, h, E₀, Ω, A, Q, hgs, hsafe, hQ, rfl⟩ := hs
+  exact regionalEntropy_le_boxEntropy hq h hgs
+    (fun e he z hz p hp ↦
+      (Nat.mul_le_mul_right Q.size hD).trans_lt (hsafe e he z hz p hp)) hQ
 
 /-! ### Children of a safe parent -/
 
@@ -365,11 +385,10 @@ theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf :
       positivity
     positivity
 
-/-- **Proposition 3.3: the initial safe-box estimate** (area-law manuscript,
-`prop:initial-box`, `02-initial.tex`, lines 596–604). For local dimension `q ≥ 1`, range `R`,
-term norm bound `J ≥ 0`, gap `Δ > 0` and safety parameter `D₀ > 2R + 10`, there are constants
-`C` and `e₀ ∈ (0, 1)` with `F_box(r) ≤ C r^{1 + e₀}` for every `r ≥ 1`. -/
-theorem exists_boxEntropy_le_rpow (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+/-- The safe-box estimate at a fixed safety parameter. This auxiliary form follows the
+scale-recurrence argument of Proposition 3.3 (`prop:initial-box`, `02-initial.tex`,
+lines 606–669). The estimate uniform in the safety parameter is stated separately below. -/
+private theorem exists_boxEntropy_le_rpow_fixed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) (D₀ : ℕ) (hD₀ : 2 * R + 10 < D₀) :
     ∃ C e₀ : ℝ, 0 < e₀ ∧ e₀ < 1 ∧
       ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e₀) := by
@@ -417,5 +436,22 @@ theorem exists_boxEntropy_le_rpow (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 
     fun r hr ↦ ?_⟩
   rw [add_sub_cancel]
   exact hC r hr
+
+
+/-- **Proposition 3.3: the initial safe-box estimate** (area-law manuscript,
+`prop:initial-box`, `02-initial.tex`, lines 596–604). For local dimension `q ≥ 1`, range `R`,
+term norm bound `J ≥ 0` and gap `Δ > 0`, there are constants `C` and `e₀ ∈ (0, 1)`,
+depending only on `q, R, J, Δ`, such that for every safety parameter `D₀ > 2R + 10`
+one has `F_box(r) ≤ C r^{1 + e₀}` for every `r ≥ 1`. -/
+theorem exists_boxEntropy_le_rpow (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
+    (hΔ : 0 < Δ) :
+    ∃ C e₀ : ℝ, 0 < e₀ ∧ e₀ < 1 ∧
+      ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
+        ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e₀) := by
+  obtain ⟨C, e₀, he₀, he₀', hbound⟩ :=
+    exists_boxEntropy_le_rpow_fixed q R hq hJ hΔ (2 * R + 11) (by omega)
+  refine ⟨C, e₀, he₀, he₀', fun D₀ hD₀ r hr ↦ ?_⟩
+  exact (boxEntropy_antitone (R := R) (J := J) (Δ := Δ) hq r
+    (show 2 * R + 11 ≤ D₀ by omega)).trans (hbound r hr)
 
 end TNLean.PEPS.AreaLaw
