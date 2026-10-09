@@ -169,14 +169,15 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
     \label{thm:area_law_initial_safe_rectangle_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow}
     \leanok
-    \uses{thm:area_law_initial_box,def:area_law_box_entropy,
-        def:area_law_hamiltonian,def:area_law_ground_entropy}
+    \uses{def:area_law_safe_rectangle,def:area_law_hamiltonian,
+        def:area_law_ground_entropy}
     Fix a local dimension $q\ge1$, an interaction range $R$, a term norm
     bound $J\ge0$, and a gap $\Delta>0$. There exist constants $C\ge0$
     and $e_0\in(0,1)$, depending only on $q,R,J,\Delta$, such that the
     following holds simultaneously for every integer $D_0>2R+10$.
     Let $\Lambda$ be any finite induced square-lattice domain, let $H$
-    be an admissible Hamiltonian on $\Lambda$, and let $\Omega$ be its
+    be a Hamiltonian on $\Lambda$ as in
+    Definition~\ref{def:area_law_hamiltonian}, and let $\Omega$ be its
     normalized ground vector at energy $E_0$ with the full-system
     projector gap $\Delta$. For every cut $A\subseteq\Lambda$ and every
     safe integer rectangle $Q$,
