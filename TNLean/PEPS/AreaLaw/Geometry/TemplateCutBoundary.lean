@@ -24,15 +24,6 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- A physical crossing edge contributes both endpoints to the source set `Z`.
-Source: Lemma 9.4, final proof paragraph, and the definition of `Z`. -/
-theorem mem_boundaryEndpoints_of_mem_edgeBoundary {Λ : Finset (ℤ × ℤ)}
-    {A : Finset (Site Λ)} {e : Sym2 (Site Λ)} (he : e ∈ edgeBoundary Λ A)
-    {x : Site Λ} (hx : x ∈ e) : x.1 ∈ boundaryEndpoints Λ A := by
-  classical
-  exact Finset.mem_image.mpr
-    ⟨x, Finset.mem_biUnion.mpr ⟨e, he, by simpa using hx⟩, rfl⟩
-
 /-- Restricting a cut to a set avoiding its cut endpoints creates only ambient
 crossing edges. Source: Lemma 9.4, final proof paragraph. -/
 theorem edgeBoundary_filter_image_subset_ambientBoundary
