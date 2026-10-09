@@ -87,11 +87,8 @@ theorem sum_chargePathWeight_bad_endpoint_domainGraph_le
     obtain ⟨events, he⟩ := S.bandState_has_chargeAncestry_domainGraph hT hgraph hdepth
       g (offsets g) choices hL hclear k side x hxA hx
     have hvariation : ∀ i y, y ∈ S.ball i →
-        |S.depth y - S.depth (S.anchor i)| ≤ S.r₀ := by
-      intro i y hy
-      have hb : (domainGraph Λ).edist (S.anchor i) y ≤ (S.r₀ : ℕ∞) := by
-        simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hy
-      simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hb
+        |S.depth y - S.depth (S.anchor i)| ≤ S.r₀ :=
+      S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth
     have hmem := he.mem_badChargePaths S hn hvariation hc.2
     refine ⟨events, hmem, ?_⟩
     intro e hevent

@@ -26,6 +26,7 @@ def prefixHistory {K m M N : ℕ} (h : History K m M N) (j : ℕ) (hj : j ≤ N)
     History K m M j :=
   (h.1, fun t ↦ h.2 (Fin.castLE hj t))
 
+/-- Restricting a history to its full length is the identity. -/
 @[simp]
 theorem prefixHistory_self {K m M N : ℕ} (h : History K m M N) :
     prefixHistory h N le_rfl = h := rfl

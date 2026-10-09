@@ -84,16 +84,20 @@ variable (S : CollarScan V I)
 
 -- The first pair has no completed charges, and the next pair has exactly one.
 example (h0 : 0 < 2 * S.n * S.m) :
-    S.actualRoundHistory ⟨0, h0⟩ = History S.K S.m S.M 0 := rfl
+    S.actualRoundHistory ⟨0, h0⟩ = History S.K S.m S.M 0 := by
+  norm_num [CollarScan.actualRoundHistory]
 
 example (h1 : 1 < 2 * S.n * S.m) :
-    S.actualRoundHistory ⟨1, h1⟩ = History S.K S.m S.M 0 := rfl
+    S.actualRoundHistory ⟨1, h1⟩ = History S.K S.m S.M 0 := by
+  norm_num [CollarScan.actualRoundHistory]
 
 example (h2 : 2 < 2 * S.n * S.m) :
-    S.actualRoundHistory ⟨2, h2⟩ = History S.K S.m S.M 1 := rfl
+    S.actualRoundHistory ⟨2, h2⟩ = History S.K S.m S.M 1 := by
+  norm_num [CollarScan.actualRoundHistory]
 
 example (h3 : 3 < 2 * S.n * S.m) :
-    S.actualRoundHistory ⟨3, h3⟩ = History S.K S.m S.M 1 := rfl
+    S.actualRoundHistory ⟨3, h3⟩ = History S.K S.m S.M 1 := by
+  norm_num [CollarScan.actualRoundHistory]
 
 example (h0 : 0 < 2 * S.n * S.m) (hist : S.actualRoundHistory ⟨0, h0⟩) :
     S.actualRoundChoice ⟨0, h0⟩ hist = Unit := rfl
@@ -102,10 +106,12 @@ example (h1 : 1 < 2 * S.n * S.m) (hist : S.actualRoundHistory ⟨1, h1⟩) :
     S.actualRoundChoice ⟨1, h1⟩ hist = ChargeChoices S.K S.M := rfl
 
 example (h2 : 2 < 2 * S.n * S.m) (hist : S.actualRoundHistory ⟨2, h2⟩) :
-    S.actualRoundChoice ⟨2, h2⟩ hist = Unit := rfl
+    S.actualRoundChoice ⟨2, h2⟩ hist = Unit := by
+  norm_num [CollarScan.actualRoundChoice, IsChargeRound]
 
 example (h3 : 3 < 2 * S.n * S.m) (hist : S.actualRoundHistory ⟨3, h3⟩) :
-    S.actualRoundChoice ⟨3, h3⟩ hist = ChargeChoices S.K S.M := rfl
+    S.actualRoundChoice ⟨3, h3⟩ hist = ChargeChoices S.K S.M := by
+  norm_num [CollarScan.actualRoundChoice, IsChargeRound]
 
 -- Instance synthesis works before round parity or history is chosen.
 example (j : Fin (2 * S.n * S.m)) (hist : S.actualRoundHistory j) :
@@ -130,14 +136,14 @@ example (hm : 0 < S.m) (hM : 0 < S.M) (h0 : 0 < 2 * S.n * S.m) :
   · intro hj
     exact absurd hj (by decide)
   · intro _
-    rfl
+    norm_num
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h1 : 1 < 2 * S.n * S.m) :
     HEq (S.actualRoundData hm hM ⟨1, h1⟩) (S.actualChargeData hm hM 0) := by
   refine S.actualRoundData_induction hm hM ⟨1, h1⟩
     (fun _ _ _ D => HEq D (S.actualChargeData hm hM 0)) ?_ ?_
   · intro _
-    rfl
+    norm_num
   · intro hnj
     exact absurd (by decide) hnj
 
@@ -148,14 +154,14 @@ example (hm : 0 < S.m) (hM : 0 < S.M) (h2 : 2 < 2 * S.n * S.m) :
   · intro hj
     exact absurd hj (by decide)
   · intro _
-    rfl
+    norm_num
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (h3 : 3 < 2 * S.n * S.m) :
     HEq (S.actualRoundData hm hM ⟨3, h3⟩) (S.actualChargeData hm hM 1) := by
   refine S.actualRoundData_induction hm hM ⟨3, h3⟩
     (fun _ _ _ D => HEq D (S.actualChargeData hm hM 1)) ?_ ?_
   · intro _
-    rfl
+    norm_num
   · intro hnj
     exact absurd (by decide) hnj
 
@@ -259,13 +265,13 @@ example (hm : 0 < S.m) (hM : 0 < S.M)
     · intro hj
       exact absurd hj (by decide)
     · intro _
-      rfl
+      norm_num
   have e1 : (S.actualRoundData hm hM ⟨1, h1⟩).rootPath n t k 0 =
       (S.actualChargeData hm hM 0).rootPath n t k 0 := by
     refine S.actualRoundData_induction hm hM ⟨1, h1⟩
       (fun _ _ _ D => D.rootPath n t k 0 = (S.actualChargeData hm hM 0).rootPath n t k 0) ?_ ?_
     · intro _
-      rfl
+      norm_num
     · intro hnj
       exact absurd (by decide) hnj
   rw [e0, e1]
@@ -281,7 +287,7 @@ example (hm : 0 < S.m) (hM : 0 < S.M)
     refine S.actualRoundData_induction hm hM ⟨1, h1⟩
       (fun _ _ _ D => D.rootPath n t k 1 = (S.actualChargeData hm hM 0).rootPath n t k 1) ?_ ?_
     · intro _
-      rfl
+      norm_num
     · intro hnj
       exact absurd (by decide) hnj
   have e2 : (S.actualRoundData hm hM ⟨2, h2⟩).rootPath n t k 0 =
@@ -291,7 +297,7 @@ example (hm : 0 < S.m) (hM : 0 < S.M)
     · intro hj
       exact absurd hj (by decide)
     · intro _
-      rfl
+      norm_num
   rw [e1, e2]
   exact S.charge_rootPath_one_eq_actualFillData_zero hm hM 0 n ht k
 
