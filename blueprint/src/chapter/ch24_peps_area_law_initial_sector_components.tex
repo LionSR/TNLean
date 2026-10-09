@@ -89,6 +89,69 @@ These are the local initial regions used in
     bijection with (\ref{eq:area_law_initial_component_membership}).
 \end{proof}
 
+% Auxiliary to OpenAI, A two-dimensional area law from a global spectral gap,
+% Section 11, geometry:initial-stars, lines 333--370, especially 361--370,
+% and prop:two-families, lines 299--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Connected components in the closed square of half-radius]
+    \label{thm:area_law_initial_closed_half_components}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_closedHalf_angular_connectedComponents_equiv}
+    \uses{def:area_law_initial_sector_assignment,
+        def:area_law_initial_region_colors,def:area_law_fan_runs,
+        def:area_law_cell_fan_successor}
+    Retain all the arbitrary choices and hypotheses fixed at the
+    beginning of this section, including the pitch residues at every
+    layer and the canonical assignment $\sigma$.
+    With the same runs $\mathcal R$, closed run regions $Y_R$ and
+    actual identifier-change radial union $L$, put
+    \begin{align}
+        \Omega_{1/2} & =\overline B_\infty(v,r/2)\setminus L.
+        \label{eq:area_law_initial_closed_half_cut_square}
+    \end{align}
+    Write $\mathcal C(\Omega_{1/2})$ for its connected components in
+    the relative topology, and $C_{\Omega_{1/2}}(x)$ for the component
+    containing $x\in\Omega_{1/2}$.
+    There is a unique bijection
+    $\Phi:\mathcal C(\Omega_{1/2})\longrightarrow\mathcal R$ such that,
+    for every $x\in\Omega_{1/2}$ and $R\in\mathcal R$,
+    \begin{align}
+        \Phi(C_{\Omega_{1/2}}(x))=R
+         & \quad\Longleftrightarrow\quad x\in Y_R.
+        \label{eq:area_law_initial_closed_half_component_membership}
+    \end{align}
+    The change set $A$ may be empty; the center is then retained.
+    Separated runs carrying the same initial identifier correspond
+    to distinct connected components. This is a local assertion in
+    the initial-star construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \uses{def:area_law_cell_fan,
+        thm:area_law_cell_fan_successor_endpoints,
+        thm:area_law_initial_sector_colors,
+        thm:area_law_closed_half_fan_components}
+    The smaller fan has origin $v-r(1,1)$, exponent $\ell$ and
+    cell index $(0,0)$, so its center is $v$.
+    Color its triangle $s$ by $\chi(\sigma(s))$.
+    The successor endpoint theorem makes $s$ and $\tau(s)$
+    adjacent. The adjacent-sector color theorem therefore gives
+    \begin{align}
+        \chi(\sigma(s))=\chi(\sigma(\tau(s)))
+         & \quad\Longleftrightarrow\quad \sigma(s)=\sigma(\tau(s)).
+    \end{align}
+    Consequently its color-change indices are exactly $A$, and
+    the radial union removed from the fan is exactly $L$.
+
+    Apply Theorem~\ref{thm:area_law_closed_half_fan_components}
+    to this smaller fan with the derived coloring. Its retained
+    closed square is
+    (\ref{eq:area_law_initial_closed_half_cut_square}), its graph
+    runs are $\mathcal R$, and its closed run regions are $Y_R$.
+    The resulting unique bijection has precisely
+    (\ref{eq:area_law_initial_closed_half_component_membership}).
+\end{proof}
+
 \begin{theorem}[A retained run belongs to its initial open region]
     \label{thm:area_law_initial_run_open_region}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_sector_run_mem_initialOpenRegion}

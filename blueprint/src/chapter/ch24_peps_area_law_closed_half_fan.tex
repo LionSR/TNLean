@@ -118,3 +118,73 @@ carrying the same color remain distinct.
     is nonempty and connected. If $A=\varnothing$, no radial is removed
     and the center is retained.
 \end{proof}
+
+% Auxiliary to OpenAI, A two-dimensional area law from a global spectral gap,
+% Section 11, geometry:initial-stars, lines 352--370, and
+% prop:two-families, lines 308--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Connected components in the smaller closed square]
+    \label{thm:area_law_closed_half_fan_components}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_closedHalf_connectedComponents_equiv}
+    \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
+    Retain the arbitrary origin, natural exponent, cell index and binary
+    coloring of Definition~\ref{def:area_law_fan_closed_half_piece}.
+    With its center $c$, half-side $r$, triangles $P_i$ and deleted
+    radial union $L$, put
+    \begin{align}
+        \Omega_{1/2} & =\overline B_\infty(c,r/2)\setminus L,
+                     & T_R                                    & =\bigcup_{i\in R}P_i \qquad (R\in\mathcal R).
+    \end{align}
+    Write $\mathcal C(\Omega_{1/2})$ for the connected components in
+    the relative topology, and $C_{\Omega_{1/2}}(x)$ for the component
+    containing $x\in\Omega_{1/2}$.
+    There is a unique bijection
+    $\Phi:\mathcal C(\Omega_{1/2})\longrightarrow\mathcal R$ such that,
+    for every $x\in\Omega_{1/2}$ and $R\in\mathcal R$,
+    \begin{align}
+        \Phi(C_{\Omega_{1/2}}(x))=R
+         & \quad\Longleftrightarrow\quad x\in T_R.
+        \label{eq:area_law_closed_half_fan_component_membership}
+    \end{align}
+    The assertion includes exponent zero and an empty change set.
+    In the latter case the center is retained. Distinct runs carrying
+    the same color correspond to distinct connected components.
+    This is a local ingredient of the initial-star construction in
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_fan_closed_half_run_connected,
+        thm:area_law_fan_cut_runs_disjoint,
+        thm:area_law_fan_run_cover,
+        thm:area_law_sample_rows,
+        thm:area_law_cell_fan_closed_ball}
+    For each run $R$, set $V_R=T_R\cap\Omega_{1/2}$.
+    Theorem~\ref{thm:area_law_fan_closed_half_run_connected} shows
+    that $V_R$ is nonempty and connected. These sets are pairwise
+    disjoint by Theorem~\ref{thm:area_law_fan_cut_runs_disjoint}.
+    The smaller closed square lies in
+    $\overline B_\infty(c,r)$, which is the closed cell by
+    Theorem~\ref{thm:area_law_cell_fan_closed_ball}. The run cover
+    therefore gives $\Omega_{1/2}=\bigcup_{R\in\mathcal R}V_R$.
+
+    Each triangle is a finite convex hull, hence compact and closed,
+    as in Theorem~\ref{thm:area_law_sample_rows}. Every $T_R$ is a
+    finite union of such triangles, so $V_R$ is relatively closed
+    in $\Omega_{1/2}$. The disjoint cover gives
+    \begin{align}
+        \Omega_{1/2}\setminus V_R
+         & =\bigcup_{\substack{T\in\mathcal R \\T\ne R}}V_T.
+    \end{align}
+    There are finitely many runs, so this complement is relatively
+    closed. Thus every $V_R$ is relatively open as well.
+
+    A connected component meeting $V_R$ contains the connected set
+    $V_R$ and cannot meet its relatively open and closed complement.
+    It is therefore exactly $V_R$. These sets give every component
+    exactly once. For a retained point, membership in $V_R$ is
+    precisely membership in $T_R$, proving
+    (\ref{eq:area_law_closed_half_fan_component_membership}).
+    Every component contains a point, so the same characterization
+    proves uniqueness of the bijection.
+\end{proof}
