@@ -37,6 +37,7 @@ variable {V H ι : Type} [Fintype V] [DecidableEq V] {K : ℕ}
   [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)]
   {n : V → ℕ} (D : TransportData V K H C) (E : EnergyTerms V n ι)
 
+omit [DecidableEq H] [∀ h, DecidableEq (C h)] in
 /-- An unsplit leaf has identically zero split entropy, directly from the defining
 sum over exceptional bands (`06-transport.tex`, lines 342–347). -/
 theorem splitEta_eq_zero_of_not_mem_splitLeaves {i : ι} {j : Σ h, Option (C h)}
@@ -100,7 +101,7 @@ theorem integral_transportScanRound_new (hD : D.IsAdmissible) (ht : 0 ≤ t)
     {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(transportScanRound D n E good t pre).μNew k p h c) =
       ∫ u, Transport.fourierWeight u *
-        realCoherentIntegral k (base n) (D.state n t k (pre k) p ⟨h, some c⟩ u) f :=
+        realCoherentIntegral k (TransportData.base n) (D.state n t k (pre k) p ⟨h, some c⟩ u) f :=
   D.integral_transportLeafMeasure n t k (pre k) p ⟨h, some c⟩ hD ht hcomm hf
 
 /-- Both leaf kinds have Fourier mass one half at every interior parameter, including
@@ -138,7 +139,8 @@ theorem transportScanRound_active (hD : D.IsAdmissible) (ht : 0 ≤ t)
   · intro c
     apply D.transportLeafMeasure_real_univ_of_weight_ne_zero n t k (pre k) 1
       ⟨h, some c⟩ hD ht hcomm hsym hpre
-    simpa [TransportData.tree, MeanTree.weight_interpTree_new] using
+    rw [TransportData.tree, MeanTree.weight_interpTree_new]
+    simpa using
       (mul_pos (hD.histWeight_pos h) (hD.choiceWeight_pos h c)).ne'
 
 /-- Choice gain uses history weights without a terminal factor `1 - p` and the same
@@ -166,6 +168,7 @@ theorem transportScanRound_chargeDefect (hD : D.IsAdmissible) (ht : 0 ≤ t)
       else 0 := by
   classical
   unfold ScanRound.chargeDefect
+  dsimp only [transportScanRound]
   apply Finset.sum_congr rfl
   intro h _
   change (if good h then D.histTree.weight h * _ else 0) = _
@@ -181,11 +184,9 @@ theorem transportScanRound_chargeDefect (hD : D.IsAdmissible) (ht : 0 ≤ t)
     apply Finset.sum_congr rfl
     intro i _
     by_cases hi : (⟨h, none⟩ : Σ h, Option (C h)) ∈ D.splitLeaves E i
-    · change (if _ then _ else _) = _
-      rw [if_pos hi]
+    · simp only [hi, ↓reduceIte]
       exact integral_transportScanRound_old D n E good t pre hD ht k hcomm p h (hcont i)
-    · change (if _ then _ else _) = _
-      rw [if_neg hi]
+    · simp only [hi, ↓reduceIte]
       simp [D.splitEta_eq_zero_of_not_mem_splitLeaves E hi,
         TransportData.oldFourierCoherentIntegral, realCoherentIntegral]
   · simp only [hg, ↓reduceIte]

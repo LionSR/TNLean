@@ -61,6 +61,11 @@ theorem oldFourierCoherentIntegral_eq_integral_hermPart (hD : D.IsAdmissible)
   unfold oldFourierCoherentIntegral
   apply integral_congr_ae
   exact Filter.Eventually.of_forall fun u => by
+    change Matrix.Transport.fourierWeight u *
+        realCoherentIntegral k (base n) (D.state n t k pre p ⟨h, none⟩ u) F =
+      Matrix.Transport.fourierWeight u *
+        (D.state n t k pre p ⟨h, none⟩ u *
+          hermPart (coherentAverage k (base n) F)).trace.re
     rw [re_trace_mul_hermPart (D.posSemidef_state hD ht hcomm pre p _ u).isHermitian,
       trace_mul_coherentAverage k (base n) hF]
 
@@ -175,7 +180,8 @@ theorem intervalIntegrable_sum_oldFourierCoherentIntegral (hD : D.IsAdmissible)
       exact (D.intervalIntegrable_oldFourierCoherentIntegral n hD ht hcomm pre h (hF h)).const_mul _
     · simp only [hg, ↓reduceIte]
       exact intervalIntegrable_const
-  simpa only [Finset.sum_apply] using
-    (IntervalIntegrable.sum Finset.univ (fun h _ => hint h))
+  convert IntervalIntegrable.sum Finset.univ (fun h _ => hint h) using 1
+  ext p
+  simp only [Finset.sum_apply]
 
 end TensorPower.ReplicaTransport.TransportData

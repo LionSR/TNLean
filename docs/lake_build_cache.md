@@ -177,8 +177,9 @@ changes. This prevents historical or removed unreachable modules from satisfying
 regression imports. Unchanged QIC proof artifacts and unchanged Gametheory and
 checkdecls modules remain reusable; no `.trace` or `.hash` is rewritten.
 
-The ordinary full `lake build`, linter target, and all existing checks still run
-before direct Lean regressions. The guard verifies that the default TNLean root
+The ordinary full `lake build`, linter target, and all existing checks still run.
+Direct Lean regressions follow the full root except for the explicitly guarded
+focused checks below. The guard verifies that the default TNLean root
 imports `QICLean`, ensuring its aggregator closure is rebuilt normally. This is
 an optimization candidate, not evidence of a cache hit or measured speedup. It
 does not relax `seed_lake_build.sh` or the stricter local seeding policy.
@@ -220,5 +221,36 @@ explicit Mathlib cache guard. Its fail-fast Lake target is
 modules and their complete import closures are rebuilt before strict elaboration.
 The regression prints eight axiom audits; `check_collared_open_axioms.py` requires
 all eight and rejects every axiom outside `propext`, `Classical.choice`, and
-`Quot.sound`, including `sorryAx`. All other direct Lean regressions remain after
-the full root build. No dependency pin or artifact provenance rule changes.
+`Quot.sound`, including `sorryAx`. No dependency pin or artifact provenance rule
+changes.
+
+### Focused scanner integrability checks before the root build
+
+After canonical setup and provenance pruning, the scanner check requires the
+prebuilt `Mathlib.olean` and runs the fail-fast `:olean` targets
+`TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral` and
+`TNLean.PEPS.AreaLaw.Scan.Selection`. Its step sets `LEAN_NUM_THREADS=1`
+explicitly; it does not rely on an implicit job-wide thread setting. Lake
+rebuilds their complete import closures before the four named early checks:
+
+1. Check parameter integrability sources strictly
+2. Test actual parameter integrability and discontinuous selection
+3. Check literal round measure and regularity sources strictly
+4. Test literal round measures and parameter integrability
+
+Those four blocks keep their original order, strict options, single-thread
+commands, 90-second per-command timeouts, and 8/5/8/7-minute step limits.
+Fixtures retain their temporary namespace, cleanup trap, output order, and
+`LEAN_PATH` prepend inside `lake env bash -c`. The workflow guards allow only
+these exact blocks in addition to the two earlier named exceptions. All other
+direct Lean regressions remain after the full root. The root retains its String
+Order capstones and `lint_style` target; the remaining checks and main-only cache
+save policy are unchanged.
+
+The focused build appends all output with `2>&1 | tee -a` to the same
+`$RUNNER_TEMP/lake-build.log` used by the full root and final changed-module
+timing gate. Never truncate or deduplicate it: an early changed-module timing
+of at least 50 seconds must still fail the gate when the later root is silent
+or reports a fast replay. Parser regressions exercise both cases without
+changing the parser or its 25/50-second thresholds. Source-only validation does
+not establish a successful Lean build or a measured runtime improvement.
