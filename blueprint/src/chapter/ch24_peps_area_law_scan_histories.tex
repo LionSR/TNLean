@@ -1624,6 +1624,56 @@ The following finite construction follows
     not contained in $S_0$.
 \end{proof}
 
+% One ground vector is obtained before all cut quantifiers; this does not
+% construct the scanner prevector, comparator estimates, or ScanData.
+% Source: Proposition 4.5 and Lemma 3.1, used in 08-scanner.tex, lines 400--414.
+\begin{theorem}[A truncated ground vector with all marginal tail bounds]
+    \label{thm:al_scan_exists_marginal_tails}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds}
+    \leanok
+    \uses{thm:al_lattice_truncation,thm:al_scan_actual_marginal_tails}
+    Fix $R\in\mathbb N$, $J\ge0$, $\Delta>0$ and $C_0\ge0$.
+    There is $C_{\mathrm{tr}}>0$, depending only on $R,J,\Delta,C_0$,
+    such that the following holds for every $q\ge1$, finite induced
+    lattice domain $\Lambda$, and local Hamiltonian $H=\sum_i h_i$
+    of range $R$ and term norm bound $J$. Let $\Omega$ be a unit vector
+    with $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
+    Take any scan at integer scale $n\ge2$, with the induced domain graph
+    and every anchor in its labelled interaction support. For any
+    $L\in\mathbb N$, suppose
+    \begin{align}
+        S_0   & =\{x\in A:d(x)\le L\},                   &
+        |S_0| & \le C_0n^2,                              &
+        r_0   & =\lceil C_{\mathrm{tr}}(\log n)^2\rceil.
+    \end{align}
+    Form the physical truncated terms of
+    Definition~\ref{def:al_scan_actual_energy_terms}, centered at
+    $\Omega$, and put $\widetilde H=\sum_i\widetilde h_i$ and
+    $g=\Delta/c_*$. There exist a real $e$ and a unit vector
+    $\widetilde\Omega$ satisfying~(\ref{eq:al_scan_truncated_gap}).
+    For this same vector, both marginal inequalities of
+    Theorem~\ref{thm:al_scan_actual_marginal_tails} hold for every
+    cut $X\subseteq\Lambda$, with $\vartheta=2/g$, the literal designated
+    support budget $\mathcal B_X$, every real $w$, and every real $u$
+    with $|u|\le1/(32\sqrt{(1+2/g)\mathcal B_X})$.
+    The constant $C_{\mathrm{tr}}$ is chosen independently of the
+    scan's charge-slot constant $C_1$, and before $q$, $\Lambda$, $H$,
+    $\Omega$ and the scan. Empty domains and empty $S_0$ are permitted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_lattice_truncation,thm:al_scan_actual_marginal_tails}
+    Choose $C_{\mathrm{tr}}$ from Theorem~\ref{thm:al_lattice_truncation}
+    with the fixed $R,J,\Delta,C_0$. Apply it using the scan's anchor map,
+    $S_0$ and $n$. The graph, radius and original centering vector agree
+    term by term, so its truncated sum is exactly $\widetilde H$,
+    with every original label retained. Its unit vector, eigen-equation
+    and projector gap give~(\ref{eq:al_scan_truncated_gap}). Apply
+    Theorem~\ref{thm:al_scan_actual_marginal_tails} to that single pair
+    $(e,\widetilde\Omega)$ for all cuts. Terms in components disjoint
+    from $S_0$ remain in the physical sum. No auxiliary system is adjoined.
+\end{proof}
+
 % Direct specializations of QICLean at 7224037, ReplicaTransport/Transport.lean.
 \begin{theorem}[Entropy and energy transport in an actual scan round]
     \label{thm:al_scan_actual_transport_estimates}

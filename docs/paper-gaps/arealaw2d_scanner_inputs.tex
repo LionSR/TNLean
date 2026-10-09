@@ -301,10 +301,11 @@ complete scanner data construction remain open.
 
 The moment and tail estimates of \cite[Lemma~3.1]{OpenAI2026AreaLaw} are established in
 \path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean}
-for every actual regional state of one supplied truncated ground vector.
+for every actual regional state of one truncated ground vector.
 The terms are the actual positive constraints centered at the original
 unit vector $\Omega$, truncated near the scanner's compact set.
-Writing $\widetilde H=\sum_i\widetilde h_i$, the explicit hypothesis is
+Writing $\widetilde H=\sum_i\widetilde h_i$, the physical ground-state
+conditions are
 \begin{align}
     \|\widetilde\Omega\|         & =1,                 \\
     \widetilde H\widetilde\Omega & =e\widetilde\Omega, \\
@@ -319,26 +320,44 @@ The exact budget preserves every original label, including repeated
 supports and zero terms; complementary cuts have the same budget, and
 the empty and full cuts have budget one.
 
-The application of Lemma~3.1 preserves its unit-norm, eigenvector and gap
-hypotheses exactly as in (\ref{eq:arealaw2d_scanner_inputs_marginal_gap}).
-Constructing a witness $(e,\widetilde\Omega)$ of these hypotheses for the
-scanner's truncated physical Hamiltonian remains part of the
-Proposition~9.2 construction. No kernel equation for each individual term
-is asserted. The gap hypothesis concerns the physical sum, before either
-auxiliary identity extension. Empty truncation sets and retained disconnected
-components are allowed; an arbitrary cut inside a retained component can still
-have crossing labels.
+The pair $(e,\widetilde\Omega)$ in
+(\ref{eq:arealaw2d_scanner_inputs_marginal_gap}) is now constructed from
+Proposition~4.5. Fix $R$, $J\ge0$, $\Delta>0$ and $C_0\ge0$.
+One constant $C_{\mathrm{tr}}>0$ is chosen before the local dimension,
+domain, interaction, original ground vector and scan. For every such
+instance, the hypotheses retained are the original Hamiltonian's gapped
+ground-state condition, the induced domain graph, anchors in their original
+admissible supports, $n\ge2$, the radius equality
+$r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$, and
+$|S_0|\le C_0n^2$. The chosen radius constant is independent of the scan's
+charge-slot constant $C_1$.
+\footnote{The existential statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds}.}
+The graph, set, radius and centered constraints agree term by term with the
+physical truncation theorem. Its unit-norm, eigenvector and positive
+semidefinite gap conclusions therefore give the actual physical
+$\widetilde H$ in (\ref{eq:arealaw2d_scanner_inputs_marginal_gap}).
+The resulting single pair is chosen before all cuts and satisfies both
+marginal inequalities for every cut. No truncated spectral or tail
+hypothesis is supplied.
 
-The remaining source-facing construction must obtain one $e$ and
-$\widetilde\Omega$ from the physical truncation theorem, identify that
-same physical sum, and derive uniform cut budgets from the actual geometry.
+No kernel equation for each individual term is asserted, and $e$ is not
+assumed to vanish. The original $\Omega$ remains the filter center.
+The projector gap concerns the physical sum before either auxiliary
+identity extension; a nontrivial spectator can destroy the one-vector
+projector gap. Empty domains, local dimension one, empty truncation sets
+and retained disconnected components are allowed. An arbitrary cut inside
+a retained component can still have crossing labels.
+
+The remaining source-facing construction must derive uniform cut budgets
+from the actual geometry and combine them with this physical witness.
 For the target typical spectrum, the bound is $C n(\log n)^{12}$ rather
 than the status bound $C nD(\log n)^{12}$ used elsewhere in the scan
 (\path{08-scanner.tex}, lines~400--414). The canonical target typical set,
 its positive mass and dimension, the initial prevector, the comparator
 estimates, and the scanner's measure-valued fields still have to be supplied.
-Neither this addition nor its budget identities construct the complete
-scanner data package or remove the restriction on Proposition~9.2.
+The constructed physical witness does not complete the scanner data
+package or remove the restriction on Proposition~9.2.
 
 \section{Elimination}
 
