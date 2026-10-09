@@ -1,0 +1,82 @@
+\subsection{Replica limits before large-scale entropy absorption}
+
+The proof of Proposition~9.5 in
+\cite[Section~9, lines~755--769]{OpenAI2026AreaLaw} takes the replica
+limit at each fixed physical scale before choosing the large-scale
+threshold. The following auxiliary scalar statements express that order.
+The two norm comparisons and the common entropy are explicit inputs;
+their physical derivation remains separate.
+
+\begin{theorem}[Absorption after the fixed-scale replica limit]
+    \label{thm:area_law_bootstrap_replica_absorption}
+    \lean{TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons}
+    Let $S,C,\tau,E,B_u,B_l\in\mathbb R$ satisfy $S\ge0$, $C\ge0$,
+    $\tau>0$ and
+    \begin{align}
+        C(\tau+E/\tau)\le1.
+    \end{align}
+    Let $F,d,r_u,r_l,r_e$ be real sequences. Suppose that
+    $r_u(k),r_l(k),r_e(k)$ tend to zero as $k\to\infty$, and that
+    for every sufficiently large $k$,
+    \begin{align}
+        d(k)                                        & \le E+r_e(k),     \\
+        F(k)                                        & \le2S+B_u+r_u(k), \\
+        \bigl(4-C(\tau+d(k)/\tau)\bigr)S-B_l-r_l(k) & \le F(k).
+    \end{align}
+    Then
+    \begin{align}
+        S\le B_u+B_l.
+    \end{align}
+    The entropy $S$ and all fixed coefficients are independent of $k$.
+    The two budgets include any substitutions of the typical entropy
+    and auxiliary dimension made before these scalar comparisons.
+\end{theorem}
+\begin{proof}
+    Since $C,S\ge0$ and $\tau>0$, the defect bound gives
+    \begin{align}
+        C(\tau+d(k)/\tau)S
+         & \le C(\tau+E/\tau)S+(C/\tau)Sr_e(k).
+    \end{align}
+    Combining the two comparisons therefore yields
+    \begin{align}
+        \bigl(2-C(\tau+E/\tau)\bigr)S
+         & \le B_u+B_l+r_u(k)+r_l(k)+(C/\tau)Sr_e(k).
+    \end{align}
+    The right-hand side tends to $B_u+B_l$, whereas the left-hand
+    side is constant. Passing to the limit gives the same inequality
+    without the three remainders. Finally,
+    $2-C(\tau+E/\tau)\ge1$ and $S\ge0$ imply the conclusion.
+\end{proof}
+
+\begin{theorem}[One threshold for the bootstrap coefficient loss]
+    \label{thm:area_law_bootstrap_comparison_loss_threshold}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold}
+    \uses{def:area_law_bootstrap_parameters}
+    Fix $e_0\in(0,1)$ and $C,C_E\in\mathbb R$, and let
+    $\nu=(1-e_0)/2000$. There is an integer $N\ge1$, depending
+    only on these fixed coefficients, with the following property.
+    For every integer $n\ge N$, put
+    \begin{align}
+        \tau_n=n^{-\nu/4},\qquad E_n=C_E n^{-\nu/2}.
+    \end{align}
+    Then
+    \begin{align}
+        0<\tau_n<\frac12,\qquad C(\tau_n+E_n/\tau_n)\le1.
+    \end{align}
+    This is the numerical threshold used after the fixed-scale
+    replica limit. It does not require a replica convergence rate
+    uniform in $n$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_bootstrap_margins}
+    The fixed parameter bounds give $\nu>0$. At positive integer
+    scales, the quotient of powers gives
+    \begin{align}
+        E_n/\tau_n           & =C_E n^{-\nu/4},     \\
+        C(\tau_n+E_n/\tau_n) & =C(1+C_E)n^{-\nu/4}.
+    \end{align}
+    Both $\tau_n$ and the last expression tend to zero. Choose
+    one threshold for the bounds $\tau_n<1/2$ and
+    $C(1+C_E)n^{-\nu/4}<1$, and enlarge it to at least one.
+    Positivity of $n$ gives $\tau_n>0$ and the asserted inequalities.
+\end{proof}
