@@ -41,6 +41,15 @@ noncomputable def boundaryEndpoints (Λ : Finset (ℤ × ℤ)) (A : Finset (Site
   classical
   exact ((edgeBoundary Λ A).biUnion Sym2.toFinset).image Subtype.val
 
+/-- A physical crossing edge contributes both endpoints to the source set `Z`.
+Source: Lemma 9.4, final proof paragraph, and the definition of `Z`. -/
+theorem mem_boundaryEndpoints_of_mem_edgeBoundary {Λ : Finset (ℤ × ℤ)}
+    {A : Finset (Site Λ)} {e : Sym2 (Site Λ)} (he : e ∈ edgeBoundary Λ A)
+    {x : Site Λ} (hx : x ∈ e) : x.1 ∈ boundaryEndpoints Λ A := by
+  classical
+  exact Finset.mem_image.mpr
+    ⟨x, Finset.mem_biUnion.mpr ⟨e, he, by simpa using hx⟩, rfl⟩
+
 /-- There are at most two endpoints per crossing edge, even when the boundary
 is empty. Source: Section 11, lines 179–185, `|Z| ≤ 2b`, absorbed into the
 numerical constant there. This does not assert the layer-cell bound. -/

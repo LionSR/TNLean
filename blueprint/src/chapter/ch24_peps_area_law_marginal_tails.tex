@@ -107,3 +107,92 @@ Definition~\ref{def:area_law_hamiltonian}.
     the conclusion is trivial. The indices of positive weight outside the
     typical set are exactly those of the tail event.
 \end{proof}
+
+\begin{theorem}[Supports crossing a general cut]
+    \label{thm:area_law_crossing_supports}
+    \lean{TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le,
+        TNLean.PEPS.AreaLaw.card_crossingTerms_le_edgeBoundary}
+    \leanok
+    \uses{def:area_law_hamiltonian,
+        thm:area_diamond_count, thm:area_diamond_budget}
+    Put $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$. At most $\mu_R$ admissible
+    supports contain a given site, and for every $A\subseteq\Lambda$ at most
+    $|\partial_\Lambda A|\,v_R\mu_R$ admissible supports meet both $A$ and its
+    complement.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_diamond_count, thm:area_diamond_budget}
+    Let $X$ meet $A$ in $v$ and its complement in $w$. A walk of length at
+    most $R$ from $v$ to $w$ in the induced graph crosses an edge
+    $\{x,y\}\in\partial_\Lambda A$ with $x\in A$, and its initial segment
+    joins $v$ to $x$ in at most $R$ steps. Thus $X$ contains a site of the
+    ball of radius $R$ about the endpoint in $A$ of a boundary edge. This
+    ball has at most $v_R$ sites by Theorem~\ref{thm:area_diamond_count}, and
+    each of them lies in at most $\mu_R$ admissible supports by
+    Theorem~\ref{thm:area_diamond_budget}.
+\end{proof}
+
+\begin{theorem}[Tail parameter of a general cut]
+    \label{thm:area_law_tail_parameter}
+    \lean{TNLean.PEPS.AreaLaw.tailParameterConstant,
+        TNLean.PEPS.AreaLaw.one_le_tailParameterConstant,
+        TNLean.PEPS.AreaLaw.cutLogBudget_le_edgeBoundary}
+    \leanok
+    \uses{def:area_law_cut_log_budget, thm:area_law_crossing_supports}
+    Let $q\ge1$ and put $C=v_R\mu_R\log^2(\mathrm e\,q^{v_R})$. Then $C\ge1$,
+    and for every $A\subseteq\Lambda$,
+    \begin{align}
+        \mathcal B_A & \le C\,(1+|\partial_\Lambda A|).
+        \label{eq:area_law_tail_parameter}
+    \end{align}
+    This is the bound on the tail parameter stated after Lemma~3.1 of
+    \cite{OpenAI2026AreaLaw}; the constant depends only on $q$ and $R$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_crossing_supports, thm:area_diamond_budget}
+    An admissible support has at most $v_R$ sites, so each summand of
+    $\mathcal B_A$ is at most $\log^2(\mathrm e\,q^{v_R})$, and by
+    Theorem~\ref{thm:area_law_crossing_supports} there are at most
+    $|\partial_\Lambda A|\,v_R\mu_R$ summands. Hence
+    $\mathcal B_A\le1+C|\partial_\Lambda A|\le C(1+|\partial_\Lambda A|)$,
+    the last step because $C\ge1$.
+\end{proof}
+
+\begin{theorem}[Typical marginal spectrum at the boundary width]
+    \label{thm:area_law_typical_spectrum_boundary}
+    \lean{TNLean.PEPS.AreaLaw.typicalWidthConstant,
+        TNLean.PEPS.AreaLaw.concentrationWidth_le,
+        TNLean.PEPS.AreaLaw.typicalMass_le_typicalMass_of_le,
+        TNLean.PEPS.AreaLaw.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary}
+    \leanok
+    \uses{thm:area_law_typical_spectrum, thm:area_law_tail_parameter}
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:area_law_marginal_tails}, let $q\ge1$, let $n\ge0$ be
+    an integer and $M\ge0$, and put
+    \begin{align}
+        C_M & =32\sqrt{(1+\vartheta)C}\,
+        \Bigl(M+\frac{\mathrm e/2+\log2}{\log2}\Bigr)
+    \end{align}
+    with $C$ as in Theorem~\ref{thm:area_law_tail_parameter}. The positive
+    eigenvalues $p_j$ of $\rho_A$ with
+    \begin{align}
+        |-\log p_j-S_\Omega(A)| & \le C_M\sqrt{1+|\partial_\Lambda A|}\,\log(n+2)
+    \end{align}
+    carry total mass at least $1-(n+2)^{-M}$. This is the concentration
+    statement following Lemma~3.1 of \cite{OpenAI2026AreaLaw}, which is
+    stated there for $n\ge1$ and $M>0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_typical_spectrum, thm:area_law_tail_parameter}
+    Since $\log(n+2)\ge\log2$,
+    \begin{align}
+        M\log(n+2)+\mathrm e/2+\log2
+         & \le\Bigl(M+\frac{\mathrm e/2+\log2}{\log2}\Bigr)\log(n+2),
+    \end{align}
+    and (\ref{eq:area_law_tail_parameter}) gives
+    $\sqrt{(1+\vartheta)\mathcal B_A}\le\sqrt{(1+\vartheta)C(1+|\partial_\Lambda A|)}$.
+    Both factors being nonnegative, the width of
+    Theorem~\ref{thm:area_law_typical_spectrum} is at most
+    $C_M\sqrt{1+|\partial_\Lambda A|}\log(n+2)$, and the mass of the typical
+    set does not decrease when the width grows.
+\end{proof}
