@@ -75,14 +75,8 @@ a minimizing vector or a Schmidt-rank bound, or complete Proposition 4.1.
 In particular, no energy bound is assumed as a field or replaced by a scalar
 inequality with the same numerical constant.
 
-The issue-owned provenance shard is
-`docs/provenance/openai-math.d/8767.json`. Its 32 original-proof rows cite the
-published source revision `42a454da694a5bc23aed4a693b810b5c8e879cfd`, whose tree `69bb2afb6a723d377ee2a5dc90328543bd243004`
-is identical to the frozen local source snapshot `8a97f5ef780f1737a6153ba0331170745c10e1c5`.
-The evidence directory `docs/provenance/evidence/8767-nested-patch-geometry/`
-records exact source hashes, invocation metadata, and unchanged compiler output.
-All 32 declarations have printed standard kernel dependencies, and 13 principal
-results also have persistent regression guards. The local checks used the
+Thirteen principal results have persistent regression guards. The local
+checks used the
 package linter options and warnings as errors, with a 90-second bound per
 module. They are not a full local Lake build or an aggregate declaration check;
 those acceptance checks remain with exact-head CI.
