@@ -34,9 +34,11 @@ theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
     ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ -
       doubledHamiltonian A‖ ≤ 4 * ‖A‖ := by
   classical
-  have hdouble : ‖doubledHamiltonian A‖ ≤ ‖A‖ + ‖A‖ :=
-    (norm_add_le _ _).trans (add_le_add (l2_opNorm_kronecker_one_le A)
-      (l2_opNorm_one_kronecker_rect_le A))
+  have hdouble : ‖doubledHamiltonian A‖ ≤ ‖A‖ + ‖A‖ := by
+    unfold doubledHamiltonian
+    refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+    · exact l2_opNorm_kronecker_one_le A
+    · exact l2_opNorm_one_kronecker_rect_le A
   have hconj : ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ‖
       ≤ ‖A‖ + ‖A‖ :=
     (norm_mul_le_of_le
