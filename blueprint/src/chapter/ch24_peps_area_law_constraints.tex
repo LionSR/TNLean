@@ -294,7 +294,7 @@ only on the parameters named below.
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:al_positive_replacement} with $v_R$, $b_0=\mu_RJ$ and
     sphere growth $2(d+1)^2$, whose hypotheses on the graph are supplied by
-    Lemma~\ref{lem:al_lattice_counts}.
+    Lemma~\ref{lem:area_domain_graph_counts}.
 \end{proof}
 
 \begin{lemma}[Square roots and local channels on an induced lattice domain]
@@ -336,9 +336,10 @@ only on the parameters named below.
 \begin{proof}\leanok
     The gapped ground vector gives $H\Omega=E_0\Omega$ and
     $H-E_0I\ge\Delta(I-P_\Omega)$. Apply Theorem~\ref{thm:al_truncation} with
-    $v_R$ sites per support, site budget $\mu_RJ$, sphere growth $2(d+1)^2$,
-    ball growth $2(d+1)^2$ and at most $\mu_R$ labels per anchor, all supplied
-    by Lemma~\ref{lem:al_lattice_counts}.
+    $v_R$ sites per support, site budget $\mu_RJ$ and sphere growth
+    $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}, and ball growth
+    $2(d+1)^2$ and at most $\mu_R$ labels per anchor from
+    Lemma~\ref{lem:al_lattice_counts}.
 \end{proof}
 
 \begin{theorem}[Crossing count and cut budget on an induced lattice domain]
@@ -357,7 +358,7 @@ only on the parameters named below.
         \log d_i\le C(r_0+1)^2\quad(i\in\mathcal C_X),\qquad
         \mathcal B_X\le C(1+b_X)(r_0+1)^6.
     \end{align}
-    Moreover, for $C_1,C_2\ge0$ there is $C$, depending only on
+    For $C_1,C_2\ge0$ there is $C$, depending only on
     $q,R,C_1,C_2$, such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$,
     $D\ge1$ and $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This
     is the crossing count and cut budget of Proposition~4.5 of
