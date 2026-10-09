@@ -1,0 +1,117 @@
+\section{Opposite labels on actual belt-cell sides}
+\label{sec:area_law_belt_fan_colors}
+
+Use the selected opposing region to assign labels to each belt-cell fan,
+as in \cite[Section~11]{OpenAI2026AreaLaw}. The residue choices at every
+layer are arbitrary; the label assignment requires no sparsity estimate.
+
+% Source: 10-geometry.tex, prop:two-families, lines 172--174,
+% 212--218 and 299--323, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are local assignment results, not the full two-family proposition.
+
+\begin{definition}[Labels of a belt-cell fan]
+    \label{def:area_law_belt_fan_color}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor}
+    \leanok
+    \uses{def:area_law_selected_elementary_opponent,def:area_law_belt_cells,
+        def:area_law_actual_side_mask}
+    Fix a common origin $o\in\mathbb R^2$, a finite endpoint set $Z$,
+    integer width $C_0\ge2$ and natural lower index $k_0\ge50\,000\,000$.
+    For every layer $h$, choose residues $0\le a_h,b_h<m_h$, where
+    $m_h=2^{p_h-\ell_h}$, $\ell_h$ is the fine exponent and $p_h$ is the
+    pitch exponent. Let $\mathcal B_h$ be the corresponding actual belt-cell
+    index set. For $k\ge k_0$ and $z\in\mathcal B_k$, denote the elementary
+    segments of the actual fan by $e_i=[a_i,b_i]$ and their selected opposing
+    identifiers by $P_{k,z}(i)$. Order the triples $(k,z_1,z_2)$
+    lexicographically. Define $c_{k,z}(i)\in\mathbb Z/2\mathbb Z$ by
+    \begin{align}
+        c_{k,z}(i)=
+        \begin{cases}
+            (k_0-1)+1, & P_{k,z}(i)=\star,                                              \\
+            h+1,       & P_{k,z}(i)=(h,w),\ w\notin\mathcal B_h,                        \\
+            0,         & P_{k,z}(i)=(h,w),\ w\in\mathcal B_h,\ (k,z_1,z_2)<(h,w_1,w_2), \\
+            1,         & P_{k,z}(i)=(h,w),\ w\in\mathcal B_h,\ (k,z_1,z_2)>(h,w_1,w_2).
+        \end{cases}
+    \end{align}
+    The indexed cells are distinct whenever the opponent is a fine cell,
+    so the last two alternatives are exhaustive.
+\end{definition}
+
+\begin{theorem}[The label opposite the dummy tile]
+    \label{thm:area_law_belt_fan_dummy_color}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor_dummy}
+    \leanok
+    \uses{def:area_law_belt_fan_color,def:area_law_dyadic_layers}
+    Retain the data of the label definition. If an actual elementary segment
+    $e_i$ lies in $\overline{N_{k_0}}$, then
+    $c_{k,z}(i)=(k_0-1)+1\ne k_0-1$ in $\mathbb Z/2\mathbb Z$.
+    Thus its incident triangle has the label opposite the dummy tile.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unique_elementary_side_opponent,def:area_law_belt_fan_color}
+    The dummy identifier satisfies the whole-segment containment condition.
+    Uniqueness therefore gives $P_{k,z}(i)=\star$. The asserted label follows
+    from its definition; adding one changes each residue modulo two.
+\end{proof}
+
+\begin{theorem}[The label and retained primary of a non-belt opponent]
+    \label{thm:area_law_belt_fan_nonbelt_color}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor_nonbelt_opponent}
+    \leanok
+    \uses{def:area_law_belt_fan_color,def:area_law_nonbelt_pitch_index,
+        def:area_law_primary_pitch_indices,def:area_law_primary_regions}
+    Retain the data of the label definition. Let $h\ge k_0$ and let
+    $w\in F_{h,\ell_h}\setminus\mathcal B_h$ be an actual non-belt index.
+    If $e_i\cap\overline{Q_{\ell_h}(w)}$ contains two distinct points,
+    put $J=j(w)$, the shifted pitch index at residues $a_h,b_h$.
+    Then $J$ is retained in the actual primary index set $\mathcal P_h$,
+    the whole segment $e_i$ lies in the primary birth region
+    $\overline{D_h\cap I_{a_h,b_h}(J)}$, and
+    $c_{k,z}(i)=h+1\ne h$ in $\mathbb Z/2\mathbb Z$.
+    The primary identifier is $(h,J)$, including when its region is disconnected.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_selected_opponent_contact,
+        thm:area_law_unique_elementary_side_opponent,
+        thm:area_law_nonbelt_primary_containment,
+        thm:area_law_primary_pitch_membership,def:area_law_belt_fan_color}
+    Belt and non-belt membership imply $(k,z)\ne(h,w)$. The contact
+    characterization gives $P_{k,z}(i)=(h,w)$, and the selected opponent
+    contains the whole segment in its closed square. Closed non-belt-cell
+    containment consequently gives
+    $e_i\subseteq\overline{Q_{\ell_h}(w)}\subseteq
+        \overline{D_h\cap I_{a_h,b_h}(J)}$.
+    Since $e_i$ contains its first endpoint, this last closure is nonempty.
+    The layer--pitch intersection itself is therefore nonempty, and the exact
+    retained-index characterization gives $J\in\mathcal P_h$.
+    The non-belt clause in the label definition gives $h+1$, which differs from $h$.
+\end{proof}
+
+\begin{theorem}[Opposite labels across contacting belt-cell segments]
+    \label{thm:area_law_belt_fan_contact_colors}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor_belt_contact}
+    \leanok
+    \uses{def:area_law_belt_fan_color}
+    Retain the common data and residue choices. Let $(k,z)\ne(h,w)$
+    be actual belt-cell pairs at $k,h\ge k_0$, and let $e_i,e_j$
+    be arbitrary elementary segments in their respective actual subdivisions.
+    If $e_i\cap e_j$ contains two distinct points, then
+    $c_{k,z}(i)\ne c_{h,w}(j)$.
+    No matching slot or reversed endpoints are assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_selected_opponent_contact,thm:area_law_cell_fan_cover,
+        def:area_law_belt_fan_color}
+    Each elementary segment lies in its incident triangle: the segment's convex
+    hull is contained in the convex hull of the three triangle vertices.
+    The fan cover then places it in its own closed cell.
+    Thus the assumed intersection gives two-point contact of each segment
+    with the other closed cell. The contact characterization yields
+    $P_{k,z}(i)=(h,w)$ and $P_{h,w}(j)=(k,z)$.
+    The distinct lexicographic keys have opposite strict orders, so the two
+    belt clauses assign zero and one in opposite order.
+\end{proof}
+
+The local labels can be used in the equal-label runs of each fan.
+Global primary--run interfaces, point contacts, boundary sectors and the
+isolated-star construction remain further parts of the two-family construction.

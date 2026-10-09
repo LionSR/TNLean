@@ -1,0 +1,59 @@
+\section{Parity of changes of initial sector identifiers}
+\label{sec:area_law_initial_sector_cycle}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, a natural width $C\ge2$, and an initial layer
+$k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at each
+layer. Let $\mathcal I$ be the resulting actual initial identifiers,
+write $X_i^0$ for their closed birth regions, and write
+$\chi(i)\in\{0,1\}$ for their initial colors.
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+and let $v$ be one of the nine marks of its defining cell.
+Put $\ell=\ell_k-5$ and $r=2^\ell/2=t_k/64$.
+
+Use the all-midpoint fan of the square
+$\overline B_\infty(v,r)=v+[-r,r]^2$ and its eight-element index set
+$\mathcal J$. Let $\tau$ be the counterclockwise successor permutation
+of Definition~\ref{def:area_law_cell_fan_successor}.
+Let $\sigma:\mathcal J\to\mathcal I$ be the unique actual assignment
+of Theorem~\ref{thm:area_law_actual_sector_assignment}, obtained from
+the working fan of half-side $2r=t_k/32$.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% and geometry:initial-stars, lines 361--370;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is the finite parity consequence of the actual adjacent-color
+% assertion. Distinct-ray identification and the full star assertion
+% are separate. The assignment is derived, not a supplied hypothesis.
+
+\begin{theorem}[Even number of changes of actual initial identifiers]
+    \label{thm:area_law_initial_sector_changes_even}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_sector_assignment_changes_even}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_cell_fan_successor,def:area_law_initial_region_colors}
+    The number of changes of actual initial identifier around these
+    eight fan members is even:
+    \begin{align}
+        \left|\{s\in\mathcal J:
+        \sigma(s)\ne\sigma(\tau(s))\}\right| & \in2\mathbb N.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_sector_colors,
+        thm:area_law_cell_fan_successor_endpoints}
+    Put $c_s=\chi(\sigma(s))$. The successor endpoint identity makes
+    $s$ and $\tau(s)$ adjacent, so the actual adjacent-color assertion
+    gives
+    \begin{align}
+        \sigma(s)\ne\sigma(\tau(s))
+         & \quad\Longleftrightarrow\quad c_s\ne c_{\tau(s)}.
+    \end{align}
+    Let $A=\{s\in\mathcal J:c_s=0\}$ and $B=\tau^{-1}(A)$.
+    The binary values of $c_s$ show that the change set is
+    $(A\setminus B)\cup(B\setminus A)$, a disjoint union.
+    Since $\tau$ is a permutation, $|A|=|B|$, and therefore
+    $|A\setminus B|=|B\setminus A|$. With
+    $d=|A\setminus B|$, the cardinality of the change set is $d+d$,
+    which is even.
+\end{proof}

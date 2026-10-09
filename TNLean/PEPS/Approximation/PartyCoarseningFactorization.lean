@@ -19,16 +19,9 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 `04-compression.tex`, internal preparations and the two separated contractions,
 lines 409–427. This is the factorization after the crossing and corrected source
 registers have been made free inputs; their chronological construction is separate.
--/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-block-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-party-coarsening-factorization-word.exists_partition_of_sources_internal
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_partition_of_sources_internal
+Independently formalized from the manuscript; no upstream Lean proof text is
+reused.
 -/
 
 noncomputable section

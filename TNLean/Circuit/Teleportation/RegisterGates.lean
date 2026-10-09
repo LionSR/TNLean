@@ -525,12 +525,14 @@ theorem isRoundsImplementationOn_thereRounds : ∀ (t : ℕ) (ht : t ≤ s),
     have h₁ := (isImplementationOn_round [] (valid_thereAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
-        v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t)) (circuitOp [] *ᵥ v)} :=
+        v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t))
+          (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs (t + 1)) v from hv).mono
         (pairSites_thereAll_subset t)
     have hmap : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
-        (chainPerm (thereAll gs t) * circuitOp []) *ᵥ v ∈ {v | IsZeroOn (zoneAll gs t) v} :=
+        (chainPerm (thereAll gs t) * circuitOp ([] : List (Layer d N))) *ᵥ v ∈
+          {v | IsZeroOn (zoneAll gs t) v} :=
       fun v hv => by
         simpa [circuitOp] using isZeroOn_chainPerm_thereAll hgs (by omega) hv
     refine ⟨?_, fun v hv => ?_⟩
@@ -565,7 +567,8 @@ theorem isRoundsImplementationOn_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
     have h₁ := (isImplementationOn_round [] (valid_backAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs t) v},
-        v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t)) (circuitOp [] *ᵥ v)} :=
+        v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t))
+          (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs t) v from hv).mono
         (pairSites_backAll_subset t)
@@ -674,7 +677,7 @@ theorem isCircuitOn_localProd {K : ℕ} (hK : ∀ g ∈ gs, IsPairProduct d (s +
     IsCircuitOn {i | ∃ g ∈ gs, i ∈ g.span} K (localProd gs) := by
   induction gs with
   | nil =>
-    simpa [localProd] using IsCircuitOn.one (d := d) (N := N)
+    simpa [localProd] using IsBondCircuitOn.one (d := d) (ringBond (N := N))
       {i | ∃ g ∈ ([] : List (RegisterGate d N s)), i ∈ g.span} K
   | cons g gs ih =>
     rw [List.pairwise_cons] at hgs
@@ -686,7 +689,7 @@ theorem isCircuitOn_localProd {K : ℕ} (hK : ∀ g ∈ gs, IsPairProduct d (s +
       rw [Set.disjoint_left]
       rintro i hi ⟨g', hg', hi'⟩
       exact Set.disjoint_left.mp (hgs.1 g' hg') hi hi'
-    refine (h₁.par hdisj h₂).mono_set fun i hi => ?_
+    refine (IsCircuitOn.par hdisj h₁ h₂).mono_set fun i hi => ?_
     rcases hi with hi | ⟨g', hg', hi⟩
     · exact ⟨g, List.mem_cons_self, hi⟩
     · exact ⟨g', List.mem_cons_of_mem _ hg', hi⟩

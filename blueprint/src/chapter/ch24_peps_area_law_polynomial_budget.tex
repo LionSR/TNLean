@@ -1,0 +1,82 @@
+\section{Polynomial factors in the dyadic budget}
+\label{sec:area_law_polynomial_decay}
+
+Retain the fixed exponent $\delta_0=2\cdot10^{-7}$. For every real number
+$p$ and nonnegative integer $k$, set
+\begin{align}
+    w_p(k) & =(k+1)^p2^{-\delta_0 k/2}.
+\end{align}
+The power $(k+1)^p$ is the ordinary real power of a positive number.
+The following estimates give the numerical series bound used in
+\cite[Section~11]{OpenAI2026AreaLaw}.
+To bound the number of repairs by this series, one must also bound the
+descendants of each initial mark and relate the initial marks to the
+sparse belts.
+
+% Source: 10-geometry.tex, lines 232--235 and 668--692,
+% geometry:descendant-count and geometry:total-repairs.
+% These are auxiliary numerical statements. The construction and count of
+% actual repairs, and the full source statement geometry:total-repairs,
+% remain separate obligations.
+
+\begin{theorem}[Eventual absorption of a polynomial factor]
+    \label{thm:area_law_polynomial_absorption}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_polynomial_dyadic_absorption}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    For every real number $p$, there is a nonnegative integer $K$ such
+    that, for every nonnegative integer $k\ge K$,
+    \begin{align}
+        (k+1)^p2^{-\delta_0 k/2} & \le2^{-\delta_0 k/4}.
+    \end{align}
+    The threshold depends only on $p$ and the fixed exponent.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_exponent_gaps}
+    Set $a=\delta_0\log2/4>0$. Exponential decay dominates every fixed
+    real power, so $(k+1)^p\exp(-ak)$ tends to zero as $k$ tends to
+    infinity. Choose $K$ so that this expression is at most one for
+    every $k\ge K$. Multiplying by the positive number
+    $2^{-\delta_0 k/4}$ gives the asserted inequality.
+\end{proof}
+
+\begin{theorem}[Summability of the polynomially weighted decay]
+    \label{thm:area_law_polynomial_summability}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.summable_polynomial_dyadic_decay}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    For every real number $p$, the nonnegative series
+    \begin{align}
+        \sum_{k=0}^{\infty}(k+1)^p2^{-\delta_0 k/2}
+    \end{align}
+    converges.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_polynomial_absorption,thm:area_law_exponent_gaps}
+    Put $q=2^{-\delta_0/4}$. Positivity of $\delta_0$ gives $0<q<1$.
+    The absorption estimate bounds $w_p(k)$ by $q^k$ for all sufficiently
+    large $k$. The geometric series converges, and adding finitely many
+    initial terms preserves convergence.
+\end{proof}
+
+\begin{theorem}[Uniform bound on finite scale sums]
+    \label{thm:area_law_polynomial_finite_sums}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_polynomial_dyadic_sum_bound}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    For every real number $p$, there is a real number $B>0$ such that,
+    for every finite set $F$ of nonnegative integers,
+    \begin{align}
+        \sum_{k\in F}(k+1)^p2^{-\delta_0 k/2} & \le B.
+    \end{align}
+    The bound is chosen from $p$ and the fixed exponent alone,
+    independently of the origin, domain, cut, and neighborhood radius.
+    It therefore applies to every finite selection of scales above any
+    chosen lower scale.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_polynomial_summability}
+    Let $S$ be the sum of the convergent nonnegative series and take
+    $B=S+1$. Nonnegativity gives $S\ge0$ and bounds every finite subsum
+    by $S$, proving both $B>0$ and the stated estimate.
+\end{proof}

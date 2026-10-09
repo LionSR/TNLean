@@ -29,19 +29,6 @@ lines 53–70 and 99–127, at revision
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-lem:effects.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8768-paireffectsourcepreparation-word.exists_grouped_source_preparation
-Downstream declaration: TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation
-
-Provenance-ID: 8768-paireffectsourcepreparation-partypaireffectelimination_with_grouped_sources
-Downstream declaration: TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources
--/
-
 noncomputable section
 
 open scoped InnerProductSpace TensorProduct
