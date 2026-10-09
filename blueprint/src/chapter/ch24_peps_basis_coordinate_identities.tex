@@ -43,12 +43,13 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
 \begin{theorem}[Equality identifications with a head register]
     \label{thm:peps_basis_head_memory_congruence}
     \lean{TNLean.PEPS.PairEffect.Layout.memCongr_cons_tmul}
+    \leanok
     \uses{thm:peps_basis_memory_equalities}
     Let $r$ be a register with space $U$, let $a=b$ be equal register
     lists, and let $u\in U$ and $x\in M(a)$. Then
     $E_{ra=rb}(u\otimes x)=u\otimes E_{a=b}x$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Identify the equal tail lists. Both sides are $u\otimes x$.
 \end{proof}
 
@@ -57,6 +58,7 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     \lean{TNLean.PEPS.PairEffect.Layout.selectedHead_heq,
         TNLean.PEPS.PairEffect.Layout.complementaryHead_heq,
         TNLean.PEPS.PairEffect.Layout.add_heq}
+    \leanok
     Let $r$ be a register with space $U$, let $a=a'$ and $b=b'$ be
     equal register lists, and suppose $z\in M(a)\otimes M(b)$ and
     $z'\in M(a')\otimes M(b')$ agree after these identifications.
@@ -69,7 +71,7 @@ denoted $E_{a=b}$. All tensor products below retain these conventions.
     spaces $A=B$ and vectors $x,y\in A$ and $x',y'\in B$ agreeing
     under this equality, $x+y$ agrees with $x'+y'$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Identify the equal lists or spaces and their equal vectors.
     Each pair is then the same tensor or sum.
 \end{proof}

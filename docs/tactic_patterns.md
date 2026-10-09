@@ -37,8 +37,9 @@ abstracted — record why, so it is not re-proposed).
 - **Refactor:** remove the duplicate private proofs and use the shared
   declarations. The more general private Hilbert-space congruences in
   `PartitionOwnerNaturality.lean` retain their cross-owner applications.
-- **Notes:** no additional hypothesis or compatibility alias; fresh native
-  verification of the public promotions and callers is pending.
+- **Notes:** no additional hypothesis or compatibility alias. The public
+  lemmas and callers pass the full native build; the strict imported-lemma
+  audit reports only `propext`, `Classical.choice`, and `Quot.sound`.
 
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
