@@ -402,11 +402,24 @@ def main() -> int:
     pages = _generated_pages(root)
     _assert_generated_source(pages)
 
-    batches = _balanced_batches(pages, max(1, args.jobs))
+    # Every dependency-graph page lays out the whole graph in a worker, and two
+    # such layouts sharing a runner starve each other past the per-page
+    # deadline -- which is exactly what the balanced content batches would
+    # create by dealing graph pages out across the parallel browsers. The graph
+    # pages are therefore held back and rendered serially, after the parallel
+    # content pass has closed every other browser, so each layout runs on an
+    # uncontended processor.
+    graph_pages = sorted(
+        page.name for page in pages if page.name.startswith("dep_graph_"))
+    content_pages = [page for page in pages
+                     if not page.name.startswith("dep_graph_")]
+
+    batches = _balanced_batches(content_pages, max(1, args.jobs))
     mathjax = _mathjax_bundle(root)
     with serve(root) as base_url:
-        if len(batches) == 1:
-            typeset = _check_pages(base_url, batches[0], mathjax)
+        if len(batches) <= 1:
+            typeset = _check_pages(base_url, batches[0] if batches else [],
+                                   mathjax)
         else:
             # Each worker drives its own browser: the synchronous Playwright
             # API is bound to the thread that started it.  Workers are spawned
@@ -416,6 +429,10 @@ def main() -> int:
                 futures = [pool.submit(_check_pages, base_url, batch, mathjax)
                            for batch in batches]
                 typeset = sum(future.result() for future in futures)
+        # The content browsers have all closed, so the graph layouts here run
+        # one at a time with nothing else competing for the processor.
+        if graph_pages:
+            typeset += _check_pages(base_url, graph_pages, mathjax)
 
     assert typeset > 0, (
         "no mathematics was typeset on any page; MathJax never ran, so the "

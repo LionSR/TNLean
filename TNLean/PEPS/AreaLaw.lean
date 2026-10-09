@@ -31,6 +31,8 @@ import TNLean.PEPS.AreaLaw.GraphLatticeDistance
 import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.InitialBuffer
+import TNLean.PEPS.AreaLaw.LatticeConstraints
+import TNLean.PEPS.AreaLaw.LatticeCounts
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.MarginalTails
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
