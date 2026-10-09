@@ -256,7 +256,7 @@
       route.stages.forEach((st, idx) => {
         const items = st.issues.map(n => byNum.get(n)).filter(Boolean);
         const status = leastStatus(st.issues);
-        const furthest = items.reduce((a, i) => RANK[i.status] > RANK[a] ? i.status : a, "blocked");
+        const furthest = items.length ? items.reduce((a, i) => RANK[i.status] > RANK[a] ? i.status : a, "blocked") : "untracked";
         const results = D.results.filter(r => r.paper === route.paper && !assigned.has(r.paper + r.label) && r.issues.some(n => st.issues.includes(n)));
         results.forEach(r => assigned.add(r.paper + r.label));
         const sections = [...new Set(results.map(r => +r.num.split(".")[0]))].sort((a, b) => a - b);

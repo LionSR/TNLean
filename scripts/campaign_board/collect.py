@@ -284,7 +284,7 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
 BLUEPRINT_ENV = re.compile(
     r"\\begin\{(theorem|lemma|proposition|corollary|definition)\}(.*?)\\end\{\1\}"
     # TeX comment lines may separate a statement from its proof.
-    r"((?:\s|%[^\n]*)*\\begin\{proof\}(.*?)\\end\{proof\})?", re.S)
+    r"((?:\s|%[^\n]*\n)*\\begin\{proof\}(.*?)\\end\{proof\})?", re.S)
 
 
 def blueprint_status(cfg: dict, checkouts: dict[str, Checkout], cites: re.Pattern) -> list[dict]:
