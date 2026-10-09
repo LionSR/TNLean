@@ -41,6 +41,14 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
     Matrix.mem_unitaryGroup_iff.mp (sheetSwap q R).permMatrix_mem_unitaryGroup
   suffices hcomm : Commute (sheetSwapOp q R) (doubledHamiltonian A) by
     rw [hcomm.eq, Matrix.mul_assoc, hunit, Matrix.mul_one]
-  rcases hS with hinside | houtside <;> done
+  rcases hS with hinside | houtside
+  · simpa only [Commute, SemiconjBy, doubledHamiltonian, Matrix.mul_add,
+      Matrix.add_mul, add_comm] using
+      congrArg₂ (· + ·)
+        (sheetSwapOp_mul_kronecker_of_mem_supportedOperators
+          (supportedOperators_mono hinside hA) (one_mem_supportedOperators _))
+        (sheetSwapOp_mul_kronecker_of_mem_supportedOperators
+          (one_mem_supportedOperators _) (supportedOperators_mono hinside hA))
+  · done
 
 end TNLean.PEPS.EncodedFrame
