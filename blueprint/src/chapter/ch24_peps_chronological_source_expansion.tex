@@ -38,7 +38,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_prepared_gate_properties}
+    \uses{thm:peps_prepared_gate_grouped}
     Each gate is a contraction. Consecutive composition, extension
     by an identity, and unitary identifications of the register order
     preserve this bound. Induction on the composition proves the claim.
@@ -131,7 +131,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties}
+    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_prepared_gate_grouped}
     A chosen prepared branch is allowed. An untouched gate is a single
     contraction on exterior memory. The owner identification turns a
     pair with two exterior endpoints into a local normalized
@@ -160,7 +160,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_prepared_gate_exists,def:peps_source_circuit}
+    \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
     At a touched gate, sum its original branch expansion and extend
     the sum by the spectator identity. At an untouched gate, the
     single partial branch is its aggregate operator. The resulting
@@ -221,7 +221,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_partial_source_local_cost}
+    \uses{thm:peps_partial_source_local_cost,def:peps_partial_source_choices}
     Induction on the chronological composition gives the product
     formula from the local contributions. Bound each nonnegative
     factor by $B$. The ket and bra sums are independent, and complex
@@ -266,10 +266,13 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceOrder}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.nodup_sourceOrder}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_gate}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceDims}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_isSome_iff}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_some_spec}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.filterMap_sourceAt_comp}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.filterMap_sourceAt_gate}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialWord_eq_filterMap}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWord}
     \leanok

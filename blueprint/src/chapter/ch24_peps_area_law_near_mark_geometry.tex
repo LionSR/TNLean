@@ -1,0 +1,70 @@
+\section{Layers and meshes near a cell mark}
+\label{sec:area_law_near_mark_geometry}
+
+Fix an arbitrary origin $o$, a finite endpoint set $Z\subset\mathbb Z^2$
+and width $C\ge 2$. Let $\ell_k$ be the existing fine exponent and
+$M_{k,z}$ the nine actual marks of the fine cell indexed by $z$ at
+layer $k$. The estimates below supply the numerical geometry in
+\cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 352--359;
+% geometry:layer-distance, lines 179--191; scale comparison, lines 200--207;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% These are local numerical estimates; active rays and sectors remain separate.
+
+\begin{theorem}[A common quarter mesh in a closed neighborhood]
+    \label{thm:area_law_near_mark_quarter_mesh}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_near_mark_quarter_mesh}
+    \leanok
+    \uses{def:area_law_fine_layer_indices,def:area_law_belt_cell_marks,
+        def:area_law_affine_mesh}
+    Let $k\ge 50{,}000{,}000$ and let $z,w$ be actual fine-cell indices
+    in layers $k,h$, respectively. Suppose $v\in M_{k,z}$ and the closed
+    cell indexed by $w$ meets the closed square of sup radius $10t$
+    about $v$, where $t=2^{\ell_k}$. Then
+    \begin{align}
+        h                   & \le k+1,                                  & k & \le h+1, \\
+        \ell_h              & =\ell_k\quad\text{or}\quad\ell_h+1=\ell_k
+        \quad\text{or}\quad\ell_h=\ell_k+1,                                            \\
+        M_{k,z}\cup M_{h,w} & \subseteq o+(t/4)\mathbb Z^2.
+    \end{align}
+    Only the reference layer carries the stated late bound.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_local_layer_exclusion,thm:area_law_fine_cell_containment,
+        thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh}
+    The reference mark and a contact point belong to their respective
+    closed actual layers, and their distance is at most $10t$.
+    Nonadjacent layers are separated by at least $16t$, so their
+    indices differ by at most one. Monotonicity of the fine exponent
+    and its successor increment give the three alternatives.
+    Both exponents are therefore at least $\ell_k-1$.
+    The existing mesh inclusion, applied to each singleton cell family,
+    puts both nine-point sets in the same quarter mesh.
+\end{proof}
+
+\begin{theorem}[Fine-scale separation from the dummy neighborhood]
+    \label{thm:area_law_dummy_fine_scale_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer_fineScale}
+    \leanok
+    \uses{def:area_law_dyadic_layers}
+    Suppose $k\ge 50{,}000{,}000$ and $k_0+1\le k$. If
+    $x\in\overline{N_{k_0}}$ and $y\in\overline{D_k}$, then
+    \begin{align}
+        \|x-y\|_\infty & \ge 16\,2^{\ell_k}.
+    \end{align}
+    No nonemptiness condition on $Z$ is supplied.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_neighborhood_endpoint_distance,thm:area_law_dyadic_layer_distance,
+        thm:area_law_scale_side_ratios}
+    The actual dummy membership supplies an endpoint $u\in Z$ with
+    $\|x-u\|_\infty\le(C+1)2^{k_0}$, while
+    $\|y-u\|_\infty\ge C2^k$. The triangle inequality and
+    $2\,2^{k_0}\le2^k$ give
+    \begin{align}
+        2\|x-y\|_\infty & \ge(C-1)2^k\ge2^k.
+    \end{align}
+    The established scale comparison at the stated threshold gives
+    $32\,2^{\ell_k}\le2^k$, proving the result.
+\end{proof}
