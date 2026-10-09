@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.FiniteDomain
 import Mathlib.Basic.Real.Basic
 import Mathlib.Algebra.Order.Floor.Ring
+import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Tactic.GCongr
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
