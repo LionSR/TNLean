@@ -1,6 +1,0 @@
-{
-  "base_revision": "a1be4cc9ba5a7e8f20bd24267b5c4cff77563a45",
-  "source_revision": "b661d5aae743568fede6a5b087c9d6d03f4a8f20",
-  "qic_revision": "caac4b549c1b5c14fcedbee647567f51e27b296d",
-  "scope": "Already rendered exact source bytes checked against the committed tree; source-only snapshot and focused rendering, no Lake build."
-}
