@@ -93,6 +93,7 @@ import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.PreparedSourceGate
+import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.RoutedContraction
