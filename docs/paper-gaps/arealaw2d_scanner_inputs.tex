@@ -1,0 +1,127 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Scanner Estimate from the Conclusions of Its Inputs}
+\author{}
+\date{2026-10-09}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source proposition}
+
+Proposition~9.2 of the two-dimensional area-law manuscript of September~24,
+2026~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~349--397) states
+that, under the scan scales and the entropy input
+$S_\Omega(X)\le C_en^{1+e}$, $S_\Omega(Q_j)\le C_e(nL^e+n)$, for every
+sufficiently large replica count $k$ some charge round and some common
+parameter $p_k\in[\epsilon/2,\epsilon]$ give the defect-energy bound
+\[
+    E_{\mathrm{def},k}\le Cn^\ell D^2W^2(\log n)^C
+    \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+o_k(1),
+\]
+with $\delta_n=C_e\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^C)$, and with the
+comparator budgets $B_{\mathrm{sh}}\le C_e(nL^e+n)$,
+$B_{\mathrm{exc}}\le CnD$ and $\mathcal B\le CnD(\log n)^C$.
+
+Its proof (lines~399--533) uses Lemma~9.1 (the scan histories),
+Proposition~7.4 (transport), Proposition~8.1 (comparators), Lemma~2.1
+(continuity) and Lemma~2.3 (tails) for the concrete scan.
+
+\section{The restriction}
+
+The formal statement takes the conclusions of those five results, for one
+scan at scale $n$, as the fields of one data package, and proves the step of
+the source from these conclusions to Proposition~9.2: the integrated entropy
+balance over the charge rounds, the averaging selection of a round and of a
+parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
+accounting of the defect energy at the selected point, and the three
+comparator budgets.\footnote{The packaged statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
+one displayed conclusion of an input and cites its source line; no field
+asserts more than the cited statement. The constants depend only on the fixed
+exponents and on the constants of the inputs, as in the source.
+
+Two harmless differences in the bookkeeping are recorded. The continuity
+input bounds the change of the shell entropies by
+$C\sqrt{n^{-500}}(1+Cn^2\log q)$, which is $O(n^{-248})$ but not at most
+$n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
+marginal parameter is bounded with logarithmic power $12$, coming from the
+crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
+source writes an unspecified power $C$.
+
+\section{Finite history construction now available}
+
+The physical partitions, independent uniform offsets and charge choices,
+padded row fills, and fixed-length labelled charge lists are now constructed
+as a finite classical history process. For positive offset and slot counts,
+the weights are normalized probabilities. Blank and previously assigned fill
+slots consume the deterministic schedule; charges preserve the nominal
+fronts. The actual unassigned sites lie beyond every completed row.
+
+For the induced lattice graph and actual ambient target depth, the ambient
+row bound, bounded anchor multiplicity, and the source cut clearance give
+on every good history a unique slot for each splitting radius-$r_0$ ball.
+Its conditional probability is exactly $1/(2\lceil C_1nD\rceil)$, bounded
+below by $[2(C_1+1)nD]^{-1}$, and the evaluated extended history moves
+exactly its old unassigned part. Goodness bounds assigned sites of $A$;
+it does not constrain the exterior sites initially on the far side.
+The probabilities are classical history weights, not the transported
+state measures. Nonnegative costs depending on band, receiving side, and
+moved subset also satisfy the corresponding expected-cost lower bound,
+by summing the disjoint labelled events within each band and then summing
+the bands. Identifying these costs
+with the transported conditional entropies remains a separate step.
+\footnote{The physical sampling statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}.}
+
+These results do not construct the entire data package. The actual old
+middle lies in the compact truncation set, so the existing crossing-support
+result now identifies every splitting variable-radius truncated designated
+support with its radius-$r_0$ charge ball. The sampling conclusion therefore
+applies to the designated support itself, and the expected-cost lower bound
+also holds for its band--side--label incidences.\footnote{The composition is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_domainGraph},
+    using \leanid{TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingLabels}.}
+The unconditional assigned-site lead is now derived from the actual evaluator.
+Together with consumed-row coverage, it confines each receiving--middle
+incidence to an anchor interval of width $D+3r_0+1$. Actual affine offset
+counting, exact uniform offset marginals, and the separation of band centers
+give total incidence weight at most $10D/m$, separately for old and new
+histories and for their common convex mixtures in fill and charge rounds.
+The designated support is identified with its base-radius ball from the
+actual middle's containment in the truncation set. No good-history or
+state-dependent independence assumption enters this dilution estimate.
+\footnote{The charge and fill mixture statements are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_domainGraph}
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_domainGraph}.}
+The bounded incidence event contains the terminal metric split event of
+\path{06-transport.tex}, lines~336--352. It is not an arbitrary entropy cut
+such as $U=P_0\setminus X$, and it is not yet an identification of the
+arbitrary split predicates stored in the scanner data package with concrete
+transported-state measures. The ancestry estimate for bad histories,
+the remaining geometric conclusions, and the transported-state estimates
+remain outside this finite-history construction.
+
+\section{Elimination}
+
+The restriction disappears once the data package is constructed from the
+scan geometry of Lemma~9.1 and the transported states of Proposition~7.4,
+with Propositions~8.1 and Lemmas~2.1 and~2.3 supplying the remaining fields.
+Those inputs are separate items of the same formalization program.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

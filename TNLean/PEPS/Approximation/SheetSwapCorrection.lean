@@ -159,13 +159,9 @@ theorem bufferCorrection_mul_tSwap (V : Matrix (BT × BE) U ℂ) :
 
 theorem norm_bufferCorrection_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry) :
     ‖bufferCorrection (T := T) (E := E) V‖ ≤ 1 := by
-  refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_le _).trans ?_)
-  have hVV : ‖V ⊗ₖ V‖ ≤ 1 :=
-    l2_opNorm_le_one_of_conjTranspose_mul_self_le_one (by
-      rw [IsIsometry.kronecker V V hV hV]; exact (IsStarProjection.one _).norm_le)
-  have hVV' := hVV
-  rw [← l2_opNorm_conjTranspose] at hVV'
-  exact l2_opNorm_mul_le_one (l2_opNorm_mul_le_one hVV' (l2_opNorm_toMatrix_toPEquiv_le _)) hVV
+  refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_rect_le _).trans ?_)
+  exact l2_opNorm_conjTranspose_mul_mul_le_one (IsIsometry.kronecker V V hV hV).l2_opNorm_le_one
+    (l2_opNorm_toMatrix_toPEquiv_le _)
 
 /-- `F_{T B_T}` fixes `(s ⊗ s')^{⊗2}`: it exchanges the two identical factors `s`. -/
 theorem act_tbSwap_vecKron_tensorPurification (s : T × BT → ℂ) (s' : E × BE → ℂ) :
@@ -188,10 +184,7 @@ theorem norm_toLp_tensorPurification {s : T × BT → ℂ} {s' : E × BE → ℂ
   have h : star (tensorPurification s s') ⬝ᵥ tensorPurification s s' = 1 := by
     rw [← pairSource_mulVec, star_mulVec_dotProduct_mulVec_of_conjTranspose_mul_eq_one
       (pairSource_conjTranspose_mul_self hs) s', hs']
-  have h2 := norm_toLp_sq (tensorPurification s s')
-  rw [h] at h2
-  simp only [Complex.one_re] at h2
-  nlinarith [norm_nonneg (WithLp.toLp 2 (tensorPurification s s') : EuclideanSpace ℂ _)]
+  exact norm_toLp_eq_one_of_star_dotProduct h
 
 /-- **The exchange error on the reference (`05-frames.tex`, lines 534–553).** For an isometry
 `V`, unit vectors `s`, `s'` and a unit vector `ω` on `(T × E) × U`, with

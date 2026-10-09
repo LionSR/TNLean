@@ -106,6 +106,20 @@ python3 scripts/test_lake_build_hotspots.py
 scripts/test_seed_lake_build.sh
 ```
 
+## Main CI cache production
+
+`pr-ci.yml` keeps one running workflow and at most one pending workflow per ref.
+New pushes to `main` replace the pending run without cancelling the running
+one, allowing it to reach the successful-build cache save despite frequent
+merges. Manual dispatches on `main` share this policy and group. Pull requests
+and dispatches on other refs still cancel superseded running workflows.
+
+This can delay checks for the latest main commit until the running workflow
+finishes; it does not guarantee a build for every intermediate commit or make
+a failing build save a cache. Cache keys still identify the built commit and
+all three root inputs. The cache guards and full build requirements below are
+unchanged.
+
 ## Narrow compatible-main CI seed
 
 The ordinary `pr-ci.yml` cache key and restore prefix still hash all three root
@@ -188,3 +202,23 @@ It creates disposable tiny projects and serializes targets to check unchanged
 reuse, upstream/dependent invalidation, independent reuse, missing traces, broken
 source rejection, and refusal of removed modules with surviving artifacts. It
 never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
+
+### Focused rectangular PEPS regression before the root build
+
+The finite rectangular dual-path CI check runs after cache setup and provenance
+pruning. It first requires the prebuilt `Mathlib.olean`, then runs Lake's
+fail-fast build on `TorusDualRectangleFlux` and `TorusDualWinding`, which are
+exactly the regression file's imports. Only after these complete import
+closures are rebuilt does it elaborate `TNLeanTest/TorusDualRectangle.lean`
+with strict options and warnings as errors. The workflow guard tests check
+this narrow exception's order, module targets, regression path, imports, and
+failure behavior.
+
+The collared open-boundary check follows the same provenance pruning and
+explicit Mathlib cache guard. Its fail-fast Lake target is
+`TorusDualOpenDeformation`, the sole regression import, so all four new production
+modules and their complete import closures are rebuilt before strict elaboration.
+The regression prints eight axiom audits; `check_collared_open_axioms.py` requires
+all eight and rejects every axiom outside `propext`, `Classical.choice`, and
+`Quot.sound`, including `sorryAx`. All other direct Lean regressions remain after
+the full root build. No dependency pin or artifact provenance rule changes.

@@ -1,0 +1,88 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Party-Network Bounds in the Dyadic Routing Lemma}
+\author{}
+\date{2026-10-08}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source lemma}
+
+Lemma~8.2 of the polynomial PEPS approximation manuscript of September~24,
+2026~\cite{OpenAI2026PolynomialPEPS} (\path{07-assembly.tex},
+lines~122--127) states, with no hypotheses, that the links of the party
+network can be routed on the padded grid $\{0,\ldots,N-1\}^2$ with constant
+edge congestion, and that after reflection into the genuine $L\times L$ grid
+the congestion is still constant and the physical output coordinates are
+unchanged. The lemma concerns one specific network: the party network built
+by the distribution protocol of Proposition~7.1 (\path{06-geometry.tex},
+lines~12--53), with its parties attached to the anchors of the dyadic blocks
+(\path{07-assembly.tex}, lines~103--114). The proof (lines~128--162) uses
+four properties of that network:
+\begin{enumerate}
+\item every anchor lies on the padded grid (lines~113--114);
+\item at most a bounded number $B$ of parties is attached to any dyadic block
+  (lines~113--114, from item~1 of Proposition~7.1);
+\item every party has at most a bounded number $\Delta$ of incident links
+  (lines~140--141, from item~2 of Proposition~7.1);
+\item the anchors of the two endpoints of every link are at distance at most
+  $c$ times either endpoint scale, for a fixed $c$ (lines~130--132, from
+  item~3 of Proposition~7.1).
+\end{enumerate}
+Proposition~7.1 also gives that the two endpoint scales of every link are
+equal or adjacent; the congestion bound does not use this.
+
+\section{The formal statement}
+
+Proposition~7.1 is not yet formalized, so no formal party network of the
+protocol exists to which the lemma could refer. The formal statements are
+therefore made for an arbitrary party network with parties attached to
+dyadic blocks, and the four properties above are hypotheses: the anchors lie
+on the padded grid, at most $B$ parties per block, at most $\Delta$ links per
+party, and link separation at most $c$ times either endpoint scale. Under
+these hypotheses the padded congestion is at most $2(2c+1)B\Delta$, the
+folded congestion is at most $8(2c+1)B\Delta$, and the routed network is
+exactly a PEPS on the open $L\times L$ square lattice with bond dimension at
+most $\max(D,1)^{8(2c+1)B\Delta}$ when every link has dimension at most
+$D$.\footnote{The padded bounds are
+\leanid{TNLean.PEPS.Approximation.DyadicPlacement.load_horizontal_le} and
+\leanid{TNLean.PEPS.Approximation.DyadicPlacement.load_vertical_le}; the
+folded bound is
+\leanid{TNLean.PEPS.Approximation.foldedRouting_card_traversal_le}; the PEPS
+assembly is
+\leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_dyadicRouting}.}
+
+The constants depend only on $B$, $\Delta$ and $c$, as in the source. The
+formal statements are a conditional form of Lemma~8.2, valid for every party
+network with the four properties; the lemma for the network of the source is
+the special case in which the four properties hold.
+
+\section{Elimination}
+
+Formalize Proposition~7.1 and the attachment of its parties to the anchors
+of the dyadic blocks of the padded hierarchy. The two sources of the four
+properties are then discharged separately. Property~1, that every anchor
+lies on the padded grid, follows from the attachment itself
+(\path{07-assembly.tex}, lines~113--114) and is not a clause of
+Proposition~7.1. Properties~2--4, the block, degree and separation bounds,
+follow from items~1--3 of Proposition~7.1, with constants uniform in the
+Hamiltonian and in $L$. Applying the conditional statements to that network
+then gives Lemma~8.2 as stated.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

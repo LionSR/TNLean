@@ -611,6 +611,24 @@ class WorkflowTests(unittest.TestCase):
         self.steps = self.workflow['jobs']['build']['steps']
         self.ids = {s['id']: s for s in self.steps if 'id' in s}
 
+    def test_main_cache_producer_survives_superseding_pushes(self):
+        # Share one ref-scoped group and the default single pending slot.
+        # Main (including dispatch) must finish; PR refs still cancel stale runs.
+        self.assertEqual(self.workflow['concurrency'], {
+            'group': '${{ github.workflow }}-${{ github.ref }}',
+            'cancel-in-progress': "${{ github.ref != 'refs/heads/main' }}",
+        })
+        self.assertNotIn('concurrency', self.workflow['jobs']['build'])
+
+    def test_cache_policy_regressions_run_for_workflow_changes(self):
+        job = self.workflow['jobs']['file-length']
+        self.assertIn("needs.changes.outputs.workflow == 'true'", job['if'])
+        step = next(s for s in job['steps']
+                    if s.get('name') == 'Test compatible CI cache guards')
+        self.assertNotIn('if', step)
+        self.assertNotIn('continue-on-error', step)
+        self.assertIn('python3 scripts/test_ci_compatible_cache.py', step['run'])
+
     def test_exact_keys_paths_and_main_only_saving_unchanged(self):
         self.assertEqual(tuple(self.workflow['env']['BUILD_CACHE_PATHS'].split()), guard.PATHS)
         self.assertEqual(self.ids['build-cache']['with']['key'], guard.KEY)
@@ -657,7 +675,61 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn('always()', self.steps[build].get('if', ''))
         for i, step in enumerate(self.steps):
             if 'lake env lean' in step.get('run', ''):
-                self.assertLess(build, i)
+                if step.get('name') == 'Check finite rectangular dual geometry early':
+                    # One explicit early regression is safe after its complete
+                    # import closure is rebuilt by Lake. No generic exemption.
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    run = step['run']
+                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
+                    target = 'lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean'
+                    self.assertLess(run.index(cache_guard), run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean'))
+                    self.assertIn('+TNLean.PEPS.TorusDualWinding:olean', run)
+                    self.assertIn('set -eo pipefail', run)
+                    self.assertIn('-DwarningAsError=true', run)
+                    self.assertIn('-DautoImplicit=false -DrelaxedAutoImplicit=false', run)
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLean/PEPS/TorusDualRectangle.lean',
+                        'TNLean/PEPS/TorusDualRectangleFlux.lean',
+                        'TNLeanTest/TorusDualRectangle.lean',
+                    ])
+                    self.assertEqual(run.strip().splitlines()[-2].strip(), '"$source"')
+                    self.assertEqual(run.strip().splitlines()[-1].strip(), 'done')
+                    imports = (ROOT / 'TNLeanTest/TorusDualRectangle.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')], [
+                        'import TNLean.PEPS.TorusDualRectangleFlux',
+                        'import TNLean.PEPS.TorusDualWinding',
+                    ])
+                elif step.get('name') == 'Check labelled open coefficients early':
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    run = step['run']
+                    target = 'lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean'
+                    self.assertIn('python3 scripts/check_collared_open_axioms.py', run)
+                    self.assertIn('tee -a "$RUNNER_TEMP/collared-open-check.log"', run)
+                    self.assertLess(run.index('test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'), run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean'))
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true']:
+                        self.assertIn(flag, run)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLeanTest/LabelledOpenCoefficient.lean',
+                        'TNLean/PEPS/LabelledOpenCoefficient.lean',
+                        'TNLean/PEPS/TorusLabelledOpenCoefficient.lean',
+                        'TNLean/PEPS/TorusDualCollar.lean',
+                        'TNLean/PEPS/TorusDualOpenDeformation.lean'])
+                    imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')],
+                                     ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                else:
+                    self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)

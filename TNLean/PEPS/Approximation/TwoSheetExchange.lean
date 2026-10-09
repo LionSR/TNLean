@@ -43,13 +43,18 @@ The swaps `F_S` of the two sheets and the buffer correction `D_U` are constructe
 
 ## Scope
 
-**Scope restriction (monomial structure):** Lemma 6.6 asserts that the exchange is implemented
-by private contractions and register renaming, using `P∘` and the owners of the renamed registers
-and tags, and is therefore a bounded change in the sense of Theorem 5.2. Here `C = D_U F_A ℛ` is
-constructed, `D_U` and `F_A` act on the raw registers of `U` alone, which `P∘` holds on both
-sheets before and after the exchange, and `ℛ` keeps every register at its party. Reading this as
-an allowed monomial of Theorem 5.2 needs a model of operators placed on parties, which the library
-does not yet have. Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
+**Scope restriction (renaming of an exchange):** Lemma 6.6 asserts that the exchange is
+implemented by private contractions and register renaming, using `P∘` and the owners of the renamed
+registers and tags, and is therefore a bounded change in the sense of Theorem 5.2. Here
+`C = D_U F_A ℛ` is constructed; the corrections `D_U F_A` are proved to be one private contraction
+at `P∘` on the registers of `U`, which `P∘` holds on both sheets before and after the exchange
+(`TwoSheetExchange.exchange_correction_monomial` in
+`TNLean.PEPS.Approximation.OwnershipMonomials`, on a layout grouping the raw registers of `U` on
+each sheet into one register), and `ℛ` is the identification of tensor factors `renameEquiv`,
+which keeps every register at its party. Writing `ℛ` as a word of exchanges of tensor factors,
+and placing the corrections on the frames' registers, needs a layout with one register per site
+and per tag identified with the canonical coordinates, which is not formalized. Documented in
+`docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 The source condition that every hole's outer square lies on one side of `∂Y` enters through the
 classification of the holes as outside or inside `Y`, which is part of the data, and through its
@@ -144,7 +149,7 @@ def liftTags {l₁ l₂ : List (Hole pos q Party)}
 theorem norm_liftTags_le {l₁ l₂ : List (Hole pos q Party)}
     (G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ) :
     ‖liftTags (l₁ := l₁) (l₂ := l₂) G‖ ≤ ‖G‖ :=
-  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_le G)
+  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_rect_le G)
 
 /-- A two-sheet raw operator commuting with every product of raw parts of the two encodings
 passes through the product `K₁ ⊗ K₂` of the encodings. -/
@@ -397,7 +402,7 @@ def exchangeOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
 
 theorem norm_exchangeOp_le_one (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     ‖X.exchangeOp P σ‖ ≤ 1 :=
-  l2_opNorm_mul_le_one ((norm_liftTags_le _).trans (l2_opNorm_mul_le_one
+  l2_opNorm_mul_le_one _ _ ((norm_liftTags_le _).trans (l2_opNorm_mul_le_one _ _
     (norm_sheetBufferCorrection_le_one _ σ) (norm_sheetSwapOp_le_one _))) X.norm_rename_le_one
 
 /-- The corrections `D_U` and `F_A` commute with the raw parts of the encoders after the
@@ -491,10 +496,8 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
   set ω : EuclideanSpace ℂ _ := WithLp.toLp 2 (splitVec h Ω)
   have hω : (WithLp.toLp 2 (⇑(vecKron Ω Ω) ∘ (threeSplit₂ h).symm) : EuclideanSpace ℂ _) =
       vecKron ω ω := rfl
-  have hω1 : ‖ω‖ = 1 := by
-    have h2 := norm_toLp_sq (splitVec h Ω)
-    rw [star_splitVec_dotProduct_splitVec h hΩ, Complex.one_re] at h2
-    nlinarith [norm_nonneg ω]
+  have hω1 : ‖ω‖ = 1 :=
+    norm_toLp_eq_one_of_star_dotProduct (star_splitVec_dotProduct_splitVec h hΩ)
   rw [hω]
   refine (norm_act_bufferCorrection_mul_tSwap_sub_le σ.isIsometry σ.star_s σ.star_s' hω1).trans ?_
   have he : ‖act ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ω - WithLp.toLp 2 (tensorPurification σ.s σ.s')‖ =
@@ -638,7 +641,8 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
   have hG : tagReorder e₁ e₂ * (F₁.encoder ⊗ₖ F₂.encoder) =
       X.frame₁.encoder ⊗ₖ X.frame₂.encoder :=
     tagReorder_mul_kronecker he₁ he₂
-  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, l2_opNorm_mul_le_one hC (norm_tagReorder_le_one e₁ e₂), ?_, ?_⟩
+  refine ⟨e₁, e₂, he₁, he₂, σ, hσ,
+    l2_opNorm_mul_le_one _ _ hC (norm_tagReorder_le_one e₁ e₂), ?_, ?_⟩
   · rw [Matrix.mul_assoc]
     exact (congrArg _ hG).trans hK
   · have hv : act (tagReorder e₁ e₂ :

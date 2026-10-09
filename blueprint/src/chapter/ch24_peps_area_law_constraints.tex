@@ -217,3 +217,63 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     ball has at most $K_b(r_0+1)^2$ sites and each anchor carries at most $\mu$
     labels.
 \end{proof}
+
+\input{chapter/ch24_peps_area_law_scan_histories}
+
+\section{The scanner estimate from its inputs}
+\label{sec:al_scanner}
+
+Section~9 of the manuscript scans the collar of a finite target in rounds and
+selects one charge round and one interpolation parameter at which the
+transported, symmetrized vector has small defect energy (Proposition~9.2). Fix
+exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with $\kappa\le e$,
+$\nu>0$, let the total metric weight $W\ge1$ of the scan be arbitrary, possibly
+depending on $n$, and put $L=\lfloor n^{1-\ell}\rfloor$,
+$D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
+$\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
+takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
+histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
+(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~2.3); it is
+therefore Proposition~9.2 restricted to those conclusions, not the source
+proposition itself, which remains open until the scan data are constructed.
+
+\begin{theorem}[Scanner estimate from the conclusions of its inputs]
+    \label{thm:al_scanner_from_inputs}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
+        TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts,
+        TNLean.PEPS.AreaLaw.Scan.exists_budgets,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
+        TNLean.PEPS.AreaLaw.Scan.exists_selected_density,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.energySum_le,
+        TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
+        TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
+    \leanok
+    There are constants, independent of $W$ and depending only on the exponents and on the constants of
+    the inputs, such that for all sufficiently large $n$ and every scan at scale
+    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 2.3 and
+    Propositions~7.4, 8.1, the comparator budgets
+    $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
+    $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
+    round and parameter, such that for every $k\ge1$ some charge round and
+    some $p_k\in[\epsilon/2,\epsilon]$ satisfy
+    $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ and
+    \begin{align}
+        E_{\mathrm{def},k}\le Cn^\ell D^2W^2(\log n)^{C}
+        \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+\rho_k.
+        \label{eq:al_scanner_energy}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Integrating the derivative of the logarithmic norm of each charge round
+    over $p\in[\epsilon/2,\epsilon]$ and summing over rounds bounds the
+    integrated charge defect by the telescoped entropy budget. Averaging over
+    the $nm$ charge rounds and the parameter interval selects a round and a
+    parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$. At that point
+    H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
+    energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and
+    bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
+    weight, and the gap of the copied Hamiltonian converts the energy into the
+    defect energy. The budgets follow from the entropy input, the continuity
+    error $O(n^{-247})$ and the crossing count, which gives the logarithmic
+    power $12$ for the marginal parameter.
+\end{proof}

@@ -1,0 +1,35 @@
+\section{Interiors of actual fan triangles}
+\label{sec:area_law_fan_regularity}
+
+Fix an arbitrary origin $o\in\mathbb R^2$, natural dyadic exponent $\ell$
+and integer cell index $z\in\mathbb Z^2$. Choose any optional midpoint
+subdivisions of the four sides. Write $c$ for the cell center and
+$P_e=\operatorname{conv}\{c,a_e,b_e\}$ for each actual fan triangle;
+see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, prop:two-families, lines 299--323,
+% especially 308--316, and geometry:initial-stars, lines 352--363;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Nonempty interiors and closure of fan triangles]
+    \label{thm:area_law_cell_fan_regularity}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_nonempty_and_closure_eq}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Every actual fan triangle satisfies
+    \begin{align}
+        \operatorname{int}(P_e)            & \ne\varnothing, \\
+        \overline{\operatorname{int}(P_e)} & =P_e.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,def:area_law_template}
+    The defining determinant $\det(a_e-c,b_e-c)$ is nonzero. Thus the
+    two edge vectors are linearly independent and span the plane, and
+    the three vertices affinely span $\mathbb R^2$. Their convex hull
+    consequently has nonempty interior.
+
+    The convex hull of these finitely many vertices is closed. A convex
+    set with nonempty interior has the same closure as its interior,
+    so $\overline{\operatorname{int}(P_e)}=\overline{P_e}=P_e$.
+\end{proof}
