@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
+import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartitionByScale
 import Mathlib.Algebra.Field.GeomSum
 
 /-!
@@ -56,7 +57,7 @@ theorem Template.card_cappedDyadicPartition_shell_at_cap_le {Ctpl : ℝ} {n s₀
     (hj : j ≤ L) (hL : L ≤ s₀) (hcap : L < 2 ^ (K + 1)) :
     2 ^ K * ((cappedDyadicPartition (ambientDilation T.points j \ T.points) K).filter
       (fun c ↦ c.1 = K)).card ≤ 2 * n := by
-  have ha := card_cappedDyadicPartition_at_cap_le
+  have ha := Geometry.card_cappedDyadicPartition_at_cap_le
     (ambientDilation T.points j \ T.points) K
   have hs := T.card_shell_le hC j (hj.trans hL)
   have hp : 4 ^ K = 2 ^ K * 2 ^ K := by
@@ -85,16 +86,8 @@ theorem Template.sum_rpow_cappedDyadicPartition_shell_le {Ctpl : ℝ} {n s₀ : 
   let a (k : ℕ) : ℝ := ((P.filter fun c ↦ c.1 = k).card : ℝ)
   have hgroup : (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) =
       ∑ k ∈ Finset.range (K + 1), a k * ((2 : ℝ) ^ k) ^ (1 + e) := by
-    symm
-    convert Finset.sum_fiberwise_of_maps_to' (g := Prod.fst)
-      (s := P) (t := Finset.range (K + 1))
-      (fun c hc ↦ Finset.mem_range.mpr
-        (Nat.lt_succ_of_le ((mem_cappedDyadicPartition _ _ _ _).mp hc).1))
-      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)) using 1 <;> simp [a]
-  have hfactor (k : ℕ) : a k * ((2 : ℝ) ^ k) ^ (1 + e) =
-      ((2 : ℝ) ^ k * a k) * ((2 : ℝ) ^ k) ^ e := by
-    rw [Real.rpow_add (by positivity), Real.rpow_one]
-    ring
+    exact sum_cappedDyadicPartition_by_scale (ambientDilation T.points j \ T.points) K
+      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e))
   have hcap : (2 : ℝ) ^ K * a K ≤ 2 * n := by
     dsimp [a, P]
     exact_mod_cast T.card_cappedDyadicPartition_shell_at_cap_le hC j L K hj hL hhi
@@ -104,34 +97,15 @@ theorem Template.sum_rpow_cappedDyadicPartition_shell_le {Ctpl : ℝ} {n s₀ : 
     dsimp [a, P]
     exact_mod_cast T.card_cappedDyadicPartition_shell_below_cap_le
       hC j K k (hj.trans hL) hk hsize
-  have htwo : 1 < (2 : ℝ) ^ e := Real.one_lt_rpow (by norm_num) he
-  have hden : 0 < (2 : ℝ) ^ e - 1 := sub_pos.mpr htwo
-  have hgeom : (∑ k ∈ Finset.range K, ((2 : ℝ) ^ k) ^ e) ≤
-      ((2 : ℝ) ^ K) ^ e / ((2 : ℝ) ^ e - 1) := by
-    simp_rw [← Real.rpow_pow_comm (by norm_num : (0 : ℝ) ≤ 2)]
-    rw [geom_sum_eq (ne_of_gt htwo)]
-    exact div_le_div_of_nonneg_right (by linarith) (by linarith)
+  have hsum := sum_weighted_dyadic_rpow_le a K he (by positivity) hcap hsmall
+  have hden : 0 < (2 : ℝ) ^ e - 1 :=
+    sub_pos.mpr (Real.one_lt_rpow (by norm_num) he)
   have hpower : ((2 : ℝ) ^ K) ^ e ≤ (L : ℝ) ^ e :=
     Real.rpow_le_rpow (by positivity) (by exact_mod_cast hlo) he.le
   change (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) ≤ _
-  rw [hgroup, Finset.sum_range_succ]
+  rw [hgroup]
   calc
-    _ ≤ (∑ k ∈ Finset.range K, (14 * n) * ((2 : ℝ) ^ k) ^ e) +
-        (2 * n) * ((2 : ℝ) ^ K) ^ e := by
-      apply add_le_add
-      · apply Finset.sum_le_sum
-        intro k hk
-        rw [hfactor]
-        exact mul_le_mul_of_nonneg_right (hsmall k (Finset.mem_range.mp hk))
-          (Real.rpow_nonneg (by positivity) _)
-      · rw [hfactor]
-        exact mul_le_mul_of_nonneg_right hcap (Real.rpow_nonneg (by positivity) _)
-    _ = (14 * n) * (∑ k ∈ Finset.range K, ((2 : ℝ) ^ k) ^ e) +
-        (2 * n) * ((2 : ℝ) ^ K) ^ e := by rw [Finset.mul_sum]
-    _ ≤ (14 * n) * (((2 : ℝ) ^ K) ^ e / ((2 : ℝ) ^ e - 1)) +
-        (2 * n) * ((2 : ℝ) ^ K) ^ e :=
-      add_le_add
-        (mul_le_mul_of_nonneg_left hgeom (by positivity : (0 : ℝ) ≤ 14 * n)) le_rfl
+    _ ≤ (2 * n + (14 * n) / ((2 : ℝ) ^ e - 1)) * ((2 : ℝ) ^ K) ^ e := hsum
     _ = (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * ((2 : ℝ) ^ K) ^ e := by ring
     _ ≤ _ := mul_le_mul_of_nonneg_left hpower (by positivity)
 

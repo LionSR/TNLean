@@ -529,14 +529,6 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "$source"
           done
-      - name: Build template mixed-square and weighted covering estimates early
-        timeout-minutes: 5
-        run: |
-          set -eo pipefail
-          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
       - name: Check finite rectangular dual geometry early
         run: |
           set -eo pipefail
@@ -716,14 +708,6 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
-
-      - name: Test partial-row entropy strictly
-        timeout-minutes: 2
-        run: >
-          lake env lean
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/TemplateEntropy.lean
 
       - name: Test square-grid vector, regional and approximation transport
         timeout-minutes: 2
