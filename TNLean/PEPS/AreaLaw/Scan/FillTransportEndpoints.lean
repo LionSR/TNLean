@@ -19,7 +19,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open scoped Matrix unitInterval
+open scoped Matrix ComplexOrder
 
 noncomputable section
 

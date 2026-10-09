@@ -1551,9 +1551,9 @@ The following finite construction follows
     satisfying
     \begin{align}
         0<n,\qquad s+1\le nm,\qquad r_0\le D,
-            & \qquad 1\le D, \\
+         & \qquad 1\le D, \\
         4D\le m,\qquad 8Km\le L,
-            & \qquad 0<C_1.
+         & \qquad 0<C_1.
         \label{eq:al_scan_transport_scales}
     \end{align}
     Write $T_j=T+[-j,j]^2_{\mathbb Z}$ and let $Z$ consist of both
@@ -1565,8 +1565,8 @@ The following finite construction follows
     factors and put
     \begin{align}
         \mathcal V & = (\mathbb C^q)^{\otimes\Lambda}
-                       \otimes\mathbb C^{d_C}\otimes\mathbb C^{d_R}, \\
-        \ell & =1+(2r_0+1)^2\log q.
+        \otimes\mathbb C^{d_C}\otimes\mathbb C^{d_R}, \\
+        \ell       & =1+(2r_0+1)^2\log q.
     \end{align}
     Let $a>0$ satisfy $a\ell\le c_0$.
 
@@ -1580,11 +1580,11 @@ The following finite construction follows
     Definition~\ref{def:al_scan_actual_energy_terms} for $H,\Omega,\Delta,L$.
     The energy terms and their replica sum are
     \begin{align}
-        E_i & =\widetilde h_i\otimes I_C\otimes I_R,
-            & D_i & =\widetilde X_i\subset\Lambda, \\
+        E_i          & =\widetilde h_i\otimes I_C\otimes I_R,
+                     & D_i                                    & =\widetilde X_i\subset\Lambda, \\
         \widetilde H & =\sum_i\widetilde h_i,
-            & \overline H_r & =\frac1r\sum_{b=0}^{r-1}
-                   (\widetilde H\otimes I_C\otimes I_R)_b.
+                     & \overline H_r                          & =\frac1r\sum_{b=0}^{r-1}
+        (\widetilde H\otimes I_C\otimes I_R)_b.
         \label{eq:al_scan_transport_energy}
     \end{align}
     Here the subscript $b$ means insertion in copy $b$, and
@@ -1599,10 +1599,10 @@ The following finite construction follows
     Write $\mathcal M_r(p)$ for the actual interpolating root and set
     \begin{align}
         N_{r,\mathrm{pre}}(p)^2
-            & =\|\mathcal M_r(p)^{-1/4}\mathrm{pre}\|^2, \\
+         & =\|\mathcal M_r(p)^{-1/4}\mathrm{pre}\|^2, \\
         v_{r,\mathrm{pre}}(p)
-            & =\frac{\mathcal M_r(p)^{-1/4}\mathrm{pre}}
-                         {N_{r,\mathrm{pre}}(p)}.
+         & =\frac{\mathcal M_r(p)^{-1/4}\mathrm{pre}}
+        {N_{r,\mathrm{pre}}(p)}.
         \label{eq:al_scan_transport_vector}
     \end{align}
     Here $N_{r,\mathrm{pre}}(p)$ is the nonnegative square root.
@@ -1616,54 +1616,54 @@ The following finite construction follows
     the terminal leaves splitting $D_i$, and set
     \begin{align}
         \mathcal L_{r,\mathrm{pre}}(p)
-            & =\sum_h w_h\int_{\mathbb R}m_{1/4}(u)
-                 \operatorname{Re}\operatorname{tr}
-                 (\sigma_{(h,\mathrm{old}),u}(p)\log C_h)\,du, \\
+               & =\sum_h w_h\int_{\mathbb R}m_{1/4}(u)
+        \operatorname{Re}\operatorname{tr}
+        (\sigma_{(h,\mathrm{old}),u}(p)\log C_h)\,du,          \\
         \mathcal G_{r,\mathrm{pre}}(p)
-            & =\sum_{h,g}w_h\int_{\mathbb R}m_{1/4}(u)
-                 \int\sum_c q_{c\mid h}\eta_{h,c,g}(\theta)
-                    \,d\mu_{\sigma_{(h,\mathrm{old}),u}(p)}(\theta)\,du, \\
-        W_i(p) & =\sum_{j\in\mathcal J_i}\pi_j(p), \\
+               & =\sum_{h,g}w_h\int_{\mathbb R}m_{1/4}(u)
+        \int\sum_c q_{c\mid h}\eta_{h,c,g}(\theta)
+        \,d\mu_{\sigma_{(h,\mathrm{old}),u}(p)}(\theta)\,du,   \\
+        W_i(p) & =\sum_{j\in\mathcal J_i}\pi_j(p),             \\
         \mathcal E_{r,\mathrm{pre}}(p)
-            & =\sum_i W_i(p)\sum_{j\in\mathcal J_i}\pi_j(p)
-                 \int_{\mathbb R}m_{1/4}(u)
-                 \int\eta_{i,j}(\theta)^{1/8}
-                    \,d\mu_{\sigma_{j,u}(p)}(\theta)\,du.
+               & =\sum_i W_i(p)\sum_{j\in\mathcal J_i}\pi_j(p)
+        \int_{\mathbb R}m_{1/4}(u)
+        \int\eta_{i,j}(\theta)^{1/8}
+        \,d\mu_{\sigma_{j,u}(p)}(\theta)\,du.
     \end{align}
     Here $\eta_{h,c,g}$ is the entropy of the actual move and
     $\eta_{i,j}$ is the entropy of the designated support's unique split.
     Then the following four conclusions hold.
     \begin{enumerate}
         \item For every $0<p<1$, the function
-            $-\log N_{r,\mathrm{pre}}(p)^2$ is differentiable at $p$, with
-            \begin{align}
-                -\frac{d}{dp}\log N_{r,\mathrm{pre}}(p)^2
-                    & =\mathcal L_{r,\mathrm{pre}}(p).
-            \end{align}
+              $-\log N_{r,\mathrm{pre}}(p)^2$ is differentiable at $p$, with
+              \begin{align}
+                  -\frac{d}{dp}\log N_{r,\mathrm{pre}}(p)^2
+                   & =\mathcal L_{r,\mathrm{pre}}(p).
+              \end{align}
         \item For every $0<p<1$,
-            \begin{align}
-                ra\mathcal G_{r,\mathrm{pre}}(p)
-                    -C_{\mathrm{ent}}raK a^{1/4}\ell^{e_{\mathrm{ent}}}
-                    -\beta_r
-                    & \le\mathcal L_{r,\mathrm{pre}}(p).
-            \end{align}
+              \begin{align}
+                  ra\mathcal G_{r,\mathrm{pre}}(p)
+                  -C_{\mathrm{ent}}raK a^{1/4}\ell^{e_{\mathrm{ent}}}
+                  -\beta_r
+                   & \le\mathcal L_{r,\mathrm{pre}}(p).
+              \end{align}
         \item For every $0<p<1$ and $E_0\in\mathbb R$ satisfying
-            $\overline H_r\mathrm{pre}=E_0\mathrm{pre}$,
-            \begin{align}
-                \operatorname{Re}\langle v_{r,\mathrm{pre}}(p),
-                    \overline H_r v_{r,\mathrm{pre}}(p)\rangle
-                    & \le 2E_0+C_{\mathrm{en}}a^2\ell^{e_{\mathrm{en}}}
-                        \mathcal E_{r,\mathrm{pre}}(p)+\varepsilon_r.
-            \end{align}
+              $\overline H_r\mathrm{pre}=E_0\mathrm{pre}$,
+              \begin{align}
+                  \operatorname{Re}\langle v_{r,\mathrm{pre}}(p),
+                  \overline H_r v_{r,\mathrm{pre}}(p)\rangle
+                   & \le 2E_0+C_{\mathrm{en}}a^2\ell^{e_{\mathrm{en}}}
+                  \mathcal E_{r,\mathrm{pre}}(p)+\varepsilon_r.
+              \end{align}
         \item For every $0\le p_0\le p_1\le1$,
-            \begin{align}
-                \int_{p_0}^{p_1}\left(
-                    ra\mathcal G_{r,\mathrm{pre}}(p)
-                    -C_{\mathrm{ent}}raK a^{1/4}\ell^{e_{\mathrm{ent}}}
-                    -\beta_r\right)\,dp
-                    & \le\log N_{r,\mathrm{pre}}(p_0)^2
-                         -\log N_{r,\mathrm{pre}}(p_1)^2.
-            \end{align}
+              \begin{align}
+                  \int_{p_0}^{p_1}\left(
+                  ra\mathcal G_{r,\mathrm{pre}}(p)
+                  -C_{\mathrm{ent}}raK a^{1/4}\ell^{e_{\mathrm{ent}}}
+                  -\beta_r\right)\,dp
+                   & \le\log N_{r,\mathrm{pre}}(p_0)^2
+                  -\log N_{r,\mathrm{pre}}(p_1)^2.
+              \end{align}
     \end{enumerate}
     The sequences are chosen before $r,\mathrm{pre},p,p_0,p_1,E_0$.
     The eigenvector equation is required only in the third conclusion.
@@ -1685,10 +1685,10 @@ The following finite construction follows
     cross-band commutation for every replica count at $t=a/2\ge0$.
     The physical dimension estimates give
     \begin{align}
-        1 & \le\ell, \\
-        \log(e\dim x_{h,c,g}) & \le\ell, \\
+        1                     & \le\ell,                                   \\
+        \log(e\dim x_{h,c,g}) & \le\ell,                                   \\
         \mathcal J_i\ne\varnothing
-            & \ \Longrightarrow\ \log(e\dim D_i)\le\ell.
+                              & \ \Longrightarrow\ \log(e\dim D_i)\le\ell.
     \end{align}
     Neither auxiliary factor belongs to a moved subsystem or a designated
     support. Apply the entropy and energy transport theorem to these actual
@@ -1698,10 +1698,10 @@ The following finite construction follows
     Finally, linearity of the copy mean gives
     \begin{align}
         \sum_i\frac1r\sum_{b=0}^{r-1}(E_i)_b
-            & =\frac1r\sum_{b=0}^{r-1}
-                 \left(\left(\sum_i\widetilde h_i\right)
-                    \otimes I_C\otimes I_R\right)_b
-             =\overline H_r.
+         & =\frac1r\sum_{b=0}^{r-1}
+        \left(\left(\sum_i\widetilde h_i\right)
+        \otimes I_C\otimes I_R\right)_b
+        =\overline H_r.
     \end{align}
     Substitute this identity in the eigenvector hypothesis and energy
     conclusion; the derivative, entropy, and integral conclusions are

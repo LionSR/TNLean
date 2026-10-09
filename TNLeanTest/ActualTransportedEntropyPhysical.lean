@@ -20,6 +20,7 @@ assertions depend on the supports and on the actual transported old state.
 set_option autoImplicit false
 
 open TensorPower TensorPower.ReplicaTransport
+open Entropy (SiteConfig)
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open TNLeanTest.ActualScanPhysicalSampling
 open scoped BigOperators

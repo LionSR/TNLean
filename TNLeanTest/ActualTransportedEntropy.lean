@@ -17,7 +17,8 @@ index families without imposing normalization on the coherent vector.
 set_option autoImplicit false
 
 open TensorPower TensorPower.ReplicaTransport MeasureTheory
-open scoped BigOperators
+open Entropy (SiteConfig)
+open scoped BigOperators ComplexOrder
 open TNLean.PEPS.AreaLaw.Scan
 
 namespace TNLeanTest.ActualTransportedEntropy

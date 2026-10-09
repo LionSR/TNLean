@@ -17,6 +17,7 @@ No normalization assumption is available for the one-copy vector.
 set_option autoImplicit false
 
 open TensorPower TensorPower.ReplicaTransport
+open Entropy (SiteConfig)
 open scoped BigOperators
 open TNLean.PEPS.AreaLaw.Scan
 

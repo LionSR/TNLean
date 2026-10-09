@@ -23,6 +23,7 @@ lines 390–412, at `openai/math@adc7f124`.
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix MeasureTheory
+open Entropy (SiteConfig)
 
 noncomputable section
 

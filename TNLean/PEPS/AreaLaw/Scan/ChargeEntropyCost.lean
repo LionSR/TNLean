@@ -29,6 +29,7 @@ and 442–451, at `openai/math@adc7f124`.
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open TensorPower TensorPower.ReplicaTransport
+open Entropy (SiteConfig)
 open scoped BigOperators
 
 variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]

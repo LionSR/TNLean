@@ -31,6 +31,7 @@ at `openai/math@adc7f124`.
 
 open scoped BigOperators
 open TensorPower TensorPower.ReplicaTransport
+open Entropy (SiteConfig)
 
 noncomputable section
 
