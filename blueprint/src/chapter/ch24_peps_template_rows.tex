@@ -1,5 +1,5 @@
-\begin{lemma}[Horizontal sections of sampled polygons]
-    \label{lem:area_law_sample_rows}
+\begin{theorem}[Horizontal sections of sampled polygons]
+    \label{thm:area_law_sample_rows}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.latticeRow,
         TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow,
@@ -21,18 +21,17 @@
     $R_y(S)=\{x\in\mathbb Z:(x,y)\in S\}$.
     Every nonempty real horizontal section of $P$ is a closed interval
     $[a,b]$, and
-    \[
-        R_y(S)=[\lceil a\rceil,\lfloor b\rfloor]\cap\mathbb Z.
-    \]
+    \begin{align}
+        R_y(S) & =[\lceil a\rceil,\lfloor b\rfloor]\cap\mathbb Z.
+    \end{align}
     This integer interval may be empty. If it is nonempty, its endpoints
     are its attained minimum and maximum. For every real $c$ and integers
     $m,y$, rounding commutes with the integer shift:
-    \[
-        \lceil c+my\rceil=\lceil c\rceil+my,
-        \qquad
-        \lfloor c+my\rfloor=\lfloor c\rfloor+my.
-    \]
-\end{lemma}
+    \begin{align}
+        \lceil c+my\rceil   & =\lceil c\rceil+my,   \\
+        \lfloor c+my\rfloor & =\lfloor c\rfloor+my.
+    \end{align}
+\end{theorem}
 \begin{proof}
     \leanok
     A finite convex hull is compact and convex. Its intersection with a
@@ -43,8 +42,8 @@
     \cite{OpenAI2026AreaLaw}.
 \end{proof}
 
-\begin{lemma}[Area of a template]
-    \label{lem:area_law_template_area}
+\begin{theorem}[Area of a template]
+    \label{thm:area_law_template_area}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box,
         TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le,
@@ -53,7 +52,7 @@
     \leanok
     \uses{def:area_law_template}
     If $C_{\rm tpl}\ge1$, a template satisfies $|T|\le9ns_0$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Each nonempty sample lies in an integer square of radius $s_0$ about
@@ -62,8 +61,8 @@
     $(2s_0+1)^2\le9s_0(s_0+1)$ and $N_0(s_0+1)\le n$.
 \end{proof}
 
-\begin{lemma}[Rows and unions under ambient dilation]
-    \label{lem:area_law_dilation_rows_union}
+\begin{theorem}[Rows and unions under ambient dilation]
+    \label{thm:area_law_dilation_rows_union}
     \lean{
         TNLean.PEPS.AreaLaw.mem_ambientDilation_iff,
         TNLean.PEPS.AreaLaw.ambientDilation_mono,
@@ -75,29 +74,26 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff
     }
     \leanok
-    \uses{def:area_law_template,lem:area_law_sample_rows}
+    \uses{def:area_law_template,thm:area_law_sample_rows}
     For a finite $S\subset\mathbb Z^2$, let
     $S_r=S+([-r,r]^2\cap\mathbb Z^2)$. Membership in $S_r$ means that
     both coordinate differences from some point of $S$ are at most $r$
     in absolute value. Dilation is monotone in both $S$ and $r$, satisfies
     $(S_r)_t=S_{r+t}$, and
-    \[
-        R_y(S_r)=
+    \begin{align}
+        R_y(S_r) & =
         \bigcup_{z=y-r}^{y+r}\ \bigcup_{a\in R_z(S)}
         ([a-r,a+r]\cap\mathbb Z).
-    \]
+    \end{align}
     For a sampled polygon, each nonempty row in this union contributes the
     interval from its minimum minus $r$ to its maximum plus $r$.
     If $S=\bigcup_{i\in I}S_i$ is a finite union, then, for $r,t\ge0$,
-    \[
-        S_r\setminus S_t
-        \subseteq\bigcup_{i\in I}((S_i)_r\setminus(S_i)_t),
-        \qquad
-        |S_r\setminus S_t|
-        \le\sum_{i\in I}|(S_i)_r\setminus(S_i)_t|.
-    \]
+    \begin{align}
+        S_r\setminus S_t   & \subseteq\bigcup_{i\in I}((S_i)_r\setminus(S_i)_t), \\
+        |S_r\setminus S_t| & \le\sum_{i\in I}|(S_i)_r\setminus(S_i)_t|.
+    \end{align}
     The pieces may be empty, overlapping, or disconnected.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     The coordinate inequalities give the row formula. A point newly present
@@ -106,8 +102,8 @@
     the cardinality inequality without requiring disjointness.
 \end{proof}
 
-\begin{lemma}[Supporting strips of allowed polygons]
-    \label{lem:area_law_polygon_strips}
+\begin{theorem}[Supporting strips of allowed polygons]
+    \label{thm:area_law_polygon_strips}
     \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices,
@@ -116,10 +112,10 @@
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
     }
     \uses{def:area_law_template}
-    Each actual polygon is the intersection of the supporting strips for
+    Each polygon is the intersection of the supporting strips for
     the four linear forms $x,y,x+y,x-y$. Equivalently, the polygon is the intersection of all
     closed supporting slabs with allowed normal directions.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Every supporting slab contains the convex hull. Conversely, the three
@@ -131,8 +127,8 @@
     forms. Their extrema over the finite vertex set are attained.
 \end{proof}
 
-\begin{lemma}[Rounded affine row profiles]
-    \label{lem:area_law_affine_row_profiles}
+\begin{theorem}[Rounded affine row profiles]
+    \label{thm:area_law_affine_row_profiles}
     \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds,
@@ -143,13 +139,13 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between,
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
     }
-    \uses{lem:area_law_polygon_strips,lem:area_law_sample_rows}
+    \uses{thm:area_law_polygon_strips,thm:area_law_sample_rows}
     For each sampled polygon there are eight integers
     $l_x,u_x,l_y,u_y,l_+,u_+,l_-,u_-$ such that, on the vertical strip,
-    \[
-        R_y(S)=
+    \begin{align}
+        R_y(S) & =
         [\max(l_x,l_+-y,l_-+y),\min(u_x,u_+-y,u_-+y)]\cap\mathbb Z.
-    \]
+    \end{align}
     Outside $[l_y,u_y]$ the row is empty; the displayed interval may also
     be empty. Nonempty rows form an integer interval, and the attained
     lower and upper endpoints each change by at most one between
@@ -157,7 +153,7 @@
     Restricting to a vertical window also preserves consecutive occupied
     columns. A sampled point can be moved to an occupied adjacent row with
     a horizontal change of at most one.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Round each real lower strip bound upward and each upper bound downward.
@@ -168,8 +164,8 @@
     most one in one row step, as do its maximum or minimum.
 \end{proof}
 
-\begin{lemma}[Single-piece ambient dilation layers]
-    \label{lem:area_law_piece_depth_layers}
+\begin{theorem}[Single-piece ambient dilation layers]
+    \label{thm:area_law_piece_depth_layers}
     \leanok
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between,
@@ -180,18 +176,19 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain,
         TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
     }
-    \uses{lem:area_law_affine_row_profiles,lem:area_law_dilation_rows_union}
-    Let $S$ be one actual sampled piece. Its dilated horizontal rows are
+    \uses{thm:area_law_affine_row_profiles,thm:area_law_dilation_rows_union,
+        thm:area_law_template_area}
+    Let $S$ be one sampled piece. Its dilated horizontal rows are
     intervals. Increasing the radius from $r$ to $r+1$ adds at most four
     sites to each old nonempty row. Every radius-$r$ row has at most
     $2s_0+2r+1$ sites. If $S$ is nonempty, there are integers $a\le b$ with
     $b-a\le2s_0$ such that its radius-$r$ occupied rows are exactly
     $[a-r,b+r]\cap\mathbb Z$.
     For $1\le j\le s_0$, including empty samples,
-    \[
-        |S_j\setminus S_{j-1}|\le24(s_0+1).
-    \]
-\end{lemma}
+    \begin{align}
+        |S_j\setminus S_{j-1}| & \le24(s_0+1).
+    \end{align}
+\end{theorem}
 \begin{proof}
     \leanok
     Intersect the original sample with a vertical radius window. Its occupied
@@ -205,25 +202,25 @@
     Their total is at most $12s_0+12j-2\le24(s_0+1)$.
 \end{proof}
 
-\begin{lemma}[Template depth layers with an explicit constant]
-    \label{lem:area_law_template_depth_layers}
+\begin{theorem}[Template depth layers with an explicit constant]
+    \label{thm:area_law_template_depth_layers}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
-    \uses{def:area_law_template,lem:area_law_piece_depth_layers,
-        lem:area_law_dilation_rows_union}
-    If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the actual template satisfies
-    \[
-        |T_j\setminus T_{j-1}|\le n.
-    \]
-\end{lemma}
+    \uses{def:area_law_template,thm:area_law_piece_depth_layers,
+        thm:area_law_dilation_rows_union}
+    If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the template satisfies
+    \begin{align}
+        |T_j\setminus T_{j-1}| & \le n.
+    \end{align}
+\end{theorem}
 \begin{proof}
     \leanok
     Apply union-layer subadditivity to the pieces and then the scale bound:
-    \[
+    \begin{align}
         |T_j\setminus T_{j-1}|
-        \le24N_0(s_0+1)
+         & \le24N_0(s_0+1)
         \le C_{\rm tpl}N_0(s_0+1)\le n.
-    \]
+    \end{align}
     Overlap, empty pieces, and disconnected unions require no extra condition.
 \end{proof}
 

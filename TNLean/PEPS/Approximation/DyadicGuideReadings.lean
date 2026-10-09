@@ -21,9 +21,10 @@ This file proves that the estimates of Lemma 7.2 do not depend on that differenc
 `f'` *reads* a labelling `f` after the displacement `v` if, at every point `p`, `f' p = f (p + ε v)`
 for all small `ε > 0`. When `f` agrees with the open chambers of the source off a locally finite
 family of segments and `v` is parallel to none of them, the ray `p + ε v` leaves those segments at
-once, so the source's sampled guide reads `f` after `v`. That agreement and the genericity of `v`
-are not formalized; the existence and uniqueness of the readings of the schedule's guides are in
-`TNLean.PEPS.Approximation.DyadicSampledGuides`. We prove:
+once, so the source's sampled guide reads `f` after `v`. The existence and uniqueness of the
+readings of the schedule's guides are in `TNLean.PEPS.Approximation.DyadicSampledGuides`, and the
+identification of the sampled guides with the readings in
+`TNLean.PEPS.Approximation.DyadicChamberSampling`. We prove:
 
 * readings of two labellings along one displacement differ only in the closure of the set where
   the labellings differ, and a reading takes a value other than `c` only in the closure of the set
