@@ -616,6 +616,12 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build physical safe-rectangle entropy early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
