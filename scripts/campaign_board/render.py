@@ -27,20 +27,38 @@ ROOT = HERE.parents[1]
 WORKFLOW = ".github/workflows/campaign-board.yml"
 
 
+DIAGRAM_SLOT = re.compile(r"\{\{DIAGRAM:([^}]+)\}\}")
+
+
+def diagram(campaign_dir: pathlib.Path, path: str) -> dict:
+    """One compiled diagram as a data URI with its natural width in points."""
+    svg = (campaign_dir / path).read_bytes()
+    width = re.search(rb'<svg[^>]*\bwidth="([0-9.]+)', svg)
+    return {
+        "src": "data:image/svg+xml;base64," + base64.b64encode(svg).decode("ascii"),
+        "width": float(width.group(1)) if width else None,
+    }
+
+
 def diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
-    """Inline every stage diagram as a data URI with its natural width in points."""
-    out = {}
-    for route in config["routes"]:
-        for stage in route["stages"]:
-            if "diagram" not in stage:
-                continue
-            svg = (campaign_dir / stage["diagram"]).read_bytes()
-            width = re.search(rb'<svg[^>]*\bwidth="([0-9.]+)', svg)
-            out[stage["diagram"]] = {
-                "src": "data:image/svg+xml;base64," + base64.b64encode(svg).decode("ascii"),
-                "width": float(width.group(1)) if width else None,
-            }
-    return out
+    """Inline every diagram a stage names, keyed by its path."""
+    return {d["src"]: diagram(campaign_dir, d["src"])
+            for route in config["routes"] for stage in route["stages"]
+            for d in stage.get("diagrams", [])}
+
+
+def intro_html(campaign_dir: pathlib.Path) -> str:
+    """The campaign introduction, with each {{DIAGRAM:path}} slot replaced by its image."""
+    intro = campaign_dir / "intro.html"
+    if not intro.exists():
+        return ""
+
+    def image(m: re.Match) -> str:
+        d = diagram(campaign_dir, m.group(1))
+        width = f' width="{round(d["width"] * 2.4)}"' if d["width"] else ""
+        return f'<img class="tnimg" src="{d["src"]}"{width} alt="">'
+
+    return DIAGRAM_SLOT.sub(image, intro.read_text())
 
 
 def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pathlib.Path) -> pathlib.Path:
@@ -56,13 +74,12 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
         "gaps": json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []},
         "meta": {"workflowUrl": blob_url + WORKFLOW, "gapsPath": gaps_rel, "gapsUrl": blob_url + gaps_rel},
     })
-    intro = campaign_dir / "intro.html"
     figures = campaign_dir / "figures.js"
     replacements = {
         "{{TITLE}}": html.escape(config["pageTitle"]),
         "{{DESCRIPTION}}": html.escape(config.get("description", "")),
         "{{CSS}}": (HERE / "board.css").read_text(),
-        "{{INTRO}}": intro.read_text() if intro.exists() else "",
+        "{{INTRO}}": intro_html(campaign_dir),
         "{{FIGURES}}": figures.read_text() if figures.exists() else "",
         "{{JS}}": (HERE / "board.js").read_text(),
         # Inline JSON must not close the surrounding <script> element.

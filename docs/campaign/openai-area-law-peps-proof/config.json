@@ -182,8 +182,12 @@
           "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>, so the label (<i>j</i>, ℓ) fits in a small register at junctions.",
           "figure": "patch",
           "caption": "Left: nested squares around a square of side about log <i>L</i>. Right: the inside rank of each subspace in the orthogonal sum, as bars. Their total is polynomial in <i>L</i>, so the label fits in a small register.",
-          "diagram": "diagrams/patch-split.svg",
-          "diagramCaption": "In tensor-network notation: up to small error, Ω, with its indices grouped into inside and outside, is an inside tensor <i>V</i> contracted with an outside tensor <i>W</i> through one bond carrying the label (<i>j</i>, ℓ). That bond has dimension Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>."
+          "diagrams": [
+            {
+              "src": "diagrams/patch-split.svg",
+              "caption": "In tensor-network notation: up to small error, Ω, with its indices grouped into inside and outside, is an inside tensor <i>V</i> contracted with an outside tensor <i>W</i> through one bond carrying the label (<i>j</i>, ℓ). That bond has dimension Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>."
+            }
+          ]
         },
         {
           "title": "Local moves on frames",
@@ -215,8 +219,12 @@
           ],
           "physics": "The protocol uses pair resources of unbounded Schmidt rank. In the density calculation they are replaced by polynomial sums of product operators. Bounded participation limits the coefficient cost, and a Gaussian second-moment bound controls the error.",
           "delivers": "A trace-norm error independent of every private dimension, and an operator network with polynomial bonds on the party graph.",
-          "diagram": "diagrams/pair-compress.svg",
-          "diagramCaption": "The density operator of a pair resource on parties <i>a</i> and <i>b</i> (legs up: ket, legs down: bra) is replaced by a sum of product operators <i>X<sub>k</sub></i> ⊗ <i>Y<sub>k</sub></i>, which is a two-site operator network whose bond <i>k</i> runs over polynomially many values."
+          "diagrams": [
+            {
+              "src": "diagrams/pair-compress.svg",
+              "caption": "The density operator of a pair resource on parties <i>a</i> and <i>b</i> (legs up: ket, legs down: bra) is replaced by a sum of product operators <i>X<sub>k</sub></i> ⊗ <i>Y<sub>k</sub></i>, which is a two-site operator network whose bond <i>k</i> runs over polynomially many values."
+            }
+          ]
         },
         {
           "title": "Back to a vector on the grid",
@@ -229,8 +237,12 @@
           "delivers": "A PEPS on the original <i>L</i>×<i>L</i> grid with bond dimension at most <i>C L<sup>c</sup></i> and error at most 1/<i>L</i>.",
           "figure": "routing",
           "caption": "The links between parents and children on an 8 × 8 grid, routed first along a row and then along a column. Stroke width counts the links that share each lattice edge, which sets the bond dimension there.",
-          "diagram": "diagrams/peps-sheet.svg",
-          "diagramCaption": "The output: one tensor <i>A<sub>v</sub></i> per site of the open grid, bonds contracted along lattice edges, one physical leg per site. Each bond has dimension at most <i>C L<sup>c</sup></i>."
+          "diagrams": [
+            {
+              "src": "diagrams/peps-sheet.svg",
+              "caption": "The output: one tensor <i>A<sub>v</sub></i> per site of the open grid, bonds contracted along lattice edges, one physical leg per site. Each bond has dimension at most <i>C L<sup>c</sup></i>."
+            }
+          ]
         }
       ]
     },
@@ -254,8 +266,12 @@
           "delivers": "Lean statements of both main theorems with no hypothesis the papers lack.",
           "figure": "domain",
           "caption": "A finite domain Λ of the square lattice, with a hole and an irregular edge, and a region <i>A</i> (blue). The orange edges form ∂<sub>Λ</sub><i>A</i>, the count that the area law bounds the entropy by.",
-          "diagram": "diagrams/peps-tensor.svg",
-          "diagramCaption": "The tensor at site <i>v</i> of a PEPS: four virtual indices <i>u</i>, <i>l</i>, <i>d</i>, <i>r</i> in the sheet, contracted with the neighbouring tensors, and one physical index pointing out of it. The papers allow a different tensor at every site."
+          "diagrams": [
+            {
+              "src": "diagrams/peps-tensor.svg",
+              "caption": "The tensor at site <i>v</i> of a PEPS: four virtual indices <i>u</i>, <i>l</i>, <i>d</i>, <i>r</i> in the sheet, contracted with the neighbouring tensors, and one physical index pointing out of it. The papers allow a different tensor at every site."
+            }
+          ]
         }
       ]
     }

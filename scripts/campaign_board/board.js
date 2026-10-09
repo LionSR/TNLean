@@ -281,12 +281,16 @@
           figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: st.caption }) : null);
           try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
         }
-        // A tensor-network diagram compiled from the campaign's tenkz sources.
-        const tn = st.diagram && (D.diagrams || {})[st.diagram];
-        const diagram = tn ? el("figure", { class: "sfig tnfig" },
-          el("img", { src: tn.src, alt: st.diagramAlt || st.diagramCaption || st.title, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
-          st.diagramCaption ? el("figcaption", { html: st.diagramCaption }) : null) : null;
-        const figs = figure || diagram ? el("div", { class: "figs" }, diagram, figure) : null;
+        // Tensor-network diagrams compiled from the campaign's tenkz sources.
+        const tnFigs = (st.diagrams || []).map(d => {
+          const tn = (D.diagrams || {})[d.src];
+          if (!tn) return null;
+          const alt = (d.alt || d.caption || st.title).replace(/<[^>]+>/g, "");
+          return el("figure", { class: "sfig tnfig" },
+            el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
+            d.caption ? el("figcaption", { html: d.caption }) : null);
+        }).filter(Boolean);
+        const figs = figure || tnFigs.length ? el("div", { class: "figs" }, ...tnFigs, figure) : null;
         container.append(el("div", { class: "stage" },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },

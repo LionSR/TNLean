@@ -236,9 +236,9 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 
 /* stage figures: Tufte-style margin schematics drawn by a campaign's figures.js */
 .stage .figs { display: grid; gap: 22px; min-width: 0; }
-.tnfig img { display: block; max-width: 100%; height: auto; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tnfig img { filter: invert(0.9); } }
-:root[data-theme="dark"] .tnfig img { filter: invert(0.9); }
+.tnfig img, img.tnimg { display: block; max-width: 100%; height: auto; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.tnfig img, img.tnimg) { filter: invert(0.9); } }
+:root[data-theme="dark"] :is(.tnfig img, img.tnimg) { filter: invert(0.9); }
 .sfig { margin: 0; display: grid; gap: 6px; min-width: 0; max-width: 400px; }
 .sfig svg { display: block; width: 100%; height: auto; overflow: visible; }
 .sfig figcaption { font: italic 13px/1.45 var(--f-display); color: var(--muted); }
