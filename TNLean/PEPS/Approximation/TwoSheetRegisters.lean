@@ -36,7 +36,7 @@ both on the registers of the frames:
   values on basis vectors.
 * `EncodedFrame.twoLayoutIso_correctionLayoutWord`, `EncodedFrame.correctionLayoutWord_props`.
 * `EncodedFrame.TwoSheetExchange.twoLayoutIso_renameWord`,
-  `EncodedFrame.TwoSheetExchange.renameWord_props`.
+  `EncodedFrame.TwoSheetExchange.isReordering_renameWord`.
 
 ## References
 
@@ -343,23 +343,15 @@ theorem correctionLayoutWord_props (l₁ l₂ : List (Hole pos q Party))
     (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).IsAllowed ∧
       (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).UsesOnly {P} ∧
       (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).sourceCount = 0 := by
-  obtain ⟨a₁, a₂, a₃⟩ := partWordApp_props (q := q) own₁ (fun x => decide (x ∈ (T ∪ E)ᶜ))
-    (layoutRegs q l₂ own₂) {P} (sites ι)
-  obtain ⟨b₁, b₂, b₃⟩ := partWord_props (q := q) own₂ (fun x => decide (x ∈ (T ∪ E)ᶜ)) {P}
-    (sites ι)
-  obtain ⟨c₁, c₂, c₃⟩ := unpartWordApp_props (q := q) own₁ (fun x => decide (x ∈ (T ∪ E)ᶜ))
-    (layoutRegs q l₂ own₂) {P} (sites ι)
-  obtain ⟨d₁, d₂, d₃⟩ := unpartWord_props (q := q) own₂ (fun x => decide (x ∈ (T ∪ E)ᶜ)) {P}
-    (sites ι)
   have hloc : ‖isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L matL W ∘L
       isoL (pairUIso own₁ own₂)‖ ≤ 1 :=
     (norm_comp_isoL_le _ _ _).trans ((norm_matL W).le.trans hW)
   simp only [correctionLayoutWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,
     Word.isAllowed_frameList_iff, Word.usesOnly_frameList_iff, Word.sourceCount_frameList,
-    Word.isAllowed_assocWord, Word.usesOnly_assocWord, Word.sourceCount_assocWord,
-    Word.isAllowed_unassocWord, Word.usesOnly_unassocWord, Word.sourceCount_unassocWord,
-    Word.isAllowed_exchangeBlocks, Word.usesOnly_exchangeBlocks, Word.sourceCount_exchangeBlocks,
-    a₁, a₂, a₃, b₁, b₂, b₃, c₁, c₂, c₃, d₁, d₂, d₃, hloc, Set.mem_singleton_iff, and_self]
+    Word.IsReordering.isAllowed, Word.IsReordering.usesOnly, Word.IsReordering.sourceCount_eq,
+    Word.isReordering_assocWord, Word.isReordering_unassocWord, Word.isReordering_exchangeBlocks,
+    isReordering_partWordApp, isReordering_partWord, isReordering_unpartWordApp,
+    isReordering_unpartWord, hloc, Set.mem_singleton_iff, and_self]
 
 end Correction
 
@@ -471,12 +463,9 @@ theorem twoLayoutIso_renameWord
     rw [eval_renameWord, twoLayoutIso_basis, rename, act_toMatrix_symm_single]
     rfl) z
 
-/-- The renaming is an allowed word using no party and no pair source. -/
-theorem renameWord_props (S : Set Party) :
-    X.renameWord.IsAllowed ∧ X.renameWord.UsesOnly S ∧ X.renameWord.sourceCount = 0 := by
-  simp [renameWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,
-    (Word.swapPairs_props S _ _ _ _ _ _ _).1, (Word.swapPairs_props S _ _ _ _ _ _ _).2.1,
-    (Word.swapPairs_props S _ _ _ _ _ _ _).2.2]
+/-- The renaming is a reordering: an allowed word using no party and no pair source. -/
+@[simp] theorem isReordering_renameWord : X.renameWord.IsReordering := by
+  simp [renameWord]
 
 end TwoSheetExchange
 

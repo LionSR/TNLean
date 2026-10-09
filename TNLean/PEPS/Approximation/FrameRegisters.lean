@@ -244,19 +244,18 @@ theorem groupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
     (groupWord (q := q) own hS hall ℓ₀ hA hB).IsAllowed ∧
       (groupWord (q := q) own hS hall ℓ₀ hA hB).UsesOnly V ∧
       (groupWord (q := q) own hS hall ℓ₀ hA hB).sourceCount = 0 := by
-  obtain ⟨a₁, a₂, a₃⟩ := partWord_props (q := q) own (fun x => decide (x ∈ T)) V S
-  obtain ⟨b₁, b₂, b₃⟩ := partWord_props (q := q) own (fun x => decide (x ∈ (T ∪ E)ᶜ)) V
-    (listR S T)
-  obtain ⟨c₂, c₃⟩ := Word.frameList_props _ V a₂ ℓ₀
-  obtain ⟨d₂, d₃⟩ := Word.frameList_props _ V b₂ (siteRegs q own (listT S T))
-  obtain ⟨e₂, e₃⟩ := Word.frameList_props _ V d₂ ℓ₀
-  refine ⟨⟨Word.isAllowed_frameList _ a₁ ℓ₀,
-      Word.isAllowed_frameList _ (Word.isAllowed_frameList _ b₁ _) ℓ₀,
-      Word.isAllowed_exchangeBlocks _ _ _, LinearIsometry.norm_toContinuousLinearMap_le _,
-      Word.isAllowed_exchangeBlocks _ _ _, LinearIsometry.norm_toContinuousLinearMap_le _⟩,
-    ⟨c₂, e₂, Word.usesOnly_exchangeBlocks _ _ _ _, hpA, Word.usesOnly_exchangeBlocks _ _ _ _,
-      hpB⟩, ?_⟩
-  simp only [groupWord, Word.sourceCount, Word.sourceCount_exchangeBlocks, c₃, a₃, e₃, d₃, b₃]
+  have a := (isReordering_partWord (q := q) own (fun x => decide (x ∈ T)) S).frameList ℓ₀
+  have b := ((isReordering_partWord (q := q) own (fun x => decide (x ∈ (T ∪ E)ᶜ))
+    (listR S T)).frameList (siteRegs q own (listT S T))).frameList ℓ₀
+  have e₁ := Word.isReordering_exchangeBlocks ℓ₀ (siteRegs q own (listT S T))
+    (siteRegs q own (listU S T E) ++ siteRegs q own (listE S T E))
+  have e₂ := Word.isReordering_exchangeBlocks ℓ₀ (siteRegs q own (listU S T E))
+    (siteRegs q own (listE S T E))
+  refine ⟨⟨a.isAllowed, b.isAllowed, e₁.isAllowed, LinearIsometry.norm_toContinuousLinearMap_le _,
+      e₂.isAllowed, LinearIsometry.norm_toContinuousLinearMap_le _⟩,
+    ⟨a.usesOnly V, b.usesOnly V, e₁.usesOnly V, hpA, e₂.usesOnly V, hpB⟩, ?_⟩
+  simp only [groupWord, Word.sourceCount, a.sourceCount_eq, b.sourceCount_eq, e₁.sourceCount_eq,
+    e₂.sourceCount_eq]
 
 /-- Ungrouping is an allowed word using only the owners of the two regions, without pair
 sources. -/
@@ -266,19 +265,18 @@ theorem ungroupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x �
     (ungroupWord (q := q) own hS hall ℓ₀ hA hB).IsAllowed ∧
       (ungroupWord (q := q) own hS hall ℓ₀ hA hB).UsesOnly V ∧
       (ungroupWord (q := q) own hS hall ℓ₀ hA hB).sourceCount = 0 := by
-  obtain ⟨a₁, a₂, a₃⟩ := unpartWord_props (q := q) own (fun x => decide (x ∈ T)) V S
-  obtain ⟨b₁, b₂, b₃⟩ := unpartWord_props (q := q) own (fun x => decide (x ∈ (T ∪ E)ᶜ)) V
-    (listR S T)
-  obtain ⟨c₂, c₃⟩ := Word.frameList_props _ V a₂ ℓ₀
-  obtain ⟨d₂, d₃⟩ := Word.frameList_props _ V b₂ (siteRegs q own (listT S T))
-  obtain ⟨e₂, e₃⟩ := Word.frameList_props _ V d₂ ℓ₀
-  refine ⟨⟨LinearIsometry.norm_toContinuousLinearMap_le _, Word.isAllowed_exchangeBlocks _ _ _,
-      LinearIsometry.norm_toContinuousLinearMap_le _, Word.isAllowed_exchangeBlocks _ _ _,
-      Word.isAllowed_frameList _ (Word.isAllowed_frameList _ b₁ _) ℓ₀,
-      Word.isAllowed_frameList _ a₁ ℓ₀⟩,
-    ⟨hpB, Word.usesOnly_exchangeBlocks _ _ _ _, hpA, Word.usesOnly_exchangeBlocks _ _ _ _, e₂,
-      c₂⟩, ?_⟩
-  simp only [ungroupWord, Word.sourceCount, Word.sourceCount_exchangeBlocks, c₃, a₃, e₃, d₃, b₃]
+  have a := (isReordering_unpartWord (q := q) own (fun x => decide (x ∈ T)) S).frameList ℓ₀
+  have b := ((isReordering_unpartWord (q := q) own (fun x => decide (x ∈ (T ∪ E)ᶜ))
+    (listR S T)).frameList (siteRegs q own (listT S T))).frameList ℓ₀
+  have e₁ := Word.isReordering_exchangeBlocks (siteRegs q own (listU S T E)) ℓ₀
+    (siteRegs q own (listE S T E))
+  have e₂ := Word.isReordering_exchangeBlocks (siteRegs q own (listT S T)) ℓ₀
+    (siteRegs q own (listU S T E) ++ siteRegs q own (listE S T E))
+  refine ⟨⟨LinearIsometry.norm_toContinuousLinearMap_le _, e₁.isAllowed,
+      LinearIsometry.norm_toContinuousLinearMap_le _, e₂.isAllowed, b.isAllowed, a.isAllowed⟩,
+    ⟨hpB, e₁.usesOnly V, hpA, e₂.usesOnly V, b.usesOnly V, a.usesOnly V⟩, ?_⟩
+  simp only [ungroupWord, Word.sourceCount, a.sourceCount_eq, b.sourceCount_eq, e₁.sourceCount_eq,
+    e₂.sourceCount_eq]
 
 end Group
 
@@ -314,15 +312,10 @@ def relabelRest (own own' : ι → Party) (hall : ∀ x, x ∈ S) (h : Disjoint 
   .frame rA (.frame rB (Word.frameList ℓ₀ (relabelSites own own' (listE S T E)
     fun x hx => hE x ((mem_listE hall h x).mp hx))))
 
-theorem relabelRest_props (own own' : ι → Party) (hall : ∀ x, x ∈ S) (h : Disjoint T E)
-    (hE : ∀ x ∈ E, own x = own' x) (ℓ₀ : Layout Party) (rA rB : Reg Party) (V : Set Party) :
-    (relabelRest (q := q) own own' hall h hE ℓ₀ rA rB).IsAllowed ∧
-      (relabelRest (q := q) own own' hall h hE ℓ₀ rA rB).UsesOnly V ∧
-      (relabelRest (q := q) own own' hall h hE ℓ₀ rA rB).sourceCount = 0 := by
-  obtain ⟨h₁, h₂, h₃⟩ := relabelSites_props (q := q) own own' V (listE S T E)
-    fun x hx => hE x ((mem_listE hall h x).mp hx)
-  obtain ⟨g₂, g₃⟩ := Word.frameList_props _ V h₂ ℓ₀
-  exact ⟨Word.isAllowed_frameList _ h₁ ℓ₀, g₂, g₃.trans h₃⟩
+theorem isReordering_relabelRest (own own' : ι → Party) (hall : ∀ x, x ∈ S) (h : Disjoint T E)
+    (hE : ∀ x ∈ E, own x = own' x) (ℓ₀ : Layout Party) (rA rB : Reg Party) :
+    (relabelRest (q := q) own own' hall h hE ℓ₀ rA rB).IsReordering := by
+  simp [relabelRest]
 
 /-- **A monomial on grouped registers, read on the raw registers.** Let `f` act on a register
 `ℂ^{T → Fin q}` and a register `ℂ^{U → Fin q}`, `U = (T ∪ E)ᶜ`, in front of untouched

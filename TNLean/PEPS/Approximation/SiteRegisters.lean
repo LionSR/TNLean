@@ -30,10 +30,13 @@ that move them; the layout of a whole frame is `TNLean.PEPS.Approximation.FrameR
 * `tagRegs l` lists one register `ℂ^{Tag}` for each hole of `l`, held by its tag owner, with
   basis vectors `tagVec` and the identification `tagIso` with `ℂ^{TagSpace l}`.
 
-Every word built here is allowed, uses no party and no pair source.
+Every word built here is a reordering (`PairEffect.Word.IsReordering`): it is allowed, uses no
+party and no pair source.
 
 ## Main definitions
 
+* `PairEffect.Word.IsReordering`: allowed, using no party and no pair source, with constructor
+  lemmas for identities, exchanges, composition and framing.
 * `PairEffect.Word.appendNil`, `PairEffect.Word.dropNil`: reading `ℓ` as `ℓ ++ []` and back.
 * `EncodedFrame.siteRegs`, `EncodedFrame.siteVec`, `EncodedFrame.siteIsoList`,
   `EncodedFrame.groupIso`.
@@ -69,29 +72,64 @@ namespace TNLean.PEPS.PairEffect.Word
 
 variable {P : Type}
 
-theorem usesOnly_moveHead (S : Set P) (r : Reg P) :
-    (ℓ₀ tail : Layout P) → (moveHead r ℓ₀ tail).UsesOnly S
-  | [], _ => trivial
-  | _ :: ℓ₀, tail => ⟨usesOnly_moveHead S r ℓ₀ tail, trivial⟩
+/-- A word is a *reordering* when it is allowed, uses no party and has no pair source: it only
+exchanges, frames and renames tensor factors, so it is an allowed monomial at any list of
+parties.
 
-theorem sourceCount_moveHead (r : Reg P) :
-    (ℓ₀ tail : Layout P) → (moveHead r ℓ₀ tail).sourceCount = 0
-  | [], _ => rfl
-  | _ :: ℓ₀, tail => by
-      change sourceCount (moveHead r ℓ₀ tail) + 0 = 0
-      rw [sourceCount_moveHead r ℓ₀ tail]
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 32–35. -/
+def IsReordering {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') : Prop :=
+  w.IsAllowed ∧ (∀ S : Set P, w.UsesOnly S) ∧ w.sourceCount = 0
 
-theorem usesOnly_exchangeBlocks (S : Set P) (a : Layout P) :
-    (b tail : Layout P) → (exchangeBlocks a b tail).UsesOnly S
-  | [], _ => trivial
-  | r :: b, tail => ⟨usesOnly_moveHead S r a (b ++ tail), usesOnly_exchangeBlocks S a b tail⟩
+namespace IsReordering
 
-theorem sourceCount_exchangeBlocks (a : Layout P) :
-    (b tail : Layout P) → (exchangeBlocks a b tail).sourceCount = 0
-  | [], _ => rfl
-  | r :: b, tail => by
-      change sourceCount (moveHead r a (b ++ tail)) + sourceCount (exchangeBlocks a b tail) = 0
-      rw [sourceCount_moveHead, sourceCount_exchangeBlocks a b tail]
+variable {ℓ ℓ' : Layout P} {w : Word ℓ ℓ'}
+
+theorem isAllowed (hw : w.IsReordering) : w.IsAllowed := hw.1
+
+theorem usesOnly (hw : w.IsReordering) (S : Set P) : w.UsesOnly S := hw.2.1 S
+
+theorem sourceCount_eq (hw : w.IsReordering) : w.sourceCount = 0 := hw.2.2
+
+end IsReordering
+
+@[simp] theorem isReordering_id (ℓ : Layout P) : (Word.id ℓ).IsReordering :=
+  ⟨trivial, fun _ => trivial, rfl⟩
+
+@[simp] theorem isReordering_swap (r r' : Reg P) (ℓ : Layout P) : (swap r r' ℓ).IsReordering :=
+  ⟨trivial, fun _ => trivial, rfl⟩
+
+@[simp] theorem isReordering_comp_iff {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂)
+    (w' : Word ℓ₂ ℓ₃) : (comp w w').IsReordering ↔ w.IsReordering ∧ w'.IsReordering := by
+  simp only [IsReordering, IsAllowed, UsesOnly, sourceCount, forall_and, Nat.add_eq_zero_iff]
+  tauto
+
+theorem IsReordering.comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} {w : Word ℓ₁ ℓ₂} {w' : Word ℓ₂ ℓ₃}
+    (hw : w.IsReordering) (hw' : w'.IsReordering) : (Word.comp w w').IsReordering :=
+  (isReordering_comp_iff w w').2 ⟨hw, hw'⟩
+
+@[simp] theorem isReordering_frame_iff (r : Reg P) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
+    (frame r w).IsReordering ↔ w.IsReordering :=
+  Iff.rfl
+
+@[simp] theorem isReordering_frameList_iff {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
+    (ℓ₀ : Layout P) → (frameList ℓ₀ w).IsReordering ↔ w.IsReordering
+  | [] => Iff.rfl
+  | _ :: ℓ₀ => isReordering_frameList_iff w ℓ₀
+
+theorem IsReordering.frameList {ℓ ℓ' : Layout P} {w : Word ℓ ℓ'} (hw : w.IsReordering)
+    (ℓ₀ : Layout P) : (Word.frameList ℓ₀ w).IsReordering :=
+  (isReordering_frameList_iff w ℓ₀).2 hw
+
+@[simp] theorem isReordering_moveHead (r : Reg P) :
+    (ℓ₀ tail : Layout P) → (moveHead r ℓ₀ tail).IsReordering
+  | [], _ => isReordering_id _
+  | _ :: ℓ₀, tail => IsReordering.comp (isReordering_moveHead r ℓ₀ tail) (isReordering_swap ..)
+
+@[simp] theorem isReordering_exchangeBlocks (a : Layout P) :
+    (b tail : Layout P) → (exchangeBlocks a b tail).IsReordering
+  | [], _ => isReordering_id _
+  | r :: b, tail => IsReordering.comp (isReordering_moveHead r a (b ++ tail))
+      (isReordering_exchangeBlocks a b tail)
 
 /-- A word framed by untouched registers acts on the second factor of the concatenation. -/
 theorem eval_frameList_appendIso_symm {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
@@ -109,12 +147,6 @@ theorem eval_frameList_appendIso_symm {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') 
           change x ⊗ₜ (frameList ℓ₀ w).eval _ = _
           rw [eval_frameList_appendIso_symm w ℓ₀ s b]
       | add x y hx hy => simp only [TensorProduct.add_tmul, map_add, hx, hy]
-
-theorem frameList_props {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (S : Set P) (hw : w.UsesOnly S) :
-    (ℓ₀ : Layout P) → (frameList ℓ₀ w).UsesOnly S ∧
-      (frameList ℓ₀ w).sourceCount = w.sourceCount
-  | [] => ⟨hw, rfl⟩
-  | _ :: ℓ₀ => frameList_props w S hw ℓ₀
 
 /-- The registers `ℓ` read as `ℓ ++ []`; no register moves. -/
 def appendNil : (ℓ : Layout P) → Word ℓ (ℓ ++ [])
@@ -150,15 +182,13 @@ theorem eval_dropNil : (ℓ : Layout P) → (x : Mem ℓ) →
           exact congrArg (fun v => (u ⊗ₜ v : Mem (r :: ℓ))) (eval_dropNil ℓ m)
       | add x y hx hy => simp only [map_add, TensorProduct.add_tmul, hx, hy]
 
-theorem appendNil_props (S : Set P) : (ℓ : Layout P) →
-    (appendNil ℓ).IsAllowed ∧ (appendNil ℓ).UsesOnly S ∧ (appendNil ℓ).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | _ :: ℓ => appendNil_props S ℓ
+@[simp] theorem isReordering_appendNil : (ℓ : Layout P) → (appendNil ℓ).IsReordering
+  | [] => isReordering_id _
+  | _ :: ℓ => isReordering_appendNil ℓ
 
-theorem dropNil_props (S : Set P) : (ℓ : Layout P) →
-    (dropNil ℓ).IsAllowed ∧ (dropNil ℓ).UsesOnly S ∧ (dropNil ℓ).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | _ :: ℓ => dropNil_props S ℓ
+@[simp] theorem isReordering_dropNil : (ℓ : Layout P) → (dropNil ℓ).IsReordering
+  | [] => isReordering_id _
+  | _ :: ℓ => isReordering_dropNil ℓ
 
 end TNLean.PEPS.PairEffect.Word
 
@@ -255,12 +285,10 @@ theorem eval_relabelHead {p p' : Party} (h : p = p') (X : HSpace) (ℓ : Layout 
   subst h
   rfl
 
-theorem relabelHead_props {p p' : Party} (h : p = p') (X : HSpace) (ℓ : Layout Party)
-    (S : Set Party) :
-    (relabelHead h X ℓ).IsAllowed ∧ (relabelHead h X ℓ).UsesOnly S ∧
-      (relabelHead h X ℓ).sourceCount = 0 := by
+@[simp] theorem isReordering_relabelHead {p p' : Party} (h : p = p') (X : HSpace)
+    (ℓ : Layout Party) : (relabelHead h X ℓ).IsReordering := by
   subst h
-  exact ⟨trivial, trivial, rfl⟩
+  exact Word.isReordering_id _
 
 /-! ### Partitioning a list of sites -/
 
@@ -415,43 +443,28 @@ theorem eval_unpartWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout
       rw [eval_unpartWordApp own p tail c y S]
       rfl
 
-theorem partWordApp_props (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
-    (T : Set Party) : (S : List ι) → (partWordApp (q := q) own p tail S).IsAllowed ∧
-      (partWordApp (q := q) own p tail S).UsesOnly T ∧
-      (partWordApp (q := q) own p tail S).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | x :: S => by
-      obtain ⟨h₁, h₂, h₃⟩ := partWordApp_props own p tail T S
-      have hs : (partStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).IsAllowed ∧
-          (partStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).UsesOnly T ∧
-          (partStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).sourceCount = 0 := by
-        cases p x
-        · exact ⟨Word.isAllowed_exchangeBlocks _ _ _, Word.usesOnly_exchangeBlocks _ _ _ _,
-            Word.sourceCount_exchangeBlocks _ _ _⟩
-        · exact ⟨trivial, trivial, rfl⟩
-      exact ⟨⟨h₁, hs.1⟩, ⟨h₂, hs.2.1⟩, congrArg₂ (· + ·) h₃ hs.2.2⟩
+@[simp] theorem isReordering_partStepApp (own : ι → Party) (x : ι) (a b : List ι)
+    (tail : Layout Party) : (c : Bool) → (partStepApp (q := q) own x a b tail c).IsReordering
+  | true => Word.isReordering_id _
+  | false => Word.isReordering_exchangeBlocks ..
 
-theorem unpartWordApp_props (own : ι → Party) (p : ι → Bool) (tail : Layout Party)
-    (T : Set Party) : (S : List ι) → (unpartWordApp (q := q) own p tail S).IsAllowed ∧
-      (unpartWordApp (q := q) own p tail S).UsesOnly T ∧
-      (unpartWordApp (q := q) own p tail S).sourceCount = 0
-  | [] => ⟨trivial, trivial, rfl⟩
-  | x :: S => by
-      obtain ⟨h₁, h₂, h₃⟩ := unpartWordApp_props own p tail T S
-      have hs : (unpartStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).IsAllowed ∧
-          (unpartStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).UsesOnly T ∧
-          (unpartStepApp (q := q) own x (partSites p S).1 (partSites p S).2 tail
-            (p x)).sourceCount = 0 := by
-        cases p x
-        · exact ⟨Word.isAllowed_moveHead _ _ _, Word.usesOnly_moveHead _ _ _ _,
-            Word.sourceCount_moveHead _ _ _⟩
-        · exact ⟨trivial, trivial, rfl⟩
-      exact ⟨⟨hs.1, h₁⟩, ⟨hs.2.1, h₂⟩, congrArg₂ (· + ·) hs.2.2 h₃⟩
+@[simp] theorem isReordering_unpartStepApp (own : ι → Party) (x : ι) (a b : List ι)
+    (tail : Layout Party) : (c : Bool) → (unpartStepApp (q := q) own x a b tail c).IsReordering
+  | true => Word.isReordering_id _
+  | false => Word.isReordering_moveHead ..
+
+@[simp] theorem isReordering_partWordApp (own : ι → Party) (p : ι → Bool) (tail : Layout Party) :
+    (S : List ι) → (partWordApp (q := q) own p tail S).IsReordering
+  | [] => Word.isReordering_id _
+  | x :: S => Word.IsReordering.comp
+      ((Word.isReordering_frame_iff _ _).2 (isReordering_partWordApp own p tail S))
+      (isReordering_partStepApp own x _ _ tail (p x))
+
+@[simp] theorem isReordering_unpartWordApp (own : ι → Party) (p : ι → Bool)
+    (tail : Layout Party) : (S : List ι) → (unpartWordApp (q := q) own p tail S).IsReordering
+  | [] => Word.isReordering_id _
+  | x :: S => Word.IsReordering.comp (isReordering_unpartStepApp own x _ _ tail (p x))
+      ((Word.isReordering_frame_iff _ _).2 (isReordering_unpartWordApp own p tail S))
 
 /-- The raw registers of `S` in front of `tail`, held by `own`, named with the owners `own'` that
 agree on `S`. -/
@@ -479,18 +492,14 @@ theorem eval_relabelSitesApp (own own' : ι → Party) (tail : Layout Party) (c 
       rw [eval_relabelHead, eval_relabelSitesApp own own' tail c y S]
       rfl
 
-theorem relabelSitesApp_props (own own' : ι → Party) (tail : Layout Party)
-    (T : Set Party) : (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
-      (relabelSitesApp (q := q) own own' tail S h).IsAllowed ∧
-        (relabelSitesApp (q := q) own own' tail S h).UsesOnly T ∧
-        (relabelSitesApp (q := q) own own' tail S h).sourceCount = 0
-  | [], _ => ⟨trivial, trivial, rfl⟩
-  | x :: S, h => by
-      obtain ⟨h₁, h₂, h₃⟩ := relabelSitesApp_props own own' tail T S
-        fun y hy => h y (List.mem_cons_of_mem x hy)
-      obtain ⟨g₁, g₂, g₃⟩ := relabelHead_props (h x List.mem_cons_self) (euc (Fin q))
-        (siteRegs q own' S ++ tail) T
-      exact ⟨⟨h₁, g₁⟩, ⟨h₂, g₂⟩, congrArg₂ (· + ·) h₃ g₃⟩
+@[simp] theorem isReordering_relabelSitesApp (own own' : ι → Party) (tail : Layout Party) :
+    (S : List ι) → (h : ∀ x ∈ S, own x = own' x) →
+      (relabelSitesApp (q := q) own own' tail S h).IsReordering
+  | [], _ => Word.isReordering_id _
+  | x :: S, h => Word.IsReordering.comp
+      ((Word.isReordering_frame_iff _ _).2 (isReordering_relabelSitesApp own own' tail S
+        fun y hy => h y (List.mem_cons_of_mem x hy)))
+      (isReordering_relabelHead _ _ _)
 
 /-! ### The same words without further registers -/
 
@@ -538,35 +547,17 @@ theorem eval_unpartWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q
     Word.eval_appendNil]
   rw [eval_unpartWordApp, Word.eval_dropNil]
 
-theorem relabelSites_props (own own' : ι → Party) (T : Set Party) (S : List ι)
-    (h : ∀ x ∈ S, own x = own' x) :
-    (relabelSites (q := q) own own' S h).IsAllowed ∧
-      (relabelSites (q := q) own own' S h).UsesOnly T ∧
-      (relabelSites (q := q) own own' S h).sourceCount = 0 := by
-  obtain ⟨a₁, a₂, a₃⟩ := Word.appendNil_props T (siteRegs q own S)
-  obtain ⟨b₁, b₂, b₃⟩ := relabelSitesApp_props (q := q) own own' [] T S h
-  obtain ⟨c₁, c₂, c₃⟩ := Word.dropNil_props T (siteRegs q own' S)
-  exact ⟨⟨a₁, b₁, c₁⟩, ⟨a₂, b₂, c₂⟩, by simp only [relabelSites, Word.sourceCount, a₃, b₃, c₃]⟩
+@[simp] theorem isReordering_relabelSites (own own' : ι → Party) (S : List ι)
+    (h : ∀ x ∈ S, own x = own' x) : (relabelSites (q := q) own own' S h).IsReordering := by
+  simp [relabelSites]
 
-theorem partWord_props (own : ι → Party) (p : ι → Bool) (T : Set Party) (S : List ι) :
-    (partWord (q := q) own p S).IsAllowed ∧ (partWord (q := q) own p S).UsesOnly T ∧
-      (partWord (q := q) own p S).sourceCount = 0 := by
-  obtain ⟨a₁, a₂, a₃⟩ := Word.appendNil_props T (siteRegs q own S)
-  obtain ⟨b₁, b₂, b₃⟩ := partWordApp_props (q := q) own p [] T S
-  obtain ⟨c₁, c₂, c₃⟩ := Word.dropNil_props T (siteRegs q own (partSites p S).2)
-  obtain ⟨d₂, d₃⟩ := Word.frameList_props _ T c₂ (siteRegs q own (partSites p S).1)
-  exact ⟨⟨a₁, b₁, Word.isAllowed_frameList _ c₁ _⟩, ⟨a₂, b₂, d₂⟩,
-    by simp only [partWord, Word.sourceCount, a₃, b₃, c₃, d₃]⟩
+@[simp] theorem isReordering_partWord (own : ι → Party) (p : ι → Bool) (S : List ι) :
+    (partWord (q := q) own p S).IsReordering := by
+  simp [partWord]
 
-theorem unpartWord_props (own : ι → Party) (p : ι → Bool) (T : Set Party) (S : List ι) :
-    (unpartWord (q := q) own p S).IsAllowed ∧ (unpartWord (q := q) own p S).UsesOnly T ∧
-      (unpartWord (q := q) own p S).sourceCount = 0 := by
-  obtain ⟨a₁, a₂, a₃⟩ := Word.appendNil_props T (siteRegs q own (partSites p S).2)
-  obtain ⟨d₂, d₃⟩ := Word.frameList_props _ T a₂ (siteRegs q own (partSites p S).1)
-  obtain ⟨b₁, b₂, b₃⟩ := unpartWordApp_props (q := q) own p [] T S
-  obtain ⟨c₁, c₂, c₃⟩ := Word.dropNil_props T (siteRegs q own S)
-  exact ⟨⟨Word.isAllowed_frameList _ a₁ _, b₁, c₁⟩, ⟨d₂, b₂, c₂⟩,
-    by simp only [unpartWord, Word.sourceCount, a₃, b₃, c₃, d₃]⟩
+@[simp] theorem isReordering_unpartWord (own : ι → Party) (p : ι → Bool) (S : List ι) :
+    (unpartWord (q := q) own p S).IsReordering := by
+  simp [unpartWord]
 
 /-- The product vector of `S` depends only on the configuration on `S`. -/
 theorem siteVec_congr (own : ι → Party) {c c' : ι → Fin q} :

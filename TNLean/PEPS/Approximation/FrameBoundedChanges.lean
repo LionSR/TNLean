@@ -171,9 +171,8 @@ theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     simp only [hxT, ↓reduceIte]
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) F.owner nodup_sites mem_sites (tagRegs F.holes)
     hTP hB (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
-  obtain ⟨r₁, r₂, r₃⟩ := relabelRest_props (q := q) F.owner (F.changeOwner T Q).owner mem_sites
+  have r := isReordering_relabelRest (q := q) F.owner (F.changeOwner T Q).owner mem_sites
     hTE hE (tagRegs F.holes) ⟨Q, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩
-    {P, Q}
   obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) (F.changeOwner T Q).owner nodup_sites
     mem_sites (tagRegs F.holes) hA' hB' (V := {P, Q}) (Set.mem_insert_of_mem P rfl)
     (Set.mem_insert P _)
@@ -189,10 +188,10 @@ theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     rw [sheetBirthOp_eq_submatrix]
     exact layoutIso_place F.holes F.owner (F.changeOwner T Q).owner hTE hTP hB hA' hB' hE
       wm.eval _ hwE z
-  refine ⟨σ, hσ, hK, W, ⟨g₁, hwA, r₁, u₁⟩, ⟨g₂, hwU, r₂, u₂⟩, ?_, heval, ?_⟩
+  refine ⟨σ, hσ, hK, W, ⟨g₁, hwA, r.isAllowed, u₁⟩, ⟨g₂, hwU, r.usesOnly _, u₂⟩, ?_, heval, ?_⟩
   · change Word.sourceCount _ + (Word.sourceCount _ + (Word.sourceCount _ +
       Word.sourceCount _)) ≤ 1
-    rw [g₃, r₃, u₃]
+    rw [g₃, r.sourceCount_eq, u₃]
     omega
   · rw [← (F.changeOwner T Q).regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply,
       heval, LinearIsometryEquiv.apply_symm_apply]
@@ -247,15 +246,15 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) (F.changeOwner T Q).owner nodup_sites
     mem_sites (tagRegs F.holes) hA hB (V := {P, Q}) (Set.mem_insert_of_mem P rfl)
     (Set.mem_insert P _)
-  obtain ⟨r₁, r₂, r₃⟩ := relabelRest_props (q := q) (F.changeOwner T Q).owner F.owner mem_sites
+  have r := isReordering_relabelRest (q := q) (F.changeOwner T Q).owner F.owner mem_sites
     hTE hE (tagRegs F.holes) ⟨P, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩
-    {P, Q}
   obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) F.owner nodup_sites mem_sites
     (tagRegs F.holes) hTP hB' (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
   let tail := (relabelRest (F.changeOwner T Q).owner F.owner mem_sites hTE hE
     (tagRegs F.holes) ⟨P, euc (T → Fin q)⟩ ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩).comp
       (ungroupWord F.owner nodup_sites mem_sites (tagRegs F.holes) hTP hB')
-  obtain ⟨p₁, p₂, p₃, p₄⟩ := PartyChain.postcomp_props {P, Q} Mm tail ⟨r₁, u₁⟩ ⟨r₂, u₂⟩ hMA hMU
+  obtain ⟨p₁, p₂, p₃, p₄⟩ := PartyChain.postcomp_props {P, Q} Mm tail ⟨r.isAllowed, u₁⟩
+    ⟨r.usesOnly _, u₂⟩ hMA hMU
   let G := groupWord (q := q) (F.changeOwner T Q).owner nodup_sites mem_sites (tagRegs F.holes)
     hA hB
   obtain ⟨q₁, q₂, q₃, q₄⟩ := PartyChain.precomp_props G {P, Q} g₁ g₂ (Mm.postcomp tail) p₁ p₂
@@ -269,7 +268,7 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
   refine ⟨σ, hσ, hK, (Mm.postcomp tail).precomp G, q₁, q₂, ?_, ?_, heval, ?_⟩
   · rw [q₃, p₃, g₃, hMS]
     change 0 + (0 + (Word.sourceCount _ + Word.sourceCount _)) = 0
-    rw [r₃, u₃]
+    rw [r.sourceCount_eq, u₃]
   · rw [q₄, p₄]
     exact hMe
   · rw [← F.regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply, heval,
@@ -293,23 +292,17 @@ theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos
       (∀ t, rawProd l₁' (e₁ t) = rawProd l₁ t) ∧ (∀ t, rawProd l₂' (e₂ t) = rawProd l₂ t) ∧
       ∃ w : Word (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)
           (layoutRegs q l₁' own₁ ++ layoutRegs q l₂' own₂),
-        w.IsAllowed ∧ (∀ S : Set Party, w.UsesOnly S) ∧ w.sourceCount = 0 ∧
-        ∀ z, twoLayoutIso l₁' l₂' own₁ own₂ (w.eval z) =
+        w.IsReordering ∧ ∀ z, twoLayoutIso l₁' l₂' own₁ own₂ (w.eval z) =
           act (TwoSheetExchange.tagReorder e₁ e₂) (twoLayoutIso l₁ l₂ own₁ own₂ z) := by
-  obtain ⟨e₁, he₁, w₁, a₁, b₁, c₁, hw₁⟩ := exists_tagWord_of_perm hd₁ hp₁
+  obtain ⟨e₁, he₁, w₁, a₁, hw₁⟩ := exists_tagWord_of_perm hd₁ hp₁
     (siteRegs q own₁ (sites ι) ++ layoutRegs q l₂ own₂)
-  obtain ⟨e₂, he₂, w₂, a₂, b₂, c₂, hw₂⟩ := exists_tagWord_of_perm hd₂ hp₂
+  obtain ⟨e₂, he₂, w₂, a₂, hw₂⟩ := exists_tagWord_of_perm hd₂ hp₂
     (siteRegs q own₂ (sites ι))
   refine ⟨e₁, e₂, he₁, he₂,
     (Word.assocWord (tagRegs l₁) (siteRegs q own₁ (sites ι)) (layoutRegs q l₂ own₂)).comp
       (w₁.comp ((Word.unassocWord (tagRegs l₁') (siteRegs q own₁ (sites ι))
         (layoutRegs q l₂ own₂)).comp (Word.frameList (layoutRegs q l₁' own₁) w₂))),
-    ⟨Word.isAllowed_assocWord _ _ _, a₁, Word.isAllowed_unassocWord _ _ _,
-      (Word.isAllowed_frameList_iff _ _).mpr a₂⟩,
-    fun S => ⟨Word.usesOnly_assocWord _ _ _ _, b₁ S, Word.usesOnly_unassocWord _ _ _ _,
-      (Word.usesOnly_frameList_iff _ _ _).mpr (b₂ S)⟩, ?_, ?_⟩
-  · simp only [Word.sourceCount, Word.sourceCount_assocWord, Word.sourceCount_unassocWord,
-      Word.sourceCount_frameList, c₁, c₂]
+    by simp [a₁, a₂], ?_⟩
   · refine twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ fun τ₁ c₁ τ₂ c₂ => ?_
     simp only [layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
       Word.eval_assocWord_appendIso_symm, hw₁, Word.eval_unassocWord_appendIso_symm,
@@ -378,14 +371,14 @@ theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (h�
     rw [Word.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
       twoLayoutIso_renameWord, ← act_mul, exchangeOp,
       sheetBufferCorrection_mul_sheetSwapOp_eq h σ (X.aSet_subset_compl P)]
-  obtain ⟨r₁, r₂, r₃⟩ := X.renameWord_props {P}
+  have r := X.isReordering_renameWord
   obtain ⟨c₁, c₂, c₃⟩ := correctionLayoutWord_props (q := q) (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁)
     X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2)
     (norm_correctionMatrix_le_one σ (X.aSet P))
   refine ⟨σ, hσ, hK, X.renameWord.comp (correctionLayoutWord (X.out₁ ++ X.in₂)
     (X.out₂ ++ X.in₁) X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1)
-    (fun x hx => (hU x hx).2) (correctionMatrix σ (X.aSet P))), ⟨r₁, c₁⟩, ⟨r₂, c₂⟩,
-    congrArg₂ (· + ·) r₃ c₃, heval, ?_⟩
+    (fun x hx => (hU x hx).2) (correctionMatrix σ (X.aSet P))), ⟨r.isAllowed, c₁⟩,
+    ⟨r.usesOnly _, c₂⟩, congrArg₂ (· + ·) r.sourceCount_eq c₃, heval, ?_⟩
   rw [← (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).norm_map, map_sub,
     LinearIsometryEquiv.apply_symm_apply, heval, LinearIsometryEquiv.apply_symm_apply]
   exact herr
@@ -446,7 +439,7 @@ theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y 
               (vecKron ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
                 ((ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤ 4 * L ^ (-30 : ℤ) := by
   set X := ofFrames F₁ F₂ Y out hout hin
-  obtain ⟨e₁, e₂, he₁, he₂, g, g₁, g₂, g₃, hg⟩ := exists_tagReorderWord (q := q) F₁.disjoint
+  obtain ⟨e₁, e₂, he₁, he₂, g, hgR, hg⟩ := exists_tagReorderWord (q := q) F₁.disjoint
     F₂.disjoint (List.filter_append_perm out F₁.holes).symm
     (List.filter_append_perm out F₂.holes).symm F₁.owner F₂.owner
   obtain ⟨σ, hσ, hK, w, w₁, w₂, w₃, hw, herr⟩ := X.exchange_bounded P hΩ hI
@@ -464,8 +457,8 @@ theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y 
           Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ)
             (twoLayoutIso _ _ F₁.owner F₂.owner z)) := congrArg (act (X.exchangeOp P σ)) (hg z)
       _ = _ := (act_mul _ _ _).symm
-  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, ?_, g.comp w, ⟨g₁, w₁⟩, ⟨g₂ {P}, w₂⟩,
-    congrArg₂ (· + ·) g₃ w₃, heval, ?_⟩
+  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, ?_, g.comp w, ⟨hgR.isAllowed, w₁⟩, ⟨hgR.usesOnly {P}, w₂⟩,
+    congrArg₂ (· + ·) hgR.sourceCount_eq w₃, heval, ?_⟩
   · rw [Matrix.mul_assoc]
     exact (congrArg _ hG).trans hK
   · have hv : act (tagReorder e₁ e₂ :

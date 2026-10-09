@@ -12,8 +12,8 @@ Words of exchanges of tensor factors used to move whole blocks of registers of e
 reassociations of concatenated blocks (`Word.assocWord`, `Word.unassocWord`), the exchange of two
 pairs of blocks around a middle pair (`Word.swapPairs`), the splitting and merging of the tag
 registers of a concatenated list of holes (`tagSplit`, `tagMerge`), and the canonical
-identification of tag orderings as a word (`exists_tagWord_of_perm`). Every such word is allowed,
-uses no party and no pair source; each operator is computed on product vectors.
+identification of tag orderings as a word (`exists_tagWord_of_perm`). Every such word is a
+reordering (`PairEffect.Word.IsReordering`); each operator is computed on product vectors.
 
 ## Main definitions
 
@@ -87,17 +87,14 @@ theorem eval_unassocWord_appendIso_symm : (a b c : Layout P) → (x : Mem a) →
             (eval_unassocWord_appendIso_symm a b c s y z)
       | add x x' hx hx' => simp only [TensorProduct.add_tmul, map_add, hx, hx']
 
-theorem assocWord_props (S : Set P) : (a b c : Layout P) →
-    (assocWord a b c).IsAllowed ∧ (assocWord a b c).UsesOnly S ∧
-      (assocWord a b c).sourceCount = 0
-  | [], _, _ => ⟨trivial, trivial, rfl⟩
-  | _ :: a, b, c => assocWord_props S a b c
+@[simp] theorem isReordering_assocWord : (a b c : Layout P) → (assocWord a b c).IsReordering
+  | [], _, _ => isReordering_id _
+  | _ :: a, b, c => isReordering_assocWord a b c
 
-theorem unassocWord_props (S : Set P) : (a b c : Layout P) →
-    (unassocWord a b c).IsAllowed ∧ (unassocWord a b c).UsesOnly S ∧
-      (unassocWord a b c).sourceCount = 0
-  | [], _, _ => ⟨trivial, trivial, rfl⟩
-  | _ :: a, b, c => unassocWord_props S a b c
+@[simp] theorem isReordering_unassocWord :
+    (a b c : Layout P) → (unassocWord a b c).IsReordering
+  | [], _, _ => isReordering_id _
+  | _ :: a, b, c => isReordering_unassocWord a b c
 
 @[simp] theorem isAllowed_frameList_iff {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
     (ℓ₀ : Layout P) → (frameList ℓ₀ w).IsAllowed ↔ w.IsAllowed
@@ -113,30 +110,6 @@ theorem unassocWord_props (S : Set P) : (a b c : Layout P) →
     (ℓ₀ : Layout P) → (frameList ℓ₀ w).sourceCount = w.sourceCount
   | [] => rfl
   | _ :: ℓ₀ => sourceCount_frameList w ℓ₀
-
-@[simp] theorem isAllowed_assocWord (a b c : Layout P) : (assocWord a b c).IsAllowed :=
-  (assocWord_props ∅ a b c).1
-
-@[simp] theorem usesOnly_assocWord (S : Set P) (a b c : Layout P) :
-    (assocWord a b c).UsesOnly S :=
-  (assocWord_props S a b c).2.1
-
-@[simp] theorem sourceCount_assocWord (a b c : Layout P) : (assocWord a b c).sourceCount = 0 :=
-  (assocWord_props ∅ a b c).2.2
-
-@[simp] theorem isAllowed_unassocWord (a b c : Layout P) : (unassocWord a b c).IsAllowed :=
-  (unassocWord_props ∅ a b c).1
-
-@[simp] theorem usesOnly_unassocWord (S : Set P) (a b c : Layout P) :
-    (unassocWord a b c).UsesOnly S :=
-  (unassocWord_props S a b c).2.1
-
-@[simp] theorem sourceCount_unassocWord (a b c : Layout P) :
-    (unassocWord a b c).sourceCount = 0 :=
-  (unassocWord_props ∅ a b c).2.2
-
-attribute [simp] isAllowed_exchangeBlocks usesOnly_exchangeBlocks sourceCount_exchangeBlocks
-  isAllowed_moveHead usesOnly_moveHead sourceCount_moveHead
 
 /-- Exchange the pairs of blocks `a₁ b₁` and `a₂ b₂` around the blocks `m₁ m₂`, the order within
 every block kept. -/
@@ -174,10 +147,9 @@ theorem eval_swapPairs (a₁ b₁ m₁ m₂ a₂ b₂ t : Layout P) (x₁ : Mem 
   simp only [eval_unassocWord_appendIso_symm, eval_frameList_appendIso_symm,
     eval_exchangeBlocks_appendIso_symm, eval_assocWord_appendIso_symm]
 
-theorem swapPairs_props (S : Set P) (a₁ b₁ m₁ m₂ a₂ b₂ t : Layout P) :
-    (swapPairs a₁ b₁ m₁ m₂ a₂ b₂ t).IsAllowed ∧ (swapPairs a₁ b₁ m₁ m₂ a₂ b₂ t).UsesOnly S ∧
-      (swapPairs a₁ b₁ m₁ m₂ a₂ b₂ t).sourceCount = 0 := by
-  simp [swapPairs, IsAllowed, UsesOnly, sourceCount]
+@[simp] theorem isReordering_swapPairs (a₁ b₁ m₁ m₂ a₂ b₂ t : Layout P) :
+    (swapPairs a₁ b₁ m₁ m₂ a₂ b₂ t).IsReordering := by
+  simp [swapPairs]
 
 end TNLean.PEPS.PairEffect.Word
 
@@ -186,59 +158,6 @@ namespace TNLean.PEPS.EncodedFrame
 open PairEffect ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
-
-section Simp
-
-variable (own own' : ι → Party) (p : ι → Bool) (tail : Layout Party) (S : List ι)
-  (T : Set Party)
-
-@[simp] theorem isAllowed_partWord : (partWord (q := q) own p S).IsAllowed :=
-  (partWord_props own p ∅ S).1
-@[simp] theorem usesOnly_partWord : (partWord (q := q) own p S).UsesOnly T :=
-  (partWord_props own p T S).2.1
-@[simp] theorem sourceCount_partWord : (partWord (q := q) own p S).sourceCount = 0 :=
-  (partWord_props own p ∅ S).2.2
-@[simp] theorem isAllowed_unpartWord : (unpartWord (q := q) own p S).IsAllowed :=
-  (unpartWord_props own p ∅ S).1
-@[simp] theorem usesOnly_unpartWord : (unpartWord (q := q) own p S).UsesOnly T :=
-  (unpartWord_props own p T S).2.1
-@[simp] theorem sourceCount_unpartWord : (unpartWord (q := q) own p S).sourceCount = 0 :=
-  (unpartWord_props own p ∅ S).2.2
-@[simp] theorem isAllowed_partWordApp : (partWordApp (q := q) own p tail S).IsAllowed :=
-  (partWordApp_props own p tail ∅ S).1
-@[simp] theorem usesOnly_partWordApp : (partWordApp (q := q) own p tail S).UsesOnly T :=
-  (partWordApp_props own p tail T S).2.1
-@[simp] theorem sourceCount_partWordApp :
-    (partWordApp (q := q) own p tail S).sourceCount = 0 :=
-  (partWordApp_props own p tail ∅ S).2.2
-@[simp] theorem isAllowed_unpartWordApp : (unpartWordApp (q := q) own p tail S).IsAllowed :=
-  (unpartWordApp_props own p tail ∅ S).1
-@[simp] theorem usesOnly_unpartWordApp : (unpartWordApp (q := q) own p tail S).UsesOnly T :=
-  (unpartWordApp_props own p tail T S).2.1
-@[simp] theorem sourceCount_unpartWordApp :
-    (unpartWordApp (q := q) own p tail S).sourceCount = 0 :=
-  (unpartWordApp_props own p tail ∅ S).2.2
-
-variable (h : ∀ x ∈ S, own x = own' x)
-
-@[simp] theorem isAllowed_relabelSites : (relabelSites (q := q) own own' S h).IsAllowed :=
-  (relabelSites_props own own' ∅ S h).1
-@[simp] theorem usesOnly_relabelSites : (relabelSites (q := q) own own' S h).UsesOnly T :=
-  (relabelSites_props own own' T S h).2.1
-@[simp] theorem sourceCount_relabelSites :
-    (relabelSites (q := q) own own' S h).sourceCount = 0 :=
-  (relabelSites_props own own' ∅ S h).2.2
-@[simp] theorem isAllowed_relabelSitesApp :
-    (relabelSitesApp (q := q) own own' tail S h).IsAllowed :=
-  (relabelSitesApp_props own own' tail ∅ S h).1
-@[simp] theorem usesOnly_relabelSitesApp :
-    (relabelSitesApp (q := q) own own' tail S h).UsesOnly T :=
-  (relabelSitesApp_props own own' tail T S h).2.1
-@[simp] theorem sourceCount_relabelSitesApp :
-    (relabelSitesApp (q := q) own own' tail S h).sourceCount = 0 :=
-  (relabelSitesApp_props own own' tail ∅ S h).2.2
-
-end Simp
 
 /-! ### Splitting and merging tag registers -/
 
@@ -295,17 +214,15 @@ theorem eval_tagMerge (tail : Layout Party) (y : Mem tail) :
           EuclideanSpace ℂ h.patch.Tag) ⊗ₜ w : Mem (tagRegs (h :: l₁ ++ l₂) ++ tail)))
         (eval_tagMerge tail y l₁ l₂ τ₁ τ₂)
 
-theorem tagSplit_props (S : Set Party) (tail : Layout Party) :
-    (l₁ l₂ : List (Hole pos q Party)) → (tagSplit l₁ l₂ tail).IsAllowed ∧
-      (tagSplit l₁ l₂ tail).UsesOnly S ∧ (tagSplit l₁ l₂ tail).sourceCount = 0
-  | [], _ => ⟨trivial, trivial, rfl⟩
-  | _ :: l₁, l₂ => tagSplit_props S tail l₁ l₂
+@[simp] theorem isReordering_tagSplit (tail : Layout Party) :
+    (l₁ l₂ : List (Hole pos q Party)) → (tagSplit l₁ l₂ tail).IsReordering
+  | [], _ => Word.isReordering_id _
+  | _ :: l₁, l₂ => isReordering_tagSplit tail l₁ l₂
 
-theorem tagMerge_props (S : Set Party) (tail : Layout Party) :
-    (l₁ l₂ : List (Hole pos q Party)) → (tagMerge l₁ l₂ tail).IsAllowed ∧
-      (tagMerge l₁ l₂ tail).UsesOnly S ∧ (tagMerge l₁ l₂ tail).sourceCount = 0
-  | [], _ => ⟨trivial, trivial, rfl⟩
-  | _ :: l₁, l₂ => tagMerge_props S tail l₁ l₂
+@[simp] theorem isReordering_tagMerge (tail : Layout Party) :
+    (l₁ l₂ : List (Hole pos q Party)) → (tagMerge l₁ l₂ tail).IsReordering
+  | [], _ => Word.isReordering_id _
+  | _ :: l₁, l₂ => isReordering_tagMerge tail l₁ l₂
 
 open QuantumCircuit in
 /-- **The canonical identification of tag orderings as a word.** If `l'` lists the holes of `l`,
@@ -318,17 +235,14 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
     (hd : PairwiseDisjointOuter (l.map Hole.patch)) (hp : l.Perm l') (tail : Layout Party) :
     ∃ e : TagSpace l ≃ TagSpace l', (∀ t, rawProd l' (e t) = rawProd l t) ∧
       ∃ w : Word (tagRegs l ++ tail) (tagRegs l' ++ tail),
-        w.IsAllowed ∧ (∀ S : Set Party, w.UsesOnly S) ∧ w.sourceCount = 0 ∧
-        ∀ (τ : TagSpace l) (y : Mem tail),
+        w.IsReordering ∧ ∀ (τ : TagSpace l) (y : Mem tail),
           w.eval ((appendIso (tagRegs l) tail).symm (tagVec l τ ⊗ₜ y)) =
             (appendIso (tagRegs l') tail).symm (tagVec l' (e τ) ⊗ₜ y) := by
   induction hp with
-  | nil => exact ⟨Equiv.refl _, fun _ => rfl, .id _, trivial, fun _ => trivial, rfl,
-      fun _ _ => rfl⟩
+  | nil => exact ⟨Equiv.refl _, fun _ => rfl, .id _, Word.isReordering_id _, fun _ _ => rfl⟩
   | @cons h l₁ l₂ _ ih =>
-    obtain ⟨e, he, w, hw₁, hw₂, hw₃, hw⟩ := ih (PairwiseDisjointOuter.of_cons hd)
-    refine ⟨(Equiv.refl h.patch.Tag).prodCongr e, fun t => ?_, .frame _ w, hw₁, hw₂, hw₃,
-      fun τ y => ?_⟩
+    obtain ⟨e, he, w, hw', hw⟩ := ih (PairwiseDisjointOuter.of_cons hd)
+    refine ⟨(Equiv.refl h.patch.Tag).prodCongr e, fun t => ?_, .frame _ w, hw', fun τ y => ?_⟩
     · change h.patch.branch t.1 * rawProd _ (e t.2) = h.patch.branch t.1 * rawProd _ t.2
       rw [he]
     · obtain ⟨t, τ⟩ := τ
@@ -336,8 +250,7 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
         EuclideanSpace ℂ h.patch.Tag) ⊗ₜ v : Mem (tagRegs (h :: l₂) ++ tail))) (hw τ y)
   | swap x y l =>
     refine ⟨⟨fun t => (t.2.1, t.1, t.2.2), fun t => (t.2.1, t.1, t.2.2), fun _ => rfl,
-      fun _ => rfl⟩, fun t => ?_, .swap _ _ _, trivial, fun _ => trivial, rfl,
-      fun τ z => ?_⟩
+      fun _ => rfl⟩, fun t => ?_, .swap _ _ _, Word.isReordering_swap .., fun τ z => ?_⟩
     · change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
         y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
       have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
@@ -347,31 +260,12 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
     · obtain ⟨t, s, τ⟩ := τ
       exact leftCommL_tmul _ _ _
   | trans h₁ _ ih₁ ih₂ =>
-    obtain ⟨e₁, he₁, w₁, a₁, b₁, c₁, hw₁⟩ := ih₁ hd
-    obtain ⟨e₂, he₂, w₂, a₂, b₂, c₂, hw₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
-    refine ⟨e₁.trans e₂, fun t => (he₂ _).trans (he₁ t), .comp w₁ w₂, ⟨a₁, a₂⟩,
-      fun S => ⟨b₁ S, b₂ S⟩, congrArg₂ (· + ·) c₁ c₂, fun τ z => ?_⟩
+    obtain ⟨e₁, he₁, w₁, a₁, hw₁⟩ := ih₁ hd
+    obtain ⟨e₂, he₂, w₂, a₂, hw₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
+    refine ⟨e₁.trans e₂, fun t => (he₂ _).trans (he₁ t), .comp w₁ w₂, a₁.comp a₂,
+      fun τ z => ?_⟩
     rw [Word.eval_comp, ContinuousLinearMap.comp_apply, hw₁, hw₂]
     rfl
-
-section
-
-variable (S : Set Party) (tail : Layout Party) (l₁ l₂ : List (Hole pos q Party))
-
-@[simp] theorem isAllowed_tagSplit : (tagSplit l₁ l₂ tail).IsAllowed :=
-  (tagSplit_props ∅ tail l₁ l₂).1
-@[simp] theorem usesOnly_tagSplit : (tagSplit l₁ l₂ tail).UsesOnly S :=
-  (tagSplit_props S tail l₁ l₂).2.1
-@[simp] theorem sourceCount_tagSplit : (tagSplit l₁ l₂ tail).sourceCount = 0 :=
-  (tagSplit_props ∅ tail l₁ l₂).2.2
-@[simp] theorem isAllowed_tagMerge : (tagMerge l₁ l₂ tail).IsAllowed :=
-  (tagMerge_props ∅ tail l₁ l₂).1
-@[simp] theorem usesOnly_tagMerge : (tagMerge l₁ l₂ tail).UsesOnly S :=
-  (tagMerge_props S tail l₁ l₂).2.1
-@[simp] theorem sourceCount_tagMerge : (tagMerge l₁ l₂ tail).sourceCount = 0 :=
-  (tagMerge_props ∅ tail l₁ l₂).2.2
-
-end
 
 end TagSplit
 

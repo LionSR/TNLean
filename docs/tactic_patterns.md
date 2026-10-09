@@ -3587,28 +3587,27 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
+### reordering words of a party layout — promoted
+
+- **Pattern:** a word of exchanges of tensor factors, built by recursion or
+  composition, gets a lemma that it is allowed, uses any given parties and has
+  no pair source, followed by three one-line projections.
+- **Helper:** the predicate `PairEffect.Word.IsReordering` with the simp lemmas
+  `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
+  `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
+  `IsReordering.isAllowed`, `IsReordering.usesOnly` and
+  `IsReordering.sourceCount_eq`, in
+  `TNLean/PEPS/Approximation/SiteRegisters.lean`.
+- **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
+  `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
+  `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
+  by `simp [w]`; a word with local maps passes the projections to `simp` as
+  conditional rewrites.
+- **Notes:** when a recursive word's type differs from the type of its
+  unfolding only up to definitions such as `siteRegs`, `simp` cannot match
+  `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
+
 ## Candidates
-
-### Allowed, party, source-count triples of reordering words — candidate (2026-10-08)
-
-- **Sites:** `PEPS/Approximation/SiteRegisters.lean` (`partWordApp_props`,
-  `relabelSitesApp_props`, `Word.appendNil_props`),
-  `PEPS/Approximation/RegisterReordering.lean` (`Word.assocWord_props`,
-  `tagSplit_props`, and the one-line projections after them),
-  `PEPS/Approximation/FrameRegisters.lean` (`groupWord_props`,
-  `relabelRest_props`), `PEPS/Approximation/TwoSheetRegisters.lean`
-  (`correctionLayoutWord_props`, `renameWord_props`).
-- **Pattern:** a word built by recursion or composition gets one lemma
-  `w.IsAllowed ∧ w.UsesOnly S ∧ w.sourceCount = 0`, proved by recursion, and
-  three `@[simp]` projections; compositions are then closed by
-  `simp [Word.IsAllowed, Word.UsesOnly, Word.sourceCount]` with those
-  projections, as in `Word.swapPairs_props`.
-- **Current reuse:** the recursive triples share the induction; the
-  projections are boilerplate.
-- **Promotion trigger:** at the next file that adds such a word, replace the
-  triples by one predicate (allowed, using any given parties, without pair
-  sources) with constructor lemmas for `comp`, `frame`, `frameList` and
-  `swap`, and close compositions with that simp set.
 
 ### Operator norm in orthonormal coordinates — candidate (2026-10-07)
 
