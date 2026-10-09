@@ -36,6 +36,7 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
         (sitePairConfigurationEquiv ι q q) (sheetSwapOp q R) ∈
       supportedOperators (q * q) (R : Set ι) := by
   classical
+  rw [Matrix.reindex_apply, sheetSwapOp, Matrix.toMatrix_toPEquiv_submatrix]
   done
 
 end TNLean.PEPS.EncodedFrame
