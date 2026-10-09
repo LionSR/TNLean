@@ -138,15 +138,6 @@ theorem split_interval_band_unique {g g' r r' k a b : ℕ} {z : ℤ}
   all_goals rcases hg with hg | hg <;> nlinarith
 
 omit [Fintype I] [LinearOrder I] in
-private theorem domainGraph_depth_variation {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) (i : I) (x : Site Λ)
-    (hx : x ∈ S.ball i) : |S.depth x - S.depth (S.anchor i)| ≤ S.r₀ := by
-  have hxgraph : (domainGraph Λ).edist (S.anchor i) x ≤ (S.r₀ : ℕ∞) := by
-    simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hx
-  simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hxgraph
-
-omit [Fintype I] [LinearOrder I] in
 private theorem domainGraph_row_bound {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {L : ℕ} (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
@@ -196,7 +187,7 @@ theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T
       orientedDepth S.depth side (S.anchor i) ≤
         S.front g (h.1 g) (k + 1) side + S.D + 2 * S.r₀ := by
   apply S.old_split_anchor_bounds h g side i hn _ _
-    (domainGraph_depth_variation hT S hgraph hdepth) hsplit
+    (S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth) hsplit
   · apply domainGraph_split_ball_subset hT S hgraph hdepth hclear _ i _ hsplit.2
     intro x hx
     exact ⟨(initial_middle_depth S.A S.depth _ _
@@ -221,7 +212,7 @@ theorem state_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT :
     S.front g (h.1 g) k side - S.r₀ ≤ orientedDepth S.depth side (S.anchor i) ∧
       orientedDepth S.depth side (S.anchor i) ≤ S.front g (h.1 g) k side + S.D + 2 * S.r₀ := by
   apply S.state_split_anchor_bounds h g side i hn _ _
-    (domainGraph_depth_variation hT S hgraph hdepth) hsplit
+    (S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth) hsplit
   · apply domainGraph_split_ball_subset hT S hgraph hdepth hclear _ i _ hsplit.2
     intro x hx
     exact ⟨(initial_middle_depth S.A S.depth _ _

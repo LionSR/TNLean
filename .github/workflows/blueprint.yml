@@ -42,6 +42,7 @@ on:
       - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -253,6 +254,7 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
+          python3 scripts/test_blueprint_graph_worker.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       # Drop pictures no page references any more, so neither the published
