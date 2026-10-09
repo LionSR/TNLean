@@ -108,6 +108,27 @@
       "plan": "Nothing remains for this note. The aggregate map per party used by Theorem 5.2 is separate work."
     },
     {
+      "id": "docs/paper-gaps/polypeps_nonempty_parties.tex",
+      "repo": "TNLean",
+      "kind": "convention",
+      "status": "resolved-pending",
+      "paper": "peps",
+      "result": "Theorem 5.2",
+      "title": "Distributed compression needs at least one party",
+      "issue": 8769,
+      "prs": {
+        "TNLean": [
+          8924,
+          9021,
+          9024
+        ]
+      },
+      "claims": "Theorem 5.2 compresses the density produced by a distributed construction into an operator tensor network with one node per party. It does not say that the set of parties is nonempty.",
+      "found": "With no parties the statement fails. The paper's preliminaries give an empty tensor product dimension one, so a circuit on no parties can still multiply by a scalar c, giving density |c|². A network with no nodes always contracts to 1, so for c = 1/2 the error is 3/4. The paper's proof puts scalar factors on an existing party, which presupposes one. Lean requires a nonempty party set once, in the definition of a distributed construction, and repeats it on no theorem. Gates in which no party takes part are still allowed. The square grids of side L ≥ 2 used later always have parties.",
+      "impact": "None. Every application in the paper has parties, so this is a reading of the paper's statement, not a restriction of it.",
+      "plan": "Merge #8924, which introduces the convention."
+    },
+    {
       "id": "docs/paper-gaps/arealaw2d_nondegenerate_templates.tex",
       "repo": "TNLean",
       "kind": "convention",
