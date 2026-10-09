@@ -30,6 +30,27 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     edges have slopes $0,\infty,1,-1$.
 \end{definition}
 
+\begin{theorem}[A dyadic square as a maximum-norm ball]
+    \label{thm:area_law_cell_fan_closed_ball}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.closedBall_cellFanCenter_eq_closure_dyadicCell}
+    \leanok
+    \uses{def:area_law_dyadic_cells,def:area_law_cell_fan}
+    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$. Let
+    $Q=o+2^\ell(z+[0,1)^2)$ be the half-open dyadic cell, with
+    center $c=o+2^\ell(z+(1/2,1/2))$ and half-side $r=2^\ell/2$.
+    Then
+    \begin{align}
+        \overline{B}_\infty(c,r) & =\overline Q.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_closures}
+    The coordinate description of $\overline Q$ gives
+    $x\in\overline Q$ if and only if $|x_j-c_j|\le r$ for $j=1,2$.
+    These inequalities are equivalent to $\|x-c\|_\infty\le r$.
+\end{proof}
+
+
 \begin{theorem}[Fan vertices are actual cell marks]
     \label{thm:area_law_cell_fan_mark_vertices}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks}

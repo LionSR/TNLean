@@ -6043,11 +6043,12 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The two contact orientations in
   `initialRegion_frontier_near_mark_iff_active_radial` in
   `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`, and the unequal-slot branch in
-  `Geometry/CellFanRadialIncidence.lean`.
+  `Geometry/CellFanRadialIncidence.lean`, followed by both orientations in
+  `Geometry/FanRunDisjointness.lean`.
 - **Abstraction:** The public `cellFanPolygons_nontrivial_inter_cases` in
   `FanRunContacts.lean` supplies the full geometric intersection classification.
   Each consumer obtains typed radial membership by ordinary equality transport.
-- **Notes:** All three occurrences already share the classification theorem.
+- **Notes:** All five occurrences share the classification theorem.
   No additional helper or tactic is needed for equality substitution, and no
   coordinate calculation is copied.
 
