@@ -6133,3 +6133,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Capped dyadic summation by scale — candidate (2026-10-09)
+
+- **Pattern:** group a finite sum over the actual capped dyadic partition
+  by its scale coordinate; replace each fibre's constant sum by its
+  cardinality times the scale weight.
+- **Seen:** the rectangle-shell weighted covering and the two template
+  covering proofs in [PR #9000](https://github.com/LionSR/TNLean/pull/9000).
+- **Abstraction:** Geometry.sum_cappedDyadicPartition_by_scale in
+  TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartitionByScale.lean.
+- **Notes:** the rectangle argument uses the shared identity. The existing
+  template arguments still need the corresponding refactoring in their
+  owning PR. The identity is valid for signed real weights, empty
+  partitions and cap zero; no positivity premise is necessary.

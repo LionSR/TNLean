@@ -3311,3 +3311,27 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
+
+## Weighted rectangle-shell covering
+
+- **Declarations:** the finite summation theorem
+  Geometry.sum_weighted_dyadic_rpow_le, the grouping identity
+  Geometry.sum_cappedDyadicPartition_by_scale, and
+  IntRect.sum_rpow_cappedDyadicPartition_shell_le, all in
+  TNLean.PEPS.AreaLaw.
+- **Meaning:** for j ≤ L ≤ size(Q), 2^K ≤ L < 2^(K+1), and e > 0,
+  the actual capped partition of Q.dilate(j) minus Q has
+  sum of side lengths to the power 1+e at most
+  (24 + 64/(2^e−1)) * size(Q) * L^e. Its scale counts are derived
+  from the rectangle-shell counting estimates.
+- **Source:** OpenAI (September 24, 2026), the covering argument in
+  Proposition 9.5, 08-scanner.tex, lines 717–729, at the immutable
+  revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+- **Scope:** arbitrary aspect ratio and negative coordinates, including
+  cap zero and an empty shell. The grouping identity permits every
+  real-valued weight without a sign condition. The weighted sum permits
+  signed weights and an arbitrary cap budget; its lower-scale budget
+  is nonnegative.
+- **Caveat:** this is the geometric covering estimate. The safety of the
+  selected squares, their physical entropy estimate, and the one-step
+  improvement of the safe-box exponent are separate results.

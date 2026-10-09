@@ -15,6 +15,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
+import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartitionByScale
 import TNLean.PEPS.AreaLaw.Geometry.CellContacts
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
@@ -33,6 +34,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
 import TNLean.PEPS.AreaLaw.Geometry.DyadicOrigin
 import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
+import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
@@ -73,6 +75,7 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
+import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
