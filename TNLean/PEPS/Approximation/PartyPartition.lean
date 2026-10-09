@@ -134,7 +134,10 @@ theorem partitionIso_cons_false_tmul (f : P → Bool) (r : Reg P) (ℓ : Layout 
     (partitionIso_cons_false f r ℓ h) (x ⊗ₜ[ℂ] y)).trans
   simp
 
-private theorem selectedHead_heq (r : Reg P) {a b a' b' : Layout P}
+/-- Equal selected and complementary register lists preserve the selected-head
+associativity identification. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 233–251 and 409–450. -/
+theorem selectedHead_heq (r : Reg P) {a b a' b' : Layout P}
     (ha : a = a') (hb : b = b') (x : r.space)
     {y : Mem a ⊗[ℂ] Mem b} {z : Mem a' ⊗[ℂ] Mem b'} (h : HEq y z) :
     HEq ((TensorProduct.assocIsometry ℂ r.space (Mem a) (Mem b)).symm (x ⊗ₜ[ℂ] y))
@@ -144,7 +147,10 @@ private theorem selectedHead_heq (r : Reg P) {a b a' b' : Layout P}
   cases h
   rfl
 
-private theorem complementaryHead_heq (r : Reg P) {a b a' b' : Layout P}
+/-- Equal selected and complementary register lists preserve the complementary-head
+exchange identification. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 233–251 and 409–450. -/
+theorem complementaryHead_heq (r : Reg P) {a b a' b' : Layout P}
     (ha : a = a') (hb : b = b') (x : r.space)
     {y : Mem a ⊗[ℂ] Mem b} {z : Mem a' ⊗[ℂ] Mem b'} (h : HEq y z) :
     HEq (leftCommIso r.space (Mem a) (Mem b) (x ⊗ₜ[ℂ] y))
@@ -154,7 +160,9 @@ private theorem complementaryHead_heq (r : Reg P) {a b a' b' : Layout P}
   cases h
   rfl
 
-private theorem add_heq {A B : HSpace} (h : A = B) {x y : A} {x' y' : B}
+/-- Addition respects identification of equal memory spaces and their vectors.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–450. -/
+theorem add_heq {A B : HSpace} (h : A = B) {x y : A} {x' y' : B}
     (hx : HEq x x') (hy : HEq y y') : HEq (x + y) (x' + y') := by
   subst h
   exact heq_of_eq (congrArg₂ (· + ·) (eq_of_heq hx) (eq_of_heq hy))
