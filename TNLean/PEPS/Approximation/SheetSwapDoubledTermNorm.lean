@@ -34,6 +34,9 @@ theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
     ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ -
       doubledHamiltonian A‖ ≤ 4 * ‖A‖ := by
   classical
+  have hdouble : ‖doubledHamiltonian A‖ ≤ ‖A‖ + ‖A‖ :=
+    (norm_add_le _ _).trans (add_le_add (l2_opNorm_kronecker_one_le A)
+      (l2_opNorm_one_kronecker_rect_le A))
   done
 
 end TNLean.PEPS.EncodedFrame
