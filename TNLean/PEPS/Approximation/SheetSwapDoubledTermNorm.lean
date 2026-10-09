@@ -41,6 +41,8 @@ theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
     (norm_mul_le_of_le (norm_sheetSwapOp_le_one (q := q) R) hdouble)
     ((l2_opNorm_conjTranspose (sheetSwapOp q R)).trans_le
       (norm_sheetSwapOp_le_one (q := q) R))
-  done
+  linarith [norm_sub_le
+    (sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ)
+    (doubledHamiltonian A)]
 
 end TNLean.PEPS.EncodedFrame
