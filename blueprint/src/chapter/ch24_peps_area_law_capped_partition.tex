@@ -102,8 +102,8 @@
     and its complement.
 \end{definition}
 
-\begin{lemma}[Counting integer quotient intervals]
-    \label{lem:area_law_quotient_interval_count}
+\begin{theorem}[Counting integer quotient intervals]
+    \label{thm:area_law_quotient_interval_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card}
     \leanok
     Let $a,b,u\in\mathbb Z$ with $a\le b$ and $u>0$. Then
@@ -111,7 +111,7 @@
         u\,\#\bigl([\lfloor a/u\rfloor,\lfloor b/u\rfloor]\cap\mathbb Z\bigr)
         \le b-a+2u.
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The interval contains $\lfloor b/u\rfloor-\lfloor a/u\rfloor+1$ integers.
     Apply $u\lfloor b/u\rfloor\le b$ and
@@ -123,20 +123,21 @@
     \lean{TNLean.PEPS.AreaLaw.IntRect.card_mixedDyadicIndices_toFinset_le}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_lattice_dyadic_square,
-        def:area_law_mixed_dyadic_square,lem:area_law_quotient_interval_count}
+        def:area_law_mixed_dyadic_square}
     Let $Q=[x_0,x_1]\times[y_0,y_1]\cap\mathbb Z^2$ be a nonempty integer
-    rectangle, let $s$ be its size, and put $u=2^k$ for $k\in\mathbb N$.
+    rectangle, and put $u=2^k$ for $k\in\mathbb N$.
     If $M_k(Q)$ is the set of indices of dyadic squares meeting both $Q$
     and its complement, then
     \begin{align}
-        u\,\#M_k(Q)\le4s+8u.
+        u\,\#M_k(Q)\le4\operatorname{size}(Q)+8u.
     \end{align}
     This is the boundary-line count used in
     \cite[proof of Proposition~9.5, lines~717--729]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:area_law_lattice_dyadic_square,def:area_law_mixed_dyadic_square,
-        lem:area_law_quotient_interval_count}
+    \uses{def:area_law_safe_rectangle,def:area_law_lattice_dyadic_square,
+        def:area_law_mixed_dyadic_square,thm:area_law_lattice_dyadic_nesting,
+        thm:area_law_capped_mixed_parents,thm:area_law_quotient_interval_count}
     Set $X=[\lfloor x_0/u\rfloor,\lfloor x_1/u\rfloor]\cap\mathbb Z$ and
     $Y=[\lfloor y_0/u\rfloor,\lfloor y_1/u\rfloor]\cap\mathbb Z$.
     An inside point places a mixed square's index in $X\times Y$.
@@ -147,7 +148,7 @@
         \#M_k(Q)\le2\#X+2\#Y.
     \end{align}
     The quotient-interval estimate gives
-    $u\,\#M_k(Q)\le2(x_1-x_0)+2(y_1-y_0)+8u\le4s+8u$.
+    $u\,\#M_k(Q)\le2(x_1-x_0)+2(y_1-y_0)+8u\le4\operatorname{size}(Q)+8u$.
 \end{proof}
 
 \begin{theorem}[Mixed parents below the cap]
