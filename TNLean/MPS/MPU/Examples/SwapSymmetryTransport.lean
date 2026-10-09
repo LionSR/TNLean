@@ -19,6 +19,17 @@ bond dimension. The comparison of all three source examples, whose canonical
 bond dimensions differ, still requires a relation permitting common ambient
 representatives. See `docs/paper-gaps/mpu_equivalence_fixed_bond.tex`.
 
+**Scope restriction (no identity ancillas):** The strict comparisons
+`strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff`,
+`strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff` and
+`strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff` compare
+strict equivalence without adjoining identity ancillas. The source definition
+of equivalence under a symmetry also permits identity ancillas
+(arXiv:1703.09188, Definition `def:equivalent-symmetry`, lines 1356--1366),
+and transporting the symmetry action to the enlarged physical dimension is not
+determined by the source. See
+`docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+
 **Local fix:** equation `threeMPU2` uses one-sided multiplication
 \(\widetilde U_N=S_NU_N\). The conjugation paragraph in the printed proof
 of `lemma:sym-trafo-swap` instead displays two-sided multiplication. We use

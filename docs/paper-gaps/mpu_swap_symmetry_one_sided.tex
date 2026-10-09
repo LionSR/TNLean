@@ -43,11 +43,12 @@ periodic operator and canonical endpoint tensors.
 
 The three operator equivalences and their strict fixed-bond path comparisons
 are proved by the corresponding adjunction, transposition, and conjugation
-results in \doclink{TNLean/MPS/MPU/Examples/SwapSymmetryTransport}.
-The general path transformation is
+results, which rest on the general transformation of paths by left
+multiplication with a one-site unitary and on the preservation of canonical
+endpoints.\footnote{Formal declarations: the results in
+\doclink{TNLean/MPS/MPU/Examples/SwapSymmetryTransport};
 \leanid{MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul};
-canonical endpoints are preserved by
-\leanid{MPOTensor.isMPUCanonicalForm_ketLeftMul}.
+\leanid{MPOTensor.isMPUCanonicalForm_ketLeftMul}.}
 
 \section{Scope}
 
