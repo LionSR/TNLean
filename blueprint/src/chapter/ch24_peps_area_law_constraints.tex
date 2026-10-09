@@ -283,8 +283,7 @@ only on the parameters named below.
         \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
     \end{align}
     so $H_F=\sum_ik_i$ satisfies $H_F\ge g(I-P_\Omega)$ with $g=\Delta/c_*$ and
-    $H_F\Omega=0$: it has the unique ground vector $\Omega$, ground energy zero,
-    and gap at least $g$. For every integer $l\ge0$ the operator
+    $H_F\Omega=0$. For every integer $l\ge0$ the operator
     $k_{i,l}=E_{i,l}(k_i)$ lies in $[0,I]$ and satisfies
     $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts on
     the connected component of $a_i$. This is Proposition~4.3 of
@@ -300,7 +299,8 @@ only on the parameters named below.
     \label{thm:al_lattice_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
     \leanok
-    \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement}
+    \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement,
+        thm:al_root_channel_commutant}
     With $p,R,J,\Delta$ as in Theorem~\ref{thm:al_lattice_positive_replacement}
     there are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, such that the
     roots $G_i$, $K_i$, $G_{i,l}$, $K_{i,l}$ and the channels $\mathcal E_i$,
@@ -326,9 +326,11 @@ only on the parameters named below.
     $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
     $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
     $n\ge2$ and every set $S_0$ of sites with $|S_0|\le C_0n^2$, the truncation
-    with $r_0=\lceil C_1(\log n)^2\rceil$ has all conclusions of
-    Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$, and each truncated term
-    acts on its designated support. This is the truncation part of
+    with $r_0=\lceil C_1(\log n)^2\rceil$ has the conclusions of
+    Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$ other than uniqueness:
+    it has a unit ground vector $\widetilde\Omega$ satisfying the stated gap,
+    vector and trace-distance estimates, and each truncated term acts on its
+    designated support. Uniqueness of $\widetilde\Omega$ is not stated here. This is the truncation part of
     Proposition~4.5 of \cite{OpenAI2026AreaLaw}, which assumes $S_0$ nonempty
     and $C_0>0$.
 \end{theorem}
