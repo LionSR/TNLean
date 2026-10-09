@@ -8,7 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
+import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.Basic
