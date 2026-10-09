@@ -266,14 +266,28 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
 
 
 PAGE_LOAD_TIMEOUT_MS = 300_000
+# The whole-document dependency graph lays out every node in the browser, and
+# that layout alone approaches a content page's budget: the passing render step
+# finishes within seconds of the deadline, so under the parallel browsers the
+# graph has flaked over the shared 300s edge.  The graph page therefore
+# navigates and completes within its own, larger single deadline.  This is
+# still one deadline shared between navigation and layout, not a fresh timeout
+# handed to the layout once navigation is done.
+GRAPH_LOAD_TIMEOUT_MS = 600_000
 
 
 def _load_page(page: Page, base_url: str, name: str) -> None:
-    """Navigate and finish an actual graph within one original page deadline."""
-    deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
+    """Navigate and finish an actual graph within one original page deadline.
+
+    Content pages keep the ordinary budget; the heavier dependency-graph page
+    navigates and finishes its in-browser layout within its own larger one.
+    """
+    is_graph = name.startswith("dep_graph_")
+    budget_ms = GRAPH_LOAD_TIMEOUT_MS if is_graph else PAGE_LOAD_TIMEOUT_MS
+    deadline = time.monotonic() + budget_ms / 1000
     page.goto(f"{base_url}/{name}", wait_until="domcontentloaded",
-              timeout=PAGE_LOAD_TIMEOUT_MS)
-    if name.startswith("dep_graph_"):
+              timeout=budget_ms)
+    if is_graph:
         remaining_ms = (deadline - time.monotonic()) * 1000
         if remaining_ms <= 0:
             raise TimeoutError(f"{name}: graph exceeded the original page deadline")
