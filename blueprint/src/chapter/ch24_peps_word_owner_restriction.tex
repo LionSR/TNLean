@@ -1,5 +1,3 @@
-% Source relocation proposal; native verification remains pending.
-
 \section{Party restrictions after changing owner labels}
 
 Let $P$ and $Q$ be sets of owner labels. A finite composition $W$ contains
@@ -13,6 +11,7 @@ $f(p)$ while preserving the register spaces and chronological order.
 \begin{definition}[Selection of one party]
     \label{def:peps_single_party_selector}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partySelector}
+    \leanok
     For $q\in Q$, define $\chi_q:Q\to\{\mathrm{false},\mathrm{true}\}$
     by $\chi_q(x)=\mathrm{true}$ exactly when $x=q$.
 \end{definition}
@@ -20,12 +19,13 @@ $f(p)$ while preserving the register spaces and chronological order.
 \begin{theorem}[Participating parties after changing owner labels]
     \label{thm:peps_source_free_owner_parties}
     \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil}
+    \leanok
     \uses{def:peps_owner_composition}
     If $W$ contains no pair-source preparation, then
     $\Pi(W^f)=f(\Pi(W))$. No injectivity assumption on $f$ is required.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_owner_composition}
     Induct on the composition. The owners of a relabelled register list
     are the image of its original owners. Images commute with unions
@@ -37,6 +37,7 @@ $f(p)$ while preserving the register spaces and chronological order.
 \begin{theorem}[Restriction to an owner outside the relabelling range]
     \label{thm:peps_owner_disjoint_restriction}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
+    \leanok
     \uses{def:peps_single_party_selector,def:peps_owner_composition}
     Suppose that $W$ contains no pair-source preparation and that
     $f(p)\ne q$ for every $p\in P$. Let $V$ be the restriction of $W^f$
@@ -45,7 +46,7 @@ $f(p)$ while preserving the register spaces and chronological order.
     empty input and output register memories with $\C$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_source_free_owner_parties,thm:peps_party_restriction,
         def:peps_single_party_selector}
     The participating parties are
