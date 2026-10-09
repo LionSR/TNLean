@@ -79,7 +79,7 @@ example :
 
 section DependentFamily
 
-variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
+variable {V I : Type*}
 variable (S : CollarScan V I)
 
 -- The first pair has no completed charges, and the next pair has exactly one.
@@ -119,6 +119,8 @@ example (j : Fin (2 * S.n * S.m)) :
       S.m ^ S.K * ((2 * S.M) ^ S.K) ^ (j.val / 2) :=
   card_history S.K S.m S.M (j.val / 2)
 
+variable [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
+
 -- Both actual trees, including blank choices, survive the dependent interleaving.
 example (hm : 0 < S.m) (hM : 0 < S.M) (h0 : 0 < 2 * S.n * S.m) :
     S.actualRoundData hm hM ⟨0, h0⟩ = S.actualFillData hm hM 0 := by
@@ -140,14 +142,14 @@ example (hm : 0 < S.m) (hM : 0 < S.M) (h3 : 3 < 2 * S.n * S.m) :
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (hj : IsChargeRound j.val) :
     HEq (S.actualRoundData hm hM j) (S.actualChargeData hm hM (j.val / 2)) := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice, if_pos hj, dif_pos hj,
-    heq_eq_eq]
+  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
+    ite_eq_left hj, dite_eq_left hj, heq_eq_eq]
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (hj : ¬IsChargeRound j.val) :
     HEq (S.actualRoundData hm hM j) (S.actualFillData hm hM (j.val / 2)) := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice, if_neg hj, dif_neg hj,
-    heq_eq_eq]
+  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
+    ite_eq_right hj, dite_eq_right hj, heq_eq_eq]
 
 -- The split-leaf operation also survives the abstract dependent casts.
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
@@ -155,14 +157,20 @@ example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (i : ι) (hj : IsChargeRound j.val) :
     ((S.actualRoundData hm hM j).splitLeaves E i).card =
       ((S.actualChargeData hm hM (j.val / 2)).splitLeaves E i).card := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice, if_pos hj, dif_pos hj]
+  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
+    ite_eq_left hj, dite_eq_left hj]
 
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
     (n : V ⊕ Bool → ℕ) {ι : Type*} (E : EnergyTerms (V ⊕ Bool) n ι)
     (i : ι) (hj : ¬IsChargeRound j.val) :
     ((S.actualRoundData hm hM j).splitLeaves E i).card =
       ((S.actualFillData hm hM (j.val / 2)).splitLeaves E i).card := by
-  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice, if_neg hj, dif_neg hj]
+  simp only [CollarScan.actualRoundData, CollarScan.actualRoundChoice,
+    ite_eq_right hj, dite_eq_right hj]
+
+section RoundIndices
+
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 
 -- Charge choices keep both sides and every padded slot; no positive-band premise is added.
 example (h1 : 1 < 2 * S.n * S.m) (hist : S.actualRoundHistory ⟨1, h1⟩) :
@@ -193,6 +201,8 @@ example (hnm : 0 < S.n * S.m) : IsChargeRound (2 * S.n * S.m - 1) := by
 example (j : Fin (2 * S.n * S.m)) : j.val / 2 + 1 ≤ S.n * S.m :=
   S.actualRoundHistory_length_add_one_le j
 
+end RoundIndices
+
 example (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m)) :
     (S.actualRoundData hm hM j).IsAdmissible :=
   S.actualRoundData_isAdmissible hm hM j
@@ -221,8 +231,7 @@ end DependentFamily
 section ZeroCopies
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
-variable [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
-variable (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+variable (aux : Bool → ℕ)
 variable (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
 variable (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (L : ℕ)
 

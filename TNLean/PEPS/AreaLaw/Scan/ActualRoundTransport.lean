@@ -51,8 +51,8 @@ abbrev actualRoundHistory (j : Fin (2 * S.n * S.m)) : Type :=
 
 /-- Even rounds fill deterministically; odd rounds keep every padded charge choice.
 The distinction is round parity, independently of the physical side scheduled by a fill. -/
-def actualRoundChoice (j : Fin (2 * S.n * S.m)) (_h : S.actualRoundHistory j) : Type :=
-  if IsChargeRound j.val then ChargeChoices S.K S.M else Unit
+def actualRoundChoice (j : Fin (2 * S.n * S.m)) : S.actualRoundHistory j → Type :=
+  if IsChargeRound j.val then fun _ => ChargeChoices S.K S.M else fun _ => Unit
 
 instance (j : Fin (2 * S.n * S.m)) (h : S.actualRoundHistory j) :
     Fintype (S.actualRoundChoice j h) := by
@@ -68,15 +68,17 @@ instance (j : Fin (2 * S.n * S.m)) (h : S.actualRoundHistory j) :
 def actualRoundData (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m)) :
     TransportData (V ⊕ Bool) S.K (S.actualRoundHistory j) (S.actualRoundChoice j) :=
   if hj : IsChargeRound j.val then
-    by simpa only [actualRoundChoice, if_pos hj] using S.actualChargeData hm hM (j.val / 2)
+    by simpa only [actualRoundChoice, ite_eq_left hj] using S.actualChargeData hm hM (j.val / 2)
   else
-    by simpa only [actualRoundChoice, if_neg hj] using S.actualFillData hm hM (j.val / 2)
+    by simpa only [actualRoundChoice, ite_eq_right hj] using S.actualFillData hm hM (j.val / 2)
 
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 /-- Every indexed round is within the physical horizon, including the final charge. -/
 theorem actualRoundHistory_length_add_one_le (j : Fin (2 * S.n * S.m)) :
     j.val / 2 + 1 ≤ S.n * S.m := by
-  have hj := j.isLt
-  rw [Nat.mul_assoc] at hj
+  have hj : j.val < 2 * (S.n * S.m) := calc
+    j.val < 2 * S.n * S.m := j.isLt
+    _ = 2 * (S.n * S.m) := Nat.mul_assoc 2 S.n S.m
   omega
 
 /-- Actual positive history weights, partitions and moves establish admissibility
@@ -84,9 +86,9 @@ for both kinds of round. No transport certificate is supplied. -/
 theorem actualRoundData_isAdmissible (hm : 0 < S.m) (hM : 0 < S.M)
     (j : Fin (2 * S.n * S.m)) : (S.actualRoundData hm hM j).IsAdmissible := by
   by_cases hj : IsChargeRound j.val
-  · simpa only [actualRoundData, actualRoundChoice, if_pos hj, dif_pos hj] using
+  · simpa only [actualRoundData, actualRoundChoice, ite_eq_left hj, dite_eq_left hj] using
       S.actualChargeData_isAdmissible hm hM (j.val / 2)
-  · simpa only [actualRoundData, actualRoundChoice, if_neg hj, dif_neg hj] using
+  · simpa only [actualRoundData, actualRoundChoice, ite_eq_right hj, dite_eq_right hj] using
       S.actualFillData_isAdmissible hm hM (j.val / 2)
 
 end Family
@@ -161,12 +163,12 @@ theorem actualRounds_transport_domainGraph :
     intro j
     have hs := S.actualRoundHistory_length_add_one_le j
     by_cases hj : IsChargeRound j.val
-    · simpa only [D, actualRoundData, actualRoundChoice, if_pos hj, dif_pos hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_left hj, dite_eq_left hj] using
         S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           (fun _ => chargeChoiceTree S.K S.M hM)
           hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
-    · simpa only [D, actualRoundData, actualRoundChoice, if_neg hj, dif_neg hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_right hj, dite_eq_right hj] using
         S.fillTransportData_supportCompatible_domainGraph hT hgraph hdepth
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
@@ -174,34 +176,34 @@ theorem actualRounds_transport_domainGraph :
   have hcomm : ∀ j k, (D j).CrossBandCommute n (a / 2) k := by
     intro j k
     by_cases hj : IsChargeRound j.val
-    · simpa only [D, actualRoundData, actualRoundChoice, if_pos hj, dif_pos hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_left hj, dite_eq_left hj] using
         S.chargeTransportData_crossBandCommute
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           (fun _ => chargeChoiceTree S.K S.M hM) n ht k
-    · simpa only [D, actualRoundData, actualRoundChoice, if_neg hj, dif_neg hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_right hj, dite_eq_right hj] using
         S.fillTransportData_crossBandCommute
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2)) n ht k
   have hmove : ∀ j hist c g, logDim n ((D j).move hist c g).subsystem ≤
       transportLogDimBound q S.r₀ := by
     intro j
     by_cases hj : IsChargeRound j.val
-    · simpa only [D, actualRoundData, actualRoundChoice, if_pos hj, dif_pos hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_left hj, dite_eq_left hj] using
         S.chargeTransportData_logDim_move_le_domainGraph hgraph
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           (fun _ => chargeChoiceTree S.K S.M hM) n hq (fun _ => rfl)
-    · simpa only [D, actualRoundData, actualRoundChoice, if_neg hj, dif_neg hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_right hj, dite_eq_right hj] using
         S.fillTransportData_logDim_move_le
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2)) n hq (fun _ => rfl)
   have hsplit : ∀ j i, ((D j).splitLeaves E i).Nonempty →
       logDim n (E.support i) ≤ transportLogDimBound q S.r₀ := by
     intro j
     by_cases hj : IsChargeRound j.val
-    · simpa only [D, actualRoundData, actualRoundChoice, if_pos hj, dif_pos hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_left hj, dite_eq_left hj] using
         S.chargeTransportData_logDim_support_le_domainGraph hgraph
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           (fun _ => chargeChoiceTree S.K S.M hM)
           n hq (fun _ => rfl) hL E (fun _ => rfl)
-    · simpa only [D, actualRoundData, actualRoundChoice, if_neg hj, dif_neg hj] using
+    · simpa only [D, actualRoundData, actualRoundChoice, ite_eq_right hj, dite_eq_right hj] using
         S.fillTransportData_logDim_support_le_domainGraph hgraph
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           n hq (fun _ => rfl) hL E (fun _ => rfl)
