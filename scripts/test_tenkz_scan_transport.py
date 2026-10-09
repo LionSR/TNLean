@@ -116,7 +116,7 @@ class ScanTransportDiagram(unittest.TestCase):
             "same fixed choice tree at every history leaf",
             r"relabels $(h,c)$ by $h\frown c$, giving $T_{k+1}$",
             "No reassociation or replacement by an independent uniform average",
-            r"T_k\bigl[C[A_{h\frown c}]\bigr] =T_{k+1}[A_{h\frown c}]",
+            r"T_k\bigl[{C[A_{h\frown c}]}\bigr] =T_{k+1}[A_{h\frown c}]",
             r"Theorem~\ref{thm:al_scan_history_mean_tree_endpoints}",
         ):
             self.assertIn(phrase, compact)

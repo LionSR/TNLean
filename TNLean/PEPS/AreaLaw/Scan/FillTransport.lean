@@ -39,6 +39,7 @@ def quantumFillMove (g r k : ℕ) (σ : PhysicalPartition V) : Move (V ⊕ Bool)
   | none => .stay
   | some x => augmentedMove σ (fillSide k) {x}
 
+omit [Fintype I] [LinearOrder I] in
 /-- Quantum-region bookkeeping agrees with the actual deterministic fill. -/
 theorem quantumFillMove_apply (g r k : ℕ) (σ : PhysicalPartition V) :
     (S.quantumFillMove g r k σ).apply (augmentedPartition σ) =
@@ -50,6 +51,7 @@ theorem quantumFillMove_apply (g r k : ℕ) (σ : PhysicalPartition V) :
     simp only [quantumFillMove, fill, he]
     exact augmentedMove_apply σ (fillSide k) {x}
 
+omit [Fintype I] [LinearOrder I] in
 /-- Every actual fill transfers a subsystem of the old middle. -/
 theorem quantumFillMove_isValid (g r k : ℕ) (σ : PhysicalPartition V) :
     (S.quantumFillMove g r k σ).IsValid (augmentedPartition σ) := by
@@ -60,6 +62,7 @@ theorem quantumFillMove_isValid (g r k : ℕ) (σ : PhysicalPartition V) :
     simp only [quantumFillMove, he]
     exact augmentedMove_isValid σ (fillSide k) {x}
 
+omit [Fintype I] [LinearOrder I] in
 /-- An occupied slot that was already assigned moves the empty subsystem. -/
 theorem quantumFillMove_subsystem_of_assigned (g r k : ℕ) (σ : PhysicalPartition V)
     (x : V) (old : Bool)
@@ -67,8 +70,8 @@ theorem quantumFillMove_subsystem_of_assigned (g r k : ℕ) (σ : PhysicalPartit
       (fillSide k) (fillCount k (fillSide k)) = some x)
     (hx : σ x = some old) : (S.quantumFillMove g r k σ).subsystem = ∅ := by
   have hempty : {x} ∩ middle σ = ∅ := by simp [middle, hx]
-  cases hs : fillSide k <;>
-    simp [quantumFillMove, hslot, augmentedMove, hs, hempty, Move.subsystem]
+  simp only [quantumFillMove, hslot]
+  cases fillSide k <;> simp [augmentedMove, hempty, Move.subsystem]
 
 /-- One deterministic fill on a supplied history tree. Its new state is the
 pre-charge state of the same history, with no extra random choice. -/

@@ -153,10 +153,10 @@ theorem augmentOperator_isSupportedOn (q : ℕ) (aux : Bool → ℕ)
       (fun x hx => h4 (.inl x) (by simpa [physicalRegion] using hx))
     have haux : (1 : Matrix ((b : Bool) → Fin (aux b)) ((b : Bool) → Fin (aux b)) ℂ)
         (fun b => σ (.inr b)) (fun b => τ (.inr b)) = 1 :=
-      Matrix.one_apply.trans (if_pos ha)
+      Matrix.one_apply.trans (ite_eq_left ha)
     have haux' : (1 : Matrix ((b : Bool) → Fin (aux b)) ((b : Bool) → Fin (aux b)) ℂ)
         (fun b => σ' (.inr b)) (fun b => τ' (.inr b)) = 1 :=
-      Matrix.one_apply.trans (if_pos hb)
+      Matrix.one_apply.trans (ite_eq_left hb)
     exact congrArg₂ (fun z w : ℂ => z * w) hphys (haux.trans haux'.symm)
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}

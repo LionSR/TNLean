@@ -24,6 +24,8 @@ at `openai/math@adc7f124`.
 
 namespace TensorPower.ReplicaTransport
 
+open Entropy (SiteConfig)
+
 variable {V : Type*} [Fintype V] [DecidableEq V] (n : V → ℕ)
 
 /-- A valid move has nonnegative conditional mutual information. The receiving
