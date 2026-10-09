@@ -188,6 +188,7 @@ trace-norm estimates do not involve private dimensions.
     \label{thm:peps_approximate_natural_accuracy}
     \lean{TNLean.PEPS.PairEffect.gateApproximation_error_inv_pow_le}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow}
+    \uses{def:peps_original_gate_density}
     \leanok
     Let $N\le CL^n$, where $n,p$ are nonnegative integers and
     $L\ge\max\{1,16C\}$. Local accuracy
@@ -295,6 +296,7 @@ trace-norm estimates do not involve private dimensions.
     \label{thm:peps_original_coefficient_sum}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds}
+    \uses{def:peps_original_termwise_bounds}
     \leanok
     Suppose an original circuit has at most $K$ monomials at each
     nonprivate gate occurrence and has termwise bounds $(r,C)$, where
