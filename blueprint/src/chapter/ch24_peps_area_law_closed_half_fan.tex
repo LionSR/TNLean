@@ -1,0 +1,114 @@
+\subsection{Connected fan pieces in a smaller closed square}
+\label{sec:area_law_fan_closed_half}
+
+The following local assertions concern the eight-triangle fan used in the
+initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
+The origin, dyadic exponent, cell index and binary coloring are arbitrary.
+The exponent zero and the empty change set are included; distinct runs
+carrying the same color remain distinct.
+
+% Source: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+% 10-geometry.tex, geometry:initial-stars, lines 352--370, and
+% prop:two-families, lines 308--323. Completion marks await ordinary
+% checks of the production declarations.
+
+\begin{definition}[Retained pieces in the smaller closed square]
+    \label{def:area_law_fan_closed_half_piece}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanClosedHalfPiece}
+    \uses{def:area_law_fan_cut_piece}
+    Let $o\in\R^2$, $\ell\in\N$, $z\in\Z^2$ and the colors
+    $f_i\in\{0,1\}$ be arbitrary. Use the center $c$, half-side
+    $r=2^\ell/2>0$, triangles $P_i$, change set $A$, deleted radials
+    $L$ and retained pieces $S_i$ of
+    Definition~\ref{def:area_law_fan_cut_piece}. Define
+    \begin{align}
+        K_i
+         & =S_i\cap\overline B_\infty(c,r/2)
+        =(P_i\setminus L)\cap\overline B_\infty(c,r/2).
+    \end{align}
+    The closed maximum-norm ball is the closed square of radius $r/2$.
+    The equality follows from
+    $\overline B_\infty(c,r/2)\subset B_\infty(c,r)$.
+    When $A=\varnothing$, the center belongs to every $K_i$.
+\end{definition}
+
+\begin{theorem}[Intersection in the smaller closed square]
+    \label{thm:area_law_fan_closed_half_intersection}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_closedHalfBall_nonempty_of_adj}
+    \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
+    If $i,j$ are consecutive perimeter positions with $f_i=f_j$, then
+    $K_i\cap K_j$ is nonempty. Either $j=\tau(i)$
+    or $i=\tau(j)$ is permitted, and the change set may be empty.
+\end{theorem}
+\begin{proof}
+    \uses{def:area_law_fan_closed_half_piece,
+        thm:area_law_cell_fan_successor_iff,
+        thm:area_law_cell_fan_base_radius,
+        thm:area_law_cell_fan_end_same_ray,
+        thm:area_law_fan_noncentral_radial_incidence}
+    Suppose first that $j=\tau(i)$, so $b_i=a_j$, and set
+    $m=(c+b_i)/2$. The base-radius identity gives
+    $\|m-c\|_\infty=r/2>0$, so $m\ne c$ and
+    $m\in\overline B_\infty(c,r/2)\subset B_\infty(c,r)$.
+    The noncentral radial-incidence characterization places $m$ in
+    both $P_i$ and $P_j$.
+
+    If $m\in[c,b_t]$, then $b_t-c$ and $b_i-c$ have the same
+    directed ray. The distinctness of the endpoint directions gives
+    $t=i$. But $f_i=f_j=f_{\tau(i)}$, so $i\notin A$.
+    Thus $m\notin L$ and $m\in K_i\cap K_j$.
+    For $i=\tau(j)$, interchange the indices and use symmetry of
+    intersection.
+\end{proof}
+
+\begin{theorem}[Connectedness of a retained piece]
+    \label{thm:area_law_fan_closed_half_piece_connected}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanClosedHalfPiece_isConnected}
+    \uses{def:area_law_fan_closed_half_piece}
+    Every $K_i$ is nonempty and connected.
+\end{theorem}
+\begin{proof}
+    \uses{def:area_law_fan_closed_half_piece,
+        thm:area_law_fan_cut_piece_connected,
+        thm:area_law_fan_radial_union_deletion_convex}
+    Apply Theorem~\ref{thm:area_law_fan_cut_piece_connected} at
+    radius $r/2$ to obtain a point of
+    $(P_i\setminus L)\cap B_\infty(c,r/2)$, which belongs to
+    $K_i$. The deleted triangle is convex by
+    Theorem~\ref{thm:area_law_fan_radial_union_deletion_convex}.
+    Both centered balls are convex, so their intersection with the
+    deleted triangle is a nonempty convex set and hence connected.
+\end{proof}
+
+\begin{theorem}[Connectedness of a retained run]
+    \label{thm:area_law_fan_closed_half_run_connected}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_cut_inter_closedHalfBall_isConnected}
+    \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
+    Retain an adjacency between consecutive triangles precisely when
+    their colors agree. For any connected component $R$ of this graph,
+    put $T_R=\bigcup_{i\in R}P_i$. Then
+    $(T_R\setminus L)\cap\overline B_\infty(c,r/2)$ is nonempty
+    and connected. Components carrying the same color remain distinct.
+\end{theorem}
+\begin{proof}
+    \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs,
+        thm:area_law_fan_closed_half_piece_connected,
+        thm:area_law_fan_closed_half_intersection}
+    Each $K_i$ is nonempty and connected by
+    Theorem~\ref{thm:area_law_fan_closed_half_piece_connected}, and
+    Theorem~\ref{thm:area_law_fan_closed_half_intersection} gives
+    a nonempty intersection along every retained edge.
+    The component $R$ is nonempty, and any two of its vertices are
+    joined by a finite path within $R$. Successive unions along these
+    paths show that $\bigcup_{i\in R}K_i$ is nonempty and
+    connected. Distributing deletion and intersection over the union
+    gives
+    \begin{align}
+        (T_R\setminus L)\cap\overline B_\infty(c,r/2)
+         & =\bigcup_{i\in R}K_i.
+        \label{eq:area_law_closed_half_run}
+    \end{align}
+    Hence the set on the left of~(\ref{eq:area_law_closed_half_run})
+    is nonempty and connected. If $A=\varnothing$, no radial is removed
+    and the center is retained.
+\end{proof}

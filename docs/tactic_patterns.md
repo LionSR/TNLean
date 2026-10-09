@@ -3614,6 +3614,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Connected retained pieces along a fan run — candidate (2026-10-09)
+
+- **Pattern:** use the connected-component paths to join connected retained
+  triangles whose intersections survive along each retained edge.
+- **Seen:** the open-radius and closed-half-radius run proofs in
+  `TNLean/PEPS/AreaLaw/Geometry/FanRunConnectedness.lean`.
+- **Abstraction:** both already use Mathlib's
+  `IsConnected.iUnion_of_reflTransGen`; a further application would justify
+  naming the common passage from component paths to intersection chains.
+- **Notes:** two occurrences in one file do not meet the promotion threshold.
+  Nonemptiness of each piece and of the component are derived from the fan.
+
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)
 
 - **Pattern:** turn membership in two center-to-endpoint segments into a common
