@@ -31,6 +31,11 @@ Source: polynomial-PEPS manuscript, the boundary perturbation estimate in
 theorem card_squareLatticeEdges_le (L : ℕ) :
     Fintype.card (Edge (squareLatticeGraph L L)) ≤ 2 * L ^ 2 := by
   classical
+  suffices hinj : Function.Injective
+      (fun e : Edge (squareLatticeGraph L L) ↦
+        (e.1.1, decide (IsHorizontalSquareLatticeEdge e))) by
+    simpa [SquareLatticeVertex, pow_two, Nat.mul_comm] using
+      Fintype.card_le_of_injective _ hinj
   done
 
 end TNLean.PEPS
