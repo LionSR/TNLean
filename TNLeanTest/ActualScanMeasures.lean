@@ -176,7 +176,7 @@ example (ha : 0 ≤ a) (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s)
 example (ha : 0 ≤ a) (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : Unit)
     {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(S.actualFillScanRound hm hM s n E a pre).μNew k p h c) =
-      ∫ u, Transport.fourierWeight u * realCoherentIntegral k (base n)
+      ∫ u, Transport.fourierWeight u * realCoherentIntegral k (TransportData.base n)
         ((S.actualFillData hm hM s).state n (a / 2) k (pre k) p ⟨h, some c⟩ u) f :=
   S.integral_actualFillScanRound_new hm hM s n E a pre ha k p h c hf
 
@@ -191,7 +191,7 @@ example (ha : 0 ≤ a) (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s)
 example (ha : 0 ≤ a) (k : ℕ) (p : ℝ) (h : History S.K S.m S.M s) (c : ChargeChoices S.K S.M)
     {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(S.actualChargeScanRound hm hM s n E a pre).μNew k p h c) =
-      ∫ u, Transport.fourierWeight u * realCoherentIntegral k (base n)
+      ∫ u, Transport.fourierWeight u * realCoherentIntegral k (TransportData.base n)
         ((S.actualChargeData hm hM s).state n (a / 2) k (pre k) p ⟨h, some c⟩ u) f :=
   S.integral_actualChargeScanRound_new hm hM s n E a pre ha k p h c hf
 
