@@ -1085,7 +1085,13 @@ jobs:
               TNLeanTest/PEPS/AreaLaw/Amplification/ComponentChannelOscillation.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelOscillation.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelEventKernel.lean \
-              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean; do
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordObservables.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectors.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectorChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/GraphExtendedMetric.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
