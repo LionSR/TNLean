@@ -16,6 +16,7 @@ directory here.
 | `config.json` | What the campaign is and how to present it (fields below) |
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
+| `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
 
 The area-law and PEPS campaign in `openai-area-law-peps-proof/` is served at
 `https://sirui-lu.com/TNLean/openai-area-law-peps-proof/` and regenerated hourly by
@@ -53,7 +54,7 @@ markers. Use it to decide whether `gaps.json` needs a new entry.
 | `leanDirs` | Directories of the primary repository whose Lean files are listed on the page |
 | `statementPR` | Optional pull request that states the headline theorems in Lean |
 | `resultNames` | Display names for results whose table row gives none, keyed by source label |
-| `routes` | The proof as a sequence of stages. A route has an `eyebrow`, `heading`, `intro`, the `paper` whose results it shows, and `stages`, each with a `title`, its `issues`, a `physics` paragraph and what it `delivers` |
+| `routes` | The proof as a sequence of stages. A route has an `eyebrow`, `heading`, `intro`, the `paper` whose results it shows, and `stages`, each with a `title`, its `issues`, a `physics` paragraph, what it `delivers`, and optionally the `figure` (a key of `figures.js`) drawn beside the text with its `caption` |
 | `glossary` | Pairs of term and definition |
 
 A result table is any markdown table in a stream tracker body whose first two
@@ -61,6 +62,17 @@ cells name a numbered result such as `Lemma 2.1` and a backticked source label
 such as `` `lem:continuity` ``. The third cell lists the work issues as
 `#NNNN`. An optional name follows an em dash after the label, and an optional
 fourth cell states what completion requires.
+
+## Stage figures
+
+A stage figure is a small schematic placed beside the stage text, in the
+manner of Tufte's margin figures: hairline range frames instead of boxed axes,
+labels next to what they name instead of a legend, small multiples for steps,
+and colour only where it carries meaning. Style marks with the `.sfig` classes
+in `board.css` (`h`, `g`, `k`, `a`, `c` for strokes; `fa`, `fl`, `fs`, `fk`,
+`fm`, `fc` for fills; `t`, `m`, `big`, `on`, `halo` for text) so the figures
+follow the light and dark themes. Curves show shapes, not data; the caption
+says what is schematic.
 
 ## `gaps.json`
 

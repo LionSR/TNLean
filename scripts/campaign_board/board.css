@@ -105,6 +105,9 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .stage .body { padding-bottom: 28px; display: grid; gap: 10px; min-width: 0; }
 .stage .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
 .stage .secs { font: 12px var(--f-mono); color: var(--muted); }
+.stage .lead { display: grid; gap: 14px 32px; align-items: start; }
+.stage .lead .txt { display: grid; gap: 10px; min-width: 0; }
+@media (min-width: 980px) { .stage .lead.hasfig { grid-template-columns: minmax(0, 72ch) minmax(260px, 400px); } }
 .stage .phys { margin: 0; max-width: 72ch; }
 .stage .out { margin: 0; max-width: 72ch; font-size: 13.5px; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--soft); border-radius: 0 6px 6px 0; }
 .stage .out b { font-weight: 600; }
@@ -230,3 +233,29 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .libcard h3 { margin: 0; font-size: 20px; }
 .libcard p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
 .libcard .links { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; }
+
+/* stage figures: Tufte-style margin schematics drawn by a campaign's figures.js */
+.sfig { margin: 0; display: grid; gap: 6px; min-width: 0; max-width: 400px; }
+.sfig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.sfig figcaption { font: italic 13px/1.45 var(--f-display); color: var(--muted); }
+.sfig figcaption i { font-style: normal; }
+.sfig .h { stroke: var(--muted); stroke-width: 0.75; fill: none; }
+.sfig .g { stroke: var(--line); stroke-width: 1; fill: none; }
+.sfig .k { stroke: var(--ink); stroke-width: 1.2; fill: none; }
+.sfig .a { stroke: var(--accent); stroke-width: 1.75; fill: none; }
+.sfig .c { stroke: var(--cut); stroke-width: 2; fill: none; }
+.sfig .thick { stroke-width: 6; }
+.sfig .dash { stroke-dasharray: 3 3; }
+.sfig .fa { fill: var(--accent); }
+.sfig .fl { fill: var(--s-landed); }
+.sfig .fs { fill: var(--soft); }
+.sfig .fk { fill: var(--ink); }
+.sfig .fm { fill: var(--muted); }
+.sfig .fc { fill: var(--cut); }
+.sfig .op { fill-opacity: 0.18; }
+.sfig text { font: 10.5px var(--f-body); fill: var(--muted); }
+.sfig text.t { fill: var(--ink); }
+.sfig text.m { font: italic 12.5px var(--f-display); }
+.sfig text.big { font-size: 17px; }
+.sfig text.on { fill: var(--surface); font-weight: 600; }
+.sfig text.halo { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }

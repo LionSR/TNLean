@@ -87,7 +87,9 @@
             8744
           ],
           "physics": "The global gap limits how much the eigenvalues of a region's reduced state fluctuate on a logarithmic scale. Optimizing products of positive operators on nested rectangles, and bounding the result in two ways, turns this into a discount on conditional entropy.",
-          "delivers": "A box of side <i>r</i> far from the cut has <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup> with <i>e</i>₀ &lt; 1. The volume bound would be <i>r</i>²."
+          "delivers": "A box of side <i>r</i> far from the cut has <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup> with <i>e</i>₀ &lt; 1. The volume bound would be <i>r</i>².",
+          "figure": "box-exponent",
+          "caption": "Entropy bounds for a box of side <i>r</i> on log–log axes, where each exponent becomes a slope. The volume bound has slope 2, this stage gives slope 1 + <i>e</i>₀ (drawn at <i>e</i>₀ = ½), and the area law is the dashed slope 1 that the later stages reach."
         },
         {
           "title": "Make the Hamiltonian local and positive",
@@ -97,7 +99,9 @@
             8747
           ],
           "physics": "Lieb–Robinson bounds in the lattice's own graph distance and a smooth spectral filter with stretched-exponentially decaying Fourier tails rewrite the Hamiltonian as a sum of positive local pieces.",
-          "delivers": "Positive operators that each annihilate Ω and have rapidly decaying spatial tails, and whose sum has a global gap."
+          "delivers": "Positive operators that each annihilate Ω and have rapidly decaying spatial tails, and whose sum has a global gap.",
+          "figure": "filter",
+          "caption": "Left: the spectrum of <i>H</i> as a rug, with the isolated ground energy and the gap. The filter vanishes at <i>E</i>₀ and is flat above the gap, so each piece annihilates Ω. Right: on a log scale the filter's Fourier tail falls below every power law, which keeps each piece quasi-local."
         },
         {
           "title": "Replicas trade information against energy",
@@ -110,7 +114,9 @@
             8753
           ],
           "physics": "Take many copies of Ω in the symmetric subspace, entangled with an auxiliary pair, and filter them by an inverse power of an operator that interpolates as a small region changes sides. Per copy, the log-norm of the filtered vector approaches a combination of entropies. Schur–Weyl labels and trees of matrix geometric means carry out this bookkeeping.",
-          "delivers": "The decrease of the log-norm bounds conditional mutual information from below, and the same states bound the energy spent. An entangled-pair projection gives an upper comparison. The gap gives a lower one, because low energy forces most copies into Ω."
+          "delivers": "The decrease of the log-norm bounds conditional mutual information from below, and the same states bound the energy spent. An entangled-pair projection gives an upper comparison. The gap gives a lower one, because low energy forces most copies into Ω.",
+          "figure": "replicas",
+          "caption": "As the number <i>m</i> of copies grows, the log-norm per copy of the filtered vector settles at a combination of entropies (dashed). Comparing this limit with the energy spent is what bounds the conditional mutual information."
         },
         {
           "title": "Scan a collar",
@@ -120,7 +126,9 @@
             8756
           ],
           "physics": "Sweep the partition through a collar along a finite randomized schedule, so that each interaction term is rarely cut. Applied repeatedly, the two norm comparisons first improve the box exponent and then bound the information that crosses the collar.",
-          "delivers": "The mutual information between <i>A</i>∩<i>T</i> and the region beyond a collar of width <i>n</i><sup>1−ε</sup> is at most <i>C n</i><sup>1−ε</sup>, for templates <i>T</i> with <i>O</i>(<i>n</i>) boundary."
+          "delivers": "The mutual information between <i>A</i>∩<i>T</i> and the region beyond a collar of width <i>n</i><sup>1−ε</sup> is at most <i>C n</i><sup>1−ε</sup>, for templates <i>T</i> with <i>O</i>(<i>n</i>) boundary.",
+          "figure": "collar-scan",
+          "caption": "Five steps of the sweep as small multiples. The partition (orange) crosses the collar (grey) at a different position in each step, chosen by a randomized schedule, so each interaction term is cut in only a few steps."
         },
         {
           "title": "Amplify the information bound",
@@ -128,7 +136,9 @@
             8757
           ],
           "physics": "Typical spectral subspaces give an operator that restores the target from an auxiliary reference. Localized products of the positive constraints suppress its excited part, and polar decomposition turns it into a unitary that acts only near the target.",
-          "delivers": "Widening the collar by a sublinear amount makes the leaked information smaller than any fixed inverse power of <i>n</i>."
+          "delivers": "Widening the collar by a sublinear amount makes the leaked information smaller than any fixed inverse power of <i>n</i>.",
+          "figure": "amplify",
+          "caption": "Information leaked past the collar against its width, on a log scale. The scan leaves at most <i>C n</i><sup>1−ε</sup>. Widening the collar by a sublinear amount drives the leak below every fixed inverse power of <i>n</i>."
         },
         {
           "title": "Arrange regions so the entropies cancel",
@@ -138,7 +148,9 @@
             8759
           ],
           "physics": "Remove <i>O</i>(|∂<i>A</i>|) sites and split the rest of <i>A</i> into two ordered families of regions. A collar separates each region from the outside and from the earlier regions of its family. Narrow strips and recursive repairs at point contacts make this work for arbitrary cuts, including domains with holes.",
-          "delivers": "Two applications of the entropy chain rule cancel the entropy of every region, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors. This is the area law."
+          "delivers": "Two applications of the entropy chain rule cancel the entropy of every region, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors. This is the area law.",
+          "figure": "cancel",
+          "caption": "The region <i>A</i> drawn cell by cell. A boundary layer <i>D</i> of <i>O</i>(|∂<i>A</i>|) sites is removed (solid squares), and the rest is cut into two ordered families of strips. In the entropy chain rule each strip's entropy is added once and removed once, leaving |<i>D</i>| log <i>q</i> plus summable errors."
         }
       ]
     },
@@ -157,7 +169,9 @@
             8766
           ],
           "physics": "Two regions separated by a buffer that tapers linearly toward finitely many points, and stays wider than a large multiple of log <i>L</i>, are almost independent. The proof adds cells one at a time using the two tile families of the area law. Gaussian filtering with the gap resets the cost after each annular step.",
-          "delivers": "Mutual information at most <i>L</i><sup>−<i>p</i></sup>, so the owner of the buffer can split its purification into two factors with small error."
+          "delivers": "Mutual information at most <i>L</i><sup>−<i>p</i></sup>, so the owner of the buffer can split its purification into two factors with small error.",
+          "figure": "angular",
+          "caption": "Two regions <i>X</i> and <i>Y</i> separated by a buffer that narrows linearly toward a point but never drops below a large multiple of log <i>L</i> (orange). Their mutual information is at most a fixed inverse power of <i>L</i>."
         },
         {
           "title": "Small patches with polynomial rank",
@@ -165,7 +179,9 @@
             8767
           ],
           "physics": "Near a square of logarithmic size, the state lies almost entirely in an orthogonal sum of subspaces. Each is spanned by a few vectors inside a nested square, tensored with everything outside. The proof combines nested filters, the gap and the area law, and needs no sharp truncation at one fixed boundary.",
-          "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>, so the label (<i>j</i>, ℓ) fits in a small register at junctions."
+          "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>, so the label (<i>j</i>, ℓ) fits in a small register at junctions.",
+          "figure": "patch",
+          "caption": "Left: nested squares around a square of side about log <i>L</i>. Right: the inside rank of each subspace in the orthogonal sum, as bars. Their total is polynomial in <i>L</i>, so the label fits in a small register."
         },
         {
           "title": "Local moves on frames",
@@ -175,7 +191,9 @@
             8771
           ],
           "physics": "The elementary operations change which party owns a region, create or retire a party, and exchange registers between two copies of the state. Each uses only private maps and normalized bipartite vectors, which may be highly entangled.",
-          "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol."
+          "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol.",
+          "figure": "moves",
+          "caption": "The three elementary moves, each drawn before and after: a region passes from party <i>a</i> to party <i>b</i>; a party splits off a new party or retires; a register (orange) moves between two copies of the state."
         },
         {
           "title": "A dyadic distribution protocol",
@@ -183,7 +201,9 @@
             8772
           ],
           "physics": "One party starts with Ω. Ownership passes down a hierarchy of dyadic squares until each site has its own party. Extra copies of Ω supply the surrounding regions that each change of owner needs.",
-          "delivers": "Every party takes part in boundedly many operations with other parties, at two adjacent scales."
+          "delivers": "Every party takes part in boundedly many operations with other parties, at two adjacent scales.",
+          "figure": "dyadic",
+          "caption": "The hierarchy as small multiples, from one party to one party per site. The outlined square in each panel is a parent; its children (blue) are the parties it interacts with at the next scale."
         },
         {
           "title": "Compress the shared resources",
@@ -192,7 +212,9 @@
             8769
           ],
           "physics": "The protocol uses pair resources of unbounded Schmidt rank. In the density calculation they are replaced by polynomial sums of product operators. Bounded participation limits the coefficient cost, and a Gaussian second-moment bound controls the error.",
-          "delivers": "A trace-norm error independent of every private dimension, and an operator network with polynomial bonds on the party graph."
+          "delivers": "A trace-norm error independent of every private dimension, and an operator network with polynomial bonds on the party graph.",
+          "figure": "compress",
+          "caption": "A pair resource of unbounded Schmidt rank (orange bond) is replaced, in the density calculation, by a sum of polynomially many product operators. The products share no bond, so the cost is set by the number of terms."
         },
         {
           "title": "Back to a vector on the grid",
@@ -202,7 +224,9 @@
             8773
           ],
           "physics": "One product-basis column of the compressed operator gives a nonzero vector close to Ω. The links join parties at nearby dyadic scales. Routed along rows and columns, they cross each lattice edge a bounded number of times.",
-          "delivers": "A PEPS on the original <i>L</i>×<i>L</i> grid with bond dimension at most <i>C L<sup>c</sup></i> and error at most 1/<i>L</i>."
+          "delivers": "A PEPS on the original <i>L</i>×<i>L</i> grid with bond dimension at most <i>C L<sup>c</sup></i> and error at most 1/<i>L</i>.",
+          "figure": "routing",
+          "caption": "The links between parents and children on an 8 × 8 grid, routed first along a row and then along a column. Stroke width counts the links that share each lattice edge, which sets the bond dimension there."
         }
       ]
     },
@@ -223,7 +247,9 @@
             8741
           ],
           "physics": "Both proofs use the same definitions: Hamiltonians on finite lattice domains, possibly with holes; regional reduced states and their entropies; the equivalence of the global gap with an energy estimate; and an exact match between the PEPS of the papers and the tensor networks of TNLean.",
-          "delivers": "Lean statements of both main theorems with no hypothesis the papers lack."
+          "delivers": "Lean statements of both main theorems with no hypothesis the papers lack.",
+          "figure": "domain",
+          "caption": "A finite domain Λ of the square lattice, with a hole and an irregular edge, and a region <i>A</i> (blue). The orange edges form ∂<sub>Λ</sub><i>A</i>, the count that the area law bounds the entropy by."
         }
       ]
     }

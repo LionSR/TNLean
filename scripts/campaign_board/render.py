@@ -7,7 +7,8 @@ Writes OUT_DIR/index.html, a self-contained page whose only external requests
 are Google Fonts, and OUT_DIR/data.json, the snapshot with the campaign's
 configuration and gap summaries merged in.
 
-CAMPAIGN_DIR provides config.json, gaps.json and intro.html; the page shell,
+CAMPAIGN_DIR provides config.json, gaps.json, and optionally intro.html and
+figures.js (the stage figures named in config.json); the page shell,
 stylesheet and script are shared by every campaign and live next to this file.
 """
 from __future__ import annotations
@@ -35,11 +36,13 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
         "meta": {"workflowUrl": blob_url + WORKFLOW, "gapsPath": gaps_rel, "gapsUrl": blob_url + gaps_rel},
     })
     intro = campaign_dir / "intro.html"
+    figures = campaign_dir / "figures.js"
     replacements = {
         "{{TITLE}}": html.escape(config["pageTitle"]),
         "{{DESCRIPTION}}": html.escape(config.get("description", "")),
         "{{CSS}}": (HERE / "board.css").read_text(),
         "{{INTRO}}": intro.read_text() if intro.exists() else "",
+        "{{FIGURES}}": figures.read_text() if figures.exists() else "",
         "{{JS}}": (HERE / "board.js").read_text(),
         # Inline JSON must not close the surrounding <script> element.
         "{{DATA}}": json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/"),

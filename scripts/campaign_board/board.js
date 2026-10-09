@@ -273,14 +273,25 @@
           ...landed.slice(-6).map(p => el("li", {}, prChip(p), el("span", { text: prTitle(p.title) }))),
           landed.length > 6 ? el("li", {}, el("span"), el("span", { class: "muted", text: `and ${landed.length - 6} earlier` })) : null,
           landed.length ? null : el("li", {}, el("span"), el("span", { class: "muted", text: "Nothing merged yet." })));
+        // A campaign's figures.js may draw a schematic beside the stage text.
+        const draw = st.figure && (window.campaignFigures || {})[st.figure];
+        let figure = null;
+        if (draw) {
+          const svg = sv("svg", { role: "img", "aria-label": st.figureAlt || st.title });
+          figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: st.caption }) : null);
+          try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
+        }
         container.append(el("div", { class: "stage" },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },
             el("div", { class: "head" }, el("h3", { text: st.title }),
               sections.length ? el("span", { class: "secs", text: sections.length > 1 ? `§§${sections[0]}–${sections[sections.length - 1]}` : `§${sections[0]}` }) : null,
               statusPill(status), ...gapBadges),
-            el("p", { class: "phys", html: st.physics }),
-            el("p", { class: "out", html: "<b>Delivers.</b> " + st.delivers }),
+            el("div", { class: figure ? "lead hasfig" : "lead" },
+              el("div", { class: "txt" },
+                el("p", { class: "phys", html: st.physics }),
+                el("p", { class: "out", html: "<b>Delivers.</b> " + st.delivers })),
+              figure),
             el("div", { class: "meta" },
               el("div", { class: "box" }, el("h4", { text: results.length ? `Paper results (${results.length})` : "Paper results" }),
                 results.length ? resultList : el("span", { class: "muted", text: "Shared definitions; no named result." })),
