@@ -1,8 +1,8 @@
 {
-  "reviewedAt": "2026-10-08T15:56Z",
+  "reviewedAt": "2026-10-09T23:03Z",
   "entries": [
     {
-      "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
+      "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
       "repo": "QICLean",
       "kind": "narrower",
       "status": "open",
@@ -13,11 +13,11 @@
       "prs": {
         "QICLean": [
           605,
-          607
+          694
         ]
       },
       "claims": "To build the small-patch subspaces, the paper minimizes the norm of an ordered product of regional filters. From the first-order conditions at the minimizer it derives that each regional output state is dominated by its optimal density plus a small shift, ρ_j ≤ x_j + b·1.",
-      "found": "QICLean proves the consequences of this inequality. The regulator is bounded by b·1 and by ρ, its trace by b·rank Q + tr((1−Q)ρ) for every projection Q, and hence by 1/4 at the paper's starting radius. QICLean #607 recovers commutation from shifted powers. The inequality itself, and the commutation of the minimizing densities with the outputs, are not yet derived for the ordered objective. Until they are, Proposition 4.1 is not formalized.",
+      "found": "QICLean proves the consequences of this inequality. The regulator is bounded by b·1 and by ρ, its trace by b·rank Q + tr((1−Q)ρ) for every projection Q, and hence by 1/4 at the paper's starting radius. QICLean #694 recovers commutation from shifted powers. The inequality itself, and the commutation of the minimizing densities with the outputs, are not yet derived for the ordered objective. Until they are, Proposition 4.1 is not formalized.",
       "impact": "No problem with the paper has been found. This is the most delicate open step in Proposition 4.1, because the paper reaches the inequality through descending trace calculations on a noncommutative objective. The note warns against substituting a simpler separable objective.",
       "plan": "Carry out the descending trace calculations for the ordered objective, derive the commutation and first-order conditions, and apply the regulator bounds already proved."
     },
@@ -185,6 +185,25 @@
       "found": "The first Lean version required commutation on the whole tensor power, which is stronger. It can fail when two regions overlap without nesting: for three qubits, an explicit commutator is nonzero on the full tensor power and zero on the symmetric subspace. QICLean now restricts the operators to the symmetric subspace and assumes exactly the paper's condition.",
       "impact": "None. The paper's hypothesis was the right one, and the first formal version was stricter than needed.",
       "plan": "Nothing further."
+    },
+    {
+      "id": "docs/paper-gaps/oai26_literal_transport_measures.tex",
+      "repo": "QICLean",
+      "kind": "convention",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Proposition 7.4",
+      "title": "The coherent measures of the transport estimate",
+      "issue": 8752,
+      "prs": {
+        "QICLean": [
+          725
+        ]
+      },
+      "claims": "Proposition 7.4 represents the transported replica states by coherent measures on the one-copy unit sphere: the image of Haar measure with a density given by the overlap of the state with a coherent projection, and for a terminal leaf a Fourier average of the actual terminal state.",
+      "found": "QICLean constructs both measures exactly as the paper writes them and proves that they are finite and integrable and that they reproduce the transported states. The Fourier average has total mass 1/2 on normalized states, not one, and the history and choice weights stay outside it, as in the paper. The paper introduces the terminal states only for interpolation parameters strictly between the endpoints. Lean also covers a terminal leaf of zero weight, where the normalization gives the zero state and the zero measure. That boundary case is a convention of the formalization, not a claim attributed to the paper.",
+      "impact": "None. The note records no defect in the paper.",
+      "plan": "Nothing remains for this note. Applying the measures to the physical scan data, and the continuity in the interpolation parameter, are separate items of the campaign."
     }
   ],
   "checked": [
