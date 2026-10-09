@@ -3335,3 +3335,30 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Caveat:** this is the geometric covering estimate. The safety of the
   selected squares, their physical entropy estimate, and the one-step
   improvement of the safe-box exponent are separate results.
+
+## Safe rectangle-shell entropy
+
+- **Declarations:** Geometry.latticeDyadicRect and its three rectangle identities;
+  Geometry.biUnion_rectRegion_cappedDyadicPartition,
+  Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
+  Geometry.regionalEntropy_filter_le_sum_rectRegion,
+  Geometry.regionalEntropy_filter_le_weighted_cover,
+  IsSafe.isSafe_cappedDyadicPartition_shell, and
+  IntRect.regionalEntropy_shell_le_of_safe_box, all in
+  TNLean.PEPS.AreaLaw.
+- **Meaning:** the actual capped dyadic partition of Q.dilate(j) minus Q
+  consists of safe integer squares when j ≤ L, 2^K ≤ L and
+  D₀ * L + L ≤ D₀ * size(Q). If the original unit vector satisfies the
+  pointwise safe-rectangle estimate C * size(R)^(1+e), then its entropy on
+  A intersect this shell is at most
+  C * (24 + 64/(2^e - 1)) * size(Q) * L^e, assuming also e > 0,
+  C ≥ 0, L ≤ size(Q) and L < 2^(K+1).
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Lemma 9.4, lines 641–667, and the proof of Proposition 9.5,
+  08-scanner.tex, lines 717–729, at
+  openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+- **Scope:** the rectangle identities and physical partition allow negative
+  coordinates, holes and disconnected domains. The weighted entropy-cover
+  lemma itself permits arbitrary real C and e. The final shell theorem
+  assumes the pointwise safe-box estimate and derives the selected squares'
+  safety and covering; it does not prove the physical exponent improvement.

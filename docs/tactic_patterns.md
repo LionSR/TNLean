@@ -6147,3 +6147,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   template arguments still need the corresponding refactoring in their
   owning PR. The identity is valid for signed real weights, empty
   partitions and cap zero; no positivity premise is necessary.
+
+### Entropy summation over selected dyadic rectangles — candidate (2026-10-09)
+
+- **Pattern:** intersect a disjoint lattice partition with the same physical
+  region, apply entropy subadditivity for the same unit vector, and sum a
+  pointwise rectangle estimate using the exact side length of each cell.
+- **Seen:** the template core and shell estimates in
+  `Geometry/TemplateBoxEntropy.lean` (the separately developed template
+  argument), and `WeakRectangleShellEntropy.lean`.
+- **Abstraction:** the shared public theorem
+  `Geometry.regionalEntropy_filter_le_weighted_cover` in
+  `Geometry/CappedDyadicEntropyCover.lean`.
+- **Notes:** the rectangle shell uses the shared theorem. The template
+  consumers retain the same proof terms when their four physical-cover
+  declarations move to this module; that extraction is coordinated with
+  the template development. No sign condition on C or e is needed for
+  the entropy summation itself.

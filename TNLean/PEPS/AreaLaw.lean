@@ -55,4 +55,6 @@ import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.WeakRectangleShellEntropy
+import TNLean.PEPS.AreaLaw.WeakRectangleShellSafety
 import TNLean.PEPS.AreaLaw.ZeroBoundary
