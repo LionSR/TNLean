@@ -49,6 +49,8 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
           (supportedOperators_mono hinside hA) (one_mem_supportedOperators _))
         (sheetSwapOp_mul_kronecker_of_mem_supportedOperators
           (one_mem_supportedOperators _) (supportedOperators_mono hinside hA))
-  · done
+  · exact (commute_sheetSwapOp_kronecker houtside hA
+      (one_mem_supportedOperators _)).add_right
+      (commute_sheetSwapOp_kronecker houtside (one_mem_supportedOperators _) hA)
 
 end TNLean.PEPS.EncodedFrame
