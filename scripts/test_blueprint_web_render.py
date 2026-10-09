@@ -78,31 +78,6 @@ def _generated_pages(root: Path) -> list[Path]:
     return pages
 
 
-# A dependency-graph page embeds one modal per statement and lays the whole
-# graph out with graphviz in the browser.  The full-document graph holds every
-# statement in the blueprint and the largest per-chapter graphs hold thousands
-# more, which no in-browser graphviz lays out within a single page budget -- the
-# layout never finishes and the readiness wait times out.  The per-chapter and
-# subset graphs still cover every node for the reader, the graph worker is
-# exercised on a small fixture by test_blueprint_graph_worker.py, and every
-# graph page (whatever its size) still has its generated source checked by the
-# first pass below.  Only the browser layout of a graph larger than this is
-# skipped.
-MAX_BROWSER_GRAPH_NODES = 500
-
-
-def _is_oversized_graph(page: Path) -> bool:
-    """Whether a dependency-graph page is too large for an in-browser layout.
-
-    Each graph node contributes exactly one modal container, so counting them
-    measures the graph graphviz would have to lay out on the page.
-    """
-    if not page.name.startswith("dep_graph_"):
-        return False
-    source = page.read_text(encoding="utf-8", errors="replace")
-    return source.count("dep-modal-container") > MAX_BROWSER_GRAPH_NODES
-
-
 def _assert_no_renderer_internals(page: Path, source: str) -> None:
     """No attribute may carry a renderer object where a name belongs.
 
@@ -392,16 +367,7 @@ def main() -> int:
     pages = _generated_pages(root)
     _assert_generated_source(pages)
 
-    # Oversized graph pages keep their source checks above but are left out of
-    # the browser pass, whose in-browser graphviz cannot lay them out in time.
-    renderable, oversized = [], []
-    for page in pages:
-        (oversized if _is_oversized_graph(page) else renderable).append(page)
-    if oversized:
-        print(json.dumps(
-            {"skipped_oversized_graphs": sorted(page.name for page in oversized)}))
-
-    batches = _balanced_batches(renderable, max(1, args.jobs))
+    batches = _balanced_batches(pages, max(1, args.jobs))
     mathjax = _mathjax_bundle(root)
     with serve(root) as base_url:
         if len(batches) == 1:
