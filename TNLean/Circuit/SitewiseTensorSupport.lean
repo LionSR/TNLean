@@ -48,7 +48,11 @@ theorem reindex_kronecker_mem_supportedOperators
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators e T) :
     Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
       (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T) := by
-  refine Submodule.span_induction₂ ?_ ?_ ?_ ?_ ?_ ?_ ?_ hA hB
+  refine Submodule.span_induction₂
+    (p := fun A B _ _ ↦
+      Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
+        (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T))
+    ?_ ?_ ?_ ?_ ?_ ?_ ?_ hA hB
   done
 
 end QuantumCircuit
