@@ -1,0 +1,91 @@
+\section{Conditional movement and skew estimates on lattice regions}
+\label{sec:area_law_conditional_estimates}
+
+The conditional movement estimate and the conditional skew estimate
+of~\cite[Lemmas~5.1 and~5.3]{OpenAI2026AreaLaw} are stated for a unit vector
+on four finite-dimensional systems. Here the four systems are four regions
+partitioning a finite domain $\Lambda$, and every operator acts on its region
+as in Definition~\ref{def:area_law_hamiltonian}. The vector is an arbitrary
+unit vector; neither estimate uses a Hamiltonian or a gap. For a positive
+semidefinite $\rho$ write $\hat\rho=\rho+\Pi_{\ker\rho}$, and let
+$\rho^{[s]}$ be the real power of $\rho$ on its support, extended by zero on
+its kernel.
+
+\begin{theorem}[Entropy exponent of a regional move]
+    \label{thm:area_law_movement_eta}
+    \lean{TNLean.PEPS.AreaLaw.movementEta_eq_condMutualInfo_left,
+        TNLean.PEPS.AreaLaw.movementEta_eq_condMutualInfo_right,
+        TNLean.PEPS.AreaLaw.movementEta_nonneg}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $P,x,Y,F$ partition $\Lambda$ and let $\theta$ be a unit vector. Then
+    \begin{align}
+        \eta_\theta=S_\theta(x|P)+S_\theta(x|Y)=I_\theta(x:F|P)=I_\theta(x:F|Y)\ge0,
+    \end{align}
+    where $S_\theta(x|R)=S_\theta(R\cup x)-S_\theta(R)$.
+\end{theorem}
+\begin{proof}\leanok
+    Complementary regions of a pure vector have equal entropy, so
+    $S_\theta(x\cup Y)=S_\theta(F\cup P)$ and
+    $S_\theta(Y)=S_\theta(x\cup F\cup P)$, which gives the first identity; the
+    second follows by exchanging $P$ and $Y$. Nonnegativity is strong
+    subadditivity.
+\end{proof}
+
+\begin{theorem}[Conditional movement estimate on lattice regions]
+    \label{thm:area_law_lattice_movement}
+    \lean{TNLean.PEPS.AreaLaw.exists_norm_movement_le}
+    \leanok
+    \uses{thm:area_law_movement_eta}
+    There are universal constants $C,c>0$ such that the following holds. Let
+    $P,x,Y,F$ partition a finite domain with local dimension $q$, let $\theta$
+    be a unit vector, let $\sigma\ge0$ on $P\cup x$ and $\tau\ge0$ on
+    $x\cup Y$ have trace at most one, put $\ell=\log(\mathrm e\,q^{|x|})$, and
+    let $0<a\ell\le c$. Then
+    \begin{align}
+        \bigl\|\sigma^{a/2}\hat\rho_P^{-a/2}\tau^{a/2}\hat\rho_Y^{-a/2}\theta\bigr\|
+        \le\exp\Bigl(-\frac a2\eta_\theta+Ca^{5/4}\ell^2\Bigr).
+    \end{align}
+    This is~\cite[Lemma~5.1]{OpenAI2026AreaLaw} with $U=Y$.
+\end{theorem}
+\begin{proof}\leanok
+    The estimate holds for four regions partitioning any finite set of sites
+    with arbitrary local dimensions: ordering the configurations as
+    $(x\times Y)\times(P\times F)$ turns the regional states into the
+    marginals of $\theta$, operators on a region into tensor products with the
+    identity, and the exponent into $\eta_\theta$, so this regional form
+    is~\cite[Lemma~5.1]{OpenAI2026AreaLaw}. Specialize it to the sites of
+    $\Lambda$ with local dimension $q$; the regional states, entropies and
+    placements of the finite-domain model are those of the general regional
+    form.
+\end{proof}
+
+\begin{theorem}[Conditional skew estimate on lattice regions]
+    \label{thm:area_law_lattice_skew}
+    \lean{TNLean.PEPS.AreaLaw.skewSymbol, TNLean.PEPS.AreaLaw.skewSymbol_skew_le}
+    \leanok
+    \uses{thm:area_law_movement_eta}
+    Let $P_0,P_1,x,U,F$ partition a finite domain with local dimension $q$, put
+    $P=P_0\cup P_1$ and $Y=x\cup U$, let $\theta$ be a unit vector and let
+    $0\le h\le1$ act on $P_0\cup x$. Put
+    \begin{align}
+        f(t)=\bigl\langle\theta,\rho_P^{[t]}\rho_Y^{[-t]}h\,\rho_P^{[-t]}\rho_Y^{[t]}\theta\bigr\rangle,
+    \end{align}
+    $\ell_h=\log(\mathrm e\,q^{|P_0|+|x|})$ and
+    $\eta_\theta=S_\theta(x|P)+S_\theta(x|U)$. If $0<a\ell_h\le1/8$, then
+    \begin{align}
+        |f(a/2)|-\operatorname{Re}f(a/2)\le Ca^2\ell_h^4\eta_\theta^{1/8},
+        \qquad C=18\pi^2+6144\,\mathrm e^{\pi^2+1}.
+    \end{align}
+    This is~\cite[Lemma~5.3]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    The estimate holds for five regions partitioning any finite set of sites
+    with arbitrary local dimensions: in the coordinates
+    $(P_0\times P_1)\times((x\times U)\times F)$ the function $f$ is the
+    function of~\cite[Lemma~5.3]{OpenAI2026AreaLaw} for the reordered vector,
+    whose conditional mutual information $I(x:F|U)$ is
+    $S_\theta(x|P)+S_\theta(x|U)$. Specialize this regional form to the sites
+    of $\Lambda$ with local dimension $q$, identifying the regional data of
+    the finite-domain model as in Theorem~\ref{thm:area_law_movement_eta}.
+\end{proof}
