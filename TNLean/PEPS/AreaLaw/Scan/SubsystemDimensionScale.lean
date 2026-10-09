@@ -103,6 +103,7 @@ theorem exists_transportCoefficients_log_bound {q : ℕ} {Cr : ℝ}
         (hcap.trans (transportLogDimBound_roundedLogRadius_le hq hCr hn)) hE
       _ = _ := by
         rw [Real.mul_rpow hA (pow_nonneg hn0 4), ← Real.rpow_natCast_mul hn0 4 E]
+        norm_num
   have hbound (c e : ℝ) (hc : |c| ≤ |Cent| + |Cen|) (he : e ≤ E) :
       c * ℓ ^ e ≤ C * (Real.log n) ^ (4 * E) := by
     calc
