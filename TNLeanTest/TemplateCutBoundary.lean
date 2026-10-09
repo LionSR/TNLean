@@ -365,20 +365,26 @@ example : (latticeDyadicRect 0 (-3, 2)).size = 1 := by simp
 
 -- A genuine selected core cell is safe for the disconnected domain's nonempty cut.
 example : IsSafe disconnectedDomain disconnectedCut 1 (latticeDyadicRect 0 (0, 0)) := by
-  apply disconnected_separated.isSafe_cappedDyadicPartition_core (by decide) 0 0 (0, 0)
-    (by decide)
+  apply Template.IsSeparated.isSafe_cappedDyadicPartition_core
+    (T := thinDiagonalTemplate) (D₀ := 1)
+    (by simpa only [Nat.cast_one] using disconnected_separated)
+    (by decide) 0 0 (0, 0) (by decide)
   decide
 
 -- Maximal permitted dilation, a cap-scale square, and a negative index.
 example : IsSafe disconnectedDomain disconnectedCut 1 (latticeDyadicRect 1 (-1, 0)) := by
-  apply disconnected_separated.isSafe_cappedDyadicPartition_shell (by decide)
-    3 1 1 (-1, 0) (by decide) (by decide)
+  apply Template.IsSeparated.isSafe_cappedDyadicPartition_shell
+    (T := thinDiagonalTemplate) (D₀ := 1)
+    (by simpa only [Nat.cast_one] using disconnected_separated)
+    (by decide) 3 1 1 (-1, 0) (by decide) (by decide)
   decide +kernel
 
 -- A unit shell rectangle has a nonempty physical intersection, despite domain holes.
 example : IsSafe disconnectedDomain disconnectedCut 1 (latticeDyadicRect 0 (1, 0)) := by
-  apply disconnected_separated.isSafe_cappedDyadicPartition_shell (by decide)
-    1 0 0 (1, 0) (by decide) (by decide)
+  apply Template.IsSeparated.isSafe_cappedDyadicPartition_shell
+    (T := thinDiagonalTemplate) (D₀ := 1)
+    (by simpa only [Nat.cast_one] using disconnected_separated)
+    (by decide) 1 0 0 (1, 0) (by decide) (by decide)
   decide +kernel
 
 example : (rectRegion disconnectedCut (latticeDyadicRect 0 (1, 0))).Nonempty := by
