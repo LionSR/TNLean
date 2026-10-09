@@ -28,6 +28,24 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
+/-- The retained part of one triangle of the actual all-midpoint fan.
+The color-change radials are removed, and the triangle is restricted to the
+open ball whose radius is the half-side of the dyadic cell.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 352–370, and
+`prop:two-families`, lines 308–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+The color assignment is arbitrary, and the change set may be empty. -/
+def cellFanCutPiece (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+    (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2)
+    (s : CellFanSlot (fun _ : Fin 4 ↦ true)) : Set (ℝ × ℝ) :=
+  ((cellFanPolygon o ℓ z (fun _ ↦ true) s).region \
+      (⋃ t ∈ {t | family t ≠ family (cellFanNext t)},
+        segment ℝ (cellFanCenter o ℓ z)
+          (cellFanEnd o ℓ z (fun _ ↦ true) t))) ∩
+    Metric.ball (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2)
+
 /-- Adjacent equally colored triangles of the actual all-midpoint fan have
 a common point in the open centered square after all color-change radials
 are removed. The radius is the actual half-side of the dyadic cell.
@@ -43,28 +61,13 @@ theorem cellFanPolygon_cut_inter_nonempty_of_adj
     (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2)
     (i j : CellFanSlot (fun _ : Fin 4 ↦ true))
     (hadj : (cellFanRunGraph o ℓ z (fun _ ↦ true) family).Adj i j) :
-    let c := cellFanCenter o ℓ z
-    let r := (2 : ℝ) ^ ℓ / 2
-    let A : Set (CellFanSlot (fun _ : Fin 4 ↦ true)) :=
-      {t | family t ≠ family (cellFanNext t)}
-    let L := ⋃ t ∈ A,
-      segment ℝ c (cellFanEnd o ℓ z (fun _ ↦ true) t)
-    let S := fun s : CellFanSlot (fun _ : Fin 4 ↦ true) ↦
-      ((cellFanPolygon o ℓ z (fun _ ↦ true) s).region \ L) ∩ Metric.ball c r
-    (S i ∩ S j).Nonempty := by
+    (cellFanCutPiece o ℓ z family i ∩ cellFanCutPiece o ℓ z family j).Nonempty := by
   have horient := hadj.2.1
-  dsimp only
-  let S := fun s : CellFanSlot (fun _ : Fin 4 ↦ true) ↦
-    (((cellFanPolygon o ℓ z (fun _ ↦ true) s).region \
-        (⋃ t ∈ {t | family t ≠ family (cellFanNext t)},
-          segment ℝ (cellFanCenter o ℓ z)
-            (cellFanEnd o ℓ z (fun _ ↦ true) t))) ∩
-      Metric.ball (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2))
-  change (S i ∩ S j).Nonempty
   have hforward (u v : CellFanSlot (fun _ : Fin 4 ↦ true))
       (he : cellFanEnd o ℓ z (fun _ ↦ true) u =
         cellFanStart o ℓ z (fun _ ↦ true) v)
-      (hc : family u = family v) : (S u ∩ S v).Nonempty := by
+      (hc : family u = family v) :
+      (cellFanCutPiece o ℓ z family u ∩ cellFanCutPiece o ℓ z family v).Nonempty := by
     have hv : v = cellFanNext u :=
       (cellFanEnd_eq_cellFanStart_iff o ℓ z u v).mp he
     have hce : dist (cellFanCenter o ℓ z)
@@ -105,6 +108,7 @@ theorem cellFanPolygon_cut_inter_nonempty_of_adj
       ⟨⟨(cellFanPolygon_mem_iff_of_mem_radial o ℓ z (fun _ ↦ true) v u m
         hmc hmradial).mpr (Or.inr he), hmcut⟩, hmball⟩⟩
   exact horient.elim (fun h ↦ hforward i j h hadj.2.2)
-    (fun h ↦ Set.inter_comm (S j) (S i) ▸ hforward j i h hadj.2.2.symm)
+    (fun h ↦ Set.inter_comm (cellFanCutPiece o ℓ z family j)
+      (cellFanCutPiece o ℓ z family i) ▸ hforward j i h hadj.2.2.symm)
 
 end TNLean.PEPS.AreaLaw.Geometry

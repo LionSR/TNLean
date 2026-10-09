@@ -13,20 +13,9 @@ Definition~\ref{def:area_law_fan_runs} in the fan construction of
     \label{thm:area_law_fan_cut_run_connected}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_cut_inter_ball_isConnected}
     \leanok
-    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor,
-        def:area_law_fan_runs}
-    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
-    $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
-    Write $c$ for its center and $r=2^\ell/2>0$ for its half-side.
-    Equip the plane with the maximum norm.
-    Subdivide every side at its midpoint, obtaining eight triangles
-    $P_i=\operatorname{conv}\{c,a_i,b_i\}$ indexed in perimeter order
-    by $\mathcal J$. Let $\tau$ be the cyclic successor and assign
-    arbitrary colors $f_i\in\{0,1\}$. Define
-    \begin{align}
-        A & =\{t\in\mathcal J:f_t\ne f_{\tau(t)}\}, \\
-        L & =\bigcup_{t\in A}[c,b_t].
-    \end{align}
+    \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs}
+    Consider the arbitrary fan, coloring and retained pieces $S_i$ of
+    Definition~\ref{def:area_law_fan_cut_piece}.
     Retain the adjacency between consecutive triangles precisely when
     their colors agree. For each connected component $R$ of this graph,
     put $T_R=\bigcup_{i\in R}P_i$. Then
@@ -34,13 +23,12 @@ Definition~\ref{def:area_law_fan_runs} in the fan construction of
     The change set $A$ may be empty. Components with the same color
     remain distinct runs.
 \end{theorem}
-\begin{proof}\leanok
-    \uses{def:area_law_fan_runs,
+\begin{proof}
+    \leanok
+    \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs,
         thm:area_law_fan_cut_piece_connected,
         thm:area_law_fan_inactive_radial_intersection}
-    For each $i\in\mathcal J$, set
-    $S_i=(P_i\setminus L)\cap B_\infty(c,r)$.
-    Each $S_i$ is nonempty and connected by
+    Each retained piece $S_i$ is nonempty and connected by
     Theorem~\ref{thm:area_law_fan_cut_piece_connected}.
     A retained edge joins consecutive triangles with equal colors, so
     Theorem~\ref{thm:area_law_fan_inactive_radial_intersection} gives

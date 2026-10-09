@@ -5,12 +5,11 @@ Theorem~\ref{thm:area_law_fan_base_radial_directions}.
 The following assertion concerns the radial contacts described in
 Theorem~\ref{thm:area_law_fan_triangle_contact}.
 
-\begin{theorem}[Intersection across an inactive radial]
-    \label{thm:area_law_fan_inactive_radial_intersection}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_nonempty_of_adj}
+\begin{definition}[Retained fan pieces]
+    \label{def:area_law_fan_cut_piece}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanCutPiece}
     \leanok
-    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor,
-        def:area_law_fan_runs}
+    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor}
     Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
     $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
     Write $c$ for its center and $r=2^\ell/2>0$ for its half-side.
@@ -24,12 +23,26 @@ Theorem~\ref{thm:area_law_fan_triangle_contact}.
         L   & =\bigcup_{t\in A}[c,b_t],               \\
         S_i & =(P_i\setminus L)\cap B_\infty(c,r).
     \end{align}
+    Here $B_\infty(c,r)$ is the open maximum-norm ball.
+    The sets $S_i$ are the retained fan pieces. The change set $A$
+    may be empty. This is the local radial deletion used in the
+    initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Intersection across an inactive radial]
+    \label{thm:area_law_fan_inactive_radial_intersection}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_nonempty_of_adj}
+    \leanok
+    \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs}
+    Let $S_i$ be the retained pieces of
+    Definition~\ref{def:area_law_fan_cut_piece}.
     If $i,j$ are consecutive perimeter positions and $f_i=f_j$, then
     $S_i\cap S_j$ is nonempty. Here either $j=\tau(i)$ or
     $i=\tau(j)$ is permitted. The change set $A$ may be empty.
 \end{theorem}
-\begin{proof}\leanok
-    \uses{def:area_law_cell_fan,
+\begin{proof}
+    \leanok
+    \uses{def:area_law_fan_cut_piece,
         thm:area_law_cell_fan_successor_iff,
         thm:area_law_cell_fan_base_radius,
         thm:area_law_cell_fan_end_same_ray,

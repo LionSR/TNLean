@@ -104,5 +104,4 @@ theorem cellFanRunRegion_sdiff_radials_pairwise_disjoint
         (by simpa only [A, Set.mem_ofPred_eq, ← hinext] using hcolors),
         hinter ▸ ⟨hxi, hxj⟩⟩)
 
-
 end TNLean.PEPS.AreaLaw.Geometry

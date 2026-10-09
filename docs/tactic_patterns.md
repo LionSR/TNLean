@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
+
+- **Pattern:** repeat the region of a fan triangle after deleting the actual
+  successor color-change radials and intersecting with the open ball of
+  radius equal to the cell's half-side.
+- **Seen:** three descriptions across `FanInactiveSeams.lean` (the statement
+  and its local proof expression) and `FanRunConnectedness.lean`.
+- **Abstraction:** `cellFanCutPiece` in
+  `TNLean/PEPS/AreaLaw/Geometry/FanInactiveSeams.lean` names this common set.
+- **Refactor:** the inactive-radial statement and proof refer directly to the
+  definition; the connected-run proof uses it for its family of pieces and
+  unfolds it only in the final union identity.
+- **Notes:** the fan has all side midpoints, the colors lie in `Fin 2`, and
+  the radius and deleted radials are derived from the same actual cell and
+  coloring. No added hypothesis or more general construction is introduced.
+
 ### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
 
 - **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with

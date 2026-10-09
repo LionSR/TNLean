@@ -46,12 +46,7 @@ theorem cellFanRunRegion_cut_inter_ball_isConnected
     IsConnected ((cellFanRunRegion o ℓ z (fun _ ↦ true) family R \ L) ∩
       Metric.ball c r) := by
   dsimp only
-  let S := fun s : CellFanSlot (fun _ : Fin 4 ↦ true) ↦
-    (((cellFanPolygon o ℓ z (fun _ ↦ true) s).region \
-        (⋃ t ∈ {t | family t ≠ family (cellFanNext t)},
-          segment ℝ (cellFanCenter o ℓ z)
-            (cellFanEnd o ℓ z (fun _ ↦ true) t))) ∩
-      Metric.ball (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2))
+  let S := cellFanCutPiece o ℓ z family
   have hr : 0 < (2 : ℝ) ^ ℓ / 2 :=
     div_pos (pow_pos zero_lt_two ℓ) zero_lt_two
   let : Nonempty R.supp := R.nonempty_supp.to_subtype
@@ -71,7 +66,7 @@ theorem cellFanRunRegion_cut_inter_ball_isConnected
     exact Relation.ReflTransGen.mono hstep i j hpath
   have hconnected : IsConnected (⋃ i : R.supp, S i.val) :=
     IsConnected.iUnion_of_reflTransGen hpieces hchain
-  simpa only [S, ← Set.iUnion_inter, ← Set.iUnion_sdiff,
+  simpa only [S, cellFanCutPiece, ← Set.iUnion_inter, ← Set.iUnion_sdiff,
     Set.iUnion_subtype, cellFanRunRegion] using hconnected
 
 end TNLean.PEPS.AreaLaw.Geometry
