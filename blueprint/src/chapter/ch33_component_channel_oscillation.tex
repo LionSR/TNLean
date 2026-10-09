@@ -1,0 +1,135 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 124--139,
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This leaf states exact finite component stabilization and the finite-shell
+% full-channel bound. It does not assert deterministic Poisson propagation.
+
+\section{Component support and full-channel oscillation}
+\label{sec:qc_component_channel}
+
+Let $G$ be a graph on a finite set $I$, with extended graph distance
+$d_G:I\times I\to\N\cup\{\infty\}$. Fix an anchor $a\in I$ and write
+$C(a)=\{x\in I:d_G(a,x)<\infty\}$ and
+$N_l(a)=\{x\in I:d_G(a,x)\le l\}$.
+Let $R_a$ be the maximum distance from $a$ to a vertex in $C(a)$.
+Equivalently, take the maximum over all vertices after assigning zero
+to the distance from $a$ to an unreachable vertex.
+All distances are measured in $G$ itself; when $G$ is an induced-domain
+graph, no ambient distance is substituted.
+
+\begin{theorem}[Stabilization of graph balls]
+    \label{thm:qc_graph_ball_stabilization}
+    \lean{QuantumCircuit.graphBall_mono,
+        QuantumCircuit.notMem_graphBall_of_edist_eq_top,
+        QuantumCircuit.coe_graphBall_eq_reachable_of_sup_dist_le,
+        QuantumCircuit.exists_graphBall_eq_reachable}
+    \leanok
+    The balls $N_l(a)$ increase with $l$. Every $n\ge R_a$ satisfies
+    $N_n(a)=C(a)$. If $d_G(a,y)=\infty$, then $y\notin N_n(a)$ for
+    every finite $n$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The implication $d_G(a,x)\le m\le n\Rightarrow d_G(a,x)\le n$
+    proves monotonicity. Membership in a finite ball implies finite
+    distance, hence reachability from $a$. Conversely, a reachable
+    vertex $x$ has $d_G(a,x)\le R_a\le n$.
+    Infinite distance cannot be bounded by a natural number.
+\end{proof}
+
+Let $q>0$, $\mathcal H=(\C^q)^{\otimes I}$, and let
+$\mathcal K=\C^J$ for an arbitrary finite set $J$, possibly empty.
+For a physical operator $A$, put
+$\widehat A=A\otimes\mathbb 1_{\mathcal K}$.
+Write $E_X$ for the normalized partial-trace expectation onto
+$X\subseteq I$, as in Definition~\ref{def:qc_site_expectation}.
+For a positive contraction $k$ on $\mathcal H$, define its root channel by
+\begin{align}
+    \mathcal E_k(B)
+     & =\widehat{\sqrt{1-k}}\,B\,\widehat{\sqrt{1-k}}
+    +\widehat{\sqrt{k}}\,B\,\widehat{\sqrt{k}}.
+    \label{eq:qc_component_root_channel}
+\end{align}
+The local channels are $\mathcal E_{k,l}=\mathcal E_{E_{N_l(a)}(k)}$.
+Their shells are $\Delta_0=\mathcal E_{k,0}-\mathrm{id}$ and
+$\Delta_{l+1}=\mathcal E_{k,l+1}-\mathcal E_{k,l}$.
+Observables $B$ on $\mathcal H\otimes\mathcal K$ need not be Hermitian.
+
+\begin{theorem}[Exact component localization]
+    \label{thm:qc_component_channel_stabilization}
+    \uses{def:qc_site_expectation}
+    \lean{TNLean.PEPS.AreaLaw.siteExpectation_graphBall_eq_of_component_support,
+        TNLean.PEPS.AreaLaw.norm_sub_siteExpectation_graphBall_eq_zero_of_component_support,
+        TNLean.PEPS.AreaLaw.localRootChannel_graphBall_eq_of_component_support,
+        TNLean.PEPS.AreaLaw.exists_localRootChannel_graphBall_eq_of_component_support,
+        TNLean.PEPS.AreaLaw.localRootChannelShell_graphBall_succ_eq_zero_of_component_support}
+    \leanok
+    Every physical operator $A$ supported on $C(a)$ satisfies
+    $E_{N_n(a)}(A)=A$ and $\|A-E_{N_n(a)}(A)\|=0$ for $n\ge R_a$.
+    In particular, if $k$ is a positive contraction supported on $C(a)$,
+    then $\mathcal E_{k,n}(B)=\mathcal E_k(B)$ and
+    $\Delta_{n+1}(B)=0$ for all $n\ge R_a$ and all $B$.
+    The same radius works for every observable.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:qc_graph_ball_stabilization,lem:qc_site_expectation_properties}
+    For $n\ge R_a$, the ball is $C(a)$ and the expectation fixes every
+    operator supported there. Substitute $E_{N_n(a)}(k)=k$ into
+    (\ref{eq:qc_component_root_channel}) to obtain equality of channels.
+    Both terms in $\Delta_{n+1}(B)$ are then $\mathcal E_k(B)$.
+\end{proof}
+
+For a real sequence $\varepsilon_l$, put $b_0=2$ and
+$b_{l+1}=4(\sqrt{\varepsilon_{l+1}}+\sqrt{\varepsilon_l})$.
+Here the real square root is zero on negative inputs.
+Write $d_y(B)$ for the physical-site oscillation of
+Definition~\ref{def:qc_site_oscillation}.
+
+\begin{theorem}[Finite-shell bound for the full channel]
+    \label{thm:qc_component_channel_increment}
+    \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_component_support}
+    \leanok
+    Suppose $0\le k\le1$, $k$ is supported on $C(a)$, and $n\ge R_a$.
+    If $\|k-E_{N_l(a)}(k)\|\le\varepsilon_l$ for every $l\le n$, then
+    \begin{align}
+        \label{eq:qc_component_increment}
+        d_y(\mathcal E_k(B))
+         & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
+        b_l\sum_{z\in N_l(a)}d_z(B).
+    \end{align}
+    The coefficient has no factor depending on $\dim\mathcal K$.
+    This is the finite-radius consequence of exact component support in
+    \cite{OpenAI2026AreaLaw}, before choosing a decaying error bound.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization,
+        thm:al_channel_finite_increment}
+    Apply Theorem~\ref{thm:al_channel_finite_increment} to the increasing
+    regions $N_l(a)$. It gives the right side of
+    (\ref{eq:qc_component_increment}) with
+    $d_y(\mathcal E_{k,n}(B))$ on the left.
+    Exact component localization identifies this local channel with
+    $\mathcal E_k$, and $y\in N_l(a)$ is precisely $d_G(a,y)\le l$.
+\end{proof}
+
+\begin{theorem}[No increase across components]
+    \label{thm:qc_component_channel_disconnected}
+    \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_edist_eq_top}
+    \leanok
+    If $0\le k\le1$, $k$ is supported on $C(a)$, and
+    $d_G(a,y)=\infty$, then $d_y(\mathcal E_k(B))\le d_y(B)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization,
+        thm:al_root_channel_outside_oscillation}
+    At radius $R_a$, the local channel equals the full channel and
+    $y\notin N_{R_a}(a)$. Apply
+    Theorem~\ref{thm:al_root_channel_outside_oscillation}: the local channel
+    commutes with on-site unitary conjugation at $y$, and its contractivity
+    bounds each resulting commutator by its original norm. Taking the
+    supremum gives the claim.
+\end{proof}

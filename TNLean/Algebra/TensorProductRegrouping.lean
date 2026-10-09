@@ -16,7 +16,10 @@ and identifications of Euclidean tensor powers used to read registers of a stack
   with its interaction with `lTensor`, `rTensor` and the reassociation isometries.
 * `ContinuousLinearMap.clm_ext_tmul`, `ContinuousLinearMap.clm_ext_tmul₃`,
   `ContinuousLinearMap.tmul₃_induction` : extensionality and induction on pure tensors.
-* `EuclideanSpace.pairIso` : `ℂ^α ⊗ ℂ^β ≅ ℂ^{α × β}`.
+* `LinearIsometryEquiv.lTensor_tmul`, `LinearIsometryEquiv.rTensor_tmul` : isometric
+  equivalences on one factor, on pure tensors.
+* `EuclideanSpace.pairIso` : `ℂ^α ⊗ ℂ^β ≅ ℂ^{α × β}`, with
+  `EuclideanSpace.pairIso_single_tmul_single` on basis vectors.
 * `EuclideanSpace.consIso` : `ℂ^ι ⊗ ℂ^{Fin n → ι} ≅ ℂ^{Fin (n + 1) → ι}`, with
   `EuclideanSpace.piTensor_cons`, `EuclideanSpace.tensorPower_succ`,
   `CyclicInsertion.insertAt_zero_eq_consIso` and `CyclicInsertion.insertAt_succ_eq_consIso`.
@@ -116,6 +119,21 @@ theorem rTensor_comp_apply (f : F →L[ℂ] G) (g : H →L[ℂ] F) (z : H ⊗[�
 
 end ContinuousLinearMap
 
+namespace LinearIsometryEquiv
+
+variable {E F G : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+
+/-- A linear isometric equivalence on the second factor, on a pure tensor. -/
+theorem lTensor_tmul (e : F ≃ₗᵢ[ℂ] G) (x : E) (y : F) : e.lTensor E (x ⊗ₜ y) = x ⊗ₜ e y := by
+  simp [LinearIsometryEquiv.lTensor_def]
+
+/-- A linear isometric equivalence on the first factor, on a pure tensor. -/
+theorem rTensor_tmul (e : E ≃ₗᵢ[ℂ] F) (x : E) (y : G) : e.rTensor G (x ⊗ₜ y) = e x ⊗ₜ y := by
+  simp [LinearIsometryEquiv.rTensor_def]
+
+end LinearIsometryEquiv
+
 namespace EuclideanSpace
 
 variable {α β ι : Type} [Fintype α] [Fintype β] [Fintype ι]
@@ -129,6 +147,15 @@ def pairIso (α β : Type) [Fintype α] [Fintype β] :
 theorem pairIso_tmul_apply (x : EuclideanSpace ℂ α) (y : EuclideanSpace ℂ β) (i : α × β) :
     pairIso α β (x ⊗ₜ y) i = x i.1 * y i.2 := by
   simp [pairIso, OrthonormalBasis.tensorProduct_repr_tmul_apply', mul_comm]
+
+/-- `pairIso` sends `|a⟩ ⊗ |b⟩` to `|a, b⟩`. -/
+theorem pairIso_single_tmul_single [DecidableEq α] [DecidableEq β] (a : α) (b : β) :
+    pairIso α β ((EuclideanSpace.single a (1 : ℂ) : EuclideanSpace ℂ α) ⊗ₜ
+      (EuclideanSpace.single b (1 : ℂ) : EuclideanSpace ℂ β)) =
+      EuclideanSpace.single (a, b) (1 : ℂ) := by
+  ext i
+  rw [pairIso_tmul_apply]
+  simp only [PiLp.single_apply, ite_zero_mul_ite_zero, one_mul, Prod.ext_iff]
 
 /-- The identification `ℂ^ι ⊗ ℂ^{Fin n → ι} ≅ ℂ^{Fin (n + 1) → ι}` placing the first factor in
 register `0`. -/

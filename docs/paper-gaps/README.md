@@ -1094,24 +1094,26 @@ formalized for the canonical contraction and its reference error, and that
 for the approximation the branch expansion, the wire classification, the
 network of each branch, its truncation by Lemma 6.2 and the final rescaling
 are formalized, giving a contraction within `L^{-a}` of the rewrite that is a
-sum of explicit product terms. Two steps remain: reading each product term as
-an allowed monomial on a layout of the frame's registers by owner, and the
-polynomial count of terms, which needs the bound on the number of cylinder
-terms of Proposition 4.1 and bounded numbers of patches and affected holes.
+sum of explicit product terms. The registers of a frame, one per site and per
+tag, are now listed and identified with the canonical coordinates. Two steps
+remain: reading each product term as an allowed monomial on those registers,
+and the polynomial count of terms, which needs the bound on the number of
+cylinder terms of Proposition 4.1 and bounded numbers of patches and affected
+holes.
 
 ### Polynomial PEPS approximation: changes of ownership
 
 [polypeps_ownership_change_monomials.tex](polypeps_ownership_change_monomials.tex)
-records that Lemmas 6.5 and 6.6 of the September 24, 2026 polynomial PEPS
-manuscript are formalized with their source hypotheses, including the canonical
-maps and both reference-error bounds. The bounded-change clauses are formalized
-on the party layout of Theorem 5.2 only with the raw registers of each region
-held by one party grouped into one register: the birth and the death as a
-private contraction, one normalized pair source or pair effect and a private
-contraction, and the exchange corrections as one private contraction. Placing
-these monomials on the registers of a frame, one per site and per tag, and
-writing the renaming of the exchange as a composition of reorderings of tensor
-factors, await that list of registers.
+(scope restriction, resolved) records that Lemmas 6.5 and 6.6 of the September
+24, 2026 polynomial PEPS manuscript are formalized with their source
+hypotheses, including the canonical maps, both reference-error bounds and the
+bounded-change clauses. The bounded-change clauses first held only with the raw
+registers of each region grouped into one register; they are now proved on the
+registers of the frames, one per site and per tag, each held by its owner and
+identified with the canonical coordinates: the birth and the death as allowed
+monomials on `P∘` and `Q∘` with one normalized pair source or pair effect, and
+the exchange as the renaming, written as a word of exchanges of tensor factors,
+followed by one private contraction at `P∘`.
 
 ### Polynomial PEPS approximation: elimination of pair effects
 
@@ -1142,3 +1144,11 @@ is formalized from the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and
 Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
 construction of that package from the scan geometry and the transported states
 remains open.
+
+### Two-dimensional area law: nondegenerate template pieces
+
+[arealaw2d_nondegenerate_templates.tex](arealaw2d_nondegenerate_templates.tex)
+records that the closed convex rectangles and triangles of Definition 9.3 of
+the September 24, 2026 two-dimensional area-law manuscript are read in the
+ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
+orthogonal rectangle sides, as a convention built into the permitted polygons.
