@@ -642,6 +642,34 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateMixedSquares.lean
 
+      - name: Test exact nearest-neighbor crossing budget strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingBudget.lean
+
+      - name: Test crossing-budget standard axioms strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingBudgetAxioms.lean
+
+      - name: Test concrete one-edge crossing regression strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/EdgeCrossingOneEdge.lean
+
+      - name: Test template clearance strictly
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/TemplateClearance.lean
+
       - name: Test concrete hole encoder and standard axioms strictly
         run: |
           for file in TNLeanTest/HoleEncoder.lean TNLeanTest/HoleEncoderAxioms.lean TNLeanTest/RegionOperatorEmbedding.lean TNLeanTest/RegionOperatorEmbeddingAxioms.lean; do
@@ -771,6 +799,38 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateBoundary.lean
+
+      - name: Test actual scan histories strictly and audit axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanHistories.lean
+
+      - name: Test jointly satisfiable physical scan sampling
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanPhysicalSampling.lean
+
+      - name: Test actual offset counts and history marginals
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualOffsetDilution.lean
+
+      - name: Audit actual designated dilution axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualScanDilutionAxioms.lean
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
