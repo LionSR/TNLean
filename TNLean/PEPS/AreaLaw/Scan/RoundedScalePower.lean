@@ -68,7 +68,7 @@ theorem rounded_shell_coefficient_uniform_le {b e e₀ η C₂ : ℝ}
   have hdene : 0 < (2 : ℝ) ^ e - 1 := hdenb.trans_le hden
   have hcoeff : 24 + 64 / ((2 : ℝ) ^ e - 1) ≤
       24 + 64 / ((2 : ℝ) ^ b - 1) :=
-    add_le_add_left (div_le_div_of_nonneg_left (by norm_num) hdenb hden) 24
+    add_le_add_left (div_le_div_of_nonneg_left (by norm_num : (0 : ℝ) ≤ 64) hdenb hden) 24
   have hcoeff_nonneg : 0 ≤ 24 + 64 / ((2 : ℝ) ^ e - 1) :=
     add_nonneg (by norm_num) (div_nonneg (by norm_num) hdene.le)
   have hbase : 1 ≤ C₂ + 1 := by linarith
