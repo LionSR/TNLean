@@ -7,14 +7,14 @@
   const C = D.config;
 
   /* ---------- vocabulary ---------- */
-  const STATUS = { done: "Closed", landed: "Partly landed", review: "In review", draft: "Draft PR", ready: "Unblocked, no PR", blocked: "Blocked" };
+  const STATUS = { done: "Closed", landed: "Partly landed", review: "In review", draft: "Draft PR", ready: "Unblocked, no PR", blocked: "Blocked", untracked: "No tracked issue" };
   const ORDER = ["done", "landed", "review", "draft", "ready", "blocked"];
-  const RANK = { blocked: 0, ready: 1, draft: 2, review: 3, landed: 4, done: 5 };
+  const RANK = { untracked: -1, blocked: 0, ready: 1, draft: 2, review: 3, landed: 4, done: 5 };
   const GAP_KIND = {
     error: ["Error in the paper", "A printed claim fails as stated. It needs a correction and possibly a new argument."],
     "missing-step": ["Missing step", "The paper omits a nontrivial step. The claim may hold, but the argument is incomplete."],
     narrower: ["Lean narrower than the paper", "Lean currently proves a restricted version. The paper's argument appears sound, and the remaining work is formalization."],
-    convention: ["Convention", "A degenerate case, such as a zero dimension or an empty set, is read as the authors evidently intend."]
+    convention: ["Convention", "A degenerate case, such as a zero dimension or an empty set, is read as the authors intend."]
   };
   const GAP_STATUS = { open: ["Open", "st-draft"], "resolved-pending": ["Resolved in an open PR", "st-review"], resolved: ["Resolved", "st-done"] };
 
@@ -77,7 +77,11 @@
     else i.status = "blocked";
   }
   const leaves = D.issues.filter(i => i.stream);
-  const leastStatus = nums => nums.map(n => byNum.get(n)).filter(Boolean).reduce((a, i) => RANK[i.status] < RANK[a] ? i.status : a, "done");
+  /** Least advanced status among the issues; a result or stage with no collected issue is untracked, never done. */
+  const leastStatus = nums => {
+    const known = nums.map(n => byNum.get(n)).filter(Boolean);
+    return known.length ? known.reduce((a, i) => RANK[i.status] < RANK[a] ? i.status : a, "done") : "untracked";
+  };
 
   /* ---------- blocking graph ---------- */
   const preds = n => ((byNum.get(n) || {}).blockedBy || []).filter(b => byNum.has(b));
@@ -137,6 +141,21 @@
     C.sources ? el("span", {}, ext(C.sources, "Pinned sources")) : null
   );
 
+  /* ---------- the libraries doing the work ---------- */
+  const libs = C.repos.filter(r => r.homepage)
+    .map(r => ({ ...r, homepage: r.homepage.replace(/\/?$/, "/") }));
+  if (libs.length) {
+    $("libs").append("Formalized in the open-source Lean 4 libraries ",
+      ...libs.flatMap((r, k) => [k ? " and " : "", el("a", { href: r.homepage, text: r.name }), " (", ext(`https://github.com/${r.slug}`, "GitHub"), ")"]),
+      ".");
+    for (const r of libs) $("libcards").append(el("div", { class: "libcard" },
+      el("h3", {}, el("a", { href: r.homepage, text: r.name })),
+      el("p", { text: r.description || "" }),
+      el("div", { class: "links" },
+        el("a", { href: r.homepage, text: "Project site" }), el("a", { href: r.homepage + "blueprint/", text: "Blueprint" }),
+        el("a", { href: r.homepage + "docs/", text: "API docs" }), ext(`https://github.com/${r.slug}`, "GitHub"))));
+  } else $("libraries").hidden = true;
+
   /* ---------- headline cards from the intro ---------- */
   const statementPR = C.statementPR && D.prs.find(p => p.repo === PRIMARY.name && p.number === C.statementPR);
   for (const card of document.querySelectorAll(".thm[data-target]")) {
@@ -169,12 +188,31 @@
   );
   $("legend").append(el("span", { text: "Status:" }), ...ORDER.map(s => el("span", {}, el("i", { class: "sw st-" + s }), STATUS[s])));
 
+  /* ---------- inline tensor-network equations ---------- */
+  // A {{tn:name}} token in stage text is a word-sized tenkz equation set on the line.
+  const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}/g, (m, name) => {
+    const d = (D.inlineDiagrams || {})[name];
+    if (!d) return "";
+    return `<img class="tni" src="${d.src}" alt="${esc(d.alt || name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.25)}"` : ""}>`;
+  });
+
   /* ---------- gaps ---------- */
   const G = D.gaps || { entries: [], checked: [] };
   const isOpenGap = g => (g.status || "open") === "open";
   // Notes are identified by repository and path; two repositories may use the same file name.
   const gapKey = (repo, path) => `${repo || PRIMARY.name}:${path}`;
   const noteFor = g => (D.gapNotes || []).find(n => gapKey(n.repo, n.path) === gapKey(g.repo, g.id));
+  // The proof stage that owns an issue, for placing a gap or a badge in the walkthrough.
+  const stageOf = n => {
+    for (const route of C.routes) {
+      const idx = route.stages.findIndex(st => st.issues.includes(n));
+      if (idx >= 0) return { route, idx, stage: route.stages[idx], anchor: `stage-${route.id}-${idx + 1}` };
+    }
+    return null;
+  };
+  // Notes in different repositories may share a file name, so the anchor names the repository too.
+  const gapAnchor = g => `gap-${g.repo || PRIMARY.name}-${g.id.split("/").pop().replace(/\.tex$/, "")}`;
   (function renderGaps() {
     const curated = new Set(G.entries.map(g => gapKey(g.repo, g.id)));
     const pending = (D.gapNotes || []).filter(n => !curated.has(gapKey(n.repo, n.path)));
@@ -199,15 +237,21 @@
     for (const g of [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || order[a.kind] - order[b.kind])) {
       const note = noteFor(g);
       const [statusName, statusCls] = GAP_STATUS[g.status || "open"];
-      list.append(el("article", { class: "gap" },
-        el("div", { class: "where" }, el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }), el("span", { class: "pill " + statusCls, text: statusName }),
-          el("span", { text: `${(C.papers[g.paper] || {}).name || ""} · ${g.result}` })),
-        el("h3", { text: g.title }),
+      // Each entry is read on its own: where it sits in the proof, a one-line verdict, what the
+      // step does, then the claim, the finding, the risk and the next step.
+      const at = stageOf(g.issue);
+      const place = at ? el("a", { href: "#" + at.anchor, text: `${at.route.paper ? (C.papers[at.route.paper] || {}).name : "Shared foundations"}, stage ${at.idx + 1}: ${at.stage.title}` })
+        : el("span", { text: (C.papers[g.paper] || {}).name || "" });
+      list.append(el("article", { class: "gap", id: gapAnchor(g) },
+        el("div", { class: "where" }, el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }), el("span", { class: "pill " + statusCls, text: statusName }), place),
+        el("h3", {}, el("span", { text: g.title }), " ", el("span", { class: "res", text: g.result })),
+        g.summary ? el("p", { class: "summary", html: tnText(g.summary) }) : null,
+        g.context ? el("p", { class: "context", html: tnText(g.context) }) : null,
         el("dl", {},
-          el("div", {}, el("dt", { text: "The paper says" }), el("dd", { text: g.claims })),
-          el("div", {}, el("dt", { text: "What the formalization found" }), el("dd", { text: g.found })),
-          el("div", {}, el("dt", { text: "Does it threaten the theorem?" }), el("dd", { text: g.impact })),
-          el("div", {}, el("dt", { text: "Next step" }), el("dd", { text: g.plan }))),
+          el("div", {}, el("dt", { text: "The paper says" }), el("dd", { html: tnText(g.claims) })),
+          el("div", {}, el("dt", { text: "What Lean found" }), el("dd", { html: tnText(g.found) })),
+          el("div", {}, el("dt", { text: "Risk to the theorem" }), el("dd", { html: tnText(g.impact) })),
+          el("div", {}, el("dt", { text: "Next step" }), el("dd", { html: tnText(g.plan) }))),
         el("div", { class: "links" }, g.issue ? issueRef(g.issue) : null,
           ...Object.entries(g.prs || {}).flatMap(([repo, ns]) => ns.map(n => prRef(repo, n))),
           note ? el("span", { class: "muted mono", text: `${note.path.split("/").pop()} · note status: ${note.status || "unstated"}` }) : null)));
@@ -232,12 +276,12 @@
     for (const route of C.routes) {
       const container = el("div", { class: "route" });
       $("routes").append(el("section", { class: "part" },
-        el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: route.intro }) : null),
+        el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: tnText(route.intro) }) : null),
         container));
       route.stages.forEach((st, idx) => {
         const items = st.issues.map(n => byNum.get(n)).filter(Boolean);
         const status = leastStatus(st.issues);
-        const furthest = items.reduce((a, i) => RANK[i.status] > RANK[a] ? i.status : a, "blocked");
+        const furthest = items.length ? items.reduce((a, i) => RANK[i.status] > RANK[a] ? i.status : a, "blocked") : "untracked";
         const results = D.results.filter(r => r.paper === route.paper && !assigned.has(r.paper + r.label) && r.issues.some(n => st.issues.includes(n)));
         results.forEach(r => assigned.add(r.paper + r.label));
         const sections = [...new Set(results.map(r => +r.num.split(".")[0]))].sort((a, b) => a - b);
@@ -245,7 +289,7 @@
         const landed = prs.filter(p => p.kind === "merged").sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
         const inflight = prs.filter(p => p.open);
         const gapBadges = G.entries.filter(g => st.issues.includes(g.issue) && g.kind !== "convention" && isOpenGap(g))
-          .map(g => { const a = el("a", { href: "#gaps", class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result}` }); a.title = g.title; return a; });
+          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{tn:[^}]+\}\}/g, ""); return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
           const rs = leastStatus(r.issues);
@@ -258,14 +302,39 @@
           ...landed.slice(-6).map(p => el("li", {}, prChip(p), el("span", { text: prTitle(p.title) }))),
           landed.length > 6 ? el("li", {}, el("span"), el("span", { class: "muted", text: `and ${landed.length - 6} earlier` })) : null,
           landed.length ? null : el("li", {}, el("span"), el("span", { class: "muted", text: "Nothing merged yet." })));
-        container.append(el("div", { class: "stage" },
+        // A campaign's figures.js may draw a schematic beside the stage text.
+        const draw = st.figure && (window.campaignFigures || {})[st.figure];
+        let figure = null;
+        if (draw) {
+          const svg = sv("svg", { role: "img", "aria-label": st.figureAlt || st.title });
+          figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: tnText(st.caption) }) : null);
+          try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
+        }
+        // Tensor-network diagrams compiled from the campaign's tenkz sources.
+        const tnFigs = (st.diagrams || []).map(d => {
+          const tn = (D.diagrams || {})[d.src];
+          if (!tn) return null;
+          const alt = (d.alt || tn.alt || d.caption || st.title).replace(/<[^>]+>/g, "");
+          return el("figure", { class: "sfig tnfig" },
+            el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
+            d.caption ? el("figcaption", { html: tnText(d.caption) }) : null);
+        }).filter(Boolean);
+        // A reader may land on any stage without having read the others, so each stage lists
+        // every symbol its text, equations and figures use.
+        const key = (st.symbols || []).length ? el("div", { class: "key" }, el("div", { class: "keyhead", text: "Symbols on this stage" }),
+          el("dl", {}, ...st.symbols.map(([sym, meaning]) => el("div", {}, el("dt", { html: sym }), el("dd", { html: meaning }))))) : null;
+        const figs = key || figure || tnFigs.length ? el("div", { class: "figs" }, key, ...tnFigs, figure) : null;
+        container.append(el("div", { class: "stage", id: `stage-${route.id}-${idx + 1}` },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },
             el("div", { class: "head" }, el("h3", { text: st.title }),
               sections.length ? el("span", { class: "secs", text: sections.length > 1 ? `§§${sections[0]}–${sections[sections.length - 1]}` : `§${sections[0]}` }) : null,
               statusPill(status), ...gapBadges),
-            el("p", { class: "phys", html: st.physics }),
-            el("p", { class: "out", html: "<b>Delivers.</b> " + st.delivers }),
+            el("div", { class: figs ? "lead hasfig" : "lead" },
+              el("div", { class: "txt" },
+                el("p", { class: "phys", html: tnText(st.physics) }),
+                el("p", { class: "out", html: '<span class="sc">Delivers</span> ' + tnText(st.delivers) })),
+              figs),
             el("div", { class: "meta" },
               el("div", { class: "box" }, el("h4", { text: results.length ? `Paper results (${results.length})` : "Paper results" }),
                 results.length ? resultList : el("span", { class: "muted", text: "Shared definitions; no named result." })),

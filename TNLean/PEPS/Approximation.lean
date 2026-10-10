@@ -8,7 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
+import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.Basic
@@ -45,6 +47,8 @@ import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
 import TNLean.PEPS.Approximation.EncodedFrame
+import TNLean.PEPS.Approximation.EndpointOperatorWord
+import TNLean.PEPS.Approximation.EndpointWordRestriction
 import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
@@ -54,6 +58,7 @@ import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
 import TNLean.PEPS.Approximation.FrameBoundedChanges
+import TNLean.PEPS.Approximation.FrameListRestriction
 import TNLean.PEPS.Approximation.FrameRegisters
 import TNLean.PEPS.Approximation.FrontRegisters
 import TNLean.PEPS.Approximation.GroupTruncation
@@ -61,6 +66,7 @@ import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
+import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
