@@ -25,6 +25,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/test_check_docbuild_manifest.py'
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -142,6 +143,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/test_check_docbuild_manifest.py'
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -310,6 +312,7 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'docbuild/**'
               - 'scripts/check_docbuild_manifest.py'
+              - 'scripts/test_check_docbuild_manifest.py'
               - 'scripts/coherent_qic_prerequisites.json'
               - 'scripts/export_coherent_qic_prerequisites.py'
               - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -1332,6 +1335,9 @@ jobs:
           bash -n scripts/lake_build_locked.sh
           bash -n scripts/seed_lake_build.sh
           bash -n scripts/test_seed_lake_build.sh
+
+      - name: Test docbuild manifest checker
+        run: python3 scripts/test_check_docbuild_manifest.py
 
       # docbuild/ shares the root package directory, so its manifest must pin
       # the same revisions or the weekly API docs build checks out stale ones.

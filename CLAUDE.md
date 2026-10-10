@@ -35,7 +35,7 @@ git -C worktrees/hot-main reset --hard origin/main
 scripts/seed_lake_build.sh /path/to/new-worktree worktrees/hot-main --dry-run
 scripts/seed_lake_build.sh /path/to/new-worktree worktrees/hot-main
 
-# Linux fallback only, because the wrapper requires macOS lockf. Fetch and
+# Linux fallback only, because the wrapper requires macOS. Fetch and
 # verify the prebuilt cache before invoking any build; never start with build.
 lake exe cache get
 test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
