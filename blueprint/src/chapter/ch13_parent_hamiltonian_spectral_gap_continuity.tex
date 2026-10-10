@@ -1121,7 +1121,9 @@ is recorded in
 
 \begin{lemma}[Phases of a symmetry up to a phase]
     \label{lem:block_symmetry_phase_power}
-    \lean{MPSTensor.map_list_prod_eq_pow_mul_of_length_three,
+    \lean{MPSTensor.IsOnSiteSymmetricUpToPhase,
+        MPSTensor.IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase,
+        MPSTensor.map_list_prod_eq_pow_mul_of_length_three,
         MPSTensor.exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul}
     \leanok
     Let $\phi$ be a linear functional on a complex algebra $\mathcal A$ with
@@ -1139,8 +1141,8 @@ is recorded in
     product vectors $\ket{\psi_N}$ of $\bigoplus_kA^k$. Then for each $g$
     there is $c$ with $|c|=1$ such that
     $\sum_k\tr B^k_w=c^{|w|}\sum_k\tr A^k_w$ for every word $w$, where
-    $B^k_i=\sum_l(U_g)_{il}A^k_l$. In particular
-    $\lambda_{g,N}=c^N$ whenever $\ket{\psi_N}\neq0$.
+    $B^k_i=\sum_l(U_g)_{il}A^k_l$. Exact symmetry is the case
+    $\lambda_{g,N}=1$.
     A symmetry of the state is fixed only up to such a phase
     \cite[lines~440--445, 655--657]{Schuch2011Phases}.
 \end{lemma}
@@ -1167,7 +1169,9 @@ is recorded in
     hypothesis at lengths one, two and three gives the three relations, so
     $c=\lambda_{g,1}$ works. At length one the nonzero vector
     $v_i=\phi(x_i)$ satisfies $U_gv=cv$, and unitarity of $U_g$ gives
-    $|c|=1$.
+    $|c|=1$. Since the twisted vector of length $N$ has the coefficients
+    $\sum_k\tr B^k_w$, it follows that $\lambda_{g,N}=c^N$ whenever
+    $\ket{\psi_N}\neq0$.
 \end{proof}
 
 \begin{theorem}[An on-site symmetry permutes normal blocks]
