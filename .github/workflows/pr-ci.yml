@@ -1122,6 +1122,10 @@ jobs:
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordChronology.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectors.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectorChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean \
               TNLeanTest/PEPS/AreaLaw/GraphExtendedMetric.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
@@ -1671,6 +1675,11 @@ jobs:
           python3 -m pip install --disable-pip-version-check 'pagefind[extended]==1.5.2'
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
+
+      - name: Test dependency graph rendering and terminal errors
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
 
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
