@@ -73,3 +73,42 @@ assumption is imposed on $\Lambda$ or $A$.
     The core is the case $j=0$.
     The manuscript fixes $D_0>2R+10$, which implies $D_0\ge1$ for $R\ge0$.
 \end{proof}
+
+\begin{lemma}[Strict clearance of contained dyadic squares]
+    \label{lem:area_law_template_dyadic_clearance}
+    \leanok
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_eq_Icc_product,
+        TNLean.PEPS.AreaLaw.Geometry.latticeDyadicCell_interval_length,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.lt_dist_of_mem_ambientDilation,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.side_lt_dist_of_mem_ambientDilation,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.dyadicCell_clearance
+    }
+    \uses{def:area_law_template,def:area_law_lattice_dyadic_square,
+        def:area_law_cell_counts}
+    Suppose $\operatorname{dist}_\infty(T,Z)>4D_0s_0$.
+    For every $j\ge0$, $p\in T_j$, and $z\in Z$,
+    \begin{align}
+        \|p-z\|_\infty>4D_0s_0-j.
+    \end{align}
+    If $D_0\ge1$, $j\le s_0$, and $u\le s_0$, this distance exceeds $D_0u$.
+    In particular, if $C_{k,c}\subseteq T_j$ and $2^k\le s_0$, every site
+    of $C_{k,c}$ has distance greater than $D_0 2^k$ from every endpoint
+    of a physical crossing edge. The square is exactly the product of
+    integer intervals
+    \begin{align}
+        [2^kc_1,2^kc_1+2^k-1]\times[2^kc_2,2^kc_2+2^k-1],
+    \end{align}
+    each of which has $2^k$ sites. This is the strict-clearance step in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose $q\in T$ with $\|p-q\|_\infty\le j$. The triangle inequality gives
+    $\|p-z\|_\infty\ge\|q-z\|_\infty-j>4D_0s_0-j$.
+    Since $s_0>0$, $D_0\ge1$, and $j\le s_0$, we have
+    $4D_0s_0-j>D_0s_0\ge D_0u$.
+    Both endpoints of every crossing edge belong to $Z$.
+    The integer interval description follows directly from the half-open
+    dyadic square inequalities.
+\end{proof}
