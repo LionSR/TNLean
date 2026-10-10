@@ -1,0 +1,14 @@
+% Area-law manuscript, prop:collar (08-scanner.tex): the target X, the collar
+% Y = S_0 \ X and the region Lambda \ S_0 beyond it, whose mutual
+% information with X the scan bounds by C n^{1-eps}.
+\begin{tenkz}[lattice={6x8}, frame=plane, physical=up, bonds=none]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \tnmark[form=enclosure, species=selected, label pos=w]{(3,3) .. (4,4)}{$X$}
+  \tnmark[form=enclosure, species=collar, label pos=n]{(2,2) .. (5,5) - (3,3) .. (4,4)}{$Y$}
+  \tnmark[form=enclosure, species=complement, label pos=e]{(1,1) .. (6,8) - (2,2) .. (5,5)}{$\Lambda\setminus S_0$}
+\end{tenkz}

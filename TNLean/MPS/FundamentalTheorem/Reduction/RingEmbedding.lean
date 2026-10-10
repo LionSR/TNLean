@@ -94,8 +94,7 @@ theorem isNBlkInjective_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin 
     rw [complexOfRing_smul, ← evalWord_complexOfRing, ← hA']
     exact T.smul_mem _ (Submodule.subset_span ⟨word i j k, rfl⟩)
   rw [h1] at hmem
-  have h2 := T.smul_mem (f c)⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h2
+  exact (T.smul_mem_iff hc).mp hmem
 
 /-- **Normality from a decided table of scaled matrix units**: the certificate of
 `isNBlkInjective_of_complexOfRing_smul_single` at a positive length `N` shows that the complex
