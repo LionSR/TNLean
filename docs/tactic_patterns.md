@@ -24,6 +24,61 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Boundary on one Kronecker factor of a letter sum — promoted (2026-10-10)
+
+- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
+  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv`, distribute with
+  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
+  boundary onto one factor with `← Matrix.mul_kronecker_mul` and
+  `Matrix.one_mul`/`Matrix.mul_one`.
+- **Seen:** fifteen occurrences across four files: `MPSTensor.IsReduction.mulTensor_kronId`,
+  `mulTensor_idKron`, `kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn`,
+  `idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn` and
+  `MPOTensor.mulTensor_mul_kronId_of_intertwine`
+  (`TNLean/MPS/Core/ReductionComposition.lean`); `MPSTensor.IsReduction.actTensor_idKron`,
+  `actTensor_kronId`, `MPOTensor.actTensor_mul_kronId_of_intertwine`,
+  `MPSTensor.IsDressedProportional.actTensor_idKron` and `actTensor_kronId`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`); and the four `hres` steps of
+  `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId`, `_mulTensor_idKron`,
+  `_actTensor_kronId` and `_actTensor_idKron`
+  (`TNLean/MPS/Core/ReductionResidualComposition.lean`), the last four added by #8244.
+- **Abstraction:** `MPOTensor.kronId_mul_submatrix_sum`, `submatrix_sum_mul_kronId`,
+  `idKron_mul_submatrix_sum` and `submatrix_sum_mul_idKron` in
+  `TNLean/MPS/Core/ReductionComposition.lean`: a boundary `X ⊗ 1` or `1 ⊗ X` on either side
+  of `(∑ j, A j ⊗ B j)` in the `finProdFinEquiv` bond order acts on one factor of every
+  summand. Each call site rewrites with one or two of them and closes by
+  `simp only [h.evalWord]` (or the intertwining or proportionality hypothesis).
+- **Notes:** `kronId_mul`, `idKron_mul` and `kronId_mul_idKron` multiply two boundaries
+  without a letter sum and keep their direct proofs. The four lemmas add 44 lines and
+  the call sites lose 52, for a net delta of −8 lines.
+
+### Chosen nonzero dressed-proportionality scalar — promoted (2026-10-10)
+
+- **Pattern:**
+  ```lean
+  open Classical in
+  ... if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+  with the spec lemma closing by
+  `simp only [_, hex, ↓reduceDIte, Units.val_mk0]; exact hex.choose_spec.2`.
+- **Seen:** four occurrences across three files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`), and
+  `BlockActionData.lSymbol` (`TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`).
+- **Abstraction:** `MPSTensor.dressedScalar B X Y : Units ℂ` and
+  `MPSTensor.isDressedProportional_dressedScalar` in
+  `TNLean/MPS/Core/ReductionComposition.lean`. The four definitions are
+  `dressedScalar` of their boundaries, and each spec lemma ends with
+  `exact MPSTensor.isDressedProportional_dressedScalar hex`. The one external proof that
+  unfolded the `dite` of `omega`, `MPOTensor.GroupCocycle.fusionData_omega`
+  (`TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`), uses the same lemma.
+- **Notes:** statements of `omega`, `relativeScalar`, both `lSymbol`s and their spec
+  lemmas are unchanged. The shared definition and lemma add 18 lines; the four call
+  sites lose 13, for a net delta of +5 lines, and four `open Classical in` blocks with
+  their `dite` unfoldings are gone.
+
 ### Empty final tensor memory — promoted (2026-10-09)
 
 - **Pattern:** identify the tensor product with an empty final memory with
@@ -4335,44 +4390,6 @@ currently one occurrence, so no general declaration is warranted.
   the `simpa` coercion from the indexed supremum.
 - **Status:** promoted; all three call sites now read
   `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
-
-### carrying a boundary through one Kronecker factor of a letter sum — candidate
-- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
-  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
-  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
-  boundary onto one factor with `← Matrix.mul_kronecker_mul` (twice) and
-  `Matrix.one_mul`/`Matrix.mul_one`.
-- **Seen:** six occurrences across three files: `MPSTensor.IsReduction.mulTensor_kronId` and
-  `mulTensor_idKron` (`TNLean/MPS/Core/ReductionComposition.lean`),
-  `MPOTensor.mulTensor_mul_kronId_of_intertwine` (`TNLean/MPS/MPDO/OperatorProduct.lean`),
-  and `MPSTensor.IsReduction.actTensor_idKron`, `actTensor_kronId` and
-  `MPOTensor.actTensor_mul_kronId_of_intertwine`
-  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
-- **Abstraction:** a lemma stating
-  `(X ⊗ 1) * (∑ j, A j ⊗ B j) * (Y ⊗ 1) = ∑ j, (X * A j * Y) ⊗ B j` and its `1 ⊗ X`
-  mirror, in the `finProdFinEquiv` bond order; the intertwiner lemmas are the cases
-  `Y = 1` and `X = 1`.
-- **Notes:** past the rule of three. Promotion rewrites the three call sites in
-  `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
-  separate refactor rather than folded into the action-tensor PR.
-
-### classical choice of a nonzero proportionality scalar — candidate
-- **Pattern:**
-  ```lean
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
-  then Units.mk0 hz.choose hz.choose_spec.1 else 1
-  ```
-- **Seen:** three occurrences across two files: `FusionData.omega` (through
-  `IsAssociator`) and `FusionData.relativeScalar`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
-- **Abstraction:** a definition
-  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
-  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
-  and `lSymbol` then specialize it.
-- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
-  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
-  is left to a separate refactor.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the

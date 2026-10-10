@@ -328,17 +328,16 @@ namespace FusionData
 
 variable (fd : FusionData F)
 
-open Classical in
 /-- **The anomaly three-cochain of a choice of fusion tensors**: `ω(g,h,k)` is the
 nonzero scalar comparing the two fusion trees of the triple product
-(`MPOTensor.GroupFamily.FusionData.isAssociator_omega`).  It is set to one if no
-such scalar exists, which does not happen for a normal representation.
+(`MPOTensor.GroupFamily.FusionData.isAssociator_omega`), chosen by
+`MPSTensor.dressedScalar`.  It is set to one if no such scalar exists, which does not
+happen for a normal representation.
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
 noncomputable def omega : ScalarThreeCochain G := fun g h k ↦
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z then Units.mk0 hz.choose hz.choose_spec.1
-  else 1
+  MPSTensor.dressedScalar (F.tripleTensor g h k).toMPSTensor (fd.leftV g h k) (fd.rightV g h k)
 
 variable {fd}
 
@@ -351,8 +350,7 @@ theorem isAssociator_omega (hF : F.IsNormalRepresentation) (g h k : G) :
   have hex : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z :=
     (fd.isReduction_left g h k).exists_isDressedProportional (fd.isReduction_right g h k)
       (hF.isNormal _) (hF.sameMPV₂Pos_tripleTensor g h k)
-  simp only [omega, hex, ↓reduceDIte, Units.val_mk0]
-  exact hex.choose_spec.2
+  exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-- **Uniqueness of `ω(g,h,k)`**: any scalar satisfying the characterizing dressed
 identity is `ω(g,h,k)`. -/
@@ -480,7 +478,6 @@ theorem isCocycle_omega (hF : F.IsNormalRepresentation) :
   apply Units.ext
   simpa only [Units.val_mul] using key
 
-open Classical in
 /-- The scalar comparing two choices of fusion tensors: `β(g,h)` is the nonzero
 scalar with `V_{g,h} B^w = β(g,h) V'_{g,h} B^w` for all long words `w` of the
 stacked product `B` of the tensors of `g` and `h`
@@ -492,10 +489,7 @@ Source: the scalar gauge freedom of the fusion tensors, arXiv:2502.20257,
 `eq:scalar_fus_ten`, `main.tex` lines 1500--1504, under which
 `F^> ↦ β F^>` and `F^< ↦ β⁻¹ F^<`. -/
 noncomputable def relativeScalar (fd fd' : FusionData F) : ScalarCocycle G := fun g h ↦
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
-      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (fd.V g h) (fd'.V g h) z then
-    Units.mk0 hz.choose hz.choose_spec.1
-  else 1
+  MPSTensor.dressedScalar (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (fd.V g h) (fd'.V g h)
 
 /-- Two choices of fusion tensors differ, against long words, by the scalar
 `relativeScalar`. -/
@@ -507,8 +501,7 @@ theorem isDressedProportional_relativeScalar (hF : F.IsNormalRepresentation)
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (fd.V g h) (fd'.V g h) z :=
     (fd.isReduction g h).exists_isDressedProportional (fd'.isReduction g h)
       (hF.isNormal _) (hF.sameMPV₂Pos_mulTensor g h)
-  simp only [relativeScalar, hex, ↓reduceDIte, Units.val_mk0]
-  exact hex.choose_spec.2
+  exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-- **Change of fusion tensors changes `ω` by a coboundary** (arXiv:2502.20257,
 `eq:omegagauge`, `main.tex` lines 1541--1545): if `β` compares two choices of
