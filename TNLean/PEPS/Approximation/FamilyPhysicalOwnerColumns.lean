@@ -54,7 +54,7 @@ private theorem familyPhysicalListBasis_cons_apply {P : Type} (d : P → ℕ) (p
 scalar `1`. -/
 private theorem familyPhysicalListBasis_nil_apply {P : Type} (d : P → ℕ)
     (g : (j : Fin ([] : List P).length) → Fin (d (([] : List P).get j))) :
-    familyPhysicalListBasis d ([] : List P) g = 1 := by
+    familyPhysicalListBasis d ([] : List P) g = (1 : ℂ) := by
   simp only [familyPhysicalListBasis]
   let I : Type := (i : Fin 0) → Fin (d (([] : List P).get i))
   have hcast : ∀ (ft ft' : Fintype I) (hf : ft = ft')
