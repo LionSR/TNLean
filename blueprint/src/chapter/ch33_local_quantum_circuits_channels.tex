@@ -385,7 +385,6 @@ change the local dimension act on single sites.
         QuantumCircuit.blockSites_symm_isKrausCPTP,
         QuantumCircuit.trace_blockSites,
         QuantumCircuit.blockSites_rectKronecker,
-        QuantumCircuit.trace_blockKronecker,
         QuantumCircuit.blockSites_mem_supportedOperators,
         QuantumCircuit.blockSites_symm_mem_supportedOperators,
         QuantumCircuit.finProdFinEquiv_add_intCast,
@@ -413,8 +412,11 @@ change the local dimension act on single sites.
 \begin{lemma}[Light cone and correlations after blocking]
     \label{lem:qc_blocked_conversion_light_cone}
     \uses{def:qc_blocked_local_channel_conversion, lem:qc_blocking_supports,
-        lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations}
+        lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations,
+        lem:qc_local_channel_conversion_properties,
+        lem:qc_local_channel_conversion_trans}
     \lean{QuantumCircuit.IsLocalChannelProtocol.exists_dual_comp_blockSites,
+        QuantumCircuit.trace_blockKronecker,
         QuantumCircuit.IsBlockedLocalChannelConversion.blockSites,
         QuantumCircuit.IsBlockedLocalChannelConversion.mono,
         QuantumCircuit.IsBlockedLocalChannelConversion.trans,
@@ -423,7 +425,9 @@ change the local dimension act on single sites.
         QuantumCircuit.IsBlockedLocalChannelConversion.exists_dual,
         QuantumCircuit.trace_mul_mul_eq_of_isBlockedLocalChannelConversion}
     \leanok
-    Let $\rho$ be converted in depth $T$ after blocking $k$ sites into
+    Every matrix is converted in depth $0$ after blocking into its blocked
+    form, and a conversion in depth $T$ after blocking is one in every larger
+    depth. Let $\rho$ be converted in depth $T$ after blocking $k$ sites into
     $\sigma$. A conversion in depth $T'$ of $\sigma$ on the
     blocked ring gives a conversion of $\rho$ in depth $T+T'$ after blocking,
     $\sigma=\Psi(\rho)$ for a channel $\Psi$, and $\sigma$ is a density
@@ -438,12 +442,17 @@ change the local dimension act on single sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    Compose the blocking channel with the protocol on the blocked ring and
+    The first statements are those of
+    Lemmas~\ref{lem:qc_local_channel_conversion_properties}
+    and~\ref{lem:qc_local_channel_conversion_trans} on the blocked ring,
+    composed with the blocking channel of
+    Lemma~\ref{lem:qc_blocking_supports}. For the dual, compose the blocking
+    channel with the protocol on the blocked ring and
     apply Lemma~\ref{lem:qc_protocol_light_cone} there; unblocking the dual
     and Lemma~\ref{lem:qc_blocking_supports} give the supports on the
     original ring. Blocking maps the product $\bigotimes_i\sigma_i$ to the
     product over the blocks of $\sigma_{jk}\otimes\dots\otimes\sigma_{jk+k-1}$,
-    each of trace one, so the correlation statement is
+    each of trace $\prod_t\Tr\sigma_{jk+t}=1$, so the correlation statement is
     Lemma~\ref{lem:qc_local_channel_conversion_correlations} on the blocked
     ring.
 \end{proof}
