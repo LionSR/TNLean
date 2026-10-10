@@ -187,11 +187,10 @@ end WordTraceAutomorphism
 
 section WordTracePhase
 
-/-- Let `φ` be a functional on an algebra with `φ 1 ≠ 0` such that `φ (M * N) = 0` for every
-`N` forces `M = 0`, and let `x` and `y` be two spanning families of letters.
-If `φ` of every word of length one, two and three in `y` is `c₁`, `c₂` and `c₃` times `φ` of
-the same word in `x`, then `φ` of every word of length `n` in `y` is `c₁ ^ n` times `φ` of
-the same word in `x`.
+/-- Let \(\phi\) be a functional on an algebra with \(\phi(1)\neq0\) such that
+\(\phi(MN)=0\) for every \(N\) forces \(M=0\), and let \((x_i)\) and \((y_i)\) be two
+spanning families of letters. If \(\phi(y_w)=c_n\phi(x_w)\) for every word \(w\) of length
+\(n\in\{1,2,3\}\), then \(\phi(y_w)=c_1^{|w|}\phi(x_w)\) for every word \(w\).
 
 This is the comparison of words of length `N` with their one-letter extensions that makes
 the phase \(\lambda_{g,N}\) of a symmetry of the matrix product vectors multiplicative in
@@ -210,11 +209,11 @@ theorem map_list_prod_eq_pow_mul_of_length_three
     ∀ w : List ι, φ (w.map y).prod = c₁ ^ w.length * φ (w.map x).prod := by
   classical
   have := Fintype.ofFinite ι
-  -- the linear map sending each `x i` to `y i`
+  -- the linear map sending each letter \(x_i\) to \(y_i\)
   set a := Fintype.linearCombination ℂ x
   set b := Fintype.linearCombination ℂ y
   have ha : LinearMap.range a = ⊤ := by rw [Fintype.range_linearCombination, hx]
-  -- vanishing of `φ (M * ·)` on the `y i` forces `M = 0`
+  -- vanishing of \(N\mapsto\phi(MN)\) on the letters \(y_i\) forces \(M=0\)
   have hzero_y : ∀ M : 𝔄, (∀ j, φ (M * y j) = 0) → M = 0 := by
     intro M hM
     refine hφ M fun N => ?_
@@ -310,7 +309,7 @@ theorem map_list_prod_eq_pow_mul_of_length_three
         exact hi i Y Z)
     simpa only [LinearMap.comp_apply, LinearMap.mulRight_apply, LinearMap.smul_apply,
       smul_eq_mul, mul_assoc] using LinearMap.congr_fun h X
-  -- the image of the identity is the scalar `c₁`
+  -- the image of the identity is the scalar \(c_1\)
   have hc₁ : c₁ ≠ 0 := by
     obtain ⟨Z, hZ⟩ := hLsurj 1
     intro h0
@@ -354,7 +353,8 @@ theorem map_list_prod_eq_pow_mul_of_length_three
   apply mul_left_cancel₀ hc₁
   rw [h]; ring
 
-/-- The summed block trace `M ↦ ∑ k, tr M_k` on the product of the block matrix algebras. -/
+/-- The summed block trace \(M\mapsto\sum_k\operatorname{tr}M_k\) on the product of the block
+matrix algebras. -/
 private noncomputable def blockTrace (dim : Fin r → ℕ) :
     ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ] ℂ :=
   ∑ k, Matrix.traceLinearMap (Fin (dim k)) ℂ ℂ ∘ₗ LinearMap.proj k
@@ -464,7 +464,7 @@ theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
     (fun i => by simpa using h₁ [i] rfl) (fun i j => by simpa using h₂ [i, j] rfl)
     (fun i j k => by simpa [mul_assoc] using h₃ [i, j, k] rfl)
   refine ⟨c₁, ?_, fun w => by simpa [hwx, hwy, blockTrace_apply] using hpow w⟩
-  -- the one-site traces form an eigenvector of `U g` with eigenvalue `c₁`
+  -- the one-site traces form an eigenvector of \(U_g\) with eigenvalue \(c_1\)
   set v : Fin d → ℂ := fun i => blockTrace dim (x i) with hvdef
   have hv : v ≠ 0 := by
     intro hv0
