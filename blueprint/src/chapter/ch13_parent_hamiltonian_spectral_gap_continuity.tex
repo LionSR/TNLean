@@ -889,9 +889,10 @@ is recorded in
     of $G_L(W)$ and $G_L(P_\gamma)$ for any fixed $L$.
     This is the conditional parent-symmetry implication of
     \cite[lines~672--676]{Schuch2011Phases}. The original local-space
-    invariance and commutation of $Q$ are explicit hypotheses; the
-    derivation from arbitrary multiblock state symmetry remains separate
-    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+    invariance and commutation of $Q$ are explicit hypotheses here.
+    Theorem~\ref{thm:block_isometric_deformation_parent_symmetry} derives
+    both from exact state symmetry of jointly injective blocks in the
+    source's standard form.
 \end{theorem}
 
 \begin{proof}
@@ -938,9 +939,8 @@ is recorded in
     orientations. This result treats the already-blocked, single-block
     unital orientation of the argument in
     \cite[lines~645--676]{Schuch2011Phases}, for exact invariance of
-    the matrix product vectors. The several-block symmetry permutation
-    and a symmetry-compatible initial canonical gauge remain separate
-    assertions; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+    the matrix product vectors. Several blocks are treated in
+    Theorem~\ref{thm:block_isometric_deformation_covariance}.
 \end{theorem}
 
 \begin{proof}
@@ -982,8 +982,9 @@ is recorded in
     $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ in
     \cite[line~653]{Schuch2011Phases}. These conclusions cover the
     already-blocked single injective block with exact vector symmetry.
-    Ray symmetry and the several-block virtual permutation remain
-    separate; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+    Ray symmetry remains separate; see
+    \cite{gap:spc11_isometric_symmetry_unitary_virtual}. Several blocks are
+    treated in Theorem~\ref{thm:block_isometric_deformation_covariance}.
 \end{theorem}
 
 \begin{proof}
@@ -1030,9 +1031,9 @@ is recorded in
     This proves the parent-symmetry conclusion of
     \cite[lines~645--676]{Schuch2011Phases} for the stated single-block
     unital case, dual to the printed partial-trace normalization as
-    explained in Theorem~\ref{thm:injective_isometric_deformation_derived_covariance};
-    the several-block assertion remains separate
-    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+    explained in Theorem~\ref{thm:injective_isometric_deformation_derived_covariance}.
+    Several blocks are treated in
+    Theorem~\ref{thm:block_isometric_deformation_parent_symmetry}.
 \end{theorem}
 
 \begin{proof}
@@ -1072,8 +1073,8 @@ is recorded in
     precisely $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$.
     This is the already-blocked single-block parent-symmetry conclusion
     of \cite[lines~645--676]{Schuch2011Phases} in the printed canonical
-    orientation. The several-block assertion remains separate
-    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+    orientation. Several blocks are treated in
+    Theorem~\ref{thm:block_isometric_deformation_parent_symmetry}.
 \end{theorem}
 
 \begin{proof}
@@ -1085,6 +1086,157 @@ is recorded in
     The trace-preserving covariance theorem gives $[U_g,Q]=0$.
     Applying the supplied-invariance parent-symmetry theorem proves
     commutation of both local interactions and their open and periodic sums.
+\end{proof}
+
+\begin{lemma}[Algebra automorphism from equal word traces]
+    \label{lem:block_word_trace_algebra_automorphism}
+    \lean{MPSTensor.exists_algEquiv_of_sum_trace_evalWord_eq}
+    \leanok
+    Let $(A^k)_k$ and $(B^k)_k$ be two families of blocks of the same bond
+    dimensions $D_k$, each of whose one-site tuples $(A^k_i)_k$ and
+    $(B^k_i)_k$ span $\bigoplus_k\MN{D_k}$. Suppose that
+    $\sum_k\tr A^k_w=\sum_k\tr B^k_w$ for every word $w$, where
+    $A^k_w$ denotes the ordered product along $w$. Then there is an
+    algebra automorphism $T$ of $\bigoplus_k\MN{D_k}$ with
+    $T\bigl((A^k_w)_k\bigr)=(B^k_w)_k$ for every word $w$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $c$ be a finite linear combination of words with
+    $\sum_wc_w(A^k_w)_k=0$, and put $\Delta=\sum_wc_w(B^k_w)_k$.
+    For every letter $i$, equality of the word traces gives
+    $\sum_k\tr(\Delta_kB^k_i)=\sum_wc_w\sum_k\tr B^k_{wi}$, and this
+    equals $\sum_wc_w\sum_k\tr A^k_{wi}=0$. The one-site tuples of the second
+    family span the direct sum, and the trace pairing on it is
+    nondegenerate, so $\Delta=0$. Hence the assignment
+    $(A^k_w)_k\mapsto(B^k_w)_k$ extends to a well-defined linear map $T$
+    on the span of the words of the first family, which is the whole
+    direct sum. The same argument with the families exchanged shows that
+    $T$ is injective; it is surjective because the words of the second
+    family also span. It sends the empty word to the identity and
+    concatenation to products, so it is multiplicative on words and,
+    by bilinearity, on the whole algebra.
+\end{proof}
+
+\begin{theorem}[An on-site symmetry permutes normal blocks]
+    \label{thm:block_isometric_deformation_symmetry_permutation}
+    \lean{MPSTensor.exists_perm_gauge_rotatePhysical_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.exists_perm_unitary_rotatePhysical_of_isOnSiteSymmetric_blockSum}
+    \leanok
+    Let $A^1,\dots,A^r$ be blocks of positive bond dimensions $D_k$ whose
+    one-site tuples $(A^k_i)_k$ span $\bigoplus_k\MN{D_k}$. Let
+    $g\mapsto U_g$ be a unitary representation of a monoid on the physical
+    space, and suppose that $U_g^{\otimes N}$ fixes every matrix product
+    vector of the block-diagonal tensor $\bigoplus_kA^k$. Then for each $g$
+    there are a permutation $\sigma$ of the blocks with
+    $D_{\sigma(k)}=D_k$ and invertible matrices $X_k$ such that
+    \begin{align*}
+        \sum_l(U_g)_{il}A^{\sigma(k)}_l=X_kA^k_iX_k^{-1}
+    \end{align*}
+    for every block $k$ and letter $i$. If in addition every block
+    satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, the matrices $X_k$ may be
+    taken unitary.
+    The joint one-site span is the standard form of
+    \cite[lines~325--352]{Schuch2011Phases}. This is the several-block
+    form of the virtual action in \cite[lines~652--660]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    \uses{lem:block_word_trace_algebra_automorphism,thm:pi_auto_decomp,thm:physical_action_joint_span_compact_gap,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical}
+    \leanok
+    Exact symmetry of the matrix product vectors equates every word trace
+    of $\bigoplus_kA^k$ with that of its twist, so the summed block traces
+    of $(A^k)_k$ and of the twisted blocks agree on every word. The
+    twisted blocks still span jointly at one site, because $U_g$ is
+    invertible. Lemma~\ref{lem:block_word_trace_algebra_automorphism}
+    gives an algebra automorphism sending the one-site tuples of the
+    original blocks to those of the twisted blocks, and
+    Theorem~\ref{thm:pi_auto_decomp} decomposes it as a block
+    permutation preceded by blockwise conjugations. In the
+    trace-preserving normalization each block is injective, hence
+    irreducible, and unitary physical rotation preserves both
+    irreducibility and the normalization. The unitary replacement lemma
+    then makes each conjugating matrix unitary.
+\end{proof}
+
+\begin{theorem}[Derived polar covariance for several normal blocks]
+    \label{thm:block_isometric_deformation_covariance}
+    \lean{MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetric_blockSum}
+    \leanok
+    In the setting of
+    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
+    assume $\sum_iA^{k\dagger}_iA^k_i=I$ for every block. For the joint
+    physical map $P_{i,(k,a,b)}=A^k_i(a,b)$ there is a unitary $X_g$ on
+    $\bigoplus_k\C^{D_k}\otimes\C^{D_k}$ with $U_gP=PX_g$. Consequently
+    $U_g$ commutes with the identity-extended positive polar factor $Q$,
+    and the same $X_g$ satisfies $U_gP_\gamma=P_\gamma X_g$ along the
+    constructed deformation $P_\gamma=Q_\gamma W$.
+    The block-diagonal normalization is exactly
+    $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ of
+    \cite[line~653]{Schuch2011Phases}, and the conclusion is the
+    covariance $U_gP=PX_g$ of \cite[lines~652--660]{Schuch2011Phases}
+    for several blocks. The symmetry is exact on the matrix product
+    vectors; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:block_isometric_deformation_symmetry_permutation,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
+    \leanok
+    Let $\sigma$ and the unitaries $V_k$ be as in
+    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation}.
+    Define $X_g$ by sending the matrix coordinates of block $k$ through
+    $V_k^T\otimes V_k^\dagger$ and then to the coordinates of block
+    $\sigma(k)$. It is the product of a block-diagonal unitary and a
+    permutation of coordinates, hence unitary. Column $(\sigma(k),a,b)$
+    of $U_gP$ is the $(a,b)$ entry of the twisted block $\sigma(k)$,
+    which equals $(V_kA^k_iV_k^\dagger)(a,b)$; this is the corresponding
+    column of $PX_g$. The polar and affine covariance theorems give the
+    remaining conclusions.
+\end{proof}
+
+\begin{theorem}[Derived parent symmetry for several normal blocks]
+    \label{thm:block_isometric_deformation_parent_symmetry}
+    \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetric,
+        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_blockSum,
+        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric_blockSum}
+    \leanok
+    In the setting of
+    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
+    $U_g^{\otimes L}G_L(\bigoplus_kA^k)=G_L(\bigoplus_kA^k)$ for every
+    $L$. If every block satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, then
+    along the constructed deformation $P_\gamma=Q_\gamma W$ both the
+    canonical two-site parent projection and the positive interaction
+    \begin{align*}
+        h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+        h_2(W)(Q_\gamma^{-1})^{\otimes2}
+    \end{align*}
+    commute with $U_g^{\otimes2}$, and their open and periodic sums
+    commute with $U_g^{\otimes N}$ for every $N\geq2$. This is the
+    parent-symmetry conclusion of \cite[lines~672--676]{Schuch2011Phases}
+    for several blocks in the printed standard form, for exact symmetry
+    of the matrix product vectors.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:block_isometric_deformation_symmetry_permutation,thm:block_isometric_deformation_covariance,thm:isometric_deformation_supplied_parent_symmetry}
+    \leanok
+    The local MPS space of the block-diagonal tensor is the sum of the
+    local spaces of its blocks. The physical action carries it to the sum
+    of the local spaces of the twisted blocks. By
+    Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
+    the twist of block $\sigma(k)$ is gauge equivalent to block $k$, and
+    gauge equivalence preserves local spaces, so the permuted sum is the
+    original one. Together with $[U_g,Q]=0$ from
+    Theorem~\ref{thm:block_isometric_deformation_covariance}, the
+    supplied-invariance parent-symmetry theorem gives the remaining
+    conclusions.
 \end{proof}
 
 \begin{theorem}[Uniform open-chain gap along the positive affine deformation]
