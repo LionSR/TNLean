@@ -35,6 +35,10 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_inter
     sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ =
       (sheetSwapOp q (R ∩ S))ᴴ * doubledHamiltonian A * sheetSwapOp q (R ∩ S) := by
   classical
+  have hcomp : sheetSwapOp q (R ∩ S) * sheetSwapOp q R = sheetSwapOp q (R \ S) :=
+    sheetSwapOp_mul_sheetSwapOp
+      (fun x ↦ by rw [← Finset.mem_sdiff, Finset.sdiff_inter_self_left])
+      Finset.inter_subset_left
   done
 
 end TNLean.PEPS.EncodedFrame
