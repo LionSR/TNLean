@@ -202,12 +202,22 @@
   // A {{tn:name}} token in stage or gap text is a tenkz equation, displayed on its own line
   // inside the sentence that leads into it.
   const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  // A {{cite:Key,...}} token is a numbered citation of references.json, numbered in order of
+  // first appearance down the page and linked to the reference list.
+  const CITE = /\{\{cite:([A-Za-z0-9_,-]+)\}\}/g;
+  const REFS = D.references || {};
+  const citeNo = new Map(), citedAt = new Map();
+  const shortRef = r => `${(r.authors || "").split(",")[0].replace(/ et al\.$/, "")}${/,| and | et al/.test(r.authors || "") ? " et al." : ""} ${r.year || ""}`.trim();
+  const cite = keys => {
+    const nums = keys.filter(k => citeNo.has(k)).sort((a, b) => citeNo.get(a) - citeNo.get(b));
+    return nums.length ? `<span class="cite">[${nums.map(k => `<a href="#ref-${k}" title="${esc(shortRef(REFS[k]) + ", " + (REFS[k].title || ""))}">${citeNo.get(k)}</a>`).join(", ")}]</span>` : "";
+  };
   // Punctuation that follows the token stays on the equation's line, as in a displayed formula.
   const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}([.,;:]?)\s*/g, (m, name, punct) => {
     const d = (D.inlineDiagrams || {})[name];
     if (!d) return punct;
     return `<span class="tnd"><img class="tni" src="${d.src}" alt="${esc(d.alt || name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.5)}"` : ""}>${punct}</span>`;
-  });
+  }).replace(CITE, (m, keys) => cite(keys.split(",")));
 
   /* ---------- gaps ---------- */
   const G = D.gaps || { entries: [], checked: [] };
@@ -235,6 +245,43 @@
     : pending.length
       ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
       : "No open errors or missing steps in either paper.";
+  // Citations are numbered in reading order: the proof stages, then the gap entries.
+  (function numberCitations() {
+    const note = (text, anchor, label) => {
+      for (const m of (text || "").matchAll(CITE)) for (const k of m[1].split(",")) {
+        if (!REFS[k]) continue;
+        if (!citeNo.has(k)) citeNo.set(k, citeNo.size + 1);
+        const at = citedAt.get(k) || new Map();
+        at.set(anchor, label); citedAt.set(k, at);
+      }
+    };
+    for (const route of C.routes) {
+      const paper = route.paper ? (C.papers[route.paper] || {}).name : "Shared foundations";
+      note(route.intro, `stage-${route.id}-1`, paper);
+      route.stages.forEach((st, idx) => {
+        const anchor = `stage-${route.id}-${idx + 1}`, label = `${paper}, stage ${idx + 1}`;
+        for (const t of [st.physics, st.delivers, ...(st.diagrams || []).map(d => d.caption), st.caption]) note(t, anchor, label);
+      });
+    }
+    for (const g of G.entries) for (const t of [g.summary, g.context, g.claims, g.found, g.impact, g.plan]) note(t, gapAnchor(g), `Gap: ${g.title}`);
+  })();
+
+  /* ---------- references ---------- */
+  (function renderReferences() {
+    const keys = [...citeNo.keys()];
+    if (!keys.length) { $("refs").hidden = true; return; }
+    $("reflist").append(...keys.map(k => {
+      const r = REFS[k];
+      const li = el("li", { id: "ref-" + k, value: String(citeNo.get(k)) },
+        el("span", { text: `${r.authors}. ` }), r.url ? ext(r.url, r.title) : el("span", { text: r.title }),
+        el("span", { text: `. ${r.venue ? r.venue + ", " : ""}${r.year}.` }),
+        r.manuscript === false ? el("span", { class: "muted", text: " Not cited in the manuscripts." }) : null);
+      li.append(el("span", { class: "back" }, "Cited in ",
+        ...[...citedAt.get(k)].flatMap(([anchor, label], i) => [i ? " · " : "", el("a", { href: "#" + anchor, text: label })])));
+      return li;
+    }));
+  })();
+
   (function renderGaps() {
     const counts = el("div", { class: "counts" }, el("span", { class: "muted", text: "Open:" }),
       ...Object.keys(GAP_KIND).map(k => el("span", {}, el("span", { class: "pill k-" + k, text: String(openCount(k)) }), " " + GAP_KIND[k][0].toLowerCase())));
@@ -324,7 +371,7 @@
         const landed = prs.filter(p => p.kind === "merged" && !ROUTINE.test(p.title)).sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
         const inflight = prs.filter(p => p.open);
         const gapBadges = G.entries.filter(g => st.issues.includes(g.issue) && g.kind !== "convention" && isOpenGap(g))
-          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{tn:[^}]+\}\}/g, ""); return a; });
+          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{(tn|cite):[^}]+\}\}/g, ""); return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
           const rs = leastStatus(r.issues);

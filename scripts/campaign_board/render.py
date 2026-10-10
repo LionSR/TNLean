@@ -8,6 +8,7 @@ are Google Fonts, and OUT_DIR/data.json, the snapshot with the campaign's
 configuration and gap summaries merged in.
 
 CAMPAIGN_DIR provides config.json, gaps.json, and optionally intro.html,
+references.json (the works that {{cite:Key}} tokens in the texts cite),
 figures.js (the stage figures named in config.json) and the tensor-network
 diagrams under diagrams/ that stages name, which are inlined as data URIs and
 are compiled by build_diagrams.py; the page shell,
@@ -29,6 +30,7 @@ WORKFLOW = ".github/workflows/campaign-board.yml"
 
 DIAGRAM_SLOT = re.compile(r"\{\{DIAGRAM:([^}]+)\}\}")
 INLINE_SLOT = re.compile(r"\{\{tn:([A-Za-z0-9_-]+)\}\}")
+CITE_SLOT = re.compile(r"\{\{cite:([A-Za-z0-9_,-]+)\}\}")
 
 
 ALT_LINE = re.compile(r"^% alt: (.+)$", re.MULTILINE)
@@ -64,6 +66,21 @@ def inline_diagrams(campaign_dir: pathlib.Path, *texts: dict) -> dict:
     return {name: diagram(campaign_dir, f"diagrams/inline/{name}.svg") for name in sorted(names)}
 
 
+def references(campaign_dir: pathlib.Path, *texts: dict) -> dict:
+    """The works cited by {{cite:Key,...}} tokens in the given texts, from references.json.
+
+    A token naming a key absent from references.json stops the render, as a missing
+    diagram does, so the page never shows a citation without its reference.
+    """
+    path = campaign_dir / "references.json"
+    library = json.loads(path.read_text()) if path.exists() else {}
+    keys = {k for text in texts for m in CITE_SLOT.findall(json.dumps(text, ensure_ascii=False)) for k in m.split(",")}
+    missing = sorted(keys - library.keys())
+    if missing:
+        raise KeyError(f"{path}: no entry for cited keys {', '.join(missing)}")
+    return {k: library[k] for k in sorted(keys)}
+
+
 def intro_html(campaign_dir: pathlib.Path) -> str:
     """The campaign introduction, with each {{DIAGRAM:path}} slot replaced by its image."""
     intro = campaign_dir / "intro.html"
@@ -88,6 +105,7 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
     data["diagrams"] = diagrams(campaign_dir, config)
     gaps = json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []}
     data["inlineDiagrams"] = inline_diagrams(campaign_dir, config, gaps)
+    data["references"] = references(campaign_dir, config, gaps)
     data.update({
         "config": config,
         "gaps": gaps,

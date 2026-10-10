@@ -218,6 +218,12 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .files { font-family: var(--f-mono); font-size: 12.5px; display: grid; gap: 4px; }
 .files div { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px dotted var(--line); padding-bottom: 4px; }
 .files span:first-child { min-width: 0; overflow-wrap: anywhere; }
+/* citations and the reference list */
+.cite { font: 500 0.7em var(--f-body); vertical-align: 0.5em; line-height: 0; white-space: nowrap; color: var(--muted); }
+.refs { margin: 0; padding-left: 2.2em; display: grid; gap: 8px; max-width: 78ch; font: 15px/1.5 var(--f-display); }
+.refs li { padding-left: 0.3em; scroll-margin-top: 16px; }
+.refs li::marker { font: 500 12.5px var(--f-body); color: var(--muted); }
+.refs .back { display: block; font: 12.5px var(--f-body); color: var(--muted); }
 .glossary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px 24px; margin: 0; font-size: 13px; }
 .glossary div { display: grid; gap: 2px; }
 .glossary dt { font-weight: 600; }

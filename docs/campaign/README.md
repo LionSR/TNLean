@@ -24,6 +24,7 @@ directory here.
 | `config.json` | What the campaign is and how to present it (fields below) |
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
+| `references.json` | Optional bibliography of the works that `{{cite:Key}}` tokens in the texts cite (fields below) |
 | `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
 | `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the equations displayed inside sentences |
 
@@ -112,6 +113,26 @@ stating the equation in words; it becomes the image's alternative text. Prefer a
 would repeat it, and keep margin diagrams for the arguments too large to sit in the text. tenkz audits
 equations written with `=` only, so an approximate relation is set as two
 pictures with `\approx` between them.
+
+## Citations and `references.json`
+
+A stage or gap text cites earlier work with `{{cite:Key}}` or
+`{{cite:Key1,Key2}}`, written straight after the phrase that names the idea and
+before any punctuation. Citations are numbered in reading order (the stages,
+then the gap entries) and link to the page's reference list, where each entry
+links back to the stages and gaps that cite it. Each key names an entry of
+`references.json`:
+
+| Field | Meaning |
+|-------|---------|
+| `authors` | Short author list, initials first, `et al.` beyond four authors |
+| `title`, `year`, `venue` | The work; `venue` is optional |
+| `url` | The arXiv abstract page, else the DOI |
+| `manuscript` | Whether either manuscript cites the work; `false` marks an earlier source for an idea the manuscripts use without a citation |
+
+Cite only works whose bibliographic data have been checked against arXiv or
+the DOI record, and only for an idea they originate or that the proof uses as
+stated. A token naming a missing key stops the render.
 
 ## `gaps.json`
 
