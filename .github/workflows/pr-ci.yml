@@ -645,6 +645,12 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build safe-rectangle dilation early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.SafeRectangleDilation \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -715,6 +721,16 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
+
+      - name: Check safe-rectangle dilation strictly and audit axioms
+        run: |
+          set -eo pipefail
+          for file in TNLean/PEPS/AreaLaw/SafeRectangleDilation.lean TNLeanTest/SafeRectangleDilationAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 80s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test partial-row entropy strictly
         timeout-minutes: 2
