@@ -77,6 +77,36 @@ abstracted — record why, so it is not re-proposed).
   for a net delta of +5 lines, and four `open Classical in` blocks with their
   `dite` unfoldings are gone.
 
+### Empty final tensor memory — promoted (2026-10-09)
+
+- **Pattern:** identify the tensor product with an empty final memory with
+  scalar multiplication on the preceding memory.
+- **Seen:** `WordAppendTail.lean` and `UnitMemoryCoordinates.lean` contained
+  the same induction on the register list and its tensor vectors.
+- **Abstraction:** `Layout.memCongr_append_nil_appendIso_symm_tmul` in
+  `UnitMemoryCoordinates.lean`.
+- **Refactor:** the spectator-register construction imports and uses this
+  public theorem; its duplicate private proof is removed.
+- **Notes:** the statement includes arbitrary complex scalars and arbitrary
+  register lists, including the empty list. No additional hypothesis is needed.
+
+### Tensor memory identifications under equality — promoted (2026-10-09)
+
+- **Pattern:** identify equal tail register lists before adjoining a fixed head,
+  or identify equal selected and complementary lists before applying the head
+  associativity/exchange maps; addition respects the same identification.
+- **Seen:** the head congruence proof occurred in `LayoutOwnerMap.lean`,
+  `WordAppendTail.lean`, and `UnitMemoryCoordinates.lean`; the partition
+  congruences occurred in `PartyPartition.lean` and `PartyPartitionAppend.lean`.
+- **Abstraction:** `Layout.memCongr_cons_tmul`, `Layout.selectedHead_heq`,
+  `Layout.complementaryHead_heq`, and `Layout.add_heq` in `PartyPartition.lean`.
+- **Refactor:** remove the duplicate private proofs and use the shared
+  declarations. The more general private Hilbert-space congruences in
+  `PartitionOwnerNaturality.lean` retain their cross-owner applications.
+- **Notes:** no additional hypothesis or compatibility alias. The public
+  lemmas and callers pass the full native build; the strict imported-lemma
+  audit reports only `propext`, `Classical.choice`, and `Quot.sound`.
+
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
 - **Pattern:** Identify the all-halves two-by-two density matrix with one half

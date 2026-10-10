@@ -77,6 +77,16 @@ exact-preparation consumers therefore avoid normal-gauge construction as well.
 assumption is needed merely to define the vector. See the
 [consumer audit](audits/2026-10-05_inhomogeneous_preparation_imports.md).
 
+## PEPS tensor-memory identifications
+
+`PEPS.Approximation.UnitMemoryCoordinates` identifies an empty final tensor
+memory with the scalar field. Its theorem
+`Layout.memCongr_append_nil_appendIso_symm_tmul` states that adjoining a scalar
+and identifying the empty final register list gives scalar multiplication on
+the preceding memory. The spectator-register construction in `WordAppendTail`
+uses this theorem directly. Its former private copy `appendIso_nil_tmul` is
+removed; no public declaration is removed or renamed.
+
 ## Archive exclusion
 
 `TNLean/Archive/` is intentionally outside the production manifest and is not
