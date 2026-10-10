@@ -44,6 +44,6 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
     simp [sitePairConfigurationEquiv, sheetSwap, hi, hxy i hi]
   case left =>
     intro x i hi
-    done
+    simp [sitePairConfigurationEquiv, sheetSwap, hi]
 
 end TNLean.PEPS.EncodedFrame
