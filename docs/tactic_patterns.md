@@ -73,9 +73,9 @@ abstracted — record why, so it is not re-proposed).
   `dressedScalar` of their boundaries, and each spec lemma ends with
   `exact MPSTensor.isDressedProportional_dressedScalar hex`.
 - **Notes:** statements of `omega`, `relativeScalar`, both `lSymbol`s and their spec
-  lemmas are unchanged. The shared definition and lemma add 18 lines; the four call sites lose 13,
-  for a net delta of +5 lines, and four `open Classical in` blocks with their
-  `dite` unfoldings are gone.
+  lemmas are unchanged. The shared definition and lemma add 18 lines; the four call
+  sites lose 13, for a net delta of +5 lines, and four `open Classical in` blocks with
+  their `dite` unfoldings are gone.
 
 ### Empty final tensor memory — promoted (2026-10-09)
 
