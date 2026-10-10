@@ -71,7 +71,9 @@ abstracted — record why, so it is not re-proposed).
   `MPSTensor.isDressedProportional_dressedScalar` in
   `TNLean/MPS/Core/ReductionComposition.lean`. The four definitions are
   `dressedScalar` of their boundaries, and each spec lemma ends with
-  `exact MPSTensor.isDressedProportional_dressedScalar hex`.
+  `exact MPSTensor.isDressedProportional_dressedScalar hex`. The one external proof that
+  unfolded the `dite` of `omega`, `MPOTensor.GroupCocycle.fusionData_omega`
+  (`TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`), uses the same lemma.
 - **Notes:** statements of `omega`, `relativeScalar`, both `lSymbol`s and their spec
   lemmas are unchanged. The shared definition and lemma add 18 lines; the four call
   sites lose 13, for a net delta of +5 lines, and four `open Classical in` blocks with
