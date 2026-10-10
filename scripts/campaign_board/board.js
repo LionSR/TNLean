@@ -215,11 +215,12 @@
   // Notes are identified by repository and path; two repositories may use the same file name.
   const gapKey = (repo, path) => `${repo || PRIMARY.name}:${path}`;
   const noteFor = g => (D.gapNotes || []).find(n => gapKey(n.repo, n.path) === gapKey(g.repo, g.id));
-  // A note on main is compiled to a PDF on its library's site; one only in an open pull request
-  // has no compiled copy yet, so its file name stays plain text.
+  // A note on main is compiled to a PDF on its library's site. A note only in an open pull
+  // request, or one whose title and status were read from a pull request's newer version
+  // (fromPR), has no matching compiled copy yet, so its file name stays plain text.
   const noteLink = (n, text) => {
     const home = (REPO[n.repo || PRIMARY.name] || {}).homepage;
-    if (!n.onMain || !home) return el("span", { class: "muted mono", text });
+    if (!n.onMain || n.fromPR || !home) return el("span", { class: "muted mono", text });
     const a = ext(`${home.replace(/\/?$/, "/")}paper-gaps/${n.path.split("/").pop().replace(/\.tex$/, ".pdf")}`, text, "mono");
     a.title = "Compiled paper-gap note (PDF)";
     return a;
