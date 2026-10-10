@@ -10,8 +10,9 @@
   --s-blocked: #7b8494; --s-blocked-bg: #eef0f3;
   --s-bad: #b4322b; --s-bad-bg: #f8dfdc;
   --lane-0: #8b6a3e; --lane-1: #3446b8; --lane-2: #0f7c86;
-  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
-  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Noto Sans Math only supplies the math symbols (such as ⊗) the text faces lack. */
+  --f-display: "Newsreader", "Noto Sans Math", "Iowan Old Style", Georgia, serif;
+  --f-body: "IBM Plex Sans", "Noto Sans Math", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
@@ -51,6 +52,7 @@ math { font-size: 1.08em; }
 .muted { color: var(--muted); }
 .note { font-size: 12.5px; color: var(--muted); max-width: 80ch; margin: 0; }
 section { display: grid; gap: 14px; }
+[hidden] { display: none !important; }
 section > header { display: grid; gap: 6px; }
 section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .part { border-top: 1px solid var(--line); padding-top: 28px; }
@@ -66,6 +68,7 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .thm .fig { display: block; width: 100%; height: auto; max-width: 100%; }
 .thm .stmt { margin: 0; font-family: var(--f-display); font-size: 16px; line-height: 1.5; }
 .thm .formula { text-align: center; padding: 8px 0; font-size: 17px; overflow-x: auto; }
+.thm .defs { margin: 0; font-size: 13.5px; color: var(--muted); }
 .thm .why { margin: 0; font-size: 13.5px; color: var(--muted); }
 .thm dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 13px; border-top: 1px solid var(--soft); padding-top: 10px; }
 .thm dt { color: var(--muted); }
@@ -92,21 +95,27 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .st-ready { color: var(--s-ready); background: var(--s-ready-bg); border-color: var(--s-ready); }
 .st-blocked { color: var(--s-blocked); background: var(--s-blocked-bg); border-color: var(--s-blocked); }
 .st-bad { color: var(--s-bad); background: var(--s-bad-bg); border-color: var(--s-bad); }
-.st-closed { color: var(--muted); background: var(--soft); border-color: var(--line); }
+.st-closed, .st-untracked { color: var(--muted); background: var(--soft); border-color: var(--line); }
 
 /* proof stages */
 .route { display: grid; gap: 0; counter-reset: stage; }
-.stage { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 16px; }
+.stage { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 0 16px; scroll-margin-top: 16px; }
 .stage .rail { display: grid; grid-template-rows: auto 1fr; justify-items: center; }
 .stage .dot { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 500 13px var(--f-mono); border: 2px solid; background: var(--surface); }
 .stage .line { width: 2px; background: var(--line); margin-block: 4px; }
 .stage:last-child .line { visibility: hidden; }
 .stage .body { padding-bottom: 28px; display: grid; gap: 10px; min-width: 0; }
 .stage .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.stage .head .pill { white-space: normal; }
 .stage .secs { font: 12px var(--f-mono); color: var(--muted); }
-.stage .phys { margin: 0; max-width: 72ch; }
-.stage .out { margin: 0; max-width: 72ch; font-size: 13.5px; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--soft); border-radius: 0 6px 6px 0; }
-.stage .out b { font-weight: 600; }
+.stage .lead { display: grid; gap: 14px 32px; align-items: start; }
+.stage .lead .txt { display: grid; gap: 10px; min-width: 0; }
+@media (min-width: 980px) { .stage .lead.hasfig { grid-template-columns: minmax(0, 66ch) minmax(260px, 380px); } }
+/* The proof is read, not scanned: serif text at reading size, equations set on the line
+   (img.tni), the outcome introduced by small capitals rather than boxed. */
+.stage .phys, .stage .out { margin: 0; max-width: 66ch; font: 17px/1.6 var(--f-display); }
+.stage .sc { font-variant: small-caps; letter-spacing: 0.06em; font-weight: 600; }
+img.tni { display: inline; vertical-align: middle; max-width: 100%; height: auto; margin: 3px 0.15em; }
 .stage .meta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 20px; }
 @media (max-width: 760px) { .stage .meta { grid-template-columns: minmax(0, 1fr); } }
 .stage .box { min-width: 0; display: grid; gap: 6px; align-content: start; }
@@ -204,14 +213,23 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .kinds div { display: grid; gap: 2px; }
 .kinds dt { display: flex; gap: 8px; align-items: center; }
 .kinds dd { margin: 0; color: var(--muted); }
-.gaplist { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
-.gap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
-.gap h3 { font-size: 17px; }
+/* Gaps are read, not scanned: one column, entries separated by rules rather than boxed, the
+   verdict in serif at reading size, the four fields as a margin-labelled list. */
+.gaplist { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; max-width: 860px; }
+.gap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding-block: 22px; border-top: 1px solid var(--line); min-width: 0; scroll-margin-top: 16px; }
+.gap h3 { font-size: 20px; }
+.gap h3 .res { font: 400 13px var(--f-body); color: var(--muted); }
 .gap .where { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
-.gap dl { margin: 0; display: grid; gap: 8px; font-size: 13.5px; }
-.gap dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 500; }
-.gap dd { margin: 2px 0 0; }
+.gap .summary { margin: 0; font: 500 18px/1.5 var(--f-display); max-width: 66ch; }
+.gap .context { margin: 0; font: 16px/1.6 var(--f-display); color: var(--muted); max-width: 66ch; }
+.gap dl { margin: 0; display: grid; gap: 10px; font: 15.5px/1.6 var(--f-display); max-width: 66ch; }
+.gap dl div { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 0 16px; }
+.gap dt { font: 500 11px/2.1 var(--f-body); text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.gap dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.gap .ov { text-decoration: overline; }
+@media (max-width: 620px) { .gap dl div { grid-template-columns: minmax(0, 1fr); } }
 .gap .links { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 12.5px; }
+.gap .links .mono { overflow-wrap: anywhere; }
 .k-error { color: var(--s-bad); background: var(--s-bad-bg); border-color: var(--s-bad); }
 .k-missing-step { color: var(--s-draft); background: var(--s-draft-bg); border-color: var(--s-draft); }
 .k-narrower { color: var(--s-review); background: var(--s-review-bg); border-color: var(--s-review); }
@@ -220,3 +238,49 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .checked li::before { content: "✓ "; color: var(--s-done); font-weight: 600; }
 @media (max-width: 560px) { .wrap { padding-inline: 16px; } td.t { min-width: 200px; } .stage { grid-template-columns: 34px minmax(0,1fr); gap: 0 10px; } .stage .dot { width: 28px; height: 28px; font-size: 12px; } }
 @media (prefers-reduced-motion: no-preference) { #map .node, #map .edge { transition: opacity .15s; } }
+
+/* libraries */
+.libs { font-size: 16px; color: var(--ink); margin: 0; }
+.libs a { font-weight: 600; }
+.libcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.libcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 10px; align-content: start; }
+.libcard h3 { margin: 0; font-size: 20px; }
+.libcard p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.libcard .links { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; }
+
+/* stage figures: Tufte-style margin schematics drawn by a campaign's figures.js */
+.stage .figs { display: grid; gap: 22px; min-width: 0; }
+/* The symbol key: a margin list, set like a sidenote, so a stage reads on its own. */
+.key { display: grid; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.key .keyhead { font: 500 11px var(--f-body); text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.key dl { margin: 0; display: grid; gap: 3px; font: 14px/1.45 var(--f-display); }
+.key dl div { display: grid; grid-template-columns: 6em minmax(0, 1fr); gap: 0 10px; }
+.key dt { min-width: 0; overflow-wrap: anywhere; }
+.key dd { margin: 0; color: var(--muted); min-width: 0; }
+.tnfig img, img.tnimg { display: block; max-width: 100%; height: auto; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.tnfig img, img.tnimg, img.tni) { filter: invert(0.9) hue-rotate(180deg); } }
+:root[data-theme="dark"] :is(.tnfig img, img.tnimg, img.tni) { filter: invert(0.9) hue-rotate(180deg); }
+.sfig { margin: 0; display: grid; gap: 6px; min-width: 0; max-width: 400px; }
+.sfig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.sfig figcaption { font: italic 13px/1.45 var(--f-display); color: var(--muted); }
+.sfig figcaption i { font-style: normal; }
+.sfig .h { stroke: var(--muted); stroke-width: 0.75; fill: none; }
+.sfig .g { stroke: var(--line); stroke-width: 1; fill: none; }
+.sfig .k { stroke: var(--ink); stroke-width: 1.2; fill: none; }
+.sfig .a { stroke: var(--accent); stroke-width: 1.75; fill: none; }
+.sfig .c { stroke: var(--cut); stroke-width: 2; fill: none; }
+.sfig .thick { stroke-width: 6; }
+.sfig .dash { stroke-dasharray: 3 3; }
+.sfig .fa { fill: var(--accent); }
+.sfig .fl { fill: var(--s-landed); }
+.sfig .fs { fill: var(--soft); }
+.sfig .fk { fill: var(--ink); }
+.sfig .fm { fill: var(--muted); }
+.sfig .fc { fill: var(--cut); }
+.sfig .op { fill-opacity: 0.18; }
+.sfig text { font: 10.5px var(--f-body); fill: var(--muted); }
+.sfig text.t { fill: var(--ink); }
+.sfig text.m { font: italic 12.5px var(--f-display); }
+.sfig text.big { font-size: 17px; }
+.sfig text.on { fill: var(--surface); font-weight: 600; }
+.sfig text.halo { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }

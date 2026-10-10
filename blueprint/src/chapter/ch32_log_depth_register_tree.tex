@@ -140,7 +140,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.regTreeOp_apply_blockInputCfg}
     \leanok
     \uses{thm:ldp_tree_factorization, lem:ldp_tree_layers_isometries,
-        lem:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes,
+        thm:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes,
         lem:qc_placed_configurations, thm:ldp_register_tree_rounds,
         thm:ldpolar_tensor_decomposition}
     Let $A$ be a tensor whose blocked tensor $\mathcal B$ over $s$ sites has an
@@ -164,7 +164,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     \leanok
     By Lemma~\ref{lem:ldp_tree_layers_isometries} the layers of the tree circuit
     of $\mathcal B$ are isometries, and they extend to unitaries
-    (Lemma~\ref{lem:ldp_unitary_implementing_isometry}) from their input
+    (Theorem~\ref{thm:ldp_unitary_implementing_isometry}) from their input
     register, the other register in $\ket0$, to their two output registers.
     The unitary of the root reads $l$ and $r$. After the depths $0,\dots,j$ the
     registers of the sub-blocks of depth $j+1$ carry the outputs of these

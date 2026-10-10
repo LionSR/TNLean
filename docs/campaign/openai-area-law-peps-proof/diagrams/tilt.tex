@@ -1,0 +1,19 @@
+% Area-law manuscript, proof of Lemma lem:tail (02-initial.tex, lines 75-82):
+% Theta = F Psi / sqrt(M(u)) with F = rho^{-u/2} on B, and
+% sigma = Tr_{B^c} |Theta><Theta| = rho^{1-u} / M(u).
+\[
+  \frac{1}{M(u)}\;
+  \begin{tenkz}[rows={wire,wire,wire,wire}, cols=2, bonds=none]
+    \tn[at=(2,1), skin=box, name=f, ports={90:physical:$B$, 270:physical}]{F}
+    \tn[at=(3,1), skin=box, wide=2, name=k, ports={90@1:physical, 90@2:physical}]{\Psi}
+    \tn[at=(4,1), skin=box, wide=2, name=b, ports={270@1:physical, 270@2:physical}]{\overline{\Psi}}
+    \tn[at=(5,1), skin=box, name=g, ports={90:physical, 270:physical:$B$}]{\overline{F}}
+    \tnwire{k.90@1}{f.270}
+    \tnwire{b.270@1}{g.90}
+    \tnwire[route=arc]{k.90@2}{b.270@2}
+  \end{tenkz}
+  \;=\;
+  \begin{tenkz}[cols=1]
+    \tn[skin=box, ports={90:physical:$B$, 270:physical:$B$}]{\sigma}
+  \end{tenkz}
+\]

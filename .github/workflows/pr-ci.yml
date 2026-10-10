@@ -71,6 +71,8 @@ on:
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -97,6 +99,7 @@ on:
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
+      - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -111,9 +114,11 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -177,6 +182,8 @@ on:
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -203,6 +210,7 @@ on:
       - 'scripts/test_tenkz_peps_groundstate.py'
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
+      - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -217,9 +225,11 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   workflow_dispatch:
 
 concurrency:
@@ -337,6 +347,8 @@ jobs:
               - 'scripts/generate_badges.py'
               - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
+              - 'scripts/test_blueprint_graph_worker.py'
+              - 'scripts/test_blueprint_graph_precompute.py'
               - 'scripts/add_blueprint_search.py'
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
@@ -352,6 +364,7 @@ jobs:
               - 'scripts/test_tenkz_peps_groundstate.py'
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
+              - 'scripts/test_tenkz_region_coordinates.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -366,9 +379,11 @@ jobs:
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_sector_encoder_diagram.py'
+              - 'scripts/test_nested_patch_geometry_diagram.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
+              - 'scripts/test_tenkz_stationary_density.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -499,6 +514,14 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Build template mixed-square and weighted covering estimates early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Check finite rectangular dual geometry early
         run: |
           set -eo pipefail
@@ -608,18 +631,18 @@ jobs:
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rounded bootstrap collar clearance early
+        timeout-minutes: 2
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template layers early
         timeout-minutes: 5
         run: |
           set -eo pipefail
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Build template mixed-square estimates early
-        timeout-minutes: 5
-        run: |
-          set -eo pipefail
-          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build safe-rectangle dilation early
@@ -717,6 +740,19 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateEntropy.lean
 
+      - name: Check rounded bootstrap collar clearance and standard axioms strictly
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          for source in \
+            TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean \
+            TNLeanTest/BootstrapRoundedClearanceAxioms.lean; do
+            lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Test square-grid vector, regional and approximation transport
         timeout-minutes: 2
         run: >
@@ -784,8 +820,19 @@ jobs:
             -o "$test_root/TNLeanTest/Support/SingleQubitConfig.olean" \
             TNLeanTest/Support/SingleQubitConfig.lean
           for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
-              RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
+              DependentRegionCoordinates RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
             LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Test nested-square geometry and kernel dependencies strictly
+        timeout-minutes: 4
+        run: |
+          set -e
+          for example in NestedPatchGeometry NestedPatchGeometryAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
 
@@ -929,6 +976,14 @@ jobs:
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
+
+      - name: Test stationary physical densities
+        timeout-minutes: 2
+        run: >
+          lake env lean -j 1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/StationaryPhysicalDensity.lean
 
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
@@ -1094,7 +1149,17 @@ jobs:
               TNLeanTest/PEPS/AreaLaw/Amplification/ComponentChannelOscillation.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelOscillation.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelEventKernel.lean \
-              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean; do
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordObservables.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectors.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectorChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/GraphExtendedMetric.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -1498,6 +1563,23 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_patch_stationarity.py
 
+      - name: Check regional basis-relabelling diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: >
+          python3 scripts/test_tenkz_region_coordinates.py
+          --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
+
+      - name: Preserve regional coordinate diagrams for review
+        if: success() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: region-coordinate-diagrams-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/region-coordinate-diagrams/tenkz-*.svg
+            ${{ runner.temp }}/region-coordinate-diagrams/cache/tenkz-*.tnlog
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_peps_native_semiregular.py
@@ -1530,11 +1612,19 @@ jobs:
         timeout-minutes: 2
         run: python3 scripts/test_tenkz_string_endpoints.py
 
+      - name: Test stationary physical density contractions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_stationary_density.py
+
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
 
       - name: Check coherent sector-encoder diagrams
         run: python3 scripts/test_sector_encoder_diagram.py
+
+      - name: Check nested-patch geometry diagram
+        run: python3 scripts/test_nested_patch_geometry_diagram.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
@@ -1622,6 +1712,25 @@ jobs:
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
 
+      - name: Test dependency graph rendering and terminal errors
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
+
+      - name: Test precomputed dependency graph interactions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_precompute.py --browser-smoke
+
+      # A zero exit status says the build ran, not that the pages read. This
+      # opens every generated page and measures what a reader would meet.
+      - name: Test generated blueprint pages
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
+          python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
       - name: Preserve failed blueprint render
         if: failure() && env.TEX_CHANGED == 'true'
         uses: actions/upload-artifact@v7
@@ -1629,12 +1738,6 @@ jobs:
           name: blueprint-render-failure
           path: blueprint/web
           retention-days: 3
-
-      # A zero exit status says the build ran, not that the pages read. This
-      # opens every generated page and measures what a reader would meet.
-      - name: Test generated blueprint pages
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Test Blueprint declaration scanner
         run: python3 scripts/test_blueprint_lean_sync.py
