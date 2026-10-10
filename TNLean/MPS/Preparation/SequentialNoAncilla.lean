@@ -175,6 +175,7 @@ theorem noAncillaState_eq_jointState :
 
 /-! ### The operations acting on the whole chain -/
 
+omit [NeZero d] in
 /-- The operation `V` on `ℂ^d ⊗ ℂ^d` acting on the chain of `n + 2` sites: its first tensor factor
 is the site at position `p + 1`, its second the site at position `p`, and the identity acts on the
 other sites. The operation `U^{[k]}` of arXiv:quant-ph/0608197, lines 1580--1586, on the source
@@ -228,6 +229,7 @@ private theorem forall_lt_update_update_eq_zero_iff {n : ℕ} (τ : Fin (n + 2) 
     rw [Function.update_of_ne hc, Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega))]
     exact h q (by omega)
 
+omit [NeZero d] in
 /-- The product `U^{[k+1]} ⋯ U^{[1]}` of the first `k + 1` operations acting on the whole chain of
 `n + 2` sites (arXiv:quant-ph/0608197, lines 1580--1586), the first operation acting first. -/
 noncomputable def noAncillaChainOp {n : ℕ}
