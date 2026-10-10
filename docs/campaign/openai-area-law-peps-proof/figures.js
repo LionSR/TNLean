@@ -91,7 +91,7 @@ window.campaignFigures = (function () {
       brace(svg, e0, e0 + gap, base + 7, "", "h", false);
       text(svg, e0 + gap / 2, base + 24, "gap Δ", "", "middle");
       text(svg, 108, base + 13, "spectrum of *H*", "", "middle");
-      text(svg, e0 + 6, base - 80, "χ = 1 at *E*_{0}", "t");
+      text(svg, e0 + 6, base - 80, "χ(*E* − *E*_{0}) = 1 at *E*_{0}", "t");
       text(svg, 150, base - 14, "χ = 0 on excited levels", "", "end");
       // Fourier transform of the filter on a log scale.
       const T = scale(0, 30, 182, 296), L = scale(1e-8, 1, 132, 22, true);

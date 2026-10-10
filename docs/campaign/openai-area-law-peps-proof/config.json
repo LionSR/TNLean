@@ -225,7 +225,7 @@
           "physics": "The Hamiltonian <i>H</i> is replaced by a sum of positive pieces <i>k<sub>i</sub></i>, one per interaction term. Each piece annihilates the ground state Ω: {{tn:al-kill}}. Each piece acts mostly near its own term. Its tail decays faster than any power of the distance. Two tools give this. One is a Lieb–Robinson bound in the lattice's own graph distance. The other is a smooth filter in energy whose Fourier transform decays stretched-exponentially.",
           "delivers": "Positive operators <i>k<sub>i</sub></i>, one per interaction term. Each annihilates the ground state Ω and has a rapidly decaying spatial tail. Their sum is at least a constant times <i>H</i> − <i>E</i><sub>0</sub>, where <i>E</i><sub>0</sub> is the ground energy. So the sum keeps a gap.",
           "figure": "filter",
-          "caption": "Left: the spectrum of <i>H</i> as a rug, with the ground energy <i>E</i><sub>0</sub> and the gap Δ above it. The filter χ is a smooth bump in energy. It equals 1 at <i>E</i><sub>0</sub> and vanishes on every excited energy. Right: the size of its Fourier transform at time <i>t</i>, on a log scale. Its tail falls below every power law. This keeps each piece concentrated near its interaction term.",
+          "caption": "Left: the spectrum of <i>H</i> as a rug, with the ground energy <i>E</i><sub>0</sub> and the gap Δ above it. The filter χ is a smooth bump, drawn as χ(<i>E</i> − <i>E</i><sub>0</sub>) against the energy <i>E</i>. It equals 1 at the ground energy and vanishes on every excited energy. Right: the size of its Fourier transform at time <i>t</i>, on a log scale. Its tail falls below every power law. This keeps each piece concentrated near its interaction term.",
           "diagrams": [
             {
               "src": "diagrams/qc-filter.svg",
@@ -283,7 +283,7 @@
             ],
             [
               "χ",
-              "energy filter, Fourier transform of f: 1 at zero, 0 beyond Δ/2"
+              "energy filter, the Fourier transform of <i>f</i>: χ(0) = 1, and χ(ω) = 0 for |ω| ≥ Δ/2; plotted as χ(<i>E</i> − <i>E</i><sub>0</sub>)"
             ],
             [
               "⟨Ω, <i>h<sub>i</sub></i>Ω⟩",
@@ -738,8 +738,8 @@
               "side length of the square grid"
             ],
             [
-              "<i>X</i>, <i>Y</i>",
-              "the two separated regions in the figure"
+              "<i>X</i>, <i>E</i>",
+              "two regions kept apart by a buffer; the splitting diagram calls the first one <i>T</i>"
             ],
             [
               "<i>K</i>",
@@ -750,8 +750,8 @@
               "any fixed positive power"
             ],
             [
-              "<i>I</i>(<i>X</i> : <i>Y</i>)",
-              "mutual information between X and Y"
+              "<i>I</i>(<i>X</i> : <i>E</i>)",
+              "mutual information between X and E"
             ],
             [
               "Ω",
@@ -767,7 +767,7 @@
             ],
             [
               "<i>E</i>",
-              "everything else"
+              "everything beyond the buffer, far from <i>X</i> (or <i>T</i>)"
             ],
             [
               "<i>V</i>",
