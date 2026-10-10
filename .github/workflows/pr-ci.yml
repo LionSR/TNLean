@@ -25,6 +25,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/test_check_docbuild_manifest.py'
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -142,6 +143,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/test_check_docbuild_manifest.py'
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -310,6 +312,7 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'docbuild/**'
               - 'scripts/check_docbuild_manifest.py'
+              - 'scripts/test_check_docbuild_manifest.py'
               - 'scripts/coherent_qic_prerequisites.json'
               - 'scripts/export_coherent_qic_prerequisites.py'
               - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -638,6 +641,13 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rectangle partial-row entropy early
+        timeout-minutes: 2
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.WeakRectanglePartialRowEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template layers early
         timeout-minutes: 5
         run: |
@@ -754,6 +764,19 @@ jobs:
           for source in \
             TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean \
             TNLeanTest/BootstrapRoundedClearanceAxioms.lean; do
+            lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Check rectangle partial-row entropy and standard axioms strictly
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          for source in \
+            TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean \
+            TNLeanTest/WeakRectanglePartialRowEntropyAxioms.lean; do
             lake env lean -j1 \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -1332,6 +1355,9 @@ jobs:
           bash -n scripts/lake_build_locked.sh
           bash -n scripts/seed_lake_build.sh
           bash -n scripts/test_seed_lake_build.sh
+
+      - name: Test docbuild manifest checker
+        run: python3 scripts/test_check_docbuild_manifest.py
 
       # docbuild/ shares the root package directory, so its manifest must pin
       # the same revisions or the weekly API docs build checks out stale ones.

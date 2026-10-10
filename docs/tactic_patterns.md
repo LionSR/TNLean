@@ -6237,6 +6237,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
 
+### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
+
+- **Pattern:** Project a physical region injectively to its ambient lattice subset,
+  then use the ambient layer cardinality bound in the entropy dimension estimate.
+- **Seen:** Two occurrences, in Geometry/TemplateEntropy.lean and
+  WeakRectanglePartialRowEntropy.lean under TNLean/PEPS/AreaLaw/.
+- **Abstraction:** A general cardinality lemma for filtering a physical region by
+  an ambient finite set could replace the image-subset and cardinality chain.
+- **Notes:** Both arguments retain the original vector and physical region.
+  The existing disjoint-region entropy increment theorem is reused directly.
+  The two cardinality chains differ only in their ambient geometric bounds.
+
 ### Owners of fixed pair-source registers — candidate (2026-10-09)
 
 - **Pattern:** From membership in a fixed source-register layout, use
