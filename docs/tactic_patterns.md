@@ -55,6 +55,22 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
   analogue for an arbitrary graph in the extended graph distance.
 
+### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
+
+- **Pattern:** repeat the region of a fan triangle after deleting the actual
+  successor color-change radials and intersecting with the open ball of
+  radius equal to the cell's half-side.
+- **Seen:** three descriptions across `FanInactiveSeams.lean` (the statement
+  and its local proof expression) and `FanRunConnectedness.lean`.
+- **Abstraction:** `cellFanCutPiece` in
+  `TNLean/PEPS/AreaLaw/Geometry/FanInactiveSeams.lean` names this common set.
+- **Refactor:** the inactive-radial statement and proof refer directly to the
+  definition; the connected-run proof uses it for its family of pieces and
+  unfolds it only in the final union identity.
+- **Notes:** the fan has all side midpoints, the colors lie in `Fin 2`, and
+  the radius and deleted radials are derived from the same actual cell and
+  coloring. No added hypothesis or more general construction is introduced.
+
 ### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
 
 - **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with
@@ -3626,6 +3642,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Unique radial through a noncentral fan point — candidate (2026-10-09)
+
+- **Pattern:** turn membership in two center-to-endpoint segments into a common
+  directed ray, then apply `cellFanEnd_sameRay_iff` to identify their slots.
+- **Seen:** two uses across `CellFanRadialIncidence.lean` and
+  `FanInactiveSeams.lean`, in `TNLean/PEPS/AreaLaw/Geometry/`.
+- **Abstraction:** a common noncentral radial-incidence lemma if a third use
+  appears; the shared endpoint-ray theorem already contains the geometry.
+- **Notes:** noncentrality is essential when composing the directed-ray
+  relations. The center remains in every triangle when no radial is removed.
+
+
 ### Operator norm in orthonormal coordinates — candidate (2026-10-07)
 
 - **Pattern:** Identify matrix multiplication in orthonormal coordinates with
@@ -3657,6 +3685,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** `isMPUSimple_of_rankOne_diagonal` (`TNLean/MPS/MPU/SimpleRankOne.lean`,
   2026-10-06) proves simplicity from three scalar pairings; the shift's own simplicity proof
   (`rightShiftTensor_isMPUSimple`) has this form and could be replaced by it.
+
+### Nonnegative barycentric coordinates — candidate (2026-10-08)
+
+- **Pattern:** Obtain nonnegativity of every barycentric coordinate from
+  membership in the convex hull of an affine basis.
+- **Seen:** Four local coordinate arguments in
+  `PEPS/AreaLaw/Geometry/FanRadialConvexity.lean`.
+- **Current reuse:** All four use Mathlib's
+  `AffineBasis.convexHull_eq_nonneg_coord` directly. They lie in one file,
+  so the two-file promotion threshold has not been reached.
+- **Promotion trigger:** If this extraction recurs in another module, prefer
+  a lemma giving the coordinate inequalities over a new tactic.
 
 ### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
 
@@ -5775,6 +5815,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
 
+### Cyclic matrix traces in physical density contractions — rejected (2026-10-05)
+
+- **Pattern:** Normalize matrix associativity around a cyclic trace permutation.
+- **Seen:** The left marginal and unitary-gauge proofs in
+  `Core/StationaryPhysicalDensity`, and the virtual-Gram purity and overlap
+  proofs in `Core/StationaryPhysicalOverlap`.
+- **Abstraction:** Reuse Mathlib's `Matrix.trace_mul_comm` with its rectangular
+  intermediate dimensions, followed by `simp only [Matrix.mul_assoc]`.
+- **Notes:** The common mathematical step is already abstracted upstream.
+  A local four-factor trace wrapper would add a parallel API without removing
+  an independent proof argument. No additional tactic or helper was added.
+
 ### Finite periodic quotient error — candidate (2026-10-06)
 
 - **Pattern:** Bound a normalized periodic expectation by rewriting
@@ -6063,19 +6115,35 @@ spectral split → block extraction → MPV calculation → strict bounds
   restriction uses the same actual base without another coordinate argument.
   The three existing callers are renamed; both complete proofs are unchanged.
 
-### Radial membership from triangle contact — candidate (2026-10-08)
+### Radial membership from triangle contact — promoted (2026-10-08)
 
 - **Pattern:** Transport membership in two intersecting fan triangles through
-  their contact equality, with an explicit radial-segment type, before
-  identifying the fan center with the marked point.
+  their contact equality, with an explicit radial-segment type.
 - **Seen:** The two contact orientations in
   `initialRegion_frontier_near_mark_iff_active_radial` in
-  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`.
-- **Abstraction:** Two branches in one file are below the promotion threshold.
-  The explicit intermediate statements keep the geometric argument readable.
-  A further consumer should first seek a shared contact-membership lemma.
-- **Notes:** The two branches use the existing intersection classification;
-  neither repeats a coordinate calculation.
+  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`, and the unequal-slot branch in
+  `Geometry/CellFanRadialIncidence.lean`, followed by both orientations in
+  `Geometry/FanRunDisjointness.lean`.
+- **Abstraction:** The public `cellFanPolygons_nontrivial_inter_cases` in
+  `FanRunContacts.lean` supplies the full geometric intersection classification.
+  Each consumer obtains typed radial membership by ordinary equality transport.
+- **Notes:** All five occurrences share the classification theorem.
+  No additional helper or tactic is needed for equality substitution, and no
+  coordinate calculation is copied.
+
+### Vertex segments in a fan triangle — promoted (2026-10-08)
+
+- **Pattern:** Contain a segment from the fan center to a perimeter vertex in
+  the triangle's convex hull.
+- **Seen:** Three applications in `Geometry/CellFanRadialIncidence.lean` and
+  two in `Geometry/InitialSectorColors.lean`.
+- **Abstraction:** All five applications directly use Mathlib's
+  `segment_subset_convexHull`. The scalar field and the three-vertex set are
+  specified when inference requires them; start and end membership witnesses
+  select the required segment.
+- **Notes:** The mathematical containment is already shared. A further wrapper
+  would add fan parameters without removing a geometric calculation, so the
+  direct applications remain unchanged.
 
 ### Ordered regularized regional filters — candidate (2026-10-07)
 
@@ -6121,3 +6189,55 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Owners of fixed pair-source registers — candidate (2026-10-09)
+
+- **Pattern:** From membership in a fixed source-register layout, use
+  `List.mem_flatMap` to identify the pair, `List.mem_ofFn` to identify its
+  slot index, and `PairSource.layout` to choose its left or right owner.
+- **Seen:** `SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id` in
+  `PEPS/Approximation/EndpointWordRestriction.lean` and
+  `SourceCircuit.restrict_allResidualSourceLayout_isNone` in
+  `PEPS/Approximation/ActualSourceEmptyOwner.lean` (the latter is proposed
+  separately in #8999). These are two mathematical uses across two files,
+  rather than copies of one source proposal.
+- **Abstraction:** At a third occurrence, prefer an ordinary lemma stating
+  that every owner in `SourceInventory.slotLayout R U V` is the left or
+  right owner of some slot `R.get i`. The assigned register spaces are
+  irrelevant to that conclusion. A selector-exclusion corollary can then
+  reuse that owner description.
+- **Notes:** The rule of three is not yet met, so no new helper or tactic is
+  added. The endpoint word's separate participating-party support proof
+  remains necessary: a general local operation on empty registers may still
+  name a participating party. The corpus scanner was run; unrelated reported
+  patterns are outside this change.
+
+### Prescribed slopes of actual fan edges — promoted (2026-10-09)
+
+- **Pattern:** Extract the base and final radial slopes from the actual
+  fan-triangle constructor.
+- **Seen:** Three actual-fan specializations across
+  `PEPS/AreaLaw/Geometry/InitialRegionBoundaries.lean` and
+  `PEPS/AreaLaw/Geometry/InitialStarFrontiers.lean`. The radial exclusion in
+  the nonemptiness argument needs the same constructor field.
+- **Abstraction:** `cellFanPolygon_base_and_radial_isAllowedSlope` in
+  `Geometry/CellFanSlopes.lean` gives both directions for arbitrary optional
+  midpoint subdivisions. The constructor extraction is proved once; its
+  existing complete proof is transferred unchanged.
+- **Notes:** The two old extraction proofs and the private single-radial
+  wrapper are removed. Existing callers select the required component of
+  the shared theorem. No new tactic or geometric hypothesis is introduced.
+
+### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
+
+- **Pattern:** Prove equality of unordered coordinate pairs by choosing the
+  direct branch of `Sym2.eq_iff`, reducing both pairs with `Prod.ext`, and
+  discharging their integer-coordinate equalities with `omega`.
+- **Seen:** Four three-line occurrences in the four nearest-neighbour cases of
+  `mem_rectangleBoundaryEdges` in `PEPS/AreaLaw/Geometry/ClosedSquare.lean`
+  (scanner run 2026-10-07).
+- **Abstraction:** Keep the local case proofs until the pattern has a consumer
+  in a second file; prefer an endpoint-equality lemma if that reuse appears.
+- **Notes:** The current occurrences are all in one proof, below the
+  multiple-file promotion threshold. Crossing membership itself is already
+  expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
