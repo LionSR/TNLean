@@ -48,11 +48,8 @@ Source: Lemma 9.4, lines 641–649. -/
 exactly `2^k`, rather than its coordinate diameter `2^k - 1`. -/
 @[simp] theorem size_latticeDyadicRect (k : ℕ) (z : ℤ × ℤ) :
     (latticeDyadicRect k z).size = 2 ^ k := by
-  have h (a : ℤ) : (a + (2 : ℤ) ^ k - 1 + 1 - a).toNat = 2 ^ k := by
-    have he : a + (2 : ℤ) ^ k - 1 + 1 - a = (2 : ℤ) ^ k := by omega
-    rw [he, Int.toNat_pow_of_nonneg (by norm_num)]
-    rfl
-  simp only [IntRect.size, latticeDyadicRect, h, max_self]
+  simp only [IntRect.size, latticeDyadicRect, (latticeDyadicCell_interval_length k z.1).2,
+    (latticeDyadicCell_interval_length k z.2).2, max_self]
 
 /-- Physical intersections use the same native rectangle region as the safe-box
 entropy interface; no ambient sites outside the domain are added. -/
