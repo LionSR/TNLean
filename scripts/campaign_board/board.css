@@ -10,8 +10,9 @@
   --s-blocked: #7b8494; --s-blocked-bg: #eef0f3;
   --s-bad: #b4322b; --s-bad-bg: #f8dfdc;
   --lane-0: #8b6a3e; --lane-1: #3446b8; --lane-2: #0f7c86;
-  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
-  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Noto Sans Math only supplies the math symbols (such as ⊗) the text faces lack. */
+  --f-display: "Newsreader", "Noto Sans Math", "Iowan Old Style", Georgia, serif;
+  --f-body: "IBM Plex Sans", "Noto Sans Math", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
@@ -67,6 +68,7 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .thm .fig { display: block; width: 100%; height: auto; max-width: 100%; }
 .thm .stmt { margin: 0; font-family: var(--f-display); font-size: 16px; line-height: 1.5; }
 .thm .formula { text-align: center; padding: 8px 0; font-size: 17px; overflow-x: auto; }
+.thm .defs { margin: 0; font-size: 13.5px; color: var(--muted); }
 .thm .why { margin: 0; font-size: 13.5px; color: var(--muted); }
 .thm dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 13px; border-top: 1px solid var(--soft); padding-top: 10px; }
 .thm dt { color: var(--muted); }
@@ -248,6 +250,13 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 
 /* stage figures: Tufte-style margin schematics drawn by a campaign's figures.js */
 .stage .figs { display: grid; gap: 22px; min-width: 0; }
+/* The symbol key: a margin list, set like a sidenote, so a stage reads on its own. */
+.key { display: grid; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.key .keyhead { font: 500 11px var(--f-body); text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.key dl { margin: 0; display: grid; gap: 3px; font: 14px/1.45 var(--f-display); }
+.key dl div { display: grid; grid-template-columns: 6em minmax(0, 1fr); gap: 0 10px; }
+.key dt { min-width: 0; overflow-wrap: anywhere; }
+.key dd { margin: 0; color: var(--muted); min-width: 0; }
 .tnfig img, img.tnimg { display: block; max-width: 100%; height: auto; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :is(.tnfig img, img.tnimg, img.tni) { filter: invert(0.9) hue-rotate(180deg); } }
 :root[data-theme="dark"] :is(.tnfig img, img.tnimg, img.tni) { filter: invert(0.9) hue-rotate(180deg); }
