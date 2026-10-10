@@ -20,23 +20,21 @@ projections and the inverse-conjugated positive interactions along
 Their open and periodic sums commute with \(U^{\otimes N}\) for every
 \(N\geq2\).
 
-**Scope restriction (supplied local-space invariance):** The general block-family
-parent-symmetry conclusions assume invariance of the original two-site
-space and commutation of the positive polar factor with the physical action.
-The derivation of these hypotheses from arbitrary multi-block state symmetry
-is recorded separately in
-docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
-(https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
-
-These are conditional consequences of Schuch--Pérez-García--Cirac,
-arXiv:1010.3732, lines 672--676. The invariance of the original local space
-and commutation of the positive factor are explicit hypotheses. The
+These are consequences of Schuch--Pérez-García--Cirac, arXiv:1010.3732,
+lines 672--676, stated with the invariance of the original local space and
+the commutation of the positive factor as explicit hypotheses. The
 single-block consequences derive both hypotheses from exact state symmetry
 for a one-site injective tensor in either canonical orientation:
 \(\sum_i A_i A_i^\dagger=I\) or \(\sum_i A_i^\dagger A_i=I\).
-The latter is the partial-trace normalization printed in the source. The virtual
-permutation and compatible unitary gauges for arbitrary multiblock state
-symmetries, invoked at source lines 649--659, remain separate.
+The latter is the partial-trace normalization printed in the source.
+For several jointly injective blocks in that normalization, where the
+symmetry permutes the blocks (source lines 649--659), both hypotheses are
+derived in `TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry`.
+
+**Scope restriction (exact vector symmetry):** The derived statements assume
+that the matrix product vectors are invariant, not only invariant up to a
+phase; see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
+(https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
 -/
 
 open scoped Matrix Kronecker BigOperators ComplexOrder
