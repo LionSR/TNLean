@@ -39,7 +39,7 @@
         ]
       },
       "title": "Changes of owner as allowed operations",
-      "summary": "The lemmas hold as stated; Lean proves both with exactly the paper's hypotheses, in a pull request awaiting merge.",
+      "summary": "The lemmas hold as stated; Lean proves both with exactly the paper's hypotheses.",
       "context": "The PEPS is built by handing the ground state among parties, each a label for a set of quantum registers, until every site has its own party. These lemmas are the elementary handovers, and they must use only operations that the later compression step accepts.",
       "claims": "Moving a region <i>T</i> from one party to another is the map {{tn:peps-birth}}. Here <i>V</i> is an isometry that splits the buffer <i>U</i> around <i>T</i>, as in Lemma 6.4. <i>s</i> is a normalized state shared by the two parties. Let <i>E</i> be the rest of the lattice, and Ω the ground state. If <i>I</i>(<i>T</i> : <i>E</i>) ≤ <i>L</i><sup>−60</sup>, then ‖(<i>B</i> − 1)Ω‖ ≤ <i>L</i><sup>−30</sup>, with <i>L</i> the grid side. Swapping ownership of a region between two copies of the state costs at most 4<i>L</i><sup>−30</sup>. Each move uses only private maps, plus normalized states or projections shared by two named parties.",
       "found": "Both lemmas are proved with exactly the paper's hypotheses and error bounds. Each move acts on the actual registers, one per lattice site, each held by its owner. Adding or removing a party uses one shared normalized state or projection; the swap is a reordering that keeps every register with its party, then one private map.",
