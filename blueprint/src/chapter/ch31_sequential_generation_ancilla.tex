@@ -1416,11 +1416,32 @@ representation, it is a general recipe for its sequential generation.
     \end{tenkz}
 \end{center}
 
-\begin{remark}
-    Before $U^{[k]}$ acts, sites $k+1,\dots,N$ remain in $\ket{0}$, and site
-    $k$ is unchanged under subsequent operations, so the intermediate chain
-    state after $U^{[k]}$ is $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$.
-\end{remark}
+\begin{theorem}[The recursion describes the operations on the whole chain]
+    \label{thm:seqanc_no_ancilla_chain}
+    \lean{MPSPreparation.pairOp, MPSPreparation.pairOp_mulVec_apply,
+        MPSPreparation.noAncillaChainOp,
+        MPSPreparation.noAncillaChainOp_mulVec_single_apply,
+        MPSPreparation.noAncillaChainOp_mulVec_single}
+    \leanok
+    \uses{def:seqanc_no_ancilla}
+    Let $d\ge 1$ and $N\ge 2$, and let each $U^{[k]}$ act on the whole chain
+    $(\C^d)^{\otimes N}$ as $U^{[k]}$ on sites $k$ and $k+1$ and as the
+    identity on the other sites. For $k=1,\dots,N-1$,
+    \begin{align*}
+        U^{[k]}\cdots U^{[1]}\ket{0}^{\otimes N}
+        =\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}.
+    \end{align*}
+    In particular, the operations $U^{[1]},\dots,U^{[N-1]}$ applied in turn to
+    $\ket{0}^{\otimes N}$ generate the state $\chi_{N-1}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Induction on $k$. Before $U^{[k]}$ acts, sites $k+1,\dots,N$ remain in
+    $\ket{0}$, so $U^{[k]}$ receives the value $\alpha$ of site $k$ in
+    $\chi_{k-1}$ and the value $0$ of site $k+1$; it does not act on sites
+    $1,\dots,k-1$. Expanding $U^{[k]}$ in the basis of sites $k$ and $k+1$
+    gives the recursion for $\chi_k$.
+\end{proof}
 
 \begin{theorem}[The scheme without an ancilla uses the next site as ancilla]
     \label{thm:seqanc_no_ancilla_joint}

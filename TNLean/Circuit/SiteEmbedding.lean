@@ -36,8 +36,9 @@ unitary `X` on a constant number `m` of sites, applied at the sites `e 0, …, e
   operators acting on `e '' S`.
 * `QuantumCircuit.embedOp_embedOp`, `QuantumCircuit.embedOp_id` — placing a placed operator
   composes the placements, and placing on all the sites in their order changes nothing.
-* `QuantumCircuit.mul_embedOp_apply` — the matrix elements of `Y (X ⊗ 1)` as a sum over the
-  configurations of the placed sites.
+* `QuantumCircuit.mul_embedOp_apply`, `QuantumCircuit.embedOp_mulVec_apply` — the matrix
+  elements of `Y (X ⊗ 1)` and the components of `(X ⊗ 1) v` as sums over the configurations of
+  the placed sites.
 -/
 
 open Matrix
@@ -345,5 +346,17 @@ theorem mul_embedOp_apply {e : κ → ι} (he : Function.Injective e)
   by_cases h : AgreeOff e y z
   · rw [ite_eq_left h.symm, ite_eq_left h, ← eq_extend_of_agreeOff he h]
   · rw [ite_eq_right fun h' => h h'.symm, ite_eq_right h, mul_zero]
+
+
+/-- The components of `(X ⊗ 1) v`, as a sum over the configurations of the placed sites. -/
+theorem embedOp_mulVec_apply {e : κ → ι} (he : Function.Injective e)
+    (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) (v : (ι → Fin d) → ℂ) (x : ι → Fin d) :
+    (embedOp e X *ᵥ v) x = ∑ u, X (x ∘ e) u * v (Function.extend e u x) := by
+  rw [mulVec, dotProduct, ← sum_agreeOff he x fun u => X (x ∘ e) u * v (Function.extend e u x)]
+  refine Finset.sum_congr rfl fun z _ => ?_
+  rw [embedOp_apply]
+  by_cases h : AgreeOff e x z
+  · rw [ite_eq_left h, ite_eq_left h, ← eq_extend_of_agreeOff he h]
+  · rw [ite_eq_right h, ite_eq_right h, zero_mul]
 
 end QuantumCircuit
