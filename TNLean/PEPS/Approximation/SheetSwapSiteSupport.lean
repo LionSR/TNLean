@@ -38,6 +38,7 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
   classical
   rw [Matrix.reindex_apply, sheetSwapOp, Matrix.toMatrix_toPEquiv_submatrix]
   apply IsLocalPerm.permMatrix_mem_supportedOperators
+  constructor
   done
 
 end TNLean.PEPS.EncodedFrame
