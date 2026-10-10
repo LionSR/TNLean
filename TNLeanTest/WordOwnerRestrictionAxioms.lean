@@ -15,13 +15,13 @@ owner-restriction identities and the single-party selector.
 set_option linter.hashCommand false
 
 /-- info: 'TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil
 
 /-- info: 'TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint
 
 /-- info: 'TNLean.PEPS.PairEffect.partySelector' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs in
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.PairEffect.partySelector
