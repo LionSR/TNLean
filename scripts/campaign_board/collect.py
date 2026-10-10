@@ -283,7 +283,8 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
 
 BLUEPRINT_ENV = re.compile(
     r"\\begin\{(theorem|lemma|proposition|corollary|definition)\}(.*?)\\end\{\1\}"
-    r"(\s*\\begin\{proof\}(.*?)\\end\{proof\})?", re.S)
+    # TeX comment lines may separate a statement from its proof.
+    r"((?:\s|%[^\n]*\n)*\\begin\{proof\}(.*?)\\end\{proof\})?", re.S)
 
 
 def blueprint_status(cfg: dict, checkouts: dict[str, Checkout], cites: re.Pattern) -> list[dict]:
@@ -301,7 +302,7 @@ def blueprint_status(cfg: dict, checkouts: dict[str, Checkout], cites: re.Patter
                     count["notready"] += 1
                 elif "\\leanok" not in statement:
                     count["unformalized"] += 1
-                elif kind == "definition" or not proof or "\\leanok" in proof:
+                elif kind == "definition" or (proof and "\\leanok" in proof):
                     count["proved"] += 1
                 else:
                     count["stated"] += 1
