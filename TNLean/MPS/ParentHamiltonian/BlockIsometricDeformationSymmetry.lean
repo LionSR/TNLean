@@ -29,8 +29,10 @@ parent projection and inverse-conjugated interaction along
 \(P_\gamma=(\gamma Q+(1-\gamma)I)W\) commutes with the symmetry.
 
 Source: Schuch--Pérez-García--Cirac, arXiv:1010.3732, paper_v3.tex,
-lines 645--676. The joint one-site span is the source's initial blocking
-assumption (lines 577--597), and the per-block normalization is the printed
+lines 645--676. The joint one-site span is the source's standard form
+(lines 325--352; in matrix language, lines 1740--1743: the one-site
+matrices are block diagonal and span the block-diagonal matrices), and the
+per-block normalization is the printed
 condition \(\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I\) at line 653
 for the block-diagonal \(P\).
 

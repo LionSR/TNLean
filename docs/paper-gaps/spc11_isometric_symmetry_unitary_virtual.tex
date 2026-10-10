@@ -90,7 +90,8 @@ invariance only up to a phase.
 \section{The several-block case}
 Let $A^1,\dots,A^r$ be blocks of positive bond dimensions whose one-site
 tuples $(A^k_i)_k$ span $\bigoplus_k M_{D_k}$; this joint span is the
-source's initial blocking assumption. Suppose that $U_g^{\otimes N}$ fixes
+source's standard form (lines 325--352, and in matrix language lines
+1740--1743). Suppose that $U_g^{\otimes N}$ fixes
 every matrix product vector of $\bigoplus_k A^k$. Equality of all word
 traces of the original and twisted block families defines an algebra
 automorphism of $\bigoplus_k M_{D_k}$ that sends each one-site tuple of
@@ -116,6 +117,18 @@ vectors under $U_g^{\otimes N}$. Invariance only up to a phase, which the
 source's notion of a symmetry of the state also admits, is not treated.
 The separately established uniform-gap results for the constructed
 deformation do not depend on this restriction.
+
+The elimination plan has two steps. Suppose that
+$U_g^{\otimes N}\ket{\psi_N}=\lambda_N(g)\ket{\psi_N}$ for nonzero
+scalars $\lambda_N(g)$. First, show that $\lambda_N(g)=\chi(g)^N$ for a
+scalar $\chi(g)$ of modulus one: by the joint one-site span, the word
+traces of $\bigoplus_kA^k$ separate the block algebra, so comparing
+words of length $N$ with their one-letter extensions forces the phase to
+be multiplicative in the length. Second, apply the derived exact-symmetry
+statements to the rescaled twist $\overline{\chi(g)}\sum_l(U_g)_{il}A_l$,
+which has the same matrix product vectors as the original tensor and keeps
+the trace-preserving normalization; the scalar cancels in $U_gP=PX_g$
+after replacing $X_g$ by $\chi(g)X_g$, which is still unitary.
 
 \bibliographystyle{alpha}
 \bibliography{references}
