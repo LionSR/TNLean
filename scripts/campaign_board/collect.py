@@ -307,7 +307,9 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
                 source = raw_file(slugs[pr["repo"]], path, pr["headRefOid"])
                 if source and cites.search(source):
                     on_main = key in notes and notes[key]["onMain"]
-                    notes[key] = {"repo": pr["repo"], "path": path, "onMain": on_main,
+                    # fromPR records that title and status now describe the pull request's
+                    # version, which no published PDF compiles yet.
+                    notes[key] = {"repo": pr["repo"], "path": path, "onMain": on_main, "fromPR": pr["number"],
                                   "prs": notes.get(key, {}).get("prs", []), **note_meta(source)}
                     refreshed.add(key)
             if key in notes:
