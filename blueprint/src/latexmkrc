@@ -6,6 +6,14 @@ $pdflatex = 'xelatex -synctex=1';
 # generated names of its many TikZ/Tenkz objects. This is runtime capacity;
 # no format rebuild is needed. Keep an explicit caller override intact.
 $ENV{'pool_size'} //= 12500000;
+# The full volume likewise exhausts XeTeX's default main memory (the `mem`
+# node/token array, default 5000000) while shipping out the final pages of a
+# 2400-page document dense with TikZ/Tenkz pictures. The extended engine sizes
+# `mem` from these values at startup and then loads the format into it, so this
+# is runtime capacity too; no format rebuild is needed. Keep caller overrides.
+$ENV{'main_memory'} //= 12500000;
+$ENV{'extra_mem_top'} //= 5000000;
+$ENV{'extra_mem_bot'} //= 5000000;
 @default_files = ('print.tex');
 use Cwd qw(abs_path);
 use File::Spec;
