@@ -224,6 +224,7 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .gap dl div { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 0 16px; }
 .gap dt { font: 500 11px/2.1 var(--f-body); text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
 .gap dd { margin: 0; min-width: 0; }
+.gap .ov { text-decoration: overline; }
 @media (max-width: 620px) { .gap dl div { grid-template-columns: minmax(0, 1fr); } }
 .gap .links { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 12.5px; }
 .k-error { color: var(--s-bad); background: var(--s-bad-bg); border-color: var(--s-bad); }
