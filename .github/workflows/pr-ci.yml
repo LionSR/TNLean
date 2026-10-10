@@ -170,6 +170,7 @@ on:
       - 'scripts/prune_tenkz_render_cache.py'
       - 'scripts/test_prune_tenkz_render_cache.py'
       - 'blueprint/src/**'
+      - 'scripts/build_blueprint_ch01_12.sh'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
@@ -388,11 +389,14 @@ jobs:
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
               - 'scripts/test_tenkz_stationary_density.py'
-            # Inputs of the LuaLaTeX/XeLaTeX print volume built by
-            # `leanblueprint pdf` (blueprint/src/latexmkrc), which the
-            # blueprint-pdf job compiles.
+            # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
+            # `leanblueprint pdf` (blueprint/src/latexmkrc) and
+            # scripts/build_blueprint_ch01_12.sh, with the bibliography from
+            # `texra-blueprint bbl` (texra-blueprint.toml).
             blueprint_pdf:
               - 'blueprint/src/**'
+              - 'texra-blueprint.toml'
+              - 'scripts/build_blueprint_ch01_12.sh'
               - 'tenkz.toml'
               - 'scripts/fetch_tenkz.py'
               - 'scripts/tenkz_paths.py'
@@ -1912,6 +1916,7 @@ jobs:
       # changed preamble no longer defines, so a failed seeded build is retried
       # from a clean print directory and only a broken source fails the step.
       - name: Build blueprint PDF
+        id: print-pdf
         run: |
           if ! leanblueprint pdf; then
             echo "::warning::Seeded PDF build failed; rebuilding from a clean print directory"
@@ -1924,8 +1929,10 @@ jobs:
       - name: Build FT-MPS blueprint volume
         run: ./scripts/build_blueprint_ch01_12.sh
 
+      # The FT-MPS script builds in a temporary directory it removes, so its
+      # log appears in the step output; only the full volume leaves print.log.
       - name: Preserve failed PDF log
-        if: failure()
+        if: failure() && steps.print-pdf.outcome == 'failure'
         uses: actions/upload-artifact@v7
         with:
           name: blueprint-pdf-failure
