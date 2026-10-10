@@ -273,7 +273,7 @@
     $("reflist").append(...keys.map(k => {
       const r = REFS[k];
       const li = el("li", { id: "ref-" + k, value: String(citeNo.get(k)) },
-        el("span", { text: `${r.authors}. ` }), r.url ? ext(r.url, r.title) : el("span", { text: r.title }),
+        el("span", { text: `${r.authors.replace(/\.$/, "")}. ` }), r.url ? ext(r.url, r.title) : el("span", { text: r.title }),
         el("span", { text: `. ${r.venue ? r.venue + ", " : ""}${r.year}.` }),
         r.manuscript === false ? el("span", { class: "muted", text: " Not cited in the manuscripts." }) : null);
       li.append(el("span", { class: "back" }, "Cited in ",
