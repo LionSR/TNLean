@@ -111,6 +111,18 @@ theorem act_add (A B : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
   simp [act, Matrix.add_mulVec]
 
 omit [Fintype m] in
+theorem act_smul (a : ℂ) (A : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
+    act (a • A) ψ = a • act A ψ := by
+  ext i
+  simp [act, Matrix.smul_mulVec]
+
+omit [Fintype m] in
+theorem act_sum {κ : Type*} [Fintype κ] (A : κ → Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
+    act (∑ k, A k) ψ = ∑ k, act (A k) ψ := by
+  ext i
+  simp [act, Matrix.sum_mulVec]
+
+omit [Fintype m] in
 theorem act_sub_right (A : Matrix m n ℂ) (x y : EuclideanSpace ℂ n) :
     act A (x - y) = act A x - act A y := by
   simp [act, Matrix.mulVec_sub]
