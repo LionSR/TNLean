@@ -15077,7 +15077,8 @@ shorter interaction range.
 
 \begin{theorem}[Faithful compression of stationary generating data]
     \label{thm:stationary_support_faithful_generators}
-    \lean{MPSTensor.exists_faithful_stationary_supportCompression_of_leftCanonical}
+    \lean{MPSTensor.exists_faithful_stationary_supportCompression,
+        MPSTensor.exists_faithful_stationary_supportCompression_of_leftCanonical}
     \leanok
     Let $A$ satisfy $\sum_iA_i^*A_i=I$, and let $\rho\geq0$ have nonzero
     trace with $E_A(\rho)=\rho$. There exist a positive dimension $E$, an
@@ -15091,6 +15092,8 @@ shorter interaction range.
     \end{align}
     $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$ for every observable
     on every finite interval, including length zero.
+    All conclusions except $\sum_iB_i^*B_i=I$ hold without the
+    normalization of $A$.
     This is a restriction of supplied stationary generating data to their
     support, as in \cite{Wolf2012Quantum}, restriction to full-rank fixed
     points, and the normalized generating representation of
@@ -15109,6 +15112,63 @@ shorter interaction range.
     Cyclicity gives $\operatorname{Tr}\sigma=\operatorname{Tr}\rho$,
     whose nonvanishing forces $E>0$. Apply the insertion intertwiner to
     obtain all finite expectation identities.
+\end{proof}
+
+\begin{lemma}[Boundary space of an isometric compression]
+    \label{lem:isometric_compression_corner_boundary}
+    \lean{MPSTensor.cornerGroundSpaceES, MPSTensor.cornerGroundSpaceES_one,
+        MPSTensor.groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner,
+        MPSTensor.groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner}
+    \leanok
+    For an MPS tensor $A$, a projection $P$, and $L\geq0$, let $G_A^P(L)$
+    be the set of open-boundary vectors $\Gamma_L^A(Y)$ with $PYP=Y$; for $P=I$ it is
+    $G_A(L)$. Let $V^*V=I$ and $A_iV=VB_i$ for every $i$. Then
+    \begin{align}
+        G_B(L) & =G_A^{VV^*}(L).
+        \label{eq:isometric_compression_corner_boundary}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The intertwining gives $\Gamma_L^A(VXV^*)=\Gamma_L^B(X)$, and
+    $VXV^*$ lies in the corner of $VV^*$. Conversely, if $Y$ lies in that
+    corner, then $Y=V(V^*YV)V^*$.
+\end{proof}
+
+\begin{theorem}[Local supports of stationary generating data]
+    \label{thm:stationary_local_support}
+    \lean{MPSTensor.observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff_of_stationary,
+        MPSTensor.exists_local_density_range_eq_cornerGroundSpaceES_of_stationary}
+    \leanok
+    \uses{def:primitive_insertion_expectation,
+        lem:isometric_compression_corner_boundary}
+    Let $A$ be an MPS tensor, let $\rho\geq0$ have nonzero trace and satisfy
+    $\sum_iA_i\rho A_i^*=\rho$, and let $P$ be its support projection.
+    The matrix $\rho$ need not be faithful. For every $k\geq0$ and every
+    $k$-site matrix $X$,
+    \begin{align}
+        \eta_{A,\rho}(X^*X)=0
+        \quad\Longleftrightarrow\quad
+        G_A^P(k)\subseteq\ker X.
+        \label{eq:stationary_local_support}
+    \end{align}
+    If moreover $\sum_iA_i^*A_i=I$, there is a density matrix $\sigma_k$
+    with $\eta_{A,\rho}(X)=\operatorname{tr}(\sigma_kX)$ for every $X$ and
+    $\operatorname{ran}\sigma_k=G_A^P(k)$.
+    This describes the local support spaces of normalized stationary
+    generating data, as in \cite[Section~3 and the proof of the overlap
+    lemma in Section~4]{Nachtergaele1996Spectral}, without the faithfulness
+    that the source obtains from minimality. Passing from an arbitrary
+    GVBS boundary limit to normalized stationary data remains separate
+    \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:stationary_support_faithful_generators,
+        thm:faithful_local_mps_support, thm:local_mps_density_support}
+    Compress to the support of $\rho$. The compressed data are faithful
+    and have the same finite expectations, so the faithful support
+    theorem and the finite-density theorem apply to them. The boundary
+    space of the compressed tensor is $G_A^P(k)$ by
+    (\ref{eq:isometric_compression_corner_boundary}).
 \end{proof}
 
 \begin{definition}[Embedding a residual boundary]
