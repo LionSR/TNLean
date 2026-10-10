@@ -24,10 +24,12 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and
 lines 1724--1738, where faithful generating data identify the local supports.
 
 **Scope restriction (faithful generating data):** This module constructs
-finite densities from a supplied faithful virtual matrix. It does not derive
-faithful minimal generating data from an arbitrary GVBS presentation, nor
-assert compatibility of these densities without transfer invariance. That
-separate source passage is recorded in
+finite densities from a supplied faithful virtual matrix. Nonzero positive
+stationary data that are not faithful reduce to this case by compression to
+the support of the stationary matrix. The module does not derive normalized
+stationary data from an arbitrary GVBS boundary limit, nor assert
+compatibility of these densities without transfer invariance. That separate
+source passage is recorded in
 docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 -/
 open scoped Matrix BigOperators ComplexOrder
