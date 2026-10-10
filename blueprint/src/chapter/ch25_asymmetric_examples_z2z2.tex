@@ -1600,10 +1600,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \end{align}
     Its class $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$
     is nonzero and admits a normalized representative $\nu$
-    with $\nu(ab,ab,ab)=-1$. This is the sign at $ab$ only.
-    \cite[Section~6]{GarreRubio2023MPOSym} also asserts, for the diagonal
-    values, that $\omega(a,a,a)=\omega(b,b,b)=1$; these are not determined
-    here~\cite{gap:glm23_klein_printed_anomaly_scope}.
+    with $\nu(ab,ab,ab)=-1$.
 \end{theorem}
 
 \begin{proof}
@@ -1640,4 +1637,99 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     cyclic product one, so the gauge class is nontrivial; by
     Theorem~\ref{thm:mpug_h3_group_cohomology} the class
     $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$ is nonzero. Finally normalization makes $\nu(ab,e,ab)=1$.
+\end{proof}
+
+\begin{theorem}[The anomaly class of the printed symmetry]
+    \label{thm:asymex_klein_printed_anomaly_class}
+    \lean{KleinSymmetry.aHom,KleinSymmetry.printedFamily_comap_aHom,
+        KleinSymmetry.tensorA_isReduction,KleinSymmetry.aFusionData,
+        KleinSymmetry.aFusionData_isAssociator,
+        KleinSymmetry.bHom,KleinSymmetry.printedFamily_comap_bHom,
+        KleinSymmetry.bFusionData,
+        KleinSymmetry.cyclicInvariant_omega_printedFamily_a,
+        KleinSymmetry.cyclicInvariant_omega_printedFamily_b,
+        KleinSymmetry.omega_printedFamily_cohomologousTo,
+        KleinSymmetry.diagonal_of_cohomologousTo_omega_printedFamily,
+        KleinSymmetry.kleinH3Equiv_anomalyClass_omega_printedFamily}
+    \leanok
+    \uses{def:asymex_klein_printed_family,def:asymex_klein_cocycle_family,
+        def:mpug_anomaly_three_cochain,def:mpug_cohomologous_to,def:mpug_h3_group_cohomology}
+    For every choice of fusion tensors of the four printed tensors,
+    \begin{align}
+        \label{eq:asymex_klein_printed_cyclic}
+        \omega(a,e,a)\,\omega(a,a,a) & =1, &
+        \omega(b,e,b)\,\omega(b,b,b) & =1.
+    \end{align}
+    Hence $\omega$ is cohomologous to $\omega_{001}$, its class corresponds
+    to $(0,0,1)$ under
+    $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})\cong\Z_2^3$, and every
+    normalized cocycle $\nu$ cohomologous to $\omega$ has
+    \begin{align}
+        \label{eq:asymex_klein_printed_diagonal}
+        \bigl(\nu(a,a,a),\nu(b,b,b),\nu(ab,ab,ab)\bigr) & =(1,1,-1).
+    \end{align}
+    This is the statement of \cite[Section~6]{GarreRubio2023MPOSym} that in
+    this realization ``the only non-trivial $3$-cocycle element is
+    $\omega(ab,ab,ab)=-1$'', read through the diagonal values that label the
+    classes; read entrywise, the printed sentence describes no
+    cocycle~\cite{gap:glm23_klein_printed_anomaly_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_printed_anomaly,thm:mpug_family_restriction_omega,
+        thm:mpug_cyclic_invariant_gauge,thm:asymex_klein_complete_classification}
+    As in the proof of Theorem~\ref{thm:asymex_klein_printed_anomaly},
+    each cyclic product is computed on a restriction of the family with
+    chosen fusion tensors. On $\{e,b\}$ all tensors have bond dimension one,
+    $B$ squares to the identity tensor letter by letter, and the one-by-one
+    identity fusion tensors make both fusion trees equal, so the anomaly is
+    one. On $\{e,a\}$ the letters of $A$ are $A^{00}=u_0e_0^{\mathsf T}$ and
+    $A^{11}=u_1e_1^{\mathsf T}$ with $u_0=(1,1)$ and $u_1=(-1,1)$, the other
+    letters vanishing. Take the fusion tensors of $(a,a)$ to be
+    $\langle 00|$ and $|00\rangle+|11\rangle$, and the identity whenever a
+    factor is $e$. Every nonzero letter of the stacked square of $A$ is
+    $(u_i\otimes u_i)(e_i\otimes e_i)^{\mathsf T}$, and
+    $\langle 00|u_i\otimes u_i\rangle=(e_i\otimes e_i)^{\mathsf T}(|00\rangle+|11\rangle)=1$,
+    so these fusion tensors reduce the stacked square to the identity tensor,
+    and the two fusion trees $\langle 00|\otimes 1$ and $1\otimes\langle 00|$
+    agree on every letter $u_i\otimes u_i\otimes u_i$ of the triple product.
+    Hence $\omega(a,e,a)\,\omega(a,a,a)=1$. Together with
+    (\ref{eq:asymex_klein_printed_anomaly}), the three cyclic products are
+    those of $\omega_{001}$, and
+    Theorem~\ref{thm:asymex_klein_complete_classification} identifies the
+    class. For normalized $\nu$ the cyclic products are the diagonal values.
+\end{proof}
+
+\begin{theorem}[L-symbol relations of the printed symmetry]
+    \label{thm:asymex_klein_printed_l_symbols}
+    \lean{KleinSymmetry.lSymbol_signs_printedFamily}
+    \leanok
+    \uses{def:asymex_klein_printed_family,def:mpug_anomaly_three_cochain,
+        def:mpug_l_symbols,def:mpug_l_normalized}
+    Let $\nu$ be a normalized cocycle cohomologous to the anomaly of the
+    printed symmetry, and let $L$ be normalized L-symbols compatible with
+    $\nu$ for an action of $\Z_2\times\Z_2$ on a set of blocks. For every
+    block $x$,
+    \begin{align}
+        \label{eq:asymex_klein_printed_l_signs}
+        L^x_{ab,ab} & =-L^{ab\cdot x}_{ab,ab}, &
+        L^x_{a,a}   & =L^{a\cdot x}_{a,a}, &
+        L^x_{b,b}   & =L^{b\cdot x}_{b,b}.
+    \end{align}
+    In the two-block phases with unbroken subgroup $H_a$ or $H_b$, the element
+    $ab$ exchanges the blocks, which is the relation
+    $L^x_{ab,ab}=-L^y_{ab,ab}$ of \cite[Section~6]{GarreRubio2023MPOSym}. The
+    relation for $a$ relates the two blocks in the phase $H_b$, and that for
+    $b$ in the phase $H_a$; the source attaches them to $H_a$ and $H_b$
+    respectively~\cite{gap:glm23_klein_printed_anomaly_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_printed_anomaly_class,thm:asymex_l_symbol_normalization}
+    Each nonidentity element is an involution, so
+    Theorem~\ref{thm:asymex_l_symbol_normalization} gives
+    $L^x_{g,g}=\nu(g,g,g)L^{g\cdot x}_{g,g}$. Substitute the diagonal values
+    (\ref{eq:asymex_klein_printed_diagonal}).
 \end{proof}
