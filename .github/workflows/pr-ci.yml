@@ -1860,10 +1860,10 @@ jobs:
           PY
 
   # PR CI otherwise builds only the web blueprint, whose plasTeX renderer
-  # accepts constructs that stop the print volume (a bare `_` in text mode, an
+  # accepts constructs that stop the print volumes (a bare `_` in text mode, an
   # unbraced `\spn_\C` subscript). Those errors then surfaced only in the
-  # Blueprint workflow on main. This job runs the same `leanblueprint pdf`
-  # build as blueprint.yml, seeded from the auxiliary files main saved, so a
+  # Blueprint workflow on main. This job runs the same two PDF builds as
+  # blueprint.yml (`leanblueprint pdf` and the FT-MPS volume), the first seeded from the auxiliary files main saved, so a
   # typical run needs one or two XeLaTeX passes. Read only: branches never save.
   blueprint-pdf:
     name: Check blueprint PDF compiles
@@ -1918,6 +1918,11 @@ jobs:
             rm -rf blueprint/print
             leanblueprint pdf
           fi
+
+      # The focused FT-MPS volume compiles the \ifftmpsvolume branches, which
+      # the full print volume never reaches; blueprint.yml builds it too.
+      - name: Build FT-MPS blueprint volume
+        run: ./scripts/build_blueprint_ch01_12.sh
 
       - name: Preserve failed PDF log
         if: failure()
