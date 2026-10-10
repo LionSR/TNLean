@@ -211,7 +211,8 @@
     }
     return null;
   };
-  const gapAnchor = g => "gap-" + g.id.split("/").pop().replace(/\.tex$/, "");
+  // Notes in different repositories may share a file name, so the anchor names the repository too.
+  const gapAnchor = g => `gap-${g.repo || PRIMARY.name}-${g.id.split("/").pop().replace(/\.tex$/, "")}`;
   (function renderGaps() {
     const curated = new Set(G.entries.map(g => gapKey(g.repo, g.id)));
     const pending = (D.gapNotes || []).filter(n => !curated.has(gapKey(n.repo, n.path)));

@@ -213,20 +213,21 @@ button.pillbtn, .filters button { font: 500 12.5px var(--f-body); color: var(--i
 .kinds dd { margin: 0; color: var(--muted); }
 /* Gaps are read, not scanned: one column, entries separated by rules rather than boxed, the
    verdict in serif at reading size, the four fields as a margin-labelled list. */
-.gaplist { display: grid; gap: 0; max-width: 860px; }
-.gap { display: grid; gap: 10px; padding-block: 22px; border-top: 1px solid var(--line); min-width: 0; scroll-margin-top: 16px; }
+.gaplist { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; max-width: 860px; }
+.gap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding-block: 22px; border-top: 1px solid var(--line); min-width: 0; scroll-margin-top: 16px; }
 .gap h3 { font-size: 20px; }
-.gap h3 .res { font: 400 13px var(--f-body); color: var(--muted); white-space: nowrap; }
+.gap h3 .res { font: 400 13px var(--f-body); color: var(--muted); }
 .gap .where { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
 .gap .summary { margin: 0; font: 500 18px/1.5 var(--f-display); max-width: 66ch; }
 .gap .context { margin: 0; font: 16px/1.6 var(--f-display); color: var(--muted); max-width: 66ch; }
 .gap dl { margin: 0; display: grid; gap: 10px; font: 15.5px/1.6 var(--f-display); max-width: 66ch; }
 .gap dl div { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 0 16px; }
 .gap dt { font: 500 11px/2.1 var(--f-body); text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
-.gap dd { margin: 0; min-width: 0; }
+.gap dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
 .gap .ov { text-decoration: overline; }
 @media (max-width: 620px) { .gap dl div { grid-template-columns: minmax(0, 1fr); } }
 .gap .links { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 12.5px; }
+.gap .links .mono { overflow-wrap: anywhere; }
 .k-error { color: var(--s-bad); background: var(--s-bad-bg); border-color: var(--s-bad); }
 .k-missing-step { color: var(--s-draft); background: var(--s-draft-bg); border-color: var(--s-draft); }
 .k-narrower { color: var(--s-review); background: var(--s-review-bg); border-color: var(--s-review); }
