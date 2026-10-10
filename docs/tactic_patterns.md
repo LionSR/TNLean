@@ -49,8 +49,8 @@ abstracted — record why, so it is not re-proposed).
   summand. Each call site rewrites with one or two of them and closes by
   `simp only [h.evalWord]` (or the intertwining or proportionality hypothesis).
 - **Notes:** `kronId_mul`, `idKron_mul` and `kronId_mul_idKron` multiply two boundaries
-  without a letter sum and keep their direct proofs. The four lemmas add 44 lines; the call sites lose 52, for a net delta of
-  -8 lines.
+  without a letter sum and keep their direct proofs. The four lemmas add 44 lines and
+  the call sites lose 52, for a net delta of −8 lines.
 
 ### Chosen nonzero dressed-proportionality scalar — promoted (2026-10-10)
 
