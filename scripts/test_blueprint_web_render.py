@@ -27,6 +27,7 @@ import multiprocessing
 import os
 import re
 import sys
+import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -264,6 +265,70 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
     assert not facts["escaped"], (name, width, facts["escaped"])
 
 
+PAGE_LOAD_TIMEOUT_MS = 300_000
+
+
+def _load_page(page: Page, base_url: str, name: str) -> None:
+    """Navigate and finish an actual graph within one original page deadline."""
+    deadline = time.monotonic() + PAGE_LOAD_TIMEOUT_MS / 1000
+    url = f"{base_url}/{name}"
+    events: list[str] = []
+    graph_context: dict[str, str | None] = {"phase": None, "worker": None}
+
+    def remember(kind: str, text: str) -> None:
+        events.append(f"{kind}: {text[:2000]}")
+        del events[:-20]
+
+    def page_error(error) -> None:
+        remember("pageerror", str(error))
+
+    def console_message(message) -> None:
+        # Only graphPhase's info messages name a phase; graphFailure also
+        # emits the error text with this prefix at the error level.
+        prefix = "[blueprint-graph] "
+        if message.type == "info" and message.text.startswith(prefix):
+            graph_context["phase"] = message.text[len(prefix):][:2000]
+        if message.type in ("error", "warning") or message.text.startswith("[blueprint-graph]"):
+            remember(f"console.{message.type}", message.text)
+
+    def worker_started(worker) -> None:
+        graph_context["worker"] = worker.url[:2000]
+        remember("worker", worker.url)
+
+    listeners = (("pageerror", page_error), ("console", console_message),
+                 ("worker", worker_started))
+    for event, callback in listeners:
+        page.on(event, callback)
+    try:
+        page.goto(url, wait_until="domcontentloaded", timeout=PAGE_LOAD_TIMEOUT_MS)
+        if name.startswith("dep_graph_"):
+            remaining_ms = (deadline - time.monotonic()) * 1000
+            if remaining_ms <= 0:
+                raise TimeoutError(f"{name}: graph exceeded the original page deadline")
+            terminal = page.wait_for_function(
+                "() => { const graph = document.getElementById('graph');"
+                " return graph && (graph.dataset.graphvizError"
+                " || (graph.dataset.graphvizReady === 'true'"
+                " && !!graph.querySelector('svg'))); }",
+                timeout=remaining_ms,
+            )
+            result = terminal.json_value()
+            terminal.dispose()
+            if result is not True:
+                raise RuntimeError(f"Graphviz failed: {result}")
+    except Exception as error:
+        # Retain the original exception and its type.  Do not evaluate the
+        # page after a timeout: its main thread may itself be unresponsive.
+        error.add_note(f"Blueprint page {name}; URL {url}; graph context: "
+                       + json.dumps(graph_context, ensure_ascii=False)
+                       + "; events: "
+                       + json.dumps(events, ensure_ascii=False))
+        raise
+    finally:
+        for event, callback in listeners:
+            page.remove_listener(event, callback)
+
+
 def _check_pages(base_url: str, names: list[str],
                  mathjax: tuple[str, bytes, str]) -> int:
     """Open each named page in one browser and return how much was typeset."""
@@ -298,10 +363,9 @@ def _check_pages(base_url: str, names: list[str],
         page.set_default_timeout(120_000)
         page.route(mathjax_glob, fulfill_mathjax)
         for name in names:
-            # Parsing the largest chapters can itself take minutes on a loaded
-            # runner while the other browsers typeset, as in the equation test.
-            page.goto(f"{base_url}/{name}",
-                      wait_until="domcontentloaded", timeout=300_000)
+            # The graph worker must finish too; navigation and graph completion
+            # share the original 300-second page budget.
+            _load_page(page, base_url, name)
             # Proofs are folded away by default; a folded proof has no width,
             # so its displays would escape measurement.
             page.add_style_tag(content=".proof_content { display: block !important; }")
@@ -347,11 +411,24 @@ def main() -> int:
     pages = _generated_pages(root)
     _assert_generated_source(pages)
 
-    batches = _balanced_batches(pages, max(1, args.jobs))
+    # Every dependency-graph page lays out the whole graph in a worker, and two
+    # such layouts sharing a runner starve each other past the per-page
+    # deadline -- which is exactly what the balanced content batches would
+    # create by dealing graph pages out across the parallel browsers. The graph
+    # pages are therefore held back and rendered serially, after the parallel
+    # content pass has closed every other browser, so each layout runs on an
+    # uncontended processor.
+    graph_pages = sorted(
+        page.name for page in pages if page.name.startswith("dep_graph_"))
+    content_pages = [page for page in pages
+                     if not page.name.startswith("dep_graph_")]
+
+    batches = _balanced_batches(content_pages, max(1, args.jobs))
     mathjax = _mathjax_bundle(root)
     with serve(root) as base_url:
-        if len(batches) == 1:
-            typeset = _check_pages(base_url, batches[0], mathjax)
+        if len(batches) <= 1:
+            typeset = _check_pages(base_url, batches[0] if batches else [],
+                                   mathjax)
         else:
             # Each worker drives its own browser: the synchronous Playwright
             # API is bound to the thread that started it.  Workers are spawned
@@ -361,6 +438,10 @@ def main() -> int:
                 futures = [pool.submit(_check_pages, base_url, batch, mathjax)
                            for batch in batches]
                 typeset = sum(future.result() for future in futures)
+        # The content browsers have all closed, so the graph layouts here run
+        # one at a time with nothing else competing for the processor.
+        if graph_pages:
+            typeset += _check_pages(base_url, graph_pages, mathjax)
 
     assert typeset > 0, (
         "no mathematics was typeset on any page; MathJax never ran, so the "
