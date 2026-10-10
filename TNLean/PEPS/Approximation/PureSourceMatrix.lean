@@ -59,6 +59,7 @@ theorem preparedDensityCoefficient_pure_eq_vecMulVec
       (Matrix.vecMulVec (bIn.repr ψ).ofLp (fun j => conj (bIn.repr ψ j))) x y =
       Matrix.vecMulVec (fun r => v.pureSourceMatrix R U V bU bV ℓ bOut ψ r x)
         (fun s => conj (v'.pureSourceMatrix R U V bU bV ℓ bOut ψ s y)) := by
+  rw [preparedDensityCoefficient, preparedMatrix_mul_vecMulVec]
   done
 
 end Word
