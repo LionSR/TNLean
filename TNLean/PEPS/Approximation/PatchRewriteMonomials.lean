@@ -68,6 +68,8 @@ the source requires only a bounded number.
   number of cylinder terms as an explicit parameter.
 * `EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial`: the second assertion
   of Lemma 6.3, with a count polynomial in `L`.
+* `EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec`: the same for `a = 30`,
+  with reference-vector error at most `(2b + 1) L^{-20}`.
 
 ## References
 
@@ -693,6 +695,60 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       _ = _ := by rw [hBdef, mul_pow (C + 1) (L ^ c), mul_pow _ (L ^ _)]; ring
   · obtain ⟨h₁, h₂, h₃, h₄, h₅⟩ := hGp p hp
     exact ⟨h₁, h₂, h₃, h₄.trans (by omega), h₅.trans (by omega)⟩
+
+/-- **Lemma 6.3, the bounded change with reference-vector error `O(L^{-20})`.** In the setting of
+`exists_allowed_monomial_approx_polynomial`, let `Ω` be a vector with `‖Ω‖ ≤ 1` on which every
+additional patch projector and every affected old-hole projector has error at most `L^{-60}`, the
+accuracy fixed for all applications of Proposition 4.1 in the frame construction. The choice
+`a = 30` gives a contraction `M_30` with `‖M_30 - M‖ ≤ L^{-30}`, expanded into at most
+`K L^e` allowed monomials whose participating parties lie in one fixed list of at most `b`
+parties, and with `‖M_30 Ω_{F_old} - Ω_{F_new}‖ ≤ (2b + 1) L^{-20}`.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218; the
+accuracy `ε = L^{-60}`, lines 21–25 (`eq:frame-epsilon`); proof lines 343–344. -/
+theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ}
+    (hL : 1 ≤ L) (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
+    (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
+    (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
+    (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
+    (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
+    (hεpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
+    ∃ P : Finset Party, P.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+      G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+        L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (P : Set Party) ∧
+        p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+      ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
+        ‖Ma - R.rewrite‖ ≤ ((L : ℝ) ^ 30)⁻¹ ∧
+        ‖act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
+          (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
+          act Ma (R.oldFrame.regIso z) := by
+  have h30 : ⌈(30 : ℝ)⌉₊ = 30 := by exact_mod_cast Nat.ceil_natCast 30
+  have hrpow : (L : ℝ) ^ (-(30 : ℝ)) = ((L : ℝ) ^ 30)⁻¹ := by
+    rw [Real.rpow_neg (Nat.cast_nonneg _)]
+    exact_mod_cast congrArg Inv.inv (Real.rpow_natCast (L : ℝ) 30)
+  obtain ⟨P, hP, G, hG, hGp, Ma, hMa1, hMa, hz⟩ := R.exists_allowed_monomial_approx_polynomial
+    hR hL hnew hpatch hold hm hrold hrnew hparties 30
+  rw [h30] at hG
+  rw [hrpow] at hMa
+  have hLr : (1 : ℝ) ≤ L := by exact_mod_cast hL
+  have hL0 : (0 : ℝ) < L := by linarith
+  have href := R.norm_act_refVec_sub_le_of_approx hR.avoidsUntouched hΩ hεpatch hεold hMa
+  refine ⟨P, hP, G, hG, hGp, Ma, hMa1, hMa, href.trans ?_, hz⟩
+  have h60 : ((L : ℝ) ^ 60)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
+    inv_anti₀ (by positivity) (pow_le_pow_right₀ hLr (by norm_num))
+  have h30' : ((L : ℝ) ^ 30)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
+    inv_anti₀ (by positivity) (pow_le_pow_right₀ hLr (by norm_num))
+  have hcount : ((R.patches.length + R.oldAffected.length : ℕ) : ℝ) ≤ 2 * b := by
+    exact_mod_cast (by omega : R.patches.length + R.oldAffected.length ≤ 2 * b)
+  push_cast at hcount
+  calc ((L : ℝ) ^ 30)⁻¹ + (R.patches.length + R.oldAffected.length) * ((L : ℝ) ^ 60)⁻¹
+      ≤ ((L : ℝ) ^ 20)⁻¹ + 2 * b * ((L : ℝ) ^ 20)⁻¹ := by
+        gcongr
+    _ = (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by ring
 
 end SmallPatchRewrite
 

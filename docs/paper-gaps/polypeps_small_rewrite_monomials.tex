@@ -158,14 +158,24 @@ parties of condition~(iv) (line~204). With $\sum_jd_j\le CL^{c}$,
 $m,r_{\rm old},r_{\rm new}\le b$, at most $b$ specified parties, $L\ge1$ and
 $\delta=L^{-a}$, the formal count
 is at most
-\[
+\begin{align}
   (C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}\,
   L^{3bc+4b(3bc+\lceil a\rceil)},
-\]
+  \label{eq:polypeps_small_rewrite_monomials_count}
+\end{align}
 a polynomial in $L$ whose coefficient and degree depend only on $C$, $c$, $b$
 and $a$, and the participating parties of all monomials lie in one fixed list
 of at most $b$ parties, as the bounded change of Theorem~5.2 requires.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial}.}
+When moreover $\|\Omega\|\le1$ and every additional patch projector and every
+affected old-hole projector has error at most the accuracy $\varepsilon=L^{-60}$
+fixed for the frame construction (lines~21--25), the choice $a=30$ gives the
+count~\eqref{eq:polypeps_small_rewrite_monomials_count} with $\lceil a\rceil=30$
+and the reference-vector error
+$\|M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\|
+\le L^{-30}+2bL^{-60}\le(2b+1)L^{-20}$, the final assertion of the
+lemma.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec}.}
 The bound on the participating parties cannot be derived from
 conditions~(i)--(iii) alone. Every site of a selected hole square, including
 the sites of the inner hole, receives a zero bra at its old owner and a zero

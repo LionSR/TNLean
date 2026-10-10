@@ -683,7 +683,8 @@ norm of matrices, rectangular ones included.
 
 \begin{theorem}[Small-patch rewrite: polynomial approximation]
     \label{thm:peps_frame_small_rewrite_polynomial}
-    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial}
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial,
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec}
     \leanok
     \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,
         lem:peps_frame_wires,lem:peps_frame_rescale,
@@ -698,9 +699,16 @@ norm of matrices, rectangular ones included.
     fixed $a>0$ the canonical map $M$ admits a contractive approximation $M_a$
     with $\lVert M_a-M\rVert\le L^{-a}$ and a polynomial sum expansion into
     monomials allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, whose
-    participating parties all lie in the specified list, of bounded size. In particular the rewrite is a bounded change with
-    reference-vector error $O(L^{-20})$. This is the second assertion of
-    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
+    participating parties all lie in the specified list, of bounded size. In
+    particular, when $\lVert\Omega\rVert\le1$ and every additional patch
+    projector and every affected old-hole projector has error at most the
+    accuracy $\varepsilon=L^{-60}$ fixed for the frame construction
+    (\texttt{05-frames.tex}, lines 21--25), the choice $a=30$ gives
+    $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
+        \rVert\le(2b+1)L^{-20}$, where $b$ bounds $m$, $r_{\rm old}$,
+    $r_{\rm new}$ and the number of specified parties; the rewrite is a bounded
+    change with reference-vector error $O(L^{-20})$. This is the second
+    assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
