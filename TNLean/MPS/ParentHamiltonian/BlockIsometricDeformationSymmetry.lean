@@ -187,16 +187,17 @@ end WordTraceAutomorphism
 
 section WordTracePhase
 
-/-- Let `φ` be a functional on an algebra whose trace pairing `(M, N) ↦ φ (M * N)` is
-nondegenerate and with `φ 1 ≠ 0`, and let `x` and `y` be two spanning families of letters.
+/-- Let `φ` be a functional on an algebra with `φ 1 ≠ 0` such that `φ (M * N) = 0` for every
+`N` forces `M = 0`, and let `x` and `y` be two spanning families of letters.
 If `φ` of every word of length one, two and three in `y` is `c₁`, `c₂` and `c₃` times `φ` of
 the same word in `x`, then `φ` of every word of length `n` in `y` is `c₁ ^ n` times `φ` of
 the same word in `x`.
 
 This is the comparison of words of length `N` with their one-letter extensions that makes
 the phase \(\lambda_{g,N}\) of a symmetry of the matrix product vectors multiplicative in
-the length. Source: arXiv:1010.3732, lines 655--657, where the symmetry is a symmetry of
-the state, hence fixed only up to a scalar. -/
+the length; the source does not spell out this step. Source context: arXiv:1010.3732,
+lines 655--657 (a symmetry \(U_g^{\otimes N}\) of the MPS) and lines 440--445 (an on-site
+symmetry is fixed only up to a one-dimensional representation). -/
 theorem map_list_prod_eq_pow_mul_of_length_three
     {𝔄 : Type*} [Ring 𝔄] [Algebra ℂ 𝔄] (φ : 𝔄 →ₗ[ℂ] ℂ)
     (hφ : ∀ M : 𝔄, (∀ N, φ (M * N) = 0) → M = 0) (hφ1 : φ 1 ≠ 0)
@@ -353,7 +354,6 @@ theorem map_list_prod_eq_pow_mul_of_length_three
   apply mul_left_cancel₀ hc₁
   rw [h]; ring
 
-
 /-- The summed block trace `M ↦ ∑ k, tr M_k` on the product of the block matrix algebras. -/
 private noncomputable def blockTrace (dim : Fin r → ℕ) :
     ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ] ℂ :=
@@ -404,8 +404,11 @@ private theorem isUnit_of_mem_unitaryGroup {n : Type*} [Fintype n] [DecidableEq 
   (Unitary.toUnits ⟨u, hu⟩).isUnit
 
 private theorem mem_unitary_of_norm_eq_one {c : ℂ} (hc : ‖c‖ = 1) : c ∈ unitary ℂ :=
-  Unitary.mem_iff.mpr ⟨by rw [RCLike.star_def, RCLike.conj_mul, hc]; simp,
-    by rw [RCLike.star_def, RCLike.mul_conj, hc]; simp⟩
+  Unitary.mem_iff_star_mul_self.mpr (by rw [RCLike.star_def, RCLike.conj_mul, hc]; simp)
+
+private theorem smul_star_smul_of_norm_eq_one {c : ℂ} (hc : ‖c‖ = 1)
+    (u : Matrix (Fin d) (Fin d) ℂ) : c • (star c • u) = u := by
+  rw [smul_smul, Unitary.mul_star_self_of_mem (mem_unitary_of_norm_eq_one hc), one_smul]
 
 variable {G : Type*} [Monoid G]
 
@@ -413,8 +416,7 @@ open scoped ComplexOrder in
 /-- Symmetry up to a phase of a block-diagonal tensor whose blocks jointly span at one site
 has phases that are powers of one unimodular scalar: the summed word traces of the blocks
 rotated by \(U_g\) are \(c^{|w|}\) times those of the original blocks, with \(|c|=1\).
-Thus \(\lambda_{g,N}=c^N\) whenever the matrix product vector of length \(N\) is nonzero.
-Source: arXiv:1010.3732, lines 655--657. -/
+Source: arXiv:1010.3732, lines 440--445 and 655--657. -/
 theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (U : G →* Matrix (Fin d) (Fin d) ℂ)
@@ -488,12 +490,8 @@ theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
           rw [hUv, star_smul, smul_dotProduct, dotProduct_smul, smul_eq_mul, smul_eq_mul,
             mul_assoc]
   have hne : star v ⬝ᵥ v ≠ 0 := fun h => hv (dotProduct_star_self_eq_zero.mp h)
-  have hcc : star c₁ * c₁ = 1 := by
-    have := mul_right_cancel₀ hne (hdot.symm.trans (one_mul _).symm)
-    exact this
-  have hsq' : ‖c₁‖ ^ 2 = 1 := by
-    simpa [norm_mul, norm_star, sq] using congrArg norm hcc
-  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).mp hsq'
+  have hcc : star c₁ * c₁ = 1 := mul_right_cancel₀ hne (hdot.symm.trans (one_mul _).symm)
+  exact CStarRing.norm_of_mem_unitary (Unitary.mem_iff_star_mul_self.mpr hcc)
 
 /-- Rotation by a rescaled physical matrix rescales every rotated letter. -/
 private theorem rotatePhysical_smul_apply {D : ℕ} (a : ℂ) (u : Matrix (Fin d) (Fin d) ℂ)
@@ -761,8 +759,7 @@ theorem exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetricUpToPh
     exists_perm_unitary_rotatePhysical_of_sum_trace_eq A hA hTP (star c • U g) hu' hTr'
   have hcov := blockPhysicalMatrix_mul_blockVirtualAction A (star c • U g) σ hdim V hV
   have hcu := mem_unitary_of_norm_eq_one hc
-  have hUg : U g = c • (star c • U g) := by
-    rw [smul_smul, (Unitary.mem_iff.mp hcu).2, one_smul]
+  have hUg : U g = c • (star c • U g) := (smul_star_smul_of_norm_eq_one hc _).symm
   refine ⟨c • blockVirtualAction σ hdim V,
     Unitary.smul_mem_of_mem hcu (blockVirtualAction_mem_unitaryGroup σ hdim V hVU), ?_⟩
   rw [hUg, Matrix.smul_mul, hcov, Matrix.mul_smul]
@@ -827,9 +824,7 @@ theorem groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase
   obtain ⟨hu', hTr', -⟩ := rescaled_rotation_data A (hU g) hc hTr
   obtain ⟨σ, hdim, X, hX⟩ := exists_perm_gauge_rotatePhysical_of_sum_trace_eq A hA
     (star c • U g) (isUnit_of_mem_unitaryGroup hu') hTr'
-  have hcu := mem_unitary_of_norm_eq_one hc
-  have hUg : U g = c • (star c • U g) := by
-    rw [smul_smul, (Unitary.mem_iff.mp hcu).2, one_smul]
+  have hUg : U g = c • (star c • U g) := (smul_star_smul_of_norm_eq_one hc _).symm
   have hc0 : c ^ L ≠ 0 := pow_ne_zero _ (by rintro rfl; simp at hc)
   rw [hUg, onSiteTensorPow_smul, map_smul, Submodule.map_smul _ _ _ hc0]
   have hblock : ∀ k, groundSpaceES (rotatePhysical (star c • U g) (A (σ k))) L =
