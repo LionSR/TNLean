@@ -188,12 +188,31 @@
   );
   $("legend").append(el("span", { text: "Status:" }), ...ORDER.map(s => el("span", {}, el("i", { class: "sw st-" + s }), STATUS[s])));
 
+  /* ---------- inline tensor-network equations ---------- */
+  // A {{tn:name}} token in stage text is a word-sized tenkz equation set on the line.
+  const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}/g, (m, name) => {
+    const d = (D.inlineDiagrams || {})[name];
+    if (!d) return "";
+    return `<img class="tni" src="${d.src}" alt="${esc(d.alt || name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.25)}"` : ""}>`;
+  });
+
   /* ---------- gaps ---------- */
   const G = D.gaps || { entries: [], checked: [] };
   const isOpenGap = g => (g.status || "open") === "open";
   // Notes are identified by repository and path; two repositories may use the same file name.
   const gapKey = (repo, path) => `${repo || PRIMARY.name}:${path}`;
   const noteFor = g => (D.gapNotes || []).find(n => gapKey(n.repo, n.path) === gapKey(g.repo, g.id));
+  // The proof stage that owns an issue, for placing a gap or a badge in the walkthrough.
+  const stageOf = n => {
+    for (const route of C.routes) {
+      const idx = route.stages.findIndex(st => st.issues.includes(n));
+      if (idx >= 0) return { route, idx, stage: route.stages[idx], anchor: `stage-${route.id}-${idx + 1}` };
+    }
+    return null;
+  };
+  // Notes in different repositories may share a file name, so the anchor names the repository too.
+  const gapAnchor = g => `gap-${g.repo || PRIMARY.name}-${g.id.split("/").pop().replace(/\.tex$/, "")}`;
   (function renderGaps() {
     const curated = new Set(G.entries.map(g => gapKey(g.repo, g.id)));
     const pending = (D.gapNotes || []).filter(n => !curated.has(gapKey(n.repo, n.path)));
@@ -218,15 +237,21 @@
     for (const g of [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || order[a.kind] - order[b.kind])) {
       const note = noteFor(g);
       const [statusName, statusCls] = GAP_STATUS[g.status || "open"];
-      list.append(el("article", { class: "gap" },
-        el("div", { class: "where" }, el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }), el("span", { class: "pill " + statusCls, text: statusName }),
-          el("span", { text: `${(C.papers[g.paper] || {}).name || ""} · ${g.result}` })),
-        el("h3", { text: g.title }),
+      // Each entry is read on its own: where it sits in the proof, a one-line verdict, what the
+      // step does, then the claim, the finding, the risk and the next step.
+      const at = stageOf(g.issue);
+      const place = at ? el("a", { href: "#" + at.anchor, text: `${at.route.paper ? (C.papers[at.route.paper] || {}).name : "Shared foundations"}, stage ${at.idx + 1}: ${at.stage.title}` })
+        : el("span", { text: (C.papers[g.paper] || {}).name || "" });
+      list.append(el("article", { class: "gap", id: gapAnchor(g) },
+        el("div", { class: "where" }, el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }), el("span", { class: "pill " + statusCls, text: statusName }), place),
+        el("h3", {}, el("span", { text: g.title }), " ", el("span", { class: "res", text: g.result })),
+        g.summary ? el("p", { class: "summary", html: tnText(g.summary) }) : null,
+        g.context ? el("p", { class: "context", html: tnText(g.context) }) : null,
         el("dl", {},
-          el("div", {}, el("dt", { text: "The paper says" }), el("dd", { text: g.claims })),
-          el("div", {}, el("dt", { text: "What the formalization found" }), el("dd", { text: g.found })),
-          el("div", {}, el("dt", { text: "Does it threaten the theorem?" }), el("dd", { text: g.impact })),
-          el("div", {}, el("dt", { text: "Next step" }), el("dd", { text: g.plan }))),
+          el("div", {}, el("dt", { text: "The paper says" }), el("dd", { html: tnText(g.claims) })),
+          el("div", {}, el("dt", { text: "What Lean found" }), el("dd", { html: tnText(g.found) })),
+          el("div", {}, el("dt", { text: "Risk to the theorem" }), el("dd", { html: tnText(g.impact) })),
+          el("div", {}, el("dt", { text: "Next step" }), el("dd", { html: tnText(g.plan) }))),
         el("div", { class: "links" }, g.issue ? issueRef(g.issue) : null,
           ...Object.entries(g.prs || {}).flatMap(([repo, ns]) => ns.map(n => prRef(repo, n))),
           note ? el("span", { class: "muted mono", text: `${note.path.split("/").pop()} · note status: ${note.status || "unstated"}` }) : null)));
@@ -244,15 +269,6 @@
     }
     if (G.reviewedAt) box.append(el("p", { class: "note", text: `Summaries last reviewed ${new Date(G.reviewedAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}. They paraphrase the paper-gap notes, which are authoritative.` }));
   })();
-
-  /* ---------- inline tensor-network equations ---------- */
-  // A {{tn:name}} token in stage text is a word-sized tenkz equation set on the line.
-  const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}/g, (m, name) => {
-    const d = (D.inlineDiagrams || {})[name];
-    if (!d) return "";
-    return `<img class="tni" src="${d.src}" alt="${esc(d.alt || name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.25)}"` : ""}>`;
-  });
 
   /* ---------- proof routes ---------- */
   (function renderRoutes() {
@@ -273,7 +289,7 @@
         const landed = prs.filter(p => p.kind === "merged").sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
         const inflight = prs.filter(p => p.open);
         const gapBadges = G.entries.filter(g => st.issues.includes(g.issue) && g.kind !== "convention" && isOpenGap(g))
-          .map(g => { const a = el("a", { href: "#gaps", class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result}` }); a.title = g.title; return a; });
+          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{tn:[^}]+\}\}/g, ""); return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
           const rs = leastStatus(r.issues);
@@ -303,8 +319,12 @@
             el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
             d.caption ? el("figcaption", { html: tnText(d.caption) }) : null);
         }).filter(Boolean);
-        const figs = figure || tnFigs.length ? el("div", { class: "figs" }, ...tnFigs, figure) : null;
-        container.append(el("div", { class: "stage" },
+        // A reader may land on any stage without having read the others, so each stage lists
+        // every symbol its text, equations and figures use.
+        const key = (st.symbols || []).length ? el("div", { class: "key" }, el("div", { class: "keyhead", text: "Symbols on this stage" }),
+          el("dl", {}, ...st.symbols.map(([sym, meaning]) => el("div", {}, el("dt", { html: sym }), el("dd", { html: meaning }))))) : null;
+        const figs = key || figure || tnFigs.length ? el("div", { class: "figs" }, key, ...tnFigs, figure) : null;
+        container.append(el("div", { class: "stage", id: `stage-${route.id}-${idx + 1}` },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },
             el("div", { class: "head" }, el("h3", { text: st.title }),

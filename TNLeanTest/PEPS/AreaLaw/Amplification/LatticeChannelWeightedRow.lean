@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelWeightedRow
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordObservables
 
-/-! Concrete lattice counts and the boundary filter exponent consume the wrapper. -/
+/-! Regression tests: the weighted-row bound for lattice channels holds with the concrete
+lattice counts and the boundary filter exponent. -/
 
 open QuantumCircuit SpectralFilter Matrix TNLean.PEPS.AreaLaw
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder

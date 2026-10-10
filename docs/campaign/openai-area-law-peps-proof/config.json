@@ -86,23 +86,133 @@
             8743,
             8744
           ],
-          "physics": "The global gap limits how much the eigenvalues of a region's reduced state fluctuate on a logarithmic scale: reweighting the state by ρ<sup>−<i>u</i>/2</sup> on a block costs energy only along the cut. The proof then optimizes a staircase of positive filters on nested rectangles, the norm {{tn:al-filter-norm}}, and bounds it from above and below; comparing the two bounds discounts the conditional entropy.",
-          "delivers": "A box of side <i>r</i> far from the cut has <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup> with <i>e</i>₀ &lt; 1. The volume bound would be <i>r</i>².",
+          "physics": "The ground state Ω is separated from all other energies by a gap. Because of the gap, the eigenvalues of a region's reduced state fluctuate little on a log scale. The reason is simple. Reweighting Ω inside the region costs energy only where terms cross its boundary. Next, surround a small box with nested regions, and put a positive operator, a filter, on each. Choose the filters to make the norm {{tn:al-filter-norm}} as large as possible. Here <i>L</i><sub>1</sub>, …, <i>L<sub>m</sub></i> are the filters, from the smallest region to the largest. The proof bounds this best norm from above and from below. Comparing the two bounds discounts the box's entropy. Given a surrounding buffer, the box keeps at most half its entropy, plus a constant times its side. Averaging this over many small boxes in random order gives the bound below.",
+          "delivers": "Take a box of side <i>r</i> far from the cut. Its entropy obeys <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup>. Here <i>C</i> is a constant and <i>e</i>₀ is a fixed number below 1. The trivial volume bound grows like <i>r</i>².",
           "figure": "box-exponent",
-          "caption": "Entropy bounds for a box of side <i>r</i> on log–log axes, where each exponent becomes a slope. The volume bound has slope 2, this stage gives slope 1 + <i>e</i>₀ (drawn at <i>e</i>₀ = ½), and the area law is the dashed slope 1 that the later stages reach.",
+          "caption": "Entropy bounds for a box of side <i>r</i>, on log–log axes. Each power of <i>r</i> becomes a straight line. The trivial volume bound has slope 2. This stage gives slope 1 + <i>e</i>₀, with <i>e</i>₀ a fixed number below 1 (drawn at ½). The dashed line of slope 1 is the area law, which later stages reach.",
           "diagrams": [
             {
               "src": "diagrams/region-nested.svg",
-              "caption": "The regions on the sheet of qudits: the target <i>X</i> = <i>A</i> ∩ <i>Q</i><sub>0</sub> and the nested regions <i>X<sub>j</sub></i> = <i>A</i> ∩ <i>Q</i><sub>0</sub><sup>+<i>d<sub>j</sub></i></sup>, clipped by the side <i>A</i> of the cut. The filters <i>L<sub>j</sub></i> act on <i>X<sub>j</sub></i>, and the shells <i>X<sub>j</sub></i> ∖ <i>X</i> are the buffer."
+              "caption": "Sites of the lattice near a box <i>Q</i><sub>0</sub> far from the cut. The cut splits the lattice into a region <i>A</i> and the rest. The target <i>X</i> is the part of <i>A</i> inside <i>Q</i><sub>0</sub>. The nested regions <i>X</i><sub>1</sub> ⊂ <i>X</i><sub>2</sub> are the parts of <i>A</i> inside larger and larger boxes around <i>Q</i><sub>0</sub>. A positive operator, the filter <i>L<sub>j</sub></i>, acts on each <i>X<sub>j</sub></i>. The shells around <i>X</i> form the buffer."
             },
             {
               "src": "diagrams/tilt.svg",
-              "caption": "Proof of Lemma <i>lem:tail</i>. Reweighting a state Ψ by <i>F</i> = ρ<sup>−<i>u</i>/2</sup> on a block <i>B</i> and tracing out the rest (the joined leg) gives σ = ρ<sup>1−<i>u</i></sup>/<i>M</i>(<i>u</i>). Only terms crossing the cut feel <i>F</i>, so by the gap the tilted vector stays close to Ψ, which pins the fluctuations of −log <i>p<sub>j</sub></i>."
+              "caption": "Proof of Lemma 3.1, as a tensor diagram. Ψ is a gapped ground state, and ρ is its reduced state on a block <i>B</i>. Multiply Ψ on <i>B</i> by <i>F</i> = ρ<sup>−<i>u</i>/2</sup>, for a small number <i>u</i>. Then trace out everything outside <i>B</i>, which is the joined leg. The result is σ = ρ<sup>1−<i>u</i></sup>/<i>M</i>(<i>u</i>), where <i>M</i>(<i>u</i>) = Tr ρ<sup>1−<i>u</i></sup> normalizes it. Only terms crossing the boundary of <i>B</i> feel <i>F</i>. So the reweighted state costs little energy, and the gap keeps it close to Ψ. This limits how far −log <i>p<sub>j</sub></i> strays from the entropy, where <i>p<sub>j</sub></i> are the eigenvalues of ρ."
             },
             {
               "src": "diagrams/staircase.svg",
-              "caption": "Section 2: the norm <i>N</i> = ‖<i>L<sub>m</sub></i>⋯<i>L</i><sub>1</sub>Ω‖ of a staircase of positive filters <i>L<sub>j</sub></i> on nested regions <i>X<sub>j</sub></i> ⊃ <i>X</i> (drawn for <i>m</i> = 2; <i>T<sub>j</sub></i> are the shells). Bounding −2 log <i>N</i> from above and below gives the discount on <i>S</i>(<i>X</i> | buffer)."
+              "caption": "From Section 3. Ω is the ground state. Positive operators <i>L</i><sub>1</sub>, …, <i>L<sub>m</sub></i> act on nested regions <i>X</i><sub>1</sub> ⊂ ⋯ ⊂ <i>X<sub>m</sub></i> around a target <i>X</i>. The diagram is the norm <i>N</i> = ‖<i>L<sub>m</sub></i>⋯<i>L</i><sub>1</sub>Ω‖, drawn for <i>m</i> = 2. The shells are <i>T</i><sub>1</sub> = <i>X</i><sub>1</sub> ∖ <i>X</i> and <i>T</i><sub>2</sub> = <i>X</i><sub>2</sub> ∖ <i>X</i><sub>1</sub>. The leg Λ ∖ <i>X</i><sub>2</sub> is every other site. Bounding −2 log <i>N</i> from above and from below bounds the entropy of <i>X</i> given its shells."
             }
+          ],
+          "symbols": [
+            [
+              "Ω",
+              "the ground state of the full Hamiltonian"
+            ],
+            [
+              "<i>A</i>",
+              "one side of the cut: the region whose entropy is bounded"
+            ],
+            [
+              "Λ",
+              "the finite set of lattice sites"
+            ],
+            [
+              "<i>B</i>",
+              "a block of sites (any set); the rest is the outside"
+            ],
+            [
+              "Ψ",
+              "a unique, gapped ground state of a general Hamiltonian (Lemma 3.1)"
+            ],
+            [
+              "ρ",
+              "reduced density matrix of the state on the block B"
+            ],
+            [
+              "<i>p<sub>j</sub></i>",
+              "eigenvalues of ρ"
+            ],
+            [
+              "−log <i>p<sub>j</sub></i>",
+              "surprisal; its average over p<sub>j</sub> is the entropy"
+            ],
+            [
+              "<i>u</i>",
+              "small real tilting parameter"
+            ],
+            [
+              "<i>F</i> = ρ<sup>−<i>u</i>/2</sup>",
+              "operator that reweights the state on the block B"
+            ],
+            [
+              "<i>M</i>(<i>u</i>)",
+              "normalization: sum of p<sub>j</sub> to the power 1 − u"
+            ],
+            [
+              "σ",
+              "reduced state on B after reweighting: ρ<sup>1−u</sup>/M(u)"
+            ],
+            [
+              "<i>r</i>",
+              "side length of the box"
+            ],
+            [
+              "<i>S</i>",
+              "entanglement entropy"
+            ],
+            [
+              "<i>C</i>",
+              "constant independent of system size and box side"
+            ],
+            [
+              "<i>e</i><sub>0</sub>",
+              "fixed exponent strictly between 0 and 1"
+            ],
+            [
+              "<i>Q</i><sub>0</sub>",
+              "box of side at most r, far from the cut"
+            ],
+            [
+              "<i>X</i>",
+              "target: the part of A inside the box Q<sub>0</sub>"
+            ],
+            [
+              "<i>Q</i><sub>0</sub><sup>+<i>d</i></sup>",
+              "box Q<sub>0</sub> enlarged by d sites in every direction"
+            ],
+            [
+              "<i>d<sub>j</sub></i>",
+              "enlargement of the j-th box; grows in equal steps with j"
+            ],
+            [
+              "<i>X<sub>j</sub></i>",
+              "part of A in the j-th enlarged box; nested around X"
+            ],
+            [
+              "<i>m</i>",
+              "number of nested regions"
+            ],
+            [
+              "<i>L<sub>j</sub></i>",
+              "positive operator (filter) acting on region X<sub>j</sub>"
+            ],
+            [
+              "<i>N</i>",
+              "norm of the filtered ground state, ‖L<sub>m</sub> ⋯ L<sub>1</sub> Ω‖, maximized over filters"
+            ],
+            [
+              "<i>T<sub>j</sub></i>",
+              "shell between consecutive nested regions: X<sub>j</sub> minus X<sub>j−1</sub>"
+            ],
+            [
+              "Λ ∖ <i>X</i><sub>2</sub>",
+              "all sites outside the largest nested region"
+            ],
+            [
+              "<i>S</i>(<i>X</i> | buffer)",
+              "conditional entropy of X given the shells around it"
+            ]
           ]
         },
         {
@@ -112,19 +222,117 @@
             8746,
             8747
           ],
-          "physics": "Lieb–Robinson bounds in the lattice's own graph distance and a smooth spectral filter with stretched-exponentially decaying Fourier tails rewrite the Hamiltonian as a sum of positive local pieces <i>k<sub>i</sub></i>. Each piece annihilates the ground state, {{tn:al-kill}}, and is supported on a ball up to a stretched-exponential tail.",
-          "delivers": "Positive operators that each annihilate Ω and have rapidly decaying spatial tails, and whose sum has a global gap.",
+          "physics": "The Hamiltonian <i>H</i> is replaced by a sum of positive pieces <i>k<sub>i</sub></i>, one per interaction term. Each piece annihilates the ground state Ω: {{tn:al-kill}}. Each piece acts mostly near its own term. Its tail decays faster than any power of the distance. Two tools give this. One is a Lieb–Robinson bound in the lattice's own graph distance. The other is a smooth filter in energy whose Fourier transform decays stretched-exponentially.",
+          "delivers": "Positive operators <i>k<sub>i</sub></i>, one per interaction term. Each annihilates the ground state Ω and has a rapidly decaying spatial tail. Their sum is at least a constant times <i>H</i> − <i>E</i><sub>0</sub>, where <i>E</i><sub>0</sub> is the ground energy. So the sum keeps a gap.",
           "figure": "filter",
-          "caption": "Left: the spectrum of <i>H</i> as a rug, with the isolated ground energy and the gap. The filter vanishes at <i>E</i>₀ and is flat above the gap, so each piece annihilates Ω. Right: on a log scale the filter's Fourier tail falls below every power law, which keeps each piece quasi-local.",
+          "caption": "Left: the spectrum of <i>H</i> as a rug, with the ground energy <i>E</i><sub>0</sub> and the gap Δ above it. The filter χ is a smooth bump, drawn as χ(<i>E</i> − <i>E</i><sub>0</sub>) against the energy <i>E</i>. It equals 1 at the ground energy and vanishes on every excited energy. Right: the size of its Fourier transform at time <i>t</i>, on a log scale. Its tail falls below every power law. This keeps each piece concentrated near its interaction term.",
           "diagrams": [
             {
               "src": "diagrams/qc-filter.svg",
-              "caption": "Equation <i>eq:quasilocal-centered-filter</i>, read left to right. Each term <i>h<sub>i</sub></i> is evolved in time and averaged against <i>f</i>, whose Fourier transform χ has χ(0) = 1 and vanishes at every excited energy; subtracting its ground value gives <i>M<sub>i</sub></i> with <i>M<sub>i</sub></i>Ω = 0 and Σ<sub><i>i</i></sub><i>M<sub>i</sub></i> = <i>H</i> − <i>E</i><sub>0</sub>. The constraints are <i>k<sub>i</sub></i> = |<i>M<sub>i</sub></i>|/<i>c</i><sub>*</sub>."
+              "caption": "Section 4, read left to right. <i>H</i> is the Hamiltonian, Ω its ground state and <i>E</i><sub>0</sub> its ground energy. Take one interaction term <i>h<sub>i</sub></i>, acting on sites <i>X<sub>i</sub></i>. Evolve it for time <i>t</i> and average over <i>t</i> with a smooth weight <i>f</i>. The Fourier transform χ of <i>f</i> equals 1 at zero and vanishes at every excitation energy. Subtract the number ⟨Ω, <i>h<sub>i</sub></i>Ω⟩. The result <i>M<sub>i</sub></i> annihilates Ω, and the <i>M<sub>i</sub></i> add up to <i>H</i> − <i>E</i><sub>0</sub>. The positive pieces are <i>k<sub>i</sub></i> = |<i>M<sub>i</sub></i>|/<i>c</i><sub>*</sub>, with <i>c</i><sub>*</sub> a constant that makes <i>k<sub>i</sub></i> ≤ 1."
             },
             {
               "src": "diagrams/truncation.svg",
-              "caption": "Equation <i>eq:quasilocal-ce</i>: truncating an operator to a ball traces out everything outside (the loop) and puts back the normalized identity there."
+              "caption": "Section 4: cutting an operator <i>B</i> down to a ball. The ball <i>N<sub>l</sub></i> holds every site within graph distance <i>l</i> of a chosen site of term <i>i</i>. All other sites are “out”. <i>E<sub>i,l</sub></i>(<i>B</i>) traces <i>B</i> over the outside sites, drawn as the loop. It then puts back the identity there, divided by its dimension <i>q</i><sup>|out|</sup>. Here <i>q</i> is the dimension of one qudit."
             }
+          ],
+          "symbols": [
+            [
+              "<i>H</i>",
+              "the Hamiltonian, a sum of interaction terms"
+            ],
+            [
+              "<i>h<sub>i</sub></i>",
+              "one interaction term of H"
+            ],
+            [
+              "Λ",
+              "the finite set of lattice sites"
+            ],
+            [
+              "<i>X<sub>i</sub></i>",
+              "the sites on which h<sub>i</sub> acts"
+            ],
+            [
+              "Λ ∖ <i>X<sub>i</sub></i>",
+              "all other sites"
+            ],
+            [
+              "Ω",
+              "the ground state of H"
+            ],
+            [
+              "<i>E</i><sub>0</sub>",
+              "ground energy of H"
+            ],
+            [
+              "Δ",
+              "spectral gap of H above E<sub>0</sub>"
+            ],
+            [
+              "<i>t</i>",
+              "time"
+            ],
+            [
+              "e<sup>±<i>itH</i></sup>",
+              "time evolution by H"
+            ],
+            [
+              "<i>f</i>",
+              "smooth weight on time, used to average the evolved term"
+            ],
+            [
+              "χ",
+              "energy filter, the Fourier transform of <i>f</i>: χ(0) = 1, and χ(ω) = 0 for |ω| ≥ Δ/2; plotted as χ(<i>E</i> − <i>E</i><sub>0</sub>)"
+            ],
+            [
+              "⟨Ω, <i>h<sub>i</sub></i>Ω⟩",
+              "ground-state expectation value of h<sub>i</sub>"
+            ],
+            [
+              "<i>I</i>",
+              "identity operator"
+            ],
+            [
+              "<i>M<sub>i</sub></i>",
+              "filtered term minus its ground value; annihilates Ω, sums to H − E<sub>0</sub>"
+            ],
+            [
+              "<i>c</i><sub>*</sub>",
+              "fixed normalizing constant, chosen so each k<sub>i</sub> is at most 1"
+            ],
+            [
+              "<i>k<sub>i</sub></i>",
+              "positive piece |M<sub>i</sub>|/c<sub>*</sub>; annihilates Ω and is nearly local"
+            ],
+            [
+              "<i>a<sub>i</sub></i>",
+              "a chosen site inside X<sub>i</sub>, the anchor of term i"
+            ],
+            [
+              "<i>l</i>",
+              "truncation radius, in lattice graph distance"
+            ],
+            [
+              "<i>N<sub>l</sub></i>",
+              "ball: all sites within graph distance l of the anchor"
+            ],
+            [
+              "out",
+              "all sites outside the ball"
+            ],
+            [
+              "<i>B</i>",
+              "any operator on the whole lattice"
+            ],
+            [
+              "<i>E<sub>i,l</sub></i>",
+              "truncation map: trace out the outside, put back normalized identity"
+            ],
+            [
+              "<i>q</i>",
+              "dimension of the qudit at each site"
+            ]
           ]
         },
         {
@@ -137,15 +345,113 @@
             8752,
             8753
           ],
-          "physics": "Take <i>k</i> copies of the ground state, each beside a maximally entangled pair on registers <i>C</i> and <i>R</i>, and keep one Schur–Weyl sector of the <i>R</i> registers: {{tn:al-prevector}}. Filter by an inverse power of an operator that interpolates as a small region changes sides; per copy, the log-norm of the filtered vector approaches a combination of entropies. Trees of matrix geometric means carry out the bookkeeping.",
-          "delivers": "The decrease of the log-norm bounds conditional mutual information from below, and the same states bound the energy spent. Projecting the target and <i>C</i> onto a pair moves the target's Schmidt index onto <i>R</i>, {{tn:al-pin}}, which gives the upper comparison. The gap gives the lower one, because low energy forces most copies into Ω.",
+          "physics": "Work with <i>k</i> copies of the state at once. Each copy is Ω̃ beside a maximally entangled pair on two extra registers, <i>C</i> and <i>R</i>. Here Ω̃ is the ground state of the Hamiltonian truncated near the target; it is very close to the true one. Keep one sector of the permutation symmetry of the <i>R</i> registers: {{tn:al-prevector}}. In this formula Bell is the pair on <i>C</i> and <i>R</i>, and π<sub><i>R</i></sub><sup>λ<sub><i>k</i></sub></sup> keeps the sector labelled λ<sub><i>k</i></sub>. Then apply an inverse power of a positive operator. That operator changes smoothly as a small region moves across a partition. Per copy, the log-norm of the result tends to a combination of entropies. Trees of matrix geometric means organize this averaging.",
+          "delivers": "The log-norm falls as the small region moves. That fall bounds the conditional mutual information from below. The same states bound the energy the move costs. Two comparisons then pin down the norm. For the upper one, project the target and <i>C</i> onto a maximally entangled pair <i>B</i>: {{tn:al-pin}}. Here <i>d</i><sub>*</sub> is the pair's dimension and <i>z</i> the probability kept in the target's typical Schmidt indices. ψ is the typical part of Ω̃, with the target's Schmidt index moved onto <i>R</i>. The lower comparison uses the gap. A low-energy state has most copies in the ground state.",
           "figure": "replicas",
-          "caption": "As the number <i>m</i> of copies grows, the log-norm per copy of the filtered vector settles at a combination of entropies (dashed). Comparing this limit with the energy spent is what bounds the conditional mutual information.",
+          "caption": "As the number <i>k</i> of copies grows, the log-norm per copy of the filtered state settles at a combination of entropies (dashed). The filtered state is the <i>k</i>-copy state after the positive operator is applied. Comparing this limit with the energy spent bounds the conditional mutual information.",
           "diagrams": [
             {
               "src": "diagrams/qc-movement.svg",
-              "caption": "Lemma <i>lem:movement</i>, <i>eq:conditional-movement</i>. Filtering a piece <i>x</i> of a pure state θ through the <i>U</i> side and then the <i>P</i> side loses norm at the rate η = <i>I</i>(<i>x</i> : <i>F</i> | <i>U</i>) = <i>I</i>(<i>x</i> : <i>F</i> | <i>P</i>). Read left to right: the first filter acts first."
+              "caption": "Lemma 5.1. θ is a pure state on four parts <i>P</i>, <i>x</i>, <i>U</i>, <i>F</i>. Read left to right; the first filter acts first. First filter <i>x</i> together with <i>U</i>, then <i>x</i> together with <i>P</i>. Each filter first divides by a small power of θ's reduced state on <i>U</i> or <i>P</i>, the hatted ρ. It then multiplies by the same power of any density matrix, τ or σ. The power is <i>a</i>/2. The norm drops by about e<sup>−<i>a</i>η/2</sup>. Here η is the information <i>x</i> shares with <i>F</i> given <i>U</i>; it equals the same given <i>P</i>. In the error term, ℓ = log(e · dim <i>x</i>) and <i>C</i> is a universal constant."
             }
+          ],
+          "symbols": [
+            [
+              "<i>k</i>",
+              "number of copies (replicas) of the state"
+            ],
+            [
+              "Ω",
+              "the ground state of the full Hamiltonian"
+            ],
+            [
+              "Ω̃",
+              "ground state of the Hamiltonian truncated near the target; very close to Ω"
+            ],
+            [
+              "<i>C</i>, <i>R</i>",
+              "two auxiliary registers added beside each copy"
+            ],
+            [
+              "Bell",
+              "maximally entangled pair on C and R, over the target's typical Schmidt indices"
+            ],
+            [
+              "λ<sub><i>k</i></sub>",
+              "label of one permutation-symmetry (Schur–Weyl) sector of the k copies"
+            ],
+            [
+              "π<sub><i>R</i></sub><sup>λ<sub><i>k</i></sub></sup>",
+              "projector onto sector λ<sub>k</sub> of the k copies of R"
+            ],
+            [
+              "pre<sub><i>k</i></sub>",
+              "the starting k-copy vector, before filtering"
+            ],
+            [
+              "target",
+              "the small region X whose information is being measured"
+            ],
+            [
+              "<i>B</i>",
+              "maximally entangled pair on the target and C; B† projects onto it"
+            ],
+            [
+              "<i>z</i>",
+              "total probability of the target's typical Schmidt indices"
+            ],
+            [
+              "<i>d</i><sub>*</sub>",
+              "number of typical Schmidt indices; dimension of C and R"
+            ],
+            [
+              "ψ",
+              "normalized typical part of Ω̃, with the target's index moved onto R"
+            ],
+            [
+              "θ",
+              "a pure state on four parts P, x, U, F"
+            ],
+            [
+              "<i>x</i>",
+              "the small part that moves between sides"
+            ],
+            [
+              "<i>P</i>, <i>U</i>",
+              "the two sides x moves between"
+            ],
+            [
+              "<i>F</i>",
+              "the remaining far part"
+            ],
+            [
+              "ρ̂<sub><i>U</i></sub>, ρ̂<sub><i>P</i></sub>",
+              "reduced states of θ on U and on P"
+            ],
+            [
+              "τ, σ",
+              "any density matrices on x with U, and on x with P"
+            ],
+            [
+              "<i>a</i>",
+              "small positive power of the filters"
+            ],
+            [
+              "η",
+              "information x shares with F given U; equals that given P"
+            ],
+            [
+              "<i>I</i>(<i>x</i> : <i>F</i> | <i>U</i>)",
+              "conditional mutual information of x and F given U"
+            ],
+            [
+              "ℓ",
+              "log(e · dimension of x)"
+            ],
+            [
+              "<i>C</i> (in the bound)",
+              "universal constant"
+            ]
           ]
         },
         {
@@ -155,15 +461,69 @@
             8755,
             8756
           ],
-          "physics": "Sweep the partition through a collar along a finite randomized schedule, so that each interaction term is rarely cut. Applied repeatedly, the two norm comparisons first improve the box exponent and then bound the information shared by the target <i>X</i> and the region beyond the collar, in the state {{tn:al-collar}} where the collar has been traced out.",
-          "delivers": "The mutual information between <i>A</i>∩<i>T</i> and the region beyond a collar of width <i>n</i><sup>1−ε</sup> is at most <i>C n</i><sup>1−ε</sup>, for templates <i>T</i> with <i>O</i>(<i>n</i>) boundary.",
+          "physics": "Sweep a partition across a collar, a band around the target <i>X</i>. The steps follow a finite random schedule. So each interaction term is rarely cut. Repeating the two norm comparisons first improves the box exponent. Then it bounds the information between <i>X</i> and the region beyond the collar. That information is computed in the state {{tn:al-collar}}. This is the ground state Ω with the collar <i>Y</i> traced out.",
+          "delivers": "The target is <i>X</i> = <i>A</i> ∩ <i>T</i>, where <i>A</i> is one side of the cut. <i>T</i> is a template: a union of small rectangles and triangles of diameter <i>n</i>, with about <i>n</i> boundary edges. Take a collar of width about <i>n</i><sup>1−ε</sup>, with ε = 10<sup>−5</sup>. The mutual information between <i>X</i> and everything beyond the collar is at most <i>C n</i><sup>1−ε</sup>, for a constant <i>C</i>.",
           "figure": "collar-scan",
-          "caption": "Five steps of the sweep as small multiples. The partition (orange) crosses the collar (grey) at a different position in each step, chosen by a randomized schedule, so each interaction term is cut in only a few steps.",
+          "caption": "Five steps of the sweep, drawn side by side. Blue is the target. The partition (orange) crosses the collar (grey) at a different place in each step. A random schedule picks these places. So each interaction term is cut in only a few steps.",
           "diagrams": [
             {
               "src": "diagrams/region-collar.svg",
-              "caption": "The target <i>X</i>, the collar <i>Y</i> = <i>S</i><sub>0</sub> ∖ <i>X</i> around it, and the region Λ ∖ <i>S</i><sub>0</sub> beyond. The scan bounds the information <i>X</i> shares with the far region by <i>C n</i><sup>1−ε</sup> (Proposition <i>prop:collar</i>)."
+              "caption": "On the lattice Λ: the target <i>X</i>, the collar <i>Y</i> around it, and the far region beyond. <i>S</i><sub>0</sub> = <i>X</i> ∪ <i>Y</i> is the target with its collar. The scan bounds the mutual information between <i>X</i> and the far region Λ ∖ <i>S</i><sub>0</sub>. The bound is <i>C n</i><sup>1−ε</sup> (Proposition 9.6). Here <i>n</i> is the target's size, ε = 10<sup>−5</sup>, and <i>C</i> is a constant."
             }
+          ],
+          "symbols": [
+            [
+              "Ω",
+              "the ground state of the full Hamiltonian"
+            ],
+            [
+              "Ω̄",
+              "complex conjugate of Ω; joining legs traces out those sites"
+            ],
+            [
+              "<i>A</i>",
+              "one side of the cut"
+            ],
+            [
+              "<i>T</i>",
+              "template: union of small rectangles and triangles, diameter at most n"
+            ],
+            [
+              "<i>X</i>",
+              "target: the part of A inside the template, X = A ∩ T"
+            ],
+            [
+              "<i>n</i>",
+              "size of the template, its diameter"
+            ],
+            [
+              "<i>Y</i>",
+              "collar: band of sites around X"
+            ],
+            [
+              "<i>S</i><sub>0</sub>",
+              "target together with its collar"
+            ],
+            [
+              "Λ",
+              "the finite set of lattice sites"
+            ],
+            [
+              "Λ ∖ <i>S</i><sub>0</sub>",
+              "far region beyond the collar"
+            ],
+            [
+              "ε",
+              "fixed small exponent, 10<sup>−5</sup>"
+            ],
+            [
+              "<i>C</i>",
+              "constant independent of n, the template and the lattice"
+            ],
+            [
+              "<i>O</i>(<i>n</i>)",
+              "at most a constant times n"
+            ]
           ]
         },
         {
@@ -171,19 +531,109 @@
           "issues": [
             8757
           ],
-          "physics": "Typical spectral subspaces give an operator that restores the target from an auxiliary reference. Localized products of the positive constraints suppress its excited part, and polar decomposition turns it into a unitary <i>U</i>′ acting only near the target: {{tn:al-restore}}. Because <i>U</i>′ never touches the reference <i>e</i>′ or the far region, the target ends up nearly independent of both.",
-          "delivers": "Widening the collar by a sublinear amount makes the leaked information smaller than any fixed inverse power of <i>n</i>.",
+          "physics": "Add two reference copies of the target's sites, <i>s</i>′ and <i>e</i>′. Move the target's state onto <i>e</i>′ and leave the target blank. Typical spectral subspaces give an operator that restores the target, purified by <i>s</i>′. Products of the positive local pieces of the Hamiltonian remove the part of this operator that leaves the ground state. Polar decomposition then turns it into a unitary <i>U</i>′ near the target: {{tn:al-restore}}. Here Ω is the ground state, ρ<sub><i>X</i></sub> is the target's reduced state, and triangles are blank states. <i>U</i>′ acts only on <i>s</i>′ and sites near the target. It never touches <i>e</i>′ or the far region. So the target ends up nearly independent of the far region.",
+          "delivers": "Widen the collar by a sublinear amount. Then the information leaked past it is smaller than any fixed inverse power of <i>n</i>, the target's size.",
           "figure": "amplify",
-          "caption": "Information leaked past the collar against its width, on a log scale. The scan leaves at most <i>C n</i><sup>1−ε</sup>. Widening the collar by a sublinear amount drives the leak below every fixed inverse power of <i>n</i>.",
+          "caption": "Information leaked past the collar, against collar width, on a log scale. Here <i>n</i> is the target's size. After the scan, at most <i>C n</i><sup>1−ε</sup> leaks, with <i>C</i> a constant and ε = 10<sup>−5</sup>. Widening the collar by a sublinear amount drives the leak below <i>n</i><sup>−<i>M</i></sup>, for any fixed <i>M</i>.",
           "diagrams": [
             {
               "src": "diagrams/region-amplify.svg",
-              "caption": "Section 9: <i>S</i><sub>0</sub> = <i>XY</i> and its neighbourhood <i>N</i><sub>2<i>r</i></sub>(<i>S</i><sub>0</sub>), the only sites (with the reference copy <i>s</i>′) on which the restoring operator and its unitary <i>U</i>′ act. Everything outside is untouched, so its information with <i>X</i> becomes tiny."
+              "caption": "From Section 10. <i>X</i> is the target, and <i>S</i><sub>0</sub> is <i>X</i> with its collar. The outer square holds every site within graph distance 2<i>r</i> of <i>S</i><sub>0</sub>, with <i>r</i> sublinear in the target's size. The restoring unitary <i>U</i>′ acts only there and on a reference copy <i>s</i>′ of the target. Everything outside is untouched. So the target's information with it becomes tiny."
             },
             {
               "src": "diagrams/qc-constraints.svg",
-              "caption": "Section 9: run a rate-one Poisson clock at each constraint and multiply the contractions <i>G<sub>i</sub></i> = (<i>I</i> − <i>k<sub>i</sub></i>)<sup>1/2</sup> in the order the clocks ring. On average the product damps the squared norm of the excited part of any vector by e<sup>−<i>gt</i></sup> (<i>eq:amplification-excited-decay</i>); keeping only the events near <i>S</i><sub>0</sub>, with ball-truncated factors, makes it local."
+              "caption": "From Section 10. Each positive local piece <i>k<sub>i</sub></i> annihilates the ground state, and their sum has a gap <i>g</i>. Give each piece a clock that rings at random, at rate one, for a time <i>t</i>. Each ring applies the contraction <i>G<sub>i</sub></i> = (<i>I</i> − <i>k<sub>i</sub></i>)<sup>1/2</sup>. <i>D</i> is the product in ringing order. It leaves the ground state alone. On average it shrinks the squared norm of the rest of any vector by e<sup>−<i>gt</i></sup>. Keeping only rings near the target, with truncated pieces, makes the product local."
             }
+          ],
+          "symbols": [
+            [
+              "Ω",
+              "the ground state of the full Hamiltonian"
+            ],
+            [
+              "<i>X</i>",
+              "target region"
+            ],
+            [
+              "<i>Y</i>",
+              "collar around the target"
+            ],
+            [
+              "<i>S</i><sub>0</sub> = <i>XY</i>",
+              "target together with its collar"
+            ],
+            [
+              "<i>n</i>",
+              "size of the target region"
+            ],
+            [
+              "<i>r</i>",
+              "extra radius, sublinear in n"
+            ],
+            [
+              "<i>N</i><sub>2<i>r</i></sub>(<i>S</i><sub>0</sub>)",
+              "all sites within graph distance 2r of S<sub>0</sub>"
+            ],
+            [
+              "<i>s</i>′, <i>e</i>′",
+              "two added reference copies of the target's sites"
+            ],
+            [
+              "ρ<sub><i>X</i></sub>",
+              "reduced state of the ground state on the target"
+            ],
+            [
+              "√ρ<sub><i>X</i></sub> on <i>s</i>′<i>e</i>′",
+              "a purification of ρ<sub>X</sub> shared by s′ and e′"
+            ],
+            [
+              "▷ (triangle)",
+              "a fixed blank state on that register"
+            ],
+            [
+              "<i>U</i>′",
+              "local unitary on s′ and sites near the target; restores the target"
+            ],
+            [
+              "<i>C</i>",
+              "constant independent of n"
+            ],
+            [
+              "ε",
+              "fixed small exponent, 10<sup>−5</sup>"
+            ],
+            [
+              "<i>M</i>",
+              "any fixed power; the leak falls below n<sup>−M</sup>"
+            ],
+            [
+              "<i>k<sub>i</sub></i>",
+              "positive local piece of the Hamiltonian; annihilates the ground state"
+            ],
+            [
+              "<i>I</i>",
+              "identity operator"
+            ],
+            [
+              "<i>G<sub>i</sub></i>",
+              "contraction (I − k<sub>i</sub>)<sup>1/2</sup>; leaves the ground state unchanged"
+            ],
+            [
+              "<i>i</i><sub>1</sub>, …, <i>i</i><sub>5</sub>",
+              "the pieces whose clocks ring, in ringing order"
+            ],
+            [
+              "<i>D</i>",
+              "product of the G<sub>i</sub> in the order the clocks ring"
+            ],
+            [
+              "<i>t</i>",
+              "running time of the clocks"
+            ],
+            [
+              "<i>g</i>",
+              "gap of the sum of the k<sub>i</sub>"
+            ]
           ]
         },
         {
@@ -193,13 +643,67 @@
             8760,
             8759
           ],
-          "physics": "Remove <i>O</i>(|∂<i>A</i>|) sites <i>D</i> and split the rest of <i>A</i> into two ordered families of regions. A collar separates each region from the outside and from the earlier regions of its family. Since the state is pure, {{tn:al-purity}}: the two marginals share their nonzero spectrum. Narrow strips and recursive repairs at point contacts make this work for arbitrary cuts, including domains with holes.",
-          "delivers": "Two applications of the entropy chain rule cancel the entropy of every region, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors. This is the area law.",
+          "physics": "Remove a set <i>D</i> of sites from <i>A</i>. It has at most a constant times as many sites as <i>A</i> has boundary edges. Split the rest of <i>A</i> into regions sorted into two ordered families. A collar keeps each region away from the outside of <i>A</i>. It also keeps it away from the earlier regions of its own family. The ground state ψ is pure, so complementary parts share their nonzero spectrum: {{tn:al-purity}}. Here <i>B</i> is the outside of <i>A</i>, <i>A<sub>f</sub></i> is one family, and <i>A</i><sub>1−<i>f</i></sub> is the other. Narrow strips and repeated repairs at point contacts handle any cut, even domains with holes.",
+          "delivers": "Apply the entropy chain rule once per family. Every region's entropy cancels. What is left is <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus small errors, with <i>q</i> the qudit dimension. The errors add up to at most a constant times the boundary of <i>A</i>. This is the area law.",
           "diagrams": [
             {
               "src": "diagrams/region-families.svg",
-              "caption": "Lemma <i>geometry:cancellation</i> on a sheet: inside <i>A</i>, the removed layer <i>D</i> and the regions <i>X</i><sub>1</sub>, <i>X</i><sub>3</sub> of one family and <i>X</i><sub>2</sub> of the other; <i>B</i> is the outside. Each region is nearly independent of <i>B</i> together with the earlier regions of its own family, and the two chain rules then cancel every region's entropy, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors."
+              "caption": "Lemma 11.1 on the lattice. Inside the region <i>A</i> sit the removed layer <i>D</i> and the regions <i>X</i><sub>1</sub>, <i>X</i><sub>2</sub>, <i>X</i><sub>3</sub>. <i>X</i><sub>1</sub> and <i>X</i><sub>3</sub> form one family, <i>X</i><sub>2</sub> the other. <i>B</i> is everything outside <i>A</i>. Each region is nearly independent of <i>B</i> plus the earlier regions of its own family. Two chain rules then cancel every region's entropy. This leaves <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus small errors, with <i>q</i> the qudit dimension."
             }
+          ],
+          "symbols": [
+            [
+              "<i>A</i>",
+              "region whose entropy is bounded"
+            ],
+            [
+              "|∂<i>A</i>|",
+              "number of lattice edges leaving A"
+            ],
+            [
+              "<i>B</i>",
+              "everything outside A"
+            ],
+            [
+              "<i>D</i>",
+              "removed sites inside A, at most a constant times |∂A|"
+            ],
+            [
+              "<i>X</i><sub>1</sub>, <i>X</i><sub>2</sub>, <i>X</i><sub>3</sub>",
+              "regions of A outside D, each in one of two families"
+            ],
+            [
+              "<i>f</i>",
+              "family label, 0 or 1"
+            ],
+            [
+              "<i>A<sub>f</sub></i>",
+              "union of all regions of family f"
+            ],
+            [
+              "<i>A</i><sub>1−<i>f</i></sub>",
+              "union of all regions of the other family"
+            ],
+            [
+              "ψ",
+              "the pure ground state"
+            ],
+            [
+              "ψ̄",
+              "complex conjugate of ψ; joined legs are traced out"
+            ],
+            [
+              "spec ≃",
+              "same nonzero eigenvalues"
+            ],
+            [
+              "<i>S</i>(<i>A</i>)",
+              "entanglement entropy of A"
+            ],
+            [
+              "<i>q</i>",
+              "dimension of the qudit at each site"
+            ]
           ]
         }
       ]
@@ -218,15 +722,69 @@
             8765,
             8766
           ],
-          "physics": "Two regions separated by a buffer that tapers linearly toward finitely many points, and stays wider than a large multiple of log <i>L</i>, are almost independent. The proof adds cells one at a time using the two tile families of the area law. Gaussian filtering with the gap resets the cost after each annular step.",
-          "delivers": "Mutual information at most <i>L</i><sup>−<i>p</i></sup>. The owner of the buffer <i>U</i> can then split its share with an isometry <i>V</i> into a product, {{tn:peps-split}}, with error at most √<i>I</i>(<i>T</i> : <i>E</i>).",
+          "physics": "Two regions are almost independent when a buffer separates them well. The buffer may narrow linearly toward finitely many points. But its width must stay above a large multiple of log <i>L</i>, where <i>L</i> is the grid side. The proof adds cells one at a time. It uses the two ordered families of regions from the area-law proof. Gaussian filtering in energy, using the gap, resets the information cost after each step inward.",
+          "delivers": "Their mutual information is at most <i>L</i><sup>−<i>p</i></sup>, for any fixed <i>p</i>. Now split the lattice into a region <i>T</i>, a buffer <i>U</i> and the rest <i>E</i>. Suppose one party holds <i>U</i>. It can apply an isometry <i>V</i> that splits the ground state Ω into a product: {{tn:peps-split}}. Here <i>s</i> holds <i>T</i> and one output of <i>V</i>, and <i>s</i>′ holds <i>E</i> and the other. The error is at most √<i>I</i>(<i>T</i> : <i>E</i>).",
           "figure": "angular",
-          "caption": "Two regions <i>X</i> and <i>Y</i> separated by a buffer that narrows linearly toward a point but never drops below a large multiple of log <i>L</i> (orange). Their mutual information is at most a fixed inverse power of <i>L</i>.",
+          "caption": "Two regions <i>X</i> and <i>E</i>, separated by a buffer. The buffer narrows linearly toward a point. Its width never drops below <i>K</i> log <i>L</i>, with <i>L</i> the grid side and <i>K</i> a large constant. Then <i>X</i> and <i>E</i> are almost independent. Their mutual information is at most <i>L</i><sup>−<i>p</i></sup>, for a fixed <i>p</i>.",
           "diagrams": [
             {
               "src": "diagrams/region-split.svg",
-              "caption": "The partition used by the splitting lemma: a region <i>T</i>, the buffer <i>U</i> held by one party, and the rest <i>E</i>. When <i>I</i>(<i>T</i> : <i>E</i>) is small, the buffer's owner can split its share into a <i>T</i> part and an <i>E</i> part."
+              "caption": "The partition used in Lemma 6.4: a region <i>T</i>, a buffer <i>U</i> held by one party, and the rest <i>E</i>. Suppose <i>T</i> and <i>E</i> are almost independent. Then the buffer's owner can split its share in two. One part goes with <i>T</i>, the other with <i>E</i>."
             }
+          ],
+          "symbols": [
+            [
+              "<i>L</i>",
+              "side length of the square grid"
+            ],
+            [
+              "<i>X</i>, <i>E</i>",
+              "two regions kept apart by a buffer; the splitting diagram calls the first one <i>T</i>"
+            ],
+            [
+              "<i>K</i>",
+              "large fixed constant"
+            ],
+            [
+              "<i>p</i>",
+              "any fixed positive power"
+            ],
+            [
+              "<i>I</i>(<i>X</i> : <i>E</i>)",
+              "mutual information between X and E"
+            ],
+            [
+              "Ω",
+              "the ground state"
+            ],
+            [
+              "<i>T</i>",
+              "a region to be split off"
+            ],
+            [
+              "<i>U</i>",
+              "buffer around T, held by one party"
+            ],
+            [
+              "<i>E</i>",
+              "everything beyond the buffer, far from <i>X</i> (or <i>T</i>)"
+            ],
+            [
+              "<i>V</i>",
+              "isometry applied by the buffer's owner to the buffer"
+            ],
+            [
+              "<i>s</i>",
+              "normalized state on T and one output of V"
+            ],
+            [
+              "<i>s</i>′",
+              "normalized state on E and the other output of V"
+            ],
+            [
+              "<i>I</i>(<i>T</i> : <i>E</i>)",
+              "mutual information between T and E"
+            ]
           ]
         },
         {
@@ -234,15 +792,69 @@
           "issues": [
             8767
           ],
-          "physics": "Near a square of logarithmic size, the state lies almost entirely in an orthogonal sum of subspaces. Each is spanned by a few vectors inside a nested square, tensored with everything outside. The proof combines nested filters, the gap and the area law, and needs no sharp truncation at one fixed boundary.",
-          "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>. An encoder supported on the hole records which cylinder and which inside vector in a small open register 𝒥: {{tn:peps-encode}}.",
+          "physics": "Pick a square of side about log <i>L</i>, where <i>L</i> is the grid side. Near it, the ground state lies almost entirely in a sum of orthogonal subspaces. Each subspace is spanned by a few vectors on a nested square, times everything outside that square. The square may differ between subspaces. The proof combines nested filters, the gap and the area law. It needs no sharp cut at one fixed boundary.",
+          "delivers": "The numbers <i>d<sub>j</sub></i> of vectors in the subspaces add up to at most <i>C L<sup>c</sup></i>, for constants <i>C</i> and <i>c</i>. An encoder <i>K</i> acts on a square <i>Q</i><sup>+</sup> around the patch, called a hole. It writes which subspace and which vector into a small register 𝒥. It replaces that vector by a fixed product state. Applied to the ground state Ω, it gives the encoded state Ω<sub>𝓕</sub>: {{tn:peps-encode}}.",
           "figure": "patch",
-          "caption": "Left: nested squares around a square of side about log <i>L</i>. Right: the inside rank of each subspace in the orthogonal sum, as bars. Their total is polynomial in <i>L</i>, so the label fits in a small register.",
+          "caption": "Left: nested squares around a square of side about log <i>L</i>, with <i>L</i> the grid side. Right: one bar per subspace <i>j</i>, as tall as its number of vectors <i>d<sub>j</sub></i>. The total is at most <i>C L<sup>c</sup></i>, polynomial in <i>L</i>. So the label of a subspace and vector fits in a small register.",
           "diagrams": [
             {
               "src": "diagrams/region-hole.svg",
-              "caption": "Around a centre <i>c</i>, every square <i>D<sub>j</sub></i> chosen by Proposition <i>prop:patch</i> lies between the squares <i>Q</i><sup>−</sup>(<i>c</i>, <i>h</i>) and <i>Q</i><sup>+</sup>(<i>c</i>, <i>h</i>) of half-widths <i>h</i> and 2<i>h</i> (drawn with <i>h</i> = 2). The radius may vary with <i>j</i>, and the encoder acts on <i>Q</i><sup>+</sup> only."
+              "caption": "Around a centre <i>c</i> lie two squares of half-widths <i>h</i> and 2<i>h</i>: <i>Q</i><sup>−</sup>(<i>c</i>, <i>h</i>) inside and <i>Q</i><sup>+</sup>(<i>c</i>, <i>h</i>) outside (drawn with <i>h</i> = 2). Proposition 4.1 picks nested squares <i>D<sub>j</sub></i>, one per subspace <i>j</i>. Each <i>D<sub>j</sub></i> lies between the two squares, and its size may vary with <i>j</i>. The encoder acts on <i>Q</i><sup>+</sup> only."
             }
+          ],
+          "symbols": [
+            [
+              "<i>L</i>",
+              "side length of the square grid"
+            ],
+            [
+              "Ω",
+              "the ground state"
+            ],
+            [
+              "<i>j</i>",
+              "index of a subspace in the orthogonal sum"
+            ],
+            [
+              "<i>d<sub>j</sub></i>",
+              "inside rank: number of vectors spanning subspace j inside its square"
+            ],
+            [
+              "<i>C</i>, <i>c</i>",
+              "constants independent of L"
+            ],
+            [
+              "<i>c</i> (in figure)",
+              "centre of the patch"
+            ],
+            [
+              "<i>h</i>",
+              "half-width of the inner square, about log L"
+            ],
+            [
+              "<i>Q</i><sup>−</sup>(<i>c</i>, <i>h</i>)",
+              "inner square, half-width h around c"
+            ],
+            [
+              "<i>Q</i><sup>+</sup>(<i>c</i>, <i>h</i>)",
+              "outer square, half-width 2h around c; the hole"
+            ],
+            [
+              "<i>D<sub>j</sub></i>",
+              "square used by subspace j; between the inner and outer squares"
+            ],
+            [
+              "<i>K</i>",
+              "encoder: records j and the inside vector, replaces it by a product state"
+            ],
+            [
+              "𝒥",
+              "small tag register holding that record"
+            ],
+            [
+              "Ω<sub>𝓕</sub>",
+              "encoded ground state: Ω after the encoder"
+            ]
           ]
         },
         {
@@ -252,21 +864,91 @@
             8770,
             8771
           ],
-          "physics": "The elementary operations change which party owns a region, create or retire a party, and exchange registers between two copies of the state. A birth consumes and re-emits one normalized pair source, {{tn:peps-pair}}, whose <i>T</i> half goes to the new party; everything else is a private map.",
-          "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol.",
+          "physics": "A frame records which party owns each site. It also records which small squares are stored in encoded form. Three moves change a frame. One changes the owner of a region. One creates or retires a party. One swaps ownership of a region between two copies of the state. A birth uses one normalized pair state {{tn:peps-pair}}. Here <i>s</i> lives on the region <i>T</i> and an extra register 𝓑<sub><i>T</i></sub>. The old owner first projects onto <i>s</i> privately. It then prepares a fresh copy of <i>s</i> whose <i>T</i> half goes to the new party. Everything else is a private map of one party.",
+          "delivers": "Each move changes the ideal state by at most a constant times <i>L</i><sup>−20</sup>, with <i>L</i> the grid side. Births and swaps cost at most a constant times <i>L</i><sup>−30</sup>. These errors are small enough to sum over the whole protocol.",
           "diagrams": [
             {
               "src": "diagrams/qc-birth.svg",
-              "caption": "Lemma <i>lem:birth</i>, read left to right; the wire between <i>T</i> and <i>U</i> is 𝓑<sub><i>T</i></sub>, and <i>U</i> carries 𝓑<sub><i>E</i></sub> between <i>V</i> and <i>V</i><sup>†</sup>. The owner of <i>T</i> and <i>U</i> splits with <i>V</i>, consumes <i>s</i> on <i>T𝓑<sub>T</sub></i>, emits a fresh pair source |<i>s</i>⟩ whose <i>T</i> half belongs to the new party, and recombines with <i>V</i><sup>†</sup>. Error at most <i>L</i><sup>−30</sup>."
+              "caption": "Lemma 6.5, read left to right. One party owns a region <i>T</i> and a buffer <i>U</i>; <i>E</i> is the rest. It applies an isometry <i>V</i> to <i>U</i>, giving registers 𝓑<sub><i>T</i></sub> and 𝓑<sub><i>E</i></sub>. It projects <i>T</i> and 𝓑<sub><i>T</i></sub> onto a normalized state <i>s</i>. It then prepares a fresh |<i>s</i>⟩, whose <i>T</i> half belongs to the new party. Finally <i>V</i><sup>†</sup> recombines the registers. If <i>T</i> and <i>E</i> are almost independent, the error is at most <i>L</i><sup>−30</sup>, with <i>L</i> the grid side."
             },
             {
               "src": "diagrams/qc-exchange.svg",
-              "caption": "Lemma <i>lem:exchange</i>, <i>eq:exchange-net-map</i>: two copies of the state exchange the region <i>T</i> using only private operations. Each copy splits its buffer with <i>V</i>, the <i>T</i> and 𝓑<sub><i>T</i></sub> factors are swapped between the copies, and <i>V</i><sup>†</sup> recombines. The product of the two split states is unchanged by the swap, so the error is at most 4<i>L</i><sup>−30</sup>."
+              "caption": "Lemma 6.6. Two copies of the state, labelled (1) and (2), swap who owns a region <i>T</i>. Only private operations are used. In each copy, the owner of the buffer <i>U</i> applies an isometry <i>V</i>. This splits off a register 𝓑<sub><i>T</i></sub> that belongs with <i>T</i>. The <i>T</i> and 𝓑<sub><i>T</i></sub> parts are swapped between the copies. Then <i>V</i><sup>†</sup> recombines. If the split were exact, the swap would change nothing. So the error is at most 4<i>L</i><sup>−30</sup>, with <i>L</i> the grid side."
             },
             {
               "src": "diagrams/qc-rewrite.svg",
-              "caption": "Lemma <i>lem:small-rewrite</i>: a small patch is re-encoded by <i>M</i> = <i>K</i><sub>new</sub><i>P<sub>m</sub></i>⋯<i>P</i><sub>1</sub><i>K</i><sub>old</sub><sup>†</sup>, with error at most (<i>m</i> + <i>r</i><sub>old</sub>)ε."
+              "caption": "Lemma 6.3: re-encoding a small patch. <i>K</i><sub>old</sub><sup>†</sup> undoes the old encoding of the square <i>Q</i><sup>+</sup> and reads its tag register 𝒥<sub>old</sub>. Projections <i>P</i><sub>1</sub>, …, <i>P<sub>m</sub></i> onto low-rank subspaces of <i>m</i> nearby patches follow. <i>K</i><sub>new</sub> writes the new encoding and its tag 𝒥<sub>new</sub>. The error is at most (<i>m</i> + <i>r</i><sub>old</sub>)ε. Here <i>r</i><sub>old</sub> counts the old encoded squares that change, and ε = <i>L</i><sup>−60</sup>, with <i>L</i> the grid side."
             }
+          ],
+          "symbols": [
+            [
+              "<i>L</i>",
+              "side length of the square grid"
+            ],
+            [
+              "<i>T</i>",
+              "region whose owner changes"
+            ],
+            [
+              "<i>U</i>",
+              "buffer around T, held by the old owner"
+            ],
+            [
+              "<i>E</i>",
+              "everything else"
+            ],
+            [
+              "<i>V</i>",
+              "isometry the buffer's owner applies to U"
+            ],
+            [
+              "<i>V</i><sup>†</sup>",
+              "adjoint of V; recombines the two outputs into U"
+            ],
+            [
+              "𝓑<sub><i>T</i></sub>, 𝓑<sub><i>E</i></sub>",
+              "the two outputs of V, belonging with T and with E"
+            ],
+            [
+              "<i>s</i>",
+              "normalized pair state on T and 𝓑<sub>T</sub>"
+            ],
+            [
+              "⟨<i>s</i>|",
+              "projection onto s, applied privately by the old owner"
+            ],
+            [
+              "(1), (2)",
+              "labels of two copies of the state"
+            ],
+            [
+              "<i>Q</i><sup>+</sup>",
+              "small square (hole) stored in encoded form"
+            ],
+            [
+              "𝒥<sub>old</sub>, 𝒥<sub>new</sub>",
+              "tag registers of the old and new encodings"
+            ],
+            [
+              "<i>K</i><sub>old</sub>, <i>K</i><sub>new</sub>",
+              "old and new encoders of the affected holes"
+            ],
+            [
+              "<i>P</i><sub>1</sub>, …, <i>P<sub>m</sub></i>",
+              "projections onto low-rank subspaces of m extra patches"
+            ],
+            [
+              "<i>M</i>",
+              "the rewrite map K<sub>new</sub> P<sub>m</sub> ⋯ P<sub>1</sub> K<sub>old</sub>†"
+            ],
+            [
+              "<i>r</i><sub>old</sub>",
+              "number of old holes changed"
+            ],
+            [
+              "ε",
+              "accuracy of each projection, L<sup>−60</sup>"
+            ]
           ]
         },
         {
@@ -274,10 +956,16 @@
           "issues": [
             8772
           ],
-          "physics": "One party starts with Ω. Ownership passes down a hierarchy of dyadic squares until each site has its own party. Extra copies of Ω supply the surrounding regions that each change of owner needs.",
+          "physics": "One party starts with the whole ground state Ω. Ownership passes down a hierarchy of dyadic squares, halving the side at each step. It stops when every site has its own party. Extra copies of Ω supply the surroundings that each change of owner needs.",
           "delivers": "Every party takes part in boundedly many operations with other parties, at two adjacent scales.",
           "figure": "dyadic",
-          "caption": "The hierarchy as small multiples, from one party to one party per site. The outlined square in each panel is a parent; its children (blue) are the parties it interacts with at the next scale."
+          "caption": "The hierarchy, drawn side by side, from one party to one party per site. In each panel the outlined square is a parent. Its children (blue) are the parties it works with at the next scale.",
+          "symbols": [
+            [
+              "Ω",
+              "the ground state"
+            ]
+          ]
         },
         {
           "title": "Compress the shared resources",
@@ -285,8 +973,42 @@
             8768,
             8769
           ],
-          "physics": "The protocol uses pair resources of unbounded Schmidt rank. In the density calculation each source operator is replaced by a Gaussian sum of polynomially many product operators, exact on average: {{tn:peps-source}}. Bounded participation limits the coefficient cost, and a Gaussian second-moment bound controls the error.",
-          "delivers": "A trace-norm error independent of every private dimension, and an operator network with polynomial bonds on the party graph."
+          "physics": "The protocol uses shared pair states of unbounded Schmidt rank. The proof then computes the output density matrix. In it, each pair-state operator |η⟩⟨η̃| is replaced by a random sum of <i>k</i> product terms: {{tn:peps-source}}. Here <i>U<sub>j</sub></i> and <i>V<sub>j</sub></i> are random Gaussian factors on the two halves, and 𝔼 is the average. The sum equals the original on average. The number <i>k</i> is polynomial in the grid side <i>L</i>. Each party joins only boundedly many operations, which keeps the coefficients small. A Gaussian second-moment bound controls the error.",
+          "delivers": "The trace-norm error does not depend on any private dimension. The result is an operator network with one node per party. Its bonds have dimension polynomial in the grid side.",
+          "symbols": [
+            [
+              "<i>L</i>",
+              "side length of the square grid"
+            ],
+            [
+              "η",
+              "a shared pair state, on the ket side"
+            ],
+            [
+              "η̃",
+              "a shared pair state, on the bra side"
+            ],
+            [
+              "|η⟩⟨η̃|",
+              "the pair-resource operator being replaced"
+            ],
+            [
+              "<i>k</i>",
+              "number of random product terms; polynomial in L"
+            ],
+            [
+              "<i>j</i>",
+              "index of a term; drawn as the bond"
+            ],
+            [
+              "<i>U<sub>j</sub></i>, <i>V<sub>j</sub></i>",
+              "random Gaussian factors on the two halves of the pair"
+            ],
+            [
+              "𝔼",
+              "average over the Gaussian randomness"
+            ]
+          ]
         },
         {
           "title": "Back to a vector on the grid",
@@ -295,15 +1017,49 @@
             8764,
             8773
           ],
-          "physics": "Fixing the input legs of the compressed operator to one product vector gives a ket network with the same bonds, {{tn:peps-column}}, and some such column is close to Ω. The links join parties at nearby dyadic scales. Routed along rows and columns, they cross each lattice edge a bounded number of times.",
-          "delivers": "A PEPS {{tn:peps-sheet}} on the original <i>L</i>×<i>L</i> grid with bond dimension at most <i>C L<sup>c</sup></i> and error at most 1/<i>L</i>.",
+          "physics": "The compressed network describes an operator. Fix each of its input legs to one product basis vector, drawn as a triangle. This leaves a vector network with the same bonds: {{tn:peps-column}}. Here σ is the operator tensor at each party and <i>v</i> the resulting vector tensor. Some such choice is close to the ground state Ω. Links join parties at nearby dyadic scales. Route each link along a row, then a column. Then each lattice edge carries boundedly many links.",
+          "delivers": "The result is a PEPS {{tn:peps-sheet}}: one tensor per site of the original <i>L</i>×<i>L</i> grid, joined along grid edges. Its bond dimension is at most <i>C L<sup>c</sup></i>, for constants <i>C</i> and <i>c</i>. Its normalized error is at most 1/<i>L</i>.",
           "figure": "routing",
           "caption": "The links between parents and children on an 8 × 8 grid, routed first along a row and then along a column. Stroke width counts the links that share each lattice edge, which sets the bond dimension there.",
           "diagrams": [
             {
               "src": "diagrams/peps-routing.svg",
-              "caption": "Lemma <i>lem:routing</i> on a small grid: the parent party <i>Q</i> and its four children <i>P</i> sit at their dyadic anchors (<i>eq:anchors</i>). Each link (red) runs along a row and then a column through identity tensors at the sites it passes, and all indices crossing a grid edge are grouped into one bond, so every bond has polynomial dimension."
+              "caption": "Lemma 8.2 on a small grid. The parent party <i>Q</i> and its four children <i>P</i> sit at fixed centre sites of their dyadic squares. Each link (red) runs along a row and then a column. At each site it passes, it carries an identity tensor. All link indices crossing a grid edge are grouped into one bond. Each edge carries boundedly many links, so every bond has polynomial dimension."
             }
+          ],
+          "symbols": [
+            [
+              "σ",
+              "tensor of the compressed operator network at one party"
+            ],
+            [
+              "▷ (triangle)",
+              "a fixed product-basis vector fed into an input leg"
+            ],
+            [
+              "<i>v</i>",
+              "resulting vector tensor, same bonds as σ"
+            ],
+            [
+              "Ω",
+              "the ground state"
+            ],
+            [
+              "<i>L</i>",
+              "side length of the square grid"
+            ],
+            [
+              "<i>C</i>, <i>c</i>",
+              "constants independent of L"
+            ],
+            [
+              "<i>Q</i>",
+              "a parent party, attached to a dyadic square"
+            ],
+            [
+              "<i>P</i>",
+              "a child party, attached to a quarter of that square"
+            ]
           ]
         }
       ]
@@ -324,10 +1080,28 @@
             8740,
             8741
           ],
-          "physics": "Both proofs use the same definitions: Hamiltonians on finite lattice domains, possibly with holes; regional reduced states and their entropies; the equivalence of the global gap with an energy estimate; and an exact match between the PEPS of the papers, one tensor {{tn:peps-tensor}} per site, and the tensor networks of TNLean.",
+          "physics": "Both proofs share the same definitions. Hamiltonians live on finite lattice domains, possibly with holes. Regions have reduced states and entropies. The global gap is restated as an energy inequality. The papers' PEPS has one tensor <i>A<sub>v</sub></i> per site <i>v</i>: {{tn:peps-tensor}}. It matches the tensor networks of TNLean exactly.",
           "delivers": "Lean statements of both main theorems with no hypothesis the papers lack.",
           "figure": "domain",
-          "caption": "A finite domain Λ of the square lattice, with a hole and an irregular edge, and a region <i>A</i> (blue). The orange edges form ∂<sub>Λ</sub><i>A</i>, the count that the area law bounds the entropy by."
+          "caption": "A finite domain Λ of the square lattice, with a hole and an irregular edge. The blue sites form a region <i>A</i>. The orange edges join <i>A</i> to the rest of Λ; together they form ∂<sub>Λ</sub><i>A</i>. The area law bounds the entropy of <i>A</i> by a constant times their number.",
+          "symbols": [
+            [
+              "Λ",
+              "finite set of square-lattice sites; may have holes"
+            ],
+            [
+              "<i>A</i>",
+              "a region: any set of sites in Λ"
+            ],
+            [
+              "∂<sub>Λ</sub><i>A</i>",
+              "lattice edges joining A to the rest of Λ"
+            ],
+            [
+              "<i>A<sub>v</sub></i>",
+              "PEPS tensor at site v: bond legs in the plane, one physical leg"
+            ]
+          ]
         }
       ]
     }

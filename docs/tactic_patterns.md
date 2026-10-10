@@ -6227,3 +6227,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The two old extraction proofs and the private single-radial
   wrapper are removed. Existing callers select the required component of
   the shared theorem. No new tactic or geometric hypothesis is introduced.
+
+### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
+
+- **Pattern:** Prove equality of unordered coordinate pairs by choosing the
+  direct branch of `Sym2.eq_iff`, reducing both pairs with `Prod.ext`, and
+  discharging their integer-coordinate equalities with `omega`.
+- **Seen:** Four three-line occurrences in the four nearest-neighbour cases of
+  `mem_rectangleBoundaryEdges` in `PEPS/AreaLaw/Geometry/ClosedSquare.lean`
+  (scanner run 2026-10-07).
+- **Abstraction:** Keep the local case proofs until the pattern has a consumer
+  in a second file; prefer an endpoint-equality lemma if that reuse appears.
+- **Notes:** The current occurrences are all in one proof, below the
+  multiple-file promotion threshold. Crossing membership itself is already
+  expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.

@@ -6,7 +6,7 @@
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESCRIPTION}}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Math&display=swap">
 <style>
 {{CSS}}
 </style>
@@ -28,19 +28,19 @@
     <div class="legend" id="legend"></div>
   </section>
 
-  <section id="gaps">
+  <div id="routes"></div>
+
+  <section id="gaps" class="part">
     <header>
       <div class="eyebrow">Checking the papers</div>
       <h2>Gaps found so far</h2>
-      <p>A machine-checked proof has to state every step. When the Lean development cannot follow a paper exactly, the deviation is recorded in a paper-gap note. The categories below separate problems in a paper from Lean work that is unfinished.</p>
+      <p>A machine-checked proof has to state every step. Where the Lean development cannot yet follow a paper exactly, the difference is written up in a paper-gap note. Each entry below says where in the proof it sits, what that step does, and whether it puts the theorem at risk. Most are unfinished Lean work, not problems in the papers.</p>
     </header>
     <div class="gapsum" id="gapsum"></div>
     <dl class="kinds" id="kinds"></dl>
     <div class="gaplist" id="gaplist"></div>
     <div id="gapchecked"></div>
   </section>
-
-  <div id="routes"></div>
 
   <section class="part">
     <header>
