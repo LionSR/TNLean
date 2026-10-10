@@ -24,6 +24,26 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Remainder-absorbing block lengths — promoted (2026-10-10)
+
+- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
+  of length `q + N % q`, and prove the sum is `N` by separating the last
+  summand with `Fin.sum_univ_castSucc`, summing the constants, and applying
+  `Nat.div_add_mod`; then prove `q ≤ ℓ k ≤ 2 q` by `split_ifs <;> omega`.
+- **Seen:** nine occurrences, one each in `LogDepthPreparation`,
+  `LogLogDepthEveryLength`, `SupportedLogLogPreparation`, `UnequalTreeMERA`,
+  `OverlappingMeasurementPreparation`, `RectangularPreparation`,
+  `VaryingReferencePreparation`, `CoherentGroundspaceConversion` and
+  `ZeroSubleadingPreparation` under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSPreparation.exists_remainderBlocks` in
+  `TNLean/MPS/Preparation/RemainderBlocks.lean`: for `0 < q ≤ N` it supplies
+  `m`, `ℓ : Fin (m + 1) → ℕ`, `N / q = m + 1`, `∑ k, ℓ k = N` and both
+  bounds. Each call site is one `obtain`. Use `remainderBlockLengths` instead
+  when the block family must be indexed by `Fin (N / q)` with a definitional
+  formula.
+- **Notes:** the lemma adds 22 lines and the call sites lose 113, for a net
+  delta of −91 Lean lines.
+
 ### Order-two family with a bond-two generator — promoted (2026-10-10)
 
 - **Pattern:** a `ℤ₂`-indexed family `1 ↦ E`, `g ↦ A` (bond dimensions one and two) written
@@ -4004,21 +4024,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   if a third use in another module needs the same argument.
 - **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
   and the existing realization identities; no tactic is needed at this count.
-
-### Remainder-absorbing block lengths — candidate
-- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
-  of length `q + N % q`, and prove the sum is `N` by separating the last
-  summand, summing the constants, and applying `Nat.div_add_mod`.
-- **Seen:** two production occurrences in
-  `TNLean/MPS/Preparation/LogDepthPreparation.lean:152` and
-  `TNLean/MPS/Preparation/ZeroSubleadingPreparation.lean:120` (2026-10-03).
-- **Abstraction:** at a third occurrence, a partition lemma for arbitrary
-  `N,q,m` with `N / q = m + 1` can supply the sum and the lower/upper bounds
-  from `Nat.mod_lt`, using the existing `Fin.sum_univ_castSucc` and
-  `Finset.sum_const`.
-- **Notes:** Mathlib already supplies the finite-sum and division identities;
-  no general partition lemma was found. The two production occurrences are
-  below the rule-of-three threshold.
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
