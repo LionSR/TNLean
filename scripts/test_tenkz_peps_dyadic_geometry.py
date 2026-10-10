@@ -225,8 +225,19 @@ def check_render(pictures: list[str], output: Path) -> None:
     for name, unit in zip(names, pictures):
         svg, _ = tenkz_pic.render_unit(unit, output)
         assert svg is not None and svg.is_file(), "production SVG rendering unavailable"
-        assert "<path" in svg.read_text(), "SVG has no ink"
-        width = float(re.search(r'width="([\d.]+)pt"', svg.read_text()).group(1))
+        text = svg.read_text()
+        assert "<path" in text, "SVG has no ink"
+        # Both converters serialize the root extent in points but spell it
+        # differently: dvisvgm writes ``width='95.1pt'`` while pdftocairo's
+        # cairo SVG surface may drop the ``pt`` unit (a bare user-unit number,
+        # still points for a PDF-sourced surface).  Accept either and fall back
+        # to the viewBox width (always user units = points), as test_tenkz_pic.
+        match = (re.search(r"""<svg[^>]*\swidth=["']([0-9.]+)(?:pt)?["']""", text)
+                 or re.search(
+                     r"""<svg[^>]*?\sviewBox=["']\s*[-0-9.eE+]+\s+[-0-9.eE+]+\s+([0-9.]+)""",
+                     text))
+        assert match, "SVG root carries neither a pt width nor a viewBox width"
+        width = float(match.group(1))
         assert width <= 345, (name, width, "wider than the text column")
         log = tenkz_pic.unit_event_log(unit, output)
         assert log is not None, "complete event stream required"
