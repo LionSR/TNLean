@@ -259,17 +259,24 @@ physical sites; they are not the boundaries of the ambient real squares.
     Let $u\ge4$, $\kappa\in\mathbb R$, and assign each selected patch the
     same weight $t_j=\kappa/m$. Then
     \begin{align}
-        \sum_{j=0}^{m-1}|\partial_\Lambda K_j|t_j^2
-         & \le (16u+4)\sum_{j=0}^{m-1}t_j^2
-        \le36\kappa^2.
+        (16u+4)\sum_{j=0}^{m-1}t_j^2 & \le36\kappa^2,
+        \label{eq:peps_nested_patch_uniform_budget} \\
+        \sum_{j=0}^{m-1}|\partial_\Lambda K_j|t_j^2 & \le36\kappa^2.
         \label{eq:peps_nested_patch_quadratic_sum}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_nested_patch_sizes}
-    Bound each boundary size by $16u+4$. Since $m>u/2$ and $u\ge4$,
-    one has $16u+4\le36m$. The constant weights satisfy
-    $\sum_{j=0}^{m-1}t_j^2=\kappa^2/m$, which gives the result.
+    Since $m>u/2$ and $u\ge4$, one has $16u+4\le36m$. The constant
+    weights satisfy $\sum_{j=0}^{m-1}t_j^2=\kappa^2/m$, which gives
+    (\ref{eq:peps_nested_patch_uniform_budget}). Bounding each boundary
+    size by $16u+4$ gives
+    \begin{align*}
+        \sum_{j=0}^{m-1}|\partial_\Lambda K_j|t_j^2
+         & \le(16u+4)\sum_{j=0}^{m-1}t_j^2,
+    \end{align*}
+    and (\ref{eq:peps_nested_patch_uniform_budget}) gives
+    (\ref{eq:peps_nested_patch_quadratic_sum}).
 \end{proof}
 % The uniform quadratic sum establishes a geometric coefficient only. It
 % does not identify this sum with a Hamiltonian energy increment.
