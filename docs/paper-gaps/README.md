@@ -84,9 +84,10 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   windows in place of Nachtergaele's estimate.
 - `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction) records
   that preservation of an on-site symmetry along the isometric deformation of
-  arXiv:1010.3732 is formalized for a supplied virtual unitary and for a single
-  injective block, where the fundamental theorem supplies that unitary; the
-  multiblock derivation of a unitary virtual action remains open.
+  arXiv:1010.3732 is derived from exact symmetry of the matrix product
+  vectors, both for a single injective block and for several jointly injective
+  blocks in the printed standard form, where the symmetry permutes the blocks;
+  invariance only up to a phase remains open.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
@@ -802,9 +803,12 @@ For the group matrix product operators of arXiv:2203.12563:
   gauge in which the three-cocycle is one on the stabilizer, gives a
   $\mathbb Z_3$ example where it fails for a nonconstant trivializer, and
   states the torsor of solutions for action-tensor gauge classes.
-- `glm23_klein_printed_anomaly_scope.tex` records that for the printed one-qubit
-  $\mathbb Z_2\times\mathbb Z_2$ symmetry only the anomaly sign at $ab$ is
-  formalized; the values at $a$ and $b$ remain open.
+- `glm23_klein_printed_anomaly_scope.tex` records that the printed sentence
+  on the one-qubit $\mathbb Z_2\times\mathbb Z_2$ symmetry, "the only
+  non-trivial 3-cocycle element is $\omega(ab,ab,ab)=-1$", is read through the
+  diagonal values $(+1,+1,-1)$, which are formalized for every choice of fusion
+  tensors (class $(0,0,1)$), and that the printed $L$-symbol relations for $a$
+  and $b$ are forced between the two blocks exchanged by the generator.
 - `glm23_klein_h3_circle_coefficients.tex` records that the Klein-four
   three-cocycle classification is formalized with $\mathbb C^\times$
   coefficients, while the source states it for $U(1)$.
@@ -1089,17 +1093,16 @@ Coarse periods at least three and the stated boundary/support scope remain.
 ### Polynomial PEPS approximation: small-patch rewrites
 
 [polypeps_small_rewrite_monomials.tex](polypeps_small_rewrite_monomials.tex)
-records that Lemma 6.3 of the September 24, 2026 polynomial PEPS manuscript is
-formalized for the canonical contraction and its reference error, and that
-for the approximation the branch expansion, the wire classification, the
-network of each branch, its truncation by Lemma 6.2 and the final rescaling
-are formalized, giving a contraction within `L^{-a}` of the rewrite that is a
-sum of explicit product terms. The registers of a frame, one per site and per
-tag, are now listed and identified with the canonical coordinates. Two steps
-remain: reading each product term as an allowed monomial on those registers,
-and the polynomial count of terms, which needs the bound on the number of
-cylinder terms of Proposition 4.1 and bounded numbers of patches and affected
-holes.
+(scope restriction, resolved) records that Lemma 6.3 of the September 24, 2026
+polynomial PEPS manuscript is formalized for the canonical contraction and its
+reference error, and that for the approximation the branch expansion, the wire
+classification, the network of each branch, its truncation by Lemma 6.2, the
+final rescaling and the reading of each product term as an allowed monomial on
+the registers of the frames, one per site and per tag, are formalized. With the
+manuscript's standing bound on the number of cylinder terms of each projector
+(one fixed power of `L`) and boundedly many patches and affected holes, there is
+a contraction within `L^{-a}` of the rewrite that is a sum of polynomially many
+allowed monomials using only the specified parties.
 
 ### Polynomial PEPS approximation: changes of ownership
 

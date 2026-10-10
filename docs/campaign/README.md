@@ -8,6 +8,14 @@ theorems, the proof organized into stages, the paper-gap notes in plain
 language, the blocking graph of the issues, activity charts, blueprint
 `\leanok` and `sorry` counts, and the full issue and pull-request tables.
 
+The page is written for a reader who knows neither paper. It opens with a
+one-line status (main theorems proved, work issues closed, open paper errors),
+then gives the theorems, the proof stages and the open gaps. Each stage's record
+of Lean work (paper results, merged pull requests, issues) is folded under one
+summary line, and resolved gaps are folded after the open ones. The maintainers'
+material (next actions, blocking map, charts, tables and file list) is folded
+at the end; a link to anything inside a folded part opens it.
+
 The tools in `scripts/campaign_board/` are shared. Each campaign is one
 directory here.
 
@@ -17,7 +25,7 @@ directory here.
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
 | `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
-| `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the word-sized equations set inside sentences |
+| `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the equations displayed inside sentences |
 
 The area-law and PEPS campaign in `openai-area-law-peps-proof/` is served at
 `https://sirui-lu.com/TNLean/openai-area-law-peps-proof/` and regenerated hourly by
@@ -93,14 +101,15 @@ which needs `xelatex` (with TikZ, `hobby`, `spath3` and `quantikz`) and `pdftoca
 commit the resulting SVGs; the hourly job only inlines them.
 
 A sentence can carry its own diagram equation. Write `{{tn:NAME}}` in a stage's
-`physics`, `delivers`, or a caption, and the equation in
-`diagrams/inline/NAME.tex` is set on the line, the way Tufte sets word-sized
-graphics into text. Inline sources are compiled in running mathematics; give
-each picture `size=l` so the names inside its boxes are set at text size and
-stay legible at word size. Give every inline source, and every diagram embedded
+`physics`, `delivers`, a caption or a gap field, and the equation in
+`diagrams/inline/NAME.tex` is displayed on its own line inside that sentence,
+as a displayed formula is in a paper; punctuation written right after the token
+stays on the equation's line. Lead into the equation with the sentence and
+define its symbols there. Inline sources are compiled in running mathematics;
+give each picture `size=l` so the names inside its boxes are set at text size. Give every inline source, and every diagram embedded
 in `intro.html` through a `{{DIAGRAM:path}}` slot, a first line `% alt: …`
 stating the equation in words; it becomes the image's alternative text. Prefer an inline equation to a margin diagram that
-would repeat it, and keep margin diagrams for the arguments too tall for a line. tenkz audits
+would repeat it, and keep margin diagrams for the arguments too large to sit in the text. tenkz audits
 equations written with `=` only, so an approximate relation is set as two
 pictures with `\approx` between them.
 

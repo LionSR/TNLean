@@ -50,6 +50,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
+import TNLean.PEPS.AreaLaw.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
@@ -57,4 +58,5 @@ import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.WeakRectanglePartialRowEntropy
 import TNLean.PEPS.AreaLaw.ZeroBoundary
