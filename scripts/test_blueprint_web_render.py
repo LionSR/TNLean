@@ -22,6 +22,7 @@ The local server and browser session are the ones used by
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import json
 import multiprocessing
 import os
@@ -330,8 +331,8 @@ def _load_page(page: Page, base_url: str, name: str) -> None:
 
 
 def _check_pages(base_url: str, names: list[str],
-                 mathjax: tuple[str, bytes, str]) -> int:
-    """Open each named page in one browser and return how much was typeset."""
+                 mathjax: tuple[str, bytes, str]) -> tuple[int, list[str]]:
+    """Return typeset count and pages that completed every browser check."""
     mathjax_url, mathjax_body, mathjax_type = mathjax
     # Every page loads MathJax through a blocking script tag, so a stalled CDN
     # request stalls DOMContentLoaded.  Serve the bundle, and the extensions it
@@ -357,6 +358,7 @@ def _check_pages(base_url: str, names: list[str],
         )
 
     typeset = 0
+    checked = []
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": MOBILE_WIDTH, "height": 900})
@@ -379,8 +381,22 @@ def _check_pages(base_url: str, names: list[str],
                 _assert_page_owns_no_sideways_scroll(
                     name, width, page.evaluate(OVERFLOW))
             page.set_viewport_size({"width": MOBILE_WIDTH, "height": 900})
+            checked.append(name)
         browser.close()
-    return typeset
+    return typeset, checked
+
+
+def _assert_browser_coverage(pages: list[Path], checked: list[str]) -> None:
+    """Do not confuse generated-source inventory with completed browser work."""
+    expected = Counter(page.name for page in pages)
+    assert "dep_graph_document.html" in expected, (
+        "generated blueprint is missing the required full-document graph")
+    actual = Counter(checked)
+    missing = sorted((expected - actual).elements())
+    unexpected = sorted((actual - expected).elements())
+    assert not missing and not unexpected, (
+        f"incomplete blueprint browser coverage; missing={missing}; "
+        f"unexpected or duplicate={unexpected}")
 
 
 def _balanced_batches(pages: list[Path], count: int) -> list[list[str]]:
@@ -427,8 +443,8 @@ def main() -> int:
     mathjax = _mathjax_bundle(root)
     with serve(root) as base_url:
         if len(batches) <= 1:
-            typeset = _check_pages(base_url, batches[0] if batches else [],
-                                   mathjax)
+            typeset, checked = _check_pages(
+                base_url, batches[0] if batches else [], mathjax)
         else:
             # Each worker drives its own browser: the synchronous Playwright
             # API is bound to the thread that started it.  Workers are spawned
@@ -437,17 +453,25 @@ def main() -> int:
             with ProcessPoolExecutor(len(batches), mp_context=context) as pool:
                 futures = [pool.submit(_check_pages, base_url, batch, mathjax)
                            for batch in batches]
-                typeset = sum(future.result() for future in futures)
+                results = [future.result() for future in futures]
+                typeset = sum(count for count, _ in results)
+                checked = [name for _, names in results for name in names]
         # The content browsers have all closed, so the graph layouts here run
         # one at a time with nothing else competing for the processor.
         if graph_pages:
-            typeset += _check_pages(base_url, graph_pages, mathjax)
+            graph_typeset, graph_checked = _check_pages(base_url, graph_pages, mathjax)
+            typeset += graph_typeset
+            checked.extend(graph_checked)
 
+    _assert_browser_coverage(pages, checked)
     assert typeset > 0, (
         "no mathematics was typeset on any page; MathJax never ran, so the "
         "reader-facing checks proved nothing"
     )
-    print(json.dumps({"pages": len(pages), "typeset": typeset}))
+    print(json.dumps({"pages": len(pages), "browser_pages": len(checked),
+                      "checked_graph_pages": sorted(
+                          name for name in checked if name.startswith("dep_graph_")),
+                      "skipped_pages": [], "typeset": typeset}))
     return 0
 
 
