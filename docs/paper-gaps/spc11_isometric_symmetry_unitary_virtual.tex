@@ -10,7 +10,7 @@
 \date{2026-10-10}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source assertion}
 Schuch, P\'erez-Garc\'ia, and Cirac \cite{Schuch2011Phases} show that the
@@ -84,14 +84,15 @@ For $P_{i,(a,b)}=A_i(a,b)$, the source's
 $\operatorname{tr}_{\mathrm{left}}(P^*P)=I_{\mathrm{right}}$ at line 653
 is $\sum_i A_i^*A_i=I$. The two proved cases are stated separately in their
 respective canonical orientations; the trace-preserving case matches this
-source convention. Both assume exact vector symmetry, rather than
-invariance only up to a phase.
+source convention. Both assume exact vector symmetry; invariance up to a
+phase is treated below for one or several blocks in the trace-preserving
+convention.
 
 \section{The several-block case}
 Let $A^1,\dots,A^r$ be blocks of positive bond dimensions whose one-site
 tuples $(A^k_i)_k$ span $\bigoplus_k M_{D_k}$; this joint span is the
 source's standard form (lines 325--352, and in matrix language lines
-1740--1743). Suppose that $U_g^{\otimes N}$ fixes
+1740--1743). Suppose first that $U_g^{\otimes N}$ fixes
 every matrix product vector of $\bigoplus_k A^k$. Equality of all word
 traces of the original and twisted block families defines an algebra
 automorphism of $\bigoplus_k M_{D_k}$ that sends each one-site tuple of
@@ -111,24 +112,60 @@ and the parent-symmetry conclusions hold along the whole deformation.
 These statements are proved in
 \path{TNLean/MPS/ParentHamiltonian/BlockIsometricDeformationSymmetry.lean}.
 
-\section{The remaining restriction}
-All derived statements assume exact invariance of the matrix product
-vectors under $U_g^{\otimes N}$. Invariance only up to a phase, which the
-source's notion of a symmetry of the state also admits, is not treated.
-The separately established uniform-gap results for the constructed
-deformation do not depend on this restriction.
+\section{Invariance up to a phase}
+The source's symmetry is a symmetry of the state, which is invariant under
+$U_g$ only up to a phase (lines 1313--1314 and 2590--2593). The faithful hypothesis is therefore
+$U_g^{\otimes N}\ket{\psi_N}=\lambda_{g,N}\ket{\psi_N}$ for every $N$, with
+scalars $\lambda_{g,N}$ that may a priori depend on both $g$ and $N$; no
+character property of $\lambda$ is assumed.
 
-The elimination plan has two steps. Suppose that
-$U_g^{\otimes N}\ket{\psi_N}=\lambda_N(g)\ket{\psi_N}$ for nonzero
-scalars $\lambda_N(g)$. First, show that $\lambda_N(g)=\chi(g)^N$ for a
-scalar $\chi(g)$ of modulus one: by the joint one-site span, the word
-traces of $\bigoplus_kA^k$ separate the block algebra, so comparing
-words of length $N$ with their one-letter extensions forces the phase to
-be multiplicative in the length. Second, apply the derived exact-symmetry
-statements to the rescaled twist $\overline{\chi(g)}\sum_l(U_g)_{il}A_l$,
-which has the same matrix product vectors as the original tensor and keeps
-the trace-preserving normalization; the scalar cancels in $U_gP=PX_g$
-after replacing $X_g$ by $\chi(g)X_g$, which is still unitary.
+Write $\phi(M)=\sum_k\operatorname{tr}M_k$ on $\bigoplus_kM_{D_k}$, let
+$x_i=(A^k_i)_k$ and let $y_i=(\sum_l(U_g)_{il}A^k_l)_k$. Both families span
+the direct sum, the pairing $(M,N)\mapsto\phi(MN)$ is nondegenerate, and
+$\phi(1)=\sum_kD_k\neq0$. The hypothesis at lengths one, two and three says
+$\phi(y_w)=c_{|w|}\phi(x_w)$ for words $w$ of those lengths. Nondegeneracy
+against the spanning family $y$ makes the assignment $x_i\mapsto y_i$ a
+well-defined linear map $L$, and then
+\begin{align}
+    \phi(LX)&=c_1\phi(X),
+    \label{eq:spc11_phase_linear}\\
+    \phi(LX\,LY)&=c_2\phi(XY),
+    \label{eq:spc11_phase_quadratic}\\
+    \phi(LX\,LY\,LZ)&=c_3\phi(XYZ)
+    \label{eq:spc11_phase_cubic}
+\end{align}
+for all $X,Y,Z$. Pairing against $LZ$, which ranges over the whole algebra,
+gives $c_1L(1)=c_2I$ and $LX\,LY=L(XY)\,L(1)$. Since $L$ is onto,
+$c_1\neq0$, and comparing $\phi(L(1))=c_1\phi(1)$ gives $c_2=c_1^2$ and
+$L(1)=c_1I$. Hence $LX\,LY=c_1L(XY)$, and induction on the word length gives
+$\phi(y_w)=c_1^{|w|}\phi(x_w)$ for every word. At length one the vector
+$v_i=\phi(x_i)$ is nonzero and satisfies $U_gv=c_1v$, so unitarity of $U_g$
+gives $|c_1|=1$. Consequently $\lambda_{g,N}=c_1^N$ whenever
+$\ket{\psi_N}\neq0$.
+
+The rescaled unitary $\bar c_1U_g$ preserves every summed word trace, so the
+several-block derivation above applies to it. The twist of block
+$\sigma(k)$ by $U_g$ is $c_1$ times a unitary conjugate of block $k$, the
+virtual action $c_1X_g$ is unitary and satisfies $U_gP=P(c_1X_g)$, and
+$[U_g,Q]=0$. Scaling $U_g^{\otimes L}$ by the nonzero scalar $c_1^L$ does not
+change the image of a subspace, so every local MPS space is invariant under
+$U_g^{\otimes L}$ itself. All parent-symmetry conclusions of the
+several-block case therefore hold under symmetry up to a phase. These
+statements are proved in
+\path{TNLean/MPS/ParentHamiltonian/BlockIsometricDeformationSymmetry.lean};
+the one-block case $r=1$ is the already-blocked single injective block in the
+printed normalization.
+
+\section{Status}
+The source assertion at lines 645--676 is formalized under the source's
+hypotheses: a block-diagonal tensor in the printed standard form, whose
+blocks jointly span at one site, and an on-site unitary representation
+leaving every matrix product vector invariant up to a phase. The
+single-block statements in the unital canonical orientation remain stated
+for exact symmetry; they are not needed for the source assertion, whose
+printed normalization is covered by the several-block statements with one
+block. The separately established uniform-gap results for the constructed
+deformation do not depend on this note.
 
 \bibliographystyle{alpha}
 \bibliography{references}
