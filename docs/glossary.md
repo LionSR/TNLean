@@ -3428,3 +3428,14 @@ These patches use `AreaLaw.domainGraph` and the unordered `AreaLaw.edgeBoundary`
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
 source's Proposition 4.1.
+
+### Binary entropy for the rounded bootstrap bands
+
+`TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binaryEntropy_cost_bound` derives
+one threshold for a fixed scanner exponent tuple, before the auxiliary
+fraction and physical data. It gives positive actual rounded band count
+`K = floor(L/(8m))`, positive metric weight `a = 4/K`, and the bound
+`Real.binEntropy τ / a ≤ (Real.log 2 / 4) n`. The coefficient is absolute;
+the threshold may depend on the fixed exponent tuple. This is the numerical
+binary-entropy cost in the proof of area-law Proposition 9.5, not the
+physical norm comparison or the exponent-improvement implication.

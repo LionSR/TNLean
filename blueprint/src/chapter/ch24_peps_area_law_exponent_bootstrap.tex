@@ -66,6 +66,40 @@
     $e_0>0$.
 \end{proof}
 
+\begin{theorem}[Binary-entropy cost of the rounded bands]
+    \label{thm:area_law_bootstrap_binary_entropy_cost}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binaryEntropy_cost_bound}
+    Fix the scanner exponents described in Section~\ref{sec:al_scanner}, and put
+    \begin{align}
+        L_n & =\lfloor n^{1-\ell}\rfloor,\qquad
+        m_n=\lfloor n^\mu\rfloor,\qquad
+        K_n=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,\qquad
+        a_n=\frac4{K_n}.
+    \end{align}
+    There is an integer $N\ge1$, depending only on these fixed exponents,
+    such that $K_n\ge1$ and $a_n>0$ for every integer $n\ge N$.
+    For every such $n$ and every $\tau\in[0,1]$, the binary entropy
+    $h(\tau)=-\tau\log\tau-(1-\tau)\log(1-\tau)$ satisfies
+    \begin{align}
+        \frac{h(\tau)}{a_n}\le\frac{\log2}{4}\,n.
+    \end{align}
+    The coefficient is absolute, and the threshold precedes $\tau$ and
+    every physical instance. This bounds the binary-entropy term in the
+    proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw} for the actual
+    rounded band count.
+\end{theorem}
+\begin{proof}
+    Since $\mu<1-\ell$, the numerical scale estimates give $K_n\ge1$
+    for all sufficiently large $n$. They also give $L_n\le n$, and
+    integer division gives $K_n\le L_n$. Now $h(\tau)\le\log2$, so
+    \begin{align}
+        \frac{h(\tau)}{a_n}
+        =\frac{K_nh(\tau)}4
+        \le\frac{K_n\log2}4
+        \le\frac{n\log2}4.
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Uniform bounds after finitely many exponent improvements]
     \label{thm:area_law_finite_exponent_improvement}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement}
