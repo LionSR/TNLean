@@ -21,6 +21,7 @@ import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.Geometry
+import TNLean.PEPS.AreaLaw.GraphExtendedMetric
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
@@ -31,6 +32,8 @@ import TNLean.PEPS.AreaLaw.GraphLatticeDistance
 import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.InitialBuffer
+import TNLean.PEPS.AreaLaw.LatticeConstraints
+import TNLean.PEPS.AreaLaw.LatticeCounts
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.MarginalTails
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
@@ -47,6 +50,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
+import TNLean.PEPS.AreaLaw.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
@@ -54,4 +58,5 @@ import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.WeakRectanglePartialRowEntropy
 import TNLean.PEPS.AreaLaw.ZeroBoundary
