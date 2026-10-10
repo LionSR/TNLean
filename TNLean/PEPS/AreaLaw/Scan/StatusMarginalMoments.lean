@@ -91,7 +91,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
     (R : ℕ) {J Δ Ccard : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hCcard : 0 ≤ Ccard) :
     ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ (q : ℕ) [NeZero q],
       ∃ CB : ℝ, 0 < CB ∧
-        ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+        ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
           (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           (E₀ : ℝ) (Ω : StateSpace Λ q),
@@ -141,7 +141,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
   obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log
     (Nat.one_le_iff_ne_zero.mpr (NeZero.ne q)) R hCtr.le
   refine ⟨CB, hCB, ?_⟩
-  intro Λ T hT h S E₀ Ω hgs hgraph hdepth hanchor L hn hradius hcard
+  intro Λ T _ hT h S E₀ Ω hgs hgraph hdepth hanchor L hn hradius hcard
     hr hDpos hD hL hrows hclear
   dsimp only
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=

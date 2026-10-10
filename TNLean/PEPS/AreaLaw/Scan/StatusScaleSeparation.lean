@@ -42,7 +42,7 @@ theorem eventually_status_scale_separation {Cr ell kappa mu : ℝ}
       2 ≤ n ∧ roundedLogRadius Cr n ≤ D ∧ 1 ≤ D ∧
         4 * D ≤ m ∧ 8 * K * m ≤ L := by
   have hratio : ∀ᶠ n : ℕ in atTop, (8 : ℝ) ≤ (n : ℝ) ^ (mu - kappa) :=
-    ((Real.tendsto_rpow_atTop (sub_pos.mpr hkm)).comp
+    ((tendsto_rpow_atTop (sub_pos.mpr hkm)).comp
       tendsto_natCast_atTop_atTop).eventually_ge_atTop 8
   filter_upwards [eventually_roundedLogRadius_le_rpow hCr hkappa,
     hratio, eventually_ge_atTop (2 : ℕ)] with n hr hratio hn

@@ -79,7 +79,7 @@ cut-containment certificate or cut-edge estimate is supplied. -/
 theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∃ CB : ℝ, 0 < CB ∧
-      ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
         S.graph = domainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -102,7 +102,7 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
   obtain ⟨C, hC, hbudget⟩ := exists_latticeCutBudget_le_log hq R hCr
     (show (0 : ℝ) ≤ 40 by norm_num)
   refine ⟨C + 1, by positivity, ?_⟩
-  intro Λ T hT S hgraph hdepth hanchor L hn hradius hr hDpos hD hL hrows hclear
+  intro Λ T _ hT S hgraph hdepth hanchor L hn hradius hr hDpos hD hL hrows hclear
   dsimp only
   have hnR : (2 : ℝ) ≤ S.n := by exact_mod_cast hn
   have hDR : (1 : ℝ) ≤ S.D := by exact_mod_cast hDpos

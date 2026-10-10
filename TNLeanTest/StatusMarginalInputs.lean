@@ -74,7 +74,7 @@ example
     (R : ℕ) {J Δ Ccard : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hCcard : 0 ≤ Ccard) :
     ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ (q : ℕ) [NeZero q],
       ∃ CB : ℝ, 0 < CB ∧
-        ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+        ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
           (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           (E₀ : ℝ) (Ω : StateSpace Λ q),

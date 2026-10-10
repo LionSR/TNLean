@@ -32,7 +32,7 @@ example {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 -- The common budget exists even though there is no band to use for its lower bound.
 example {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∃ CB : ℝ, 0 < CB ∧
-      ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
         S.graph = domainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -49,7 +49,7 @@ example {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {Cr : ℝ} (hCr : 0 ≤ Cr) :
           IsEmpty (Fin S.K) := by
   obtain ⟨CB, hCB, hb⟩ := CollarScan.exists_statusMarginal_cutBudget_le_log hq R hCr
   refine ⟨CB, hCB, ?_⟩
-  intro Λ T hT S hgraph hdepth hanchor L hn hradius hr hDpos hD hL hrows hclear hzero
+  intro Λ T _ hT S hgraph hdepth hanchor L hn hradius hr hDpos hD hL hrows hclear hzero
   refine ⟨(hb Λ T hT S hgraph hdepth hanchor L hn hradius
     hr hDpos hD hL hrows hclear).1, ?_⟩
   rw [hzero]
