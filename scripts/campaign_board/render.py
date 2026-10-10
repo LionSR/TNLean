@@ -93,15 +93,26 @@ def references(campaign_dir: pathlib.Path, config: dict, gaps: dict) -> dict:
     path = campaign_dir / "references.json"
     library = json.loads(path.read_text()) if path.exists() else {}
     texts = cited_texts(config, gaps)
+    everything = json.dumps([config, gaps], ensure_ascii=False)
+    malformed = everything.count("{{cite:") - len(CITE_SLOT.findall(everything))
+    if malformed:
+        raise ValueError(f"{malformed} malformed {{{{cite:...}}}} token(s): write {{{{cite:Key}}}} or "
+                         "{{cite:Key1,Key2}}, with no spaces")
     rendered = sum(len(CITE_SLOT.findall(t)) for t in texts)
-    everywhere = len(CITE_SLOT.findall(json.dumps([config, gaps], ensure_ascii=False)))
-    if everywhere != rendered:
+    if len(CITE_SLOT.findall(everything)) != rendered:
         raise ValueError("{{cite:...}} tokens may appear only in route introductions, stage "
                          "physics, delivers and captions, and gap prose fields")
     keys = {k for text in texts for m in CITE_SLOT.findall(text) for k in m.split(",")}
     missing = sorted(keys - library.keys())
     if missing:
         raise KeyError(f"{path}: no entry for cited keys {', '.join(missing)}")
+    for k in sorted(keys):
+        entry = library[k]
+        bad = [f for f in ("authors", "title", "url") if not isinstance(entry.get(f), str) or not entry[f].strip()]
+        bad += [] if isinstance(entry.get("year"), int) else ["year"]
+        bad += [] if isinstance(entry.get("venue", ""), str) else ["venue"]
+        if bad:
+            raise ValueError(f"{path}: entry {k} lacks a valid {', '.join(bad)}")
     return {k: library[k] for k in sorted(keys)}
 
 

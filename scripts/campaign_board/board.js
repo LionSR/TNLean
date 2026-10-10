@@ -280,7 +280,9 @@
       note(route.intro, `route-${route.id}`, paper);
       route.stages.forEach((st, idx) => {
         const anchor = `stage-${route.id}-${idx + 1}`, label = `${paper}, stage ${idx + 1}`;
-        for (const t of [st.physics, st.delivers, ...(st.diagrams || []).map(d => d.caption), st.caption]) note(t, anchor, label);
+        // The schematic's caption is shown only with a figure the campaign's figures.js defines.
+        const drawn = st.figure && (window.campaignFigures || {})[st.figure];
+        for (const t of [st.physics, st.delivers, ...(st.diagrams || []).filter(d => (D.diagrams || {})[d.src]).map(d => d.caption), drawn ? st.caption : ""]) note(t, anchor, label);
       });
     }
     for (const g of gapsInOrder()) for (const t of [g.summary, g.context, g.claims, g.found, g.impact, g.plan]) note(t, gapAnchor(g), `Gap: ${g.title}`);
@@ -410,7 +412,8 @@
         if (draw) {
           const svg = sv("svg", { role: "img", "aria-label": st.figureAlt || st.title });
           figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: tnText(st.caption) }) : null);
-          try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
+          // A figure that fails to draw keeps its caption, whose citations are already numbered.
+          try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); svg.remove(); }
         }
         // Tensor-network diagrams compiled from the campaign's tenkz sources.
         const tnFigs = (st.diagrams || []).map(d => {
