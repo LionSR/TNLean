@@ -4,27 +4,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.WordOwnerRestriction
-import Lean.Elab.Command
-import Lean.Util.CollectAxioms
 
 /-!
-# Kernel dependencies of source-free owner restrictions
+# Axiom guards for source-free owner restrictions
 
-Check the two owner-restriction identities and the generic party selector in the
-imported library. Every named declaration must exist, and every transitive axiom
-dependency must be one of `propext`, `Classical.choice` and `Quot.sound`. A
-declaration may use any subset of these axioms, including the empty set.
+The expected sets were copied from the actual raw reports for the two
+owner-restriction identities and the single-party selector.
 -/
 
-run_cmd do
-  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil,
-      ``TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint,
-      ``TNLean.PEPS.PairEffect.partySelector] do
-    unless env.contains decl do
-      throwError "Missing declaration {decl}"
-    let axioms ← Lean.collectAxioms decl
-    unless axioms.all (allowed.contains ·) do
-      throwError "Unexpected axioms for {decl}: {axioms}"
-    Lean.logInfo m!"{decl}: {axioms}"
+set_option linter.hashCommand false
+
+/-- info: 'TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms TNLean.PEPS.PairEffect.Word.parties_mapOwner_of_sources_nil
+
+/-- info: 'TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms TNLean.PEPS.PairEffect.Word.restrict_mapOwner_eval_eq_id_of_disjoint
+
+/-- info: 'TNLean.PEPS.PairEffect.partySelector' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms TNLean.PEPS.PairEffect.partySelector
