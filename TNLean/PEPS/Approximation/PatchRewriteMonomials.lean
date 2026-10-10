@@ -46,6 +46,12 @@ gives at most `K L^e` monomials, with `K` and `e` explicit in `C`, `c`, `b` and 
 participating parties lie in one fixed list of at most `b` parties
 (`exists_allowed_monomial_approx_polynomial`). This is the second assertion of Lemma 6.3.
 
+The bound `D ≤ C L^c` is a property of the projectors that the source's setting fixes by
+Proposition 4.1 `prop:patch` (`03-patches.tex`), so it enters these theorems as a hypothesis on
+the cylinder data rather than being derived here; Proposition 4.1 is a separate result, and
+composing it with these theorems discharges the hypothesis. This reading is recorded in
+`docs/paper-gaps/polypeps_small_rewrite_monomials.tex`.
+
 The expansion is stated in the canonical coordinates of the two frames, the tags of the untouched
 holes first; the source compares frames after the canonical identification of tag orderings
 (`05-frames.tex`, lines 74–75 and 84–85). Each monomial has at most `2m` pair sources and `2m`
