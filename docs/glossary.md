@@ -3378,3 +3378,16 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
   for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
   of Lemma 9.4, not safe clearance or a regional entropy theorem.
+
+### Nested closed-square patches
+
+The [nested-square patch geometry](formalization/peps-nested-patch-geometry.md)
+records the geometric part of the polynomial-PEPS patch construction. For the
+existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
+samples the closed coordinate square at any real centre and clips it to `Λ`.
+`Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
+`Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
+These patches use `AreaLaw.domainGraph` and the unordered `AreaLaw.edgeBoundary`;
+they are not graph-distance balls. The crossing-edge and two-site-support
+results are geometric statements, not an energy estimate or a proof of the
+source's Proposition 4.1.
