@@ -31,9 +31,11 @@ For several jointly injective blocks in that normalization, where the
 symmetry permutes the blocks (source lines 649--659), both hypotheses are
 derived in `TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry`.
 
-**Scope restriction (exact vector symmetry):** The derived statements assume
-that the matrix product vectors are invariant, not only invariant up to a
-phase; see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
+**Scope restriction (exact vector symmetry):** The single-block derived statements
+here assume that the matrix product vectors are invariant, not only invariant up to
+a phase. Symmetry up to a phase is derived for one or several blocks in the printed
+normalization in `TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry`;
+see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
 (https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
 -/
 
