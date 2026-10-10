@@ -625,6 +625,13 @@ jobs:
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rounded bootstrap collar clearance early
+        timeout-minutes: 2
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template layers early
         timeout-minutes: 5
         run: |
@@ -710,6 +717,19 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateEntropy.lean
+
+      - name: Check rounded bootstrap collar clearance and standard axioms strictly
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          for source in \
+            TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean \
+            TNLeanTest/BootstrapRoundedClearanceAxioms.lean; do
+            lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       - name: Test square-grid vector, regional and approximation transport
         timeout-minutes: 2
