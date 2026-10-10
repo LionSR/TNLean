@@ -374,18 +374,8 @@ def main() -> int:
     # pages are therefore held back and rendered serially, after the parallel
     # content pass has closed every other browser, so each layout runs on an
     # uncontended processor.
-    #
-    # The whole-document dependency graph is the one exception: it gathers every
-    # statement of the blueprint (~10k nodes), and laying out that many nodes
-    # with the bundled WASM graphviz does not finish within a browser page
-    # budget even uncontended, so opening it would block on the completion wait
-    # in _load_page until the deadline. Its worker wiring is still checked
-    # statically above and by scripts/test_blueprint_graph_worker.py, and the
-    # tractable per-chapter graphs are still opened and waited on.
     graph_pages = sorted(
-        page.name for page in pages
-        if page.name.startswith("dep_graph_")
-        and page.name != "dep_graph_document.html")
+        page.name for page in pages if page.name.startswith("dep_graph_"))
     content_pages = [page for page in pages
                      if not page.name.startswith("dep_graph_")]
 
