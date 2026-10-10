@@ -8327,10 +8327,10 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Pullback of scalar cohomology]
     \label{def:mpug_h2_pullback}
-    \lean{TNLean.Algebra.ScalarCocycle.pullback,
-        TNLean.Algebra.ScalarCocycle.pullback_apply,
-        TNLean.Algebra.H2.pullback,
-        TNLean.Algebra.H2.pullback_mk}
+    \lean{TNLean.Algebra.ScalarCocycle.comap,
+        TNLean.Algebra.ScalarCocycle.comap_apply,
+        TNLean.Algebra.H2.comap,
+        TNLean.Algebra.H2.comap_mk}
     \leanok
     \uses{def:h2_cx}
     Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
@@ -8343,8 +8343,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{theorem}[Pullback preserves cocycles and cohomology]
     \label{thm:mpug_h2_pullback_preserves}
-    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.comap,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.comap}
     \leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
     Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
@@ -8367,7 +8367,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 % No U(1) restriction naturality or tensor-level block-independence claim.
 \begin{theorem}[Exact extension of a subgroup cocycle]
     \label{thm:mpug_h2_exact_extension}
-    \lean{TNLean.Algebra.H2.mem_range_pullback_subtype_iff,
+    \lean{TNLean.Algebra.H2.mem_range_comap_subtype_iff,
         TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
     \leanok
     \uses{def:mpug_h2_pullback, def:is_cocycle}
