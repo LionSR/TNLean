@@ -24,6 +24,123 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
+
+- **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate
+  `fun δ N₀ x => ∀ N, N₀ ≤ N → ∀ v ∈ V x N, δ * ‖v‖ ≤ ‖H x N v‖`, then the two monotonicity
+  bullets (shrinking `δ` by `mul_le_mul_of_nonneg_right`, enlarging `N₀` by `le_trans`)
+  before the local bound.
+- **Seen:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` itself and three
+  parent-Hamiltonian gap theorems that inlined it:
+  `exists_uniform_parentHamiltonianES_gap_of_strict_openWindows`
+  (`CompactParentGap.lean`),
+  `exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective`
+  (`CompactNormalParentGap.lean`) and
+  `exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact`
+  (`CompactBlockParentGap.lean`), all under `TNLean/MPS/ParentHamiltonian/`.
+- **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
+  `TNLean/Algebra/CompactGapBounds.lean`; pass `H := fun x N => …` and
+  `V := fun x N => (LinearMap.ker …)ᗮ` and prove only the local bound.
+- **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
+  `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
+  `CompactKernelGap.lean` has no tail, so both keep the direct call to
+  `exists_uniform_pos_nat_bounds`.
+
+### Remainder-absorbing block lengths — promoted (2026-10-10)
+
+- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
+  of length `q + N % q`, and prove the sum is `N` by separating the last
+  summand with `Fin.sum_univ_castSucc`, summing the constants, and applying
+  `Nat.div_add_mod`; then prove `q ≤ ℓ k ≤ 2 q` by `split_ifs <;> omega`.
+- **Seen:** nine occurrences, one each in `LogDepthPreparation`,
+  `LogLogDepthEveryLength`, `SupportedLogLogPreparation`, `UnequalTreeMERA`,
+  `OverlappingMeasurementPreparation`, `RectangularPreparation`,
+  `VaryingReferencePreparation`, `CoherentGroundspaceConversion` and
+  `ZeroSubleadingPreparation` under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSPreparation.exists_remainderBlocks` in
+  `TNLean/MPS/Preparation/RemainderBlocks.lean`: for `0 < q ≤ N` it supplies
+  `m`, `ℓ : Fin (m + 1) → ℕ`, `N / q = m + 1`, `∑ k, ℓ k = N` and both
+  bounds. Each call site is one `obtain`. Use `remainderBlockLengths` instead
+  when the block family must be indexed by `Fin (N / q)` with a definitional
+  formula.
+- **Notes:** the lemma adds 22 lines and the call sites lose 113, for a net
+  delta of −91 Lean lines.
+
+### Order-two family with a bond-two generator — promoted (2026-10-10)
+
+- **Pattern:** a `ℤ₂`-indexed family `1 ↦ E`, `g ↦ A` (bond dimensions one and two) written
+  out with `Fin 2` label matches for tensors and fusion tensors, together with the cast and
+  associator lemmas that reduce the two fusion trees of three generators to `V ⊗ 1` and
+  `1 ⊗ V` and make `ω(g,1,g) = 1`.
+- **Seen:** `Examples/CZX/CZXAnomalyClass.lean` (`czxFamily`),
+  `Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` (`pairFamily`, two uses), and
+  `Examples/KleinSymmetryAnomaly.lean` (the restriction to `{e, a}`).
+- **Abstraction:** `MPOTensor.GroupFamily.orderTwoFamily`,
+  `MPOTensor.GroupFamily.FusionData.orderTwo`, and
+  `MPOTensor.GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator` in
+  `TNLean/MPS/Symmetry/MPOSymmetry/AssociatorOrderTwo.lean`. State the generator as
+  `orderTwoGen`: a bare `Multiplicative.ofAdd 1` may elaborate through a different instance
+  path for `ZMod 2` and then fail to match in `rw`.
+- **Notes:** `Z2Z2AnomalyClass` and `KleinSymmetryAnomaly` use it; `czxFamily` keeps its
+  printed labels and can switch when next edited. The step "restrict along `f`, transport the
+  cyclic invariant, read off the associator scalar" is
+  `FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo`, used by three callers.
+
+### Boundary on one Kronecker factor of a letter sum — promoted (2026-10-10)
+
+- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
+  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv`, distribute with
+  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
+  boundary onto one factor with `← Matrix.mul_kronecker_mul` and
+  `Matrix.one_mul`/`Matrix.mul_one`.
+- **Seen:** fifteen occurrences across four files: `MPSTensor.IsReduction.mulTensor_kronId`,
+  `mulTensor_idKron`, `kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn`,
+  `idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn` and
+  `MPOTensor.mulTensor_mul_kronId_of_intertwine`
+  (`TNLean/MPS/Core/ReductionComposition.lean`); `MPSTensor.IsReduction.actTensor_idKron`,
+  `actTensor_kronId`, `MPOTensor.actTensor_mul_kronId_of_intertwine`,
+  `MPSTensor.IsDressedProportional.actTensor_idKron` and `actTensor_kronId`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`); and the four `hres` steps of
+  `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId`, `_mulTensor_idKron`,
+  `_actTensor_kronId` and `_actTensor_idKron`
+  (`TNLean/MPS/Core/ReductionResidualComposition.lean`), the last four added by #8244.
+- **Abstraction:** `MPOTensor.kronId_mul_submatrix_sum`, `submatrix_sum_mul_kronId`,
+  `idKron_mul_submatrix_sum` and `submatrix_sum_mul_idKron` in
+  `TNLean/MPS/Core/ReductionComposition.lean`: a boundary `X ⊗ 1` or `1 ⊗ X` on either side
+  of `(∑ j, A j ⊗ B j)` in the `finProdFinEquiv` bond order acts on one factor of every
+  summand. Each call site rewrites with one or two of them and closes by
+  `simp only [h.evalWord]` (or the intertwining or proportionality hypothesis).
+- **Notes:** `kronId_mul`, `idKron_mul` and `kronId_mul_idKron` multiply two boundaries
+  without a letter sum and keep their direct proofs. The four lemmas add 44 lines and
+  the call sites lose 52, for a net delta of −8 lines.
+
+### Chosen nonzero dressed-proportionality scalar — promoted (2026-10-10)
+
+- **Pattern:**
+  ```lean
+  open Classical in
+  ... if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+  with the spec lemma closing by
+  `simp only [_, hex, ↓reduceDIte, Units.val_mk0]; exact hex.choose_spec.2`.
+- **Seen:** four occurrences across three files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`), and
+  `BlockActionData.lSymbol` (`TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`).
+- **Abstraction:** `MPSTensor.dressedScalar B X Y : Units ℂ` and
+  `MPSTensor.isDressedProportional_dressedScalar` in
+  `TNLean/MPS/Core/ReductionComposition.lean`. The four definitions are
+  `dressedScalar` of their boundaries, and each spec lemma ends with
+  `exact MPSTensor.isDressedProportional_dressedScalar hex`. The one external proof that
+  unfolded the `dite` of `omega`, `MPOTensor.GroupCocycle.fusionData_omega`
+  (`TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`), uses the same lemma.
+- **Notes:** statements of `omega`, `relativeScalar`, both `lSymbol`s and their spec
+  lemmas are unchanged. The shared definition and lemma add 18 lines; the four call
+  sites lose 13, for a net delta of +5 lines, and four `open Classical in` blocks with
+  their `dite` unfoldings are gone.
+
 ### Empty final tensor memory — promoted (2026-10-09)
 
 - **Pattern:** identify the tensor product with an empty final memory with
@@ -1350,7 +1467,24 @@ three-plaquette output measurement, and the routed reunion measurement.
   unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
   claimed that every call site had been refactored, which was wrong for the nine sites listed
   above; those were refactored on 2026-09-19, after which the claim holds.  A site loses
-  between three and nine lines.
+  between three and nine lines.  A second spelling of the same argument, rewriting the
+  goal with `(Matrix.stdBasis ℂ _ _).span_eq` and `Submodule.span_le`, survived in four
+  `TNLean/MPS/MPDO/` files (`RescalingStableExplicitVerticalBNT`,
+  `RescalingStableLengthDependentRFPCanonicalForm`, `TwistedDimerHorizontalCF`,
+  `TwistedDimerVerticalCF`); those were refactored on 2026-10-10.
+
+### cancelling a nonzero scalar in a submodule membership — rejected (Mathlib)
+- **Pattern:**
+  ```lean
+  have h' := Submodule.smul_mem _ c⁻¹ hmem
+  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h'
+  ```
+- **Seen:** eight occurrences across seven files (2026-10-10): `Examples/AKLT.lean` (twice),
+  `Examples/MultiBlock/OneSlotGauge.lean`, `FundamentalTheorem/Reduction/RingEmbedding.lean`,
+  and the four `TNLean/MPS/MPDO/` injectivity proofs listed in the previous entry.
+- **Abstraction:** none needed: Mathlib's `Submodule.smul_mem_iff (p) (hc : c ≠ 0)` states
+  `c • x ∈ p ↔ x ∈ p`; write `(Submodule.smul_mem_iff _ hc).mp hmem`.  All eight sites
+  were rewritten that way on 2026-10-10.
 
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
@@ -3913,21 +4047,6 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
   and the existing realization identities; no tactic is needed at this count.
 
-### Remainder-absorbing block lengths — candidate
-- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
-  of length `q + N % q`, and prove the sum is `N` by separating the last
-  summand, summing the constants, and applying `Nat.div_add_mod`.
-- **Seen:** two production occurrences in
-  `TNLean/MPS/Preparation/LogDepthPreparation.lean:152` and
-  `TNLean/MPS/Preparation/ZeroSubleadingPreparation.lean:120` (2026-10-03).
-- **Abstraction:** at a third occurrence, a partition lemma for arbitrary
-  `N,q,m` with `N / q = m + 1` can supply the sum and the lower/upper bounds
-  from `Nat.mod_lt`, using the existing `Fin.sum_univ_castSucc` and
-  `Finset.sum_const`.
-- **Notes:** Mathlib already supplies the finite-sum and division identities;
-  no general partition lemma was found. The two production occurrences are
-  below the rule-of-three threshold.
-
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction
@@ -4335,44 +4454,6 @@ currently one occurrence, so no general declaration is warranted.
   the `simpa` coercion from the indexed supremum.
 - **Status:** promoted; all three call sites now read
   `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
-
-### carrying a boundary through one Kronecker factor of a letter sum — candidate
-- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
-  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
-  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
-  boundary onto one factor with `← Matrix.mul_kronecker_mul` (twice) and
-  `Matrix.one_mul`/`Matrix.mul_one`.
-- **Seen:** six occurrences across three files: `MPSTensor.IsReduction.mulTensor_kronId` and
-  `mulTensor_idKron` (`TNLean/MPS/Core/ReductionComposition.lean`),
-  `MPOTensor.mulTensor_mul_kronId_of_intertwine` (`TNLean/MPS/MPDO/OperatorProduct.lean`),
-  and `MPSTensor.IsReduction.actTensor_idKron`, `actTensor_kronId` and
-  `MPOTensor.actTensor_mul_kronId_of_intertwine`
-  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
-- **Abstraction:** a lemma stating
-  `(X ⊗ 1) * (∑ j, A j ⊗ B j) * (Y ⊗ 1) = ∑ j, (X * A j * Y) ⊗ B j` and its `1 ⊗ X`
-  mirror, in the `finProdFinEquiv` bond order; the intertwiner lemmas are the cases
-  `Y = 1` and `X = 1`.
-- **Notes:** past the rule of three. Promotion rewrites the three call sites in
-  `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
-  separate refactor rather than folded into the action-tensor PR.
-
-### classical choice of a nonzero proportionality scalar — candidate
-- **Pattern:**
-  ```lean
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
-  then Units.mk0 hz.choose hz.choose_spec.1 else 1
-  ```
-- **Seen:** three occurrences across two files: `FusionData.omega` (through
-  `IsAssociator`) and `FusionData.relativeScalar`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
-- **Abstraction:** a definition
-  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
-  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
-  and `lSymbol` then specialize it.
-- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
-  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
-  is left to a separate refactor.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
@@ -6219,6 +6300,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
+
+- **Pattern:** Project a physical region injectively to its ambient lattice subset,
+  then use the ambient layer cardinality bound in the entropy dimension estimate.
+- **Seen:** Two occurrences, in Geometry/TemplateEntropy.lean and
+  WeakRectanglePartialRowEntropy.lean under TNLean/PEPS/AreaLaw/.
+- **Abstraction:** A general cardinality lemma for filtering a physical region by
+  an ambient finite set could replace the image-subset and cardinality chain.
+- **Notes:** Both arguments retain the original vector and physical region.
+  The existing disjoint-region entropy increment theorem is reused directly.
+  The two cardinality chains differ only in their ambient geometric bounds.
 
 ### Owners of fixed pair-source registers — candidate (2026-10-09)
 
