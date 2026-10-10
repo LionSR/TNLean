@@ -15114,20 +15114,27 @@ shorter interaction range.
     obtain all finite expectation identities.
 \end{proof}
 
-\begin{lemma}[Boundary space of an isometric compression]
-    \label{lem:isometric_compression_corner_boundary}
-    \lean{MPSTensor.cornerGroundSpaceES, MPSTensor.cornerGroundSpaceES_one,
-        MPSTensor.groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner,
-        MPSTensor.groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner}
+\begin{definition}[Corner boundary space]
+    \label{def:corner_boundary_space}
+    \lean{MPSTensor.cornerGroundSpaceES, MPSTensor.cornerGroundSpaceES_one}
     \leanok
     For an MPS tensor $A$, a projection $P$, and $L\geq0$, let $G_A^P(L)$
-    be the set of open-boundary vectors $\Gamma_L^A(Y)$ with $PYP=Y$; for $P=I$ it is
-    $G_A(L)$. Let $V^*V=I$ and $A_iV=VB_i$ for every $i$. Then
+    be the set of open-boundary vectors $\Gamma_L^A(Y)$ with $PYP=Y$.
+    For $P=I$ it is $G_A(L)$.
+\end{definition}
+
+\begin{theorem}[Boundary space of an isometric compression]
+    \label{thm:isometric_compression_corner_boundary}
+    \lean{MPSTensor.groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner,
+        MPSTensor.groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner}
+    \leanok
+    \uses{def:corner_boundary_space}
+    Let $V^*V=I$ and $A_iV=VB_i$ for every $i$. Then for every $L\geq0$,
     \begin{align}
         G_B(L) & =G_A^{VV^*}(L).
         \label{eq:isometric_compression_corner_boundary}
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The intertwining gives $\Gamma_L^A(VXV^*)=\Gamma_L^B(X)$, and
     $VXV^*$ lies in the corner of $VV^*$. Conversely, if $Y$ lies in that
@@ -15139,8 +15146,7 @@ shorter interaction range.
     \lean{MPSTensor.observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff_of_stationary,
         MPSTensor.exists_local_density_range_eq_cornerGroundSpaceES_of_stationary}
     \leanok
-    \uses{def:primitive_insertion_expectation,
-        lem:isometric_compression_corner_boundary}
+    \uses{def:primitive_insertion_expectation, def:corner_boundary_space}
     Let $A$ be an MPS tensor, let $\rho\geq0$ have nonzero trace and satisfy
     $\sum_iA_i\rho A_i^*=\rho$, and let $P$ be its support projection.
     The matrix $\rho$ need not be faithful. For every $k\geq0$ and every
@@ -15156,13 +15162,14 @@ shorter interaction range.
     $\operatorname{ran}\sigma_k=G_A^P(k)$.
     This describes the local support spaces of normalized stationary
     generating data, as in \cite[Section~3 and the proof of the overlap
-    lemma in Section~4]{Nachtergaele1996Spectral}, without the faithfulness
+        lemma in Section~4]{Nachtergaele1996Spectral}, without the faithfulness
     that the source obtains from minimality. Passing from an arbitrary
     GVBS boundary limit to normalized stationary data remains separate
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:stationary_support_faithful_generators,
+        thm:isometric_compression_corner_boundary,
         thm:faithful_local_mps_support, thm:local_mps_density_support}
     Compress to the support of $\rho$. The compressed data are faithful
     and have the same finite expectations, so the faithful support
