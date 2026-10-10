@@ -127,11 +127,14 @@ $\phi(1)=\sum_kD_k\neq0$. The hypothesis at lengths one, two and three says
 $\phi(y_w)=c_{|w|}\phi(x_w)$ for words $w$ of those lengths. Nondegeneracy
 against the spanning family $y$ makes the assignment $x_i\mapsto y_i$ a
 well-defined linear map $L$, and then
-\begin{align*}
-    \phi(LX)=c_1\phi(X),\quad
-    \phi(LX\,LY)=c_2\phi(XY),\quad
-    \phi(LX\,LY\,LZ)=c_3\phi(XYZ)
-\end{align*}
+\begin{align}
+    \phi(LX)&=c_1\phi(X),
+    \label{eq:spc11_phase_linear}\\
+    \phi(LX\,LY)&=c_2\phi(XY),
+    \label{eq:spc11_phase_quadratic}\\
+    \phi(LX\,LY\,LZ)&=c_3\phi(XYZ)
+    \label{eq:spc11_phase_cubic}
+\end{align}
 for all $X,Y,Z$. Pairing against $LZ$, which ranges over the whole algebra,
 gives $c_1L(1)=c_2I$ and $LX\,LY=L(XY)\,L(1)$. Since $L$ is onto,
 $c_1\neq0$, and comparing $\phi(L(1))=c_1\phi(1)$ gives $c_2=c_1^2$ and

@@ -412,6 +412,8 @@ private theorem smul_star_smul_of_norm_eq_one {c : ℂ} (hc : ‖c‖ = 1)
 
 variable {G : Type*} [Monoid G]
 
+-- The complex order supplies the star-ordered ring structure used to show that a
+-- nonzero vector has nonzero squared norm.
 open scoped ComplexOrder in
 /-- Symmetry up to a phase of a block-diagonal tensor whose blocks jointly span at one site
 has phases that are powers of one unimodular scalar: the summed word traces of the blocks
