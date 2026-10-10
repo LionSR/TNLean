@@ -373,8 +373,9 @@ change the local dimension act on single sites.
     blocked ring by fewer than $2q^2$ nearest-neighbour gates on the original
     ring, a compilation not carried out here
     \cite{gap:psc21_local_channel_phase_scope}. The blocking factor $k$ is
-    part of the relation: blocking the whole ring into one site would make
-    every conversion possible in depth $0$.
+    part of the relation, and it is positive: blocking the whole ring into one
+    site would make every conversion between density matrices possible in
+    depth $0$.
 \end{definition}
 
 \begin{lemma}[Blocking is a channel that transports supports]
@@ -426,7 +427,7 @@ change the local dimension act on single sites.
     $\sigma$. A conversion in depth $T'$ of $\sigma$ on the
     blocked ring gives a conversion of $\rho$ in depth $T+T'$ after blocking,
     $\sigma=\Psi(\rho)$ for a channel $\Psi$, and $\sigma$ is a density
-    matrix when $\rho$ is. If $d,k\ge1$, there is a map $\Psi^\dagger$ with
+    matrix when $\rho$ is. If $d\ge1$, there is a map $\Psi^\dagger$ with
     $\Tr(\sigma A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting on a
     set $X$ of blocks to operators acting on the sites within distance $kT$
     of the sites of $X$, and that is multiplicative on operators acting on

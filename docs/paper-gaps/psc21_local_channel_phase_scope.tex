@@ -83,8 +83,9 @@ depth at most $T$ on the chain of blocks.\footnote{Formal declaration:
     \leanid{QuantumCircuit.IsBlockedLocalChannelConversion} in
     \doclink{TNLean/Circuit/Channel/SiteBlocking}.}
 The blocking factor $k$ is part of the relation: blocking the whole chain
-into one site and applying an onsite channel there would convert every
-operator into every other one at depth zero. Locality is transported by
+into one site and applying a replacement channel there would convert every
+density matrix into every other one at depth zero. As in the source, the
+blocking factor is positive. Locality is transported by
 rescaling: the dual of such a conversion maps an operator acting on a set
 $X$ of blocks to an operator acting within distance $kT$ of the sites of
 $X$ in the original chain.

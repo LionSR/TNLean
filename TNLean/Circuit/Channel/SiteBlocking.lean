@@ -25,8 +25,9 @@ matrix `ρ` on `M * k` sites into a matrix `σ` on `M` sites blocks the sites `k
 then runs a local channel protocol of depth at most `T` on the blocked chain. The blocking
 factor `k` is part of the relation, through the two chain lengths. It cannot be absorbed into
 a depth-`0` protocol step on chains of arbitrary length: blocking the whole chain into one
-site (`M = 1`) and applying an onsite channel there would convert every matrix into every
-other one in depth `0`.
+site (`M = 1`) and applying a replacement channel there would convert every density matrix
+into every other one in depth `0`. The blocking factor is positive, as in the source, where
+blocks consist of `q ≥ 1` sites.
 
 Locality is transported across the blocking step by rescaling distances by `k`. The dual of
 a depth-`T` protocol after blocking maps an operator acting on the blocks `X` to an operator
@@ -289,20 +290,21 @@ theorem IsLocalChannelProtocol.exists_dual_comp_blockSites [NeZero M] [NeZero d]
 
 /-- A matrix `ρ` on `M * k` sites of local dimension `d` is *converted in depth `T` after
 blocking `k` sites* into a matrix `σ` on `M` sites of local dimension `e` when the blocked
-matrix, on `M` sites of local dimension `d ^ k`, is converted in depth `T` into `σ`.
+matrix, on `M` sites of local dimension `d ^ k`, is converted in depth `T` into `σ`. The
+blocking factor `k` is positive.
 
 Source: arXiv:2103.13367v3, `main.tex`, lines 287–289 (blocking `q` neighbouring sites, then
 operating on the blocked chain), in the enlarged-site local-channel model of
 `docs/paper-gaps/psc21_local_channel_phase_scope.tex`, where a layer on the blocked chain
 costs one depth unit. -/
-def IsBlockedLocalChannelConversion [NeZero M] (k T : ℕ)
+def IsBlockedLocalChannelConversion [NeZero M] (k : ℕ) [NeZero k] (T : ℕ)
     (ρ : Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ)
     (σ : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ) : Prop :=
   IsLocalChannelConversion T (blockSites M k d ρ) σ
 
 namespace IsBlockedLocalChannelConversion
 
-variable [NeZero M] {e' : ℕ}
+variable [NeZero M] [NeZero k] {e' : ℕ}
 
 /-- Blocking converts a matrix into its blocked form in depth `0`. -/
 theorem blockSites (ρ : Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ) :
@@ -353,7 +355,7 @@ of the sites of `X`, and that is multiplicative on operators acting on sets of b
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the light cone of a
 depth-`T` circuit), on the blocked chain of arXiv:2103.13367v3, `main.tex`, lines 287–289,
 with distances rescaled by the blocking factor. -/
-theorem exists_dual [NeZero k] [NeZero d] {T : ℕ}
+theorem exists_dual [NeZero d] {T : ℕ}
     {ρ : Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ}
     {σ : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ}
     (h : IsBlockedLocalChannelConversion k T ρ σ) :
@@ -386,7 +388,7 @@ larger than `2T`, `tr(σ AB) = tr(σ A) tr(σ B)`.
 
 Source: arXiv:2103.13367v3, `main.tex`, Proposition `propQCA2`, eq. `eq:necessary_condition`,
 on the blocked chain of lines 287–289. -/
-theorem trace_mul_mul_eq_of_isBlockedLocalChannelConversion [NeZero M] {T : ℕ}
+theorem trace_mul_mul_eq_of_isBlockedLocalChannelConversion [NeZero M] [NeZero k] {T : ℕ}
     {σ₀ : Fin (M * k) → Matrix (Fin d) (Fin d) ℂ} (hσ₀ : ∀ i, trace (σ₀ i) = 1)
     {σ : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ}
     (h : IsBlockedLocalChannelConversion k T (finKronecker σ₀) σ)
