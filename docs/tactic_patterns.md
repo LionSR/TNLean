@@ -1425,7 +1425,24 @@ three-plaquette output measurement, and the routed reunion measurement.
   unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
   claimed that every call site had been refactored, which was wrong for the nine sites listed
   above; those were refactored on 2026-09-19, after which the claim holds.  A site loses
-  between three and nine lines.
+  between three and nine lines.  A second spelling of the same argument, rewriting the
+  goal with `(Matrix.stdBasis ℂ _ _).span_eq` and `Submodule.span_le`, survived in four
+  `TNLean/MPS/MPDO/` files (`RescalingStableExplicitVerticalBNT`,
+  `RescalingStableLengthDependentRFPCanonicalForm`, `TwistedDimerHorizontalCF`,
+  `TwistedDimerVerticalCF`); those were refactored on 2026-10-10.
+
+### cancelling a nonzero scalar in a submodule membership — rejected (Mathlib)
+- **Pattern:**
+  ```lean
+  have h' := Submodule.smul_mem _ c⁻¹ hmem
+  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h'
+  ```
+- **Seen:** eight occurrences across seven files (2026-10-10): `Examples/AKLT.lean` (twice),
+  `Examples/MultiBlock/OneSlotGauge.lean`, `FundamentalTheorem/Reduction/RingEmbedding.lean`,
+  and the four `TNLean/MPS/MPDO/` injectivity proofs listed in the previous entry.
+- **Abstraction:** none needed: Mathlib's `Submodule.smul_mem_iff (p) (hc : c ≠ 0)` states
+  `c • x ∈ p ↔ x ∈ p`; write `(Submodule.smul_mem_iff _ hc).mp hmem`.  All eight sites
+  were rewritten that way on 2026-10-10.
 
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
