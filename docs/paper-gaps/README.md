@@ -82,12 +82,14 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
-- `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction) records
-  that preservation of an on-site symmetry along the isometric deformation of
-  arXiv:1010.3732 is derived from exact symmetry of the matrix product
-  vectors, both for a single injective block and for several jointly injective
-  blocks in the printed standard form, where the symmetry permutes the blocks;
-  invariance only up to a phase remains open.
+- `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction, resolved)
+  records that preservation of an on-site symmetry along the isometric
+  deformation of arXiv:1010.3732 was first derived from exact symmetry of the
+  matrix product vectors. Comparing summed word traces of lengths one, two and
+  three shows that the phases of a symmetry up to a phase are powers `c^N` of
+  one unimodular scalar, and rescaling by `c̄` reduces to the exact case, so
+  the derivation now holds for one or several jointly injective blocks in the
+  printed standard form under symmetry up to a phase.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
