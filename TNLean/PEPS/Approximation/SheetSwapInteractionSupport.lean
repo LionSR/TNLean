@@ -41,6 +41,10 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_inter
       Finset.inter_subset_left
   have hunit : (sheetSwapOp q (R ∩ S))ᴴ * sheetSwapOp q (R ∩ S) = 1 :=
     Matrix.mem_unitaryGroup_iff'.mp (sheetSwap q (R ∩ S)).permMatrix_mem_unitaryGroup
+  have hR : sheetSwapOp q R =
+      (sheetSwapOp q (R ∩ S))ᴴ * sheetSwapOp q (R \ S) := by
+    simpa only [← Matrix.mul_assoc, hunit, Matrix.one_mul] using
+      congrArg (fun X ↦ (sheetSwapOp q (R ∩ S))ᴴ * X) hcomp
   done
 
 end TNLean.PEPS.EncodedFrame
