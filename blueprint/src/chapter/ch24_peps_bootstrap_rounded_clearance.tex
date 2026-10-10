@@ -8,6 +8,7 @@ numerical estimates supply a sufficient clearance budget.
 \begin{theorem}[A rounded sublinear collar is at most half the side length]
     \label{thm:area_law_rounded_collar_half}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_two_mul_floor_rpow_ceil_mul_le}
+    \leanok
     Let $C_2>0$ and $0<\eta<1$ be real numbers. There is an integer
     $N\in\mathbb N$, depending only on $C_2$ and $\eta$, such that for
     every $s\in\mathbb N$ with $s\ge N$, on setting
@@ -16,7 +17,7 @@ numerical estimates supply a sufficient clearance budget.
         2L_s\le s.
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Since $1-\eta>0$, choose $N\ge1$ such that
     $s^{1-\eta}\ge2(C_2+1)^\eta$ for every integer $s\ge N$.
     The ceiling bound gives $n_s<C_2s+1\le(C_2+1)s$, and hence
@@ -31,12 +32,13 @@ numerical estimates supply a sufficient clearance budget.
 \begin{theorem}[A scalar budget for collar clearance]
     \label{thm:area_law_collar_scalar_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le}
+    \leanok
     Let $D_0,L,s\in\mathbb N$ satisfy $D_0\ge1$ and $2L\le s$. Then
     \begin{align}
         D_0L+L\le D_0s.
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Multiplication by $L\ge0$ gives $L\le D_0L$. Therefore
     \begin{align}
         D_0L+L\le D_0L+D_0L=D_0(2L)\le D_0s.
