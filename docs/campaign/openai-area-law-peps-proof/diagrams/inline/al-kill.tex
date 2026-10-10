@@ -1,0 +1,8 @@
+% alt: The constraint k_i acting on its ball applied to Omega gives zero.
+% Area law, eq:quasilocal-positive (03-quasilocal.tex, line 231): k_i Omega = 0.
+\begin{tenkz}[size=l, rows={wire,wire}, cols=3, bonds=none]
+  \tn[at=(2,1), skin=box, wide=3, name=o, ports={90@1:physical, 90@2:physical, 90@3:physical}]{\Omega}
+  \tn[at=(1,2), skin=box, name=k, ports={270:physical, 90:physical}]{k_i}
+  \tnwire{o.90@2}{k.270}
+\end{tenkz}
+=0

@@ -7,19 +7,75 @@ Writes OUT_DIR/index.html, a self-contained page whose only external requests
 are Google Fonts, and OUT_DIR/data.json, the snapshot with the campaign's
 configuration and gap summaries merged in.
 
-CAMPAIGN_DIR provides config.json, gaps.json and intro.html; the page shell,
+CAMPAIGN_DIR provides config.json, gaps.json, and optionally intro.html,
+figures.js (the stage figures named in config.json) and the tensor-network
+diagrams under diagrams/ that stages name, which are inlined as data URIs and
+are compiled by build_diagrams.py; the page shell,
 stylesheet and script are shared by every campaign and live next to this file.
 """
 from __future__ import annotations
 
+import base64
 import html
 import json
 import pathlib
+import re
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WORKFLOW = ".github/workflows/campaign-board.yml"
+
+
+DIAGRAM_SLOT = re.compile(r"\{\{DIAGRAM:([^}]+)\}\}")
+INLINE_SLOT = re.compile(r"\{\{tn:([A-Za-z0-9_-]+)\}\}")
+
+
+ALT_LINE = re.compile(r"^% alt: (.+)$", re.MULTILINE)
+
+
+def diagram(campaign_dir: pathlib.Path, path: str) -> dict:
+    """One compiled diagram as a data URI with its natural width in points.
+
+    The alternative text is the `% alt:` line of the diagram's source, if any.
+    """
+    svg_path = campaign_dir / path
+    svg = svg_path.read_bytes()
+    width = re.search(rb'<svg[^>]*\bwidth="([0-9.]+)', svg)
+    source = svg_path.with_suffix(".tex")
+    alt = ALT_LINE.search(source.read_text()) if source.exists() else None
+    return {
+        "src": "data:image/svg+xml;base64," + base64.b64encode(svg).decode("ascii"),
+        "width": float(width.group(1)) if width else None,
+        "alt": alt.group(1).strip() if alt else "",
+    }
+
+
+def diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
+    """Inline every diagram a stage names, keyed by its path."""
+    return {d["src"]: diagram(campaign_dir, d["src"])
+            for route in config["routes"] for stage in route["stages"]
+            for d in stage.get("diagrams", [])}
+
+
+def inline_diagrams(campaign_dir: pathlib.Path, *texts: dict) -> dict:
+    """Inline every {{tn:name}} equation the given configuration and gap texts use, keyed by name."""
+    names = {name for text in texts for name in INLINE_SLOT.findall(json.dumps(text, ensure_ascii=False))}
+    return {name: diagram(campaign_dir, f"diagrams/inline/{name}.svg") for name in sorted(names)}
+
+
+def intro_html(campaign_dir: pathlib.Path) -> str:
+    """The campaign introduction, with each {{DIAGRAM:path}} slot replaced by its image."""
+    intro = campaign_dir / "intro.html"
+    if not intro.exists():
+        return ""
+
+    def image(m: re.Match) -> str:
+        d = diagram(campaign_dir, m.group(1))
+        width = f' width="{round(d["width"] * 2.4)}"' if d["width"] else ""
+        return f'<img class="tnimg" src="{d["src"]}"{width} alt="{html.escape(d["alt"])}">'
+
+    return DIAGRAM_SLOT.sub(image, intro.read_text())
 
 
 def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pathlib.Path) -> pathlib.Path:
@@ -29,17 +85,21 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
     primary = next(r for r in config["repos"] if r.get("primary"))
     blob_url = f"https://github.com/{primary['slug']}/blob/main/"
     gaps_rel = gaps_path.resolve().relative_to(ROOT).as_posix()
+    data["diagrams"] = diagrams(campaign_dir, config)
+    gaps = json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []}
+    data["inlineDiagrams"] = inline_diagrams(campaign_dir, config, gaps)
     data.update({
         "config": config,
-        "gaps": json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []},
+        "gaps": gaps,
         "meta": {"workflowUrl": blob_url + WORKFLOW, "gapsPath": gaps_rel, "gapsUrl": blob_url + gaps_rel},
     })
-    intro = campaign_dir / "intro.html"
+    figures = campaign_dir / "figures.js"
     replacements = {
         "{{TITLE}}": html.escape(config["pageTitle"]),
         "{{DESCRIPTION}}": html.escape(config.get("description", "")),
         "{{CSS}}": (HERE / "board.css").read_text(),
-        "{{INTRO}}": intro.read_text() if intro.exists() else "",
+        "{{INTRO}}": intro_html(campaign_dir),
+        "{{FIGURES}}": figures.read_text() if figures.exists() else "",
         "{{JS}}": (HERE / "board.js").read_text(),
         # Inline JSON must not close the surrounding <script> element.
         "{{DATA}}": json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/"),
