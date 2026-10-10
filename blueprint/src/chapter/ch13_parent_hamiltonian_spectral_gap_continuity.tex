@@ -891,7 +891,7 @@ is recorded in
     \cite[lines~672--676]{Schuch2011Phases}. The original local-space
     invariance and commutation of $Q$ are explicit hypotheses here.
     Theorem~\ref{thm:block_isometric_deformation_parent_symmetry} derives
-    both from exact state symmetry of jointly injective blocks in the
+    both from symmetry up to a phase of jointly injective blocks in the
     source's standard form.
 \end{theorem}
 
@@ -982,9 +982,9 @@ is recorded in
     $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ in
     \cite[line~653]{Schuch2011Phases}. These conclusions cover the
     already-blocked single injective block with exact vector symmetry.
-    Ray symmetry remains separate; see
-    \cite{gap:spc11_isometric_symmetry_unitary_virtual}. Several blocks are
-    treated in Theorem~\ref{thm:block_isometric_deformation_covariance}.
+    Symmetry up to a phase, for one or several blocks, is treated in
+    Theorem~\ref{thm:block_isometric_deformation_covariance}; see
+    \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
 \end{theorem}
 
 \begin{proof}
@@ -1119,20 +1119,89 @@ is recorded in
     by bilinearity, on the whole algebra.
 \end{proof}
 
+\begin{definition}[On-site symmetry up to a phase]
+    \label{def:on_site_symmetric_up_to_phase}
+    \lean{MPSTensor.IsOnSiteSymmetricUpToPhase,
+        MPSTensor.IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase}
+    \leanok
+    \uses{def:twisted_tensor, def:mpv}
+    Let $g\mapsto U_g$ be a linear representation of a monoid on the physical
+    space. A tensor $A$ is on-site symmetric up to a phase if for every $g$
+    and every chain length $N$ there is a scalar $\lambda_{g,N}$ with
+    $U_g^{\otimes N}\ket{\psi_N}=\lambda_{g,N}\ket{\psi_N}$, where
+    $\ket{\psi_N}$ is the matrix product vector of $A$ of length $N$. The
+    scalars may depend on both $g$ and $N$. Exact on-site symmetry is the
+    case $\lambda_{g,N}=1$. This is the symmetry of the state in
+    \cite[lines~655--657, 2590--2593]{Schuch2011Phases}.
+\end{definition}
+
+\begin{lemma}[Phases of a symmetry up to a phase]
+    \label{lem:block_symmetry_phase_power}
+    \lean{MPSTensor.map_list_prod_eq_pow_mul_of_length_three,
+        MPSTensor.exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul}
+    \leanok
+    Let $\phi$ be a linear functional on a complex algebra $\mathcal A$ with
+    $\phi(1)\neq0$ such that $\phi(MN)=0$ for all $N$ forces $M=0$, and let
+    $(x_i)_i$ and $(y_i)_i$ be finite families spanning $\mathcal A$. If
+    $\phi(y_w)=c_n\phi(x_w)$ for every word $w$ of length $n\in\{1,2,3\}$,
+    where $x_w$ and $y_w$ denote the ordered products along $w$, then
+    $\phi(y_w)=c_1^{|w|}\phi(x_w)$ for every word $w$.
+
+    Consequently, let $A^1,\dots,A^r$ be blocks of positive bond dimensions
+    whose one-site tuples span $\bigoplus_k\MN{D_k}$, let $g\mapsto U_g$ be a
+    unitary representation of a monoid, and suppose that for every $g$ and
+    $N$ there is a scalar $\lambda_{g,N}$ with
+    $U_g^{\otimes N}\ket{\psi_N}=\lambda_{g,N}\ket{\psi_N}$ for the matrix
+    product vectors $\ket{\psi_N}$ of $\bigoplus_kA^k$. Then for each $g$
+    there is $c$ with $|c|=1$ such that
+    $\sum_k\tr B^k_w=c^{|w|}\sum_k\tr A^k_w$ for every word $w$, where
+    $B^k_i=\sum_l(U_g)_{il}A^k_l$. Exact symmetry is the case
+    $\lambda_{g,N}=1$.
+    A symmetry of the state holds only up to such a phase
+    \cite[lines~1313--1314, 2590--2593]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}
+    \uses{def:on_site_symmetric_up_to_phase}
+    \leanok
+    Nondegeneracy against the spanning family $(y_i)$ makes $x_i\mapsto y_i$
+    a well-defined linear map $L$: if $\sum_ia_ix_i=0$, then
+    $\phi\bigl((\sum_ia_iy_i)y_j\bigr)=c_2\phi\bigl((\sum_ia_ix_i)x_j\bigr)=0$
+    for every $j$. By multilinearity,
+    $\phi(LX)=c_1\phi(X)$, $\phi(LX\,LY)=c_2\phi(XY)$ and
+    $\phi(LX\,LY\,LZ)=c_3\phi(XYZ)$ for all $X,Y,Z$. The map $L$ is onto, so
+    pairing against $LZ$ gives $LX\,LY=L(XY)L(1)$ and $c_1L(1)=c_2\cdot1$.
+    Since $\phi(1)\neq0$ lies in the image of $\phi\circ L=c_1\phi$, we have
+    $c_1\neq0$; applying $\phi$ to $c_1L(1)=c_2\cdot1$ gives $c_2=c_1^2$,
+    hence $L(1)=c_1\cdot1$ and $LX\,LY=c_1L(XY)$. Induction on the word
+    gives $y_w\,L(1)=c_1^{|w|}L(x_w)$, and applying $\phi$ proves the first
+    claim.
+
+    For the blocks take $\phi(M)=\sum_k\tr M_k$, $x_i=(A^k_i)_k$ and
+    $y_i=(B^k_i)_k$; the latter span because $U_g$ is invertible, and the
+    trace pairing on $\bigoplus_k\MN{D_k}$ is nondegenerate with
+    $\phi(1)=\sum_kD_k\neq0$ (if $r=0$ there is nothing to prove). The
+    hypothesis at lengths one, two and three gives the three relations, so
+    $c=\lambda_{g,1}$ works. At length one the nonzero vector
+    $v_i=\phi(x_i)$ satisfies $U_gv=cv$, and unitarity of $U_g$ gives
+    $|c|=1$.
+\end{proof}
+
 \begin{theorem}[An on-site symmetry permutes normal blocks]
     \label{thm:block_isometric_deformation_symmetry_permutation}
-    \lean{MPSTensor.exists_perm_gauge_rotatePhysical_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.exists_perm_unitary_rotatePhysical_of_isOnSiteSymmetric_blockSum}
+    \lean{MPSTensor.exists_perm_gauge_rotatePhysical_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.exists_perm_unitary_rotatePhysical_of_isOnSiteSymmetricUpToPhase}
     \leanok
     Let $A^1,\dots,A^r$ be blocks of positive bond dimensions $D_k$ whose
     one-site tuples $(A^k_i)_k$ span $\bigoplus_k\MN{D_k}$. Let
     $g\mapsto U_g$ be a unitary representation of a monoid on the physical
-    space, and suppose that $U_g^{\otimes N}$ fixes every matrix product
-    vector of the block-diagonal tensor $\bigoplus_kA^k$. Then for each $g$
-    there are a permutation $\sigma$ of the blocks with
-    $D_{\sigma(k)}=D_k$ and invertible matrices $X_k$ such that
+    space, and suppose that $U_g^{\otimes N}$ maps every matrix product
+    vector $\ket{\psi_N}$ of the block-diagonal tensor $\bigoplus_kA^k$ to a
+    scalar multiple $\lambda_{g,N}\ket{\psi_N}$. Then for each $g$
+    there are a scalar $c$ with $|c|=1$, a permutation $\sigma$ of the blocks
+    with $D_{\sigma(k)}=D_k$ and invertible matrices $X_k$ such that
     \begin{align*}
-        \sum_l(U_g)_{il}A^{\sigma(k)}_l=X_kA^k_iX_k^{-1}
+        \sum_l(U_g)_{il}A^{\sigma(k)}_l=c\,X_kA^k_iX_k^{-1}
     \end{align*}
     for every block $k$ and letter $i$. If in addition every block
     satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, the matrices $X_k$ may be
@@ -1143,13 +1212,14 @@ is recorded in
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:block_word_trace_algebra_automorphism,thm:pi_auto_decomp,thm:physical_action_joint_span_compact_gap,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical}
+    \uses{lem:block_symmetry_phase_power,lem:block_word_trace_algebra_automorphism,thm:pi_auto_decomp,thm:physical_action_joint_span_compact_gap,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical}
     \leanok
-    Exact symmetry of the matrix product vectors equates every word trace
-    of $\bigoplus_kA^k$ with that of its twist, so the summed block traces
-    of $(A^k)_k$ and of the twisted blocks agree on every word. The
-    twisted blocks still span jointly at one site, because $U_g$ is
-    invertible. Lemma~\ref{lem:block_word_trace_algebra_automorphism}
+    By Lemma~\ref{lem:block_symmetry_phase_power} there is $c$ with $|c|=1$
+    such that the summed block traces of the blocks twisted by $U_g$ are
+    $c^{|w|}$ times those of $(A^k)_k$. Hence the summed block traces of
+    $(A^k)_k$ and of the blocks twisted by the unitary $\bar cU_g$ agree on
+    every word. These twisted blocks still span jointly at one site,
+    because $\bar cU_g$ is invertible. Lemma~\ref{lem:block_word_trace_algebra_automorphism}
     gives an algebra automorphism sending the one-site tuples of the
     original blocks to those of the twisted blocks, and
     Theorem~\ref{thm:pi_auto_decomp} decomposes it as a block
@@ -1157,14 +1227,15 @@ is recorded in
     trace-preserving normalization each block is injective, hence
     irreducible, and unitary physical rotation preserves both
     irreducibility and the normalization. The unitary replacement lemma
-    then makes each conjugating matrix unitary.
+    then makes each conjugating matrix unitary. Multiplying by $c$ returns
+    to the twist by $U_g$.
 \end{proof}
 
 \begin{theorem}[Derived polar covariance for several normal blocks]
     \label{thm:block_isometric_deformation_covariance}
-    \lean{MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetric_blockSum}
+    \lean{MPSTensor.exists_blockPhysicalMatrix_unitary_covariance_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of
     Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
@@ -1178,34 +1249,35 @@ is recorded in
     $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ of
     \cite[line~653]{Schuch2011Phases}, and the conclusion is the
     covariance $U_gP=PX_g$ of \cite[lines~652--660]{Schuch2011Phases}
-    for several blocks. The symmetry is exact on the matrix product
-    vectors; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
+    for several blocks, under symmetry of the matrix product vectors up to
+    a phase; see \cite{gap:spc11_isometric_symmetry_unitary_virtual}.
 \end{theorem}
 
 \begin{proof}
     \uses{thm:block_isometric_deformation_symmetry_permutation,thm:parent_polar_unitary_covariance,thm:isometric_deformation_unitary_covariance}
     \leanok
-    Let $\sigma$ and the unitaries $V_k$ be as in
+    Let $c$, $\sigma$ and the unitaries $V_k$ be as in
     Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation}.
-    Define $X_g$ by sending the matrix coordinates of block $k$ through
+    Define $X'_g$ by sending the matrix coordinates of block $k$ through
     $V_k^T\otimes V_k^\dagger$ and then to the coordinates of block
     $\sigma(k)$. It is the product of a block-diagonal unitary and a
     permutation of coordinates, hence unitary. Column $(\sigma(k),a,b)$
-    of $U_gP$ is the $(a,b)$ entry of the twisted block $\sigma(k)$,
-    which equals $(V_kA^k_iV_k^\dagger)(a,b)$; this is the corresponding
-    column of $PX_g$. The polar and affine covariance theorems give the
+    of $\bar cU_gP$ is the $(a,b)$ entry of block $\sigma(k)$ twisted by
+    $\bar cU_g$, which equals $(V_kA^k_iV_k^\dagger)(a,b)$; this is the
+    corresponding column of $PX'_g$. Hence $X_g=cX'_g$ is unitary and
+    satisfies $U_gP=PX_g$. The polar and affine covariance theorems give the
     remaining conclusions.
 \end{proof}
 
 \begin{theorem}[Derived parent symmetry for several normal blocks]
     \label{thm:block_isometric_deformation_parent_symmetry}
-    \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetric,
-        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_blockSum,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric_blockSum}
+    \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of
     Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
@@ -1220,8 +1292,8 @@ is recorded in
     commute with $U_g^{\otimes2}$, and their open and periodic sums
     commute with $U_g^{\otimes N}$ for every $N\geq2$. This is the
     parent-symmetry conclusion of \cite[lines~672--676]{Schuch2011Phases}
-    for several blocks in the printed standard form, for exact symmetry
-    of the matrix product vectors.
+    for several blocks in the printed standard form, for symmetry of the
+    matrix product vectors up to a phase.
 \end{theorem}
 
 \begin{proof}
@@ -1231,9 +1303,10 @@ is recorded in
     local spaces of its blocks. The physical action carries it to the sum
     of the local spaces of the twisted blocks. By
     Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
-    the twist of block $\sigma(k)$ is gauge equivalent to block $k$, and
-    gauge equivalence preserves local spaces, so the permuted sum is the
-    original one. Together with $[U_g,Q]=0$ from
+    the twist of block $\sigma(k)$ by $\bar cU_g$ is gauge equivalent to
+    block $k$, and gauge equivalence preserves local spaces, so the permuted
+    sum is the original one. The action of $U_g^{\otimes L}$ is $c^L\neq0$
+    times that of $(\bar cU_g)^{\otimes L}$ and has the same image. Together with $[U_g,Q]=0$ from
     Theorem~\ref{thm:block_isometric_deformation_covariance}, the
     supplied-invariance parent-symmetry theorem gives the remaining
     conclusions.

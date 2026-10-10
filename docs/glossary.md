@@ -2379,6 +2379,26 @@ in `MPS/Preparation/` uses it.
   restriction of `H²(G, ℂˣ)`; that coarser relation is not formalized. See
   `docs/paper-gaps/glm23_eq20_fusion_gauge.tex`.
 
+### `MPSTensor.IsOnSiteSymmetricUpToPhase`
+
+- **Declaration:** `MPSTensor.IsOnSiteSymmetricUpToPhase A U : Prop`, for a tensor
+  `A : MPSTensor d D` and an on-site representation `U : G →* Matrix (Fin d) (Fin d) ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/Defs.lean`.
+- **Meaning:** for every $g$ and chain length $N$ there is a scalar
+  $\lambda_{g,N}$ with $U_g^{\otimes N}|\psi_N\rangle=\lambda_{g,N}|\psi_N\rangle$; the
+  scalars may depend on both $g$ and $N$, and no relation between them is assumed.
+- **Source:** arXiv:1010.3732, `Papers/1010.3732/paper_v3.tex`, lines 655–657 (a
+  symmetry $U_g^{\otimes N}$ of the MPS), 1313–1314 and 2590–2593 (an MPS with a
+  $U_g$-invariant parent Hamiltonian is invariant under $U_g$ up to a phase).
+- **Sanctioned bridges:** `MPSTensor.IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase`
+  (exact symmetry is symmetry with the trivial phase) and
+  `MPSTensor.exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul`
+  (for unitary $U$ and blocks spanning jointly at one site, the phases are powers
+  $c^N$ of one scalar with $|c|=1$).
+- **Caveat:** the scalar is not required to be unimodular or nonzero; for a
+  unitary $U$ and a nonzero vector it is unimodular automatically, and results that
+  need this derive it.
+
 ## Fusion symmetries of matrix product operators
 
 The periodic-boundary layer of non-invertible matrix product operator symmetry.
