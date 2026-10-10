@@ -42,6 +42,42 @@ identifier, even when their union is disconnected.
     These definitions also allow empty interiors and empty fragments.
     In the geometric construction, $\ell=\ell_k$, $p=p_k$, and
     $a,b$ represent the selected residue classes modulo $s/t$.
+    In the picture below, with $s=4t$ and $r=2t$, the open pitch interiors
+    $U_j$ and $U_{j'}$, for $j'=j+(1,0)$, are separated by the strip of
+    width $t$ on their lower sides, and each scale-$r$ cell of the layer
+    contributes one closed fragment to the primary region of each pitch
+    interior it meets.
+    % Source: 10-geometry.tex, lines 212--249 and the figure
+    % geometry:layer-picture, lines 253--291 (D_k, pitch s_k, strips t_k).
+    % Specialization drawn: s = 4t, r = 2t, shifts a = b = 0; rows run with
+    % the second coordinate increasing upward, columns with the first.
+    % Ink-to-index: every dot is one closed fine square of side t. The orange
+    % tinted comb is the union of the strips [v_{j,i}, v_{j,i}+t] removed from
+    % each pitch square (lower and left sides). The red enclosures are the open
+    % pitch interiors U_j and U_{j'}. Each dashed square is one scale-r cell
+    % C_{k,z} of D_k that straddles a strip; the blue tinted sets are the
+    % fragments F_{j,z} = closure(C_{k,z} cap U_j), labelled by the region R_j
+    % or R_{j'} they belong to. The upper-left fragment of R_j is a whole cell
+    % whose dashed outline coincides with it and is omitted. Both labels R_j
+    % mark fragments of the single region R_j. Not to scale: the source has
+    % t << r << s. No strings, legs or contractions; empty boundary signature.
+    \begin{center}
+        \begin{tenkz}[size=s, rows={ket,ket,ket,ket}, cols=8, bonds=none]
+            \tndeclare{species}{belt}{hue=source:orange}
+            \tndeclare{species}{layer}{hue=source:blue}
+            \tnmark[form=enclosure, species=belt, tint]{(1,1) .. (4,8) - (1,2) .. (3,4) - (1,6) .. (3,8)}{}
+            \tnmark[form=enclosure, species=layer, tint]{(1,3) .. (2,4)}{}
+            \tnmark[form=enclosure, species=layer, tint]{(3,3) .. (3,4)}{}
+            \tnmark[form=enclosure, species=layer, tint]{(1,6) .. (2,6)}{}
+            \tnmark[form=enclosure, species=complement]{(3,3) .. (4,4)}{}
+            \tnmark[form=enclosure, species=complement]{(1,5) .. (2,6)}{}
+            \tnmark[form=enclosure, species=selected, label pos=n]{(1,2) .. (3,4)}{$U_j$}
+            \tnmark[form=enclosure, species=selected, label pos=n]{(1,6) .. (3,8)}{$U_{j'}$}
+            \tnmark[form=label, label pos=e]{midway (1,3) and (2,3)}{$R_j$}
+            \tnmark[form=label, label pos=s]{midway (3,3) and (3,4)}{$R_j$}
+            \tnmark[form=label, label pos=e]{midway (1,6) and (2,6)}{$R_{j'}$}
+        \end{tenkz}
+    \end{center}
 \end{definition}
 
 \begin{theorem}[Finite rectangular decomposition]
