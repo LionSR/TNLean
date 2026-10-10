@@ -207,7 +207,14 @@
   const CITE = /\{\{cite:([A-Za-z0-9_,-]+)\}\}/g;
   const REFS = D.references || {};
   const citeNo = new Map(), citedAt = new Map();
-  const shortRef = r => `${(r.authors || "").split(",")[0].replace(/ et al\.$/, "")}${/,| and | et al/.test(r.authors || "") ? " et al." : ""} ${r.year || ""}`.trim();
+  // "Lieb 1972", "Lieb and Robinson 1972", or "Bennett et al. 1993", from a list of initials and surnames.
+  const shortRef = r => {
+    const a = r.authors || "", names = a.replace(/ et al\.$/, "").split(/,| and /).map(n => n.trim()).filter(Boolean);
+    const surname = n => n.split(/\s+/).filter(w => !/\.$/.test(w)).join(" ") || n;
+    const who = names.length === 2 && !/et al\.$/.test(a) ? `${surname(names[0])} and ${surname(names[1])}`
+      : `${surname(names[0] || a)}${names.length > 2 || /et al\.$/.test(a) ? " et al." : ""}`;
+    return `${who} ${r.year || ""}`.trim();
+  };
   const cite = keys => {
     const nums = keys.filter(k => citeNo.has(k)).sort((a, b) => citeNo.get(a) - citeNo.get(b));
     return nums.length ? `<span class="cite">[${nums.map(k => `<a href="#ref-${k}" title="${esc(shortRef(REFS[k]) + ", " + (REFS[k].title || ""))}">${citeNo.get(k)}</a>`).join(", ")}]</span>` : "";
@@ -255,6 +262,9 @@
     : pending.length
       ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
       : "No open errors or missing steps in either paper.";
+  // Gap entries as the page shows them: open ones first, then by kind.
+  const GAP_ORDER = { error: 0, "missing-step": 1, narrower: 2, convention: 3 };
+  const gapsInOrder = () => [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || GAP_ORDER[a.kind] - GAP_ORDER[b.kind]);
   // Citations are numbered in reading order: the proof stages, then the gap entries.
   (function numberCitations() {
     const note = (text, anchor, label) => {
@@ -267,13 +277,13 @@
     };
     for (const route of C.routes) {
       const paper = route.paper ? (C.papers[route.paper] || {}).name : "Shared foundations";
-      note(route.intro, `stage-${route.id}-1`, paper);
+      note(route.intro, `route-${route.id}`, paper);
       route.stages.forEach((st, idx) => {
         const anchor = `stage-${route.id}-${idx + 1}`, label = `${paper}, stage ${idx + 1}`;
         for (const t of [st.physics, st.delivers, ...(st.diagrams || []).map(d => d.caption), st.caption]) note(t, anchor, label);
       });
     }
-    for (const g of G.entries) for (const t of [g.summary, g.context, g.claims, g.found, g.impact, g.plan]) note(t, gapAnchor(g), `Gap: ${g.title}`);
+    for (const g of gapsInOrder()) for (const t of [g.summary, g.context, g.claims, g.found, g.impact, g.plan]) note(t, gapAnchor(g), `Gap: ${g.title}`);
   })();
 
   /* ---------- references ---------- */
@@ -301,11 +311,10 @@
     $("gapsum").append(el("div", { class: "verdict", text: verdict }), counts);
     $("kinds").append(...Object.entries(GAP_KIND).map(([k, [name, desc]]) => el("div", {}, el("dt", {}, el("span", { class: "pill k-" + k, text: name })), el("dd", { text: desc }))));
 
-    const order = { error: 0, "missing-step": 1, narrower: 2, convention: 3 };
     // Open gaps are read first; resolved ones stay on record in a folded list after them.
     const resolvedList = el("div", { class: "gaplist" });
     const resolvedCount = G.entries.filter(g => !isOpenGap(g)).length;
-    for (const g of [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || order[a.kind] - order[b.kind])) {
+    for (const g of gapsInOrder()) {
       const list = isOpenGap(g) ? $("gaplist") : resolvedList;
       const note = noteFor(g);
       const [statusName, statusCls] = GAP_STATUS[g.status || "open"];
@@ -367,7 +376,7 @@
     const assigned = new Set();
     for (const route of C.routes) {
       const container = el("div", { class: "route" });
-      $("routes").append(el("section", { class: "part" },
+      $("routes").append(el("section", { class: "part", id: `route-${route.id}` },
         el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: tnText(route.intro) }) : null),
         container));
       route.stages.forEach((st, idx) => {

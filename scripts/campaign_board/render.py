@@ -66,15 +66,39 @@ def inline_diagrams(campaign_dir: pathlib.Path, *texts: dict) -> dict:
     return {name: diagram(campaign_dir, f"diagrams/inline/{name}.svg") for name in sorted(names)}
 
 
-def references(campaign_dir: pathlib.Path, *texts: dict) -> dict:
-    """The works cited by {{cite:Key,...}} tokens in the given texts, from references.json.
+GAP_TEXT_FIELDS = ("summary", "context", "claims", "found", "impact", "plan")
 
-    A token naming a key absent from references.json stops the render, as a missing
-    diagram does, so the page never shows a citation without its reference.
+
+def cited_texts(config: dict, gaps: dict) -> list[str]:
+    """The texts the page renders citations in: route introductions, stage prose and
+    captions, and the gap entries' prose fields."""
+    texts = []
+    for route in config["routes"]:
+        texts.append(route.get("intro", ""))
+        for stage in route["stages"]:
+            texts += [stage.get("physics", ""), stage.get("delivers", ""), stage.get("caption", "")]
+            texts += [d.get("caption", "") for d in stage.get("diagrams", [])]
+    for entry in gaps.get("entries", []):
+        texts += [entry.get(f, "") for f in GAP_TEXT_FIELDS]
+    return [t or "" for t in texts]
+
+
+def references(campaign_dir: pathlib.Path, config: dict, gaps: dict) -> dict:
+    """The works cited by {{cite:Key,...}} tokens in the page's texts, from references.json.
+
+    A token naming a key absent from references.json, or a token in a field the page
+    does not render citations in, stops the render, as a missing diagram does, so the
+    page never shows a citation without its reference or a raw token.
     """
     path = campaign_dir / "references.json"
     library = json.loads(path.read_text()) if path.exists() else {}
-    keys = {k for text in texts for m in CITE_SLOT.findall(json.dumps(text, ensure_ascii=False)) for k in m.split(",")}
+    texts = cited_texts(config, gaps)
+    rendered = sum(len(CITE_SLOT.findall(t)) for t in texts)
+    everywhere = len(CITE_SLOT.findall(json.dumps([config, gaps], ensure_ascii=False)))
+    if everywhere != rendered:
+        raise ValueError("{{cite:...}} tokens may appear only in route introductions, stage "
+                         "physics, delivers and captions, and gap prose fields")
+    keys = {k for text in texts for m in CITE_SLOT.findall(text) for k in m.split(",")}
     missing = sorted(keys - library.keys())
     if missing:
         raise KeyError(f"{path}: no entry for cited keys {', '.join(missing)}")
