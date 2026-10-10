@@ -139,6 +139,63 @@ not assumed.
     horizontally to the column of the anchor of its second party, then vertically
     to that anchor. The load of a unit edge of the padded square is the number of
     steps of all these walks that traverse it, counted with repetition.
+    On the padded square of side $N=8$, with $L=5$, the square, the rounded
+    marks and the blue dots below are the anchors of scales $3$, $2$ and $1$,
+    the arrow is one routed link from $P$ to $Q$, and the shaded square is
+    the genuine $L\times L$ square, onto which the fold $f$ of
+    Definition~\ref{def:peps_dyadic_fold} maps the endpoint $Q$.
+    % Source: arXiv OpenAI2026PolynomialPEPS, 07-assembly.tex, lines
+    % 101--160 (anchors eq. (anchors), proof of lem:routing); the source has
+    % no figure for this step.
+    % Ink-to-index: the drawing carries no tensor indices. Every dot is a
+    % point of the padded square {0,...,7}^2; cell (r,c) is the point
+    % (x,y)=(c-1,r-1), with y increasing downward on the page. Every point is
+    % a scale-zero anchor. The square marks the scale-3 anchor (4,4); the
+    % four rounded atoms mark the scale-2 anchors {2,6}^2; the blue dots mark
+    % the scale-1 anchors {1,3,5,7}^2.
+    % The directed string is one link from P=(2,2) (scale 2, block indices
+    % (0,0)) to Q=(7,5) (scale 1, block indices (3,2)): horizontal along the
+    % row y=2 of P to the column x=7 of Q, then vertical to Q. Its separation
+    % (5,3) is within c times either block side for c=3.
+    % The shaded enclosure is the genuine square {0,...,4}^2 (L=5). The fold
+    % f(x)=x for x<=4 and f(x)=8-x for x>=5 sends Q to f(Q)=(1,3), cell
+    % (4,2). The folded walk retraces itself (x: 2,3,4,3,2,1 on y=2, then
+    % y: 2,3,4,3 on x=1), so it is described here and not drawn.
+    % No physical or virtual legs; empty boundary signature.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,ket,ket}, cols=8,
+                bonds=none]
+            \tndeclare{species}{scale-one}{hue=source:blue}
+            \tndeclare{species}{route}{hue=source:green!50!black}
+            \tn[at=(5,5), skin=box]{}
+            \tn[at=(3,3), skin=ring, name=P, label pos=nw]{P}
+            \tn[at=(3,7), skin=ring]{}
+            \tn[at=(7,3), skin=ring]{}
+            \tn[at=(7,7), skin=ring]{}
+            \tn[at=(2,2), species=scale-one]{}
+            \tn[at=(2,4), species=scale-one]{}
+            \tn[at=(2,6), species=scale-one]{}
+            \tn[at=(2,8), species=scale-one]{}
+            \tn[at=(4,2), species=scale-one]{}
+            \tn[at=(4,4), species=scale-one]{}
+            \tn[at=(4,6), species=scale-one]{}
+            \tn[at=(4,8), species=scale-one]{}
+            \tn[at=(6,2), species=scale-one]{}
+            \tn[at=(6,4), species=scale-one]{}
+            \tn[at=(6,6), species=scale-one]{}
+            \tn[at=(6,8), species=scale-one, name=Q, label pos=e]{Q}
+            \tn[at=(8,2), species=scale-one]{}
+            \tn[at=(8,4), species=scale-one]{}
+            \tn[at=(8,6), species=scale-one]{}
+            \tn[at=(8,8), species=scale-one]{}
+            \tnwire[kind=string, species=route, route=orth, dir=to,
+                name=link, via={(3,8)}]{P}{Q}
+            \tnmark[form=label, label pos=s]{(4,2)}{$f(Q)$}
+            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
+            {(1,1) .. (5,5)}{$L\times L$}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{theorem}[Constant congestion on the padded square]

@@ -101,6 +101,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_assembly.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -214,6 +215,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_assembly.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -370,6 +372,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_region_coordinates.py'
+              - 'scripts/test_tenkz_peps_assembly.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -1623,6 +1626,10 @@ jobs:
         run: >
           python3 scripts/test_tenkz_region_coordinates.py
           --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
+
+      - name: Check PEPS assembly diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_assembly.py
 
       - name: Preserve regional coordinate diagrams for review
         if: success() && env.TEX_CHANGED == 'true'
