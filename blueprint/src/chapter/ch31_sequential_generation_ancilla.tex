@@ -1436,7 +1436,10 @@ representation, it is a general recipe for its sequential generation.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induction on $k$. Before $U^{[k]}$ acts, the chain is
+    Induction on $k$. For $k=1$, $U^{[1]}$ acts on sites $1$ and $2$ of
+    $\ket{0}^{\otimes N}$ and gives $U^{[1]}\ket{0,0}\otimes\ket{0}^{\otimes(N-2)}
+        =\ket{\chi_1}\otimes\ket{0}^{\otimes(N-2)}$. For $k\ge 2$, before
+    $U^{[k]}$ acts, the chain is
     $\sum_\alpha\chi_{k-1}(\dots,\alpha)\ket{\dots,\alpha}\otimes\ket{0}
         \otimes\ket{0}^{\otimes(N-k-1)}$, with $\alpha$ the value of site $k$ and
     site $k+1$ in $\ket{0}$. The operation $U^{[k]}$ acts on sites $k$ and
