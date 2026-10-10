@@ -17,8 +17,8 @@ padded charge choices at odd indices. Blank slots are retained.
 One application of finite-family transport chooses nonnegative common errors before
 all round indices, replica counts, supplied vectors, interpolation points and energy
 eigenvalues. The same actual band count and labelled augmented truncated Hamiltonian
-are used throughout. All geometric and analytic premises are derived from their
-existing producers. Physical and auxiliary dimensions are fixed before the errors;
+are used throughout. All geometric and analytic premises are derived from the
+existing lemmas. Physical and auxiliary dimensions are fixed before the errors;
 this is not a limit over systems whose dimensions grow with the replica count.
 
 Only the energy conclusion assumes a replica-energy eigenvector equation. At zero

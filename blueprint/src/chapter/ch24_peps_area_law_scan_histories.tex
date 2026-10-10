@@ -1749,6 +1749,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundChoice,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_induction}
+    \leanok
     \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
     For a fixed scanner with $m,M>0$, index its rounds by integers
     $0\le j<2nm$ and put $s_j=\lfloor j/2\rfloor$.
@@ -1777,6 +1778,7 @@ The following finite construction follows
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible}
+    \leanok
     \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
         def:al_scan_physical_dimension_cap}
     There exist universal real constants
@@ -1894,7 +1896,7 @@ The following finite construction follows
     No physical prevector or identification with a fixed physical ground
     energy is asserted.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,
         thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,
         thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,
