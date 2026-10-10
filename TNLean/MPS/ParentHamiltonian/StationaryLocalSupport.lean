@@ -10,17 +10,17 @@ import TNLean.MPS.Core.IsometricBondCompression
 /-!
 # Local supports of stationary generating data
 
-Let `A` be a tensor and let \(ρ ≥ 0\) be a nonzero stationary virtual matrix,
-\(∑ i, A i * ρ * (A i)ᴴ = ρ\). The matrix `ρ` need not be faithful. Its
-support projection `P` is invariant under the letters, so restricting the
-boundary matrices of `A` to the corner `P M_D P` gives a subspace of the
+Let \(A\) be a tensor and let \(\rho \ge 0\) be a nonzero stationary virtual matrix,
+\(\sum_i A_i \rho A_i^* = \rho\). The matrix \(\rho\) need not be faithful. Its
+support projection \(P\) is invariant under the letters, so restricting the
+boundary matrices of \(A\) to the corner \(P M_D P\) gives a subspace of the
 open-boundary space. This subspace is exactly the support of the finite
-local functionals determined by \((A, ρ)\): a square observable \(Xᴴ * X\) has
-zero expectation iff `X` annihilates it, and when `A` is left canonical the
+local functionals determined by \((A, \rho)\): a square observable \(X^* X\) has
+zero expectation iff \(X\) annihilates it, and when \(A\) is left canonical the
 representing finite densities have this subspace as their range.
 
-The proof compresses \((A, ρ)\) to faithful generating data on the support of
-`ρ` and applies the faithful support theorems. When `ρ` is faithful the
+The proof compresses \((A, \rho)\) to faithful generating data on the support of
+\(\rho\) and applies the faithful support theorems. When \(\rho\) is faithful the
 corner is the whole matrix algebra and the subspace is the full
 open-boundary space.
 
@@ -42,8 +42,8 @@ open scoped Matrix ComplexOrder
 namespace MPSTensor
 variable {d D E k : ℕ}
 
-/-- The open-boundary vectors of `A` on `L` sites whose boundary matrices lie in
-the corner `P M_D P`, as a subspace of the Euclidean configuration space.
+/-- The open-boundary vectors of \(A\) on \(L\) sites whose boundary matrices lie in
+the corner \(P M_D P\), as a subspace of the Euclidean configuration space.
 For a support projection this is the local support space of
 Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738. -/
 noncomputable def cornerGroundSpaceES (A : MPSTensor d D)
@@ -62,9 +62,9 @@ theorem cornerGroundSpaceES_one (A : MPSTensor d D) (L : ℕ) :
   rw [cornerGroundSpaceES, hTop, Submodule.map_top]
   rfl
 
-/-- Under an isometric letter intertwiner \(A i * V = V * B i\), the open-boundary
-space of `B` is the image of the corner \((V Vᴴ) M_D (V Vᴴ)\) under the boundary map
-of `A`. Source context: Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738,
+/-- Under an isometric letter intertwiner \(A_i V = V B_i\), the open-boundary
+space of \(B\) is the image of the corner \((V V^*) M_D (V V^*)\) under the boundary map
+of \(A\). Source context: Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738,
 the spanning vectors of the local support spaces. -/
 theorem groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner
     (A : MPSTensor d D) (B : MPSTensor d E)
@@ -96,10 +96,10 @@ theorem groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner
   rw [groundSpaceES, cornerGroundSpaceES,
     groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner A B V hV hInt L]
 
-/-- For a nonzero positive stationary virtual matrix `ρ`, which need not be
+/-- For a nonzero positive stationary virtual matrix \(\rho\), which need not be
 faithful, a square observable has zero insertion expectation iff its factor
 annihilates the open-boundary vectors with boundary matrices in the support
-corner of `ρ`. No tensor normalization is required.
+corner of \(\rho\). No tensor normalization is required.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738, the local
 support spaces of stationary generating data. -/
 theorem observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff_of_stationary
