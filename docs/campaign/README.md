@@ -77,7 +77,11 @@ says what is schematic.
 
 Tensor-network diagrams are written in [tenkz](https://github.com/LionSR/tenkz),
 the package the blueprint draws its diagrams with, so a tensor, bond or
-physical leg looks the same on the board as in the blueprint. Each
+physical leg looks the same on the board as in the blueprint. An argument that
+is a sequence of operations on a few registers (a time evolution, a product of
+contractions, a party's private maps) is written as a
+[quantikz](https://ctan.org/pkg/quantikz) circuit instead, read left to right;
+the build loads both packages. Each
 `diagrams/NAME.tex` holds one picture body. Compile them with
 
 ```bash
@@ -85,7 +89,7 @@ python3 scripts/fetch_tenkz.py
 python3 scripts/campaign_board/build_diagrams.py docs/campaign/openai-area-law-peps-proof
 ```
 
-which needs `xelatex` (with TikZ, `hobby` and `spath3`) and `pdftocairo`, and
+which needs `xelatex` (with TikZ, `hobby`, `spath3` and `quantikz`) and `pdftocairo`, and
 commit the resulting SVGs; the hourly job only inlines them.
 
 A sentence can carry its own diagram equation. Write `{{tn:NAME}}` in a stage's

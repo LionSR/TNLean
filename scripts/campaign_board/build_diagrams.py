@@ -3,11 +3,12 @@
 
     python3 scripts/campaign_board/build_diagrams.py CAMPAIGN_DIR
 
-Each CAMPAIGN_DIR/diagrams/NAME.tex holds one tenkz picture body, set as a
+Each CAMPAIGN_DIR/diagrams/NAME.tex holds one tenkz picture body, or a
+quantikz circuit for an argument that is a sequence of operations, set as a
 display. Each CAMPAIGN_DIR/diagrams/inline/NAME.tex holds a short equation
 set in running mathematics, so tenkz chooses its denser inline size class;
 the board places these inside sentences. Every source is compiled in a
-standalone document with the pinned tenkz package (fetch it
+standalone document with the pinned tenkz package and quantikz (fetch it
 with `python3 scripts/fetch_tenkz.py`) along the blueprint's route, xelatex
 to PDF and pdftocairo to SVG, and written to CAMPAIGN_DIR/diagrams/NAME.svg.
 The SVGs are committed, so the hourly board job needs no TeX installation;
@@ -27,6 +28,7 @@ TENKZ = ROOT / ".deps" / "tenkz" / "tex" / "tenkz"
 DOCUMENT = r"""\documentclass[varwidth,border=2pt]{standalone}
 \usepackage{amssymb,amsmath}
 \usepackage{tenkz}
+\usetikzlibrary{quantikz2}
 \begin{document}
 %s
 \end{document}

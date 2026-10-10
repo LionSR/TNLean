@@ -232,33 +232,6 @@ window.campaignFigures = (function () {
       text(svg, bx, base - 86, "Σ *d*_{j} ≤ *C L*^{c}");
     },
 
-    /* PEPS, stage 3: the three local moves, before and after. */
-    moves(svg) {
-      view(svg, 320, 108);
-      const sq = 34, y = 36;
-      const panel = (k, before, after, lab) => {
-        const x = 6 + k * 106;
-        before(x, y); text(svg, x + sq + 9, y + sq / 2 + 4, "→", "", "middle"); after(x + sq + 18, y);
-        text(svg, x + sq + 9, y + sq + 26, lab, "", "middle");
-      };
-      const own = (x, y, cls, name) => { rect(svg, x, y, sq, sq, cls, { "fill-opacity": 0.4 }); text(svg, x + sq / 2, y + sq / 2 + 4, name, "m t", "middle"); };
-      panel(0, (x, y) => own(x, y, "fa", "a"), (x, y) => own(x, y, "fl", "b"), "change owner");
-      panel(1, (x, y) => own(x, y, "fa", "a"), (x, y) => {
-        rect(svg, x, y, sq / 2, sq, "fa", { "fill-opacity": 0.4 }); rect(svg, x + sq / 2, y, sq / 2, sq, "fl", { "fill-opacity": 0.4 });
-        text(svg, x + sq / 4, y + sq / 2 + 4, "a", "m t", "middle"); text(svg, x + 3 * sq / 4, y + sq / 2 + 4, "b", "m t", "middle");
-      }, "birth or death");
-      const copies = (x, y, at) => {
-        for (const k of [1, 0]) {
-          const o = k * 7;
-          rect(svg, x + o, y - o + 7, sq - 7, sq - 7, "fs");
-          rect(svg, x + o, y - o + 7, sq - 7, sq - 7, "h");
-          if (k === at) rect(svg, x + o + 4, y - o + 11, 7, 7, "fc");
-        }
-      };
-      panel(2, (x, y) => copies(x, y, 1), (x, y) => copies(x, y, 0), "exchange copies");
-      text(svg, 160, 16, "each move costs error ≤ *L*^{−30}", "t", "middle");
-    },
-
     /* PEPS, stage 4: small multiples of the dyadic hierarchy. */
     dyadic(svg) {
       view(svg, 320, 118);

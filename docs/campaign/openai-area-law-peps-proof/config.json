@@ -114,6 +114,10 @@
           "caption": "Left: the spectrum of <i>H</i> as a rug, with the isolated ground energy and the gap. The filter vanishes at <i>E</i>₀ and is flat above the gap, so each piece annihilates Ω. Right: on a log scale the filter's Fourier tail falls below every power law, which keeps each piece quasi-local.",
           "diagrams": [
             {
+              "src": "diagrams/qc-filter.svg",
+              "caption": "Equation <i>eq:quasilocal-centered-filter</i>, read left to right. Each term <i>h<sub>i</sub></i> is evolved in time and averaged against <i>f</i>, whose Fourier transform χ has χ(0) = 1 and vanishes at every excited energy; subtracting its ground value gives <i>M<sub>i</sub></i> with <i>M<sub>i</sub></i>Ω = 0 and Σ<sub><i>i</i></sub><i>M<sub>i</sub></i> = <i>H</i> − <i>E</i><sub>0</sub>. The constraints are <i>k<sub>i</sub></i> = |<i>M<sub>i</sub></i>|/<i>c</i><sub>*</sub>."
+            },
+            {
               "src": "diagrams/truncation.svg",
               "caption": "Equation <i>eq:quasilocal-ce</i>: truncating an operator to a ball traces out everything outside (the loop) and puts back the normalized identity there."
             }
@@ -135,8 +139,8 @@
           "caption": "As the number <i>m</i> of copies grows, the log-norm per copy of the filtered vector settles at a combination of entropies (dashed). Comparing this limit with the energy spent is what bounds the conditional mutual information.",
           "diagrams": [
             {
-              "src": "diagrams/movement.svg",
-              "caption": "Lemma <i>lem:movement</i>, <i>eq:conditional-movement</i>. Filtering a piece <i>x</i> of a pure state θ through the <i>U</i> side and then the <i>P</i> side loses norm at the rate η = <i>I</i>(<i>x</i> : <i>F</i> | <i>U</i>) = <i>I</i>(<i>x</i> : <i>F</i> | <i>P</i>)."
+              "src": "diagrams/qc-movement.svg",
+              "caption": "Lemma <i>lem:movement</i>, <i>eq:conditional-movement</i>. Filtering a piece <i>x</i> of a pure state θ through the <i>U</i> side and then the <i>P</i> side loses norm at the rate η = <i>I</i>(<i>x</i> : <i>F</i> | <i>U</i>) = <i>I</i>(<i>x</i> : <i>F</i> | <i>P</i>). Read left to right: the first filter acts first."
             }
           ]
         },
@@ -160,7 +164,13 @@
           "physics": "Typical spectral subspaces give an operator that restores the target from an auxiliary reference. Localized products of the positive constraints suppress its excited part, and polar decomposition turns it into a unitary <i>U</i>′ acting only near the target: {{tn:al-restore}}. Because <i>U</i>′ never touches the reference <i>e</i>′ or the far region, the target ends up nearly independent of both.",
           "delivers": "Widening the collar by a sublinear amount makes the leaked information smaller than any fixed inverse power of <i>n</i>.",
           "figure": "amplify",
-          "caption": "Information leaked past the collar against its width, on a log scale. The scan leaves at most <i>C n</i><sup>1−ε</sup>. Widening the collar by a sublinear amount drives the leak below every fixed inverse power of <i>n</i>."
+          "caption": "Information leaked past the collar against its width, on a log scale. The scan leaves at most <i>C n</i><sup>1−ε</sup>. Widening the collar by a sublinear amount drives the leak below every fixed inverse power of <i>n</i>.",
+          "diagrams": [
+            {
+              "src": "diagrams/qc-constraints.svg",
+              "caption": "Section 9: run a rate-one Poisson clock at each constraint and multiply the contractions <i>G<sub>i</sub></i> = (<i>I</i> − <i>k<sub>i</sub></i>)<sup>1/2</sup> in the order the clocks ring. On average the product damps the squared norm of the excited part of any vector by e<sup>−<i>gt</i></sup> (<i>eq:amplification-excited-decay</i>); keeping only the events near <i>S</i><sub>0</sub>, with ball-truncated factors, makes it local."
+            }
+          ]
         },
         {
           "title": "Arrange regions so the entropies cancel",
@@ -214,15 +224,17 @@
           ],
           "physics": "The elementary operations change which party owns a region, create or retire a party, and exchange registers between two copies of the state. A birth consumes and re-emits one normalized pair source, {{tn:peps-pair}}, whose <i>T</i> half goes to the new party; everything else is a private map.",
           "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol.",
-          "figure": "moves",
-          "caption": "The three elementary moves, each drawn before and after: a region passes from party <i>a</i> to party <i>b</i>; a party splits off a new party or retires; a register (orange) moves between two copies of the state.",
           "diagrams": [
             {
-              "src": "diagrams/birth.svg",
-              "caption": "Lemma <i>lem:birth</i>, read bottom to top. The owner of <i>T</i> and <i>U</i> splits with <i>V</i>, consumes <i>s</i> on <i>T𝓑<sub>T</sub></i>, emits a fresh pair source |<i>s</i>⟩ whose <i>T</i> half belongs to the new party, and recombines with <i>V</i><sup>†</sup>. Error at most <i>L</i><sup>−30</sup>."
+              "src": "diagrams/qc-birth.svg",
+              "caption": "Lemma <i>lem:birth</i>, read left to right; the wire between <i>T</i> and <i>U</i> is 𝓑<sub><i>T</i></sub>, and <i>U</i> carries 𝓑<sub><i>E</i></sub> between <i>V</i> and <i>V</i><sup>†</sup>. The owner of <i>T</i> and <i>U</i> splits with <i>V</i>, consumes <i>s</i> on <i>T𝓑<sub>T</sub></i>, emits a fresh pair source |<i>s</i>⟩ whose <i>T</i> half belongs to the new party, and recombines with <i>V</i><sup>†</sup>. Error at most <i>L</i><sup>−30</sup>."
             },
             {
-              "src": "diagrams/rewrite.svg",
+              "src": "diagrams/qc-exchange.svg",
+              "caption": "Lemma <i>lem:exchange</i>, <i>eq:exchange-net-map</i>: two copies of the state exchange the region <i>T</i> using only private operations. Each copy splits its buffer with <i>V</i>, the <i>T</i> and 𝓑<sub><i>T</i></sub> factors are swapped between the copies, and <i>V</i><sup>†</sup> recombines. The product of the two split states is unchanged by the swap, so the error is at most 4<i>L</i><sup>−30</sup>."
+            },
+            {
+              "src": "diagrams/qc-rewrite.svg",
               "caption": "Lemma <i>lem:small-rewrite</i>: a small patch is re-encoded by <i>M</i> = <i>K</i><sub>new</sub><i>P<sub>m</sub></i>⋯<i>P</i><sub>1</sub><i>K</i><sub>old</sub><sup>†</sup>, with error at most (<i>m</i> + <i>r</i><sub>old</sub>)ε."
             }
           ]
