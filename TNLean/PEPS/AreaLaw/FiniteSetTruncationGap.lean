@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.TruncationRadius
-import QICLean.Analysis.PositiveGapUniqueness
 
 /-!
 # The truncated Hamiltonian keeps a unique gapped ground vector
