@@ -67,6 +67,34 @@ on an arbitrarily enlarged local space does not by itself give a
 uniform-depth simulation in that convention. No such simulation or
 inclusion between the two asymptotic conversion relations is proved here.
 
+\section{Blocking sites}
+In the proof of its classification theorem for matrix product states, the source groups $q$ neighbouring sites of
+a chain of $N$ sites into one site of dimension $d^q$, giving a chain of
+$N/q$ sites (\texttt{main.tex} of arXiv:2103.13367v3, line 287). An
+operation on the blocked chain acts on $q$ adjacent qudits of the original
+chain, and each one- or two-site gate on the blocked chain is realized by
+fewer than $2q^2$ sequential two-site gates on the original chain
+(line 289).
+
+Blocking itself is a relabelling of the computational basis. It is a
+unitary channel and is formalized as a step of depth zero. A blocked
+conversion first blocks $k$ sites and then runs a local channel protocol of
+depth at most $T$ on the chain of blocks.\footnote{Formal declaration:
+    \leanid{QuantumCircuit.IsBlockedLocalChannelConversion} in
+    \doclink{TNLean/Circuit/Channel/SiteBlocking}.}
+The blocking factor $k$ is part of the relation: blocking the whole chain
+into one site and applying an onsite channel there would convert every
+operator into every other one at depth zero. Locality is transported by
+rescaling: the dual of such a conversion maps an operator acting on a set
+$X$ of blocks to an operator acting within distance $kT$ of the sites of
+$X$ in the original chain.
+
+As in the enlarged-site model above, one layer of two-site channels on the
+blocked chain costs one depth unit. The source's compilation of a blocked
+gate into fewer than $2q^2$ nearest-neighbour gates on the original chain is
+not formalized, so no bound on the original-chain depth of a blocked
+conversion is asserted.
+
 \section{Remaining scope}
 The equivalence proved here belongs to the enlarged-site local-channel model.
 It is not identified with the source's phase equivalence or asserted to be

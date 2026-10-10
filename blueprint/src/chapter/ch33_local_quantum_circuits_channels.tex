@@ -350,4 +350,100 @@ change the local dimension act on single sites.
     \end{align}
 \end{proof}
 
+\begin{definition}[Blocked local channel conversion]
+    \label{def:qc_blocked_local_channel_conversion}
+    \uses{def:qc_local_channel_conversion}
+    \lean{QuantumCircuit.siteBlock, QuantumCircuit.blockSites,
+        QuantumCircuit.blockKronecker,
+        QuantumCircuit.IsBlockedLocalChannelConversion}
+    \leanok
+    Consider a ring of $Mk$ sites of local dimension $d$. Grouping the sites
+    $jk,\dots,jk+k-1$ into one site $j$ of local dimension $d^k$ gives a ring
+    of $M$ sites. On operators, it is the isomorphism
+    $\beta_k\colon M_d^{\otimes Mk}\to M_{d^k}^{\otimes M}$ that relabels the
+    computational basis; it maps $\bigotimes_i m_i$ to
+    $\bigotimes_j\bigl(m_{jk}\otimes\dots\otimes m_{jk+k-1}\bigr)$. A matrix
+    $\rho$ on the $Mk$ sites is \emph{converted in depth $T$ after blocking $k$
+    sites} into a matrix $\sigma$ on the $M$ blocked sites if $\beta_k(\rho)$
+    is converted in depth $T$ into $\sigma$. This is the blocking of $q$
+    neighbouring sites in the proof of the classification of matrix product
+    states in \cite{Piroli2021LOCC}. A layer of two-site channels on the
+    blocked ring costs one unit of depth; the source realizes each gate on the
+    blocked ring by fewer than $2q^2$ nearest-neighbour gates on the original
+    ring, a compilation not carried out here
+    \cite{gap:psc21_local_channel_phase_scope}. The blocking factor $k$ is
+    part of the relation: blocking the whole ring into one site would make
+    every conversion possible in depth $0$.
+\end{definition}
+
+\begin{lemma}[Blocking is a channel that transports supports]
+    \label{lem:qc_blocking_supports}
+    \uses{def:qc_blocked_local_channel_conversion}
+    \lean{QuantumCircuit.blockSites_isKrausCPTP,
+        QuantumCircuit.blockSites_symm_isKrausCPTP,
+        QuantumCircuit.trace_blockSites,
+        QuantumCircuit.blockSites_rectKronecker,
+        QuantumCircuit.trace_blockKronecker,
+        QuantumCircuit.blockSites_mem_supportedOperators,
+        QuantumCircuit.blockSites_symm_mem_supportedOperators,
+        QuantumCircuit.finProdFinEquiv_add_intCast,
+        QuantumCircuit.preimage_siteBlock_neighbourhood_subset}
+    \leanok
+    Blocking and unblocking are trace preserving and completely positive.
+    If $Z$ acts on the sites of a set $Y$ of blocks, then $\beta_k(Z)$ acts on
+    $Y$; conversely, if $W$ acts on a set $X$ of blocks and $d\ge1$, then
+    $\beta_k^{-1}(W)$ acts on the sites of the blocks in $X$. The sites of the
+    blocks within distance $r$ of $X$ lie within distance $kr$ of the sites of
+    $X$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A relabelling of the basis is conjugation by a permutation matrix. On
+    product operators, the factors of $\beta_k(\bigotimes_im_i)$ outside $Y$
+    are products of identities, and linearity concludes. For unblocking, an
+    operator on the original ring acts on a set of sites exactly when it
+    commutes with every operator acting on the complement; $\beta_k$ maps the
+    operators acting on the sites outside the blocks in $X$ to operators acting
+    outside $X$, which commute with $W$. Finally, the site $t+kj'$ with
+    $j'=j+m$ equals $(t+kj)+km$ modulo $Mk$.
+\end{proof}
+
+\begin{lemma}[Light cone and correlations after blocking]
+    \label{lem:qc_blocked_conversion_light_cone}
+    \uses{def:qc_blocked_local_channel_conversion, lem:qc_blocking_supports,
+        lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations}
+    \lean{QuantumCircuit.IsLocalChannelProtocol.exists_dual_comp_blockSites,
+        QuantumCircuit.IsBlockedLocalChannelConversion.blockSites,
+        QuantumCircuit.IsBlockedLocalChannelConversion.mono,
+        QuantumCircuit.IsBlockedLocalChannelConversion.trans,
+        QuantumCircuit.IsBlockedLocalChannelConversion.exists_isKrausCPTP,
+        QuantumCircuit.IsBlockedLocalChannelConversion.density,
+        QuantumCircuit.IsBlockedLocalChannelConversion.exists_dual,
+        QuantumCircuit.trace_mul_mul_eq_of_isBlockedLocalChannelConversion}
+    \leanok
+    Let $\rho$ be converted in depth $T$ after blocking $k$ sites into
+    $\sigma$. A conversion in depth $T'$ of $\sigma$ on the
+    blocked ring gives a conversion of $\rho$ in depth $T+T'$ after blocking,
+    $\sigma=\Psi(\rho)$ for a channel $\Psi$, and $\sigma$ is a density
+    matrix when $\rho$ is. If $d,k\ge1$, there is a map $\Psi^\dagger$ with
+    $\Tr(\sigma A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting on a
+    set $X$ of blocks to operators acting on the sites within distance $kT$
+    of the sites of $X$, and that is multiplicative on operators acting on
+    sets of blocks whose neighbourhoods of radius $T$ are disjoint. If
+    $\rho=\bigotimes_i\sigma_i$ with $\Tr\sigma_i=1$, and $Z$, $Z'$ act on
+    sets of blocks at distance larger than $2T$, then
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Compose the blocking channel with the protocol on the blocked ring and
+    apply Lemma~\ref{lem:qc_protocol_light_cone} there; unblocking the dual
+    and Lemma~\ref{lem:qc_blocking_supports} give the supports on the
+    original ring. Blocking maps the product $\bigotimes_i\sigma_i$ to the
+    product over the blocks of $\sigma_{jk}\otimes\dots\otimes\sigma_{jk+k-1}$,
+    each of trace one, so the correlation statement is
+    Lemma~\ref{lem:qc_local_channel_conversion_correlations} on the blocked
+    ring.
+\end{proof}
+
 \input{chapter/ch33_local_quantum_circuits_approximate}
