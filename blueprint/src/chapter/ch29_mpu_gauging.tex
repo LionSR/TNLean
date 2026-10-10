@@ -8363,6 +8363,27 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     so $\eta$ witnesses the required cohomology relation.
 \end{proof}
 
+\begin{lemma}[Restriction is the inhomogeneous restriction map]
+    \label{lem:mpug_restriction_inhomogeneous}
+    \lean{TNLean.Algebra.scalarRepresentationRes,
+        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain_comap,
+        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain_comap}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction,
+        def:mpug_h3_group_cohomology}
+    Let $f:K\to G$ be a group homomorphism. Regard scalar $2$- and
+    $3$-cochains as inhomogeneous cochains with values in the trivial
+    representation $\C^\times_{\mathrm{triv}}$. Then $f^*$ in degrees two
+    and three is the restriction map of inhomogeneous cochains along $f$,
+    $x\mapsto x\circ(f\times\cdots\times f)$, whose coefficient map is the
+    identity of $\C^\times$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction}
+    Both sides send a cochain $x$ to $(g_1,\dots,g_n)\mapsto x(f(g_1),\dots,f(g_n))$.
+\end{proof}
+
 % Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
 % No U(1) restriction naturality or tensor-level block-independence claim.
 \begin{theorem}[Exact extension of a subgroup cocycle]
