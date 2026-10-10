@@ -362,15 +362,39 @@ projector gap. Empty domains, local dimension one, empty truncation sets
 and retained disconnected components are allowed. An arbitrary cut inside
 a retained component can still have crossing labels.
 
-The remaining source-facing construction must derive uniform cut budgets
-from the actual geometry and combine them with this physical witness.
-For the target typical spectrum, the bound is $C n(\log n)^{12}$ rather
-than the status bound $C nD(\log n)^{12}$ used elsewhere in the scan
-(\path{08-scanner.tex}, lines~400--414). The canonical target typical set,
-its positive mass and dimension, the initial prevector, the comparator
-estimates, and the scanner's measure-valued fields still have to be supplied.
-The constructed physical witness does not complete the scanner data
-package or remove the restriction on Proposition~9.2.
+The geometric status estimates now give one common number
+$1\le\mathcal B\le C_B nD(\log n)^{12}$ for the actual five regions
+$XU,V,Y,U,UY$, at every completed status with $k\le nm$ and every
+pre-charge status with $k+1\le nm$. Initial far assignments persist, so
+$XU,Y,U,UY,V^c$ lie in $S_0$. No containment of $V$ in $S_0$ is used:
+its budget and cut-edge count equal those of its complement. The actual
+cut counts are $16nD$ for $XU,V$, $20nD$ for $U,UY$, and $40nD$ for $Y$.
+The lattice estimate with coefficient $40$ chooses $C_B$ before all
+scanners, keeping the original support labels and the growing factor $D$.
+
+For this same pair $(e,\widetilde\Omega)$, the moment estimate holds on
+the common real interval $|u|\le c_0/\sqrt{\mathcal B}$, with
+$C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$.
+The energy, phase and trace-distance bounds in
+(\ref{eq:arealaw2d_scanner_inputs_marginal_closeness}) are retained.
+\footnote{The common physical statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds}.}
+
+This geometric statement explicitly retains the source rows and clearance,
+the cardinality bound $|S_0|\le C_{\mathrm{card}}n^2$, and the literal
+inequalities $r_0\le D$, $1\le D$, $4D\le m$, and $8Km\le L$.
+For fixed $C_r\ge0$ and $0<\kappa<\mu$, the rounded source scales give
+these inequalities eventually; the threshold depends on the fixed exponent
+gap. This is not a threshold uniform over all positive exponent gaps.
+The compact-cardinality specialization and a single statement combining
+all source-scale and geometry choices remain separate.
+
+The target typical-spectrum bound is $Cn(\log n)^{12}$ rather than the
+status bound $CnD(\log n)^{12}$. The target typical set, its positive mass
+and dimension, the initial prevector, the comparator estimates, and the
+scanner's measure-valued fields remain outside this common-status result.
+It does not complete the scanner data package or remove the restriction
+on Proposition~9.2.
 
 \section{Elimination}
 

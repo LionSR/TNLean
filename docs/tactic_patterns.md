@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Nonfar sites remain in the compact truncation set — promoted (2026-10-10)
+
+- **Pattern:** persistence of the initial far assignment forces a nonfar site
+  into the color and below the initial upper cutoff, which is at most `8Km`.
+- **Seen:** The previous private near-containment proof in `SideSeparation.lean`,
+  the non-contained-support proof in `SplitSupportSize.lean`, and the common
+  five-region budget in `StatusMarginalBudget.lean`.
+- **Abstraction:** `CollarScan.mem_truncationSet_of_not_far` in
+  `TNLean/PEPS/AreaLaw/Scan/StatusContainment.lean`, with completed and
+  pre-charge far-complement inclusions. Both previous proof copies are removed.
+- **Notes:** There is no time-horizon, row, good-history, or positive-band premise.
+  The far side itself is not asserted to be compact.
+
 ### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
 
 - **Pattern:** unfold charge-ball membership, identify the induced domain graph,
