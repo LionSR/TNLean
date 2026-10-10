@@ -39,6 +39,9 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
   rw [Matrix.reindex_apply, sheetSwapOp, Matrix.toMatrix_toPEquiv_submatrix]
   apply IsLocalPerm.permMatrix_mem_supportedOperators
   constructor
-  done
+  case right =>
+    intro x y hxy i hi
+    done
+  case left => done
 
 end TNLean.PEPS.EncodedFrame
