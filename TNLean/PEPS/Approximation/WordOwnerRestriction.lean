@@ -12,7 +12,7 @@ The statements concern the explicitly constructed words, their register order,
 and their restrictions to selected parties. They are auxiliary identities for
 the chronological construction, before the final physical partial trace.
 
-Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 342–381.
+Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 351–381.
 -/
 
 noncomputable section
