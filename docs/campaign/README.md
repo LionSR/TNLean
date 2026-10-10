@@ -115,7 +115,13 @@ in `id` and its repository in `repo` (default: the primary repository):
 | `status` | `open`, `resolved-pending` (resolved in an unmerged pull request) or `resolved` |
 | `paper`, `result`, `title`, `issue` | Where the gap sits |
 | `prs` | Pull requests by repository name |
+| `summary` | One sentence a hurried reader needs: is anything wrong with the paper, and how far the Lean work has got |
+| `context` | One or two sentences on what the result does in the proof, defining every object it names |
 | `claims`, `found`, `impact`, `plan` | What the paper says, what the formalization found, whether it threatens the theorem, and the next step, written for a physicist who does not read Lean |
+
+Write every entry for a physicist who has read neither the papers nor the rest of
+the page: name each cited result in words, define each object at first use, and
+keep pull-request history out of the prose, since the links appear beside it.
 
 `checked` lists results whose pull requests report that no gap was found, and
 `reviewedAt` records when the summaries were last compared with the notes. A

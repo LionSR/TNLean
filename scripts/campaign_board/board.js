@@ -288,7 +288,7 @@
         const landed = prs.filter(p => p.kind === "merged").sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
         const inflight = prs.filter(p => p.open);
         const gapBadges = G.entries.filter(g => st.issues.includes(g.issue) && g.kind !== "convention" && isOpenGap(g))
-          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result}` }); a.title = g.summary || g.title; return a; });
+          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = g.summary || g.title; return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
           const rs = leastStatus(r.issues);

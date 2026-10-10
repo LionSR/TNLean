@@ -104,6 +104,7 @@ section > header p { margin: 0; color: var(--muted); max-width: 72ch; }
 .stage:last-child .line { visibility: hidden; }
 .stage .body { padding-bottom: 28px; display: grid; gap: 10px; min-width: 0; }
 .stage .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.stage .head .pill { white-space: normal; }
 .stage .secs { font: 12px var(--f-mono); color: var(--muted); }
 .stage .lead { display: grid; gap: 14px 32px; align-items: start; }
 .stage .lead .txt { display: grid; gap: 10px; min-width: 0; }
