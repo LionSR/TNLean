@@ -9,8 +9,8 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialSectorAssignment
 
 set_option linter.hashCommand false in
 /--
-info: 'TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closedHalf_radius_eq'
+info: 'TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closed_half_radius_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closedHalf_radius_eq
+#print axioms TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closed_half_radius_eq

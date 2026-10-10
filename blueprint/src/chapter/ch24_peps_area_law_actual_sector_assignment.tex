@@ -61,29 +61,32 @@ This local construction is part of
 % Source: 10-geometry.tex, prop:two-families, lines 201--209;
 % geometry:initial-stars, lines 333--370, especially 352--370.
 
-\begin{lemma}[The closed half-radius scale]
-    \label{lem:area_law_initial_closed_half_radius}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closedHalf_radius_eq}
-    \uses{def:area_law_fine_belt_scales,thm:area_law_adjacent_fine_meshes}
+\begin{theorem}[The closed half-radius scale]
+    \label{thm:area_law_initial_closed_half_radius}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closed_half_radius_eq}
+    \leanok
+    \uses{def:area_law_fine_belt_scales}
     Let $k\ge50{,}000{,}000$, write $\ell_k$ for its fine-cell exponent,
     and put
-    \[
-        t_k=2^{\ell_k},\qquad r=\frac{2^{\ell_k-5}}2.
-    \]
+    \begin{align}
+        t_k & =2^{\ell_k},           \\
+        r   & =\frac{2^{\ell_k-5}}2.
+    \end{align}
     Then
-    \[
-        \frac r2=\frac{t_k}{128}.
-    \]
+    \begin{align}
+        \frac r2 & =\frac{t_k}{128}.
+        \label{eq:area_law_closed_half_radius}
+    \end{align}
     Thus the closed half-radius square has half-side $t_k/128$.
     This is the numerical scale relation used in the initial-star geometry
     of \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{lemma}
-\begin{proof}
+\end{theorem}
+\begin{proof}\leanok
     \uses{def:area_law_fine_belt_scales,thm:area_law_adjacent_fine_meshes}
     The explicit lower bound on $k$ gives $\ell_k\ge5$.
     Hence $2^{\ell_k}=32\,2^{\ell_k-5}$.
     Dividing by $128$ and substituting the definition of $r$ proves
-    the stated identity.
+    (\ref{eq:area_law_closed_half_radius}).
 \end{proof}
 
 \begin{theorem}[Unique sector assignment and closed restriction]

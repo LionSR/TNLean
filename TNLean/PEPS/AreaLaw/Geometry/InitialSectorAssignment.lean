@@ -119,7 +119,7 @@ Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `prop:two-families`, lines 200–207, and
 `geometry:initial-stars`, lines 333–370, especially 352–370, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
-theorem fineScaleIndex_closedHalf_radius_eq (k : ℕ) (hk : 50000000 ≤ k) :
+theorem fineScaleIndex_closed_half_radius_eq (k : ℕ) (hk : 50000000 ≤ k) :
     ((2 : ℝ) ^ (fineScaleIndex k - 5) / 2) / 2 =
       (2 : ℝ) ^ fineScaleIndex k / 128 := by
   have h := fine_working_radius_eq k hk
