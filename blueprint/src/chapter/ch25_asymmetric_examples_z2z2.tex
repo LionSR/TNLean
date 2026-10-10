@@ -1681,8 +1681,9 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_klein_printed_anomaly,thm:mpug_family_restriction_omega,
-        thm:mpug_cyclic_invariant_gauge,thm:asymex_klein_complete_classification}
+    \uses{thm:asymex_klein_printed_anomaly,thm:asymex_z2z2_anomaly_class,
+        thm:mpug_family_restriction_omega,thm:mpug_cyclic_invariant_gauge,
+        thm:asymex_klein_complete_classification}
     As in the proof of Theorem~\ref{thm:asymex_klein_printed_anomaly},
     each cyclic product is computed on a restriction of the family with
     chosen fusion tensors. On $\{e,b\}$ all tensors have bond dimension one,
@@ -1698,7 +1699,9 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     so these fusion tensors reduce the stacked square to the identity tensor,
     and the two fusion trees $\langle 00|\otimes 1$ and $1\otimes\langle 00|$
     agree on every letter $u_i\otimes u_i\otimes u_i$ of the triple product.
-    Hence $\omega(a,e,a)\,\omega(a,a,a)=1$. Together with
+    Hence $\omega(a,e,a)\,\omega(a,a,a)=1$; reading the cyclic product off
+    the two fusion trees of an order-two family with a bond-two generator is
+    the step used in Theorem~\ref{thm:asymex_z2z2_anomaly_class}. Together with
     (\ref{eq:asymex_klein_printed_anomaly}), the three cyclic products are
     those of $\omega_{001}$, and
     Theorem~\ref{thm:asymex_klein_complete_classification} identifies the
