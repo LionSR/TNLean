@@ -39,6 +39,8 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_inter
     sheetSwapOp_mul_sheetSwapOp
       (fun x ↦ by rw [← Finset.mem_sdiff, Finset.sdiff_inter_self_left])
       Finset.inter_subset_left
+  have hunit : (sheetSwapOp q (R ∩ S))ᴴ * sheetSwapOp q (R ∩ S) = 1 :=
+    Matrix.mem_unitaryGroup_iff'.mp (sheetSwap q (R ∩ S)).permMatrix_mem_unitaryGroup
   done
 
 end TNLean.PEPS.EncodedFrame
