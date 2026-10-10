@@ -344,7 +344,8 @@ theorem cyclicInvariant_omega_printedFamily_a (fd : printedFamily.FusionData) :
   have hF := orderTwoFamily_tensorA_isNormalRepresentation
   change ScalarThreeCochain.cyclicInvariant fd.omega (aHom GroupFamily.orderTwoGen) 2 = 1
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd aHom
-    printedFamily_isNormalRepresentation printedFamily_comap_aHom aFusionData GroupFamily.orderTwoGen_pow_two]
+    printedFamily_isNormalRepresentation printedFamily_comap_aHom aFusionData
+    GroupFamily.orderTwoGen_pow_two]
   apply Units.ext
   rw [aFusionData, GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator hF
     aFusionData_isAssociator]
@@ -358,7 +359,8 @@ theorem cyclicInvariant_omega_printedFamily_b (fd : printedFamily.FusionData) :
     (printedFamily_comap_bHom ▸ printedFamily_isNormalRepresentation.comap bHom)
   change ScalarThreeCochain.cyclicInvariant fd.omega (bHom GroupFamily.orderTwoGen) 2 = 1
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd bHom
-    printedFamily_isNormalRepresentation printedFamily_comap_bHom bFusionData GroupFamily.orderTwoGen_pow_two, h1]
+    printedFamily_isNormalRepresentation printedFamily_comap_bHom bFusionData
+    GroupFamily.orderTwoGen_pow_two, h1]
   simp [ScalarThreeCochain.cyclicInvariant]
 
 /-- **The anomaly class of the printed symmetry is the class `(0,0,1)` of the source table**:

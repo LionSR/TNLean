@@ -359,10 +359,8 @@ theorem xFusionData_isAssociator_gen_gen_gen :
     xFusionData.IsAssociator GroupFamily.orderTwoGen GroupFamily.orderTwoGen
       GroupFamily.orderTwoGen ((1 : ℤ) : ℂ) := by
   unfold GroupFamily.FusionData.IsAssociator
-  rw [xFusionData]
-  rw [GroupFamily.FusionData.orderTwo_leftV_gen_gen_gen,
-    GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen]
-  rw [xXLeft, kronId_complexOfRing,
+  rw [xFusionData, GroupFamily.FusionData.orderTwo_leftV_gen_gen_gen,
+    GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen, xXLeft, kronId_complexOfRing,
     idKron_complexOfRing]
   have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily eTensor kxTensor)
       GroupFamily.orderTwoGen GroupFamily.orderTwoGen
@@ -384,10 +382,8 @@ theorem xyFusionData_isAssociator_gen_gen_gen :
     xyFusionData.IsAssociator GroupFamily.orderTwoGen GroupFamily.orderTwoGen
       GroupFamily.orderTwoGen ((-1 : ℤ) : ℂ) := by
   unfold GroupFamily.FusionData.IsAssociator
-  rw [xyFusionData]
-  rw [GroupFamily.FusionData.orderTwo_leftV_gen_gen_gen,
-    GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen]
-  rw [xyXyLeft, kronId_complexOfRing,
+  rw [xyFusionData, GroupFamily.FusionData.orderTwo_leftV_gen_gen_gen,
+    GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen, xyXyLeft, kronId_complexOfRing,
     idKron_complexOfRing]
   have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily eTensor kxyTensor)
       GroupFamily.orderTwoGen GroupFamily.orderTwoGen

@@ -24,6 +24,26 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Order-two family with a bond-two generator — promoted (2026-10-10)
+
+- **Pattern:** a `ℤ₂`-indexed family `1 ↦ E`, `g ↦ A` (bond dimensions one and two) written
+  out with `Fin 2` label matches for tensors and fusion tensors, together with the cast and
+  associator lemmas that reduce the two fusion trees of three generators to `V ⊗ 1` and
+  `1 ⊗ V` and make `ω(g,1,g) = 1`.
+- **Seen:** `Examples/CZX/CZXAnomalyClass.lean` (`czxFamily`),
+  `Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` (`pairFamily`, two uses), and
+  `Examples/KleinSymmetryAnomaly.lean` (the restriction to `{e, a}`).
+- **Abstraction:** `MPOTensor.GroupFamily.orderTwoFamily`,
+  `MPOTensor.GroupFamily.FusionData.orderTwo`, and
+  `MPOTensor.GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator` in
+  `TNLean/MPS/Symmetry/MPOSymmetry/AssociatorOrderTwo.lean`. State the generator as
+  `orderTwoGen`: a bare `Multiplicative.ofAdd 1` may elaborate through a different instance
+  path for `ZMod 2` and then fail to match in `rw`.
+- **Notes:** `Z2Z2AnomalyClass` and `KleinSymmetryAnomaly` use it; `czxFamily` keeps its
+  printed labels and can switch when next edited. The surrounding step "restrict along
+  `f`, transport the cyclic invariant, read off the associator scalar" now appears three times
+  and is a candidate for one lemma taking `F.comap f = orderTwoFamily E A`.
+
 ### Boundary on one Kronecker factor of a letter sum — promoted (2026-10-10)
 
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
