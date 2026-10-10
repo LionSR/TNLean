@@ -321,21 +321,36 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{definition}[The corresponding original circuit gate]
     \label{def:peps_message_gate_circuit}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.toOriginalCircuit,
-        TNLean.PEPS.PairEffect.MessageGate.eval_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.MessageGate.nonprivateCount_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit}
+    \lean{TNLean.PEPS.PairEffect.MessageGate.toOriginalCircuit}
     \leanok
     \uses{thm:peps_message_gate_eval}
     Suppose the local participant set $C$ has $|C|\ne1$, its embedding in
     the global parties is $\iota:C\hookrightarrow P$, all monomials are
     allowed, and $\|G_L\|\le1$. Insert the expanded list as one nonprivate
     gate with the same participant embedding and the same spectator memory.
-    Its operator is the canonical relabelling of $G_L\otimes I$.
-    It has one nonprivate occurrence, with participant set $\iota(C)$.
-    The norm bound follows from equality of the expanded and original
-    operators. Empty participant sets are included.
+    Empty participant sets are included.
 \end{definition}
+
+\begin{theorem}[Operator and occurrences of the constructed gate]
+    \label{thm:peps_message_gate_circuit_properties}
+    \lean{TNLean.PEPS.PairEffect.MessageGate.eval_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.MessageGate.nonprivateCount_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit}
+    \leanok
+    \uses{def:peps_message_gate_circuit}
+    The constructed gate's operator is the canonical relabelling of
+    $G_L\otimes I$. It has one nonprivate occurrence, with participant
+    set $\iota(C)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_message_gate_eval}
+    The expanded list has the original operator, so adjoining the spectator
+    identity and relabelling the participant registers gives the stated
+    operator. Its norm bound follows from equality of the expanded and
+    original operators. The construction inserts exactly one nonprivate
+    occurrence with the prescribed participant embedding.
+\end{proof}
 
 \begin{theorem}[Resource bounds for the constructed gate]
     \label{thm:peps_message_gate_circuit_bounds}
