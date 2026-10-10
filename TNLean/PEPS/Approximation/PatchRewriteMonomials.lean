@@ -40,9 +40,11 @@ is the number of branches and `k` the truncation rank; if every hole and every p
 
 The frame construction fixes projectors whose numbers `∑_j d_j` of cylinder terms are bounded by
 one fixed power of `L` (`05-frames.tex`, lines 34–46), and Lemma 6.3 has boundedly many patches
-and affected holes. Under these standing bounds, `D ≤ C L^c` and `m`, `r_old`, `r_new ≤ b`, the
-choice `δ = L^{-a}` gives at most `K L^e` monomials, with `K` and `e` explicit in `C`, `c`, `b` and
-`a` (`exists_allowed_monomial_approx_polynomial`). This is the second assertion of Lemma 6.3.
+and affected holes and a bounded specified list of parties. Under these bounds, `D ≤ C L^c` and
+`m`, `r_old`, `r_new` and the number of specified parties at most `b`, the choice `δ = L^{-a}`
+gives at most `K L^e` monomials, with `K` and `e` explicit in `C`, `c`, `b` and `a`, whose
+participating parties lie in one fixed list of at most `b` parties
+(`exists_allowed_monomial_approx_polynomial`). This is the second assertion of Lemma 6.3.
 
 The expansion is stated in the canonical coordinates of the two frames, the tags of the untouched
 holes first; the source compares frames after the canonical identification of tag orderings
@@ -614,27 +616,34 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
 /-- **Lemma 6.3, second assertion: the polynomial count.** Let `L ≥ 1`, and suppose that every
 affected hole and every additional patch has at most `C L^c` cylinder terms (the standing bound
 `∑_j d_j ≤ C L^c` on the projectors chosen in the frame construction) and that there are at most
-`b` additional patches, at most `b` affected old holes and at most `b` affected new holes. For
-every real `a`, the canonical contraction `M` admits a contraction `M_a` with
-`‖M_a - M‖ ≤ L^{-a}` and an expansion `M_a = ∑_t c_t M_t` into at most `K L^e` monomials allowed
-by Theorem 5.2, using only the specified parties, each with at most `2b` normalized pair sources
-and at most `2b` normalized pair effects, and with `|c_t| ≤ 1`. Here
+`b` additional patches, at most `b` affected old holes, at most `b` affected new holes and at
+most `b` parties in the specified list of condition (iv). For every real `a`, the canonical
+contraction `M` admits a contraction `M_a` with `‖M_a - M‖ ≤ L^{-a}` and an expansion
+`M_a = ∑_t c_t M_t` into at most `K L^e` monomials allowed by Theorem 5.2, all participating
+parties lying in one fixed list `P` of at most `b` parties, each monomial with at most `2b`
+normalized pair sources and at most `2b` normalized pair effects, and with `|c_t| ≤ 1`. Here
 `K = (C + 1)^{3b} (16 b² (C + 1)^{6b} + 1)^{2b}` and `e = 3bc + 4b(3bc + ⌈a⌉)` depend only on
 `C`, `c`, `b` and `a`. The expansion is read in canonical coordinates, the tags of the untouched
 holes first, as in the canonical identification of tag orderings of the source.
 
-Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–217; the
-bound on the cylinder terms, lines 34–46; proof lines 331–342. -/
+The bound on the participating parties is the boundedness of the specified list in condition
+(iv), not a consequence of conditions (i)–(iii): the touched sites include whole selected hole
+squares, whose raw owners inside the inner holes condition (iii) does not restrict, and each of
+them receives `⟨0|` at its old owner and `|0⟩` at its new owner.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–217, in
+particular the specified bounded list of parties of condition (iv), line 204; the bound on the
+cylinder terms, lines 34–46; proof lines 331–343. -/
 theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L : ℕ}
     (hL : 1 ≤ L) (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
-    (hrnew : R.newAffected.length ≤ b) (a : ℝ) :
-    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+    (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b) (a : ℝ) :
+    ∃ P : Finset Party, P.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (P : Set Party) ∧
         p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ (L : ℝ) ^ (-a) ∧
@@ -675,7 +684,7 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       ring
     rw [this, add_mul, one_mul]
     exact Nat.add_le_add_left hP _
-  refine ⟨G, ?_, fun p hp => ?_, rest⟩
+  refine ⟨R.parties, hparties, G, ?_, fun p hp => ?_, rest⟩
   · refine hG.trans ((Nat.mul_le_mul hN ((Nat.pow_le_pow_left hk _).trans
       (Nat.pow_le_pow_right (Nat.succ_pos _) (Nat.mul_le_mul_left 2 hm)))).trans ?_)
     calc B ^ (3 * b) * (X ^ 2 + 1) ^ (2 * b)

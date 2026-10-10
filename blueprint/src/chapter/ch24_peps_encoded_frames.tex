@@ -302,7 +302,10 @@ norm of matrices, rectangular ones included.
     Old and new one-sheet frames share their untouched holes, with the same
     encodings and tag owners; the remaining holes are the affected old holes and the affected new holes,
     $r_{\rm old}$ of the former. There are $m$ additional square patches
-    $(c_i,u_i)$ with cylinder data, and a specified finite list of parties.
+    $(c_i,u_i)$ with cylinder data, and a specified finite list of parties;
+    the source requires this list to be bounded, and its size enters, with
+    $m$ and the numbers of affected holes, the polynomial count of
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
     Write $H^\mp(\mathcal F)$ for the unions of the physical samples of the
     inner and outer hole squares. The four conditions of
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}
@@ -691,11 +694,11 @@ norm of matrices, rectangular ones included.
     hole and every additional patch is a sum of $\sum_jd_j\le CL^c$
     cylinder projectors for fixed $C$ and $c$ (\texttt{05-frames.tex}, lines
     34--46), assume the four conditions with boundedly many affected holes and
-    additional patches. Then for every fixed $a>0$ the canonical map $M$
-    admits a contractive approximation $M_a$ with $\lVert M_a-M\rVert\le
-        L^{-a}$ and a polynomial sum expansion into monomials allowed by
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, using only the specified
-    parties. In particular the rewrite is a bounded change with
+    additional patches and a bounded specified list of parties. Then for every
+    fixed $a>0$ the canonical map $M$ admits a contractive approximation $M_a$
+    with $\lVert M_a-M\rVert\le L^{-a}$ and a polynomial sum expansion into
+    monomials allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, whose
+    participating parties all lie in the specified list, of bounded size. In particular the rewrite is a bounded change with
     reference-vector error $O(L^{-20})$. This is the second assertion of
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
@@ -740,10 +743,17 @@ norm of matrices, rectangular ones included.
     reading of each product term as an allowed monomial on the registers of
     the frames, with at most $Nk^{2m}$ monomials, in
     Theorem~\ref{thm:peps_frame_small_rewrite_monomials}. With
-    $\sum_jd_j\le CL^c$ and $m,r_{\rm old},r_{\rm new}\le b$, the number of
+    $\sum_jd_j\le CL^c$, $m,r_{\rm old},r_{\rm new}\le b$ and at most $b$
+    specified parties, the number of
     branches is at most $\bigl((C+1)L^c\bigr)^{3b}$, and for $\delta=L^{-a}$,
     $L\ge1$ the count is at most
     $(C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}L^{3bc+4b(3bc+\lceil
                 a\rceil)}$, with at most $2b$ normalized pair sources and $2b$ normalized
-    pair effects in each monomial \cite{gap:polypeps_small_rewrite_monomials}.
+    pair effects in each monomial, and every monomial uses only the at most
+    $b$ specified parties. The bound on the participating parties is the
+    boundedness of the list in the fourth condition and does not follow from
+    the other three: every site of a selected hole square receives a zero bra
+    at its old owner and a zero ket at its new owner, and the third condition
+    does not restrict the owners inside the inner holes
+    \cite{gap:polypeps_small_rewrite_monomials}.
 \end{proof}

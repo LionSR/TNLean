@@ -153,16 +153,27 @@ every hole and every patch are sums of $\sum_jd_j$ cylinder projectors, with
 $\sum_jd_j$ bounded by one fixed power of $L$
 (\path{05-frames.tex}, lines~34--46, applied to the patch projectors at
 lines~254--256); and (b) $m$, $r_{\rm old}$ and $r_{\rm new}$ are bounded, by
-the hypotheses of the lemma (lines~189--192). With $\sum_jd_j\le CL^{c}$,
-$m,r_{\rm old},r_{\rm new}\le b$, $L\ge1$ and $\delta=L^{-a}$, the formal count
+the hypotheses of the lemma (lines~189--192), and so is the specified list of
+parties of condition~(iv) (line~204). With $\sum_jd_j\le CL^{c}$,
+$m,r_{\rm old},r_{\rm new}\le b$, at most $b$ specified parties, $L\ge1$ and
+$\delta=L^{-a}$, the formal count
 is at most
 \[
   (C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}\,
   L^{3bc+4b(3bc+\lceil a\rceil)},
 \]
 a polynomial in $L$ whose coefficient and degree depend only on $C$, $c$, $b$
-and $a$.\footnote{%
+and $a$, and the participating parties of all monomials lie in one fixed list
+of at most $b$ parties, as the bounded change of Theorem~5.2 requires.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial}.}
+The bound on the participating parties cannot be derived from
+conditions~(i)--(iii) alone. Every site of a selected hole square, including
+the sites of the inner hole, receives a zero bra at its old owner and a zero
+ket at its new owner (lines~258--268), and condition~(iii) restricts the owners
+only outside the inner holes; an inner hole of side of order $\log L$ may have
+of order $\log^2L$ distinct raw owners. The bound is the boundedness of the
+list in condition~(iv), which the formal statement carries as the hypothesis
+that the list has at most $b$ members.
 Bound (a) is a choice made in the source's setting, so it enters the formal
 statement as a hypothesis on the cylinder data of the rewrite; that the choice
 can be made is Proposition~4.1, which is a separate result.
