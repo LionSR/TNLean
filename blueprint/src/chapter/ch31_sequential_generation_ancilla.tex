@@ -1436,11 +1436,20 @@ representation, it is a general recipe for its sequential generation.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induction on $k$. Before $U^{[k]}$ acts, sites $k+1,\dots,N$ remain in
-    $\ket{0}$, so $U^{[k]}$ receives the value $\alpha$ of site $k$ in
-    $\chi_{k-1}$ and the value $0$ of site $k+1$; it does not act on sites
-    $1,\dots,k-1$. Expanding $U^{[k]}$ in the basis of sites $k$ and $k+1$
-    gives the recursion for $\chi_k$.
+    Induction on $k$. Before $U^{[k]}$ acts, the chain is
+    $\sum_\alpha\chi_{k-1}(\dots,\alpha)\ket{\dots,\alpha}\otimes\ket{0}
+    \otimes\ket{0}^{\otimes(N-k-1)}$, with $\alpha$ the value of site $k$ and
+    site $k+1$ in $\ket{0}$. The operation $U^{[k]}$ acts on sites $k$ and
+    $k+1$ only, and
+    \begin{align*}
+        U^{[k]}\ket{\alpha,0}
+        =\sum_{i,\beta}\bra{i,\beta}U^{[k]}\ket{\alpha,0}\ket{i,\beta}.
+    \end{align*}
+    Hence the chain after $U^{[k]}$ is
+    $\sum_{i,\beta}\bigl(\sum_\alpha\bra{i,\beta}U^{[k]}\ket{\alpha,0}
+    \chi_{k-1}(\dots,\alpha)\bigr)\ket{\dots,i,\beta}\otimes
+    \ket{0}^{\otimes(N-k-1)}$, and the coefficient is $\chi_k(\dots,i,\beta)$
+    by the recursion of Definition~\ref{def:seqanc_no_ancilla}.
 \end{proof}
 
 \begin{theorem}[The scheme without an ancilla uses the next site as ancilla]
