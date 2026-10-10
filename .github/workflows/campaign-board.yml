@@ -24,6 +24,9 @@ permissions:
 
 jobs:
   board:
+    # Only main publishes: a dispatch on another branch would otherwise upload an
+    # unmerged board under the production artifact name and deploy it.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     name: Render campaign board
     timeout-minutes: 20

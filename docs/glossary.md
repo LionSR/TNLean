@@ -3345,6 +3345,29 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
 
+## Rounded bootstrap collar clearance
+
+- **Declarations:** `TNLean.PEPS.AreaLaw.Scan.exists_two_mul_floor_rpow_ceil_mul_le`,
+  `TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le`, and
+  `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_collar_clearance`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean`.
+- **Meaning:** for `C₂ > 0` and `0 < η < 1`, one threshold `N(C₂, η)` gives
+  `2⌊⌈C₂s⌉^η⌋ ≤ s` for every natural `s ≥ N`. For natural `D₀ ≥ 1`,
+  the scalar implication `2L ≤ s → D₀L + L ≤ D₀s` transfers this bound
+  to the covering-square clearance budget.
+- **Fixed bootstrap parameters:** for `C₂ > 0` and `0 < e₀ < 1`, put
+  `ℓ = (1 − e₀)/200000` and `L_s = ⌊⌈C₂s⌉^(1 − ℓ)⌋`.
+  There is one threshold `N(C₂, e₀)`, chosen before every natural side
+  length `s` and every natural safety parameter `D₀ ≥ 1`, such that
+  `D₀L_s + L_s ≤ D₀s` whenever `s ≥ N`. The initial exponent fixes `ℓ`
+  throughout the entropy-exponent iteration; the threshold is independent
+  of the current entropy exponent and all physical data.
+- **Source:** OpenAI's September 24, 2026 area-law manuscript,
+  [the collar scales, `08-scanner.tex`, lines 32–41](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L32-L41),
+  and [the fixed bootstrap parameters and rectangle covering clearance, lines 693–729](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L693-L729).
+- **Scope:** these are numerical auxiliary estimates for the rectangle
+  covering argument in the proof of Proposition 9.5.
+
 ## Weighted template shell coverings
 
 - `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
