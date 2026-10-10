@@ -82,7 +82,6 @@ private theorem familyPhysicalListBasis_owner_column_heq
         (fun j ↦ y ((ps.map f).get j))) := by
   induction ps with
   | nil =>
-      simp only [List.map_nil]
       rw [familyPhysicalListBasis_nil_apply, familyPhysicalListBasis_nil_apply]
       rfl
   | cons p ps ih =>
