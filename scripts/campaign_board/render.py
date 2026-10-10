@@ -31,13 +31,23 @@ DIAGRAM_SLOT = re.compile(r"\{\{DIAGRAM:([^}]+)\}\}")
 INLINE_SLOT = re.compile(r"\{\{tn:([A-Za-z0-9_-]+)\}\}")
 
 
+ALT_LINE = re.compile(r"^% alt: (.+)$", re.MULTILINE)
+
+
 def diagram(campaign_dir: pathlib.Path, path: str) -> dict:
-    """One compiled diagram as a data URI with its natural width in points."""
-    svg = (campaign_dir / path).read_bytes()
+    """One compiled diagram as a data URI with its natural width in points.
+
+    The alternative text is the `% alt:` line of the diagram's source, if any.
+    """
+    svg_path = campaign_dir / path
+    svg = svg_path.read_bytes()
     width = re.search(rb'<svg[^>]*\bwidth="([0-9.]+)', svg)
+    source = svg_path.with_suffix(".tex")
+    alt = ALT_LINE.search(source.read_text()) if source.exists() else None
     return {
         "src": "data:image/svg+xml;base64," + base64.b64encode(svg).decode("ascii"),
         "width": float(width.group(1)) if width else None,
+        "alt": alt.group(1).strip() if alt else "",
     }
 
 
@@ -63,7 +73,7 @@ def intro_html(campaign_dir: pathlib.Path) -> str:
     def image(m: re.Match) -> str:
         d = diagram(campaign_dir, m.group(1))
         width = f' width="{round(d["width"] * 2.4)}"' if d["width"] else ""
-        return f'<img class="tnimg" src="{d["src"]}"{width} alt="">'
+        return f'<img class="tnimg" src="{d["src"]}"{width} alt="{html.escape(d["alt"])}">'
 
     return DIAGRAM_SLOT.sub(image, intro.read_text())
 

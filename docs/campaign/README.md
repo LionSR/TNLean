@@ -55,7 +55,7 @@ markers. Use it to decide whether `gaps.json` needs a new entry.
 | `leanDirs` | Directories of the primary repository whose Lean files are listed on the page |
 | `statementPR` | Optional pull request that states the headline theorems in Lean |
 | `resultNames` | Display names for results whose table row gives none, keyed by source label |
-| `routes` | The proof as a sequence of stages. A route has an `eyebrow`, `heading`, `intro`, the `paper` whose results it shows, and `stages`, each with a `title`, its `issues`, a `physics` paragraph, what it `delivers`, and optionally the `figure` (a key of `figures.js`) drawn beside the text with its `caption`, and a tensor-network `diagram` (a path such as `diagrams/NAME.svg`) with its `diagramCaption` |
+| `routes` | The proof as a sequence of stages. A route has an `eyebrow`, `heading`, `intro`, the `paper` whose results it shows, and `stages`, each with a `title`, its `issues`, a `physics` paragraph, what it `delivers`, and optionally the `figure` (a key of `figures.js`) drawn beside the text with its `caption`, and `diagrams`, a list of tensor-network diagrams beside the text, each with `src` (a path such as `diagrams/NAME.svg`), `caption` and optional `alt` |
 | `glossary` | Pairs of term and definition |
 
 A result table is any markdown table in a stream tracker body whose first two
@@ -97,7 +97,9 @@ A sentence can carry its own diagram equation. Write `{{tn:NAME}}` in a stage's
 `diagrams/inline/NAME.tex` is set on the line, the way Tufte sets word-sized
 graphics into text. Inline sources are compiled in running mathematics; give
 each picture `size=l` so the names inside its boxes are set at text size and
-stay legible at word size. Prefer an inline equation to a margin diagram that
+stay legible at word size. Give every inline source, and every diagram embedded
+in `intro.html` through a `{{DIAGRAM:path}}` slot, a first line `% alt: …`
+stating the equation in words; it becomes the image's alternative text. Prefer an inline equation to a margin diagram that
 would repeat it, and keep margin diagrams for the arguments too tall for a line. tenkz audits
 equations written with `=` only, so an approximate relation is set as two
 pictures with `\approx` between them.

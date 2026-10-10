@@ -247,7 +247,7 @@
   const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}/g, (m, name) => {
     const d = (D.inlineDiagrams || {})[name];
     if (!d) return "";
-    return `<img class="tni" src="${d.src}" alt="${esc(name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.25)}"` : ""}>`;
+    return `<img class="tni" src="${d.src}" alt="${esc(d.alt || name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.25)}"` : ""}>`;
   });
 
   /* ---------- proof routes ---------- */
@@ -294,7 +294,7 @@
         const tnFigs = (st.diagrams || []).map(d => {
           const tn = (D.diagrams || {})[d.src];
           if (!tn) return null;
-          const alt = (d.alt || d.caption || st.title).replace(/<[^>]+>/g, "");
+          const alt = (d.alt || tn.alt || d.caption || st.title).replace(/<[^>]+>/g, "");
           return el("figure", { class: "sfig tnfig" },
             el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
             d.caption ? el("figcaption", { html: tnText(d.caption) }) : null);
