@@ -7,6 +7,7 @@ import TNLean.MPS.Preparation.CoherentBlockTreePreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.LogLogDepthBound
 import TNLean.MPS.Preparation.ShortChainPreparation
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Double-logarithmic compilation of supported block approximations
@@ -116,20 +117,7 @@ theorem exists_log_log_preparation_of_supported_block_approximation
   by_cases hqN : q ≤ N
   · -- Long chains: `M - 1` blocks of length `q` and one of length `q' = q + N % q < 2q`.
     have hq0 : 0 < q := by omega
-    obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-      ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq0)).symm⟩
-    set ℓ : Fin (m + 1) → ℕ := fun k => if k = Fin.last m then q + N % q else q
-    have hsum : ∑ k, ℓ k = N := by
-      rw [Fin.sum_univ_castSucc]
-      simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-        Fintype.card_fin, smul_eq_mul, ite_true]
-      have := Nat.div_add_mod N q
-      rw [hm] at this
-      linarith
-    have hℓq : ∀ k, q ≤ ℓ k := fun k => by simp only [ℓ]; split_ifs <;> omega
-    have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => by
-      have := Nat.mod_lt N hq0
-      simp only [ℓ]; split_ifs <;> omega
+    obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
     obtain ⟨α, hα, hαapprox⟩ := happrox N hvalid
     obtain ⟨hnorm, herr⟩ := hαapprox (m + 1) ℓ hsum q (by omega) hℓq
     obtain ⟨h, hh1, hh2⟩ := exists_two_pow_le hs0 h4s

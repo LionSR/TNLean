@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Scan.AssignedLead
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
+import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.ChargeSlots
 import TNLean.PEPS.AreaLaw.Scan.Defs

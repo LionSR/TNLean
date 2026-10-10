@@ -1,0 +1,10 @@
+% PEPS, lem:birth (05-frames.tex, eq:birth-map): B = V^dagger (|s><s| (x) id) V.
+% The second wire is B_T and the third carries U, then B_E, then U again.
+\[
+  \begin{quantikz}
+    \lstick{$T$} & & & \gate[2]{\langle s|} & \gate[2]{|s\rangle}\setwiretype{n} & \setwiretype{q} & & & \rstick{$T$} \\
+    \setwiretype{n} & & \gate[2]{V} & \setwiretype{q} & \setwiretype{n} & \setwiretype{q} & \gate[2]{V^{\dagger}} & \setwiretype{n} & \\
+    \lstick{$U$} & & & & & & & & \rstick{$U$} \\
+    \lstick{$E$} & & & & & & & & \rstick{$E$}
+  \end{quantikz}
+\]
