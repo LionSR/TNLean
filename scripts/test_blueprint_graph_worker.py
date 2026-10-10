@@ -151,10 +151,8 @@ class GraphDeadlineTests(unittest.TestCase):
         page = _Page()
         with patch.object(reader.time, "monotonic", side_effect=[100.0, 125.0]):
             reader._load_page(page, "http://local", "dep_graph_document.html")
-        self.assertEqual(page.navigation[0][1]["timeout"],
-                         reader.GRAPH_LAYOUT_TIMEOUT_MS)
-        self.assertEqual(page.waits[0][1]["timeout"],
-                         reader.GRAPH_LAYOUT_TIMEOUT_MS - 25_000)
+        self.assertEqual(page.navigation[0][1]["timeout"], 300_000)
+        self.assertEqual(page.waits[0][1]["timeout"], 275_000)
         self.assertIn("graph.dataset.graphvizReady === 'true'", page.waits[0][0])
         self.assertIn("graph.querySelector('svg')", page.waits[0][0])
 
@@ -168,8 +166,7 @@ class GraphDeadlineTests(unittest.TestCase):
 
     def test_exhausted_budget_is_not_replaced_by_a_fresh_timeout(self):
         page = _Page()
-        exhausted = 100.0 + reader.GRAPH_LAYOUT_TIMEOUT_MS / 1000 + 1.0
-        with patch.object(reader.time, "monotonic", side_effect=[100.0, exhausted]):
+        with patch.object(reader.time, "monotonic", side_effect=[100.0, 401.0]):
             with self.assertRaisesRegex(TimeoutError, "original page deadline"):
                 reader._load_page(page, "http://local", "dep_graph_chapter_24.html")
         self.assertEqual(page.waits, [])
