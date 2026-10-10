@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Geometry.ActualSideMatching
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
+import TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine
 import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
@@ -21,6 +22,7 @@ import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRadialIncidence
 import TNLean.PEPS.AreaLaw.Geometry.CellFanRays
 import TNLean.PEPS.AreaLaw.Geometry.CellFanSectors
+import TNLean.PEPS.AreaLaw.Geometry.CellFanSlopes
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
 import TNLean.PEPS.AreaLaw.Geometry.CellSides
 import TNLean.PEPS.AreaLaw.Geometry.ConcentricFans
@@ -40,9 +42,13 @@ import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.Geometry.FanAffineCoordinates
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.FanInactiveSeams
 import TNLean.PEPS.AreaLaw.Geometry.FanRadialConvexity
+import TNLean.PEPS.AreaLaw.Geometry.FanRadialPieces
 import TNLean.PEPS.AreaLaw.Geometry.FanRegularity
+import TNLean.PEPS.AreaLaw.Geometry.FanRunConnectedness
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
+import TNLean.PEPS.AreaLaw.Geometry.FanRunDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.FanRuns
 import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
 import TNLean.PEPS.AreaLaw.Geometry.FineBelts
@@ -75,6 +81,7 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
+import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
