@@ -480,9 +480,13 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \begin{proof}
     \leanok
     The vectors $\sum_{\alpha,i}Q^i_{\alpha\beta}\ket{\alpha,i}$, $\beta<b$,
-    are orthonormal. Extend them to an orthonormal basis of
-    $\C^D\otimes\C^d$ and let $U$ send the standard basis, with the vectors
-    $\ket{\beta,0}$, $\beta<b$, first, to this basis.
+    are orthonormal, so they are the columns of an isometry $W$ from $\C^b$
+    into $\C^D\otimes\C^d$. The map $\beta\mapsto(\beta,0)$ places the
+    basis of $\C^b$ injectively among the basis vectors $\ket{\alpha,i}$.
+    An isometry extends to a unitary agreeing with it on any such placement:
+    put its orthonormal columns at the placed positions and extend them to an
+    orthonormal basis of the larger space. Applied to $W$ and this placement,
+    this gives $U$ with $U\ket{\beta,0}=W\ket{\beta}$ for $\beta<b$.
 \end{proof}
 
 \begin{theorem}[Positive bond bound]

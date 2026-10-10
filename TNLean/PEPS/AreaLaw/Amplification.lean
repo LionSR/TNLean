@@ -11,11 +11,15 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelGroundVectors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelShellOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordObservables
+import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventKernel
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelOscillation
+import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelWeightedRow
+import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelPoissonGrowth
+import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelPoissonThinning
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelWeightedRow
 import TNLean.PEPS.AreaLaw.Amplification.LocalChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels

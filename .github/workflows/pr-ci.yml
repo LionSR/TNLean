@@ -72,6 +72,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -113,6 +114,7 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
@@ -181,6 +183,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -222,6 +225,7 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
@@ -344,6 +348,7 @@ jobs:
               - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
               - 'scripts/test_blueprint_graph_worker.py'
+              - 'scripts/test_blueprint_graph_precompute.py'
               - 'scripts/add_blueprint_search.py'
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
@@ -374,6 +379,7 @@ jobs:
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_sector_encoder_diagram.py'
+              - 'scripts/test_nested_patch_geometry_diagram.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
@@ -803,6 +809,17 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test nested-square geometry and kernel dependencies strictly
+        timeout-minutes: 4
+        run: |
+          set -e
+          for example in NestedPatchGeometry NestedPatchGeometryAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
       - name: Check QICLean import compatibility strictly
         run: |
           set -e
@@ -1122,6 +1139,10 @@ jobs:
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordChronology.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectors.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectorChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean \
               TNLeanTest/PEPS/AreaLaw/GraphExtendedMetric.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
@@ -1586,6 +1607,9 @@ jobs:
       - name: Check coherent sector-encoder diagrams
         run: python3 scripts/test_sector_encoder_diagram.py
 
+      - name: Check nested-patch geometry diagram
+        run: python3 scripts/test_nested_patch_geometry_diagram.py
+
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
         run: |
@@ -1672,12 +1696,23 @@ jobs:
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
 
+      - name: Test dependency graph rendering and terminal errors
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
+
+      - name: Test precomputed dependency graph interactions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_precompute.py --browser-smoke
+
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
       - name: Test generated blueprint pages
         if: env.TEX_CHANGED == 'true'
         run: |
           python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Preserve failed blueprint render

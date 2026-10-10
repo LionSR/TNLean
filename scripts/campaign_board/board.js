@@ -128,6 +128,15 @@
   const issueRef = n => { const j = byNum.get(n); const a = ext(issueUrl(n), "#" + n, "blk" + (j && j.state === "CLOSED" ? " closed" : "")); a.title = j ? j.title : ""; return a; };
   const tile = (big, label, sub) => el("div", { class: "tile" }, el("div", { class: "eyebrow", text: label }), el("div", { class: "big", text: big }), el("div", { class: "sub", text: sub }));
   const statusPill = s => el("span", { class: "pill st-" + s, text: STATUS[s] });
+  const ROUTINE = /^(ci|chore)(\(|:)|\bbump\b/i;
+
+  // A link into the folded maintainer part, or into a folded list of resolved gaps, opens it.
+  const reveal = () => {
+    const t = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    for (let d = t && t.closest("details"); d; d = d.parentElement.closest("details")) d.open = true;
+    if (t) t.scrollIntoView();
+  };
+  window.addEventListener("hashchange", reveal);
 
   /* ---------- masthead ---------- */
   document.title = C.pageTitle;
@@ -172,7 +181,7 @@
       statementPR ? el("dd", {}, prChip(statementPR), ` ${statementPR.kind === "merged" ? "merged" : statementPR.kind === "draft" ? "is a draft" : "is in review"}${statementPR.attention ? " and needs a fix" : ""}`) : null
     );
     const trace = card.querySelector(".trace");
-    if (trace) trace.addEventListener("click", () => { select(n); $("map").scrollIntoView({ behavior: "smooth", block: "center" }); });
+    if (trace) trace.addEventListener("click", () => { $("maint").open = true; select(n); $("map").scrollIntoView({ behavior: "smooth", block: "center" }); });
   }
 
   /* ---------- headline tiles ---------- */
@@ -180,13 +189,25 @@
   const open = D.prs.filter(p => p.open);
   const byRepo = ps => C.repos.map(r => `${ps.filter(p => p.repo === r.name).length} ${r.name}`).join(" · ");
   const withWork = D.results.filter(r => RANK[leastStatus(r.issues)] >= RANK.draft).length;
+  const provedResults = D.results.filter(r => leastStatus(r.issues) === "done").length;
   $("tiles").append(
-    tile(`${withWork} / ${D.results.length}`, "Paper results with work", "named results whose issues have a pull request or are closed"),
+    tile(`${provedResults} / ${D.results.length}`, "Paper results proved", `every issue of the result closed · ${withWork - provedResults} more have a pull request`),
     tile(`${leaves.filter(i => i.status === "done").length} / ${leaves.length}`, "Work issues closed", `${leaves.filter(i => i.status === "landed").length} more have merged pieces`),
     tile(String(merged.length), "Pull requests merged", byRepo(merged)),
     tile(String(open.length), "Pull requests open", `${open.filter(p => p.kind === "review").length} ready for review · ${open.filter(p => p.attention).length} need a fix`)
   );
   $("legend").append(el("span", { text: "Status:" }), ...ORDER.map(s => el("span", {}, el("i", { class: "sw st-" + s }), STATUS[s])));
+
+  /* ---------- inline tensor-network equations ---------- */
+  // A {{tn:name}} token in stage or gap text is a tenkz equation, displayed on its own line
+  // inside the sentence that leads into it.
+  const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  // Punctuation that follows the token stays on the equation's line, as in a displayed formula.
+  const tnText = html => (html || "").replace(/\{\{tn:([A-Za-z0-9_-]+)\}\}([.,;:]?)\s*/g, (m, name, punct) => {
+    const d = (D.inlineDiagrams || {})[name];
+    if (!d) return punct;
+    return `<span class="tnd"><img class="tni" src="${d.src}" alt="${esc(d.alt || name.replace(/-/g, " "))}"${d.width ? ` width="${Math.round(d.width * 1.5)}"` : ""}>${punct}</span>`;
+  });
 
   /* ---------- gaps ---------- */
   const G = D.gaps || { entries: [], checked: [] };
@@ -194,17 +215,27 @@
   // Notes are identified by repository and path; two repositories may use the same file name.
   const gapKey = (repo, path) => `${repo || PRIMARY.name}:${path}`;
   const noteFor = g => (D.gapNotes || []).find(n => gapKey(n.repo, n.path) === gapKey(g.repo, g.id));
+  // The proof stage that owns an issue, for placing a gap or a badge in the walkthrough.
+  const stageOf = n => {
+    for (const route of C.routes) {
+      const idx = route.stages.findIndex(st => st.issues.includes(n));
+      if (idx >= 0) return { route, idx, stage: route.stages[idx], anchor: `stage-${route.id}-${idx + 1}` };
+    }
+    return null;
+  };
+  // Notes in different repositories may share a file name, so the anchor names the repository too.
+  const gapAnchor = g => `gap-${g.repo || PRIMARY.name}-${g.id.split("/").pop().replace(/\.tex$/, "")}`;
+  const curated = new Set(G.entries.map(g => gapKey(g.repo, g.id)));
+  const pending = (D.gapNotes || []).filter(n => !curated.has(gapKey(n.repo, n.path)));
+  const openCount = k => G.entries.filter(g => g.kind === k && isOpenGap(g)).length;
+  const serious = openCount("error") + openCount("missing-step");
+  const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+  const verdict = serious > 0
+    ? `${plural(openCount("error"), "open error")} and ${plural(openCount("missing-step"), "open missing step")} in the papers.`
+    : pending.length
+      ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
+      : "No open errors or missing steps in either paper.";
   (function renderGaps() {
-    const curated = new Set(G.entries.map(g => gapKey(g.repo, g.id)));
-    const pending = (D.gapNotes || []).filter(n => !curated.has(gapKey(n.repo, n.path)));
-    const openCount = k => G.entries.filter(g => g.kind === k && isOpenGap(g)).length;
-    const serious = openCount("error") + openCount("missing-step");
-    const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
-    const verdict = serious > 0
-      ? `${plural(openCount("error"), "open error")} and ${plural(openCount("missing-step"), "open missing step")} in the papers.`
-      : pending.length
-        ? `No open errors or missing steps among the classified notes. ${plural(pending.length, "new note")} still to be classified.`
-        : "No open errors or missing steps in either paper.";
     const counts = el("div", { class: "counts" }, el("span", { class: "muted", text: "Open:" }),
       ...Object.keys(GAP_KIND).map(k => el("span", {}, el("span", { class: "pill k-" + k, text: String(openCount(k)) }), " " + GAP_KIND[k][0].toLowerCase())));
     const done = G.entries.filter(g => !isOpenGap(g)).length;
@@ -214,28 +245,43 @@
     $("kinds").append(...Object.entries(GAP_KIND).map(([k, [name, desc]]) => el("div", {}, el("dt", {}, el("span", { class: "pill k-" + k, text: name })), el("dd", { text: desc }))));
 
     const order = { error: 0, "missing-step": 1, narrower: 2, convention: 3 };
-    const list = $("gaplist");
+    // Open gaps are read first; resolved ones stay on record in a folded list after them.
+    const resolvedList = el("div", { class: "gaplist" });
+    const resolvedCount = G.entries.filter(g => !isOpenGap(g)).length;
     for (const g of [...G.entries].sort((a, b) => (isOpenGap(b) - isOpenGap(a)) || order[a.kind] - order[b.kind])) {
+      const list = isOpenGap(g) ? $("gaplist") : resolvedList;
       const note = noteFor(g);
       const [statusName, statusCls] = GAP_STATUS[g.status || "open"];
-      list.append(el("article", { class: "gap" },
-        el("div", { class: "where" }, el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }), el("span", { class: "pill " + statusCls, text: statusName }),
-          el("span", { text: `${(C.papers[g.paper] || {}).name || ""} · ${g.result}` })),
-        el("h3", { text: g.title }),
+      // Each entry is read on its own: where it sits in the proof, a one-line verdict, what the
+      // step does, then the claim, the finding, the risk and the next step.
+      const at = stageOf(g.issue);
+      const place = at ? el("a", { href: "#" + at.anchor, text: `${at.route.paper ? (C.papers[at.route.paper] || {}).name : "Shared foundations"}, stage ${at.idx + 1}: ${at.stage.title}` })
+        : el("span", { text: (C.papers[g.paper] || {}).name || "" });
+      list.append(el("article", { class: "gap", id: gapAnchor(g) },
+        // Once Lean proves the paper's statement, "narrower" no longer describes the entry.
+        el("div", { class: "where" }, isOpenGap(g) || g.kind !== "narrower" ? el("span", { class: "pill k-" + g.kind, text: GAP_KIND[g.kind][0] }) : null,
+          el("span", { class: "pill " + statusCls, text: statusName }), place),
+        el("h3", {}, el("span", { text: g.title }), " ", el("span", { class: "res", text: g.result })),
+        g.summary ? el("p", { class: "summary", html: tnText(g.summary) }) : null,
+        g.context ? el("p", { class: "context", html: tnText(g.context) }) : null,
         el("dl", {},
-          el("div", {}, el("dt", { text: "The paper says" }), el("dd", { text: g.claims })),
-          el("div", {}, el("dt", { text: "What the formalization found" }), el("dd", { text: g.found })),
-          el("div", {}, el("dt", { text: "Does it threaten the theorem?" }), el("dd", { text: g.impact })),
-          el("div", {}, el("dt", { text: "Next step" }), el("dd", { text: g.plan }))),
+          el("div", {}, el("dt", { text: "The paper says" }), el("dd", { html: tnText(g.claims) })),
+          el("div", {}, el("dt", { text: "What Lean found" }), el("dd", { html: tnText(g.found) })),
+          el("div", {}, el("dt", { text: "Risk to the theorem" }), el("dd", { html: tnText(g.impact) })),
+          el("div", {}, el("dt", { text: "Next step" }), el("dd", { html: tnText(g.plan) }))),
         el("div", { class: "links" }, g.issue ? issueRef(g.issue) : null,
           ...Object.entries(g.prs || {}).flatMap(([repo, ns]) => ns.map(n => prRef(repo, n))),
           note ? el("span", { class: "muted mono", text: `${note.path.split("/").pop()} · note status: ${note.status || "unstated"}` }) : null)));
     }
+    const list = $("gaplist");
     for (const n of pending) list.append(el("article", { class: "gap" },
       el("div", { class: "where" }, el("span", { class: "pill st-draft", text: "New note, summary pending" }), n.kind ? el("span", { text: `marked ${n.kind} by its author` }) : null),
       el("h3", { text: n.title || n.path }),
       el("div", { class: "links" }, ...n.prs.map(p => prRef(n.repo, p.number)), el("span", { class: "muted mono", text: n.path.split("/").pop() }))));
-    if (!list.children.length) list.append(el("p", { class: "muted", text: "No paper-gap notes yet." }));
+    if (!list.children.length) list.append(el("p", { class: "muted", text: resolvedCount ? "No open paper gaps." : "No paper-gap notes yet." }));
+    if (resolvedCount) list.after(el("details", { class: "fold resolved" },
+      el("summary", {}, el("h3", { text: `Resolved (${resolvedCount})` }), el("span", { class: "muted", text: " Lean proves what the paper states (in some cases in a pull request awaiting merge), or the gap was a degenerate case now excluded by the definitions." })),
+      resolvedList));
 
     const box = $("gapchecked");
     if ((G.checked || []).length) {
@@ -245,13 +291,26 @@
     if (G.reviewedAt) box.append(el("p", { class: "note", text: `Summaries last reviewed ${new Date(G.reviewedAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}. They paraphrase the paper-gap notes, which are authoritative.` }));
   })();
 
+  /* ---------- one-line status under the lede ---------- */
+  (function renderStatus() {
+    const targets = [...document.querySelectorAll(".thm[data-target]")].map(c => byNum.get(+c.dataset.target)).filter(Boolean);
+    const provedT = targets.filter(t => t.state === "CLOSED").length;
+    const theorems = !targets.length ? ""
+      : provedT === targets.length ? (targets.length === 1 ? "The main theorem is proved in Lean." : "Both main theorems are proved in Lean.")
+      : provedT === 0 ? (targets.length === 1 ? "The main theorem is not yet proved in Lean." : targets.length === 2 ? "Neither main theorem is proved in Lean yet." : "No main theorem is proved in Lean yet.")
+      : `${provedT} of ${targets.length} main theorems are proved in Lean.`;
+    const closed = leaves.filter(i => i.status === "done").length;
+    $("status").append(el("b", { text: theorems }), ` ${closed} of ${leaves.length} work issues are closed. ${verdict} `,
+      el("a", { href: "#gaps", text: "Gaps" }), " · ", el("a", { href: "#maint", text: "Work queue" }));
+  })();
+
   /* ---------- proof routes ---------- */
   (function renderRoutes() {
     const assigned = new Set();
     for (const route of C.routes) {
       const container = el("div", { class: "route" });
       $("routes").append(el("section", { class: "part" },
-        el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: route.intro }) : null),
+        el("header", {}, el("div", { class: "eyebrow", text: route.eyebrow }), el("h2", { text: route.heading }), route.intro ? el("p", { html: tnText(route.intro) }) : null),
         container));
       route.stages.forEach((st, idx) => {
         const items = st.issues.map(n => byNum.get(n)).filter(Boolean);
@@ -261,10 +320,11 @@
         results.forEach(r => assigned.add(r.paper + r.label));
         const sections = [...new Set(results.map(r => +r.num.split(".")[0]))].sort((a, b) => a - b);
         const prs = [...new Set(items.flatMap(i => i.prs))];
-        const landed = prs.filter(p => p.kind === "merged").sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
+        // Dependency bumps and CI changes are not part of the stage's mathematics.
+        const landed = prs.filter(p => p.kind === "merged" && !ROUTINE.test(p.title)).sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
         const inflight = prs.filter(p => p.open);
         const gapBadges = G.entries.filter(g => st.issues.includes(g.issue) && g.kind !== "convention" && isOpenGap(g))
-          .map(g => { const a = el("a", { href: "#gaps", class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result}` }); a.title = g.title; return a; });
+          .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{tn:[^}]+\}\}/g, ""); return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
           const rs = leastStatus(r.issues);
@@ -277,21 +337,51 @@
           ...landed.slice(-6).map(p => el("li", {}, prChip(p), el("span", { text: prTitle(p.title) }))),
           landed.length > 6 ? el("li", {}, el("span"), el("span", { class: "muted", text: `and ${landed.length - 6} earlier` })) : null,
           landed.length ? null : el("li", {}, el("span"), el("span", { class: "muted", text: "Nothing merged yet." })));
-        container.append(el("div", { class: "stage" },
+        // A campaign's figures.js may draw a schematic beside the stage text.
+        const draw = st.figure && (window.campaignFigures || {})[st.figure];
+        let figure = null;
+        if (draw) {
+          const svg = sv("svg", { role: "img", "aria-label": st.figureAlt || st.title });
+          figure = el("figure", { class: "sfig" }, svg, st.caption ? el("figcaption", { html: tnText(st.caption) }) : null);
+          try { draw(svg); } catch (e) { console.error(`figure ${st.figure}:`, e); figure = null; }
+        }
+        // Tensor-network diagrams compiled from the campaign's tenkz sources.
+        const tnFigs = (st.diagrams || []).map(d => {
+          const tn = (D.diagrams || {})[d.src];
+          if (!tn) return null;
+          const alt = (d.alt || tn.alt || d.caption || st.title).replace(/<[^>]+>/g, "");
+          return el("figure", { class: "sfig tnfig" },
+            el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
+            d.caption ? el("figcaption", { html: tnText(d.caption) }) : null);
+        }).filter(Boolean);
+        // A reader may land on any stage without having read the others, so each stage lists
+        // every symbol its text, equations and figures use.
+        const key = (st.symbols || []).length ? el("div", { class: "key" }, el("div", { class: "keyhead", text: "Symbols on this stage" }),
+          el("dl", {}, ...st.symbols.map(([sym, meaning]) => el("div", {}, el("dt", { html: sym }), el("dd", { html: meaning }))))) : null;
+        const figs = key || figure || tnFigs.length ? el("div", { class: "figs" }, key, ...tnFigs, figure) : null;
+        container.append(el("div", { class: "stage", id: `stage-${route.id}-${idx + 1}` },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },
             el("div", { class: "head" }, el("h3", { text: st.title }),
               sections.length ? el("span", { class: "secs", text: sections.length > 1 ? `§§${sections[0]}–${sections[sections.length - 1]}` : `§${sections[0]}` }) : null,
               statusPill(status), ...gapBadges),
-            el("p", { class: "phys", html: st.physics }),
-            el("p", { class: "out", html: "<b>Delivers.</b> " + st.delivers }),
-            el("div", { class: "meta" },
-              el("div", { class: "box" }, el("h4", { text: results.length ? `Paper results (${results.length})` : "Paper results" }),
-                results.length ? resultList : el("span", { class: "muted", text: "Shared definitions; no named result." })),
-              el("div", { class: "box" }, el("h4", { text: `Landed (${landed.length})` }), landedList)),
-            el("div", { class: "foot" }, meter(items), el("span", { text: `${items.length} issue${items.length === 1 ? "" : "s"}:` }),
-              ...items.map(i => { const a = issueRef(i.number); a.classList.add("chip", "st-" + i.status); return a; }),
-              inflight.length ? el("span", { text: `· ${inflight.length} PR${inflight.length === 1 ? "" : "s"} open` }) : null))));
+            el("div", { class: figs ? "lead hasfig" : "lead" },
+              el("div", { class: "txt" },
+                el("p", { class: "phys", html: tnText(st.physics) }),
+                el("p", { class: "out", html: '<span class="sc">Delivers</span> ' + tnText(st.delivers) })),
+              figs),
+            // The record of the Lean work is for checking, not for following the proof, so it
+            // stays folded under a one-line summary.
+            el("details", { class: "book" },
+              el("summary", {}, el("span", { class: "sc", text: "Formalization" }), " ", meter(items),
+                el("span", { text: [results.length ? `${results.length} paper result${results.length === 1 ? "" : "s"}` : "", `${landed.length} merged pull request${landed.length === 1 ? "" : "s"}`, inflight.length ? `${inflight.length} open` : "", `${items.length} issue${items.length === 1 ? "" : "s"}`].filter(Boolean).join(" · ") })),
+              el("div", { class: "meta" },
+                el("div", { class: "box" }, el("h4", { text: results.length ? `Paper results (${results.length})` : "Paper results" }),
+                  results.length ? resultList : el("span", { class: "muted", text: "Shared definitions; no named result." })),
+                el("div", { class: "box" }, el("h4", { text: `Landed (${landed.length})` }), landedList)),
+              el("div", { class: "foot" }, el("span", { text: `${items.length} issue${items.length === 1 ? "" : "s"}:` }),
+                ...items.map(i => { const a = issueRef(i.number); a.classList.add("chip", "st-" + i.status); return a; }),
+                inflight.length ? el("span", { text: `· ${inflight.length} PR${inflight.length === 1 ? "" : "s"} open` }) : null)))));
       });
     }
   })();
@@ -583,4 +673,6 @@
     "A partly landed issue is one with at least one merged pull request that is still open. A stage or paper result takes the least advanced status among its issues. ",
     "The stage texts paraphrase each manuscript's own proof outline. ",
     meta.gapsUrl ? el("span", {}, "The gap summaries are maintained in ", ext(meta.gapsUrl, meta.gapsPath), ", and the paper-gap notes themselves are authoritative.") : null);
+  // The page is built after load, so the browser's own jump to a fragment found nothing.
+  reveal();
 })();
