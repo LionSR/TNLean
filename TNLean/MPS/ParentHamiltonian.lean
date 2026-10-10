@@ -34,6 +34,7 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.BlockIntervalProjectors
+import TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.BlockObservableSectorDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpaceAtSimultaneousInjectivity
