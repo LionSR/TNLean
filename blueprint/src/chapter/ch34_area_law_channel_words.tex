@@ -1,0 +1,274 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 139--173,
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% ChannelWordObservables is checked at b9968a9236, with relabelling at 3bf19a42.
+% These are finite chronological compositions and their append increments.
+% No clock process or Poisson evolution estimate is asserted here.
+
+\section{Chronological finite channel words}
+\label{sec:al_channel_words}
+
+Let $I,J$ be finite sets, let $q\in\N$, and put
+$\mathcal H=(\C^q)^{\otimes I}$ and $\mathcal K=\C^J$.
+The spectator dimension may be zero. Let $F$ be a set of event labels,
+and write $\mathcal E_i$ for the full spectator root map associated
+with the physical matrix $k_i$, as in
+Definition~\ref{def:al_local_root_channel}.
+All input operators are arbitrary complex matrices on
+$\mathcal H\otimes\mathcal K$, with the Euclidean operator norm.
+Write $wi$ for the word obtained by appending a single label $i$ to
+the right of a finite word $w$.
+
+\begin{definition}[Observable after a chronological word]
+    \label{def:al_channel_word}
+    \uses{def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord}
+    \leanok
+    For a nonempty word $w=(i_0,\ldots,i_{m-1})$, define
+    \begin{align}
+        \label{eq:al_word_composition}
+        \mathcal E_w(B)
+         & =(\mathcal E_{i_{m-1}}\circ\cdots\circ\mathcal E_{i_0})(B).
+    \end{align}
+    For the empty word $\varnothing$, take
+    $\mathcal E_{\varnothing}=\mathrm{id}$.
+    Thus the first event acts first. Given an initial operator $B_0$,
+    write $B_w=\mathcal E_w(B_0)$.
+\end{definition}
+
+\begin{theorem}[Empty words and appending an event]
+    \label{thm:al_channel_word_append}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_nil,
+        TNLean.PEPS.AreaLaw.spectatorRootChannelWord_append_singleton}
+    \leanok
+    For every operator $B$, every finite word $w$, and every label $i$,
+    \begin{align}
+        \label{eq:al_word_empty}
+        \mathcal E_{\varnothing}(B) & =B,
+    \end{align}
+    \begin{align}
+        \label{eq:al_word_append}
+        \mathcal E_{wi}(B) & =\mathcal E_i(\mathcal E_w(B)).
+    \end{align}
+    In particular, $B_{\varnothing}=B_0$ and $B_{wi}=\mathcal E_i(B_w)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_channel_word}
+    The empty composition is the identity. In the composition for
+    $wi$, the last map is $\mathcal E_i$, after every map indexed by
+    $w$, which gives~(\ref{eq:al_word_append}).
+\end{proof}
+
+\begin{theorem}[Relabelling chronological words]
+    \label{thm:al_channel_word_relabel}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_map}
+    \leanok
+    Let $E$ be any label set and let $f:E\to F$ be any map.
+    Define $\widetilde k_j=k_{f(j)}$ and
+    $\widetilde{\mathcal E}_j=\mathcal E_{f(j)}$ for $j\in E$.
+    For a word $w$ over $E$, let $f(w)$ be the word obtained by
+    applying $f$ to each label. Then, for every operator $B$,
+    \begin{align}
+        \label{eq:al_word_relabel}
+        \mathcal E_{f(w)}(B) & =\widetilde{\mathcal E}_w(B).
+    \end{align}
+    The map $f$ may identify distinct labels.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_channel_word}
+    At every position in the chronological composition, both sides
+    of~(\ref{eq:al_word_relabel}) apply the same map
+    $\mathcal E_{f(j)}$. They start from the same input $B$ and
+    apply these maps in the same order.
+\end{proof}
+
+% Source: 09-amplification.tex, eq:amplification-channel-vector, lines 218--224.
+\begin{theorem}[Channel words on a common ground vector]
+    \label{thm:al_channel_word_ground}
+    \uses{def:al_channel_word,def:al_local_root_channel}
+    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannel_mulVec_ground,
+        TNLean.PEPS.AreaLaw.spectatorRootChannelWord_mulVec_ground}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ and $k_i\Omega=0$ for every
+    $i\in F$, where $\Omega\in\mathcal H$. Put
+    $G_i=(\mathbb 1-k_i)^{1/2}$, and, for a chronological word
+    $w=(i_0,\ldots,i_{m-1})$, put
+    $R_w=G_{i_{m-1}}\cdots G_{i_0}$, with
+    $R_{\varnothing}=\mathbb 1$.
+    For every $\xi\in\mathcal K$ and every operator $B$ on
+    $\mathcal H\otimes\mathcal K$, one has
+    \begin{align}
+        \label{eq:al_word_ground_vector}
+        \mathcal E_w(B)(\Omega\otimes\xi)
+         & =(R_w\otimes\mathbb 1)B(\Omega\otimes\xi).
+    \end{align}
+    This is the finite composition identity in
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+    Neither vector need be normalized, and $B$ need not be Hermitian.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_local_root_channel,thm:al_channel_word_append}
+    Functional calculus gives $G_i\Omega=\Omega$ and
+    $k_i^{1/2}\Omega=0$. Consequently
+    \begin{align}
+        \label{eq:al_single_ground_vector}
+        \mathcal E_i(B)(\Omega\otimes\xi)
+         & =(G_i\otimes\mathbb 1)B(\Omega\otimes\xi).
+    \end{align}
+    Induct by appending the final event to a word. The empty word
+    gives the identity. For $wi$, apply
+    (\ref{eq:al_single_ground_vector}) to $\mathcal E_w(B)$,
+    then the induction hypothesis; the resulting left factor is
+    $G_iR_w=R_{wi}$.
+\end{proof}
+
+\begin{theorem}[Vector difference bounded by channel difference]
+    \label{thm:al_channel_word_vector_difference}
+    \uses{thm:al_channel_word_ground}
+    \lean{TNLean.PEPS.AreaLaw.norm_rootProduct_sub_le_channelWord_sub}
+    \leanok
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:al_channel_word_ground}, let $u,w$ be any
+    two finite words. Then
+    \begin{align}
+        \label{eq:al_word_vector_difference}
+        \bigl\|(R_u\otimes\mathbb 1)B(\Omega\otimes\xi)
+        -(R_w\otimes\mathbb 1)B(\Omega\otimes\xi)\bigr\|
+         & \le\|\mathcal E_u(B)-\mathcal E_w(B)\|
+        \|\Omega\otimes\xi\|.
+    \end{align}
+    Vector norms are Euclidean and the matrix norm is the induced
+    operator norm. This is the pointwise conversion used in
+    \cite[\texttt{09-amplification.tex}, lines 218--224]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_ground}
+    By (\ref{eq:al_word_ground_vector}), the vector inside the norm
+    is $(\mathcal E_u(B)-\mathcal E_w(B))(\Omega\otimes\xi)$.
+    Apply the defining operator-norm inequality.
+\end{proof}
+
+\begin{theorem}[Norm contraction along a finite word]
+    \label{thm:al_channel_word_norm}
+    \uses{def:al_channel_word}
+    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannelWord_le}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$.
+    Then $\|\mathcal E_w(B)\|\le\|B\|$ for every finite word $w$
+    and every operator $B$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_channel_word,thm:al_root_channel_contraction}
+    Induct on the word, allowing an arbitrary input operator.
+    The empty word gives equality. If the first label is $i$ and
+    the remaining word is $u$, then
+    \begin{align}
+        \label{eq:al_word_norm_step}
+        \|\mathcal E_{iu}(B)\|
+         & =\|\mathcal E_u(\mathcal E_i(B))\|
+        \le\|\mathcal E_i(B)\|\le\|B\|.
+    \end{align}
+    Here the first inequality is the induction hypothesis at input
+    $\mathcal E_i(B)$ and the second is
+    Theorem~\ref{thm:al_root_channel_contraction}.
+\end{proof}
+
+\begin{theorem}[Oscillation bounded by the initial norm]
+    \label{thm:al_channel_word_oscillation}
+    \uses{def:al_channel_word,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannelWord_bounds}
+    \leanok
+    Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$.
+    For every finite word $w$, site $y\in I$, and initial operator
+    $B_0$, one has $0\le d_y(B_w)\le2\|B_0\|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_channel_word_norm,thm:qc_site_oscillation_bounds}
+    The oscillation is nonnegative, and
+    $d_y(B_w)\le2\|B_w\|\le2\|B_0\|$ by
+    Theorems~\ref{thm:qc_site_oscillation_bounds} and
+    \ref{thm:al_channel_word_norm}.
+\end{proof}
+
+At the empty word, the initial support bound is
+Theorem~\ref{thm:al_spectator_support_indicator}.
+If $q>0$ and every physical matrix block of $B_0$ is supported on
+$S\subseteq I$, then~(\ref{eq:al_word_empty}) gives
+\begin{align}
+    \label{eq:al_word_initial_support}
+    d_y(B_{\varnothing}) & =d_y(B_0)\le2\|B_0\|\mathbf1_S(y).
+\end{align}
+
+\begin{theorem}[Summed append increments of the current observable]
+    \label{thm:al_channel_word_kernel_increment}
+    \uses{def:al_channel_word,def:qc_site_oscillation,
+        def:al_graph_event_kernel,def:qc_local_circuit}
+    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelEventKernel}
+    \leanok
+    Suppose $q>0$ and $F$ is finite. Let $G$ be a simple graph on
+    $I$, and choose anchors $a_i\in I$ for $i\in F$.
+    Assume $0\le k_i\le\mathbb 1$ and that $k_i$ is supported on
+    the connected component of $a_i$ for every $i$.
+    Let $C\ge0$, $c>0$, and $0<\alpha\le1$.
+    Fix a cutoff $N\in\N$ with $N\ge R_{a_i}$ for every $i$,
+    where $R_{a_i}$ is the maximum distance from $a_i$ within its
+    component. Suppose that, for every $i\in F$ and every integer
+    $l$ with $0\le l\le N$,
+    \begin{align}
+        \label{eq:al_word_localization_error}
+        \|k_i-E_{N_l(a_i)}(k_i)\| & \le C\exp(-cl^\alpha).
+    \end{align}
+    Use the kernel~(\ref{eq:al_propagation_event_kernel}) with
+    $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$.
+    Then, for every finite word $w$, every $y\in I$, and every
+    initial operator $B_0$,
+    \begin{align}
+        \label{eq:al_word_kernel_increment}
+        \sum_{i\in F}\bigl(d_y(B_{wi})-d_y(B_w)\bigr)
+         & \le\sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B_w).
+    \end{align}
+    Every oscillation on the right is evaluated at the same current
+    observable $B_w$. Labels with the same anchor remain distinct
+    summands. The estimate holds for arbitrary finite spectators
+    and arbitrary complex initial operators $B_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_actual_channel_kernel_domination,thm:al_channel_word_append}
+    Apply Theorem~\ref{thm:al_actual_channel_kernel_domination} to
+    the operator $B_w$. For each event $i$, replace
+    $\mathcal E_i(B_w)$ by $B_{wi}$ using~(\ref{eq:al_word_append}).
+    The resulting inequality is~(\ref{eq:al_word_kernel_increment}).
+\end{proof}
+
+For a finite retained family $F_P=\{i\in F:P(i)\}$, let
+$j:F_P\hookrightarrow F$ be the inclusion and let $\mathcal E_w^P$
+denote composition using the restricted effects $k\circ j$.
+Theorem~\ref{thm:al_channel_word_relabel} identifies
+the observable $\mathcal E_w^P(B_0)$ with
+$B_{j(w)}=\mathcal E_{j(w)}(B_0)$ in the original family.
+Under the hypotheses of Theorem~\ref{thm:al_channel_word_kernel_increment}
+for this restricted family, (\ref{eq:al_word_kernel_increment}) gives
+\begin{align}
+    \label{eq:al_word_retained_increment}
+    \sum_{i\in F_P}\bigl(d_y(B_{j(wi)})-d_y(B_{j(w)})\bigr)
+     & \le\sum_{z\in I}\mathsf A^{(N,P)}_{yz}d_z(B_{j(w)}),
+\end{align}
+where $\mathsf A^{(N,P)}$ counts the retained labels and the cutoff
+need only cover their anchors.
+For the lattice constraints of
+Theorem~\ref{thm:al_lattice_channel_uniform_bounds}, one may instead
+apply~(\ref{eq:al_propagation_lattice_increment}) directly to
+$\mathcal E_w^{\,P}(B_0)$ and use~(\ref{eq:al_word_relabel}) and
+(\ref{eq:al_word_append}). Thus the same $C,c,v$, chosen before $P$,
+give both the lattice weighted row bound and
+(\ref{eq:al_word_retained_increment}) for every retained word.
+Every effect in this composition is still constructed from the
+original full Hamiltonian and its gapped ground vector.
