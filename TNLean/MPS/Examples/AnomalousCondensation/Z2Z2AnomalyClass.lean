@@ -8,6 +8,7 @@ import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Exact
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Split
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorOrderTwo
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
@@ -50,8 +51,9 @@ step is resolved in `docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`.
 
 * `Z2Z2Condensation.xHom`, `Z2Z2Condensation.yHom`, `Z2Z2Condensation.xyHom`: the three
   embeddings of `ℤ₂` onto the subgroups of order two.
-* `Z2Z2Condensation.pairFamily`, `Z2Z2Condensation.pairFusionData`: a `ℤ₂`-indexed family
-  `1 ↦ M_e`, `g ↦ A` with a bond-two tensor `A`, and its fusion tensors.
+* `Z2Z2Condensation.xFusionData`, `Z2Z2Condensation.xyFusionData`: fusion tensors of the
+  restrictions to `{e, x}` and `{e, xy}`, as instances of
+  `MPOTensor.GroupFamily.FusionData.orderTwo`.
 
 ## Main results
 
@@ -151,144 +153,15 @@ def yHom : Multiplicative (ZMod 2) →* Multiplicative (ZMod 2 × ZMod 2) :=
 def xyHom : Multiplicative (ZMod 2) →* Multiplicative (ZMod 2 × ZMod 2) :=
   AddMonoidHom.toMultiplicative ((AddMonoidHom.id (ZMod 2)).prod (AddMonoidHom.id (ZMod 2)))
 
-/-- The generator of `ℤ₂`, written multiplicatively. -/
-def z2Gen : Multiplicative (ZMod 2) := Multiplicative.ofAdd 1
-
-/-- The generator of `ℤ₂` has order two. -/
-theorem z2Gen_pow_two : z2Gen ^ 2 = 1 := by decide
-
-/-! ### A `ℤ₂`-indexed family with a bond-two generator -/
-
-/-- The bond dimension attached to a label of `ℤ₂`: one for the identity and two for the
-generator. -/
-def pairBondDim (a : Fin 2) : ℕ := if a = 0 then 1 else 2
-
-/-- The tensor attached to a label of `ℤ₂`: `M_e` for the identity and `A` for the
-generator. -/
-def pairLabelTensor (A : MPOTensor 4 2) : (a : Fin 2) → MPOTensor 4 (pairBondDim a)
-  | ⟨0, _⟩ => eTensor
-  | ⟨1, _⟩ => A
-  | ⟨n + 2, h⟩ => absurd h (by omega)
-
-/-- The `ℤ₂`-indexed family `1 ↦ M_e`, `g ↦ A`. -/
-def pairFamily (A : MPOTensor 4 2) : GroupFamily (Multiplicative (ZMod 2)) 4 where
-  bondDim x := pairBondDim x.toAdd
-  bondDim_pos x := by unfold pairBondDim; split <;> norm_num
-  tensor x := pairLabelTensor A x.toAdd
-
-/-- The left fusion tensors attached to a pair of labels: the identity when a label is the
-identity, and `V` for two generators. -/
-def pairLabelV (V : Matrix (Fin 1) (Fin (2 * 2)) ℂ) : (a b : Fin 2) →
-    Matrix (Fin (pairBondDim (a + b))) (Fin (pairBondDim a * pairBondDim b)) ℂ
-  | ⟨0, _⟩, ⟨0, _⟩ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
-  | ⟨0, _⟩, ⟨1, _⟩ => (1 : Matrix (Fin 2) (Fin 2) ℂ)
-  | ⟨1, _⟩, ⟨0, _⟩ => (1 : Matrix (Fin 2) (Fin 2) ℂ)
-  | ⟨1, _⟩, ⟨1, _⟩ => V
-  | ⟨n + 2, h⟩, _ => absurd h (by omega)
-  | _, ⟨n + 2, h⟩ => absurd h (by omega)
-
-/-- The right fusion tensors attached to a pair of labels. -/
-def pairLabelW (W : Matrix (Fin (2 * 2)) (Fin 1) ℂ) : (a b : Fin 2) →
-    Matrix (Fin (pairBondDim a * pairBondDim b)) (Fin (pairBondDim (a + b))) ℂ
-  | ⟨0, _⟩, ⟨0, _⟩ => (1 : Matrix (Fin 1) (Fin 1) ℂ)
-  | ⟨0, _⟩, ⟨1, _⟩ => (1 : Matrix (Fin 2) (Fin 2) ℂ)
-  | ⟨1, _⟩, ⟨0, _⟩ => (1 : Matrix (Fin 2) (Fin 2) ℂ)
-  | ⟨1, _⟩, ⟨1, _⟩ => W
-  | ⟨n + 2, h⟩, _ => absurd h (by omega)
-  | _, ⟨n + 2, h⟩ => absurd h (by omega)
-
-/-- **Fusion tensors of a `ℤ₂`-indexed family with a bond-two generator**: the identity
-whenever a factor is the identity, when stacking `M_e` with `A` on either side gives `A`, and a
-reduction `(V, W)` of the stacked square of `A` onto `M_e` for two generators.
-
-Source: arXiv:2502.20257, equations `eq:fusion_1` and `eq:fusion_2`, `main.tex`
-lines 1403--1497. -/
-def pairFusionData (A : MPOTensor 4 2) (V : Matrix (Fin 1) (Fin (2 * 2)) ℂ)
-    (W : Matrix (Fin (2 * 2)) (Fin 1) ℂ)
-    (hEA : (mulTensor eTensor A).toMPSTensor = A.toMPSTensor)
-    (hAE : (mulTensor A eTensor).toMPSTensor = A.toMPSTensor)
-    (hAA : MPSTensor.IsReduction (mulTensor A A).toMPSTensor eMPS V W) :
-    (pairFamily A).FusionData where
-  V x y := pairLabelV V x.toAdd y.toAdd
-  W x y := pairLabelW W x.toAdd y.toAdd
-  isReduction := by
-    refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
-      (Multiplicative.forall_zmod_two ?_ ?_)
-    · exact MPSTensor.isReduction_one_one_of_eq (funext eEStacked_eq)
-    · exact MPSTensor.isReduction_one_one_of_eq hEA
-    · exact MPSTensor.isReduction_one_one_of_eq hAE
-    · exact hAA
-
-section PairFusionData
-
-variable {A : MPOTensor 4 2} {V : Matrix (Fin 1) (Fin (2 * 2)) ℂ}
-  {W : Matrix (Fin (2 * 2)) (Fin 1) ℂ}
-  {hEA : (mulTensor eTensor A).toMPSTensor = A.toMPSTensor}
-  {hAE : (mulTensor A eTensor).toMPSTensor = A.toMPSTensor}
-  {hAA : MPSTensor.IsReduction (mulTensor A A).toMPSTensor eMPS V W}
-
-private theorem assocInv_two_two_two :
-    mulTensorAssocInvMatrix 2 2 2 = (1 : Matrix (Fin 8) (Fin 8) ℂ) := by
-  rw [mulTensorAssocInvMatrix_eq_finCongr]
-  exact finCongr_toMatrix_eq_one _
-
-private theorem assocInv_two_one_two :
-    mulTensorAssocInvMatrix 2 1 2 = (1 : Matrix (Fin 4) (Fin 4) ℂ) := by
-  rw [mulTensorAssocInvMatrix_eq_finCongr]
-  exact finCongr_toMatrix_eq_one _
-
-private theorem castMat_gen_gen_gen (A : MPOTensor 4 2) :
-    (pairFamily A).castMat (mul_assoc z2Gen z2Gen z2Gen).symm =
-      (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
-  rw [GroupFamily.castMat_eq_finCongr]
-  exact finCongr_toMatrix_eq_one _
-
-private theorem castMat_gen_one_gen (A : MPOTensor 4 2) :
-    (pairFamily A).castMat (mul_assoc z2Gen 1 z2Gen).symm = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-  rw [GroupFamily.castMat_eq_finCongr]
-  exact finCongr_toMatrix_eq_one _
-
-/-- The tree fusing the first two of three generators first is `V ⊗ 1`. -/
-theorem pairFusionData_leftV_gen_gen_gen :
-    (pairFusionData A V W hEA hAE hAA).leftV z2Gen z2Gen z2Gen = kronId V 2 := by
-  change (1 : Matrix (Fin 2) (Fin 2) ℂ) * kronId V 2 = _
-  rw [Matrix.one_mul]
-
-/-- The tree fusing the last two of three generators first is `1 ⊗ V`. -/
-theorem pairFusionData_rightV_gen_gen_gen :
-    (pairFusionData A V W hEA hAE hAA).rightV z2Gen z2Gen z2Gen = idKron 2 V := by
-  rw [GroupFamily.FusionData.rightV, castMat_gen_gen_gen]
-  change (1 : Matrix (Fin 2) (Fin 2) ℂ) * ((1 : Matrix (Fin 2) (Fin 2) ℂ) *
-      idKron 2 V * mulTensorAssocInvMatrix 2 2 2) = _
-  rw [assocInv_two_two_two, Matrix.one_mul, Matrix.one_mul, Matrix.mul_one]
-
-/-- `ω(g,1,g) = 1` for the fusion tensors of `pairFusionData`, which are trivial whenever a
-factor is the identity: both fusion trees are `V`. -/
-theorem pairFusionData_omega_gen_one_gen (hF : (pairFamily A).IsNormalRepresentation) :
-    (pairFusionData A V W hEA hAE hAA).omega z2Gen 1 z2Gen = 1 := by
-  refine GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV hF ?_
-  rw [GroupFamily.FusionData.rightV, castMat_gen_one_gen]
-  change V * kronId (1 : Matrix (Fin 2) (Fin 2) ℂ) 2 = (1 : Matrix (Fin 1) (Fin 1) ℂ) *
-    (V * idKron 2 (1 : Matrix (Fin 2) (Fin 2) ℂ) * mulTensorAssocInvMatrix 2 1 2)
-  rw [kronId_one, idKron_one, assocInv_two_one_two, Matrix.mul_one, Matrix.mul_one,
-    Matrix.one_mul]
-
-/-- The cyclic invariant of `pairFusionData` at the generator is `ω(g,g,g)`. -/
-theorem cyclicInvariant_pairFusionData (hF : (pairFamily A).IsNormalRepresentation) :
-    ScalarThreeCochain.cyclicInvariant (pairFusionData A V W hEA hAE hAA).omega z2Gen 2 =
-      (pairFusionData A V W hEA hAE hAA).omega z2Gen z2Gen z2Gen := by
-  simp only [ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero,
-    one_mul, pow_zero, pow_one, pairFusionData_omega_gen_one_gen hF]
-
-end PairFusionData
-
 /-- A family `1 ↦ M_e`, `g ↦ A` equal to a restriction of the dressed family: bond dimensions
 agree by computation, and the tensors by `kleinTensor_one` and `hA`. -/
-private theorem comap_eq_pairFamily
+private theorem comap_eq_orderTwoFamily
     (f : Multiplicative (ZMod 2) →* Multiplicative (ZMod 2 × ZMod 2))
-    (hb0 : bondDim (kleinEquiv (f 1)) = 1) (hb1 : bondDim (kleinEquiv (f z2Gen)) = 2)
-    (h1 : f 1 = 1) {A : MPOTensor 4 2} (hA : HEq (kleinTensor (f z2Gen)) A) :
-    kleinFamily.comap f = pairFamily A := by
+    (hb0 : bondDim (kleinEquiv (f 1)) = 1)
+    (hb1 : bondDim (kleinEquiv (f GroupFamily.orderTwoGen)) = 2)
+    (h1 : f 1 = 1) {A : MPOTensor 4 2}
+    (hA : HEq (kleinTensor (f GroupFamily.orderTwoGen)) A) :
+    kleinFamily.comap f = GroupFamily.orderTwoFamily eTensor A := by
   refine GroupFamily.ext_of_heq ?_ ?_
   · funext x
     revert x
@@ -357,10 +230,16 @@ theorem mulTensor_kxyTensor_eTensor :
     toMPSTensor_mulTensor_complexOfInt kxyIntTensor eIntTensor a, kxyE_int]
   rfl
 
+/-- Stacking `M_e` with itself gives `M_e`. -/
+theorem mulTensor_eTensor_eTensor :
+    (mulTensor eTensor eTensor).toMPSTensor = eTensor.toMPSTensor :=
+  funext eEStacked_eq
+
 /-- **The square of the dressed tensor of `x` is the square of `M_x`**, so the compression
 witnesses of the block `(x, x)` are fusion tensors onto `M_e`. -/
 theorem kx_isReduction :
-    MPSTensor.IsReduction (mulTensor kxTensor kxTensor).toMPSTensor eMPS xXLeft xXRight := by
+    MPSTensor.IsReduction (mulTensor kxTensor kxTensor).toMPSTensor eTensor.toMPSTensor xXLeft
+      xXRight := by
   have h : (mulTensor kxTensor kxTensor).toMPSTensor = xXStacked := by
     funext a
     rw [xXStacked_eq, ← kxKx_int]
@@ -372,8 +251,8 @@ theorem kx_isReduction :
 compression witnesses of the block `(xy, xy)` are fusion tensors onto `M_e`: the sign cancels
 the weight `−1` of the target of that block. -/
 theorem kxy_isReduction :
-    MPSTensor.IsReduction (mulTensor kxyTensor kxyTensor).toMPSTensor eMPS xyXyLeft
-      xyXyRight := by
+    MPSTensor.IsReduction (mulTensor kxyTensor kxyTensor).toMPSTensor eTensor.toMPSTensor
+      xyXyLeft xyXyRight := by
   have h : (mulTensor kxyTensor kxyTensor).toMPSTensor = fun i ↦ (-1 : ℂ) • xyXyStacked i := by
     funext a
     rw [xyXyStacked_eq, show (mulTensor kxyTensor kxyTensor).toMPSTensor a = _
@@ -382,36 +261,37 @@ theorem kxy_isReduction :
   rw [h]
   convert xyXy_isReduction.smul (-1) using 1
   funext i
-  simp
+  simp [eMPS]
 
 /-- The restriction of the dressed family to `{e, x}`. -/
-def xFusionData : (pairFamily kxTensor).FusionData :=
-  pairFusionData kxTensor xXLeft xXRight mulTensor_eTensor_kxTensor mulTensor_kxTensor_eTensor
-    kx_isReduction
+def xFusionData : (GroupFamily.orderTwoFamily eTensor kxTensor).FusionData :=
+  GroupFamily.FusionData.orderTwo eTensor kxTensor xXLeft xXRight mulTensor_eTensor_eTensor
+    mulTensor_eTensor_kxTensor mulTensor_kxTensor_eTensor kx_isReduction
 
 /-- The restriction of the dressed family to `{e, xy}`. -/
-def xyFusionData : (pairFamily kxyTensor).FusionData :=
-  pairFusionData kxyTensor xyXyLeft xyXyRight mulTensor_eTensor_kxyTensor
-    mulTensor_kxyTensor_eTensor kxy_isReduction
+def xyFusionData : (GroupFamily.orderTwoFamily eTensor kxyTensor).FusionData :=
+  GroupFamily.FusionData.orderTwo eTensor kxyTensor xyXyLeft xyXyRight mulTensor_eTensor_eTensor
+    mulTensor_eTensor_kxyTensor mulTensor_kxyTensor_eTensor kxy_isReduction
 
 /-- The restriction of the dressed family to `{e, x}` is the family `1 ↦ M_e`, `g ↦ M'_x`. -/
-theorem comap_xHom : kleinFamily.comap xHom = pairFamily kxTensor :=
-  comap_eq_pairFamily xHom rfl rfl rfl (heq_of_eq kleinTensor_x)
+theorem comap_xHom : kleinFamily.comap xHom = GroupFamily.orderTwoFamily eTensor kxTensor :=
+  comap_eq_orderTwoFamily xHom rfl rfl rfl (heq_of_eq kleinTensor_x)
 
 /-- The restriction of the dressed family to `{e, xy}` is the family `1 ↦ M_e`,
 `g ↦ M'_xy`. -/
-theorem comap_xyHom : kleinFamily.comap xyHom = pairFamily kxyTensor :=
-  comap_eq_pairFamily xyHom rfl rfl rfl (heq_of_eq kleinTensor_xy)
+theorem comap_xyHom : kleinFamily.comap xyHom = GroupFamily.orderTwoFamily eTensor kxyTensor :=
+  comap_eq_orderTwoFamily xyHom rfl rfl rfl (heq_of_eq kleinTensor_xy)
 
 /-- The family `1 ↦ M_e`, `g ↦ M'_x` is an exact representation of `ℤ₂` by normal tensors,
 as a restriction of the dressed family. -/
-theorem pairFamily_kx_isNormalRepresentation : (pairFamily kxTensor).IsNormalRepresentation :=
+theorem orderTwoFamily_kx_isNormalRepresentation :
+    (GroupFamily.orderTwoFamily eTensor kxTensor).IsNormalRepresentation :=
   comap_xHom ▸ kleinFamily_isNormalRepresentation.comap xHom
 
 /-- The family `1 ↦ M_e`, `g ↦ M'_xy` is an exact representation of `ℤ₂` by normal tensors,
 as a restriction of the dressed family. -/
-theorem pairFamily_kxy_isNormalRepresentation :
-    (pairFamily kxyTensor).IsNormalRepresentation :=
+theorem orderTwoFamily_kxy_isNormalRepresentation :
+    (GroupFamily.orderTwoFamily eTensor kxyTensor).IsNormalRepresentation :=
   comap_xyHom ▸ kleinFamily_isNormalRepresentation.comap xyHom
 
 /-! ### The two fusion trees of three generators -/
@@ -476,11 +356,15 @@ def kxyIntMPS (a : Fin 16) : Matrix (Fin 2) (Fin 2) ℤ :=
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`; the value is `ω_a = +1` of the
 type-II row of arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1856--1872. -/
 theorem xFusionData_isAssociator_gen_gen_gen :
-    xFusionData.IsAssociator z2Gen z2Gen z2Gen ((1 : ℤ) : ℂ) := by
+    xFusionData.IsAssociator GroupFamily.orderTwoGen GroupFamily.orderTwoGen
+      GroupFamily.orderTwoGen ((1 : ℤ) : ℂ) := by
   unfold GroupFamily.FusionData.IsAssociator
-  rw [xFusionData, pairFusionData_leftV_gen_gen_gen, pairFusionData_rightV_gen_gen_gen, xXLeft,
-    kronId_complexOfRing, idKron_complexOfRing]
-  have hT : (GroupFamily.tripleTensor (pairFamily kxTensor) z2Gen z2Gen z2Gen).toMPSTensor =
+  rw [xFusionData, GroupFamily.FusionData.orderTwo_leftV_gen_gen_gen,
+    GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen, xXLeft, kronId_complexOfRing,
+    idKron_complexOfRing]
+  have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily eTensor kxTensor)
+      GroupFamily.orderTwoGen GroupFamily.orderTwoGen
+      GroupFamily.orderTwoGen).toMPSTensor =
       fun a ↦ complexOfInt (kxCubeInt a) := by
     funext a
     rw [← kxCube_int]
@@ -495,11 +379,15 @@ theorem xFusionData_isAssociator_gen_gen_gen :
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`; the value is `ω_ab = −1` of the
 type-II row of arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1856--1872. -/
 theorem xyFusionData_isAssociator_gen_gen_gen :
-    xyFusionData.IsAssociator z2Gen z2Gen z2Gen ((-1 : ℤ) : ℂ) := by
+    xyFusionData.IsAssociator GroupFamily.orderTwoGen GroupFamily.orderTwoGen
+      GroupFamily.orderTwoGen ((-1 : ℤ) : ℂ) := by
   unfold GroupFamily.FusionData.IsAssociator
-  rw [xyFusionData, pairFusionData_leftV_gen_gen_gen, pairFusionData_rightV_gen_gen_gen,
-    xyXyLeft, kronId_complexOfRing, idKron_complexOfRing]
-  have hT : (GroupFamily.tripleTensor (pairFamily kxyTensor) z2Gen z2Gen z2Gen).toMPSTensor =
+  rw [xyFusionData, GroupFamily.FusionData.orderTwo_leftV_gen_gen_gen,
+    GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen, xyXyLeft, kronId_complexOfRing,
+    idKron_complexOfRing]
+  have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily eTensor kxyTensor)
+      GroupFamily.orderTwoGen GroupFamily.orderTwoGen
+      GroupFamily.orderTwoGen).toMPSTensor =
       fun a ↦ complexOfInt (kxyCubeInt a) := by
     funext a
     rw [← kxyCube_int]
@@ -549,28 +437,20 @@ theorem comap_yHom :
 /-- The cyclic invariant `ω(x,e,x) ω(x,x,x)` at `x = (1,0)` is `+1`. -/
 theorem cyclicInvariant_omega_kleinFamily_x (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
-  have hF := pairFamily_kx_isNormalRepresentation
-  rw [show Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2) = xHom z2Gen from rfl,
-    GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd xHom
-      kleinFamily_isNormalRepresentation comap_xHom xFusionData z2Gen_pow_two, xFusionData,
-    cyclicInvariant_pairFusionData hF]
-  have h := GroupFamily.FusionData.eq_omega_of_isAssociator hF
-    xFusionData_isAssociator_gen_gen_gen
-  unfold xFusionData at h
-  exact Units.ext (by simpa using h.symm)
+  change ScalarThreeCochain.cyclicInvariant fd.omega (xHom GroupFamily.orderTwoGen) 2 = 1
+  apply Units.ext
+  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
+    kleinFamily_isNormalRepresentation xHom comap_xHom xFusionData_isAssociator_gen_gen_gen]
+  simp
 
 /-- The cyclic invariant `ω(xy,e,xy) ω(xy,xy,xy)` at `xy = (1,1)` is `−1`. -/
 theorem cyclicInvariant_omega_kleinFamily_xy (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 1)) 2 = -1 := by
-  have hF := pairFamily_kxy_isNormalRepresentation
-  rw [show Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2) = xyHom z2Gen from rfl,
-    GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd xyHom
-      kleinFamily_isNormalRepresentation comap_xyHom xyFusionData z2Gen_pow_two, xyFusionData,
-    cyclicInvariant_pairFusionData hF]
-  have h := GroupFamily.FusionData.eq_omega_of_isAssociator hF
-    xyFusionData_isAssociator_gen_gen_gen
-  unfold xyFusionData at h
-  exact Units.ext (by simpa using h.symm)
+  change ScalarThreeCochain.cyclicInvariant fd.omega (xyHom GroupFamily.orderTwoGen) 2 = -1
+  apply Units.ext
+  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
+    kleinFamily_isNormalRepresentation xyHom comap_xyHom xyFusionData_isAssociator_gen_gen_gen]
+  simp
 
 /-- The cyclic invariants on the restriction to `{e, y}` are one. -/
 private theorem cyclicInvariant_omega_kleinFamily_yHom (fd : kleinFamily.FusionData)
@@ -586,7 +466,7 @@ private theorem cyclicInvariant_omega_kleinFamily_yHom (fd : kleinFamily.FusionD
 /-- The cyclic invariant `ω(y,e,y) ω(y,y,y)` at `y = (0,1)` is `+1`. -/
 theorem cyclicInvariant_omega_kleinFamily_y (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
-  cyclicInvariant_omega_kleinFamily_yHom fd z2Gen
+  cyclicInvariant_omega_kleinFamily_yHom fd GroupFamily.orderTwoGen
 
 /-- The cyclic invariant `ω(g,e,g) ω(g,g,g)` of `(−1)^{a₁ b₂ c₂}` is `(−1)^{g₁ g₂}`: `+1` at
 `e, x, y` and `−1` at `xy`.
