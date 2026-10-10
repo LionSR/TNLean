@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Core.PhysicalRotation
 import QICLean.Kraus.Transfer
 import QICLean.Kraus.MixedMap
+import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!
 # Physical matrices of matrix product tensors
@@ -31,7 +32,7 @@ factors on this interface; `Preparation.ApproximatingState` adds convergence sta
 * arXiv:2307.01696, paragraph "Approximation through the fixed-point state" and eq. (8).
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Kronecker
 
 namespace MPSTensor
 
@@ -89,5 +90,25 @@ theorem conjTranspose_physicalMatrix_mul_apply (B : MPSTensor n D) (a b : Fin D 
     ((physicalMatrix B)ᴴ * physicalMatrix B) a b =
       Kraus.transferMap B (Matrix.single b.2 a.2 1) b.1 a.1 := by
   rw [conjTranspose_physicalMatrix_mul_physicalMatrix_apply, Kraus.mixedMapLM_self]
+
+/-- Conjugation of the bond matrices acts on the virtual pair index by
+`Xᵀ ⊗ Y`. Source: arXiv:1010.3732, Section II.C, virtual gauge action. -/
+theorem physicalMatrix_mul_left_right {d D : ℕ} (A : MPSTensor d D)
+    (X Y : Matrix (Fin D) (Fin D) ℂ) :
+    physicalMatrix (fun i => X * A i * Y) = physicalMatrix A * (Xᵀ ⊗ₖ Y) := by
+  ext i ⟨a, b⟩
+  simp only [physicalMatrix, Matrix.mul_apply, Matrix.kroneckerMap_apply,
+    Matrix.transpose_apply, Fintype.sum_prod_type, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  simp only [mul_comm, mul_left_comm]
+
+/-- The physical contraction of two tensor reshapes is the trace pairing of
+individual bond matrices. -/
+theorem physicalMatrix_mul_conjTranspose_apply
+    (A B : MPSTensor n D) (i j : Fin n) :
+    (physicalMatrix A * (physicalMatrix B)ᴴ) i j =
+      Matrix.trace (A i * (B j)ᴴ) := by
+  simp only [Matrix.mul_apply, physicalMatrix, Matrix.conjTranspose_apply,
+    Fintype.sum_prod_type, Matrix.trace, Matrix.diag]
 
 end MPSTensor

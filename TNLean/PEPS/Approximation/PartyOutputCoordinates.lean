@@ -71,8 +71,7 @@ theorem partitionIso_selectedHead_of_tail_excluded_heq
 end Layout
 
 /-- Equality of the two register lists preserves concatenated memory vectors.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267.
-This consolidates the append transports used in the corrected-source development. -/
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267. -/
 theorem Layout.appendIso_symm_tmul_heq {a b a' b' : Layout P}
     (ha : a = a') (hb : b = b') {x : Mem a} {x' : Mem a'}
     {y : Mem b} {y' : Mem b'} (hx : HEq x x') (hy : HEq y y') :
