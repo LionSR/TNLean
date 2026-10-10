@@ -76,7 +76,9 @@ window.campaignFigures = (function () {
       text(svg, 44, 10, "entropy bound, log scale");
     },
 
-    /* Area law, stage 2: spectral filter and its Fourier tail. */
+    /* Area law, stage 2: the spectral window chi and the decay of its Fourier transform f.
+       Area-law manuscript, eq:quasilocal-centered-filter: chi(0) = 1 and chi vanishes on
+       every excited energy, so averaging h_i over time against f keeps only its ground part. */
     filter(svg) {
       view(svg, 320, 175);
       const base = 132, e0 = 22, gap = 44;
@@ -84,12 +86,13 @@ window.campaignFigures = (function () {
       line(svg, e0, base, e0, base - 10, "k");
       line(svg, 12, base, 150, base);
       const smooth = u => u <= 0 ? 0 : u >= 1 ? 1 : u * u * u * (u * (6 * u - 15) + 10);
-      path(svg, pts(sample(x => [x, base - 74 * smooth((x - e0) / gap)], e0, 150)), "a");
+      path(svg, pts(sample(x => [x, base - 74 * (1 - smooth((x - e0) / (gap / 2)))], e0, 150)), "a");
       text(svg, e0 - 4, base - 1, "*E*_{0}", "m", "end");
       brace(svg, e0, e0 + gap, base + 7, "", "h", false);
       text(svg, e0 + gap / 2, base + 24, "gap Δ", "", "middle");
       text(svg, 108, base + 13, "spectrum of *H*", "", "middle");
-      text(svg, 150, base - 80, "filter, 0 at *E*_{0}", "t", "end");
+      text(svg, e0 + 6, base - 80, "χ = 1 at *E*_{0}", "t");
+      text(svg, 150, base - 14, "χ = 0 on excited levels", "", "end");
       // Fourier transform of the filter on a log scale.
       const T = scale(0, 30, 182, 296), L = scale(1e-8, 1, 132, 22, true);
       const str = t => Math.exp(-1.5 * Math.pow(t, 0.7)), pow = t => Math.pow(1 + t, -4);
@@ -98,7 +101,7 @@ window.campaignFigures = (function () {
       text(svg, T(9), L(pow(9)) + 14, "power law", "", "middle");
       text(svg, T(30) - 2, L(str(30)) + 12, "stretched exp.", "t", "end");
       xFrame(svg, T, base + 6, [[0, "0"], [30, "large *t*"]]);
-      text(svg, 182, 14, "|Fourier transform|, log");
+      text(svg, 182, 14, "|*f*(*t*)|, log scale");
     },
 
     /* Area law, stage 3: per-copy log-norm converging as the number of replicas grows. */
@@ -241,7 +244,7 @@ window.campaignFigures = (function () {
         max = Math.max(max, v);
         const [a, b] = k.split("|").map(t => t.split(",").map(Number));
         const l = line(svg, ...P(a), ...P(b), "a");
-        l.setAttribute("stroke-width", (0.6 + 1.1 * v).toFixed(2));
+        l.setAttribute("stroke-width", (0.9 + 2.4 * (v - 1)).toFixed(2));
         l.setAttribute("stroke-linecap", "round");
       }
       for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) dot(svg, ...P([i, j]), 1.6, "fm");

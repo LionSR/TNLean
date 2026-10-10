@@ -115,7 +115,7 @@
           "physics": "Lieb–Robinson bounds in the lattice's own graph distance and a smooth spectral filter with stretched-exponentially decaying Fourier tails rewrite the Hamiltonian as a sum of positive local pieces <i>k<sub>i</sub></i>. Each piece annihilates the ground state, {{tn:al-kill}}, and is supported on a ball up to a stretched-exponential tail.",
           "delivers": "Positive operators that each annihilate Ω and have rapidly decaying spatial tails, and whose sum has a global gap.",
           "figure": "filter",
-          "caption": "Left: the spectrum of <i>H</i> as a rug, with the isolated ground energy and the gap. The filter vanishes at <i>E</i>₀ and is flat above the gap, so each piece annihilates Ω. Right: on a log scale the filter's Fourier tail falls below every power law, which keeps each piece quasi-local.",
+          "caption": "Left: the spectrum of the Hamiltonian <i>H</i> as a rug of ticks, with the ground energy <i>E</i>₀ isolated by the gap Δ. The window χ equals 1 at <i>E</i>₀ and vanishes before <i>E</i>₀ + Δ/2, so it is zero on every excited level. Right: the Fourier transform <i>f</i> of χ on a log scale. Its tail falls below every power law, so averaging a local term over time against <i>f</i> keeps it nearly local.",
           "diagrams": [
             {
               "src": "diagrams/qc-filter.svg",

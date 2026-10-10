@@ -319,7 +319,11 @@
             el("img", { src: tn.src, alt, ...(tn.width ? { width: String(Math.round(tn.width * 2.4)) } : {}) }),
             d.caption ? el("figcaption", { html: tnText(d.caption) }) : null);
         }).filter(Boolean);
-        const figs = figure || tnFigs.length ? el("div", { class: "figs" }, ...tnFigs, figure) : null;
+        // A reader may land on any stage without having read the others, so each stage lists
+        // every symbol its text, equations and figures use.
+        const key = (st.symbols || []).length ? el("div", { class: "key" }, el("div", { class: "keyhead", text: "Symbols on this stage" }),
+          el("dl", {}, ...st.symbols.map(([sym, meaning]) => el("div", {}, el("dt", { html: sym }), el("dd", { html: meaning }))))) : null;
+        const figs = key || figure || tnFigs.length ? el("div", { class: "figs" }, key, ...tnFigs, figure) : null;
         container.append(el("div", { class: "stage", id: `stage-${route.id}-${idx + 1}` },
           el("div", { class: "rail" }, el("div", { class: "dot st-" + furthest, text: route.stages.length > 1 ? String(idx + 1) : "·" }), el("div", { class: "line" })),
           el("div", { class: "body" },
