@@ -631,6 +631,12 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build birth-target entropy implication early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.BirthTargetEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build capped dyadic partition early
         run: |
           set -eo pipefail
