@@ -347,7 +347,6 @@ theorem mul_embedOp_apply {e : κ → ι} (he : Function.Injective e)
   · rw [ite_eq_left h.symm, ite_eq_left h, ← eq_extend_of_agreeOff he h]
   · rw [ite_eq_right fun h' => h h'.symm, ite_eq_right h, mul_zero]
 
-
 /-- The components of `(X ⊗ 1) v`, as a sum over the configurations of the placed sites. -/
 theorem embedOp_mulVec_apply {e : κ → ι} (he : Function.Injective e)
     (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) (v : (ι → Fin d) → ℂ) (x : ι → Fin d) :

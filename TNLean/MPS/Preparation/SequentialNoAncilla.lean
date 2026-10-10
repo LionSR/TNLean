@@ -192,9 +192,7 @@ theorem pairOp_mulVec_apply {n : ℕ} (p : Fin (n + 1))
     (pairOp p V *ᵥ v) τ = ∑ a, ∑ b, V (τ p.succ, τ p.castSucc) (a, b) *
       v (Function.update (Function.update τ p.succ a) p.castSucc b) := by
   have hne : p.succ ≠ p.castSucc := (Fin.castSucc_lt_succ (i := p)).ne'
-  have he : Function.Injective ![p.succ, p.castSucc] := by
-    intro i j h
-    fin_cases i <;> fin_cases j <;> simp_all [eq_comm]
+  have he : Function.Injective ![p.succ, p.castSucc] := Matrix.injective_pair_iff_ne.mpr hne
   rw [pairOp, QuantumCircuit.embedOp_mulVec_apply he, ← (finTwoArrowEquiv (Fin d)).symm.sum_comp,
     Fintype.sum_prod_type]
   refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
@@ -253,7 +251,7 @@ theorem noAncillaChainOp_mulVec_single_apply {n : ℕ}
         else 0
   | 0, hk, τ => by
     rw [noAncillaChainOp, pairOp_mulVec_apply]
-    set p : Fin (n + 1) := Fin.rev 0 with hpdef
+    set p : Fin (n + 1) := Fin.rev 0
     have hp : p.val = n := by simp [p]
     have hcond : ∀ a b, Function.update (Function.update τ p.succ a) p.castSucc b = 0 ↔
         a = 0 ∧ b = 0 ∧ ∀ q : Fin (n + 2), q.val < n - 0 → τ q = 0 := by
@@ -286,7 +284,7 @@ theorem noAncillaChainOp_mulVec_single_apply {n : ℕ}
       rw [ite_eq_right fun h => hP h.2.2]
   | k + 1, hk, τ => by
     rw [noAncillaChainOp, ← Matrix.mulVec_mulVec, pairOp_mulVec_apply]
-    set p : Fin (n + 1) := Fin.rev ⟨k + 1, by omega⟩ with hpdef
+    set p : Fin (n + 1) := Fin.rev ⟨k + 1, by omega⟩
     have hp : p.val = n - (k + 1) := by simp [p]
     have hcond : ∀ a b, (∀ q : Fin (n + 2), q.val < n - k →
         Function.update (Function.update τ p.succ a) p.castSucc b q = 0) ↔
@@ -317,8 +315,8 @@ theorem noAncillaChainOp_mulVec_single_apply {n : ℕ}
       rw [ite_eq_right fun h => hP h.2]
 
 /-- **The recursion is the scheme acting on the whole chain.** The operations
-`U^{[1]}, …, U^{[N-1]}`, acting in turn on the sites `k` and `k + 1` of the whole chain of
-`N = n + 2` sites and as the identity on the other sites, send `|0⟩^{⊗N}` to the state
+`U^{[1]}, …, U^{[N-1]}`, with `U^{[k]}` acting on the sites `k` and `k + 1` of the whole chain
+of `N = n + 2` sites and as the identity on the other sites, send `|0⟩^{⊗N}` to the state
 `noAncillaState n U` (arXiv:quant-ph/0608197, lines 1580--1586). -/
 theorem noAncillaChainOp_mulVec_single {n : ℕ}
     (U : Fin (n + 1) → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
