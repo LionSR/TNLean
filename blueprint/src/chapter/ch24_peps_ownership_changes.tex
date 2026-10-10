@@ -817,6 +817,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Cancellation of a noncrossing doubled interaction]
     \label{thm:peps_sheet_swap_doubled_cancellation}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
+    \leanok
     Let $V$ be a finite site set, $q\geq0$ a local dimension, and
     $R,S\subseteq V$. Let $A$ be an operator supported on $S$, and let
     $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
@@ -829,6 +830,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     argument of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
     If $S\subseteq R$, the swap exchanges the two tensor summands.
     If $S\cap R=\varnothing$, it commutes with each summand.
