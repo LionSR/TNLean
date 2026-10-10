@@ -10,16 +10,16 @@ import TNLean.MPS.Core.IsometricBondCompression
 /-!
 # Local supports of stationary generating data
 
-Let `A` be a tensor and let `ρ ≥ 0` be a nonzero stationary virtual matrix,
-`∑ i, A i * ρ * (A i)ᴴ = ρ`. The matrix `ρ` need not be faithful. Its
+Let `A` be a tensor and let \(ρ ≥ 0\) be a nonzero stationary virtual matrix,
+\(∑ i, A i * ρ * (A i)ᴴ = ρ\). The matrix `ρ` need not be faithful. Its
 support projection `P` is invariant under the letters, so restricting the
 boundary matrices of `A` to the corner `P M_D P` gives a subspace of the
 open-boundary space. This subspace is exactly the support of the finite
-local functionals determined by `(A, ρ)`: a square observable `Xᴴ * X` has
+local functionals determined by \((A, ρ)\): a square observable \(Xᴴ * X\) has
 zero expectation iff `X` annihilates it, and when `A` is left canonical the
 representing finite densities have this subspace as their range.
 
-The proof compresses `(A, ρ)` to faithful generating data on the support of
+The proof compresses \((A, ρ)\) to faithful generating data on the support of
 `ρ` and applies the faithful support theorems. When `ρ` is faithful the
 corner is the whole matrix algebra and the subspace is the full
 open-boundary space.
@@ -62,8 +62,8 @@ theorem cornerGroundSpaceES_one (A : MPSTensor d D) (L : ℕ) :
   rw [cornerGroundSpaceES, hTop, Submodule.map_top]
   rfl
 
-/-- Under an isometric letter intertwiner `A i * V = V * B i`, the open-boundary
-space of `B` is the image of the corner `(V Vᴴ) M_D (V Vᴴ)` under the boundary map
+/-- Under an isometric letter intertwiner \(A i * V = V * B i\), the open-boundary
+space of `B` is the image of the corner \((V Vᴴ) M_D (V Vᴴ)\) under the boundary map
 of `A`. Source context: Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738,
 the spanning vectors of the local support spaces. -/
 theorem groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner
