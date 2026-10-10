@@ -312,7 +312,11 @@ jobs:
           source: home_page
           destination: site-blueprint/homepage
 
+      # deploy-pages.yml fetches the newest artifact of each name, so only
+      # main may publish site components; a manual run elsewhere builds them
+      # but keeps them out of the next production deploy.
       - name: Upload blueprint component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-blueprint
@@ -320,6 +324,7 @@ jobs:
           retention-days: 30
 
       - name: Upload badges component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-badges
