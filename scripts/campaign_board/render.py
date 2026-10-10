@@ -58,9 +58,9 @@ def diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
             for d in stage.get("diagrams", [])}
 
 
-def inline_diagrams(campaign_dir: pathlib.Path, config: dict) -> dict:
-    """Inline every {{tn:name}} equation the configuration's text uses, keyed by name."""
-    names = set(INLINE_SLOT.findall(json.dumps(config, ensure_ascii=False)))
+def inline_diagrams(campaign_dir: pathlib.Path, *texts: dict) -> dict:
+    """Inline every {{tn:name}} equation the given configuration and gap texts use, keyed by name."""
+    names = {name for text in texts for name in INLINE_SLOT.findall(json.dumps(text, ensure_ascii=False))}
     return {name: diagram(campaign_dir, f"diagrams/inline/{name}.svg") for name in sorted(names)}
 
 
@@ -86,10 +86,11 @@ def render(campaign_dir: pathlib.Path, snapshot_path: pathlib.Path, out_dir: pat
     blob_url = f"https://github.com/{primary['slug']}/blob/main/"
     gaps_rel = gaps_path.resolve().relative_to(ROOT).as_posix()
     data["diagrams"] = diagrams(campaign_dir, config)
-    data["inlineDiagrams"] = inline_diagrams(campaign_dir, config)
+    gaps = json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []}
+    data["inlineDiagrams"] = inline_diagrams(campaign_dir, config, gaps)
     data.update({
         "config": config,
-        "gaps": json.loads(gaps_path.read_text()) if gaps_path.exists() else {"entries": [], "checked": []},
+        "gaps": gaps,
         "meta": {"workflowUrl": blob_url + WORKFLOW, "gapsPath": gaps_rel, "gapsUrl": blob_url + gaps_rel},
     })
     figures = campaign_dir / "figures.js"

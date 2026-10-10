@@ -86,14 +86,14 @@
             8743,
             8744
           ],
-          "physics": "The global gap limits how much the eigenvalues of a region's reduced state fluctuate on a logarithmic scale: reweighting the state by ρ<sup>−<i>u</i>/2</sup> on a block costs energy only along the cut. The proof then optimizes a staircase of positive filters on nested rectangles, the norm {{tn:al-filter-norm}}, and bounds it from above and below; comparing the two bounds discounts the conditional entropy.",
+          "physics": "The global gap limits how much the eigenvalues of a region's reduced state fluctuate on a logarithmic scale: reweighting the state by ρ<sup>−<i>u</i>/2</sup> on a block costs energy only along the cut. The proof then optimizes a product of positive filters, one on each of a nested sequence of rectangles, through the norm {{tn:al-filter-norm}}, and bounds it from above and below; comparing the two bounds discounts the conditional entropy.",
           "delivers": "A box of side <i>r</i> far from the cut has <i>S</i> ≤ <i>C r</i><sup>1+<i>e</i>₀</sup> with <i>e</i>₀ &lt; 1. The volume bound would be <i>r</i>².",
           "figure": "box-exponent",
           "caption": "Entropy bounds for a box of side <i>r</i> on log–log axes, where each exponent becomes a slope. The volume bound has slope 2, this stage gives slope 1 + <i>e</i>₀ (drawn at <i>e</i>₀ = ½), and the area law is the dashed slope 1 that the later stages reach.",
           "diagrams": [
             {
               "src": "diagrams/region-nested.svg",
-              "caption": "The regions on the sheet of qudits: the target <i>X</i> = <i>A</i> ∩ <i>Q</i><sub>0</sub> and the nested regions <i>X<sub>j</sub></i> = <i>A</i> ∩ <i>Q</i><sub>0</sub><sup>+<i>d<sub>j</sub></i></sup>, clipped by the side <i>A</i> of the cut. The filters <i>L<sub>j</sub></i> act on <i>X<sub>j</sub></i>, and the shells <i>X<sub>j</sub></i> ∖ <i>X</i> are the buffer."
+              "caption": "The regions on the lattice of qudits: the target <i>X</i> = <i>A</i> ∩ <i>Q</i><sub>0</sub> and the nested regions <i>X<sub>j</sub></i> = <i>A</i> ∩ <i>Q</i><sub>0</sub><sup>+<i>d<sub>j</sub></i></sup>, clipped by the side <i>A</i> of the cut. The filters <i>L<sub>j</sub></i> act on <i>X<sub>j</sub></i>, and the shells <i>X<sub>j</sub></i> ∖ <i>X</i> are the buffer."
             },
             {
               "src": "diagrams/tilt.svg",
@@ -101,7 +101,7 @@
             },
             {
               "src": "diagrams/staircase.svg",
-              "caption": "Section 2: the norm <i>N</i> = ‖<i>L<sub>m</sub></i>⋯<i>L</i><sub>1</sub>Ω‖ of a staircase of positive filters <i>L<sub>j</sub></i> on nested regions <i>X<sub>j</sub></i> ⊃ <i>X</i> (drawn for <i>m</i> = 2; <i>T<sub>j</sub></i> are the shells). Bounding −2 log <i>N</i> from above and below gives the discount on <i>S</i>(<i>X</i> | buffer)."
+              "caption": "Section 2: the norm <i>N</i> = ‖<i>L<sub>m</sub></i>⋯<i>L</i><sub>1</sub>Ω‖ of a product of positive filters <i>L<sub>j</sub></i> on nested regions <i>X<sub>j</sub></i> ⊃ <i>X</i> (drawn for <i>m</i> = 2; <i>T<sub>j</sub></i> are the shells). Bounding −2 log <i>N</i> from above and below gives the discount on <i>S</i>(<i>X</i> | buffer)."
             }
           ]
         },
@@ -198,7 +198,7 @@
           "diagrams": [
             {
               "src": "diagrams/region-families.svg",
-              "caption": "Lemma <i>geometry:cancellation</i> on a sheet: inside <i>A</i>, the removed layer <i>D</i> and the regions <i>X</i><sub>1</sub>, <i>X</i><sub>3</sub> of one family and <i>X</i><sub>2</sub> of the other; <i>B</i> is the outside. Each region is nearly independent of <i>B</i> together with the earlier regions of its own family, and the two chain rules then cancel every region's entropy, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors."
+              "caption": "Lemma <i>geometry:cancellation</i> on the lattice: inside <i>A</i>, the removed layer <i>D</i> and the regions <i>X</i><sub>1</sub>, <i>X</i><sub>3</sub> of one family and <i>X</i><sub>2</sub> of the other; <i>B</i> is the outside. Each region is nearly independent of <i>B</i> together with the earlier regions of its own family, and the two chain rules then cancel every region's entropy, leaving <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus summable errors."
             }
           ]
         }
@@ -235,7 +235,7 @@
             8767
           ],
           "physics": "Near a square of logarithmic size, the state lies almost entirely in an orthogonal sum of subspaces. Each is spanned by a few vectors inside a nested square, tensored with everything outside. The proof combines nested filters, the gap and the area law, and needs no sharp truncation at one fixed boundary.",
-          "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>. An encoder supported on the hole records which cylinder and which inside vector in a small open register 𝒥: {{tn:peps-encode}}.",
+          "delivers": "Total inside rank Σ<i>d<sub>j</sub></i> ≤ <i>C L<sup>c</sup></i>. An encoder supported on a square around the patch (a hole) records which cylinder and which inside vector in a small open register 𝒥: {{tn:peps-encode}}.",
           "figure": "patch",
           "caption": "Left: nested squares around a square of side about log <i>L</i>. Right: the inside rank of each subspace in the orthogonal sum, as bars. Their total is polynomial in <i>L</i>, so the label fits in a small register.",
           "diagrams": [
@@ -252,7 +252,7 @@
             8770,
             8771
           ],
-          "physics": "The elementary operations change which party owns a region, create or retire a party, and exchange registers between two copies of the state. A birth consumes and re-emits one normalized pair source, {{tn:peps-pair}}, whose <i>T</i> half goes to the new party; everything else is a private map.",
+          "physics": "A frame records which party owns each site and which small squares are stored compressed. The elementary operations on frames change which party owns a region, create or retire a party, and exchange registers between two copies of the state. A birth consumes and re-emits one normalized pair source, {{tn:peps-pair}}, whose <i>T</i> half goes to the new party; everything else is a private map.",
           "delivers": "Each move has error of order <i>L</i><sup>−30</sup> at most, small enough to sum over the whole protocol.",
           "diagrams": [
             {
