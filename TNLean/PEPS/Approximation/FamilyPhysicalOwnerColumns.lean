@@ -33,7 +33,7 @@ private theorem familyPhysicalListBasis_owner_mem_eq {P Q : Type} (f : P → Q) 
     Mem (familyPhysicalLayout (fun p ↦ δ (f p)) ps) = Mem (familyPhysicalLayout δ (ps.map f))
   | [] => rfl
   | p :: ps =>
-      congrArg (fun S ↦ HSpace.of (euc (Fin (δ (f p))) ⊗[ℂ] S))
+      congrArg (fun S : HSpace ↦ HSpace.of (euc (Fin (δ (f p))) ⊗[ℂ] S))
         (familyPhysicalListBasis_owner_mem_eq f δ ps)
 
 /-- Evaluating the physical tensor basis on a nonempty register list splits off the
