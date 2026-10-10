@@ -71,7 +71,10 @@ GAP_TEXT_FIELDS = ("summary", "context", "claims", "found", "impact", "plan")
 
 def cited_texts(config: dict, gaps: dict) -> list[str]:
     """The texts the page renders citations in: route introductions, stage prose and
-    captions, and the gap entries' prose fields."""
+    captions, and the gap entries' prose fields.
+
+    A stage's schematic caption is shown only when figures.js defines its figure, which
+    this script cannot check; a citation there with no such figure is not shown."""
     texts = []
     for route in config["routes"]:
         texts.append(route.get("intro", ""))
@@ -109,7 +112,7 @@ def references(campaign_dir: pathlib.Path, config: dict, gaps: dict) -> dict:
     for k in sorted(keys):
         entry = library[k]
         bad = [f for f in ("authors", "title", "url") if not isinstance(entry.get(f), str) or not entry[f].strip()]
-        bad += [] if isinstance(entry.get("year"), int) else ["year"]
+        bad += [] if type(entry.get("year")) is int else ["year"]  # bool is an int subclass
         bad += [] if isinstance(entry.get("venue", ""), str) else ["venue"]
         if bad:
             raise ValueError(f"{path}: entry {k} lacks a valid {', '.join(bad)}")
