@@ -503,6 +503,13 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check interaction-support swap restriction early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapInteractionSupport:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Check doubled-interaction cancellation early
         run: |
           set -eo pipefail
@@ -651,6 +658,20 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check interaction-support swap restriction and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapInteractionSupport.lean \
+              TNLeanTest/SheetSwapInteractionSupportAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true \
+              -DwarningAsError=true "$source"
+          done
 
       - name: Check doubled-interaction cancellation and standard axioms strictly
         timeout-minutes: 4
