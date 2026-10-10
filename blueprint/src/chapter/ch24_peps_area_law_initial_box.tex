@@ -1,0 +1,259 @@
+\section{The initial safe-box estimate}
+\label{sec:area_law_initial_box}
+
+For fixed $q,R,J,\Delta$ and $D_0>2R+10$, let $F_{\mathrm{box}}(r)$ be the
+supremum of $S_\Omega(A\cap Q)$ over all finite-range Hamiltonians on finite
+domains with gapped ground vectors, all cuts $A$, and all safe rectangles $Q$
+of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
+
+\begin{definition}[Safe-box entropy]
+    \label{def:area_law_box_entropy}
+    \lean{TNLean.PEPS.AreaLaw.boxEntropy,
+        TNLean.PEPS.AreaLaw.boxEntropyValues}
+    \leanok
+    \uses{def:area_law_safe_rectangle, def:area_law_ground_entropy}
+    The function $F_{\mathrm{box}}$ defined before~\cite[Proposition~3.3]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Elementary bounds for the safe-box entropy]
+    \label{thm:area_law_box_entropy_bounds}
+    \lean{TNLean.PEPS.AreaLaw.boxEntropy_nonneg,
+        TNLean.PEPS.AreaLaw.boxEntropy_mono,
+        TNLean.PEPS.AreaLaw.boxEntropy_le_sq_mul_log}
+    \leanok
+    \uses{def:area_law_box_entropy}
+    For $q\ge1$ the function $F_{\mathrm{box}}$ is nonnegative, nondecreasing
+    in $r$, and satisfies $F_{\mathrm{box}}(r)\le r^2\log q$.
+\end{theorem}
+\begin{proof}\leanok
+    A region $A\cap Q$ has at most $\operatorname{size}(Q)^2$ sites, so its
+    entropy is at most $r^2\log q$; entropies of unit vectors are nonnegative;
+    and enlarging $r$ enlarges the collection in the supremum.
+\end{proof}
+
+\begin{theorem}[Dependence on the safety parameter]
+    \label{thm:area_law_box_entropy_safety}
+    \lean{TNLean.PEPS.AreaLaw.boxEntropy_antitone}
+    \leanok
+    \uses{def:area_law_box_entropy, def:area_law_safe_rectangle}
+    For fixed $q,R,J,\Delta,r$ with $q\ge1$, write $F_{\mathrm{box},D_0}(r)$ for
+    the safe-box entropy at safety parameter $D_0$. If $D_0,D_1\in\mathbb N$
+    and $D_0\le D_1$, then
+    $F_{\mathrm{box},D_1}(r)\le F_{\mathrm{box},D_0}(r)$.
+\end{theorem}
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.AreaLaw.card_rectRegion_le,
+        TNLean.PEPS.AreaLaw.le_of_mem_boxEntropyValues,
+        TNLean.PEPS.AreaLaw.bddAbove_boxEntropyValues,
+        TNLean.PEPS.AreaLaw.nonneg_of_mem_boxEntropyValues,
+        TNLean.PEPS.AreaLaw.regionalEntropy_le_boxEntropy}
+    Every rectangle safe at threshold $D_1$ is safe at threshold $D_0$, so
+    the supremum is taken over a smaller collection.
+\end{proof}
+
+\begin{theorem}[Children of a rectangle]
+    \label{thm:area_law_box_children}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.child,
+        TNLean.PEPS.AreaLaw.IntRect.exists_mem_child,
+        TNLean.PEPS.AreaLaw.IntRect.dist_le_of_mem_child_dilate,
+        TNLean.PEPS.AreaLaw.IntRect.child_dilate_subset,
+        TNLean.PEPS.AreaLaw.IntRect.width,
+        TNLean.PEPS.AreaLaw.IntRect.height,
+        TNLean.PEPS.AreaLaw.IntRect.numChunksX,
+        TNLean.PEPS.AreaLaw.IntRect.numChunksY}
+    \leanok
+    \uses{def:area_law_safe_rectangle}
+    Partition each axis of a rectangle $Q$ of size at most $Mr$ into chunks of
+    $r$ sites and one final shorter chunk. The products of chunks are at most
+    $M^2$ pairwise disjoint rectangles of size at most $r$ covering $Q$. If a
+    point of one child lies in the $Cr$-padding of another, their chunk
+    positions differ by at most $C$ along each axis. A child at least $C$
+    positions from the first chunk and $C+2$ from the last along both axes
+    has its $Cr$-padding inside $Q$.
+\end{theorem}
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.AreaLaw.IntRect.width_eq,
+        TNLean.PEPS.AreaLaw.IntRect.height_eq,
+        TNLean.PEPS.AreaLaw.IntRect.width_le_size',
+        TNLean.PEPS.AreaLaw.IntRect.height_le_size',
+        TNLean.PEPS.AreaLaw.IntRect.numChunksX_le,
+        TNLean.PEPS.AreaLaw.IntRect.numChunksY_le,
+        TNLean.PEPS.AreaLaw.IntRect.div_lt_numChunks,
+        TNLean.PEPS.AreaLaw.IntRect.mem_child,
+        TNLean.PEPS.AreaLaw.IntRect.child_subset,
+        TNLean.PEPS.AreaLaw.IntRect.size_child_le,
+        TNLean.PEPS.AreaLaw.IntRect.eq_of_mem_child}
+    Coordinates in a chunk at position $a$ lie in $[ar,ar+r-1]$ relative to
+    the corner of $Q$, and the padding adds $Cr$ on both sides.
+\end{proof}
+
+\begin{theorem}[Averaged entropy chain rule]
+    \label{thm:area_law_rotated_chain_rule}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_biUnion_le_rotations}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\Omega$ be a unit vector and write $S=S_\Omega$. Let $X_i$ be
+    pairwise disjoint regions carrying colors in
+    $\{0,\dots,N-1\}$, and suppose each $i$ in a set $G$ has a buffer $T_i$
+    contained in the union of the regions of the other colors, with
+    $S(X_i\mid T_i)\le S(X_i)/2+\beta$. Then
+    \begin{align}
+        S\Bigl(\bigcup_iX_i\Bigr)\le\sum_iS(X_i)-\frac1{2N}\sum_{i\in G}S(X_i)
+        +\frac{|G|\beta}N.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.AreaLaw.sum_sub_filter_key_eq,
+        TNLean.PEPS.AreaLaw.regionalEntropy_cond_anti}
+    For each of the $N$ cyclic rotations of the colors, order the regions by
+    rotated color and apply the chain rule. Every term is at most $S(X_i)$.
+    For $i\in G$, in the rotation putting the color of $i$ last, all of $T_i$
+    precedes $X_i$, so the term is at most $S(X_i\mid T_i)$. Average over the
+    rotations.
+\end{proof}
+
+\begin{theorem}[Scale recurrence for the safe-box entropy]
+    \label{thm:area_law_box_recurrence}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectRegion_le_of_children,
+        TNLean.PEPS.AreaLaw.boxEntropy_le_of_scale}
+    \leanok
+    \uses{thm:area_law_initial_buffer, def:area_law_box_entropy}
+    With $C_{\mathrm{pad}},C_{\mathrm{buf}}$ from
+    Theorem~\ref{thm:area_law_initial_buffer}, $P=2C_{\mathrm{pad}}+1$ and
+    $p=1/(2P^2)$, for every $M$ and $r\ge1$,
+    \begin{align}
+        F_{\mathrm{box}}(Mr)\le\bigl[(1-p)M^2+p\cdot2PM\bigr]F_{\mathrm{box}}(r)
+        +C_{\mathrm{buf}}M^2r.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_buffer, thm:area_law_box_children,
+        thm:area_law_rotated_chain_rule}
+    \lean{TNLean.PEPS.AreaLaw.eq_of_color_eq,
+        TNLean.PEPS.AreaLaw.card_filter_not_interior_le,
+        TNLean.PEPS.AreaLaw.IntRect.size_le_of_subset,
+        TNLean.PEPS.AreaLaw.IsSafe.mono}
+    Color the children of a safe parent by their chunk positions modulo $P$.
+    The padding of a child meets only children within $C_{\mathrm{pad}}$
+    positions, which have other colors. Children are safe and of size at most
+    $r$, and interior children satisfy the hypotheses of
+    Theorem~\ref{thm:area_law_initial_buffer}. At most $2PM$ children are not
+    interior. Apply Theorem~\ref{thm:area_law_rotated_chain_rule} with
+    $N=P^2$.
+\end{proof}
+
+\begin{theorem}[Initial safe-box estimate]
+    \label{thm:area_law_initial_box}
+    \lean{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow}
+    \leanok
+    \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_safety}
+    For fixed $q\ge1$, $R$, $J\ge0$ and $\Delta>0$, there are constants $C$ and
+    $e_0\in(0,1)$, depending only on $q,R,J,\Delta$, such that for every
+    integer $D_0>2R+10$ and every integer $r\ge1$,
+    $F_{\mathrm{box},D_0}(r)\le Cr^{1+e_0}$.
+    This is~\cite[Proposition~3.3]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_safety,
+        thm:area_law_box_entropy_bounds}
+    First take the safety parameter $2R+11$. Choose
+    $M=8(C_{\mathrm{pad}}+1)$, so $2PM\le M^2/2$ and the coefficient is
+    at most $\lambda=(1-p/2)M^2$, with $M<\lambda<M^2$. Iterating the
+    recurrence at powers of $M$ and using monotonicity gives
+    $F_{\mathrm{box},2R+11}(r)\le Cr^{\log_M\lambda}$, with
+    $1<\log_M\lambda<2$. Theorem~\ref{thm:area_law_box_entropy_safety}
+    gives the same bound at every integer safety parameter $D_0>2R+10$.
+\end{proof}
+
+\begin{theorem}[Safety inside a dilated rectangle]
+    \label{thm:area_law_safe_rectangle_dilation}
+    \lean{TNLean.PEPS.AreaLaw.IsSafe.of_subset_dilate}
+    \leanok
+    \uses{def:area_law_safe_rectangle}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $A\subseteq\Lambda$,
+    and let $Z$ be the endpoints of its crossing edges. Let
+    $D_0,j\in\mathbb N$, and let $Q,Q'$ be integer rectangles, each
+    a product of two finite nonempty integer intervals. Suppose that
+    every point of $Q$ has sup-norm distance greater than
+    $D_0\operatorname{size}(Q)$ from every point of $Z$, and that
+    \begin{align}
+        Q' & \subseteq Q^{+j},              \\
+        D_0\operatorname{size}(Q')+j
+           & \le D_0\operatorname{size}(Q).
+    \end{align}
+    Then every point of $Q'$ has sup-norm distance greater than
+    $D_0\operatorname{size}(Q')$ from every point of $Z$.
+    Here the size counts sites along the longer axis and
+    $Q^{+j}=Q+([-j,j]^2\cap\mathbb Z^2)$.
+    This is the clearance step in
+    \cite[proof of Proposition~9.5, lines~723--729]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_safe_rectangle}
+    Suppose that $p\in Q'$ and $z\in Z$ satisfy
+    $\|p-z\|_\infty\le D_0\operatorname{size}(Q')$.
+    The containment and radius inequality give
+    \begin{align}
+        z\in Q^{+(j+D_0\operatorname{size}(Q'))}
+         & \subseteq Q^{+D_0\operatorname{size}(Q)}.
+    \end{align}
+    Thus some $v\in Q$ satisfies
+    $\|v-z\|_\infty\le D_0\operatorname{size}(Q)$,
+    contrary to the assumed safety of $Q$.
+\end{proof}
+
+\begin{theorem}[Uniform entropy of physical safe rectangles]
+    \label{thm:area_law_initial_safe_rectangle_entropy}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow}
+    \leanok
+    \uses{def:area_law_safe_rectangle,def:area_law_hamiltonian,
+        def:area_law_ground_entropy}
+    Fix a local dimension $q\ge1$, an interaction range $R$, a term norm
+    bound $J\ge0$, and a gap $\Delta>0$. There exist constants $C\ge0$
+    and $e_0\in(0,1)$, depending only on $q,R,J,\Delta$, such that the
+    following holds simultaneously for every integer $D_0>2R+10$.
+    Let $\Lambda$ be any finite induced square-lattice domain, let $H$
+    be a Hamiltonian on $\Lambda$ as in
+    Definition~\ref{def:area_law_hamiltonian}, and let $\Omega$ be its
+    normalized ground vector at energy $E_0$ with the full-system
+    projector gap $\Delta$. For every cut $A\subseteq\Lambda$ and every
+    safe integer rectangle $Q$,
+    \begin{align}
+        S_\Omega(A\cap Q)
+        \le C\operatorname{size}(Q)^{1+e_0}.
+        \label{eq:area_law_initial_rectangle_entropy}
+    \end{align}
+    Here $Q$ is a product of two finite nonempty integer intervals,
+    $\operatorname{size}(Q)$ is its larger number of sites along an axis,
+    and safety means that every point of $Q$ has sup-norm distance
+    greater than $D_0\operatorname{size}(Q)$ from every endpoint of a
+    cut edge. The physical region $A\cap Q$ includes only sites of
+    $\Lambda$. Empty cuts, empty physical intersections, disconnected
+    domains, and domains with holes are permitted.
+    This is the pointwise consequence of the safe-box supremum and
+    \cite[Proposition~3.3]{OpenAI2026AreaLaw} at its initial exponent.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,
+        def:area_law_box_entropy}
+    The initial safe-box estimate supplies $C$ and $e_0\in(0,1)$
+    uniformly over all safety parameters $D_0>2R+10$. At the admissible
+    threshold $D_0=2R+11$ and scale $r=1$, its nonnegative supremum
+    satisfies
+    \begin{align}
+        0\le F_{\mathrm{box},2R+11}(1)
+        \le C\,1^{1+e_0}=C.
+        \label{eq:area_law_initial_rectangle_constant}
+    \end{align}
+    Thus the same constant is nonnegative. Every integer rectangle has
+    $\operatorname{size}(Q)\ge1$. By the definition of the safe-box
+    supremum and the initial estimate,
+    \begin{align}
+        S_\Omega(A\cap Q)
+         & \le F_{\mathrm{box},D_0}(\operatorname{size}(Q))
+        \le C\operatorname{size}(Q)^{1+e_0},
+    \end{align}
+    which proves (\ref{eq:area_law_initial_rectangle_entropy}).
+    The constant and exponent were chosen before the safety parameter,
+    domain, Hamiltonian, energy, ground vector, cut, and rectangle.
+\end{proof}

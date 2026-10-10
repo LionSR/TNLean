@@ -21,7 +21,10 @@ This file writes these procedures as allowed monomials on a party layout
 registers of `T`, and those of `U`, are grouped into one register each, and proves that their
 operators are `Kᴴ K ⊗ 1` and `W ⊗ 1` there.  Separately, the canonical maps of
 `TNLean.PEPS.Approximation.HomogeneousOwnership` and `TNLean.PEPS.Approximation.TwoSheetExchange`
-are written as `1_E ⊗ Kᴴ K` and `1 ⊗ W` in the canonical coordinates of a sheet.
+are written as `1_E ⊗ Kᴴ K` and `1 ⊗ W` in the canonical coordinates of a sheet.  The grouped
+monomials are the middle steps of the bounded changes on the registers of the frames, one
+register per site and per tag (`TNLean.PEPS.Approximation.FrameBoundedChanges`), which group and
+ungroup the raw registers by private unitaries and exchanges of tensor factors.
 
 ## Main definitions
 
@@ -35,37 +38,11 @@ are written as `1_E ⊗ Kᴴ K` and `1 ⊗ W` in the canonical coordinates of a 
 * `EncodedFrame.pairHeadIso_birthWord_eval`, `EncodedFrame.pairHeadIso_deathChain_eval` : the
   operator of the birth and of the death is `Kᴴ K ⊗ 1` with `K = ⟨s| (1_T ⊗ V)`.
 * `EncodedFrame.sheetBirthOp_eq_submatrix` : the canonical map of `eq:birth-map` is
-  `B = 1_E ⊗ Kᴴ K`.
-* `EncodedFrame.Frame.birth_monomial`, `EncodedFrame.Frame.death_monomial` : Lemma 6.5
-  `lem:birth`, with the bounded-change clause on grouped registers.
+  `B = 1_E ⊗ Kᴴ K` (`sheetPlace`).
+* `EncodedFrame.Frame.birth_monomial`, `EncodedFrame.Frame.death_monomial` : the birth and the
+  death of Lemma 6.5 `lem:birth` on grouped registers.
 * `EncodedFrame.TwoSheetExchange.exchange_correction_monomial` : the corrections `D_U F_A` of
   Lemma 6.6 form one private contraction at `P∘` on grouped registers.
-
-## Scope
-
-**Scope restriction (register grouping):** in `Frame.exists_birthWord`,
-`Frame.exists_deathChain`, `Frame.birth_monomial`, `Frame.death_monomial` and
-`TwoSheetExchange.exchange_correction_monomial`, the source has one raw register `ℂ^q` per site
-(`05-frames.tex`, lines 15–20), whereas the monomials act on a layout in which the raw registers
-of `T`, and those of `U`, form one register each, followed by an arbitrary list `ℓ` of untouched
-registers.  The grouping is mathematically harmless, since the registers of `T`, and those of
-`U`, have one owner before and one after the change (`Frame.owner_eq_of_notMem_birthEnv`,
-`TwoSheetExchange.owner_eq_of_notMem_exchangeEnv`), and grouping registers of one party is a
-private unitary; but it is not proved.  Not formalized: the list of a frame's registers with one
-register per site and per tag, its identification with the canonical coordinates in which
-`1_tags ⊗ B` and `1 ⊗ W` act, and the grouping maps and reorderings that place the monomials on
-it.  Consequently the statements give `Kᴴ K ⊗ 1` (respectively `W ⊗ 1`) on the grouped layout
-and the canonical map `B = 1_E ⊗ Kᴴ K` (respectively `D_U F_A = 1 ⊗ W`) on the sheet as two
-separate facts.  Documented in `docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
-
-**Scope restriction (renaming of an exchange):** Lemma 6.6 implements the exchange by private
-contractions and a register renaming.  Here the corrections `D_U F_A` are proved to be one private
-contraction at `P∘` on the registers of `U` of both sheets
-(`TwoSheetExchange.exchange_correction_monomial`), and the renaming `ℛ` is the canonical
-identification of tensor factors `TwoSheetExchange.renameEquiv`, which keeps every register at its
-party.  Writing `ℛ` as a word of exchanges of tensor factors needs a layout with one register per
-site and per tag, which is not formalized.  Documented in
-`docs/paper-gaps/polypeps_ownership_change_monomials.tex`.
 
 ## References
 
@@ -174,7 +151,7 @@ theorem isAllowed_birthPrivateWord (P : Party) {V : Matrix (BT × BE) U ℂ} (hV
   have h := norm_birthKernel_le_one hV hs
   have h' := h
   rw [← l2_opNorm_conjTranspose] at h'
-  exact l2_opNorm_mul_le_one h' h
+  exact l2_opNorm_mul_le_one _ _ h' h
 
 omit [DecidableEq BT] [DecidableEq T] in
 /-- The death monomial is allowed: its private maps are contractions and its pair effect is
@@ -419,14 +396,29 @@ section FrameMonomial
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 
+/-- The matrix `1_E ⊗ M` on a sheet, in the coordinates `((t, e), u)` of `threeSplit T E`: the
+operator `M` on the configurations of `T` and `U = (T ∪ E)ᶜ`, the identity on those of `E`. -/
+def sheetPlace {T E : Finset ι} (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ M).submatrix
+    (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h)
+
+theorem sheetPlace_apply {T E : Finset ι} (h : Disjoint T E)
+    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (c' c : ι → Fin q) :
+    sheetPlace h M c' c = (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) *
+      M ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x))
+        ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) := by
+  simp only [sheetPlace, Matrix.submatrix_apply, Function.comp_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, teuShuffle, Equiv.coe_fn_mk]
+  rfl
+
 /-- The canonical map of a birth on the sheet is `1_E ⊗ Kᴴ K` with `K = ⟨s| (1_T ⊗ V)`, in the
 coordinates `(e, (t, u))` (`birthOp_eq_submatrix`). -/
 theorem sheetBirthOp_eq_submatrix {T E : Finset ι} (h : Disjoint T E) (σ : SplittingData q T E) :
-    sheetBirthOp h σ =
-      ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ
-          ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).submatrix
-        (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h) := by
-  rw [sheetBirthOp, birthOp_eq_submatrix, submatrix_submatrix]
+    sheetBirthOp h σ = sheetPlace h ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s) := by
+  rw [sheetBirthOp, birthOp_eq_submatrix, submatrix_submatrix, sheetPlace]
 
 namespace Frame
 
@@ -467,7 +459,7 @@ theorem exists_deathChain {T E : Finset ι} (P Q : Party) (σ : SplittingData q 
       usesOnly_deathChain hQP σ.V σ.s ℓ, sourceCount_deathChain hQP σ.V σ.s ℓ,
       (effectCount_deathChain hQP σ.V σ.s ℓ).le, pairHeadIso_deathChain_eval hQP σ.V σ.s ℓ⟩
 
-/-- **Lemma 6.5 (homogeneous birth), with the bounded-change clause on grouped registers.** In
+/-- **The homogeneous birth of Lemma 6.5 on grouped registers.** In
 an encoded frame `F`, let `T` be a set of raw sites owned by `P∘` and disjoint from every outer
 hole footprint, and let `E` and `U = Λ ∖ (T ∪ E)` be as in `eq:birth-partition`. If
 `I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting data such that:
@@ -481,8 +473,8 @@ hole footprint, and let `E` and `U = Λ ∖ (T ∪ E)` be as in `eq:birth-partit
   followed by any layout `ℓ` of other registers, `Kᴴ K ⊗ 1` is the operator of an allowed word
   using only `P∘` and `Q∘` with at most one normalized pair source, from `T` and `U` held by
   `P∘` to `T` held by `Q∘`; for `Q∘ ≠ P∘` it is a private contraction at `P∘`, one pair source
-  between `Q∘` and `P∘`, and a private contraction at `P∘` (`birthWord`).  The grouped layout is
-  not identified with the frame's registers (see the scope restriction in the module docstring).
+  between `Q∘` and `P∘`, and a private contraction at `P∘` (`birthWord`).  On the registers of
+  the frame, one per site and per tag, this is `Frame.birth_bounded`.
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437 and 447–449. -/
@@ -494,10 +486,7 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
       sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ =
-        ((1 : Matrix (F.birthEnv P → Fin q) (F.birthEnv P → Fin q) ℂ) ⊗ₖ
-          ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).submatrix
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH))
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH)) ∧
+        sheetPlace (F.disjoint_birthEnv hTP hTH) ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s) ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
           sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * F.encoder =
         (F.changeOwner T Q).encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
@@ -525,7 +514,7 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
   · change (if x ∈ T then Q else F.owner x) = Q
     simp only [hx, ↓reduceIte]
 
-/-- **Lemma 6.5 (homogeneous death), with the bounded-change clause on grouped registers.** Let `F`
+/-- **The homogeneous death of Lemma 6.5 on grouped registers.** Let `F`
 be the frame *after* the death, in which `T` is owned by `P∘` and avoids every outer hole footprint,
 and let the frame before the death be `F` with `T` owned by `Q∘`. If `I_Ω(T:E) ≤ L^{-60}` for `E`
 computed in `F`, there are splitting data such that the canonical map `B = 1_E ⊗ Kᴴ K`, with the
@@ -535,8 +524,8 @@ into one register each, followed by any layout `ℓ` of other registers, `Kᴴ K
 an allowed monomial using only `P∘` and `Q∘`, without pair sources and with at most one normalized
 pair effect, from `T` held by `Q∘` and `U` by `P∘` to both held by `P∘`; for `Q∘ ≠ P∘` it is a
 private contraction at `P∘`, one pair effect between `Q∘` and `P∘`, and a private contraction at
-`P∘` (`deathChain`). The grouped layout is not identified with the frame's registers (see the scope
-restriction in the module docstring).
+`P∘` (`deathChain`). On the registers of the frame, one per site and per tag, this is
+`Frame.death_bounded`.
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–449. -/
@@ -548,10 +537,7 @@ theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
       sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ =
-        ((1 : Matrix (F.birthEnv P → Fin q) (F.birthEnv P → Fin q) ℂ) ⊗ₖ
-          ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).submatrix
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH))
-          (teuShuffle _ _ _ ∘ threeSplit q T (F.birthEnv P) (F.disjoint_birthEnv hTP hTH)) ∧
+        sheetPlace (F.disjoint_birthEnv hTP hTH) ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s) ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
           sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * (F.changeOwner T Q).encoder =
         F.encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
@@ -616,7 +602,7 @@ set_option synthInstance.maxSize 512 in
 /-- The corrections `W` of an exchange form a contraction. -/
 theorem norm_correctionMatrix_le_one (σ : SplittingData q T E) (A : Finset ι) :
     ‖correctionMatrix σ A‖ ≤ 1 :=
-  l2_opNorm_mul_le_one (l2_opNorm_conjTranspose_mul_mul_le_one
+  l2_opNorm_mul_le_one _ _ (l2_opNorm_conjTranspose_mul_mul_le_one
     (IsIsometry.kronecker σ.V σ.V σ.isIsometry σ.isIsometry).l2_opNorm_le_one
     (l2_opNorm_toMatrix_toPEquiv_le _)) (l2_opNorm_toMatrix_toPEquiv_le _)
 
@@ -707,9 +693,10 @@ splitting data of the exchange partition, the corrections `D_U F_A` of the imple
 `C = D_U F_A ℛ` are `1 ⊗ W` with `W = correctionMatrix σ A` acting on the two copies of `U`, the
 registers of `U` are held by `P∘` on both sheets before and after the exchange, and for every
 layout `ℓ` of the other registers `W ⊗ 1` is the operator of one allowed private contraction at
-`P∘` on two registers `ℂ^U` of `P∘` grouping the raw registers of `U` on each sheet (see the
-scope restriction in the module docstring).  The renaming `ℛ` is the identification of tensor
-factors `renameEquiv`, which keeps every register at its party.
+`P∘` on two registers `ℂ^U` of `P∘` grouping the raw registers of `U` on each sheet.  The
+renaming `ℛ` is the identification of tensor factors `renameEquiv`, which keeps every register at
+its party.  On the registers of the frames, one per site and per tag, the exchange is
+`exchange_bounded`.
 
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 474–479; proof
 lines 485–515 and 556–561. -/

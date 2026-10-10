@@ -78,7 +78,8 @@ choice functions `J`.
 Approximate conversions in trace norm and mutual asymptotic conversion in polylogarithmic
 depth are treated in `TNLean.Circuit.Channel.ApproximateConversion` and
 `TNLean.Circuit.Channel.AsymptoticConversion`, for the same class of local channels. Blocking
-a fixed number of sites into one, which changes the number of sites, is not treated here.
+a fixed number of sites into one, which changes the number of sites, is treated in
+`TNLean.Circuit.Channel.SiteBlocking`.
 Finite adaptive channels on arbitrary inputs and their composition are treated separately
 in `TNLean.Circuit.Measurement.AdaptiveConversion`. That model still lacks a fixed-number
 source `QCcc` block decomposition and a uniform physical gate-cost comparison.
