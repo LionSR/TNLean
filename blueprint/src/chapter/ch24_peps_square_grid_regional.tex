@@ -41,14 +41,12 @@
 \begin{theorem}[Number of square-lattice edges]
     \label{thm:peps_square_edge_count}
     \lean{TNLean.PEPS.card_squareLatticeEdges_le}
-    \leanok
     Let $L\ge0$ be an integer. The nearest-neighbor graph on
     $\{0,\ldots,L-1\}^2$, with open boundary, has at most $2L^2$ edges.
     This is the elementary counting bound used in the doubled-Hamiltonian
     boundary estimate of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
-    \leanok
     Orient every horizontal edge to the right and every vertical edge upward.
     Each edge is determined by its initial vertex and its orientation.
     There are $L^2$ vertices and two orientations, so the edge set injects
