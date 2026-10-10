@@ -84,9 +84,10 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   windows in place of Nachtergaele's estimate.
 - `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction) records
   that preservation of an on-site symmetry along the isometric deformation of
-  arXiv:1010.3732 is formalized for a supplied virtual unitary and for a single
-  injective block, where the fundamental theorem supplies that unitary; the
-  multiblock derivation of a unitary virtual action remains open.
+  arXiv:1010.3732 is derived from exact symmetry of the matrix product
+  vectors, both for a single injective block and for several jointly injective
+  blocks in the printed standard form, where the symmetry permutes the blocks;
+  invariance only up to a phase remains open.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
   records that the formal fixed point takes a projective representation as input,
   whereas the source starts from the 2-cocycle alone. For finite groups the twisted
