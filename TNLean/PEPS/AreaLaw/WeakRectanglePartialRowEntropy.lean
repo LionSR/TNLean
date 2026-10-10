@@ -10,8 +10,8 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
 # Entropy cost of part of a rectangle dilation layer
 
 Adding an arbitrary subset of the next dilation layer changes the regional
-entropy by at most twelve times the rectangle size times the logarithm of
-the local dimension. The estimate follows from the layer cardinality bound,
+entropy by at most `12 * Q.size * Real.log q`, where `q` is the local
+dimension. The estimate follows from the layer cardinality bound,
 the disjoint-region entropy increment inequality, and the dimension bound.
 It includes thin rectangles, negative coordinates, an empty added region,
 and missing lattice sites in the physical domain.
