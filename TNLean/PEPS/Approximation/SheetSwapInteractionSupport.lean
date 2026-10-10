@@ -45,6 +45,10 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_inter
       (sheetSwapOp q (R ∩ S))ᴴ * sheetSwapOp q (R \ S) := by
     simpa only [← Matrix.mul_assoc, hunit, Matrix.one_mul] using
       congrArg (fun X ↦ (sheetSwapOp q (R ∩ S))ᴴ * X) hcomp
+  have hcancel : sheetSwapOp q (R \ S) * doubledHamiltonian A *
+      (sheetSwapOp q (R \ S))ᴴ = doubledHamiltonian A :=
+    sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA
+      (Or.inr (Finset.disjoint_coe.mpr Finset.disjoint_sdiff))
   done
 
 end TNLean.PEPS.EncodedFrame
