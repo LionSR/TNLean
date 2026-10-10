@@ -27,7 +27,7 @@
       "id": "docs/paper-gaps/polypeps_ownership_change_monomials.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "resolved-pending",
+      "status": "resolved",
       "paper": "peps",
       "result": "Lemmas 6.5–6.6, birth, death and two-sheet exchange",
       "issue": 8771,
@@ -39,18 +39,18 @@
         ]
       },
       "title": "Changes of owner as allowed operations",
-      "summary": "The lemmas hold as stated; Lean proves both with exactly the paper's hypotheses, in a pull request awaiting merge.",
+      "summary": "The lemmas hold as stated; Lean proves both with exactly the paper's hypotheses.",
       "context": "The PEPS is built by handing the ground state among parties, each a label for a set of quantum registers, until every site has its own party. These lemmas are the elementary handovers, and they must use only operations that the later compression step accepts.",
       "claims": "Moving a region <i>T</i> from one party to another is the map {{tn:peps-birth}}. Here <i>V</i> is an isometry that splits the buffer <i>U</i> around <i>T</i>, as in Lemma 6.4. <i>s</i> is a normalized state shared by the two parties. Let <i>E</i> be the rest of the lattice, and Ω the ground state. If <i>I</i>(<i>T</i> : <i>E</i>) ≤ <i>L</i><sup>−60</sup>, then ‖(<i>B</i> − 1)Ω‖ ≤ <i>L</i><sup>−30</sup>, with <i>L</i> the grid side. Swapping ownership of a region between two copies of the state costs at most 4<i>L</i><sup>−30</sup>. Each move uses only private maps, plus normalized states or projections shared by two named parties.",
       "found": "Both lemmas are proved with exactly the paper's hypotheses and error bounds. Each move acts on the actual registers, one per lattice site, each held by its owner. Adding or removing a party uses one shared normalized state or projection; the swap is a reordering that keeps every register with its party, then one private map.",
       "impact": "No.",
-      "plan": "Merge the pending pull request."
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/polypeps_small_rewrite_monomials.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "resolved-pending",
+      "status": "resolved",
       "paper": "peps",
       "result": "Lemma 6.3, small-patch rewrite",
       "issue": 8770,
@@ -68,7 +68,7 @@
       "claims": "The rewrite is the map {{tn:peps-rewrite}}. <i>K</i> undoes or writes the encoding of a small square <i>Q</i><sup>+</sup>, with tag register 𝒥. <i>P</i><sub>1</sub>, …, <i>P<sub>m</sub></i> project onto low-rank subspaces of <i>m</i> nearby patches. <i>M</i> is a contraction. Its error is ‖<i>M</i>Ω<sub>old</sub> − Ω<sub>new</sub>‖ ≤ (<i>m</i> + <i>r</i><sub>old</sub>)ε. Here Ω<sub>old</sub> and Ω<sub>new</sub> are the target states before and after, <i>r</i><sub>old</sub> counts changed old squares, and ε = <i>L</i><sup>−60</sup>. For every <i>a</i> &gt; 0, <i>M</i> is within <i>L</i><sup>−<i>a</i></sup> of a polynomial sum of terms. Each term uses private maps and normalized states or projections shared by at most two parties.",
       "found": "The first part is proved with exactly the paper's hypotheses. For the second, Lean writes the map as a sum of explicit product terms, truncates each piece to rank <i>k</i> with error at most <i>g</i>/√<i>k</i> (<i>g</i> ≤ 2<i>m</i>, independent of the site dimensions), and reads every term as an allowed operation of Theorem 5.2 on the registers of the frames, one per site and per tag, using only parties of the specified list. With the paper's standing bound on the number of cylinder terms of each projector (one fixed power of <i>L</i>), boundedly many patches and affected holes, and a bounded specified list of parties, the number of terms is polynomial in <i>L</i>, and the choice <i>a</i> = 30 gives reference error at most (2<i>b</i> + 1)<i>L</i><sup>−20</sup>. No hypotheses were added.",
       "impact": "No.",
-      "plan": "Merge the pending pull request."
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
@@ -173,7 +173,9 @@
       "prs": {
         "TNLean": [
           8926,
-          8944
+          8944,
+          9002,
+          9004
         ]
       },
       "title": "The low-energy sweep from its five inputs",
