@@ -23,7 +23,7 @@
     <article class="thm" data-target="8773">
       <div class="eyebrow">PEPS manuscript · Theorem 1.1</div>
       <h3>Ground states are polynomial PEPS</h3>
-      <svg class="fig" id="fig-peps" viewBox="0 0 360 170" role="img" aria-label="A projected entangled-pair state on a grid of tensors"></svg>
+      {{DIAGRAM:diagrams/peps-sheet.svg}}
       <p class="stmt">On an open <i>L</i>×<i>L</i> grid, a tensor network with one tensor per site and bond dimension polynomial in <i>L</i> reproduces the whole ground vector to error 1/<i>L</i>.</p>
       <div class="formula"><math display="block"><munder><mo movablelimits="true">min</mo><mi>θ</mi></munder><mrow><mo>‖</mo><mfrac><mi>Φ</mi><mrow><mo>‖</mo><mi>Φ</mi><mo>‖</mo></mrow></mfrac><mo>−</mo><msup><mi>e</mi><mrow><mi>i</mi><mi>θ</mi></mrow></msup><mi>Ω</mi><mo>‖</mo></mrow><mo>≤</mo><msup><mi>L</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>,</mo><mspace width="1em"></mspace><msub><mi>D</mi><mi>max</mi></msub><mo>≤</mo><mi>C</mi><msup><mi>L</mi><mi>c</mi></msup></math></div>
       <p class="why">An area law bounds each cut separately, while a PEPS has to make all cuts compatible on the given lattice. The result addresses Questions 7–8 of the Cirac–Garre-Rubio–Pérez-García survey tracked in #8273. It asserts existence only, and the tensors need not be efficiently computable.</p>
@@ -71,30 +71,5 @@
     t2.style.fill = "var(--surface)"; t2.style.font = "italic 600 15px var(--f-display)";
     svg.append(t1, t2);
   })();
-  (function pepsFig() {
-    const svg = document.getElementById("fig-peps");
-    const n = 6, s = 24, x0 = 110, y0 = 14, R = 6.5;
-    const bonds = sv("g"), legs = sv("g"), nodes = sv("g");
-    svg.append(bonds, legs, nodes);
-    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
-      const x = x0 + c * s, y = y0 + r * s;
-      if (c < n - 1) { const l = sv("line", { x1: x, y1: y, x2: x + s, y2: y }); l.style.stroke = "var(--accent)"; l.style.strokeWidth = "2"; bonds.append(l); }
-      if (r < n - 1) { const l = sv("line", { x1: x, y1: y, x2: x, y2: y + s }); l.style.stroke = "var(--accent)"; l.style.strokeWidth = "2"; bonds.append(l); }
-      const lg = sv("line", { x1: x, y1: y, x2: x + 7, y2: y - 8 }); lg.style.stroke = "var(--muted)"; lg.style.strokeWidth = "1.4"; legs.append(lg);
-      const cc = sv("circle", { cx: x, cy: y, r: R }); cc.style.fill = "var(--surface)"; cc.style.stroke = "var(--ink)"; cc.style.strokeWidth = "1.4"; nodes.append(cc);
-    }
-    const hx = x0 + 2.5 * s, hy = y0 + 2 * s;
-    const hl = sv("line", { x1: x0 + 2 * s + R, y1: hy, x2: x0 + 3 * s - R, y2: hy }); hl.style.stroke = "var(--cut)"; hl.style.strokeWidth = "4"; svg.append(hl);
-    const lab = (x, y, txt, anchor) => { const t = sv("text", { x, y, "text-anchor": anchor || "start" }); t.textContent = txt; t.style.fill = "var(--muted)"; t.style.font = "11px var(--f-mono)"; svg.append(t); return t; };
-    lab(x0 + n * s - 4, hy - 30, "bond ≤ C·Lᶜ").style.fill = "var(--cut)";
-    const pl = sv("path", { d: `M${hx},${hy - 4} C${hx + 30},${hy - 30} ${x0 + n * s - 30},${hy - 34} ${x0 + n * s - 6},${hy - 34}` });
-    pl.style.fill = "none"; pl.style.stroke = "var(--cut)"; pl.style.strokeWidth = "1"; svg.append(pl);
-    lab(12, y0 + 6, "one tensor").style.fill = "var(--ink)";
-    lab(12, y0 + 20, "per site");
-    lab(12, y0 + 60, "physical leg").style.fill = "var(--ink)";
-    lab(12, y0 + 74, "dimension q");
-    lab(x0 + (n - 1) * s / 2, 166, "L × L open grid", "middle");
-  })();
-
 })();
 </script>
