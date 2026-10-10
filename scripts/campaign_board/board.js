@@ -215,6 +215,15 @@
   // Notes are identified by repository and path; two repositories may use the same file name.
   const gapKey = (repo, path) => `${repo || PRIMARY.name}:${path}`;
   const noteFor = g => (D.gapNotes || []).find(n => gapKey(n.repo, n.path) === gapKey(g.repo, g.id));
+  // A note on main is compiled to a PDF on its library's site; one only in an open pull request
+  // has no compiled copy yet, so its file name stays plain text.
+  const noteLink = (n, text) => {
+    const home = (REPO[n.repo || PRIMARY.name] || {}).homepage;
+    if (!n.onMain || !home) return el("span", { class: "muted mono", text });
+    const a = ext(`${home.replace(/\/?$/, "/")}paper-gaps/${n.path.split("/").pop().replace(/\.tex$/, ".pdf")}`, text, "mono");
+    a.title = "Compiled paper-gap note (PDF)";
+    return a;
+  };
   // The proof stage that owns an issue, for placing a gap or a badge in the walkthrough.
   const stageOf = n => {
     for (const route of C.routes) {
@@ -271,13 +280,14 @@
           el("div", {}, el("dt", { text: "Next step" }), el("dd", { html: tnText(g.plan) }))),
         el("div", { class: "links" }, g.issue ? issueRef(g.issue) : null,
           ...Object.entries(g.prs || {}).flatMap(([repo, ns]) => ns.map(n => prRef(repo, n))),
-          note ? el("span", { class: "muted mono", text: `${note.path.split("/").pop()} · note status: ${note.status || "unstated"}` }) : null)));
+          note ? noteLink(note, note.path.split("/").pop()) : null,
+          note ? el("span", { class: "muted", text: `note status: ${note.status || "unstated"}` }) : null)));
     }
     const list = $("gaplist");
     for (const n of pending) list.append(el("article", { class: "gap" },
       el("div", { class: "where" }, el("span", { class: "pill st-draft", text: "New note, summary pending" }), n.kind ? el("span", { text: `marked ${n.kind} by its author` }) : null),
       el("h3", { text: n.title || n.path }),
-      el("div", { class: "links" }, ...n.prs.map(p => prRef(n.repo, p.number)), el("span", { class: "muted mono", text: n.path.split("/").pop() }))));
+      el("div", { class: "links" }, ...n.prs.map(p => prRef(n.repo, p.number)), noteLink(n, n.path.split("/").pop()))));
     if (!list.children.length) list.append(el("p", { class: "muted", text: resolvedCount ? "No open paper gaps." : "No paper-gap notes yet." }));
     if (resolvedCount) list.after(el("details", { class: "fold resolved" },
       el("summary", {}, el("h3", { text: `Resolved (${resolvedCount})` }), el("span", { class: "muted", text: " Lean proves what the paper states (in some cases in a pull request awaiting merge), or the gap was a degenerate case now excluded by the definitions." })),
