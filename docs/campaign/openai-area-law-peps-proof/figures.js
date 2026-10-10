@@ -108,18 +108,18 @@ window.campaignFigures = (function () {
     replicas(svg) {
       view(svg, 320, 196);
       const X = scale(1, 16, 50, 250), Y = scale(0, 1.3, 150, 30);
-      const lim = 0.32, v = m => lim + 0.9 / Math.pow(m, 0.85);
+      const lim = 0.32, v = k => lim + 0.9 / Math.pow(k, 0.85);
       line(svg, X(1), Y(lim), X(16) + 6, Y(lim), "h dash");
       text(svg, X(16) + 10, Y(lim) + 4, "limit:", "t");
       text(svg, X(16) + 10, Y(lim) + 17, "entropies");
       path(svg, pts(Array.from({ length: 16 }, (_, i) => [X(i + 1), Y(v(i + 1))])), "h");
-      for (let m = 1; m <= 16; m++) dot(svg, X(m), Y(v(m)), 2.4, "fa");
-      text(svg, X(3) + 6, Y(v(3)) - 6, "(1/*m*) log ‖filtered vector‖", "t");
+      for (let k = 1; k <= 16; k++) dot(svg, X(k), Y(v(k)), 2.4, "fa");
+      text(svg, X(3) + 6, Y(v(3)) - 6, "−(1/*k*) log ‖filtered state‖^{2}", "t");
       xFrame(svg, X, 162, [[1, "1"], [4, "4"], [8, "8"], [12, "12"], [16, "16"]]);
-      text(svg, X(8.5), 192, "copies *m* of Ω in the symmetric subspace", "", "middle");
+      text(svg, X(8.5), 192, "number of copies *k*", "", "middle");
       // the m copies, drawn once
       for (let i = 0; i < 7; i++) { const c = add(svg, "circle", { cx: 60 + i * 13, cy: 14, r: 4.5 }, "k"); c.setAttribute("stroke-width", "1"); }
-      text(svg, 60 + 7 * 13, 18, "… Ω^{⊗m}");
+      text(svg, 60 + 7 * 13, 18, "… Ω̃^{⊗k}");
     },
 
     /* Area law, stage 4: small multiples of the partition sweeping a collar. */
@@ -139,7 +139,7 @@ window.campaignFigures = (function () {
         path(svg, pts(q), "c");
         text(svg, x + w / 2, top + h + 16, String(k + 1), "", "middle");
       });
-      text(svg, 8 + cl / 2, top + h / 2 + 4, "*A*", "m t", "middle");
+      text(svg, 8 + cl / 2, top + h / 2 + 4, "*X*", "m t", "middle");
       brace(svg, 8 + cl, 8 + cr, top - 4, "collar");
       text(svg, 160, 168, "steps of the randomized schedule", "", "middle");
     },
@@ -155,7 +155,7 @@ window.campaignFigures = (function () {
       dot(svg, X(1), Y(e(1)), 3, "fa");
       text(svg, X(0) + 8, Y(e(0)) - 4, "after the scan: *C n*^{1−ε}", "t");
       text(svg, X(1) + 6, Y(e(1)) - 6, "below", "t");
-      text(svg, X(1) + 6, Y(e(1)) + 6, "*n*^{−k}");
+      text(svg, X(1) + 6, Y(e(1)) + 6, "*n*^{−M}");
       yFrame(svg, Y, 66, [[1, "*n*"], [0, "1"], [-1, "*n*^{−1}"], [-2, "*n*^{−2}"], [-3, "*n*^{−3}"], [-4, "*n*^{−4}"]]);
       xFrame(svg, X, 160, [[0, "*n*^{1−ε}"], [1, "+ sublinear"]]);
       text(svg, X(0.5), 176, "collar width", "", "middle");
@@ -173,13 +173,13 @@ window.campaignFigures = (function () {
       line(svg, ...lt, ...lb, "k"); line(svg, ...rt, ...rb, "k");
       line(svg, mid - narrow, bot, mid - narrow, bot + 18, "k"); line(svg, mid + narrow, bot, mid + narrow, bot + 18, "k");
       text(svg, 60, 80, "*X*", "m t big", "middle");
-      text(svg, 260, 80, "*Y*", "m t big", "middle");
+      text(svg, 260, 80, "*E*", "m t big", "middle");
       text(svg, mid, 40, "buffer", "t", "middle");
       text(svg, mid + 30, 100, "tapers", "", "start");
       text(svg, mid + 30, 112, "linearly", "", "start");
       line(svg, mid - narrow, bot + 24, mid + narrow, bot + 24, "c");
       text(svg, mid, bot + 36, "width ≥ *K* log *L*", "", "middle");
-      text(svg, 16, bot + 36, "*I*(*X* : *Y*) ≤ *L*^{−p}", "t");
+      text(svg, 16, bot + 36, "*I*(*X* : *E*) ≤ *L*^{−p}", "t");
     },
 
     /* PEPS, stage 2: nested squares and the inside ranks of the subspaces. */
@@ -212,7 +212,7 @@ window.campaignFigures = (function () {
         for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) dot(svg, x + (i + 0.5) * c, y + (j + 0.5) * c, Math.max(1.6, 4.5 - k), i < 2 && j < 2 && k ? "fa" : "fm");
         text(svg, x + s / 2, y + s + 16, `${n * n} part${n > 1 ? "ies" : "y"}`, "", "middle");
       }
-      text(svg, 160, 112, "a party meets only its parent and siblings: two adjacent scales", "", "middle");
+      text(svg, 160, 112, "a party works only with parties at its own or the next scale", "", "middle");
     },
 
     /* PEPS, stage 6: links between dyadic parties routed along rows and columns. */
