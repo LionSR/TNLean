@@ -101,6 +101,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -214,6 +215,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -370,6 +372,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_region_coordinates.py'
+              - 'scripts/test_tenkz_area_law_scan_buffer.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -1634,6 +1637,10 @@ jobs:
             ${{ runner.temp }}/region-coordinate-diagrams/cache/tenkz-*.tnlog
           if-no-files-found: error
           retention-days: 3
+
+      - name: Check area-law scanner and buffer diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_area_law_scan_buffer.py
 
       - name: Check native semi-regular parent diagrams
         if: env.TEX_CHANGED == 'true'

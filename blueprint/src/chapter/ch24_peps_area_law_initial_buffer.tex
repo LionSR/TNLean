@@ -49,6 +49,46 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     $8(R+1)\mu_R(\operatorname{size}(Q_0)+d')$ admissible supports are split by
     $A\cap Q_0^{+d'}$, where $\mu_R=2^{2R(R+1)}$ bounds the number of admissible
     supports containing a site.
+
+    The picture shows the nested rectangles for range $R=1$, $d=1$ and
+    $d'=2$, with two admissible supports that are each split by exactly one
+    contour.
+    \begin{tenkzequation}
+        % Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:219--300
+        % (lemma lem:initial-buffer and the contour separation in its proof);
+        % the source has no figure.
+        % Geometry only: dots are sites of Q (nearest-neighbor edges are not
+        % drawn); there are no tensors or open indices, and the boundary
+        % signature is empty.
+        % Enclosures, inner to outer: Q_0 = rows/cols 4..5; Q_0^{+d} with
+        % d=1 = rows/cols 3..6; Q_0^{+d'} with d'=2 = rows/cols 2..7; the
+        % safe rectangle Q = rows/cols 1..8. All of Q is drawn inside A.
+        % Tinted pairs: adjacent pairs, admissible at range R=1. The pair
+        % (2,4),(3,4) is split by Q_0^{+d} and lies in Q_0^{+(d+R)} = Q_0^{+d'};
+        % the pair (1,6),(2,6) is split by Q_0^{+d'} only. Since d+R<=d',
+        % neither is split by both contours.
+        % Not to scale: safety puts the cut endpoints Z at sup-norm distance
+        % greater than D_0 size(Q) from Q, so Z lies far outside the picture.
+        \tenkzkernel
+        \begin{tenkz}[size=s, rows={wire,wire,wire,wire,wire,wire,wire,wire},
+                cols=8, bonds=none]
+            \tndeclare{species}{support}{hue=source:orange!85!black}
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+            \tnmark[form=enclosure, species=selected, tint, label pos=e]{(4,4) .. (5,5)}{$Q_0$}
+            \tnmark[form=enclosure, species=secondary, label pos=s]{(3,3) .. (6,6)}{$Q_0^{+d}$}
+            \tnmark[form=enclosure, species=complement, label pos=s]{(2,2) .. (7,7)}{$Q_0^{+d'}$}
+            \tnmark[form=enclosure, label pos=n]{(1,1) .. (8,8)}{$Q$}
+            \tnmark[form=enclosure, species=support, tint]{{(2,4), (3,4)}}{}
+            \tnmark[form=enclosure, species=support, tint]{{(1,6), (2,6)}}{}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{theorem}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
