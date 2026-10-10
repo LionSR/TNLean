@@ -72,6 +72,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -177,6 +178,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -336,6 +338,7 @@ jobs:
               - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
               - 'scripts/test_blueprint_graph_worker.py'
+              - 'scripts/test_blueprint_graph_precompute.py'
               - 'scripts/add_blueprint_search.py'
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
@@ -1535,12 +1538,23 @@ jobs:
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
 
+      - name: Test dependency graph rendering and terminal errors
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
+
+      - name: Test precomputed dependency graph interactions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_precompute.py --browser-smoke
+
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
       - name: Test generated blueprint pages
         if: env.TEX_CHANGED == 'true'
         run: |
           python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Preserve failed blueprint render
