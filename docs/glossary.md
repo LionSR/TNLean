@@ -1637,6 +1637,33 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** for the open chain and graphs only the inclusion in the metric
   ball is proved; on the ring the equality holds.
 
+#### `QuantumCircuit.IsSeparatedBy`
+
+- **Declaration:**
+  `QuantumCircuit.IsSeparatedBy {N : ℕ} [NeZero N] (X Y : Set (Fin N)) (s : ℕ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Geometry.lean`.
+- **Meaning:** the sets `X` and `Y` of ring sites are at ring distance larger
+  than `s`: no `y ∈ Y` equals `x + m` with `x ∈ X` and `|m| ≤ s`, the addition
+  taken modulo `N`. Equivalently, `Y` misses the neighbourhood
+  `neighbourhood X s` of sites within ring distance `s` of `X`.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1
+  (operators at a distance larger than `2T` have uncorrelated expectations in a
+  state prepared by a local circuit of depth `T`).
+- **Sanctioned bridges:** `QuantumCircuit.IsSeparatedBy.symm`,
+  `QuantumCircuit.IsSeparatedBy.notMem_neighbourhood`,
+  `QuantumCircuit.isSeparatedBy_of_val_bounds` (two windows of consecutive
+  sites with gaps of at least `s` on both sides of the ring),
+  `QuantumCircuit.disjoint_neighbourhood_of_isSeparatedBy` and
+  `QuantumCircuit.disjoint_lightCone_ringBond_of_isSeparatedBy` (separation by
+  `2T` makes the light cones of radius `T` disjoint), and, for nonempty sets,
+  `MPSPreparation.isSeparatedBy_iff_lt_ringSupportDistance` (separation by `s`
+  is `s` strictly below the ring distance of the supports).
+- **Caveat:** the inequality is strict, so `IsSeparatedBy X Y (2 * T)`
+  excludes sets at ring distance exactly `2T`, whose light cones of radius `T`
+  share a site. If `X` or `Y` is empty the predicate holds for every `s`; if
+  both are nonempty it fails as soon as `N ≤ 2s + 1`, since the offsets
+  `|m| ≤ s` then reach every site of the ring.
+
 #### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
 
 - **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
