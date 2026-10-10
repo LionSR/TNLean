@@ -1119,11 +1119,25 @@ is recorded in
     by bilinearity, on the whole algebra.
 \end{proof}
 
+\begin{definition}[On-site symmetry up to a phase]
+    \label{def:on_site_symmetric_up_to_phase}
+    \lean{MPSTensor.IsOnSiteSymmetricUpToPhase,
+        MPSTensor.IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase}
+    \leanok
+    \uses{def:twisted_tensor, def:mpv}
+    Let $g\mapsto U_g$ be a linear representation of a monoid on the physical
+    space. A tensor $A$ is on-site symmetric up to a phase if for every $g$
+    and every chain length $N$ there is a scalar $\lambda_{g,N}$ with
+    $U_g^{\otimes N}\ket{\psi_N}=\lambda_{g,N}\ket{\psi_N}$, where
+    $\ket{\psi_N}$ is the matrix product vector of $A$ of length $N$. The
+    scalars may depend on both $g$ and $N$. Exact on-site symmetry is the
+    case $\lambda_{g,N}=1$. This is the symmetry of the state in
+    \cite[lines~655--657, 2590--2593]{Schuch2011Phases}.
+\end{definition}
+
 \begin{lemma}[Phases of a symmetry up to a phase]
     \label{lem:block_symmetry_phase_power}
-    \lean{MPSTensor.IsOnSiteSymmetricUpToPhase,
-        MPSTensor.IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase,
-        MPSTensor.map_list_prod_eq_pow_mul_of_length_three,
+    \lean{MPSTensor.map_list_prod_eq_pow_mul_of_length_three,
         MPSTensor.exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul}
     \leanok
     Let $\phi$ be a linear functional on a complex algebra $\mathcal A$ with
@@ -1143,11 +1157,12 @@ is recorded in
     $\sum_k\tr B^k_w=c^{|w|}\sum_k\tr A^k_w$ for every word $w$, where
     $B^k_i=\sum_l(U_g)_{il}A^k_l$. Exact symmetry is the case
     $\lambda_{g,N}=1$.
-    A symmetry of the state is fixed only up to such a phase
-    \cite[lines~440--445, 655--657]{Schuch2011Phases}.
+    A symmetry of the state holds only up to such a phase
+    \cite[lines~1313--1314, 2590--2593]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}
+    \uses{def:on_site_symmetric_up_to_phase}
     \leanok
     Nondegeneracy against the spanning family $(y_i)$ makes $x_i\mapsto y_i$
     a well-defined linear map $L$: if $\sum_ia_ix_i=0$, then

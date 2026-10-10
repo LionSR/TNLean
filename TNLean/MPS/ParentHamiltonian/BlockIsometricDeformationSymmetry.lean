@@ -41,7 +41,7 @@ matrices are block diagonal and span the block-diagonal matrices), and the
 per-block normalization is the printed
 condition \(\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I\) at line 653
 for the block-diagonal \(P\). The symmetry is a symmetry of the state, so it holds only
-up to a phase (lines 440--445 and 655--657).
+up to a phase (lines 655--657, 1313--1314 and 2590--2593).
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -192,11 +192,11 @@ section WordTracePhase
 spanning families of letters. If \(\phi(y_w)=c_n\phi(x_w)\) for every word \(w\) of length
 \(n\in\{1,2,3\}\), then \(\phi(y_w)=c_1^{|w|}\phi(x_w)\) for every word \(w\).
 
-This is the comparison of words of length `N` with their one-letter extensions that makes
+This is the comparison of words of length \(N\) with their one-letter extensions that makes
 the phase \(\lambda_{g,N}\) of a symmetry of the matrix product vectors multiplicative in
 the length; the source does not spell out this step. Source context: arXiv:1010.3732,
-lines 655--657 (a symmetry \(U_g^{\otimes N}\) of the MPS) and lines 440--445 (an on-site
-symmetry is fixed only up to a one-dimensional representation). -/
+lines 655--657 (a symmetry \(U_g^{\otimes N}\) of the MPS) and lines 2590--2593 (such an
+MPS is invariant under \(U_g\) up to a phase). -/
 theorem map_list_prod_eq_pow_mul_of_length_three
     {𝔄 : Type*} [Ring 𝔄] [Algebra ℂ 𝔄] (φ : 𝔄 →ₗ[ℂ] ℂ)
     (hφ : ∀ M : 𝔄, (∀ N, φ (M * N) = 0) → M = 0) (hφ1 : φ 1 ≠ 0)
@@ -418,7 +418,7 @@ open scoped ComplexOrder in
 /-- Symmetry up to a phase of a block-diagonal tensor whose blocks jointly span at one site
 has phases that are powers of one unimodular scalar: the summed word traces of the blocks
 rotated by \(U_g\) are \(c^{|w|}\) times those of the original blocks, with \(|c|=1\).
-Source: arXiv:1010.3732, lines 440--445 and 655--657. -/
+Source: arXiv:1010.3732, lines 655--657 and 2590--2593. -/
 theorem exists_norm_eq_one_sum_trace_evalWord_rotatePhysical_eq_pow_mul
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (U : G →* Matrix (Fin d) (Fin d) ℂ)
@@ -803,7 +803,7 @@ theorem exists_isometricDeformationBlocks_unitary_covariance_of_isOnSiteSymmetri
   exact ⟨X, hX, fun γ =>
     blockPhysicalMatrix_isometricDeformationBlocks_covariance A (U g) X (hU g) hX hCov γ⟩
 
-/-- The `L`-fold on-site power of a rescaled matrix is the rescaled power. -/
+/-- The \(L\)-fold on-site power of a rescaled matrix is the rescaled power. -/
 private theorem onSiteTensorPow_smul (L : ℕ) (a : ℂ) (u : Matrix (Fin d) (Fin d) ℂ) :
     onSiteTensorPow L (a • u) = a ^ L • onSiteTensorPow L u := by
   ext σ τ

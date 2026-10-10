@@ -70,9 +70,9 @@ def IsOnSiteSymmetric (A : MPSTensor d D)
 each chain length `N`, the periodic vector of the twisted tensor is a scalar multiple
 `λ_{g,N}` of the periodic vector of `A`: \(U_g^{\otimes N}|\psi_N\rangle =
 \lambda_{g,N}|\psi_N\rangle\). The scalar may depend on both `g` and `N`.
-Source: arXiv:1010.3732, `Papers/1010.3732/paper_v3.tex` lines 440--445 (a symmetry is
-fixed only up to a one-dimensional representation) and lines 655--657 (a symmetry
-\(U_g^{\otimes N}\) of the MPS). -/
+Source: arXiv:1010.3732, `Papers/1010.3732/paper_v3.tex` lines 655--657 (a symmetry
+\(U_g^{\otimes N}\) of the MPS), lines 1313--1314 and 2590--2593 (an MPS with a
+\(U_g\)-invariant parent Hamiltonian is invariant under \(U_g\) up to a phase). -/
 def IsOnSiteSymmetricUpToPhase (A : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∀ (g : G) (N : ℕ), ∃ c : ℂ, ∀ s : Fin N → Fin d, mpv (twistedTensor A U g) s = c * mpv A s
