@@ -285,9 +285,10 @@ theorem fusionData_omega {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.I
   have hz := fusionData_isAssociator e hω g h k
   have hex : ∃ z : ℂ, z ≠ 0 ∧ (fusionData e hω).IsAssociator g h k z :=
     ⟨_, Units.ne_zero _, hz⟩
+  have hdp := MPSTensor.isDressedProportional_dressedScalar hex
   apply Units.ext
-  simp only [FusionData.omega, hex, ↓reduceDIte, Units.val_mk0, Pi.inv_apply]
-  refine hex.choose_spec.2.eq_of_forall_exists_ne_zero hz fun N ↦ ?_
+  simp only [Pi.inv_apply]
+  refine hdp.eq_of_forall_exists_ne_zero hz fun N ↦ ?_
   obtain ⟨w, hw, hne⟩ := exists_evalWord_tensor_ne_zero e ω (g * h * k) N
   refine ⟨w, hw, fun h0 ↦ hne ?_⟩
   have hred := ((fusionData e hω).isReduction_left g h k).evalWord w
