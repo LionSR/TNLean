@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
@@ -28,6 +29,9 @@ trees of three generators are `V ⊗ 1` and `1 ⊗ V`.
   `MPOTensor.GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen`: the two fusion trees.
 * `MPOTensor.GroupFamily.FusionData.cyclicInvariant_orderTwo`: the cyclic invariant at the
   generator is `ω(g,g,g)`.
+* `MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo`: for a
+  family whose restriction along `f : ℤ₂ →* G` is `1 ↦ E`, `g ↦ A`, the cyclic invariant at
+  `f g` is the associator scalar of the fusion tensors `FusionData.orderTwo`.
 
 Source: arXiv:2502.20257, equations `eq:fusion_1` and `eq:fusion_2`, `main.tex`
 lines 1403--1497, for the fusion tensors, and the display preceding `eq:3-cocycle`,
@@ -192,6 +196,24 @@ theorem cyclicInvariant_orderTwo_of_isAssociator
       (orderTwo E A V W hEE hEA hAE hAA).omega orderTwoGen 2 : ℂˣ) : ℂ) = z := by
   rw [cyclicInvariant_orderTwo hF]
   exact (GroupFamily.FusionData.eq_omega_of_isAssociator hF h).symm
+
+/-- **Cyclic invariants from an order-two restriction**: if the restriction of a normal
+representation `F` along `f : ℤ₂ →* G` is the family `1 ↦ E`, `g ↦ A`, then for every choice of
+fusion tensors of `F` the cyclic invariant `ω(f g, e, f g) ω(f g, f g, f g)` is the scalar by
+which the two fusion trees of three generators of `FusionData.orderTwo` differ.
+
+Source: arXiv:2502.20257, `eq:omegagauge` and the sentence following it, `main.tex`
+lines 1541--1546, with the display preceding `eq:3-cocycle`, lines 1506--1535. -/
+theorem cyclicInvariant_omega_map_of_comap_eq_orderTwo {G : Type} [Group G]
+    {F : GroupFamily G d} (fd : F.FusionData) (hF : F.IsNormalRepresentation)
+    (f : Multiplicative (ZMod 2) →* G) (hc : F.comap f = orderTwoFamily E A) {z : ℂ}
+    (h : (orderTwo E A V W hEE hEA hAE hAA).IsAssociator orderTwoGen orderTwoGen orderTwoGen
+      z) :
+    ((TNLean.Algebra.ScalarThreeCochain.cyclicInvariant fd.omega (f orderTwoGen) 2 : ℂˣ) :
+      ℂ) = z := by
+  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd f hF hc
+    (orderTwo E A V W hEE hEA hAE hAA) orderTwoGen_pow_two]
+  exact cyclicInvariant_orderTwo_of_isAssociator (hc ▸ hF.comap f) h
 
 end FusionData
 

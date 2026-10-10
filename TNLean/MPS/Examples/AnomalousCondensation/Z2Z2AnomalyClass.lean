@@ -438,22 +438,18 @@ theorem comap_yHom :
 theorem cyclicInvariant_omega_kleinFamily_x (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
   change ScalarThreeCochain.cyclicInvariant fd.omega (xHom GroupFamily.orderTwoGen) 2 = 1
-  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd xHom
-    kleinFamily_isNormalRepresentation comap_xHom xFusionData GroupFamily.orderTwoGen_pow_two]
   apply Units.ext
-  rw [xFusionData, GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator
-    orderTwoFamily_kx_isNormalRepresentation xFusionData_isAssociator_gen_gen_gen]
+  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
+    kleinFamily_isNormalRepresentation xHom comap_xHom xFusionData_isAssociator_gen_gen_gen]
   simp
 
 /-- The cyclic invariant `ω(xy,e,xy) ω(xy,xy,xy)` at `xy = (1,1)` is `−1`. -/
 theorem cyclicInvariant_omega_kleinFamily_xy (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 1)) 2 = -1 := by
   change ScalarThreeCochain.cyclicInvariant fd.omega (xyHom GroupFamily.orderTwoGen) 2 = -1
-  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd xyHom
-    kleinFamily_isNormalRepresentation comap_xyHom xyFusionData GroupFamily.orderTwoGen_pow_two]
   apply Units.ext
-  rw [xyFusionData, GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator
-    orderTwoFamily_kxy_isNormalRepresentation xyFusionData_isAssociator_gen_gen_gen]
+  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
+    kleinFamily_isNormalRepresentation xyHom comap_xyHom xyFusionData_isAssociator_gen_gen_gen]
   simp
 
 /-- The cyclic invariants on the restriction to `{e, y}` are one. -/

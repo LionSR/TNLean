@@ -341,14 +341,10 @@ theorem printedFamily_comap_bHom :
 as in arXiv:2203.12563, lines 1865 and 1884. -/
 theorem cyclicInvariant_omega_printedFamily_a (fd : printedFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
-  have hF := orderTwoFamily_tensorA_isNormalRepresentation
   change ScalarThreeCochain.cyclicInvariant fd.omega (aHom GroupFamily.orderTwoGen) 2 = 1
-  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd aHom
-    printedFamily_isNormalRepresentation printedFamily_comap_aHom aFusionData
-    GroupFamily.orderTwoGen_pow_two]
   apply Units.ext
-  rw [aFusionData, GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator hF
-    aFusionData_isAssociator]
+  rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
+    printedFamily_isNormalRepresentation aHom printedFamily_comap_aHom aFusionData_isAssociator]
   simp
 
 /-- The printed symmetry has cyclic anomaly invariant `+1` at `b`,

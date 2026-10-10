@@ -40,9 +40,9 @@ abstracted — record why, so it is not re-proposed).
   `orderTwoGen`: a bare `Multiplicative.ofAdd 1` may elaborate through a different instance
   path for `ZMod 2` and then fail to match in `rw`.
 - **Notes:** `Z2Z2AnomalyClass` and `KleinSymmetryAnomaly` use it; `czxFamily` keeps its
-  printed labels and can switch when next edited. The surrounding step "restrict along
-  `f`, transport the cyclic invariant, read off the associator scalar" now appears three times
-  and is a candidate for one lemma taking `F.comap f = orderTwoFamily E A`.
+  printed labels and can switch when next edited. The step "restrict along `f`, transport the
+  cyclic invariant, read off the associator scalar" is
+  `FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo`, used by three callers.
 
 ### Boundary on one Kronecker factor of a letter sum — promoted (2026-10-10)
 
