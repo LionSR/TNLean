@@ -30,13 +30,14 @@ parent projection and inverse-conjugated interaction along
 
 Source: Schuch--Pérez-García--Cirac, arXiv:1010.3732, paper_v3.tex,
 lines 645--676. The joint one-site span is the source's initial blocking
-assumption (lines 575--600), and the per-block normalization is the printed
+assumption (lines 577--597), and the per-block normalization is the printed
 condition \(\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I\) at line 653
 for the block-diagonal \(P\).
 
 **Scope restriction (exact vector symmetry):** The symmetry is assumed on
 the matrix product vectors themselves, not only up to a phase; see
-docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex.
+docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
+(https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
 -/
 
 open scoped Matrix BigOperators Kronecker
