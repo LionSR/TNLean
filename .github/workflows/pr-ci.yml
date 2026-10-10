@@ -72,6 +72,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -182,6 +183,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -346,6 +348,7 @@ jobs:
               - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
               - 'scripts/test_blueprint_graph_worker.py'
+              - 'scripts/test_blueprint_graph_precompute.py'
               - 'scripts/add_blueprint_search.py'
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
@@ -642,6 +645,12 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build safe-rectangle dilation early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.SafeRectangleDilation \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -653,6 +662,13 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check physical-column composition axioms strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PartyOutputCoordinatesAxioms.lean
 
       - name: Check source-free owner restriction kernel dependencies strictly
         timeout-minutes: 2
@@ -721,6 +737,16 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
+
+      - name: Check safe-rectangle dilation strictly and audit axioms
+        run: |
+          set -eo pipefail
+          for file in TNLean/PEPS/AreaLaw/SafeRectangleDilation.lean TNLeanTest/SafeRectangleDilationAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 80s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test partial-row entropy strictly
         timeout-minutes: 2
@@ -1707,12 +1733,18 @@ jobs:
         timeout-minutes: 2
         run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
 
+      - name: Test precomputed dependency graph interactions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_precompute.py --browser-smoke
+
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
       - name: Test generated blueprint pages
         if: env.TEX_CHANGED == 'true'
         run: |
           python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Preserve failed blueprint render
