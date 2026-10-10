@@ -25,7 +25,7 @@ import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 TENKZ = ROOT / ".deps" / "tenkz" / "tex" / "tenkz"
-DOCUMENT = r"""\documentclass[varwidth,border=2pt]{standalone}
+DOCUMENT = r"""\documentclass[varwidth=60cm,border=2pt]{standalone}
 \usepackage{amssymb,amsmath}
 \usepackage{tenkz}
 \usetikzlibrary{quantikz2}

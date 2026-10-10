@@ -159,41 +159,6 @@ window.campaignFigures = (function () {
       text(svg, 20, 10, "information leaked, log scale");
     },
 
-    /* Area law, stage 6: removed boundary layer and two ordered families of regions. */
-    cancel(svg) {
-      view(svg, 320, 200);
-      const cols = 22, rows = 11, s = 13, x0 = 17, y0 = 8;
-      const inA = (c, r) => { const dx = (c - 10.5) / 9.3, dy = (r - 5) / 4.9; return dx * dx + dy * dy < 1 && !(c >= 14 && c <= 15 && r <= 2); };
-      const nb = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-      let cmin = cols;
-      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (inA(c, r)) cmin = Math.min(cmin, c);
-      const mid = new Map();
-      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-        const x = x0 + c * s, y = y0 + r * s;
-        if (!inA(c, r)) { dot(svg, x + s / 2, y + s / 2, 1, "fm"); continue; }
-        const boundary = nb.some(([dc, dr]) => !inA(c + dc, r + dr));
-        if (boundary) { rect(svg, x + 1, y + 1, s - 2, s - 2, "fk"); continue; }
-        const strip = Math.floor((c - cmin - 1) / 3), fam = strip % 2;
-        rect(svg, x + 1, y + 1, s - 2, s - 2, fam ? "fl" : "fa", { "fill-opacity": 0.55 });
-        if (r === 5) mid.set(strip, [...(mid.get(strip) || []), c]);
-      }
-      for (const [strip, cs] of mid) text(svg, x0 + (cs.reduce((a, b) => a + b) / cs.length + 0.5) * s, y0 + 6 * s - 3, String(strip + 1), "on", "middle");
-      const yb = y0 + rows * s + 6;
-      // Leader from a label to the nearest cell of the named kind in the lowest rows.
-      const kind = (c, r) => !inA(c, r) ? "out" : nb.some(([dc, dr]) => !inA(c + dc, r + dr)) ? "D" : Math.floor((c - cmin - 1) / 3) % 2 ? "II" : "I";
-      const lab = (want, c0, lx, s1) => {
-        let best = null;
-        for (let r = rows - 1; r >= 0 && !best; r--) for (let d = 0; d < cols && !best; d++) for (const c of [c0 - d, c0 + d]) if (!best && kind(c, r) === want) best = [c, r];
-        line(svg, x0 + (best[0] + 0.5) * s, y0 + (best[1] + 0.5) * s, lx, yb + 2);
-        text(svg, lx, yb + 13, s1, "", "middle");
-      };
-      lab("D", 4, x0 + 3 * s, "removed layer *D*");
-      lab("I", 10, x0 + 10.5 * s, "first family");
-      lab("II", 13, x0 + 17 * s, "second family");
-      text(svg, x0 + 21 * s, y0 - 1 + s / 2, "outside *A*", "halo", "end");
-      text(svg, 160, yb + 30, "regions taken in the numbered order", "", "middle");
-    },
-
     /* PEPS, stage 1: a buffer tapering linearly toward a point. */
     angular(svg) {
       view(svg, 320, 180);
