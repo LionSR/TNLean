@@ -51,6 +51,7 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
         Matrix.kroneckerBilinear (R := ℂ)
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
+  change δ h.operator = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.edgeTerm e)
   done
 
 end TNLean.PEPS.Approximation
