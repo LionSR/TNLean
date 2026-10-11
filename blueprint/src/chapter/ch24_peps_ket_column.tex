@@ -9,16 +9,16 @@ positivity nor Hermiticity of $\sigma$ is assumed. The trace norm is
 independent of the order in which the basis is enumerated, so it may be
 evaluated along any enumeration.
 
-\begin{lemma}[Columns of an operator and the trace norm]
-    \label{lem:peps_ket_column_hilbert_schmidt}
+\begin{theorem}[Columns of an operator and the trace norm]
+    \label{thm:peps_ket_column_hilbert_schmidt}
     \lean{TNLean.PEPS.Approximation.sum_norm_sq_le_traceNorm_reindex_sq}
     \leanok
     For every operator $E$ on a finite-dimensional space with orthonormal
     basis $\{\ket z\}$,
-    \[
-        \sum_z \lVert E\ket z\rVert^2 \le \lVert E\rVert_1^2 .
-    \]
-\end{lemma}
+    \begin{align}
+        \sum_z \lVert E\ket z\rVert^2 & \le \lVert E\rVert_1^2 .
+    \end{align}
+\end{theorem}
 
 \begin{proof}\leanok
     The left side is the sum of the squared moduli of all matrix entries of
@@ -26,15 +26,15 @@ evaluated along any enumeration.
     The Hilbert--Schmidt norm is at most the trace norm.
 \end{proof}
 
-\begin{lemma}[Selection of one index]
-    \label{lem:peps_ket_column_selection}
+\begin{theorem}[Selection of one index]
+    \label{thm:peps_ket_column_selection}
     \lean{TNLean.PEPS.Approximation.exists_ne_zero_norm_sq_le_of_sum}
     \leanok
     Let $f_z$ be vectors and $a_z$ complex numbers indexed by a finite set,
     with $\sum_z\lVert f_z\rVert^2\le\eta^2$ and $\sum_z|a_z|^2=1$. Then some
     index $z$ has $a_z\ne0$ and $\lVert f_z\rVert^2\le\eta^2|a_z|^2$. No
     lower bound on $|a_z|$ is required, and $\eta=0$ is allowed.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Let $S$ be the set of indices with $a_z\ne0$; it is nonempty and
@@ -43,8 +43,8 @@ evaluated along any enumeration.
     $\eta^2<\sum_{z\in S}\lVert f_z\rVert^2\le\eta^2$, a contradiction.
 \end{proof}
 
-\begin{lemma}[Normalization within twice the error]
-    \label{lem:peps_ket_column_normalization}
+\begin{theorem}[Normalization within twice the error]
+    \label{thm:peps_ket_column_normalization}
     \lean{TNLean.PEPS.Approximation.normalize_sub_le_two_mul,
         TNLean.PEPS.Approximation.exists_phase_normalize_sub_le}
     \leanok
@@ -53,7 +53,7 @@ evaluated along any enumeration.
     Consequently, if $v=f+a\Omega$ with $a\ne0$ and
     $\lVert f\rVert\le\eta|a|$, then $v\ne0$ and some real $\theta$ satisfies
     $\lVert v/\lVert v\rVert-e^{i\theta}\Omega\rVert\le2\eta$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The reverse triangle inequality gives $|\lVert w\rVert-1|\le\eta<1$, so
@@ -74,9 +74,9 @@ evaluated along any enumeration.
     Let $\Omega$ be a unit vector and let $\sigma$ be an operator with
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$. Then some basis
     column $v=\sigma\ket z$ is nonzero, and some real $\theta$ satisfies
-    \[
-        \Big\lVert\frac{v}{\lVert v\rVert}-e^{i\theta}\Omega\Big\rVert\le2\eta .
-    \]
+    \begin{align}
+        \Big\lVert\frac{v}{\lVert v\rVert}-e^{i\theta}\Omega\Big\rVert & \le2\eta .
+    \end{align}
     This is the vector part of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
     with exactly its hypotheses. The source bounds the minimum over
     $\theta$; an explicit $\theta$ is equivalent, since the minimum over the
@@ -84,14 +84,15 @@ evaluated along any enumeration.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_ket_column_hilbert_schmidt,lem:peps_ket_column_selection,
-        lem:peps_ket_column_normalization}
+    \uses{thm:peps_ket_column_hilbert_schmidt,thm:peps_ket_column_selection,
+        thm:peps_ket_column_normalization}
     Put $E=\sigma-\ket\Omega\langle\Omega|$, $f_z=E\ket z$ and
-    $a_z=\braket{\Omega}{z}$. By the first lemma
+    $a_z=\braket{\Omega}{z}$. By Theorem~\ref{thm:peps_ket_column_hilbert_schmidt},
     $\sum_z\lVert f_z\rVert^2\le\eta^2$, and $\sum_z|a_z|^2=\lVert\Omega\rVert^2=1$.
-    The selection lemma gives $z$ with $a_z\ne0$ and
+    Theorem~\ref{thm:peps_ket_column_selection} gives $z$ with $a_z\ne0$ and
     $\lVert f_z\rVert\le\eta|a_z|$. The column satisfies
-    $\sigma\ket z=f_z+a_z\Omega$, and the normalization lemma concludes.
+    $\sigma\ket z=f_z+a_z\Omega$, and Theorem~\ref{thm:peps_ket_column_normalization}
+    concludes.
 \end{proof}
 
 \begin{definition}[Operator networks and fixed inputs on directed multigraphs]
@@ -209,6 +210,45 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     same edge dimensions $D_e$ (in the virtual-first presentation, the same
     positive dimensions and hence the same maximum bond dimension). Their contraction is exactly the column
     $\sigma\ket z$.
+    On a $3\times3$ square, fixing the inputs closes the input leg of every
+    site tensor with the basis vector $\ket{z_v}$ and leaves every bond in
+    place.
+    % Source: arXiv OpenAI2026PolynomialPEPS, 07-assembly.tex, lines 67--94
+    % (lem:columns: "Fixing the input basis index separately in each
+    % physical tensor selects the same column without altering a virtual
+    % leg"); no source figure.
+    % Ink-to-index: each ellipse is a site tensor A_v of the operator
+    % network; the in-plane lines are the virtual bonds e with dimension
+    % D_e, identical in both pictures; the upward leg at v is the output
+    % index s_v, the downward leg the input index r_v. In the right picture
+    % each downward leg ends in a blue dot, the basis vector |z_v>, so the
+    % input index is contracted to the value z_v; the dot on the leg of the
+    % middle site of the right column carries the generic label z_v.
+    % Boundary signatures: left, nine open output and nine open input
+    % physical legs (the operator sigma); right, nine open output legs only
+    % (the column sigma|z>). No virtual leg is open in either picture.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op,op}, cols=3, frame=plane,
+                physical=updown]
+            \tnmark[form=label, label pos=e]{(2,3)}{$A_v$}
+        \end{tenkz}
+        $\quad\longmapsto\quad$
+        \begin{tenkz}[rows={op,op,op}, cols=3, frame=plane,
+                physical=updown]
+            \tndeclare{species}{input}{hue=source:blue}
+            \tn[at=on leg-s-1-1 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-1-2 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-1-3 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-2-1 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-2-2 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-2-3 1, skin=dot, species=input,
+                label pos=e]{z_v}
+            \tn[at=on leg-s-3-1 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-3-2 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-3-3 1, skin=dot, species=input]{}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{lemma}[Fixed inputs and the native square-grid tensor]

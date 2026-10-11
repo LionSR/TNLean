@@ -204,6 +204,7 @@ When adding or completing (removing sorry from) theorems/lemmas:
 - Do not leave unrelated new sorrys
 - Before changing theorem statements, first try to complete the proof using existing lemmas
 - If a mathematical result looks wrong or suspiciously general, check the LaTeX sources in `Papers/` and `Notes/` for the original theorems
+- Do not add per-module steps or path entries to `.github/workflows/pr-ci.yml`. CI discovers changed modules, `TNLeanTest/` files, `scripts/*_regression.lean`, and blueprint diagram tests (`scripts/test_tenkz_*.py`, `scripts/test_*_diagram.py`) automatically; see `docs/ci-automation.md`
 
 ### Faithfulness rule
 
