@@ -76,7 +76,11 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
         (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E :=
     congrArg (fun A : {A : Matrix (FiniteProduct.Configuration β X)
         (FiniteProduct.Configuration β X) ℂ // A.IsHermitian} =>
-      A.2.normalizedSpectralRestriction E) (Subtype.ext hρ)
+      A.2.normalizedSpectralRestriction E)
+      (Subtype.ext
+        (a1 := ⟨reducedState Λ q Ωt X, reducedState_isHermitian Λ q Ωt X⟩)
+        (a2 := ⟨Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)),
+          (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian⟩) hρ)
   done
 
 end TNLean.PEPS.AreaLaw
