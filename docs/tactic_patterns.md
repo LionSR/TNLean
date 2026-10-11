@@ -3860,6 +3860,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   unfolding only up to definitions such as `siteRegs`, `simp` cannot match
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
+### Operator norm in orthonormal coordinates — promoted (2026-10-08)
+
 ## Candidates
 
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)

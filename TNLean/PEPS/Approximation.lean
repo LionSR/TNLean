@@ -166,7 +166,6 @@ import TNLean.PEPS.Approximation.PhysicalFirstNetworkResources
 import TNLean.PEPS.Approximation.PhysicalFirstPolynomial
 import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalOutputContraction
-import TNLean.PEPS.Approximation.PhysicalReadout
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps

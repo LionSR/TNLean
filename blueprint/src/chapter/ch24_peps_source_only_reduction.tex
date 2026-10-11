@@ -287,76 +287,15 @@ dimensions.
     and the error is zero.
 \end{proof}
 
-\begin{definition}[Labelled physical outputs]
-    \label{def:peps_labelled_physical_output}
-    \lean{TNLean.PEPS.PairEffect.physicalLayout}
-    \lean{TNLean.PEPS.PairEffect.physicalOutputLayout}
-    \lean{TNLean.PEPS.PairEffect.labelledPhysicalReadout}
-    \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout}
-    \lean{TNLean.PEPS.PairEffect.restrictedPhysicalBasis}
-    \leanok
-    \uses{def:peps_party_layout}
-    Let every party have physical space $\C^d$. List the parties once
-    and append their actual private registers after these physical
-    registers. The physical coordinates are assignments
-    $\sigma:P\to\{0,\ldots,d-1\}$. For a region $A\subseteq P$, retain
-    $\sigma|_A$ and discard both $\sigma|_{P\setminus A}$ and the
-    private registers. Tensor products of the standard physical bases
-    and an orthonormal basis of the actual private memory give isometric
-    coordinates for this decomposition.
-\end{definition}
-
-\begin{theorem}[Regional physical coordinates]
-    \label{thm:peps_regional_physical_coordinates}
-    \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout_apply}
-    \lean{TNLean.PEPS.PairEffect.card_regionalPhysicalIndex}
-    \lean{TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace}
-    \lean{TNLean.PEPS.PairEffect.restrict_physicalLayout}
-    \lean{TNLean.PEPS.PairEffect.length_filter_region}
-    \lean{TNLean.PEPS.PairEffect.finrank_physicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_physicalLayout}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
-    \leanok
-    \uses{def:peps_labelled_physical_output,thm:peps_source_only_density_error}
-    Regional coordinates are obtained by splitting the same full
-    assignment $\sigma$ into its restrictions to $A$ and its complement.
-    Selecting the physical registers owned by $A$ gives precisely the
-    filtered party ordering, whose tensor memory has dimension $d^{|A|}$.
-    There are exactly $d^{|A|}$ regional physical coordinates. For the
-    original whole-party product input, the source-only replacement
-    has regional physical density error at most $\varepsilon/2$ with
-    the budget of Theorem~\ref{thm:peps_source_only_density_error}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv}
-    \lean{TNLean.PEPS.PairEffect.labelledPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.norm_regionalPhysicalReadout_le_one}
-    \lean{TNLean.PEPS.PairEffect.physicalLayout_owners}
-    \lean{TNLean.PEPS.PairEffect.physicalListBasis}
-    \lean{TNLean.PEPS.PairEffect.regionalPhysicalIndexEquiv}
-    \uses{thm:peps_source_only_density_error}
-    Reindex the tensor basis by
-    $\sigma\mapsto(\sigma|_A,\sigma|_{P\setminus A})$. An assignment on
-    $A$ has $d$ independent choices at each of its $|A|$ parties, giving
-    $d^{|A|}$ coordinates. Selecting owned registers filters the original
-    complete ordering without repetitions, so exactly $|A|$ physical
-    factors remain; their tensor basis has the same cardinality.
-    The constructed coordinate map is an
-    isometry, so Theorem~\ref{thm:peps_source_only_density_error}
-    applies to the literal regional partial trace.
-\end{proof}
-
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
-    \lean{TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout_le}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout_apply}
-    \lean{TNLean.PEPS.PairEffect.card_familyRegionalPhysicalIndex}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
     \leanok
-    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
+    \uses{def:peps_family_physical_output,
+        thm:peps_source_only_density_error,
+        thm:peps_basis_physical_list_restriction,
+        thm:peps_basis_physical_dimensions,
+        thm:peps_basis_regional_readouts}
     The actual physical memory selected by the original party set $A$
     has dimension
     \begin{align}
@@ -372,13 +311,13 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_const}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_owners}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv}
-    \lean{TNLean.PEPS.PairEffect.norm_familyRegionalPhysicalReadout_le_one}
-    \uses{thm:peps_source_only_density_error}
+    \uses{thm:peps_source_only_density_error,
+        def:peps_basis_physical_readouts,
+        def:peps_basis_region_coordinates,
+        thm:peps_basis_physical_dimensions,
+        thm:peps_basis_physical_list_restriction,
+        def:peps_family_physical_output,
+        thm:peps_basis_regional_readouts}
     Selecting owned physical registers filters the original party
     ordering. Its tensor basis is indexed by one choice of $d_p$ values
     at each $p\in A$, so its cardinality is $\prod_{p\in A}d_p$.
@@ -388,6 +327,27 @@ dimensions.
     the regional isometry. Apply
     Theorem~\ref{thm:peps_source_only_density_error} to this actual
     partial trace.
+\end{proof}
+
+\begin{theorem}[Constant-dimensional regional density estimate]
+    \label{thm:peps_constant_family_regional_density}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
+    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
+    Suppose $d_p=d$ at every party and the actual discarded private memory
+    is finite-dimensional. For the original whole-party product input,
+    contraction circuit and positive error budget of
+    Theorem~\ref{thm:peps_source_only_density_error}, the regional readout
+    retains the original physical coordinates in $A$ and discards the
+    exterior physical and private coordinates. If the original gate count
+    is bounded by $M$, the resulting source-only replacement density has
+    trace-norm error at most $\varepsilon/2$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_source_only_density_error}
+    Specialize the physical dimension family to $d_p=d$, using the same
+    complete party ordering and its coverage. Apply the density-error
+    estimate to the resulting regional isometry and the original normalized
+    whole-party product vector.
 \end{proof}
 
 \begin{theorem}[Resources of the constructed source-only circuit]

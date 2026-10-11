@@ -579,7 +579,7 @@ inner-product discard spaces.
 
 \begin{definition}[Two actual contraction factors]
     \label{def:peps_actual_tensor_partition}
-    \lean{TNLean.PEPS.PairEffect.Word.HasTensorPartition}
+    \lean{TNLean.PEPS.PairEffect.Word.IsTensorPartitioned}
     \leanok
     A word admits a tensor partition for a Boolean owner map when there are
     two allowed source-free words $C,D$, on the respective restricted input
@@ -613,9 +613,8 @@ inner-product discard spaces.
 \end{proof}
 
 \begin{definition}[Concatenating two partitioned layouts]
+    \uses{def:peps_basis_partition_join}
     \label{def:peps_append_partition}
-    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso}
-    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso_tmul}
     \leanok
     Given four ordered layouts $a_+,a_-,b_+,b_-$, canonically regroup
     \begin{align}
@@ -629,9 +628,9 @@ inner-product discard spaces.
 
 \begin{theorem}[Partition commutes with concatenation]
     \label{thm:peps_partition_append}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_tmul}
     \leanok
-    \uses{def:peps_append_partition}
+    \uses{def:peps_append_partition,
+        thm:peps_basis_partition_concat}
     Let a Boolean owner map partition two layouts $a,b$. Concatenating their
     memory vectors and then partitioning the resulting layout gives the
     same vector as partitioning each layout first and applying

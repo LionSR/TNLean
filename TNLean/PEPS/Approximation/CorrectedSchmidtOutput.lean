@@ -62,8 +62,8 @@ theorem exists_correctedSchmidtOutput (hw : w.IsAllowed)
   intro A R U V C T out side e
   obtain ⟨u, hu, hus, hinput⟩ := exists_correctedSchmidtInput_identity w S E F p₀
   let v : Word (C ++ T) out := correctedPreparedWord w S p₀ u ξ
-  have hv : Word.HasTensorPartition side v :=
-    hasTensorPartition_prepared_reordered_partial w hw S p₀ hp₀ hp₀s u hu hus ξ
+  have hv : Word.IsTensorPartitioned side v :=
+    isTensorPartitioned_prepared_reordered_partial w hw S p₀ hp₀ hp₀s u hu hus ξ
   let I := CorrectedSchmidtCoordinates w S
   let frame : EuclideanSpace ℂ I →ₗᵢ[ℂ] Mem (Layout.mapOwner side C) :=
     correctedSourceFrame w S E F hE hF ξ
@@ -81,7 +81,7 @@ theorem exists_correctedSchmidtOutput (hw : w.IsAllowed)
   have hf : HasSchmidtInputFrames (Layout.mapOwner side C) (Layout.mapOwner side T) frame
       (Layout.partitionIso (fun p : Bool ↦ p) (Layout.mapOwner side T)
         (Layout.mapOwnerIso side T y)) := exists_correctedInputFrames w S E F hE hF ξ
-  have ho := Word.hasSchmidtOutput_of_hasTensorPartition side C T out v hv frame x y hx hf
+  have ho := Word.hasSchmidtOutput_of_isTensorPartitioned side C T out v hv frame x y hx hf
   have hfun := funext (fun i : I ↦ congrArg
     (fun z : Mem out ↦ Layout.partitionIso (fun p : Bool ↦ p) (Layout.mapOwner side out)
       (Layout.mapOwnerIso side out z)) (hinput ξ i))

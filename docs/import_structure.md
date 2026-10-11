@@ -85,6 +85,70 @@ exact-preparation consumers therefore avoid normal-gauge construction as well.
 assumption is needed merely to define the vector. See the
 [consumer audit](audits/2026-10-05_inhomogeneous_preparation_imports.md).
 
+## Physical coordinates and changes of register labels
+
+The PEPS physical-coordinate development uses one register $\mathbb C^{d_p}$
+for each party in the prescribed order. `FamilyPhysicalReadout` retains these
+actual dimensions, the standard tensor basis, and the original physical and
+private register lists. A common dimension is the specialization $d_p=d$;
+it does not require a second physical-coordinate construction.
+
+The former `PhysicalReadout` module and the following constant-specific
+statements are removed after their mathematical consumer in
+`SourceOnlyReduction` uses that constant family. The original party ordering,
+its coverage, the normalized product input, the error budget and the actual
+regional partial trace are preserved. Empty party sets, zero dimensions and
+the terminal scalar factor are still included. All declaration names in the
+table are in `TNLean.PEPS.PairEffect`.
+
+| Removed declaration | Retained family construction or dimension argument |
+| --- | --- |
+| `physicalLayout` | `familyPhysicalLayout (fun _ ↦ d)` |
+| `physicalListBasis` | `familyPhysicalListBasis (fun _ ↦ d)` |
+| `labelledPhysicalBasis` | `familyLabelledPhysicalBasis (fun _ ↦ d)` |
+| `physicalOutputLayout` | `familyPhysicalOutputLayout (fun _ ↦ d)` |
+| `labelledPhysicalReadout` | `familyLabelledPhysicalReadout (fun _ ↦ d)` |
+| `physicalLayout_owners` | `familyPhysicalLayout_owners (fun _ ↦ d)` |
+| `card_regionalPhysicalIndex` | `card_familyRegionalPhysicalIndex (fun _ ↦ d)` |
+| `regionalPhysicalIndexEquiv` | `familyRegionalPhysicalIndexEquiv (fun _ ↦ d)` |
+| `regionalPhysicalReadout` | `familyRegionalPhysicalReadout (fun _ ↦ d)` |
+| `norm_regionalPhysicalReadout_le_one` | `norm_familyRegionalPhysicalReadout_le_one (fun _ ↦ d)` |
+| `regionalPhysicalReadout_apply` | `familyRegionalPhysicalReadout_apply (fun _ ↦ d)` |
+| `finrank_regionalPhysicalSpace` | The dimension of the finite-coordinate Euclidean space, computed from its standard basis and `card_familyRegionalPhysicalIndex (fun _ ↦ d)` |
+| `restrict_physicalLayout` | `restrict_familyPhysicalLayout (fun _ ↦ d)` |
+| `finrank_physicalLayout` | `Module.finrank_eq_card_basis` applied to `familyPhysicalListBasis (fun _ ↦ d)`; its position index set has cardinality $d^{|\mathbf p|}$ |
+| `finrank_restrict_physicalLayout` | `finrank_restrict_familyPhysicalLayout (fun _ ↦ d)`, whose product is $d^{|A|}$ |
+| `restrictedPhysicalBasis` | `familyRestrictedPhysicalBasis (fun _ ↦ d)` |
+| `familyPhysicalLayout_const` | No comparison is needed when the constant case uses the same family construction |
+
+`filteredPartyEquiv` and `length_filter_region` move unchanged into
+`FamilyPhysicalReadout`. They continue to describe the same complete ordering
+without repetitions and its selected parties. No alias of a removed
+constant-specific declaration is retained.
+
+Equal-register memory identities belong to `LayoutEqualityCoordinates`;
+restriction after an owner map belongs to `OwnerMemoryTransport`. The source
+input and affected-output developments import these elementary statements
+instead of declaring them again. `WordEvaluationTransport` retains its
+separate theorem about evaluating a word after identifying both register
+lists and its input vector. An equality of memory vectors alone does not
+express that assertion.
+
+These changes retain the physical dimensions and coordinate order used in
+*Polynomial PEPS approximation of gapped square-grid ground states*, proof of
+Theorem 5.2. They do not establish the identification of the sampled operator
+with a contraction of local tensors.
+
+## PEPS tensor-memory identifications
+
+`PEPS.Approximation.UnitMemoryCoordinates` identifies an empty final tensor
+memory with the scalar field. Its theorem
+`Layout.memCongr_append_nil_appendIso_symm_tmul` states that adjoining a scalar
+and identifying the empty final register list gives scalar multiplication on
+the preceding memory. The spectator-register construction in `WordAppendTail`
+uses this theorem directly. Its former private copy `appendIso_nil_tmul` is
+removed; no public declaration is removed or renamed.
+
 ## Corrected source coordinates and vectors
 
 `PEPS.Approximation.SourceCircuitSourceOrder` owns the paired Schmidt
@@ -95,6 +159,22 @@ and the equality showing that changing unselected positions leaves this vector
 unchanged. The corrected endpoint frames and corrected Schmidt input identities
 use these elementary constructions; they do not require the Gaussian physical
 error estimate merely to identify their coordinates or source vectors.
+
+`CorrectedSourcePartition` owns `Word.IsTensorPartitioned`, formerly
+`Word.HasTensorPartition`: after grouping a Boolean owner map, the operator
+factors into two allowed source-free local words of norm at most one, with
+equality on the entire input memory. In `CorrectedInputReordering`,
+`SourceCircuit.hasTensorPartition_reordered_partial` and
+`SourceCircuit.hasTensorPartition_prepared_reordered_partial` become
+`SourceCircuit.isTensorPartitioned_reordered_partial` and
+`SourceCircuit.isTensorPartitioned_prepared_reordered_partial`, respectively.
+In `LocalSchmidtOutput`, `Word.hasSchmidtOutput_of_hasTensorPartition` becomes
+`Word.hasSchmidtOutput_of_isTensorPartitioned`. All consumers, including
+`CorrectedSchmidtOutput`, and the corresponding blueprint tags use these names.
+The hypotheses and proofs are unchanged except for identifier substitutions;
+reversing those substitutions recovers the original mathematical declarations.
+No otherwise-dead compatibility alias is retained after migrating all
+consumers, in accordance with the repository policy.
 
 ## PEPS tensor-memory identifications
 

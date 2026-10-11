@@ -10,12 +10,11 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
 
 \begin{definition}[Bases adapted to the party partition]
     \label{def:peps_partition_output_bases}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionBasis}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionAppendBasis}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionOutputIso}
     \lean{TNLean.PEPS.PairEffect.Layout.regionalOutputIso}
     \leanok
-    \uses{def:peps_party_partition}
+    \uses{def:peps_party_partition,
+        def:peps_basis_partition_bases,
+        def:peps_basis_partition_output_coordinates}
     Write the output as a physical register list followed by a discarded
     register list. Partition each list into the affected and exterior owners.
     Choose orthonormal bases $(a_x)$ and $(e_y)$ of the two physical memories,
@@ -33,15 +32,12 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
 
 \begin{theorem}[Regrouping physical and discarded coordinates]
     \label{thm:peps_partition_output_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_tmul_heq}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_partitionBasis_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionBasis_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionOutputIso_basis}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionOutputIso_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionBasis_coordinates_of_eq}
     \lean{TNLean.PEPS.PairEffect.Word.repr_effectMap}
     \leanok
-    \uses{def:peps_partition_output_bases}
+    \uses{def:peps_partition_output_bases,
+        thm:peps_basis_memory_equalities,
+        thm:peps_basis_partition_coordinates,
+        thm:peps_basis_partition_output_coordinates}
     For every output vector $z$, its coordinate at $((x,y),(i,j))$
     in physical/discard order is its coordinate at $((x,i),(y,j))$
     after the affected/exterior partition. The affected output isometry
@@ -63,11 +59,11 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
 
 \begin{theorem}[Output coordinates under owner relabelling]
     \label{thm:peps_owner_output_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_tensorBasis_coordinates}
     \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_tensorBasis_coordinates}
     \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_partitionBasis_coordinates}
     \leanok
-    \uses{thm:peps_partition_output_coordinates}
+    \uses{thm:peps_partition_output_coordinates,
+        thm:peps_basis_owner_coordinates}
     Relabel owners by any map, or successively by two maps. Transport the
     physical and discarded bases by the corresponding memory isometries.
     Every physical/discard coordinate of the original vector equals the
@@ -124,13 +120,12 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
 
 \begin{theorem}[Original physical dimensions after the two owner maps]
     \label{thm:peps_affected_original_dimensions}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrictMapOwnerIso}
     \lean{TNLean.PEPS.PairEffect.Layout.affectedOutputIso}
     \lean{TNLean.PEPS.PairEffect.affectedFamilyPhysicalBasis}
     \lean{TNLean.PEPS.PairEffect.finrank_affectedFamilyPhysicalLayout}
     \leanok
-    \uses{thm:peps_family_regional_dimensions}
+    \uses{thm:peps_family_regional_dimensions,
+        def:peps_basis_owner_restriction}
     Let the original parties form a finite list without repetitions,
     containing every party. Party $p$ has physical space $\C^{d_p}$.
     Relabel affected parties individually, identify all exterior parties,

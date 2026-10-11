@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.CorrectedSourcePartition
+import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
 
@@ -31,12 +32,6 @@ noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect.Layout
 variable {P : Type}
-
-/-- Equality of register lists preserves the underlying memory vector. -/
-theorem memCongr_apply_heq {a b : Layout P} (h : a = b) (x : Mem a) :
-    HEq (memCongr h x) x := by
-  cases h
-  rfl
 
 /-- The append identification commutes with equality of its source-register list. -/
 theorem memCongr_append_tmul {a b : Layout P} (h : a = b)
