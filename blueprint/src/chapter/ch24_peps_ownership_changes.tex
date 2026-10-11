@@ -884,6 +884,31 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     supported on $R$.
 \end{proof}
 
+\begin{theorem}[Support of a swapped doubled interaction]
+    \label{thm:peps_sheet_swap_conjugate_support}
+    \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
+    \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $V$ be a finite site set, let $q\geq0$ be an integer, and let
+    $R,S\subseteq V$. Suppose that $A$ is supported on $S$.
+    Express the two-copy operators in paired-site coordinates, and denote
+    the resulting matrices of $F_R$ and $A\otimes I+I\otimes A$ by
+    $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then
+    $\widetilde F_R\widetilde T(A)\widetilde F_R^*$ is supported on $S$.
+    Empty regions and zero local dimension are included. This is the
+    interaction-support assertion used for the boundary perturbation in
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_sheet_swap_interaction_restriction,
+        thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
+    Set $B=R\cap S$. The restriction identity gives
+    $F_RT(A)F_R^*=F_B^*T(A)F_B$.
+    In paired-site coordinates, $F_B$ is supported on $B\subseteq S$,
+    and each summand of $T(A)$ is supported on $S$.
+    Operators supported on $S$ are closed under adjoints, sums and products,
+    so the conjugated operator is supported on $S$.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
