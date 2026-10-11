@@ -79,6 +79,7 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
             (Exponents.boxError : ℝ) / 4 from min_le_right _ _).trans
           ((show (Exponents.boxError : ℝ) / 4 ≤
               (Exponents.boxError : ℝ) by norm_num [Exponents.boxError]).trans he₀.le) }
+  obtain ⟨N, hN, hcost⟩ := exists_bootstrap_binaryEntropy_cost_bound X
   done
 
 end TNLean.PEPS.AreaLaw.Scan
