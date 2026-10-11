@@ -57,6 +57,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
         regionalEntropy Λ q Ωt X| ≤ η := by
   have hbounds := (reducedState_posSemidef Λ q Ωt X).typicalSpectralRestriction_entropy_bounds
     E w hz hE
+  intro β split ΩX z ψ η
   done
 
 end TNLean.PEPS.AreaLaw
