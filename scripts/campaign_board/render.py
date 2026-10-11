@@ -68,18 +68,36 @@ def inline_diagrams(campaign_dir: pathlib.Path, *texts: dict) -> dict:
 
 GAP_TEXT_FIELDS = ("summary", "context", "claims", "found", "impact", "plan")
 
+# A drawing function of figures.js: a method of the returned object, written
+# `name(svg) {` or `"name"(svg) {` at the object's indentation.
+FIGURE_KEY = re.compile(r'^    (?:"([^"]+)"|([A-Za-z_$][\w$]*))\(svg\)', re.MULTILINE)
 
-def cited_texts(config: dict, gaps: dict) -> list[str]:
-    """The texts the page renders citations in: route introductions, stage prose and
-    captions, and the gap entries' prose fields.
 
-    A stage's schematic caption is shown only when figures.js defines its figure, which
-    this script cannot check; a citation there with no such figure is not shown."""
+def figure_names(campaign_dir: pathlib.Path, config: dict) -> set[str]:
+    """The stage figures figures.js draws.
+
+    A stage naming a figure that figures.js does not define stops the render, as a
+    missing diagram does, since board.js would silently omit it and its caption."""
+    path = campaign_dir / "figures.js"
+    names = {a or b for a, b in FIGURE_KEY.findall(path.read_text())} if path.exists() else set()
+    named = {stage["figure"] for route in config["routes"] for stage in route["stages"]
+             if stage.get("figure")}
+    if named - names:
+        raise KeyError(f"{path}: no drawing for stage figures {', '.join(sorted(named - names))}")
+    return names
+
+
+def cited_texts(config: dict, gaps: dict, figures: set[str]) -> list[str]:
+    """The texts the page renders citations in: route introductions, stage prose,
+    diagram captions, the captions of stages whose figure figures.js draws, and the
+    gap entries' prose fields. These are the texts board.js numbers citations in."""
     texts = []
     for route in config["routes"]:
         texts.append(route.get("intro", ""))
         for stage in route["stages"]:
-            texts += [stage.get("physics", ""), stage.get("delivers", ""), stage.get("caption", "")]
+            texts += [stage.get("physics", ""), stage.get("delivers", "")]
+            if stage.get("figure") in figures:
+                texts.append(stage.get("caption", ""))
             texts += [d.get("caption", "") for d in stage.get("diagrams", [])]
     for entry in gaps.get("entries", []):
         texts += [entry.get(f, "") for f in GAP_TEXT_FIELDS]
@@ -95,7 +113,7 @@ def references(campaign_dir: pathlib.Path, config: dict, gaps: dict) -> dict:
     """
     path = campaign_dir / "references.json"
     library = json.loads(path.read_text()) if path.exists() else {}
-    texts = cited_texts(config, gaps)
+    texts = cited_texts(config, gaps, figure_names(campaign_dir, config))
     everything = json.dumps([config, gaps], ensure_ascii=False)
     malformed = everything.count("{{cite:") - len(CITE_SLOT.findall(everything))
     if malformed:
@@ -104,7 +122,8 @@ def references(campaign_dir: pathlib.Path, config: dict, gaps: dict) -> dict:
     rendered = sum(len(CITE_SLOT.findall(t)) for t in texts)
     if len(CITE_SLOT.findall(everything)) != rendered:
         raise ValueError("{{cite:...}} tokens may appear only in route introductions, stage "
-                         "physics, delivers and captions, and gap prose fields")
+                         "physics and delivers, diagram captions, captions of drawn stage "
+                         "figures, and gap prose fields")
     keys = {k for text in texts for m in CITE_SLOT.findall(text) for k in m.split(",")}
     missing = sorted(keys - library.keys())
     if missing:
