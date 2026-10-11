@@ -15,43 +15,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-physicalreadout-01
-TNLean.PEPS.PairEffect.card_regionalPhysicalIndex
-Provenance-ID: 8769-source-resource-physicalreadout-02
-TNLean.PEPS.PairEffect.filteredPartyEquiv
-Provenance-ID: 8769-source-resource-physicalreadout-03
-TNLean.PEPS.PairEffect.finrank_physicalLayout
-Provenance-ID: 8769-source-resource-physicalreadout-04
-TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace
-Provenance-ID: 8769-source-resource-physicalreadout-05
-TNLean.PEPS.PairEffect.finrank_restrict_physicalLayout
-Provenance-ID: 8769-source-resource-physicalreadout-06
-TNLean.PEPS.PairEffect.labelledPhysicalBasis
-Provenance-ID: 8769-source-resource-physicalreadout-07
-TNLean.PEPS.PairEffect.labelledPhysicalReadout
-Provenance-ID: 8769-source-resource-physicalreadout-08
-TNLean.PEPS.PairEffect.length_filter_region
-Provenance-ID: 8769-source-resource-physicalreadout-09
-TNLean.PEPS.PairEffect.norm_regionalPhysicalReadout_le_one
-Provenance-ID: 8769-source-resource-physicalreadout-10
-TNLean.PEPS.PairEffect.physicalLayout
-Provenance-ID: 8769-source-resource-physicalreadout-11
-TNLean.PEPS.PairEffect.physicalLayout_owners
-Provenance-ID: 8769-source-resource-physicalreadout-12
-TNLean.PEPS.PairEffect.physicalListBasis
-Provenance-ID: 8769-source-resource-physicalreadout-13
-TNLean.PEPS.PairEffect.physicalOutputLayout
-Provenance-ID: 8769-source-resource-physicalreadout-14
-TNLean.PEPS.PairEffect.regionalPhysicalIndexEquiv
-Provenance-ID: 8769-source-resource-physicalreadout-15
-TNLean.PEPS.PairEffect.regionalPhysicalReadout
-Provenance-ID: 8769-source-resource-physicalreadout-16
-TNLean.PEPS.PairEffect.regionalPhysicalReadout_apply
-Provenance-ID: 8769-source-resource-physicalreadout-17
-TNLean.PEPS.PairEffect.restrict_physicalLayout
-Provenance-ID: 8769-source-resource-physicalreadout-18
-TNLean.PEPS.PairEffect.restrictedPhysicalBasis
 -/
 
 noncomputable section

@@ -20,29 +20,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectcircuiterror-01
-TNLean.PEPS.PairEffect.EffectCircuit.norm_referenceEval_le_one
-Provenance-ID: 8769-source-resource-effectcircuiterror-02
-TNLean.PEPS.PairEffect.EffectCircuit.norm_replacement_sub_reference_le
-Provenance-ID: 8769-source-resource-effectcircuiterror-03
-TNLean.PEPS.PairEffect.EffectCircuit.referenceEval
-Provenance-ID: 8769-source-resource-effectcircuiterror-04
-TNLean.PEPS.PairEffect.EffectCircuit.referenceEval_apply
-Provenance-ID: 8769-source-resource-effectcircuiterror-05
-TNLean.PEPS.PairEffect.SourceCircuit.exchangeHead_tmul
-Provenance-ID: 8769-source-resource-effectcircuiterror-06
-TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_castLayouts_sub
-Provenance-ID: 8769-source-resource-effectcircuiterror-07
-TNLean.PEPS.PairEffect.appendIso_singleton_symm_tmul
-Provenance-ID: 8769-source-resource-effectcircuiterror-08
-TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_identity
-Provenance-ID: 8769-source-resource-effectcircuiterror-09
-TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_tmul
-Provenance-ID: 8769-source-resource-effectcircuiterror-10
-TNLean.PEPS.PairEffect.gateMemoryMap_tmul
-Provenance-ID: 8769-source-resource-effectcircuiterror-11
-TNLean.PEPS.PairEffect.preparation_mapOwner_heq
 -/
 
 noncomputable section
