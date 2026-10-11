@@ -1,0 +1,26 @@
+\subsection{Clipping an incident segment}
+\label{subsec:area_law_segment_clipping}
+
+The local repair construction in \cite[Section~11]{OpenAI2026AreaLaw}
+intersects the segments incident to a mark with a small closed square.
+After normalization, the following calculation determines their endpoints.
+It applies to any real normed space, and hence to the maximum norm used
+for the planar geometry.
+
+\begin{theorem}[Clipping a unit segment]
+    \label{thm:area_law_unit_segment_ball_clipping}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.segment_inter_closedBall_of_dist_eq_one}
+    \leanok
+    Let $E$ be a real normed space and let $a,b\in E$ satisfy
+    $\|b-a\|=1$. If $0\le\eta\le1$, then
+    \begin{align}
+        [a,b]\cap\overline B(a,\eta)
+         & = [a,(1-\eta)a+\eta b].
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Write a point of $[a,b]$ as $(1-t)a+tb$, where $0\le t\le1$.
+    Its distance from $a$ is $t\|b-a\|=t$. It therefore belongs to
+    the closed ball precisely when $0\le t\le\eta$.
+    These points form the segment on the right-hand side.
+\end{proof}
