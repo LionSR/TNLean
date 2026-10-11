@@ -7,10 +7,12 @@ $pdflatex = 'xelatex -synctex=1';
 # no format rebuild is needed. Keep an explicit caller override intact.
 $ENV{'pool_size'} //= 12500000;
 # The same full volume also exceeds XeTeX's default main memory when shipping
-# out the complete print document. `extra_mem_top`/`extra_mem_bot` extend the
-# runtime node memory without a format rebuild. Keep caller overrides intact.
-$ENV{'extra_mem_top'} //= 40000000;
-$ENV{'extra_mem_bot'} //= 40000000;
+# out the complete print document. Modern XeTeX uses a single dynamically grown
+# main-memory array, so the obsolete `extra_mem_top`/`extra_mem_bot` knobs are
+# ignored; the runtime node budget is set by `main_memory`, exactly as the
+# `pool_size` override above sets the string pool. No format rebuild is needed.
+# Keep an explicit caller override intact.
+$ENV{'main_memory'} //= 30000000;
 @default_files = ('print.tex');
 use Cwd qw(abs_path);
 use File::Spec;
