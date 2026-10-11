@@ -131,3 +131,41 @@ These identities concern the register selections used in
     $P\setminus\{p\}$. Apply
     (\ref{eq:peps_nested_party_restrictions}).
 \end{proof}
+
+
+\begin{theorem}[Scalar restrictions under composition and framing]
+    \label{thm:peps_scalar_residual_composition}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_scalar}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_scalar}
+    \uses{def:peps_canonical_source_residual,thm:peps_party_restriction}
+    Let $W:\ell\to m$ and $V:m\to n$ be chronological compositions,
+    possibly containing pair preparations. Fix a selection for which
+    $\ell,m,n$ and both source-register lists restrict to the empty list.
+    Suppose the corresponding remaining operations restrict to
+    $\alpha\operatorname{id}_{\mathbb C}$ and
+    $\beta\operatorname{id}_{\mathbb C}$.
+    The remaining operations of $VW$ then restrict to
+    $\alpha\beta\operatorname{id}_{\mathbb C}$.
+
+    If $W$ instead is extended by an untouched register whose owner is
+    excluded, its remaining operations have the same scalar restriction
+    $\alpha\operatorname{id}_{\mathbb C}$. These statements allow zero
+    scalars. They are auxiliary identities for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 246--251 and 351--381.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_canonical_source_residual,
+        thm:peps_excluded_spectator_restriction,thm:peps_party_restriction}
+    In the remaining operations of $VW$, the sources of $V$ are
+    untouched registers beside those of $W$. They disappear under
+    restriction, leaving the composition of the two scalar maps.
+    Its scalar is $\beta\alpha=\alpha\beta$.
+
+    Extending $W$ by an excluded register first moves that register
+    past the prepared sources and then adjoins it unchanged to the
+    remaining operations. Every register in these exchanges is
+    excluded, so their restriction is the identity. Removing the
+    untouched excluded register leaves the scalar map of $W$.
+\end{proof}
