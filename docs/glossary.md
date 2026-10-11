@@ -3376,6 +3376,32 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   and `isSafe_cappedDyadicPartition_shell` derive those containment and size
   premises from the selected cells themselves when `2^K ≤ s₀`. These are the
   clearance step of Lemma 9.4, not its conditional entropy conclusion.
+## Weighted template shell coverings
+
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
+  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
+  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
+  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
+  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
+  of Lemma 9.4, not safe clearance or a regional entropy theorem.
+
+## Conditional entropy of template regions
+
+- `biUnion_rectRegion_cappedDyadicPartition` and
+  `pairwiseDisjoint_rectRegion_cappedDyadicPartition` identify the actual
+  disjoint physical rectangle cover, including missing sites and disconnected domains.
+- `Template.regionalEntropy_core_le_of_safe_box`,
+  `Template.regionalEntropy_shell_le_of_safe_box`, and
+  `Template.regionalEntropy_prefix_le_of_safe_box` compose actual regional
+  subadditivity, derived safety, and the weighted covering estimates. A partial
+  final row costs at most `n * log q`.
+- `exists_template_entropy_bounds_of_arbitrary_safe_box` assumes the safe-box
+  estimate for every exponent in `(0,1)` and every safe native rectangle. It
+  chooses the corresponding constant before the template and scales. This is
+  the conditional entropy component of Lemma 9.4, not a derivation of the
+  arbitrary-exponent input or a completion marker for the full source lemma.
 
 ## Partial rectangle layer entropy
 
@@ -3416,17 +3442,6 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   and [the fixed bootstrap parameters and rectangle covering clearance, lines 693–729](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L693-L729).
 - **Scope:** these are numerical auxiliary estimates for the rectangle
   covering argument in the proof of Proposition 9.5.
-
-## Weighted template shell coverings
-
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
-  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
-  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
-  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
-  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
-  of Lemma 9.4, not safe clearance or a regional entropy theorem.
 
 ### Nested closed-square patches
 
