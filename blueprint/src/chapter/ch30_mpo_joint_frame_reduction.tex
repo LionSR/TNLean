@@ -1,0 +1,228 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
+% All linked declarations pass exact-source native module checks and strict dependency guards.
+
+\subsection{The actual support in the joint boundary frame}
+\label{sec:mpo_joint_frame_reduction}
+
+Retain the shared alphabet $\mathcal I$, the enlarged dimensions
+$D_x=D_x^0+D_x^1$, and the full joint matrices $L,R$ from
+Definition~\ref{def:mpo_joint_boundary_columns}. At parameter zero, write
+$S=\operatorname{ran}\Gamma'_2$, where
+\begin{align}
+    \Gamma'_2(X)_{i,j}
+     & =\sum_x\tr(C_x^iV_xV_x^*C_x^jX_x).
+    \label{eq:mpo_joint_full_trace}
+\end{align}
+The actual local parent interaction is $h=I-P_S$.
+
+\begin{definition}[The full product frame and its boundary coefficients]
+    \label{def:mpo_joint_full_frame}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteBoundaryColumns,
+        MPSTensor.MPOSymmetry.jointMixedTwoSitePolarFrame,
+        MPSTensor.MPOSymmetry.jointMixedTwoSiteBoundaryCoefficients}
+    \leanok
+    \uses{def:mpo_joint_boundary_columns}
+    Put $F=L\otimes R$ and $U=U_L\otimes U_R$, with rows indexed
+    by the two physical letters. Both have the full column space
+    $\C^{\mathcal B_L\times\mathcal B_R}$. For a family of virtual
+    boundaries, define
+    \begin{align}
+        g(X) & =\sum_x\sum_{a,e\in\Fin{D_x}}
+        \sum_{b\in\Fin{D_x^0}}(X_x)_{ea}
+        \ket{x,a,b}\otimes\ket{x,b,e}.
+        \label{eq:mpo_joint_frame_coefficients}
+    \end{align}
+    The diagonal labels in $g(X)$ arise from the internal trace;
+    the ambient column space still contains every ordered pair of labels.
+\end{definition}
+
+\begin{theorem}[Full actual support lies in the boundary frame]
+    \label{thm:mpo_joint_full_frame_support}
+    \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_jointMixed_eq_boundaryColumns,
+        MPSTensor.MPOSymmetry.jointMixedTwoSiteBoundaryColumns_eq_polarFrame_mul,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_boundaryColumns,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_le_polarFrame}
+    \leanok
+    \uses{def:mpo_joint_full_frame}
+    Without a spanning or positive-dimension hypothesis,
+    \begin{align}
+        \Gamma'_2(X) & =Fg(X),
+                     & F                            & =U(P_L\otimes P_R),
+        \label{eq:mpo_joint_full_frame_factor}                            \\
+        S            & \subseteq\operatorname{ran}F
+        \subseteq\operatorname{ran}U.
+    \end{align}
+    Neither physical site is cropped, and the block columns may overlap.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_boundary_original_bulk,def:mpo_joint_boundary_columns}
+    The empty interior word gives
+    $(C_x^iV_xV_x^*C_x^j)_{ae}=\sum_bL_{i;(x,a,b)}R_{j;(x,b,e)}$.
+    Multiplying by $(X_x)_{ea}$ and summing $x,a,e$ turns
+    (\ref{eq:mpo_joint_full_trace}) into
+    (\ref{eq:mpo_joint_full_frame_factor}). Polar reconstruction gives
+    $L\otimes R=(U_L\otimes U_R)(P_L\otimes P_R)$ and both range
+    inclusions. Empty sums give the same identities when labels or
+    first endpoint fibers are empty.
+\end{proof}
+
+The open virtual legs in the following identity are $a,e\in\Fin{D_x}$;
+the block label $x$ is fixed. The left contractions have dimension
+$D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
+\begin{tenkzequation}
+    % Formula: (C_x^i V_x V_x^* C_x^j)_{ae}
+    % = sum_b L_{i;(x,a,b)} R_{j;(x,b,e)}.
+    % Source: GLM23v3, REsubmission.tex, lines 1695--1704.
+    % Ink: W_x(0)=V_x V_x^*, L_x=C_x V_x, R_x=V_x^* C_x.
+    % Open legs: virtual a west, virtual e east, physical i and j north.
+    % Contracted legs: the virtual bonds joining C_x to W_x(0) on each side
+    % (left), and the bond b joining L_x to R_x (right).
+    % The label x is a parameter, not an independent physical leg.
+    % Boundary signature on both sides: west=1, east=1, up=2, down=0.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=Cleft, skin=box, size=l,
+            ports={180:virtual:$a$, 0:virtual, 90:physical:$i$}]{C_x}
+        \tn[at=(1,2), name=W, skin=box, size=l,
+            ports={180:virtual, 0:virtual}]{W_x(0)}
+        \tn[at=(1,3), name=Cright, skin=box, size=l,
+            ports={180:virtual, 0:virtual:$e$, 90:physical:$j$}]{C_x}
+        \tnwire{Cleft.0}{W.180}
+        \tnwire{W.0}{Cright.180}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=L, skin=box, size=l,
+            ports={180:virtual:$a$, 0:virtual, 90:physical:$i$}]{L_x}
+        \tn[at=(1,2), name=R, skin=box, size=l,
+            ports={180:virtual, 0:virtual:$e$, 90:physical:$j$}]{R_x}
+        \tnwire{L.0}{R.180}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[A parent interaction supported in a frame]
+    \label{thm:mpo_supported_parent_projection}
+    \lean{Submodule.starProjection_comp_starProjection_eq_right_of_le,
+        Submodule.starProjection_comp_starProjection_eq_left_of_le,
+        Submodule.commute_starProjection_one_sub_starProjection_of_le,
+        Submodule.one_sub_starProjection_apply_of_mem_orthogonal_of_le,
+        Submodule.one_sub_starProjection_le_one_sub_starProjection_of_le,
+        Submodule.isPositive_one_sub_starProjection_sub_one_sub_starProjection_of_le,
+        Submodule.re_inner_one_sub_starProjection_le_of_le,
+        Submodule.norm_sq_starProjection_orthogonal_le_re_inner_one_sub_of_le}
+    \leanok
+    Let $S\subseteq E$ be subspaces of a finite-dimensional complex
+    Hilbert space, and set $h=I-P_S$, $Q=P_E$. Then
+    \begin{align}
+        QP_S & =P_SQ=P_S,             & Qh                                       & =hQ, & I-Q & \le h, \\
+        hv   & =v\quad(v\in E^\perp),
+             & \|(I-Q)v\|^2           & \le\operatorname{Re}\langle hv,v\rangle.
+    \end{align}
+    Equivalently, $h-(I-Q)$ is positive, so the quadratic form of
+    $I-Q$ is bounded by that of $h$ on every vector.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Projection onto $E$ fixes $S$, giving $QP_S=P_S$; taking
+    adjoints gives $P_SQ=P_S$. Thus $Q$ commutes with $h$.
+    The projection order $P_S\le Q$ gives $I-Q\le h$.
+    If $v\in E^\perp$, then $P_Sv=0$ and $hv=v$.
+    Finally $\operatorname{Re}\langle(I-Q)v,v\rangle
+        =\|(I-Q)v\|^2$, which proves the squared-norm bound.
+\end{proof}
+
+\begin{definition}[The actual full-frame projection]
+    \label{def:mpo_joint_full_frame_projection}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection}
+    \leanok
+    \uses{def:mpo_joint_full_frame}
+    Let $Q=P_{\operatorname{ran}U}$ on the entire two-site physical
+    Hilbert space.
+\end{definition}
+
+\begin{theorem}[Reduction and penalty for the actual interaction]
+    \label{thm:mpo_joint_full_frame_reduction}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_mul_supportProjection,
+        MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_commute_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedParentInteraction_apply_eq_self_of_orthogonal_frame,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedTwoSiteFrameProjection_le_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedParentInteraction_frameComplement_norm_sq_le}
+    \leanok
+    \uses{def:mpo_joint_full_frame_projection}
+    For the actual support $S$ in (\ref{eq:mpo_joint_full_trace}),
+    $QP_S=P_S$, $Qh=hQ$, and $I-Q\le h$. The interaction equals
+    the identity on $(\operatorname{ran}U)^\perp$, and every physical
+    vector satisfies $\|(I-Q)v\|^2\le\operatorname{Re}\langle hv,v\rangle$.
+    These conclusions require no injectivity hypothesis.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_full_frame_support,thm:mpo_supported_parent_projection}
+    Apply the supported-parent projection result to the derived inclusion
+    $S\subseteq\operatorname{ran}U$.
+\end{proof}
+
+\begin{theorem}[Exact compression in a supported isometric frame]
+    \label{thm:mpo_supported_parent_compression}
+    \lean{LinearIsometry.starProjection_range_eq_comp_adjoint,
+        LinearIsometry.commute_rangeProjection_one_sub_starProjection_of_le_range,
+        LinearIsometry.map_adjoint_map_eq_of_le_range,
+        LinearIsometry.compression_starProjection_of_le_range,
+        LinearIsometry.compression_one_sub_starProjection_of_le_range,
+        LinearIsometry.compression_one_sub_starProjection_eq_orthogonal_of_le_range,
+        LinearIsometry.ker_compression_one_sub_starProjection_of_le_range,
+        LinearIsometry.norm_gap_compression_one_sub_starProjection_of_le_range}
+    \leanok
+    Let $U$ be a rectangular isometry between finite-dimensional
+    complex Hilbert spaces and suppose $S\subseteq\operatorname{ran}U$.
+    Then $P_{\operatorname{ran}U}=UU^*$, $U(U^*S)=S$, and
+    \begin{align}
+        U^*P_SU                     & =P_{U^*S},
+                                    & U^*(I-P_S)U & =I-P_{U^*S}=P_{(U^*S)^\perp}, \\
+        \ker\bigl(U^*(I-P_S)U\bigr) & =U^*S.
+    \end{align}
+    The projection $UU^*$ commutes with $I-P_S$. Every norm-gap
+    lower bound for $I-P_S$ on $S^\perp$ holds with the same constant
+    for its compression on $(U^*S)^\perp$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_supported_parent_projection,thm:mpo_rectangular_compression_gap}
+    The identities $U^*U=I$ and $S\subseteq\operatorname{ran}U$
+    give $U(U^*S)=S$. Orthogonal projection onto an isometric image
+    satisfies $P_{U(U^*S)}=UP_{U^*S}U^*$. Multiply by $U^*$ and
+    $U$ to obtain the compressed projector. Taking its complement
+    gives the interaction and its kernel. The established commutator
+    permits gap restriction through the isometry.
+\end{proof}
+
+\begin{theorem}[The actual compressed interaction and its kernel]
+    \label{thm:mpo_joint_full_frame_compression}
+    \lean{MPSTensor.MPOSymmetry.jointMixedTwoSitePolarFrame_isIsometry,
+        MPSTensor.MPOSymmetry.jointMixedTwoSitePolarIsometry,
+        MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_eq_isometry_comp_adjoint,
+        MPSTensor.MPOSymmetry.jointMixedTwoSitePolar_compression_parentInteraction,
+        MPSTensor.MPOSymmetry.ker_jointMixedTwoSitePolar_compression_parentInteraction}
+    \leanok
+    \uses{def:mpo_joint_full_frame}
+    Suppose both endpoint families have simultaneous one-site span.
+    Then $U=U_L\otimes U_R$ is an isometry, $Q=UU^*$, and the
+    actual two-site interaction satisfies
+    \begin{align}
+        U^*hU & =I-P_{U^*S}, & \ker(U^*hU) & =U^*S.
+    \end{align}
+    At length two, this is one local term with both boundary frames.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_boundary_polar,thm:mpo_joint_full_frame_support,
+        thm:mpo_supported_parent_compression}
+    The joint polar identities give
+    $U^*U=(U_L^*U_L)\otimes(U_R^*U_R)=I$.
+    Apply supported isometric compression to
+    $S\subseteq\operatorname{ran}U$.
+\end{proof}
+
+% The longer-chain reduction, the phase-cropped first and last actual
+% kernels, the common ordered-pair family, and the endpoint gap remain open.

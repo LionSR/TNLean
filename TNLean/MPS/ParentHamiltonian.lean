@@ -147,6 +147,7 @@ import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.ParentHamiltonian.InjectiveIsometricDeformationSymmetry
+import TNLean.MPS.ParentHamiltonian.InteractionMatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.IntervalObservableCoordinates
 import TNLean.MPS.ParentHamiltonian.IntervalStateProjection
@@ -180,6 +181,7 @@ import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalFace
 import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalGroundStates
 import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalSupport
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
+import TNLean.MPS.ParentHamiltonian.NonzeroInteraction
 import TNLean.MPS.ParentHamiltonian.NormalBlockC1Normalization
 import TNLean.MPS.ParentHamiltonian.NormalBlockInjectiveBlocking
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
@@ -220,6 +222,7 @@ import TNLean.MPS.ParentHamiltonian.PeriodicShortGapContinuity
 import TNLean.MPS.ParentHamiltonian.PhysicalActionWordTupleSpan
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
+import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
 import TNLean.MPS.ParentHamiltonian.PhysicalResidualCoverLimit
 import TNLean.MPS.ParentHamiltonian.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap

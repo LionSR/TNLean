@@ -5959,6 +5959,51 @@ spectral split → block extraction → MPV calculation → strict bounds
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
 
+### Isometric active/inactive gap splitting — candidate (2026-10-05)
+
+- **Pattern:** split a vector as `U (U.adjoint v) + (v - U (U.adjoint v))`,
+  remove mixed energy terms by intertwining and symmetry, and combine the
+  two quadratic bounds with their minimum.
+- **Seen:** `MPS/Symmetry/MPOSymmetry/MixedEndpointActiveGapTransfer.lean`
+  and `Algebra/IsometricGapTransfer.lean`.
+- **Abstraction:** `LinearIsometry.re_inner_ge_of_intertwines` and
+  `LinearIsometry.norm_gap_of_intertwines` now serve the noncommuting physical
+  isometry transport. The independent kernel theorem only needs intertwining
+  and a strictly positive inactive bound.
+- **Notes:** The existing mixed-endpoint consumer is unchanged while its
+  separate validation is in progress; its later migration is a direct
+  application of the generic norm-gap theorem.
+
+### Transporting endpoint parent order through polar inclusion — candidate (2026-10-06)
+
+- **Pattern:** Recover an embedded original tensor from its polar factor,
+  rewrite its canonical parent as an isometric interaction extension, then
+  transfer the square-support order through `isometricInteractionExtension_mono`
+  and `Matrix.isPositive_toEuclideanLin_iff`.
+- **Seen:** The two actual limiting-interaction comparisons in
+  `MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalEndpointAttachment.lean`.
+- **Abstraction:** The common order transport already uses the existing
+  isometric-extension monotonicity theorem; the endpoint-specific rewrites
+  have two occurrences in one file and do not yet warrant another theorem.
+- **Notes:** Kernel and norm-gap transport use the existing affine-kernel
+  theorem and QICLean's positive-order gap theorem. No copy of the spectral
+  argument or new proof tactic is introduced.
+
+### Norm gaps under isometric conjugacy — promoted (2026-10-06)
+
+- **Pattern:** Derive kernel membership from the conjugacy identity, transport
+  orthogonality by inner-product preservation, and then transport the norm bound.
+- **Abstraction:** `LinearIsometryEquiv.norm_gap_iff_of_conj` and its kernel and
+  intertwining companions in `IsometricConjugationGap.lean`, without
+  finite-dimensionality or sign assumptions.
+- **Consumers:** The joint normalized core comparison now uses the public
+  theorem. The endpoint-swap development uses the same API. The older
+  single-block `MixedEndpointCoreHamiltonianSpectators` still has its private
+  proof; migrating that independent consumer awaits its own focused validation.
+- **Notes:** The dependent projection identification is separately shared as
+  `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; both joint edge consumers
+  use that theorem instead of repeating the orthogonal-projection proof.
+
 ### Cyclic matrix traces in physical density contractions — rejected (2026-10-05)
 
 - **Pattern:** Normalize matrix associativity around a cyclic trace permutation.
@@ -6397,3 +6442,31 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Projection commutation from an invariant subspace — promoted (2026-10-11)
+
+- **Pattern:** show that a symmetric operator preserving a subspace commutes
+  with its orthogonal projection, via `eq_starProjection_of_mem_of_inner_eq_zero`.
+- **Seen:** private copies in `MixedEndpointOpenSectors` and
+  `MixedEndpointReducingSectors`, and the joint reducing-sector proofs.
+- **Abstraction:** `Submodule.commute_starProjection_of_invariant` in
+  `MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean`; the private
+  copies were removed and their call sites use the public theorem.
+
+### Block-supported mixed tree contractions — promoted (2026-10-06)
+
+- **Pattern:** Expand a product of analysis/synthesis matrices supported on
+  one common endpoint summand, split the three finite sums by that summand,
+  and take the normalized trace without assuming the endpoint dimensions
+  are nonzero.
+- **Seen:** The sequential-action, fusion-action, and left/right fusion-tree
+  calculations in `MixedEndpointMPOActionSymbols.lean` and
+  `MixedEndpointMPOFusionSymbols.lean`.
+- **Abstraction:** `mixedEndpointTripleAnalysis_mul_synthesis`,
+  `mixedEndpointTripleAnalysis_trace_mul_synthesis`, and
+  `mixedEndpointTripleAnalysis_normalizedTrace_mul_synthesis` in
+  `MixedEndpointTripleMaps.lean`; `finDimension_mul_normalizedTrace`
+  handles the zero-dimensional case separately from field cancellation.
+- **Notes:** The coefficient weights use the final state bond for L and
+  the final operator bond for F. Equal coefficients are inherited; unequal
+  coefficients are dimension-weighted, not averaged without weights.

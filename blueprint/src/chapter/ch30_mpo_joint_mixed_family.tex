@@ -1,0 +1,302 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
+% The endpoint simultaneous spans are explicit hypotheses. This leaf supplies
+% the actual mixed family and specializes the joint finite-volume boundary
+% results; it claims neither a spectral gap nor the full MPO phase theorem.
+% Declaration and proof checks: source head 06075cb0a7a63b9131434ee622248124ecf8bde5.
+% See docs/audits/2026-10-06_glm23_joint_mixed_family.md for exact evidence.
+
+\subsection{The mixed family with shared endpoint alphabets}
+\label{sec:mpo_joint_mixed_family}
+
+Let $x\in\Fin{r}$ label corresponding blocks of two tensor families
+$\{(A_x^0)^i\}_{i\in\Fin{d_0}}$ and
+$\{(A_x^1)^j\}_{j\in\Fin{d_1}}$, with respective bond dimensions
+$D_x^0,D_x^1$. Set $E_x=\C^{D_x^0}\oplus\C^{D_x^1}$ and
+$D_x=D_x^0+D_x^1$. Each endpoint has one physical alphabet shared by all
+its blocks. The mixed construction of
+\cite[Section~5]{GarreRubio2023MPOSym} uses the disjoint union
+\begin{align}
+    \mathcal I
+     & =\Fin{d_0}
+    \sqcup\coprod_x\bigl(\Fin{D_x^0}\times\Fin{D_x^1}\bigr)
+    \label{eq:mpo_joint_mixed_alphabet}                             \\
+     & \quad\sqcup\coprod_x\bigl(\Fin{D_x^1}\times\Fin{D_x^0}\bigr)
+    \sqcup\Fin{d_1}.
+    \notag
+\end{align}
+Write these four kinds of physical letters as $(00,i)$, $(01,x,a,b)$,
+$(10,x,a,b)$ and $(11,j)$. Only the two cross sectors carry a block label.
+
+\begin{definition}[Mixed block family]
+    \label{def:mpo_joint_mixed_family}
+    \lean{MPSTensor.MPOSymmetry.JointMixedPhysical,
+        MPSTensor.MPOSymmetry.jointMixedPhysicalDim,
+        MPSTensor.MPOSymmetry.jointMixedPhysicalDim_eq,
+        MPSTensor.MPOSymmetry.jointMixedEndpointLetter,
+        MPSTensor.MPOSymmetry.jointMixedEndpointBase,
+        MPSTensor.MPOSymmetry.jointMixedEndpointLeftTensor,
+        MPSTensor.MPOSymmetry.jointMixedEndpointInterpolation}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $V_{x,p}:\C^{D_x^p}\to E_x$ be the coordinate inclusions and
+    $E_{x;ab}^{pq}=V_{x,p}\ketbra{a}{b}V_{x,q}^*$ the rectangular
+    matrix units embedded in $\End(E_x)$. Define the letters of $C_x$ by
+    \begin{align}
+        C_x^{(00,i)} & =(A_x^0)^i\oplus0,
+                     & C_x^{(11,j)}       & =0\oplus(A_x^1)^j,
+        \label{eq:mpo_joint_mixed_diagonal}
+    \end{align}
+    \begin{align}
+        C_x^{(01,x,a,b)} & =E_{x;ab}^{01},
+                         & C_x^{(10,x,a,b)} & =E_{x;ab}^{10}.
+        \label{eq:mpo_joint_mixed_cross}
+    \end{align}
+    Cross letters bearing a label different from $x$ give the zero
+    matrix in block $x$. For $\gamma\in\R$, set
+    \begin{align}
+        W_x(\gamma) & =(1-\gamma)I_{D_x^0}\oplus\gamma I_{D_x^1},
+                    & A_x^\mu(\gamma)                             & =C_x^\mu W_x(\gamma).
+        \label{eq:mpo_joint_mixed_weight}
+    \end{align}
+    The full tensor is $A^\mu(\gamma)=\bigoplus_xA_x^\mu(\gamma)$.
+    Its physical dimension is $d=d_0+d_1+2\sum_xD_x^0D_x^1$.
+    Let $B_x^\mu=(A_x^0)^i$ when $\mu=(00,i)$, and
+    $B_x^\mu=0$ in the other three physical sectors.
+\end{definition}
+
+The physical index $\mu$ in the following identity belongs to
+$\mathcal I$; the block label $x$ is fixed on both sides.
+\begin{tenkzequation}
+    % Formula: A_x^mu(gamma)_{ab} = sum_t C_x^mu_{at} W_x(gamma)_{tb}.
+    % Source: GLM23v3, REsubmission.tex, lines 1695--1704.
+    % Ink: A_x is the actual mixed block; C_x is its unweighted base;
+    % W_x is the diagonal insertion. The block label x is a parameter, not a leg.
+    % Contracted leg: t in E_x, from C_x east to W_x west.
+    % Open legs: virtual a west, virtual b east, physical mu north in I.
+    % Boundary signature on each side: virtual-west=1, virtual-east=1,
+    % physical-up=1, physical-down=0. No sum over x occurs in this identity.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=A, skin=box, size=l,
+            ports={180:virtual:$a$, 0:virtual:$b$, 90:physical:$\mu$}]{A_x(\gamma)}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=C, skin=box, size=l,
+            ports={180:virtual:$a$, 0:virtual, 90:physical:$\mu$}]{C_x}
+        \tn[at=(1,2), name=W, skin=box, size=l,
+            ports={180:virtual, 0:virtual:$b$}]{W_x(\gamma)}
+        \tnwire{C.0}{W.180}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Preservation of simultaneous one-site spans]
+    \label{thm:mpo_joint_one_site_span}
+    \lean{MPSTensor.wordTupleSpanTop_one_iff,
+        MPSTensor.wordTupleSpanTop_one_of_rectangular_compression,
+        MPSTensor.wordTupleSpanTop_one_of_right_inverse}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Let $(B_x)_x$ have simultaneous one-site span
+    $\spn_{\C}\{(B_x^i)_x:i\in\Fin{d}\}=\prod_x\MN{n_x}$.
+    If $U_x:\C^{n_x}\to\C^{m_x}$ and
+    $V_x:\C^{m_x}\to\C^{n_x}$ satisfy $U_xV_x=I_{m_x}$,
+    then $(U_xB_x^iV_x)_x$ has simultaneous one-site span
+    $\prod_x\MN{m_x}$. If instead $R_x,W_x\in\MN{n_x}$ satisfy
+    $R_xW_x=I_{n_x}$, then $(B_x^iW_x)_x$ has simultaneous one-site
+    span $\prod_x\MN{n_x}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    For a target tuple $(X_x)_x$, expand $(V_xX_xU_x)_x$ using the
+    common coefficients of the original family, then compress:
+    \begin{align}
+        V_xX_xU_x & =\sum_i c_iB_x^i,
+                  & X_x               & =\sum_i c_iU_xB_x^iV_x.
+    \end{align}
+    For the second assertion expand $(X_xR_x)_x$ and multiply on the
+    right by $W_x$:
+    \begin{align}
+        X_xR_x & =\sum_i c_iB_x^i,
+               & X_x               & =\sum_i c_iB_x^iW_x.
+    \end{align}
+    At one site each word is a single letter, so these are precisely
+    the asserted one-site spans.
+\end{proof}
+
+\begin{theorem}[Simultaneous spanning of the mixed family]
+    \label{thm:mpo_joint_mixed_span}
+    \lean{MPSTensor.MPOSymmetry.span_jointMixedEndpointLetter_eq_top,
+        MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointBase,
+        MPSTensor.MPOSymmetry.continuous_jointMixedEndpointInterpolation,
+        MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointInterpolation}
+    \leanok
+    \uses{def:mpo_joint_mixed_family,def:blockwise_product_word_span}
+    Suppose that for $p=0,1$,
+    \begin{align}
+        \spn_{\C}\{((A_x^p)^i)_x:i\in\Fin{d_p}\}
+         & =\prod_x\MN{D_x^p}.
+        \label{eq:mpo_joint_mixed_endpoint_span}
+    \end{align}
+    Then the mixed base has simultaneous one-site span
+    \begin{align}
+        \spn_{\C}\{(C_x^\mu)_x:\mu\in\mathcal I\}
+         & =\prod_x\MN{D_x}.
+        \label{eq:mpo_joint_mixed_span}
+    \end{align}
+    For $0<\gamma<1$, the family $(A_x(\gamma))_x$ has the same
+    simultaneous one-site span. Its letters depend continuously on
+    $\gamma\in\R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_joint_mixed_family,thm:mpo_joint_one_site_span,
+        thm:spt_normalized_bond_interpolation,thm:mpo_mixed_interior}
+    Decompose an arbitrary tuple $Z=(Z_x)_x$ into its four virtual
+    corners. By~(\ref{eq:mpo_joint_mixed_endpoint_span}), there are common
+    coefficients $c_i^p$ with
+    $Z_x^{pp}=\sum_i c_i^p(A_x^p)^i$ for every $x$.
+    The letters $(01,x,a,b)$ and $(10,x,a,b)$ supply the entries of
+    $Z_x^{01}$ and $Z_x^{10}$ independently for every $x$.
+    Thus the same coefficient vector over $\mathcal I$ gives
+    $Z_x=\sum_\mu c_\mu C_x^\mu$ simultaneously in all blocks.
+    For $0<\gamma<1$, every $W_x(\gamma)$ is invertible. Applying
+    (\ref{eq:mpo_joint_mixed_span}) to
+    $(Z_xW_x(\gamma)^{-1})_x$ proves the span of $(A_x(\gamma))_x$.
+    Formula~(\ref{eq:mpo_joint_mixed_weight}) is affine in $\gamma$,
+    proving continuity.
+\end{proof}
+
+\begin{theorem}[Recovery of the first endpoint family]
+    \label{thm:mpo_joint_mixed_compression}
+    \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_first_compression,
+        MPSTensor.MPOSymmetry.wordTupleSpanTop_jointMixedEndpointLeftTensor}
+    \leanok
+    \uses{def:mpo_joint_mixed_family,def:blockwise_product_word_span}
+    For every $x$ and every physical letter $\mu$, the first virtual
+    compression is $V_{x,0}^*C_x^\mu V_{x,0}=B_x^\mu$.
+    Under~(\ref{eq:mpo_joint_mixed_endpoint_span}), the extended first
+    family $(B_x)_x$ has simultaneous one-site span
+    $\prod_x\MN{D_x^0}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_joint_mixed_family,thm:mpo_joint_mixed_span,
+        thm:mpo_joint_one_site_span,def:spt_coordinate_inclusions}
+    The compression retains the $00$ virtual corner. The letters
+    $(00,i)$ give $(A_x^0)^i$, while each other letter gives zero.
+    Since $V_{x,0}^*V_{x,0}=I_{D_x^0}$, apply
+    Theorem~\ref{thm:mpo_joint_one_site_span} to the simultaneous mixed
+    span of Theorem~\ref{thm:mpo_joint_mixed_span}.
+\end{proof}
+
+\begin{definition}[Extended supports of the mixed family]
+    \label{def:mpo_joint_mixed_support}
+    \uses{def:mpo_joint_mixed_family,def:mpo_joint_inserted_boundary}
+    For $N\geq1$, let the joint extended boundary map be
+    \begin{align}
+        \Gamma'_{\gamma,N}((X_x)_x)_{\mu_1\cdots\mu_N}
+                               & =\sum_x\tr\bigl(
+        C_x^{\mu_1}W_x(\gamma)C_x^{\mu_2}
+        \cdots W_x(\gamma)C_x^{\mu_N}X_x\bigr),
+        \label{eq:mpo_joint_mixed_boundary}                               \\
+        \mathcal S'_{\gamma,N} & =\operatorname{range}\Gamma'_{\gamma,N}.
+    \end{align}
+    The domain is $\prod_x\MN{D_x}$. Set
+    $h'_\gamma=I-\Pi_{\mathcal S'_{\gamma,2}}$ and
+    $H'^{\mathrm{open}}_{\gamma,N}=\sum_{i=0}^{N-2}h'_{\gamma,i,i+1}$.
+\end{definition}
+
+\begin{theorem}[Canonical and extended supports in the interior]
+    \label{thm:mpo_joint_mixed_interior_support}
+    \lean{MPSTensor.MPOSymmetry.insertedEvalWord_mul_right,
+        MPSTensor.MPOSymmetry.blockGroundSpaceMap_rightMul_eq_inserted,
+        MPSTensor.MPOSymmetry.range_blockInsertedGroundSpaceMap_eq_of_isUnit,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedGroundSpace_eq_iSup}
+    \leanok
+    \uses{def:mpo_joint_inserted_boundary,def:mpo_joint_mixed_support,
+        def:block_ground_space_map}
+    Let $(B_x)_x$ be any block family and $W_x$ any square insertion
+    matrices of the matching sizes. At every length $N\geq1$,
+    \begin{align}
+        (B_x^{i_1}W_xB_x^{i_2}\cdots W_xB_x^{i_N})W_x
+         & =(B_x^{i_1}W_x)\cdots(B_x^{i_N}W_x).
+    \end{align}
+    \begin{align}
+        \Gamma^{\oplus}_{BW,N}((X_x)_x)
+         & =\Gamma'_{B,W,N}((W_xX_x)_x).
+        \label{eq:mpo_joint_mixed_boundary_change}
+    \end{align}
+    If every $W_x$ is invertible, the two boundary maps have the same
+    range. In particular, for $0<\gamma<1$,
+    \begin{align}
+        \mathcal S'_{\gamma,N} & =\sum_xG_N(A_x(\gamma)).
+        \label{eq:mpo_joint_mixed_interior_support}
+    \end{align}
+    These assertions require no simultaneous span assumption.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_joint_inserted_boundary,def:block_ground_space_map,
+        def:mpo_joint_mixed_family,thm:mpo_mixed_interior}
+    Associativity regroups the alternating product
+    and gives~(\ref{eq:mpo_joint_mixed_boundary_change}) after taking
+    traces and summing over $x$. Invertibility makes
+    $(X_x)_x\mapsto(W_xX_x)_x$ a bijection, with inverse
+    $(Y_x)_x\mapsto(W_x^{-1}Y_x)_x$, proving equality of ranges.
+    For the mixed family, $W_x(\gamma)$ is invertible in the open
+    interval. The joint canonical boundary range is
+    $\sum_xG_N(A_x(\gamma))$ by
+    Definition~\ref{def:block_ground_space_map}.
+\end{proof}
+
+\begin{theorem}[Exact finite-volume support of the mixed family]
+    \label{thm:mpo_joint_mixed_open_kernel}
+    \lean{MPSTensor.MPOSymmetry.continuous_nonzero_jointMixedEndpointInsertion,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_blockInsertedBoundaryMap_injective,
+        MPSTensor.MPOSymmetry.finrank_jointMixedEndpoint_extendedBoundarySupport,
+        MPSTensor.MPOSymmetry.continuous_jointMixedEndpoint_blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.continuous_jointMixedEndpoint_extendedBoundarySupport_starProjection,
+        MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_jointMixedEndpoint_eq,
+        MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_jointMixedEndpoint_starProjection}
+    \leanok
+    \uses{def:mpo_joint_mixed_support,def:blockwise_product_word_span}
+    For arbitrary endpoint families, the maps
+    $\gamma\mapsto\Gamma'_{\gamma,N}$ are continuous at fixed $N$.
+    Suppose~(\ref{eq:mpo_joint_mixed_endpoint_span}) holds and
+    $D_x^0,D_x^1>0$ for every $x$.
+    Then $W_x(\gamma)$ is continuous and nonzero on $\R$.
+    For every $\gamma\in\R$ and $N\geq1$, the map
+    $\Gamma'_{\gamma,N}$ is injective and
+    $\dim\mathcal S'_{\gamma,N}=\sum_x(D_x^0+D_x^1)^2$.
+    For $N\geq2$,
+    \begin{align}
+        \ker H'^{\mathrm{open}}_{\gamma,N}
+         & =\mathcal S'_{\gamma,N},
+        \label{eq:mpo_joint_mixed_kernel} \\
+        \dim\ker H'^{\mathrm{open}}_{\gamma,N}
+         & =\sum_x(D_x^0+D_x^1)^2.
+    \end{align}
+    For fixed $N\geq1$, the orthogonal projector onto
+    $\mathcal S'_{\gamma,N}$ is continuous on $\R$.
+    For fixed $N\geq2$, the orthogonal projector onto
+    $\ker H'^{\mathrm{open}}_{\gamma,N}$ is continuous on $\R$,
+    including at $\gamma=0,1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_mixed_span,thm:mpo_joint_inserted_injective,
+        thm:mpo_joint_inserted_open_kernel,thm:spt_normalized_bond_interpolation}
+    Theorem~\ref{thm:mpo_joint_mixed_span} supplies simultaneous spanning
+    of $(C_x)_x$. Since $D_x^0,D_x^1>0$, the matrix $W_x(\gamma)$
+    could vanish only if both $1-\gamma=0$ and $\gamma=0$, which is
+    impossible. Theorem~\ref{thm:mpo_joint_inserted_injective} therefore
+    applies to~(\ref{eq:mpo_joint_mixed_boundary}) at every real parameter.
+    Theorem~\ref{thm:mpo_joint_inserted_open_kernel} gives
+    (\ref{eq:mpo_joint_mixed_kernel}), its dimension, and continuity of
+    the kernel projector. The tensor family $C_x$ is constant and
+    $W_x(\gamma)$ is continuous, so the boundary maps are continuous.
+    Injectivity and the inverse-Gram formula give continuity of their
+    orthogonal range projectors at every positive fixed length.
+\end{proof}

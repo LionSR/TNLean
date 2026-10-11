@@ -1,0 +1,160 @@
+% Auxiliary physical-coordinate construction for the fusion and action
+% equations in Garre-Rubio--Lootens--Molnar, arXiv:2203.12563v3.
+% Source context: REsubmission.tex, rawrels, eq:F_symbol2, and coupledpent.
+
+\section{Triangular physical padding}
+\label{sec:glm_triangular_padding}
+
+Adjoining one physical letter expresses operator multiplication and
+operator action as products in the same physical alphabet. This is an
+auxiliary coordinate construction for the fusion and action equations of
+\cite[Section~2]{GarreRubio2023MPOSym}.
+
+\begin{definition}[Corner and column padding]
+    \leanok
+    \label{def:glm_triangular_padding}
+    \lean{MPOTensor.operatorPhysicalPadding,
+        MPOTensor.statePhysicalPadding,
+        MPOTensor.operatorPhysicalPadding_castSucc_castSucc,
+        MPOTensor.operatorPhysicalPadding_last,
+        MPOTensor.operatorPhysicalPadding_last_right,
+        MPOTensor.statePhysicalPadding_castSucc_last,
+        MPOTensor.statePhysicalPadding_castSucc_right,
+        MPOTensor.statePhysicalPadding_last}
+    \uses{def:mpo_tensor, def:mps_tensor}
+    Let $I=\{0,\ldots,d-1\}$ and adjoin a letter $\bullet$.
+    For an operator tensor $O$ and a state tensor $A$, define operator
+    tensors $E(O)$ and $J(A)$ on $I\sqcup\{\bullet\}$ by
+    \begin{align}
+        E(O)^{ij}
+         & =\begin{cases}O^{ij},&i,j\in I,\\0,&\text{otherwise},\end{cases}
+        \label{eq:glm_padding_corner}                                              \\
+        J(A)^{ij}
+         & =\begin{cases}A^i,&i\in I,\ j=\bullet,\\0,&\text{otherwise}.\end{cases}
+        \label{eq:glm_padding_column}
+    \end{align}
+    The virtual bond spaces are unchanged. Both last physical rows vanish;
+    the last column of $E(O)$ and every original column of $J(A)$ vanish.
+\end{definition}
+
+\begin{theorem}[Products of padded tensors]
+    \leanok
+    \label{thm:glm_triangular_padding_products}
+    \lean{MPOTensor.mulTensor_operatorPhysicalPadding,
+        MPOTensor.mulTensor_operatorPhysicalPadding_statePhysicalPadding,
+        MPOTensor.mulTensor_statePhysicalPadding_operatorPhysicalPadding,
+        MPOTensor.mulTensor_statePhysicalPadding_statePhysicalPadding}
+    \uses{def:glm_triangular_padding, def:mpdo_operator_product, def:mpug_action_tensor}
+    For operator tensors $O,P$ and state tensors $A,B$ on the same original
+    physical alphabet, the products obey
+    \begin{align}
+        E(O)E(P) & =E(OP),
+        \label{eq:glm_padding_operator_product} \\
+        E(O)J(A) & =J(O\cdot A),
+        \label{eq:glm_padding_action_product}   \\
+        J(A)E(O) & =0,
+        \label{eq:glm_padding_state_operator}   \\
+        J(A)J(B) & =0.
+        \label{eq:glm_padding_state_state}
+    \end{align}
+    Every equality retains the original ordered tensor product of virtual
+    bond spaces. No positivity of physical or virtual dimensions is needed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_triangular_padding, def:mpdo_operator_product, def:mpug_action_tensor}
+    Split the contracted physical index into $j\in I$ and $j=\bullet$.
+    In the first two products the last-index summand vanishes, and the
+    remaining sums are $\sum_j O^{ij}\otimes P^{jk}$ and
+    $\sum_j O^{ij}\otimes A^j$ in their retained corner or column.
+    With $J(A)$ on the left, only $j=\bullet$ can contribute, but the
+    last row of the right factor is zero.
+\end{proof}
+
+\begin{theorem}[Injectivity under physical padding]
+    \leanok
+    \label{thm:glm_triangular_padding_injectivity}
+    \lean{MPOTensor.isInjective_operatorPhysicalPadding,
+        MPOTensor.isInjective_statePhysicalPadding}
+    \uses{def:glm_triangular_padding, def:injective}
+    If the matrices $O^{ij}$ span the full virtual matrix algebra, then
+    the matrices $E(O)^{ij}$ do so. If the matrices $A^i$ span that algebra,
+    then the matrices $J(A)^{ij}$ do so.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_triangular_padding, def:injective}
+    Every original letter is a retained padded letter, so the original
+    matrix span is contained in the padded matrix span.
+\end{proof}
+
+\begin{theorem}[Padding exact decompositions]
+    \leanok
+    \label{thm:glm_triangular_padding_decomposition}
+    \lean{MPSTensor.IsBiorthogonalDecomposition.operatorPhysicalPadding,
+        MPSTensor.IsBiorthogonalDecomposition.statePhysicalPadding}
+    \uses{def:glm_triangular_padding, def:glm_boundary_decomposition}
+    Let $c$ range over any finite set, possibly empty. Suppose rectangular
+    matrices satisfy $V_cW_c=\Id$ and $V_cW_b=0$ for $c\ne b$.
+    If $O^{ij}=\sum_c W_cT_c^{ij}V_c$, then
+    \begin{align}
+        E(O)^{ij} & =\sum_c W_cE(T_c)^{ij}V_c.
+        \label{eq:glm_padding_operator_decomposition}
+    \end{align}
+    If $B^i=\sum_c W_cA_c^iV_c$, then
+    \begin{align}
+        J(B)^{ij} & =\sum_c W_cJ(A_c)^{ij}V_c.
+        \label{eq:glm_padding_state_decomposition}
+    \end{align}
+    Thus both padded decompositions use the same target indices and the
+    same analysis and synthesis matrices, with no ambient completeness
+    requirement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_triangular_padding, def:glm_boundary_decomposition}
+    The equations for $V_cW_b$ are unchanged. At each retained physical
+    coordinate, reconstruction is the original letter identity; at every
+    other coordinate both sides are zero.
+\end{proof}
+
+\begin{theorem}[Restriction of padded scalar gauges]
+    \leanok
+    \label{thm:glm_triangular_padding_gauge_restriction}
+    \lean{MPOTensor.gaugePhaseEquiv_of_operatorPhysicalPadding,
+        MPOTensor.gaugePhaseEquiv_of_statePhysicalPadding}
+    \uses{def:glm_triangular_padding, def:gauge_phase_equiv}
+    For equal virtual dimensions, a gauge-phase relation between $E(O)$
+    and $E(P)$ implies the same relation between $O$ and $P$.
+    A gauge-phase relation between $J(A)$ and $J(B)$ implies the same
+    relation between $A$ and $B$. In both cases, the invertible virtual
+    matrix and nonzero scalar are unchanged.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_triangular_padding, def:gauge_phase_equiv}
+    Evaluate the scalar-gauge identity at the retained corner for
+    operators, or at the retained last-column entries for states.
+\end{proof}
+
+\begin{theorem}[Separation of padded operators and states]
+    \leanok
+    \label{thm:glm_triangular_padding_gauge_separation}
+    \lean{MPOTensor.not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding,
+        MPOTensor.not_gaugePhaseEquiv_statePhysicalPadding_operatorPhysicalPadding}
+    \uses{def:glm_triangular_padding, def:gauge_phase_equiv, def:injective}
+    Let the common virtual dimension be $D>0$.
+    If $A$ is injective, no invertible $X$ and nonzero scalar $\zeta$
+    satisfy $J(A)^{ij}=\zeta X E(O)^{ij}X^{-1}$ for every physical pair.
+    If $O$ is injective on its doubled physical alphabet, no such $X,\zeta$
+    satisfy $E(O)^{ij}=\zeta X J(A)^{ij}X^{-1}$ for every physical pair.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:glm_triangular_padding, def:injective}
+    In the first direction, the last column gives $A^i=0$ for every $i$.
+    In the second direction, the retained corner gives $O^{ij}=0$ for
+    every $i,j$. Each conclusion makes the target letter span zero,
+    contradicting injectivity since the identity matrix has a nonzero
+    diagonal entry when $D>0$.
+\end{proof}

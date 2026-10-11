@@ -114,13 +114,19 @@ on:
       - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_isometric_gap_transport.py'
+      - 'scripts/test_tenkz_normal_adjoint_boundary.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_mixed_action.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_mixed_fusion.py'
       - 'scripts/test_tenkz_stationary_density.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -228,13 +234,19 @@ on:
       - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
       - 'scripts/test_tenkz_index_routing.py'
+      - 'scripts/test_tenkz_isometric_gap_transport.py'
+      - 'scripts/test_tenkz_normal_adjoint_boundary.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_mixed_action.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_mixed_fusion.py'
       - 'scripts/test_tenkz_stationary_density.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
   workflow_dispatch:
 
 concurrency:
@@ -385,13 +397,19 @@ jobs:
               - 'scripts/check_peps_four_cut_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
               - 'scripts/test_tenkz_index_routing.py'
+              - 'scripts/test_tenkz_isometric_gap_transport.py'
+              - 'scripts/test_tenkz_normal_adjoint_boundary.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_sector_encoder_diagram.py'
               - 'scripts/test_nested_patch_geometry_diagram.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
+              - 'scripts/test_tenkz_mixed_action.py'
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
+              - 'scripts/test_tenkz_mixed_fusion.py'
               - 'scripts/test_tenkz_stationary_density.py'
+              - 'scripts/test_tenkz_mixed_normality.py'
+              - 'scripts/test_tenkz_mixed_symbols.py'
             # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
             # `leanblueprint pdf` (blueprint/src/latexmkrc) and
             # scripts/build_blueprint_ch01_12.sh, with the bibliography from
@@ -1210,7 +1228,21 @@ jobs:
           set -e
           for example in BoundaryTransport GroupNIMAction FibonacciNIMRepDecomposition \
               FibonacciSymmetricFamilyDecomposition PiMatrixRepresentation \
-              BoundaryReconstruction BoundaryMultiplicity PBCGroupProjector; do
+              BoundaryReconstruction BoundaryMultiplicity PBCGroupProjector \
+              BoundaryDecompositionComparison BoundaryActionLMatrix \
+              TriangularPadding CompleteZipperFusionMixedOrientation TriangularBoundary \
+              BoundaryFusionComparison BoundarySourceMixedPentagon MixedEndpointMPOAction \
+              BoundaryActionCrossTransport MixedEndpointMPOFusionMaps MixedEndpointMPOFusion \
+              MixedEndpointMPONormality MixedEndpointMPOActionSymbols MixedEndpointMPOFusionSymbols; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+          for example in BoundaryParentHamiltonian BlockBoundaryParentHamiltonian \
+              BoundaryUnitSupport BoundaryProjectionAverage \
+              NormalAdjointBoundary NormalBlockBoundaryParentHamiltonian \
+              BoundaryAdjointCounterexample DualRepresentationAdjointBoundary; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -1236,6 +1268,22 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PreparationAlgebraBoundary.lean
+
+      - name: Test mixed endpoint parent interactions
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in MixedEndpointComparison MixedEndpointPhase \
+              MixedEndpointOpenGap MixedEndpointUniformPathGap PhysicalIsometricGapTransport \
+              ArbitraryPhysicalMixedPathGap ArbitraryPhysicalEndpointAttachment JointInsertedOpenKernel \
+              JointMixedEndpointFamily JointMixedEndpointBoundaryColumns DependentSpectatorGapEquivalence \
+              JointMixedEndpointPeriodicGap JointMixedEndpointRightPeriodicGap JointMixedEndpointEdgeNormalization \
+              JointMixedEndpointFrameReduction JointMixedEndpointCoreHamiltonian; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
 
       - name: Test area-law foundations and physical oscillations
         timeout-minutes: 2
@@ -1716,11 +1764,22 @@ jobs:
 
       - name: Test tenkz coefficient-index routing
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_index_routing.py
+        run: |
+          python3 scripts/test_tenkz_index_routing.py
+          python3 scripts/test_tenkz_isometric_gap_transport.py
+          python3 scripts/test_tenkz_normal_adjoint_boundary.py
 
       - name: Test ordered mixing contraction diagrams
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_ordered_mixing.py
+
+      - name: Test exact mixed MPO action diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_action.py
+
+      - name: Test exact mixed MPO fusion diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_fusion.py
 
       - name: Test the GHZ sector-probability contraction
         if: env.TEX_CHANGED == 'true'
@@ -1736,6 +1795,14 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         timeout-minutes: 2
         run: python3 scripts/test_tenkz_stationary_density.py
+
+      - name: Test mixed MPO normality diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_normality.py
+
+      - name: Test actual mixed MPO symbol diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_symbols.py
 
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
@@ -1824,6 +1891,10 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
+          python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_normality.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_symbols.py --web-root blueprint/web --browser
 
       - name: Add and test blueprint search
         if: env.TEX_CHANGED == 'true'

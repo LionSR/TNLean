@@ -1,0 +1,156 @@
+% Source: GLM23v3, REsubmission.tex, lines 1695--1777.
+% Scope: exact sector exchange and both actual periodic endpoints.
+
+\subsection{Exchanging the two periodic endpoints}
+\label{sec:mpo_joint_periodic_endpoint_swap}
+
+The second endpoint follows from the first by exchanging the two sector
+labels. This exchange acts on the shared endpoint alphabets and on every
+rectangular alphabet at once, so all overlaps between block columns are
+preserved.
+
+\begin{definition}[Physical and virtual sector exchange]
+    \label{def:mpo_joint_endpoint_swap}
+    \lean{MPSTensor.MPOSymmetry.jointMixedPhysicalSwap,
+        MPSTensor.MPOSymmetry.jointMixedEndpointPhysicalSwap}
+    \leanok
+    \uses{def:mpo_joint_mixed_family}
+    Write $\mathcal I$ for the joint alphabet of $(A_0,A_1)$ and
+    $\widetilde{\mathcal I}$ for that of the reversed pair $(A_1,A_0)$.
+    Define $e:\mathcal I\longrightarrow\widetilde{\mathcal I}$ by
+    \begin{align*}
+        00(i)     & \longmapsto11(i),     & 11(j) & \longmapsto00(j), \\
+        01(x,a,b) & \longmapsto10(x,a,b), &
+        10(x,a,b) & \longmapsto01(x,a,b).
+    \end{align*}
+    Both rectangular indices retain their order. Let
+    $s_x:\mathbb C^{D_0^x}\oplus\mathbb C^{D_1^x}
+        \longrightarrow\mathbb C^{D_1^x}\oplus\mathbb C^{D_0^x}$
+    exchange the virtual summands, and put
+    $\Phi_x(X)=s_xXs_x^{-1}$.
+    The physical configuration isometry goes from the reversed chain
+    space to the original one:
+    $(U_Nv)_\sigma=v_{e\circ\sigma}$.
+\end{definition}
+
+\begin{theorem}[Reflection of the actual family and joint support]
+    \label{thm:mpo_joint_endpoint_swap_support}
+    \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_swap,
+        MPSTensor.MPOSymmetry.bondInterpolationMatrix_reflect_swap,
+        MPSTensor.MPOSymmetry.jointMixedEndpointInterpolation_reflect_swap,
+        MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_jointMixed_reflect_swap,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_eq_map_reflect_swap,
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_eq_conj_reflect_swap}
+    \leanok
+    \uses{def:mpo_joint_endpoint_swap,def:mpo_joint_mixed_support}
+    A tilde denotes the reversed pair. For every $\gamma\in\mathbb R$,
+    every block $x$, and every physical letter $\mu$,
+    \begin{align}
+        \widetilde C_x^{e(\mu)}           & =\Phi_x(C_x^\mu),         &
+        \widetilde W_x(1-\gamma)          & =\Phi_x(W_x(\gamma)),     &
+        \widetilde A_x^{e(\mu)}(1-\gamma) & =\Phi_x(A_x^\mu(\gamma)).
+        \label{eq:mpo_joint_endpoint_swap_letters}
+    \end{align}
+    Consequently,
+    \begin{align}
+        U_2\widetilde\Gamma'_{2,1-\gamma}((\Phi_xX_x)_x)
+                   & =\Gamma'_{2,\gamma}(X),                \\
+        S_\gamma   & =U_2\widetilde S_{1-\gamma},         &
+        h'(\gamma) & =U_2\widetilde h'(1-\gamma)U_2^{-1}.
+        \label{eq:mpo_joint_endpoint_swap_support}
+    \end{align}
+    These identities require no spanning or dimension assumptions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_phase_boundary}
+    Inspect the four physical summands. An endpoint letter stays in its
+    corresponding virtual corner after both labels are exchanged; a
+    rectangular matrix unit keeps its row and column indices. Exchanging
+    the two diagonal weights replaces $\gamma$ by $1-\gamma$.
+    In each summand of the joint boundary trace, the whole product is
+    conjugated by $s_x$, so its trace is unchanged. Every reversed virtual
+    boundary is $\Phi_xX_x$ for a unique $X_x$, which proves the support
+    equality. Orthogonal projection onto an isometric image is conjugated
+    by the same isometry, giving the parent interaction identity.
+\end{proof}
+
+\begin{theorem}[Transport of the periodic Hamiltonian and component vectors]
+    \label{thm:mpo_joint_endpoint_swap_periodic}
+    \lean{MPSTensor.periodicInteractionHamiltonianES_physicalReindex_conj,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_eq_conj_reflect_swap,
+        MPSTensor.MPOSymmetry.mpv_jointMixedEndpointInterpolation_reflect_swap,
+        MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_jointMixed_reflect_swap}
+    \leanok
+    \uses{thm:mpo_joint_endpoint_swap_support}
+    For every $N\ge0$ and every real $\gamma$,
+    \begin{align}
+        H'_N(\gamma) & =U_N\widetilde H'_N(1-\gamma)U_N^{-1}, \\
+        U_N\lvert V^{(N)}(\widetilde A_x(1-\gamma))\rangle
+                     & =\lvert V^{(N)}(A_x(\gamma))\rangle.
+        \label{eq:mpo_joint_endpoint_swap_periodic}
+    \end{align}
+    The same identity holds for an arbitrary common linear combination
+    of the component vectors, with its coefficient vector unchanged.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_endpoint_swap_support}
+    Relabeling physical letters commutes with restriction to each cyclic
+    window and with extension by the spectator identity. It therefore
+    conjugates every translated interaction, and summing gives the first
+    identity. This argument includes both oriented terms when $N=2$.
+    For a component MPS, induction on the word length conjugates its
+    complete matrix product by $s_x$. Trace invariance gives the second
+    identity, including the empty word. Summing over $x$ retains every
+    cross-label overlap.
+\end{proof}
+
+\begin{theorem}[The actual second endpoint and a common bound for both endpoints]
+    \label{thm:mpo_joint_both_periodic_endpoints}
+    \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_one_eq_actual,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_endpoints_eq_actual,
+        MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_one_gap,
+        MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_endpoints_gap}
+    \leanok
+    \uses{thm:mpo_joint_endpoint_swap_periodic,thm:mpo_joint_periodic_gap,
+        thm:martingale_isometric_conjugation_gap}
+    Suppose that both endpoint families have simultaneous one-site span
+    and $D_1^x>0$ for every block. For every $N\ge2$,
+    \begin{align}
+        \ker H'_N(1) & =\operatorname{span}_{\mathbb C}
+        \{\lvert V^{(N)}(A_x(1))\rangle:x=0,\ldots,r-1\}.
+        \label{eq:mpo_joint_right_periodic_kernel}
+    \end{align}
+    There is a $\delta_1>0$, independent of $N$, such that
+    $\|H'_N(1)v\|\ge\delta_1\|v\|$ whenever $v\perp\ker H'_N(1)$.
+    Positivity of the first endpoint dimensions is unnecessary here.
+
+    If also $D_0^x>0$ for every block, the actual component-span identity
+    holds at both endpoints, and one $\delta_*>0$ satisfies
+    \begin{align}
+        \|H'_N(\gamma)v\|\ge\delta_*\|v\|
+        \quad\text{for }\gamma\in\{0,1\},\ N\ge2,
+        \ v\perp\ker H'_N(\gamma).
+        \label{eq:mpo_joint_both_periodic_gap}
+    \end{align}
+    Empty block families and zero physical alphabets are permitted.
+    The statement concerns the two endpoints only.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_endpoint_swap_periodic,thm:mpo_joint_periodic_gap,
+        thm:martingale_isometric_conjugation_gap}
+    Apply Theorem~\ref{thm:mpo_joint_periodic_gap} to $(A_1,A_0)$.
+    Its required positive dimensions are precisely $D_1^x$.
+    Conjugacy sends the reversed kernel to the original kernel; it also
+    sends the reversed component span to the actual span in
+    (\ref{eq:mpo_joint_right_periodic_kernel}). If $v$ is orthogonal to the
+    original kernel, then $U_N^{-1}v$ is orthogonal to the reversed kernel:
+    for every reversed kernel vector $z$,
+    $\langle z,U_N^{-1}v\rangle=\langle U_Nz,v\rangle=0$.
+    Apply the reversed gap bound and use preservation of both norms.
+    Finally choose $\delta_*=\min(\delta_0,\delta_1)$ from the two
+    common joint-parent endpoint bounds. No interior parameter enters
+    this argument.
+\end{proof}
