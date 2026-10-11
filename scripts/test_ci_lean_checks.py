@@ -206,6 +206,19 @@ class EarlyBuildTest(unittest.TestCase):
         self.lake("exit 3\n")
         self.assertEqual(ci.early_build(["TNLean.Core"], self.log, 0), 3)
 
+    def test_budget_kills_descendants_that_ignore_sigterm(self) -> None:
+        # lake exits on SIGTERM, but its compiler child ignores it and holds the
+        # output pipe; the step must still end promptly.
+        self.lake("bash -c 'trap \"\" TERM; sleep 60' &\n"
+                  "trap 'exit 143' TERM\nsleep 60 & wait\n")
+        import io, time
+        from contextlib import redirect_stdout
+        start = time.monotonic()
+        with redirect_stdout(io.StringIO()):
+            code = ci.early_build(["TNLean.Core"], self.log, 1)
+        self.assertEqual(code, 0)
+        self.assertLess(time.monotonic() - start, 20)
+
     def test_budget_exceeded_is_a_warning(self) -> None:
         self.lake("sleep 30\n")
         import io

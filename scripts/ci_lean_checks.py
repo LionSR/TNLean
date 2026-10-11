@@ -266,6 +266,25 @@ def run_batch(paths: list[str], overlay: Path | None, jobs: int, timeout: int) -
     return failed
 
 
+def _signal_group(pid: int, sig: int) -> None:
+    try:
+        os.killpg(pid, sig)
+    except ProcessLookupError:
+        pass  # the whole group has already exited
+
+
+def _stop_group(proc: subprocess.Popen, grace: int = 30) -> None:
+    """Terminate the build's process group: SIGTERM, a grace period for `lake`,
+    then SIGKILL for any descendant that ignored it or outlived `lake`."""
+    _signal_group(proc.pid, signal.SIGTERM)
+    try:
+        proc.wait(timeout=grace)
+    except subprocess.TimeoutExpired:
+        pass
+    _signal_group(proc.pid, signal.SIGKILL)
+    proc.wait()
+
+
 def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
     """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
     since the root build compiles the same modules, so when it exceeds `budget`
@@ -282,19 +301,22 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
             log.write(line)
 
     with open(log_path or os.devnull, "a") as log:
-        reader = threading.Thread(target=pump, args=(proc.stdout, log))
+        reader = threading.Thread(target=pump, args=(proc.stdout, log), daemon=True)
         reader.start()
         try:
-            code = proc.wait(timeout=budget or None)
+            code: int | None = proc.wait(timeout=budget or None)
         except subprocess.TimeoutExpired:
-            os.killpg(proc.pid, signal.SIGTERM)
-            try:
-                proc.wait(timeout=30)
-            except subprocess.TimeoutExpired:
-                os.killpg(proc.pid, signal.SIGKILL)
-                proc.wait()
+            _stop_group(proc)
             code = None
-        reader.join()
+        except BaseException:
+            # The build runs in its own session, so an interrupt such as Ctrl-C
+            # does not reach it; stop it before re-raising.
+            _stop_group(proc, grace=5)
+            raise
+        finally:
+            # A descendant that outlived `lake` would keep the pipe open.
+            _signal_group(proc.pid, signal.SIGKILL)
+            reader.join(timeout=60)
     if code is None:
         print(f"::warning::Early build stopped after {budget}s; "
               "the root build compiles the remaining modules.", flush=True)
