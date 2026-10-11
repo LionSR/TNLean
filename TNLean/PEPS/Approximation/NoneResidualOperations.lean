@@ -72,7 +72,8 @@ theorem Word.restrict_localPart_comp_scalar {Q : Type} (f : Q → Bool)
     (v.localPart.restrict f v.sources_localPart).eval
     (by simp only [Layout.restrict_append, hv, hw, ha, List.nil_append])
     (by simp only [Layout.restrict_append, hv, hb, List.nil_append]) hd α β
-    ((Word.restrict_frameList_eval_heq_of_eq_nil f _ hv w.localPart w.sources_localPart).trans he) he'
+    ((Word.restrict_frameList_eval_heq_of_eq_nil f _ hv w.localPart w.sources_localPart).trans he)
+    he'
 
 
 private theorem parties_moveHead {Q : Type} [DecidableEq Q] (r : Reg Q) (rs tail : Layout Q) :
