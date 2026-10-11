@@ -1251,8 +1251,8 @@ The following finite construction follows
         TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeEntropyDefect,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect}
+    \leanok
     \uses{def:al_scan_old_entropy_integral,def:al_scan_actual_charge_data}
-    % Source implementation only; parameter-regularity revision awaits compilation.
     For admissible transport data with positive factor dimensions,
     nonnegative metric parameter and cross-band commutation, fix a continuous
     real symbol $F$, a history $h$, a replica count $k\ge0$ and a supplied
@@ -1264,7 +1264,7 @@ The following finite construction follows
     this regularity, including the actual good-history charge defect.
     No symmetry or nonzero-prevector hypothesis is needed for these assertions.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     For a zero prevector the filtered vector, its rank-one matrix and the
     trace-adjoint transported state are zero, so $J_h(F)=0$.
     Otherwise the Hermitian transported state satisfies
@@ -1792,13 +1792,12 @@ The following finite construction follows
     unchanged.
 \end{proof}
 
-% Private source-only candidate on QICLean acfb5c6, the accepted canonical measure
-% dependency; these declarations and regressions have not been compiled. No leanok tags.
 \begin{definition}[Literal transported measures of a scan round]
     \label{def:al_scan_literal_measures}
     \lean{TNLean.PEPS.AreaLaw.Scan.transportScanRound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound}
+    \leanok
     \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
     Fix one actual fill or charge round, its recursive history and choice trees,
     dimensions, and a supplied family of replica vectors $\psi_k$.
@@ -1833,6 +1832,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.transportScanRound_mass,
         TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_old,
         TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_new}
+    \leanok
     \uses{def:al_scan_literal_measures}
     Each measure is finite for every fixed real $p$, every replica count,
     and every supplied vector. If $a\ge0$, every continuous real function
@@ -1849,7 +1849,7 @@ The following finite construction follows
     complementary old and new leaves at $p=0$ and $p=1$ have mass $1/2$.
     These statements include $k=0$ for a supplied nonzero scalar vector.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The actual partitions and moves give admissibility and cross-band
     commutation. Apply the canonical Fourier-weighted coherent measure
     identity to each old or new terminal state. Its fixed-parameter compact
@@ -1873,6 +1873,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.transportScanRound_termEnergy,
         TNLean.PEPS.AreaLaw.Scan.transportScanRound_energySum,
         TensorPower.ReplicaTransport.TransportData.splitEta_eq_zero_of_not_mem_splitLeaves}
+    \leanok
     \uses{def:al_scan_literal_measures,thm:al_scan_literal_integrals}
     For $a\ge0$ and every real $p$, the choice gain is the transport entropy
     gain, with history factor $w_h$, and the charge defect is the actual
@@ -1889,7 +1890,7 @@ The following finite construction follows
     truncated terms, the mean energy is the expectation of their actual
     replica Hamiltonian in the same filtered vector.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Apply~(\ref{eq:al_scan_leaf_integral}) to the continuous choice entropy,
     split entropy and one-eighth-power split-entropy symbols. Finite sums pass
     through the common old-state integral. Unsplit leaves have zero split
@@ -1898,8 +1899,6 @@ The following finite construction follows
     mean identifies the actual replica Hamiltonian.
 \end{proof}
 
-% Private source-only composition with the accepted canonical measure theorem.
-% These regularity specializations have not been compiled; no completion marker is added.
 \begin{theorem}[Parameter integrability of literal round defects]
     \label{thm:al_scan_literal_parameter_integral}
     \lean{TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_transportScanRound_chargeDefect,
@@ -1914,6 +1913,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeScanRound_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualChargeScanRound_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualChargeScanRound_chargeDefect}
+    \leanok
     \uses{def:al_scan_literal_measures,thm:al_scan_literal_scalars,
         thm:al_scan_old_parameter_integral}
     Fix admissible finite transport data, a nonnegative metric parameter $t$,
@@ -1925,7 +1925,7 @@ The following finite construction follows
     with $t=a/2$ and $a\ge0$, for the same supplied family of vectors.
     No symmetry, nonzero-vector or positive-copy hypothesis is needed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The finite split-entropy symbol
     $F_h(\theta)=\sum_i\eta_{i,(h,\mathrm{old})}(\theta)$ is continuous in
     the coherent vector. The exact scalar identity is
