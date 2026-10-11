@@ -533,6 +533,13 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check prescribed physical owner columns before the full build
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.Approximation.FamilyPhysicalOwnerColumns \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
         run: |
