@@ -915,6 +915,13 @@ The following finite construction follows
     $Y=UY\setminus U$. For every physical status,
     $V=\Lambda\setminus(P_0\cup Y)$.
 \end{lemma}
+\begin{proof}\leanok
+    The three regions $P_0$, $Y$, and $V$ partition $\Lambda$, so $V$ is the
+    complement of $P_0\cup Y$. For the first identity, a site of $Y$ has
+    positive depth by assumption and is not in $P_0$, so it lies in $UY$ but
+    not in $U$. Conversely, a site of $UY$ outside $U$ has positive depth and
+    is not in $P_0$, so it lies in $Y$.
+\end{proof}
 
 \begin{theorem}[All five physical status cuts]
     \label{thm:al_scan_status_cuts}
