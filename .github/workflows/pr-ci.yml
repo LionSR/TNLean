@@ -1609,7 +1609,7 @@ jobs:
           path: |
             ${{ runner.temp }}/diagram-tests/**/tenkz-*.svg
             ${{ runner.temp }}/diagram-tests/**/cache/tenkz-*.tnlog
-          if-no-files-found: error
+          if-no-files-found: ignore
           retention-days: 3
 
       - name: Lint LaTeX (chktex)

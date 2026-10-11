@@ -26,9 +26,10 @@ class RunnerTest(unittest.TestCase):
     def setUp(self) -> None:
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
-        self.root = Path(tmp.name)
+        # Nest the repository so a relative --output-dir stays inside tmp.
+        self.root = Path(tmp.name) / "repo"
         self.scripts = self.root / "scripts"
-        self.scripts.mkdir()
+        self.scripts.mkdir(parents=True)
 
     def write(self, name: str, source: str) -> None:
         (self.scripts / name).write_text(source)
