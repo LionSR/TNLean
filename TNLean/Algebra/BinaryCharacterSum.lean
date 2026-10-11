@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fintype.Pi
+import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 
@@ -20,8 +21,9 @@ Kramers–Wannier kernels into a delta constraint.
 
 The file also records the elementary bit identities used alongside it: a sum of two bits
 vanishes exactly when they agree, adding a fixed configuration is an involution, a sum of
-two bits equals one exactly when they are complementary, and a sign `(-1) ^ n` squares
-to one.
+two bits equals one exactly when they are complementary, a sign `(-1) ^ n` squares
+to one, and the sign character `x ↦ (-1) ^ x.val` of `ZMod 2` takes addition to
+multiplication.
 -/
 
 /-- Two bits add to zero exactly when they agree. -/
@@ -45,6 +47,13 @@ theorem Fin.add_eq_one_iff_eq_rev (u v : Fin 2) : u + v = 1 ↔ u = v.rev := by
 theorem neg_one_pow_mul_neg_one_pow_self {R : Type*} [Monoid R] [HasDistribNeg R] (n : ℕ) :
     (-1 : R) ^ n * (-1 : R) ^ n = 1 := by
   rw [← pow_add, ← two_mul, pow_mul, neg_one_sq, one_pow]
+
+/-- The sign character `x ↦ (-1) ^ x.val` of `ZMod 2` takes addition to multiplication. -/
+theorem ZMod.neg_one_pow_val_add {R : Type*} [Monoid R] [HasDistribNeg R] (x y : ZMod 2) :
+    (-1 : R) ^ (x + y).val = (-1) ^ x.val * (-1) ^ y.val := by
+  rw [← pow_add, ZMod.val_add]
+  conv_rhs => rw [← Nat.mod_add_div (x.val + y.val) 2, pow_add, pow_mul, neg_one_sq, one_pow,
+    mul_one]
 
 namespace Fintype
 

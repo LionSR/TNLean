@@ -92,22 +92,6 @@ attribute [local instance 1001]
 
 /-! ### Mixed transfer maps of blocked tensors -/
 
-/-- The mixed transfer map of two `L`-site blocked tensors is the `L`-th power of the mixed
-transfer map of the tensors. -/
-theorem mixedMapLM_blockTensor_apply {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y : MPSTensor d D₂)
-    (L : ℕ) (Z : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    Kraus.mixedMapLM (blockTensor X L) (blockTensor Y L) Z = (Kraus.mixedMapLM X Y ^ L) Z := by
-  classical
-  rw [Kraus.mixedMapLM_pow_apply, Kraus.mixedMapLM_apply]
-  simp only [Kraus.blockTensor, Kraus.wordOfBlock]
-  let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) := decodeBlockEquiv d L
-  simpa [Kraus.decodeBlockEquiv_apply, e] using
-    (Fintype.sum_equiv e
-      (f := fun i =>
-        Kraus.evalWord X (List.ofFn (e i)) * Z * (Kraus.evalWord Y (List.ofFn (e i)))ᴴ)
-      (g := fun σ => Kraus.evalWord X (List.ofFn σ) * Z * (Kraus.evalWord Y (List.ofFn σ))ᴴ)
-      (by intro i; rfl))
-
 open scoped Matrix.Norms.L2Operator in
 /-- **Decay of a mixed transfer map.** If every eigenvalue of the mixed transfer map
 `E_{XY}(Z) = ∑ᵢ Xⁱ Z (Yⁱ)†` has modulus at most `|λ₂| < 1` and `0 < γ < 1`, then
