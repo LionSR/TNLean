@@ -109,7 +109,8 @@ def squareAreaLawSupport (L : ℕ) (i : SquareInteraction L) :
       AreaLaw.isAdmissibleSupport_singleton (AreaLaw.rectangularDomain L L) 1
         (AreaLaw.rectangleSiteEquiv L L v)
   | inr e =>
-    simpa only [squareInteractionSupport, Finset.image_pair] using
+    simpa only [squareInteractionSupport, Finset.image_insert, Finset.image_singleton,
+      forwardSquareEdgeEquiv_val] using
       AreaLaw.isAdmissibleSupport_rectangle_pair_of_adj
         (forwardSquareEdgeEquiv L e).property.2
 
