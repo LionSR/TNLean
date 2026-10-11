@@ -1,0 +1,70 @@
+\section{Localization from an arbitrary region}
+
+\begin{theorem}[Elementary commutator bound]
+    \label{thm:qc_commutator_norm_bound}
+    \lean{norm_commutator_le}
+    \leanok
+    For any two elements $X,A$ of a normed ring,
+    $\|XA-AX\|\leq2\|A\|\|X\|$.
+\end{theorem}
+\begin{proof}\leanok
+    The triangle inequality and submultiplicativity give
+    $\|XA-AX\|\leq\|X\|\|A\|+\|A\|\|X\|$.
+\end{proof}
+
+\begin{theorem}[Transferring time evolution across a commutator]
+    \label{thm:qc_commutator_reverse_evolution}
+    \lean{norm_exp_commutator_eq}
+    \leanok
+    Let $\mathcal A$ be a complete real normed star algebra satisfying the
+    $C^*$ identity, and let $K^*=-K$. For $A,B\in\mathcal A$ and real $t$,
+    \begin{align*}
+        \|[e^{tK}Ae^{-tK},B]\|=\|[A,e^{-tK}Be^{tK}]\|.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    Conjugation by the unitary $e^{tK}$ carries
+    $[A,e^{-tK}Be^{tK}]$ to $[e^{tK}Ae^{-tK},B]$ and preserves the norm.
+\end{proof}
+
+\begin{theorem}[Localization from a region]
+    \label{thm:area_region_localization}
+    \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:qc_site_expectation}
+    Fix integers $q\geq1$ and $R\geq0$, and a real number $J$.
+    There are positive constants $C,v,c$ with the following property.
+    Let $\Lambda\subseteq\Z^2$ be any finite domain, and let $H$ be a
+    finite-range Hamiltonian of range $R$ and term-norm bound $J$ on
+    $\Lambda$. For a region $S\subseteq\Lambda$, write
+    $N_l(S)=\{y\in\Lambda:d_\Lambda(y,S)\leq l\}$, with
+    $N_l(\varnothing)=\varnothing$. If $A$ is supported on $S$, then for
+    every integer $l\geq0$ and real $t$,
+    \begin{align*}
+        \|\tau_t(A)-E_{N_l(S)}(\tau_t(A))\|
+        \leq\|A\|\min\{2,C|\Lambda|e^{v|t|-cl}\}.
+    \end{align*}
+    Empty domains and empty regions are included. This is the operator
+    localization estimate used in \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:quasilocal-lr,thm:qc_commutator_norm_bound,
+        thm:qc_commutator_reverse_evolution,
+        lem:qc_site_expectation_properties,lem:qc_site_expectation_commutator}
+    Let $C_0,v,c$ be the constants of Lemma~\ref{lem:quasilocal-lr}.
+    If $y\notin N_l(S)$, then $N_l(y)$ is disjoint from $S$.
+    For an on-site unitary $U$ at $y$, the operator
+    $E_{N_l(y)}(\tau_{-t}(U))$ therefore commutes with $A$. Put
+    $D=\tau_{-t}(U)-E_{N_l(y)}(\tau_{-t}(U))$.
+    The singleton localization estimate gives
+    $\|D\|\leq C_0e^{v|t|-cl}$, so the two commutator identities yield
+    \begin{align*}
+        \|[\tau_t(A),U]\|=\|[A,D]\|
+        \leq2C_0\|A\|e^{v|t|-cl}.
+    \end{align*}
+    Lemma~\ref{lem:qc_site_expectation_commutator} sums these bounds over
+    at most $|\Lambda|$ sites. Independently, norm preservation of the
+    evolution and contractivity of the expectation give the bound
+    $2\|A\|$. Combining the two estimates proves the assertion with
+    $C=2C_0$. The same argument uses an empty sum when the domain is empty.
+\end{proof}
