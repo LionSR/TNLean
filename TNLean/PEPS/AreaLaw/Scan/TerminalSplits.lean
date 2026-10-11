@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.BandUniqueness
 import TNLean.PEPS.AreaLaw.Scan.BandNesting
+import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 
 /-!
 # Terminal splitting of actual designated supports
@@ -185,11 +186,7 @@ theorem state_designatedSplitIncidence_isTerminalSplit_domainGraph
   have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
   have hm : (S.ball i ∩ middle (S.state h g)).Nonempty := by
     simpa only [heq] using hs.2
-  have hvar (x : Site Λ) (hx : x ∈ S.ball i) :
-      |S.depth x - S.depth (S.anchor i)| ≤ S.r₀ := by
-    have hd : (domainGraph Λ).edist (S.anchor i) x ≤ (S.r₀ : ℕ∞) := by
-      simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hx
-    simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hd
+  have hvar := S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i
   have hball : S.ball i ⊆ S.A := by
     obtain ⟨y, hy⟩ := hm
     obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
@@ -235,11 +232,7 @@ theorem old_designatedSplitIncidence_isTerminalSplit_domainGraph
   have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
   have hm : (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty := by
     simpa only [heq] using hs.2
-  have hvar (x : Site Λ) (hx : x ∈ S.ball i) :
-      |S.depth x - S.depth (S.anchor i)| ≤ S.r₀ := by
-    have hd : (domainGraph Λ).edist (S.anchor i) x ≤ (S.r₀ : ℕ∞) := by
-      simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hx
-    simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hd
+  have hvar := S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i
   have hball : S.ball i ⊆ S.A := by
     obtain ⟨y, hy⟩ := hm
     obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
