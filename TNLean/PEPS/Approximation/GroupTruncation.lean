@@ -59,31 +59,6 @@ theorem norm_toEuclideanLin_le_of_isProj (M : Matrix ι ι ℂ) (hH : Mᴴ = M) 
   rw [hp]
   exact Submodule.norm_starProjection_apply_le _ x
 
-omit [DecidableEq ι] in
-theorem conjTranspose_orthonormalProjector {β : Type*}
-    (f : ι → EuclideanSpace ℂ β) : (orthonormalProjector f)ᴴ = orthonormalProjector f := by
-  ext b b'
-  simp [orthonormalProjector, conjTranspose_apply, mul_comm]
-
-omit [DecidableEq ι] in
-theorem orthonormalProjector_mul_self {β : Type*} [Fintype β]
-    {f : ι → EuclideanSpace ℂ β} (hf : Orthonormal ℂ f) :
-    orthonormalProjector f * orthonormalProjector f = orthonormalProjector f := by
-  classical
-  apply (toEuclideanLin (𝕜 := ℂ) (m := β) (n := β)).injective
-  rw [toLpLin_mul_same]
-  refine LinearMap.ext fun x ↦ ?_
-  rw [LinearMap.comp_apply, toEuclideanLin_orthonormalProjector,
-    toEuclideanLin_orthonormalProjector]
-  refine Finset.sum_congr rfl fun i _ ↦ ?_
-  rw [inner_sum, Finset.sum_eq_single i]
-  · rw [inner_smul_right, inner_self_eq_norm_sq_to_K, hf.1 i]
-    simp
-  · intro j _ hji
-    rw [inner_smul_right, orthonormal_iff_ite.mp hf i j]
-    simp [Ne.symm hji]
-  · simp
-
 /-- The coordinatewise complex conjugate of a family of Euclidean vectors. -/
 def conjFamily {β : Type*} (f : ι → EuclideanSpace ℂ β) : ι → EuclideanSpace ℂ β :=
   fun i ↦ WithLp.toLp 2 fun b ↦ star (f i b)
@@ -305,7 +280,7 @@ of modulus at most one.
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, equation
 `eq:group-truncation`, 05-frames.tex:133–141; proof 05-frames.tex:166–179. -/
 theorem exists_group_truncation (Z : EuclideanSpace ℂ ((v : V) → P v)) (hZ : ‖Z‖ ≤ 1)
-    (hnuc : ∀ w, nuclearNorm (groupFlattening Z.ofLp w) ≤ 1) (G : Finset V)
+    (hnuc : ∀ w, rectangularTraceNorm (groupFlattening Z.ofLp w) ≤ 1) (G : Finset V)
     (hG : ∀ v ∉ G, Fintype.card (P v) ≤ 1) (k : ℕ) (hk : 1 ≤ k) :
     ∃ (r : V → ℕ) (e : (v : V) → Fin (r v) → EuclideanSpace ℂ (P v)),
       (∀ v, r v ≤ k) ∧ (∀ v, Orthonormal ℂ (e v)) ∧
@@ -347,10 +322,10 @@ theorem exists_group_truncation (Z : EuclideanSpace ℂ ((v : V) → P v)) (hZ :
       split_ifs with hv
       · have h1 := herr v
         have hn := hnuc v
-        have hn0 := nuclearNorm_nonneg (groupFlattening Z.ofLp v)
+        have hn0 := rectangularTraceNorm_nonneg (groupFlattening Z.ofLp v)
         have hle : ‖Z - toEuclideanLin (onFactor v (Q v)) Z‖ ^ 2 ≤ (1 / √k) ^ 2 := by
           rw [hsq, div_pow, one_pow, Real.sq_sqrt hkpos.le, le_div_iff₀ hkpos]
-          have hnsq : nuclearNorm (groupFlattening Z.ofLp v) ^ 2 ≤ 1 := by nlinarith
+          have hnsq : rectangularTraceNorm (groupFlattening Z.ofLp v) ^ 2 ≤ 1 := by nlinarith
           have hhs := sq_nonneg
             ‖groupFlattening Z.ofLp v - groupFlattening Z.ofLp v * orthonormalProjector (f v)‖
           have hk1 : (k : ℝ) ≤ k + 1 := by linarith
@@ -438,11 +413,11 @@ theorem groupFlattening_contraction (w : V) :
   simp [mul_apply]
 
 /-- Every single-group flattening of the contraction has nuclear norm at most one. -/
-theorem nuclearNorm_groupFlattening_contraction_le_one (hloop : ∀ e, tail e ≠ head e)
+theorem rectangularTraceNorm_groupFlattening_contraction_le_one (hloop : ∀ e, tail e ≠ head e)
     (hA : ∀ v, vertexNormSq A v ≤ 1) (w : V) :
-    nuclearNorm (groupFlattening (contraction A) w) ≤ 1 := by
+    rectangularTraceNorm (groupFlattening (contraction A) w) ≤ 1 := by
   rw [groupFlattening_contraction]
-  refine (nuclearNorm_mul_transpose_le _ _).trans ?_
+  refine (rectangularTraceNorm_mul_transpose_le _ _).trans ?_
   rw [frobenius_norm_submatrix_equiv, frobenius_norm_submatrix_equiv]
   have h₁ : ‖bipartitionLeft A ({w} : Finset V)ᶜ‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
     ((norm_sq_bipartitionLeft A _).trans_le (partialNormSq_le_one A hloop hA _))
@@ -460,7 +435,7 @@ sends `Z` to `Z_k` with `‖Z - Z_k‖ ≤ |G| / √k`; in those bases `Z_k` has
 product terms, with coefficients of modulus at most one.
 
 The norm and nuclear-norm statements of the lemma are `contraction_norm_le_one` and
-`nuclearNorm_flattening_le_one`.
+`rectangularTraceNorm_flattening_le_one`.
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`,
 05-frames.tex:125–141; proof 05-frames.tex:143–179. -/
@@ -477,7 +452,7 @@ theorem exists_simultaneous_group_truncation (hloop : ∀ e, tail e ≠ head e)
         toEuclideanLin (factorMatrix fun v ↦ orthonormalProjector (e v))
             (WithLp.toLp 2 (contraction A)) = ∑ i, c i • productVector e i :=
   exists_group_truncation _ (contraction_norm_le_one A hloop hA)
-    (nuclearNorm_groupFlattening_contraction_le_one A hloop hA) G hG k hk
+    (rectangularTraceNorm_groupFlattening_contraction_le_one A hloop hA) G hG k hk
 
 end Contraction
 
