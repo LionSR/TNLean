@@ -70,8 +70,7 @@ private theorem parties_moveHead (r : Reg P) (c a : Layout P) :
   induction c with
   | nil => simp [moveHead, parties]
   | cons s c ih =>
-      simp [moveHead, parties, ih, List.map_append, Finset.union_assoc,
-        Finset.union_left_comm, Finset.union_comm, Finset.insert_comm]
+      simp [moveHead, parties, ih, List.map_append, Finset.union_comm, Finset.insert_comm]
 
 /-- Moving all original pair preparations to the beginning preserves exactly
 the parties of the remaining operations, without a nonvanishing hypothesis.
@@ -85,14 +84,15 @@ theorem parties_localPart {a b : Layout P} (w : Word a b) :
       simp only [localPart, parties_castInput, parties, parties_frameList, ihw, ihv]
       rw [Finset.union_assoc, Finset.union_eq_right.mpr ?_]
       exact (owners_subset (owners_sources_mem_parties v)).trans
-        (Finset.subset_union_right _ _)
+        Finset.subset_union_right
   | localMap => rfl
-  | source hpq U V η tail => simp [localPart, parties, sources, SourceInventory.layout,
-      PairSource.layout]
+  | source hpq U V η tail => simp [localPart, parties, sources, PairSource.layout]
   | swap => rfl
   | @frame r a b w ih =>
-      simp only [localPart, parties, parties_moveHead, ih, Finset.insert_union,
-        Finset.union_insert, Finset.insert_idem]
+      change (moveHead r w.sources.layout a).parties ∪
+        insert r.owner w.localPart.parties = insert r.owner w.parties
+      rw [parties_moveHead, ih]
+      simp only [Finset.insert_union, Finset.union_insert, Finset.insert_idem]
       rw [Finset.union_eq_right.mpr ?_]
       exact Finset.union_subset_iff.mpr
         ⟨owners_subset (owners_sources_mem_parties w),
@@ -120,7 +120,7 @@ theorem parties_mapOwner (f : P → Q) {a b : Layout P} (w : Word a b) :
       Finset.image_insert]
   | @source p q hpq U V η tail =>
       by_cases h : f p = f q
-      · simp only [mapOwner, dite_eq_left h, parties_castLayouts, localPairSource, parties,
+      · simp only [mapOwner, dite_true, parties_castLayouts, localPairSource, parties,
           owners_mapOwner_image, Finset.image_insert, h, Finset.insert_idem]
       · simp only [mapOwner, dite_eq_right h, parties, owners_mapOwner_image,
           Finset.image_insert]
