@@ -75,6 +75,45 @@ This gives the contractions used in
     Definition~\ref{def:peps_prepared_density_coefficient}.
 \end{definition}
 
+\begin{definition}[Source columns on a prescribed pure input]
+    \label{def:peps_pure_source_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.pureSourceMatrix}
+    \uses{def:peps_source_slot_basis,def:peps_free_source_matrix}
+    For a prescribed vector $\psi\in\mathcal H$, let $A_{T,\psi}$
+    have row index $k\in M$ and column index $a\in\mathcal A$, with
+    \begin{align}
+        A_{T,\psi}(k,a)
+         & =\langle g_k,T(s_a\otimes\psi)\rangle.
+        \label{eq:peps_pure_source_matrix}
+    \end{align}
+    No normalization of $\psi$ is required.
+\end{definition}
+
+\begin{theorem}[Pure-input prepared density coefficients]
+    \label{thm:peps_pure_source_density_coefficient}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
+    Let $T,T':\mathcal S\otimes\mathcal H\to\mathcal K$ be two
+    compositions, expressed in the same output basis. For independently
+    chosen $a,b\in\mathcal A$, their prepared matrices satisfy
+    \begin{align}
+        K_T(a)|\psi\rangle\langle\psi|K_{T'}(b)^\dagger
+         & =A_{T,\psi}(:,a)A_{T',\psi}(:,b)^\dagger.
+        \label{eq:peps_pure_source_density_coefficient}
+    \end{align}
+    Neither normalization nor allowedness is required. The identity
+    includes the zero input vector and the empty source list.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis}
+    The preparation identity gives
+    $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$.
+    Apply Theorem~\ref{thm:peps_prepared_vector_density} to the ket
+    and bra preparations to obtain
+    (\ref{eq:peps_pure_source_density_coefficient}).
+\end{proof}
+
 \begin{theorem}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}
