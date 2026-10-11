@@ -1,0 +1,42 @@
+\section{Local interactions after a partial swap}
+\label{sec:swapped_square_interaction}
+
+\begin{theorem}[Local interactions after a partial swap]
+    \label{thm:swapped_square_hamiltonian_interaction}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_swapped_doubled_localHamiltonian}
+    \uses{def:square_hermitian_term,def:square_area_law_support,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Fix integers $L,q\ge0$ and a real number $J\ge0$. Let $H=\sum_i A_i$
+    be a Hermitian square Hamiltonian, with each $A_i$ supported on its
+    designated site or edge $S_i$ and $\|A_i\|\le J$. Let $R$ be any
+    set of sites. Put $A_i^{\mathrm h}=(A_i+A_i^*)/2$ and
+    $D(A)=A\otimes I+I\otimes A$.
+
+    Pair the two replicas at every site, so that the local dimension
+    becomes $q^2$, and write $F_R$ for the partial swap in these paired
+    coordinates. A hat will denote this pairing of coordinates. Let
+    $\sigma$ be the canonical bijection from the square-grid sites to
+    the integer rectangle, and let $U$ be its induced unitary on
+    configuration spaces. There is a range-one Hermitian interaction
+    family $g$ on the rectangle, with interaction bound $2J$, whose terms are
+    \begin{align*}
+        g_{\sigma(S_i)} & =U\bigl(F_R\widehat{D(A_i^{\mathrm h})}F_R^*\bigr)U^*.
+    \end{align*}
+    At every other admissible support the term is zero. Its sum is exactly
+    \begin{align*}
+        H_g & =U\bigl(F_R\widehat{D(H)}F_R^*\bigr)U^*.
+    \end{align*}
+    This is the local interaction construction for the partially swapped
+    doubled Hamiltonian in \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:square_hermitian_term_properties,thm:square_hermitian_term_sum,thm:peps_sheet_swap_conjugate_support,def:square_area_law_hamiltonian,thm:square_area_law_hamiltonian_operator}
+    The Hermitian terms $A_i^{\mathrm h}$ have their original supports and
+    norm bounds, and their sum is $H$. After doubling and the partial swap,
+    each term remains supported on $S_i$. Its norm is at most $2J$, by
+    the triangle inequality for the two Kronecker factors and the norm
+    bound one for the swap. These estimates also hold in zero-dimensional
+    spaces. Transport the resulting interactions to the integer rectangle
+    and assign zero to unused supports. The supports of distinct original
+    labels are distinct. Linearity of doubling and conjugation gives the
+    asserted exact sum.
+\end{proof}
