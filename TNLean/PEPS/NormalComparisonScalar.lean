@@ -210,13 +210,11 @@ theorem exists_normalPerVertexScalar
     h.oneSiteSeparation.withSite_eq_insert v
   -- Blocked-tensor injectivity of the comparison pair for `A`.
   have hRA : RegionBlockedTensorInjective (G := G) A
-      (h.oneSiteSeparation.withoutSite v) := by
-    have hi := (h.oneSiteSeparation.withoutSite_injective v).1
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (h.oneSiteSeparation.withoutSite v) :=
+    (h.oneSiteSeparation.withoutSite_injective v).1
   have hCA : RegionBlockedTensorInjective (G := G) A
-      (Finset.univ \ h.oneSiteSeparation.withoutSite v) := by
-    have hi := (h.oneSiteSeparation.withoutSite_complement_injective v).1
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ h.oneSiteSeparation.withoutSite v) :=
+    (h.oneSiteSeparation.withoutSite_complement_injective v).1
   have hSA : RegionBlockedTensorInjective (G := G) A
       (insert v (h.oneSiteSeparation.withoutSite v)) := by
     have hi := (h.oneSiteSeparation.withSite_injective v).1
