@@ -161,16 +161,27 @@ lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) 
 
 /-- The continuity cost of Lemma 2.1 remains at most `n^{-247}` when the trace-distance
 bound has any fixed nonnegative coefficient. The threshold is chosen before `t`.
-Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`.
-
-**Proof status:** The proof is under construction; elaboration is pending. -/
+Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`. -/
 lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
     (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
     ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
       C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) := by
   filter_upwards [eventually_continuityCost_le (C * √(1 + A)) lq
     (mul_nonneg hC (Real.sqrt_nonneg _)) hlq] with n hn t ht
-  done
+  have hB : 0 < 1 + A := by positivity
+  have hsB : 1 ≤ √(1 + A) := Real.one_le_sqrt.mpr (le_add_of_nonneg_right hA)
+  have ht' : t / (1 + A) ≤ (n : ℝ) ^ (-500 : ℝ) :=
+    (div_le_iff₀ hB).2 (by nlinarith [Real.rpow_nonneg (Nat.cast_nonneg n) (-500 : ℝ)])
+  have hsqrt : √t = √(1 + A) * √(t / (1 + A)) := by
+    rw [← Real.sqrt_mul hB.le, mul_div_cancel₀ t hB.ne']
+  have hC' : C ≤ C * √(1 + A) := le_mul_of_one_le_right hC hsB
+  calc
+    C * √t * (1 + C * (n : ℝ) ^ 2 * lq)
+        = C * √(1 + A) * √(t / (1 + A)) * (1 + C * (n : ℝ) ^ 2 * lq) := by
+          rw [hsqrt, ← mul_assoc]
+    _ ≤ C * √(1 + A) * √(t / (1 + A)) *
+        (1 + C * √(1 + A) * (n : ℝ) ^ 2 * lq) := by gcongr
+    _ ≤ (n : ℝ) ^ (-247 : ℝ) := hn _ ht'
 
 namespace ScanData
 
