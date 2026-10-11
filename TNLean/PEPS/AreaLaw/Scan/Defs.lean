@@ -17,15 +17,14 @@ the content of Lemma 9.1 (`scanner:histories`); the transported states and their
 energy estimates are Proposition 7.4 (`prop:transport`); the norm comparisons are
 Proposition 8.1 (`prop:comparators`). Following the source, Proposition 9.2 *uses* those
 results. Here their conclusions are recorded as explicit fields of `ScanRound` and `ScanData`.
-The fields cite the source passages they represent. The coefficient-one trace-distance
-bound is stronger than the source's asymptotic bound, as recorded below.
+The fields cite the source passages they represent. The trace-distance estimate retains
+the fixed common coefficient in the source's asymptotic bound.
 
 **Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
 Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for one scan as fields instead of deriving them
-from the scan geometry and the transported states. It also requires a coefficient-one
-trace-distance bound where the source states `O(n^(-500))` (lines 400–403). Results over
-`ScanData` retain these restrictions; a physical construction must account for the fixed
-coefficient without replacing the truncated ground vector. Documented in
+from the scan geometry and the transported states. Results over `ScanData` retain this
+restriction; a physical construction must supply the fields for the same original and
+truncated ground vectors. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Abstraction of the transported states
@@ -289,9 +288,10 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   the trace norm of the difference of their density matrices (lines 400–403). -/
   traceDist : ℝ
   traceDist_nonneg : 0 ≤ traceDist
-  /-- Coefficient-one bound, stronger than the source's `O(n^(-500))` statement.
-  The fixed-coefficient issue is recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. -/
-  traceDist_le : traceDist ≤ (n : ℝ) ^ (-500 : ℝ)
+  /-- Fixed-coefficient bound from the source's `O(n^(-500))` estimate
+  (`08-scanner.tex`, lines 400–403). The remaining physical construction is recorded in
+  `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. -/
+  traceDist_le : traceDist ≤ κ.C * (n : ℝ) ^ (-500 : ℝ)
   /-- Lemma 2.1 on the target, whose Hilbert space has `log`-dimension at most `C n² log q`. -/
   continuity_X : |SXt - SX| ≤ κ.C * √traceDist * (1 + κ.C * n ^ 2 * Real.log κ.q)
   /-- Lemma 2.1 on the shell sets `Q_j`. -/

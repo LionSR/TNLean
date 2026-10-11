@@ -196,7 +196,8 @@ lemma log_q_nonneg (κ : ScanConstants) : 0 ≤ Real.log κ.q :=
 theorem SXt_le (X : ScannerExponents) (κ : ScanConstants) :
     ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
       S.SXt ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) + (n : ℝ) ^ (-247 : ℝ) := by
-  filter_upwards [eventually_continuityCost_le κ.C _ (by linarith [κ.one_le_C])
+  filter_upwards [eventually_continuityCost_le_of_fixed_coefficient κ.C κ.C _
+    (by linarith [κ.one_le_C]) (by linarith [κ.one_le_C])
     (log_q_nonneg κ)] with n hn S
   have := hn _ S.traceDist_le
   have := S.continuity_X
