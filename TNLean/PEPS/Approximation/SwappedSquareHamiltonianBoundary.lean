@@ -54,6 +54,7 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
   intro p K F boundary Z
   have hsum := congrArg (Matrix.reindex p p)
     (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
+  simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
   done
 
 end TNLean.PEPS.Approximation
