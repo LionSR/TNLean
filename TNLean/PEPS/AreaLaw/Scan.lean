@@ -83,6 +83,8 @@ import TNLean.PEPS.AreaLaw.Scan.SubsystemSize
 import TNLean.PEPS.AreaLaw.Scan.SupportClassification
 import TNLean.PEPS.AreaLaw.Scan.SupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
+import TNLean.PEPS.AreaLaw.Scan.TargetGeometry
+import TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension

@@ -1693,6 +1693,69 @@ The following finite construction follows
     from $S_0$ remain in the physical sum. No auxiliary system is adjoined.
 \end{proof}
 
+% Source: 08-scanner.tex, lines 21--48, 243--257 and 400--414;
+% 07-comparators.tex, lines 37--53, at openai/math@adc7f124.
+% New completion markers remain withheld pending exact-head strict CI.
+\begin{theorem}[The target typical window of one truncated ground vector]
+    \label{thm:al_scan_target_typical_window}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.one_le_L_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.target_typicalSet_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary}
+    Fix $q\ge1$, $R\in\mathbb N$, $J\ge0$, $\Delta>0$ and $C_T\ge0$.
+    There exist $C_{\mathrm{tr}}>0$, $C_B>0$ and $N\ge2$, chosen before
+    the domain, Hamiltonian, ground vector, cut, scan and source exponents.
+    Consider any instance of Theorem~\ref{thm:al_scan_exists_marginal_tails}
+    with $n\ge N$, except that the compact-volume bound is replaced by
+    the following source geometry. Let $T$ be a nonempty ambient target,
+    $d(x)=\operatorname{dist}_\infty(x,T)$, $0<\ell<1$,
+    $L=\lfloor n^{1-\ell}\rfloor$, and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+    Suppose $|T|\le C_Tn^2$, each positive ambient dilation layer through
+    depth $L$ has at most $n$ sites, and
+    $\operatorname{dist}_\infty(T,Z)>2L+10r_0$, where $Z$ is the set
+    of endpoints of the actual cut edges. Set $X=A\cap T$ and
+    $S_0=A\cap T_L$. Then
+    \begin{align}
+        1 & \le L\le n,    & |S_0|                & \le(C_T+1)n^2, &
+        X & \subseteq S_0, & |\partial_\Lambda X| & \le4n.
+        \label{eq:al_scan_target_geometry}
+    \end{align}
+    One pair $(e,\widetilde\Omega)$ satisfies every energy, phase-distance,
+    trace-distance, moment and all-cut tail conclusion of
+    Theorem~\ref{thm:al_scan_exists_marginal_tails}. For the target marginal
+    of this same vector, write $p_i$ for its eigenvalues,
+    $S=S_{\widetilde\Omega}(X)$, $w=n^{3/5}$ and $\delta=n^{-100}$.
+    Its literal labelled cut budget and canonical typical set satisfy
+    \begin{align}
+        1                          & \le\mathcal B_X\le C_Bn(\log n)^{12}, &
+        \Pr_p\{|{-\log p_i}-S|>w\} & \le\delta,                                                      \\
+        E                          & =\{i:p_i>0,\ |{-\log p_i}-S|\le w\},  &
+        z                          & =\sum_{i\in E}p_i,                    & 0 & <1-\delta\le z\le1.
+        \label{eq:al_scan_target_typical_mass}
+    \end{align}
+    In particular, $E$ is nonempty. Every $i\in E$ obeys
+    $\mathrm e^{-S-w}\le p_i\le\mathrm e^{-S+w}$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary}
+    The source floor gives $1\le L\le n$. Summing ambient layers gives
+    $|S_0|\le|T|+nL\le(C_T+1)n^2$. The zero-depth prefix is $X$;
+    clearance removes edges to the opposite color, and the first positive
+    layer bounds its physical boundary by $4n$. Choose
+    $C_{\mathrm{tr}}$ with $C_0=C_T+1$ in
+    Theorem~\ref{thm:al_scan_exists_marginal_tails}. The lattice crossing
+    estimate, retaining all original admissible labels, yields
+    $\mathcal B_X\le Cn(\log n)^{12}$. Replace $C$ by $\max\{1,C\}$.
+    For fixed $\vartheta=2/g$, the tail expression is bounded by
+    $C'\exp[-c'n^{1/10}/(\log n)^6]\le n^{-100}$ for $n\ge N$.
+    Choose this $N$ before any instance and apply the all-cut tail estimate
+    to the single vector already constructed. The canonical positive
+    spectrum has mass at least $1-\delta>0$, and its defining logarithmic
+    window gives the stated exponential bounds. Zero eigenvalues are excluded.
+\end{proof}
+
 % Direct specializations of QICLean at 7224037, ReplicaTransport/Transport.lean.
 \begin{theorem}[Entropy and energy transport in an actual scan round]
     \label{thm:al_scan_actual_transport_estimates}

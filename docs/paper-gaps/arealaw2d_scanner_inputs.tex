@@ -368,15 +368,51 @@ projector gap. Empty domains, local dimension one, empty truncation sets
 and retained disconnected components are allowed. An arbitrary cut inside
 a retained component can still have crossing labels.
 
-The remaining source-facing construction must derive uniform cut budgets
-from the actual geometry and combine them with this physical witness.
-For the target typical spectrum, the bound is $C n(\log n)^{12}$ rather
-than the status bound $C nD(\log n)^{12}$ used elsewhere in the scan
-(\path{08-scanner.tex}, lines~400--414). The canonical target typical set,
-its positive mass and dimension, the initial prevector, the comparator
-estimates, and the scanner's measure-valued fields still have to be supplied.
-The constructed physical witness does not complete the scanner data
-package or remove the restriction on Proposition~9.2.
+\section{Target typical window}
+
+The target specialization is now stated in
+\path{TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean}.
+Fix $q\ge1$, $R$, $J\ge0$, $\Delta>0$ and $C_T\ge0$.
+The constants $C_{\mathrm{tr}}>0$, $C_B>0$ and $N\ge2$ precede every
+scale, finite domain, Hamiltonian, cut and scanner. The source assumptions
+are a nonempty ambient target $T$ with $|T|\le C_Tn^2$, actual ambient
+depth, at most $n$ sites per positive ambient layer through
+$L=\lfloor n^{1-\ell}\rfloor$, and clearance
+$\operatorname{dist}_\infty(T,Z)>2L+10r_0$ from actual cut endpoints.
+The source exponent range gives $1\le L\le n$; this is derived from the
+floor rather than assumed. These hypotheses yield
+$|S_0|\le(C_T+1)n^2$, $X=A\cap T\subseteq S_0$ and
+$|\partial_\Lambda X|\le4n$.
+\footnote{The geometric statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry}.}
+
+The lattice crossing-budget theorem accounts for the multiplicity of
+original admissible labels and the actual radius
+$r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+Thus $1\le\mathcal B_X\le C_Bn(\log n)^{12}$ for this target.
+Only its $4n$ boundary permits using the budget factor $D=1$;
+the status bound remains $CnD(\log n)^{12}$.
+The same actual physical pair $(e,\widetilde\Omega)$ retains
+(\ref{eq:arealaw2d_scanner_inputs_marginal_gap}),
+(\ref{eq:arealaw2d_scanner_inputs_marginal_closeness}), and all-cut
+moment and tail estimates. At $w=n^{3/5}$ its target tail is at most
+$n^{-100}$ for $n\ge N$. The canonical set of positive eigenvalues
+within this surprisal window is nonempty and has mass
+$z\ge1-n^{-100}>0$, with $z\le1$ and
+$\mathrm e^{-S-w}\le p_i\le\mathrm e^{-S+w}$ for each selected eigenvalue.
+Here $S$ is the target entropy of $\widetilde\Omega$, whereas the original
+$\Omega$ continues to center every Hamiltonian term.
+\footnote{The same-witness statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
+
+% Exact-head strict compilation and full CI are still required for this entry.
+% No completion marker is added before those checks pass.
+This target-window statement does not construct the initial physical
+prevector, its Bell factors, the comparator estimates, the scanner's
+measure-valued fields, or the complete scanner data package. It does not
+supply normalized typical-sector rank or entropy estimates for the later
+comparator construction. No auxiliary unique-gap assertion is made.
+The restriction on Proposition~9.2 therefore remains.
 
 \section{Elimination}
 

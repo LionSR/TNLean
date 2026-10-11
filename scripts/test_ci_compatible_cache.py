@@ -8,6 +8,7 @@ import io
 import subprocess
 import json
 import os
+import re
 from pathlib import Path
 import tempfile
 import unittest
@@ -16,6 +17,7 @@ from unittest.mock import patch
 import yaml
 
 import ci_compatible_cache as guard
+from lean_import_syntax import pure_import_modules, strip_lean_comments
 
 ROOT = Path(__file__).resolve().parents[1]
 OLD = 'a' * 40
@@ -673,6 +675,12 @@ class WorkflowTests(unittest.TestCase):
         self.assertLess(self.steps[prune]['run'].index(' validate '),
                         self.steps[prune]['run'].index(' prune'))
         self.assertNotIn('always()', self.steps[build].get('if', ''))
+        for name in ('Build actual target typical window early',
+                     'Check actual target typical window strictly'):
+            self.assertEqual(sum(s.get('name') == name for s in self.steps), 1)
+        target_check = next(s for s in self.steps
+                            if s.get('name') == 'Check actual target typical window strictly')
+        self.assertIn('lake env lean', target_check.get('run', ''))
         for i, step in enumerate(self.steps):
             if 'lake env lean' in step.get('run', ''):
                 if step.get('name') == 'Check finite rectangular dual geometry early':
@@ -728,11 +736,128 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                elif step.get('name') == 'Check actual target typical window strictly':
+                    # This one bounded exception rebuilds the complete import
+                    # closure before checking exactly these sources. Keep the
+                    # ordinary full-root-before-elaboration rule below intact.
+                    early = next(j for j, candidate in enumerate(self.steps)
+                                 if candidate.get('name') == 'Build actual target typical window early')
+                    self.assertLess(prune, early)
+                    self.assertLess(early, i)
+                    self.assertLess(i, build)
+                    producer = self.steps[early]
+                    for bounded in (producer, step):
+                        self.assertNotIn('if', bounded)
+                        self.assertNotIn('continue-on-error', bounded)
+                    self.assertEqual(producer['timeout-minutes'], 10)
+                    self.assertEqual(step['timeout-minutes'], 7)
+                    # Exact commands protect the cache guard, target list,
+                    # one-thread bounds and append-only shared timing log.
+                    self.assertEqual(producer['run'],
+                                     'set -eo pipefail\n'
+                                     'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean\n'
+                                     'LEAN_NUM_THREADS=1 lake --fail-fast build \\\n'
+                                     '  +TNLean.PEPS.AreaLaw.Scan.TargetGeometry:olean \\\n'
+                                     '  +TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow:olean \\\n'
+                                     '  2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"\n')
+                    self.assertEqual(step['run'],
+                                     'set -eo pipefail\n'
+                                     'for source in TNLean/PEPS/AreaLaw/Scan/TargetGeometry.lean \\\n'
+                                     '    TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean \\\n'
+                                     '    TNLeanTest/TargetTypicalWindow.lean \\\n'
+                                     '    TNLeanTest/TargetTypicalWindowAxioms.lean; do\n'
+                                     '  LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \\\n'
+                                     '    -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \\\n'
+                                     '    -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \\\n'
+                                     '    "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"\n'
+                                     'done\n')
+                    for fixture in ('TargetTypicalWindow', 'TargetTypicalWindowAxioms'):
+                        source = (ROOT / f'TNLeanTest/{fixture}.lean').read_text()
+                        uncommented, error = strip_lean_comments(source)
+                        self.assertIsNone(error)
+                        # Detect any import token, including indented, tabbed,
+                        # modified or multiline commands; unsupported syntax
+                        # must fail closed rather than disappear from the list.
+                        imports, error = pure_import_modules('\n'.join(
+                            line for line in uncommented.splitlines()
+                            if re.search(r'\bimport\b', line)))
+                        self.assertIsNone(error)
+                        self.assertEqual(imports, ['TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow'])
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)
+
+    def test_target_typical_window_early_exception_fails_closed(self):
+        early_name = 'Build actual target typical window early'
+        strict_name = 'Check actual target typical window strictly'
+        mutations = [
+            ('strict before producer', 'order', None, None),
+            ('producer timeout', early_name, 'timeout-minutes', 11),
+            ('strict timeout', strict_name, 'timeout-minutes', 8),
+            ('producer ignores failure', early_name, 'continue-on-error', True),
+            ('strict ignores failure', strict_name, 'continue-on-error', True),
+            ('strict disabled', strict_name, 'run', ('lake env lean', 'echo skipped')),
+        ]
+        for target in ('TargetGeometry', 'TargetTypicalWindow'):
+            mutations.append((f'missing target {target}', early_name, 'run',
+                              (f'+TNLean.PEPS.AreaLaw.Scan.{target}:olean', '')))
+        for path in ('TNLean/PEPS/AreaLaw/Scan/TargetGeometry.lean',
+                     'TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean',
+                     'TNLeanTest/TargetTypicalWindow.lean',
+                     'TNLeanTest/TargetTypicalWindowAxioms.lean'):
+            mutations.append((f'missing strict file {path}', strict_name, 'run', (path, '')))
+        for flag in ('-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                     '-Dpp.unicode.fun=true', '-DmaxSynthPendingDepth=3',
+                     '-Dlinter.mathlibStandardSet=true', '-DwarningAsError=true',
+                     'LEAN_NUM_THREADS=1', '-j1', '--signal=INT', '--kill-after=5s'):
+            mutations.append((f'missing strict flag {flag}', strict_name, 'run', (flag, '')))
+        mutations.extend([
+            ('per-file timeout', strict_name, 'run', ('90s', '180s')),
+            ('producer loses one-thread bound', early_name, 'run', ('LEAN_NUM_THREADS=1', '')),
+            ('producer loses fail-fast', early_name, 'run', ('--fail-fast', '')),
+            ('producer truncates timing log', early_name, 'run', ('tee -a ', 'tee ')),
+            ('strict truncates timing log', strict_name, 'run', ('tee -a ', 'tee ')),
+        ])
+        for name in (early_name, strict_name):
+            mutations.append((f'{name} loses pipefail', name, 'run', ('set -eo pipefail', 'set -e')))
+            mutations.append((f'{name} masks failure', name, 'run',
+                              ('"$RUNNER_TEMP/lake-build.log"', '"$RUNNER_TEMP/lake-build.log" || true')))
+        for label, name, field, value in mutations:
+            with self.subTest(label=label):
+                self.setUp()
+                if name == 'order':
+                    early = next(i for i, s in enumerate(self.steps) if s.get('name') == early_name)
+                    strict = next(i for i, s in enumerate(self.steps) if s.get('name') == strict_name)
+                    self.steps[early], self.steps[strict] = self.steps[strict], self.steps[early]
+                else:
+                    step = next(s for s in self.steps if s.get('name') == name)
+                    step[field] = step[field].replace(*value) if field == 'run' else value
+                with self.assertRaises(AssertionError):
+                    self.test_lookup_then_validation_then_exact_restore_then_prune_then_build()
+
+    def test_target_typical_window_fixture_imports_fail_closed(self):
+        expected = 'import TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow'
+        read_text = Path.read_text
+        for fixture in ('TargetTypicalWindow', 'TargetTypicalWindowAxioms'):
+            path = ROOT / f'TNLeanTest/{fixture}.lean'
+            source = path.read_text()
+            mutations = [
+                source + '\nimport\tOther.Module\n',
+                source + '\n  import Other.Module\n',
+                source + '\npublic import Other.Module\n',
+                source + '\nimport\nOther.Module\n',
+                source.replace(expected, expected + ' Other.Module'),
+                source.replace(expected, f'/- {expected} -/'),
+                source + '\n/- unterminated comment',
+            ]
+            for index, changed in enumerate(mutations):
+                with self.subTest(fixture=fixture, mutation=index):
+                    def fixture_source(candidate, *args, **kwargs):
+                        return changed if candidate == path else read_text(candidate, *args, **kwargs)
+                    with patch.object(Path, 'read_text', fixture_source), self.assertRaises(AssertionError):
+                        self.test_lookup_then_validation_then_exact_restore_then_prune_then_build()
 
     def test_postrestore_shell_stops_before_prune_or_build(self):
         step = next(s for s in self.steps if s.get('name') == 'Discard unvalidated cross-commit artifacts')
