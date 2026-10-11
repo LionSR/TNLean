@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import os
 import subprocess
 import sys
 import tempfile
@@ -66,23 +65,26 @@ class RunnerTest(unittest.TestCase):
         self.assertIn("timed out after 1s", result.stdout)
 
     def test_timeout_kills_the_renderer_subprocess(self) -> None:
-        pidfile = self.root / "child.pid"
+        # The renderer appends a heartbeat; once the group is killed the file
+        # stops growing. This holds even if the killed process lingers as a
+        # zombie that its new parent has not reaped yet.
+        beat = self.root / "beat"
+        renderer = ("import time\n"
+                    f"f = open({str(beat)!r}, 'a')\n"
+                    "while True:\n    f.write('x'); f.flush(); time.sleep(0.05)\n")
         self.write("test_tenkz_spawn.py",
                    "import subprocess, sys, time\n"
-                   "child = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'])\n"
-                   f"open({str(pidfile)!r}, 'w').write(str(child.pid))\n"
+                   f"subprocess.Popen([sys.executable, '-c', {renderer!r}])\n"
                    "time.sleep(60)\n")
         result = self.run_runner("--timeout", "2")
         self.assertEqual(result.returncode, 1)
-        pid = int(pidfile.read_text())
-        for _ in range(50):
-            try:
-                os.kill(pid, 0)
-            except ProcessLookupError:
-                break
-            time.sleep(0.1)
-        else:
-            self.fail("renderer subprocess outlived the timed-out test")
+        self.assertIn("timed out after 2s", result.stdout)
+        time.sleep(0.3)
+        size = beat.stat().st_size
+        self.assertGreater(size, 0)
+        time.sleep(0.6)
+        self.assertEqual(beat.stat().st_size, size,
+                         "renderer subprocess kept running after the test timed out")
 
     def test_relative_root_and_single_quoted_option(self) -> None:
         self.write("test_tenkz_render.py", WRITES.replace('"--output-dir"', "'--output-dir'"))
