@@ -137,30 +137,10 @@ independent over all pair classes. Restricting to commuting classes gives the op
 independence used in SCP10, Theorem 5.9, lines 1595–1610. This is not a ground-space claim. -/
 theorem linearIndependent_pairConjugacyClassOperator
     (ρ : Representation ℂ G E) (hρ : ρ.IsSemiRegular) :
-    LinearIndependent ℂ (pairConjugacyClassOperator ρ) := by
-  classical
-  rw [Fintype.linearIndependent_iff]
-  intro μ hμ C₀
-  let p : G × G := C₀.out
-  have hp : pairConjugacyClass G p = C₀ := Quotient.out_eq C₀
-  have hrep (C : PairConjugacyClass G) :
-      pairConjugacyClassOperator ρ C = pairConjugacyOperator ρ C.out := by
-    have hout : pairConjugacyClass G C.out = C := Quotient.out_eq C
-    exact (congrArg (pairConjugacyClassOperator ρ) hout).symm
-  have hzero (C : PairConjugacyClass G) (hC : C ≠ C₀) :
-      pairOperatorDeltaPairing ρ p (pairConjugacyClassOperator ρ C) = 0 := by
-    rw [hrep]
-    apply pairOperatorDeltaPairing_eq_zero_of_pairConjugacyClass_ne ρ hρ
-    rw [hp, show pairConjugacyClass G C.out = C from Quotient.out_eq C]
-    exact Ne.symm hC
-  have h := congrArg (pairOperatorDeltaPairing ρ p) hμ
-  simp only [map_sum, map_smul, smul_eq_mul, map_zero] at h
-  rw [Finset.sum_eq_single C₀ (fun C _ hC => by rw [hzero C hC, mul_zero])
-    (fun hC => absurd (Finset.mem_univ C₀) hC)] at h
-  have hn : pairOperatorDeltaPairing ρ p (pairConjugacyClassOperator ρ C₀) ≠ 0 := by
-    rw [← hp, pairConjugacyClassOperator_pairConjugacyClass]
-    exact pairOperatorDeltaPairing_self_ne_zero ρ hρ p
-  exact (mul_eq_zero.mp h).resolve_right hn
+    LinearIndependent ℂ (pairConjugacyClassOperator ρ) :=
+  PairConjugacyClass.linearIndependent_of_extraction _ (pairOperatorDeltaPairing ρ)
+    (fun _ _ ↦ pairOperatorDeltaPairing_eq_zero_of_pairConjugacyClass_ne ρ hρ)
+    (pairOperatorDeltaPairing_self_ne_zero ρ hρ)
 
 section Coordinates
 
