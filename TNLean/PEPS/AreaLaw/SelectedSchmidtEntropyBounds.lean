@@ -71,6 +71,6 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
     (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1)] at hbounds
   rw [abs_of_nonpos (Real.log_nonpos hz.le hz1)] at hbounds
   simp only [← hρ] at hselected
-  done
+  simpa only [η, regionalEntropy, sub_eq_add_neg, ← hselected] using! hbounds
 
 end TNLean.PEPS.AreaLaw
