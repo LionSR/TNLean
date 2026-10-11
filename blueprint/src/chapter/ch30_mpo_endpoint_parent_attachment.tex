@@ -1,9 +1,5 @@
 % Source: arXiv:2203.12563v3, REsubmission.tex, Section 5,
 % defphase, lines 1328--1331, 1584--1601, and 1690--1692.
-% This isolated leaf records canonical-parent attachments for one-site
-% injective endpoints. Production declarations passed CI at public head
-% 210e1d8300d2bf585a34511fc4eb2bf6a394ee1b (run 37424899108).
-% The repaired strict regression file still awaits a successful full pass.
 
 \section{Attaching the canonical parents}
 \label{sec:mpo_endpoint_parent_attachment}
@@ -45,14 +41,12 @@ commutation with a common matrix product operator.
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_zero_le_parent,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_one_le_parent}
     \leanok
-    For each $p\in\{0,1\}$,
-    \begin{align}
-        \mathcal S^2_{E_pA_p}\subseteq(J\otimes J)S'_p,
-        \qquad 0\leq h_p\leq k_p\leq I.
-    \end{align}
+    For each $p\in\{0,1\}$, $h_p\leq k_p$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:spt_isometric_parent_interaction,
+        thm:mpo_mixed_endpoint_projector_comparison}
     Let $V_p:\C^{D_p}\to\C^D$ include the virtual summand, so
     $P_p=V_pV_p^\dagger$ and $V_p^\dagger B^iV_p=\widehat B_p^i$.
     For every boundary matrix $X\in\MN{D_p}$, cyclicity of the trace gives
@@ -66,27 +60,40 @@ commutation with a common matrix product operator.
         I-\Pi_{\mathcal S^2_{\widehat B_p}}$. Isometric inclusion with the
     unit penalty on the unused space preserves this inequality. The identity
     $E_pA_p=J\widehat B_p$ identifies its right side with $k_p$.
-    Both operators are orthogonal projections, which gives the remaining bounds.
 \end{proof}
 
 \begin{definition}[Affine attachments]
     \label{def:mpo_arbitrary_endpoint_attachment}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointParentInteraction,
-        MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment,
-        MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_zero,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment}
+    \leanok
+    For $p\in\{0,1\}$ and $0\leq t\leq1$, set
+    \begin{align}
+        c_p(t)=h_p+t(k_p-h_p)=(1-t)h_p+tk_p.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Properties of the affine attachments]
+    \label{thm:mpo_arbitrary_endpoint_attachment_properties}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_zero,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_one,
         MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalEndpointAttachment,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_posSemidef,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_norm_le_one}
     \leanok
-    \uses{thm:mpo_arbitrary_endpoint_parent_order}
-    For $p\in\{0,1\}$ and $0\leq t\leq1$, set
-    \begin{align}
-        c_p(t)=h_p+t(k_p-h_p)=(1-t)h_p+tk_p.
-    \end{align}
-    Then $c_p(0)=h_p$, $c_p(1)=k_p$, and $c_p$ is continuous.
-    Every $c_p(t)$ is positive and has operator norm at most one.
-\end{definition}
+    \uses{def:mpo_arbitrary_endpoint_attachment,
+        thm:mpo_arbitrary_endpoint_parent_order}
+    For $p\in\{0,1\}$, $c_p(0)=h_p$, $c_p(1)=k_p$, and $c_p$ is continuous.
+    Every $c_p(t)$ with $0\leq t\leq1$ is positive and has operator norm at
+    most one.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The endpoint values and continuity are immediate from the affine formula.
+    Both $h_p$ and $k_p$ are orthogonal-projection complements, hence lie
+    between $0$ and $I$, and a convex combination of two such operators
+    again lies between $0$ and $I$.
+\end{proof}
 
 \begin{theorem}[Exact periodic ground states and uniform gap]
     \label{thm:mpo_arbitrary_endpoint_attachment_gap}
@@ -97,7 +104,10 @@ commutation with a common matrix product operator.
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_groundSpace_finrank,
         MPSTensor.MPOSymmetry.exists_uniform_arbitraryPhysicalEndpointAttachment_gap}
     \leanok
-    \uses{def:mpo_arbitrary_endpoint_attachment}
+    \uses{def:mpo_arbitrary_endpoint_attachment,
+        thm:mpo_arbitrary_endpoint_attachment_properties,
+        thm:mpo_arbitrary_uniform_path_gap,
+        thm:mpo_arbitrary_periodic_ground_line}
     Write $H_{p,N}$, $K_{p,N}$, and $C_{p,N}(t)$ for the periodic sums
     of $h_p$, $k_p$, and $c_p(t)$, respectively. For every $N\geq2$,
     \begin{align}

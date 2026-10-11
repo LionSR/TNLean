@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenKernel
+import TNLean.MPS.ParentHamiltonian.Martingale.ReducingProjectionGap
 
 /-!
 # Inner physical-sector penalties on the open mixed chain
@@ -429,24 +430,6 @@ theorem mixedEndpointOpen_inactive_energy_lower_bound
   norm_num at hpos
   linarith
 
-
-private theorem commute_projection_of_invariant
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    (S : Submodule ℂ E) [S.HasOrthogonalProjection]
-    (Q : E →ₗ[ℂ] E) (hQ : Q.IsSymmetric) (hS : S.map Q ≤ S) :
-    Commute Q S.starProjection.toLinearMap := by
-  have hmem (v : E) (hv : v ∈ S) : Q v ∈ S := hS ⟨v, hv, rfl⟩
-  apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  change Q (S.starProjection v) = S.starProjection (Q v)
-  symm
-  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero (K := S)
-  · exact hmem _ (S.starProjection_apply_mem v)
-  · intro w hw
-    rw [← map_sub, hQ]
-    exact Submodule.starProjection_inner_eq_zero (K := S) v (Q w) (hmem w hw)
-
 /-- Both local row selectors reduce the actual extended first-endpoint
 interaction. The inner selector fixes its support, while the outer selector
 acts by boundary transport. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -459,7 +442,8 @@ theorem mixedEndpointRowSector_commute_parentInteraction_zero
         (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
     fin_cases r
     · exact mixedEndpointRowSector_commute_extendedSupport_starProjection A₀ A₁ _
-    · apply commute_projection_of_invariant _ _ (mixedEndpointRowSector_isSymmetric 1)
+    · apply Submodule.commute_starProjection_of_invariant _ _
+        (mixedEndpointRowSector_isSymmetric 1)
       rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
       exact ⟨v, (mixedEndpointRowSector_one_insertedTwoSiteMap A₀ A₁ v).symm⟩
   exact (Commute.one_right _).sub_right hs
@@ -474,7 +458,8 @@ theorem mixedEndpointColumnSector_commute_parentInteraction_zero
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
     fin_cases r
-    · apply commute_projection_of_invariant _ _ (mixedEndpointColumnSector_isSymmetric 0)
+    · apply Submodule.commute_starProjection_of_invariant _ _
+        (mixedEndpointColumnSector_isSymmetric 0)
       rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
       exact ⟨v, (mixedEndpointColumnSector_zero_insertedTwoSiteMap A₀ A₁ v).symm⟩
     · exact mixedEndpointColumnSector_commute_extendedSupport_starProjection A₀ A₁ _
@@ -579,7 +564,7 @@ theorem mixedEndpointOpenActiveProjection_commute_openInteractionHamiltonianES
   have hQ : mixedEndpointOpenActiveProjection D₀ D₁ N = S.starProjection.toLinearMap :=
     mixedEndpointOpenActiveProjection_eq_starProjection hN
   rw [hQ]
-  exact (commute_projection_of_invariant S H hpos.isSymmetric hS).symm
+  exact (Submodule.commute_starProjection_of_invariant S H hpos.isSymmetric hS).symm
 
 end MPOSymmetry
 end MPSTensor

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSectors
+import TNLean.MPS.ParentHamiltonian.Martingale.ReducingProjectionGap
 
 /-!
 # Reducing physical sectors of the extended support
@@ -51,23 +52,6 @@ theorem mixedEndpointColumnSector_isSymmetric (site : Fin 2) :
     (ι := Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)
     (fun σ => (finProdFinEquiv.symm (σ site)).2)
 
-private theorem commute_starProjection_of_invariant
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    (S : Submodule ℂ E) [S.HasOrthogonalProjection]
-    (Q : E →ₗ[ℂ] E) (hQ : Q.IsSymmetric) (hS : S.map Q ≤ S) :
-    Commute Q S.starProjection.toLinearMap := by
-  have hmem (v : E) (hv : v ∈ S) : Q v ∈ S := hS ⟨v, hv, rfl⟩
-  apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  change Q (S.starProjection v) = S.starProjection (Q v)
-  symm
-  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero (K := S)
-  · exact hmem _ (S.starProjection_apply_mem v)
-  · intro w hw
-    rw [← map_sub, hQ]
-    exact Submodule.starProjection_inner_eq_zero (K := S) v (Q w) (hmem w hw)
-
 /-- The first row sector reduces the orthogonal projector onto the actual
 extended support. This follows from the explicit boundary transport,
 without assuming projector commutation.
@@ -77,7 +61,7 @@ theorem mixedEndpointRowSector_commute_extendedSupport_starProjection
     (W : Matrix (Fin (D₀ + D₁)) (Fin (D₀ + D₁)) ℂ) :
     Commute (mixedEndpointRowSector D₀ D₁ 0)
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁) W).range.starProjection.toLinearMap :=
-  commute_starProjection_of_invariant _ _ (mixedEndpointRowSector_isSymmetric 0)
+  Submodule.commute_starProjection_of_invariant _ _ (mixedEndpointRowSector_isSymmetric 0)
     (range_insertedTwoSiteMap_invariant_rowSector A₀ A₁ W)
 
 /-- The second column sector reduces the orthogonal projector onto the
@@ -88,7 +72,7 @@ theorem mixedEndpointColumnSector_commute_extendedSupport_starProjection
     (W : Matrix (Fin (D₀ + D₁)) (Fin (D₀ + D₁)) ℂ) :
     Commute (mixedEndpointColumnSector D₀ D₁ 1)
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁) W).range.starProjection.toLinearMap :=
-  commute_starProjection_of_invariant _ _ (mixedEndpointColumnSector_isSymmetric 1)
+  Submodule.commute_starProjection_of_invariant _ _ (mixedEndpointColumnSector_isSymmetric 1)
     (range_insertedTwoSiteMap_invariant_columnSector A₀ A₁ W)
 
 end MPOSymmetry

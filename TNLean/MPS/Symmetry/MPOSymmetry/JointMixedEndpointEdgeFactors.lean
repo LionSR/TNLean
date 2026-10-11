@@ -19,7 +19,13 @@ and zero-dimensional fibers.
 
 These are identities for the actual inserted coefficient map. No
 orthogonality of physical block labels, Hamiltonian identity, or spectral
-gap is assumed. Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
+gap is assumed.
+
+Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777. That passage
+defines the degenerate-case path and asserts, without proof, that its
+Hamiltonian stays well behaved along the whole path (line 1777). The
+boundary columns, their polar factors and the compression below are not in
+the source; they are this library's proof of that assertion.
 -/
 
 open scoped Matrix BigOperators Kronecker

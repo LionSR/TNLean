@@ -6430,3 +6430,13 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Projection commutation from an invariant subspace — promoted (2026-10-11)
+
+- **Pattern:** show that a symmetric operator preserving a subspace commutes
+  with its orthogonal projection, via `eq_starProjection_of_mem_of_inner_eq_zero`.
+- **Seen:** private copies in `MixedEndpointOpenSectors` and
+  `MixedEndpointReducingSectors`, and the joint reducing-sector proofs.
+- **Abstraction:** `Submodule.commute_starProjection_of_invariant` in
+  `MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean`; the private
+  copies were removed and their call sites use the public theorem.
