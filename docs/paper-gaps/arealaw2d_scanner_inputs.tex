@@ -49,9 +49,10 @@ parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
 accounting of the defect energy at the selected point, and the three
 comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
-one displayed conclusion of an input and cites its source line; no field
-asserts more than the cited statement. The constants depend only on the fixed
-exponents and on the constants of the inputs, as in the source.
+the relevant input conclusion and cites its source passage. In particular,
+the transported-measure mass equality is required only for interior
+interpolation parameters. The constants depend only on the fixed exponents
+and on the constants of the inputs, as in the source.
 
 Two harmless differences in the bookkeeping are recorded. The continuity
 input bounds the change of the shell entropies by
@@ -60,6 +61,29 @@ $n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
 marginal parameter is bounded with logarithmic power $12$, coming from the
 crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
 source writes an unspecified power $C$.
+
+\section{Parameter domain of the transported measures}
+
+The transported states of Proposition~7.4 are density matrices for
+$0<p<1$ (\path{06-transport.tex}, lines~393--400), so the combined
+Fourier--coherent measures have mass $1/2$ there. At $p=1$ an old terminal
+leaf has weight $(1-p)w_h=0$, and at $p=0$ a new terminal leaf has weight
+$pw_hq_{c\mid h}=0$. The totalized normalized derivative map contains the
+factor $\pi_j^{-1}$ and is zero when $\pi_j=0$. Its transported state and
+combined measure are then zero. Requiring mass $1/2$ for every real $p$
+would therefore exclude the literal transported measures.
+
+The mass hypotheses now have the interior domain $0<p<1$. The measures
+remain defined at every parameter; no replacement probability measure is
+assigned to an inactive leaf. The charge-defect bound and the old- and
+new-leaf energy estimates use the mass hypothesis only in the interior.
+The integral over
+$[0,1]$ uses the interior bounds and interior continuity of the charge defect,
+since the two boundary points have Lebesgue measure zero. The logarithmic
+norm remains continuous on $[0,1]$, and its matching boundary values,
+initial and final comparisons, and integrated entropy conclusions are
+unchanged. This domain correction does not construct the transported
+measures or remove the remaining scanner-input restriction.
 
 \section{Finite history construction now available}
 
@@ -81,8 +105,8 @@ The probabilities are classical history weights, not the transported
 state measures. Nonnegative costs depending on band, receiving side, and
 moved subset also satisfy the corresponding expected-cost lower bound,
 by summing the disjoint labelled events within each band and then summing
-the bands. Identifying these costs
-with the transported conditional entropies remains a separate step.
+the bands. The identification of these costs with the transported conditional
+entropies is established below.
 \footnote{The physical sampling statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}.}
 
@@ -196,8 +220,26 @@ agree with the corresponding tree evaluations for positive definite inputs.
     gives the singleton fill trees and their endpoints.}
 These tree identities do not construct the initial quantum prevector or
 identify the history-tree inputs with its transported quantum states.
-Quantum entropy-cost transport and the complete scanner data package remain
-open.
+The pointwise entropy sampling theorem specializes the actual
+nonnegative move-cost inequality to regional conditional mutual information.
+Every trial set is first intersected with the old middle; the receiving side
+and the old pure vector are kept fixed while charge choices are averaged.
+Disabled choices and empty moved sets have equal zero entropy, without
+identifying their distinct move constructors. Support compatibility derived
+from the actual geometry identifies the incidence sum with terminal split
+entropy. The pointwise inequality is then integrated against the same actual
+old transported state for all conditional
+choices, retaining the exact Fourier and coherent integrals. The resulting
+entropy gain dominates the good-history split defect with coefficient
+$[2(C_1+1)nD]^{-1}$. The history weight in this derivative expression has no
+terminal old-edge factor $1-p$. For a nonzero symmetric common prevector and
+an interior interpolation parameter, the combined integral has mass $1/2$.
+\footnote{The integrated inequality is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
+Constructing the scanner's measure-valued fields, an initial prevector,
+typical sectors and comparator budgets, and the complete scanner data package
+remain open. A direct inequality for the canonical integrals does not alone
+construct those measure-valued fields.
 
 The missing direct near--far case is now excluded from the actual geometry.
 The near side lies in the truncation set, so a designated support meeting
@@ -210,6 +252,50 @@ split rule. No good-history condition is used.
 The auxiliary factors remain outside the physical supports. The augmented
 finite-tree compatibility condition therefore holds for every old and new
 leaf of an actual charge round.
+
+The deterministic fill uses the same recursive history tree and a
+singleton conditional tree. Its move transfers exactly the scheduled
+singleton's unassigned part, and the new partition is the following
+charge's old partition. Admissibility, cross-band commutation and
+designated-support compatibility are derived from the actual scan.
+The adjacent fill and charge roots agree without reassociation of
+matrix means.
+
+The physical cardinality and logarithmic-dimension bounds are checked.
+For physical dimension $q\ge1$, the explicit cap is
+$\ell=1+(2r_0+1)^2\log q\ge1$. Fills transfer at most one site and charges
+at most $(2r_0+1)^2$ sites. A designated support has the same bound when its
+actual partition is nonconstant on that support: initial far-side persistence
+and $8Km\le L$ give a physical singleton cut crossing it, hence reduce its
+truncation radius to $r_0$. No support compatibility, good-history, row-bound,
+clearance, or time-horizon assumption is needed for this reduction.
+Unsplit supports remain unbounded. For the rounded radius
+$r_0=\lceil C_r(\log n)^2\rceil$, $C_r\ge0$, the checked eventual estimate is
+$\ell\le[1+(2C_r+3)^2\log q](\log n)^4$, with threshold chosen independently
+of the domain, scanner, labels, and histories.
+
+The quantum transport statements identify moved subsystems with embedded
+physical middle differences, so auxiliary-factor dimensions do not enter
+their cap. A designated support has this cap when its actual split-leaf
+set is nonempty; no bound is imposed on supports that never split.
+
+The actual truncated positive constraints, extended by the identities on
+both auxiliary factors, are positive contractions with their designated
+physical supports. Their replica sum is exactly the copy mean of the
+augmented truncated Hamiltonian. For both actual fill and charge rounds,
+Proposition~7.4 now gives the logarithmic-norm derivative, entropy lower
+bound and energy upper bound for $0<p<1$, and the integrated entropy
+bound for $0\le p_0\le p_1\le1$.
+\footnote{The actual specializations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph}
+    and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph}.}
+They require a supplied nonzero symmetric prevector and the smallness
+condition $a\ell\le c_0$. Only the energy bound additionally requires
+that prevector to be an eigenvector of the actual augmented truncated
+replica Hamiltonian. The initial physical prevector, typical sectors,
+comparator estimates, the scanner's measure-valued fields and the
+complete scanner data construction remain open.
 
 \section{Elimination}
 
