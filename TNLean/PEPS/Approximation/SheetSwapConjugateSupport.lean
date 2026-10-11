@@ -35,12 +35,15 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
     F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ ∈
       supportedOperators (q * q) (S : Set ι) := by
   classical
-  simp only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
-  rw [sheetSwapOp_conj_doubledHamiltonian_eq_inter R S hA]
-  have hF := supportedOperators_mono
-    (show (↑(R ∩ S) : Set ι) ⊆ (S : Set ι) from
-      Finset.coe_subset.mpr Finset.inter_subset_right)
-    (reindex_sheetSwapOp_mem_supportedOperators q (R ∩ S))
+  -- The conjugated sheet swap in paired coordinates is supported on `R ∩ S`.
+  have hF :
+      Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (sheetSwapOp q (R ∩ S)) ∈ supportedOperators (q * q) (S : Set ι) :=
+    supportedOperators_mono
+      (show (↑(R ∩ S) : Set ι) ⊆ (S : Set ι) from
+        Finset.coe_subset.mpr Finset.inter_subset_right)
+      (reindex_sheetSwapOp_mem_supportedOperators q (R ∩ S))
+  -- The doubled interaction stays supported on `S` after pairing.
   have hT :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
         (doubledHamiltonian A) ∈ supportedOperators (q * q) (S : Set ι) := by
@@ -50,6 +53,30 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
           (one_mem_supportedOperators (d := q) (S : Set ι)))
         (reindex_kronecker_mem_supportedOperators
           (one_mem_supportedOperators (d := q) (S : Set ι)) hA)
-  done
+  -- Rewrite the conjugation in paired coordinates to the restricted swap.
+  have hconj :
+      Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (sheetSwapOp q R)
+        * Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (doubledHamiltonian A)
+        * (Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (sheetSwapOp q R))ᴴ
+      = (Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (sheetSwapOp q (R ∩ S)))ᴴ
+        * Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (doubledHamiltonian A)
+        * Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (sheetSwapOp q (R ∩ S)) := by
+    simp only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
+    rw [sheetSwapOp_conj_doubledHamiltonian_eq_inter R S hA]
+  show Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (sheetSwapOp q R)
+      * Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (doubledHamiltonian A)
+      * (Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (sheetSwapOp q R))ᴴ ∈ supportedOperators (q * q) (S : Set ι)
+  rw [hconj]
+  exact mul_mem_supportedOperators
+    (mul_mem_supportedOperators (star_mem_supportedOperators hF) hT) hF
 
 end TNLean.PEPS.EncodedFrame
