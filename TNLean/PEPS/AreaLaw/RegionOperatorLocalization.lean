@@ -107,6 +107,14 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
         (heisenbergEvolution h.operator t A)
         (fun _ ↦ 2 * (C * Real.exp (v * |t| - c * l)) * ‖A‖) hε).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
+  have hτnorm : ‖heisenbergEvolution h.operator t A‖ = ‖A‖ :=
+    letI : NormedAlgebra ℚ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
+      .restrictScalars ℚ ℝ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+    (CStarRing.norm_mul_mem_unitary
+      (NormedSpace.exp (t • (Complex.I • h.operator)) * A)
+      (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem (-t) hK))).trans
+      (CStarRing.norm_mem_unitary_mul A
+        (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem t hK)))
   done
 
 end TNLean.PEPS.AreaLaw
