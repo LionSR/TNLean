@@ -1,4 +1,10 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
+import TNLean.PEPS.Approximation.OwnerMemoryTransport
 
 /-!
 # Physical tensor columns under dimension-preserving owner relabelling
@@ -17,9 +23,8 @@ namespace TNLean.PEPS.PairEffect
 open scoped TensorProduct
 
 /-- Transporting a vector across an equality of the right tensor factor commutes
-with tensoring on the left by a fixed vector.  The left factor `W` is left as a
-plain type so that it is inferred directly from the supplied vector, rather than
-by inverting `HSpace.carrier`. -/
+with tensoring on the left by a fixed vector. The left factor needs only its
+complex module structure. -/
 private theorem tmul_heq {W : Type} [AddCommGroup W] [Module ℂ W] {A B : HSpace}
     (hAB : A = B) (v : W) {a : A} {b : B} (h : HEq a b) :
     HEq (v ⊗ₜ[ℂ] a) (v ⊗ₜ[ℂ] b) := by
@@ -93,5 +98,23 @@ private theorem familyPhysicalListBasis_owner_column_heq
       rw [List.map_cons, familyPhysicalListBasis_cons_apply, familyPhysicalListBasis_cons_apply]
       exact tmul_heq (familyPhysicalListBasis_owner_mem_eq f δ ps)
         ((EuclideanSpace.basisFun (Fin (δ (f p))) ℂ) (y (f p))) ih
+
+/-- The canonical owner isometry carries each prescribed physical column to
+its column on the relabelled register list. Repeated owners carry the same
+prescribed label, and the empty list has scalar column one.
+Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
+`04-compression.tex`, lines 137–151 and 565–588. -/
+theorem mapOwnerIso_familyPhysicalListBasis_apply_heq
+    {P Q : Type} (f : P → Q) (δ : Q → ℕ) (ps : List P)
+    (y : (q : Q) → Fin (δ q)) :
+    HEq
+      (Layout.mapOwnerIso f
+        (familyPhysicalLayout (fun p ↦ δ (f p)) ps)
+        (familyPhysicalListBasis (fun p ↦ δ (f p)) ps
+          (fun j ↦ y (f (ps.get j)))))
+      (familyPhysicalListBasis δ (ps.map f)
+        (fun j ↦ y ((ps.map f).get j))) := by
+  exact (Layout.mapOwnerIso_apply_heq f _ _).trans
+    (familyPhysicalListBasis_owner_column_heq f δ ps y)
 
 end TNLean.PEPS.PairEffect
