@@ -104,6 +104,33 @@
     \end{align}
 \end{proof}
 
+% The comparison-budget statement and proof are still under construction.
+\begin{theorem}[Additive comparison costs at fixed bootstrap scales]
+    \label{thm:area_law_bootstrap_comparison_budget}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_budget_bound}
+    \uses{def:area_law_bootstrap_parameters}
+    Fix $e_*<e_0<1$, where $e_*=2\cdot10^{-6}$, and use the parameters of
+    (\ref{eq:area_law_bootstrap_parameters}) and
+    (\ref{eq:area_law_bootstrap_separation}). Set $\eta=1-\ell$ and
+    \begin{align}
+        L_n & =\lfloor n^\eta\rfloor,\qquad
+        m_n=\lfloor n^\mu\rfloor,\qquad
+        K_n=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,\qquad
+        D_n=\lceil n^\kappa\rceil,\qquad a_n=\frac4{K_n}.
+    \end{align}
+    There is an integer $N\ge1$, depending only on $e_0$, such that
+    $K_n\ge1$ and $a_n>0$ for every integer $n\ge N$ and, simultaneously,
+    \begin{align}
+        nL_n^e+nD_n+n^{3/5}+\frac{h(\tau)}{a_n}+1
+        \le\left(5+\frac{\log2}{4}\right)n^{1+\eta e}
+    \end{align}
+    for every $e_*<e\le e_0$ and every real $\tau$, where
+    $h(\tau)=-\tau\log|\tau|-(1-\tau)\log|1-\tau|$ with the convention
+    $0\log0=0$. The threshold is chosen before $e$ and $\tau$.
+    This is a numerical estimate for the additive terms following the
+    comparison in the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw}.
+\end{theorem}
+
 \begin{theorem}[Uniform bounds after finitely many exponent improvements]
     \label{thm:area_law_finite_exponent_improvement}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement}
