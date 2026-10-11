@@ -30,7 +30,7 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
 * `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation`: Proposition 4.5, truncation and
   ground-state part.
 * `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span`: Proposition 4.5,
-  uniqueness of the truncated ground vector.
+  truncation and ground-state part together with uniqueness of the truncated ground vector.
 * `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget`,
   `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log`: Proposition 4.5, crossing count and
   cut budget.
@@ -207,11 +207,12 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
     hS₀
 
-/-- **Uniqueness of the truncated ground vector on a lattice domain** (Proposition 4.5,
-`prop:truncation`, `03-quasilocal.tex`, lines 426–427: "its ground vector `\tilde\Omega` is unique").
-With the constant `C₁` of `exists_latticeFiniteSetTruncation`, the truncated sum `H'` has a
-unit gapped ground vector `Ω₀` with ground energy `e ∈ [0, ε_n]` and gap `g/2` whose eigenspace
-at `e` is the line spanned by `Ω₀`, and `‖Ω₀ - e^{iθ} Ω‖ ≤ 2 √(ε_n / g)` for some phase. -/
+/-- **Truncation near a finite set on a lattice domain, with a unique ground vector**
+(Proposition 4.5, `prop:truncation`, first part, `03-quasilocal.tex`, lines 405–433 and
+457–505; lines 426–427: "its ground vector `\tilde\Omega` is unique"). With one constant `C₁`
+and one truncation, every conclusion of `exists_latticeFiniteSetTruncation` holds, and in
+addition the eigenspace of the truncated sum `H'` at its ground energy `e` is the line spanned by
+its ground vector `Ω₀`. -/
 theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C₀ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
     ∃ C₁ : ℝ, 0 < C₁ ∧
@@ -226,19 +227,30 @@ theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C�
         let r₀ := ⌈C₁ * Real.log n ^ 2⌉₊
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
-        ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), Matrix.IsGappedGroundState Ht e Ω₀ (g / 2) ∧
-          0 ≤ e ∧ e ≤ ε ∧
+        (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
+          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+        (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
+          truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
+        ‖Ht - ∑ i, k i‖ ≤ ε ∧
+        ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+          Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
+          (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
+            (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
           Module.End.eigenspace (Matrix.toEuclideanLin Ht) (e : ℂ) = Submodule.span ℂ {Ω₀} ∧
-          ∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g) := by
+          (∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
+          Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))
+              (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
+            Real.sqrt (2 * ε / g) := by
   obtain ⟨C₁, hC₁, htr⟩ := exists_latticeFiniteSetTruncation R hJ hΔ hC₀
   refine ⟨C₁, hC₁, ?_⟩
   intro q _ Λ h a ha E₀ Ω hgs n hn S₀ hS₀
-  obtain ⟨-, -, -, e, Ω₀, hΩ₀, hHΩ₀, he₀, heε, hgap, hθ, -⟩ :=
+  obtain ⟨hsupp, hpos, herr, e, Ω₀, hΩ₀, hHΩ₀, he₀, heε, hgap, hθ, htd⟩ :=
     htr Λ h a ha E₀ Ω hgs n hn S₀ hS₀
   have hgs₀ := Matrix.isGappedGroundState_iff.mpr ⟨hΩ₀, hHΩ₀, hgap⟩
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J / 2 :=
     half_pos (div_pos hΔ (positiveNormalization_pos 1 _ J))
-  exact ⟨e, Ω₀, hgs₀, he₀, heε, hgs₀.eigenspace_eq_span hg, hθ⟩
+  exact ⟨hsupp, hpos, herr, e, Ω₀, hΩ₀, hHΩ₀, he₀, heε, hgap, hgs₀.eigenspace_eq_span hg, hθ,
+    htd⟩
 
 /-- **Crossing count and cut budget on a lattice domain** (Proposition 4.5, `prop:truncation`,
 `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`, `03-quasilocal.tex`,
