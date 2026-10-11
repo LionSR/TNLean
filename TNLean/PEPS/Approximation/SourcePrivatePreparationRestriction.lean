@@ -50,6 +50,6 @@ theorem restrict_sourcePrivatePreparation_none_eval_heq_id {a b : Layout P}
     w.allResidualSourceLayout (restrict_allResidualSourceLayout_isNone w)
     (ψ.prepare.mapOwner (affectedOwner (fun _ : P => true)))
     (by simp [Word.sources_mapOwner, ψ.sources_prepare])
-  exact hframe.trans (by simpa only [hselector] using hprepare)
+  exact hframe.trans (hselector ▸ hprepare)
 
 end TNLean.PEPS.PairEffect.SourceCircuit
