@@ -149,6 +149,7 @@ import TNLean.PEPS.Approximation.PartialSourceDensity
 import TNLean.PEPS.Approximation.PartialSourceEvaluation
 import TNLean.PEPS.Approximation.PartialSourceInventory
 import TNLean.PEPS.Approximation.PartialSourcePreparation
+import TNLean.PEPS.Approximation.PartialSourceWordEvaluation
 import TNLean.PEPS.Approximation.PartitionOwnerNaturality
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyChainComposition
@@ -253,6 +254,7 @@ import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourcePreparationVectors
 import TNLean.PEPS.Approximation.SourcePrivatePreparation
+import TNLean.PEPS.Approximation.SourcePrivatePreparationEvaluation
 import TNLean.PEPS.Approximation.SourcePrivatePreparationRestriction
 import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
