@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Canonical initial sector assignment — promoted (2026-10-09)
+
+- **Pattern:** name the same unique assignment of the eight working sectors
+  to actual initial identifiers in a theorem statement and its proof.
+- **Seen:** twenty-one bindings in theorem statements and proofs:
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorColors.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorRuns.lean`: four bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`: six bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRayCount.lean`: three bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorCycle.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRays.lean`: four bindings.
+- **Abstraction:** `initialSectorAssignment` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean` is exactly the
+  choice from `exists_unique_initialRegion_sector_assignment`, with the
+  original parameters and cell/mark hypotheses.
+- **Refactor:** the sector-color, run-assignment and no-active-sector
+  statements and proofs, together with the sector-cycle, active-ray,
+  ray-count and both initial-component declarations, use the same definition
+  for their local assignment. The existing
+  `Classical.choose_spec` arguments are unchanged.
+- **Notes:** this names an existing assignment and introduces no new
+  geometric premise, identifier family or quotient of separated runs.
+
 ### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
 
 - **Pattern:** unfold charge-ball membership, identify the induced domain graph,
@@ -3850,6 +3873,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Connected retained pieces along a fan run — candidate (2026-10-09)
+
+- **Pattern:** use the connected-component paths to join connected retained
+  triangles whose intersections survive along each retained edge.
+- **Seen:** the open-radius and closed-half-radius run proofs in
+  `TNLean/PEPS/AreaLaw/Geometry/FanRunConnectedness.lean`.
+- **Abstraction:** both already use Mathlib's
+  `IsConnected.iUnion_of_reflTransGen`; a further application would justify
+  naming the common passage from component paths to intersection chains.
+- **Notes:** two occurrences in one file do not meet the promotion threshold.
+  Nonemptiness of each piece and of the component are derived from the fan.
+
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)
 
 - **Pattern:** turn membership in two center-to-endpoint segments into a common
@@ -6410,6 +6445,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The two old extraction proofs and the private single-radial
   wrapper are removed. Existing callers select the required component of
   the shared theorem. No new tactic or geometric hypothesis is introduced.
+
+### Initial-sector cut-set transport — candidate (2026-10-09)
+
+- **Pattern:** Identify the center of a translated fan and equate its
+  color-change radial union with the radial union at changes of the canonical
+  initial identifier.
+- **Seen:** The open-square and closed-half-square component correspondences
+  in `PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`.
+- **Abstraction:** Both use the canonical sector assignment and the existing
+  adjacent-color equivalence. The common connected-partition proof is already
+  shared by a private arbitrary-subset lemma in `FanRunComponents.lean`.
+- **Notes:** The cut-set calculation occurs twice in one file, below the
+  promotion threshold. If another consumer repeats it, prefer a lemma for
+  the equality of the two radial unions.
 
 ### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
 
