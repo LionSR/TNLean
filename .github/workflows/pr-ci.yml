@@ -562,6 +562,14 @@ jobs:
             TNLean.PEPS.Approximation.PartyProductScalar \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Check successive party restrictions before the full build
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.Approximation.AbsorbedRestriction \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
         run: |
@@ -750,6 +758,13 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PartyProductAxioms.lean
+
+      - name: Check successive party restriction axioms strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/AbsorbedRestrictionAxioms.lean
 
       - name: Check physical-column composition axioms strictly
         run: >

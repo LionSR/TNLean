@@ -72,3 +72,60 @@ Concatenation of register lists is denoted by juxtaposition.
 These identities concern the register selections used in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 233--267 and 351--381.
+
+
+\begin{theorem}[Successive restrictions to nested party sets]
+    \label{thm:peps_nested_party_restrictions}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_restrict_heq_of_implies,
+        TNLean.PEPS.PairEffect.Word.restrict_restrict_eval_heq_of_implies}
+    \uses{thm:peps_party_restriction}
+    Let $P$ be any set of parties and let $W:\ell\to m$ be a
+    source-free composition. Let $A,B\subseteq P$ with $B\subseteq A$.
+    Under the canonical identifications of the selected register lists,
+    restricting first to $A$ and then to $B$ gives the same composition
+    as restricting directly to $B$:
+    \begin{align}
+        (W|_A)|_B=W|_B.
+        \label{eq:peps_nested_party_restrictions}
+    \end{align}
+    In particular, their linear operators coincide. Local maps may
+    vanish, and a named scalar operation retains its party even when
+    its input and output register lists are empty.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_party_restriction}
+    A register retained by $B$ is also retained by $A$, so its
+    position and space are identical after either selection.
+    Induct on the composition. Identities and composition respect
+    this equality of selected lists. A local map at $p\in B$
+    survives both restrictions unchanged, since $p\in A$; a local
+    map at $p\notin B$ is removed in either construction. For a
+    register exchange, both selections retain exactly the same
+    exchanged registers, so both restricted exchanges agree.
+    Adjoining an unchanged register also commutes with the
+    two selections. This proves
+    (\ref{eq:peps_nested_party_restrictions}) as an identity of
+    compositions and hence of their operators.
+\end{proof}
+
+\begin{theorem}[A singleton restriction after excluding another party]
+    \label{thm:peps_singleton_after_excluded_party}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_withoutParty_atParty_eval_heq}
+    \uses{thm:peps_nested_party_restrictions}
+    Let $p,q\in P$ be distinct and let $W$ be any source-free
+    composition. Under the canonical register identifications,
+    \begin{align}
+        (W|_{P\setminus\{p\}})|_{\{q\}}=W|_{\{q\}}
+        \label{eq:peps_singleton_after_excluded_party}
+    \end{align}
+    as linear operators. No contraction or nonvanishing hypothesis
+    is required.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_nested_party_restrictions}
+    Since $q\ne p$, the set $\{q\}$ is contained in
+    $P\setminus\{p\}$. Apply
+    (\ref{eq:peps_nested_party_restrictions}).
+\end{proof}

@@ -6066,6 +6066,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   congruence after the memory types have been identified.
 
 
+- **Further use (2026-10-11):** `AbsorbedRestriction.lean` identifies the
+  input and output lists of actual restricted words before comparing their
+  constructors and evaluations. Its short equality-elimination helpers are
+  defining equations of these dependent constructions, under the same
+  decision above. The word-level identity cannot be obtained from the
+  existing evaluation-only transport lemmas. The corpus scanner was run;
+  unrelated finite-sum patterns are outside this change.
+
 ### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
 
 - **Pattern:** Identify the vector-independent slot layout with an actual source
