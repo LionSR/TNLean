@@ -58,6 +58,15 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
   change F * K * Fᴴ - K = ∑ e ∈ boundary,
     (F * Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)) * Fᴴ -
       Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e))) at hsum
+  have hnorm (A : Matrix (Configuration L q) (Configuration L q) ℂ) :
+      ‖F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
+        Matrix.reindex p p (doubledHamiltonian A)‖ ≤ 4 * ‖A‖ := by
+    simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
+      ← Matrix.submatrix_mul_equiv (e₂ := p.symm), ← Matrix.conjTranspose_submatrix] using!
+      (Matrix.l2_opNorm_reindex_equiv p
+        (EncodedFrame.sheetSwapOp q R * doubledHamiltonian A *
+          (EncodedFrame.sheetSwapOp q R)ᴴ - doubledHamiltonian A)).trans_le
+        (EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le R A)
   done
 
 end TNLean.PEPS.Approximation
