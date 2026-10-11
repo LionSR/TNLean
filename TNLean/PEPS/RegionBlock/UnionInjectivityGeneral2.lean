@@ -550,27 +550,15 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
           · have h2notred : f.1.1.2 ∉ g.red := fun h2red =>
               hred (Or.inr ⟨fun h1red =>
                 (Finset.disjoint_left.mp g.red_disjoint_blue) h1red h1blue, h2red⟩)
-            have h2compl : f.1.1.2 ∈ g.complement := by
-              have hcover : f.1.1.2 ∈ g.red ∪ g.blue ∪ g.complement := by
-                rw [g.cover_univ]; exact Finset.mem_univ _
-              rcases Finset.mem_union.mp hcover with hrb | hc
-              · rcases Finset.mem_union.mp hrb with hr | hb
-                · exact absurd hr h2notred
-                · exact absurd hb h2notblue
-              · exact hc
+            have h2compl : f.1.1.2 ∈ g.complement :=
+              g.mem_complement_of_notMem h2notred h2notblue
             exact Or.inr ⟨fun h1compl =>
               (Finset.disjoint_left.mp g.blue_disjoint_complement) h1blue h1compl, h2compl⟩
           · have h1notred : f.1.1.1 ∉ g.red := fun h1red =>
               hred (Or.inl ⟨h1red, fun h2red =>
                 (Finset.disjoint_left.mp g.red_disjoint_blue) h2red h2blue⟩)
-            have h1compl : f.1.1.1 ∈ g.complement := by
-              have hcover : f.1.1.1 ∈ g.red ∪ g.blue ∪ g.complement := by
-                rw [g.cover_univ]; exact Finset.mem_univ _
-              rcases Finset.mem_union.mp hcover with hrb | hc
-              · rcases Finset.mem_union.mp hrb with hr | hb
-                · exact absurd hr h1notred
-                · exact absurd hb h1notblue
-              · exact hc
+            have h1compl : f.1.1.1 ∈ g.complement :=
+              g.mem_complement_of_notMem h1notred h1notblue
             exact Or.inl ⟨h1compl, fun h2compl =>
               (Finset.disjoint_left.mp g.blue_disjoint_complement) h2blue h2compl⟩
         rw [hagree_compl ζ hζ.2 f.1 hcompl]

@@ -188,18 +188,7 @@ theorem graphOrientedRegionCoordinateMatrix_open
   simp only [graphOrientedOpenBoundaryFactor_coordinates Q hQ U L hL,
     graphOrientedOpenInternalFactor_coordinates Q U L hL]
   simp_rw [graphOrientedOpenBondCoordinates_eq_sum_prod]
-  funext β
-  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
-  symm
-  simp only [Finset.mul_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro q _
-  rw [Fintype.prod_sum]
-  simp only [Finset.mul_sum, Finset.sum_mul, Finset.prod_mul_distrib]
-  apply Finset.sum_congr rfl
-  intro a _
-  ring
+  exact sum_prod_sum_mul_eq_sum_prod_smul _ _ _ _
 
 /-- Arbitrary entangled boundary coefficient vectors transform explicitly,
 without a fixed-label or product-boundary restriction. -/

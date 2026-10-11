@@ -87,4 +87,24 @@ theorem mixedPhysicalProductMap_sum_prod {A : Type*} [Fintype A]
       rw [Fintype.prod_sum, Fintype.prod_sum]
     _ = _ := by rw [mul_assoc]; rfl
 
+omit [DecidableEq B] in
+/-- After a mixed product map has expanded each boundary factor of a coherent sum as a
+combination `∑ z, c b z * x b a z`, the coherent sum is the combination of the coherent
+sums with fixed boundary labels, weighted by the product of the boundary coefficients.
+Source: SCP10, Section 7, lines 2977–3019. -/
+theorem sum_prod_sum_mul_eq_sum_prod_smul {A Z T : Type*} [Fintype A] [Fintype Z]
+    (w : A → ℂ) (c : B → Z → ℂ) (x : B → A → Z → Y → ℂ) (y : A → (B → Y) × T → ℂ) :
+    (fun τ : (B → Y) × T => ∑ a, w a * (∏ b, ∑ z, c b z * x b a z (τ.1 b)) * y a τ) =
+      ∑ ζ : B → Z, (∏ b, c b (ζ b)) •
+        fun τ : (B → Y) × T => ∑ a, w a * (∏ b, x b a (ζ b) (τ.1 b)) * y a τ := by
+  classical
+  funext τ
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  rw [Fintype.prod_sum]
+  simp only [Finset.mul_sum, Finset.sum_mul, Finset.prod_mul_distrib]
+  refine Finset.sum_congr rfl fun ζ _ => ?_
+  ring
+
 end TNLean.PEPS
