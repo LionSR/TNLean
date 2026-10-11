@@ -1,0 +1,223 @@
+\section{Coordinate variation and final-state marginals}
+\label{sec:peps_regularized_patch_stationarity}
+
+Retain the regions, identity extensions, and ordered product of
+Definition~\ref{def:peps_regularized_patch_objective}.
+Write $K_j=(x_j+bI_{X_j})^{-a_j/2}$, so $L_j=\widehat{K_j}_{X_j}$.
+The coordinate variation below is the unstripped first variation in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L134-L149}{proof of the regularized patch estimate}.
+Its marginals are those of the same final normalized vector defined in
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L91-L99}{the variational problem}.
+
+\begin{definition}[One-coordinate variation and insertion]
+    \label{def:peps_patch_coordinate_insertion}
+    \lean{
+        TNLean.PEPS.regularizedPatchCoordinateUpdate,
+        TNLean.PEPS.regularizedPatchInsertion,
+        TNLean.PEPS.regularizedPatchInsertion_apply,
+        TNLean.PEPS.regularizedPatchInsertion_self,
+        TNLean.PEPS.regularizedPatchUnitaryCurve
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_objective}
+    Fix an index $j$ and a unitary $U$ on $\mathcal H_{X_j}$.
+    Define $x^{j,U}$ by replacing $x_j$ with $Ux_jU^*$ and leaving every
+    other coordinate unchanged. Put
+    \begin{align}
+        P_j^+           & =L_{m-1}\cdots L_{j+1},            &
+        P_j^-           & =L_{j-1}\cdots L_0,\notag            \\
+        \mathcal I_j(K) & =P_j^+\widehat K_{X_j}P_j^-\Omega.
+        \label{eq:peps_coordinate_insertion}
+    \end{align}
+    Empty products are identities. The map $\mathcal I_j$ is complex linear,
+    and $\mathcal I_j(K_j)=\Psi(x)$.
+    For $B^*=-B$ and real $t$, the exponential $U(t)=e^{tB}$ is unitary.
+    Equal regions at different indices still have independent coordinates.
+\end{definition}
+
+\begin{theorem}[Feasibility and covariance]
+    \label{thm:peps_patch_coordinate_covariance}
+    \lean{
+        TNLean.PEPS.regularizedPatchCoordinateUpdate_mem,
+        TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow,
+        TNLean.PEPS.regularizedPatchOutput_coordinateUpdate
+    }
+    \leanok
+    \uses{def:peps_patch_coordinate_insertion}
+    For $x\in\mathcal D$, $b>0$, arbitrary real weights, and a unitary $U$
+    on $\mathcal H_{X_j}$, one has $x^{j,U}\in\mathcal D$ and
+    \begin{align}
+        (Ux_jU^*+bI)^{-a_j/2} & =UK_jU^*,
+        \label{eq:peps_coordinate_covariance_rpow}      \\
+        \Psi(x^{j,U})         & =\mathcal I_j(UK_jU^*).
+        \label{eq:peps_coordinate_covariance_apply}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Unitary conjugation preserves positivity and trace. It fixes the identity,
+    so $Ux_jU^*+bI=U(x_j+bI)U^*$. Unitary covariance of the real power gives
+    (\ref{eq:peps_coordinate_covariance_rpow}). Every factor except the one at
+    index $j$ is unchanged, giving~(\ref{eq:peps_coordinate_covariance_apply}).
+    The argument also applies to singular $x_j$ because $x_j+bI$ is positive
+    definite on the full regional space.
+\end{proof}
+
+\begin{theorem}[Ordered first variation]
+    \label{thm:peps_patch_first_variation}
+    \lean{
+        TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate,
+        TNLean.PEPS.regularizedPatchFirstVariation_eq_zero
+    }
+    \leanok
+    \uses{def:peps_patch_coordinate_insertion}
+    Let $x\in\mathcal D$, $b>0$, and $B^*=-B$ on $\mathcal H_{X_j}$.
+    For arbitrary real weights, the filtered output satisfies
+    \begin{align}
+        \left.\frac{d}{dt}\Psi(x^{j,e^{tB}})\right|_{t=0}
+         & =\mathcal I_j(BK_j-K_jB).
+        \label{eq:peps_coordinate_derivative}
+    \end{align}
+    If $F(x)\le F(y)$ for every $y\in\mathcal D$, then
+    \begin{align}
+        \operatorname{Re}\langle\Psi(x),\mathcal I_j(BK_j-K_jB)\rangle=0.
+        \label{eq:peps_coordinate_first_variation}
+    \end{align}
+
+    Set $D_j=\widehat{BK_j-K_jB}_{X_j}$ and
+    $\Delta_j=P_j^+D_jP_j^-\Omega$. Every line in the following diagram
+    carries the full space $\mathcal H_V$.
+    % Formula: (Delta_j)_sigma = sum_{alpha,beta,gamma}
+    % (P_j^+)_{sigma,alpha} (D_j)_{alpha,beta}
+    % (P_j^-)_{beta,gamma} Omega_gamma.
+    % Source: 03-patches.tex lines 134--149, adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+    % Ink-to-index map: every wire is a global configuration index.
+    % D_j is the identity extension of the regional commutator; P_j^+ and
+    % P_j^- are global ordered products, not operators on X_j.
+    % Contractions: alpha, beta, gamma, in that left-to-right order.
+    % Open leg: sigma on the left. Boundary signature: phys:w.
+    % Action begins at Omega on the right: P_j^-, then D_j, then P_j^+.
+    % No tensor-factor decomposition, nesting, or commutation is assumed.
+    \begin{center}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=7, bonds=none]
+            \tn[at=(1,1), name=coordinateouter, skin=box,
+                ports={180:physical, 0:physical}]{P_j^+}
+            \tn[at=(1,3), name=coordinateinsert, skin=box,
+                ports={180:physical, 0:physical}]{D_j}
+            \tn[at=(1,5), name=coordinateinner, skin=box,
+                ports={180:physical, 0:physical}]{P_j^-}
+            \tn[at=(1,7), name=coordinatestate, skin=box,
+                ports={180:physical}]{\Omega}
+            \tnwire[name=coordinateoutput]{open w}{coordinateouter.180}
+            \tnwire[name=coordinatealpha]{coordinateouter.0}{coordinateinsert.180}
+            \tnwire[name=coordinatebeta]{coordinateinsert.0}{coordinateinner.180}
+            \tnwire[name=coordinategamma]{coordinateinner.0}{coordinatestate.180}
+            \tnmark[form=label, label pos=n]{on coordinateoutput 0.5}{$\sigma$}
+            \tnmark[form=label, label pos=n]{on coordinatealpha 0.5}{$\alpha$}
+            \tnmark[form=label, label pos=n]{on coordinatebeta 0.5}{$\beta$}
+            \tnmark[form=label, label pos=n]{on coordinategamma 0.5}{$\gamma$}
+        \end{tenkz}
+    \end{center}
+    Starting at $\Omega$ on the right, $P_j^-$ acts first, $D_j$ second,
+    and $P_j^+$ last. The two outer products need not be supported on $X_j$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_patch_coordinate_covariance}
+    Differentiate $e^{tB}K_je^{-tB}$ at zero to obtain $BK_j-K_jB$.
+    Apply the continuous linear map $\mathcal I_j$ to obtain
+    (\ref{eq:peps_coordinate_derivative}). The entire real curve is feasible.
+    Thus $t\mapsto\|\Psi(x^{j,e^{tB}})\|^2$ has a local minimum at zero,
+    and its derivative there is
+    $2\operatorname{Re}\langle\Psi(x),\mathcal I_j(BK_j-K_jB)\rangle$.
+    Fermat's theorem gives~(\ref{eq:peps_coordinate_first_variation}).
+\end{proof}
+
+\begin{definition}[Canonical global coordinates and marginals]
+    \label{def:peps_patch_canonical_marginal}
+    \lean{
+        TNLean.PEPS.dependentGlobalConfigEquiv,
+        TNLean.PEPS.dependentGlobalConfigIsometry,
+        TNLean.PEPS.dependentGlobalConfigIsometry_apply,
+        TNLean.PEPS.normalizedRegularizedPatchMarginal
+    }
+    \leanok
+    \uses{def:peps_regularized_patch_minimum}
+    Identify configurations indexed by the full region $V$ with global
+    configurations by forgetting the redundant membership condition. This
+    bijection induces a unitary coordinate identification $J$.
+    For the same final vector $\phi=\widehat\Psi(x)$ and every region
+    $X\subseteq V$, define
+    \begin{align}
+        \rho_X=\operatorname{Tr}_{V\setminus X}
+        \ketbra{J\phi}{J\phi}.
+        \label{eq:peps_canonical_marginal}
+    \end{align}
+    At a feasible minimizer with nonnegative weights,
+    $\phi=N^{-1}M(x)\Omega$. No intermediate filtered vector enters
+    (\ref{eq:peps_canonical_marginal}).
+\end{definition}
+
+\begin{theorem}[Regional expectation and density properties]
+    \label{thm:peps_patch_marginal_expectation}
+    \lean{
+        TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure,
+        TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef,
+        TNLean.PEPS.trace_normalizedRegularizedPatchMarginal,
+        TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace
+    }
+    \leanok
+    \uses{def:peps_patch_canonical_marginal}
+    For every global vector $\xi$, region $X$, and arbitrary complex
+    operator $K$ on $\mathcal H_X$,
+    \begin{align}
+        \langle\xi,\widehat K_X\xi\rangle
+         & =\tr\left(\operatorname{Tr}_{V\setminus X}
+        \ketbra{J\xi}{J\xi}\,K\right).
+        \label{eq:peps_complex_expectation}
+    \end{align}
+    In particular, $\langle\phi,\widehat K_X\phi\rangle=\tr(\rho_XK)$.
+    Each $\rho_X$ is positive semidefinite. If $a_j\ge0$, $b>0$,
+    $\|\Omega\|=1$, and $x\in\mathcal D$, then $\tr\rho_X=1$.
+    These assertions include the empty region.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regularized_patch_minimum}
+    In regional coordinates, $\widehat K_X=K\otimes I$ and the reduced
+    matrix is the partial trace of $\ketbra{J\xi}{J\xi}$ over the second
+    factor. The partial-trace identity gives
+    $\tr(\operatorname{Tr}_{V\setminus X}(P)K)=\tr(P(K\otimes I))$.
+    For $P=\ketbra{J\xi}{J\xi}$ this is
+    (\ref{eq:peps_complex_expectation}); no real part or Hermiticity
+    assumption is needed. Partial trace preserves positivity and trace.
+    Finally $J$ preserves the norm and $\|\phi\|=1$, so $\tr\rho_X=1$.
+\end{proof}
+
+\begin{theorem}[Relabelling the final-state marginal]
+    \label{thm:peps_patch_basis_relabelling}
+    \lean{TNLean.PEPS.reindex_normalizedRegularizedPatchMarginal}
+    \leanok
+    \uses{def:peps_patch_canonical_marginal,
+        thm:peps_regional_basis_relabelling}
+    For the sitewise basis relabellings of
+    Theorem~\ref{thm:peps_regional_basis_relabelling}, the marginal
+    $\rho_X$ of the same final vector $\phi=\widehat\Psi(x)$ satisfies
+    \begin{align}
+        E_X\rho_XE_X^*
+         & =\operatorname{Tr}_{V\setminus X}
+        \ketbra{E_V\phi}{E_V\phi}.
+        \label{eq:peps_patch_marginal_relabelling}
+    \end{align}
+    This identity holds for every tuple $x$ and every choice of weights
+    and regulator.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_patch_canonical_marginal,
+        thm:peps_regional_basis_relabelling}
+    Apply~(\ref{eq:peps_marginal_basis_relabelling}) to $\xi=\phi$,
+    using the canonical identification $J$ in
+    Definition~\ref{def:peps_patch_canonical_marginal}.
+\end{proof}
