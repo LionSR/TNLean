@@ -1,0 +1,150 @@
+\section{Physical coordinates of the two local outputs}
+\label{sec:peps_local_output_coordinates}
+
+We use the actual physical and discarded register lists in the regional
+decomposition of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+% Source: 04-compression.tex, lines 409--480, at
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+All coordinate bases in this
+section are finite orthonormal bases. The private dimensions are unrestricted.
+
+\begin{definition}[Bases adapted to the party partition]
+    \label{def:peps_partition_output_bases}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionBasis}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionAppendBasis}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionOutputIso}
+    \lean{TNLean.PEPS.PairEffect.Layout.regionalOutputIso}
+    \leanok
+    \uses{def:peps_party_partition}
+    Write the output as a physical register list followed by a discarded
+    register list. Partition each list into the affected and exterior owners.
+    Choose orthonormal bases $(a_x)$ and $(e_y)$ of the two physical memories,
+    and $(d_i)$ and $(f_j)$ of the two discarded memories. Transport their
+    tensor products by the canonical register permutations. This gives
+    a basis with coordinates $((x,y),(i,j))$ in physical/discard order,
+    and a basis with coordinates $((x,i),(y,j))$ in affected/exterior order.
+
+    On the affected memory, the output isometry sends
+    $a_x\otimes d_i$ to $e_x\otimes d_i$, where $(e_x)$ is the standard
+    coordinate basis. The exterior isometry is defined in the same way.
+    If a register list is identified with its physical/discard concatenation,
+    these maps include the canonical identification of equal lists.
+\end{definition}
+
+\begin{theorem}[Regrouping physical and discarded coordinates]
+    \label{thm:peps_partition_output_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_tmul_heq}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_partitionBasis_tmul}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionBasis_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionOutputIso_basis}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionOutputIso_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionBasis_coordinates_of_eq}
+    \lean{TNLean.PEPS.PairEffect.Word.repr_effectMap}
+    \leanok
+    \uses{def:peps_partition_output_bases}
+    For every output vector $z$, its coordinate at $((x,y),(i,j))$
+    in physical/discard order is its coordinate at $((x,i),(y,j))$
+    after the affected/exterior partition. The affected output isometry
+    preserves the pair $(x,i)$ of coordinates, and similarly on the exterior.
+    For $v\in\C^X\otimes D$, taking the partial inner product with $e_x$
+    and then the $d_i$ coordinate gives exactly the $(x,i)$ coordinate of $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_partition_output_bases}
+    On an elementary basis tensor the two orders are
+    $(a_x\otimes e_y)\otimes(d_i\otimes f_j)$ and
+    $(a_x\otimes d_i)\otimes(e_y\otimes f_j)$.
+    The canonical partition sends the first to the second. Taking inner
+    products with an arbitrary $z$ gives the coordinate identity because
+    the partition is isometric. Partial inner products give the stated
+    coordinate projection first on elementary tensors and then by linearity.
+\end{proof}
+
+\begin{theorem}[Output coordinates under owner relabelling]
+    \label{thm:peps_owner_output_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_tensorBasis_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_tensorBasis_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_partitionBasis_coordinates}
+    \leanok
+    \uses{thm:peps_partition_output_coordinates}
+    Relabel owners by any map, or successively by two maps. Transport the
+    physical and discarded bases by the corresponding memory isometries.
+    Every physical/discard coordinate of the original vector equals the
+    same coordinate of the relabelled vector. In particular, partitioning
+    after the two relabellings gives the coordinate order
+    $((x,i),(y,j))$ described above. No injectivity of the owner maps is needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_partition_output_coordinates}
+    Owner relabelling preserves the ordered register spaces and commutes
+    with concatenation. Its isometry therefore sends each transported
+    physical/discard basis tensor to the original tensor. Preserve inner
+    products, apply this twice, and then apply the partition identity.
+\end{proof}
+
+\begin{theorem}[Coordinates of a local Schmidt expansion]
+    \label{thm:peps_local_schmidt_output_coordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.partition_coordinates_eq_separated}
+    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_coordinates_eq_separated}
+    \leanok
+    \uses{thm:peps_owner_output_coordinates}
+    Let $V,W$ be the two actual local output maps, let $F,G$ be input
+    isometries, and suppose that the affected/exterior partition of an
+    output vector $z_k$ is
+    \begin{align}
+        \sum_t\sqrt{\tau_t}\,
+        VF e_{(k,t)}\otimes WG e_t.
+        \label{eq:peps_local_schmidt_output_vector}
+    \end{align}
+    In the partition-adapted physical/discard bases, the coordinate of $z_k$
+    at $((x,y),(i,j))$ is
+    \begin{align}
+        \sum_t\sqrt{\tau_t}\,
+        \langle d_i,C_{x,V}F e_{(k,t)}\rangle
+        \langle f_j,C_{y,W}G e_t\rangle,
+        \label{eq:peps_local_schmidt_output_coordinate}
+    \end{align}
+    where $C_{x,V}$ and $C_{y,W}$ are the physical-coordinate projections
+    of the two local outputs. The same identity holds for the original
+    output before either of the two owner relabellings, in the transported
+    bases. This identity does not require contractivity or normalization
+    in addition to the displayed vector equality.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_partition_output_coordinates,thm:peps_owner_output_coordinates}
+    Substitute (\ref{eq:peps_local_schmidt_output_vector}) into the partition
+    coordinate identity. Linearity gives the sum over $t$, and the tensor
+    inner product gives the product of the two discarded coordinates.
+    The partial-inner-product identity identifies these coordinates with
+    $C_{x,V}$ and $C_{y,W}$. Transport the bases back through the two owner maps.
+\end{proof}
+
+\begin{theorem}[Original physical dimensions after the two owner maps]
+    \label{thm:peps_affected_original_dimensions}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrict_mapOwner}
+    \lean{TNLean.PEPS.PairEffect.Layout.restrictMapOwnerIso}
+    \lean{TNLean.PEPS.PairEffect.Layout.affectedOutputIso}
+    \lean{TNLean.PEPS.PairEffect.affectedFamilyPhysicalBasis}
+    \lean{TNLean.PEPS.PairEffect.finrank_affectedFamilyPhysicalLayout}
+    \leanok
+    \uses{thm:peps_family_regional_dimensions}
+    Let the original parties form a finite list without repetitions,
+    containing every party. Party $p$ has physical space $\C^{d_p}$.
+    Relabel affected parties individually, identify all exterior parties,
+    and then map owners to the two sides. The selected physical memory
+    is canonically isometric to the original memory on that side.
+    For an affected set $A$, its actual orthonormal coordinates are indexed
+    by assignments $s_p\in\{0,\ldots,d_p-1\}$ for $p\in A$, and its
+    dimension is $\prod_{p\in A}d_p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_family_regional_dimensions}
+    Selecting after relabelling is the same as relabelling the registers
+    selected by the composite owner test. For the two stated owner maps,
+    that test is exactly membership in $A$. Transport the original regional
+    tensor basis through these isometries and count its assignments.
+\end{proof}

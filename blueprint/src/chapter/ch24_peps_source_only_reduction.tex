@@ -1,0 +1,475 @@
+\section{Source-only reduction of distributed densities}
+\label{sec:peps_source_only_reduction}
+
+We prove the source-only reduction from
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+% Source: 04-compression.tex, lines 199--229, at
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+All registers are retained
+until the final partial trace. The Hilbert spaces have arbitrary finite
+dimensions.
+
+
+\begin{definition}[Private product inputs and exact local operations]
+    \label{def:peps_private_product_input}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.mem_owners_wholePartyLayout}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.nodup_owners_wholePartyLayout}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.ofAllParties}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.owners_wholePartyLayout}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.wholePartyLayout}
+    \lean{TNLean.PEPS.PairEffect.ProductInput}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.eval_prepare}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.eval_prepare_smul}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.isAllowed_prepare}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.mapOwner}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.mapOwnerIso_vector}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.norm_vector}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.ofParties}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.partitionIso_symm_mapOwner_vector}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.partitionIso_symm_vector}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.partitionIso_vector}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.prepare}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.prepareIsometry}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.restrict}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.sources_prepare}
+    \lean{TNLean.PEPS.PairEffect.ProductInput.vector}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_party_monomial}
+    For an ordered register list with spaces $H_1,\ldots,H_n$, choose
+    unit vectors $x_j\in H_j$ and put $x=x_1\otimes\cdots\otimes x_n$.
+    The empty tensor is the scalar $1$. Registers may instead be grouped
+    into one entire private memory for each party, so no factorization
+    inside a party's memory is required. Local preparation is the
+    isometry $z\mapsto zx$ from $\C$ to the input memory.
+
+    Restricting to a set of owners selects the corresponding factors.
+    The canonical owner partition sends $x$ to $x_A\otimes x_{A^c}$;
+    each factor has norm one. Changing owner names leaves these vectors
+    unchanged under the canonical memory identification.
+\end{definition}
+
+\begin{definition}[Prepared sources and retained spectators]
+    \label{def:peps_source_replacement_operations}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsAllowed}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.eval}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_eval_le_one}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.isPreparation_prepStack}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.castLayouts}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_frameList_tmul}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_ofLocalWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exchangeBlocks}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.frameList}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_frameList}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_ofLocalWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofLocalWord}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.norm_vector}
+    \lean{TNLean.PEPS.PairEffect.Word.IsPreparation}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_isPreparation_cast}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_isPreparation_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_localPrepare}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_localPrepare}
+    \lean{TNLean.PEPS.PairEffect.Word.localPrepare}
+    \lean{TNLean.PEPS.PairEffect.Word.output_of_isPreparation}
+    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement}
+    \lean{TNLean.PEPS.PairEffect.isPreparation_prepGate}
+    \lean{TNLean.PEPS.PairEffect.isPreparation_prepWord}
+    \leanok
+    \uses{def:peps_private_product_input,def:peps_party_monomial}
+    A source-only operation is composed from local contractions,
+    register permutations, and normalized pair-source preparations.
+    A local vector $x$ is prepared by $y\mapsto x\otimes y$.
+    Preparing an ordered inventory of pair vectors gives the tensor
+    product of those vectors followed by the unchanged input.
+    Its norm is one when every pair vector has norm one.
+
+    For an operation $T$ and an additional register memory $R$, retaining
+    $R$ means applying $I_R\otimes T$. Exchanging two register blocks
+    sends $r\otimes s\otimes y$ to $s\otimes r\otimes y$.
+    Equal register lists are identified by the canonical memory isometry.
+    These operations preserve the indicated vectors and introduce no
+    additional nonprivate gate. An allowed original monomial expansion
+    can consequently be replaced by its actual prepared-source expansion.
+\end{definition}
+
+\begin{definition}[Original distributed circuits]
+    \label{def:peps_original_circuit}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.gateLocations}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isAllowed_produce}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_produce_iff}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateLocations}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_produce}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.produce}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.produceLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_party_monomial}
+    An original circuit is an ordered composition of contractions on
+    owned registers. A private operation acts at one party. Every
+    nonprivate operation has a specified participating set and an
+    expansion $G_j=\sum_\xi c_{j,\xi}M_{j,\xi}$ into allowed monomials.
+    Registers outside the participating set are spectators.
+    Let $N$ denote the number of nonprivate occurrences. Fix $r$ and $S$
+    so that each original monomial has at most $r$ pair effects and
+    $\sum_\xi|c_{j,\xi}|\le S$ at every nonprivate occurrence.
+\end{definition}
+
+\begin{theorem}[Common auxiliary vector and operator error]
+    \label{thm:peps_circuit_effect_error}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.referenceEval_apply}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_auxiliaryVector}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_replacement_sub_reference_le}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isAllowed_replacement}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_produce}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.expandedGateCount_produce}
+    \leanok
+    \uses{def:peps_original_circuit,cor:peps_pair_effects_rescaling}
+    Let $T$ be the operator of an original circuit and let $\delta>0$.
+    Choose $m=\lceil(rS/\delta)^2\rceil+1$, using the original expansions.
+    Replacing each nonprivate operation by its rescaled source-only
+    expansion gives a contraction $\widetilde T$ and a normalized
+    auxiliary vector $\Gamma$ such that
+    \begin{align}
+        \|\widetilde T-|\Gamma\rangle\otimes T\|\le 2\delta N.
+        \label{eq:peps_circuit_effect_error}
+    \end{align}
+    Each previously added auxiliary register is a spectator for all
+    subsequent original operations.
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.auxiliary}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.auxiliaryVector}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.replacement}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_frameList}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_exchangeBlocks}
+    \lean{TNLean.PEPS.PairEffect.appendIso_assoc_symm_heq}
+    \lean{TNLean.PEPS.PairEffect.castOutputMap}
+    \lean{TNLean.PEPS.PairEffect.castOutputMap_sub}
+    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_native}
+    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform}
+    \lean{TNLean.PEPS.PairEffect.gateMemoryMap}
+    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_sub}
+    \lean{TNLean.PEPS.PairEffect.gate_auxiliary_layout}
+    \lean{TNLean.PEPS.PairEffect.norm_castOutputMap}
+    \lean{TNLean.PEPS.PairEffect.norm_gateMemoryMap_le}
+    \lean{TNLean.PEPS.PairEffect.norm_retainMap_le}
+    \lean{TNLean.PEPS.PairEffect.replacementCoefficients}
+    \lean{TNLean.PEPS.PairEffect.retainMap}
+    \lean{TNLean.PEPS.PairEffect.retainMap_sub}
+    \lean{TNLean.PEPS.PairEffect.retainMap_tmul}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_referenceEval_le_one}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.referenceEval}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exchangeHead_tmul}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_castLayouts_sub}
+    \lean{TNLean.PEPS.PairEffect.appendIso_singleton_symm_tmul}
+    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_identity}
+    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_tmul}
+    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_tmul}
+    \lean{TNLean.PEPS.PairEffect.preparation_mapOwner_heq}
+    \uses{cor:peps_pair_effects_rescaling}
+    Induct on the composition of the original operations. The ideal
+    replacement of each nonprivate gate is its original operator
+    tensored with that gate's fixed normalized auxiliary vector.
+    Their tensor product is $\Gamma$. Private contractions and
+    permutations contribute no error. In a composition, insert the
+    ideal intermediate operator and use contractivity to obtain
+    $e(T_2T_1)\le e(T_1)+e(T_2)$. Each replaced nonprivate occurrence
+    contributes at most $2\delta$, proving
+    (\ref{eq:peps_circuit_effect_error}).
+\end{proof}
+
+\begin{theorem}[Preservation of participating parties]
+    \label{thm:peps_replacement_participants}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_ne_one}
+    \leanok
+    \uses{def:peps_original_circuit}
+    The nonprivate occurrences of the original circuit correspond
+    bijectively to the expanded gates of the replacement. Corresponding
+    occurrences have exactly the same participating parties. Auxiliary
+    preparations and register permutations introduce no additional
+    expanded gate occurrences.
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.replacementLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.castLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exchangeBlocksLocationsEquivEmpty}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.false_of_gateLocation_ofLocalWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.frameListLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofLocalWordLocationsEquivEmpty}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_castLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_frameListLocationsEquiv}
+    Induct on the circuit. An original nonprivate occurrence contributes
+    one replacement gate with the original participating set. Composition
+    joins the two occurrence sets, while spectator registers leave them
+    unchanged. Private operations and permutations contribute empty sets.
+\end{proof}
+
+\begin{theorem}[Physical density error]
+    \label{thm:peps_source_only_density_error}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
+    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_eq_of_pos}
+    \leanok
+    \uses{thm:peps_circuit_effect_error}
+    Fix a decomposition of the original output memory into physical and
+    discarded factors. For an input $x$ with $\|x\|\le1$, let $\rho$ be
+    the original physical density and let $\widetilde\rho$ be the
+    replacement density after also discarding its auxiliary registers.
+    Then
+    \begin{align}
+        \|\widetilde\rho-\rho\|_1\le4\delta N.
+        \label{eq:peps_source_only_density_error}
+    \end{align}
+    If $N\le M$ and $\varepsilon>0$, choose
+    $\delta=\varepsilon/(8\max\{1,M\})$. The density error is at most
+    $\varepsilon/2$. For $M>0$ this is precisely
+    $\delta=\varepsilon/(8M)$. The estimate applies in particular to a
+    tensor product of normalized vectors, one in each party's entire
+    private memory.
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{Matrix.appendAuxiliaryVector}
+    \lean{Matrix.norm_appendAuxiliaryVector}
+    \lean{Matrix.partialTraceRight_appendAuxiliaryVector}
+    \lean{Matrix.rectangularTraceNorm_appendAuxiliaryVector_error_le_two}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.originalPhysicalDensity}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.replacementPhysicalDensity}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_sources_prepStack}
+    \lean{TNLean.PEPS.PairEffect.auxiliaryCoordinateIso}
+    \lean{TNLean.PEPS.PairEffect.auxiliaryCoordinateIso_tmul}
+    \lean{TNLean.PEPS.PairEffect.auxiliaryCoordinates}
+    \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout}
+    \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout_append_tmul}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_mem_append}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_sources_comp}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_sources_prepGate}
+    \lean{TNLean.PEPS.PairEffect.finiteDimensional_sources_prepWord}
+    \lean{TNLean.PEPS.PairEffect.norm_extendedPhysicalReadout_le_one}
+    \lean{TNLean.PEPS.PairEffect.rectangularTraceNorm_extendedPhysicalReadout_error_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half}
+    \lean{TNLean.PEPS.PairEffect.sourceGateBudget}
+    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_pos}
+    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_spec}
+    \uses{thm:peps_circuit_effect_error}
+    Put $u=\widetilde T x$ and $v=\Gamma\otimes Tx$, expressed in the
+    common physical and discarded coordinates. Both norms are at most
+    one, and (\ref{eq:peps_circuit_effect_error}) gives
+    $\|u-v\|\le2\delta N$. For the final partial trace $\operatorname{Tr}_E$,
+    \begin{align}
+        \|\operatorname{Tr}_E(|u\rangle\langle u|-|v\rangle\langle v|)\|_1
+        \le(\|u\|+\|v\|)\|u-v\|\le4\delta N.
+        \label{eq:peps_source_only_pure_error}
+    \end{align}
+    Discarding the normalized factor $\Gamma$ leaves the original
+    physical density unchanged. This proves
+    (\ref{eq:peps_source_only_density_error}); substituting the chosen
+    budget and $N\le M$ gives the final bound. When $M=0$, one has $N=0$
+    and the error is zero.
+\end{proof}
+
+\begin{definition}[Labelled physical outputs]
+    \label{def:peps_labelled_physical_output}
+    \lean{TNLean.PEPS.PairEffect.physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.physicalOutputLayout}
+    \lean{TNLean.PEPS.PairEffect.labelledPhysicalReadout}
+    \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout}
+    \lean{TNLean.PEPS.PairEffect.restrictedPhysicalBasis}
+    \leanok
+    \uses{def:peps_party_layout}
+    Let every party have physical space $\C^d$. List the parties once
+    and append their actual private registers after these physical
+    registers. The physical coordinates are assignments
+    $\sigma:P\to\{0,\ldots,d-1\}$. For a region $A\subseteq P$, retain
+    $\sigma|_A$ and discard both $\sigma|_{P\setminus A}$ and the
+    private registers. Tensor products of the standard physical bases
+    and an orthonormal basis of the actual private memory give isometric
+    coordinates for this decomposition.
+\end{definition}
+
+\begin{theorem}[Regional physical coordinates]
+    \label{thm:peps_regional_physical_coordinates}
+    \lean{TNLean.PEPS.PairEffect.regionalPhysicalReadout_apply}
+    \lean{TNLean.PEPS.PairEffect.card_regionalPhysicalIndex}
+    \lean{TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace}
+    \lean{TNLean.PEPS.PairEffect.restrict_physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.length_filter_region}
+    \lean{TNLean.PEPS.PairEffect.finrank_physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.finrank_restrict_physicalLayout}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
+    \leanok
+    \uses{def:peps_labelled_physical_output,thm:peps_source_only_density_error}
+    Regional coordinates are obtained by splitting the same full
+    assignment $\sigma$ into its restrictions to $A$ and its complement.
+    Selecting the physical registers owned by $A$ gives precisely the
+    filtered party ordering, whose tensor memory has dimension $d^{|A|}$.
+    There are exactly $d^{|A|}$ regional physical coordinates. For the
+    original whole-party product input, the source-only replacement
+    has regional physical density error at most $\varepsilon/2$ with
+    the budget of Theorem~\ref{thm:peps_source_only_density_error}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv}
+    \lean{TNLean.PEPS.PairEffect.labelledPhysicalBasis}
+    \lean{TNLean.PEPS.PairEffect.norm_regionalPhysicalReadout_le_one}
+    \lean{TNLean.PEPS.PairEffect.physicalLayout_owners}
+    \lean{TNLean.PEPS.PairEffect.physicalListBasis}
+    \lean{TNLean.PEPS.PairEffect.regionalPhysicalIndexEquiv}
+    \uses{thm:peps_source_only_density_error}
+    Reindex the tensor basis by
+    $\sigma\mapsto(\sigma|_A,\sigma|_{P\setminus A})$. An assignment on
+    $A$ has $d$ independent choices at each of its $|A|$ parties, giving
+    $d^{|A|}$ coordinates. Selecting owned registers filters the original
+    complete ordering without repetitions, so exactly $|A|$ physical
+    factors remain; their tensor basis has the same cardinality.
+    The constructed coordinate map is an
+    isometry, so Theorem~\ref{thm:peps_source_only_density_error}
+    applies to the literal regional partial trace.
+\end{proof}
+
+\begin{theorem}[Regional dimensions without padding]
+    \label{thm:peps_family_regional_dimensions}
+    \lean{TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout}
+    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout}
+    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout_le}
+    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout_apply}
+    \lean{TNLean.PEPS.PairEffect.card_familyRegionalPhysicalIndex}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
+    \leanok
+    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
+    The actual physical memory selected by the original party set $A$
+    has dimension
+    \begin{align}
+        \dim\mathcal H_A=\prod_{p\in A}d_p\le D^{|A|}
+        \label{eq:peps_family_regional_dimension}
+    \end{align}
+    whenever $d_p\le D$ on $A$. The regional readout splits the same
+    original configuration into its restrictions to $A$ and its
+    complement, and discards the actual private memory. With this
+    readout, the original whole-party product input and the gate budget
+    of Theorem~\ref{thm:peps_source_only_density_error} give replacement
+    density error at most $\varepsilon/2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout}
+    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_const}
+    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_owners}
+    \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
+    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv}
+    \lean{TNLean.PEPS.PairEffect.norm_familyRegionalPhysicalReadout_le_one}
+    \uses{thm:peps_source_only_density_error}
+    Selecting owned physical registers filters the original party
+    ordering. Its tensor basis is indexed by one choice of $d_p$ values
+    at each $p\in A$, so its cardinality is $\prod_{p\in A}d_p$.
+    Multiplying the local bounds gives
+    (\ref{eq:peps_family_regional_dimension}). Reindexing the full tensor
+    basis by the two restrictions of the original configuration gives
+    the regional isometry. Apply
+    Theorem~\ref{thm:peps_source_only_density_error} to this actual
+    partial trace.
+\end{proof}
+
+\begin{theorem}[Resources of the constructed source-only circuit]
+    \label{thm:peps_source_only_resources}
+    \lean{TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients_le}
+    \lean{TNLean.PEPS.PairEffect.card_replacementLabels_le}
+    \lean{TNLean.PEPS.PairEffect.stackLength_le}
+    \lean{TNLean.PEPS.PairEffect.card_replacementLabels_stackLength_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_replacement}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_eq_choose}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount_eq_choose}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_replacement_le}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement_le}
+    \leanok
+    \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants}
+    Suppose each original nonprivate gate has at most $K$ monomials,
+    absolute coefficient sum at most $S$, and at most $r$ pair effects
+    per monomial. Suppose also that each gate involves at most $b$
+    parties and each party participates in at most $b$ nonprivate
+    occurrences over the entire circuit.
+
+    With the stack length chosen above, each replacement gate has at
+    most $Km^r$ monomials and absolute coefficient sum at most $S$.
+    Moreover,
+    \begin{align}
+        m    & \le(rS/\delta)^2+2,                 \\
+        Km^r & \le K\bigl((rS/\delta)^2+2\bigr)^r.
+        \label{eq:peps_replacement_resource_bound}
+    \end{align}
+    After combining sources on equal party pairs, a gate with $q$
+    participating parties has exactly $\binom q2$ common source slots,
+    including one-dimensional padding. Thus the entire replacement
+    has at most $N\binom b2$ source positions. Each party participates
+    in exactly as many expanded gate occurrences as originally, so
+    its bound $b$ over the entire circuit is preserved. At each actual
+    chronological occurrence, the branch cardinality and coefficient sum
+    satisfy the same bounds. The participation count is the number of
+    incident nonprivate occurrences, with repeated uses counted separately.
+\end{theorem}
+
+\begin{proof}\leanok
+    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform_resources}
+    \lean{TNLean.PEPS.PairEffect.length_wordList_le}
+    \lean{TNLean.PEPS.PairEffect.sum_norm_coeff_wordList}
+    \lean{TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsMonomialBounded}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsExpansionBounded}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_castLayouts}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_exchangeBlocks}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_frameList}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_ofLocalWord}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_nonprivateLocations}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.natCard_nonprivateLocations}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateLocationsFintype}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationLocationsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_slots}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_le_choose}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_eq_sum_choose}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_le}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsExpansionBounded.at_gate}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount_eq_card_incidentGates}
+    \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
+    Expanding the permutation averages preserves the absolute sum of
+    the original coefficients. The common rescaling has modulus
+    $(1+\delta)^{-1}\le1$, so it cannot increase that sum. The monomial
+    count is at most $Km^r$ by the gate expansion. The ceiling estimate
+    gives (\ref{eq:peps_replacement_resource_bound}). Inducting on the
+    original chronology carries both bounds through composition and
+    retained spectators.
+
+    Each prepared gate has one common slot for every unordered pair of
+    distinct participating parties. Summing $\binom q2\le\binom b2$
+    over its $N$ occurrences bounds all source positions. The occurrence
+    correspondence of Theorem~\ref{thm:peps_replacement_participants}
+    restricts to a bijection on the occurrences involving any fixed
+    party, proving exact preservation of its count.
+\end{proof}
+
+% These statements establish the effect-elimination part of the proof of
+% Theorem 5.2. They do not establish the subsequent sampling construction,
+% uniform polynomial bounds, or the full distributed density-compression theorem.

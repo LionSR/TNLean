@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
+import TNLean.PEPS.Approximation.WordEvaluationTransport
 
 /-!
 # Selective preparation of source registers
@@ -184,22 +185,13 @@ private theorem prepareSlots_cons_heq (r : PairSource P) (R : SourceInventory P)
     (prepareSlots_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
       (fun i ↦ η i.succ) ℓ x).symm
 
-/-- Layout casts preserve evaluation on identified input vectors. -/
-private theorem eval_castLayouts_apply_heq {a b a' b' : Layout P}
-    (w : Word a b) (hi : a = a') (ho : b = b')
-    {x : Mem a'} {y : Mem a} (hxy : HEq x y) :
-    HEq ((w.castLayouts hi ho).eval x) (w.eval y) := by
-  cases hi
-  cases ho
-  exact heq_of_eq (congrArg w.eval (eq_of_heq hxy))
-
 /-- Free-slot preparation identifies the selected inventory preparation. -/
 private theorem prepareFreeSlots_heq_prepare (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (free : Fin R.length → Bool)
     (ζ : ∀ i, U i ⊗[ℂ] V i) (ℓ : Layout P) (x : Mem ℓ) :
     HEq ((prepareFreeSlots R U V free ζ ℓ).eval x)
       (((selectedSources R U V free ζ).prepare ℓ).eval x) := by
-  exact eval_castLayouts_apply_heq _ _ _ HEq.rfl
+  exact Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl
 
 /-- A free head is prepared before the other selected source registers. -/
 private theorem prepareFreeSlots_cons_true_heq (r : PairSource P)
@@ -257,7 +249,7 @@ theorem eval_prepareSelected_prepareFreeSlots (R : SourceInventory P)
     apply eq_of_heq
     simp only [prepareSelected]
     split <;> rename_i h
-    · refine (eval_castLayouts_apply_heq
+    · refine (Word.eval_castLayouts_apply_heq
         (Word.frame ⟨r.left, U 0⟩ (Word.frame ⟨r.right, V 0⟩
           (prepareSelected R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
             (fun i ↦ free i.succ) (fun i h ↦ fixed i.succ h) ℓ))) _ _
@@ -272,7 +264,7 @@ theorem eval_prepareSelected_prepareFreeSlots (R : SourceInventory P)
       rw [← comp_apply (prepareSelected R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
         (fun i ↦ free i.succ) (fun i h ↦ fixed i.succ h) ℓ).eval, ih]
       rfl
-    · refine (eval_castLayouts_apply_heq
+    · refine (Word.eval_castLayouts_apply_heq
         (Word.comp
           (prepareSelected R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
             (fun i ↦ free i.succ) (fun i h ↦ fixed i.succ h) ℓ)

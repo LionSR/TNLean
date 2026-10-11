@@ -6472,6 +6472,68 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
 
+### Empty occurrence sets in circuit replacement — candidate (2026-10-08)
+
+- **Pattern:** In a circuit induction, an identity, a private map, or a register
+  permutation has an empty expanded-gate occurrence type. The occurrence
+  equivalence is reflexive and participant preservation follows by eliminating
+  the impossible occurrence.
+- **Seen:** Three cases of
+  `EffectCircuit.exists_replacementLocationsEquiv` in
+  `PEPS/Approximation/EffectCircuitLocations.lean`.
+- **Abstraction:** No new helper is needed within one induction. Before this
+  argument is repeated in a second file, use an equivalence between empty types
+  and a shared statement that participant preservation is vacuous on an empty
+  domain.
+- **Scan:** The focused approximation scan also found short equality-transport
+  proofs in `EffectCircuitReplacement` and `EffectCircuitError`. These are
+  defining equations of distinct dependent maps; they follow the existing
+  congruence-after-identifying-layout-memories decision above. Tensor calculations
+  reuse `clm_ext_tmul`, `rTensor_tmul`, and the existing preparation identities.
+
+### Circuit expansion bounds under retained memories — candidate (2026-10-08)
+
+- **Pattern:** Transport a property of the actual gate expansions through equal
+  layout identifications, retained spectator registers, and source-free local
+  words.
+- **Seen:** `SourceCircuit.isExpansionBounded_castLayouts`,
+  `isExpansionBounded_frameList`, and `isExpansionBounded_ofLocalWord` in
+  `PEPS/Approximation/EffectReplacementExpansion.lean`.
+- **Abstraction:** One predicate records both scalar coefficient and monomial
+  counts, so the original-circuit induction proves both bounds together rather
+  than repeating the chronology for each estimate. Actual source-position counts
+  instead reuse the participant-preserving occurrence equivalence.
+- **Notes:** Short equality elimination continues the earlier congruence decision.
+  A fourth independent property of all gate expansions should be derived from a
+  common occurrence-wise description before adding another structural induction.
+
+
+### Evaluation under equal register lists — promoted (2026-10-08)
+
+- **Pattern:** Apply a word whose input and output register lists have been
+  identified to a vector identified with the original input.
+- **Reuse:** `Word.eval_castLayouts_apply_heq` in
+  `TNLean/PEPS/Approximation/WordEvaluationTransport.lean` is the existing checked
+  public proof from `SourceRegisterPermutation`. Its lower import position makes
+  it available to `SourceSlotMaps`, `SelectiveSourcePreparation`,
+  `SourceRegisterPermutation`, and `EffectCircuitPreparation`.
+- **Refactor:** Remove the three identical private copies and move the public
+  proof unchanged. Every call now uses the same declaration. Source inventories,
+  prepared vectors, public hypotheses, and conclusions are unchanged.
+- **Scouting:** `Word.eval_castLayouts_heq` already identifies the two maps;
+  the value statement additionally identifies their dependent input vectors.
+  Its proof uses core `congrArg`, `eq_of_heq`, and `heq_of_eq`; no custom tactic
+  or new generic congruence theorem is introduced.
+
+### Physical projection coordinates — promoted (2026-10-08)
+
+- **Pattern:** Taking a physical basis component and then a discarded coordinate
+  is the same as taking the tensor-product coordinate.
+- **Reuse:** The existing proof `Word.repr_effectMap` in
+  `PhysicalOutputContraction.lean` is public. Its original physical-output matrix
+  consumer and the new `SeparatedOutputCoordinates` consumer use that one proof.
+  The proposed duplicate in the latter module is removed.
+
 ### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
 
 - **Pattern:** Project a physical region injectively to its ambient lattice subset,

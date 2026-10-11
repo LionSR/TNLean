@@ -85,6 +85,17 @@ exact-preparation consumers therefore avoid normal-gauge construction as well.
 assumption is needed merely to define the vector. See the
 [consumer audit](audits/2026-10-05_inhomogeneous_preparation_imports.md).
 
+## Corrected source coordinates and vectors
+
+`PEPS.Approximation.SourceCircuitSourceOrder` owns the paired Schmidt
+coordinates at the selected original source occurrences, alongside their
+coordinate dimensions. These finite index sets are independent of the Gaussian
+source law. `SourceInputPartition` owns the joint vector of the selected sources
+and the equality showing that changing unselected positions leaves this vector
+unchanged. The corrected endpoint frames and corrected Schmidt input identities
+use these elementary constructions; they do not require the Gaussian physical
+error estimate merely to identify their coordinates or source vectors.
+
 ## PEPS tensor-memory identifications
 
 `PEPS.Approximation.UnitMemoryCoordinates` identifies an empty final tensor

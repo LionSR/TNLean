@@ -1,0 +1,531 @@
+\section{Corrected source inputs and actual local outputs}
+\label{sec:peps_corrected_input_frames}
+
+We construct the local input isometries and output expansion used in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+% Source: 04-compression.tex, lines 409--434, at
+% adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+Source occurrences retain their chronological positions, even when their
+endpoint parties coincide with those of another occurrence.
+A register list $L$ has memory $\mathcal H_L$; concatenation is identified
+with tensor product by the canonical isometry
+$\alpha_{L,M}\colon\mathcal H_{L+M}\to\mathcal H_L\otimes\mathcal H_M$.
+For a division of the parties into two classes, write $\Pi_L$ for the
+isometry gathering the two classes in their inherited orders.
+Relabelling parties changes neither the order nor the Hilbert spaces.
+
+\begin{theorem}[Identifying equal register lists]
+    \label{thm:peps_register_identifications}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts_apply_heq}
+    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_apply_heq}
+    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_append_tmul}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_source_apply_heq}
+    \leanok
+    Identifying two equal register lists leaves their vectors and the evaluation
+    of a composition unchanged. Such identifications commute with source
+    preparation and with the concatenation isometries $\alpha_{L,M}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Identify the equal lists. Each assertion is then an equality of the same
+    vector or linear map.
+\end{proof}
+
+\begin{definition}[Ordered source positions]
+    \label{def:peps_ordered_source_positions}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareSourcePositions}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotReference}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_eq_layout}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_append}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSources_eq_map}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_filter}
+    \leanok
+    For a family of pair sources $r_i$ and a finite ordered list $J$ of positions,
+    let $L_J$ be the concatenation of their two-register lists, and let
+    $P_J(\eta)$ prepare the vectors $\eta_i$ in that order.
+    Then $L_{J+K}=L_J+L_K$. Selecting positions by a predicate retains their
+    inherited order and their literal endpoint parties and spaces. The same
+    layout is obtained by assigning zero vectors to these fixed spaces.
+\end{definition}
+
+\begin{theorem}[Preparation in an ordered list]
+    \label{thm:peps_ordered_source_preparation}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_heq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_append}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_filter}
+    \leanok
+    Preparation indexed by positions equals preparation of the corresponding
+    ordered source records. Under the concatenation identifications,
+    $P_{J+K}(\eta)=P_J(\eta)P_K(\eta)$. Restricting $J$ to a selected set of
+    positions agrees with preparing precisely those selected sources.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_ordered_source_positions,thm:peps_register_identifications}
+    Induct on the list of positions. The induction step prepends the actual
+    source vector and identifies the unchanged spectator lists.
+\end{proof}
+
+\begin{theorem}[Uniform permutation of source registers]
+    \label{thm:peps_reorder_source_positions}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_reorderSourcePositions}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_reorderFreeSlots}
+    \leanok
+    If $J$ and $J'$ are permutations of the same list of source positions, fix
+    a spectator register list. There is an allowed composition $U$ containing
+    no sources such that, for every source-vector family,
+    \begin{align}
+        U P_J(\eta) & = P_{J'}(\eta).
+        \label{eq:peps_frames_reorder}
+    \end{align}
+    In particular, one may place any selected subset of free positions before
+    its complement, preserving the order within each subset. The same $U$
+    works for every vector family; no normalization is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_ordered_source_preparation}
+    Induct on a decomposition of the permutation into adjacent exchanges.
+    Use the identity for the empty list, retain a common first pair as
+    spectators of the inductively constructed composition, exchange adjacent two-register
+    blocks, and compose successive permutations. Apply this result to the
+    selected list followed by its complement.
+\end{proof}
+
+\begin{definition}[The joint vector of selected sources]
+    \label{def:peps_free_source_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.freeSourceVector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.crossingSourceVector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_freeSlotLayout}
+    \leanok
+    For selected positions $J$, let $\eta_J\in\mathcal H_{L_J}$ be their ordered
+    tensor product, with the scalar $1$ for the empty list. Its memory is fixed
+    by the endpoint spaces, independently of the vectors. Each register is
+    exactly one of the two registers at a selected original position.
+    For a party division, define the crossing vector by relabelling the
+    selected registers by their side and applying $\Pi_{L_J}$ to $\eta_J$.
+\end{definition}
+
+\begin{theorem}[Preparation and normalization of source vectors]
+    \label{thm:peps_free_source_norm}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareFreeSlots_eq_appendIso_symm}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.norm_freeSourceVector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.norm_crossingSourceVector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.freeSourceVector_congr}
+    \leanok
+    For every spectator vector $x$,
+    \begin{align}
+        P_J(\eta)x & = \alpha_{L_J,M}^{-1}(\eta_J\otimes x).
+        \label{eq:peps_frames_prepare}
+    \end{align}
+    The joint vector depends only on the selected vectors. If each selected
+    vector has norm one, both $\eta_J$ and its crossing vector have norm one,
+    including when $J$ is empty.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_free_source_vector}
+    Preparation gives the ordered tensor product by induction. The norm of
+    an elementary tensor is the product of the norms; the register
+    identifications and the party partition are isometries. Equality on the
+    selected positions gives equality of the ordered source records.
+\end{proof}
+
+\begin{definition}[Corrected and crossing blocks]
+    \label{def:peps_corrected_crossing_blocks}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSlotMask}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.crossingSlotMask}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceLayout}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.crossingSourceLayout}
+    \leanok
+    Let $S$ be a set of original source occurrences of a circuit $W$, and let
+    $A(S)$ consist of all their endpoint parties. Among the surviving partial
+    source positions, call a position corrected if its original occurrence is
+    in $S$, and crossing if its two endpoints lie on opposite sides of $A(S)$.
+    Write $C$ and $T$ for the corrected and crossing register lists, respectively,
+    with all lists in the inherited original order. Their Boolean-labelled
+    versions record only the side of each register.
+\end{definition}
+
+\begin{theorem}[The free positions are corrected or crossing]
+    \label{thm:peps_corrected_crossing_masks}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSlotMask_endpoints}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_eq_or}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.crossingSlotMask_eq_false_of_corrected}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_masks}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceLayout_owners}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_correctedSourceLayout_append}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedMask_meets}
+    \leanok
+    Both endpoints of every corrected position lie in $A(S)$. Thus corrected
+    and crossing positions are disjoint, and the free positions are exactly
+    their union. All registers in $C$ lie on the affected side. Consequently,
+    the two restrictions of $C+T$ are $C+T_A$ and $T_E$, where $T_A,T_E$ are
+    the affected and exterior restrictions of $T$. Every occurrence in $S$
+    meets $A(S)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_corrected_crossing_blocks}
+    Membership in $A(S)$ is defined by being an endpoint of an occurrence
+    in $S$. Apply this to each corrected position. The two Boolean masks are
+    then disjoint, and their union is precisely the defining free mask.
+\end{proof}
+
+\begin{theorem}[A common corrected-source rearrangement]
+    \label{thm:peps_corrected_reordering}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputReordering}
+    \leanok
+    There is an allowed composition $U$, containing no sources, from the
+    corrected block followed by the crossing block and original input to the
+    original free-register order. It satisfies~(\ref{eq:peps_frames_reorder})
+    for every free-source vector family. In particular, $U$ is chosen before
+    the partial branch and before any corrected-source coordinate.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reorder_source_positions,thm:peps_corrected_crossing_masks}
+    Apply the uniform permutation theorem to the free positions, selecting
+    the corrected positions. The complementary list is the crossing list by
+    the disjointness of the two masks.
+\end{proof}
+
+\begin{theorem}[Preparing vectors from the scalar unit]
+    \label{thm:peps_source_scalar_preparation}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_nil_heq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.vector_append_heq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareFreeSlots_nil_heq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.vector_append_eq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_framed_sourceVector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_framed_freeSourceVectors}
+    \leanok
+    Preparing an inventory on $1\in\mathbb C$ gives its ordered joint vector.
+    Concatenating two inventories gives the vector
+    $\alpha_{L,M}^{-1}(\eta_L\otimes\eta_M)$. If a scalar-input composition
+    $p_0$ acts with these registers as spectators, it acts as the identity on their
+    joint vector and prepares $p_0(1)$ in the original input memory.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_free_source_norm,thm:peps_register_identifications}
+    Use the preparation identity~(\ref{eq:peps_frames_prepare}) and the
+    scalar tensor identity. Tensoring with the identity commutes with preparing the unchanged
+    source registers. Apply this once to an inventory and then to its two
+    concatenated parts.
+\end{proof}
+
+\begin{definition}[Absorbing the original input preparation]
+    \label{def:peps_prepared_reordered_word}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceVectorPair}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.preparedReorderedWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedInputPreparation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedPreparedWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedInputVector}
+    \leanok
+    Given a scalar-input composition $p_0$, a register permutation $U$, fixed
+    source vectors, and a residual composition $V$, form $\widetilde V$ by
+    retaining the two free blocks as spectators of $p_0$, applying $U$, preparing the
+    fixed sources, and applying $V$. Its input is just $C+T$.
+    The corresponding input vector is
+    $\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)$.
+    For a partial circuit branch $\xi$, use its actual residual and its
+    original fixed-source vectors; denote the resulting composition by
+    $\widetilde V_\xi$.
+\end{definition}
+
+\begin{theorem}[Evaluation after absorbing the input]
+    \label{thm:peps_prepared_reordered_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_reordered_prepared_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedInputVector_identity_of_reordering}
+    \leanok
+    Suppose $U$ has the uniform preparation property
+    (\ref{eq:peps_frames_reorder}). Then $\widetilde V$ evaluated on
+    $\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)$ equals the original residual
+    applied after full source preparation on $p_0(1)$, with the prescribed
+    fixed vectors outside the free positions. The same identity holds for
+    every actual partial branch and every free-vector family.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_prepared_reordered_word,thm:peps_source_scalar_preparation}
+    First move the input preparation past the two free-source
+    preparations. Apply the defining equality for $U$, then compose free
+    preparation with fixed preparation. Their composition is exactly full
+    source preparation.
+\end{proof}
+
+\begin{definition}[Uniform equality of corrected inputs]
+    \label{def:peps_uniform_corrected_input}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.HasCorrectedInputVectors}
+    \leanok
+    The uniform corrected-input identity asserts the existence of one allowed,
+    source-free $U$ such that the evaluation equality in
+    Theorem~\ref{thm:peps_prepared_reordered_vector} holds for every partial
+    branch and every free-source family, using the actual residual and fixed
+    vectors of that branch.
+\end{definition}
+
+\begin{theorem}[Construction of the uniform input identity]
+    \label{thm:peps_uniform_corrected_input}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputVector_identity}
+    \leanok
+    Every circuit and scalar-input composition satisfy the uniform
+    corrected-input identity. No normalization or contraction assumption is
+    needed for this equality.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_corrected_reordering,thm:peps_prepared_reordered_vector}
+    Theorem~\ref{thm:peps_corrected_reordering} gives the common permutation.
+    Apply Theorem~\ref{thm:peps_prepared_reordered_vector} separately to each
+    branch and vector family.
+\end{proof}
+
+\begin{theorem}[Actual local factors of the rearranged composition]
+    \label{thm:peps_reordered_local_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.hasTensorPartition_reordered_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.hasTensorPartition_prepared_reordered_partial}
+    \leanok
+    Suppose the circuit is allowed. After the common rearrangement, its
+    selectively prepared residual factors across the affected/exterior
+    division into two actual allowed compositions with no sources and
+    operator norms at most one. If $p_0$ is also allowed and contains no
+    sources, the same assertion holds after absorbing $p_0$; the free input
+    is then exactly $C+T$. The factorization holds on every free input vector.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_corrected_crossing_masks,def:peps_prepared_reordered_word}
+    Every source remaining in the selectively prepared composition is
+    internal to the division. Relabel by the side, so these preparations
+    become local operations, and apply the source-free binary factorization.
+    Retaining spectators and composing the allowed source-free $p_0$ preserves these
+    properties.
+\end{proof}
+
+\begin{definition}[Ordered tensor products of source isometries]
+    \label{def:peps_source_input_isometries}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.matrixFrame}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame}
+    \leanok
+    A matrix $E$ with $E^*E=1$ defines the linear isometry whose columns are
+    $E$. Tensor the two endpoint isometries in the order of a list of source
+    positions. Restricting this construction to a selected list gives an
+    isometry from the Euclidean space indexed by the selected endpoint
+    coordinates into its actual register memory. Repeated endpoint parties
+    remain distinct tensor factors.
+\end{definition}
+
+\begin{theorem}[Columns are the actual prepared endpoint vectors]
+    \label{thm:peps_source_input_columns}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.matrixFrame_basis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame_basis_prepare}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis_prepare}
+    \leanok
+    The column at a supplied endpoint assignment is the ordered tensor of its
+    literal endpoint columns. With an arbitrary spectator vector appended,
+    this column gives exactly preparation of those elementary pair vectors.
+    For a selected list, coordinates outside the selected positions make no
+    contribution.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_source_input_isometries,thm:peps_ordered_source_preparation}
+    Evaluate each matrix isometry on a coordinate basis vector. Induct on
+    the list using the canonical tensor-product basis and source preparation.
+    Then reindex the selected coordinate assignments by the filtered list.
+\end{proof}
+
+\begin{definition}[The corrected-source isometry]
+    \label{def:peps_corrected_source_frame}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame}
+    \leanok
+    Fix a partial branch $\xi$ and the original endpoint matrices $E_e,F_e$,
+    each with orthonormal columns. For $I=\prod_{e\in S}(J_e\times J_e)$,
+    tensor their columns at the actual local labels of $\xi$, in the original
+    occurrence order. Relabelling these registers by the affected side gives
+    an isometry $Q_\xi\colon\ell^2(I)\to\mathcal H_C$.
+\end{definition}
+
+\begin{theorem}[Corrected coordinates preserve the exact source order]
+    \label{thm:peps_corrected_source_columns}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame_basis}
+    \leanok
+    For every corrected coordinate $i\in I$, $Q_\xi e_i$ is the actual joint
+    corrected-source vector formed from the original $E_e,F_e$ columns at $i$.
+    The coordinate correspondence is the bijection between selected partial
+    positions and original occurrences in $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_source_input_columns,thm:peps_free_source_norm}
+    Apply the selected-column identity. The existence of the branch and
+    the normalization of its original source vectors make each needed
+    endpoint coordinate set nonempty. Extend a selected assignment outside
+    the selected positions, then remove those choices using dependence only
+    on the selected source vectors.
+\end{proof}
+
+\begin{definition}[The exact crossing-source vector]
+    \label{def:peps_actual_crossing_vector}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCrossingVector}
+    \leanok
+    For branch $\xi$, let $\beta_\xi\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$
+    be the actual ordered tensor of its crossing sources, relabelled and
+    partitioned into affected and exterior registers. Its two ambient
+    memories depend on the fixed register lists, not on the branch vectors.
+\end{definition}
+
+\begin{theorem}[Schmidt isometries for the exact crossing vector]
+    \label{thm:peps_crossing_schmidt}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_sourceCrossingVector}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceCrossing_schmidt}
+    \leanok
+    For every partial branch, $\|\beta_\xi\|=1$. There are a finite index set
+    $J$, probabilities $\tau_j\geq0$ with $\sum_j\tau_j=1$, and linear
+    isometries $L\colon\ell^2(J)\to\mathcal H_{T_A}$ and
+    $R\colon\ell^2(J)\to\mathcal H_{T_E}$ such that
+    \begin{align}
+        \beta_\xi & = \sum_{j\in J}\sqrt{\tau_j}\,Le_j\otimes Re_j.
+        \label{eq:peps_frames_crossing_schmidt}
+    \end{align}
+    The isometries need not span either ambient memory.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_free_source_norm,def:peps_actual_crossing_vector}
+    Every original source vector is normalized by the prepared-gate construction, so the
+    crossing vector has norm one. Place this algebraic tensor in finite
+    dimensional subspaces of its two memories, apply the finite dimensional
+    Schmidt decomposition, and include the resulting orthonormal families
+    back into the original memories.
+\end{proof}
+
+\begin{definition}[Schmidt input isometries]
+    \label{def:peps_schmidt_input_frames}
+    \lean{TNLean.PEPS.PairEffect.HasSchmidtInputFrames}
+    \leanok
+    Fix the corrected isometry $Q$ and the crossing vector $\beta$.
+    Thus $Q\colon\ell^2(I)\to\mathcal H_C$. Choose probabilities $\tau$
+    and a linear isometry
+    $A\colon\ell^2(I\times J)\to\mathcal H_{(C+T)_A}$.
+    Choose also $B\colon\ell^2(J)\to\mathcal H_{(C+T)_E}$.
+    A Schmidt input representation requires the identity
+    \begin{align}
+        \Pi_{C+T}\alpha_{C,T}^{-1}(Qe_i\otimes\Pi_T^{-1}\beta)
+         & = \sum_{j\in J}\sqrt{\tau_j}\,Ae_{(i,j)}\otimes Be_j.
+        \label{eq:peps_frames_input_schmidt}
+    \end{align}
+    The probabilities and isometries are chosen before $i$.
+\end{definition}
+
+\begin{theorem}[Construction of the actual input isometries]
+    \label{thm:peps_actual_schmidt_input_frames}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputFrames}
+    \leanok
+    For each actual partial branch and original endpoint matrices with
+    orthonormal columns, the corrected isometry $Q_\xi$ and exact crossing
+    vector $\beta_\xi$ admit the representation
+    (\ref{eq:peps_frames_input_schmidt}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_corrected_crossing_masks,thm:peps_crossing_schmidt,def:peps_corrected_source_frame}
+    Tensor $Q_\xi$ with the affected isometry in
+    (\ref{eq:peps_frames_crossing_schmidt}), and use the exterior isometry
+    unchanged. The corrected registers all lie on the affected side, so
+    canonical concatenation identifies their targets with the two actual
+    restrictions of $C+T$. Distribute the tensor product over the Schmidt
+    sum.
+\end{proof}
+
+\begin{definition}[A local-word Schmidt output representation]
+    \label{def:peps_schmidt_local_output}
+    \lean{TNLean.PEPS.PairEffect.Word.HasSchmidtOutput}
+    \leanok
+    A family $z_i$ in the affected/exterior output tensor product has a
+    local-word Schmidt representation if there are actual allowed source-free
+    compositions $D_A,D_E$, each of operator norm at most one, probabilities
+    $\tau$, and linear input isometries $A,B$ such that
+    \begin{align}
+        z_i & = \sum_j\sqrt{\tau_j}\,(D_AAe_{(i,j)})\otimes(D_EBe_j).
+        \label{eq:peps_frames_output_schmidt}
+    \end{align}
+    All these choices precede the coordinate $i$.
+\end{definition}
+
+\begin{theorem}[Applying the two actual local factors]
+    \label{thm:peps_local_schmidt_output}
+    \lean{TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_hasTensorPartition}
+    \leanok
+    If a composition factors into actual allowed source-free local words, and
+    its inputs admit~(\ref{eq:peps_frames_input_schmidt}), then its outputs
+    admit~(\ref{eq:peps_frames_output_schmidt}). The original register
+    identifications are retained on both sides.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_schmidt_input_frames,def:peps_schmidt_local_output}
+    Transport the input isometries along the canonical equal-list
+    identifications, apply the exact tensor-product factorization to
+    (\ref{eq:peps_frames_input_schmidt}), and use linearity. The norm bounds
+    come from allowedness of the two local words.
+\end{proof}
+
+\begin{definition}[The actual corrected-column input identity]
+    \label{def:peps_corrected_schmidt_inputs}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.HasCorrectedSchmidtInputs}
+    \leanok
+    The corrected-column input identity asserts that one allowed source-free
+    rearrangement, chosen before every branch and corrected coordinate,
+    identifies the original partially prepared output with the absorbed
+    composition evaluated on the actual corrected-column vector tensor the
+    original crossing vector.
+\end{definition}
+
+\begin{theorem}[Substitution of the corrected endpoint columns]
+    \label{thm:peps_corrected_schmidt_input_identity}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedSchmidtInput_identity}
+    \leanok
+    Every circuit, endpoint matrix family and scalar-input composition satisfy
+    the corrected-column input identity. No orthonormality or contraction
+    hypothesis is needed for this equality.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_uniform_corrected_input,thm:peps_corrected_crossing_masks,thm:peps_free_source_norm}
+    In the uniform input identity, substitute the original endpoint
+    columns at corrected positions and the original source vectors elsewhere.
+    Fixed positions are not corrected; crossing positions are not corrected
+    either. Dependence only on selected positions therefore preserves the
+    literal crossing vector and every fixed source.
+\end{proof}
+
+\begin{theorem}[Schmidt expansion of the actual partial output]
+    \label{thm:peps_actual_corrected_schmidt_output}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedSchmidtOutput}
+    \leanok
+    Let $W$ be an allowed circuit, let all original endpoint matrices have
+    orthonormal columns, and let $p_0$ be an allowed scalar-input composition
+    containing no sources. For each partial branch $\xi$, replace precisely
+    the corrected source vectors by their original endpoint columns at
+    $i\in I$, and use $p_0(1)$ as the original input. After the canonical owner
+    relabelling and affected/exterior output partition, this actual output
+    has the representation~(\ref{eq:peps_frames_output_schmidt}).
+    Thus the two local words, probabilities and linear input isometries are
+    constructed from the circuit and are chosen before $i$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_corrected_schmidt_input_identity,thm:peps_reordered_local_factors,thm:peps_actual_schmidt_input_frames,thm:peps_local_schmidt_output}
+    Choose the common rearrangement from the corrected-column input
+    identity. Factor the actual absorbed composition into its two local words.
+    Construct its input isometries from the corrected-source isometry and
+    exact crossing vector, then apply Theorem~\ref{thm:peps_local_schmidt_output}.
+    Finally substitute the original partial-output identity. This keeps the
+    original occurrence-coordinate bijection and both owner relabellings.
+\end{proof}
