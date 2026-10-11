@@ -245,5 +245,10 @@ theorem actualRounds_entropy_integral_le_domainGraph :
     _ = _ := by
       rw [Finset.sum_add_distrib, S.sum_actualRoundData_logNormSq_sub hm hM n ht k pre]
       simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+      -- The remaining equality holds definitionally: the proof-local `let` binders
+      -- (`n`, `err`, `ℓ`) still appear on the left, while the goal's right-hand side
+      -- has the statement-level `let`s zeta-reduced. `simp only` cannot unfold the
+      -- local `let` fvars, so close the definitional gap explicitly.
+      rfl
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
