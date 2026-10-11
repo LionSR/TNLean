@@ -87,6 +87,9 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
     simpa only [squareInteractionSupport, Finset.coe_insert, Finset.coe_singleton,
       forwardSquareEdgeEquiv_symm_val] using
         hBsupport (.inr ((forwardSquareEdgeEquiv L).symm a))
+  have hBsite (v : Vertex L) :
+      B (.inl v) ∈ QuantumCircuit.supportedOperators (q * q) {v} := by
+    simpa only [squareInteractionSupport, Finset.coe_singleton] using hBsupport (.inl v)
   done
 
 end TNLean.PEPS.Approximation
