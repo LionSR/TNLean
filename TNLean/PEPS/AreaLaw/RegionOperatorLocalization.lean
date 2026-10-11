@@ -118,13 +118,8 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
   have hTwo : ‖heisenbergEvolution h.operator t A -
       siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
       ‖A‖ * 2 := by
-    simpa only [hτnorm, mul_two] using
-      (norm_sub_le (heisenbergEvolution h.operator t A)
-        (siteExpectation q (graphNeighborhood Λ l S)
-          (heisenbergEvolution h.operator t A))).trans
-        (add_le_add_left
-          (norm_siteExpectation_le (graphNeighborhood Λ l S)
-            (heisenbergEvolution h.operator t A)) ‖heisenbergEvolution h.operator t A‖)
+    refine (norm_sub_le _ _).trans ?_
+    done
   rw [mul_min_of_nonneg _ _ (norm_nonneg A)]
   exact le_min hTwo hExp
 
