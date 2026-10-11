@@ -70,7 +70,8 @@ theorem eval_sourcePrivatePreparation_tmul {a b : Layout P}
       ((appendIso w.allResidualSourceLayout []).symm (y ⊗ₜ[ℂ] (1 : ℂ))) =
       (appendIso w.allResidualSourceLayout (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm
         (y ⊗ₜ[ℂ] Layout.mapOwnerIso (affectedOwner (fun _ => true)) a ψ.vector) := by
-  rw [sourcePrivatePreparation, Word.eval_frameList_appendIso_symm]
+  unfold sourcePrivatePreparation
+  rw [Word.eval_frameList_appendIso_symm]
   exact congrArg (fun z =>
     (appendIso w.allResidualSourceLayout
       (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm (y ⊗ₜ[ℂ] z))
