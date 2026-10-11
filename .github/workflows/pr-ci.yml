@@ -1207,7 +1207,7 @@ jobs:
           for example in BoundaryParentHamiltonian BlockBoundaryParentHamiltonian \
               BoundaryUnitSupport BoundaryProjectionAverage \
               NormalAdjointBoundary NormalBlockBoundaryParentHamiltonian \
-              BoundaryAdjointCounterexample; do
+              BoundaryAdjointCounterexample DualRepresentationAdjointBoundary; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
