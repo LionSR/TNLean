@@ -612,34 +612,6 @@ inner-product discard spaces.
     free-source memory, with the exterior owners kept together.
 \end{proof}
 
-% This common equality entry has the same three owners as the coordinate
-% development. On integration, retain its canonical coordinate-chapter home
-% and cite that entry here, rather than repeat its declaration tags.
-Write $M(a)$ for the tensor memory of a register list $a$.
-
-\begin{theorem}[Head tensor identifications under equality of memories]
-    \label{thm:peps_basis_head_memory_equalities}
-    \lean{TNLean.PEPS.PairEffect.Layout.selectedHead_heq,
-        TNLean.PEPS.PairEffect.Layout.complementaryHead_heq,
-        TNLean.PEPS.PairEffect.Layout.add_heq}
-    \leanok
-    Let $r$ be a register with space $U$, let $a=a'$ and $b=b'$ be
-    equal register lists, and suppose $z\in M(a)\otimes M(b)$ and
-    $z'\in M(a')\otimes M(b')$ agree after these identifications.
-    Write $\alpha$ for the tensor associativity isometry and $L$ for
-    the isometry exchanging the first two factors. For every $u\in U$,
-    after identifying the memories,
-    $\alpha^{-1}(u\otimes z)=\alpha^{-1}(u\otimes z')$ and
-    $L(u\otimes z)=L(u\otimes z')$.
-    More generally, for equal complex inner product
-    spaces $A=B$ and vectors $x,y\in A$ and $x',y'\in B$ agreeing
-    under this equality, $x+y$ agrees with $x'+y'$.
-\end{theorem}
-\begin{proof}\leanok
-    Identify the equal lists or spaces and their equal vectors.
-    Each pair is then the same tensor or sum.
-\end{proof}
-
 \begin{definition}[Concatenating two partitioned layouts]
     \label{def:peps_append_partition}
     \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso}
