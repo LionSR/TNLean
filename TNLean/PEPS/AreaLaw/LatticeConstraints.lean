@@ -29,6 +29,8 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
 * `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots`: Lemma 4.4.
 * `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation`: Proposition 4.5, truncation and
   ground-state part.
+* `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span`: Proposition 4.5,
+  uniqueness of the truncated ground vector.
 * `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget`,
   `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log`: Proposition 4.5, crossing count and
   cut budget.
@@ -204,6 +206,39 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
     (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
     hS₀
+
+/-- **Uniqueness of the truncated ground vector on a lattice domain** (Proposition 4.5,
+`prop:truncation`, `03-quasilocal.tex`, lines 426–427: "its ground vector `\tilde\Omega` is unique").
+With the constant `C₁` of `exists_latticeFiniteSetTruncation`, the truncated sum `H'` has a
+unit gapped ground vector `Ω₀` with ground energy `e ∈ [0, ε_n]` and gap `g/2` whose eigenspace
+at `e` is the line spanned by `Ω₀`, and `‖Ω₀ - e^{iθ} Ω‖ ≤ 2 √(ε_n / g)` for some phase. -/
+theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C₀ : ℝ}
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
+    ∃ C₁ : ℝ, 0 < C₁ ∧
+      ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+        let G := domainGraph Λ
+        let cs := positiveNormalization 1 (Δ / 2) J
+        let g := Δ / cs
+        let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
+        let r₀ := ⌈C₁ * Real.log n ^ 2⌉₊
+        let ε := min (n ^ (-1000 : ℝ)) (g / 4)
+        let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
+        ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), Matrix.IsGappedGroundState Ht e Ω₀ (g / 2) ∧
+          0 ≤ e ∧ e ≤ ε ∧
+          Module.End.eigenspace (Matrix.toEuclideanLin Ht) (e : ℂ) = Submodule.span ℂ {Ω₀} ∧
+          ∃ θ : ℝ, ‖Ω₀ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g) := by
+  obtain ⟨C₁, hC₁, htr⟩ := exists_latticeFiniteSetTruncation R hJ hΔ hC₀
+  refine ⟨C₁, hC₁, ?_⟩
+  intro q _ Λ h a ha E₀ Ω hgs n hn S₀ hS₀
+  obtain ⟨-, -, -, e, Ω₀, hΩ₀, hHΩ₀, he₀, heε, hgap, hθ, -⟩ :=
+    htr Λ h a ha E₀ Ω hgs n hn S₀ hS₀
+  have hgs₀ := Matrix.isGappedGroundState_iff.mpr ⟨hΩ₀, hHΩ₀, hgap⟩
+  have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J / 2 :=
+    half_pos (div_pos hΔ (positiveNormalization_pos 1 _ J))
+  exact ⟨e, Ω₀, hgs₀, he₀, heε, hgs₀.eigenspace_eq_span hg, hθ⟩
 
 /-- **Crossing count and cut budget on a lattice domain** (Proposition 4.5, `prop:truncation`,
 `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`, `03-quasilocal.tex`,

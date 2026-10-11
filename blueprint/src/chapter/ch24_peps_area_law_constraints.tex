@@ -331,18 +331,20 @@ only on the parameters named below.
 
 \begin{theorem}[Truncation near a finite set on an induced lattice domain]
     \label{thm:al_lattice_truncation}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation}
+    \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation,
+        TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span}
     \leanok
-    \uses{thm:al_truncation, thm:al_lattice_counts, lem:area_domain_graph_counts, def:area_law_ground_entropy}
+    \uses{thm:al_truncation, thm:al_lattice_counts, lem:area_domain_graph_counts,
+        def:area_law_ground_entropy, thm:area_law_ground_eigenspace}
     Take $p=1$ in Theorem~\ref{thm:al_lattice_positive_replacement}, so
     $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
     $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
     $n\ge2$ and every set $S_0$ of sites with $|S_0|\le C_0n^2$, the truncation
     with $r_0=\lceil C_1(\log n)^2\rceil$ has the conclusions of
-    Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$ other than uniqueness:
-    it has a unit ground vector $\widetilde\Omega$ satisfying the stated gap,
-    vector and trace-distance estimates, and each truncated term acts on its
-    designated support. Uniqueness of $\widetilde\Omega$ is not stated here. This is the truncation part of
+    Theorem~\ref{thm:al_truncation} with $g=\Delta/c_*$: each truncated term
+    acts on its designated support, and $\widetilde H$ has a unit ground vector
+    $\widetilde\Omega$, unique up to a scalar, satisfying the stated gap,
+    vector and trace-distance estimates. This is the truncation part of
     Proposition~4.5 of \cite{OpenAI2026AreaLaw}, which assumes $S_0$ nonempty
     and $C_0>0$.
 \end{theorem}
@@ -352,7 +354,10 @@ only on the parameters named below.
     $v_R$ sites per support, site budget $\mu_RJ$ and sphere growth
     $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}, and ball growth
     $2(d+1)^2$ and at most $\mu_R$ labels per anchor from
-    Theorem~\ref{thm:al_lattice_counts}.
+    Theorem~\ref{thm:al_lattice_counts}. The gap inequality of $\widetilde H$
+    at its ground energy and Theorem~\ref{thm:area_law_ground_eigenspace} show
+    that the eigenspace of $\widetilde H$ at that energy is spanned by
+    $\widetilde\Omega$.
 \end{proof}
 
 \begin{theorem}[Crossing count and cut budget on an induced lattice domain]
