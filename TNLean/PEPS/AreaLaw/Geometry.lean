@@ -37,6 +37,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
 import TNLean.PEPS.AreaLaw.Geometry.DyadicOrigin
 import TNLean.PEPS.AreaLaw.Geometry.DyadicRefinement
 import TNLean.PEPS.AreaLaw.Geometry.DyadicScales
+import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents
 import TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity
