@@ -20,6 +20,12 @@ namespace MPSTensor
 
 open ContinuousLinearMap
 
+/-- A cached instance: `LinearMap.toContinuousLinearMap` below otherwise repeats a slow search
+for this instance at every use. -/
+local instance continuousSMul_euclideanSpace {ι : Type*} [Finite ι] :
+    ContinuousSMul ℂ (EuclideanSpace ℂ ι) :=
+  have := Fintype.ofFinite ι; inferInstance
+
 variable {I S : Type*} [Fintype I] [Fintype S]
 
 /-- Extend an invertible physical map independently over every exterior
