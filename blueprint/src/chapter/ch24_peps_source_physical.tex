@@ -612,38 +612,11 @@ inner-product discard spaces.
     free-source memory, with the exterior owners kept together.
 \end{proof}
 
-\begin{definition}[Concatenating two partitioned layouts]
-    \uses{def:peps_basis_partition_join}
-    \label{def:peps_append_partition}
-    \leanok
-    Given four ordered layouts $a_+,a_-,b_+,b_-$, canonically regroup
-    \begin{align}
-        (H_{a_+}\otimes H_{a_-})\otimes(H_{b_+}\otimes H_{b_-})
-        \simeq H_{a_+b_+}\otimes H_{a_-b_-}.
-    \end{align}
-    This isometry sends $(x_+\otimes x_-)\otimes(y_+\otimes y_-)$ to
-    $(x_+\otimes y_+)\otimes(x_-\otimes y_-)$, with concatenations
-    interpreted by their canonical memory isometries.
-\end{definition}
-
-\begin{theorem}[Partition commutes with concatenation]
-    \label{thm:peps_partition_append}
-    \leanok
-    \uses{def:peps_append_partition,
-        thm:peps_basis_partition_concat}
-    Let a Boolean owner map partition two layouts $a,b$. Concatenating their
-    memory vectors and then partitioning the resulting layout gives the
-    same vector as partitioning each layout first and applying
-    Definition~\ref{def:peps_append_partition}. This identity holds for all
-    vectors in $H_a$ and $H_b$ and arbitrary owner sets.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:peps_basis_head_memory_equalities}
-    Induct on the first layout. For a head register on either side,
-    use the defining partition isometry and the four-factor regrouping.
-    The empty layout contributes its scalar factor.
-\end{proof}
+% The concatenation/partition-commutation pair repeats the coordinate
+% development verbatim. Retain its canonical coordinate-chapter home
+% (Definition~\ref{def:peps_basis_partition_join} and
+% Theorem~\ref{thm:peps_basis_partition_concat}) and cite that entry rather
+% than duplicate its declaration tags here.
 
 \begin{definition}[An explicit positive sample count]
     \label{def:peps_source_sample_count}
