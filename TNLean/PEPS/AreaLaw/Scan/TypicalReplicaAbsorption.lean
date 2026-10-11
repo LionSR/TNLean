@@ -98,6 +98,11 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
       (hp.normalizedSpectralRestriction_posSemidef E hzX)
       (hp.isHermitian.trace_normalizedSpectralRestriction E hzX.ne')).trans_eq
         (Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E hzX).symm
+  have hupper' : ∀ᶠ k in atTop,
+      F k ≤ 2 * S' +
+        (2 * Real.log (E.card : ℝ) - 2 * S' - Real.log z +
+          4 * Bsh / z + 4 * Bexc) + rᵤ k :=
+    hupper.mono fun k hk ↦ by linarith only [hk]
   done
 
 end TNLean.PEPS.AreaLaw.Scan
