@@ -59,9 +59,6 @@ theorem exists_unitary_regularActualCycleBidirectionalPermutation {d : ℕ}
           (regularActualCycleDirectionalPermutation R T hT htree o φ reverse u))) := by
   obtain ⟨W, hW, hglobal, hlocal, hact⟩ :=
     exists_unitary_regularGaugedCyclePhysicalPermutation R T a ha hT htree o φ hφ
-  have hWgram : W.conjTranspose * W = 1 := Matrix.mem_unitaryGroup_iff'.mp hW
-  have hUgram : (regionLocalTerm R W).conjTranspose * regionLocalTerm R W = 1 :=
-    Matrix.mem_unitaryGroup_iff'.mp hglobal
   refine ⟨W, hW, hglobal, ?_, ?_⟩
   · intro reverse u θ
     cases reverse
@@ -72,9 +69,7 @@ theorem exists_unitary_regularActualCycleBidirectionalPermutation {d : ℕ}
     · have H := hlocal (regularRegionTreeGauge R T hT htree o u).1
         (φ.symm (regularRegionTreeCycleResidual R T hT htree o u)) u θ
       rw [Equiv.apply_symm_apply, regularRegionBondExtension_treeGauge R T hT htree o u] at H
-      change W.conjTranspose *ᵥ _ = _
-      rw [← H, Matrix.mulVec_mulVec, hWgram, Matrix.one_mulVec]
-      rfl
+      exact Matrix.conjTranspose_mulVec_eq_of_mulVec_eq hW H
   · intro reverse u
     cases reverse
     · have H := hact (regularRegionTreeGauge R T hT htree o u).1
@@ -84,8 +79,6 @@ theorem exists_unitary_regularActualCycleBidirectionalPermutation {d : ℕ}
     · have H := hact (regularRegionTreeGauge R T hT htree o u).1
         (φ.symm (regularRegionTreeCycleResidual R T hT htree o u)) u
       rw [Equiv.apply_symm_apply, regularRegionBondExtension_treeGauge R T hT htree o u] at H
-      change (regionLocalTerm R W).conjTranspose *ᵥ _ = _
-      rw [← H, Matrix.mulVec_mulVec, hUgram, Matrix.one_mulVec]
-      rfl
+      exact Matrix.conjTranspose_mulVec_eq_of_mulVec_eq hglobal H
 
 end TNLean.PEPS

@@ -19,6 +19,7 @@ whose coordinate functions are `U *ᵥ x` and `U *ᵥ y`.
 * `Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary`: `star (U x) ⬝ᵥ U y = star x ⬝ᵥ y`.
 * `Matrix.inner_eq_of_mulVec_eq`: `⟨U x|U y⟩ = ⟨x|y⟩`.
 * `Matrix.norm_eq_of_mulVec_eq`: `‖U x‖ = ‖x‖`.
+* `Matrix.conjTranspose_mulVec_eq_of_mulVec_eq`: `U x = y` gives `Uᴴ y = x`.
 -/
 
 open scoped InnerProductSpace
@@ -50,5 +51,10 @@ theorem norm_eq_of_mulVec_eq (hU : U ∈ unitary (Matrix ι ι ℂ)) {x x' : Euc
   rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
   have h' : ‖x'‖ ^ 2 = ‖x‖ ^ 2 := by exact_mod_cast h
   exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp h'
+
+/-- The conjugate transpose of a unitary matrix undoes its action on a vector. -/
+theorem conjTranspose_mulVec_eq_of_mulVec_eq (hU : U ∈ unitaryGroup ι ℂ) {x y : ι → ℂ}
+    (h : U *ᵥ x = y) : Uᴴ *ᵥ y = x := by
+  rw [← h, mulVec_mulVec, ← star_eq_conjTranspose, Unitary.star_mul_self_of_mem hU, one_mulVec]
 
 end Matrix
