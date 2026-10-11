@@ -29,31 +29,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-subset-expansion.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-corrections-sourcephysicaldensity-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity
-
-Provenance-ID: 8769-source-corrections-sourcephysicaldensity-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.physicalCorrectedSourceTerm
-
-Provenance-ID: 8769-source-corrections-sourcephysicaldensity-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity
-
-Provenance-ID: 8769-source-corrections-sourcephysicaldensity-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_exact
-
-Provenance-ID: 8769-source-corrections-sourcephysicaldensity-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_sub_exact
-
-Provenance-ID: 8769-source-corrections-sourcephysicaldensity-06
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le
-
 -/
 
 noncomputable section

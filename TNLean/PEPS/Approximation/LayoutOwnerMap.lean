@@ -48,13 +48,6 @@ def mapOwnerIso (f : P → Q) : (ℓ : Layout P) → Mem ℓ ≃ₗᵢ[ℂ] Mem 
     (x : r.space) (y : Mem ℓ) : mapOwnerIso f (r :: ℓ) (x ⊗ₜ y) =
       x ⊗ₜ mapOwnerIso f ℓ y := rfl
 
-/-- Appending a head register commutes with the equality identification of the tail. -/
-private theorem memCongr_cons_tmul (r : Reg Q) {a b : Layout Q} (h : a = b)
-    (x : r.space) (y : Mem a) :
-    memCongr (congrArg (r :: ·) h) (x ⊗ₜ y) = x ⊗ₜ memCongr h y := by
-  cases h
-  rfl
-
 /-- Changing owners respects the canonical tensor product for concatenated layouts.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–427. -/
 theorem mapOwnerIso_append_tmul (f : P → Q) (a b : Layout P)

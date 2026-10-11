@@ -3,52 +3,12 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.Approximation.PhysicalReadout
+import TNLean.PEPS.Approximation.PartyPartition
+import Mathlib.Data.List.NodupEquivFin
 
 /-! Physical registers with their original party-dependent dimensions.
 Source: polynomial-PEPS, `04-compression.tex:137–151`.
 -/
-
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-familyphysicalreadout-01
-TNLean.PEPS.PairEffect.card_familyRegionalPhysicalIndex
-Provenance-ID: 8769-source-resource-familyphysicalreadout-02
-TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis
-Provenance-ID: 8769-source-resource-familyphysicalreadout-03
-TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout
-Provenance-ID: 8769-source-resource-familyphysicalreadout-04
-TNLean.PEPS.PairEffect.familyPhysicalLayout
-Provenance-ID: 8769-source-resource-familyphysicalreadout-05
-TNLean.PEPS.PairEffect.familyPhysicalLayout_const
-Provenance-ID: 8769-source-resource-familyphysicalreadout-06
-TNLean.PEPS.PairEffect.familyPhysicalLayout_owners
-Provenance-ID: 8769-source-resource-familyphysicalreadout-07
-TNLean.PEPS.PairEffect.familyPhysicalListBasis
-Provenance-ID: 8769-source-resource-familyphysicalreadout-08
-TNLean.PEPS.PairEffect.familyPhysicalOutputLayout
-Provenance-ID: 8769-source-resource-familyphysicalreadout-09
-TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv
-Provenance-ID: 8769-source-resource-familyphysicalreadout-10
-TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout
-Provenance-ID: 8769-source-resource-familyphysicalreadout-11
-TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout_apply
-Provenance-ID: 8769-source-resource-familyphysicalreadout-12
-TNLean.PEPS.PairEffect.familyRestrictedPhysicalBasis
-Provenance-ID: 8769-source-resource-familyphysicalreadout-13
-TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout
-Provenance-ID: 8769-source-resource-familyphysicalreadout-14
-TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout_le
-Provenance-ID: 8769-source-resource-familyphysicalreadout-15
-TNLean.PEPS.PairEffect.norm_familyRegionalPhysicalReadout_le_one
-Provenance-ID: 8769-source-resource-familyphysicalreadout-16
-TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout
--/
-
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect
@@ -88,6 +48,25 @@ theorem restrict_familyPhysicalLayout (d : P → ℕ) (ps : List P) (mask : P �
     Layout.restrict mask (familyPhysicalLayout d ps) =
       familyPhysicalLayout d (ps.filter mask) := by
   simp [Layout.restrict, familyPhysicalLayout, List.filter_map, Function.comp_def]
+
+/-- An exhaustive ordering without repetitions contains each selected party once.
+Source: polynomial-PEPS, `04-compression.tex:18–25` and `233–251`. -/
+theorem length_filter_region [DecidableEq P] (ps : List P) (hps : ps.Nodup)
+    (hcover : ∀ p : P, p ∈ ps) (A : Finset P) :
+    (ps.filter fun p ↦ decide (p ∈ A)).length = A.card := by
+  have hset : (ps.filter fun p ↦ decide (p ∈ A)).toFinset = A := by
+    ext p
+    simp [hcover p]
+  exact (List.toFinset_card_of_nodup (hps.filter _)).symm.trans
+    (congrArg Finset.card hset)
+
+/-- The filtered positions enumerate exactly the original party labels in the region.
+Source: polynomial-PEPS, `04-compression.tex:233–251`. -/
+def filteredPartyEquiv [DecidableEq P] (ps : List P) (hps : ps.Nodup)
+    (hcover : ∀ p : P, p ∈ ps) (A : Finset P) :
+    Fin (ps.filter fun p ↦ decide (p ∈ A)).length ≃ {p // p ∈ A} :=
+  (List.Nodup.getEquiv _ (hps.filter _)).trans
+    (Equiv.subtypeEquivRight fun p ↦ by simp [hcover p])
 
 /-- The actual selected physical memory has tensor coordinates labelled by its
 original parties with their original dimensions.
@@ -177,11 +156,6 @@ Source: polynomial-PEPS, `04-compression.tex:137–151`. -/
 theorem familyPhysicalLayout_owners (d : P → ℕ) (ps : List P) :
     (familyPhysicalLayout d ps).map Reg.owner = ps := by
   simp [familyPhysicalLayout, Function.comp_def]
-
-/-- The fixed-dimension physical layout is the constant-family specialization.
-Source: polynomial-PEPS, `04-compression.tex:137–151`. -/
-theorem familyPhysicalLayout_const (d : ℕ) (ps : List P) :
-    familyPhysicalLayout (fun _ ↦ d) ps = physicalLayout d ps := rfl
 
 /-- Regional coordinates split the same original party-dependent configuration.
 Source: polynomial-PEPS, `04-compression.tex:137–151` and `223–251`. -/

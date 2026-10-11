@@ -21,31 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectcircuitlocations-01
-TNLean.PEPS.PairEffect.EffectCircuit.exists_replacementLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-02
-TNLean.PEPS.PairEffect.EffectCircuit.participants_replacementLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-03
-TNLean.PEPS.PairEffect.EffectCircuit.replacementLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-04
-TNLean.PEPS.PairEffect.OriginalCircuit.participants_replacementLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-05
-TNLean.PEPS.PairEffect.OriginalCircuit.replacementLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-06
-TNLean.PEPS.PairEffect.SourceCircuit.castLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-07
-TNLean.PEPS.PairEffect.SourceCircuit.exchangeBlocksLocationsEquivEmpty
-Provenance-ID: 8769-source-resource-effectcircuitlocations-08
-TNLean.PEPS.PairEffect.SourceCircuit.false_of_gateLocation_ofLocalWord
-Provenance-ID: 8769-source-resource-effectcircuitlocations-09
-TNLean.PEPS.PairEffect.SourceCircuit.frameListLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-10
-TNLean.PEPS.PairEffect.SourceCircuit.ofLocalWordLocationsEquivEmpty
-Provenance-ID: 8769-source-resource-effectcircuitlocations-11
-TNLean.PEPS.PairEffect.SourceCircuit.participants_castLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitlocations-12
-TNLean.PEPS.PairEffect.SourceCircuit.participants_frameListLocationsEquiv
 -/
 
 noncomputable section

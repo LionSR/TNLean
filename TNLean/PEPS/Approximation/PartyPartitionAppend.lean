@@ -17,27 +17,6 @@ physical and discarded registers.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–450.
 -/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-exterior-contraction.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-partypartitionappend-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.Layout.appendPartitionIso
-
-Provenance-ID: 8769-physical-partypartitionappend-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.Layout.appendPartitionIso_tmul
-
-Provenance-ID: 8769-physical-partypartitionappend-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.Layout.partitionIso_append_tmul
-
--/
-
-
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap

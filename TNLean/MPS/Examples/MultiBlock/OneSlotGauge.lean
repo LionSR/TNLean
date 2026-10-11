@@ -333,8 +333,7 @@ theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPSTensor d D}
     have hmem : ∑ k, (T x y k : ℂ) • (A (a k) * A (b k)) ∈ Kraus.wordSpan A 2 :=
       Submodule.sum_mem _ fun k _ => Submodule.smul_mem _ _ (hword k)
     rw [hsum] at hmem
-    have hinv := Submodule.smul_mem _ (m : ℂ)⁻¹ hmem
-    rwa [smul_smul, inv_mul_cancel₀ (Int.cast_ne_zero.mpr hm), one_smul] at hinv
+    exact (Submodule.smul_mem_iff _ (Int.cast_ne_zero.mpr hm)).mp hmem
   exact Submodule.eq_top_of_forall_single_mem _ hunit
 
 /-! ### Integer certificates for vanishing intertwiner spaces -/
