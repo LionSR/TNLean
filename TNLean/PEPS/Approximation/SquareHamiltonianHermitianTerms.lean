@@ -23,7 +23,7 @@ and `03-patches.tex`, lines 214–333, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Classical Matrix ComplexStarModule
+open Matrix ComplexStarModule
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
