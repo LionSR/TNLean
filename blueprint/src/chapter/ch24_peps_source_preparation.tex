@@ -147,6 +147,41 @@
     identity preserves its contraction bound.
 \end{proof}
 
+\begin{theorem}[Parties of the remaining operations]
+    \label{thm:peps_source_word_parties}
+    \lean{TNLean.PEPS.PairEffect.Word.parties_localPart}
+    \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint}
+    \uses{thm:peps_source_preparation,def:peps_owner_composition,thm:peps_party_factorization,thm:peps_party_restriction,def:peps_single_party_selector}
+    For any composition $W$, write $\mathcal P(W)$ for the parties of its
+    registers and named local operations, and let $B_W$ be the remaining
+    composition after its pair preparations are moved to the beginning.
+    Then $\mathcal P(B_W)=\mathcal P(W)$.
+    If $f:P\to Q$ relabels the owners, retaining a pair whose new owners
+    coincide as a local preparation, then
+    $\mathcal P(W^f)=f(\mathcal P(W))$.
+    In particular, for $q\notin f(P)$, the restriction of $B_{W^f}$ to
+    $q$ acts as the identity on the empty memory $\C$.
+    These statements require neither normalization nor nonzero source
+    vectors. A scalar local operation retains its named party.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_preparation,def:peps_owner_composition,thm:peps_party_factorization,thm:peps_party_restriction,def:peps_single_party_selector}
+    Induct on the composition. Moving a pair preparation to the beginning
+    replaces it by the identity on its two endpoint registers and the
+    original spectators, with the same owners. In a concatenation, the
+    extra spectators are source registers of the later composition, so
+    their owners already occur there. The exchanges in the framed case
+    involve only the framed owner and owners of the original registers
+    and sources. Thus no party is added or removed.
+    Relabelling preserves register owners and named local maps. When two
+    endpoints acquire the same owner, that owner is still recorded in the
+    local preparation. Finally, $q\notin f(P)$ implies that the restricted
+    remaining composition has no party; the no-party clause of
+    Theorem~\ref{thm:peps_party_factorization} gives the identity on $\C$.
+\end{proof}
+
 \begin{definition}[Expansion of a preparation]
     \label{def:peps_source_expansion}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands}
