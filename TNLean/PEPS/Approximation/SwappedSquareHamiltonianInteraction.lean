@@ -81,6 +81,12 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       (h.hermitianTerm_isHermitian i).eq]
   have hBH (i : SquareInteraction L) : (B i).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose F ((hDH i).reindex p)
+  have hBedge (a : Edge (squareLatticeGraph L L)) :
+      B (.inr ((forwardSquareEdgeEquiv L).symm a)) ∈
+        QuantumCircuit.supportedOperators (q * q) {a.1.1, a.1.2} := by
+    simpa only [squareInteractionSupport, Finset.coe_insert, Finset.coe_singleton,
+      forwardSquareEdgeEquiv_symm_val] using
+        hBsupport (.inr ((forwardSquareEdgeEquiv L).symm a))
   done
 
 end TNLean.PEPS.Approximation
