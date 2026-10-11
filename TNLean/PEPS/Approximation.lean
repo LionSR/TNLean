@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AbsorbedRestriction
 import TNLean.PEPS.Approximation.ActualCorrectedSourceBound
 import TNLean.PEPS.Approximation.ActualGaussianBranch
+import TNLean.PEPS.Approximation.ActualPureSourceMatrix
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
