@@ -29,7 +29,7 @@ example :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = domainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
@@ -63,11 +63,11 @@ example :
 
 -- The zero-copy consequence needs no physical energy or positive-copy premise.
 example :
-    ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
+    ∃ c₀ _Cent _eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = domainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
@@ -83,8 +83,8 @@ example :
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
         let n := augmentedDimensions (V := Site Λ) q aux
-        let D := S.actualRoundData hm hM
-        let ℓ := transportLogDimBound q S.r₀
+        let _D := S.actualRoundData hm hM
+        let _ℓ := transportLogDimBound q S.r₀
         ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
           (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
           ∀ (pre : Config 0 (fun v => Fin (n v)) → ℂ),
