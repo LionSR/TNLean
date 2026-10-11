@@ -41,6 +41,16 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
         (F * doubledHamiltonian (h.edgeTerm e) * Fᴴ -
           doubledHamiltonian (h.edgeTerm e)) := by
   classical
+  let δ : Matrix (Configuration L q) (Configuration L q) ℂ →ₗ[ℂ]
+      Matrix (Configuration L q × Configuration L q)
+        (Configuration L q × Configuration L q) ℂ :=
+    (LinearMap.mulLeftRight ℂ
+      (EncodedFrame.sheetSwapOp q R, (EncodedFrame.sheetSwapOp q R)ᴴ) -
+      LinearMap.id).comp
+      ((Matrix.kroneckerBilinear (R := ℂ)).flip
+          (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
+        Matrix.kroneckerBilinear (R := ℂ)
+          (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
   done
 
 end TNLean.PEPS.Approximation
