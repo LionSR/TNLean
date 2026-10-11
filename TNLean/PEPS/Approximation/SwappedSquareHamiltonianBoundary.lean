@@ -109,6 +109,13 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     (norm_nonneg (h.siteTerm
       (⟨0, Nat.pos_of_ne_zero hL⟩, ⟨0, Nat.pos_of_ne_zero hL⟩))).trans
       (h.site_norm_le _)
-  done
+  exact ⟨hsupport, if hL : L = 0 then
+    hbound.trans_eq (by
+      simp [hL, Nat.eq_zero_of_le_zero (by simpa [hL] using hbcard)])
+    else hbound.trans (calc
+      (boundary.card : ℝ) * (4 * J) ≤ (2 * (L : ℝ) ^ 2) * (4 * J) :=
+        mul_le_mul_of_nonneg_right (by exact_mod_cast hbcard)
+          (mul_nonneg (by norm_num) (hJ hL))
+      _ = 8 * J * (L : ℝ) ^ 2 := by ring)⟩
 
 end TNLean.PEPS.Approximation
