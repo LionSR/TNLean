@@ -3,10 +3,11 @@
 \begin{theorem}[Elementary commutator bound]
     \label{thm:qc_commutator_norm_bound}
     \lean{norm_commutator_le}
+    \leanok
     For any two elements $X,A$ of a normed ring,
     $\|XA-AX\|\leq2\|A\|\|X\|$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The triangle inequality and submultiplicativity give
     $\|XA-AX\|\leq\|X\|\|A\|+\|A\|\|X\|$.
 \end{proof}
@@ -14,13 +15,14 @@
 \begin{theorem}[Transferring time evolution across a commutator]
     \label{thm:qc_commutator_reverse_evolution}
     \lean{norm_exp_commutator_eq}
+    \leanok
     Let $\mathcal A$ be a complete real normed star algebra satisfying the
     $C^*$ identity, and let $K^*=-K$. For $A,B\in\mathcal A$ and real $t$,
     \begin{align*}
         \|[e^{tK}Ae^{-tK},B]\|=\|[A,e^{-tK}Be^{tK}]\|.
     \end{align*}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Conjugation by the unitary $e^{tK}$ carries
     $[A,e^{-tK}Be^{tK}]$ to $[e^{tK}Ae^{-tK},B]$ and preserves the norm.
 \end{proof}
@@ -28,6 +30,7 @@
 \begin{theorem}[Localization from a region]
     \label{thm:area_region_localization}
     \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization}
+    \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_expectation}
     Fix integers $q\geq1$ and $R\geq0$, and a real number $J$.
     There are positive constants $C,v,c$ with the following property.
@@ -44,7 +47,7 @@
     Empty domains and empty regions are included. This is the operator
     localization estimate used in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:quasilocal-lr,thm:qc_commutator_norm_bound,
         thm:qc_commutator_reverse_evolution,
         lem:qc_site_expectation_properties,lem:qc_site_expectation_commutator}
