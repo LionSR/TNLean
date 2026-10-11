@@ -737,6 +737,7 @@ class WorkflowTests(unittest.TestCase):
                     self.assertLess(run.index(target), run.index('lake env lean'))
                     self.assertIn('TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover', run)
                     self.assertIn('TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover', run)
+                    self.assertIn('TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy', run)
                     self.assertEqual(run.count('lake env lean'), 1)
                     for flag in ['set -eo pipefail', '-DwarningAsError=true',
                                  '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
@@ -745,10 +746,13 @@ class WorkflowTests(unittest.TestCase):
                         self.assertIn(flag, run)
                     checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
                     self.assertEqual(checked.split(), [
-                        'TNLeanTest/TemplateMixedSquares.lean', 'TNLeanTest/TemplateCutBoundary.lean'])
+                        'TNLeanTest/TemplateMixedSquares.lean', 'TNLeanTest/TemplateCutBoundary.lean',
+                        'TNLeanTest/TemplateEntropy.lean'])
                     expected = {
+                        'TemplateEntropy': ['TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy',
+                                            'TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy'],
                         'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover',
-                                                 'TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover'],
+                            'TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover'],
                         'TemplateCutBoundary': [
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary',
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateClearance',
