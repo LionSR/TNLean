@@ -22,43 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-random-source.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.SourceGaussianSamples
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLaw
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLawIsProbabilityMeasure
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_sourceGaussian_eval
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_selected_sourceGaussian
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-06
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-07
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integrable_sampledSourceMatrix
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-08
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integral_sampledSourceMatrix
-
-Provenance-ID: 8769-source-gaussian-sourcegaussianlaw-09
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.exists_unbiased_sampledSourceMatrix
-
 -/
 
 noncomputable section

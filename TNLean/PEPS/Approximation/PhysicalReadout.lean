@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.Approximation.PartyPartition
+import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import Mathlib.Data.List.NodupEquivFin
 
 /-! Labelled physical outputs with unrestricted private dimensions.
@@ -185,17 +185,6 @@ theorem restrict_physicalLayout (d : ℕ) (ps : List P) (mask : P → Bool) :
     Layout.restrict mask (physicalLayout d ps) = physicalLayout d (ps.filter mask) := by
   simp [Layout.restrict, physicalLayout, List.filter_map, Function.comp_def]
 
-/-- An exhaustive ordering without repetitions contains each selected party once.
-Source: polynomial-PEPS, `04-compression.tex:18–25` and `233–251`. -/
-theorem length_filter_region [DecidableEq P] (ps : List P) (hps : ps.Nodup)
-    (hcover : ∀ p : P, p ∈ ps) (A : Finset P) :
-    (ps.filter fun p ↦ decide (p ∈ A)).length = A.card := by
-  have hset : (ps.filter fun p ↦ decide (p ∈ A)).toFinset = A := by
-    ext p
-    simp [hcover p]
-  exact (List.toFinset_card_of_nodup (hps.filter _)).symm.trans
-    (congrArg Finset.card hset)
-
 /-- The actual tensor product of `n` physical registers has dimension `d^n`.
 Source: polynomial-PEPS, `04-compression.tex:18–25`. -/
 theorem finrank_physicalLayout (d : ℕ) (ps : List P) :
@@ -215,14 +204,6 @@ theorem finrank_restrict_physicalLayout [DecidableEq P]
     (fun p ↦ decide (p ∈ A)))).toLinearEquiv.finrank_eq
   exact h.trans ((finrank_physicalLayout d _).trans
     (congrArg (fun n ↦ d ^ n) (length_filter_region ps hps hcover A)))
-
-/-- The filtered positions enumerate exactly the original party labels in the region.
-Source: polynomial-PEPS, `04-compression.tex:233–251`. -/
-def filteredPartyEquiv [DecidableEq P] (ps : List P) (hps : ps.Nodup)
-    (hcover : ∀ p : P, p ∈ ps) (A : Finset P) :
-    Fin (ps.filter fun p ↦ decide (p ∈ A)).length ≃ {p // p ∈ A} :=
-  (List.Nodup.getEquiv _ (hps.filter _)).trans
-    (Equiv.subtypeEquivRight fun p ↦ by simp [hcover p])
 
 /-- Tensor coordinates on the actual selected physical registers, labelled by
 original parties. Source: polynomial-PEPS, `04-compression.tex:18–25` and `233–251`. -/

@@ -29,6 +29,19 @@ namespace Algebra
 /-- A concrete multiplicative scalar 2-cochain on a group. -/
 abbrev ScalarCocycle (G : Type) := G → G → Units ℂ
 
+/-- Restriction (pullback) of a scalar 2-cochain along a group homomorphism `f : K →* G`:
+`(f^* ω)(a, b) = ω(f a, f b)`. The three-cochain analogue is `ScalarThreeCochain.comap`. Both
+agree with Mathlib's restriction `groupCohomology.cochainsMap f` of inhomogeneous cochains
+(`ScalarCocycle.toInhomogeneousCochain_comap`, `ScalarThreeCochain.toInhomogeneousCochain_comap`). -/
+def ScalarCocycle.comap {G K : Type} [Group G] [Group K] (f : K →* G) (ω : ScalarCocycle G) :
+    ScalarCocycle K :=
+  fun a b ↦ ω (f a) (f b)
+
+/-- Evaluate a restricted cochain by applying the homomorphism to both arguments. -/
+@[simp]
+theorem ScalarCocycle.comap_apply {G K : Type} [Group G] [Group K] (f : K →* G)
+    (ω : ScalarCocycle G) (a b : K) : ω.comap f a b = ω (f a) (f b) := rfl
+
 section Group
 
 variable {G : Type} [Group G]
