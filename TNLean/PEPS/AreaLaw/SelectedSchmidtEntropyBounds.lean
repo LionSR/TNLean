@@ -69,6 +69,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
       (FiniteProduct.trace_reducedPure β Ωt hΩt X)) E
   rw [(reducedState_isHermitian Λ q Ωt X).rank_normalizedSpectralRestriction E hz.ne'
     (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1)] at hbounds
+  rw [abs_of_nonpos (Real.log_nonpos hz.le hz1)] at hbounds
   done
 
 end TNLean.PEPS.AreaLaw
