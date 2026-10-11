@@ -70,6 +70,8 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
                   ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
                     Real.exp (v * T - c * l) := by
   classical
+  obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
+    exists_quasilocal_region_localization q hq R J
   done
 
 end TNLean.PEPS.AreaLaw
