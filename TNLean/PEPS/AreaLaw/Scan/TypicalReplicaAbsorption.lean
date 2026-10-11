@@ -86,6 +86,10 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
   intro β split ΩX z ψ S S' η hupper hlower
   have hbounds := TNLean.PEPS.AreaLaw.abs_log_card_and_selectedSchmidtEntropy_sub_le
     Ωt hΩt X E w hz hE
+  have hρ : reducedState Λ q Ωt X = Matrix.partialTraceRight
+      (Matrix.vecMulVec ΩX (star ΩX)) :=
+    (reducedState_eq_finiteProduct Λ q Ωt X).trans
+      (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   done
 
 end TNLean.PEPS.AreaLaw.Scan

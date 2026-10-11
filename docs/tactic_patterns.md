@@ -6397,3 +6397,16 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Physical regional density as a tensor-factor partial trace — candidate (2026-10-11)
+
+- **Pattern:** Compose `reducedState_eq_finiteProduct` with
+  `FiniteProduct.reducedPure_eq_partialTrace` after splitting a physical state
+  into the selected region and its complement.
+- **Seen:** Two occurrences in `PEPS/AreaLaw/SelectedSchmidtEntropyBounds.lean`
+  and `PEPS/AreaLaw/Scan/TypicalReplicaAbsorption.lean`.
+- **Abstraction:** A regional-density identity could package the composition
+  if a third use appears. The two existing public identities are reused here.
+- **Notes:** The split state and the selected spectral set remain those of the
+  supplied physical state. No normalization or gap premise is needed for the
+  density identity itself. This is below the promotion threshold.
