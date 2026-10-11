@@ -104,6 +104,55 @@ theorem eq_point_end_of_mem_closedEdgeBand {n : ℝ} (hn : 0 ≤ n) {e : SquareE
 
 /-! ### Replacing a band by a word -/
 
+/-- **A band update on the rim of the band.** Let `p`, other than the two endpoints of the edge,
+lie in the closed band `-8 ≤ x ≤ 2` but not in the open band, and let `W` equal `c₁` on
+`-8 < x < -7` and `c₂` on `1 < x < 2`. If the guide `g` equals `c₁` near `p` when `p` lies on the
+curve `x = -8`, and `c₂` when `p` lies on the curve `x = 2`, then `g` and the guide obtained by
+replacing the band of `g` by `W` are both constant, with the same value, near `p`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:227–241, 321–326`. -/
+theorem exists_eventuallyEq_bandUpdate_of_mem_closedEdgeBand {ι : Type*} {n : ℝ} (hn : 0 < n)
+    {e : SquareEdge} {W : ℝ → ι} {g : ℝ × ℝ → ι} {p : ℝ × ℝ} {c₁ c₂ : ι}
+    (hlo : ∀ x ∈ Ioo (-8 : ℝ) (-7), W x = c₁) (hhi : ∀ x ∈ Ioo (1 : ℝ) 2, W x = c₂)
+    (h0 : p ≠ e.point n 0 0) (h1 : p ≠ e.point n n 0)
+    (hcb : p ∈ closedEdgeBand n e (-8) 2) (hb : p ∉ edgeBand n e (-8) 2)
+    (hlow : 0 < e.par p → e.par p < n → e.nor n p = -8 * bandWidth n (e.par p) →
+      g =ᶠ[𝓝 p] fun _ => c₁)
+    (hup : 0 < e.par p → e.par p < n → e.nor n p = 2 * bandWidth n (e.par p) →
+      g =ᶠ[𝓝 p] fun _ => c₂) :
+    ∃ c, (g =ᶠ[𝓝 p] fun _ => c) ∧ bandUpdate n e W g =ᶠ[𝓝 p] fun _ => c := by
+  have hs0 : 0 < e.par p :=
+    lt_of_le_of_ne hcb.1 fun h => h0 (eq_point_zero_of_mem_closedEdgeBand hn.le hcb h.symm)
+  have hsn : e.par p < n :=
+    lt_of_le_of_ne hcb.2.1 fun h => h1 (eq_point_end_of_mem_closedEdgeBand hn.le hcb h)
+  have hw := bandWidth_pos hs0 hsn
+  have hc := continuousAt_bandCoord hs0 hsn
+  have hd : e.nor n p = -8 * bandWidth n (e.par p) ∨ e.nor n p = 2 * bandWidth n (e.par p) := by
+    by_contra h
+    push Not at h
+    exact hb ⟨hs0, hsn, lt_of_le_of_ne hcb.2.2.1 (Ne.symm h.1), lt_of_le_of_ne hcb.2.2.2 h.2⟩
+  rcases hd with hd | hd
+  · have hx : bandCoord n e p < -7 := by
+      rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
+      norm_num
+    refine ⟨c₁, hlow hs0 hsn hd, ?_⟩
+    filter_upwards [hlow hs0 hsn hd, hc.eventually (Iio_mem_nhds hx)] with q hq (hq' : _ < _)
+    by_cases hqb : q ∈ edgeBand n e (-8) 2
+    · rw [bandUpdate_of_mem hqb]
+      exact hlo _ ⟨(mem_edgeBand_iff_bandCoord.1 hqb).2.2.1, hq'⟩
+    · rw [bandUpdate_of_notMem hqb]
+      exact hq
+  · have hx : 1 < bandCoord n e p := by
+      rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
+      norm_num
+    refine ⟨c₂, hup hs0 hsn hd, ?_⟩
+    filter_upwards [hup hs0 hsn hd, hc.eventually (Ioi_mem_nhds hx)] with q hq (hq' : _ < _)
+    by_cases hqb : q ∈ edgeBand n e (-8) 2
+    · rw [bandUpdate_of_mem hqb]
+      exact hhi _ ⟨hq', (mem_edgeBand_iff_bandCoord.1 hqb).2.2.2⟩
+    · rw [bandUpdate_of_notMem hqb]
+      exact hq
+
 /-- **Two labels near a point after a band update.** Let `W` take at most two values near every
 point, the value `c₁` on `-8 < x < -7` and `c₂` on `1 < x < 2`, and let the guide `g` have at most
 two labels near `p`, equal `c₁` near the curve `x = -8` and `c₂` near the curve `x = 2`. Then
@@ -129,37 +178,9 @@ theorem hasTwoLabelsNear_bandUpdate {ι : Type*} {n : ℝ} (hn : 0 < n) {e : Squ
     rw [bandUpdate_of_mem hq]
     exact hq'
   by_cases hcb : p ∈ closedEdgeBand n e (-8) 2
-  · have hs0 : 0 < e.par p :=
-      lt_of_le_of_ne hcb.1 fun h => h0 (eq_point_zero_of_mem_closedEdgeBand hn.le hcb h.symm)
-    have hsn : e.par p < n :=
-      lt_of_le_of_ne hcb.2.1 fun h => h1 (eq_point_end_of_mem_closedEdgeBand hn.le hcb h)
-    have hw := bandWidth_pos hs0 hsn
-    have hc := continuousAt_bandCoord hs0 hsn
-    have hd : e.nor n p = -8 * bandWidth n (e.par p) ∨ e.nor n p = 2 * bandWidth n (e.par p) := by
-      by_contra h
-      push Not at h
-      exact hb ⟨hs0, hsn, lt_of_le_of_ne hcb.2.2.1 (Ne.symm h.1), lt_of_le_of_ne hcb.2.2.2 h.2⟩
-    rcases hd with hd | hd
-    · have hx : bandCoord n e p < -7 := by
-        rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
-        norm_num
-      refine hasTwoLabelsNear_of_eventuallyEq_const (c := c₁) ?_
-      filter_upwards [hlow hs0 hsn hd, hc.eventually (Iio_mem_nhds hx)] with q hq (hq' : _ < _)
-      by_cases hqb : q ∈ edgeBand n e (-8) 2
-      · rw [bandUpdate_of_mem hqb]
-        exact hlo _ ⟨(mem_edgeBand_iff_bandCoord.1 hqb).2.2.1, hq'⟩
-      · rw [bandUpdate_of_notMem hqb]
-        exact hq
-    · have hx : 1 < bandCoord n e p := by
-        rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
-        norm_num
-      refine hasTwoLabelsNear_of_eventuallyEq_const (c := c₂) ?_
-      filter_upwards [hup hs0 hsn hd, hc.eventually (Ioi_mem_nhds hx)] with q hq (hq' : _ < _)
-      by_cases hqb : q ∈ edgeBand n e (-8) 2
-      · rw [bandUpdate_of_mem hqb]
-        exact hhi _ ⟨hq', (mem_edgeBand_iff_bandCoord.1 hqb).2.2.2⟩
-      · rw [bandUpdate_of_notMem hqb]
-        exact hq
+  · obtain ⟨c, -, hc⟩ :=
+      exists_eventuallyEq_bandUpdate_of_mem_closedEdgeBand hn hlo hhi h0 h1 hcb hb hlow hup
+    exact hasTwoLabelsNear_of_eventuallyEq_const hc
   · refine hg.congr ?_
     filter_upwards [(isClosed_closedEdgeBand n e _ _).isOpen_compl.mem_nhds hcb] with q hq
     rw [bandUpdate_of_notMem fun h => hq (edgeBand_subset_closedEdgeBand _ _ _ _ h)]
