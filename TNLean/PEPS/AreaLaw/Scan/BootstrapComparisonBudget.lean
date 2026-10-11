@@ -51,6 +51,10 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
   have he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
   obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ :=
     BootstrapParameters.parameter_bounds he₀pos he₀₁
+  have hℓg₀ : BootstrapParameters.ell e₀ < BootstrapParameters.g0 e₀ :=
+    (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
+      (by norm_num : (1 : ℝ) < 100)).trans
+      (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
   done
 
 end TNLean.PEPS.AreaLaw.Scan
