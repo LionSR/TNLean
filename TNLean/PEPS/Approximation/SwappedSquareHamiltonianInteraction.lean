@@ -57,6 +57,10 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
   intro p e F K
   let B (i : SquareInteraction L) :=
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i)) * Fᴴ
+  have hBsupport (i : SquareInteraction L) : B i ∈
+      QuantumCircuit.supportedOperators (q * q) (squareInteractionSupport i : Set (Vertex L)) :=
+    EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
+      (squareInteractionSupport i) (h.hermitianTerm_mem_supportedOperators i)
   done
 
 end TNLean.PEPS.Approximation
