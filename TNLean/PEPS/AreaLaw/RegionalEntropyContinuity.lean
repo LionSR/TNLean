@@ -44,7 +44,7 @@ theorem abs_regionalEntropy_sub_le_sqrt_traceDistance
     (Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr
       (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
         (FiniteProduct.trace_reducedPure (fun _ : Site Λ ↦ Fin q) Ω hΩ A)))).ne'
-  simpa [regionalEntropy_eq_finiteProduct, Nat.cast_pow, Real.log_pow] using
-    (Real.log_mul (Real.exp_ne_zero 1) hdim ▸ h)
+  rw [Real.log_mul (Real.exp_ne_zero 1) hdim] at h
+  done
 
 end TNLean.PEPS.AreaLaw
