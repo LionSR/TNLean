@@ -1877,3 +1877,229 @@ The following finite construction follows
     conclusion; the derivative, entropy, and integral conclusions are
     unchanged.
 \end{proof}
+
+% Source: 08-scanner.tex, lines 32--58 and 400--414; 07-comparators.tex,
+% lines 70--85. Completion markers await exact-head hosted verification.
+\subsection{A common marginal moment bound for physical statuses}
+
+\begin{theorem}[Compact containment outside the far side]
+    \label{thm:al_scan_nonfar_compact}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.mem_truncationSet_of_not_far,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_far_compl_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_far_compl_subset_truncationSet}
+    \uses{def:al_scan_actual_histories}
+    Suppose $8Km\le L$. If a physical partition preserves every initial
+    far-side assignment of a band, every site outside its far side lies
+    in $S_0=\{x\in A:d(x)\le L\}$. In particular, $V^c\subseteq S_0$
+    at every completed and pre-charge status, with no time-horizon or
+    row assumption.
+\end{theorem}
+\begin{proof}
+    A site outside $A$, or above the initial upper cutoff, is initially
+    far and stays far. Every other site has depth at most
+    $8gm+5m+r\le8Km\le L$, since $g<K$ and $r<m$.
+    Fills and charges preserve all assigned sites.
+\end{proof}
+
+\begin{definition}[Physical status marginal regions]
+    \label{def:al_scan_status_marginals}
+    \lean{TNLean.PEPS.AreaLaw.Scan.statusMarginalRegions}
+    \uses{def:al_scan_actual_histories}
+    The physical marginal regions at a status are
+    $XU,V,Y,U,UY$, where $XU$ is the near receiving side, $V$ is the far
+    side, $Y$ is the middle, and $U,UY$ are the positive-depth portions
+    of $XU,XU\cup Y$, respectively. Coincident and empty regions are allowed.
+\end{definition}
+
+\begin{theorem}[One budget for every physical status]
+    \label{thm:al_scan_common_status_budget}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_statusMarginal_cutBudget_le_log}
+    \uses{thm:al_scan_nonfar_compact,def:al_scan_status_marginals,
+        thm:al_scan_status_cuts,thm:al_lattice_crossing_budget,thm:al_exact_cut_budget}
+    Fix $q\ge1$, the interaction range $R$, and $C_r\ge0$.
+    There is $C_B>0$, chosen before the finite domain and scanner, with
+    the following property. Use the induced lattice graph and anchors
+    in their original admissible supports. Suppose $n\ge2$, $T\ne\varnothing$,
+    depth is ambient sup-norm distance to $T$, and
+    \begin{align}
+        r_0 & =\lceil C_r(\log n)^2\rceil\le D, & 1 & \le D, & 4D & \le m, & 8Km & \le L.
+    \end{align}
+    Assume $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$, and every
+    endpoint of a physical cut edge of $A$ has ambient distance greater
+    than $2L+10r_0$ from $T$. One common number
+    $\mathcal B=C_B nD(\log n)^{12}\ge1$ bounds the designated-support
+    budget of every region in Definition~\ref{def:al_scan_status_marginals},
+    at every completed status with $k\le nm$ and every pre-charge status
+    with $k+1\le nm$.
+\end{theorem}
+\begin{proof}
+    The regions $XU,Y,U,UY$ lie in $V^c\subseteq S_0$.
+    For $V$, apply the lattice estimate to $V^c$ and use complement
+    invariance of both the cut-edge count and the labelled budget.
+    The actual boundary counts are $16nD$ for $XU,V$, $20nD$ for $U,UY$,
+    and $40nD$ for $Y$. The lattice logarithmic estimate with coefficient
+    $40$ therefore gives one constant $C$ for every status. Take
+    $C_B=C+1$. Applying the same estimate to the empty cut, whose budget
+    is one, proves $\mathcal B\ge1$ even when there are no bands.
+\end{proof}
+
+\begin{theorem}[Common real moment interval]
+    \label{thm:al_scan_common_moment_interval}
+    \lean{TNLean.PEPS.AreaLaw.Scan.tailRadius_antitone_budget,
+        TNLean.PEPS.AreaLaw.Scan.tailRadius_eq_div_sqrt,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_reducedState_le_common}
+    \uses{thm:al_scan_actual_marginal_tails,thm:al_exact_cut_budget}
+    For $\vartheta\ge0$ and $0<B\le B'$, the radius
+    $[32\sqrt{(1+\vartheta)B}]^{-1}$ decreases when $B$ is replaced by $B'$.
+    Under the physical ground-state hypotheses of
+    Theorem~\ref{thm:al_scan_actual_marginal_tails}, suppose
+    the designated-support budget of a cut $Q$ is at most $\mathcal B$.
+    Put $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$.
+    For every real $u$ with $|u|\le c_0/\sqrt{\mathcal B}$,
+    \begin{align}
+        \log\sum_{p_j>0}p_j^{1-u} & \le uS_{\widetilde\Omega}(Q)+C_0\mathcal B u^2,
+        \label{eq:al_scan_common_moment}
+    \end{align}
+    where $p_j$ are the eigenvalues of the marginal of the same
+    physical ground vector $\widetilde\Omega$.
+\end{theorem}
+\begin{proof}
+    Factor $\sqrt{(1+\vartheta)B}=\sqrt{1+\vartheta}\sqrt B$ and use
+    monotonicity of the square root and its positive reciprocal.
+    The larger budget restricts the interval and increases the
+    nonnegative quadratic term in the existing moment estimate.
+\end{proof}
+
+\begin{theorem}[One truncated vector for all physical marginal inputs]
+    \label{thm:al_scan_common_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_common_status_budget,
+        thm:al_scan_common_moment_interval}
+    Fix $R$, $J\ge0$, $\Delta>0$, and $C_{\mathrm{card}}\ge0$.
+    There is $C_{\mathrm{tr}}>0$ such that, for each $q\ge1$, there is
+    $C_B>0$, both chosen before the domain, Hamiltonian and scanner.
+    Assume the original Hamiltonian has the ground vector and gap of
+    Theorem~\ref{thm:al_scan_exists_marginal_tails}, that
+    $|S_0|\le C_{\mathrm{card}}n^2$, and that the geometric hypotheses of
+    Theorem~\ref{thm:al_scan_common_status_budget} hold with $C_r=C_{\mathrm{tr}}$.
+    There are one pair $(e,\widetilde\Omega)$ and one number
+    $1\le\mathcal B\le C_BnD(\log n)^{12}$ such that the truncated sum has
+    ground vector $\widetilde\Omega$, energy $e$ and projector gap $g/2$.
+    This pair retains
+    \begin{align}
+        0          & \le e\le\epsilon_n,      &
+        \epsilon_n & =\min\{n^{-1000},g/4\},    \\
+        \|\widetilde\Omega-\mathrm e^{i\theta}\Omega\|
+                   & \le2\sqrt{\epsilon_n/g},   \\
+        \frac12\bigl\||\widetilde\Omega\rangle\langle\widetilde\Omega|
+        -|\Omega\rangle\langle\Omega|\bigr\|_1
+                   & \le\sqrt{2\epsilon_n/g}
+    \end{align}
+    for a real phase $\theta$. The positive constants
+    $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ give
+    (\ref{eq:al_scan_common_moment}) for all five physical regions,
+    every completed status with $k\le nm$, every pre-charge status with
+    $k+1\le nm$, and every real $u$ in the same interval
+    $|u|\le c_0/\sqrt{\mathcal B}$.
+\end{theorem}
+\begin{proof}
+    Choose the truncated ground vector once, before all cut and history
+    indices, retaining its energy and distance bounds. Choose the geometric
+    coefficient with radius coefficient $C_{\mathrm{tr}}$, and apply the
+    common-interval estimate to every actual status cut. The original
+    $\Omega$ continues to center every positive constraint.
+\end{proof}
+
+\begin{theorem}[Rounded scales satisfy the status separations]
+    \label{thm:al_scan_status_scale_separation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eight_mul_bandCount_mul_le,
+        TNLean.PEPS.AreaLaw.Scan.eventually_status_scale_separation}
+    Fix $C_r\ge0$ and real exponents $0<\kappa<\mu$ and $\ell$.
+    For all sufficiently large integer $n$, put
+    $L=\lfloor n^{1-\ell}\rfloor$, $m=\lfloor n^\mu\rfloor$,
+    $D=\lceil n^\kappa\rceil$, and $K=L/(8m)$ with integer division.
+    Then $n\ge2$, $r_0=\lceil C_r(\log n)^2\rceil\le D$, $D\ge1$,
+    $4D\le m$, and $8Km\le L$. The threshold may depend on the fixed
+    exponents. The last inequality holds for all natural $L,m$.
+\end{theorem}
+\begin{proof}
+    The squared logarithm is smaller than $n^\kappa$ eventually.
+    Also $n^{\mu-\kappa}\ge8$ eventually and
+    $\lceil n^\kappa\rceil\le n^\kappa+1\le2n^\kappa$ for $n\ge2$.
+    Thus $4\lceil n^\kappa\rceil\le n^\mu$, so the integer left side is
+    at most $\lfloor n^\mu\rfloor$. Integer division gives $8Km\le L$.
+\end{proof}
+
+\begin{theorem}[Quadratic volume of the compact collar]
+    \label{thm:al_scan_compact_quadratic_volume}
+    \lean{TNLean.PEPS.AreaLaw.Scan.card_compact_collar_le_quadratic}
+    \uses{thm:al_scan_ambient_rows}
+    Let $T\ne\varnothing$ be a finite ambient target and let $A$ be any
+    subset of the finite physical domain. Suppose $n,L\in\N$, $L\le n$,
+    $C\in\R$, $|T|\le Cn^2$, and
+    $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$.
+    Then $|A\cap T_L|\le(C+1)n^2$.
+\end{theorem}
+\begin{proof}
+    The actual physical collar injects into $T_L$. Summing its ambient
+    layers gives $|T_L|\le |T|+nL\le Cn^2+n^2=(C+1)n^2$.
+    This also applies when $L=0$ or $A=\varnothing$.
+\end{proof}
+
+\begin{theorem}[Positive rounded band count]
+    \label{thm:al_scan_positive_source_bands}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_one_le_source_bandCount}
+    Fix real exponents $0<\mu<1-\ell$.
+    For all sufficiently large integer $n$, the exact integer quotient
+    $K=\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)$ is at least one.
+    The threshold may depend on $\mu$ and $1-\ell-\mu$.
+\end{theorem}
+\begin{proof}
+    Eventually $n\ge1$ and $n^{1-\ell-\mu}\ge8$.
+    Hence $m=\lfloor n^\mu\rfloor\ge1$ and
+    $8m\le8n^\mu\le n^{1-\ell}$, so $8m\le L=\lfloor n^{1-\ell}\rfloor$.
+    Division by the positive integer $8m$ gives $K\ge1$.
+\end{proof}
+
+\begin{theorem}[Physical marginal moments at the source scales]
+    \label{thm:al_scan_source_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_statusMarginal_moment_bounds}
+    \uses{thm:al_scan_compact_quadratic_volume,thm:al_scan_positive_source_bands,
+        thm:al_scan_status_scale_separation,thm:al_scan_common_status_moments}
+    Fix $R$, $J\ge0$, $\Delta>0$, $C_T\ge0$, and
+    $0<\ell<1$, $0<\kappa<\mu<1-\ell$.
+    There are $C_{\mathrm{tr}}>0$ and $N\ge2$, chosen before the local
+    dimension, such that for every $q\ge1$ there is $C_B>0$ chosen before
+    the physical domain, Hamiltonian and scanner. Use an original gapped
+    ground vector as in Theorem~\ref{thm:al_scan_common_status_moments},
+    the induced lattice graph, and anchors in their original supports.
+    For $n\ge N$, use the literal scales
+    $L=\lfloor n^{1-\ell}\rfloor$, $m=\lfloor n^\mu\rfloor$,
+    $D=\lceil n^\kappa\rceil$, $K=L/(8m)$ with integer division, and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+    Suppose $T\ne\varnothing$, depth is ambient sup-norm distance to $T$,
+    $|T|\le C_Tn^2$, $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$,
+    and every endpoint of a physical cut edge of $A$ has ambient distance
+    greater than $2L+10r_0$ from $T$.
+
+    Then $K\ge1$. There are one pair $(e,\widetilde\Omega)$ and one
+    number $1\le\mathcal B\le C_BnD(\log n)^{12}$ satisfying all the
+    spectral, energy, phase and trace-distance conclusions of
+    Theorem~\ref{thm:al_scan_common_status_moments}. The positive constants
+    $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ give
+    (\ref{eq:al_scan_common_moment}) for every actual region
+    $XU,V,Y,U,UY$, every completed status with $k\le nm$, every pre-charge
+    status with $k+1\le nm$, and every real $u$ with
+    $|u|\le c_0/\sqrt{\mathcal B}$, using that same $\widetilde\Omega$.
+\end{theorem}
+\begin{proof}
+    Choose the truncation coefficient for the compact-volume coefficient
+    $C_T+1$. Choose one threshold for the radius coefficient and fixed exponents so that
+    $r_0\le D$, $D\ge1$, $4D\le m$, and $K\ge1$; integer division always
+    gives $8Km\le L$. Since $\ell>0$ and $n\ge1$, the floor gives $L\le n$.
+    Theorem~\ref{thm:al_scan_compact_quadratic_volume} supplies
+    $|S_0|\le(C_T+1)n^2$. Apply
+    Theorem~\ref{thm:al_scan_common_status_moments} with these derived
+    inequalities, retaining its single truncated ground vector.
+\end{proof}
+

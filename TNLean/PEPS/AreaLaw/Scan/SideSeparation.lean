@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scan.DesignatedDilution
-import TNLean.PEPS.AreaLaw.Scan.BandNesting
+import TNLean.PEPS.AreaLaw.Scan.StatusContainment
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 
@@ -29,48 +28,24 @@ namespace CollarScan
 
 variable (S : CollarScan V I)
 
-omit [Fintype I] [LinearOrder I] in
-private theorem near_subset_truncationSet {L : ℕ} (g : Fin S.K) (r : Fin S.m)
-    (hL : 8 * S.K * S.m ≤ L) (σ : PhysicalPartition V)
-    (hfar : ∀ x, initialPartition S.A S.depth (S.lower g r) (S.upper g r) x =
-      some true → σ x = some true) :
-    receiving σ false ⊆ S.truncationSet L := by
-  intro x hx
-  have hxnear := (Finset.mem_filter.mp hx).2
-  have hi : initialPartition S.A S.depth (S.lower g r) (S.upper g r) x ≠ some true := by
-    intro hx
-    have := hfar x hx
-    simp_all
-  have hxA : x ∈ S.A := by
-    by_contra h
-    exact hi (by simp [initialPartition, h])
-  have hupper : S.depth x ≤ S.upper g r := by
-    have hlu : S.lower g r ≤ S.upper g r := by simp only [lower, upper]; omega
-    by_contra h
-    exact hi (by simp [initialPartition, hxA, show ¬ S.depth x ≤ S.lower g r by omega,
-      show S.upper g r < S.depth x by omega])
-  have hbound : S.upper g r ≤ L := by
-    have hg : g.val + 1 ≤ S.K := g.isLt
-    have hgm := Nat.mul_le_mul_right S.m (Nat.mul_le_mul_left 8 hg)
-    have hr := r.isLt
-    simp only [upper]
-    exact_mod_cast (show 8 * g.val * S.m + 5 * S.m + r.val ≤ L by nlinarith)
-  exact Finset.mem_filter.mpr ⟨hxA, hupper.trans hbound⟩
-
 /-- The actual near side remains in the truncation set at every completed history,
 including the fixed target. No row bound or good-history condition is needed. -/
 theorem state_near_subset_truncationSet {k L : ℕ} (h : History S.K S.m S.M k)
     (g : Fin S.K) (hL : 8 * S.K * S.m ≤ L) :
-    receiving (S.state h g) false ⊆ S.truncationSet L :=
-  S.near_subset_truncationSet g (h.1 g) hL _ fun x hx ↦
-    S.bandState_of_initial_assigned g (h.1 g) k (fun t ↦ h.2 t g) x true hx
+    receiving (S.state h g) false ⊆ S.truncationSet L := by
+  intro x hx
+  apply S.state_far_compl_subset_truncationSet h g hL
+  have hxnear := (Finset.mem_filter.mp hx).2
+  simp [receiving, hxnear]
 
 /-- The actual near side remains in the truncation set immediately before a charge. -/
 theorem oldChargeState_near_subset_truncationSet {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (hL : 8 * S.K * S.m ≤ L) :
-    receiving (S.oldChargeState h g) false ⊆ S.truncationSet L :=
-  S.near_subset_truncationSet g (h.1 g) hL _ fun _ hx ↦
-    S.oldChargeState_of_initial_assigned h g hx
+    receiving (S.oldChargeState h g) false ⊆ S.truncationSet L := by
+  intro x hx
+  apply S.oldChargeState_far_compl_subset_truncationSet h g hL
+  have hxnear := (Finset.mem_filter.mp hx).2
+  simp [receiving, hxnear]
 
 omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 private theorem front_sum_lt_neg_lead {k : ℕ} (g r : ℕ)

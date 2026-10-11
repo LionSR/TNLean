@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.SubsystemSize
-import TNLean.PEPS.AreaLaw.Scan.BandNesting
+import TNLean.PEPS.AreaLaw.Scan.StatusContainment
 
 /-!
 # Size of every non-contained actual designated support
@@ -45,26 +45,8 @@ private theorem designatedSupport_eq_ball_of_not_constant {L : ℕ}
     push Not at hh
     exact hnc ⟨some true, hh⟩
   obtain ⟨x, hxD, hx⟩ := hex
-  have hi : initialPartition S.A S.depth (S.lower g r) (S.upper g r) x ≠ some true :=
-    fun hi ↦ hx (hfar x hi)
-  have hxA : x ∈ S.A := by
-    by_contra hh
-    exact hi (by simp [initialPartition, hh])
-  have hlu : S.lower g r ≤ S.upper g r := by simp only [lower, upper]; omega
-  have hxd : S.depth x ≤ S.upper g r := by
-    by_contra hh
-    exact hi (by simp [initialPartition, hxA, show ¬ S.depth x ≤ S.lower g r by omega,
-      show S.upper g r < S.depth x by omega])
-  have hu : 8 * g.val * S.m + 5 * S.m + r.val ≤ L := by
-    calc
-      _ ≤ 8 * g.val * S.m + 8 * S.m := by have := r.isLt; omega
-      _ = 8 * (g.val + 1) * S.m := by ring
-      _ ≤ 8 * S.K * S.m := Nat.mul_le_mul_right S.m (Nat.mul_le_mul_left 8 g.isLt)
-      _ ≤ L := hL
-  have hxT : x ∈ S.truncationSet L := by
-    refine Finset.mem_filter.mpr ⟨hxA, hxd.trans ?_⟩
-    simpa only [upper] using (show ((8 * g.val * S.m + 5 * S.m + r.val : ℕ) : ℤ) ≤ L by
-      exact_mod_cast hu)
+  have hxT : x ∈ S.truncationSet L :=
+    S.mem_truncationSet_of_not_far g r σ hL hfar hx
   have hey : ∃ y ∈ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i),
       σ y ≠ σ x := by
     by_contra hh

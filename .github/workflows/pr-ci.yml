@@ -906,6 +906,59 @@ jobs:
               "$source"
           done
 
+      - name: Check common status marginal production strictly
+        timeout-minutes: 10
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/StatusContainment.lean \
+              TNLean/PEPS/AreaLaw/Scan/SideSeparation.lean \
+              TNLean/PEPS/AreaLaw/Scan/SplitSupportSize.lean \
+              TNLean/PEPS/AreaLaw/Scan/StatusMarginalBudget.lean \
+              TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean \
+              TNLean/PEPS/AreaLaw/Scan/StatusScaleSeparation.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          done
+
+      - name: Test common status marginal inputs and axioms strictly
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for source in TNLeanTest/StatusMarginalInputs.lean \
+              TNLeanTest/StatusMarginalGeometry.lean \
+              TNLeanTest/StatusMarginalInputsAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          done
+
+      - name: Check source-scale status marginal production strictly
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/CompactCollarCounting.lean \
+              TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          done
+
+      - name: Test source-scale status marginal signatures and axioms strictly
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLeanTest/SourceStatusMarginalMoments.lean \
+              TNLeanTest/SourceStatusMarginalMomentsAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          done
+
       - name: Check actual energy and transport production modules strictly
         timeout-minutes: 4
         run: |
