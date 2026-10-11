@@ -101,6 +101,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_assembly.py'
       - 'scripts/test_tenkz_area_law_geometry.py'
       - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_dyadic_geometry.py'
@@ -217,6 +218,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_assembly.py'
       - 'scripts/test_tenkz_area_law_geometry.py'
       - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_dyadic_geometry.py'
@@ -376,6 +378,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_region_coordinates.py'
+              - 'scripts/test_tenkz_peps_assembly.py'
               - 'scripts/test_tenkz_area_law_geometry.py'
               - 'scripts/test_tenkz_area_law_scan_buffer.py'
               - 'scripts/test_tenkz_peps_dyadic_geometry.py'
@@ -1704,6 +1707,9 @@ jobs:
           python3 scripts/test_tenkz_region_coordinates.py
           --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
 
+      - name: Check PEPS assembly diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_assembly.py
       - name: Check dyadic protocol geometry diagrams
         if: env.TEX_CHANGED == 'true'
         run: >
