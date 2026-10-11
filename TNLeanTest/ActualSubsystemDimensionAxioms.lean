@@ -65,3 +65,23 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms exists_transportLogDimBound_log_four
+
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.exists_transport_coefficients_log_bound'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms exists_transport_coefficients_log_bound
+
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.transportLogDimBound_le_radius_sq'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms transportLogDimBound_le_radius_sq
+
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.mul_transportLogDimBound_le_of_radius_small'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms mul_transportLogDimBound_le_of_radius_small
+
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.exists_pos_radius_smallness_threshold'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms exists_pos_radius_smallness_threshold
