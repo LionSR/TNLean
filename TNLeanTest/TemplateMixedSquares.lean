@@ -318,6 +318,7 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le
+
 -- A zero-radius shell has no selected cells, at every cap and exponent.
 example (K : ℕ) (e : ℝ) :
     ∑ c ∈ cappedDyadicPartition (ambientDilation thinDiagonalTemplate.points 0 \
