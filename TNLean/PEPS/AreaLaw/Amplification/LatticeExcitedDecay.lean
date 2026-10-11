@@ -18,9 +18,8 @@ The expectation uses the concrete fixed-time Poisson-word probability law.
 
 ## Proof status
 
-The statement, ground-state decomposition and positive-constraint estimates
-have been elaborated. The final application of the Poisson contraction decay
-theorem awaits compiler verification.
+The proof has compiled in the full project build. Strict verification and
+the exact-name axiom audit remain pending.
 
 ## References
 
@@ -50,7 +49,7 @@ including arbitrary entangled finite spectators.
 Source: area law, `09-amplification.tex`, lines 237–253,
 `eq:amplification-excited-decay`. -/
 theorem latticeConstraintWord_excitedProjection_decay
-    {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ} (_hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
     (E₀ : ℝ) (Ω : StateSpace Λ q) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
     {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
