@@ -268,7 +268,7 @@ theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
       simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sub_apply,
         Matrix.smul_apply, Matrix.one_apply, Matrix.vecMulVec_apply, Pi.star_apply,
         e.symm.injective.eq_iff]
-      done
+      rfl
     done
 
 end TNLean.PEPS.Approximation
