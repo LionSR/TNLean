@@ -60,6 +60,25 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
   have hκμ : BootstrapParameters.kappa e₀ < BootstrapParameters.mu e₀ := by
     linarith [show BootstrapParameters.kappa e₀ ≤ BootstrapParameters.ell e₀ from
       min_le_left _ _, show BootstrapParameters.mu e₀ = 1 - BootstrapParameters.g0 e₀ from rfl]
+  let X : ScannerExponents :=
+    { ell := BootstrapParameters.ell e₀
+      kappa := BootstrapParameters.kappa e₀
+      mu := BootstrapParameters.mu e₀
+      nu := BootstrapParameters.nu e₀
+      e := e₀
+      ell_pos := hℓ
+      ell_lt_one := hℓ₁
+      kappa_pos := hκ
+      kappa_lt_mu := hκμ
+      mu_lt_one_sub_ell := hμℓ
+      nu_pos := div_pos hg₀ (by norm_num)
+      e_pos := he₀pos
+      e_lt_one := he₀₁
+      kappa_le_e :=
+        (show BootstrapParameters.kappa e₀ ≤
+            (Exponents.boxError : ℝ) / 4 from min_le_right _ _).trans
+          ((show (Exponents.boxError : ℝ) / 4 ≤
+              (Exponents.boxError : ℝ) by norm_num [Exponents.boxError]).trans he₀.le) }
   done
 
 end TNLean.PEPS.AreaLaw.Scan
