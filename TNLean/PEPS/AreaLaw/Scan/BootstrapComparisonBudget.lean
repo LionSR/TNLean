@@ -55,6 +55,8 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
     (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
       (by norm_num : (1 : ℝ) < 100)).trans
       (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
+  have hμℓ : BootstrapParameters.mu e₀ < 1 - BootstrapParameters.ell e₀ :=
+    sub_lt_sub_left hℓg₀ 1
   done
 
 end TNLean.PEPS.AreaLaw.Scan
