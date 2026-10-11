@@ -55,6 +55,9 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
   have hsum := congrArg (Matrix.reindex p p)
     (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
+  change F * K * Fᴴ - K = ∑ e ∈ boundary,
+    (F * Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)) * Fᴴ -
+      Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e))) at hsum
   done
 
 end TNLean.PEPS.Approximation
