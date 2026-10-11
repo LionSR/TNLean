@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.NuclearNormTruncation
+import QICLean.Analysis.RectangularTraceNormTruncation
 
 /-!
 # Whole-group tensor bounds for finite tensor graphs
@@ -29,8 +29,8 @@ functions on `P v`. A vertex without open legs has a one-point configuration typ
 * `WholeGroup.partialNormSq_le_prod`: every partially contracted subgraph has squared norm at
   most the product of the squared vertex norms.
 * `WholeGroup.contraction_norm_le_one`: the contracted tensor has norm at most one.
-* `WholeGroup.nuclearNorm_flattening_le_one`: across every bipartition into whole open-leg groups,
-  the flattening has nuclear norm at most one.
+* `WholeGroup.rectangularTraceNorm_flattening_le_one`: across every bipartition into whole
+  open-leg groups, the flattening has trace norm at most one.
 
 ## References
 
@@ -660,11 +660,11 @@ across every bipartition into whole open-leg groups. No dimension enters.
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, 05-frames.tex:125–141;
 proof and equation `eq:group-nuclear`, 05-frames.tex:157–164. -/
-theorem nuclearNorm_flattening_le_one [∀ v, DecidableEq (P v)]
+theorem rectangularTraceNorm_flattening_le_one [∀ v, DecidableEq (P v)]
     (hloop : ∀ e, tail e ≠ head e) (hA : ∀ v, vertexNormSq A v ≤ 1) (T : Finset V) :
-    Matrix.nuclearNorm (flattening (contraction A) T) ≤ 1 := by
+    Matrix.rectangularTraceNorm (flattening (contraction A) T) ≤ 1 := by
   rw [flattening_contraction]
-  refine (Matrix.nuclearNorm_mul_transpose_le _ _).trans ?_
+  refine (Matrix.rectangularTraceNorm_mul_transpose_le _ _).trans ?_
   have h₁ : ‖bipartitionLeft A T‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
     ((norm_sq_bipartitionLeft A T).trans_le (partialNormSq_le_one A hloop hA T))
   have h₂ : ‖bipartitionRight A T‖ ≤ 1 := (sq_le_one_iff₀ (norm_nonneg _)).mp
