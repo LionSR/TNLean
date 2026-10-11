@@ -206,6 +206,7 @@ $\mu$ labels.
 \begin{theorem}[A common auxiliary label in physical coordinates]
     \label{thm:al_global_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector}
+    \leanok
     Let $V$ be a finite set of physical sites with local dimension $q>0$,
     and let $\Omega$ be a unit vector satisfying $H\Omega=E\Omega$.
     Fix $X\subseteq V$. In a spectral basis of the reduced density on $X$,
@@ -239,7 +240,7 @@ $\mu$ labels.
         \log\dim\lambda_k-kS(\rho) & =o(k).
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Positive selected mass normalizes the selected Schmidt vector.
     The common-label selection for its actual auxiliary marginal gives the
     polynomial mass bound and entropy asymptotic. Impose this same label on
@@ -253,6 +254,7 @@ $\mu$ labels.
 \begin{theorem}[The initial vector for the truncated Hamiltonian]
     \label{thm:al_truncation_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
+    \leanok
     \uses{thm:al_truncation, thm:al_global_schmidt_bell_prevector}
     Under the hypotheses of Theorem~\ref{thm:al_truncation}, the same constant
     $C_1$, truncated Hamiltonian $\widetilde H$, ground energy $e$ and unit
@@ -263,7 +265,7 @@ $\mu$ labels.
     all the conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
     with $H=\widetilde H$ and $E=e$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     First choose the constant and witnesses of
     Theorem~\ref{thm:al_truncation}. Apply
     Theorem~\ref{thm:al_global_schmidt_bell_prevector} to their exact ground
