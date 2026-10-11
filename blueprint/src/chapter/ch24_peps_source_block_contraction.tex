@@ -116,10 +116,10 @@ This gives the contractions used in
     (\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
-% The following auxiliary declarations await ordinary-module and axiom checks.
 \begin{definition}[The product source matrix]
     \label{def:peps_product_source_matrix}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.productSourceMatrix}
+    \leanok
     \uses{def:peps_source_inventory}
     Let $K_e$ be sets indexed by the ordered source positions, and put
     $\mathcal A_K=\prod_e K_e$. For matrices
@@ -136,6 +136,7 @@ This gives the contractions used in
 \begin{theorem}[Finite contraction of source columns]
     \label{thm:peps_source_column_contraction}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceContraction_columns_eq_mul}
+    \leanok
     \uses{def:peps_product_source_matrix}
     Suppose each $K_e$ is finite. Let $\mathcal R,\mathcal T$ be
     arbitrary sets, and let
@@ -151,19 +152,19 @@ This gives the contractions used in
     or nonvanishing condition is required.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_product_source_matrix}
     Pairing the ket and bra assignments at each source position
     identifies them with $(\alpha,\beta)\in\mathcal A_K^2$.
     The $(r,s)$ entry of the contraction is
     \begin{align*}
         \sum_{\alpha,\beta}
-            L(r,\alpha)\overline{M(s,\beta)}
-                \prod_e X_e(\alpha_e,\beta_e)
+        L(r,\alpha)\overline{M(s,\beta)}
+        \prod_e X_e(\alpha_e,\beta_e)
          & =\sum_{\beta,\alpha}
-            L(r,\alpha)\mathcal X(\alpha,\beta)
-                \overline{M(s,\beta)}
-          =(L\mathcal X M^\dagger)(r,s).
+        L(r,\alpha)\mathcal X(\alpha,\beta)
+        \overline{M(s,\beta)}
+        =(L\mathcal X M^\dagger)(r,s).
     \end{align*}
     The sums are finite, so their order may be interchanged.
 \end{proof}
@@ -171,6 +172,7 @@ This gives the contractions used in
 \begin{theorem}[Contraction on a prescribed pure input]
     \label{thm:peps_pure_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
         def:peps_product_source_matrix}
     In the source bases of Definition~\ref{def:peps_source_slot_basis},
@@ -187,7 +189,7 @@ This gives the contractions used in
     normalized. Empty source lists and zero input vectors are included.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient,
         thm:peps_source_column_contraction}
     Substitute (\ref{eq:peps_pure_source_density_coefficient}) into
@@ -198,6 +200,7 @@ This gives the contractions used in
 \begin{theorem}[Physical entries of a pure prepared coefficient]
     \label{thm:peps_pure_source_physical}
     \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_partialTrace_apply}
+    \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
     Suppose the output consists of a physical memory followed by a
     discarded memory. Choose finite orthonormal bases $(h_r)_{r\in X}$ and
@@ -209,14 +212,14 @@ This gives the contractions used in
     \begin{align}
         \bigl(\tr_D H_{\alpha,\beta}\bigr)(r,s)
          & =\sum_{z\in D}
-            A_{T,\psi}((r,z),\alpha)
-            \overline{A_{T',\psi}((s,z),\beta)}.
+        A_{T,\psi}((r,z),\alpha)
+        \overline{A_{T',\psi}((s,z),\beta)}.
         \label{eq:peps_pure_source_physical}
     \end{align}
     No normalization or positivity hypothesis is imposed.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient}
     Take the $((r,z),(s,z))$ entry of
     (\ref{eq:peps_pure_source_density_coefficient}) and sum over
