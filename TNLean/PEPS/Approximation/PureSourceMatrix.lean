@@ -60,6 +60,8 @@ theorem preparedDensityCoefficient_pure_eq_vecMulVec
       Matrix.vecMulVec (fun r => v.pureSourceMatrix R U V bU bV ℓ bOut ψ r x)
         (fun s => conj (v'.pureSourceMatrix R U V bU bV ℓ bOut ψ s y)) := by
   rw [preparedDensityCoefficient, preparedMatrix_mul_vecMulVec]
+  simp only [pureSourceMatrix, SourceInventory.eval_prepareSlots_eq_appendIso_symm,
+    ← SourceInventory.slotBasis_apply]
   done
 
 end Word
