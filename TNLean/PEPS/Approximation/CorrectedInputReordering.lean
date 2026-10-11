@@ -33,6 +33,10 @@ open TNLean.PEPS.Approximation
 open SourceInventory
 variable {P : Type}
 
+-- Keeping the retained-slot list opaque stops elaboration from unfolding the
+-- concrete register memories while matching their tensor-product instances.
+attribute [local irreducible] partialSlots
+
 /-- One actual source-free permutation recovers the original free-slot order
 from the corrected and crossing blocks, uniformly for all their vectors. -/
 theorem exists_correctedInputReordering {a b : Layout P} (w : SourceCircuit a b)
