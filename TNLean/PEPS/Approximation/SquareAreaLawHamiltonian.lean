@@ -269,6 +269,6 @@ theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
         Matrix.smul_apply, Matrix.one_apply, Matrix.vecMulVec_apply, Pi.star_apply,
         e.symm.injective.eq_iff]
       rfl
-    done
+    exact hdef ▸ hg
 
 end TNLean.PEPS.Approximation
