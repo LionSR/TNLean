@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
+import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 
 /-!
 # Mixed dyadic squares of an integer-dilated template piece
@@ -78,14 +79,6 @@ theorem Template.exists_dilation_in_row_within {Ctpl : ℝ} {n s₀ : ℕ}
     omega
   · dsimp [w]
     omega
-
-private theorem quotient_interval_card (a b u : ℤ) (hu : 0 < u) (hab : a ≤ b) :
-    u * ((Finset.Icc (a / u) (b / u)).card : ℤ) ≤ b - a + 2 * u := by
-  have hdiv := Int.ediv_le_ediv hu hab
-  rw [Int.card_Icc, Int.toNat_of_nonneg (by omega)]
-  have ha := Int.lt_ediv_add_one_mul_self a hu
-  have hb := Int.ediv_mul_le b (ne_of_gt hu)
-  nlinarith
 
 private theorem quotient_near (x y a u z : ℤ) (hu : 0 < u)
     (hx : z * u ≤ x ∧ x < z * u + u)
