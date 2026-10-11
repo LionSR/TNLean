@@ -27,6 +27,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Matrix.Norms.
 
 namespace TNLean.PEPS.AreaLaw
 
+open Classical in
 /-- A unit exact eigenvector and an actual selected spectral set determine
 one Schmidt--Bell label sequence and the corresponding initial vector in
 canonical physical-site coordinates. The selected typical vector chooses
@@ -36,7 +37,6 @@ and `comparator:high-label`, lines 130–147 and 240–281; `08-scanner.tex`,
 lines 50–59, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 The two auxiliary operators are their literal coordinate transports,
 before identification with singleton site-label projectors. -/
-open Classical in
 theorem exists_global_schmidtBellPrevector
     {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι]
     (H : Matrix (ι → Fin q) (ι → Fin q) ℂ)
