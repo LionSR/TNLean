@@ -114,6 +114,113 @@ This gives the contractions used in
     (\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
+% The following auxiliary declarations await ordinary-module and axiom checks.
+\begin{definition}[The product source matrix]
+    \label{def:peps_product_source_matrix}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.productSourceMatrix}
+    \uses{def:peps_source_inventory}
+    Let $K_e$ be sets indexed by the ordered source positions, and put
+    $\mathcal A_K=\prod_e K_e$. For matrices
+    $X_e\in\C^{K_e\times K_e}$, define
+    $\mathcal X\in\C^{\mathcal A_K\times\mathcal A_K}$ by
+    \begin{align}
+        \mathcal X(\alpha,\beta)
+         & =\prod_e X_e(\alpha_e,\beta_e).
+        \label{eq:peps_product_source_matrix}
+    \end{align}
+    The product over an empty source list is one.
+\end{definition}
+
+\begin{theorem}[Finite contraction of source columns]
+    \label{thm:peps_source_column_contraction}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceContraction_columns_eq_mul}
+    \uses{def:peps_product_source_matrix}
+    Suppose each $K_e$ is finite. Let $\mathcal R,\mathcal T$ be
+    arbitrary sets, and let
+    $L\in\C^{\mathcal R\times\mathcal A_K}$ and
+    $M\in\C^{\mathcal T\times\mathcal A_K}$.
+    For $H(\alpha,\beta)=L(:,\alpha)M(:,\beta)^\dagger$, the
+    contraction of (\ref{eq:peps_source_contraction}) satisfies
+    \begin{align}
+        \mathcal C_H(X) & =L\mathcal X M^\dagger.
+        \label{eq:peps_source_column_contraction}
+    \end{align}
+    The matrices $X_e$ are arbitrary complex matrices; no positivity
+    or nonvanishing condition is required.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_product_source_matrix}
+    Pairing the ket and bra assignments at each source position
+    identifies them with $(\alpha,\beta)\in\mathcal A_K^2$.
+    The $(r,s)$ entry of the contraction is
+    \begin{align*}
+        \sum_{\alpha,\beta}
+            L(r,\alpha)\overline{M(s,\beta)}
+                \prod_e X_e(\alpha_e,\beta_e)
+         & =\sum_{\beta,\alpha}
+            L(r,\alpha)\mathcal X(\alpha,\beta)
+                \overline{M(s,\beta)}
+          =(L\mathcal X M^\dagger)(r,s).
+    \end{align*}
+    The sums are finite, so their order may be interchanged.
+\end{proof}
+
+\begin{theorem}[Contraction on a prescribed pure input]
+    \label{thm:peps_pure_source_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
+        def:peps_product_source_matrix}
+    In the source bases of Definition~\ref{def:peps_source_slot_basis},
+    take $K_e=I_e\times J_e$ and let $X_e$ be arbitrary complex
+    matrices on $K_e$. For the actual prepared coefficients
+    $H(\alpha,\beta)=K_T(\alpha)|\psi\rangle\langle\psi|
+        K_{T'}(\beta)^\dagger$, one has
+    \begin{align}
+        \mathcal C_H(X)
+         & =A_{T,\psi}\mathcal X A_{T',\psi}^\dagger.
+        \label{eq:peps_pure_source_contraction}
+    \end{align}
+    The two compositions are independent, and $\psi$ need not be
+    normalized. Empty source lists and zero input vectors are included.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_pure_source_density_coefficient,
+        thm:peps_source_column_contraction}
+    Substitute (\ref{eq:peps_pure_source_density_coefficient}) into
+    each prepared coefficient, then apply
+    (\ref{eq:peps_source_column_contraction}).
+\end{proof}
+
+\begin{theorem}[Physical entries of a pure prepared coefficient]
+    \label{thm:peps_pure_source_physical}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_partialTrace_apply}
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
+    Suppose the output consists of a physical memory followed by a
+    discarded memory. Choose finite orthonormal bases $(h_r)_{r\in X}$ and
+    $(t_z)_{z\in D}$ of these memories, and use their tensor product
+    as the output basis in (\ref{eq:peps_pure_source_matrix}).
+    For independent source assignments $\alpha,\beta\in\mathcal A$,
+    put $H_{\alpha,\beta}=K_T(\alpha)|\psi\rangle\langle\psi|
+        K_{T'}(\beta)^\dagger$. Then
+    \begin{align}
+        \bigl(\tr_D H_{\alpha,\beta}\bigr)(r,s)
+         & =\sum_{z\in D}
+            A_{T,\psi}((r,z),\alpha)
+            \overline{A_{T',\psi}((s,z),\beta)}.
+        \label{eq:peps_pure_source_physical}
+    \end{align}
+    No normalization or positivity hypothesis is imposed.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_pure_source_density_coefficient}
+    Take the $((r,z),(s,z))$ entry of
+    (\ref{eq:peps_pure_source_density_coefficient}) and sum over
+    the common discarded index $z$.
+\end{proof}
+
 \begin{theorem}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}

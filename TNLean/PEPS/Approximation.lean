@@ -174,6 +174,8 @@ import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
+import TNLean.PEPS.Approximation.PurePhysicalCoefficient
+import TNLean.PEPS.Approximation.PurePreparedContraction
 import TNLean.PEPS.Approximation.PureSourceMatrix
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
@@ -204,6 +206,7 @@ import TNLean.PEPS.Approximation.SourceCircuitResourceBounds
 import TNLean.PEPS.Approximation.SourceCircuitSchmidtSources
 import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
 import TNLean.PEPS.Approximation.SourceCircuitSubstitution
+import TNLean.PEPS.Approximation.SourceColumnContraction
 import TNLean.PEPS.Approximation.SourceCompressedDensity
 import TNLean.PEPS.Approximation.SourceCorrectedContraction
 import TNLean.PEPS.Approximation.SourceCorrectedContractionIdentity
