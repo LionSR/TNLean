@@ -36,11 +36,14 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id
       (ContinuousLinearMap.id ℂ ℂ) := by
   classical
   have ht : ∃ _q : C, true = true := ⟨hC.some, rfl⟩
-  have i : ι := by simpa only [Choices, ite_eq_left ht] using ξ
-  simpa only [partialWord, dite_eq_left ht, partySelector_none] using
+  have hg (i : ι) :=
     Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint
       (affectedOwner (fun _ : P ↦ true)) none
       (((G.branchWord i).mapOwner owner).appendTail tail)
       (fun p ↦ by simp [affectedOwner])
+  rw [partySelector_none] at hg
+  unfold partialWord
+  rw [dite_eq_left ht]
+  exact hg _
 
 end TNLean.PEPS.PairEffect.SourceCircuit
