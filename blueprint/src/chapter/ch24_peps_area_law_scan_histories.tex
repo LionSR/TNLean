@@ -107,6 +107,75 @@ The following finite construction follows
     prescribed fill, then the chosen charge at the resulting front.
     A nonblank labelled slot selects its graph $r_0$-ball; a blank slot makes
     no move.
+
+    The picture shows the nominal partitions of $A$ in two consecutive bands,
+    ordered by depth, with $X=A\cap T$ and $U=P_0\setminus X$; arrows show the
+    fill directions at the fronts, and brackets mark the charge intervals of
+    oriented depth $[j-r_0,j+D]$ on the two sides.
+    \begin{tenkzequation}
+        % Source: arXiv OpenAI2026AreaLaw, sections/08-scanner.tex:156--192
+        % (figure scanner:figure), prose lines 92--130; fronts (scanner:fronts).
+        % Geometry only: there are no tensors, contractions or open indices,
+        % and the boundary signature is empty.
+        % Horizontal axis: unsigned depth d(x), increasing to the east
+        % (column 2 is d=0); it is not a lattice direction. Not to scale:
+        % r_0 << D << m and the band spacing 8m are compressed.
+        % Rows 2 and 5: bands g and g+1; each dot is one depth row of A
+        % (a dot is a set of sites, not a tensor). Tinted enclosures are the nominal
+        % parts X=A cap T, U=P_0 minus X, the middle Y and the far side V
+        % (only sites of A are drawn; Lambda minus A also lies in V).
+        % Rows 1 and 4: fill arrows. The near front j_P (first column of Y)
+        % fills toward larger depth; the far front, at unsigned depth -j_F
+        % (last column of Y, j_F being oriented), fills toward smaller depth.
+        % Brackets under rows 2 and 5: charge intervals. Near side: depths
+        % [j_P-r_0, j_P+D]; far side: oriented depths [j_F-r_0, j_F+D], i.e.
+        % unsigned depths [-j_F-D, -j_F+r_0]; drawn with r_0=D=1 column.
+        % Charges can assign sites inside these intervals, so the actual U,
+        % Y, V need not be depth intervals.
+        \tenkzkernel
+        \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire},
+                cols=18, bonds=none]
+            \tndeclare{species}{target}{hue=source:blue}
+            \tndeclare{species}{near}{hue=source:green!50!black}
+            \tndeclare{species}{middle}{hue=source:orange!85!black}
+            \tndeclare{species}{far}{hue=source:gray}
+            \tndeclare{species}{charge}{hue=source:black}
+            \tnmark[form=label, label pos=w]{(2,1)}{$g$}
+            \tn[at=(2,2)]{} \tn[at=(2,3)]{} \tn[at=(2,4)]{} \tn[at=(2,5)]{}
+            \tn[at=(2,6)]{} \tn[at=(2,7)]{} \tn[at=(2,8)]{} \tn[at=(2,9)]{}
+            \tn[at=(2,10)]{} \tn[at=(2,11)]{} \tn[at=(2,12)]{} \tn[at=(2,13)]{}
+            \tn[at=(2,14)]{} \tn[at=(2,15)]{} \tn[at=(2,16)]{} \tn[at=(2,17)]{}
+            \tn[at=(2,18)]{}
+            \tnmark[form=enclosure, species=target, tint, label pos=n]{(2,2)}{$X$}
+            \tnmark[form=enclosure, species=near, tint, label pos=n]{(2,3) .. (2,5)}{$U$}
+            \tnmark[form=enclosure, species=middle, tint, label pos=n]{(2,6) .. (2,11)}{$Y$}
+            \tnmark[form=enclosure, species=far, tint, label pos=n]{(2,12) .. (2,18)}{$V$}
+            \tnwire[kind=string, dir=to, name=scanNearFrontG]{(1,6)}{(1,7)}
+            \tnmark[form=label, label pos=n]{on scanNearFrontG 0.5}{$j_P$}
+            \tnwire[kind=string, dir=to, name=scanFarFrontG]{(1,11)}{(1,10)}
+            \tnmark[form=label, label pos=n]{on scanFarFrontG 0.5}{$-j_F$}
+            \tnmark[form=bracket, species=charge, label pos=s]{(2,5) .. (2,7)}{}
+            \tnmark[form=bracket, species=charge, label pos=s]{(2,10) .. (2,12)}{}
+            \tnmark[form=label, label pos=w]{(5,1)}{$g+1$}
+            \tn[at=(5,2)]{} \tn[at=(5,3)]{} \tn[at=(5,4)]{} \tn[at=(5,5)]{}
+            \tn[at=(5,6)]{} \tn[at=(5,7)]{} \tn[at=(5,8)]{} \tn[at=(5,9)]{}
+            \tn[at=(5,10)]{} \tn[at=(5,11)]{} \tn[at=(5,12)]{} \tn[at=(5,13)]{}
+            \tn[at=(5,14)]{} \tn[at=(5,15)]{} \tn[at=(5,16)]{} \tn[at=(5,17)]{}
+            \tn[at=(5,18)]{}
+            \tnmark[form=enclosure, species=target, tint, label pos=n]{(5,2)}{$X$}
+            \tnmark[form=enclosure, species=near, tint, label pos=n]{(5,3) .. (5,11)}{$U$}
+            \tnmark[form=enclosure, species=middle, tint, label pos=n]{(5,12) .. (5,17)}{$Y$}
+            \tnmark[form=enclosure, species=far, tint, label pos=n]{(5,18)}{$V$}
+            \tnwire[kind=string, dir=to, name=scanNearFrontH]{(4,12)}{(4,13)}
+            \tnmark[form=label, label pos=n]{on scanNearFrontH 0.5}{$j_P$}
+            \tnwire[kind=string, dir=to, name=scanFarFrontH]{(4,17)}{(4,16)}
+            \tnmark[form=label, label pos=n]{on scanFarFrontH 0.5}{$-j_F$}
+            \tnmark[form=bracket, species=charge, label pos=s]{(5,11) .. (5,13)}{}
+            \tnmark[form=bracket, species=charge, label pos=s]{(5,16) .. (5,18)}{}
+            \tnwire[kind=string, dir=to, name=scanDepthAxis]{(7,2)}{(7,18)}
+            \tnmark[form=label, label pos=e]{(7,18)}{$d$}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{theorem}[Normalized classical histories and deterministic fronts]
