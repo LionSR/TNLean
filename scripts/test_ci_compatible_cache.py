@@ -35,7 +35,7 @@ supportInterpreter = true
 '''
 
 
-# Only these two exact strict checks may precede the full root after their
+# Only these four exact strict checks may precede the full root after their
 # production import closure is built. Keep all commands and resource limits.
 ACTUAL_ROUND_EARLY_STEPS = yaml.safe_load(r"""
       - name: Build actual finite-round transport prerequisites early
@@ -69,9 +69,40 @@ ACTUAL_ROUND_EARLY_STEPS = yaml.safe_load(r"""
               "$source"
           done
 
+      - name: Build actual-round entropy telescope early
+        env:
+          LEAN_NUM_THREADS: '1'
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check actual-round entropy telescope strictly
+        timeout-minutes: 2
+        run: |
+          set -eo pipefail
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+            -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+            -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+            TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Test actual-round entropy signatures and axioms strictly
+        timeout-minutes: 4
+        run: |
+          set -eo pipefail
+          for source in TNLeanTest/ActualRoundEntropy.lean \
+              TNLeanTest/ActualRoundEntropyAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source" 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          done
+
 """)
 ACTUAL_ROUND_BUILD_NAME = ACTUAL_ROUND_EARLY_STEPS[0]['name']
-ACTUAL_ROUND_STRICT_NAMES = tuple(step['name'] for step in ACTUAL_ROUND_EARLY_STEPS[1:])
+ACTUAL_ROUND_STRICT_NAMES = tuple(ACTUAL_ROUND_EARLY_STEPS[i]['name'] for i in (1, 2, 4, 5))
 FULL_BUILD_NAME = 'Build Lean project and capture timings'
 EXPECTED_FULL_BUILD = yaml.safe_load(r"""
       - name: Build Lean project and capture timings
@@ -838,6 +869,41 @@ class WorkflowTests(unittest.TestCase):
                 ('TNLeanTest/ActualRoundTransportAxioms.lean', ''),
                 ('-DwarningAsError=true', ''), ('90s', '180s'),
             ],
+            3: [
+                ('set -eo pipefail', 'set -e'),
+                ('test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean', ':'),
+                ('lake --fail-fast build', 'lake build'),
+                ('+TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy:olean',
+                 '+TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport:olean'),
+                ('2>&1', ''), ('tee -a', 'tee'),
+                ('lake-build.log', 'early-build.log'),
+            ],
+            4: [
+                ('set -eo pipefail', 'set -e'),
+                ('LEAN_NUM_THREADS=1', 'LEAN_NUM_THREADS=2'),
+                ('--signal=INT', '--signal=TERM'), ('--kill-after=5s', '--kill-after=10s'),
+                ('90s', '180s'), ('-j1', '-j2'), ('-DautoImplicit=false', ''),
+                ('-DrelaxedAutoImplicit=false', ''), ('-Dpp.unicode.fun=true', ''),
+                ('-DmaxSynthPendingDepth=3', ''), ('-Dlinter.mathlibStandardSet=true', ''),
+                ('-DwarningAsError=true', ''),
+                ('TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean',
+                 'TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean'),
+                ('2>&1', ''), ('tee -a', 'tee'),
+                ('lake-build.log', 'early-build.log'),
+            ],
+            5: [
+                ('set -eo pipefail', 'set +e'),
+                ('TNLeanTest/ActualRoundEntropy.lean', ''),
+                ('TNLeanTest/ActualRoundEntropyAxioms.lean', ''),
+                ('LEAN_NUM_THREADS=1', 'LEAN_NUM_THREADS=2'),
+                ('--signal=INT', '--signal=TERM'), ('--kill-after=5s', '--kill-after=10s'),
+                ('90s', '180s'), ('-j1', '-j2'), ('-DautoImplicit=false', ''),
+                ('-DrelaxedAutoImplicit=false', ''), ('-Dpp.unicode.fun=true', ''),
+                ('-DmaxSynthPendingDepth=3', ''), ('-Dlinter.mathlibStandardSet=true', ''),
+                ('-DwarningAsError=true', ''),
+                ('2>&1', ''), ('tee -a', 'tee'),
+                ('lake-build.log', 'early-build.log'),
+            ],
         }
         try:
             for offset, changes in replacements.items():
@@ -849,7 +915,7 @@ class WorkflowTests(unittest.TestCase):
                         step['run'] = step['run'].replace(before, after)
                         with self.assertRaises(AssertionError):
                             self.assert_actual_round_early_steps()
-            for offset in range(3):
+            for offset in range(len(ACTUAL_ROUND_EARLY_STEPS)):
                 for key, value in [('if', 'always()'), ('continue-on-error', True),
                                    ('timeout-minutes', 30), ('env', {'LEAN_NUM_THREADS': '2'})]:
                     with self.subTest(offset=offset, key=key):
@@ -865,10 +931,15 @@ class WorkflowTests(unittest.TestCase):
         focused = next(i for i, step in enumerate(original)
                        if step.get('name') == ACTUAL_ROUND_BUILD_NAME)
         try:
-            for offset in range(3):
+            for offset in range(len(ACTUAL_ROUND_EARLY_STEPS)):
                 with self.subTest(duplicate=offset):
                     self.steps = copy.deepcopy(original)
                     self.steps.append(copy.deepcopy(self.steps[focused + offset]))
+                    with self.assertRaises(AssertionError):
+                        self.assert_actual_round_early_steps()
+                with self.subTest(missing=offset):
+                    self.steps = copy.deepcopy(original)
+                    del self.steps[focused + offset]
                     with self.assertRaises(AssertionError):
                         self.assert_actual_round_early_steps()
             self.steps = copy.deepcopy(original)
@@ -880,7 +951,8 @@ class WorkflowTests(unittest.TestCase):
                             "lake env bash -c 'exec lean Unchecked.lean'"):
                 with self.subTest(command=command):
                     self.steps = copy.deepcopy(original)
-                    self.steps.insert(focused + 3, {'name': 'Unchecked early source', 'run': command})
+                    self.steps.insert(focused + len(ACTUAL_ROUND_EARLY_STEPS),
+                                      {'name': 'Unchecked early source', 'run': command})
                     with self.assertRaises(AssertionError):
                         self.test_lookup_then_validation_then_exact_restore_then_prune_then_build()
         finally:
@@ -911,13 +983,23 @@ class WorkflowTests(unittest.TestCase):
                 dependencies.add(dependency)
                 if dependency.startswith('TNLean.'):
                     pending.append(dependency)
+        entropy_targets = [target.removeprefix('+').removesuffix(':olean')
+                           for target in ACTUAL_ROUND_EARLY_STEPS[3]['run'].split()
+                           if target.startswith('+TNLean.')]
+        self.assertEqual(entropy_targets, ['TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy'])
+        for module in entropy_targets:
+            self.assertTrue(set(imports(module)) <= closure | dependencies)
+            closure.add(module)
         for module in ('TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport',
-                       'TNLeanTest.ActualRoundTransport', 'TNLeanTest.ActualRoundTransportAxioms'):
+                       'TNLeanTest.ActualRoundTransport', 'TNLeanTest.ActualRoundTransportAxioms',
+                       'TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy',
+                       'TNLeanTest.ActualRoundEntropy', 'TNLeanTest.ActualRoundEntropyAxioms'):
             with self.subTest(module=module):
                 self.assertTrue(set(imports(module)) <= closure | dependencies)
-        # These two fixtures are checked directly without an output overlay:
-        # neither may acquire a TNLeanTest import unavailable to that command.
-        for fixture in ('TNLeanTest.ActualRoundTransport', 'TNLeanTest.ActualRoundTransportAxioms'):
+        # These fixtures are checked directly without an output overlay:
+        # none may acquire a TNLeanTest import unavailable to that command.
+        for fixture in ('TNLeanTest.ActualRoundTransport', 'TNLeanTest.ActualRoundTransportAxioms',
+                        'TNLeanTest.ActualRoundEntropy', 'TNLeanTest.ActualRoundEntropyAxioms'):
             self.assertFalse(any(module.startswith('TNLeanTest.') for module in imports(fixture)))
 
     def test_actual_round_timing_uses_shared_append_only_log_and_final_collector(self):
