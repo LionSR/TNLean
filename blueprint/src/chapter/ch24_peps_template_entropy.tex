@@ -99,7 +99,8 @@
     This is the clearance step of~\cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:area_law_template_dyadic_clearance,thm:area_law_capped_dyadic_partition}
+    \uses{lem:area_law_template_dyadic_clearance,thm:area_template_dyadic_rectangle,
+        thm:area_law_capped_dyadic_partition}
     For $x\in Q\subseteq T_j$, choose $p\in T$ with
     $\|p-x\|_\infty\le j$. For every cut endpoint $z$,
     \begin{align}
