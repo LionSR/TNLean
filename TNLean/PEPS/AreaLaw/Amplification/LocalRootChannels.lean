@@ -95,14 +95,12 @@ theorem norm_spectatorRootChannel_sub_localRootChannel_le [NeZero q] (K : Finset
     ‖spectatorRootChannel k B - localRootChannel K k B‖ ≤ 4 * Real.sqrt ε * ‖B‖ := by
   have hl₀ := siteExpectation_nonneg K hk₀
   have hl₁ := siteExpectation_le_one K hk₁
-  have hG : ‖CFC.sqrt (1 - k)‖ ≤ 1 :=
-    norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one (sub_le_self _ hk₀))
-  have hKr : ‖CFC.sqrt k‖ ≤ 1 :=
-    norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one hk₁)
-  have hGl : ‖CFC.sqrt (1 - siteExpectation q K k)‖ ≤ 1 :=
-    norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one (sub_le_self _ hl₀))
-  have hKl : ‖CFC.sqrt (siteExpectation q K k)‖ ≤ 1 :=
-    norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one hl₁)
+  have hsqrt {a : Matrix (ι → Fin q) (ι → Fin q) ℂ} (ha : a ≤ 1) : ‖CFC.sqrt a‖ ≤ 1 :=
+    norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one ha)
+  have hG := hsqrt (sub_le_self 1 hk₀)
+  have hKr := hsqrt hk₁
+  have hGl := hsqrt (sub_le_self 1 hl₀)
+  have hKl := hsqrt hl₁
   have htG : ‖CFC.sqrt (1 - k) - CFC.sqrt (1 - siteExpectation q K k)‖ ≤ Real.sqrt ε :=
     (norm_sqrt_one_sub_sub_le hk₁ hl₁).trans (Real.sqrt_le_sqrt hε)
   have htK : ‖CFC.sqrt k - CFC.sqrt (siteExpectation q K k)‖ ≤ Real.sqrt ε :=

@@ -13,21 +13,20 @@
 \end{theorem}
 \begin{proof}\leanok
     Subadditivity gives
-    \[
-        S_\Omega(R\cup B)\le S_\Omega(R)+S_\Omega(B).
-    \]
+    \begin{align}
+        S_\Omega(R\cup B) & \le S_\Omega(R)+S_\Omega(B).
+    \end{align}
     Complements are taken in the physical domain. Since $R\cap B=\varnothing$,
-    \[
-        (R\cup B)^c\cap B=\varnothing,
-        \qquad (R\cup B)^c\cup B=R^c.
-    \]
+    \begin{align}
+        (R\cup B)^c\cap B & =\varnothing, & (R\cup B)^c\cup B & =R^c.
+    \end{align}
     Apply subadditivity to this disjoint union and use purity,
     $S_\Omega(X)=S_\Omega(X^c)$, to obtain
-    \[
-        S_\Omega(R)=S_\Omega(R^c)
+    \begin{align}
+        S_\Omega(R) & =S_\Omega(R^c)
         \le S_\Omega((R\cup B)^c)+S_\Omega(B)
         =S_\Omega(R\cup B)+S_\Omega(B).
-    \]
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Partial template row]
