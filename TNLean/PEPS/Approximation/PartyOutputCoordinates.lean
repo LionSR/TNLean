@@ -328,18 +328,19 @@ theorem atParty_familyPhysicalLayout_of_mem
   simp [Layout.atParty, Layout.restrict, familyPhysicalLayout, List.filter_map,
     Function.comp_def, List.filter_eq, List.count_eq_one_of_mem hn hp]
 
-/-- The specified physical basis of a party's singleton register, including
-the final scalar unit of its memory. No positive-dimension assumption is
-needed. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
-lines 137–151 and 565–588. -/
+/-- The specified physical basis of a listed party's singleton register,
+including the final scalar unit of its memory. The physical list has no
+repetitions, but need not contain every party. No positive-dimension
+assumption is needed. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 137–151 and 565–588. -/
 def familyPhysicalPartyBasis
-    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps) (p : P) :
+    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (p : P) (hp : p ∈ ps) :
     OrthonormalBasis (Fin (d p)) ℂ
       (Mem (Layout.atParty p (familyPhysicalLayout d ps))) :=
   (EuclideanSpace.basisFun (Fin (d p)) ℂ).map
     ((TensorProduct.ridIsometry ℂ (euc (Fin (d p)))).symm.trans
       (Layout.memCongr
-        (atParty_familyPhysicalLayout_of_mem d ps hn p (hc p)).symm))
+        (atParty_familyPhysicalLayout_of_mem d ps hn p hp).symm))
 
 /-- Grouping an ordered physical basis vector agrees with its product of local
 singleton vectors. The list may contain only some parties; register coverage
@@ -547,7 +548,7 @@ theorem familyLabelledPhysicalBasis_eq_partyGroupedBasis
     (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps) :
     familyLabelledPhysicalBasis d ps hn hc =
       partyGroupedBasis (familyPhysicalLayout d ps)
-        (familyPhysicalPartyBasis d ps hn hc) ps hn hc := by
+        (fun p => familyPhysicalPartyBasis d ps hn p (hc p)) ps hn hc := by
   apply DFunLike.ext
   intro x
   simp only [familyLabelledPhysicalBasis, partyGroupedBasis,
@@ -557,7 +558,8 @@ theorem familyLabelledPhysicalBasis_eq_partyGroupedBasis
     OrthonormalBasis.map_apply, partyLabelledBasis_apply]
   change familyPhysicalListBasis d ps (fun i => x (ps.get i)) =
     (groupByPartyIso ps (familyPhysicalLayout d ps) hn (fun r _ => hc r.owner)).symm
-      (partyListBasis (familyPhysicalLayout d ps) (familyPhysicalPartyBasis d ps hn hc)
+      (partyListBasis (familyPhysicalLayout d ps)
+        (fun p => familyPhysicalPartyBasis d ps hn p (hc p))
         ps (fun i => x (ps.get i)))
   apply (groupByPartyIso ps (familyPhysicalLayout d ps) hn
     (fun r _ => hc r.owner)).injective
