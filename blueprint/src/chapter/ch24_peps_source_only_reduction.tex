@@ -347,24 +347,6 @@ dimensions.
     applies to the literal regional partial trace.
 \end{proof}
 
-\begin{definition}[Original local physical dimensions]
-    \label{def:peps_family_physical_output}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalOutputLayout}
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRestrictedPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout}
-    \leanok
-    \uses{def:peps_party_layout}
-    More generally, let the original physical space at party $p$ be
-    $\C^{d_p}$, with no requirement that these dimensions coincide.
-    Its physical configurations are assignments
-    $\sigma_p\in\{0,\ldots,d_p-1\}$. The tensor product of the local
-    standard bases gives labelled coordinates for the actual physical
-    registers. Restricting registers to their owners in $A$ gives the
-    corresponding dependent assignments on $A$.
-\end{definition}
-
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
     \lean{TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout}
