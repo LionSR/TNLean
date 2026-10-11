@@ -3445,6 +3445,21 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Scope:** these are numerical auxiliary estimates for the rectangle
   covering argument in the proof of Proposition 9.5.
 
+## Binary-entropy cost of the rounded bootstrap bands
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapBinaryEntropyCost.lean`.
+- **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
+  the auxiliary fraction and all physical data, gives positive rounded band
+  count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and
+  `Real.binEntropy τ / a ≤ (Real.log 2 / 4) n` for every real `τ`. The
+  coefficient is absolute.
+- **Source:** OpenAI's September 24, 2026 area-law manuscript,
+  [the collar scales, `08-scanner.tex`, lines 32–41](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L32-L41).
+- **Scope:** the numerical binary-entropy cost in the proof of Proposition
+  9.5; not the physical norm comparison or the exponent-improvement
+  implication.
+
 ### Nested closed-square patches
 
 The [nested-square patch geometry](formalization/peps-nested-patch-geometry.md)
