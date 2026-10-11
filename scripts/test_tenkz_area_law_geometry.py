@@ -173,10 +173,11 @@ def check_rays(unit: str) -> None:
         endpoint = PERIMETER[(s + 1) % 8]
         active = ids[s] != ids[(s + 1) % 8]
         assert drawn[endpoint] == ("solid" if active else "dashed"), (endpoint, ids)
-    # Colors alternate across active rays, so the number of runs is even; one
-    # identifier may recur in separate runs.
+    # Colors alternate across active rays, so the number of transitions is
+    # even. One identifier may recur in separate runs, and a single identifier
+    # on all eight sectors (no active ray) is allowed.
     runs = sum(ids[s] != ids[(s + 1) % 8] for s in range(8))
-    assert runs % 2 == 0 and len(set(ids)) <= runs
+    assert runs % 2 == 0, ids
 
 
 CHECKS = {"layers": check_layers, "primary": check_primary, "fan": check_fan, "rays": check_rays}
