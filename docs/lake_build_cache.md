@@ -177,8 +177,9 @@ changes. This prevents historical or removed unreachable modules from satisfying
 regression imports. Unchanged QIC proof artifacts and unchanged Gametheory and
 checkdecls modules remain reusable; no `.trace` or `.hash` is rewritten.
 
-The ordinary full `lake build`, linter target, and all existing checks still run
-before direct Lean regressions. The guard verifies that the default TNLean root
+The ordinary full `lake build`, linter target, and all existing checks still run.
+Apart from the focused checks below, direct Lean regressions follow the root
+build. The guard verifies that the default TNLean root
 imports `QICLean`, ensuring its aggregator closure is rebuilt normally. This is
 an optimization candidate, not evidence of a cache hit or measured speedup. It
 does not relax `seed_lake_build.sh` or the stricter local seeding policy.
@@ -203,7 +204,7 @@ reuse, upstream/dependent invalidation, independent reuse, missing traces, broke
 source rejection, and refusal of removed modules with surviving artifacts. It
 never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
 
-### Focused rectangular PEPS regression before the root build
+### Focused PEPS checks before the root build
 
 The finite rectangular dual-path CI check runs after cache setup and provenance
 pruning. It first requires the prebuilt `Mathlib.olean`, then runs Lake's
@@ -220,5 +221,23 @@ explicit Mathlib cache guard. Its fail-fast Lake target is
 modules and their complete import closures are rebuilt before strict elaboration.
 The regression prints eight axiom audits; `check_collared_open_axioms.py` requires
 all eight and rejects every axiom outside `propext`, `Classical.choice`, and
-`Quot.sound`, including `sorryAx`. All other direct Lean regressions remain after
-the full root build. No dependency pin or artifact provenance rule changes.
+`Quot.sound`, including `sorryAx`.
+
+The initial-region component check also follows cache setup and pruning. It
+requires the prebuilt `Mathlib.olean`, then builds exactly the production
+module's two imports, `InitialSectorComponents` and
+`Mathlib.Analysis.Normed.Affine.Convex`, with fail-fast Lake targets. Import
+rebuilding has a 240-second limit, followed by strict elaboration of
+`InitialComponentRegions` with a 60-second limit. Each command receives an
+interrupt at its limit and a forced termination after a sole five-second
+cleanup interval; the combined step has a six-minute outer limit. Lean uses
+one compiler thread, without a claim that Lake schedules dependency jobs
+serially. Both commands append to the ordinary build timing log. A missing
+prebuilt guard or either command's failure stops the step, including when
+output is piped through `tee`. The workflow tests check this order, exact
+import agreement, strict options, limits, and failure behavior with shell
+stand-ins that never invoke Lean.
+
+All other direct Lean regressions remain after the full root build. The full
+root build, linter target, and all existing checks remain mandatory. No
+dependency pin or artifact provenance rule changes.
