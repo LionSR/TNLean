@@ -28,7 +28,7 @@ spectral gap*, Theorem 1.1 and Corollary 1.2. Source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Classical Matrix ComplexStarModule
+open Matrix ComplexStarModule
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
 noncomputable section
@@ -143,7 +143,7 @@ private theorem embedOp_rectangle_eq_reindex {L q : ℕ}
       Matrix.reindex (AreaLaw.rectangleConfigurationEquiv L L q)
         (AreaLaw.rectangleConfigurationEquiv L L q) A := by
   ext x y
-  rw [QuantumCircuit.embedOp_apply, if_pos]
+  rw [QuantumCircuit.embedOp_apply, ite_eq_left]
   · rfl
   · intro v hv
     exact False.elim (hv ((AreaLaw.rectangleSiteEquiv L L).symm v)
