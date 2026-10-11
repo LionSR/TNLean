@@ -18,7 +18,8 @@ set_option linter.hashCommand false
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id] do
+  for decl in #[
+    ``TNLean.PEPS.PairEffect.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

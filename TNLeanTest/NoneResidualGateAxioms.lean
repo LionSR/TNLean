@@ -15,8 +15,9 @@ depend only on the standard logical axioms.
 
 set_option linter.hashCommand false
 
+open TNLean.PEPS.PairEffect.SourceCircuit in
 run_cmd do
-  let decl := ``TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
+  let decl := ``restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   unless env.contains decl do
