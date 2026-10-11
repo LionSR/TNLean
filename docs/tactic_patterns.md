@@ -6397,3 +6397,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
+
+- **Pattern:** transport a matrix-vector equation through the configuration
+  isometry, then pass between Euclidean vectors and their coordinate functions.
+- **Seen:** the energy equation, simultaneous symmetry and two auxiliary
+  projection equations in `PEPS/AreaLaw/GlobalSchmidtBellPrevector.lean`.
+- **Abstraction:** all four equations use one local arbitrary-matrix transport
+  lemma, itself an application of
+  `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
+  `Algebra/MatrixReindexGap.lean`.
+- **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
+  corollary is appropriate if the same conversion occurs in another module;
+  the underlying matrix-action identity is already shared.
