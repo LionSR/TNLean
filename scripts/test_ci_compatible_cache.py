@@ -736,6 +736,7 @@ class WorkflowTests(unittest.TestCase):
                     self.assertLess(run.index(cache_guard), run.index(target))
                     self.assertLess(run.index(target), run.index('lake env lean'))
                     self.assertIn('TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover', run)
+                    self.assertIn('TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover', run)
                     self.assertEqual(run.count('lake env lean'), 1)
                     for flag in ['set -eo pipefail', '-DwarningAsError=true',
                                  '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
@@ -746,7 +747,8 @@ class WorkflowTests(unittest.TestCase):
                     self.assertEqual(checked.split(), [
                         'TNLeanTest/TemplateMixedSquares.lean', 'TNLeanTest/TemplateCutBoundary.lean'])
                     expected = {
-                        'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover'],
+                        'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover',
+                                                 'TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover'],
                         'TemplateCutBoundary': [
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary',
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateClearance',
