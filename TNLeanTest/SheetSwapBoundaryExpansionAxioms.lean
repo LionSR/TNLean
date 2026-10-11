@@ -9,10 +9,11 @@ import Lean.Util.CollectAxioms
 
 /-! Audit the original crossing-edge expansion against the standard axioms. -/
 
+open TNLean.PEPS.Approximation in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let decl :=
-    ``TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
+    ``SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
   unless (← Lean.getEnv).contains decl do
     throwError "Missing declaration {decl}"
   let axioms ← Lean.collectAxioms decl
