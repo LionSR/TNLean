@@ -227,7 +227,10 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
     · intro i _
       exact ((squareAreaLawSupport_injective L).extend_apply T 0 i).symm
   change (∑ X, f X) = _
-  rw [← hsum, ← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), h.sum_hermitianTerm]
+  rw [← hsum]
+  change (∑ i : SquareInteraction L,
+    (Matrix.reindexAlgEquiv ℂ ℂ e) (h.hermitianTerm i)) = _
+  rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), h.sum_hermitianTerm]
   rfl
 
 /-- The original unit ground vector and full-system gap are preserved by
