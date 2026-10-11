@@ -62,6 +62,7 @@ theorem exists_supported_projected_relative_evolution (q : ℕ) [NeZero q]
       (siteExpectationLM q K) (fun _ hA ↦ isHermitian_siteExpectation K hA)
       (norm_siteExpectation_le K) hH' hH
   refine ⟨U, hU0, hU, hunit, ?_, huniq, hcompare⟩
+  refine fun t ↦ mem_supportedOperators_of_forall_commute K (fun B hB ↦ ?_)
   done
 
 end QuantumCircuit
