@@ -502,6 +502,7 @@ jobs:
       - uses: leanprover/lean-action@v1
         with:
           build: false
+          use-mathlib-cache: true
           use-github-cache: false
 
       # Setup/Mathlib prebuilt retrieval happens before this separate seed;
@@ -533,6 +534,27 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check swapped doubled-interaction norm early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check swapped doubled-interaction norm and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapDoubledTermNorm.lean \
+              TNLeanTest/SheetSwapDoubledTermNormAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
         run: |
