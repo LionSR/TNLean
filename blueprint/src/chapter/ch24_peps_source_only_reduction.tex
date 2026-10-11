@@ -312,12 +312,14 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.card_regionalPhysicalIndex}
     \lean{TNLean.PEPS.PairEffect.finrank_regionalPhysicalSpace}
     \lean{TNLean.PEPS.PairEffect.restrict_physicalLayout}
-    \lean{TNLean.PEPS.PairEffect.length_filter_region}
     \lean{TNLean.PEPS.PairEffect.finrank_physicalLayout}
     \lean{TNLean.PEPS.PairEffect.finrank_restrict_physicalLayout}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
-    \uses{def:peps_labelled_physical_output,thm:peps_source_only_density_error}
+    % The filtered-list length count is tagged in its canonical
+    % coordinate-chapter home; cite that entry here.
+    \uses{def:peps_labelled_physical_output,thm:peps_source_only_density_error,
+        thm:peps_basis_physical_dimensions}
     Regional coordinates are obtained by splitting the same full
     assignment $\sigma$ into its restrictions to $A$ and its complement.
     Selecting the physical registers owned by $A$ gives precisely the
@@ -329,13 +331,14 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.filteredPartyEquiv}
     \lean{TNLean.PEPS.PairEffect.labelledPhysicalBasis}
     \lean{TNLean.PEPS.PairEffect.norm_regionalPhysicalReadout_le_one}
     \lean{TNLean.PEPS.PairEffect.physicalLayout_owners}
     \lean{TNLean.PEPS.PairEffect.physicalListBasis}
     \lean{TNLean.PEPS.PairEffect.regionalPhysicalIndexEquiv}
-    \uses{thm:peps_source_only_density_error}
+    % The filtered-party reindexing bijection is tagged in its canonical
+    % coordinate-chapter home; cite that entry here.
+    \uses{thm:peps_source_only_density_error,def:peps_basis_region_coordinates}
     Reindex the tensor basis by
     $\sigma\mapsto(\sigma|_A,\sigma|_{P\setminus A})$. An assignment on
     $A$ has $d$ independent choices at each of its $|A|$ parties, giving
@@ -349,14 +352,12 @@ dimensions.
 
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
-    \lean{TNLean.PEPS.PairEffect.restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.finrank_restrict_familyPhysicalLayout_le}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout_apply}
-    \lean{TNLean.PEPS.PairEffect.card_familyRegionalPhysicalIndex}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
     \leanok
-    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
+    % The regional dimension counts and readout are tagged in their canonical
+    % coordinate-chapter home; cite those entries rather than duplicate here.
+    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error,
+        thm:peps_basis_physical_dimensions,thm:peps_basis_regional_readouts}
     The actual physical memory selected by the original party set $A$
     has dimension
     \begin{align}
@@ -372,13 +373,12 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalReadout}
     \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_const}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout_owners}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalIndexEquiv}
-    \lean{TNLean.PEPS.PairEffect.norm_familyRegionalPhysicalReadout_le_one}
-    \uses{thm:peps_source_only_density_error}
+    % The family physical readouts, bases and owner/restriction identities are
+    % tagged in their canonical coordinate-chapter home; cite those entries.
+    \uses{thm:peps_source_only_density_error,def:peps_family_physical_output,
+        thm:peps_basis_physical_list_restriction,def:peps_basis_physical_readouts,
+        thm:peps_basis_regional_readouts}
     Selecting owned physical registers filters the original party
     ordering. Its tensor basis is indexed by one choice of $d_p$ values
     at each $p\in A$, so its cardinality is $\prod_{p\in A}d_p$.
