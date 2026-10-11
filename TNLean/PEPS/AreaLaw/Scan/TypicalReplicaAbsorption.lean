@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
 import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
+import Mathlib.Tactic.Convert
 
 /-!
 # Typical-entropy substitution after the rough replica comparisons
@@ -113,7 +114,7 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
       (4 - (2 * C) * (τ + d k / τ)) * S' -
         (2 * C * τ * (Real.log (E.card : ℝ) - S') +
           2 * C * Real.binEntropy τ / a) - rₗ k ≤ F k :=
-    hlower_nonmax.mono fun k hk ↦ by nlinarith only [hk]
+    hlower_nonmax.mono fun k hk ↦ by convert hk using 1 <;> ring
   done
 
 end TNLean.PEPS.AreaLaw.Scan
