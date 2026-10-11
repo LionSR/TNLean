@@ -62,6 +62,8 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
       (Matrix.vecMulVec ΩX (star ΩX)) :=
     (reducedState_eq_finiteProduct Λ q Ωt X).trans
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
+  have hselected := Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E
+    (by simpa only [← hρ] using hz)
   done
 
 end TNLean.PEPS.AreaLaw
