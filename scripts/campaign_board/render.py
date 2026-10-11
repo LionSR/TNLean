@@ -89,9 +89,12 @@ def figure_names(campaign_dir: pathlib.Path, config: dict) -> set[str]:
     path = campaign_dir / "figures.js"
     names = set()
     if path.exists():
-        keys = subprocess.run(["node", "-e", FIGURE_KEYS_JS, str(path)],
-                              check=True, capture_output=True, text=True).stdout
-        names = set(json.loads(keys))
+        run = subprocess.run(["node", "-e", FIGURE_KEYS_JS, str(path)],
+                             capture_output=True, text=True)
+        if run.returncode:
+            raise ValueError(f"{path} must define window.campaignFigures without calling browser "
+                             f"APIs at load time; evaluating it failed:\n{run.stderr.strip()}")
+        names = set(json.loads(run.stdout))
     named = {stage["figure"] for route in config["routes"] for stage in route["stages"]
              if stage.get("figure")}
     if named - names:

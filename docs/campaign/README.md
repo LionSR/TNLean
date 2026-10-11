@@ -25,7 +25,7 @@ directory here.
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
 | `references.json` | Optional bibliography of the works that `{{cite:Key}}` tokens in the texts cite (fields below) |
-| `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
+| `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>`; only the drawing functions may use browser APIs, since the render evaluates the file outside a page |
 | `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the equations displayed inside sentences |
 
 The area-law and PEPS campaign in `openai-area-law-peps-proof/` is served at
