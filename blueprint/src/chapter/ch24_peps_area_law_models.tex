@@ -16,7 +16,8 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.domainGraph,
         TNLean.PEPS.AreaLaw.graphNeighborhood,
         TNLean.PEPS.AreaLaw.configurationSplit,
-        TNLean.PEPS.AreaLaw.card_configuration
+        TNLean.PEPS.AreaLaw.card_configuration,
+        TNLean.PEPS.AreaLaw.card_regionConfig
     }
     \leanok
     Let $\Lambda\subset\mathbb Z^2$ be finite. Join sites at coordinate distance
@@ -32,13 +33,16 @@ original open square. We state the two models separately, following
     length at most $r$. At every site put $\mathbb C^q$,
     $q\ge1$. In configuration coordinates the physical Hilbert space is
     \begin{align}
-        \mathcal H_\Lambda     & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
-        \label{eq:area_law_state_space}                                              \\
-        \dim\mathcal H_\Lambda & =q^{|\Lambda|}.
+        \label{eq:area_law_state_space}
+        \mathcal H_\Lambda & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
+    \end{align}
+    \begin{align}
         \label{eq:area_law_dimension}
+        \dim\mathcal H_\Lambda & =q^{|\Lambda|}.
     \end{align}
     Restriction to $A$ and $\Lambda\setminus A$ identifies the configuration set
-    with the product of the two regional configuration sets. Empty domains,
+    with the product of the two regional configuration sets. The configuration
+    set of a region $A$ has $q^{|A|}$ elements. Empty domains,
     holes, and disconnected components are permitted.
 \end{definition}
 
@@ -53,6 +57,7 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.LocalHamiltonian.zero,
         TNLean.PEPS.AreaLaw.localLift,
         TNLean.PEPS.AreaLaw.localLift_mem_supportedOperators,
+        TNLean.PEPS.AreaLaw.localLift_eq_entropyLocalLift,
         TNLean.PEPS.AreaLaw.edgeBoundary,
         TNLean.PEPS.AreaLaw.edgeBoundary_empty,
         TNLean.PEPS.AreaLaw.edgeBoundary_univ
@@ -65,12 +70,13 @@ original open square. We state the two models separately, following
     The assigned operator may be zero, and acts as the identity on the
     complementary tensor factors. Define
     \begin{align}
-        H                  & =\sum_{\substack{\varnothing\ne X\subseteq\Lambda \\
-                \operatorname{diam}_{d_\Lambda}X\le R}}h_X,
-        \label{eq:area_law_hamiltonian}                                        \\
+        \label{eq:area_law_hamiltonian}
+        H & =\sum_{\varnothing\ne X\subseteq\Lambda,\ \operatorname{diam}_{d_\Lambda}X\le R}h_X,
+    \end{align}
+    \begin{align}
+        \label{eq:area_law_boundary}
         \partial_\Lambda A & =
         \{\{x,y\}:x\in A,\ y\in\Lambda\setminus A,\ d_\Lambda(x,y)=1\}.
-        \label{eq:area_law_boundary}
     \end{align}
     The norm is the Euclidean operator norm. Boundary edges are unordered and
     counted once; empty and full cuts have empty boundary.
@@ -116,10 +122,13 @@ original open square. We state the two models separately, following
     \label{def:area_law_ground_entropy}
     \lean{
         Matrix.IsGappedGroundState,
+        Matrix.isGappedGroundState_iff,
         TNLean.PEPS.AreaLaw.IsGappedGroundState,
         TNLean.PEPS.AreaLaw.reducedState,
         TNLean.PEPS.AreaLaw.reducedState_isHermitian,
         TNLean.PEPS.AreaLaw.regionalEntropy,
+        TNLean.PEPS.AreaLaw.reducedState_eq_regionState,
+        TNLean.PEPS.AreaLaw.regionalEntropy_eq_regionEntropy,
         TNLean.PEPS.AreaLaw.UniformAreaLaw
     }
     \leanok
@@ -127,17 +136,21 @@ original open square. We state the two models separately, following
     For a unit vector $\Omega$, a real $E_0$, and $\Delta>0$, the eigenvector and
     full-system projector-gap conditions are
     \begin{align}
+        \label{eq:area_law_ground_vector}
         H\Omega & =E_0\Omega,
-        \label{eq:area_law_ground_vector}                    \\
-        H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
+    \end{align}
+    \begin{align}
         \label{eq:area_law_projector_gap}
+        H-E_0I & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
     For $A\subseteq\Lambda$, put
     \begin{align}
-        \rho_A      & =\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|,
-        \label{eq:area_law_reduced_state}                                                  \\
-        S_\Omega(A) & =-\operatorname{Tr}\rho_A\log\rho_A.
+        \label{eq:area_law_reduced_state}
+        \rho_A & =\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|,
+    \end{align}
+    \begin{align}
         \label{eq:area_law_regional_entropy}
+        S_\Omega(A) & =-\operatorname{Tr}\rho_A\log\rho_A.
     \end{align}
     All logarithms are natural, with $0\log0=0$. The reduced matrix is Hermitian,
     including when its spectrum contains zero. No condition is imposed on the
@@ -145,6 +158,28 @@ original open square. We state the two models separately, following
     The uniform boundary assertion requires a single finite constant for each
     $q,R,J,\Delta$, chosen before every domain, Hamiltonian, ground vector, and cut.
 \end{definition}
+
+\begin{theorem}[Uniqueness from a positive global gap]
+    \label{thm:area_law_ground_eigenspace}
+    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $H$ be a complex matrix indexed by a finite set, let $E_0$ be real,
+    and let $\Omega$ be a unit vector satisfying
+    (\ref{eq:area_law_ground_vector}) and
+    (\ref{eq:area_law_projector_gap}) with $\Delta>0$.
+    Then the eigenspace of $H$ at $E_0$ is $\operatorname{span}_{\mathbb C}\{\Omega\}$.
+    This is an elementary consequence of the global gap, giving the
+    uniqueness assertion in
+    \cite[Proposition~4.5]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    For an eigenvector $\psi$ at $E_0$, the gap inequality gives
+    $0\ge\Delta\|\psi-\langle\Omega,\psi\rangle\Omega\|^2$.
+    Since $\Delta>0$, $\psi=\langle\Omega,\psi\rangle\Omega$.
+    Conversely, $H\Omega=E_0\Omega$ puts every scalar multiple of $\Omega$
+    in this eigenspace.
+\end{proof}
 
 \begin{theorem}[Regional reductions of pure vectors]
     \label{thm:area_law_regional_state_identities}

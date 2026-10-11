@@ -158,6 +158,50 @@ theorem idKron_mul {m n p : ℕ} (D : ℕ) (V : Matrix (Fin m) (Fin n) ℂ)
     idKron D (1 : Matrix (Fin m) (Fin m) ℂ) = 1 := by
   rw [idKron, Matrix.one_kronecker_one, Matrix.submatrix_one_equiv]
 
+/-! ### Boundaries on one Kronecker factor of a letter sum
+
+Letters of `mulTensor` and `actTensor`, and their word evaluations, are sums `∑ j, A j ⊗ B j`
+in the `finProdFinEquiv` bond order. A boundary `X ⊗ 1` or `1 ⊗ X` acts on one factor of
+every summand. -/
+
+section KroneckerFactor
+
+variable {ι : Type*} [Fintype ι] {m n p q D D' : ℕ}
+
+/-- The left boundary `X ⊗ 1` acts on the first factor of every summand. -/
+theorem kronId_mul_submatrix_sum (X : Matrix (Fin m) (Fin n) ℂ)
+    (A : ι → Matrix (Fin n) (Fin p) ℂ) (B : ι → Matrix (Fin D) (Fin D') ℂ) :
+    kronId X D * (∑ j, A j ⊗ₖ B j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm =
+      (∑ j, (X * A j) ⊗ₖ B j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [kronId, Matrix.submatrix_mul_equiv, Matrix.mul_sum]
+  simp only [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+
+/-- The right boundary `Y ⊗ 1` acts on the first factor of every summand. -/
+theorem submatrix_sum_mul_kronId (Y : Matrix (Fin p) (Fin q) ℂ)
+    (A : ι → Matrix (Fin n) (Fin p) ℂ) (B : ι → Matrix (Fin D) (Fin D') ℂ) :
+    (∑ j, A j ⊗ₖ B j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm * kronId Y D' =
+      (∑ j, (A j * Y) ⊗ₖ B j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [kronId, Matrix.submatrix_mul_equiv, Matrix.sum_mul]
+  simp only [← Matrix.mul_kronecker_mul, Matrix.mul_one]
+
+/-- The left boundary `1 ⊗ X` acts on the second factor of every summand. -/
+theorem idKron_mul_submatrix_sum (X : Matrix (Fin m) (Fin n) ℂ)
+    (A : ι → Matrix (Fin D) (Fin D') ℂ) (B : ι → Matrix (Fin n) (Fin p) ℂ) :
+    idKron D X * (∑ j, A j ⊗ₖ B j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm =
+      (∑ j, A j ⊗ₖ (X * B j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [idKron, Matrix.submatrix_mul_equiv, Matrix.mul_sum]
+  simp only [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+
+/-- The right boundary `1 ⊗ Y` acts on the second factor of every summand. -/
+theorem submatrix_sum_mul_idKron (Y : Matrix (Fin p) (Fin q) ℂ)
+    (A : ι → Matrix (Fin D) (Fin D') ℂ) (B : ι → Matrix (Fin n) (Fin p) ℂ) :
+    (∑ j, A j ⊗ₖ B j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm * idKron D' Y =
+      (∑ j, A j ⊗ₖ (B j * Y)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [idKron, Matrix.submatrix_mul_equiv, Matrix.sum_mul]
+  simp only [← Matrix.mul_kronecker_mul, Matrix.mul_one]
+
+end KroneckerFactor
+
 /-- Identity factors on different sides commute:
 `(V ⊗ 1)(1 ⊗ U) = (1 ⊗ U)(V ⊗ 1)`. -/
 theorem kronId_mul_idKron {m n m' n' : ℕ} (V : Matrix (Fin m) (Fin n) ℂ)
@@ -213,12 +257,8 @@ theorem mulTensor_kronId {X : MPOTensor d D₂}
   intro w
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_toMPSTensor_mulTensor_ofFn, evalWord_toMPSTensor_mulTensor_ofFn,
-    kronId, kronId, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
-    Matrix.mul_sum, Matrix.sum_mul]
-  congr 1
-  refine Finset.sum_congr rfl fun ρ _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, h.evalWord,
-    Matrix.one_mul, Matrix.mul_one]
+    kronId_mul_submatrix_sum, submatrix_sum_mul_kronId]
+  simp only [h.evalWord]
 
 /-- **A factor that does not take part in a reduction, on the left.** If
 `(V, W)` reduces `X` onto `A`, then `(1 ⊗ V, 1 ⊗ W)` reduces the product
@@ -236,12 +276,8 @@ theorem mulTensor_idKron {X : MPOTensor d D₂}
   intro w
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_toMPSTensor_mulTensor_ofFn, evalWord_toMPSTensor_mulTensor_ofFn,
-    idKron, idKron, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
-    Matrix.mul_sum, Matrix.sum_mul]
-  congr 1
-  refine Finset.sum_congr rfl fun ρ _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, h.evalWord,
-    Matrix.one_mul, Matrix.mul_one]
+    idKron_mul_submatrix_sum, submatrix_sum_mul_idKron]
+  simp only [h.evalWord]
 
 end MPSTensor.IsReduction
 
@@ -459,6 +495,24 @@ theorem eq_of_forall_exists_ne_zero (h : IsDressedProportional B X Y z)
 
 end IsDressedProportional
 
+open Classical in
+/-- **A chosen dressed scalar.** A nonzero scalar `z` with `X B^w = z Y B^w` for long words,
+chosen when one exists, and one otherwise. Every scalar invariant defined by comparing two
+reductions onto the same normal tensor is of this form: the anomaly three-cochain of
+arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535, the scalar
+gauge freedom of the fusion tensors, `eq:scalar_fus_ten`, and the L-symbols of `eq:defL`. -/
+noncomputable def dressedScalar (B : MPSTensor d D) (X Y : Matrix (Fin m) (Fin D) ℂ) : Units ℂ :=
+  if hz : ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B X Y z then Units.mk0 hz.choose hz.choose_spec.1
+  else 1
+
+/-- The chosen dressed scalar satisfies the dressed proportionality whenever some nonzero
+scalar does. -/
+theorem isDressedProportional_dressedScalar {B : MPSTensor d D}
+    {X Y : Matrix (Fin m) (Fin D) ℂ} (h : ∃ z : ℂ, z ≠ 0 ∧ IsDressedProportional B X Y z) :
+    IsDressedProportional B X Y (dressedScalar B X Y) := by
+  simp only [dressedScalar, h, ↓reduceDIte, Units.val_mk0]
+  exact h.choose_spec.2
+
 namespace IsReduction
 
 variable {D_A : ℕ} {B : MPSTensor d D} {A : MPSTensor d D_A}
@@ -509,11 +563,7 @@ theorem kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn (M : MPOTensor d D₁)
           Kraus.evalWord P.toMPSTensor
             (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  rw [evalWord_toMPSTensor_mulTensor_ofFn, kronId, Matrix.submatrix_mul_equiv,
-    Matrix.mul_sum]
-  congr 1
-  refine Finset.sum_congr rfl fun ρ _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+  rw [evalWord_toMPSTensor_mulTensor_ofFn, kronId_mul_submatrix_sum]
 
 /-- The left boundary `1 ⊗ X` against a word of a product tensor. -/
 theorem idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn (P : MPOTensor d D₂)
@@ -526,11 +576,7 @@ theorem idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn (P : MPOTensor d D₂)
           (X * Kraus.evalWord M.toMPSTensor
             (List.ofFn fun k ↦ finProdFinEquiv (ρ k, (u k).modNat)))).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm := by
-  rw [evalWord_toMPSTensor_mulTensor_ofFn, idKron, Matrix.submatrix_mul_equiv,
-    Matrix.mul_sum]
-  congr 1
-  refine Finset.sum_congr rfl fun ρ _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+  rw [evalWord_toMPSTensor_mulTensor_ofFn, idKron_mul_submatrix_sum]
 
 /-- Dressed proportionality on a factor extends to the product with a factor
 on the right, through `X ⊗ 1`. -/
@@ -576,12 +622,8 @@ theorem mulTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTenso
     (R : MPOTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
     (hX : ∀ i l, X' i l * P = P * X i l) (i l : Fin d) :
     mulTensor X' R i l * kronId P D₃ = kronId P D₃ * mulTensor X R i l := by
-  rw [mulTensor_apply, mulTensor_apply, kronId, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv, Matrix.sum_mul, Matrix.mul_sum]
-  congr 1
-  refine Finset.sum_congr rfl fun j _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hX, Matrix.mul_one,
-    Matrix.one_mul]
+  rw [mulTensor_apply, mulTensor_apply, submatrix_sum_mul_kronId, kronId_mul_submatrix_sum]
+  simp only [hX]
 
 end MPOTensor
 

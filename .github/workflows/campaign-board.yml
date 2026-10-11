@@ -24,6 +24,9 @@ permissions:
 
 jobs:
   board:
+    # Only main publishes: a dispatch on another branch would otherwise upload an
+    # unmerged board under the production artifact name and deploy it.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     name: Render campaign board
     timeout-minutes: 20
@@ -47,10 +50,16 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Fetch the published snapshot
+        # Unchanged pull requests reuse its file statistics, which keeps the
+        # job within the token's hourly quota. A missing snapshot is fine.
+        run: curl -fsSL --retry 3 --retry-delay 10 --retry-all-errors https://sirui-lu.com/TNLean/openai-area-law-peps-proof/data.json -o previous.json || true
+
       - name: Collect the snapshot
         env:
           GH_TOKEN: ${{ github.token }}
           QICLEAN_DIR: qiclean
+          PREVIOUS_SNAPSHOT: previous.json
         run: python3 scripts/campaign_board/collect.py docs/campaign/openai-area-law-peps-proof campaign-data.json
 
       - name: Render the page

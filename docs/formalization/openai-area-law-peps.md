@@ -159,6 +159,12 @@ the descendant count and the construction and count of actual repairs remain
 unproved. In particular, these auxiliary results do not prove the full
 `geometry:total-repairs` statement.
 
+The real-centred closed-square samples and the nested radii used by the
+polynomial-PEPS patch argument are treated in the
+[nested-square patch geometry](peps-nested-patch-geometry.md). These lemmas
+concern induced crossing edges and two-site supports; the source's energy,
+filter, and rank arguments remain separate obligations.
+
 ## Mathematical coverage
 
 | Source label | Present status | Remaining mathematical work |
