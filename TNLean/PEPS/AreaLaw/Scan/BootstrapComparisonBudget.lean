@@ -23,7 +23,7 @@ September 24, 2026, `08-scanner.tex`, `scanner:scales`, lines 32–41,
 The statement is independently formulated from the manuscript; no upstream Lean proof
 text is reused.
 
-**Proof status:** The declaration is under construction and has not been elaborated.
+**Proof status:** The statement has been elaborated; its proof is under construction.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -48,6 +48,7 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
             (n : ℝ) * (L : ℝ) ^ e + (n : ℝ) * (D : ℝ) +
                 (n : ℝ) ^ (3 / 5 : ℝ) + Real.binEntropy τ / a + 1 ≤
               (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + η * e) := by
+  have he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
   done
 
 end TNLean.PEPS.AreaLaw.Scan
