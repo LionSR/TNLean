@@ -90,7 +90,7 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
               let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
                 Matrix.compressedTypicalPureState ΩX E
                   ((Finset.equivFin E).symm x.2, x.1)
-              ∃ ell : (k : ℕ) → PermutationRepresentation.IrrepLabel (Equiv.Perm (Fin k)),
+              ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
                 (∀ k : ℕ, 0 < k →
                   let d := E.card
                   let eₖ := TensorPower.globalReplicaCopiesEquiv β (Fin d) (Fin d) k
