@@ -23,7 +23,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
-variable {I O : Option {p : P // true = true} → Type}
+variable {I O : Option {_ : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
 
 /-- The matrix of the identity from literal source-slot coordinates to the
@@ -33,8 +33,8 @@ lines 253–267, 409–434 and 565–588. -/
 def actualPartySourceBasisChange (w : SourceCircuit a b)
     (B : ∀ q, OrthonormalBasis (I q) ℂ
       (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
-    (ps : List (Option {p : P // true = true})) (hn : ps.Nodup)
-    (hc : ∀ q, q ∈ ps) : Matrix ((q : Option {p : P // true = true}) → I q)
+    (ps : List (Option {_ : P // true = true})) (hn : ps.Nodup)
+    (hc : ∀ q, q ∈ ps) : Matrix ((q : Option {_ : P // true = true}) → I q)
       w.allSourceLabels ℂ :=
   LinearMap.toMatrix w.actualSourceInputBasis.toBasis
     (partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc).toBasis
@@ -50,7 +50,7 @@ def partialSourcePartyMatrix (w : SourceCircuit a b) (ψ : ProductInput a)
       (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
     (C : ∀ q, OrthonormalBasis (O q) ℂ
       (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))))
-    (q : Option {p : P // true = true}) : Matrix (O q) (I q) ℂ :=
+    (q : Option {_ : P // true = true}) : Matrix (O q) (I q) ℂ :=
   Matrix.of (fun row col ↦ (C q).repr
     (((w.partialSourceWord ψ ξ).restrict (partySelector q)
       (sources_partialSourceWord w ψ ξ)).eval (B q col)) row)
@@ -80,11 +80,20 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
     (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) C ps hn hc
   have hparty := Word.partyGroupedBasis_matrix_eval (w.partialSourceWord ψ ξ)
     (sources_partialSourceWord w ψ ξ) B C ps hn hc
+  have hmatrix : Matrix.of (fun row col ↦
+      bOut.repr ((w.partialSourceWord ψ ξ).eval (bIn col)) row) =
+      dependentPhysicalProductFamilyMatrix (fun q ↦
+        w.partialSourcePartyMatrix ψ ξ B C q) := by
+    simpa only [bIn, bOut, partialSourcePartyMatrix] using hparty
   have hm : LinearMap.toMatrix bIn.toBasis bOut.toBasis
       (w.partialSourceWord ψ ξ).eval.toLinearMap =
       dependentPhysicalProductFamilyMatrix (w.partialSourcePartyMatrix ψ ξ B C) := by
-    simpa only [matrix_repr_eval_eq_toMatrix, partialSourcePartyMatrix] using hparty
-  rw [partialSourceGlobalMatrix_eq_toMatrix, actualPartySourceBasisChange,
-    ← hm, ← LinearMap.toMatrix_comp, LinearMap.comp_id]
+    simpa only [matrix_repr_eval_eq_toMatrix] using hmatrix
+  have hcomp := LinearMap.toMatrix_comp w.actualSourceInputBasis.toBasis
+    bIn.toBasis bOut.toBasis (w.partialSourceWord ψ ξ).eval.toLinearMap
+    (LinearMap.id : Mem (w.allResidualSourceLayout ++ []) →ₗ[ℂ]
+      Mem (w.allResidualSourceLayout ++ []))
+  rw [LinearMap.comp_id, hm] at hcomp
+  exact (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut).trans hcomp
 
 end TNLean.PEPS.PairEffect.SourceCircuit
