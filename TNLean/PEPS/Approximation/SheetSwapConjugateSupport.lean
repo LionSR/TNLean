@@ -36,6 +36,7 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
       supportedOperators (q * q) (S : Set ι) := by
   classical
   simp only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
+  rw [sheetSwapOp_conj_doubledHamiltonian_eq_inter R S hA]
   done
 
 end TNLean.PEPS.EncodedFrame
