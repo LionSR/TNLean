@@ -259,7 +259,13 @@ theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
     rfl
   · rw [h.toAreaLawHamiltonian_operator hJ]
     have hg := hΩ.2.2.submatrix e.symm
-    simpa only [Matrix.submatrix_sub, Matrix.submatrix_smul,
-      Matrix.submatrix_one_equiv, Matrix.reindex_apply] using! hg
+    have hdef : (h.operator - (E₀ : ℂ) • 1 -
+        (Δ : ℂ) • (1 - vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).submatrix
+        e.symm e.symm = Matrix.reindex e e h.operator - (E₀ : ℂ) • 1 -
+          (Δ : ℂ) • (1 - vecMulVec (fun x ↦ squareAreaLawState Ω x)
+            (star (fun x ↦ squareAreaLawState Ω x))) := by
+      ext i j
+      done
+    done
 
 end TNLean.PEPS.Approximation
