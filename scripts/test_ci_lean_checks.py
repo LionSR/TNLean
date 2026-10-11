@@ -117,6 +117,20 @@ class SelectTest(unittest.TestCase):
         self.assertLess(tests.index("TNLeanTest/Support/Fixture.lean"),
                         tests.index("TNLeanTest/FixtureTest.lean"))
 
+    def test_full_run_change_preserves_changed_production_checks(self) -> None:
+        for path in ci.FULL_RUN_PATHS:
+            with self.subTest(path=path):
+                base = git(self.root, "rev-parse", "HEAD")
+                (self.root / "TNLean/Core.lean").write_text(
+                    f"import Mathlib\n-- changed with {path}\n")
+                self.change(path, "changed\n")
+                early, sources, tests = self.select(base)
+                self.assertEqual(early, ["TNLean.Core"])
+                self.assertEqual(sources, ["TNLean/Core.lean"])
+                self.assertEqual(len(tests), 4)
+                self.assertLess(tests.index("TNLeanTest/Support/Fixture.lean"),
+                                tests.index("TNLeanTest/FixtureTest.lean"))
+
     def test_no_base_runs_every_test(self) -> None:
         _, _, tests = self.select(None)
         self.assertEqual(len(tests), 4)
