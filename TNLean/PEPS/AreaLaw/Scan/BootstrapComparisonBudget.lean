@@ -49,6 +49,8 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
                 (n : ℝ) ^ (3 / 5 : ℝ) + Real.binEntropy τ / a + 1 ≤
               (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + η * e) := by
   have he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+  obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ :=
+    BootstrapParameters.parameter_bounds he₀pos he₀₁
   done
 
 end TNLean.PEPS.AreaLaw.Scan
