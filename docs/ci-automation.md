@@ -203,7 +203,10 @@ modules or tests.
 
 - **Early build** (pull requests, before the root build): a fail-fast
   `lake build` of the changed production modules, logged with the root build
-  for the compilation-time gate.
+  for the compilation-time gate. It is a shortcut with a 20-minute budget: a
+  compile error fails the step, but a build that runs past the budget (for
+  example behind a cold dependency cache after a pin change) stops with a
+  warning and leaves the remaining modules to the root build.
 - **Strict checks** (after the root build): every changed production file and
   every affected test file is elaborated with the package options
   and `-DwarningAsError=true`, three files at a time, each with a time limit.
