@@ -78,6 +78,7 @@ These identities concern the register selections used in
     \label{thm:peps_nested_party_restrictions}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_restrict_heq_of_implies,
         TNLean.PEPS.PairEffect.Word.restrict_restrict_eval_heq_of_implies}
+    \leanok
     \uses{thm:peps_party_restriction}
     Let $P$ be any set of parties and let $W:\ell\to m$ be a
     source-free composition. Let $A,B\subseteq P$ with $B\subseteq A$.
@@ -93,7 +94,7 @@ These identities concern the register selections used in
     its input and output register lists are empty.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_party_restriction}
     A register retained by $B$ is also retained by $A$, so its
     position and space are identical after either selection.
@@ -112,6 +113,7 @@ These identities concern the register selections used in
 \begin{theorem}[A singleton restriction after excluding another party]
     \label{thm:peps_singleton_after_excluded_party}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_withoutParty_atParty_eval_heq}
+    \leanok
     \uses{thm:peps_nested_party_restrictions}
     Let $p,q\in P$ be distinct and let $W$ be any source-free
     composition. Under the canonical register identifications,
@@ -123,7 +125,7 @@ These identities concern the register selections used in
     is required.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_nested_party_restrictions}
     Since $q\ne p$, the set $\{q\}$ is contained in
     $P\setminus\{p\}$. Apply
