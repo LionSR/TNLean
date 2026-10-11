@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartyPartitionAppend
-import TNLean.PEPS.Approximation.SourceInputPartition
+import TNLean.PEPS.Approximation.LayoutOwnerMap
+import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 
 /-!
 # Physical and discarded coordinates adapted to a party partition
@@ -17,47 +18,10 @@ identification is the canonical one for the actual register lists.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–450.
 -/
 
-/-!
-Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
-eq:compression-exterior-input; Theorem 5.2, lines 409–480.
-Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-01
-TNLean.PEPS.PairEffect.Layout.mapOwner_tensorBasis_coordinates
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-02
-TNLean.PEPS.PairEffect.Layout.memCongr_tmul_heq
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-03
-TNLean.PEPS.PairEffect.Layout.partitionAppendBasis
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-04
-TNLean.PEPS.PairEffect.Layout.partitionBasis
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-05
-TNLean.PEPS.PairEffect.Layout.partitionBasis_coordinates
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-06
-TNLean.PEPS.PairEffect.Layout.partitionBasis_coordinates_of_eq
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-07
-TNLean.PEPS.PairEffect.Layout.partitionIso_partitionBasis_tmul
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-08
-TNLean.PEPS.PairEffect.Layout.partitionOutputIso
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-09
-TNLean.PEPS.PairEffect.Layout.partitionOutputIso_basis
-Provenance-ID: 8769-source-resource-outputpartitioncoordinates-10
-TNLean.PEPS.PairEffect.Layout.partitionOutputIso_coordinates
--/
-
-
 noncomputable section
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect.Layout
 variable {P X Y d e : Type} [Fintype X] [Fintype Y] [Fintype d] [Fintype e]
-
-/-- Transporting two memory vectors along layout equalities preserves their tensor. -/
-theorem memCongr_tmul_heq {a b c d : Layout P} (ha : a = b) (hc : c = d)
-    (x : Mem a) (y : Mem c) :
-    HEq (memCongr ha x ⊗ₜ[ℂ] memCongr hc y) (x ⊗ₜ[ℂ] y) := by
-  cases ha
-  cases hc
-  rfl
 
 /-- The product of the two regional bases, transported to the original memory. -/
 def partitionBasis (f : P → Bool) (a : Layout P)

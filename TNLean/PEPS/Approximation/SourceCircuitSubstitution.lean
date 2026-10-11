@@ -22,39 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-subset-expansion.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.PreparedSourceGate.branchWithSources
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_original
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources_original
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-06
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_eq_sum_partialWithSources
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-07
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceVectors
-
-Provenance-ID: 8769-source-corrections-sourcecircuitsubstitution-08
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.eval_selectedSourceVectors_eq_sum
-
 -/
 
 noncomputable section

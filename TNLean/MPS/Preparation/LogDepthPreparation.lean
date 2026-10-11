@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.BlockApproximationError
 import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.ShortChainPreparation
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Preparation of a normal translation-invariant MPS in depth `O(log(N/ε))`, every chain length
@@ -149,22 +150,7 @@ theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTe
   have hq0 : 0 < q := by exact_mod_cast (show (0 : ℝ) < q by linarith)
   by_cases hqN : q ≤ N
   · -- Long chains: `M - 1` blocks of length `q` and one of length `q' = q + N % q < 2q`.
-    obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-      ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq0)).symm⟩
-    set q' := q + N % q
-    set ℓ : Fin (m + 1) → ℕ := fun k => if k = Fin.last m then q' else q
-    have hsum : ∑ k, ℓ k = N := by
-      rw [Fin.sum_univ_castSucc]
-      simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-        Fintype.card_fin, smul_eq_mul, ite_true]
-      have := Nat.div_add_mod N q
-      rw [hm] at this
-      simp only [q']
-      linarith
-    have hℓq : ∀ k, q ≤ ℓ k := fun k => by simp only [ℓ]; split_ifs <;> omega
-    have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => by
-      have := Nat.mod_lt N hq0
-      simp only [ℓ, q']; split_ifs <;> omega
+    obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
     have hLq : (L : ℝ) ≤ q := by
       have : (0 : ℝ) ≤ a * Real.log (N / ε) + max (Real.log K) 0 / r + 3 * D + 1 := by positivity
       linarith

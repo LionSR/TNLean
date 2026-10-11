@@ -18,55 +18,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-01
-TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-02
-TNLean.PEPS.PairEffect.EffectCircuit.auxiliary
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-03
-TNLean.PEPS.PairEffect.EffectCircuit.auxiliaryVector
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-04
-TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-05
-TNLean.PEPS.PairEffect.EffectCircuit.isAllowed_replacement
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-06
-TNLean.PEPS.PairEffect.EffectCircuit.norm_auxiliaryVector
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-07
-TNLean.PEPS.PairEffect.EffectCircuit.replacement
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-08
-TNLean.PEPS.PairEffect.SourceCircuit.eval_frameList
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-09
-TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_exchangeBlocks
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-10
-TNLean.PEPS.PairEffect.appendIso_assoc_symm_heq
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-11
-TNLean.PEPS.PairEffect.castOutputMap
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-12
-TNLean.PEPS.PairEffect.castOutputMap_sub
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-13
-TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_native
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-14
-TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-15
-TNLean.PEPS.PairEffect.gateMemoryMap
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-16
-TNLean.PEPS.PairEffect.gateMemoryMap_sub
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-17
-TNLean.PEPS.PairEffect.gate_auxiliary_layout
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-18
-TNLean.PEPS.PairEffect.norm_castOutputMap
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-19
-TNLean.PEPS.PairEffect.norm_gateMemoryMap_le
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-20
-TNLean.PEPS.PairEffect.norm_retainMap_le
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-21
-TNLean.PEPS.PairEffect.replacementCoefficients
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-22
-TNLean.PEPS.PairEffect.retainMap
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-23
-TNLean.PEPS.PairEffect.retainMap_sub
-Provenance-ID: 8769-source-resource-effectcircuitreplacement-24
-TNLean.PEPS.PairEffect.retainMap_tmul
 -/
 
 noncomputable section
