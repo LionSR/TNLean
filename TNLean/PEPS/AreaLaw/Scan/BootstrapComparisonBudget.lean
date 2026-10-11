@@ -23,7 +23,6 @@ September 24, 2026, `08-scanner.tex`, `scanner:scales`, lines 32–41,
 The statement is independently formulated from the manuscript; no upstream Lean proof
 text is reused.
 
-**Proof status:** The statement has been elaborated; its proof is under construction.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -85,6 +84,59 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
   have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hN.trans hn
   have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hn1
   have hepos : 0 < e := lt_trans (by norm_num [Exponents.boxError]) he
-  done
+  -- Everything is compared against the improved power `n ^ (1 + (1 - ℓ) e)`.
+  show (n : ℝ) * (X.L n : ℝ) ^ e + (n : ℝ) * (X.D n : ℝ) + (n : ℝ) ^ (3 / 5 : ℝ)
+      + Real.binEntropy τ / X.a 4 n + 1
+      ≤ (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e)
+  have hη : (0 : ℝ) < 1 - X.ell := sub_pos.2 X.ell_lt_one
+  have hexp0 : (0 : ℝ) ≤ (1 - X.ell) * e := mul_nonneg hη.le hepos.le
+  have hmul : (n : ℝ) ^ (1 + (1 - X.ell) * e)
+      = (n : ℝ) * (n : ℝ) ^ ((1 - X.ell) * e) := by
+    rw [Real.rpow_add hnpos, Real.rpow_one]
+  -- The collar depth `L ≤ n^{1-ℓ}`, so `L^e ≤ n^{(1-ℓ)e}`.
+  have hLle : (X.L n : ℝ) ≤ (n : ℝ) ^ (1 - X.ell) := Nat.floor_le (by positivity)
+  have hLe : (X.L n : ℝ) ^ e ≤ (n : ℝ) ^ ((1 - X.ell) * e) :=
+    calc (X.L n : ℝ) ^ e ≤ ((n : ℝ) ^ (1 - X.ell)) ^ e :=
+          Real.rpow_le_rpow (by positivity) hLle hepos.le
+      _ = (n : ℝ) ^ ((1 - X.ell) * e) := by rw [← Real.rpow_mul hnpos.le]
+  have ht1 : (n : ℝ) * (X.L n : ℝ) ^ e ≤ (n : ℝ) ^ (1 + (1 - X.ell) * e) := by
+    rw [hmul]; exact mul_le_mul_of_nonneg_left hLe hnpos.le
+  -- The separation exponent `κ < (1 - ℓ) e`, so `n D ≤ 2 n^{1 + (1-ℓ)e}`.
+  have hκlt : X.kappa < (1 - X.ell) * e :=
+    (BootstrapParameters.comparison_exponents he₀pos he).1
+  have hκ1 : (1 : ℝ) ≤ (n : ℝ) ^ X.kappa := Real.one_le_rpow hn1 X.kappa_pos.le
+  have hDceil : (X.D n : ℝ) ≤ (n : ℝ) ^ X.kappa + 1 :=
+    (Nat.ceil_lt_add_one (by positivity)).le
+  have hDn : (n : ℝ) ^ X.kappa ≤ (n : ℝ) ^ ((1 - X.ell) * e) :=
+    Real.rpow_le_rpow_of_exponent_le hn1 hκlt.le
+  have hD2 : (X.D n : ℝ) ≤ 2 * (n : ℝ) ^ ((1 - X.ell) * e) :=
+    calc (X.D n : ℝ) ≤ (n : ℝ) ^ X.kappa + 1 := hDceil
+      _ ≤ 2 * (n : ℝ) ^ X.kappa := by linarith
+      _ ≤ 2 * (n : ℝ) ^ ((1 - X.ell) * e) := by linarith
+  have ht2 : (n : ℝ) * (X.D n : ℝ) ≤ 2 * (n : ℝ) ^ (1 + (1 - X.ell) * e) := by
+    rw [hmul]
+    calc (n : ℝ) * (X.D n : ℝ)
+        ≤ (n : ℝ) * (2 * (n : ℝ) ^ ((1 - X.ell) * e)) :=
+          mul_le_mul_of_nonneg_left hD2 hnpos.le
+      _ = 2 * ((n : ℝ) * (n : ℝ) ^ ((1 - X.ell) * e)) := by ring
+  -- The improved power dominates `1`, `n` and the typical width `n^{3/5}`.
+  have hP1 : (1 : ℝ) ≤ (n : ℝ) ^ (1 + (1 - X.ell) * e) :=
+    Real.one_le_rpow hn1 (by linarith)
+  have hPn : (n : ℝ) ≤ (n : ℝ) ^ (1 + (1 - X.ell) * e) :=
+    calc (n : ℝ) = (n : ℝ) ^ (1 : ℝ) := (Real.rpow_one _).symm
+      _ ≤ (n : ℝ) ^ (1 + (1 - X.ell) * e) :=
+          Real.rpow_le_rpow_of_exponent_le hn1 (by linarith)
+  have ht3 : (n : ℝ) ^ (3 / 5 : ℝ) ≤ (n : ℝ) ^ (1 + (1 - X.ell) * e) :=
+    Real.rpow_le_rpow_of_exponent_le hn1 (by linarith)
+  -- The binary-entropy cost contributes the single `log 2 / 4` coefficient.
+  have hlog0 : (0 : ℝ) ≤ Real.log 2 / 4 :=
+    div_nonneg (Real.log_nonneg (by norm_num)) (by norm_num)
+  have ht4 : Real.binEntropy τ / X.a 4 n
+      ≤ (Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e) :=
+    ((hcost n hn).2.2 τ).trans (mul_le_mul_of_nonneg_left hPn hlog0)
+  have hdistrib : (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e)
+      = 5 * (n : ℝ) ^ (1 + (1 - X.ell) * e)
+        + (Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e) := by ring
+  linarith [ht1, ht2, ht3, ht4, hP1, hdistrib]
 
 end TNLean.PEPS.AreaLaw.Scan
