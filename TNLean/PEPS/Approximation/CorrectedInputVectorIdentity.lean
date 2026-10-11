@@ -71,12 +71,7 @@ theorem exists_correctedInputVector_identity {a b : Layout P} (w : SourceCircuit
     HasCorrectedInputVectors w S p₀ := by
   unfold HasCorrectedInputVectors
   intro A R U V ℓ C T free v fixed X Y F input output
-  have hr : ∃ u : Word (C ++ (T ++ ℓ)) (freeSlotLayout R U V free ++ ℓ),
-      u.IsAllowed ∧ u.sources = [] ∧ ∀ η : ∀ i, U i ⊗[ℂ] V i,
-        u.eval ∘L (prepareFreeSlots R U V (correctedSlotMask w S) η (T ++ ℓ)).eval ∘L
-          (prepareFreeSlots R U V (crossingSlotMask w S) η ℓ).eval =
-            (prepareFreeSlots R U V free η ℓ).eval := exists_correctedInputReordering w S
-  obtain ⟨u, hu, hus, hue⟩ := hr
+  obtain ⟨u, hu, hus, hue⟩ := exists_correctedInputReordering w S
   refine ⟨u, hu, hus, ?_⟩
   intro ξ η
   exact correctedInputVector_identity_of_reordering w S p₀ u ξ η (hue η)

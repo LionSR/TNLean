@@ -96,9 +96,8 @@ import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalSchmidtOutput
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
-import TNLean.PEPS.Approximation.OwnerOutputCoordinates
-import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
+import TNLean.PEPS.Approximation.OwnerOutputCoordinates
 import TNLean.PEPS.Approximation.OwnershipMonomials
 import TNLean.PEPS.Approximation.PairEffectElimination
 import TNLean.PEPS.Approximation.PairEffectSourcePreparation
