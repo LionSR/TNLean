@@ -80,6 +80,11 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
           ((show (Exponents.boxError : ℝ) / 4 ≤
               (Exponents.boxError : ℝ) by norm_num [Exponents.boxError]).trans he₀.le) }
   obtain ⟨N, hN, hcost⟩ := exists_bootstrap_binaryEntropy_cost_bound X
+  refine ⟨N, hN, fun n hn ↦ ?_⟩
+  refine ⟨(hcost n hn).1, (hcost n hn).2.1, fun e he hee₀ τ ↦ ?_⟩
+  have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hN.trans hn
+  have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hn1
+  have hepos : 0 < e := lt_trans (by norm_num [Exponents.boxError]) he
   done
 
 end TNLean.PEPS.AreaLaw.Scan
