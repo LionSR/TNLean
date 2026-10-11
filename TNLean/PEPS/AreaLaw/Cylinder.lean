@@ -39,6 +39,25 @@ theorem mem_dependentRegionCylinder (R : Finset V)
     x ∈ dependentRegionCylinder R S ↔ ∀ τ, dependentRegionSlice R τ x ∈ S := by
   simp [dependentRegionCylinder]
 
+/-- A global vector is determined by its complementary slices. -/
+private theorem eq_of_forall_dependentRegionSlice_eq (R : Finset V)
+    {x x' : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ}
+    (h : ∀ τ, dependentRegionSlice R τ x = dependentRegionSlice R τ x') : x = x' := by
+  funext η
+  obtain ⟨⟨α, τ⟩, rfl⟩ := (dependentRegionConfigEquiv R).symm.surjective η
+  exact congrFun (h τ) α
+
+/-- Every family of regional vectors indexed by the complementary configurations is
+the slice family of one global vector. -/
+private theorem exists_dependentRegionSlice_eq (R : Finset V)
+    (y : ((w : {w : V // w ∈ Finset.univ \ R}) → Out w.1) →
+      ((w : {w : V // w ∈ R}) → Out w.1) → ℂ) :
+    ∃ z, ∀ τ, dependentRegionSlice R τ z = y τ := by
+  refine ⟨fun η ↦ y (dependentRegionConfigEquiv R η).2 (dependentRegionConfigEquiv R η).1,
+    fun τ ↦ ?_⟩
+  funext α
+  exact congrArg (fun p ↦ y p.2 p.1) ((dependentRegionConfigEquiv R).apply_symm_apply (α, τ))
+
 /-- Extending a regional linear map by the identity extends its range to a cylinder. -/
 theorem range_dependentRegionOperatorLift [∀ v, Fintype (Out v)] (R : Finset V)
     (K : Matrix ((w : {w : V // w ∈ R}) → Out w.1)
@@ -52,20 +71,12 @@ theorem range_dependentRegionOperatorLift [∀ v, Fintype (Out v)] (R : Finset V
     refine (mem_dependentRegionCylinder R _ _).mpr fun τ => ⟨dependentRegionSlice R τ y, ?_⟩
     exact (dependentRegionSlice_mulVec_dependentRegionOperatorLift R K y τ).symm
   · intro hx
-    have h := (mem_dependentRegionCylinder R _ x).mp hx
-    choose y hy using h
-    let z := fun η => y ((dependentRegionConfigEquiv R η).2)
-      ((dependentRegionConfigEquiv R η).1)
-    refine ⟨z, ?_⟩
-    funext η
-    obtain ⟨⟨α, τ⟩, rfl⟩ := (dependentRegionConfigEquiv R).symm.surjective η
-    have hz : dependentRegionSlice R τ z = y τ := by
-      funext β
-      exact congrArg (fun p => y p.2 p.1)
-        ((dependentRegionConfigEquiv R).apply_symm_apply (β, τ))
+    choose y hy using (mem_dependentRegionCylinder R _ x).mp hx
+    obtain ⟨z, hz⟩ := exists_dependentRegionSlice_eq R y
+    refine ⟨z, eq_of_forall_dependentRegionSlice_eq R fun τ ↦ ?_⟩
     have he := dependentRegionSlice_mulVec_dependentRegionOperatorLift R K z τ
     rw [hz] at he
-    exact congrFun (he.trans (hy τ)) α
+    exact he.trans (hy τ)
 
 /-- The cylinder projector is the identity extension of the inside projector. -/
 theorem coordinateRangeProjector_dependentRegionCylinder [∀ v, Fintype (Out v)]
@@ -85,10 +96,7 @@ theorem dependentRegionCylinder_bot (R : Finset V) :
   ext x
   simp only [mem_dependentRegionCylinder, Submodule.mem_bot]
   constructor
-  · intro h
-    funext η
-    obtain ⟨⟨α, τ⟩, rfl⟩ := (dependentRegionConfigEquiv R).symm.surjective η
-    exact congrFun (h τ) α
+  · exact fun h ↦ eq_of_forall_dependentRegionSlice_eq R fun τ ↦ (h τ).trans (map_zero _).symm
   · rintro rfl
     simp
 
@@ -104,28 +112,12 @@ theorem dependentRegionCylinder_sup (R : Finset V)
     have h' : ∀ τ, ∃ s ∈ S, ∃ t ∈ T, s + t = dependentRegionSlice R τ x :=
       fun τ => Submodule.mem_sup.mp (h τ)
     choose s hs t ht hst using h'
-    let a := fun η => s ((dependentRegionConfigEquiv R η).2)
-      ((dependentRegionConfigEquiv R η).1)
-    let b := fun η => t ((dependentRegionConfigEquiv R η).2)
-      ((dependentRegionConfigEquiv R η).1)
-    have ha : ∀ τ, dependentRegionSlice R τ a = s τ := by
-      intro τ
-      funext α
-      exact congrArg (fun p => s p.2 p.1)
-        ((dependentRegionConfigEquiv R).apply_symm_apply (α, τ))
-    have hb : ∀ τ, dependentRegionSlice R τ b = t τ := by
-      intro τ
-      funext α
-      exact congrArg (fun p => t p.2 p.1)
-        ((dependentRegionConfigEquiv R).apply_symm_apply (α, τ))
+    obtain ⟨a, ha⟩ := exists_dependentRegionSlice_eq R s
+    obtain ⟨b, hb⟩ := exists_dependentRegionSlice_eq R t
     refine Submodule.mem_sup.mpr ⟨a, ?_, b, ?_, ?_⟩
     · exact (mem_dependentRegionCylinder R S a).mpr fun τ => (ha τ).symm ▸ hs τ
     · exact (mem_dependentRegionCylinder R T b).mpr fun τ => (hb τ).symm ▸ ht τ
-    · funext η
-      obtain ⟨⟨α, τ⟩, rfl⟩ := (dependentRegionConfigEquiv R).symm.surjective η
-      have hsum : dependentRegionSlice R τ (a + b) = dependentRegionSlice R τ x := by
-        rw [map_add, ha, hb, hst]
-      exact congrFun hsum α
+    · exact eq_of_forall_dependentRegionSlice_eq R fun τ ↦ by rw [map_add, ha, hb, hst]
   · apply sup_le
     · intro x hx
       exact (mem_dependentRegionCylinder R _ x).mpr fun τ =>
