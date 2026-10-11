@@ -798,7 +798,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
-    $(\mathbb C^q)^{\otimes\Lambda}$ supported on $R$. Then
+    $\mathcal H_\Lambda$ supported on $R$. Then
     \begin{align*}
         F_R(A\otimes B)=(B\otimes A)F_R.
     \end{align*}
@@ -808,6 +808,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:peps_frame_split_forms}
     Split each sheet into $R$ and its complement. The support assumptions give
     $A=A_R\otimes I$ and $B=B_R\otimes I$. The swap interchanges the two
     copies of $R$ and fixes the complementary factors. Writing each
@@ -823,12 +824,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{thm:peps_sheet_swap_doubled_cancellation}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
-    Let $V$ be a finite site set, $q\geq0$ a local dimension, and
-    $R,S\subseteq V$. Let $A$ be an operator supported on $S$, and let
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
+    be an operator supported on $S$, and let
     $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
     or $S\cap R=\varnothing$, then
     \[
-        F_R(A\otimes I+I\otimes A)F_R^*
+        F_R(A\otimes I+I\otimes A)F_R^\dagger
         =A\otimes I+I\otimes A.
     \]
     This is the noncrossing cancellation used in the boundary perturbation
@@ -837,22 +839,29 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
-    If $S\subseteq R$, the swap exchanges the two tensor summands.
-    If $S\cap R=\varnothing$, it commutes with each summand.
-    In either case their sum commutes with $F_R$, and unitarity gives
-    the stated conjugation identity.
+    If $S\subseteq R$, the exchange identity applied with $B=I$ on both
+    sides gives
+    \begin{align*}
+        F_R(A\otimes I)=(I\otimes A)F_R,\qquad F_R(I\otimes A)=(A\otimes I)F_R.
+    \end{align*}
+    If $S\cap R=\varnothing$, the swap commutes with $A\otimes I$ and with
+    $I\otimes A$. In either case
+    $F_R(A\otimes I+I\otimes A)=(A\otimes I+I\otimes A)F_R$, and
+    multiplying on the right by $F_R^\dagger=F_R^{-1}$ gives the stated
+    identity.
 \end{proof}
 
 \begin{theorem}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
     \leanok
-    Let $V$ be a finite site set, $q\geq0$ a local dimension, and
-    $R,S\subseteq V$. Let $A$ be an operator supported on $S$.
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
+    be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
     two copies at the sites in $D$. Then
     \begin{align}
-        F_R T(A) F_R^* = F_{R\cap S}^* T(A) F_{R\cap S}.
+        F_R T(A) F_R^\dagger = F_{R\cap S}^\dagger T(A) F_{R\cap S}.
         \label{eq:peps_swap_interaction_restriction}
     \end{align}
     This is the support reduction in the boundary perturbation argument
@@ -861,11 +870,40 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation}
     Put $B=R\cap S$ and $O=R\setminus S$. The composition of the
-    swaps gives $F_BF_R=F_O$, hence $F_R=F_B^*F_O$ by unitarity.
+    swaps gives $F_BF_R=F_O$, hence $F_R=F_B^\dagger F_O$ by unitarity.
     Since $S\cap O=\varnothing$, cancellation outside $S$ gives
     \begin{align*}
-        F_R T(A)F_R^* = F_B^*\bigl(F_OT(A)F_O^*\bigr)F_B = F_B^*T(A)F_B.
+        F_R T(A)F_R^\dagger = F_B^\dagger\bigl(F_OT(A)F_O^\dagger\bigr)F_B = F_B^\dagger T(A)F_B.
     \end{align*}
+\end{proof}
+
+\begin{theorem}[Crossing-edge expansion of the doubled perturbation]
+    \label{thm:peps_sheet_swap_boundary_expansion}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
+    \leanok
+    \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
+    Let $H=\sum_v h_v+\sum_e h_e$ be an open-square Hamiltonian with the
+    original bounded site and edge interactions, and let $R$ be any set of
+    vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
+    Let $F_R$ exchange the two copies at the sites of $R$, and let
+    $\partial R$ be the set of edges with exactly one endpoint in $R$.
+    Then
+    \begin{align*}
+        F_RT(H)F_R^\dagger-T(H)
+        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
+    \end{align*}
+    This includes zero local dimension and squares of side zero or one.
+    Individual interactions need not be Hermitian. The identity is the
+    crossing-edge reduction in the boundary perturbation argument of
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_swap_doubled_cancellation}
+    The map $A\mapsto F_RT(A)F_R^\dagger-T(A)$ is linear. Expand the original
+    sum defining $H$. Every singleton support lies in $R$ or is disjoint
+    from $R$, so each site contribution vanishes. The same holds for the
+    two-endpoint support of every noncrossing edge. Removing these zero
+    summands leaves precisely the displayed crossing-edge sum.
 \end{proof}
 
 \begin{definition}[Exchange data]
