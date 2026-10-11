@@ -38,6 +38,7 @@ theorem restrict_sourcePrivatePreparation_none_eval_heq_id {a b : Layout P}
       (sources_sourcePrivatePreparation w ψ)).eval)
       (ContinuousLinearMap.id ℂ ℂ) := by
   classical
+  unfold sourcePrivatePreparation
   have hselector :
       partySelector (none : Option {p : P // (fun _ : P => true) p = true}) =
         Option.isNone := by
@@ -46,10 +47,11 @@ theorem restrict_sourcePrivatePreparation_none_eval_heq_id {a b : Layout P}
   have hprepare := (Word.restrict_mapOwner_eval_eq_id_of_disjoint
     (affectedOwner (fun _ : P => true)) none ψ.prepare ψ.sources_prepare
     (by intro p; simp [affectedOwner])).2
+  rw [hselector] at hprepare
   have hframe := Word.restrict_frameList_eval_heq_of_eq_nil Option.isNone
     w.allResidualSourceLayout (restrict_allResidualSourceLayout_isNone w)
     (ψ.prepare.mapOwner (affectedOwner (fun _ : P => true)))
     (by simp [Word.sources_mapOwner, ψ.sources_prepare])
-  exact hframe.trans (hselector ▸ hprepare)
+  exact hframe.trans hprepare
 
 end TNLean.PEPS.PairEffect.SourceCircuit
