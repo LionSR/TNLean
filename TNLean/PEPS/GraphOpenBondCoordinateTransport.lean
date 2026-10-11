@@ -101,18 +101,7 @@ theorem graphRegionCoordinateMatrix_open
   simp only [graphOpenBoundaryFactor_coordinates Q hQ U L hL,
     graphOpenInternalFactor_coordinates Q U L hL]
   simp_rw [graphOpenBondCoordinates_eq_sum_prod]
-  funext β
-  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
-  symm
-  simp only [Finset.mul_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro q _
-  rw [Fintype.prod_sum]
-  simp only [Finset.mul_sum, Finset.sum_mul, Finset.prod_mul_distrib]
-  apply Finset.sum_congr rfl
-  intro a _
-  ring
+  exact sum_prod_sum_mul_eq_sum_prod_smul _ _ _ _
 
 /-- Arbitrary virtual boundary coefficient vectors transform explicitly;
 no product-state or fixed-label condition is imposed on the boundary. -/

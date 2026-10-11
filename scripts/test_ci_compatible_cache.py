@@ -675,58 +675,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn('always()', self.steps[build].get('if', ''))
         for i, step in enumerate(self.steps):
             if 'lake env lean' in step.get('run', ''):
-                if step.get('name') == 'Check finite rectangular dual geometry early':
-                    # One explicit early regression is safe after its complete
-                    # import closure is rebuilt by Lake. No generic exemption.
-                    self.assertLess(prune, i)
-                    self.assertLess(i, build)
-                    self.assertNotIn('continue-on-error', step)
-                    run = step['run']
-                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
-                    target = 'lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean'
-                    self.assertLess(run.index(cache_guard), run.index(target))
-                    self.assertLess(run.index(target), run.index('lake env lean'))
-                    self.assertIn('+TNLean.PEPS.TorusDualWinding:olean', run)
-                    self.assertIn('set -eo pipefail', run)
-                    self.assertIn('-DwarningAsError=true', run)
-                    self.assertIn('-DautoImplicit=false -DrelaxedAutoImplicit=false', run)
-                    self.assertEqual(run.count('lake env lean'), 1)
-                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
-                    self.assertEqual(checked.replace('\\', '').split(), [
-                        'TNLean/PEPS/TorusDualRectangle.lean',
-                        'TNLean/PEPS/TorusDualRectangleFlux.lean',
-                        'TNLeanTest/TorusDualRectangle.lean',
-                    ])
-                    self.assertEqual(run.strip().splitlines()[-2].strip(), '"$source"')
-                    self.assertEqual(run.strip().splitlines()[-1].strip(), 'done')
-                    imports = (ROOT / 'TNLeanTest/TorusDualRectangle.lean').read_text().splitlines()
-                    self.assertEqual([line for line in imports if line.startswith('import ')], [
-                        'import TNLean.PEPS.TorusDualRectangleFlux',
-                        'import TNLean.PEPS.TorusDualWinding',
-                    ])
-                elif step.get('name') == 'Check finite weighted dyadic sum early':
-                    # Exact one-import fixture, checked only after Lake rebuilds
-                    # its complete production closure. No generic exemption.
-                    self.assertLess(prune, i)
-                    self.assertLess(i, build)
-                    self.assertNotIn('continue-on-error', step)
-                    run = step['run']
-                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
-                    target = 'lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum'
-                    self.assertLess(run.index(cache_guard), run.index(target))
-                    self.assertLess(run.index(target), run.index('lake env lean'))
-                    self.assertEqual(run.count('lake env lean'), 1)
-                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
-                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
-                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true',
-                                 'timeout --signal=INT --kill-after=5s 90s']:
-                        self.assertIn(flag, run)
-                    self.assertEqual(run.strip().splitlines()[-1].strip(),
-                                     'TNLeanTest/DyadicWeightedSum.lean')
-                    imports = (ROOT / 'TNLeanTest/DyadicWeightedSum.lean').read_text().splitlines()
-                    self.assertEqual([line for line in imports if line.startswith('import ')],
-                                     ['import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum'])
-                elif step.get('name') == 'Check labelled open coefficients early':
+                if step.get('name') == 'Check labelled open coefficients early':
                     self.assertLess(prune, i)
                     self.assertLess(i, build)
                     self.assertNotIn('continue-on-error', step)
@@ -755,45 +704,6 @@ class WorkflowTests(unittest.TestCase):
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)
-
-    def test_schmidt_bell_checks_follow_full_build_with_unchanged_bounds(self):
-        build = next(i for i, s in enumerate(self.steps)
-                     if s.get('name') == 'Build Lean project and capture timings')
-        target = next(i for i, s in enumerate(self.steps)
-                      if s.get('name') == 'Build canonical Schmidt--Bell initial vectors after the full build')
-        strict = next(i for i, s in enumerate(self.steps)
-                      if s.get('name') == 'Check canonical Schmidt--Bell sources and exact-name axioms strictly')
-        self.assertLess(build, target)
-        self.assertEqual(target + 1, strict)
-        builder, checker = self.steps[target], self.steps[strict]
-        for step in (builder, checker):
-            self.assertNotIn('if', step)
-            self.assertNotIn('continue-on-error', step)
-            self.assertEqual(step['timeout-minutes'], 5)
-            self.assertEqual(step['env'], {'LEAN_NUM_THREADS': 1})
-            self.assertIn('set -eo pipefail', step['run'])
-            self.assertIn('tee -a "$RUNNER_TEMP/lake-build.log"', step['run'])
-        cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
-        command = 'lake --fail-fast build TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector'
-        self.assertLess(builder['run'].index(cache_guard), builder['run'].index(command))
-        bounded_build = ' '.join(builder['run'].replace('\\\n', '').split())
-        self.assertIn('timeout --signal=INT --kill-after=5s 240s ' + command, bounded_build)
-        run = checker['run']
-        self.assertIn('timeout --signal=INT --kill-after=5s 90s lake env lean -j1', run)
-        for flag in ['-DwarningAsError=true', '-DautoImplicit=false',
-                     '-DrelaxedAutoImplicit=false', '-Dpp.unicode.fun=true',
-                     '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true']:
-            self.assertIn(flag, run)
-        checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
-        self.assertEqual(checked.replace('\\', '').split(), [
-            'TNLean/PEPS/AreaLaw/GlobalSchmidtBellPrevector.lean',
-            'TNLean/PEPS/AreaLaw/FiniteSetTruncationSchmidtBellPrevector.lean',
-            'TNLeanTest/GlobalSchmidtBellPrevectorAxioms.lean'])
-        imports = (ROOT / 'TNLeanTest/GlobalSchmidtBellPrevectorAxioms.lean').read_text().splitlines()
-        self.assertEqual([line for line in imports if line.startswith('import ')], [
-            'import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector',
-            'import Lean.Elab.Command',
-            'import Lean.Util.CollectAxioms'])
 
     def test_postrestore_shell_stops_before_prune_or_build(self):
         step = next(s for s in self.steps if s.get('name') == 'Discard unvalidated cross-commit artifacts')

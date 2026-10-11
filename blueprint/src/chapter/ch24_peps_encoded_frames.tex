@@ -74,6 +74,47 @@ norm of matrices, rectangular ones included.
     It keeps a raw register at every site, inside the hole as well. If the
     outer sample is empty, the tag register is one-dimensional and $K_{c,h}$
     is the identity encoding, as in \texttt{05-frames.tex}, lines 67--69.
+    On a square grid of unit spacing with $c$ a site and $h=3/2$, the inner
+    sample, one sample $D_j$ of radius $r_j=2$, and the outer sample are
+    nested squares of sites, and the encoder maps the raw registers to a tag
+    together with the raw registers.
+    % Source: arXiv OpenAI2026PolynomialPEPS, 05-frames.tex, lines 26--69
+    % (eq. hole-projector and eq. hole-encoder); no source figure.
+    % First picture: every dot is a site of Lambda (a 7x7 window of the unit
+    % grid); no tensor indices are drawn. Cell (4,4) is the centre c. The
+    % shaded enclosure is the inner sample (|x-c|_inf<=3/2, a 3x3 block),
+    % the solid enclosure is D_j for r_j=2 (5x5 block), the dashed enclosure
+    % is the outer sample (|x-c|_inf<=3, the whole 7x7 window). Each label
+    % stands inside its own contour. Sample choice only; h, r_j and the
+    % window are illustrative. Empty boundary signature.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,ket}, cols=7,
+                bonds=none]
+            \tnmark[form=enclosure, species=selected, tint]{(3,3) .. (5,5)}{}
+            \tnmark[form=enclosure, species=secondary]{(2,2) .. (6,6)}{}
+            \tnmark[form=enclosure, species=complement]{(1,1) .. (7,7)}{}
+            \tnmark[form=label, label pos=n]{midway (4,3) and (4,4)}{$Q^-$}
+            \tnmark[form=label, label pos=n]{midway (3,2) and (3,3)}{$D_j$}
+            \tnmark[form=label, label pos=n]{midway (2,1) and (2,2)}{$Q^+$}
+            \tnmark[form=label, label pos=e]{(4,4)}{$c$}
+        \end{tenkz}
+    \end{tenkzequation}
+    % Second picture: the box is K_{c,h}. Its west leg is the input
+    % H_Lambda; its two east legs are the outputs, the tag J_{c,h} (upper)
+    % and the raw registers H_Lambda (lower), so K_{c,h} maps H_Lambda to
+    % J_{c,h} (x) H_Lambda. All three legs are open physical legs; boundary
+    % signature (phys:w | phys:e, phys:e). Each tag value |j,l> applies
+    % <v_{jl}| on D_j and re-prepares |0> on D_j, as in eq. hole-encoder.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+            \tn[at=(1,1), skin=box, wires=2,
+                ports={180@2:physical:$\mathcal H_\Lambda$,
+                        0@1:physical:$\mathcal J_{c,h}$,
+                        0@2:physical:$\mathcal H_\Lambda$}]{K_{c,h}}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{lemma}[Encoders are contractions]

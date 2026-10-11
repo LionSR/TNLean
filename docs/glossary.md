@@ -3178,6 +3178,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` | Square roots `(I - kᵢ)^{1/2}`, `kᵢ^{1/2}` and their graph-ball truncations, with stretched-exponential tails and the induced unital local channels | Area-law Lemma 4.4 (`lem:quasilocal-roots`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation` | Constraints truncated near a finite set `S₀` of at most `C₀ n²` sites at radius `⌈C₁ (log n)²⌉`, within `ε_n` of the positive Hamiltonian, with a unit ground vector and gap at least half | Area-law Proposition 4.5 (`prop:truncation`), first part, on induced lattice domains, with `p = 1`; `C₁` depends only on `R, J, Δ, C₀`. |
+| `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span` | The truncated sum of `exists_latticeFiniteSetTruncation` has a gapped ground vector whose eigenspace at the ground energy is the line it spans | Area-law Proposition 4.5 (`prop:truncation`), uniqueness of the truncated ground vector, on induced lattice domains, with `p = 1`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
@@ -3436,3 +3437,24 @@ source's Proposition 4.1.
 |---|---|---|
 | `TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector` | An actual positive-mass spectral restriction chooses one label sequence; the initial vector built from the original exact eigenvector has nonzero norm at most one, exact mean energy, simultaneous copy symmetry and both literal auxiliary projection equations. The same labels have polynomial selected-vector mass and the auxiliary entropy asymptotic. | Area-law `comparator:prevector` and `comparator:high-label`, lines 130–147 and 240–281. Identification of the transported auxiliary operators with singleton site-label projectors is separate. |
 | `TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap` | The same finite-set truncation constant, Hamiltonian and ground vector retain their support, gap and distance estimates and supply the common-label initial vector for every positive-mass spectral selection. | Area-law `prop:truncation` composed with the preceding result. The exact energy equation belongs to the truncated Hamiltonian. |
+
+## Fixed-scale replica limit in the entropy bootstrap
+
+- **Declarations:** `TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons`
+  and `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapReplicaAbsorption.lean`.
+- **Meaning:** two eventual rough scalar comparisons share one nonnegative
+  entropy independent of the replica count. Three vanishing remainders can be
+  removed at the fixed physical scale, then the coefficient margin gives the
+  bound by the sum of the two additive budgets. The comparison value and defect
+  sequence need not converge.
+- **Scale threshold:** the fixed bootstrap error exponent gives one threshold
+  with `0 < τ < 1/2` and coefficient loss at most one for
+  `τ = n^(-nu(e₀)/4)` and `E = Cₑ*n^(-nu(e₀)/2)`.
+- **Source:** the fixed-scale limit and coefficient absorption in
+  [the proof of Proposition 9.5, lines 744–769](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L744-L769).
+- **Scope:** a conditional scalar implication and a numerical threshold.
+  Actual norm comparisons, their common physical vector, and substitutions of
+  typical entropy and auxiliary dimension remain separate proof obligations.
+  Those substitutions must already occur in the additive budgets; no uniform
+  replica convergence rate over physical scales is supplied or needed.
