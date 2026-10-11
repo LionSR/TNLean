@@ -85,7 +85,7 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
   have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hn1
   have hepos : 0 < e := lt_trans (by norm_num [Exponents.boxError]) he
   -- Everything is compared against the improved power `n ^ (1 + (1 - ℓ) e)`.
-  show (n : ℝ) * (X.L n : ℝ) ^ e + (n : ℝ) * (X.D n : ℝ) + (n : ℝ) ^ (3 / 5 : ℝ)
+  change (n : ℝ) * (X.L n : ℝ) ^ e + (n : ℝ) * (X.D n : ℝ) + (n : ℝ) ^ (3 / 5 : ℝ)
       + Real.binEntropy τ / X.a 4 n + 1
       ≤ (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e)
   have hη : (0 : ℝ) < 1 - X.ell := sub_pos.2 X.ell_lt_one
