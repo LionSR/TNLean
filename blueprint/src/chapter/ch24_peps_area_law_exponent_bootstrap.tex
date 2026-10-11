@@ -107,7 +107,6 @@
 \begin{theorem}[Additive comparison costs at fixed bootstrap scales]
     \label{thm:area_law_bootstrap_comparison_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_budget_bound}
-    \leanok
     \uses{def:area_law_bootstrap_parameters}
     Fix $e_*<e_0<1$, where $e_*=2\cdot10^{-6}$, and use the parameters of
     (\ref{eq:area_law_bootstrap_parameters}) and
@@ -130,6 +129,25 @@
     This is a numerical estimate for the additive terms following the
     comparison in the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw}.
 \end{theorem}
+
+\begin{proof}
+    \uses{thm:area_law_bootstrap_binary_entropy_cost,thm:area_law_bootstrap_margins}
+    Apply the binary-entropy estimate with the fixed parameters chosen from
+    $e_0$. It gives one $N\ge1$ such that $K_n\ge1$, $a_n>0$, and
+    $h(\tau)/a_n\le(\log2/4)n$ for every $n\ge N$ and every real $\tau$.
+    Fix such an $n$ and an exponent $e_*<e\le e_0$, and set
+    $P=n^{1+\eta e}$. Since $\eta>0$, $e>0$ and $n\ge1$, we have
+    $1\le n\le P$. The floor bound $L_n\le n^\eta$ yields
+    $nL_n^e\le P$. Since $\kappa>0$ and $n\ge1$, we have $n^\kappa\ge1$.
+    The parameter inequality $\kappa<\eta e$ gives
+    \begin{align}
+        D_n\le n^\kappa+1\le2n^\kappa\le2n^{\eta e},
+    \end{align}
+    and hence $nD_n\le2P$. Also $n^{3/5}\le P$, and the nonnegative
+    coefficient $\log2/4$ gives $h(\tau)/a_n\le(\log2/4)P$.
+    Adding these four estimates and $1\le P$ proves the result, with
+    coefficient $1+2+1+\log2/4+1=5+\log2/4$.
+\end{proof}
 
 \begin{theorem}[Uniform bounds after finitely many exponent improvements]
     \label{thm:area_law_finite_exponent_improvement}
