@@ -91,8 +91,7 @@ theorem eval_partialSourceWord_tmul {a b : Layout P}
         ((appendIso w.allResidualSourceLayout
           (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm
             (y ⊗ₜ[ℂ] Layout.mapOwnerIso (affectedOwner (fun _ => true)) a ψ.vector)) := by
-  change (partialResidual (fun _ => true) w ξ).eval
-    ((w.sourcePrivatePreparation ψ).eval _) = _
-  rw [eval_sourcePrivatePreparation_tmul]
+  exact congrArg (partialResidual (fun _ => true) w ξ).eval
+    (eval_sourcePrivatePreparation_tmul w ψ y)
 
 end TNLean.PEPS.PairEffect.SourceCircuit
