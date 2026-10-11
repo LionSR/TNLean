@@ -3827,6 +3827,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Sheet swaps in regional coordinates — candidate (2026-10-09)
+
+- **Pattern:** derive regional tensor factors from membership in the supported-operator
+  space, rewrite multiplication by the sheet-swap permutation matrix, and compare
+  entries using the region/complement split.
+- **Seen:** `commute_sheetSwapOp_kronecker` in
+  `PEPS/Approximation/SheetSwapCorrection.lean` and
+  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
+  `PEPS/Approximation/SheetSwapSupported.lean`.
+- **Abstraction:** the support decompositions, permutation-matrix products, and split
+  coordinates are already public lemmas. These are the two distinct cases, for
+  operators supported outside and inside the swapped region.
+- **Notes:** subsequent cancellation of doubled Hamiltonian terms uses these two
+  identities directly; it does not require another entrywise proof. Record a shared
+  coordinate lemma if a further independent use appears.
+
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)
 
 - **Pattern:** turn membership in two center-to-endpoint segments into a common
