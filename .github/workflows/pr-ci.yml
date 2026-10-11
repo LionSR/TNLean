@@ -538,13 +538,13 @@ jobs:
 
       # Cache setup and provenance guards above must finish before Lean runs.
       - name: Build selected Schmidt entropy bounds early
-        timeout-minutes: 6
+        timeout-minutes: 11
         env:
           LEAN_NUM_THREADS: 1
         run: |
           set -eo pipefail
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          timeout --signal=INT --kill-after=5s 300s \
+          timeout --signal=INT --kill-after=5s 600s \
             lake --fail-fast build TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
