@@ -101,6 +101,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_dyadic_geometry.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -214,6 +215,7 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_dyadic_geometry.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
       - 'scripts/test_tenkz_peps_four_cut.py'
       - 'scripts/test_tenkz_peps_three_block.py'
@@ -370,6 +372,7 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_region_coordinates.py'
+              - 'scripts/test_tenkz_peps_dyadic_geometry.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
               - 'scripts/test_tenkz_peps_four_cut.py'
               - 'scripts/test_tenkz_peps_three_block.py'
@@ -631,6 +634,12 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build birth-target entropy implication early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.BirthTargetEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build capped dyadic partition early
         run: |
           set -eo pipefail
@@ -666,6 +675,15 @@ jobs:
         run: |
           set -eo pipefail
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build rectangle mixed-square estimates and shared arithmetic early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals \
+            TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares \
+            TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build safe-rectangle dilation early
@@ -730,6 +748,12 @@ jobs:
         run: |
           set -euo pipefail
           lake --fail-fast build TNLean.PEPS.AreaLaw.RoundedShellEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build physical safe-rectangle entropy early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
@@ -864,6 +888,18 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/EdgeCrossingBudgetAxioms.lean
 
+      - name: Test fan radial-ray restriction strictly and audit axioms
+        timeout-minutes: 4
+        run: |
+          set -e
+          for file in TNLean/PEPS/AreaLaw/Geometry/CellFanRays.lean \
+              TNLeanTest/PEPS/AreaLaw/Geometry/CellFanRaysAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
       - name: Test concrete one-edge crossing regression strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -877,6 +913,18 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateClearance.lean
+
+      - name: Test initial closed-half radius strictly and audit axioms
+        timeout-minutes: 4
+        run: |
+          set -e
+          for file in TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean \
+              TNLeanTest/PEPS/AreaLaw/Geometry/InitialSectorAssignmentAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
 
       - name: Test concrete hole encoder and standard axioms strictly
         run: |
@@ -1757,6 +1805,12 @@ jobs:
         run: >
           python3 scripts/test_tenkz_region_coordinates.py
           --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
+
+      - name: Check dyadic protocol geometry diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: >
+          python3 scripts/test_tenkz_peps_dyadic_geometry.py
+          --output-dir "$RUNNER_TEMP/dyadic-geometry-diagrams"
 
       - name: Preserve regional coordinate diagrams for review
         if: success() && env.TEX_CHANGED == 'true'
