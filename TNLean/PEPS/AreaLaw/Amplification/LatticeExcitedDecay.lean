@@ -18,9 +18,9 @@ The expectation uses the concrete fixed-time Poisson-word probability law.
 
 ## Proof status
 
-The statement and ground-state decomposition have been elaborated. The proof
-is unfinished; the physical positive-constraint estimates still have to be
-applied to the existing Poisson contraction decay theorem.
+The statement, ground-state decomposition and positive-constraint estimates
+have been elaborated. The final application of the Poisson contraction decay
+theorem awaits compiler verification.
 
 ## References
 
@@ -69,6 +69,9 @@ theorem latticeConstraintWord_excitedProjection_decay
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
   obtain ⟨hk, hsum, hgapk⟩ :=
     positive_replacement hp hΔ hΩ hHΩ hgap h.term h.hermitian h.norm_le rfl
-  done
+  exact Matrix.poissonContractionWord_excitedProjection_decay _
+    (fun i => (hk i).2.1) hΩ
+    (fun i => WithLp.ofLp_injective 2 (hk i).2.2)
+    (hgapk.trans hsum) ζ t
 
 end TNLean.PEPS.AreaLaw
