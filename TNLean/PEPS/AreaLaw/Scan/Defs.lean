@@ -132,7 +132,10 @@ structure ScanConstants where
   Ce : ℝ
   /-- The local Hilbert dimension `q`. -/
   q : ℕ
-  /-- The spectral gap `g` of the original Hamiltonian. -/
+  /-- The gap `g` of the positive-constraint Hamiltonian before truncation
+  (`03-quasilocal.tex`, Proposition 4.5; `08-scanner.tex`, lines 49–59).
+  For a physical Hamiltonian of gap `Δ`, the lattice construction uses
+  `g = Δ / SpectralFilter.positiveNormalization 1 (Δ / 2) J`. -/
   g : ℝ
   one_le_C : 1 ≤ C
   Cl_nonneg : 0 ≤ Cl
