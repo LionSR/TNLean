@@ -403,6 +403,21 @@ histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
 
+% The fixed-coefficient estimate is under construction; no verification marks.
+\begin{lemma}[Continuity cost with a fixed distance coefficient]
+    \label{lem:al_continuity_fixed_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le_of_fixed_coefficient}
+    Fix $A,C,\lambda\ge0$. There is a threshold depending only on these constants
+    such that, for every natural number $n$ above the threshold and every real
+    $t\le A n^{-500}$,
+    \begin{align}
+        C\sqrt{t}\bigl(1+Cn^2\lambda\bigr)\le n^{-247}.
+    \end{align}
+    Here the real square root is zero on negative arguments.
+    This is the scalar estimate used in the entropy transfer of
+    \cite[Proposition~9.2, proof]{OpenAI2026AreaLaw}.
+\end{lemma}
+
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
