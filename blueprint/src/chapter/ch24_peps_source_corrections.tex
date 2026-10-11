@@ -1,0 +1,562 @@
+\section{Source substitutions and corrected density terms}
+
+We follow \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 279--383.
+Let $W:\mathcal H_a\to\mathcal H_b$ be a chronological composition.
+Its original source positions form the finite set $\mathcal E$.
+For $e=(g,j)$, write $\Xi_g$ for the local labels of its owning gate,
+$c_{g,\alpha}$ for the gate coefficients, and
+$\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for its original source vector.
+A replacement at $e$ may depend on $\alpha$, but not on labels of other gates.
+All coordinate matrices below use fixed finite orthonormal bases on the
+original input and output memories. The input matrix $\rho$ is arbitrary.
+The finite-dimensional convention is that of the manuscript, lines 5--19;
+no bound on private dimensions is imposed.
+
+\begin{definition}[Substitution in the original composition]
+    \label{def:peps_source_substitution}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.branchWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceVectors}
+    \leanok
+    \uses{def:peps_source_circuit,def:peps_prepared_source_gate,def:peps_partial_source_choices}
+    Given vectors $\eta_{e,\alpha}$ in the original source halfspaces,
+    replace the preparations in branch $\alpha$ of gate $g$ by these
+    vectors, retain its remaining operations, and sum with its original
+    coefficient $c_{g,\alpha}$. Compose these substituted gate operators
+    in the original order; denote the result by $W(\eta)$.
+
+    For affected parties $\mathcal A$, denote by
+    $W_{\mathcal A,\xi}(\eta)$ the partial branch obtained by the same
+    substitution at touched gates, retaining each untouched gate as its
+    original aggregate operator. For $S\subseteq\mathcal E$, let
+    $\nu[S\leftarrow\eta]$ equal $\eta$ on $S$ and $\nu$ elsewhere.
+\end{definition}
+
+\begin{theorem}[Summing untouched gates]
+    \label{thm:peps_source_substitution_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_original}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources_original}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_eq_sum_partialWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_selectedSourceVectors_eq_sum}
+    \leanok
+    \uses{def:peps_source_substitution}
+    Original vectors recover $W(\nu)=W$ and the original partial branches.
+    Suppose $\eta_{e,\alpha}=\nu_{e,\alpha}$ whenever the owning gate
+    of $e$ does not touch $\mathcal A$. If $J_a,J_b$ are the canonical
+    owner-identification isometries, then
+    \begin{align}
+        J_b W(\eta)
+         & =\sum_{\xi}c_{\mathcal A,\xi}
+        W_{\mathcal A,\xi}(\eta)J_a.
+        \label{eq:peps_substitution_partial}
+    \end{align}
+    In particular, (\ref{eq:peps_substitution_partial}) holds for
+    $\nu[S\leftarrow\eta]$ if every position in $S$ has an endpoint
+    in $\mathcal A$. The substituted vectors need not be normalized.
+\end{theorem}
+
+\begin{proof}
+    \lean{TNLean.PEPS.PairEffect.Layout.affectedOwner_mapOwner_eq_none}
+    \leanok
+    \uses{thm:peps_partial_source_evaluation,thm:peps_source_circuit_incidence}
+    Induct on the chronological composition. At a touched gate, the
+    sum is its defining branch sum. At an untouched gate all source
+    vectors are original, and every participant has exterior owner;
+    its branch sum is therefore its original aggregate operator.
+    Composition distributes through the finite sums, while idle
+    registers tensor each term with an identity. Every endpoint of a
+    selected source belongs to its owning gate, which proves the
+    final specialization.
+\end{proof}
+
+\begin{definition}[The canonical remaining operations]
+    \label{def:peps_canonical_source_residual}
+    \lean{TNLean.PEPS.PairEffect.Word.residualInSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialResidual}
+    \leanok
+    \uses{thm:peps_source_preparation,thm:peps_partial_fixed_layout}
+    Moving the actual sources of a word to its initial registers
+    leaves a specified composition of its original remaining operations.
+    Identify its source-register list with any equal prescribed list.
+    Denote the resulting composition by $V$.
+    For the partial branch $W_{\mathcal A,\xi}$, use the fixed retained
+    positions $\mathcal E_{\mathcal A}$ and write $V_{\mathcal A,\xi}$.
+\end{definition}
+
+\begin{theorem}[Recovery by the canonical remaining operations]
+    \label{thm:peps_canonical_source_recovery}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_residualInSlots}
+    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_residualInSlots}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_residualInSlots_prepare}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialResidual}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialResidual}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare}
+    \leanok
+    \uses{def:peps_canonical_source_residual}
+    The composition $V$ has no pair sources. It is allowed if the
+    original word is allowed. Whenever a preparation in the prescribed
+    positions has exactly the original ordered source inventory,
+    $VP_\eta$ is the original word operator.
+    Consequently the allowed partial branches satisfy
+    \begin{align}
+        V_{\mathcal A,\xi}P_{\nu_\xi}
+         & =W_{\mathcal A,\xi},
+         & (\nu_\xi)_i          & =\nu_{e_i,\xi_{g_i}}.
+        \label{eq:peps_canonical_recovery}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_source_preparation,thm:peps_partial_original_source_vector}
+    Transport the source-preparation identity along the equality of
+    ordered register lists. The inventory at index $i$ is the original
+    vector selected by $\xi_{g_i}$, which gives
+    (\ref{eq:peps_canonical_recovery}).
+\end{proof}
+
+\begin{theorem}[Uniform recovery after source substitution]
+    \label{thm:peps_canonical_substitution_recovery}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.residualInSlots_partialWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofSlots_partialWithSources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare_substituted}
+    \leanok
+    \uses{def:peps_source_substitution,def:peps_canonical_source_residual}
+    For arbitrary $\eta$, the ordered pair-source inventory of
+    $W_{\mathcal A,\xi}(\eta)$ has the same retained positions and
+    has vector $\eta_{e_i,\xi_{g_i}}$ at position $i$.
+    If every source with both endpoints outside $\mathcal A$ retains
+    its original vector, the canonical remaining composition is
+    literally $V_{\mathcal A,\xi}$, independently of the retained
+    vectors. Thus
+    \begin{align}
+        V_{\mathcal A,\xi}P_{\eta_\xi}
+         & =W_{\mathcal A,\xi}(\eta),
+         & (\eta_\xi)_i               & =\eta_{e_i,\xi_{g_i}}.
+        \label{eq:peps_substituted_recovery}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_partial_source_order,thm:peps_canonical_source_recovery}
+    Induction preserves the complete ordered source records.
+    Surviving pair preparations change only their vectors. A source
+    whose endpoints are both exterior becomes a local preparation;
+    the stated condition keeps that local operation unchanged.
+    All other remaining operations agree. Apply the canonical recovery
+    identity to the resulting exact inventory.
+\end{proof}
+
+\begin{theorem}[Weighted matrix sums]
+    \label{thm:peps_weighted_density_sum}
+    \lean{Matrix.sum_smul_mul_mul_conjTranspose}
+    \leanok
+    For finite coefficient families $c_\alpha,d_\beta$, rectangular
+    matrices $K_\alpha,L_\beta$, and a compatible rectangular matrix $R$,
+    \begin{align}
+        \Bigl(\sum_\alpha c_\alpha K_\alpha\Bigr)R
+        \Bigl(\sum_\beta d_\beta L_\beta\Bigr)^\dagger
+         & =\sum_{\alpha,\beta}c_\alpha\overline{d_\beta}
+        K_\alpha R L_\beta^\dagger.
+        \label{eq:peps_weighted_density_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Distribute the products over the finite sums and conjugate the
+    coefficients in the adjoint.
+\end{proof}
+
+\begin{definition}[Corrected terms at original source positions]
+    \label{def:peps_original_corrected_term}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.SourceBasisChoice}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisChoiceFintype}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.labelBasisVectors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm}
+    \leanok
+    \uses{def:peps_source_substitution}
+    Fix $S\subseteq\mathcal E$. A choice $u$ specifies at each $e=(g,j)\in S$
+    a local label $\alpha_e\in\Xi_g$ and an endpoint basis index $a_e$.
+    In $W$, replace the vector at $(e,\gamma)$ by the basis tensor
+    indexed by $a_e$ if $\gamma=\alpha_e$, and by zero otherwise;
+    retain original vectors outside $S$. Let $M_{S,u}$ be the resulting
+    circuit matrix. For arbitrary source matrices $E_{e,\alpha,\beta}$,
+    define
+    \begin{align}
+        F_S(E;\rho)
+         & :=\sum_{u=(\alpha,a),\,v=(\beta,b)}
+        \left(\prod_{e\in S}E_{e,\alpha_e,\beta_e}(a_e,b_e)\right)
+        M_{S,u}\rho M_{S,v}^{\dagger}.
+        \label{eq:peps_original_corrected_term}
+    \end{align}
+    This definition uses the original positions and local labels,
+    before any affected set is chosen.
+\end{definition}
+
+\begin{theorem}[The empty corrected set]
+    \label{thm:peps_corrected_empty}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_empty}
+    \leanok
+    \uses{def:peps_original_corrected_term}
+    If $M$ is the original circuit matrix, then $F_\varnothing(E;\rho)=M\rho M^\dagger$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_source_substitution_partial}
+    There is one assignment on the empty set, its product is one,
+    and every source remains original.
+\end{proof}
+
+\begin{definition}[Partially expanded basis substitutions]
+    \label{def:peps_partial_basis_substitution}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.SelectedSourceCoordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinatesFintype}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coordinateBasisVectors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix}
+    \leanok
+    \uses{def:peps_original_corrected_term,def:peps_partial_source_choices}
+    Let $M_{\mathcal A,\xi;S,u}$ be the matrix of the corresponding
+    substituted partial branch, transported back to the original
+    input and output coordinates by $J_a,J_b$.
+    A coordinate choice $a$ on $S$ specifies only the endpoint basis
+    indices. Write $K_{\mathcal A,\xi;S,a}$ for the same partial matrix
+    with these basis tensors at selected positions, without imposing
+    additional local-label conditions.
+\end{definition}
+
+\begin{theorem}[Partial expansion of the same corrected term]
+    \label{thm:peps_corrected_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix_eq_sum_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_partial}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix_eq_ite}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix}
+    \leanok
+    \uses{def:peps_partial_basis_substitution}
+    Suppose every $e\in S$ has an endpoint in $\mathcal A$.
+    Then $M_{S,u}=\sum_\xi c_{\mathcal A,\xi}M_{\mathcal A,\xi;S,u}$.
+    A summand $M_{\mathcal A,\xi;S,u}$ equals
+    $K_{\mathcal A,\xi;S,a}$ if $\alpha_e=\xi_{g_e}$ at every
+    selected position, and is zero otherwise. Consequently
+    \begin{align}
+        F_S(E;\rho)
+         & =\sum_{\xi,\zeta}c_{\mathcal A,\xi}\overline{c_{\mathcal A,\zeta}}
+        \sum_{a,b}
+        \left(\prod_{e\in S}
+        E_{e,\xi_{g_e},\zeta_{g_e}}(a_e,b_e)\right)
+        K_{\mathcal A,\xi;S,a}\rho K_{\mathcal A,\zeta;S,b}^{\dagger}.
+        \label{eq:peps_corrected_partial}
+    \end{align}
+    Each $K$ is the matrix of the canonical remaining composition
+    applied to the indicated basis preparations, with the original
+    locally selected vectors at every unselected retained position.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,
+        thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
+    Apply (\ref{eq:peps_substitution_partial}) to each basis substitution
+    and distribute the ket and bra sums using
+    (\ref{eq:peps_weighted_density_sum}). If a selected label disagrees
+    with the branch label, its source vector is zero. Multilinearity
+    of preparation makes the corresponding matrix zero. Otherwise the
+    substitution is exactly the prescribed basis preparation, by
+    (\ref{eq:peps_substituted_recovery}). Summing the local-label
+    conditions leaves (\ref{eq:peps_corrected_partial}). Selected
+    positions at the same gate impose the same label; the coefficient
+    of that gate still occurs only once in $c_{\mathcal A,\xi}$.
+\end{proof}
+
+\begin{definition}[Selected retained positions]
+    \label{def:peps_selected_retained_positions}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_selectedPartialSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlotEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv_apply}
+    \leanok
+    \uses{def:peps_partial_fixed_positions}
+    Let $i\mapsto e_i$ enumerate the retained positions. Set
+    $S_{\mathcal A}=\{i:e_i\in S\}$. If every selected position has an
+    affected endpoint, $i\mapsto e_i$ restricts to a bijection
+    $S_{\mathcal A}\to S$. Precomposition with this bijection identifies
+    the two families of endpoint-coordinate assignments, point by point.
+\end{definition}
+\begin{theorem}[Changing the enumeration of selected sources]
+    \label{thm:peps_selected_retained_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_reindex}
+    \leanok
+    \uses{def:peps_selected_retained_positions,thm:peps_canonical_substitution_recovery}
+    Under this bijection, $K_{\mathcal A,\xi;S,a}$ is exactly the
+    prepared matrix of $V_{\mathcal A,\xi}$ with the corresponding
+    basis vectors at $S_{\mathcal A}$ and original source vectors elsewhere.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Compare the vector at each retained index $i$. Membership in
+    $S_{\mathcal A}$ is precisely $e_i\in S$, and both expressions
+    select the same coordinate in that case.
+\end{proof}
+
+For a fixed ordered source list, let $K_V(a)$ be the matrix obtained
+from a remaining composition $V$ by preparing its endpoint vectors
+indexed by $a$. For ket and bra endpoint families, put
+$H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and write
+\begin{align}
+    \mathcal C_H(Y)
+     & :=\sum_{a,b}\left(\prod_iY_i(a_i,b_i)\right)H(a,b).
+    \label{eq:peps_source_contraction}
+\end{align}
+The endpoint families on the two sides may have different finite
+index sets.
+
+\begin{theorem}[Prepared densities as source contractions]
+    \label{thm:peps_prepared_source_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_basis}
+    \leanok
+    \uses{thm:peps_prepared_density_components}
+    Suppose $\eta_i=\sum_a r_i(a)u_i(a_1)\otimes v_i(a_2)$ and
+    $\zeta_i=\sum_b s_i(b)u'_i(b_1)\otimes v'_i(b_2)$.
+    With $X_i=r_i s_i^\dagger$, the actual prepared matrices satisfy
+    \begin{align}
+        \mathcal C_{H_{V,V'}}(X)
+         & =K_V(\eta)\rho K_{V'}(\zeta)^\dagger.
+        \label{eq:peps_prepared_contraction}
+    \end{align}
+    No spanning or normalization condition is needed for these finite
+    expansions. In particular the identity holds for the coordinate
+    vectors of arbitrary sources in independently chosen endpoint
+    orthonormal bases.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Pair the ket and bra assignments at each position. Expanding their
+    rank-one matrix entries gives the product of the ket coefficients
+    and conjugated bra coefficients. The finite preparation expansion
+    then gives (\ref{eq:peps_prepared_contraction}).
+\end{proof}
+
+\begin{definition}[Replacement of source operators]
+    \label{def:peps_prepared_source_replacement}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity}
+    \leanok
+    For actual remaining compositions $V_\xi$ and weights $c_\xi$,
+    define
+    \begin{align}
+        \mathcal R(Y)
+         & :=\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
+        \mathcal C_{H_{V_\xi,V_\zeta}}(Y_{\xi,\zeta}).
+        \label{eq:peps_prepared_replacement}
+    \end{align}
+    Source matrices may depend on both branch labels; ket and bra
+    endpoint-coordinate sets may vary with their respective branch labels.
+    The matrices need not be positive or Hermitian.
+\end{definition}
+\begin{theorem}[The prepared corrected-subset identity]
+    \label{thm:peps_prepared_subset_identity}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_exact}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub_prepared}
+    \leanok
+    \uses{def:peps_prepared_source_replacement}
+    If $X$ is any family of source matrices, then
+    \begin{align}
+        \mathcal R(X+E)-\mathcal R(X)
+         & =\sum_{\varnothing\ne S\subseteq\{0,\ldots,r-1\}}
+        \mathcal R(E\text{ on }S,\ X\text{ off }S).
+        \label{eq:peps_prepared_subsets}
+    \end{align}
+    For exact rank-one coordinate matrices of sources $\eta_\xi$,
+    $\mathcal R(X)=M\rho M^\dagger$, where
+    $M=\sum_\xi c_\xi K_{V_\xi}(\eta_\xi)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_prepared_source_contraction,thm:peps_weighted_density_sum}
+    Expand the product in (\ref{eq:peps_source_contraction}) over subsets
+    and subtract its empty-subset term. Apply
+    (\ref{eq:peps_prepared_contraction}) and
+    (\ref{eq:peps_weighted_density_sum}) for the exact-source assertion.
+\end{proof}
+
+\begin{theorem}[Expanding only the selected source matrices]
+    \label{thm:peps_selected_source_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected}
+    \leanok
+    \uses{thm:peps_prepared_source_contraction}
+    Let $X_i=\ketbra{\eta_i}{\zeta_i}$ in the chosen ket and bra
+    endpoint bases. For any set $S$ of positions,
+    \begin{align}
+        \mathcal C_{H_{V,V'}}(E\text{ on }S,\ X\text{ off }S)
+         & =\sum_{a,b}\left(\prod_{i\in S}E_i(a_i,b_i)\right)
+        K_V(\eta[S\leftarrow a])\rho
+        K_{V'}(\zeta[S\leftarrow b])^\dagger.
+        \label{eq:peps_selected_contraction}
+    \end{align}
+    Here $a,b$ range only over endpoint-coordinate assignments on $S$,
+    and the notation on the right replaces each selected vector by
+    its endpoint basis tensor. Ket and bra bases may differ.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand each selected matrix in matrix units. Multilinearity of
+    (\ref{eq:peps_source_contraction}) leaves a sum over only those
+    positions. A selected matrix unit is the rank-one coordinate
+    matrix of its ket and bra basis tensors. Apply
+    (\ref{eq:peps_prepared_contraction}) to each term.
+\end{proof}
+
+\begin{theorem}[The corrected term in a partial expansion]
+    \label{thm:peps_corrected_source_contraction}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
+    \leanok
+    \uses{def:peps_original_corrected_term,def:peps_selected_retained_positions}
+    Suppose every $e\in S$ has an endpoint in $\mathcal A$.
+    In the common retained positions, set
+    \begin{align}
+        Y_{\xi,\zeta,i}
+         & :=\begin{cases}
+                 E_{e_i,\xi_{g_i},\zeta_{g_i}},                       & e_i\in S,    \\
+                 \ketbra{\nu_{e_i,\xi_{g_i}}}{\nu_{e_i,\zeta_{g_i}}}, & e_i\notin S.
+             \end{cases}
+        \label{eq:peps_partial_corrected_sources}
+    \end{align}
+    The same globally defined term then satisfies
+    \begin{align}
+        F_S(E;\rho)
+         & =\sum_{\xi,\zeta}c_{\mathcal A,\xi}\overline{c_{\mathcal A,\zeta}}
+        \mathcal C_{H_{V_{\mathcal A,\xi},V_{\mathcal A,\zeta}}}
+        (Y_{\xi,\zeta}).
+        \label{eq:peps_corrected_contraction}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,
+        thm:peps_selected_source_contraction}
+    Apply (\ref{eq:peps_selected_contraction}) to each partial ket--bra
+    pair and reindex its selected coordinates along the bijection
+    $S_{\mathcal A}\to S$. The resulting expression is exactly
+    (\ref{eq:peps_corrected_partial}).
+\end{proof}
+
+\begin{definition}[All original source positions]
+    \label{def:peps_all_original_source_slots}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv_apply}
+    \leanok
+    \uses{def:peps_partial_fixed_positions}
+    Taking every party to be affected retains every original source
+    position. Its ordered enumeration is a bijection
+    $\{0,\ldots,r-1\}\to\mathcal E$. No finiteness assumption on the
+    set of parties is needed.
+\end{definition}
+\begin{theorem}[Reindexing nonempty source subsets]
+    \label{thm:peps_all_source_subsets}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_nonempty_allSourceSlots}
+    \leanok
+    \uses{def:peps_all_original_source_slots}
+    This bijection identifies sums over nonempty subsets of the
+    retained indices with sums over nonempty subsets of $\mathcal E$,
+    for every function valued in a commutative additive monoid.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The induced bijection on finite subsets preserves emptiness.
+\end{proof}
+
+\begin{definition}[Replacement in the complete circuit density]
+    \label{def:peps_global_source_replacement}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exactSourceMatrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity}
+    \leanok
+    \uses{def:peps_prepared_source_replacement,def:peps_all_original_source_slots}
+    Put $X_{e,\alpha,\beta}=\ketbra{\nu_{e,\alpha}}{\nu_{e,\beta}}$.
+    To define $\widehat\rho(Y)$, take all parties to be affected in
+    (\ref{eq:peps_prepared_replacement}), use the actual canonical
+    remaining compositions, and assign at position $e_i$ the matrix
+    $Y_{e_i,\xi_{g_i},\zeta_{g_i}}$. Thus $\widehat\rho(Y)$ is defined
+    directly by local source-operator replacement, independently of
+    any corrected-subset formula.
+\end{definition}
+\begin{theorem}[The global corrected-subset identity]
+    \label{thm:peps_global_corrected_subsets}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_exact}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_piecewise}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_sub_exact}
+    \leanok
+    \uses{def:peps_global_source_replacement}
+    The exact sources recover $\widehat\rho(X)=M\rho M^\dagger$.
+    Replacing precisely the original positions in $S$ gives
+    $\widehat\rho(E\text{ on }S,X\text{ off }S)=F_S(E;\rho)$.
+    Consequently
+    \begin{align}
+        \widehat\rho(X+E)-M\rho M^\dagger
+         & =\sum_{\varnothing\ne S\subseteq\mathcal E}F_S(E;\rho).
+        \label{eq:peps_global_corrected_subsets}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,
+        thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
+    Apply (\ref{eq:peps_corrected_contraction}) with every party
+    affected, first to the empty selected set and then to arbitrary
+    $S$. This gives the two recovery identities. Expand the source
+    operators by (\ref{eq:peps_prepared_subsets}) and reindex the
+    nonempty subsets by their original occurrences.
+\end{proof}
+
+\begin{definition}[Physical output after discarding retained registers]
+    \label{def:peps_physical_source_replacement}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalCorrectedSourceTerm}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity}
+    \leanok
+    \uses{def:peps_global_source_replacement,def:peps_original_corrected_term}
+    Suppose the final ordered register list is the physical list
+    followed by the discarded list. Choose finite orthonormal bases
+    of both memories and their tensor-product basis on the full
+    output, transported through the canonical append isometry.
+    Define
+    \begin{align}
+        \rho_{\mathrm{phys}}            & :=\operatorname{Tr}_{\mathrm{disc}}(M\rho M^\dagger), \\
+        \widehat\rho_{\mathrm{phys}}(Y) & :=\operatorname{Tr}_{\mathrm{disc}}\widehat\rho(Y),   \\
+        F_S^{\mathrm{phys}}(E;\rho)     & :=\operatorname{Tr}_{\mathrm{disc}}F_S(E;\rho).
+    \end{align}
+\end{definition}
+\begin{theorem}[The physical corrected-subset identity]
+    \label{thm:peps_physical_corrected_subsets}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_exact}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
+    \leanok
+    \uses{def:peps_physical_source_replacement}
+    Exact sources recover $\widehat\rho_{\mathrm{phys}}(X)=\rho_{\mathrm{phys}}$.
+    The physical replacement error satisfies
+    \begin{align}
+        \widehat\rho_{\mathrm{phys}}(X+E)-\rho_{\mathrm{phys}}
+         & =\sum_{\varnothing\ne S\subseteq\mathcal E}F_S^{\mathrm{phys}}(E;\rho),
+        \label{eq:peps_physical_corrected_subsets}                                 \\
+        \bigl\|\widehat\rho_{\mathrm{phys}}(X+E)-\rho_{\mathrm{phys}}\bigr\|_1
+         & \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
+        \bigl\|F_S^{\mathrm{phys}}(E;\rho)\bigr\|_1.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_global_corrected_subsets}
+    Apply the linear partial trace to
+    (\ref{eq:peps_global_corrected_subsets}), then use the triangle
+    inequality for trace norm. No discarded-memory dimension factor
+    appears in either assertion.
+\end{proof}

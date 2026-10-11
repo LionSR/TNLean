@@ -6093,6 +6093,118 @@ spectral split → block extraction → MPV calculation → strict bounds
   it never cancels an identity extension or assumes that the outside factor is
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
+### Bilinear identities for two pair sources — candidate (2026-10-07)
+
+- **Pattern:** Reduce an identity involving two arbitrary bipartite source
+  vectors to pure tensors by two tensor-product inductions. Linearity handles
+  the additive cases; tensor associators and exchanges then evaluate explicitly.
+- **Seen:** `eval_combineSources` in
+  `TNLean/PEPS/Approximation/PartyLayout.lean` and
+  `eval_expandCombinedPair` in
+  `TNLean/PEPS/Approximation/PairSourceExpansion.lean` (two occurrences).
+- **Abstraction:** At the next occurrence, consider a bilinear extensionality
+  lemma for maps on two tensor products. The existing `clm_ext_tmul` and
+  `clm_ext_tmul₃` already handle identities between continuous linear maps
+  with one tensor-product input; use those whenever the map has that form.
+- **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
+  complete source blocks reuses the preparation tensor identity and the
+  register-block exchange theorem. Neither requires another double induction.
+
+### Tensor maps under equal filtered layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify equal owner-filtered memories, transport their tensor
+  maps, and compare the resulting operators or their values on vectors.
+- **Seen:** `PartyTensorMaps.mapL_heq` and
+  `PartyFactorization.mapL_apply_heq` under `PEPS/Approximation` (two local
+  helpers across two files).
+- **Abstraction:** Canonical conjugation already uses the shared
+  `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
+  `Layout.eq_conj_memCongr_of_heq`. The remaining two helpers distinguish
+  equality of tensor maps from equality after evaluation. A further occurrence
+  should use one tensor-map equality lemma followed by evaluation.
+- **Notes:** Associator and exchange identities use the existing
+  `clm_ext_tmul₃`; no additional tactic is needed.
+- **Scan:** The focused approximation scan also found five instances of
+  eliminating the two layout equalities by `cases` and closing by reflexivity,
+  all in `WordRestriction.lean`. These express the defining equations of the
+  equality transport; there is no repeated proof argument across files.
+
+### Congruence after identifying layout memories — reuse (2026-10-07)
+
+- **Pattern:** After identifying two equal register layouts, apply the same
+  dependent construction to heterogeneously equal vectors.
+- **Seen:** The focused scan found `cases h; cases hxy; rfl` in
+  `SourcePreparation.eval_source_heq`, `Word.eval_castInput_of_heq`, and the
+  new `SourcePreparationCoordinates.assocL_tmul_heq` under
+  `TNLean/PEPS/Approximation` (three occurrences across two files).
+- **Decision:** Reuse core `congrArg`, `eq_of_heq`, and `heq_of_eq` in the new
+  associator helper after identifying the layouts. These are defining
+  equations of three distinct dependent constructions, not repeated tensor
+  calculations. A new generic congruence lemma would restate the existing
+  equality lemmas, so no additional theorem or tactic is promoted. Previously
+  audited source-preparation proofs are unchanged.
+- **Relation to the tensor-map candidate:** The two existing private
+  `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
+  with four changing spaces. The new helper instead compares an associator
+  applied to a fixed pair vector and a changing spectator vector; obtaining
+  a tensor-map identity first would require additional equalities without
+  simplifying the proof. The common mathematical operation is ordinary
+  congruence after the memory types have been identified.
+
+
+### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify the vector-independent slot layout with an actual source
+  inventory, then express preparation of a nonempty list as preparation of the
+  tail followed by its head source.
+- **Seen:** `prepareSlots_cons_heq` in `SourceSlotMaps.lean` and
+  `SelectiveSourcePreparation.lean` under `PEPS/Approximation` (two occurrences).
+- **Abstraction:** Before a third consumer, export the cons identity from a
+  shared preparation module. Tensor calculations already reuse
+  `eval_frameList_prepare`; the remaining argument identifies equal layouts.
+- **Notes:** Short equality transports follow the existing congruence decision
+  above. No additional tactic is needed.
+
+### Grouped operators and spectator memories — candidate (2026-10-07)
+
+- **Pattern:** Evaluate an operator on a block tensored with an untouched memory,
+  and transport both layouts through the canonical owner-grouping isometries.
+- **Seen:** `localMap_owner_naturality` in `WordOwnerMap.lean` and
+  `eval_groupedBlockMap` in `GroupedBlockMap.lean` under `PEPS/Approximation`.
+- **Abstraction:** Both calculations use `Layout.mapOwnerIso_append_tmul` and
+  `clm_ext_tmul`. At a third occurrence, move the block-operator identity to a
+  lower-level lemma, then derive the local and aggregate cases from it.
+- **Notes:** The aggregate case permits several original owners on the block;
+  it retains the full operator after those owners are grouped together.
+
+### Weighted ket–bra matrix sums — promoted (2026-10-08)
+
+- **Pattern:** Distribute a matrix product through two finite weighted sums,
+  conjugating the bra coefficients and exchanging the two summations.
+- **Helper:** `Matrix.sum_smul_mul_mul_conjTranspose` in
+  `TNLean/Algebra/MatrixDensitySum.lean`. Both coefficient families and both
+  output and input coordinate types are independent; the middle matrix may
+  be rectangular.
+- **Refactored occurrences:** The private `sum_density_expansion` in
+  `SourceGateDensity.lean` is removed. Its two callers and
+  `PartialSourceDensity.density_eval_eq_sum_partialWord` use the shared lemma.
+  Corrected source reaggregation uses the same lemma.
+- **Decision:** Ordinary finite-sum and matrix identities suffice. No tactic
+  or special simplification attribute is needed.
+
+### Exterior ownership of a placed block — promoted (2026-10-08)
+
+- **Pattern:** If no participant of a placed gate is affected, every register
+  in its transported layout has the exterior owner.
+- **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
+  `TNLean/PEPS/Approximation/SourceOwnerSupport.lean`, using
+  `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
+- **Refactored occurrences:** The private proof in
+  `DistributedSourceComposition.lean` is removed; its gate constructor,
+  `PartialSourceEvaluation.eval_partial_gate`, and the substituted gate
+  constructor in `SourceCircuitSubstitution.lean` use the shared lemma.
+- **Decision:** One layout-membership lemma removes the repeated argument;
+  no further automation is required.
 
 ### Dyadic refinement cardinality bounds — candidate (2026-10-07)
 
