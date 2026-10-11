@@ -85,6 +85,7 @@ import TNLean.PEPS.Approximation.EffectReplacementCoefficients
 import TNLean.PEPS.Approximation.EffectReplacementExpansion
 import TNLean.PEPS.Approximation.EffectReplacementPolynomial
 import TNLean.PEPS.Approximation.EffectReplacementSources
+import TNLean.PEPS.Approximation.EmptyGateScalar
 import TNLean.PEPS.Approximation.EmptyHeadGrouping
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.EndpointOperatorWord
@@ -276,3 +277,4 @@ import TNLean.PEPS.Approximation.WordPartyMixedMatrix
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
+import TNLean.PEPS.Approximation.ZeroPartyGates

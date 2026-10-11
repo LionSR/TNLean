@@ -108,3 +108,50 @@ operations on an empty memory.
     Substituting it into the defining matrix entries yields
     (\ref{eq:peps_actual_source_columns}).
 \end{proof}
+
+\begin{definition}[Scalar contributions of zero-party gates]
+    \label{def:peps_empty_party_gate_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar_gate_of_isEmpty}
+    \uses{def:peps_source_circuit_positions,def:peps_prepared_source_gate}
+    At gate occurrence $g$, let $C_g$ be its participating party set,
+    $\Xi_g$ its monomial labels, and $c_{g,\alpha}$ its recorded coefficients.
+    Define
+    \begin{align}
+        \lambda_W & :=\prod_{g:C_g=\varnothing}
+        \left(\sum_{\alpha\in\Xi_g}c_{g,\alpha}\right).
+        \label{eq:peps_empty_party_gate_scalar}
+    \end{align}
+    The empty product is $1$, and an empty label set contributes $0$.
+    Concatenating compositions multiplies their scalar contributions;
+    extending by spectator registers preserves them. Zero-party gates
+    are included in the gate convention of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 24--28: a private gate has exactly
+    one participating party.
+\end{definition}
+
+\begin{theorem}[The operator and norm of a zero-party gate]
+    \label{thm:peps_empty_party_gate_scalar}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty}
+    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_emptyGateScalar_le_one}
+    \uses{def:peps_empty_party_gate_scalar}
+    A prepared gate with no participating parties acts on $\C$ as
+    $z\mapsto(\sum_{\alpha\in\Xi_g}c_{g,\alpha})z$.
+    Its contraction bound gives
+    $|\sum_{\alpha\in\Xi_g}c_{g,\alpha}|\le1$.
+    Consequently every distributed composition satisfies $|\lambda_W|\le1$,
+    including compositions with vanishing scalar contributions.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_party_factorization,def:peps_prepared_source_gate,def:peps_empty_party_gate_scalar}
+    A register list on an empty party set is empty, and a word with no
+    participating parties acts as the identity on $\C$ by the no-party
+    clause of Theorem~\ref{thm:peps_party_factorization}. Each monomial of
+    the gate therefore has operator $1$, so its weighted sum has operator
+    $\sum_{\alpha\in\Xi_g}c_{g,\alpha}$. Taking operator norms gives the
+    coefficient-sum bound. Induction on the composition, using
+    $|\lambda_1\lambda_2|\le|\lambda_1||\lambda_2|$, proves the final bound.
+\end{proof}
