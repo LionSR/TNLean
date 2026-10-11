@@ -35,6 +35,7 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
     F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ ∈
       supportedOperators (q * q) (S : Set ι) := by
   classical
+  simp only [Matrix.conjTranspose_reindex, Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
   done
 
 end TNLean.PEPS.EncodedFrame
