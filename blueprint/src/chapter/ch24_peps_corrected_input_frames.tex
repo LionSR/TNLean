@@ -18,10 +18,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{theorem}[Identifying equal register lists]
     \label{thm:peps_register_identifications}
     \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts_apply_heq}
-    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_apply_heq}
     \lean{TNLean.PEPS.PairEffect.Layout.memCongr_append_tmul}
     \lean{TNLean.PEPS.PairEffect.Word.eval_source_apply_heq}
     \leanok
+    \uses{thm:peps_basis_memory_equalities}
     Identifying two equal register lists leaves their vectors and the evaluation
     of a composition unchanged. Such identifications commute with source
     preparation and with the concatenation isometries $\alpha_{L,M}$.
