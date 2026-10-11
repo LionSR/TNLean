@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
+import TNLean.PEPS.AreaLaw.WeakRectangleShellSafety
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
 /-!
@@ -124,38 +125,6 @@ theorem ScannerExponents.exists_rounded_clearance_threshold (X : ScannerExponent
         (D₀ + 1) * X.L n ≤ D₀ * s ∧ 2 * X.L n + 10 * r₀ ≤ D₀ * s :=
   Scan.exists_rounded_clearance_threshold hC₂ hCr X.ell_pos X.ell_lt_one
 
-end TNLean.PEPS.AreaLaw.Scan
-
-namespace TNLean.PEPS.AreaLaw
-
-open TNLean.PEPS.AreaLaw.Geometry
-
-/-- Actual selected shell cells of a safe rectangle remain safe under the
-rounded-clearance budget. The cap exponent `Kcap` is independent of the scanner
-band count. Source: Proposition 9.5, `08-scanner.tex`, lines 723–729. -/
-theorem IsSafe.cappedDyadicPartition_shell {Λ : Finset (ℤ × ℤ)}
-    {A : Finset (Site Λ)} {D₀ j L Kcap k : ℕ} {Q : IntRect}
-    (hsafe : TNLean.PEPS.AreaLaw.IsSafe Λ A D₀ Q) (hj : j ≤ L)
-    (hcap : 2 ^ Kcap ≤ L) (hbudget : (D₀ + 1) * L ≤ D₀ * Q.size)
-    {z : ℤ × ℤ}
-    (hcell : (k, z) ∈ cappedDyadicPartition ((Q.dilate j).toFinset \ Q.toFinset) Kcap) :
-    TNLean.PEPS.AreaLaw.IsSafe Λ A D₀ (latticeDyadicRect k z) := by
-  obtain ⟨hk, hsub, _⟩ := (mem_cappedDyadicPartition _ _ _ _).mp hcell
-  have hsize : (latticeDyadicRect k z).size ≤ L := by
-    rw [size_latticeDyadicRect]
-    exact (Nat.pow_le_pow_right (by decide) hk).trans hcap
-  apply hsafe.of_subset_dilate
-  · simpa only [toFinset_latticeDyadicRect] using hsub.trans Finset.sdiff_subset
-  · calc
-      D₀ * (latticeDyadicRect k z).size + j ≤ D₀ * L + L :=
-        Nat.add_le_add (Nat.mul_le_mul_left D₀ hsize) hj
-      _ = (D₀ + 1) * L := by ring
-      _ ≤ D₀ * Q.size := hbudget
-
-end TNLean.PEPS.AreaLaw
-
-namespace TNLean.PEPS.AreaLaw.Scan
-
 open TNLean.PEPS.AreaLaw.Geometry
 
 /-- One rounded-scale threshold gives scanner clearance and safe actual shell
@@ -183,6 +152,7 @@ theorem exists_safe_shell_cells_of_rounded_scales (X : ScannerExponents)
   · intro e he z hz p hp
     exact hclear.trans_lt (hsafe e he z hz p hp)
   · intro j Kcap hj hcap k z hcell
-    exact hsafe.cappedDyadicPartition_shell hj hcap hbudget hcell
+    exact hsafe.isSafe_cappedDyadicPartition_shell j _ Kcap k z hj hcap
+      ((add_one_mul D₀ _).symm.trans_le hbudget) hcell
 
 end TNLean.PEPS.AreaLaw.Scan

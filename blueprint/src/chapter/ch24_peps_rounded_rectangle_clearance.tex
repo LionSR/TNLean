@@ -33,8 +33,7 @@
 
 \begin{theorem}[Safe selected shell cells]
     \label{thm:area_law_rounded_safe_shell_cells}
-    \lean{TNLean.PEPS.AreaLaw.IsSafe.cappedDyadicPartition_shell,
-        TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition,
         def:area_template_dyadic_rectangle}
@@ -51,7 +50,8 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_rounded_clearance,thm:area_law_safe_rectangle_dilation,
-        thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
+        thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition,
+        thm:area_law_rectangle_shell_safe_cells}
     A selected square of scale $k\le K_{\rm cap}$ is a rectangle $Q'$ in
     $Q^{+j}$ of size $2^k\le L$. Thus
     \begin{align}
