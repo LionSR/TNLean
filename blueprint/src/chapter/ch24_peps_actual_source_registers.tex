@@ -171,7 +171,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:peps_all_party_source_exterior_empty,
+    \uses{thm:peps_exterior_owner_selector,thm:peps_all_party_source_exterior_empty,
         thm:peps_excluded_spectator_restriction,
         thm:peps_owner_disjoint_restriction,def:peps_actual_private_preparation}
     Every source register belongs to an original party, so none survives
@@ -211,4 +211,18 @@ operations on an empty memory.
     a selected original party and disappears from the exterior restriction.
     The canonical identifications of the empty memories preserve this
     scalar map.
+\end{proof}
+
+
+\begin{lemma}[Selecting the exterior owner]
+    \label{thm:peps_exterior_owner_selector}
+    \lean{TNLean.PEPS.PairEffect.partySelector_none}
+    \uses{def:peps_single_party_selector}
+    In the owner set $\mathcal P\sqcup\{\star\}$, the singleton selector
+    at $\star$ is the indicator of the exterior owner.
+\end{lemma}
+
+\begin{proof}
+    \uses{def:peps_single_party_selector}
+    The two selectors are $1$ at $\star$ and $0$ at every original party.
 \end{proof}
