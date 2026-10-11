@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Membership in composed gate expansions — promoted (2026-10-08)
+
+- **Pattern:** Decompose membership in the ordered Cartesian gate expansion
+  into membership of the first and second original monomials.
+- **Seen:** `PartyGateComposition.isAllowed_comp`,
+  `PartyGateComposition.effectCount_comp_le`, and
+  `MessageMonomial.isAllowed_effectCount_expand` use the same decomposition.
+- **Abstraction:** `TNLean.PEPS.PairEffect.PartyGate.mem_comp`, using Mathlib's
+  `List.mem_flatMap` and `List.mem_map` once at the defining composition.
+- **Refactor:** All three consumers use this characterization directly;
+  no custom tactic or extra membership definition is introduced.
+
+
 ### Telescoping two contraction compositions — promoted (2026-10-08)
 
 - **Pattern:** Expand `B ∘ A - D ∘ C` as `B ∘ (A - C) + (B - D) ∘ C`,
