@@ -60,6 +60,34 @@ theorem exists_unique_initialRegion_of_closedHalf_component
         x.val ∈ initialOpenRegion o k₀ Z C a b hC h₀ i := by
   classical
   intro ℓ r oSmall J I σ L Ω q
-  done
+  -- The half-radius closed square lies inside the open square of radius `r`.
+  have hr : (0 : ℝ) < r := by
+    show (0 : ℝ) < (2 : ℝ) ^ ℓ / 2
+    positivity
+  have hhalf : r / 2 < r := by linarith
+  have hsub : ∀ x : Ω, x.val ∈ Metric.ball v r \ L := by
+    intro x
+    have hxΩ : x.val ∈ Metric.closedBall v (r / 2) \ L := x.property
+    exact ⟨Metric.closedBall_subset_ball hhalf hxΩ.1, hxΩ.2⟩
+  -- The unique component/run equivalence and the canonical run assignment.
+  obtain ⟨e, he, -⟩ := initialRegion_closedHalf_angular_connectedComponents_equiv
+    o k₀ Z C a b hC h₀ k z v hk₀ hz hv
+  set μ := Classical.choose
+    (exists_unique_initialRegion_sector_run_assignment
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  have hdisj := initialOpenRegion_pairwise_disjoint o k₀ Z C a b hC h₀
+  -- Every retained point of the component `q` lies in the open region of its run.
+  have hpoint : ∀ x : Ω, ConnectedComponents.mk x = q →
+      x.val ∈ initialOpenRegion o k₀ Z C a b hC h₀ (μ (e q)) := by
+    intro x hx
+    have hrun := (he x (e q)).mp (by rw [hx])
+    exact initialRegion_sector_run_mem_initialOpenRegion
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv (e q) x.val (hsub x) hrun
+  refine ⟨μ (e q), hpoint, ?_⟩
+  -- Uniqueness: a representative point of `q` pins down the identifier via disjointness.
+  intro j hj
+  obtain ⟨x, hxq⟩ := ConnectedComponents.surjective_coe q
+  by_contra hne
+  exact Set.disjoint_left.1 (hdisj hne) (hj x hxq) (hpoint x hxq)
 
 end TNLean.PEPS.AreaLaw.Geometry
