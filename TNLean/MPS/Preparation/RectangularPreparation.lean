@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.VaryingReferencePreparation
 import TNLean.MPS.Preparation.RectangularTransferEstimate
 import TNLean.MPS.Preparation.RectangularBlocks
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Quantitative preparation on actual varying bond spaces
@@ -131,20 +132,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing
         IsPairApproximable (A N) hN
           (Cp * Real.sqrt K' * ((N : ℝ) ^ 1 * Real.exp (-((r / 2) * q)))) := by
     intro N _ q hq hqN hcut
-    obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-      ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq)).symm⟩
-    let ℓ : Fin (m + 1) → ℕ := fun j => if j = Fin.last m then q + N % q else q
-    have hsum : ∑ j, ℓ j = N := by
-      rw [Fin.sum_univ_castSucc]
-      simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-        Fintype.card_fin, smul_eq_mul, ite_true]
-      have h := Nat.div_add_mod N q
-      rw [hm] at h
-      linarith
-    have hℓq : ∀ j, q ≤ ℓ j := fun j => by dsimp [ℓ]; split_ifs <;> omega
-    have hℓ2q : ∀ j, ℓ j ≤ 2 * q := fun j => by
-      have h := Nat.mod_lt N hq
-      dsimp [ℓ]; split_ifs <;> omega
+    obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2q⟩ := exists_remainderBlocks hq hqN
     refine ⟨m + 1, Nat.succ_pos _, ℓ, hsum, hℓq, hℓ2q, ?_⟩
     have hpos : chainPosState (zeroPad (A N)) hsum ≠ 0 := by
       intro hz

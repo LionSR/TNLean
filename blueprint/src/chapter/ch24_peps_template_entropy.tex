@@ -101,7 +101,6 @@
     condition on $f$.
 \end{theorem}
 \begin{proof}\leanok
-    \leanok
     \uses{thm:area_law_capped_dyadic_partition}
     Membership in $\mathcal P_K(S)$ implies $r\le K$. Group its finitely
     many terms according to $r$. On each group with $r=k$, the summand is
@@ -135,6 +134,7 @@
     its size is $2^k$, and its physical region is $A\cap C_{k,z}$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:area_law_template_dyadic_clearance}
     Integer division by the positive integer $2^k$ identifies the closed
     integer interval with the corresponding half-open dyadic interval.
     Each coordinate interval contains exactly $2^k$ sites.

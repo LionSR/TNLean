@@ -298,6 +298,16 @@ theorem owner_of_mem_two {p : P} {X Y : HSpace} :
   simp only [List.mem_cons, List.not_mem_nil, or_false] at hr
   rcases hr with rfl | rfl <;> rfl
 
+/-- The registers of a two-register layout of `p` and `p'` are owned by `p` when `p = p'`. -/
+theorem owner_of_mem_pair {p p' : P} {X Y : HSpace} (h : p = p') :
+    ∀ r ∈ ([⟨p, X⟩, ⟨p', Y⟩] : Layout P), r.owner = p := by
+  subst h
+  exact owner_of_mem_two
+
+/-- The empty layout has no registers, so every register in it is owned by `p`. -/
+theorem owner_of_mem_nil {p : P} : ∀ r ∈ ([] : Layout P), r.owner = p :=
+  fun _ hr => absurd hr List.not_mem_nil
+
 section LocalMaps
 
 variable {α β γ δ : Type} [Fintype α] [Fintype β] [Fintype γ] [Fintype δ]

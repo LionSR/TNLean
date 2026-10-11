@@ -1,4 +1,5 @@
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy
+import TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy
 
 /-!
 # Actual-state partial-row entropy regressions
@@ -143,3 +144,10 @@ run_cmd do
     for ax in axioms do
       unless [``propext, ``Classical.choice, ``Quot.sound].contains ax do
         throwError "{name} uses unexpected axiom {ax}"
+
+/--
+info: 'TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow

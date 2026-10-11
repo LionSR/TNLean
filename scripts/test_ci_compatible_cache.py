@@ -749,7 +749,8 @@ class WorkflowTests(unittest.TestCase):
                         'TNLeanTest/TemplateMixedSquares.lean', 'TNLeanTest/TemplateCutBoundary.lean',
                         'TNLeanTest/TemplateEntropy.lean'])
                     expected = {
-                        'TemplateEntropy': ['TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy'],
+                        'TemplateEntropy': ['TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy',
+                                            'TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy'],
                         'TemplateMixedSquares': ['TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover',
                             'TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover'],
                         'TemplateCutBoundary': [
