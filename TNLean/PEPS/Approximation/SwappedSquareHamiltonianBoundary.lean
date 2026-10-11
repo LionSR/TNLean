@@ -67,6 +67,16 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
         (EncodedFrame.sheetSwapOp q R * doubledHamiltonian A *
           (EncodedFrame.sheetSwapOp q R)ᴴ - doubledHamiltonian A)).trans_le
         (EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le R A)
+  have hplain (S : Finset (SquareLatticeVertex L L))
+      {A : Matrix (Configuration L q) (Configuration L q) ℂ}
+      (hA : A ∈ supportedOperators q (S : Set (SquareLatticeVertex L L))) :
+      Matrix.reindex p p (doubledHamiltonian A) ∈
+        supportedOperators (q * q) (S : Set (SquareLatticeVertex L L)) := by
+    simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
+      Matrix.submatrix_mul_equiv,
+      EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+        (R := ∅) hA (Or.inr (by simp))] using!
+      EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hA
   done
 
 end TNLean.PEPS.Approximation
