@@ -62,7 +62,6 @@ theorem preparedDensityCoefficient_pure_eq_vecMulVec
   rw [preparedDensityCoefficient, preparedMatrix_mul_vecMulVec]
   simp only [pureSourceMatrix, SourceInventory.eval_prepareSlots_eq_appendIso_symm,
     ← SourceInventory.slotBasis_apply]
-  done
 
 end Word
 end TNLean.PEPS.PairEffect
