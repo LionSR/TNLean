@@ -3,6 +3,7 @@
 \begin{theorem}[Entropy continuity on a fixed lattice region]
     \label{thm:area_law_regional_entropy_continuity}
     \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_sub_le_sqrt_traceDistance}
+    \leanok
     \uses{def:area_law_ground_entropy}
     Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\in\mathbb N$, and let
     $\Omega,\Phi\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be unit vectors.
@@ -17,7 +18,7 @@
     This is the regional form of \cite[Lemma~2.1]{OpenAI2026AreaLaw} used
     in its scanner entropy estimate.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Partial trace contracts trace distance, so the reduced states have trace
     distance at most $\delta$. Entropy continuity on their common space of
     dimension $q^{|A|}$ bounds the entropy difference by
