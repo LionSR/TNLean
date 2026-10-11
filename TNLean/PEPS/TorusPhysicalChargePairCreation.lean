@@ -58,9 +58,7 @@ theorem IsGIsometric.exists_unitary_torusPhysicalChargePairCreation
       ∀ θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G,
         W *ᵥ openRegionWeight (groupBondTensor (A a)) (R v) (fun f => Fintype.equivFin G (θ f)) =
         fun s => regularChargePairOpenRegionMatrix (A a) (R v) (e₀ v) (e₁ v) χ p s θ := by
-  have hne : (verticalTwoPlaquetteCycleBond v 0).1 ≠
-      (verticalTwoPlaquetteCycleBond v 1).1 :=
-    (Subtype.val_injective.comp (verticalTwoPlaquetteCycleBond_injective v)).ne (by decide)
+  have hne := verticalTwoPlaquetteCycleBond_zero_ne_one v
   obtain ⟨W, hW, hact⟩ := exists_unitary_regularPhysicalChargePairCreation
     (torusIncidentSite (width := width) (height := height) a)
     (fun w => ha.isGIsometric_torusIncidentSite w) (verticalTwoPlaquetteRegion v)

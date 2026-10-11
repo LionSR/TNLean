@@ -62,9 +62,7 @@ theorem IsGIsometric.exists_torusPhysicalChargePairReturnMeasurement
           (fun s => regularChargePairOpenRegionMatrix (torusIncidentSite a)
             (R v) (e₀ v) (e₁ v) σ.character p s θ)
         Q true *ᵥ ψ = φ ∧ Q false *ᵥ ψ = ψ - φ := by
-  have hne : (verticalTwoPlaquetteCycleBond v 0).1 ≠
-      (verticalTwoPlaquetteCycleBond v 1).1 :=
-    (Subtype.val_injective.comp (verticalTwoPlaquetteCycleBond_injective v)).ne (by decide)
+  have hne := verticalTwoPlaquetteCycleBond_zero_ne_one v
   exact exists_regularPhysicalChargePairReturnMeasurement σ hσ
     (torusIncidentSite (width := width) (height := height) a)
     (fun w => ha.isGIsometric_torusIncidentSite w) (verticalTwoPlaquetteRegion v)
