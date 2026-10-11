@@ -109,6 +109,8 @@ end TNLean.PEPS.PairEffect.PartyChain
 
 namespace TNLean.PEPS.PairEffect
 
+open EncodedFrame (act act_apply_apply)
+
 variable {P : Type} {α β : Type} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
 
 /-- The contraction of two registers `ℂ^α`, `ℂ^β` with the bra `⟨w|`. -/
@@ -193,29 +195,32 @@ theorem pairHeadIso_ketWord (pA pB : P) (v : EuclideanSpace ℂ (α × β)) (ℓ
     rw [hk, pairHeadIso_appendIso_symm, ← ht]
   · exact pairHeadIso_source h v ℓ t
 
+omit [DecidableEq α] [DecidableEq β] in
 /-- `|v⟩⟨w|` applied to `y` is `⟨w, y⟩ v`. -/
-theorem matL_vecMulVec_star (v w y : EuclideanSpace ℂ (α × β)) :
-    matL (vecMulVec v.ofLp (star w.ofLp)) y = ⟪w, y⟫_ℂ • v := by
+theorem act_vecMulVec_star (v w y : EuclideanSpace ℂ (α × β)) :
+    act (vecMulVec v.ofLp (star w.ofLp)) y = ⟪w, y⟫_ℂ • v := by
   ext i
-  rw [matL_apply, EuclideanSpace.inner_eq_star_dotProduct, PiLp.smul_apply, smul_eq_mul,
+  rw [act_apply_apply, EuclideanSpace.inner_eq_star_dotProduct, PiLp.smul_apply, smul_eq_mul,
     Matrix.mulVec, dotProduct, dotProduct, Finset.sum_mul]
   refine Finset.sum_congr rfl fun j _ => ?_
   simp only [vecMulVec_apply, Pi.star_apply]
   ring
 
+omit [DecidableEq α] [DecidableEq β] in
 /-- **The operator of the rank-one chain.** It acts on the two front registers as `|v⟩⟨w|`,
 tensored with the identity of the untouched registers. -/
 theorem pairHeadIso_rankOneChain (pA pB pA' pB' : P) (v w : EuclideanSpace ℂ (α × β))
     (ℓ : Layout P) (z : Mem (⟨pA, euc α⟩ :: ⟨pB, euc β⟩ :: ℓ)) :
     pairHeadIso ℓ ((rankOneChain pA pB pA' pB' v w ℓ).toEffectChain.eval z) =
-      (matL (vecMulVec v.ofLp (star w.ofLp))).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
+      (act (vecMulVec v.ofLp (star w.ofLp))).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
+  classical
   obtain ⟨Y, rfl⟩ : ∃ Y, z = (pairHeadIso (p := pA) (q := pB) (α := α) (β := β) ℓ).symm Y :=
     ⟨pairHeadIso ℓ z, by simp⟩
   rw [LinearIsometryEquiv.apply_symm_apply, rankOneChain, PartyChain.eval_postcomp]
   induction Y using TensorProduct.inductionOn with
   | tmul y t =>
       rw [ContinuousLinearMap.comp_apply, eval_braChain, map_smul, map_smul,
-        pairHeadIso_ketWord, rTensor_tmul, matL_vecMulVec_star, TensorProduct.smul_tmul']
+        pairHeadIso_ketWord, rTensor_tmul, act_vecMulVec_star, TensorProduct.smul_tmul']
   | add a b ha hb => simp only [map_add, ha, hb]
 
 omit [DecidableEq α] [DecidableEq β] in

@@ -112,13 +112,13 @@ theorem layoutIso_eq_act_of_basis (l l' : List (Hole pos q Party)) (own own' : �
       act A (EuclideanSpace.single (τ, c) (1 : ℂ)))
     (z : Mem (layoutRegs q l own)) : layoutIso l' own' (f z) = act A (layoutIso l own z) := by
   obtain ⟨y, rfl⟩ : ∃ y, z = (layoutIso l own).symm y := ⟨layoutIso l own z, by simp⟩
-  rw [LinearIsometryEquiv.apply_symm_apply, act_eq_matL]
+  rw [LinearIsometryEquiv.apply_symm_apply]
   conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
   conv_rhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
   simp only [map_sum, map_smul]
   refine Finset.sum_congr rfl fun i _ => ?_
   obtain ⟨τ, c⟩ := i
-  rw [EuclideanSpace.basisFun_apply, layoutIso_symm_single, hf, act_eq_matL]
+  rw [EuclideanSpace.basisFun_apply, layoutIso_symm_single, hf]
 
 /-! ### The tag maps of a branch -/
 

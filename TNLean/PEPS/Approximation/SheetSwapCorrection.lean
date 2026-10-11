@@ -56,13 +56,12 @@ section Kron
 
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n']
 
-omit [Fintype m'] [Fintype n'] in
 /-- A Kronecker product acts factorwise on a product vector: `(A ⊗ B)(x ⊗ y) = (A x) ⊗ (B y)`. -/
 theorem act_kronecker_vecKron (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) (x : EuclideanSpace ℂ m)
     (y : EuclideanSpace ℂ n) : act (A ⊗ₖ B) (vecKron x y) = vecKron (act A x) (act B y) := by
   ext ⟨i, j⟩
-  simp only [vecKron, mulVec, dotProduct, kroneckerMap_apply, Fintype.sum_prod_type,
-    Finset.sum_mul_sum]
+  simp only [act_apply_apply, vecKron, mulVec, dotProduct, kroneckerMap_apply,
+    Fintype.sum_prod_type, Finset.sum_mul_sum]
   refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
   ring
 
@@ -171,7 +170,8 @@ theorem act_tbSwap_vecKron_tensorPurification (s : T × BT → ℂ) (s' : E × B
       vecKron (WithLp.toLp 2 (tensorPurification s s'))
         (WithLp.toLp 2 (tensorPurification s s')) := by
   ext x
-  simp only [PEquiv.toMatrix_toPEquiv_mulVec, Function.comp_apply, vecKron, tensorPurification]
+  simp only [act_apply_apply, PEquiv.toMatrix_toPEquiv_mulVec, Function.comp_apply, vecKron,
+    tensorPurification]
   change s (x.2.1.1, x.2.2.1) * s' (x.1.1.2, x.1.2.2) * (s (x.1.1.1, x.1.2.1) *
     s' (x.2.1.2, x.2.2.2)) = _
   ring

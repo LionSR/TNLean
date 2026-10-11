@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.PartyLayout
 
 /-!
@@ -11,9 +12,10 @@ import TNLean.PEPS.Approximation.PartyLayout
 This file provides the calculus used to read explicit matrices as allowed monomials of
 Theorem 5.2 of the polynomial-PEPS manuscript.  A register `ℂ^α` of a party is a Euclidean
 register; one or two Euclidean registers at the front of a layout are identified with `ℂ^α`
-(`oneIso`) or with `ℂ^{α × β}` (`twoIso`), and a matrix acts on them through `matL`.  A local
-map built from a matrix on such registers acts, under these identifications, as the matrix
-tensored with the identity of the untouched registers (`eval_localMap`).
+(`oneIso`) or with `ℂ^{α × β}` (`twoIso`), and a matrix acts on them through
+`EncodedFrame.act`.  A local map built from a matrix on such registers acts, under these
+identifications, as the matrix tensored with the identity of the untouched registers
+(`eval_localMap`).
 
 It also records which parties a monomial uses: `Word.UsesOnly S` says that every local map
 of a word acts at a party of `S` and every pair source joins two parties of `S`, and
@@ -24,7 +26,6 @@ of a word acts at a party of `S` and every pair source joins two parties of `S`,
 
 * `PairEffect.Word.UsesOnly`, `PairEffect.Word.sourceCount`,
   `PairEffect.PartyChain.UsesOnly`, `PairEffect.PartyChain.sourceCount`.
-* `PairEffect.matL` : a matrix as a continuous linear map of Euclidean spaces.
 * `PairEffect.oneIso`, `PairEffect.twoIso` : one or two Euclidean registers as a Euclidean
   space.
 * `PairEffect.matLocal₂₁`, `PairEffect.matLocal₁₂`, `PairEffect.matLocal₂₂` : local maps given
@@ -51,6 +52,7 @@ open scoped InnerProductSpace TensorProduct Matrix.Norms.L2Operator
 namespace TNLean.PEPS.PairEffect
 
 open EuclideanSpace ContinuousLinearMap Matrix
+open EncodedFrame (act)
 
 variable {P : Type}
 
@@ -104,40 +106,6 @@ end PartyChain
 section Euclidean
 
 variable {α β γ δ : Type} [Fintype α] [Fintype β] [Fintype γ] [Fintype δ]
-
-/-- A matrix as a continuous linear map `ℂ^β → ℂ^α`. -/
-def matL [DecidableEq β] (A : Matrix α β ℂ) : EuclideanSpace ℂ β →L[ℂ] EuclideanSpace ℂ α :=
-  (Matrix.toEuclideanLin.trans LinearMap.toContinuousLinearMap) A
-
-/-- The coordinates of `matL A x` are `A *ᵥ x`. -/
-theorem ofLp_matL [DecidableEq β] (A : Matrix α β ℂ) (x : EuclideanSpace ℂ β) :
-    (matL A x).ofLp = A *ᵥ x.ofLp :=
-  rfl
-
-/-- The entries of `matL A x` are those of `A *ᵥ x`. -/
-theorem matL_apply [DecidableEq β] (A : Matrix α β ℂ) (x : EuclideanSpace ℂ β) (i : α) :
-    matL A x i = (A *ᵥ x.ofLp) i :=
-  rfl
-
-/-- `matL A` on a standard basis vector is the corresponding column of `A`. -/
-theorem matL_single_apply [DecidableEq β] (A : Matrix α β ℂ) (j : β) (i : α) :
-    matL A (EuclideanSpace.single j (1 : ℂ)) i = A i j := by
-  rw [matL_apply, PiLp.ofLp_single, Matrix.mulVec_single_one]
-  rfl
-
-/-- The operator norm of `matL A` is the operator norm of `A`. -/
-theorem norm_matL [DecidableEq β] (A : Matrix α β ℂ) : ‖matL A‖ = ‖A‖ :=
-  rfl
-
-/-- `matL` is additive. -/
-theorem matL_add [DecidableEq β] (A B : Matrix α β ℂ) : matL (A + B) = matL A + matL B :=
-  map_add _ _ _
-
-/-- `matL` turns matrix products into composition. -/
-theorem matL_mul [DecidableEq β] [DecidableEq γ] (A : Matrix α β ℂ) (B : Matrix β γ ℂ)
-    (x : EuclideanSpace ℂ γ) : matL (A * B) x = matL A (matL B x) := by
-  ext i
-  rw [matL_apply, matL_apply, ofLp_matL, Matrix.mulVec_mulVec]
 
 /-- One Euclidean register, identified with its space. -/
 def oneIso (p : P) (α : Type) [Fintype α] : Mem [⟨p, euc α⟩] ≃ₗᵢ[ℂ] EuclideanSpace ℂ α :=
@@ -234,18 +202,18 @@ theorem pairHeadIso_appendIso_symm {p q : P} (ℓ : Layout P) (v : EuclideanSpac
 of `p`. -/
 def matLocal₂₁ [DecidableEq α] [DecidableEq β] (p : P) (A : Matrix γ (α × β) ℂ) :
     Mem [⟨p, euc α⟩, ⟨p, euc β⟩] →L[ℂ] Mem [⟨p, euc γ⟩] :=
-  isoL (oneIso p γ).symm ∘L matL A ∘L isoL (twoIso p p α β)
+  isoL (oneIso p γ).symm ∘L act A ∘L isoL (twoIso p p α β)
 
 /-- The local map of a matrix from one register `ℂ^γ` of `p` to two registers `ℂ^α`, `ℂ^β`
 of `p`. -/
 def matLocal₁₂ [DecidableEq γ] (p : P) (A : Matrix (α × β) γ ℂ) :
     Mem [⟨p, euc γ⟩] →L[ℂ] Mem [⟨p, euc α⟩, ⟨p, euc β⟩] :=
-  isoL (twoIso p p α β).symm ∘L matL A ∘L isoL (oneIso p γ)
+  isoL (twoIso p p α β).symm ∘L act A ∘L isoL (oneIso p γ)
 
 /-- The local map of a matrix on two registers of `p`. -/
 def matLocal₂₂ [DecidableEq α] [DecidableEq β] (p : P) (A : Matrix (γ × δ) (α × β) ℂ) :
     Mem [⟨p, euc α⟩, ⟨p, euc β⟩] →L[ℂ] Mem [⟨p, euc γ⟩, ⟨p, euc δ⟩] :=
-  isoL (twoIso p p γ δ).symm ∘L matL A ∘L isoL (twoIso p p α β)
+  isoL (twoIso p p γ δ).symm ∘L act A ∘L isoL (twoIso p p α β)
 
 /-- Composing with linear isometric equivalences on both sides does not increase the norm. -/
 theorem norm_comp_isoL_le {E F G H : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
@@ -321,8 +289,8 @@ theorem eval_localMap₂₁ (p : P) (A : Matrix γ (α × β) ℂ) (ℓ : Layout
     (v : EuclideanSpace ℂ (α × β)) (w : Mem ℓ) :
     (Word.localMap p h₁ h₂ (matLocal₂₁ p A) ℓ).eval
         ((appendIso [⟨p, euc α⟩, ⟨p, euc β⟩] ℓ).symm ((twoIso p p α β).symm v ⊗ₜ w)) =
-      (matL A v ⊗ₜ w : Mem (⟨p, euc γ⟩ :: ℓ)) := by
-  rw [eval_localMap, ← appendIso_one_symm p ℓ (matL A v) w]
+      (act A v ⊗ₜ w : Mem (⟨p, euc γ⟩ :: ℓ)) := by
+  rw [eval_localMap, ← appendIso_one_symm p ℓ (act A v) w]
   simp [matLocal₂₁]
 
 omit [DecidableEq α] [DecidableEq β] in
@@ -332,7 +300,7 @@ theorem eval_localMap₁₂ (p : P) (A : Matrix (α × β) γ ℂ) (ℓ : Layout
     (h₂ : ∀ r ∈ ([⟨p, euc α⟩, ⟨p, euc β⟩] : Layout P), r.owner = p)
     (x : EuclideanSpace ℂ γ) (w : Mem ℓ) :
     (Word.localMap p h₁ h₂ (matLocal₁₂ p A) ℓ).eval (x ⊗ₜ w : Mem (⟨p, euc γ⟩ :: ℓ)) =
-      (appendIso [⟨p, euc α⟩, ⟨p, euc β⟩] ℓ).symm ((twoIso p p α β).symm (matL A x) ⊗ₜ w) := by
+      (appendIso [⟨p, euc α⟩, ⟨p, euc β⟩] ℓ).symm ((twoIso p p α β).symm (act A x) ⊗ₜ w) := by
   rw [← appendIso_one_symm p ℓ x w, eval_localMap]
   simp [matLocal₁₂]
 
@@ -344,7 +312,7 @@ theorem pairHeadIso_eval_localMap₂₂ (p : P) (A : Matrix (γ × δ) (α × β
     (h₂ : ∀ r ∈ ([⟨p, euc γ⟩, ⟨p, euc δ⟩] : Layout P), r.owner = p)
     (z : Mem (⟨p, euc α⟩ :: ⟨p, euc β⟩ :: ℓ)) :
     pairHeadIso ℓ ((Word.localMap p h₁ h₂ (matLocal₂₂ p A) ℓ).eval z) =
-      (matL A).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
+      (act A).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
   obtain ⟨y, rfl⟩ : ∃ y : EuclideanSpace ℂ (α × β) ⊗[ℂ] Mem ℓ, z = (pairHeadIso ℓ).symm y :=
     ⟨pairHeadIso ℓ z, by simp⟩
   rw [LinearIsometryEquiv.apply_symm_apply]
@@ -354,7 +322,7 @@ theorem pairHeadIso_eval_localMap₂₂ (p : P) (A : Matrix (γ × δ) (α × β
           (appendIso [⟨p, euc α⟩, ⟨p, euc β⟩] ℓ).symm ((twoIso p p α β).symm v ⊗ₜ w) := by
         rw [LinearIsometryEquiv.symm_apply_eq, pairHeadIso_appendIso_symm]
       rw [hz, eval_localMap, rTensor_tmul,
-        ← pairHeadIso_appendIso_symm (p := p) (q := p) ℓ (matL A v) w]
+        ← pairHeadIso_appendIso_symm (p := p) (q := p) ℓ (act A v) w]
       simp [matLocal₂₂]
   | add a b ha hb => simp only [map_add, ha, hb]
 
