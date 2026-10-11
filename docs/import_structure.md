@@ -49,6 +49,14 @@ transfer-operator gap and overlap-decay results built on QICLean's spectral
 theory. Public chapter-index modules are part of the production tree and
 therefore enter the generated import surface automatically.
 
+In `PEPS.Approximation`, `TNLean.PEPS.PairEffect.SourceCircuit.partySelector`
+is replaced by `TNLean.PEPS.PairEffect.partySelector`, since selecting a party
+depends only on equality of owner labels. The predicate remains $q=p$ on an
+arbitrary type of labels. `WordOwnerRestriction` imports `PartySelector` and
+uses this generic definition. Older chronological sources must adopt it and
+remove the duplicate selector in `ChronologicalLocality` when integrated;
+that adoption is separate from the present owner-restriction identities.
+
 ## Preparation algebra and convergence
 
 `MPS.Core.PhysicalMatrix` owns the tensor-to-physical-matrix reshape, its inverse,
@@ -167,6 +175,16 @@ The hypotheses and proofs are unchanged except for identifier substitutions;
 reversing those substitutions recovers the original mathematical declarations.
 No otherwise-dead compatibility alias is retained after migrating all
 consumers, in accordance with the repository policy.
+
+## PEPS tensor-memory identifications
+
+`PEPS.Approximation.UnitMemoryCoordinates` identifies an empty final tensor
+memory with the scalar field. Its theorem
+`Layout.memCongr_append_nil_appendIso_symm_tmul` states that adjoining a scalar
+and identifying the empty final register list gives scalar multiplication on
+the preceding memory. The spectator-register construction in `WordAppendTail`
+uses this theorem directly. Its former private copy `appendIso_nil_tmul` is
+removed; no public declaration is removed or renamed.
 
 ## Archive exclusion
 

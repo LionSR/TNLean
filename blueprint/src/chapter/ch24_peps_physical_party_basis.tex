@@ -38,6 +38,24 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \end{align}
 \end{definition}
 
+\begin{definition}[Original local physical dimensions]
+    \label{def:peps_family_physical_output}
+    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout,
+        TNLean.PEPS.PairEffect.familyPhysicalOutputLayout,
+        TNLean.PEPS.PairEffect.familyPhysicalListBasis,
+        TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
+    \leanok
+    \uses{def:peps_party_layout}
+    Let the physical space at $p$ be $H_p=\C^{d_p}$, where $d_p$
+    is a nonnegative integer, and denote its standard orthonormal
+    basis by $e_{p,j}$. The physical register list has one register
+    $H_{p_i}$ owned by $p_i$ in each position. Its labelled basis has
+    column $E_x=e_{p_1,x_{p_1}}\otimes\cdots
+        \otimes e_{p_m,x_{p_m}}\otimes1$ for each assignment
+    $x_p\in\{0,\ldots,d_p-1\}$. The physical output list may be
+    followed by any specified list of private registers.
+\end{definition}
+
 \begin{theorem}[Singleton physical memory of each party]
     \label{thm:peps_singleton_physical_memory}
     \lean{TNLean.PEPS.PairEffect.atParty_familyPhysicalLayout_of_mem}

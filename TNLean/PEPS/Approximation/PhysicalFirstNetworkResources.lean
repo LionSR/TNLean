@@ -25,15 +25,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-message-resources-physicalfirstnetworkresources-01
-TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstLinks_le
-Provenance-ID: 8769-message-resources-physicalfirstnetworkresources-02
-TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_link
-Provenance-ID: 8769-message-resources-physicalfirstnetworkresources-03
-TNLean.PEPS.PairEffect.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv
-Provenance-ID: 8769-message-resources-physicalfirstnetworkresources-04
-TNLean.PEPS.PairEffect.OriginalCircuit.physicalFirstReplacementLocationsEquiv
 -/
 
 

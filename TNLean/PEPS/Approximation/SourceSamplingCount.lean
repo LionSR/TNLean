@@ -25,35 +25,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-total-error.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-sourcesamplingcount-01
-Downstream declaration:
-TNLean.PEPS.Approximation.div_sqrt_sourceSamplingCount_le
-
-Provenance-ID: 8769-physical-sourcesamplingcount-02
-Downstream declaration:
-TNLean.PEPS.Approximation.sourceSamplingCount
-
-Provenance-ID: 8769-physical-sourcesamplingcount-03
-Downstream declaration:
-TNLean.PEPS.Approximation.sourceSamplingCount_lt
-
-Provenance-ID: 8769-physical-sourcesamplingcount-04
-Downstream declaration:
-TNLean.PEPS.Approximation.sourceSamplingCount_pos
-
-Provenance-ID: 8769-physical-sourcesamplingcount-05
-Downstream declaration:
-TNLean.PEPS.Approximation.sum_nonemptyFinsets_pow_card
-
-Provenance-ID: 8769-physical-sourcesamplingcount-06
-Downstream declaration:
-TNLean.PEPS.Approximation.sum_sourceErrorWeights
-
-Provenance-ID: 8769-physical-sourcesamplingcount-07
-Downstream declaration:
-TNLean.PEPS.Approximation.sum_sourceErrorWeights_sourceSamplingCount_le
-
 -/
 
 

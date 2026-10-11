@@ -74,15 +74,13 @@ Theorem~\ref{thm:wielandt_proposition_three}: the peripheral spectrum is
 $\{1\}$, the positive fixed point $\rho$ is unique up to scale, and all
 remaining eigenvalues have modulus strictly less than $1$.
 
-\begin{lemma}[Convergence of the positive part]
-    \label{lem:ldp_positive_part_converges}
+\begin{theorem}[Convergence of the positive part]
+    \label{thm:ldp_positive_part_converges}
     \lean{MPSTensor.tendsto_polarPosTensor_blockTensor_of_isNormal,
         MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap,
         MPSTensor.tendsto_polarPos_physicalMatrix_of_tendsto_transferMap}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
-        thm:prep_fixed_point_tensor_psd, thm:prep_transfer_fixed_point_tensor,
-        thm:prep_blocked_transfer_limit_normal}
+    \uses{def:ldpolar_tensor, def:prep_fixed_point_tensor}
     Let $P_q=(\mathcal B_q^\dagger\mathcal B_q)^{1/2}$. Then $P_q\to P_\infty$ as
     $q\to\infty$, where $P_\infty=(\sqrt\rho)^{\mathsf T}\otimes\Id$
     \cite[eq.~(8)]{Malz2024Preparation}.
@@ -91,9 +89,11 @@ remaining eigenvalues have modulus strictly less than $1$.
     parts of the physical matrices of $B_q$ converge to
     $(\sqrt\rho)^{\mathsf T}\otimes\Id$, and the corresponding tensors
     converge to $P_\infty$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:prep_fixed_point_tensor_psd, thm:prep_transfer_fixed_point_tensor,
+        thm:prep_blocked_transfer_limit_normal}
     The matrix of $\mathcal B_q^\dagger\mathcal B_q$ is a rearrangement of
     $\E_A^{\,q}$:
     $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
@@ -293,10 +293,10 @@ remaining eigenvalues have modulus strictly less than $1$.
     \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
         MPSTensor.mpv_approximatingTensor_norm_sq}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
+    \uses{def:ldpolar_tensor, def:prep_fixed_point_tensor,
         thm:prep_mpv_fixed_point_tensor, lem:mpv_rotate_physical,
         thm:ldpolar_tensor_injective, thm:prep_pair_product_norm}
-    With $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition} and $N=qM$, the
+    With $V$ from Definition~\ref{def:ldpolar_tensor} and $N=qM$, the
     \emph{approximating state} is
     $\ket{\widetilde\phi_N}=\ket{\phi_M(VP_\infty)}/\lVert\phi_M(VP_\infty)\rVert$.
     By Lemma~\ref{lem:mpv_rotate_physical} and
@@ -307,15 +307,15 @@ remaining eigenvalues have modulus strictly less than $1$.
     This is \cite[eqs.~(9) and~(10)]{Malz2024Preparation}.
 \end{definition}
 
-\begin{lemma}[A unitary implementing the isometry]
-    \label{lem:ldp_unitary_implementing_isometry}
+\begin{theorem}[A unitary implementing the isometry]
+    \label{thm:ldp_unitary_implementing_isometry}
     \lean{Matrix.exists_mem_unitaryGroup_apply_embedding_eq,
         MPSTensor.embeddedPairState,
         MPSTensor.mpv_approximatingTensor_eq_sum_embeddedPairState,
         MPSTensor.exists_unitary_mpv_approximatingTensor}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_tensor_injective,
-        def:ldp_approximating_state, def:prep_pair_product_state}
+    \uses{def:ldpolar_tensor, def:ldp_approximating_state,
+        def:prep_pair_product_state}
     Suppose $\mathcal B_q$ is injective, and let $\iota$ be an injective map
     from the pairs $(\gamma,\delta)$ with $0\le\gamma,\delta<D$ to the
     computational basis of $(\C^d)^{\otimes q}$. Then there is a unitary $U$
@@ -341,7 +341,7 @@ remaining eigenvalues have modulus strictly less than $1$.
     of~(\ref{eq:ldp_unitary_preparation}) then evaluates to
     $\bigl(\bigotimes_kU_k\bigr)\bigotimes_k\bigl(\ket{\omega}_{R_kL_{k+1}}\ket{0}_{C_k}\bigr)$
     \cite[eqs.~(10) and~(11)]{Malz2024Preparation}.
-\end{lemma}
+\end{theorem}
 
 \begin{center}
     % Formula: |phi~_N> = (U_1 (x) ... (x) U_M) (x)_k (|omega>_{R_k
@@ -398,6 +398,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{center}
 \begin{proof}
     \leanok
+    \uses{thm:ldpolar_tensor_injective}
     Since $V$ is an isometry, its columns $V\ket{\gamma,\delta}$ are
     orthonormal. Place them at the positions $\iota(\gamma,\delta)$ and extend
     them to an orthonormal basis of $(\C^d)^{\otimes q}$; the matrix with these
@@ -1141,7 +1142,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_unitary_implementing_isometry,
+    \uses{thm:ldp_unitary_implementing_isometry,
         thm:ldp_sequential_factorization, lem:seqanc_staircase,
         thm:qc_bounded_unitary_two_site_gates, lem:qc_parallel_circuits,
         lem:qc_placed_operators}
@@ -1168,7 +1169,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
     Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} it has constant depth.
     On each block $k$, in parallel, a unitary $U_k$ with
     $U_k\ket{l,0,r}=V_{\ell_k}\ket{l,r}$ is applied, as in
-    Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
+    Theorem~\ref{thm:ldp_unitary_implementing_isometry}. SWAP
     gates move the first $D$ sites next to the last ones in $O(q)$ gates.
     By Theorem~\ref{thm:ldp_sequential_factorization}, $V_\ell$ is the ordered
     product of $\ell$ isometries, each from the bond space into the bond space

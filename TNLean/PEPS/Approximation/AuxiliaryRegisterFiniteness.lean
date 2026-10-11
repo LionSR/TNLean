@@ -22,25 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-01
-TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_mem
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-02
-TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_private_registers
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-03
-TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary_registers
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-04
-TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_append
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-05
-TNLean.PEPS.PairEffect.Layout.finiteDimensional_registers_mapOwner
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-06
-TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_registers_sources_prepStack
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-07
-TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_comp
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-08
-TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepGate
-Provenance-ID: 8769-approximate-physical-auxiliaryregisterfiniteness-09
-TNLean.PEPS.PairEffect.finiteDimensional_registers_sources_prepWord
 -/
 
 

@@ -25,49 +25,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-input; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-sourceinputpartition-01
-TNLean.PEPS.PairEffect.Layout.memCongr_append_tmul
-Provenance-ID: 8769-source-resource-sourceinputpartition-02
-TNLean.PEPS.PairEffect.Layout.memCongr_apply_heq
-Provenance-ID: 8769-source-resource-sourceinputpartition-03
-TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_eq_or
-Provenance-ID: 8769-source-resource-sourceinputpartition-04
-TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_masks
-Provenance-ID: 8769-source-resource-sourceinputpartition-05
-TNLean.PEPS.PairEffect.SourceCircuit.correctedSlotMask
-Provenance-ID: 8769-source-resource-sourceinputpartition-06
-TNLean.PEPS.PairEffect.SourceCircuit.correctedSlotMask_endpoints
-Provenance-ID: 8769-source-resource-sourceinputpartition-07
-TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceLayout
-Provenance-ID: 8769-source-resource-sourceinputpartition-08
-TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceLayout_owners
-Provenance-ID: 8769-source-resource-sourceinputpartition-09
-TNLean.PEPS.PairEffect.SourceCircuit.crossingSlotMask
-Provenance-ID: 8769-source-resource-sourceinputpartition-10
-TNLean.PEPS.PairEffect.SourceCircuit.crossingSlotMask_eq_false_of_corrected
-Provenance-ID: 8769-source-resource-sourceinputpartition-11
-TNLean.PEPS.PairEffect.SourceCircuit.crossingSourceLayout
-Provenance-ID: 8769-source-resource-sourceinputpartition-12
-TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceCrossing_schmidt
-Provenance-ID: 8769-source-resource-sourceinputpartition-13
-TNLean.PEPS.PairEffect.SourceCircuit.norm_sourceCrossingVector
-Provenance-ID: 8769-source-resource-sourceinputpartition-14
-TNLean.PEPS.PairEffect.SourceCircuit.restrict_correctedSourceLayout_append
-Provenance-ID: 8769-source-resource-sourceinputpartition-15
-TNLean.PEPS.PairEffect.SourceCircuit.sourceCrossingVector
-Provenance-ID: 8769-source-resource-sourceinputpartition-16
-TNLean.PEPS.PairEffect.SourceInventory.crossingSourceVector
-Provenance-ID: 8769-source-resource-sourceinputpartition-17
-TNLean.PEPS.PairEffect.SourceInventory.eval_prepareFreeSlots_eq_appendIso_symm
-Provenance-ID: 8769-source-resource-sourceinputpartition-18
-TNLean.PEPS.PairEffect.SourceInventory.freeSourceVector
-Provenance-ID: 8769-source-resource-sourceinputpartition-19
-TNLean.PEPS.PairEffect.SourceInventory.mem_freeSlotLayout
-Provenance-ID: 8769-source-resource-sourceinputpartition-20
-TNLean.PEPS.PairEffect.SourceInventory.norm_crossingSourceVector
-Provenance-ID: 8769-source-resource-sourceinputpartition-21
-TNLean.PEPS.PairEffect.SourceInventory.norm_freeSourceVector
 -/
 
 

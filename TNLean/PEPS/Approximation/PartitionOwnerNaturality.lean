@@ -114,7 +114,7 @@ private theorem restrictMapOwnerIso_apply_heq (f : P → Q) (g : Q → Bool)
     (mapOwnerIso f _ x)).trans (mapOwnerIso_apply_heq f _ x)
 
 /-- Tensor products of canonical identity identifications act as the identity
- after the two endpoint Hilbert spaces have been identified. -/
+ after the two target Hilbert spaces have been identified. -/
 private theorem tensorMap_apply_heq_refl {A B A' B' : HSpace}
     (ha : A' = A) (hb : B' = B) (e : A ≃ₗᵢ[ℂ] A') (d : B ≃ₗᵢ[ℂ] B')
     (he : ∀ x, HEq (e x) x) (hd : ∀ y, HEq (d y) y) (z : A ⊗[ℂ] B) :

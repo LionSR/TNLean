@@ -26,13 +26,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 sec:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-actual-sampling-finiteregistermemories-01
-TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_of_registers
-Provenance-ID: 8769-actual-sampling-finiteregistermemories-02
-TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner
-Provenance-ID: 8769-actual-sampling-finiteregistermemories-03
-TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis
 -/
 
 

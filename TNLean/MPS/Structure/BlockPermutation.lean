@@ -166,19 +166,19 @@ section MainDecomposition
 variable {ι : Type*} [Finite ι] [DecidableEq ι]
 variable {D : ι → ℕ} [∀ i, NeZero (D i)]
 
-/-- **Main theorem**: Any ℂ-algebra automorphism of `∏_i M_{D_i}(ℂ)` decomposes as a block
-permutation composed with per-block inner automorphisms (Skolem–Noether). -/
-theorem algEquiv_pi_matrix_decomposition
+/-- The Skolem--Noether step for a fixed block permutation of the ideals. -/
+private theorem algEquiv_pi_matrix_decomposition_of_permutes
     (T : (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ) ≃ₐ[ℂ]
-         (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)) :
-    ∃ (σ : ι ≃ ι) (hDeq : ∀ i, D (σ i) = D i)
-      (X : ∀ i, GL (Fin (D i)) ℂ),
+         (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)) (σ : ι ≃ ι)
+    (hσ : ∀ i, T.toRingEquiv.mapTwoSidedIdeal
+        (blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) i) =
+      blockIdeal (fun j => Matrix (Fin (D j)) (Fin (D j)) ℂ) (σ i)) :
+    ∃ (hDeq : ∀ i, D (σ i) = D i) (X : ∀ i, GL (Fin (D i)) ℂ),
     ∀ (i : ι) (M : Matrix (Fin (D i)) (Fin (D i)) ℂ),
       (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDeq i)))
         (componentMap T.toRingEquiv σ i M) =
         (X i : Matrix (Fin (D i)) (Fin (D i)) ℂ) * M *
           ((X i)⁻¹ : GL (Fin (D i)) ℂ) := by
-  obtain ⟨σ, hσ⟩ := ringEquiv_pi_simple_permutes_blockIdeals T.toRingEquiv
   have hDeq : ∀ i, D (σ i) = D i := fun i => dim_preserved hσ i
   let reind (i : ι) := Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDeq i))
   let castMap (i : ι) : Matrix (Fin (D i)) (Fin (D i)) ℂ →ₐ[ℂ] _ :=
@@ -195,7 +195,49 @@ theorem algEquiv_pi_matrix_decomposition
     fun i => (reind i).bijective.comp (blockComponentMap_bijective _ _ hσ i)
   choose X hX using fun i =>
     skolemNoether_matrix (AlgEquiv.ofBijective (castMap i) (castMap_bij i))
-  exact ⟨σ, hDeq, X, fun i M => hX i M⟩
+  exact ⟨hDeq, X, fun i M => hX i M⟩
+
+/-- **Main theorem**: Any ℂ-algebra automorphism of `∏_i M_{D_i}(ℂ)` decomposes as a block
+permutation composed with per-block inner automorphisms (Skolem–Noether). -/
+theorem algEquiv_pi_matrix_decomposition
+    (T : (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ) ≃ₐ[ℂ]
+         (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)) :
+    ∃ (σ : ι ≃ ι) (hDeq : ∀ i, D (σ i) = D i)
+      (X : ∀ i, GL (Fin (D i)) ℂ),
+    ∀ (i : ι) (M : Matrix (Fin (D i)) (Fin (D i)) ℂ),
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDeq i)))
+        (componentMap T.toRingEquiv σ i M) =
+        (X i : Matrix (Fin (D i)) (Fin (D i)) ℂ) * M *
+          ((X i)⁻¹ : GL (Fin (D i)) ℂ) := by
+  obtain ⟨σ, hσ⟩ := ringEquiv_pi_simple_permutes_blockIdeals T.toRingEquiv
+  exact ⟨σ, algEquiv_pi_matrix_decomposition_of_permutes T σ hσ⟩
+
+omit [DecidableEq ι] in
+/-- Pointwise form of the decomposition: the block `σ i` of `T M` depends only
+on the block `i` of `M`, and is conjugate to it after identifying the equal
+block dimensions. -/
+theorem algEquiv_pi_matrix_decomposition_apply
+    (T : (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ) ≃ₐ[ℂ]
+         (∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)) :
+    ∃ (σ : ι ≃ ι) (hDeq : ∀ i, D (σ i) = D i)
+      (X : ∀ i, GL (Fin (D i)) ℂ),
+    ∀ (M : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ) (i : ι),
+      (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDeq i))) (T M (σ i)) =
+        (X i : Matrix (Fin (D i)) (Fin (D i)) ℂ) * M i *
+          ((X i)⁻¹ : GL (Fin (D i)) ℂ) := by
+  classical
+  cases nonempty_fintype ι
+  obtain ⟨σ, hσ⟩ := ringEquiv_pi_simple_permutes_blockIdeals T.toRingEquiv
+  obtain ⟨hDeq, X, hX⟩ := algEquiv_pi_matrix_decomposition_of_permutes T σ hσ
+  refine ⟨σ, hDeq, X, fun M i => ?_⟩
+  have hM : T M (σ i) = componentMap T.toRingEquiv σ i (M i) := by
+    conv_lhs => rw [← Finset.univ_sum_single M, map_sum, Finset.sum_apply]
+    change ∑ j, T.toRingEquiv (Pi.single j (M j)) (σ i) = _
+    rw [Finset.sum_eq_single i (fun j _ hj =>
+      ringEquiv_maps_single_support_between T.toRingEquiv σ hσ (M j) (σ i)
+        (fun h => hj (σ.injective h).symm)) (fun hi => absurd (Finset.mem_univ i) hi)]
+    rfl
+  rw [hM, hX]
 
 end MainDecomposition
 

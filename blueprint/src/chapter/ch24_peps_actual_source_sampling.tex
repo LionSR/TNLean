@@ -233,7 +233,7 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_sample_count_bound,thm:peps_sampled_error_integral_bound}
+    \uses{thm:peps_source_sample_count_bound,thm:peps_sampled_error_integral_bound,def:peps_source_sample_count}
     Integrability follows from the finite Gaussian expressions for the actual
     source corrections. The exact nonempty-subset expansion bounds the mean
     error by the sum of the displayed expectations. Choose a sample with error
@@ -317,7 +317,7 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_sample_count_bound,def:peps_source_sample_count}
+    \uses{def:peps_source_sample_count}
     The source bound also bounds $\max(1,N)$ because $C_NL^n\geq1$.
     Substitute the three power bounds into the defining square and use
     $k<(8\max(1,N)Q/\varepsilon)^2+2$. Since the resulting power of $L$
@@ -353,7 +353,7 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_source_sampling,thm:peps_source_sampling_polynomial}
+    \uses{thm:peps_actual_source_sampling,thm:peps_source_sampling_polynomial,def:peps_source_sample_count}
     Since $L\geq1$ and $q\geq p$, the accuracy $L^{-q}$ belongs to $(0,1]$
     and satisfies $L^{-q}\leq L^{-p}$. Apply the actual sampling theorem
     at $L^{-q}$, retaining its Schmidt data and its sample. The scalar
@@ -382,7 +382,7 @@ representation of that operator is a separate statement.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_sampling_polynomial}
+    \uses{thm:peps_source_sampling_polynomial,def:peps_source_sample_count}
     Substitute the per-gate budget into the stack-length formula. It is
     the same ceiling expression as the source sample count, with cost
     $rS$. Apply the inverse-power sample-count estimate to
