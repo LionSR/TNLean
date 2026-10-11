@@ -23,19 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-total-error.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-sourcegaussianbranchdensity-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity
-
-Provenance-ID: 8769-physical-sourcegaussianbranchdensity-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity
-
-Provenance-ID: 8769-physical-sourcegaussianbranchdensity-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum
-
 -/
 
 

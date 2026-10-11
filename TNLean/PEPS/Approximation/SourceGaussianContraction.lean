@@ -23,27 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-product-covariance.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiancontraction-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.PartialSchmidtCoordinates
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiancontraction-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiancontraction-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv_apply
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiancontraction-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtSourceVectors
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiancontraction-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_eq_sum
-
 -/
 
 noncomputable section
