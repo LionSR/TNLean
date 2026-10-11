@@ -78,6 +78,12 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       (by simpa only [Finset.coe_singleton] using hU) (-t)).2 l
     rw [CStarRing.norm_of_mem_unitary hUu, one_mul, abs_neg] at hestimate
     exact hestimate.trans (min_le_right _ _)
+  have hcommute (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
+      (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+      Commute A (siteExpectation q (graphBall (domainGraph Λ) y l)
+        (heisenbergEvolution h.operator (-t) U)) :=
+    commute_of_mem_supportedOperators (hdisj y hy) hA
+      (siteExpectation_mem_supportedOperators _ _)
   done
 
 end TNLean.PEPS.AreaLaw
