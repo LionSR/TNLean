@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourceGaussianCoefficients
 import TNLean.PEPS.Approximation.WeightedPhysicalSource
+import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
 
 /-!
 # Physical source errors under the actual global Gaussian law
@@ -36,12 +37,6 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped InnerProductSpace TensorProduct Matrix ComplexConjugate
 namespace TNLean.PEPS.PairEffect.SourceCircuit
-
-/-- Both independent Schmidt endpoint indices at every selected original source position. -/
-abbrev CorrectedSchmidtCoordinates {P : Type} {a b : Layout P}
-    (w : SourceCircuit a b) (S : Finset (sourceLocations w)) :=
-  ∀ e : S, Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2) ×
-    Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2)
 
 open Classical in
 /-- Actual global Gaussian source-entry products give the separated physical

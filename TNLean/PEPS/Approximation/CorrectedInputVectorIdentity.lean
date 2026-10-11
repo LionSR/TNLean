@@ -60,21 +60,13 @@ def HasCorrectedInputVectors {a b : Layout P} (w : SourceCircuit a b)
       u.IsAllowed ∧ u.sources = [] ∧ ∀ (ξ : Choices A w) (η : ∀ i, U i ⊗[ℂ] V i),
         output ξ η = F u ξ (input η)
 
-set_option Elab.async false in
-set_option maxHeartbeats 400000 in
--- Matching the two dependent memory representations requires additional elaboration steps.
 /-- The original prepared partial vector equals the absorbed word on its literal
 corrected and crossing source-vector blocks. The common rearrangement is derived
 from the original source positions and precedes every branch and free vector. -/
 theorem exists_correctedInputVector_identity {a b : Layout P} (w : SourceCircuit a b)
     (S : Finset (sourceLocations w)) (p₀ : Word [] a) :
     HasCorrectedInputVectors w S p₀ := by
-  unfold HasCorrectedInputVectors
-  intro A R U V ℓ C T free v fixed X Y F input output
   obtain ⟨u, hu, hus, hue⟩ := exists_correctedInputReordering w S
-  refine ⟨u, hu, hus, ?_⟩
-  intro ξ η
-  exact correctedInputVector_identity_of_reordering w S p₀ u ξ η (hue η)
-
+  exact ⟨u, hu, hus, fun ξ η ↦ correctedInputVector_identity_of_reordering w S p₀ u ξ η (hue η)⟩
 
 end TNLean.PEPS.PairEffect.SourceCircuit
