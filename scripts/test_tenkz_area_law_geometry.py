@@ -178,6 +178,26 @@ def check_rays(unit: str) -> None:
     # on all eight sectors (no active ray) is allowed.
     runs = sum(ids[s] != ids[(s + 1) % 8] for s in range(8))
     assert runs % 2 == 0, ids
+    # Each identifier carries one fixed color, so the identifier adjacency
+    # graph must be bipartite.
+    color: dict[str, int] = {}
+    edges = {(ids[s], ids[(s + 1) % 8]) for s in range(8) if ids[s] != ids[(s + 1) % 8]}
+    for start in ids:
+        if start in color:
+            continue
+        color[start], stack = 0, [start]
+        while stack:
+            u = stack.pop()
+            for a, b in edges:
+                for x, y in ((a, b), (b, a)):
+                    if x == u:
+                        if y not in color:
+                            color[y] = 1 - color[u]
+                            stack.append(y)
+                        assert color[y] != color[u], ("odd identifier cycle", ids)
+    for cell, label, pos in (((5, 5), "v", "22.5"), ((9, 9), r"\overline B_\infty(v,r)", "se")):
+        assert re.search(r"\\tnmark\[form=label, label pos=%s\]\{\(%d,%d\)\}\{\$%s\$\}"
+                         % (re.escape(pos), cell[0], cell[1], re.escape(label)), unit), label
 
 
 CHECKS = {"layers": check_layers, "primary": check_primary, "fan": check_fan, "rays": check_rays}
