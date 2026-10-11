@@ -6676,3 +6676,27 @@ spectral split → block extraction → MPV calculation → strict bounds
   the relabelling identities.
 - **Notes:** Named scalar local maps belong to the participating-party set.
   Excluding register owners alone would not exclude those scalar operations.
+
+
+### Selecting the exterior owner — promoted (2026-10-11)
+
+- **Helper:** `partySelector_none` in
+  `TNLean/PEPS/Approximation/PartySelector.lean` identifies selection of the
+  exterior owner with `Option.isNone`.
+- **Use:** Rewrite the selector in an already inferred restriction identity,
+  then compose the resulting heterogeneous equalities.
+- **Occurrences replaced:** `SourcePrivatePreparationRestriction.lean`,
+  `AllPartialGate.lean`, and `NoneResidualScalar.lean` previously repeated
+  function extensionality and the two optional-owner cases.
+- **Scope:** A lemma suffices; no new tactic or simplification attribute is
+  needed.
+
+### Composing scalar maps on empty register memories — candidate (2026-10-11)
+
+- **Pattern:** Identify the input, intermediate and output register lists with
+  the empty list, then compose two heterogeneous scalar-map identities.
+- **Seen:** The private `scalar_comp_heq` helpers in `NoneResidualOperations.lean`
+  and `NoneSourceWordScalar.lean` (two occurrences).
+- **Abstraction:** At a third occurrence, share the scalar composition lemma
+  in a lower-level module and retain the explicit empty-layout assumptions.
+- **Notes:** The two scalars may vanish. No cancellation or normalization is used.

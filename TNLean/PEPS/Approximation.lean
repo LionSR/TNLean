@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AbsorbedRestriction
 import TNLean.PEPS.Approximation.ActualCorrectedSourceBound
 import TNLean.PEPS.Approximation.ActualGaussianBranch
+import TNLean.PEPS.Approximation.ActualPartySourceMatrix
 import TNLean.PEPS.Approximation.ActualPureSourceMatrix
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
@@ -22,6 +23,7 @@ import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.ActualSourceSampling
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
+import TNLean.PEPS.Approximation.AllPartialGate
 import TNLean.PEPS.Approximation.AllSourceSlots
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
@@ -90,6 +92,7 @@ import TNLean.PEPS.Approximation.EmptyGateScalar
 import TNLean.PEPS.Approximation.EmptyHeadGrouping
 import TNLean.PEPS.Approximation.EncodedFrame
 import TNLean.PEPS.Approximation.EndpointOperatorWord
+import TNLean.PEPS.Approximation.EndpointWordEvaluation
 import TNLean.PEPS.Approximation.EndpointWordRestriction
 import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
@@ -127,6 +130,8 @@ import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
+import TNLean.PEPS.Approximation.NoneResidualScalar
+import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates

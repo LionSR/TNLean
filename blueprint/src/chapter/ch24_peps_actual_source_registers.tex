@@ -171,7 +171,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:peps_all_party_source_exterior_empty,
+    \uses{thm:peps_exterior_owner_selector,thm:peps_all_party_source_exterior_empty,
         thm:peps_excluded_spectator_restriction,
         thm:peps_owner_disjoint_restriction,def:peps_actual_private_preparation}
     Every source register belongs to an original party, so none survives
@@ -211,4 +211,110 @@ operations on an empty memory.
     a selected original party and disappears from the exterior restriction.
     The canonical identifications of the empty memories preserve this
     scalar map.
+\end{proof}
+
+
+\begin{lemma}[Selecting the exterior owner]
+    \label{thm:peps_exterior_owner_selector}
+    \lean{TNLean.PEPS.PairEffect.partySelector_none}
+    \uses{def:peps_single_party_selector}
+    In the owner set $\mathcal P\sqcup\{\star\}$, the singleton selector
+    at $\star$ is the indicator of the exterior owner.
+\end{lemma}
+
+\begin{proof}
+    \uses{def:peps_single_party_selector}
+    The two selectors are $1$ at $\star$ and $0$ at every original party.
+\end{proof}
+
+\begin{theorem}[Exterior restriction of a touched gate]
+    \label{thm:peps_actual_touched_gate_exterior}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id}
+    \uses{def:peps_partial_source_choices,thm:peps_source_word_parties}
+    Select all original parties. If a gate has a participating party, then,
+    for each choice of its monomial, the exterior restriction of its remaining
+    operations is $\Id_{\C}$. The monomial vectors and spectator registers
+    are arbitrary.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_exterior_owner_selector,def:peps_partial_source_choices,thm:peps_source_word_parties}
+    The gate is replaced by the chosen monomial. Relabelling its operations
+    and spectator registers assigns every owner to a selected original party.
+    The exterior owner is outside that image. Moving its pair preparations to
+    the beginning preserves the participating parties, so the exterior
+    restriction has no participating party and acts as $\Id_{\C}$.
+\end{proof}
+
+\begin{theorem}[The actual chronological exterior scalar]
+    \label{thm:peps_actual_chronological_exterior_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_emptyGateScalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_all_eval_heq_emptyGateScalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialSourceWord_all_eval_heq_emptyGateScalar}
+    \uses{def:peps_empty_party_gate_scalar,def:peps_canonical_source_residual,
+        thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
+        thm:peps_actual_private_preparation_exterior}
+    Select all original parties of a composition $W$. For every monomial
+    choice, the exterior restriction of its remaining operations acts as
+    $\lambda_W\Id_{\C}$. The same identity holds after identifying the
+    source registers with their prescribed slots and after preparing the
+    recorded private product input. It includes an empty original party set
+    and a vanishing coefficient sum.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_exterior_owner_selector,thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
+        thm:peps_scalar_residual_composition,thm:peps_all_party_source_exterior_empty,
+        thm:peps_actual_private_preparation_exterior}
+    Induct on the composition. Every local operation or exchange at an
+    original party has exterior restriction $1$. A gate with a participating
+    party also contributes $1$; a gate with no participating party contributes
+    the sum of its original coefficients. Chronological composition multiplies
+    these scalars, and adjoining an excluded register preserves them. All
+    exterior input, intermediate and source memories are empty. The prescribed
+    slot identification adds no operation, and the private preparation
+    contributes the identity. No scalar is cancelled.
+\end{proof}
+
+\begin{definition}[Actual party matrices and their source coordinates]
+    \label{def:peps_actual_party_source_matrices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualPartySourceBasisChange}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourcePartyMatrix}
+    \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation,
+        def:peps_party_grouped_basis}
+    Let $\mathcal P$ be finite and set
+    $\mathcal Q=\mathcal P\sqcup\{\star\}$, where $\star$ denotes the
+    exterior owner. Choose orthonormal bases $B_q,C_q$ for the actual input
+    and output register memories at each $q\in\mathcal Q$, and order all
+    parties without repetition. Let $B,C$ be the corresponding grouped bases.
+    Write $E$ for the literal source input basis. Define
+    \[
+        R_{y,x}=B^*_{y}E_x,\qquad
+        A_{\xi,q}=[\widetilde W_\xi|_q]_{B_q,C_q},
+    \]
+    where $\widetilde W_\xi$ is the actual remaining word after preparing the
+    recorded private input. Thus $R$ is the matrix of the identity from $E$
+    to $B$ and is independent of the monomial choice.
+\end{definition}
+
+\begin{theorem}[Actual source columns in party coordinates]
+    \label{thm:peps_actual_party_source_columns}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange}
+    \uses{def:peps_actual_party_source_matrices,thm:peps_actual_source_column_coordinates,
+        thm:peps_actual_party_word_entries}
+    The literal prepared source-column matrix, with output basis $C$, satisfies
+    \[
+        D_\xi=\left(\bigotimes_{q\in\mathcal Q} A_{\xi,q}\right)R.
+    \]
+    Every owner, including $\star$, remains in this product. The same bases
+    and the same $R$ may be used for independent ket and bra choices.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
+        def:peps_actual_party_source_matrices}
+    First express the actual word in the grouped input and output bases.
+    Its matrix is the product of its singleton-restriction matrices.
+    Compose with the identity from the literal source basis to the grouped
+    input basis. The matrix of this composition is the claimed product.
 \end{proof}
