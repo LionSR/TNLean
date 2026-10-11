@@ -62,6 +62,7 @@ private theorem squareInteractionSupport_injective (L : ℕ) :
     | inl w =>
       exact congrArg Sum.inl (Finset.singleton_inj.mp hij)
     | inr e =>
+      dsimp only at hij
       have h₁ : e.val.1 = v := by
         have := hij.symm ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
         simpa only [squareInteractionSupport, Finset.mem_singleton] using this
@@ -72,6 +73,7 @@ private theorem squareInteractionSupport_injective (L : ℕ) :
   | inr e =>
     cases j with
     | inl v =>
+      dsimp only at hij
       have h₁ : e.val.1 = v := by
         have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
         simpa only [squareInteractionSupport, Finset.mem_singleton] using this
@@ -80,6 +82,7 @@ private theorem squareInteractionSupport_injective (L : ℕ) :
         simpa only [squareInteractionSupport, Finset.mem_singleton] using this
       exact False.elim (forwardAdjacent_ne e.property (h₁.trans h₂.symm))
     | inr f =>
+      dsimp only at hij
       have h₁ : e.val.1 = f.val.1 ∨ e.val.1 = f.val.2 := by
         have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
         simpa only [squareInteractionSupport, Finset.mem_insert, Finset.mem_singleton] using this
