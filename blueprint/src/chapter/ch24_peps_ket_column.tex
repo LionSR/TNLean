@@ -210,6 +210,45 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     same edge dimensions $D_e$ (in the virtual-first presentation, the same
     positive dimensions and hence the same maximum bond dimension). Their contraction is exactly the column
     $\sigma\ket z$.
+    On a $3\times3$ square, fixing the inputs closes the input leg of every
+    site tensor with the basis vector $\ket{z_v}$ and leaves every bond in
+    place.
+    % Source: arXiv OpenAI2026PolynomialPEPS, 07-assembly.tex, lines 67--94
+    % (lem:columns: "Fixing the input basis index separately in each
+    % physical tensor selects the same column without altering a virtual
+    % leg"); no source figure.
+    % Ink-to-index: each ellipse is a site tensor A_v of the operator
+    % network; the in-plane lines are the virtual bonds e with dimension
+    % D_e, identical in both pictures; the upward leg at v is the output
+    % index s_v, the downward leg the input index r_v. In the right picture
+    % each downward leg ends in a blue dot, the basis vector |z_v>, so the
+    % input index is contracted to the value z_v; the dot on the leg of the
+    % middle site of the right column carries the generic label z_v.
+    % Boundary signatures: left, nine open output and nine open input
+    % physical legs (the operator sigma); right, nine open output legs only
+    % (the column sigma|z>). No virtual leg is open in either picture.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op,op}, cols=3, frame=plane,
+                physical=updown]
+            \tnmark[form=label, label pos=e]{(2,3)}{$A_v$}
+        \end{tenkz}
+        $\quad\longmapsto\quad$
+        \begin{tenkz}[rows={op,op,op}, cols=3, frame=plane,
+                physical=updown]
+            \tndeclare{species}{input}{hue=source:blue}
+            \tn[at=on leg-s-1-1 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-1-2 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-1-3 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-2-1 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-2-2 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-2-3 1, skin=dot, species=input,
+                label pos=e]{z_v}
+            \tn[at=on leg-s-3-1 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-3-2 1, skin=dot, species=input]{}
+            \tn[at=on leg-s-3-3 1, skin=dot, species=input]{}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{lemma}[Fixed inputs and the native square-grid tensor]

@@ -101,6 +101,8 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_assembly.py'
+      - 'scripts/test_tenkz_area_law_geometry.py'
       - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_dyadic_geometry.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -216,6 +218,8 @@ on:
       - 'scripts/test_tenkz_peps_parent_spanning.py'
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
+      - 'scripts/test_tenkz_peps_assembly.py'
+      - 'scripts/test_tenkz_area_law_geometry.py'
       - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_dyadic_geometry.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -374,6 +378,8 @@ jobs:
               - 'scripts/test_tenkz_peps_parent_spanning.py'
               - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_region_coordinates.py'
+              - 'scripts/test_tenkz_peps_assembly.py'
+              - 'scripts/test_tenkz_area_law_geometry.py'
               - 'scripts/test_tenkz_area_law_scan_buffer.py'
               - 'scripts/test_tenkz_peps_dyadic_geometry.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -1814,12 +1820,19 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_patch_stationarity.py
 
+      - name: Check area-law geometry diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_area_law_geometry.py
+
       - name: Check regional basis-relabelling diagrams
         if: env.TEX_CHANGED == 'true'
         run: >
           python3 scripts/test_tenkz_region_coordinates.py
           --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
 
+      - name: Check PEPS assembly diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_peps_assembly.py
       - name: Check dyadic protocol geometry diagrams
         if: env.TEX_CHANGED == 'true'
         run: >
