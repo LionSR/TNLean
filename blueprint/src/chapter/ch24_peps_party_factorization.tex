@@ -279,6 +279,7 @@
 \begin{theorem}[Factorization by the actual singleton restrictions]
     \label{thm:peps_actual_singleton_factorization}
     \lean{TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions}
+    \leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
     Let $W:\mathcal H_\ell\to\mathcal H_m$ be a source-free
     composition, and let $p_1,\ldots,p_s$ be a list of distinct
@@ -300,7 +301,7 @@
     \texttt{04-compression.tex}, lines 233--251 and 351--381.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_factorization,
         thm:peps_singleton_after_excluded_party}
     Induct on the ordered party list. For an empty list, the
