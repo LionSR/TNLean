@@ -480,9 +480,13 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \begin{proof}
     \leanok
     The vectors $\sum_{\alpha,i}Q^i_{\alpha\beta}\ket{\alpha,i}$, $\beta<b$,
-    are orthonormal. Extend them to an orthonormal basis of
-    $\C^D\otimes\C^d$ and let $U$ send the standard basis, with the vectors
-    $\ket{\beta,0}$, $\beta<b$, first, to this basis.
+    are orthonormal, so they are the columns of an isometry $W$ from $\C^b$
+    into $\C^D\otimes\C^d$. The map $\beta\mapsto(\beta,0)$ places the
+    basis of $\C^b$ injectively among the basis vectors $\ket{\alpha,i}$.
+    An isometry extends to a unitary agreeing with it on any such placement:
+    put its orthonormal columns at the placed positions and extend them to an
+    orthonormal basis of the larger space. Applied to $W$ and this placement,
+    this gives $U$ with $U\ket{\beta,0}=W\ket{\beta}$ for $\beta<b$.
 \end{proof}
 
 \begin{theorem}[Positive bond bound]
@@ -1412,11 +1416,44 @@ representation, it is a general recipe for its sequential generation.
     \end{tenkz}
 \end{center}
 
-\begin{remark}
-    Before $U^{[k]}$ acts, sites $k+1,\dots,N$ remain in $\ket{0}$, and site
-    $k$ is unchanged under subsequent operations, so the intermediate chain
-    state after $U^{[k]}$ is $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$.
-\end{remark}
+\begin{theorem}[The recursion describes the operations on the whole chain]
+    \label{thm:seqanc_no_ancilla_chain}
+    \lean{MPSPreparation.pairOp, MPSPreparation.pairOp_mulVec_apply,
+        MPSPreparation.noAncillaChainOp,
+        MPSPreparation.noAncillaChainOp_mulVec_single_apply,
+        MPSPreparation.noAncillaChainOp_mulVec_single}
+    \leanok
+    \uses{def:seqanc_no_ancilla}
+    Let $d\ge 1$ and $N\ge 2$, and let each $U^{[k]}$ act on the whole chain
+    $(\C^d)^{\otimes N}$ as $U^{[k]}$ on sites $k$ and $k+1$ and as the
+    identity on the other sites. For $k=1,\dots,N-1$,
+    \begin{align*}
+        U^{[k]}\cdots U^{[1]}\ket{0}^{\otimes N}
+        =\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}.
+    \end{align*}
+    In particular, the operations $U^{[1]},\dots,U^{[N-1]}$ applied in turn to
+    $\ket{0}^{\otimes N}$ generate the state $\chi_{N-1}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Induction on $k$. For $k=1$, $U^{[1]}$ acts on sites $1$ and $2$ of
+    $\ket{0}^{\otimes N}$ and gives $U^{[1]}\ket{0,0}\otimes\ket{0}^{\otimes(N-2)}
+        =\ket{\chi_1}\otimes\ket{0}^{\otimes(N-2)}$. For $k\ge 2$, before
+    $U^{[k]}$ acts, the chain is
+    $\sum_\alpha\chi_{k-1}(\dots,\alpha)\ket{\dots,\alpha}\otimes\ket{0}
+        \otimes\ket{0}^{\otimes(N-k-1)}$, with $\alpha$ the value of site $k$ and
+    site $k+1$ in $\ket{0}$. The operation $U^{[k]}$ acts on sites $k$ and
+    $k+1$ only, and
+    \begin{align*}
+        U^{[k]}\ket{\alpha,0}
+        =\sum_{i,\beta}\bra{i,\beta}U^{[k]}\ket{\alpha,0}\ket{i,\beta}.
+    \end{align*}
+    Hence the chain after $U^{[k]}$ is
+    $\sum_{i,\beta}\bigl(\sum_\alpha\bra{i,\beta}U^{[k]}\ket{\alpha,0}
+        \chi_{k-1}(\dots,\alpha)\bigr)\ket{\dots,i,\beta}\otimes
+        \ket{0}^{\otimes(N-k-1)}$, and the coefficient is $\chi_k(\dots,i,\beta)$
+    by the recursion of Definition~\ref{def:seqanc_no_ancilla}.
+\end{proof}
 
 \begin{theorem}[The scheme without an ancilla uses the next site as ancilla]
     \label{thm:seqanc_no_ancilla_joint}
