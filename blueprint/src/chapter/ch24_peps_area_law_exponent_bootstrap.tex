@@ -107,6 +107,7 @@
 \begin{theorem}[Additive comparison costs at fixed bootstrap scales]
     \label{thm:area_law_bootstrap_comparison_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_budget_bound}
+    \leanok
     \uses{def:area_law_bootstrap_parameters}
     Fix $e_*<e_0<1$, where $e_*=2\cdot10^{-6}$, and use the parameters of
     (\ref{eq:area_law_bootstrap_parameters}) and
@@ -130,7 +131,7 @@
     comparison in the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_bootstrap_binary_entropy_cost,thm:area_law_bootstrap_margins}
     Apply the binary-entropy estimate with the fixed parameters chosen from
     $e_0$. It gives one $N\ge1$ such that $K_n\ge1$, $a_n>0$, and
