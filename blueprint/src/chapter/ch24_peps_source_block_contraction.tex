@@ -116,10 +116,10 @@ This gives the contractions used in
     (\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
-% The following auxiliary declarations await ordinary-module and axiom checks.
 \begin{definition}[The product source matrix]
     \label{def:peps_product_source_matrix}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.productSourceMatrix}
+    \leanok
     \uses{def:peps_source_inventory}
     Let $K_e$ be sets indexed by the ordered source positions, and put
     $\mathcal A_K=\prod_e K_e$. For matrices
@@ -136,6 +136,7 @@ This gives the contractions used in
 \begin{theorem}[Finite contraction of source columns]
     \label{thm:peps_source_column_contraction}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceContraction_columns_eq_mul}
+    \leanok
     \uses{def:peps_product_source_matrix}
     Suppose each $K_e$ is finite. Let $\mathcal R,\mathcal T$ be
     arbitrary sets, and let
@@ -151,19 +152,19 @@ This gives the contractions used in
     or nonvanishing condition is required.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_product_source_matrix}
     Pairing the ket and bra assignments at each source position
     identifies them with $(\alpha,\beta)\in\mathcal A_K^2$.
     The $(r,s)$ entry of the contraction is
     \begin{align*}
         \sum_{\alpha,\beta}
-            L(r,\alpha)\overline{M(s,\beta)}
-                \prod_e X_e(\alpha_e,\beta_e)
+        L(r,\alpha)\overline{M(s,\beta)}
+        \prod_e X_e(\alpha_e,\beta_e)
          & =\sum_{\beta,\alpha}
-            L(r,\alpha)\mathcal X(\alpha,\beta)
-                \overline{M(s,\beta)}
-          =(L\mathcal X M^\dagger)(r,s).
+        L(r,\alpha)\mathcal X(\alpha,\beta)
+        \overline{M(s,\beta)}
+        =(L\mathcal X M^\dagger)(r,s).
     \end{align*}
     The sums are finite, so their order may be interchanged.
 \end{proof}
@@ -171,6 +172,7 @@ This gives the contractions used in
 \begin{theorem}[Contraction on a prescribed pure input]
     \label{thm:peps_pure_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
         def:peps_product_source_matrix}
     In the source bases of Definition~\ref{def:peps_source_slot_basis},
@@ -187,7 +189,7 @@ This gives the contractions used in
     normalized. Empty source lists and zero input vectors are included.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient,
         thm:peps_source_column_contraction}
     Substitute (\ref{eq:peps_pure_source_density_coefficient}) into
@@ -198,6 +200,7 @@ This gives the contractions used in
 \begin{theorem}[Physical entries of a pure prepared coefficient]
     \label{thm:peps_pure_source_physical}
     \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_partialTrace_apply}
+    \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
     Suppose the output consists of a physical memory followed by a
     discarded memory. Choose finite orthonormal bases $(h_r)_{r\in X}$ and
@@ -209,14 +212,14 @@ This gives the contractions used in
     \begin{align}
         \bigl(\tr_D H_{\alpha,\beta}\bigr)(r,s)
          & =\sum_{z\in D}
-            A_{T,\psi}((r,z),\alpha)
-            \overline{A_{T',\psi}((s,z),\beta)}.
+        A_{T,\psi}((r,z),\alpha)
+        \overline{A_{T',\psi}((s,z),\beta)}.
         \label{eq:peps_pure_source_physical}
     \end{align}
     No normalization or positivity hypothesis is imposed.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient}
     Take the $((r,z),(s,z))$ entry of
     (\ref{eq:peps_pure_source_density_coefficient}) and sum over
@@ -227,6 +230,7 @@ This gives the contractions used in
     \label{thm:peps_party_product_conjugation}
     \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
         TNLean.PEPS.PairEffect.partyProductMatrix_conjugate}
+    \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite, let $I_p$ be finite input alphabets, and let
     $O_p$ be output alphabets. For matrices
@@ -234,7 +238,7 @@ This gives the contractions used in
     $X_p\in\C^{I_p\times I_p}$, one has
     \begin{align}
         \left(\bigotimes_p B_p\right)^\dagger
-         & =\bigotimes_p B_p^\dagger, \\
+         & =\bigotimes_p B_p^\dagger,         \\
         \left(\bigotimes_p A_p\right)
         \left(\bigotimes_p X_p\right)
         \left(\bigotimes_p B_p\right)^\dagger
@@ -245,7 +249,7 @@ This gives the contractions used in
     their prescribed product $\bigotimes_p X_p$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
     Complex conjugation preserves finite products, giving the adjoint
     identity entrywise. Apply coordinatewise matrix multiplication
@@ -256,6 +260,7 @@ This gives the contractions used in
     \label{thm:peps_party_product_partial_trace}
     \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
         TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite, with physical alphabets $H_p$ and finite private
     alphabets $D_p$. For arbitrary matrices
@@ -273,13 +278,13 @@ This gives the contractions used in
     These identities include empty index sets.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_party_product_conjugation}
     The $(a,b)$ entry of the partial trace is
     \begin{align*}
         \sum_{(z_p)_p}\prod_p M_p((a_p,z_p),(b_p,z_p))
          & =\prod_p\sum_{z_p\in D_p}
-             M_p((a_p,z_p),(b_p,z_p)),
+        M_p((a_p,z_p),(b_p,z_p)),
     \end{align*}
     by finite distributivity. For the mixed product, first apply
     (\ref{eq:peps_party_product_conjugation}) and then this identity.
@@ -288,6 +293,7 @@ This gives the contractions used in
 \begin{theorem}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
     \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite and choose $p_0\in P$. For any family of
     rectangular matrices $M_p$ and any $\mu\in\C$, put
@@ -300,7 +306,7 @@ This gives the contractions used in
     The scalar is absorbed once, including when it vanishes.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_dependent_physical_product}
     At each matrix entry, factor the product of the $c_p$ from the
     product of the entries of $M_p$. The former product equals $\mu$
