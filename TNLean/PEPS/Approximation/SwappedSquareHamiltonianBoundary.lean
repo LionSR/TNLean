@@ -52,6 +52,8 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
       ‖F * K * Fᴴ - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
   classical
   intro p K F boundary Z
+  have hsum := congrArg (Matrix.reindex p p)
+    (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
   done
 
 end TNLean.PEPS.Approximation
