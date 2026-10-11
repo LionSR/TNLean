@@ -109,6 +109,11 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     hlower.mono fun k hk ↦ by
       simpa only [max_eq_right
         (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hS')] using hk
+  have hlower' : ∀ᶠ k in atTop,
+      (4 - (2 * C) * (τ + d k / τ)) * S' -
+        (2 * C * τ * (Real.log (E.card : ℝ) - S') +
+          2 * C * Real.binEntropy τ / a) - rₗ k ≤ F k :=
+    hlower_nonmax.mono fun k hk ↦ by nlinarith only [hk]
   done
 
 end TNLean.PEPS.AreaLaw.Scan
