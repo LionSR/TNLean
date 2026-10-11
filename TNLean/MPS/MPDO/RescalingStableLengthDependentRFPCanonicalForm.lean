@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.RFP.BeigiLoopBNTIdentification
@@ -154,12 +155,7 @@ lemma toMPSTensor_R_apply (p q : Fin 4) :
 matrix algebra `Matrix (Fin 4) (Fin 4) ℂ`: they are, up to nonzero scalars by
 `R_eq_single`, exactly the standard matrix-unit basis of the bond space. -/
 lemma R_toMPSTensor_isInjective : Kraus.IsInjective R.toMPSTensor := by
-  unfold Kraus.IsInjective
-  apply le_antisymm le_top
-  rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
-  apply Submodule.span_le.mpr
-  rintro M ⟨⟨a0, b0⟩, rfl⟩
-  rw [Matrix.stdBasis_eq_single]
+  refine Submodule.eq_top_of_forall_single_mem _ fun a0 b0 => ?_
   have hc : (25/32 : ℂ) * sVal a0 * sVal b0 ≠ 0 := by
     have h25 : (25/32 : ℂ) ≠ 0 := by norm_num
     exact mul_ne_zero (mul_ne_zero h25 (sVal_ne_zero a0)) (sVal_ne_zero b0)
@@ -171,9 +167,7 @@ lemma R_toMPSTensor_isInjective : Kraus.IsInjective R.toMPSTensor := by
     rw [this]
     exact Submodule.subset_span ⟨_, rfl⟩
   rw [R_eq_single] at hmem
-  have := Submodule.smul_mem (Submodule.span ℂ (Set.range R.toMPSTensor))
-    ((25/32 : ℂ) * sVal a0 * sVal b0)⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at this
+  exact (Submodule.smul_mem_iff _ hc).mp hmem
 
 /-! ### The rank-one closed form of `transferMap R.toMPSTensor` -/
 
