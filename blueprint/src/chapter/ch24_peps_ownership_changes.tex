@@ -792,6 +792,33 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     copies of $S$ both $F_S$ and $R_1\otimes R_2$ act on different factors.
 \end{proof}
 
+\begin{theorem}[Exchanging supported operators]
+    \label{thm:peps_sheet_swap_supported_exchange}
+    \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
+    $(\mathbb C^q)^{\otimes\Lambda}$ supported on $R$. Then
+    \begin{align*}
+        F_R(A\otimes B)=(B\otimes A)F_R.
+    \end{align*}
+    This identity gives the exchange of replica terms supported inside the
+    swapped region in \cite{OpenAI2026PolynomialPEPS},
+    \texttt{02-information.tex}, lines 416--424.
+\end{theorem}
+
+\begin{proof}\leanok
+    Split each sheet into $R$ and its complement. The support assumptions give
+    $A=A_R\otimes I$ and $B=B_R\otimes I$. The swap interchanges the two
+    copies of $R$ and fixes the complementary factors. Writing each
+    configuration as $x=(x_R,x_{R^c})$, both sides have the entry
+    \begin{align*}
+        A_R\big((y_2)_R,(x_1)_R\big)\,B_R\big((y_1)_R,(x_2)_R\big)\,
+        \delta_{(y_1)_{R^c},(x_1)_{R^c}}\,\delta_{(y_2)_{R^c},(x_2)_{R^c}}
+    \end{align*}
+    in row $(y_1,y_2)$ and column $(x_1,x_2)$.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
