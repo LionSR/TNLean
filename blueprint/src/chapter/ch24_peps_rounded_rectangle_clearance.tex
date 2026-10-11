@@ -4,6 +4,7 @@
     \label{thm:area_law_rounded_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_rounded_clearance_threshold,
         TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold}
+    \leanok
     Fix $C_2>0$, $C_r\ge0$, and $0<\ell<1$. There is an integer $S\ge1$
     such that, for every integer $s\ge S$, setting
     $n=\lceil C_2s\rceil$, $L=\lfloor n^{1-\ell}\rfloor$, and
@@ -17,7 +18,7 @@
     These are the rounded clearance estimates used in
     \cite[proof of Proposition~9.5, lines~707--729]{OpenAI2026AreaLaw}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Since $\ell>0$, $n^{-\ell}\to0$, and $(\log n)^2/n\to0$.
     Consequently
     \begin{align}
@@ -34,6 +35,7 @@
     \label{thm:area_law_rounded_safe_shell_cells}
     \lean{TNLean.PEPS.AreaLaw.IsSafe.cappedDyadicPartition_shell,
         TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
+    \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition,
         def:area_template_dyadic_rectangle}
     Let $Q$ be a safe integer rectangle of size $s$. Whenever $j\le L$,
@@ -47,7 +49,7 @@
     strictly greater than $2L+10r_0$ from every crossing-edge endpoint.
     The dyadic cap exponent $K_{\rm cap}$ is independent of the scanner band count.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_rounded_clearance,thm:area_law_safe_rectangle_dilation,
         thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
     A selected square of scale $k\le K_{\rm cap}$ is a rectangle $Q'$ in
