@@ -136,7 +136,9 @@ Cite only works whose bibliographic data have been checked against arXiv or
 the DOI record, and only for an idea they originate or that the proof uses as
 stated. A malformed token, a token in any other field, a token naming a
 missing key, a cited entry without `authors`, `title`, `year` and `url`, and
-a stage figure that `figures.js` does not draw each stop the render.
+a stage figure that `figures.js` does not draw each stop the render. To read
+the drawings, `render.py` evaluates `figures.js` with Node, which must be on
+the path.
 
 ## `gaps.json`
 

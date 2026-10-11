@@ -21,6 +21,7 @@ import html
 import json
 import pathlib
 import re
+import subprocess
 import sys
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -68,18 +69,29 @@ def inline_diagrams(campaign_dir: pathlib.Path, *texts: dict) -> dict:
 
 GAP_TEXT_FIELDS = ("summary", "context", "claims", "found", "impact", "plan")
 
-# A drawing function of figures.js: a method of the returned object, written
-# `name(svg) {` or `"name"(svg) {` at the object's indentation.
-FIGURE_KEY = re.compile(r'^    (?:"([^"]+)"|([A-Za-z_$][\w$]*))\(svg\)', re.MULTILINE)
+# Evaluates figures.js with no page around it and prints the keys of the drawing
+# functions it assigns to window.campaignFigures. Defining the object touches no
+# browser API; only calling a drawing function does.
+FIGURE_KEYS_JS = """
+const vm = require("vm"), fs = require("fs");
+const context = { window: {} };
+vm.runInNewContext(fs.readFileSync(process.argv[1], "utf8"), context);
+const figures = context.window.campaignFigures || {};
+console.log(JSON.stringify(Object.keys(figures).filter(k => typeof figures[k] === "function")));
+"""
 
 
 def figure_names(campaign_dir: pathlib.Path, config: dict) -> set[str]:
-    """The stage figures figures.js draws.
+    """The stage figures figures.js draws, read from the object it defines.
 
     A stage naming a figure that figures.js does not define stops the render, as a
     missing diagram does, since board.js would silently omit it and its caption."""
     path = campaign_dir / "figures.js"
-    names = {a or b for a, b in FIGURE_KEY.findall(path.read_text())} if path.exists() else set()
+    names = set()
+    if path.exists():
+        keys = subprocess.run(["node", "-e", FIGURE_KEYS_JS, str(path)],
+                              check=True, capture_output=True, text=True).stdout
+        names = set(json.loads(keys))
     named = {stage["figure"] for route in config["routes"] for stage in route["stages"]
              if stage.get("figure")}
     if named - names:
