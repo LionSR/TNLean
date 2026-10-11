@@ -64,6 +64,9 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   have hselected := Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E
     (by simpa only [← hρ] using hz)
+  have hz1 : z ≤ 1 := (reducedState_posSemidef Λ q Ωt X).spectralRestrictionMass_le_one
+    (by simpa only [reducedState_eq_finiteProduct] using
+      (FiniteProduct.trace_reducedPure β Ωt hΩt X)) E
   done
 
 end TNLean.PEPS.AreaLaw
