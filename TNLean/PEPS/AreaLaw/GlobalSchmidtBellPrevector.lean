@@ -46,8 +46,8 @@ theorem exists_global_schmidtBellPrevector
     let β := fun _ : ι => Fin q
     let split := FiniteProduct.splitEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ω
-    0 < ((posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian)
-      .spectralRestrictionMass E →
+    0 < Matrix.IsHermitian.spectralRestrictionMass
+      (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E →
     let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → PermutationRepresentation.IrrepLabel (Equiv.Perm (Fin k)),

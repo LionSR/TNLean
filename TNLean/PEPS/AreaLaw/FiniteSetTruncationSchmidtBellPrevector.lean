@@ -85,8 +85,8 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
             let split := FiniteProduct.splitEquiv β X
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ω₀
             ∀ E : Finset (FiniteProduct.Configuration β X),
-              0 < ((Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian)
-                .spectralRestrictionMass E →
+              0 < Matrix.IsHermitian.spectralRestrictionMass
+                (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E →
               let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
                 Matrix.compressedTypicalPureState ΩX E
                   ((Finset.equivFin E).symm x.2, x.1)
