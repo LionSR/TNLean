@@ -32,23 +32,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-private theorem midpoint_halves_inter (a b : ℝ × ℝ) (hab : a ≠ b) :
-    segment ℝ a (midpoint ℝ a b) ∩ segment ℝ (midpoint ℝ a b) b =
-      {midpoint ℝ a b} := by
-  let f : ℝ →ᵃ[ℝ] (ℝ × ℝ) := AffineMap.lineMap a b
-  have hf : Function.Injective f := AffineMap.lineMap_injective ℝ hab
-  have hi : Set.Icc (0 : ℝ) (1 / 2) ∩ Set.Icc (1 / 2) 1 = {(1 / 2 : ℝ)} :=
-    Set.Icc_inter_Icc_eq_singleton (by norm_num) (by norm_num)
-  have himage := congrArg (fun s : Set ℝ ↦ f '' s) hi
-  rw [Set.image_inter hf] at himage
-  have hfirst : f '' Set.Icc (0 : ℝ) (1 / 2) = segment ℝ a (midpoint ℝ a b) := by
-    rw [← segment_eq_Icc (by norm_num : (0 : ℝ) ≤ 1 / 2), image_segment]
-    simp [f, midpoint, invOf_eq_inv]
-  have hlast : f '' Set.Icc (1 / 2 : ℝ) 1 = segment ℝ (midpoint ℝ a b) b := by
-    rw [← segment_eq_Icc (by norm_num : (1 / 2 : ℝ) ≤ 1), image_segment]
-    simp [f, midpoint, invOf_eq_inv]
-  simpa [hfirst, hlast, f, midpoint, invOf_eq_inv] using himage
-
 private theorem whole_start_ne_end (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (s : Fin 4) :
     cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩ ≠
@@ -231,7 +214,7 @@ private theorem perimeter_inter_cases (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
         obtain ⟨ha, hm⟩ := first_half_endpoints o ℓ z split ⟨s, u⟩ hs hu
         obtain ⟨hm', hb⟩ := last_half_endpoints o ℓ z split ⟨s, v⟩ hs hv
         rw [ha, hm, hm', hb]
-        exact ⟨rfl, midpoint_halves_inter _ _ (whole_start_ne_end o ℓ z s)⟩
+        exact ⟨rfl, segment_midpoint_inter_segment _ _⟩
       rcases hu with hu | hu <;> rcases hv with hv | hv
       · exact False.elim (huv (hu.trans hv.symm))
       · exact Or.inl (ordered u v hu hv)

@@ -167,43 +167,9 @@ private theorem rectangles_contact (a b r A B R : ℝ) (hr : 0 < r) (hR : 0 < R)
     | 1 => Set.Icc a (a + r) ×ˢ {b + r}
     | 2 => {a} ×ˢ Set.Icc b (b + r)
     | _ => Set.Icc a (a + r) ×ˢ {b} := by
-  fin_cases s <;> norm_num at hpos ⊢
-  · rcases hpos with ⟨he, hl, hu⟩
-    ext x
+  fin_cases s <;> norm_num at hpos ⊢ <;> obtain ⟨he, hl, hu⟩ := hpos <;> ext ⟨x, y⟩ <;>
     simp only [Set.mem_inter_iff, Set.mem_prod, Set.mem_Icc, Set.mem_singleton_iff,
-      Prod.le_def]
-    constructor
-    · rintro ⟨⟨⟨h1, h2⟩, ⟨h3, h4⟩⟩, ⟨⟨h5, h6⟩, ⟨h7, h8⟩⟩⟩
-      exact ⟨by linarith, h2, h4⟩
-    · rintro ⟨hc, h1, h2⟩
-      refine ⟨⟨⟨?_, ?_⟩, ?_, ?_⟩, ⟨?_, ?_⟩, ?_, ?_⟩ <;> linarith
-  · rcases hpos with ⟨he, hl, hu⟩
-    ext x
-    simp only [Set.mem_inter_iff, Set.mem_prod, Set.mem_Icc, Set.mem_singleton_iff,
-      Prod.le_def]
-    constructor
-    · rintro ⟨⟨⟨h1, h2⟩, ⟨h3, h4⟩⟩, ⟨⟨h5, h6⟩, ⟨h7, h8⟩⟩⟩
-      exact ⟨⟨h1, h3⟩, by linarith⟩
-    · rintro ⟨⟨h1, h2⟩, hc⟩
-      refine ⟨⟨⟨?_, ?_⟩, ?_, ?_⟩, ⟨?_, ?_⟩, ?_, ?_⟩ <;> linarith
-  · rcases hpos with ⟨he, hl, hu⟩
-    ext x
-    simp only [Set.mem_inter_iff, Set.mem_prod, Set.mem_Icc, Set.mem_singleton_iff,
-      Prod.le_def]
-    constructor
-    · rintro ⟨⟨⟨h1, h2⟩, ⟨h3, h4⟩⟩, ⟨⟨h5, h6⟩, ⟨h7, h8⟩⟩⟩
-      exact ⟨by linarith, h2, h4⟩
-    · rintro ⟨hc, h1, h2⟩
-      refine ⟨⟨⟨?_, ?_⟩, ?_, ?_⟩, ⟨?_, ?_⟩, ?_, ?_⟩ <;> linarith
-  · rcases hpos with ⟨he, hl, hu⟩
-    ext x
-    simp only [Set.mem_inter_iff, Set.mem_prod, Set.mem_Icc, Set.mem_singleton_iff,
-      Prod.le_def]
-    constructor
-    · rintro ⟨⟨⟨h1, h2⟩, ⟨h3, h4⟩⟩, ⟨⟨h5, h6⟩, ⟨h7, h8⟩⟩⟩
-      exact ⟨⟨h1, h3⟩, by linarith⟩
-    · rintro ⟨⟨h1, h2⟩, hc⟩
-      refine ⟨⟨⟨?_, ?_⟩, ?_, ?_⟩, ⟨?_, ?_⟩, ?_, ?_⟩ <;> linarith
+      Prod.mk_le_mk] <;> constructor <;> intro h <;> grind
 
 private theorem cells_contact_offsets (o : ℝ × ℝ) (ℓ j : ℕ) (z w : ℤ × ℤ)
     (m : ℤ) (hm : 0 < m) (hp : (2 : ℝ) ^ j = 2 ^ ℓ * m)

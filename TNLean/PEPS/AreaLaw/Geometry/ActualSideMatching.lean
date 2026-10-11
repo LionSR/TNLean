@@ -161,20 +161,6 @@ private theorem elementary_subset_closure (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ 
   rw [hr]
   exact Or.inr (subset_convexJoin_right (Set.singleton_nonempty _) hx)
 
-private theorem midpoint_halves_inter_subsingleton (a b : ℝ × ℝ) :
-    (segment ℝ a (midpoint ℝ a b) ∩ segment ℝ (midpoint ℝ a b) b).Subsingleton := by
-  have heq {x : ℝ × ℝ}
-      (hx : x ∈ segment ℝ a (midpoint ℝ a b) ∩ segment ℝ (midpoint ℝ a b) b) :
-      x = midpoint ℝ a b := by
-    have h₁ := dist_add_dist_of_mem_segment hx.1
-    have h₂ := dist_add_dist_of_mem_segment hx.2
-    have h₃ := dist_add_dist_of_mem_segment (midpoint_mem_segment (𝕜 := ℝ) a b)
-    have h₄ := dist_triangle a x b
-    have h₅ := dist_nonneg (x := x) (y := midpoint ℝ a b)
-    rw [dist_comm (midpoint ℝ a b) x] at h₂
-    exact dist_eq_zero.mp (by linarith)
-  exact fun x hx y hy ↦ (heq hx).trans (heq hy).symm
-
 private theorem same_split_side_inter_eq (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split split' : Fin 4 → Bool) (i : CellFanSlot split) (n : CellFanSlot split')
     (hside : i.1 = n.1) (hi : split i.1 = true) (hn : split' n.1 = true)
@@ -189,15 +175,9 @@ private theorem same_split_side_inter_eq (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ �
     ⟨_, hc, hd⟩ | ⟨_, hc, hd⟩
   all_goals try simp [hn] at hm
   all_goals rw [ha, hb, hc, hd, ← hside] at h ⊢
-  all_goals apply False.elim
   all_goals first
-    | exact (midpoint_halves_inter_subsingleton
-        (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
-        (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)).not_nontrivial h
-    | exact (midpoint_halves_inter_subsingleton
-        (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
-        (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)).not_nontrivial
-        (by simpa only [Set.inter_comm] using h)
+    | simp [segment_midpoint_inter_segment] at h; done
+    | rw [Set.inter_comm] at h; simp [segment_midpoint_inter_segment] at h
 
 private theorem endpoints_change_mask (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split split' : Fin 4 → Bool) (s : Fin 4) (v : ℕ)
