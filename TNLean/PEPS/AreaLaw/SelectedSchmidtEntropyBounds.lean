@@ -80,6 +80,13 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
         (a1 := ⟨reducedState Λ q Ωt X, reducedState_isHermitian Λ q Ωt X⟩)
         (a2 := ⟨Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)),
           (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian⟩) hρ)
+  have hEntropy := hselected.trans
+    (vonNeumannEntropy_congr hσ
+      ((reducedState_posSemidef Λ q Ωt X).normalizedSpectralRestriction_posSemidef
+        E hz).isHermitian
+      ((Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight
+        .normalizedSpectralRestriction_posSemidef E
+          (by simpa only [← hρ] using hz)).isHermitian).symm
   done
 
 end TNLean.PEPS.AreaLaw
