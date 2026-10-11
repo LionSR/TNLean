@@ -208,7 +208,6 @@ namespace BlockActionData
 
 variable (fd : FusionData F) (ad : BlockActionData F A)
 
-open Classical in
 /-- **The L-symbols of permuted blocks**: `Lˣ_{g,h}` is the nonzero scalar with
 `actV g h x ~ Lˣ_{g,h} · fuseV g h x` against long words of `(O_g O_h) · A_x`
 (`MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol`), set to one if no such
@@ -217,9 +216,8 @@ scalar exists.
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913; arXiv:2203.12563,
 `sec:PBC`, line 1091. -/
 noncomputable def lSymbol : LSymbol G X := fun x g h ↦
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
-      (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (ad.actV g h x) (ad.fuseV fd g h x) z
-  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
+    (ad.actV g h x) (ad.fuseV fd g h x)
 
 variable {fd ad}
 
@@ -235,8 +233,7 @@ theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
     exact hW.exists_isDressedProportional hW' (hA _)
       (((hperm g (h • x)).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
         (MPSTensor.SameMPV₂Pos.refl (A x)))
-  simp only [lSymbol, hex, ↓reduceDIte, Units.val_mk0]
-  exact hex.choose_spec.2
+  exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-! ### The five reductions of the triple action -/
 
