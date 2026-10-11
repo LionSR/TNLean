@@ -333,7 +333,7 @@ theorem openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES
 
 /-- Under the one-site right-spectator splitting, a fiber is restriction to a
 fixed final physical index. -/
-theorem rightFiber_rightSpectatorConfigLinearIsometryEquiv_one
+theorem rightFiber_rightSpectatorConfigLinearIsometryEquiv_one {n : ℕ}
     (v : EuclideanSpace ℂ (Cfg d (n + 1))) (s : Cfg d 1) :
     WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
         (ContinuousLinearMap.rightFiber
