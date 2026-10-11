@@ -1,0 +1,51 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.AreaLaw.GraphPropagation
+
+/-!
+# Localization of an operator on an arbitrary physical region
+
+The normalized partial-trace expectation onto a graph neighbourhood approximates
+the time evolution of every operator supported on the original region. The
+constants precede the domain, Hamiltonian, region and operator. No spectral gap
+or entropy hypothesis is used in this operator estimate.
+
+## References
+
+* OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
+  September 24, 2026, `02-information.tex`, equation
+  `eq:info-operator-localization`, lines 498–508, revision
+  `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+* OpenAI, *A two-dimensional area law from a global spectral gap*,
+  September 24, 2026, Lemma 4.1, `eq:quasilocal-lr-ce`.
+-/
+
+open QuantumCircuit
+open scoped Matrix.Norms.L2Operator
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- Localization on an arbitrary region, including an empty region or domain.
+The estimate follows by applying the one-site propagation bound at negative
+time and averaging over sites outside the region's graph neighbourhood.
+
+Source: polynomial-PEPS `eq:info-operator-localization`. The displayed domain
+cardinality is sufficient for its square-grid specialization. -/
+theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
+    (R : ℕ) (J : ℝ) :
+    ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
+        ‖heisenbergEvolution h.operator t A -
+            siteExpectation q (graphNeighborhood Λ l S)
+              (heisenbergEvolution h.operator t A)‖ ≤
+          ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
+  obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
+    exists_quasilocal_lieb_robinson q hq R J
+  done
+
+end TNLean.PEPS.AreaLaw

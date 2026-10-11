@@ -512,6 +512,7 @@ jobs:
         with:
           build: false
           use-github-cache: false
+          use-mathlib-cache: true
 
       # Setup/Mathlib prebuilt retrieval happens before this separate seed;
       # no seeded artifact is available to a Lean command until pruning passes.
@@ -542,6 +543,17 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Build arbitrary-region operator localization early
+        timeout-minutes: 6
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          timeout --signal=INT --kill-after=5s 300s \
+            lake --fail-fast build TNLean.PEPS.AreaLaw.RegionOperatorLocalization \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Check finite weighted dyadic sum early
         timeout-minutes: 10
         run: |
@@ -729,6 +741,21 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check region localization and commutator identities strictly
+        timeout-minutes: 6
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean \
+              TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean \
+              TNLeanTest/RegionOperatorLocalizationAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       - name: Check rectangle mixed-square estimates strictly and audit axioms
         timeout-minutes: 5
