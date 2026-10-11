@@ -3407,6 +3407,21 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Scope:** these are numerical auxiliary estimates for the rectangle
   covering argument in the proof of Proposition 9.5.
 
+## Binary-entropy cost of the rounded bootstrap bands
+
+- **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapBinaryEntropyCost.lean`.
+- **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
+  the auxiliary fraction and all physical data, gives positive rounded band
+  count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and
+  `Real.binEntropy τ / a ≤ (Real.log 2 / 4) n` for every real `τ`. The
+  coefficient is absolute.
+- **Source:** OpenAI's September 24, 2026 area-law manuscript,
+  [the collar scales, `08-scanner.tex`, lines 32–41](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L32-L41).
+- **Scope:** the numerical binary-entropy cost in the proof of Proposition
+  9.5; not the physical norm comparison or the exponent-improvement
+  implication.
+
 ## Weighted template shell coverings
 
 - `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
@@ -3451,12 +3466,3 @@ source's Proposition 4.1.
   typical entropy and auxiliary dimension remain separate proof obligations.
   Those substitutions must already occur in the additive budgets; no uniform
   replica convergence rate over physical scales is supplied or needed.
-### Binary entropy for the rounded bootstrap bands
-`TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binaryEntropy_cost_bound` derives
-one threshold for a fixed scanner exponent tuple, before the auxiliary
-fraction and physical data. It gives positive actual rounded band count
-`K = floor(L/(8m))`, positive metric weight `a = 4/K`, and the bound
-`Real.binEntropy τ / a ≤ (Real.log 2 / 4) n`. The coefficient is absolute;
-the threshold may depend on the fixed exponent tuple. This is the numerical
-binary-entropy cost in the proof of area-law Proposition 9.5, not the
-physical norm comparison or the exponent-improvement implication.
