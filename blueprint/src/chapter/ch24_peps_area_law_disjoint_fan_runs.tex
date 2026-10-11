@@ -1,0 +1,74 @@
+\section{Disjoint runs after radial deletion}
+\label{sec:area_law_disjoint_fan_runs}
+
+\begin{theorem}[Disjointness of distinct runs after radial deletion]
+    \label{thm:area_law_fan_cut_runs_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_sdiff_radials_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor,
+        def:area_law_fan_runs}
+    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
+    $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square
+    with center $c$.
+    Subdivide every side at its midpoint, obtaining eight fan triangles
+    $P_i=\operatorname{conv}\{c,a_i,b_i\}$ indexed in perimeter order
+    by $\mathcal J$.
+    Let $\tau$ be the cyclic successor and assign arbitrary colors
+    $f_i\in\{0,1\}$. Define the change set and its radial union by
+    \begin{align}
+        A & =\{t\in\mathcal J:f_t\ne f_{\tau(t)}\}, \\
+        K & =\bigcup_{t\in A}[c,b_t].
+    \end{align}
+    Retain the adjacency between consecutive triangles precisely when
+    their colors agree. For each connected component $R$ of this graph,
+    put $T_R=\bigcup_{i\in R}P_i$.
+    The sets $T_R\setminus K$ are pairwise disjoint: if $R\ne T$, then
+    \begin{align}
+        (T_R\setminus K)\cap(T_T\setminus K) & =\varnothing.
+    \end{align}
+    The change set $A$ may be empty. Distinct components of the
+    retained graph remain distinct runs even when their colors agree.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_cell_fan,def:area_law_fan_runs,
+        thm:area_law_cell_fan_successor_iff,
+        thm:area_law_cell_fan_intersections,
+        thm:area_law_fan_triangle_contact,
+        thm:area_law_fan_run_opposite,
+        thm:area_law_fan_run_monochromatic}
+    Suppose that $R\ne T$ and that
+    $x\in(T_R\setminus K)\cap(T_T\setminus K)$.
+    Choose $i\in R$ and $j\in T$ with $x\in P_i\cap P_j$.
+    Since the components differ, $i\ne j$.
+
+    First suppose that $x=c$.
+    Every radial contains $c$, so $c\notin K$ implies
+    $f_t=f_{\tau(t)}$ for every $t\in\mathcal J$.
+    The endpoint-successor equivalence then makes the colors equal
+    across every perimeter adjacency.
+    With constant color zero, the full perimeter graph is connected
+    by Theorem~\ref{thm:area_law_fan_run_monochromatic}.
+    Each of its edges is also retained under the coloring $f$.
+    Thus $i$ and $j$ are connected in the retained graph, contradicting
+    their membership in distinct components.
+
+    Now suppose that $x\ne c$.
+    By Theorem~\ref{thm:area_law_cell_fan_intersections}, both triangles
+    contain $c$. Thus $P_i\cap P_j$ contains two distinct points.
+    The contact classification gives either
+    $b_i=a_j$ and $P_i\cap P_j=[c,b_i]$, or the reverse orientation
+    $b_j=a_i$ and $P_i\cap P_j=[c,b_j]$.
+    In the first case, $j=\tau(i)$.
+    Since the adjacent triangles belong to distinct runs,
+    Theorem~\ref{thm:area_law_fan_run_opposite} gives $f_i\ne f_j$.
+    Hence $i\in A$ and $x\in[c,b_i]\subset K$, a contradiction.
+    In the reverse orientation, the same argument gives $j\in A$
+    and $x\in[c,b_j]\subset K$.
+
+    When $A$ is empty, the center is retained and every perimeter
+    adjacency is retained. There is therefore a single run, as the
+    first part of the argument shows.
+    The assertion is an auxiliary to the initial-star construction in
+    \cite[Section~11]{OpenAI2026AreaLaw} and holds before any ball
+    restriction.
+\end{proof}

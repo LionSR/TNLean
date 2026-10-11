@@ -40,7 +40,10 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -106,6 +109,7 @@ jobs:
           python3 scripts/test_tenkz_ordered_mixing.py
           python3 scripts/test_tenkz_quantum_double_source_construction.py
           python3 scripts/test_sector_encoder_diagram.py
+          python3 scripts/test_nested_patch_geometry_diagram.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check
@@ -251,6 +255,8 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
+          python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       # Drop pictures no page references any more, so neither the published
@@ -306,7 +312,11 @@ jobs:
           source: home_page
           destination: site-blueprint/homepage
 
+      # deploy-pages.yml fetches the newest artifact of each name, so only
+      # main may publish site components; a manual run elsewhere builds them
+      # but keeps them out of the next production deploy.
       - name: Upload blueprint component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-blueprint
@@ -314,6 +324,7 @@ jobs:
           retention-days: 30
 
       - name: Upload badges component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-badges
