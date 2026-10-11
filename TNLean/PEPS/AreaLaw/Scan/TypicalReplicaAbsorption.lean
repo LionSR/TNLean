@@ -115,6 +115,9 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
         (2 * C * τ * (Real.log (E.card : ℝ) - S') +
           2 * C * Real.binEntropy τ / a) - rₗ k ≤ F k :=
     hlower_nonmax.mono fun k hk ↦ by convert hk using 1 <;> ring
+  have hscalar := entropy_le_of_replica_comparisons
+    hS' (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hC)
+    hτ hsmall hrᵤ hrₗ hrₑ hdefect hupper' hlower'
   done
 
 end TNLean.PEPS.AreaLaw.Scan
