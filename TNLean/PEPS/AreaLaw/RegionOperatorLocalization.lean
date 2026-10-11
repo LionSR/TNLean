@@ -65,6 +65,19 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
         heisenbergEvolution h.operator (-t) U * A‖ := by
     simpa only [heisenbergEvolution_def, neg_neg] using
       norm_exp_commutator_eq (Complex.I • h.operator) hK A U t
+  have : NeZero q := ⟨by omega⟩
+  have hnear (y : Site Λ) (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+      (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
+      (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
+      ‖heisenbergEvolution h.operator (-t) U -
+        siteExpectation q (graphBall (domainGraph Λ) y l)
+          (heisenbergEvolution h.operator (-t) U)‖ ≤
+        C * Real.exp (v * |t| - c * l) := by
+    have hestimate := (hlocal Λ h ⟨{y}, isAdmissibleSupport_singleton Λ R y⟩ y
+      (Finset.mem_singleton_self y) U
+      (by simpa only [Finset.coe_singleton] using hU) (-t)).2 l
+    rw [CStarRing.norm_of_mem_unitary hUu, one_mul, abs_neg] at hestimate
+    exact hestimate.trans (min_le_right _ _)
   done
 
 end TNLean.PEPS.AreaLaw
