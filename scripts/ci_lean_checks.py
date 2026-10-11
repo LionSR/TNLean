@@ -13,9 +13,11 @@ Commands
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
-            * every ``TNLeanTest`` file that is changed or whose repository
-              import closure contains a changed module, together with the
-              test files it imports.
+            * every test file that is changed or whose repository import
+              closure contains a changed module (or a module the change
+              deleted or renamed), together with the test files it imports.
+              Test files are those under ``TNLeanTest/`` and the standalone
+              regressions ``scripts/*_regression.lean``.
 
             Tests are elaborated in import order. Each test writes its object
             file to a fresh overlay directory placed first on ``LEAN_PATH``, so
@@ -62,6 +64,10 @@ FULL_RUN_PATHS = (
 # modules separately.
 EXCLUDED_PREFIXES = ("TNLean/Archive/",)
 
+# Standalone regression files elaborated like tests; they are not modules
+# of any Lake library.
+REGRESSION_RE = re.compile(r"scripts/[^/]+_regression\.lean")
+
 IMPORT_RE = re.compile(r"^(?:(?:public|private|meta)\s+)*import\s+(.+?)\s*$")
 
 
@@ -78,7 +84,12 @@ def is_production(path: str) -> bool:
 
 
 def is_test(path: str) -> bool:
-    return path.startswith("TNLeanTest/") and path.endswith(".lean")
+    return ((path.startswith("TNLeanTest/") and path.endswith(".lean"))
+            or REGRESSION_RE.fullmatch(path) is not None)
+
+
+def is_internal(module: str) -> bool:
+    return module == "TNLean" or module.startswith(("TNLean.", "TNLeanTest."))
 
 
 def parse_imports(text: str) -> list[str]:
@@ -114,16 +125,23 @@ def lean_files(root: Path) -> list[str]:
             files.extend(str(p.relative_to(root)) for p in base.rglob("*.lean"))
     if (root / "TNLean.lean").is_file():
         files.append("TNLean.lean")
+    scripts = root / "scripts"
+    if scripts.is_dir():
+        files.extend(str(p.relative_to(root)) for p in scripts.glob("*_regression.lean"))
     return sorted(files)
 
 
 def import_graph(root: Path, files: list[str]) -> dict[str, set[str]]:
-    """Map each repository module to the repository modules it imports."""
+    """Map each repository file's module to the repository modules it imports.
+
+    Imports of repository-internal modules are kept even when the module no
+    longer exists, so deleting or renaming a module marks its importers."""
     modules = {module_of(f) for f in files}
     graph: dict[str, set[str]] = {}
     for f in files:
         text = (root / f).read_text(encoding="utf-8", errors="replace")
-        graph[module_of(f)] = {m for m in parse_imports(text) if m in modules}
+        graph[module_of(f)] = {m for m in parse_imports(text)
+                               if m in modules or is_internal(m)}
     return graph
 
 
@@ -144,7 +162,7 @@ def changed_paths(base: str | None) -> list[str] | None:
     if not base:
         return None
     out = [p for p in subprocess.run(
-        ["git", "diff", "-z", "--name-only", "--diff-filter=ACDMR", base, "HEAD"],
+        ["git", "diff", "-z", "--name-only", "--no-renames", "--diff-filter=ACDM", base, "HEAD"],
         check=True, capture_output=True, text=True,
     ).stdout.split("\0") if p]
     if any(p in FULL_RUN_PATHS for p in out):

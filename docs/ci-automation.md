@@ -204,10 +204,12 @@ modules or tests.
   `lake build` of the changed production modules, logged with the root build
   for the compilation-time gate.
 - **Strict checks** (after the root build): every changed production file and
-  every affected file under `TNLeanTest/` is elaborated with the package options
+  every affected test file is elaborated with the package options
   and `-DwarningAsError=true`, three files at a time, each with a time limit.
-  A test is affected when it changed or when its repository import closure
-  contains a changed module; the tests it imports are elaborated first, into a
+  Test files are those under `TNLeanTest/` and the standalone regressions
+  `scripts/*_regression.lean`. A test is affected when it changed or when its
+  repository import closure contains a changed, deleted or renamed module; the
+  tests it imports are elaborated first, into a
   fresh overlay placed ahead of every Lake package path. Every test runs on
   manual dispatch, and when the base revision is unknown or
   `lake-manifest.json`, `lakefile.toml`, `lean-toolchain`, the workflow, or the
@@ -215,7 +217,8 @@ modules or tests.
 
 `python3 scripts/ci_lean_checks.py list --base origin/main` prints the
 selection locally. Do not add per-module "build early" or "test strictly" steps
-to `pr-ci.yml`: a new test file under `TNLeanTest/` is picked up automatically,
+to `pr-ci.yml`: a new test file under `TNLeanTest/`, or a new
+`scripts/*_regression.lean`, is picked up automatically,
 including axiom-guard files that pin `#print axioms` output with `#guard_msgs`.
 
 ---

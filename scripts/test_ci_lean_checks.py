@@ -45,6 +45,8 @@ class SelectTest(unittest.TestCase):
             "TNLeanTest/UsesTest.lean": "import TNLean.Uses\n",
             "TNLeanTest/FixtureTest.lean": "import TNLeanTest.Support.Fixture\n",
             "TNLeanTest/Unrelated.lean": "import Mathlib\n",
+            "scripts/core_regression.lean": "import TNLean.Uses\n",
+            "scripts/LintStyle.lean": "import TNLean.Core\n",
         }
         for path, text in files.items():
             p = self.root / path
@@ -81,7 +83,8 @@ class SelectTest(unittest.TestCase):
         early, sources, tests = self.select(self.base)
         self.assertEqual(early, ["TNLean.Core"])
         self.assertEqual(sources, ["TNLean/Core.lean"])
-        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
+                                 "scripts/core_regression.lean"])
 
     def test_imported_test_fixture_runs_first(self) -> None:
         self.change("TNLean/Other.lean", "import Mathlib\n-- edit\n")
@@ -109,17 +112,45 @@ class SelectTest(unittest.TestCase):
         self.assertEqual(early, ["TNLean.New"])
         self.assertEqual(tests, ["TNLeanTest/NewTest.lean"])
 
+    def test_changed_regression_script_is_selected(self) -> None:
+        self.change("scripts/core_regression.lean", "import TNLean.Uses\n-- edit\n")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual((early, sources, tests), ([], [], ["scripts/core_regression.lean"]))
+
+    def test_deleted_module_marks_its_importers(self) -> None:
+        (self.root / "TNLean/Uses.lean").unlink()
+        git(self.root, "add", "-A")
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "delete")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual((early, sources), ([], []))
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean", "scripts/core_regression.lean"])
+
+    def test_renamed_module_marks_importers_of_the_old_name(self) -> None:
+        git(self.root, "mv", "TNLean/Uses.lean", "TNLean/Renamed.lean")
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "rename")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual(early, ["TNLean.Renamed"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean", "scripts/core_regression.lean"])
+
+    def test_deleted_test_fixture_marks_its_importers(self) -> None:
+        (self.root / "TNLeanTest/Support/Fixture.lean").unlink()
+        git(self.root, "add", "-A")
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "delete")
+        _, _, tests = self.select(self.base)
+        self.assertEqual(tests, ["TNLeanTest/FixtureTest.lean"])
+
     def test_dependency_pin_runs_every_test(self) -> None:
         self.change("lake-manifest.json", "{}\n")
         early, sources, tests = self.select(self.base)
         self.assertEqual((early, sources), ([], []))
-        self.assertEqual(len(tests), 4)
+        self.assertEqual(len(tests), 5)
+        self.assertNotIn("scripts/LintStyle.lean", tests)
         self.assertLess(tests.index("TNLeanTest/Support/Fixture.lean"),
                         tests.index("TNLeanTest/FixtureTest.lean"))
 
     def test_no_base_runs_every_test(self) -> None:
         _, _, tests = self.select(None)
-        self.assertEqual(len(tests), 4)
+        self.assertEqual(len(tests), 5)
 
     def test_levels_respect_imports(self) -> None:
         _, _, tests = self.select(None)
