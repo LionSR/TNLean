@@ -83,32 +83,6 @@
 
 \section{Safe rectangles in template coverings}
 
-\begin{definition}[Native rectangles of dyadic cells]
-    \label{def:area_template_dyadic_rectangle}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect}
-    \leanok
-    \uses{def:area_law_safe_rectangle,def:area_law_lattice_dyadic_square}
-    For $k\ge0$ and $z\in\mathbb Z^2$, let $R_{k,z}$ have coordinate intervals
-    from $2^kz_i$ to $2^kz_i+2^k-1$, inclusive.
-\end{definition}
-
-\begin{theorem}[Exact rectangle interpretation]
-    \label{thm:area_template_dyadic_rectangle}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.toFinset_latticeDyadicRect,
-        TNLean.PEPS.AreaLaw.Geometry.size_latticeDyadicRect,
-        TNLean.PEPS.AreaLaw.Geometry.rectRegion_latticeDyadicRect}
-    \leanok
-    \uses{def:area_template_dyadic_rectangle}
-    The lattice points of $R_{k,z}$ are exactly $C_{k,z}$,
-    its size is $2^k$, and its physical region is $A\cap C_{k,z}$.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{lem:area_law_template_dyadic_clearance}
-    Integer division by the positive integer $2^k$ identifies the closed
-    integer interval with the corresponding half-open dyadic interval.
-    Each coordinate interval contains exactly $2^k$ sites.
-\end{proof}
-
 \begin{theorem}[Safety from template separation]
     \label{thm:area_template_safe_rectangles}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
