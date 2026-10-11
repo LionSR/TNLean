@@ -38,7 +38,10 @@ jobs:
             exit 1
           fi
 
+      # deploy-pages.yml publishes the newest artifact of each name, so only
+      # main may upload site components or deploy.
       - name: Upload badges component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-badges
@@ -48,6 +51,7 @@ jobs:
   deploy:
     name: Deploy Pages site
     needs: badges
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-pages.yml
     permissions:
       contents: read

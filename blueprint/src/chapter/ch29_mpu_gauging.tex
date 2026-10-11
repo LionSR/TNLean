@@ -8327,10 +8327,10 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Pullback of scalar cohomology]
     \label{def:mpug_h2_pullback}
-    \lean{TNLean.Algebra.ScalarCocycle.pullback,
-        TNLean.Algebra.ScalarCocycle.pullback_apply,
-        TNLean.Algebra.H2.pullback,
-        TNLean.Algebra.H2.pullback_mk}
+    \lean{TNLean.Algebra.ScalarCocycle.comap,
+        TNLean.Algebra.ScalarCocycle.comap_apply,
+        TNLean.Algebra.H2.comap,
+        TNLean.Algebra.H2.comap_mk}
     \leanok
     \uses{def:h2_cx}
     Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
@@ -8343,8 +8343,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{theorem}[Pullback preserves cocycles and cohomology]
     \label{thm:mpug_h2_pullback_preserves}
-    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.pullback,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.pullback}
+    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.comap,
+        TNLean.Algebra.ScalarCocycle.CohomologousTo.comap}
     \leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
     Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
@@ -8363,11 +8363,33 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     so $\eta$ witnesses the required cohomology relation.
 \end{proof}
 
+\begin{lemma}[Restriction is the inhomogeneous restriction map]
+    \label{lem:mpug_restriction_inhomogeneous}
+    \lean{TNLean.Algebra.scalarRepresentationRes,
+        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain_comap,
+        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain_comap}
+    \leanok
+    \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction,
+        def:mpug_h3_group_cohomology}
+    Let $f:K\to G$ be a group homomorphism. Regard scalar $2$- and
+    $3$-cochains as inhomogeneous cochains with values in the trivial
+    representation $\C^\times_{\mathrm{triv}}$. Then $f^*$ in degrees two
+    and three is the restriction map of inhomogeneous cochains along $f$,
+    $x\mapsto x\circ(f\times\cdots\times f)$, whose coefficient map is the
+    identity of $\C^\times$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction,
+        def:mpug_h3_group_cohomology}
+    Both sides send a cochain $x$ to $(g_1,\dots,g_n)\mapsto x(f(g_1),\dots,f(g_n))$.
+\end{proof}
+
 % Partial support for #7361 (child #7754), not the full prop:BI_psi criterion.
 % No U(1) restriction naturality or tensor-level block-independence claim.
 \begin{theorem}[Exact extension of a subgroup cocycle]
     \label{thm:mpug_h2_exact_extension}
-    \lean{TNLean.Algebra.H2.mem_range_pullback_subtype_iff,
+    \lean{TNLean.Algebra.H2.mem_range_comap_subtype_iff,
         TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
     \leanok
     \uses{def:mpug_h2_pullback, def:is_cocycle}
@@ -11876,7 +11898,7 @@ block label, or physical gate is changed.
         MPOTensor.CZX.eExponent,
         MPOTensor.CZX.hExponent,
         MPOTensor.CZX.fExponent,
-        MPOTensor.CZX.neg_one_pow_val_add,
+        ZMod.neg_one_pow_val_add,
         MPOTensor.CZX.w_eq,
         MPOTensor.CZX.lambda_eq,
         MPOTensor.CZX.tildeLambda_eq,

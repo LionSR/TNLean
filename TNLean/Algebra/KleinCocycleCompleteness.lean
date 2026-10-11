@@ -381,7 +381,7 @@ theorem kleinCocycleFamily_add (p q r p' q' r' : ZMod 2) :
     kleinCocycleFamily (p + p') (q + q') (r + r') =
       kleinCocycleFamily p q r * kleinCocycleFamily p' q' r' := by
   funext g h k
-  simp only [Pi.mul_apply, kleinCocycleFamily, neg_one_pow_val_add]
+  simp only [Pi.mul_apply, kleinCocycleFamily, ← ZMod.neg_one_pow_val_add]
   congr 2
   ring
 
