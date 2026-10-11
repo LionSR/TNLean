@@ -8,7 +8,7 @@ import Mathlib.Analysis.SpecialFunctions.Log.Base
 import Mathlib.Topology.MetricSpace.Pseudo.Constructions
 
 /-!
-# Simultaneous removal of repair squares
+# Removal squares and repair children
 
 For a positive parent scale `S`, the removal square has half-side
 `d(S) = 2 ^ ⌊ρ₀ * log₂ S⌋`. At each generation, every old actual region
@@ -16,14 +16,18 @@ loses the same union of these closed squares. Labels and remembered birth
 regions retain their values at this step. Terminal squares are included
 in the removal; replacement regions are created afterwards.
 
-The definitions concern the removal step alone. The stopping threshold,
+A parent contributes children when its removal half-side is at least the
+stopping threshold. Their locations are the center, corners and side
+midpoints of its removal square; their assigned scale is that half-side.
+The child index retains the parent and the offset. Child-star preservation,
 replacement sectors and geometric induction are separate assertions.
 
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
   September 24, 2026, Section 11, `geometry:trim-radius`, lines 380–399,
-  and `geometry:birth-separation`, lines 584–591.
+  replacement instructions, lines 401–409, `geometry:repair-induction`,
+  lines 506–524 and 538–541, and `geometry:birth-separation`, lines 584–591.
   Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
@@ -57,5 +61,34 @@ Source: area-law Section 11, `geometry:trim-radius`, lines 398–399, and
 def simultaneousRepairRemnants {ι : Type*} (R : ι → Set (ℝ × ℝ))
     (M : Finset (ℝ × ℝ)) (S : M → ℝ) : ι → Set (ℝ × ℝ) :=
   fun i ↦ R i \ repairRemovalSet M S
+
+/-- The nine centered offsets, with each coordinate in `{-1, 0, 1}`.
+The `Fin 3 × Fin 3` indexing agrees with the existing belt-cell marks.
+Source: area-law Section 11, `geometry:repair-induction`, lines 506–512. -/
+def repairChildOffset (p : Fin 3 × Fin 3) : ℝ × ℝ :=
+  ((p.1.val : ℝ) - 1, (p.2.val : ℝ) - 1)
+
+/-- The child occurrences in the next generation: a nonterminal current
+parent together with one of the nine offsets. A terminal cut has no child.
+Source: area-law Section 11, lines 401–409, and
+`geometry:repair-induction`, lines 538–541. -/
+abbrev RepairChildIndex {ι : Type*} (S : ι → ℝ) (Sstar : ℝ) :=
+  {i : ι // Sstar ≤ repairHalfSide (S i)} × (Fin 3 × Fin 3)
+
+/-- A child's location is its parent location plus the computed removal
+half-side times its centered offset.
+Source: area-law Section 11, lines 404–409, and
+`geometry:repair-induction`, lines 506–512. -/
+def repairChildLocation {ι : Type*} (v : ι → ℝ × ℝ) (S : ι → ℝ)
+    (Sstar : ℝ) (j : RepairChildIndex S Sstar) : ℝ × ℝ :=
+  v j.1.val + repairHalfSide (S j.1.val) • repairChildOffset j.2
+
+/-- Every child of a nonterminal parent has scale equal to that parent's
+computed removal half-side.
+Source: area-law Section 11, lines 404–409, and
+`geometry:repair-induction`, lines 506–512. -/
+def repairChildScale {ι : Type*} (S : ι → ℝ) (Sstar : ℝ)
+    (j : RepairChildIndex S Sstar) : ℝ :=
+  repairHalfSide (S j.1.val)
 
 end TNLean.PEPS.AreaLaw.Geometry
