@@ -41,6 +41,15 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
     (show (↑(R ∩ S) : Set ι) ⊆ (S : Set ι) from
       Finset.coe_subset.mpr Finset.inter_subset_right)
     (reindex_sheetSwapOp_mem_supportedOperators q (R ∩ S))
+  have hT :
+      Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (doubledHamiltonian A) ∈ supportedOperators (q * q) (S : Set ι) := by
+    simpa only [Set.union_self] using
+      (supportedOperators (q * q) ((S : Set ι) ∪ (S : Set ι))).add_mem
+        (reindex_kronecker_mem_supportedOperators hA
+          (one_mem_supportedOperators (d := q) (S : Set ι)))
+        (reindex_kronecker_mem_supportedOperators
+          (one_mem_supportedOperators (d := q) (S : Set ι)) hA)
   done
 
 end TNLean.PEPS.EncodedFrame
