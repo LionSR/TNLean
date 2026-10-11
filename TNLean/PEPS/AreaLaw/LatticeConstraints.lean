@@ -208,7 +208,7 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
     hS₀
 
 /-- **Uniqueness of the truncated ground vector on a lattice domain** (Proposition 4.5,
-`prop:truncation`, `03-quasilocal.tex`, lines 426–427: "its ground vector `Ω̃` is unique").
+`prop:truncation`, `03-quasilocal.tex`, lines 426–427: "its ground vector `Ω₀` is unique").
 With the constant `C₁` of `exists_latticeFiniteSetTruncation`, the truncated sum `H'` has a
 unit gapped ground vector `Ω₀` with ground energy `e ∈ [0, ε_n]` and gap `g/2` whose eigenspace
 at `e` is the line spanned by `Ω₀`, and `‖Ω₀ - e^{iθ} Ω‖ ≤ 2 √(ε_n / g)` for some phase. -/
