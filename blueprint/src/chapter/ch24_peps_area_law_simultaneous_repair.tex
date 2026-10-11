@@ -1,0 +1,47 @@
+\section{Simultaneous removal of repair squares}
+\label{sec:area_law_simultaneous_repair}
+
+The removal step in \cite[Section~11]{OpenAI2026AreaLaw} takes place
+before replacement regions are created. Every old region loses the same
+union of closed squares, including squares whose interiors will be left
+unassigned at the stopping scale.
+
+% Source: 10-geometry.tex, geometry:trim-radius, lines 380--399;
+% geometry:birth-separation, lines 584--591.
+% The four definitions have not yet been elaborated. The stopping threshold,
+% isolated-star induction and replacement regions are not asserted here.
+
+\begin{definition}[Dyadic removal square]
+    \label{def:area_law_repair_square}
+    % Intended declarations:
+    % TNLean.PEPS.AreaLaw.Geometry.repairHalfSide
+    % TNLean.PEPS.AreaLaw.Geometry.repairSquare
+    \uses{thm:area_law_exponent_gaps}
+    Retain the fixed exponent $\rho_0=(1+\beta)/2$. For a positive
+    parent scale $S$ and a mark $v\in\mathbb R^2$, define
+    \begin{align}
+        d(S) & =2^{\lfloor\rho_0\log_2 S\rfloor}, &
+        Q(v,S) & =v+[-d(S),d(S)]^2.
+        \label{eq:area_law_repair_square}
+    \end{align}
+    The floor and the exponent are integers. Equivalently, $Q(v,S)$
+    is the closed ball of radius $d(S)$ for the maximum metric.
+\end{definition}
+
+\begin{definition}[Simultaneous old-region remnants]
+    \label{def:area_law_simultaneous_remnants}
+    % Intended declarations:
+    % TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet
+    % TNLean.PEPS.AreaLaw.Geometry.simultaneousRepairRemnants
+    \uses{def:area_law_repair_square}
+    Let $M\subset\mathbb R^2$ be a finite marked set with a positive
+    assigned scale $S(v)$ at each $v\in M$. Let $(R_i)_{i\in I}$ be
+    the current actual regions of the old identifiers. Set
+    \begin{align}
+        Q_M & =\bigcup_{v\in M}Q(v,S(v)), &
+        R'_i & =R_i\setminus Q_M.
+        \label{eq:area_law_simultaneous_remnants}
+    \end{align}
+    This formula applies to every $i\in I$. The labels and remembered
+    birth regions retain their values at the removal step.
+\end{definition}
