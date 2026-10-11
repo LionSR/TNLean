@@ -306,12 +306,12 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after a "PR CI" run completes with the blueprint job failed. Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`leanblueprint web`, plasTeX) or the `blueprint-pdf` job (`leanblueprint pdf` and `./scripts/build_blueprint_ch01_12.sh`, XeLaTeX). Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
-- Reads the blueprint compilation error logs
+- Reads the blueprint compilation error logs and identifies which of the two jobs failed
 - Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, plasTeX parse errors
-- Validates the fix by running `leanblueprint web`
+- Validates the fix with the command matching the failed job: `leanblueprint web` for the `blueprint` job; `leanblueprint pdf` for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
 - Pushes a commit with the `[claude-auto-fix]` prefix
 - Posts a summary comment on the PR
 
