@@ -105,6 +105,10 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
             (mul_le_mul_of_nonneg_left (h.edge_norm_le e) (by norm_num))))
   have hbcard : boundary.card ≤ 2 * L ^ 2 :=
     (Finset.card_le_univ boundary).trans (TNLean.PEPS.card_squareLatticeEdges_le L)
+  have hJ (hL : L ≠ 0) : 0 ≤ J :=
+    (norm_nonneg (h.siteTerm
+      (⟨0, Nat.pos_of_ne_zero hL⟩, ⟨0, Nat.pos_of_ne_zero hL⟩))).trans
+      (h.site_norm_le _)
   done
 
 end TNLean.PEPS.Approximation
