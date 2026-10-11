@@ -66,7 +66,7 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
       Set.disjoint_insert_left, Set.disjoint_singleton_left, Finset.mem_coe] at he ⊢
     tauto
   have hsite (v : SquareLatticeVertex L L) : δ (h.siteTerm v) = 0 :=
-    hcancel (h.site_supported v) (by simp)
+    hcancel (h.site_supported v) (by simp; exact em _)
   rw [Finset.sum_eq_zero fun v _ => hsite v, zero_add]
   refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm
   intro e _ hne
