@@ -95,6 +95,14 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
             ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))) he))
         (hlocal {e.1.1, e.1.2}
           (by simpa only [Finset.coe_insert, Finset.coe_singleton] using h.edge_supported e)))
+  have hbound : ‖F * K * Fᴴ - K‖ ≤ (boundary.card : ℝ) * (4 * J) := by
+    simpa only [hsum, nsmul_eq_mul] using
+      (norm_sum_le boundary (fun e ↦
+        F * Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)) * Fᴴ -
+          Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)))).trans
+        (Finset.sum_le_card_nsmul boundary _ (4 * J) (fun e _ ↦
+          (hnorm (h.edgeTerm e)).trans
+            (mul_le_mul_of_nonneg_left (h.edge_norm_le e) (by norm_num))))
   done
 
 end TNLean.PEPS.Approximation
