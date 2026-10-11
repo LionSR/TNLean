@@ -2029,3 +2029,77 @@ The following finite construction follows
     Thus $4\lceil n^\kappa\rceil\le n^\mu$, so the integer left side is
     at most $\lfloor n^\mu\rfloor$. Integer division gives $8Km\le L$.
 \end{proof}
+
+\begin{theorem}[Quadratic volume of the compact collar]
+    \label{thm:al_scan_compact_quadratic_volume}
+    \lean{TNLean.PEPS.AreaLaw.Scan.card_compact_collar_le_quadratic}
+    \uses{thm:al_scan_ambient_rows}
+    Let $T\ne\varnothing$ be a finite ambient target and let $A$ be any
+    subset of the finite physical domain. Suppose $n,L\in\N$, $L\le n$,
+    $C\in\R$, $|T|\le Cn^2$, and
+    $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$.
+    Then $|A\cap T_L|\le(C+1)n^2$.
+\end{theorem}
+\begin{proof}
+    The actual physical collar injects into $T_L$. Summing its ambient
+    layers gives $|T_L|\le |T|+nL\le Cn^2+n^2=(C+1)n^2$.
+    This also applies when $L=0$ or $A=\varnothing$.
+\end{proof}
+
+\begin{theorem}[Positive rounded band count]
+    \label{thm:al_scan_positive_source_bands}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_one_le_source_bandCount}
+    Fix real exponents $0<\mu<1-\ell$.
+    For all sufficiently large integer $n$, the exact integer quotient
+    $K=\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)$ is at least one.
+    The threshold may depend on $\mu$ and $1-\ell-\mu$.
+\end{theorem}
+\begin{proof}
+    Eventually $n\ge1$ and $n^{1-\ell-\mu}\ge8$.
+    Hence $m=\lfloor n^\mu\rfloor\ge1$ and
+    $8m\le8n^\mu\le n^{1-\ell}$, so $8m\le L=\lfloor n^{1-\ell}\rfloor$.
+    Division by the positive integer $8m$ gives $K\ge1$.
+\end{proof}
+
+\begin{theorem}[Physical marginal moments at the source scales]
+    \label{thm:al_scan_source_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_statusMarginal_moment_bounds}
+    \uses{thm:al_scan_compact_quadratic_volume,thm:al_scan_positive_source_bands,
+        thm:al_scan_status_scale_separation,thm:al_scan_common_status_moments}
+    Fix $R$, $J\ge0$, $\Delta>0$, $C_T\ge0$, and
+    $0<\ell<1$, $0<\kappa<\mu<1-\ell$.
+    There are $C_{\mathrm{tr}}>0$ and $N\ge2$, chosen before the local
+    dimension, such that for every $q\ge1$ there is $C_B>0$ chosen before
+    the physical domain, Hamiltonian and scanner. Use an original gapped
+    ground vector as in Theorem~\ref{thm:al_scan_common_status_moments},
+    the induced lattice graph, and anchors in their original supports.
+    For $n\ge N$, use the literal scales
+    $L=\lfloor n^{1-\ell}\rfloor$, $m=\lfloor n^\mu\rfloor$,
+    $D=\lceil n^\kappa\rceil$, $K=L/(8m)$ with integer division, and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+    Suppose $T\ne\varnothing$, depth is ambient sup-norm distance to $T$,
+    $|T|\le C_Tn^2$, $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$,
+    and every endpoint of a physical cut edge of $A$ has ambient distance
+    greater than $2L+10r_0$ from $T$.
+
+    Then $K\ge1$. There are one pair $(e,\widetilde\Omega)$ and one
+    number $1\le\mathcal B\le C_BnD(\log n)^{12}$ satisfying all the
+    spectral, energy, phase and trace-distance conclusions of
+    Theorem~\ref{thm:al_scan_common_status_moments}. The positive constants
+    $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ give
+    (\ref{eq:al_scan_common_moment}) for every actual region
+    $XU,V,Y,U,UY$, every completed status with $k\le nm$, every pre-charge
+    status with $k+1\le nm$, and every real $u$ with
+    $|u|\le c_0/\sqrt{\mathcal B}$, using that same $\widetilde\Omega$.
+\end{theorem}
+\begin{proof}
+    Choose the truncation coefficient for the compact-volume coefficient
+    $C_T+1$. Choose one threshold for the radius coefficient and fixed exponents so that
+    $r_0\le D$, $D\ge1$, $4D\le m$, and $K\ge1$; integer division always
+    gives $8Km\le L$. Since $\ell>0$ and $n\ge1$, the floor gives $L\le n$.
+    Theorem~\ref{thm:al_scan_compact_quadratic_volume} supplies
+    $|S_0|\le(C_T+1)n^2$. Apply
+    Theorem~\ref{thm:al_scan_common_status_moments} with these derived
+    inequalities, retaining its single truncated ground vector.
+\end{proof}
+

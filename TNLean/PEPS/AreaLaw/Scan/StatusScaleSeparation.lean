@@ -64,4 +64,35 @@ theorem eventually_status_scale_separation {Cr ell kappa mu : ℝ}
     rw [hmul]
     nlinarith [mul_le_mul_of_nonneg_left hratio (zero_le_one.trans hpow)]
 
+/-- The exact rounded band count is positive eventually for each fixed positive
+window exponent strictly below the collar exponent. No unrounded quotient is
+substituted for the integer division. -/
+theorem eventually_one_le_source_bandCount {ell mu : ℝ}
+    (hmu : 0 < mu) (hmuL : mu < 1 - ell) :
+    ∀ᶠ n : ℕ in atTop,
+      1 ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * ⌊(n : ℝ) ^ mu⌋₊) := by
+  have hratio : ∀ᶠ n : ℕ in atTop, (8 : ℝ) ≤ (n : ℝ) ^ (1 - ell - mu) :=
+    ((tendsto_rpow_atTop (sub_pos.mpr hmuL)).comp
+      tendsto_natCast_atTop_atTop).eventually_ge_atTop 8
+  filter_upwards [hratio, eventually_ge_atTop (1 : ℕ)] with n hratio hn
+  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hnR
+  have hm : 1 ≤ ⌊(n : ℝ) ^ mu⌋₊ :=
+    Nat.le_floor (Real.one_le_rpow hnR hmu.le)
+  have hband : 8 * ⌊(n : ℝ) ^ mu⌋₊ ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ := by
+    apply Nat.le_floor
+    push_cast
+    calc
+      _ ≤ 8 * (n : ℝ) ^ mu :=
+        mul_le_mul_of_nonneg_left (Nat.floor_le (Real.rpow_nonneg (Nat.cast_nonneg n) _))
+          (by norm_num)
+      _ ≤ (n : ℝ) ^ mu * (n : ℝ) ^ (1 - ell - mu) := by
+        nlinarith [mul_le_mul_of_nonneg_left hratio
+          (Real.rpow_nonneg (Nat.cast_nonneg n) mu)]
+      _ = (n : ℝ) ^ (1 - ell) := by
+        rw [← Real.rpow_add hnpos]
+        congr 1
+        ring
+  exact Nat.div_pos hband (by omega)
+
 end TNLean.PEPS.AreaLaw.Scan

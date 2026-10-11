@@ -48,4 +48,23 @@ theorem card_compact_collar_le {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     exact (ambientDepth_le_iff_mem_dilation T hT x.val L).mp (Finset.mem_filter.mp hx).2
   · exact Subtype.val_injective.injOn
 
+/-- A collar no wider than the row scale has quadratic volume, using only the
+actual target size and ambient layer counts. The coefficient may be zero. -/
+theorem card_compact_collar_le_quadratic {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (A : Finset (Site Λ)) {n L : ℕ} {C : ℝ} (hLn : L ≤ n)
+    (hsize : (T.card : ℝ) ≤ C * (n : ℝ) ^ 2)
+    (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
+      (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n) :
+    ((A.filter fun x ↦ ambientDepth T hT x.val ≤ L).card : ℝ) ≤
+      (C + 1) * (n : ℝ) ^ 2 := by
+  have hcard : ((A.filter fun x ↦ ambientDepth T hT x.val ≤ L).card : ℝ) ≤
+      (T.card : ℝ) + (n : ℝ) * L := by
+    exact_mod_cast card_compact_collar_le hT A n L hrows
+  have hLnR : (L : ℝ) ≤ n := by exact_mod_cast hLn
+  calc
+    _ ≤ (T.card : ℝ) + (n : ℝ) * L := hcard
+    _ ≤ C * (n : ℝ) ^ 2 + (n : ℝ) * n :=
+      add_le_add hsize (mul_le_mul_of_nonneg_left hLnR (Nat.cast_nonneg _))
+    _ = _ := by ring
+
 end TNLean.PEPS.AreaLaw.Scan

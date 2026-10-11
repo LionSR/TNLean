@@ -72,6 +72,7 @@ import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SideSeparation
+import TNLean.PEPS.AreaLaw.Scan.SourceStatusMarginalMoments
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
 import TNLean.PEPS.AreaLaw.Scan.SplitEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
