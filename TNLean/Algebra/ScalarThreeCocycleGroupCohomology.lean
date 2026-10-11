@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.RepresentationTheory.Homological.GroupCohomology.Functoriality
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.ScalarThreeCocycle
 
@@ -35,9 +36,14 @@ arbitrary scalar two-cochains correspond to arbitrary Mathlib coboundaries.
   three-cocycles.
 * `ScalarThreeCochain.anomalyClass`: the degree-three cohomology class of a scalar
   three-cocycle.
+* `scalarRepresentationRes`: restriction of the trivial representation on `ℂˣ` along a group
+  homomorphism, as a representation morphism.
 
 ## Main results
 
+* `ScalarCocycle.toInhomogeneousCochain_comap`,
+  `ScalarThreeCochain.toInhomogeneousCochain_comap`: restriction of scalar cochains along a
+  homomorphism is Mathlib's `groupCohomology.cochainsMap`.
 * `ScalarThreeCochain.isCocycle_iff_d_eq_zero`: the three-cocycle equation is
   the vanishing of Mathlib's differential.
 * `ScalarCocycle.d_toInhomogeneousCochain`: Mathlib's degree-two differential is
@@ -112,6 +118,16 @@ theorem scalarRepresentationEquiv_ofMul_eq_zero_iff (z : Units ℂ) :
     scalarRepresentationEquiv G (Additive.ofMul z) = 0 ↔ z = 1 := by
   rw [AddEquivClass.map_eq_zero_iff, ofMul_eq_zero]
 
+/-- Restricting the trivial representation on `ℂˣ` along `f : K →* G` gives the trivial
+representation of `K`; this is the identity on `Additive ℂˣ` as a representation morphism, the
+coefficient map for Mathlib's restriction `groupCohomology.cochainsMap f`. -/
+def scalarRepresentationRes {K : Type} [Group K] (f : K →* G) :
+    Rep.res f (scalarH2Representation G) ⟶ scalarH2Representation K := by
+  apply Rep.ofHom
+  refine ⟨LinearMap.id, ?_⟩
+  intro g
+  rfl
+
 namespace ScalarCocycle
 
 /-- A scalar two-cochain as an inhomogeneous two-cochain of the trivial
@@ -136,6 +152,13 @@ theorem toInhomogeneousCochain_ofInhomogeneousCochain
   congr 1
   funext i
   fin_cases i <;> rfl
+
+/-- Restriction `ScalarCocycle.comap f` is Mathlib's restriction of inhomogeneous two-cochains,
+`groupCohomology.cochainsMap f`, with the identity coefficient map. -/
+theorem toInhomogeneousCochain_comap {K : Type} [Group K] (f : K →* G) (β : ScalarCocycle G) :
+    toInhomogeneousCochain (β.comap f) =
+      ((cochainsMap f (scalarRepresentationRes f)).f 2).hom (toInhomogeneousCochain β) :=
+  rfl
 
 end ScalarCocycle
 
@@ -169,6 +192,14 @@ theorem toInhomogeneousCochain_ofInhomogeneousCochain
   congr 1
   funext i
   fin_cases i <;> rfl
+
+/-- Restriction `ScalarThreeCochain.comap f` is Mathlib's restriction of inhomogeneous
+three-cochains, `groupCohomology.cochainsMap f`, with the identity coefficient map. -/
+theorem toInhomogeneousCochain_comap {K : Type} [Group K] (f : K →* G)
+    (ω : ScalarThreeCochain G) :
+    toInhomogeneousCochain (comap f ω) =
+      ((cochainsMap f (scalarRepresentationRes f)).f 3).hom (toInhomogeneousCochain ω) :=
+  rfl
 
 /-- Mathlib's degree-three differential of a scalar three-cochain, for the
 trivial action on `ℂˣ`, is the ratio of the two sides of the three-cocycle
