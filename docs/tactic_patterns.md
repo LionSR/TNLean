@@ -6559,6 +6559,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   consumer and the new `SeparatedOutputCoordinates` consumer use that one proof.
   The proposed duplicate in the latter module is removed.
 
+### Physical error through an intermediate operator — candidate (2026-10-08)
+
+- **Pattern:** Write `A - C = (A - B) + (B - C)`, apply the rectangular
+  trace-norm triangle inequality, and add the two already proved error bounds.
+- **Seen:** The private `rectangularTraceNorm_sub_le_sum` in
+  `PEPS/Approximation/SampledOriginalCircuit.lean` and the final calculation in
+  `PEPS/Approximation/ApproximateSourceSampling.lean`.
+- **Abstraction:** These are two uses of the existing QICLean triangle inequality
+  and `sub_add_sub_cancel`. Before a third independent use, look for a public
+  rectangular trace-norm difference estimate in QICLean; if none exists, promote
+  the short estimate there and replace both calculations. No new tactic is needed.
+
 ### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
 
 - **Pattern:** Project a physical region injectively to its ambient lattice subset,
