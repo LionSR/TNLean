@@ -1606,9 +1606,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: diagram-tests-${{ github.sha }}
-          path: |
-            ${{ runner.temp }}/diagram-tests/**/tenkz-*.svg
-            ${{ runner.temp }}/diagram-tests/**/cache/tenkz-*.tnlog
+          path: ${{ runner.temp }}/diagram-tests
           if-no-files-found: ignore
           retention-days: 3
 

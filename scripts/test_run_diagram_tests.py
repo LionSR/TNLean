@@ -3,9 +3,11 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -62,6 +64,25 @@ class RunnerTest(unittest.TestCase):
         result = self.run_runner("--timeout", "1")
         self.assertEqual(result.returncode, 1)
         self.assertIn("timed out after 1s", result.stdout)
+
+    def test_timeout_kills_the_renderer_subprocess(self) -> None:
+        pidfile = self.root / "child.pid"
+        self.write("test_tenkz_spawn.py",
+                   "import subprocess, sys, time\n"
+                   "child = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'])\n"
+                   f"open({str(pidfile)!r}, 'w').write(str(child.pid))\n"
+                   "time.sleep(60)\n")
+        result = self.run_runner("--timeout", "2")
+        self.assertEqual(result.returncode, 1)
+        pid = int(pidfile.read_text())
+        for _ in range(50):
+            try:
+                os.kill(pid, 0)
+            except ProcessLookupError:
+                break
+            time.sleep(0.1)
+        else:
+            self.fail("renderer subprocess outlived the timed-out test")
 
     def test_relative_root_and_single_quoted_option(self) -> None:
         self.write("test_tenkz_render.py", WRITES.replace('"--output-dir"', "'--output-dir'"))

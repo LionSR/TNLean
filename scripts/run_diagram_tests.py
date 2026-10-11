@@ -19,7 +19,9 @@ failures and exits nonzero if there were any.
 from __future__ import annotations
 
 import argparse
+import os
 import re
+import signal
 import subprocess
 import sys
 from pathlib import Path
@@ -47,6 +49,19 @@ def command(test: Path, output_dir: Path | None) -> list[str]:
     return cmd
 
 
+def run(cmd: list[str], cwd: Path, timeout: int) -> tuple[int, str]:
+    """Run one test in its own process group; on timeout kill the whole group,
+    including renderer subprocesses the test started."""
+    proc = subprocess.Popen(cmd, cwd=cwd, start_new_session=True)
+    try:
+        code = proc.wait(timeout=timeout)
+        return code, f"exit {code}"
+    except subprocess.TimeoutExpired:
+        os.killpg(proc.pid, signal.SIGKILL)
+        proc.wait()
+        return 1, f"timed out after {timeout}s"
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--root", type=Path, default=Path("."))
@@ -68,12 +83,7 @@ def main(argv: list[str] | None = None) -> int:
     failed = []
     for test in tests:
         print(f"::group::{test.name}", flush=True)
-        try:
-            code = subprocess.run(command(test, args.output_dir), cwd=args.root,
-                                  timeout=args.timeout).returncode
-            status = f"exit {code}"
-        except subprocess.TimeoutExpired:
-            code, status = 1, f"timed out after {args.timeout}s"
+        code, status = run(command(test, args.output_dir), args.root, args.timeout)
         print("::endgroup::", flush=True)
         if code != 0:
             print(f"::error file={test}::{test.name} failed ({status})", flush=True)
