@@ -1,0 +1,106 @@
+\section{Weighted dyadic covering of rectangle shells}
+
+\subsection{Finite weighted dyadic summation}
+
+\begin{theorem}[From side budgets to a dyadic moment]
+    \label{thm:area_law_weighted_dyadic_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_weighted_dyadic_rpow_le}
+    \leanok
+    Let $K\ge0$ be an integer, $e>0$, $B\ge0$, $A\in\mathbb R$, and
+    $a_k\in\mathbb R$. Suppose $2^K a_K\le A$ and $2^k a_k\le B$ for
+    $0\le k<K$. Then
+    \begin{align}
+        \sum_{k=0}^{K} a_k(2^k)^{1+e}
+        \le \left(A+\frac{B}{2^e-1}\right)(2^K)^e.
+    \end{align}
+    This is the finite summation step in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}; template counting and the entropy
+    application are separate statements.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Factor each summand as $(2^k a_k)(2^k)^e$. The cap contributes at most
+    $A(2^K)^e$. Since $2^e>1$, the lower scales contribute at most
+    \begin{align}
+        B\sum_{k=0}^{K-1}(2^e)^k
+        =B\frac{(2^e)^K-1}{2^e-1}
+        \le\frac{B}{2^e-1}(2^K)^e.
+    \end{align}
+    The same formula includes $K=0$, when the lower sum is empty.
+\end{proof}
+
+\begin{theorem}[Summation of selected dyadic squares by scale]
+    \label{thm:area_law_capped_sum_by_scale}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_cappedDyadicPartition_by_scale}
+    \leanok
+    \uses{def:area_law_capped_dyadic_partition}
+    Let $S\subseteq\mathbb Z^2$ be finite, let $K\in\mathbb N$, and let
+    $f:\mathbb N\to\mathbb R$ be arbitrary. Then
+    \begin{align}
+        \sum_{(r,z)\in\mathcal P_K(S)} f(r)
+         & =\sum_{k=0}^{K}
+        \#\{(r,z)\in\mathcal P_K(S):r=k\}\,f(k).
+    \end{align}
+    This is the finite summation by scale used in the covering argument of
+    \cite[Lemma~9.4, lines~656--664]{OpenAI2026AreaLaw}.
+    The identity includes $S=\varnothing$ and $K=0$ and imposes no sign
+    condition on $f$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_capped_dyadic_partition}
+    Membership in $\mathcal P_K(S)$ implies $r\le K$. Group its finitely
+    many terms according to $r$. On each group with $r=k$, the summand is
+    the constant $f(k)$, so
+    \begin{align}
+        \sum_{\substack{(r,z)\in\mathcal P_K(S)      \\r=k}}f(k)
+         & =\#\{(r,z)\in\mathcal P_K(S):r=k\}\,f(k).
+    \end{align}
+    Summing over $k=0,\ldots,K$ gives the identity.
+\end{proof}
+
+\begin{theorem}[Weighted dyadic covering of a rectangle shell]
+    \label{thm:area_law_rectangle_shell_weighted_cover}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.sum_rpow_cappedDyadicPartition_shell_le}
+    \leanok
+    \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition}
+    Let $Q$ be a nonempty integer rectangle and put $s=\operatorname{size}(Q)$. Let $j,L,K\in\N$
+    satisfy $j\le L\le s$ and $2^K\le L<2^{K+1}$, and let $e>0$.
+    Set $S_j=Q^{+j}\setminus Q$, with both rectangles viewed as sets of
+    lattice sites. Then the capped maximal-contained dyadic partition satisfies
+    \begin{align}
+        \sum_{(k,z)\in\mathcal P_K(S_j)}(2^k)^{1+e}
+         & \le \left(24+\frac{64}{2^e-1}\right)sL^e.
+    \end{align}
+    This is the geometric weighted covering estimate used in
+    \cite[proof of Proposition~9.5, lines~717--729]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_rectangle_shell_cap_count,
+        thm:area_law_rectangle_shell_selected_count,
+        thm:area_law_capped_sum_by_scale,thm:area_law_weighted_dyadic_sum}
+    Let $N_k$ denote the number of selected squares of scale $k$.
+    The rectangle-shell counting estimates give the following bounds.
+    The second holds for every $k$ with $0\le k<K$.
+    \begin{align}
+        2^K N_K & \le24s, \\
+        2^k N_k & \le64s.
+    \end{align}
+    For the second estimate, the required bounds are
+    $j\le L\le s$ and $2^{k+1}\le2^K\le L\le s$.
+
+    Grouping the selected squares by scale and applying the finite weighted
+    dyadic sum with cap budget $24s$ and lower-scale budget $64s$ gives
+    \begin{align}
+        \sum_{(k,z)\in\mathcal P_K(S_j)}(2^k)^{1+e}
+         & =\sum_{k=0}^{K}N_k(2^k)^{1+e}                \\
+         & \le\left(24s+\frac{64s}{2^e-1}\right)(2^K)^e \\
+         & \le\left(24+\frac{64}{2^e-1}\right)sL^e.
+    \end{align}
+    The last inequality uses $e>0$ and $2^K\le L$; its coefficient is
+    nonnegative because $2^e-1>0$.
+    If $j=0$, the shell and its partition are empty. If $K=0$, the
+    lower-scale sum is empty and the cap inequalities force $L=1$.
+    The argument also applies to thin rectangles and negative coordinates.
+\end{proof}
