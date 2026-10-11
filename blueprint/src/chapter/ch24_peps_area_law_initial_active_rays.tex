@@ -46,6 +46,61 @@ interfaces in the local construction of
          & \quad\Longleftrightarrow\quad
         \exists(s,t)\in\mathcal A,\quad x\in[v,b_s^+].
     \end{align}
+    In the picture below each triangle carries its identifier $\sigma(s)$;
+    the solid radial segments are the active ones, and they are exactly the
+    frontier points of the birth regions inside the open square.
+    % Source: 10-geometry.tex, geometry:initial-stars, lines 333--370, and the
+    % left panel of geometry:repair-picture, lines 418--466. Ink-to-index: the
+    % red dot is the mark v; the dotted square is the boundary of the closed
+    % ball of radius r, with its eight base endpoints (corners and side
+    % midpoints) dotted. Each of the eight triangles P_s is labelled by its
+    % identifier sigma(s); the sample assignment is i_1,i_1 (upper),
+    % i_2,i_2,i_2 (right and lower right), i_3, i_4,i_4. A solid segment
+    % [v, b_s^+] separates neighbours with different identifiers (an active
+    % pair); a dashed segment separates neighbours with the same identifier and
+    % is not a frontier. By the sector-color theorem the colors chi alternate
+    % across solid segments only. These lines are geometry, not tensor indices:
+    % no contractions, empty boundary signature. Not to scale.
+    \begin{center}
+        \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none]
+            \tndeclare{species}{centre}{hue=source:red}
+            \tn[at=(5,5), name=starc, species=centre, ports={0:virtual, 45:virtual, 90:virtual, 135:virtual, 180:virtual, 225:virtual, 270:virtual, 315:virtual}]{}
+            \tn[at=(1,1), name=starnw, ports={0:virtual, 270:virtual, 315:virtual}]{}
+            \tn[at=(1,5), name=starn, ports={0:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(1,9), name=starne, ports={180:virtual, 225:virtual, 270:virtual}]{}
+            \tn[at=(5,9), name=stare, ports={90:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(9,9), name=starse, ports={90:virtual, 135:virtual, 180:virtual}]{}
+            \tn[at=(9,5), name=stars, ports={0:virtual, 90:virtual, 180:virtual}]{}
+            \tn[at=(9,1), name=starsw, ports={0:virtual, 45:virtual, 90:virtual}]{}
+            \tn[at=(5,1), name=starw, ports={0:virtual, 90:virtual, 270:virtual}]{}
+            \tnwire[stroke=dotted, name=starsidenw]{starnw.0}{starn.180}
+            \tnwire[stroke=dotted, name=starsiden]{starn.0}{starne.180}
+            \tnwire[stroke=dotted, name=starsidene]{starne.270}{stare.90}
+            \tnwire[stroke=dotted, name=starsidee]{stare.270}{starse.90}
+            \tnwire[stroke=dotted, name=starsidese]{starse.180}{stars.0}
+            \tnwire[stroke=dotted, name=starsides]{stars.180}{starsw.0}
+            \tnwire[stroke=dotted, name=starsidesw]{starsw.90}{starw.270}
+            \tnwire[stroke=dotted, name=starsidew]{starw.90}{starnw.270}
+            \tnwire[name=starraynw]{starc.135}{starnw.315}
+            \tnwire[stroke=dashed, name=starrayn]{starc.90}{starn.270}
+            \tnwire[name=starrayne]{starc.45}{starne.225}
+            \tnwire[stroke=dashed, name=starraye]{starc.0}{stare.180}
+            \tnwire[stroke=dashed, name=starrayse]{starc.315}{starse.135}
+            \tnwire[name=starrays]{starc.270}{stars.90}
+            \tnwire[name=starraysw]{starc.225}{starsw.45}
+            \tnwire[stroke=dashed, name=starrayw]{starc.180}{starw.0}
+            \tnmark[form=label, label pos=22.5]{(5,5)}{$v$}
+            \tnmark[form=label]{(3,4)}{$i_1$}
+            \tnmark[form=label]{(3,6)}{$i_1$}
+            \tnmark[form=label]{(4,8)}{$i_2$}
+            \tnmark[form=label]{(7,8)}{$i_2$}
+            \tnmark[form=label]{(8,6)}{$i_2$}
+            \tnmark[form=label]{(8,4)}{$i_3$}
+            \tnmark[form=label]{(7,2)}{$i_4$}
+            \tnmark[form=label]{(4,2)}{$i_4$}
+            \tnmark[form=label, label pos=se]{(9,9)}{$\overline B_\infty(v,r)$}
+        \end{tenkz}
+    \end{center}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_actual_sector_assignment,
