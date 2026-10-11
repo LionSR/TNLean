@@ -158,15 +158,17 @@ theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : 
       (squareInteractionSupport i : Set (Vertex L)) := by
   cases i with
   | inl v =>
-    exact coe_realPart_mem_of_star_mem
-      (S := (QuantumCircuit.supportedOperators q ({v} : Set (Vertex L))).restrictScalars ℝ)
-      (h.site_supported v) (QuantumCircuit.star_mem_supportedOperators (h.site_supported v))
+    simpa only [squareInteractionSupport, Finset.coe_singleton] using!
+      coe_realPart_mem_of_star_mem
+        (S := (QuantumCircuit.supportedOperators q ({v} : Set (Vertex L))).restrictScalars ℝ)
+        (h.site_supported v) (QuantumCircuit.star_mem_supportedOperators (h.site_supported v))
   | inr e =>
-    exact coe_realPart_mem_of_star_mem
-      (S := (QuantumCircuit.supportedOperators q
-        ({e.val.1, e.val.2} : Set (Vertex L))).restrictScalars ℝ)
-      (h.edge_supported (forwardSquareEdgeEquiv L e))
-      (QuantumCircuit.star_mem_supportedOperators (h.edge_supported (forwardSquareEdgeEquiv L e)))
+    simpa only [squareInteractionSupport, Finset.coe_insert, Finset.coe_singleton] using!
+      coe_realPart_mem_of_star_mem
+        (S := (QuantumCircuit.supportedOperators q
+          ({e.val.1, e.val.2} : Set (Vertex L))).restrictScalars ℝ)
+        (h.edge_supported (forwardSquareEdgeEquiv L e))
+        (QuantumCircuit.star_mem_supportedOperators (h.edge_supported (forwardSquareEdgeEquiv L e)))
 
 /-- The original square Hamiltonian, with Hermitian parts at its actual
 range-one supports and zero at unused supports. The interaction bound is
