@@ -58,6 +58,13 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
   have hK : Complex.I • h.operator ∈
       skewAdjoint (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
     h.operator_isHermitian.isSelfAdjoint.I_smul_mem_skewAdjoint (K := ℂ)
+  have hreverse (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+      ‖heisenbergEvolution h.operator t A * U -
+        U * heisenbergEvolution h.operator t A‖ =
+      ‖A * heisenbergEvolution h.operator (-t) U -
+        heisenbergEvolution h.operator (-t) U * A‖ := by
+    simpa only [heisenbergEvolution_def, neg_neg] using
+      norm_exp_commutator_eq (Complex.I • h.operator) hK A U t
   done
 
 end TNLean.PEPS.AreaLaw
