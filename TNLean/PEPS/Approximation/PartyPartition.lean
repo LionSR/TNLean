@@ -58,6 +58,13 @@ def memCongr {a b : Layout P} (h : a = b) : Mem a ≃ₗᵢ[ℂ] Mem b :=
 @[simp] theorem memCongr_rfl (a : Layout P) :
     memCongr (rfl : a = a) = LinearIsometryEquiv.refl ℂ (Mem a) := rfl
 
+/-- Reversing a layout equality gives the inverse memory identification.
+Source: polynomial-PEPS, `04-compression.tex`, lines 246–267. -/
+theorem memCongr_symm {a b : Layout P} (h : a = b) :
+    memCongr h.symm = (memCongr h).symm := by
+  cases h
+  rfl
+
 /-- Appending a head register commutes with the equality identification of the tail.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267. -/
 theorem memCongr_cons_tmul (r : Reg P) {a b : Layout P} (h : a = b)
