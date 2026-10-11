@@ -838,6 +838,34 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     the stated conjugation identity.
 \end{proof}
 
+\begin{theorem}[Crossing-edge expansion of the doubled perturbation]
+    \label{thm:peps_sheet_swap_boundary_expansion}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
+    \uses{def:polynomial_peps_model}
+    Let $H=\sum_v h_v+\sum_e h_e$ be an open-square Hamiltonian with the
+    original bounded site and edge interactions, and let $R$ be any set of
+    vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
+    Let $F_R$ exchange the two copies at the sites of $R$, and let
+    $\partial R$ be the set of edges with exactly one endpoint in $R$.
+    Then
+    \[
+        F_RT(H)F_R^*-T(H)
+        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^*-T(h_e)\bigr).
+    \]
+    This includes zero local dimension and squares of side zero or one.
+    Individual interactions need not be Hermitian. The identity is the
+    crossing-edge reduction in the boundary perturbation argument of
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_sheet_swap_doubled_cancellation}
+    The map $A\mapsto F_RT(A)F_R^*-T(A)$ is linear. Expand the original
+    sum defining $H$. Every singleton support lies in $R$ or is disjoint
+    from $R$, so each site contribution vanishes. The same holds for the
+    two-endpoint support of every noncrossing edge. Removing these zero
+    summands leaves precisely the displayed crossing-edge sum.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
