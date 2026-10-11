@@ -55,6 +55,9 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hxS,
         (exists_walk_length_le_iff_edist_le Λ l x y).mpr
           (by simpa only [SimpleGraph.edist_comm] using (mem_graphBall.mp hxball))⟩)
+  have hK : Complex.I • h.operator ∈
+      skewAdjoint (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
+    h.operator_isHermitian.isSelfAdjoint.I_smul_mem_skewAdjoint (K := ℂ)
   done
 
 end TNLean.PEPS.AreaLaw
