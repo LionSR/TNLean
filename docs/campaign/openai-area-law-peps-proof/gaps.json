@@ -1,95 +1,107 @@
 {
-  "reviewedAt": "2026-10-07T21:30Z",
+  "reviewedAt": "2026-10-10T01:00:00Z",
   "entries": [
     {
-      "id": "docs/paper-gaps/openai_peps_patch_stationarity_gap.tex",
+      "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
       "repo": "QICLean",
       "kind": "narrower",
       "status": "open",
       "paper": "peps",
-      "result": "Proposition 4.1",
-      "title": "Stationarity of the patch optimizer",
+      "result": "Proposition 4.1, adaptive patch constraint",
       "issue": 8767,
       "prs": {
         "QICLean": [
           605,
-          607
+          694
         ]
       },
-      "claims": "To build the small-patch subspaces, the paper minimizes the norm of an ordered product of regional filters. From the first-order conditions at the minimizer it derives that each regional output state is dominated by its optimal density plus a small shift, ρ_j ≤ x_j + b·1.",
-      "found": "QICLean proves the consequences of this inequality. The regulator is bounded by b·1 and by ρ, its trace by b·rank Q + tr((1−Q)ρ) for every projection Q, and hence by 1/4 at the paper's starting radius. QICLean #607 recovers commutation from shifted powers. The inequality itself, and the commutation of the minimizing densities with the outputs, are not yet derived for the ordered objective. Until they are, Proposition 4.1 is not formalized.",
-      "impact": "No problem with the paper has been found. This is the most delicate open step in Proposition 4.1, because the paper reaches the inequality through descending trace calculations on a noncommutative objective. The note warns against substituting a simpler separable objective.",
-      "plan": "Carry out the descending trace calculations for the ordered objective, derive the commutation and first-order conditions, and apply the regulator bounds already proved."
+      "title": "First-order conditions of the patch optimization",
+      "summary": "No problem with the paper has been found; Lean has the consequences of the key inequality, but not the inequality itself.",
+      "context": "Proposition 4.1 shows that near any square of logarithmic size the ground state lies almost entirely in subspaces of polynomial total rank. This is what keeps the final bond dimension polynomial.",
+      "claims": "The proof picks density matrices <i>x<sub>j</sub></i> on nested squares around the patch. Each defines a filter <i>L<sub>j</sub></i> = (<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−<i>a<sub>j</sub></i>/2</sup>, with fixed small numbers <i>b</i> and <i>a<sub>j</sub></i>. The choice makes the norm {{tn:al-filter-norm}} as small as possible. Here Ω is the ground state. Let ρ<sub><i>j</i></sub> be the reduced state, on the <i>j</i>-th square, of the normalized filtered state. At the minimum, each <i>x<sub>j</sub></i> commutes with ρ<sub><i>j</i></sub>. Also ρ<sub><i>j</i></sub> ≤ <i>x<sub>j</sub></i> + <i>b</i>·1.",
+      "found": "Lean proves what follows from this inequality, taken as an explicit hypothesis. One consequence concerns the operator <i>T</i> = <i>b</i>ρ<sub><i>j</i></sub>(<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−1</sup>. It satisfies 0 ≤ <i>T</i> ≤ <i>b</i>·1 and <i>T</i> ≤ ρ<sub><i>j</i></sub>. At the paper's starting radius, its trace is at most 1/4. The commutation and the inequality are not yet derived for the actual product of filters.",
+      "impact": "No. This is the most delicate open step, because the filters need not commute.",
+      "plan": "Carry out the paper's trace calculations from the largest square inward, then apply the bounds already proved."
     },
     {
       "id": "docs/paper-gaps/polypeps_ownership_change_monomials.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Lemmas 6.5–6.6",
-      "title": "Birth, death and exchange as allowed operations",
+      "result": "Lemmas 6.5–6.6, birth, death and two-sheet exchange",
       "issue": 8771,
       "prs": {
         "TNLean": [
           8855,
-          8917
+          8917,
+          8943
         ]
       },
-      "claims": "Handing a region from one party to another (birth or death), or swapping ownership between two copies of the state (exchange), costs reference error at most L^−30 (4L^−30 for the exchange), provided the region shares information at most L^−60 with its surroundings. Each move involves only the named parties.",
-      "found": "Both lemmas are proved with exactly the paper's hypotheses, including the canonical maps, their contractivity and both error bounds. On the party model built in #8843, with the registers of each region held by one party grouped into one register, the birth is proved to be a private map, one shared state and a private map, and the death the same with one shared effect. The exchange corrections are proved to be one private map on such grouped registers. The paper has one register per site, and the grouped registers are not yet identified with the registers of a frame. Also unstated is that the exchange's renaming is a reordering of registers. It is proved to keep every register with its party, but writing it as a reordering needs the same list with one register per site and per tag.",
-      "impact": "No problem with the paper has been found. What remains is to place the grouped monomials on the registers of a frame and to restate the renaming step of the exchange.",
-      "plan": "List the registers of a frame one per site and per tag, identified with the canonical coordinates. Move and group the registers of each region by reorderings and private unitaries, so that the birth, death and correction monomials act on that list, and write the exchange's renaming as a reordering of it."
+      "title": "Changes of owner as allowed operations",
+      "summary": "The lemmas hold as stated; Lean proves both with exactly the paper's hypotheses.",
+      "context": "The PEPS is built by handing the ground state among parties, each a label for a set of quantum registers, until every site has its own party. These lemmas are the elementary handovers, and they must use only operations that the later compression step accepts.",
+      "claims": "Moving a region <i>T</i> from one party to another is the map {{tn:peps-birth}}. Here <i>V</i> is an isometry that splits the buffer <i>U</i> around <i>T</i>, as in Lemma 6.4. <i>s</i> is a normalized state shared by the two parties. Let <i>E</i> be the rest of the lattice, and Ω the ground state. If <i>I</i>(<i>T</i> : <i>E</i>) ≤ <i>L</i><sup>−60</sup>, then ‖(<i>B</i> − 1)Ω‖ ≤ <i>L</i><sup>−30</sup>, with <i>L</i> the grid side. Swapping ownership of a region between two copies of the state costs at most 4<i>L</i><sup>−30</sup>. Each move uses only private maps, plus normalized states or projections shared by two named parties.",
+      "found": "Both lemmas are proved with exactly the paper's hypotheses and error bounds. Each move acts on the actual registers, one per lattice site, each held by its owner. Adding or removing a party uses one shared normalized state or projection; the swap is a reordering that keeps every register with its party, then one private map.",
+      "impact": "No.",
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/polypeps_small_rewrite_monomials.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Lemma 6.3",
-      "title": "Rewriting a small patch as allowed operations",
+      "result": "Lemma 6.3, small-patch rewrite",
       "issue": 8770,
       "prs": {
         "TNLean": [
           8823,
-          8932
+          8932,
+          8943,
+          9061
         ]
       },
-      "claims": "Lemma 6.3 rewrites the state near a small patch where ownership changes. It states that (1) the rewrite map is a contraction that moves the old reference state close to the new one, and (2) up to error L^−a the map is a polynomial sum of operations that the compression theorem allows.",
-      "found": "Part (1) is proved with exactly the paper's hypotheses. For part (2), Lean proves the branch expansion, the owner bookkeeping, the network of each branch with no wire from a vertex to itself, its truncation by Lemma 6.2 with error 2m/√k and at most k^(2m) terms independent of the site dimensions, and the final rescaling: for every δ > 0 there is a contraction within δ of the rewrite that is a sum of explicit product terms. Two steps are not yet formalized. Each product term is not yet written as an allowed monomial of Theorem 5.2, because the frame's registers have no layout by owner with one register per site and per tag. The term count is not yet polynomial in L, because the patches do not carry the bound on the number of cylinder terms from Proposition 4.1.",
-      "impact": "No problem with the paper has been found. What remains is the register layout of a frame and carrying the cylinder-term bound of Proposition 4.1 into the patch data.",
-      "plan": "List the frame's registers one per site and per tag, identified with the canonical coordinates, and read each product term as an allowed party chain with the front-register calculus already used for Lemmas 6.5 and 6.6. Carry the bound on the number of cylinder terms from Proposition 4.1, with bounded numbers of patches and affected holes, to make the count of terms polynomial in L."
+      "title": "Rewriting a small patch with two-party operations",
+      "summary": "No problem with the paper has been found; Lean proves the lemma as stated, including the form and number of the terms.",
+      "context": "During the construction some small squares are stored compressed, as a short label naming a vector of a small subspace. Lemma 6.3 changes ownership near such squares, using only operations the later compression step accepts.",
+      "claims": "The rewrite is the map {{tn:peps-rewrite}}. <i>K</i> undoes or writes the encoding of a small square <i>Q</i><sup>+</sup>, with tag register 𝒥. <i>P</i><sub>1</sub>, …, <i>P<sub>m</sub></i> project onto low-rank subspaces of <i>m</i> nearby patches. <i>M</i> is a contraction. Its error is ‖<i>M</i>Ω<sub>old</sub> − Ω<sub>new</sub>‖ ≤ (<i>m</i> + <i>r</i><sub>old</sub>)ε. Here Ω<sub>old</sub> and Ω<sub>new</sub> are the target states before and after, <i>r</i><sub>old</sub> counts changed old squares, and ε = <i>L</i><sup>−60</sup>. For every <i>a</i> &gt; 0, <i>M</i> is within <i>L</i><sup>−<i>a</i></sup> of a polynomial sum of terms. Each term uses private maps and normalized states or projections shared by at most two parties.",
+      "found": "The first part is proved with exactly the paper's hypotheses. For the second, Lean writes the map as a sum of explicit product terms, truncates each piece to rank <i>k</i> with error at most <i>g</i>/√<i>k</i> (<i>g</i> ≤ 2<i>m</i>, independent of the site dimensions), and reads every term as an allowed operation of Theorem 5.2 on the registers of the frames, one per site and per tag, using only parties of the specified list. With the paper's standing bound on the number of cylinder terms of each projector (one fixed power of <i>L</i>), boundedly many patches and affected holes, and a bounded specified list of parties, the number of terms is polynomial in <i>L</i>, and the choice <i>a</i> = 30 gives reference error at most (2<i>b</i> + 1)<i>L</i><sup>−20</sup>. No hypotheses were added.",
+      "impact": "No.",
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/openai26_dyadic_geometry_guide_properties.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Lemma 7.2",
-      "title": "Clearance during the dyadic repainting",
+      "result": "Lemma 7.2, separation of the unmodified bands",
       "issue": 8772,
       "prs": {
         "TNLean": [
           8836,
           8910,
-          8935
+          8935,
+          8970,
+          8974
         ]
       },
-      "claims": "When a dyadic square changes owner, each elementary move keeps a clearance proportional to the distance from a few marked points, with one universal constant a₀.",
-      "found": "Lean first proved the clearance with a₀ = 1/5000 for any guides with the properties the paper's proof uses. #8910 builds the schedule of guides, derives those properties from the disjointness of the bands, and proves Lemma 7.2 for every square of the hierarchy with no added hypothesis. Formal guides are labellings of the plane that represent the paper's open chambers, and the estimates are proved for the labellings the schedule specifies. At the start of each edge and at the end of each repainting the schedule passes to a labelling that agrees with the one reached only off a few curves; no lattice site lies on those curves, so the labels at the sites are unchanged, matching the paper's sampling convention. On an interface curve the formal words take the label on one fixed side, while the paper's displacement takes the other side along two edges of each square. #8935 proves that the estimates, which are stated for closures, hold on all four edges for every guide read after one small displacement, and that such readings of the schedule's guides exist for every displacement. That the paper's sampled guides are these readings rests on the identification of the paper's open chambers with the formal labellings off a locally finite family of segments and on the genericity of the displacement, neither of which is formalized.",
-      "impact": "No problem with the paper. The clearance estimates of Lemma 7.2 are proved for every reading of the schedule's guides after a small displacement (#8910, #8935). Lemma 7.2 for the paper's chamber-sampled guides is established only conditionally: identifying those guides with the readings needs two facts not yet proved (the chambers are the open sets where the formal labellings are constant, off a locally finite family of segments, and the generic displacement is parallel to none of these segments).",
-      "plan": "Prove the two identification facts: describe the paper's open chambers as the constancy sets of the formal labellings off a locally finite family of segments, and show a generic displacement is parallel to none of them, so each sampled guide equals a reading. The protocol of Proposition 7.1 is separate work."
+      "title": "Clearance during the dyadic repainting",
+      "summary": "The lemma holds as stated; Lean proves it, including the paper's rule for reading ownership on boundaries.",
+      "context": "Ownership passes down a hierarchy of dyadic squares. Each square is repainted to its new owner by small moves along thin bands at its edges. A move is accurate only if its region stays away from other owners, since that distance keeps the shared information small.",
+      "claims": "There is one constant <i>a</i><sub>0</sub> &gt; 0 such that every point <i>y</i> of a move's region satisfies dist(<i>y</i>, other owners) ≥ <i>a</i><sub>0</sub> min{<i>n</i>, <i>d</i>(<i>y</i>)}, where <i>n</i> is the side of the square and <i>d</i>(<i>y</i>) the distance from a few marked corners. Owners are read from a polygonal partition of the plane after a small generic shift off its boundaries.",
+      "found": "Lean builds the paper's whole schedule of partitions and proves the lemma for every square with <i>a</i><sub>0</sub> = 1/5000, assuming only n > 0. It proves that every partition in the schedule has walls on finitely many families of lines, so each generic shift gives a unique reading, and the estimates hold for it.",
+      "impact": "No.",
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/polypeps_pair_effects_party_layout.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "resolved-pending",
+      "status": "resolved",
       "paper": "peps",
-      "result": "Lemma 5.1",
-      "title": "Who owns the replacement of a shared resource",
+      "result": "Lemma 5.1, elimination of normalized pair effects",
       "issue": 8768,
       "prs": {
         "TNLean": [
@@ -98,10 +110,146 @@
           8853
         ]
       },
-      "claims": "Lemma 5.1 removes a two-party shared state by replacing it with a stack of m fresh copies, at error r/√m. It also states that the replacement uses only operations local to the two parties plus normalized shared states, and that all shared states between the same two parties can be merged into one.",
-      "found": "The first Lean model had no notion of a party, so the locality clauses could not be stated (#8791). #8843 added parties and proved those clauses. #8853 proves the merging clause. Each freshly prepared shared state can be moved to the front, and the states between the same two parties combine into one normalized state. No hypotheses were added.",
-      "impact": "None. Lemma 5.1 is formalized as stated once #8853 merges.",
-      "plan": "Merge #8853. The aggregate map per party used by Theorem 5.2 is separate work."
+      "title": "Removing joint projections between two parties",
+      "summary": "The lemma holds as stated; Lean proves every clause with the paper's hypotheses.",
+      "context": "The compression step accepts operations built from private maps and states prepared jointly for two parties. Some moves also project two parties' registers onto a fixed vector, a postselected joint measurement. Lemma 5.1 removes these projections.",
+      "claims": "Each joint projection ⟨η| is replaced by a stack of <i>m</i> fresh shared states |η⟩<sup>⊗<i>m</i></sup>. For an operation <i>G</i> = Σ<sub>ξ</sub> <i>c</i><sub>ξ</sub><i>M</i><sub>ξ</sub> whose terms have at most <i>r</i> projections, the replacement <i>G</i>′<sub><i>m</i></sub> satisfies ‖<i>G</i>′<sub><i>m</i></sub> − <i>G</i> ⊗ |Γ<sub><i>m</i></sub>⟩‖ ≤ (<i>r</i>/√<i>m</i>) Σ<sub>ξ</sub>|<i>c</i><sub>ξ</sub>|, with |Γ<sub><i>m</i></sub>⟩ a fixed leftover vector. The new registers belong to the original parties, and all shared states between the same two parties can be merged into one.",
+      "found": "Every clause is proved: the error and term counts, the locality of the new operations, ownership of the new registers, and merging any number of shared states between two parties. No hypothesis was added; the paper's assumption that the original operation is a contraction is not needed.",
+      "impact": "No.",
+      "plan": "Nothing remains for this lemma. The rest of the compression argument is separate work."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_nonempty_parties.tex",
+      "repo": "TNLean",
+      "kind": "convention",
+      "status": "resolved-pending",
+      "paper": "peps",
+      "result": "Theorem 5.2, distributed density compression",
+      "issue": 8769,
+      "prs": {
+        "TNLean": [
+          8924,
+          9021,
+          9024
+        ]
+      },
+      "title": "Compression needs at least one party",
+      "summary": "The theorem fails only with no parties, a case the paper never uses; Lean excludes it once, in a pull request awaiting merge.",
+      "context": "Theorem 5.2 turns the state produced by the construction, whose shared resources may be arbitrarily large, into a tensor network with one node per party and polynomial bonds. A party is a label for a set of quantum registers.",
+      "claims": "Let ρ be the output density matrix of the construction. For every fixed <i>p</i>, some such network σ satisfies ‖σ − ρ‖<sub>1</sub> ≤ <i>L</i><sup>−<i>p</i></sup>, with <i>L</i> the size parameter. The statement does not say that there is at least one party.",
+      "found": "With no parties it fails. An empty tensor product has dimension one, so a construction can still multiply by a scalar <i>c</i>, giving density |<i>c</i>|<sup>2</sup>, while a network with no nodes contracts to 1. For <i>c</i> = 1/2 the error is |1/4 − 1| = 3/4. The paper's proof places scalars on an existing party. Lean requires at least one party once, in the definition of a construction, and repeats it on no theorem.",
+      "impact": "No. Every application uses an L × L grid with L ≥ 2, which has parties.",
+      "plan": "Merge the pending pull request."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_nondegenerate_templates.tex",
+      "repo": "TNLean",
+      "kind": "convention",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Definition 9.3, template",
+      "issue": 8738,
+      "prs": {
+        "TNLean": [
+          8788
+        ]
+      },
+      "title": "Rectangles and triangles in a template are nondegenerate",
+      "summary": "Nothing is wrong with the paper; Lean reads rectangles and triangles in their ordinary sense.",
+      "context": "A template is a target region of the area-law argument, a union of small rectangles and triangles. The final cutting of the region into pieces whose entropies cancel uses templates.",
+      "claims": "A template is a finite union of the lattice points of closed rectangles and triangles of bounded size, with sides of slope 0, ∞, 1 or −1.",
+      "found": "Read literally, a segment or a point could count as a degenerate rectangle or triangle. The paper's remark after the definition says only the number and sizes of the pieces matter. Lean builds the ordinary meaning into the definition, so no theorem carries an extra hypothesis.",
+      "impact": "No. This is a reading of the paper's words.",
+      "plan": "Nothing remains."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_scanner_inputs.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "area",
+      "result": "Proposition 9.2, the scanner estimate",
+      "issue": 8755,
+      "prs": {
+        "TNLean": [
+          8926,
+          8944,
+          9002,
+          9004
+        ]
+      },
+      "title": "The low-energy sweep from its five inputs",
+      "summary": "No problem with the paper has been found; Lean proves the final step from five earlier results, which are not yet all proved.",
+      "context": "The proof sweeps a partition across a band around a target region in small random steps, while many copies of the ground state are filtered by operators built from the partition; an interpolation parameter moves the filter smoothly as a small region changes sides. Proposition 9.2 finds a point of the sweep where the filtered state has small excess energy; the later entropy bounds are applied there.",
+      "claims": "Some step and some interpolation parameter make the excess energy <i>E</i><sub>def</sub> = (⟨<i>v</i>, <i class=\"ov\">H</i><i>v</i>⟩ − <i>E</i><sub>0</sub>)/<i>g</i> small, for every large number <i>k</i> of copies; here <i>v</i> is the filtered state of the copies, <i class=\"ov\">H</i> the Hamiltonian averaged over the copies, and <i>g</i> the gap. The proof combines the geometry of the sweep, entropy and energy transport (Proposition 7.4), norm comparisons (Proposition 8.1), entropy continuity and spectral tail bounds.",
+      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Lean also builds the random sweep and proves its main probability bounds, but not yet all of its geometry.",
+      "impact": "No. The proposition holds once its inputs are proved.",
+      "plan": "Prove the five inputs for the actual sweep. Each is a separate item of the project."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_routing_network_bounds.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Lemma 8.2, routing the party network on the grid",
+      "issue": 8764,
+      "prs": {
+        "TNLean": [
+          8796,
+          8921
+        ]
+      },
+      "title": "Routing the party network with bounded congestion",
+      "summary": "No problem with the paper has been found; Lean proves the lemma for every network with the four properties its proof uses.",
+      "context": "After compression, the approximation is a tensor network on parties attached to dyadic squares. To get a PEPS on the L × L grid, each link must run along grid edges, with each edge carrying boundedly many links.",
+      "claims": "The links of the network built by the construction (Proposition 7.1) can be routed with constant congestion, keeping the physical sites in place. The lemma has no hypotheses.",
+      "found": "The proof uses four properties. Each party sits at a point of the grid enlarged to a power-of-two side. Each dyadic square has at most <i>B</i> parties. Each party has at most <i>K</i> links. Linked parties are within <i>c</i> times their scale. Proposition 7.1 is not yet formalized, so Lean proves the lemma for every network with these properties. Each grid edge then carries at most 8(2<i>c</i> + 1)<i>BK</i> links. If every link has dimension at most <i>D</i>, the result is a PEPS on the grid. Its bond dimension is at most max(<i>D</i>, 1)<sup>8(2<i>c</i>+1)<i>BK</i></sup>.",
+      "impact": "No. The paper's lemma is the case of its own network.",
+      "plan": "Formalize Proposition 7.1 and check the four properties for its network."
+    },
+    {
+      "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",
+      "repo": "QICLean",
+      "kind": "narrower",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Proposition 7.4, entropy and energy transport",
+      "issue": 8752,
+      "prs": {
+        "QICLean": [
+          689,
+          695
+        ]
+      },
+      "title": "Commutation of the transport operators across bands",
+      "summary": "The paper's hypothesis is the right one; Lean proves the proposition under exactly that hypothesis.",
+      "context": "The area-law proof filters many copies of the ground state, held in their symmetric subspace, by positive operators with one factor per band of a moving partition. Proposition 7.4 bounds how entropy and energy change as the partition moves.",
+      "claims": "The proof works with <i>k</i> copies of one system, whose space is 𝒱. Each band of the partition has its own positive operator. The proof assumes these operators commute on Sym<sup><i>k</i></sup>𝒱, the symmetric part of the <i>k</i> copies.",
+      "found": "Commutation on all of 𝒱<sup>⊗<i>k</i></sup> would be stronger. It fails when two regions overlap without nesting. Take three qubits <i>a</i>, <i>b</i>, <i>c</i> and <i>k</i> = 3. Let <i>W<sub>ab</sub></i> and <i>W<sub>bc</sub></i> be the operators of the regions <i>ab</i> and <i>bc</i>. On 𝒱<sup>⊗3</sup> their commutator has ‖[<i>W<sub>ab</sub></i>, <i>W<sub>bc</sub></i>]‖<sub>2</sub> ≈ 3.9 × 10<sup>−4</sup>. On Sym<sup>3</sup>𝒱 they reduce to <i>W<sub>c</sub></i> and <i>W<sub>a</sub></i>, which commute. Lean extends each operator by the identity off the symmetric part. It assumes exactly the paper's condition.",
+      "impact": "No.",
+      "plan": "Nothing remains."
+    },
+    {
+      "id": "docs/paper-gaps/oai26_literal_transport_measures.tex",
+      "repo": "QICLean",
+      "kind": "convention",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Proposition 7.4, entropy and energy transport",
+      "issue": 8752,
+      "prs": {
+        "QICLean": [
+          725
+        ]
+      },
+      "title": "The coherent measures in the transport estimate",
+      "summary": "Nothing is wrong with the paper; Lean builds its measures exactly as written and adds one harmless boundary case.",
+      "context": "Proposition 7.4 bounds how entropy and energy change as filtered copies of the ground state follow a moving partition. It writes states of k copies as averages over product states θ⊗ᵏ, through measures on the unit sphere of one copy.",
+      "claims": "Let 𝒱 be the space of one copy and ρ a state of <i>k</i> copies. The measure on unit vectors θ has density <i>D<sub>k</sub></i> Tr(ρ<i>P</i><sub>θ,<i>k</i></sub>) with respect to the uniform measure. Here <i>P</i><sub>θ,<i>k</i></sub> = |θ<sup>⊗<i>k</i></sup>⟩⟨θ<sup>⊗<i>k</i></sup>| and <i>D<sub>k</sub></i> = dim Sym<sup><i>k</i></sup>𝒱. For each end state of the proof's averaging procedure, the measure is a Fourier-weighted average built from that state.",
+      "found": "Lean constructs both measures as written and proves that they are finite and reproduce the transported states. The Fourier average has total mass 1/2, as in the paper. The paper defines the end states only for interpolation parameters strictly between 0 and 1. Lean also allows an end state of zero weight, with zero measure; this is a convention, not a claim of the paper.",
+      "impact": "No.",
+      "plan": "Nothing remains for this note. Using the measures on the physical data is separate work."
     }
   ],
   "checked": [

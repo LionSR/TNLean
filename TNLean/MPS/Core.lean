@@ -44,6 +44,8 @@ import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Core.SquarePhysicalCoordinates
+import TNLean.MPS.Core.StationaryPhysicalDensity
+import TNLean.MPS.Core.StationaryPhysicalOverlap
 import TNLean.MPS.Core.TPGauge
 import TNLean.MPS.Core.TensorProduct
 import TNLean.MPS.Core.TensorProductSpan

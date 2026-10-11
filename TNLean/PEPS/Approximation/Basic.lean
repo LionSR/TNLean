@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.Circuit.LocalCircuit
+import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
@@ -71,14 +72,12 @@ noncomputable def SquareHamiltonian.operator {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) : Matrix (Configuration L q) (Configuration L q) ℂ :=
   (∑ v, h.siteTerm v) + ∑ e, h.edgeTerm e
 
-/-- Unit eigenvector and the full-system projector gap on the open square.
+/-- Unit eigenvector and the full-system projector gap on the open square, the
+specialization of `Matrix.IsGappedGroundState` to `h.operator`.
 Source: polynomial-PEPS `eq:global-gap`; uniqueness follows for positive `Δ`. -/
 def SquareHamiltonian.IsGappedGroundState {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q) (Δ : ℝ) : Prop :=
-  ‖Ω‖ = 1 ∧
-    Matrix.toEuclideanCLM (n := Configuration L q) (𝕜 := ℂ) h.operator Ω = (E₀ : ℂ) • Ω ∧
-      (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
-        (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef
+  Matrix.IsGappedGroundState h.operator E₀ Ω Δ
 
 /-- The contraction of a native PEPS, in Euclidean configuration coordinates.
 Source: polynomial-PEPS Section 1, the unnormalized vector `Φ`. -/

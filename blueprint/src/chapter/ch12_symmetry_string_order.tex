@@ -364,39 +364,65 @@ virtual-boundary nondecay and virtual local covariance.
     $\mu=1$, so the same endpoint criterion supplies the endpoints.
 \end{proof}
 
+\input{chapter/ch12_symmetry_stationary_physical_density}
+
 \begin{theorem}[Physical state symmetry and twisted spectral radius]
     \label{thm:pgwsvc08_physical_symmetry}
-    \notready
-    \uses{lem:pgwsvc08_twisted_spectral_radius, thm:psd_fp_unique}
-    This is Theorem~2 of~\cite{PerezGarcia2008StringOrder}.  For a pure
-    finitely correlated state and a unitary $u\ne\Id$, the physical
-    state is invariant under $u^{\otimes N}$ on every $N$-site reduced density
-    operator if and only if
+    \lean{MPSTensor.stationaryBlockDensity_invariant_iff_spectralRadius_eq_one}
+    \leanok
+    \uses{def:stationary_physical_block_density}
+    This is Theorem~2 of~\cite{PerezGarcia2008StringOrder} for a fixed
+    physical unitary $u$. Suppose $\Lambda>0$, $\tr\Lambda=1$,
+    $\E_A(\Id)=\Id$, and $\E_A^*(\Lambda)=\Lambda$. Assume that
+    $\E_A(X)=\lambda X$, $X\ne0$, and $|\lambda|=1$ imply
+    $\lambda=1$ and $X\in\C\Id$. Then
     \begin{align}
-        \rho(\E_u) & =1.
-        \notag
+        \bigl[\forall N,\;
+            u^{\otimes N}\varrho_N(A,\Lambda)(u^\dagger)^{\otimes N}
+            =\varrho_N(A,\Lambda)\bigr]
+         & \quad\Longleftrightarrow\quad \rho(\E_u)=1.
+        \label{eq:stationary_density_symmetry}
     \end{align}
-    For one-site-injective tensors, this physical symmetry is equivalent to
-    virtual local covariance.
+    Scalar unitaries are included in this fixed-$u$ statement.
 \end{theorem}
 
 \begin{proof}
-    If $\rho(\E_u)=1$, Lemma~\ref{lem:pgwsvc08_twisted_spectral_radius} gives
-    a unitary $V$ satisfying the local intertwining relation.  Substitution of
-    that relation into the adjoint transfer map, together with
-    $\E_A^\dagger(\Lambda)=\Lambda$, gives
-    $\E_A^\dagger(V\Lambda V^\dagger)=V\Lambda V^\dagger$.
-    This positive fixed point has trace one, so uniqueness gives
-    $V\Lambda V^\dagger=\Lambda$, equivalently
-    $V^\dagger\Lambda V=\Lambda$, which yields the physical symmetry.
-    Conversely, physical invariance gives, for length-independent boundary
-    tensors $L,R$,
+    \leanok
+    \uses{lem:canonical_fixed_space_irreducible,
+        thm:irreducible_twisted_spectral_radius,
+        lem:irreducible_twisted_transfer_reduction,
+        thm:stationary_density_purity, thm:stationary_density_overlap,
+        thm:stationary_density_covariance}
+    By Lemma~\ref{lem:canonical_fixed_space_irreducible}, the source purity
+    hypothesis makes $\E_A$ irreducible.
+    If $\rho(\E_u)=1$, Theorem~\ref{thm:irreducible_twisted_spectral_radius}
+    supplies a unitary $V$ and a phase $\mu$ satisfying
+    $B_i=\sum_j u_{ij}A_j=\mu VA_iV^\dagger$.
+    Lemma~\ref{lem:irreducible_twisted_transfer_reduction} then gives
+    $V^\dagger\Lambda V=\Lambda$ for the faithful normalized stationary
+    dual density.
+    Theorem~\ref{thm:stationary_density_covariance} now proves physical
+    invariance.
+
+    Conversely, invariance gives $\varrho_N(B,\Lambda)=\varrho_N(A,\Lambda)$.
+    The mixed map is the twisted transfer map:
     \begin{align}
-        D^{-2} & \le\tr(\varrho_N^2)
-        =\tr\!\left[L(\E_u\otimes\E_{u^\dagger})^N(R)\right].
+        \E_{BA}(X)
+         & =\sum_iB_iXA_i^\dagger
+        =\sum_{i,j}u_{ij}A_jXA_i^\dagger
+        =\sum_{n,n'}\bra{n'}u\ket{n}A_nXA_{n'}^\dagger
+        =\E_u(X).
         \notag
     \end{align}
-    Exponential decay would contradict this bound, so $\rho(\E_u)=1$.
+    Hence
+    (\ref{eq:stationary_density_purity}) and
+    (\ref{eq:stationary_density_overlap}) give
+    $D^{-2}\leq\tr(\varrho_N^2)=\tr(KG_NKG_N^\dagger)$.
+    If $\rho(\E_u)<1$, its powers tend to zero, hence
+    $G_N\to0$ by (\ref{eq:stationary_density_mixed_gram}). This contradicts
+    the positive uniform bound. The twisted spectral-radius upper bound of
+    Theorem~\ref{thm:irreducible_twisted_spectral_radius} therefore forces
+    $\rho(\E_u)=1$.
 \end{proof}
 
 \begin{definition}[Virtual local covariance with boundary invariance]\label{def:local_symmetry}
@@ -952,5 +978,7 @@ virtual-boundary nondecay and virtual local covariance.
 \input{chapter/ch12_symmetry_string_order_bounds}
 
 \input{chapter/ch12_symmetry_string_order_finite_endpoints}
+
+\input{chapter/ch12_symmetry_string_order_continuous}
 
 \input{chapter/ch12_symmetry_string_order_examples}

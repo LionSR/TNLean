@@ -1,0 +1,148 @@
+\section{Separation on the translated quarter mesh}
+\label{sec:area_law_quarter_mesh}
+
+The numerical estimates used in the initial-star argument come from a
+common translated lattice. We record them separately from the construction
+of the active interfaces; see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 352--359.
+% These estimates concern actual marked points and allowed affine lines.
+% Local layer exclusion is included below; active fan interfaces and
+% isolated stars remain separate.
+
+\begin{theorem}[Nonadjacent layers avoid fine neighborhoods]
+    \label{thm:area_law_local_layer_exclusion}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent_fineScale}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_belt_scales}
+    Let $C_0\ge2$ and $k\ge50{,}000{,}000$, and put $t_k=2^{\ell_k}$.
+    If $x\in\overline{D_k}$, $y\in\overline{D_h}$, and the layer
+    indices differ by at least two, then
+    \begin{align}
+        \|x-y\|_\infty & \ge16t_k.
+    \end{align}
+    The threshold is uniform in the finite endpoint set and origin.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dyadic_nonadjacent,thm:area_law_scale_side_ratios}
+    The scale-ratio estimate with exponent gap five gives $32t_k\le2^k$.
+    The nonadjacent-layer bound gives
+    $\|x-y\|_\infty\ge(C_0-1)2^{\max(k,h)}/2\ge2^k/2\ge16t_k$.
+\end{proof}
+
+\begin{theorem}[Only neighboring layers occur nearby]
+    \label{thm:area_law_local_layer_indices}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_nearby_indices}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_belt_scales}
+    Under the same conditions on $C_0$ and $k$, if
+    $x\in\overline{D_k}$, $y\in\overline{D_h}$ and
+    $\|x-y\|_\infty<10t_k$, then
+    \begin{align}
+        h & \le k+1, & k & \le h+1.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_local_layer_exclusion}
+    A difference of at least two would give distance at least $16t_k$,
+    contradicting the strict upper bound since $t_k>0$.
+\end{proof}
+
+\begin{definition}[Translated planar mesh]
+    \label{def:area_law_affine_mesh}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh}
+    \leanok
+    For $o\in\mathbb R^2$ and $q\in\mathbb R$, define
+    \begin{align}
+        \mathcal M(o,q) & =\{o+qz:z\in\mathbb Z^2\}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Actual marks lie on the quarter mesh]
+    \label{thm:area_law_belt_marks_quarter_mesh}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltMarks_subset_affineMesh}
+    \leanok
+    \uses{def:area_law_affine_mesh,def:area_law_belt_marks}
+    Let $j,\ell$ be nonnegative integers with $\ell\le j+1$.
+    For every finite cell-index set $F$,
+    \begin{align}
+        M_j(F) & \subseteq\mathcal M(o,2^\ell/4).
+    \end{align}
+    In particular, cells of sides $t/2$, $t$ and $2t$, where
+    $t=2^\ell$ and $\ell\ge1$, have all their marks on the same
+    mesh $\mathcal M(o,t/4)$.
+\end{theorem}
+\begin{proof}\leanok
+    A mark of a cell of side $2^j$ is $o+2^j(z+e/2)$, where
+    $e\in\{0,1,2\}^2$. Since $\ell\le j+1$, the vector
+    $2^{j+1-\ell}(2z+e)$ is integral, and the mark equals
+    $o+(2^\ell/4)2^{j+1-\ell}(2z+e)$.
+\end{proof}
+
+\begin{theorem}[Distinct mesh points are separated]
+    \label{thm:area_law_affine_mesh_point_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_dist_ge}
+    \leanok
+    \uses{def:area_law_affine_mesh}
+    If $q>0$ and $x,y\in\mathcal M(o,q)$ are distinct, then
+    \begin{align}
+        \|x-y\|_\infty & \ge q.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    At least one coordinate of the integer vectors indexing $x$ and
+    $y$ differs. Its difference has absolute value at least one, so
+    the corresponding coordinate difference of $x$ and $y$ has
+    absolute value at least $q$.
+\end{proof}
+
+\begin{theorem}[Clearance from a nonincident allowed line]
+    \label{thm:area_law_affine_mesh_line_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge}
+    \leanok
+    \uses{def:area_law_affine_mesh,def:area_law_template}
+    Suppose $q>0$ and $u,v,x\in\mathcal M(o,q)$. Let $L$ be the
+    affine span of $u,v$. Suppose either $u=v$, or $L$ has slope
+    $0$, $\infty$, $1$ or $-1$. If $x\notin L$, then
+    \begin{align}
+        \|x-y\|_\infty & \ge q/2\qquad(y\in L).
+    \end{align}
+    Thus on a quarter mesh the clearance is at least $t/8$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_affine_mesh_point_separation}
+    If $u=v$, use the point-separation bound. Otherwise, the supporting
+    line has a constant coordinate, coordinate sum or coordinate
+    difference. Its value at a missing mesh point differs from the
+    line's value by a nonzero integer multiple of $q$. A coordinate
+    difference is bounded by the sup distance; a difference of sums
+    or differences is bounded by twice that distance. The result follows.
+\end{proof}
+
+\begin{theorem}[Clearance from a nonincident allowed segment]
+    \label{thm:area_law_affine_mesh_segment_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_segment_dist_ge_of_not_mem}
+    \leanok
+    \uses{def:area_law_affine_mesh,def:area_law_template}
+    Let $q>0$ and $a,b,p\in\mathcal M(o,q)$. Suppose that the segment
+    $[a,b]$ is horizontal, vertical or diagonal, with coincident endpoints
+    also permitted. If $p\notin[a,b]$, then every $x\in[a,b]$ satisfies
+    $\|p-x\|_\infty\ge q/2$.
+    This estimate is used in the isolation arguments for the initial stars
+    and recursive repair in \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_affine_mesh_point_separation,thm:area_law_affine_mesh_line_clearance}
+    If $a=b$, then $x=a\ne p$, so mesh-point separation gives the
+    stronger bound $q$. Otherwise let $L$ be the supporting line of
+    $[a,b]$. If $p\notin L$, apply the line-clearance estimate.
+    If $p\in L\setminus[a,b]$, one endpoint $e\in\{a,b\}$ lies
+    between $p$ and $x$. Since $p\ne e$, mesh-point separation and
+    distance additivity give
+    \begin{align}
+        q & \le\|p-e\|_\infty
+        \le\|p-e\|_\infty+\|e-x\|_\infty
+        =\|p-x\|_\infty.
+    \end{align}
+    In both cases the asserted half-spacing bound follows.
+\end{proof}

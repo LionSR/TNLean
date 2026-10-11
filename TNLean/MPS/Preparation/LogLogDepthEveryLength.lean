@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.LogLogDepthBound
 import TNLean.MPS.Preparation.UnequalTreePreparation
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Preparation with measurements in depth `O(log log(N/ε))`, every chain length
@@ -177,20 +178,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
   by_cases hqN : q ≤ N
   · -- Long chains: `M - 1` blocks of length `q` and one of length `q' = q + N % q < 2q`.
     have hq0 : 0 < q := by omega
-    obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-      ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq0)).symm⟩
-    set ℓ : Fin (m + 1) → ℕ := fun k => if k = Fin.last m then q + N % q else q
-    have hsum : ∑ k, ℓ k = N := by
-      rw [Fin.sum_univ_castSucc]
-      simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-        Fintype.card_fin, smul_eq_mul, ite_true]
-      have := Nat.div_add_mod N q
-      rw [hm] at this
-      linarith
-    have hℓq : ∀ k, q ≤ ℓ k := fun k => by simp only [ℓ]; split_ifs <;> omega
-    have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => by
-      have := Nat.mod_lt N hq0
-      simp only [ℓ]; split_ifs <;> omega
+    obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
     have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor B (ℓ k)) := fun k =>
       hinjs _ ((by omega : s ≤ q).trans (hℓq k))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by

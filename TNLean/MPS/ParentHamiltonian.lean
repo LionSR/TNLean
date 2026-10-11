@@ -34,6 +34,7 @@ import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.BlockIntervalProjectors
+import TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.BlockObservableSectorDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpaceAtSimultaneousInjectivity
@@ -180,6 +181,7 @@ import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalFace
 import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalGroundStates
 import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalSupport
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
+import TNLean.MPS.ParentHamiltonian.NonzeroInteraction
 import TNLean.MPS.ParentHamiltonian.NormalBlockC1Normalization
 import TNLean.MPS.ParentHamiltonian.NormalBlockInjectiveBlocking
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
@@ -280,6 +282,7 @@ import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import TNLean.MPS.ParentHamiltonian.SpectatorOverlap
 import TNLean.MPS.ParentHamiltonian.StationaryLocalStateSupport
+import TNLean.MPS.ParentHamiltonian.StationaryLocalSupport
 import TNLean.MPS.ParentHamiltonian.StationaryParentFiniteGap
 import TNLean.MPS.ParentHamiltonian.StationaryParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.StationarySupportCompression

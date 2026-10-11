@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRestriction
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 
 /-!
 # Exact open-chain kernels of the extended mixed interaction

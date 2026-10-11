@@ -3,10 +3,11 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
+\interfootnotelinepenalty=10000
 \input{./command}
-\title{Matrix Product Operator Symmetric States: the Periodic-Boundary Layer}
+\title{Matrix Product Operator Symmetric States:\newline Formalized Layers and Remaining Scope}
 \author{}
-\date{2026-09-24}
+\date{2026-10-05}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -57,7 +58,7 @@ in each block.\footnote{Source traceability: lines 994--1000 and 1062--1064.}
 The formalization has several layers. They have different hypotheses and
 must not be conflated with the arbitrary-boundary existence theorem.
 
-\paragraph{Length-independent arbitrary-boundary transport.}
+\paragraph{Uniform arbitrary-boundary transport.}
 The closedness and compatibility predicates have the order
 $\forall X,Y\,\exists Z\,\forall N\geq1$; one output boundary works for
 all lengths. Stacking sends $(X,Y)$ to $X\otimes Y$.
@@ -79,6 +80,46 @@ These forward formulas do not construct the decomposition from
 closedness.\footnote{\leanid{MPSTensor.IsBiorthogonalDecomposition.mpvWithBoundary}
     and \leanid{MPSTensor.IsBiorthogonalDecomposition.evalWord_of_complete}, in
     \doclink{TNLean/MPS/MPDO/BoundaryTransport}.}
+
+\paragraph{Exact arbitrary-boundary reconstruction.}
+Merged \ghpr{8689} supplies the source-exact reconstruction. The assembled
+tensors are literal unweighted block sums. For fusion, the operator blocks
+are individually injective on the doubled physical alphabet, have positive
+virtual dimensions, and have no scalar-gauge duplicates. For the action
+construction, these target-block requirements concern the state blocks;
+no injectivity or separation of the incoming operator blocks is needed
+for that existence theorem. A scalar gauge here is an invertible similarity
+together with any nonzero complex scalar.\footnote{
+    \leanid{MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective}
+    and
+    \leanid{MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective},
+    in \doclink{TNLean/MPS/MPDO/BoundarySourceDecomposition}.}
+
+The common positive word-spanning length is derived from these individual
+block hypotheses. The trace-dual boundary map becomes a non-unital algebra
+representation by comparing that length with twice that length.
+Matrix-unit splitting then gives biorthogonal analysis and synthesis
+matrices and reconstructs the original unblocked letters exactly, with no
+nilpotent remainder. Their synthesis-analysis sum is the represented
+identity, which may be a proper support idempotent. No adjoint preservation,
+star closure, or ambient identity resolution is assumed.\footnote{
+    \leanid{MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective}, in
+    \doclink{TNLean/MPS/MPDO/InjectiveBlockWordSpan};
+    \leanid{Matrix.exists_piMatrix_blocks}, in
+    \doclink{TNLean/Algebra/PiMatrixRepresentation}; and
+    \leanid{MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryBiorthogonal}.}
+This exact representation splitting discharges the reconstruction step of
+Appendix A; it is not a separate assertion that every arbitrary two-sided
+linear-map expansion has a globally minimal number of summands.
+
+Taking identity boundaries in the constructed exact maps gives the
+periodic fusion and action equations, integer multiplicities, their NIM
+representation law, and fusion associativity. The simultaneous state
+independence used in the proof is derived from the same individual block
+hypotheses, rather than added to the source theorem.\footnote{
+    \leanid{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryMultiplicity}.}
 
 \paragraph{Periodic fusion and action.}
 The periodic fusion hypothesis is (\ref{eq:glm23_fusion}) at every positive
@@ -122,8 +163,13 @@ to an invertible matrix on each multiplicity space is proved.\footnote{
     \leanid{MPOTensor.exists_unique_zipperFusionGauge} and
     \leanid{MPOTensor.exists_unique_zipperActionGauge}, in
     \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness}.}
-Thus multiplicity-space uniqueness is available in the exact setting; it
-is not an assertion about unrestricted periodic reductions.
+The exact source reconstructions also admit unique invertible
+multiplicity gauges on their letter support under the stated target-block
+hypotheses.\footnote{
+    \leanid{MPSTensor.IsBiorthogonalDecomposition.exists_unique_multiplicityGauge_of_isInjective},
+    in \doclink{TNLean/MPS/MPDO/BoundaryZipperUniqueness}.}
+These comparison maps do not by themselves prove the joint L-symbol gauge
+law, and they are not an assertion about unrestricted periodic reductions.
 
 \paragraph{Multiplicity F-symbols for complete zipper families.}
 Complete zipper fusion families carry independently specified synthesis
@@ -145,9 +191,51 @@ under the full multiplicity gauge.\footnote{
 The printed F-matrix and its inverse have opposite orientations; the
 pentagon must use the stated orientation. Constructions from a compression
 with zero remainder and from a star-closed word algebra are also available.
-Neither construction proves that the arbitrary-boundary hypotheses of
-Ref.~\cite{GarreRubio2023MPOSym} produce the required exact data.
+Those compression and star-closed-algebra routes are distinct from the
+source-exact reconstruction above. The latter also supplies a complete
+zipper family after a derived common positive physical blocking, with the
+original exact virtual maps and multiplicities unchanged. A simultaneous
+one-letter inverse at the unblocked alphabet is not imposed.\footnote{
+    \leanid{MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryZipperBlocked}.}
 Star closure is not a standing hypothesis of the source's Sections 2--3.
+
+\paragraph{Multiplicity L matrices and the coupled pentagon.}
+For the exact fusion and action maps, sequential analysis followed by
+fusion-then-action synthesis determines the multiplicity L matrix.
+For a fixed final block $y$, each coefficient satisfies
+\begin{align}
+    (H_{\mathrm{seq}})_p(S_{\mathrm{fus}})_q
+     & =L_{pq}I_{D_y}.
+    \label{eq:glm23_exact_l_contraction}
+\end{align}
+Normalized trace extracts $L_{pq}$. Positive-dimensional, individually
+injective, scalar-gauge-separated state blocks give its inverse identities
+without a supplied simultaneous-span premise. The collected analysis-tree
+identity is also proved; its intermediate common-span hypothesis is
+supplied by those same block assumptions.\footnote{
+    \leanid{MPOTensor.actionLMatrix_cross},
+    \leanid{MPOTensor.actionLMatrix_inverse_of_isInjective}, and
+    \leanid{MPOTensor.actionLMatrix_analysis}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrix}.}
+
+The current draft \ghpr{8695} derives the multiplicity coupled pentagon
+for these actual coefficients from exact tree comparisons. Its source
+existence theorem uses the uniform arbitrary-boundary closedness and
+compatibility conditions above, unweighted block assemblies, and the
+individual injectivity, positive dimensions, and scalar-gauge separation
+of both the operator and state families. It assumes no coherence equation.
+Triangular physical padding and a common positive blocking leave the
+original virtual maps, and hence their coefficients, unchanged.\footnote{
+    \leanid{MPOTensor.actionLMatrix_mixed_pentagon} and
+    \leanid{MPOTensor.IsBoundaryCompatible.exists_exact_mixed_pentagon}, in
+    \doclink{TNLean/MPS/MPDO/BoundarySourceMixedPentagon}.}
+The fusion coefficient uses left analysis followed by right synthesis,
+so it is the inverse printed F-matrix of the complete-zipper convention.
+The coupled F factor has row $(d,\eta,\chi)$ and column $(f,\mu,\nu)$,
+correcting the source's reversed multiplicity pairs as documented in
+\path{docs/paper-gaps/glm23_multiplicity_l_indices.tex}. Individual L entries may vanish.
+These results do not establish the general joint multiplicity gauge law.
 
 \paragraph{Group cocycles, L-symbols, and the group obstruction.}
 For a normal periodic group representation, the two fusion trees define a
@@ -190,9 +278,10 @@ Hamiltonian-path classification.
 
 The source's lemma that exact closed fusion and $U_e=\mathbb 1$ force an
 injective group representation to be on-site, with trivial anomaly, is
-also proved from the exact fusion identities. The equivalence of those
-identities with the original arbitrary-boundary closedness still needs
-its own construction.\footnote{
+also proved from the exact fusion identities. The general exact reconstruction above does not yet specialize its
+maps to the one-channel closed-group data required by these declarations;
+that adapter is distinct from both the completed reconstruction and the
+periodic, boundary-dressed group reductions.\footnote{
     \leanid{MPOTensor.GroupFamily.isOnSite_of_closed_fusion} and
     \leanid{MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion}, in
     \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion}.}
@@ -213,55 +302,61 @@ indecomposability of the action.\footnote{
 
 \section{Remaining boundary}
 
-The elementary arbitrary-boundary contractions themselves are already
-available as \leanid{MPOTensor.mpoWithBoundary} and
-\leanid{MPSTensor.groundSpaceMap}, with
-\leanid{MPSTensor.groundSpace} their state range. Length-independent arbitrary-boundary closedness and compatibility are
-now stated directly. The remaining implication is from these source
-hypotheses to exact fusion and action decompositions. Merely closing the operators
-separately at each length, with an output boundary that depends on the
-length, would not be the source's condition.
+The arbitrary-boundary contractions, the length-independent boundary
+transport, and the exact fusion/action reconstruction are no longer
+missing. In particular, the merged result chooses one output boundary
+before all positive lengths; merely choosing a new boundary separately
+at each length is not substituted for the source's condition. The
+matrix-unit splitting retains the possibly nonunital support instead of
+adding a star-closure, vanishing-remainder, or ambient-completeness premise.
+The multiplicity L construction and the corrected coupled pentagon are
+also formalized.
 
-In particular, the following claims remain open here:
+The following algebraic obligations remain distinct:
 \begin{enumerate}
-    \item The minimal two-sided matrix decomposition of the Appendix A
-          boundary map, deriving the exact
-          fusion and action tensors and their orthogonality from the source's
-          closedness and invariance, without a star-closure or zero-remainder
-          hypothesis.
-    \item General L-symbols with fusion and action multiplicities, their
-          invertible change-of-basis construction, full coupled pentagon and joint
-          multiplicity gauge law, derived from those exact tensors.
-    \item The source's general single-block, multiplicity-one obstruction
-          that trivializes the F-symbols, beyond the already proved scalar group
+    \item Derive the full joint multiplicity gauge law for L from arbitrary
+          compatible changes of the original fusion and action maps, beyond
+          the proved complete-fusion gauge covariance and scalar group laws.
+    \item Prove the source's general single-block, multiplicity-one
+          obstruction that trivializes the F-symbols, beyond the scalar group
           case and the different fusion-ring obstruction.
+    \item Connect the exact source maps to the one-channel closed-group and
+          coset constructions where an exact adapter is still required;
+          periodic or boundary-dressed reductions alone are not that adapter.
 \end{enumerate}
-These are tracked by issues \#7968 and \#8045. Once the constructions are
-proved, the periodic predicates remain useful as explicitly weaker
-hypotheses; they need not be renamed as the arbitrary-boundary ones.
+The original tracking issues are \ghissue{7968} and \ghissue{8045}; the
+completed reconstruction and coherence components above must be
+distinguished from these remaining questions. The periodic predicates
+remain useful as explicitly weaker hypotheses and need not be renamed as
+the arbitrary-boundary ones.
 
-The rest of the paper has further independent work: tensor-derived time
-reversal constraints; the general physical phase classification of
-Section 5, including non-fixed-point and varying-bond paths; and the
-remaining exact constructions and completeness claims in Section 6.
-Their status must not be inferred from the algebraic scalar classification.
-The printed time-reversal L relation is subject to the resolved correction
-in \path{docs/paper-gaps/glm23_time_reversal_l_symbol.tex}.
+Further independent work concerns tensor-derived time-reversal constraints;
+the weak-Hopf realization, represented-unit support, and canonical-integral
+normalization used by the source's parent construction; the general physical
+phase classification of Section 5, including non-fixed-point and varying-bond
+paths; and remaining exact examples and completeness claims in Section 6.
+The local parent and finite-boundary averaging results do not themselves
+supply the missing weak-Hopf realization and integral normalization; see
+\path{docs/paper-gaps/glm23_wha_parent_completion.tex}.
+None of these physical conclusions follows just from the algebraic scalar
+classification or the multiplicity pentagon. The printed time-reversal L
+relation is subject to the resolved correction in
+\path{docs/paper-gaps/glm23_time_reversal_l_symbol.tex}.
 
 \section{Elimination plan}
 
-Starting from the proved linear boundary map, derive its minimal
-two-sided matrix decomposition and the exact fusion decomposition of
-Appendix A, using the source's simultaneous block injectivity. Apply
-the same finite-dimensional argument to the state action. Derive the
-existing periodic fusion and symmetry formulas by taking identity
-boundaries. Instantiate the existing complete zipper F theory from the
-constructed exact fusion data; do not add its conclusions as hypotheses.
-Then construct multiplicity L-symbols from the two action-tree bases,
-prove their coupled pentagon and gauges, and derive the general
-multiplicity-one obstruction. Keep the group and conditional F results
-above as reusable proved ingredients while these source-level implications
-remain open.
+Use the completed exact arbitrary-boundary reconstruction and the actual
+multiplicity F/L comparisons as the starting point. Derive the remaining
+joint multiplicity gauge law with the source's corrected dual index
+positions, then address the general multiplicity-one F-symbol obstruction.
+Complete the exact one-channel group and coset adapters without replacing
+exact identities by long-word, boundary-dressed ones. Keep the already
+proved scalar group and fusion-ring results as separate reusable inputs.
+
+The remaining tasks concerning tensor-derived time reversal, weak-Hopf
+realization, physical phase classification, and example completeness retain
+their own source hypotheses and correction notes. Completing the algebraic reconstruction and coupled
+pentagon does not remove those independent proof obligations.
 
 \bibliographystyle{alpha}
 \bibliography{references}

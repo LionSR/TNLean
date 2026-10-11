@@ -1,0 +1,75 @@
+\subsection{Rounded collar clearance}
+
+The scale choice in \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw} and
+its use in the proof of Proposition~9.5, lines~693--729, require a collar
+whose depth is small compared with the rectangle size. The following
+numerical estimates supply a sufficient clearance budget.
+
+\begin{theorem}[A rounded sublinear collar is at most half the side length]
+    \label{thm:area_law_rounded_collar_half}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_two_mul_floor_rpow_ceil_mul_le}
+    \leanok
+    Let $C_2>0$ and $0<\eta<1$ be real numbers. There is an integer
+    $N\in\mathbb N$, depending only on $C_2$ and $\eta$, such that for
+    every $s\in\mathbb N$ with $s\ge N$, on setting
+    $n_s=\lceil C_2s\rceil$ and $L_s=\lfloor n_s^\eta\rfloor$, one has
+    \begin{align}
+        2L_s\le s.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Since $1-\eta>0$, choose $N\ge1$ such that
+    $s^{1-\eta}\ge2(C_2+1)^\eta$ for every integer $s\ge N$.
+    The ceiling bound gives $n_s<C_2s+1\le(C_2+1)s$, and hence
+    \begin{align}
+        2L_s
+         & \le2n_s^\eta
+        \le2(C_2+1)^\eta s^\eta
+        \le s^{1-\eta}s^\eta=s.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[A scalar budget for collar clearance]
+    \label{thm:area_law_collar_scalar_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le}
+    \leanok
+    Let $D_0,L,s\in\mathbb N$ satisfy $D_0\ge1$ and $2L\le s$. Then
+    \begin{align}
+        D_0L+L\le D_0s.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Multiplication by $L\ge0$ gives $L\le D_0L$. Therefore
+    \begin{align}
+        D_0L+L\le D_0L+D_0L=D_0(2L)\le D_0s.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Uniform clearance for the fixed bootstrap collar]
+    \label{thm:area_law_bootstrap_collar_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_collar_clearance}
+    \leanok
+    \uses{def:area_law_bootstrap_parameters}
+    Fix real numbers $C_2>0$ and $0<e_0<1$, and let
+    $\ell=(1-e_0)/200000$, as in the fixed bootstrap parameters.
+    There is an integer $N\in\mathbb N$, depending only on $C_2$ and
+    $e_0$, such that for every $s\in\mathbb N$ with $s\ge N$, on setting
+    $n_s=\lceil C_2s\rceil$ and $L_s=\lfloor n_s^{1-\ell}\rfloor$, one
+    has, for every $D_0\in\mathbb N$ with $D_0\ge1$,
+    \begin{align}
+        D_0L_s+L_s\le D_0s.
+    \end{align}
+    The same threshold is chosen before the safety parameter $D_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_bootstrap_margins,thm:area_law_rounded_collar_half,
+        thm:area_law_collar_scalar_clearance}
+    The fixed parameter bounds give $0<\ell<1$, so $0<1-\ell<1$.
+    Apply Theorem~\ref{thm:area_law_rounded_collar_half} with
+    $\eta=1-\ell$ to choose $N$ depending only on $C_2$ and $e_0$.
+    For every $s\ge N$, this gives $2L_s\le s$. For each $D_0\ge1$,
+    Theorem~\ref{thm:area_law_collar_scalar_clearance} now gives the
+    asserted budget without changing $N$.
+\end{proof}
+
+% These are auxiliary numerical statements, not Proposition 9.5 itself.
