@@ -67,9 +67,8 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
   have hz1 : z ≤ 1 := (reducedState_posSemidef Λ q Ωt X).spectralRestrictionMass_le_one
     (by simpa only [reducedState_eq_finiteProduct] using
       (FiniteProduct.trace_reducedPure β Ωt hΩt X)) E
-  simpa only [η, z, ψ, regionalEntropy, hselected, ← hρ,
-    (reducedState_isHermitian Λ q Ωt X).rank_normalizedSpectralRestriction E hz.ne'
-      (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1),
-    abs_of_nonpos (Real.log_nonpos hz.le hz1), sub_eq_add_neg] using hbounds
+  rw [(reducedState_isHermitian Λ q Ωt X).rank_normalizedSpectralRestriction E hz.ne'
+    (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1)] at hbounds
+  done
 
 end TNLean.PEPS.AreaLaw
