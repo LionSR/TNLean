@@ -6413,10 +6413,23 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** bound `ceil(C₂*s)` by `(C₂+1)*s` for `s>=1`, then use
   monotonicity of nonnegative real powers and `Real.mul_rpow`.
 - **Seen:** `Scan/BootstrapRoundedClearance.lean` and
-  `InitialRoundedCollarEntropy.lean`.
+  `Scan/RoundedScalePower.lean`.
 - **Abstraction:** `floor_rpow_ceil_mul_rpow_le` exposes the complete
   homogeneous bound, including a further nonnegative power of the scale.
 - **Notes:** the clearance argument and physical entropy argument use
   different final comparisons. There are two copies of the elementary
   ceiling estimate; a third use should share that estimate rather than
   copy it again. No custom tactic is needed.
+
+### Fixed rounded-collar threshold — promoted (2026-10-09)
+
+- **Pattern:** obtain the fixed collar exponent bounds, choose one threshold
+  for the rounded half-side estimate, enlarge it to at least one, and derive
+  positivity and clearance for all safety parameters.
+- **Abstraction:** `Scan.exists_bootstrap_collar_clearance` now records
+  threshold positivity, collar positivity, the half-side bound and clearance
+  in one statement.
+- **Consumers:** `InitialRoundedCollarEntropy.lean` and
+  `RoundedShellEntropy.lean` reuse this statement. Its defining proof handles
+  the numerical argument once; no separate predicate or compatibility alias
+  is introduced.

@@ -29,6 +29,7 @@ import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
