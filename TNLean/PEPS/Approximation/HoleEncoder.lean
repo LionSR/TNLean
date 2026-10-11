@@ -262,7 +262,7 @@ theorem holeEncoder_norm_eq_projector (R : Fin n → Finset V) (hR : Monotone R)
 
 /-- The one-hole encoder preserves the physical Hilbert norm on the span of the
 original regional cylinders. This is a consequence of the projector Gram identity
-in polynomial-PEPS, `05-frames.tex`, `eq:encoder-contraction`, lines 61–64.
+in polynomial-PEPS, `05-frames.tex`, `eq:encoder-contraction`, lines 62–64.
 -/
 theorem holeEncoder_norm_eq_of_mem (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
