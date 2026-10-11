@@ -67,6 +67,9 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
     tauto
   have hsite (v : SquareLatticeVertex L L) : δ (h.siteTerm v) = 0 :=
     hcancel (h.site_supported v) (by simp)
-  done
+  rw [Finset.sum_eq_zero fun v _ => hsite v, zero_add]
+  refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm
+  intro e _ hne
+  exact hedge e fun hb => hne (Finset.mem_filter.mpr ⟨Finset.mem_univ e, hb⟩)
 
 end TNLean.PEPS.Approximation
