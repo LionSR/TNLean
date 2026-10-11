@@ -11,23 +11,23 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialActiveRayCount
 /-!
 # Connected components and initial regions near a fine-cell mark
 
-The connected components of the smaller open square after the actual
-identifier-change radials are removed correspond uniquely to the existing
-sector runs. The sector assignment is the canonical one derived from the
-initial regions. Neighboring sector colors change exactly when their assigned
-identifiers change, so the actual radial deletion agrees with that of the
-colored fan.
+The connected components of the smaller open square, and of its concentric
+closed square of half the radius, correspond uniquely to sector runs after
+the identifier-change radial segments are removed. The sector assignment is
+the canonical one derived from the initial regions. Neighboring sector colors
+change exactly when their assigned identifiers change, so the radial deletion
+agrees with that of the colored fan.
 
-Every retained point of a run belongs to its assigned initial open region.
-The closed run decomposition supplies birth-region membership, while the
-active-radial description excludes the frontier. The change set may be empty;
-separated runs carrying the same initial identifier remain distinct.
+Every retained point of a run in the smaller open square belongs to its assigned
+initial open region. The closed run decomposition supplies birth-region
+membership, while the active-radial description excludes the frontier. The
+change set may be empty; separated runs carrying the same initial identifier
+remain distinct.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:initial-stars`, lines 333–370,
 especially 361–370, and `prop:two-families`, lines 299–323.
-These open-square assertions are local auxiliaries to the initial-star
-construction.
+These are local auxiliaries to the initial-star construction.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
@@ -119,6 +119,89 @@ theorem initialRegion_angular_connectedComponents_equiv
     ∀ (x : Ω) (R : G.ConnectedComponent),
       e (ConnectedComponents.mk x) = R ↔
         x.val ∈ cellFanRunRegion oSmall ℓ (0, 0) (fun _ ↦ true) family R) at hgeneric
+  exact hgeneric
+
+/-- Connected components of the closed square of half the smaller fan
+radius, with the actual identifier-change radial segments removed, correspond
+uniquely to runs of the derived initial sector assignment. Membership in a
+closed run region characterizes the component of a retained point.
+
+The sector assignment is canonical and the valid shifts are arbitrary. Empty
+cuts are permitted, and separated runs carrying the same initial identifier
+remain distinct.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 333–370, especially 361–370, and
+`prop:two-families`, lines 299–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This is a local component correspondence in the initial-star construction. -/
+theorem initialRegion_closedHalf_angular_connectedComponents_equiv
+    (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (k : ℕ) (z : ℤ × ℤ) (v : ℝ × ℝ) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hv : v ∈ beltCellMarks o (fineScaleIndex k) z) :
+    let ℓ := fineScaleIndex k - 5
+    let r := (2 : ℝ) ^ ℓ / 2
+    let oSmall := (v.1 - r, v.2 - r)
+    let J := CellFanSlot (fun _ : Fin 4 ↦ true)
+    let I := InitialRegionIndex o k₀ Z C a b hC h₀
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
+    let family : J → Fin 2 :=
+      fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
+    let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
+    let L : Set (ℝ × ℝ) :=
+      ⋃ s : {s : J // σ s ≠ σ (cellFanNext s)},
+        segment ℝ v (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s.val)
+    let Ω := Metric.closedBall v (r / 2) \ L
+    ∃! e : ConnectedComponents Ω ≃ G.ConnectedComponent,
+      ∀ (x : Ω) (R : G.ConnectedComponent),
+        e (ConnectedComponents.mk x) = R ↔
+          x.val ∈ cellFanRunRegion oSmall ℓ (0, 0) (fun _ ↦ true) family R := by
+  classical
+  dsimp only
+  let ℓ := fineScaleIndex k - 5
+  let r := (2 : ℝ) ^ ℓ / 2
+  let oSmall := (v.1 - r, v.2 - r)
+  let J := CellFanSlot (fun _ : Fin 4 ↦ true)
+  let I := InitialRegionIndex o k₀ Z C a b hC h₀
+  let σ : J → I :=
+    initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
+  let family : J → Fin 2 :=
+    fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
+  let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
+  let L : Set (ℝ × ℝ) :=
+    ⋃ s : {s : J // σ s ≠ σ (cellFanNext s)},
+      segment ℝ v (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s.val)
+  let Ω := Metric.closedBall v (r / 2) \ L
+  change ∃! e : ConnectedComponents Ω ≃ G.ConnectedComponent,
+    ∀ (x : Ω) (R : G.ConnectedComponent),
+      e (ConnectedComponents.mk x) = R ↔
+        x.val ∈ cellFanRunRegion oSmall ℓ (0, 0) (fun _ ↦ true) family R
+  have hcenter : cellFanCenter oSmall ℓ (0, 0) = v := by
+    simp [cellFanCenter, oSmall, r]
+  have hchange (s : J) :
+      family s ≠ family (cellFanNext s) ↔ σ s ≠ σ (cellFanNext s) :=
+    not_congr (initialRegion_sector_assignment_adjacent_colors_eq_iff
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv s (cellFanNext s)
+      (Or.inl (cellFanEnd_eq_cellFanStart_next oSmall ℓ (0, 0) s)))
+  have hcuts :
+      (⋃ s ∈ {s : J | family s ≠ family (cellFanNext s)},
+        segment ℝ v (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s)) = L := by
+    ext x
+    constructor
+    · intro hx
+      obtain ⟨s, hs, hxs⟩ := Set.mem_iUnion₂.mp hx
+      exact Set.mem_iUnion.mpr ⟨⟨s, (hchange s).mp hs⟩, hxs⟩
+    · intro hx
+      obtain ⟨s, hxs⟩ := Set.mem_iUnion.mp hx
+      exact Set.mem_iUnion₂.mpr
+        ⟨s.val, (hchange s.val).mpr s.property, hxs⟩
+  have hgeneric := cellFanRun_closedHalf_connectedComponents_equiv oSmall ℓ (0, 0) family
+  dsimp only at hgeneric
+  rw [hcenter, hcuts] at hgeneric
   exact hgeneric
 
 /-- A point of an actual sector run inside the smaller open square, avoiding

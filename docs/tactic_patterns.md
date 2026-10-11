@@ -6407,6 +6407,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   wrapper are removed. Existing callers select the required component of
   the shared theorem. No new tactic or geometric hypothesis is introduced.
 
+### Initial-sector cut-set transport — candidate (2026-10-09)
+
+- **Pattern:** Identify the center of a translated fan and equate its
+  color-change radial union with the radial union at changes of the canonical
+  initial identifier.
+- **Seen:** The open-square and closed-half-square component correspondences
+  in `PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`.
+- **Abstraction:** Both use the canonical sector assignment and the existing
+  adjacent-color equivalence. The common connected-partition proof is already
+  shared by a private arbitrary-subset lemma in `FanRunComponents.lean`.
+- **Notes:** The cut-set calculation occurs twice in one file, below the
+  promotion threshold. If another consumer repeats it, prefer a lemma for
+  the equality of the two radial unions.
+
 ### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
 
 - **Pattern:** Prove equality of unordered coordinate pairs by choosing the
