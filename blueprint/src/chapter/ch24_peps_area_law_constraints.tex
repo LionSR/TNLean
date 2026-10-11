@@ -403,10 +403,10 @@ histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
 
-% Verification marks await the exact-name axiom check.
 \begin{lemma}[Continuity cost with a fixed distance coefficient]
     \label{lem:al_continuity_fixed_coefficient}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le_of_fixed_coefficient}
+    \leanok
     Fix $A,C,\lambda\ge0$. There is a threshold depending only on these constants
     such that, for every natural number $n$ above the threshold and every real
     $t\le A n^{-500}$,
@@ -419,6 +419,7 @@ proposition itself, which remains open until the scan data are constructed.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Put $B=1+A$ and $\overline C=C\sqrt B$.
     For all sufficiently large $n$, the coefficient-one estimate gives
     \begin{align}
