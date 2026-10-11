@@ -30,6 +30,7 @@ example (depth : Fin 0 → ℤ) (σ : PhysicalPartition (Fin 0)) :
 -- A full far side need not lie in the compact truncation set.
 example : ¬ receiving (fun _ : Fin 2 ↦ some true) true ⊆ (∅ : Finset (Fin 2)) := by
   simp [receiving]
+  exact Finset.univ_nonempty.ne_empty
 
 example : (receiving (fun _ : Fin 2 ↦ some true) true)ᶜ ⊆ (∅ : Finset (Fin 2)) := by
   simp [receiving]
@@ -38,6 +39,7 @@ example : (receiving (fun _ : Fin 2 ↦ some true) true)ᶜ ⊆ (∅ : Finset (F
 example : statusMarginalRegions (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some true) =
     {∅, Finset.univ} := by
   simp [statusMarginalRegions, receiving, middle, positiveNear, positiveNearMiddle]
+  exact Finset.pair_comm _ _
 
 example {V : Type*} [Fintype V] [DecidableEq V]
     (depth : V → ℤ) (σ : PhysicalPartition V) :
