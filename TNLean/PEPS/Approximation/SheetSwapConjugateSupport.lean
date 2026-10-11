@@ -69,7 +69,7 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
           (sheetSwapOp q (R ∩ S)) := by
     simp only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
     rw [sheetSwapOp_conj_doubledHamiltonian_eq_inter R S hA]
-  show Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+  change Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
         (sheetSwapOp q R)
       * Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
         (doubledHamiltonian A)
