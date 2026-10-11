@@ -94,10 +94,10 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     let hp := (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight
     let hzX : 0 < hp.isHermitian.spectralRestrictionMass E :=
       by simpa only [← hρ] using hz
-    (Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E hzX).symm ▸
-      vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-        (hp.normalizedSpectralRestriction_posSemidef E hzX)
-        (hp.isHermitian.trace_normalizedSpectralRestriction E hzX.ne')
+    (vonNeumannEntropy_nonneg_of_posSemidef_trace_one
+      (hp.normalizedSpectralRestriction_posSemidef E hzX)
+      (hp.isHermitian.trace_normalizedSpectralRestriction E hzX.ne')).trans_eq
+        (Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E hzX).symm
   done
 
 end TNLean.PEPS.AreaLaw.Scan
