@@ -53,6 +53,12 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
   change δ h.operator = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.edgeTerm e)
   simp only [SquareHamiltonian.operator, map_add, map_sum]
+  have hcancel {S : Set (SquareLatticeVertex L L)}
+      {A : Matrix (Configuration L q) (Configuration L q) ℂ}
+      (hA : A ∈ QuantumCircuit.supportedOperators q S)
+      (hS : S ⊆ (R : Set _) ∨ Disjoint S (R : Set _)) : δ A = 0 :=
+    sub_eq_zero.mpr
+      (EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA hS)
   done
 
 end TNLean.PEPS.Approximation
