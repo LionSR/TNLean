@@ -23,19 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-message-resources-messagegatecircuit-01
-TNLean.PEPS.PairEffect.MessageGate.eval_toOriginalCircuit
-Provenance-ID: 8769-message-resources-messagegatecircuit-02
-TNLean.PEPS.PairEffect.MessageGate.isExpansionBounded_toOriginalCircuit
-Provenance-ID: 8769-message-resources-messagegatecircuit-03
-TNLean.PEPS.PairEffect.MessageGate.isMonomialBounded_toOriginalCircuit
-Provenance-ID: 8769-message-resources-messagegatecircuit-04
-TNLean.PEPS.PairEffect.MessageGate.nonprivateCount_toOriginalCircuit
-Provenance-ID: 8769-message-resources-messagegatecircuit-05
-TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit
-Provenance-ID: 8769-message-resources-messagegatecircuit-06
-TNLean.PEPS.PairEffect.MessageGate.toOriginalCircuit
 -/
 
 
