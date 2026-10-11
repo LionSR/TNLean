@@ -98,6 +98,15 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
           (heisenbergEvolution h.operator (-t) U))).trans
         (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_left (hnear y U hU hUu) zero_le_two) (norm_nonneg A))
+  have hExp : ‖heisenbergEvolution h.operator t A -
+      siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
+      ‖A‖ * (2 * C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
+    simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_coe, nsmul_eq_mul,
+      mul_assoc, mul_comm, mul_left_comm] using
+      (norm_sub_siteExpectation_le (graphNeighborhood Λ l S)
+        (heisenbergEvolution h.operator t A)
+        (fun _ ↦ 2 * (C * Real.exp (v * |t| - c * l)) * ‖A‖) hε).trans
+        (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
   done
 
 end TNLean.PEPS.AreaLaw
