@@ -1,0 +1,73 @@
+\section{A supported Gaussian integral}
+
+\begin{theorem}[Supported Gaussian approximation]
+    \label{thm:area_supported_gaussian_integral}
+    \lean{TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral}
+    \uses{def:area_law_hamiltonian,def:qc_site_expectation}
+    Fix integers $q\geq1$ and $R\geq0$, and a real number $J$.
+    There are positive constants $C,v,c$ with the following property.
+    Let $\Lambda\subseteq\Z^2$ be a finite domain, let $H'$ be a
+    Hamiltonian of range $R$ and term-norm bound $J$ on $\Lambda$, and
+    let $H$ be any Hermitian operator on the same space.
+    Suppose that $W$ acts on $Q\subseteq\Lambda$ and that $D=H'-H$
+    acts on $Z\subseteq\Lambda$. For each integer $l\geq0$, put
+    $B=N_l(Q\cup Z)$, where distance is measured in the induced graph.
+    There is a differentiable path $U$ such that
+    \begin{align*}
+        U(0)  & =1, \\
+        U'(t) & =iE_B(e^{itH'}De^{-itH'})U(t).
+    \end{align*}
+    For every real $t$, the operator $U(t)$ is unitary and acts on $B$.
+    Choose this path before the Gaussian variance and time cutoff.
+    For every $\eta\geq0$ and $T\geq0$, let $\gamma_\eta$ be the centered
+    Gaussian measure of variance $\eta$, and define
+    \begin{align}
+        M_{\eta,T}
+        & =\int_{[-T,T]}E_B(e^{itH'}We^{-itH'})U(t)\,d\gamma_\eta(t),
+        \label{eq:supported_gaussian_integral}
+        \\
+        \widetilde M_{\eta,T}
+        & =\int_{[-T,T]}e^{itH'}We^{-itH}\,d\gamma_\eta(t).
+        \label{eq:supported_gaussian_original}
+    \end{align}
+    Then $M_{\eta,T}$ acts on $B$, its norm is at most $\|W\|$, and
+    \begin{align*}
+        \|M_{\eta,T}-\widetilde M_{\eta,T}\|
+        \leq \|W\|C|\Lambda|(1+\|D\|T)e^{vT-cl}.
+    \end{align*}
+    The integrals retain their original Gaussian mass. Zero variance,
+    empty domains and empty regions are included. This is the supported
+    Gaussian approximation used in \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_region_localization,
+        thm:qc_supported_projected_relative_evolution,
+        lem:qc_site_expectation_properties}
+    Choose $C,v,c$ from Theorem~\ref{thm:area_region_localization}.
+    Apply Theorem~\ref{thm:qc_supported_projected_relative_evolution}
+    with the projection region $B$. This constructs the path $U$ from
+    $H',H,B$, independently of $\eta,T$. Set
+    $A_B(t)=E_B(e^{itH'}We^{-itH'})$.
+    Both $A_B(t)$ and $U(t)$ act on $B$; expectation contractivity and
+    unitarity give $\|A_B(t)U(t)\|\leq\|W\|$.
+    Continuity and this bound imply Gaussian integrability.
+    The expectation onto $B$ commutes with integration and fixes the
+    integrand in (\ref{eq:supported_gaussian_integral}), proving the
+    asserted support. The restricted Gaussian mass is at most one,
+    which proves the norm bound.
+
+    Both $W$ and $D$ act on $Q\cup Z$. For $|t|\leq T$, the region
+    estimate and the relative-evolution comparison give
+    \begin{align*}
+        \|e^{itH'}We^{-itH'}-A_B(t)\|
+        & \leq \|W\|C|\Lambda|e^{vT-cl}, \\
+        \|e^{itH'}e^{-itH}-U(t)\|
+        & \leq \|D\|C|\Lambda|T e^{vT-cl}.
+    \end{align*}
+    Factor $e^{itH'}We^{-itH}$ as
+    $(e^{itH'}We^{-itH'})(e^{itH'}e^{-itH})$ and subtract
+    $A_B(t)U(t)$ in this order. Submultiplicativity gives the claimed
+    error for the integrands. Integrating and using again that the
+    restricted mass is at most one proves the comparison with
+    (\ref{eq:supported_gaussian_original}).
+\end{proof}
