@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
+import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
 
 /-!
 # Typical-entropy substitution after the rough replica comparisons
