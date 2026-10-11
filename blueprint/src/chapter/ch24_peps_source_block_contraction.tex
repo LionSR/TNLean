@@ -283,6 +283,28 @@ This gives the contractions used in
     (\ref{eq:peps_party_product_conjugation}) and then this identity.
 \end{proof}
 
+\begin{theorem}[Absorbing a common scalar at one party]
+    \label{thm:peps_party_product_scalar}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \uses{def:peps_dependent_physical_product}
+    Let $P$ be finite and choose $p_0\in P$. For any family of
+    rectangular matrices $M_p$ and any $\mu\in\C$, put
+    $c_p=\mu$ when $p=p_0$ and $c_p=1$ otherwise. Then
+    \begin{align}
+        \bigotimes_p(c_pM_p)
+         & =\mu\bigotimes_pM_p.
+        \label{eq:peps_party_product_scalar}
+    \end{align}
+    The scalar is absorbed once, including when it vanishes.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_dependent_physical_product}
+    At each matrix entry, factor the product of the $c_p$ from the
+    product of the entries of $M_p$. The former product equals $\mu$
+    because exactly one of its factors may differ from one.
+\end{proof}
+
 \begin{theorem}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}

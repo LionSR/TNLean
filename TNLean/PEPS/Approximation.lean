@@ -153,6 +153,7 @@ import TNLean.PEPS.Approximation.PartyPartition
 import TNLean.PEPS.Approximation.PartyPartitionAppend
 import TNLean.PEPS.Approximation.PartyProductConjugation
 import TNLean.PEPS.Approximation.PartyProductPartialTrace
+import TNLean.PEPS.Approximation.PartyProductScalar
 import TNLean.PEPS.Approximation.PartySelector
 import TNLean.PEPS.Approximation.PartyTensorCoordinates
 import TNLean.PEPS.Approximation.PartyTensorMaps
