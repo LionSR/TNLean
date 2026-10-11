@@ -61,6 +61,9 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       QuantumCircuit.supportedOperators (q * q) (squareInteractionSupport i : Set (Vertex L)) :=
     EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareInteractionSupport i) (h.hermitianTerm_mem_supportedOperators i)
+  have hFn : ‖F‖ ≤ 1 :=
+    (Matrix.l2_opNorm_reindex_equiv p (EncodedFrame.sheetSwapOp q R)).le.trans
+      (EncodedFrame.norm_sheetSwapOp_le_one R)
   done
 
 end TNLean.PEPS.Approximation
