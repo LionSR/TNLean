@@ -80,3 +80,100 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Apply the induction hypothesis to those registers. The canonical
     association and register identifications preserve the original order.
 \end{proof}
+
+\begin{lemma}[Coordinates of the original joint source vector]
+    \label{thm:peps_joint_source_vector_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_sum_slotBasis}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_slotVector}
+    \uses{def:peps_joint_source_vector,def:peps_source_slot_basis}
+    Choose finite orthonormal bases $b_i,c_i$ of $U_i,V_i$ and let $e_x$ be their
+    ordered joint source basis. For arbitrary $\eta_i\in U_i\otimes V_i$,
+    \[
+        \bigotimes_i\eta_i
+        =\sum_x\left(\prod_i
+        \langle b_{i,x_i^{(1)}}\otimes c_{i,x_i^{(2)}},\eta_i\rangle\right)e_x.
+    \]
+    Thus each coordinate is the product of the corresponding individual
+    source coordinates. The assertion includes empty source lists and
+    zero-dimensional register spaces.
+\end{lemma}
+
+\begin{proof}
+    \uses{def:peps_source_slot_basis,def:peps_joint_source_vector}
+    Expand each factor in its orthonormal basis and distribute the finite
+    tensor product over the finite sums. Taking the coordinate of $e_x$
+    leaves the displayed coefficient.
+\end{proof}
+
+\begin{definition}[The operator with specified orthonormal coordinates]
+    \label{def:peps_operator_from_basis_matrix}
+    \lean{TNLean.PEPS.PairEffect.basisMatrixOperator}
+    \lean{TNLean.PEPS.PairEffect.basisMatrixOperator_repr}
+    Let $b=(b_j)_{j\in I}$ be an orthonormal basis of a finite-dimensional
+    complex inner product space. For a matrix $M$, define $T_b(M)$ by
+    $T_b(M)b_j=\sum_i M_{ij}b_i$. Its matrix in $b$ is exactly $M$.
+    The matrix may be arbitrary, and the coordinate set may be empty.
+\end{definition}
+
+\begin{theorem}[Coordinates of the source-endpoint operator]
+    \label{thm:peps_endpoint_operator_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointWord}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixWord}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointMatrixWord}
+    \uses{thm:peps_source_register_operator_evaluation,
+        thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
+    In the joint source basis, the endpoint operator satisfies
+    \[
+        [Z_R]_{x,y}=\prod_i
+        \langle b_{i,x_i^{(1)}},A_i b_{i,y_i^{(1)}}\rangle
+        \langle c_{i,x_i^{(2)}},B_i c_{i,y_i^{(2)}}\rangle.
+    \]
+    In particular, constructing the endpoint maps from matrices $L_i,H_i$
+    gives $[Z_R]_{x,y}=\prod_i (L_i)_{x_i^{(1)},y_i^{(1)}}
+        (H_i)_{x_i^{(2)},y_i^{(2)}}$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_register_operator_evaluation,
+        thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
+    Apply the endpoint action to the basis vector $e_y$, then take its
+    coordinate at $e_x$. Inner products of elementary tensors multiply.
+\end{proof}
+
+\begin{theorem}[Finite averaging of endpoint operators]
+    \label{thm:peps_endpoint_matrix_average}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixAverage_eq_product}
+    \uses{thm:peps_endpoint_operator_coordinates}
+    Let $L_{i,s},H_{i,s}$ be endpoint matrices for $s\in\{0,\ldots,k-1\}$.
+    Then, entrywise in the joint source basis,
+    \[
+        \bigotimes_{i=0}^{n-1}
+        \left(k^{-1}\sum_{s=0}^{k-1} L_{i,s}\otimes H_{i,s}\right)
+        =k^{-n}\sum_{j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}} Z_j,
+    \]
+    where $Z_j$ is the actual endpoint operator with maps constructed from
+    $L_{i,j(i)},H_{i,j(i)}$. The same assignment $j(i)$ is used at both
+    endpoints. The algebraic identity includes $k=0$, with $0^{-1}=0$,
+    and $n=0$, with the empty assignment contributing the scalar identity.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_endpoint_operator_coordinates}
+    Substitute the endpoint-coordinate formula and distribute the product
+    of finite sums. One choice of a summand at every original slot gives
+    exactly one global assignment $j$.
+\end{proof}
+
+\begin{lemma}[Matrices in orthonormal coordinates]
+    \label{thm:peps_matrix_orthonormal_coordinates}
+    \lean{TNLean.PEPS.PairEffect.matrix_repr_eval_eq_toMatrix}
+    Let $b,c$ be finite orthonormal bases and let $A$ be a continuous linear
+    map between their spaces. Its linear-map matrix is the coordinate-entry
+    matrix $M_{ij}=\langle c_i,A b_j\rangle$. Empty index sets and the zero
+    map are included.
+\end{lemma}
+
+\begin{proof}
+    The matrix of a linear map is defined by the coordinates of the images
+    of its basis vectors. Evaluate that definition at each pair of indices.
+\end{proof}

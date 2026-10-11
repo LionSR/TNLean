@@ -1,0 +1,91 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.Approximation.ActualPartySourceMatrix
+import TNLean.PEPS.Approximation.BasisMatrixOperator
+import Mathlib.Analysis.InnerProductSpace.Adjoint
+
+/-! # Actual source columns with an intervening source-free word
+
+An operator given by an actual source-free input word may be placed between the
+literal chronological ket and bra columns. Changing the input coordinates to
+party coordinates gives the product of the actual local mixed matrices. This
+identity applies to each word in a sampled sum separately.
+
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
+409–434 and 565–588.
+-/
+
+noncomputable section
+open scoped Matrix
+namespace TNLean.PEPS.PairEffect
+
+private theorem mixed_toMatrix_basis_independent
+    {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    [FiniteDimensional ℂ E] [FiniteDimensional ℂ F]
+    {I J K : Type} [Fintype I] [Fintype J] [Fintype K]
+    (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ E)
+    (d : OrthonormalBasis K ℂ F) (A B : E →ₗ[ℂ] F) (U : E →ₗ[ℂ] E) :
+    LinearMap.toMatrix b.toBasis d.toBasis A *
+        LinearMap.toMatrix b.toBasis b.toBasis U *
+        (LinearMap.toMatrix b.toBasis d.toBasis B)ᴴ =
+      LinearMap.toMatrix c.toBasis d.toBasis A *
+        LinearMap.toMatrix c.toBasis c.toBasis U *
+        (LinearMap.toMatrix c.toBasis d.toBasis B)ᴴ := by
+  classical
+  rw [← LinearMap.toMatrix_adjoint b d, ← LinearMap.toMatrix_adjoint c d,
+    ← LinearMap.toMatrix_comp, ← LinearMap.toMatrix_comp,
+    ← LinearMap.toMatrix_comp, ← LinearMap.toMatrix_comp]
+
+
+namespace SourceCircuit
+variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
+variable {I O : Option {p : P // true = true} → Type}
+variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
+
+/-- A literal source-input word between the actual prepared ket and bra columns
+factors through its actual singleton restrictions. This is a coordinate identity
+for an individual input word, without any factorization hypothesis on a sum.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
+409–434 and 565–588. -/
+theorem partialSourceGlobalMatrix_mixed_word
+    (w : SourceCircuit a b) (ψ : ProductInput a)
+    (ξ ζ : Choices (fun _ : P ↦ true) w)
+    (u : Word (w.allResidualSourceLayout ++ []) (w.allResidualSourceLayout ++ []))
+    (hu : u.sources = [])
+    (B : ∀ q, OrthonormalBasis (I q) ℂ
+      (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
+    (C : ∀ q, OrthonormalBasis (O q) ℂ
+      (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))))
+    (ps : List (Option {p : P // true = true})) (hn : ps.Nodup)
+    (hc : ∀ q, q ∈ ps) :
+    w.partialSourceGlobalMatrix ψ ξ
+        (partyGroupedBasis (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
+          C ps hn hc) *
+      LinearMap.toMatrix w.actualSourceInputBasis.toBasis w.actualSourceInputBasis.toBasis
+        u.eval.toLinearMap *
+      (w.partialSourceGlobalMatrix ψ ζ
+        (partyGroupedBasis (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
+          C ps hn hc))ᴴ =
+      dependentPhysicalProductFamilyMatrix (fun q ↦
+        w.partialSourcePartyMatrix ψ ξ B C q *
+          Matrix.of (fun row col ↦ (B q).repr
+            ((u.restrict (partySelector q) hu).eval (B q col)) row) *
+          (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
+  classical
+  let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
+  let bOut := partyGroupedBasis
+    (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) C ps hn hc
+  rw [partialSourceGlobalMatrix_eq_toMatrix, partialSourceGlobalMatrix_eq_toMatrix,
+    mixed_toMatrix_basis_independent w.actualSourceInputBasis bIn bOut]
+  have h := Word.partyGroupedBasis_mixed_matrix (w.partialSourceWord ψ ξ)
+    (w.partialSourceWord ψ ζ) u (sources_partialSourceWord w ψ ξ)
+    (sources_partialSourceWord w ψ ζ) hu B C ps hn hc
+  simp only [matrix_repr_eval_eq_toMatrix] at h
+  simpa only [partialSourcePartyMatrix, matrix_repr_eval_eq_toMatrix] using h
+
+end SourceCircuit
+end TNLean.PEPS.PairEffect

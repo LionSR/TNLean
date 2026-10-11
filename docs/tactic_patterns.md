@@ -6700,3 +6700,16 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** At a third occurrence, share the scalar composition lemma
   in a lower-level module and retain the explicit empty-layout assumptions.
 - **Notes:** The two scalars may vanish. No cancellation or normalization is used.
+
+### Matrices of actual maps in orthonormal coordinates — promoted (2026-10-11)
+
+- **Helper:** `matrix_repr_eval_eq_toMatrix` in
+  `TNLean/PEPS/Approximation/BasisMatrixOperator.lean` identifies the matrix
+  formed from the coordinate entries with the linear map's matrix.
+- **Use:** Apply the identity before multiplying, summing or changing bases,
+  rather than repeatedly comparing entries and simplifying the two basis
+  coercions.
+- **Occurrences replaced:** `ActualPartySourceMatrix.lean`,
+  `ActualMixedSourceMatrix.lean`, and `ActualSampledEndpointInputWord.lean`.
+- **Scope:** Arbitrary actual continuous linear maps and finite orthonormal
+  bases; empty coordinate sets and zero maps are included. A lemma suffices.

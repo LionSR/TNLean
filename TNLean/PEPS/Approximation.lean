@@ -11,8 +11,12 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AbsorbedRestriction
 import TNLean.PEPS.Approximation.ActualCorrectedSourceBound
 import TNLean.PEPS.Approximation.ActualGaussianBranch
+import TNLean.PEPS.Approximation.ActualMixedSourceMatrix
 import TNLean.PEPS.Approximation.ActualPartySourceMatrix
 import TNLean.PEPS.Approximation.ActualPureSourceMatrix
+import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
+import TNLean.PEPS.Approximation.ActualSampledEndpointWord
+import TNLean.PEPS.Approximation.ActualSampledPartyContraction
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
@@ -37,6 +41,7 @@ import TNLean.PEPS.Approximation.ApproximateGateRescaling
 import TNLean.PEPS.Approximation.ApproximateSourceSampling
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.BasisMatrixOperator
 import TNLean.PEPS.Approximation.CanonicalPartyFactorization
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CommonPairSources
@@ -91,6 +96,9 @@ import TNLean.PEPS.Approximation.EffectReplacementSources
 import TNLean.PEPS.Approximation.EmptyGateScalar
 import TNLean.PEPS.Approximation.EmptyHeadGrouping
 import TNLean.PEPS.Approximation.EncodedFrame
+import TNLean.PEPS.Approximation.EndpointMatrixAverage
+import TNLean.PEPS.Approximation.EndpointMatrixWord
+import TNLean.PEPS.Approximation.EndpointOperatorCoordinates
 import TNLean.PEPS.Approximation.EndpointOperatorWord
 import TNLean.PEPS.Approximation.EndpointWordEvaluation
 import TNLean.PEPS.Approximation.EndpointWordRestriction
@@ -197,6 +205,7 @@ import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.RoutedContraction
+import TNLean.PEPS.Approximation.SampledEndpointFactors
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SelectedSourceContraction
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
@@ -260,6 +269,7 @@ import TNLean.PEPS.Approximation.SourceSampleChoice
 import TNLean.PEPS.Approximation.SourceSamplingCount
 import TNLean.PEPS.Approximation.SourceSamplingPolynomial
 import TNLean.PEPS.Approximation.SourceSlotBasis
+import TNLean.PEPS.Approximation.SourceSlotCoordinates
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SourceSubstitutionInventory
 import TNLean.PEPS.Approximation.SourceSubstitutionResidual
