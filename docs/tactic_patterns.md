@@ -28,13 +28,13 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** name the same unique assignment of the eight working sectors
   to actual initial identifiers in a theorem statement and its proof.
-- **Seen:** eighteen bindings at the following declaration sites:
-  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorColors.lean:88`, with the remaining bindings at lines 104.
-  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorRuns.lean:69`, with the remaining bindings at lines 86, 157, 173.
-  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorComponents.lean:63`, with the remaining bindings at lines 83, 146, 168.
-  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRayCount.lean:51`, with the remaining bindings at lines 58, 87.
-  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorCycle.lean:72`, with the remaining binding at line 76.
-  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRays.lean:143`, with the remaining bindings at lines 159, 285.
+- **Seen:** twenty-one bindings in theorem statements and proofs:
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorColors.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorRuns.lean`: four bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`: six bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRayCount.lean`: three bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorCycle.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRays.lean`: four bindings.
 - **Abstraction:** `initialSectorAssignment` in
   `TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean` is exactly the
   choice from `exists_unique_initialRegion_sector_assignment`, with the
