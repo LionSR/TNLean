@@ -122,3 +122,48 @@ interfaces in the local construction of
     $\overline B_\infty(v,r/2)\subseteq B_\infty(v,r)$, and the
     open-square equivalence applies to every point of this closed square.
 \end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% especially 352--370, and prop:two-families, lines 308--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% This is the local closed-half-radius assertion for arbitrary valid shifts.
+
+\begin{theorem}[Actual frontiers as restricted directed rays]
+    \label{thm:area_law_initial_active_ray_closed}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_ray}
+    \leanok
+    \uses{thm:area_law_actual_sector_assignment,
+        def:area_law_initial_birth_regions,def:area_law_cell_fan_successor}
+    Retain the origin, endpoint set, width, initial layer, arbitrary
+    valid pitch residues, actual cell and mark fixed above.
+    Let $\tau$ be the perimeter successor, and put
+    \begin{align}
+        \mathcal A_* & =\{s\in\mathcal J:\sigma(s)\ne\sigma(\tau(s))\},
+                     & R_s                                              & =\{v+\lambda(b_s^+-v):\lambda\ge0\}.
+    \end{align}
+    Then
+    \begin{align}
+        \left(\bigcup_{i\in\mathcal I}\partial X_i^0\right)
+        \cap\overline B_\infty(v,r/2)
+         & =\left(\bigcup_{s\in\mathcal A_*}R_s\right)
+        \cap\overline B_\infty(v,r/2).
+        \label{eq:area_law_initial_active_ray_closed}
+    \end{align}
+    Each ray includes $v$. If $\mathcal A_*$ is empty, the right-hand
+    union is empty and there is no birth frontier in this closed square.
+    Identifiers may occur in several separated sectors; the change set
+    records successive sectors without identifying such occurrences.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_active_radial_closed,
+        thm:area_law_cell_fan_successor_iff,
+        thm:area_law_cell_fan_radial_ray_restriction}
+    Endpoint adjacency is exactly the successor relation, so the active
+    pairs are $(s,\tau(s))$ with $s\in\mathcal A_*$.
+    The closed radial description therefore identifies the frontier
+    points with the segments $[v,b_s^+]$ at these changes.
+    Since $\overline B_\infty(v,r/2)\subseteq\overline B_\infty(v,r)$,
+    the radial restriction theorem replaces each segment by $R_s$
+    throughout the smaller closed square. This includes the center,
+    and proves~\eqref{eq:area_law_initial_active_ray_closed}.
+\end{proof}
