@@ -151,17 +151,8 @@ theorem eq_of_color_eq {P a b a' b' C : ℕ} (hCP : C < P)
     rw [hmb] at hcol
     exact Nat.eq_of_mul_eq_mul_right hP (Nat.add_right_cancel hcol)
   -- equal residues at distance less than `P`
-  have key : ∀ {x y : ℕ}, x % P = y % P → x ≤ y + C → y ≤ x + C → x = y := by
-    intro x y hxy hx hy
-    rcases le_total x y with h | h
-    · have := Nat.sub_mod_eq_zero_of_mod_eq hxy.symm
-      have hd : y - x < P := by omega
-      rw [Nat.mod_eq_of_lt hd] at this
-      omega
-    · have := Nat.sub_mod_eq_zero_of_mod_eq hxy
-      have hd : x - y < P := by omega
-      rw [Nat.mod_eq_of_lt hd] at this
-      omega
+  have key : ∀ {x y : ℕ}, x % P = y % P → x ≤ y + C → y ≤ x + C → x = y :=
+    fun hxy hx hy ↦ Nat.ModEq.eq_of_abs_lt hxy (abs_lt.mpr ⟨by omega, by omega⟩)
   exact ⟨key hma h2 h1, key hmb h4 h3⟩
 
 /-- At most `2 C + 1` chunk positions in `[0, n)` violate `C ≤ a ∧ a + C + 2 ≤ n`. -/

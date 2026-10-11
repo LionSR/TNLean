@@ -55,17 +55,7 @@ theorem designatedSupport_eq_ball_of_state_split {k L : ℕ}
     have hA := (initial_middle_depth S.A S.depth _ _
       (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) x hn).1 false).1
     exact Finset.mem_filter.mpr ⟨hA, (Finset.mem_Icc.mp (S.state_depth_bounds h g hL x hn)).2⟩
-  have hcross : i ∈ crossingLabels S.graph (S.truncationSet L) S.r₀ S.anchor
-      (middle (S.state h g)) := by
-    obtain ⟨x, hx⟩ := hsplit.2
-    obtain ⟨y, hy⟩ := hsplit.1
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ⟨x, (Finset.mem_inter.mp hx).1, (Finset.mem_inter.mp hx).2⟩,
-      y, (Finset.mem_inter.mp hy).1, ?_⟩
-    have hs := (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2
-    simp [middle, hs]
-  simpa only [QuantumCircuit.graphBall, ball] using
-    (truncationRadius_eq_of_mem_crossingLabels hsub hcross).2.2
+  exact S.designatedSupport_eq_ball_of_incidence _ side i hsub hsplit
 
 private theorem dilution_constant {m D r₀ : ℕ} (hr : r₀ ≤ D) (hD : 1 ≤ D) :
     2 * (((r₀ : ℝ) + (D + 2 * r₀ : ℕ) + 1) / m) ≤ 10 * (D : ℝ) / m := by

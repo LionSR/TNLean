@@ -91,30 +91,24 @@ variable {Q r}
 theorem div_lt_numChunks {n t : ℕ} (ht : t < n) : t / r < (n - 1) / r + 1 :=
   Nat.lt_succ_of_le (Nat.div_le_div_right (by omega))
 
+/-- A valid chunk position `a` of `n ≥ 1` sites starts at offset at most `n - 1`. -/
+private theorem chunk_mul_le {n a : ℕ} (hr : 1 ≤ r) (hn : 1 ≤ n) (ha : a < (n - 1) / r + 1) :
+    (a : ℤ) * r ≤ n - 1 := by
+  have h : a * r ≤ n - 1 := (Nat.le_div_iff_mul_le (by omega)).mp (by omega)
+  have h' : ((a * r : ℕ) : ℤ) ≤ ((n - 1 : ℕ) : ℤ) := by exact_mod_cast h
+  push_cast [Nat.cast_sub hn] at h'
+  exact h'
+
 /-- Points of a child at a valid position. -/
 theorem mem_child {a b : ℕ} (hr : 1 ≤ r) (ha : a < Q.numChunksX r) (hb : b < Q.numChunksY r)
     {p : ℤ × ℤ} :
     p ∈ (Q.child r a b).toFinset ↔
       Q.x₀ + a * r ≤ p.1 ∧ p.1 ≤ Q.x₀ + a * r + r - 1 ∧ p.1 ≤ Q.x₁ ∧
       Q.y₀ + b * r ≤ p.2 ∧ p.2 ≤ Q.y₀ + b * r + r - 1 ∧ p.2 ≤ Q.y₁ := by
-  have hax : (a : ℤ) * r ≤ Q.x₁ - Q.x₀ := by
-    have h1 : a * r ≤ Q.width - 1 := by
-      have := Nat.div_mul_le_self (Q.width - 1) r
-      have : a ≤ (Q.width - 1) / r := by simp only [numChunksX] at ha; omega
-      nlinarith
-    have := Q.width_eq
-    have : (1 : ℤ) ≤ Q.width := by have := Q.hx; omega
-    have h2 : ((a * r : ℕ) : ℤ) ≤ (Q.width : ℤ) - 1 := by omega
-    push_cast at h2; omega
-  have hby : (b : ℤ) * r ≤ Q.y₁ - Q.y₀ := by
-    have h1 : b * r ≤ Q.height - 1 := by
-      have := Nat.div_mul_le_self (Q.height - 1) r
-      have : b ≤ (Q.height - 1) / r := by simp only [numChunksY] at hb; omega
-      nlinarith
-    have := Q.height_eq
-    have : (1 : ℤ) ≤ Q.height := by have := Q.hy; omega
-    have h2 : ((b * r : ℕ) : ℤ) ≤ (Q.height : ℤ) - 1 := by omega
-    push_cast at h2; omega
+  have hw := Q.width_eq
+  have hh := Q.height_eq
+  have hax := chunk_mul_le (n := Q.width) hr (by have := Q.hx; omega) ha
+  have hby := chunk_mul_le (n := Q.height) hr (by have := Q.hy; omega) hb
   have hr' : (1 : ℤ) ≤ r := by exact_mod_cast hr
   rw [mem_toFinset]
   simp only [child]
@@ -163,19 +157,8 @@ theorem eq_of_mem_child {a b a' b' : ℕ} (hr : 1 ≤ r) (ha : a < Q.numChunksX 
   rw [mem_child hr ha hb] at hp
   rw [mem_child hr ha' hb'] at hp'
   have hr' : (0 : ℤ) < r := by exact_mod_cast hr
-  constructor
-  · by_contra h
-    rcases Nat.lt_or_gt_of_ne h with h | h
-    · have : (a : ℤ) + 1 ≤ a' := by exact_mod_cast h
-      nlinarith
-    · have : (a' : ℤ) + 1 ≤ a := by exact_mod_cast h
-      nlinarith
-  · by_contra h
-    rcases Nat.lt_or_gt_of_ne h with h | h
-    · have : (b : ℤ) + 1 ≤ b' := by exact_mod_cast h
-      nlinarith
-    · have : (b' : ℤ) + 1 ≤ b := by exact_mod_cast h
-      nlinarith
+  constructor <;> by_contra h <;> rcases Nat.lt_or_gt_of_ne h with h | h <;> zify at h <;>
+    nlinarith
 
 /-- **Neighbors of a padded child.** If a point of the child at `(a', b')` lies in the
 padding `C r` of the child at `(a, b)`, the positions differ by at most `C` along each axis.
@@ -224,24 +207,13 @@ theorem child_dilate_subset {a b C : ℕ} (hr : 1 ≤ r) (ha : a + C + 2 ≤ Q.n
   have hsub := child_subset hr ha' hb'
   rw [mem_dilate] at hp
   rw [mem_toFinset]
-  have hx1 : (a + C + 1) * r ≤ Q.width - 1 := by
-    have := Nat.div_mul_le_self (Q.width - 1) r
-    have : a + C + 1 ≤ (Q.width - 1) / r := by simp only [numChunksX] at ha; omega
-    nlinarith
-  have hy1 : (b + C + 1) * r ≤ Q.height - 1 := by
-    have := Nat.div_mul_le_self (Q.height - 1) r
-    have : b + C + 1 ≤ (Q.height - 1) / r := by simp only [numChunksY] at hb; omega
-    nlinarith
   have hw := Q.width_eq
   have hh := Q.height_eq
-  have hW : (1 : ℤ) ≤ Q.width := by have := Q.hx; omega
-  have hH : (1 : ℤ) ≤ Q.height := by have := Q.hy; omega
-  have hx1' : ((a : ℤ) + C + 1) * r ≤ Q.width - 1 := by
-    have : (((a + C + 1) * r : ℕ) : ℤ) ≤ ((Q.width - 1 : ℕ) : ℤ) := by exact_mod_cast hx1
-    push_cast [Nat.cast_sub (by omega : 1 ≤ Q.width)] at this; linarith
-  have hy1' : ((b : ℤ) + C + 1) * r ≤ Q.height - 1 := by
-    have : (((b + C + 1) * r : ℕ) : ℤ) ≤ ((Q.height - 1 : ℕ) : ℤ) := by exact_mod_cast hy1
-    push_cast [Nat.cast_sub (by omega : 1 ≤ Q.height)] at this; linarith
+  have hx1' := chunk_mul_le (n := Q.width) (a := a + C + 1) hr (by have := Q.hx; omega)
+    (by unfold numChunksX at ha; omega)
+  have hy1' := chunk_mul_le (n := Q.height) (a := b + C + 1) hr (by have := Q.hy; omega)
+    (by unfold numChunksY at hb; omega)
+  push_cast at hx1' hy1'
   have hCa : (C : ℤ) * r ≤ a * r := by exact_mod_cast Nat.mul_le_mul_right r haC
   have hCb : (C : ℤ) * r ≤ b * r := by exact_mod_cast Nat.mul_le_mul_right r hbC
   have hr1 : (1 : ℤ) ≤ r := by exact_mod_cast hr

@@ -84,25 +84,12 @@ private theorem cell_frontier_onSupportingLine (o : ℝ × ℝ) (ℓ : ℕ)
   have h₂ : o.2 + (2 : ℝ) ^ ℓ * z.2 < o.2 + (2 : ℝ) ^ ℓ * (z.2 + 1) := by
     nlinarith [ht]
   rw [dyadicCell, frontier_prod_eq, frontier_Ico h₂, frontier_Ico h₁] at hx
-  rcases hx with hx | hx
-  · have hy := hx.2
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy
-    rcases hy with hy | hy
-    · refine ⟨(2 : ℤ) ^ ℓ * z.2, Or.inr (Or.inl ?_)⟩
-      push_cast
-      exact hy
-    · refine ⟨(2 : ℤ) ^ ℓ * (z.2 + 1), Or.inr (Or.inl ?_)⟩
-      push_cast
-      exact hy
-  · have hx' := hx.1
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx'
-    rcases hx' with hx' | hx'
-    · refine ⟨(2 : ℤ) ^ ℓ * z.1, Or.inl ?_⟩
-      push_cast
-      exact hx'
-    · refine ⟨(2 : ℤ) ^ ℓ * (z.1 + 1), Or.inl ?_⟩
-      push_cast
-      exact hx'
+  rcases hx with ⟨-, hy⟩ | ⟨hy, -⟩ <;>
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hy <;> rcases hy with hy | hy
+  exacts [⟨(2 : ℤ) ^ ℓ * z.2, Or.inr (Or.inl (by push_cast; exact hy))⟩,
+    ⟨(2 : ℤ) ^ ℓ * (z.2 + 1), Or.inr (Or.inl (by push_cast; exact hy))⟩,
+    ⟨(2 : ℤ) ^ ℓ * z.1, Or.inl (by push_cast; exact hy)⟩,
+    ⟨(2 : ℤ) ^ ℓ * (z.1 + 1), Or.inl (by push_cast; exact hy)⟩]
 
 /-- Every mark at positive dyadic exponent lies on the translated integer mesh.
 Auxiliary to area-law Section 11, `prop:two-families`, lines 325–330 and 545–549. -/
