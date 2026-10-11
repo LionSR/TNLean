@@ -22,13 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-input; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-correctedinputreordering-01
-TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputReordering
-Provenance-ID: 8769-source-resource-correctedinputreordering-02
-TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_prepared_reordered_partial
-Provenance-ID: 8769-source-resource-correctedinputreordering-03
-TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_reordered_partial
 -/
 
 
@@ -65,7 +58,7 @@ theorem exists_correctedInputReordering {a b : Layout P} (w : SourceCircuit a b)
 
 /-- Composing the actual selectively prepared partial circuit with a source-free
 register rearrangement gives two genuine local contractions on all its inputs. -/
-theorem isTensorPartitioned_reordered_partial {a b : Layout P}
+theorem hasTensorPartition_reordered_partial {a b : Layout P}
     (w : SourceCircuit a b) (hw : w.IsAllowed) (S : Finset (sourceLocations w)) :
     let A := correctedMask w S
     let R := partialSlots A w
@@ -78,7 +71,7 @@ theorem isTensorPartitioned_reordered_partial {a b : Layout P}
     ∀ (k : Layout (Option {p // A p = true}))
       (u : Word k (freeSlotLayout R U V free ++ ℓ)),
       u.IsAllowed → u.sources = [] → ∀ ξ : Choices A w,
-        Word.IsTensorPartitioned (fun p : Option {p // A p = true} ↦ p.isSome)
+        Word.HasTensorPartition (fun p : Option {p // A p = true} ↦ p.isSome)
           (Word.comp u (Word.comp
             (ℓ₁ := freeSlotLayout R U V free ++ ℓ)
             (ℓ₂ := slotLayout R U V ++ ℓ)
@@ -109,7 +102,7 @@ theorem isTensorPartitioned_reordered_partial {a b : Layout P}
 /-- Absorb a genuine source-free initial preparation before separating the
 partial circuit. The only remaining free registers are the corrected and
 crossing sources; the two local words are contractions on all of those inputs. -/
-theorem isTensorPartitioned_prepared_reordered_partial {a b : Layout P}
+theorem hasTensorPartition_prepared_reordered_partial {a b : Layout P}
     (w : SourceCircuit a b) (hw : w.IsAllowed) (S : Finset (sourceLocations w))
     (p₀ : Word [] a) (hp₀ : p₀.IsAllowed) (hp₀s : p₀.sources = []) :
     let A := correctedMask w S
@@ -126,7 +119,7 @@ theorem isTensorPartitioned_prepared_reordered_partial {a b : Layout P}
       (List.append_nil _) (List.append_assoc C T ℓ)
     ∀ u : Word (C ++ (T ++ ℓ)) (freeSlotLayout R U V free ++ ℓ),
       u.IsAllowed → u.sources = [] → ∀ ξ : Choices A w,
-        Word.IsTensorPartitioned (fun p : Option {p // A p = true} ↦ p.isSome)
+        Word.HasTensorPartition (fun p : Option {p // A p = true} ↦ p.isSome)
           (Word.comp (Word.comp p u) (Word.comp
             (ℓ₁ := freeSlotLayout R U V free ++ ℓ)
             (ℓ₂ := slotLayout R U V ++ ℓ)
@@ -139,7 +132,7 @@ theorem isTensorPartitioned_prepared_reordered_partial {a b : Layout P}
     simp only [p, Word.sources_castLayouts, Word.sources_frameList,
       Word.sources_mapOwner, hp₀s, SourceInventory.mapOwner]
     rfl
-  exact isTensorPartitioned_reordered_partial w hw S (C ++ T) (.comp p u)
+  exact hasTensorPartition_reordered_partial w hw S (C ++ T) (.comp p u)
     ⟨hp, hu⟩ (by simp [Word.sources, hps, hus]) ξ
 
 end TNLean.PEPS.PairEffect.SourceCircuit

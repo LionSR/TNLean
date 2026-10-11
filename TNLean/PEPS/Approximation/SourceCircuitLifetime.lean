@@ -13,35 +13,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-choice-cost.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.card_touched_correctedMask_le
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.coefficient_physical_cost_eq
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.coefficient_physical_cost_le
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.correctedMask
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.corrected_slot_isTouched
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-06
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.isTouched_correctedMask_iff
-
-Provenance-ID: 8769-physical-sourcecircuitlifetime-07
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_le_lifetime
-
 -/
 
 

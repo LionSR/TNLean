@@ -22,13 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-polynomial-bounds; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-actual-sampling-sourcesamplingpolynomial-01
-TNLean.PEPS.Approximation.sourceSamplingCount_lt_inv_pow
-Provenance-ID: 8769-actual-sampling-sourcesamplingpolynomial-02
-TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_gate_power_bounds
-Provenance-ID: 8769-actual-sampling-sourcesamplingpolynomial-03
-TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_power_bounds
 -/
 
 

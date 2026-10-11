@@ -31,31 +31,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-01
-TNLean.PEPS.PairEffect.EffectCircuit.physicalDensity_physicalFirstReplacement
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-02
-TNLean.PEPS.PairEffect.EffectCircuit.physicalFirstReplacement
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-03
-TNLean.PEPS.PairEffect.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-04
-TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-05
-TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-06
-TNLean.PEPS.PairEffect.exchangedGarbageBasis
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-07
-TNLean.PEPS.PairEffect.extendedPhysicalReadout_triple_tmul
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-08
-TNLean.PEPS.PairEffect.partialTrace_physicalFirstReadout_exchange
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-09
-TNLean.PEPS.PairEffect.physicalFirstReadout
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-10
-TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_apply
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-11
-TNLean.PEPS.PairEffect.physicalFirstReadout_exchange_outerProduct
-Provenance-ID: 8769-approximate-physical-physicalfirstreadout-12
-TNLean.PEPS.PairEffect.physicalFirstReadout_tmul
 -/
 
 noncomputable section

@@ -72,4 +72,22 @@ theorem Word.eval_mapPair_source {p q : P} (hpq : p ≠ q) {U V U' V' : HSpace}
         TensorProduct.mapL_tmul]
       exact Word.eval_mapPair_tmul p q A B ℓ u v x
 
+namespace SourceInventory.Expands
+
+/-- Apply two local contractions to the first prepared pair, retaining the source
+tail and all spectator registers. No normalization of either source list is required.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267. -/
+theorem cons_mapL (r : PairSource P) (U V U' V' : HSpace)
+    (A : U →L[ℂ] U') (B : V →L[ℂ] V') (hA : ‖A‖ ≤ 1) (hB : ‖B‖ ≤ 1)
+    (η : U ⊗[ℂ] V) (T : SourceInventory P) :
+    Expands (⟨r.left, r.right, r.distinct, U, V, η⟩ :: T)
+      (⟨r.left, r.right, r.distinct, U', V', TensorProduct.mapL A B η⟩ :: T) := by
+  intro ℓ
+  obtain ⟨hw, hs⟩ := Word.mapPair_spec r.left r.right A B hA hB (T.layout ++ ℓ)
+  refine ⟨Word.mapPair r.left r.right A B (T.layout ++ ℓ), hw, hs, ?_⟩
+  have h := Word.eval_mapPair_source r.distinct A B η (T.layout ++ ℓ)
+  exact (comp_assoc _ _ _).symm.trans (congrArg (· ∘L (T.prepare ℓ).eval) h)
+
+end SourceInventory.Expands
+
 end TNLean.PEPS.PairEffect
