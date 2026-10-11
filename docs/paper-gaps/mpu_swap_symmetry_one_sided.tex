@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{One-Sided Swap Transformation of MPU Symmetries}
+\author{}
+\date{2026-10-03, revised 2026-10-09}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source and correction}
+
+The transformed examples in Ref.~\cite[lines~2053--2063]{Cirac2017MPU}
+are obtained by multiplying the periodic operator on one side by
+$S_N=\mathbb S^{\otimes N}$: $\widetilde U^{(N)}=S_NU^{(N)}$.
+The proof of the swap-transformation lemma instead writes
+$\widetilde U(x)^{(N)}=S_NU(x)^{(N)}S_N$
+\cite[lines~2076--2084]{Cirac2017MPU}. This conjugation is inconsistent with
+the stated transformed examples. The correction is to use the one-sided
+map $U\mapsto S_NU$ throughout that proof.
+
+\section{Operator identities}
+
+The swap is real, symmetric, unitary, and involutive. For every operator $U$,
+\begin{align}
+    S_NU^\dagger S_N=U
+     &\quad\Longleftrightarrow\quad (S_NU)^\dagger=S_NU,
+    \label{eq:mpu_swap_one_sided_adjoint} \\
+    S_NU^{\mathsf T}S_N=U
+     &\quad\Longleftrightarrow\quad (S_NU)^{\mathsf T}=S_NU,
+    \label{eq:mpu_swap_one_sided_transpose} \\
+    \overline U=U
+     &\quad\Longleftrightarrow\quad \overline{S_NU}=S_NU.
+    \label{eq:mpu_swap_one_sided_conjugation}
+\end{align}
+The first two equivalences follow by multiplying by $S_N$ and using
+$S_N^2=I$; the third uses $\overline{S_N}=S_N$.
+The same involutive linear map carries a continuous path to a continuous
+path. Multiplication by a one-site unitary preserves unitarity of every
+periodic operator and canonical endpoint tensors.
+
+The three operator equivalences and their strict path comparisons
+are proved by the corresponding adjunction, transposition, and conjugation
+results, which rest on the general transformation of paths by left
+multiplication with a one-site unitary and on the preservation of canonical
+endpoints.\footnote{Formal declarations: the results in
+\doclink{TNLean/MPS/MPU/Examples/SwapSymmetryTransport};
+\leanid{MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul};
+\leanid{MPOTensor.isMPUCanonicalForm_ketLeftMul}.}
+
+\section{Scope}
+
+These identities justify the swap comparison of strict symmetry-preserving
+paths, with the two tensors compared after unused virtual directions are
+adjoined up to a common dimension, as in
+\doclink{docs/paper-gaps/mpu_equivalence_fixed_bond.tex}. They do not
+establish the stabilized comparison with general identity ancillas and
+blocking. The remaining questions are recorded in
+\doclink{docs/paper-gaps/mpu_symmetry_ancilla_transport.tex}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

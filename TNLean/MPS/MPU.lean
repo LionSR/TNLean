@@ -111,6 +111,7 @@ import TNLean.MPS.MPU.JoiningRegisterCoordinates
 import TNLean.MPS.MPU.JoiningResetColumns
 import TNLean.MPS.MPU.JoiningSpectatorColumns
 import TNLean.MPS.MPU.KetLeftMul
+import TNLean.MPS.MPU.KetLeftMulCanonicalForm
 import TNLean.MPS.MPU.LeafIntervalCircuit
 import TNLean.MPS.MPU.LengthDependentPhase
 import TNLean.MPS.MPU.MPUCanonicalForm
@@ -196,6 +197,7 @@ import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
+import TNLean.MPS.MPU.SymmetryPathTransport
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPU.TensorProductIndex

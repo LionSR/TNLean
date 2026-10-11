@@ -331,6 +331,21 @@ abstracted — record why, so it is not re-proposed).
 - **Refactor:** All three callers use the lemma. The closure callers apply
   `closure_mono` to the same containment conclusion. No theorem statement changes.
 
+### Pointwise comparison of finite-chain symmetries — promoted
+- **Pattern:** compare invariance at every applicable chain length by proving
+  equivalent operator equations pointwise, for symmetries with the same
+  applicable lengths.
+- **Seen:** six uses across
+  `TNLean/MPS/MPU/Examples/SwapSymmetryTransport.lean` and
+  `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
+  transposition and conjugation comparisons (2026-10-03).
+- **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
+  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+- **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
+  removed from all six sites. The helper requires equality of the applicable
+  lengths and pointwise equivalence of the actual operator fixed equations;
+  it assumes no path or canonical-form certificate.
+
 ### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
 
 - **Pattern:** Rewrite the quasi-local MPS expectation of an interval
