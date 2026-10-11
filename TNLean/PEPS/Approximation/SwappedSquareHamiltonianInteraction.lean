@@ -55,6 +55,8 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       g.operator = Matrix.reindex e e (F * K * Fᴴ) := by
   classical
   intro p e F K
+  let B (i : SquareInteraction L) :=
+    F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i)) * Fᴴ
   done
 
 end TNLean.PEPS.Approximation
