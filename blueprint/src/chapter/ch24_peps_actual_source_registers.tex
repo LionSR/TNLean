@@ -47,3 +47,64 @@ This identity concerns the fixed source registers in
 The exterior memory of this empty register list is the scalar space
 $\C$. The identity does not remove the scalar contributed by source-free
 operations on an empty memory.
+
+\begin{definition}[Fixed coordinates of the actual source input]
+    \label{def:peps_actual_source_input_basis}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceU}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceV}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceLabels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceBasis}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis}
+    \uses{def:peps_all_party_source_registers,def:peps_source_slot_basis}
+    For each source occurrence $e$, take the standard bases of
+    $\C^{u_e}$ and $\C^{v_e}$. Their ordered tensor product is an
+    orthonormal basis $(b_x)_{x\in I_W}$ of $\mathcal H_{R_W}$, where
+    $I_W=\prod_{e\in\mathcal E_W}
+        (\{0,\ldots,u_e-1\}\times\{0,\ldots,v_e-1\})$.
+    Transport this basis through the canonical identification
+    $\mathcal H_{R_W}\simeq\mathcal H_{R_W\,\varnothing}$, obtaining
+    $(b_x^+)_{x\in I_W}$ on the input of the actual private preparation.
+    These bases depend on the original source positions and spaces, before
+    a monomial choice or sampled source vector is specified. This is the
+    fixed-coordinate convention of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 253--267 and 279--355.
+\end{definition}
+
+\begin{definition}[Literal source-to-output columns]
+    \label{def:peps_actual_source_column_matrix}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix}
+    \uses{def:peps_actual_private_preparation,def:peps_actual_source_input_basis}
+    Let $T_\xi$ be the actual source-to-output composition with recorded
+    private input $\psi$, and choose any finite orthonormal output basis
+    $(\beta_j)_{j\in J}$. Its literal column matrix is
+    \begin{align}
+        (M_\xi)_{j,x}
+         & =\langle\beta_j,T_\xi J_{R_W,\varnothing}^{-1}
+        (b_x\otimes1)\rangle,
+        \label{eq:peps_actual_source_columns}
+    \end{align}
+    where $J_{R_W,\varnothing}$ is the canonical append isometry.
+    The ket and bra compositions may have independent monomial choices.
+\end{definition}
+
+\begin{theorem}[Coordinates of the actual source-to-output word]
+    \label{thm:peps_actual_source_column_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis_apply}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_eq_toMatrix}
+    \uses{def:peps_actual_source_column_matrix}
+    Every $x\in I_W$ satisfies
+    $b_x^+=J_{R_W,\varnothing}^{-1}(b_x\otimes1)$.
+    Consequently $M_\xi$ is precisely the matrix of $T_\xi$ in the
+    input basis $(b_x^+)$ and output basis $(\beta_j)$.
+    Empty source inventories give the singleton scalar basis; a source
+    halfspace of dimension zero gives an empty column-index set.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_actual_source_input_basis,def:peps_actual_source_column_matrix,thm:peps_basis_final_scalar}
+    Appending an empty register list identifies its scalar unit with the
+    original source vector. This gives the stated expression for $b_x^+$.
+    Substituting it into the defining matrix entries yields
+    (\ref{eq:peps_actual_source_columns}).
+\end{proof}

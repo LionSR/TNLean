@@ -10,8 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.ActualCorrectedSourceBound
 import TNLean.PEPS.Approximation.ActualGaussianBranch
+import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
+import TNLean.PEPS.Approximation.ActualSourceInputBasis
 import TNLean.PEPS.Approximation.ActualSourceLifetimeBound
 import TNLean.PEPS.Approximation.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.ActualSourceRegisters
