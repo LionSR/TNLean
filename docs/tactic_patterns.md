@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
+
+- **Pattern:** unfold charge-ball membership, identify the induced domain graph,
+  apply the ambient-depth variation bound, and reverse the absolute difference.
+- **Seen:** Four copies in `Scan/GoodSampling.lean`, `Scan/SplitIntervals.lean`,
+  `Scan/PhysicalChargeAncestry.lean`, and `Scan/BadHistoryProbability.lean`.
+- **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  in `TNLean/PEPS/AreaLaw/Scan/GoodSampling.lean`.
+- **Refactor:** All five callers use the shared lemma; the private copy in
+  `SplitIntervals.lean` is removed. No import edge or theorem hypothesis changes.
+
 ### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
 
 - **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate
@@ -6333,6 +6344,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+
+### Ambient depth variation on a scan ball — refactored (2026-10-11)
+
+- **Pattern:** convert filtered-ball membership to an induced-graph distance bound,
+  then apply `abs_ambientDepth_sub_le_domainGraph` and reverse the absolute difference.
+- **Seen:** `Scan/TerminalSplits.lean` has two occurrences; the private helper in
+  `Scan/SideSeparation.lean` uses the same conversion.
+- **Abstraction:** the new side-separation proofs share one private helper, so their
+  three applications do not repeat this conversion. The mathematical estimate is
+  already supplied by `abs_ambientDepth_sub_le_domainGraph`.
+- **Disposition:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  is now available in `Scan/GoodSampling.lean`, and the sampling, ancestry,
+  probability, `SplitIntervals`, `PrefixApproximation`, `SideSeparation`, and
+  `TerminalSplits` callers use it; the private copies are removed. No new tactic
+  or geometric estimate is needed.
 
 ### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
 

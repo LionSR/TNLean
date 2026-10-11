@@ -27,7 +27,7 @@ edge-dependent networks with identity edge matrices.
 
 * `WholeGroup.network_one_eq_contraction`: the network with identity edge matrices is the
   coordinate contraction.
-* `WholeGroup.network_norm_le_one`, `WholeGroup.nuclearNorm_flattening_network_le_one`,
+* `WholeGroup.network_norm_le_one`, `WholeGroup.rectangularTraceNorm_flattening_network_le_one`,
   `WholeGroup.exists_simultaneous_network_truncation`: Lemma 6.2 of the polynomial-PEPS
   manuscript for edge-dependent networks.
 
@@ -146,12 +146,12 @@ vertex to itself, and vertex tensors of norm at most one has nuclear norm at mos
 
 Polynomial-PEPS manuscript (Sept 24 2026), Lemma 6.2 `lem:group-tensor`, 05-frames.tex:125–131.
 -/
-theorem nuclearNorm_flattening_network_le_one [∀ v, DecidableEq (P v)]
+theorem rectangularTraceNorm_flattening_network_le_one [∀ v, DecidableEq (P v)]
     (hloop : ∀ e, tail e ≠ head e) (hA : ∀ v, ∑ η, ∑ p, ‖A v η p‖ ^ 2 ≤ 1) (T : Finset V) :
-    Matrix.nuclearNorm (flattening (network tail head D A (fun _ ↦ 1)) T) ≤ 1 := by
+    Matrix.rectangularTraceNorm (flattening (network tail head D A (fun _ ↦ 1)) T) ≤ 1 := by
   rw [show network tail head D A (fun _ ↦ 1) = contraction (ofLocalTensors A) from
     funext (network_one_eq_contraction A)]
-  exact nuclearNorm_flattening_le_one _ hloop
+  exact rectangularTraceNorm_flattening_le_one _ hloop
     (fun v ↦ (vertexNormSq_ofLocalTensors hloop A v).trans_le (hA v)) T
 
 /-- **Whole-group tensor bound, truncation part, for edge-dependent networks.** For a network
