@@ -86,6 +86,15 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     (supportedOperators (q * q) (S : Set (SquareLatticeVertex L L))).sub_mem
       (EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R S hA)
       (hplain S hA)
+  have hsupport : F * K * Fᴴ - K ∈
+      supportedOperators (q * q) (Z : Set (SquareLatticeVertex L L)) :=
+    hsum.symm ▸ (supportedOperators (q * q) (Z : Set (SquareLatticeVertex L L))).sum_mem
+      (fun e he ↦ supportedOperators_mono
+        (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
+          (fun e : Edge (squareLatticeGraph L L) ↦
+            ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))) he))
+        (hlocal {e.1.1, e.1.2}
+          (by simpa only [Finset.coe_insert, Finset.coe_singleton] using h.edge_supported e)))
   done
 
 end TNLean.PEPS.Approximation
