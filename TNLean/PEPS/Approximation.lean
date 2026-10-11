@@ -8,9 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Approximation
 
+import TNLean.PEPS.Approximation.ActualCorrectedSourceBound
+import TNLean.PEPS.Approximation.ActualGaussianBranch
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
+import TNLean.PEPS.Approximation.ActualSourceLifetimeBound
+import TNLean.PEPS.Approximation.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.ActualSourceRegisters
+import TNLean.PEPS.Approximation.ActualSourceSampling
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
 import TNLean.PEPS.Approximation.AllSourceSlots
@@ -63,6 +68,7 @@ import TNLean.PEPS.Approximation.EffectCircuitReplacement
 import TNLean.PEPS.Approximation.EffectCircuitResources
 import TNLean.PEPS.Approximation.EffectReplacementCoefficients
 import TNLean.PEPS.Approximation.EffectReplacementExpansion
+import TNLean.PEPS.Approximation.EffectReplacementPolynomial
 import TNLean.PEPS.Approximation.EffectReplacementSources
 import TNLean.PEPS.Approximation.EmptyHeadGrouping
 import TNLean.PEPS.Approximation.EncodedFrame
@@ -72,10 +78,12 @@ import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
+import TNLean.PEPS.Approximation.ExteriorPhysicalDimension
 import TNLean.PEPS.Approximation.ExteriorSourceContraction
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import TNLean.PEPS.Approximation.FamilySourceOnlyReduction
 import TNLean.PEPS.Approximation.FinitePairSources
+import TNLean.PEPS.Approximation.FiniteRegisterMemories
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.FiniteSourcePreparation
 import TNLean.PEPS.Approximation.FrameBoundedChanges
@@ -199,7 +207,9 @@ import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourcePreparationVectors
 import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
+import TNLean.PEPS.Approximation.SourceSampleChoice
 import TNLean.PEPS.Approximation.SourceSamplingCount
+import TNLean.PEPS.Approximation.SourceSamplingPolynomial
 import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SourceSubstitutionInventory
