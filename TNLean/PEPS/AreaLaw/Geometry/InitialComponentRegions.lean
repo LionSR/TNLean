@@ -16,8 +16,8 @@ cell, and mark are arbitrary under the initial-region hypotheses. Different
 components may carry the same initial identifier, and the change set may be
 empty.
 
-This is an unfinished draft target. Its statement and proof have not been
-elaborated or checked. It does not establish the full isolated-star or
+This is an unfinished draft target. The proof remains incomplete.
+It does not establish the full isolated-star or
 recursive two-family assertion.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -36,7 +36,7 @@ components may have the same initial identifier.
 Local auxiliary to OpenAI, Section 11, `geometry:initial-stars`, lines
 333–370, especially 361–370, and `prop:two-families`, lines 299–323, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-The statement and proof have not been elaborated or checked. -/
+The proof remains incomplete. -/
 theorem exists_unique_initialRegion_of_closedHalf_component
     (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
     (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
@@ -59,6 +59,7 @@ theorem exists_unique_initialRegion_of_closedHalf_component
       ∀ x : Ω, ConnectedComponents.mk x = q →
         x.val ∈ initialOpenRegion o k₀ Z C a b hC h₀ i := by
   classical
+  intro ℓ r oSmall J I σ L Ω q
   done
 
 end TNLean.PEPS.AreaLaw.Geometry
