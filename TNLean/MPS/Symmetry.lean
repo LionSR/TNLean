@@ -47,9 +47,12 @@ import TNLean.MPS.Symmetry.CompactSupportedSequenceClass
 import TNLean.MPS.Symmetry.CompactUnitalTensors
 import TNLean.MPS.Symmetry.ContinuousCanonicalNormalization
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
+import TNLean.MPS.Symmetry.ContinuousPhysicalCovariance
 import TNLean.MPS.Symmetry.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousSpectralCorner
 import TNLean.MPS.Symmetry.ContinuousStationaryDensity
+import TNLean.MPS.Symmetry.ContinuousStringEndpoints
+import TNLean.MPS.Symmetry.ContinuousStringOrder
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
@@ -72,6 +75,7 @@ import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.GlobalVirtualGauge
 import TNLean.MPS.Symmetry.GroundLineSymmetryCharacter
 import TNLean.MPS.Symmetry.IndependentBondGap
+import TNLean.MPS.Symmetry.InfinitesimalPhysicalCovariance
 import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InvertibleProjectivePathInvariance
@@ -134,6 +138,7 @@ import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.ScalarIdentityAmbientObstruction
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StationaryDensitySymmetry
+import TNLean.MPS.Symmetry.StationaryPhysicalSymmetry
 import TNLean.MPS.Symmetry.StationarySupportLimitIdentification
 import TNLean.MPS.Symmetry.StationarySupportPreparation
 import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance

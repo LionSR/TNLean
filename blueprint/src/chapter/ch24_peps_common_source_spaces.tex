@@ -1,0 +1,394 @@
+\section{Common private source spaces}
+\label{sec:peps_common_source_spaces}
+
+\begin{definition}[Sources in prescribed pair slots]
+    \label{def:peps_source_slots}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots_nil}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots_cons}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.isNormalized_ofSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_ofSlots_eq}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.partyPairs_ofSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotLayout}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareSlots}
+    \leanok
+    \uses{def:peps_source_inventory}
+    Fix an ordered list of pairs $(p_e,q_e)$ with $p_e\ne q_e$.
+    Assign complex inner product spaces $U_e,V_e$ to the respective
+    parties and a vector $\eta_e\in U_e\otimes V_e$ to each pair.
+    These data define an ordered source list. Its register layout depends
+    only on the parties and halfspaces, and its unordered pairs are the
+    prescribed pairs. The list is normalized when each $\eta_e$ is
+    normalized. The empty list prepares no registers; separating the
+    first pair separates its two registers from those of the remaining
+    sources.
+
+    For any original memory $\mathcal H$, write $Q_{\eta,\mathcal H}$
+    for preparation of these sources, using the fixed register layout
+    and the canonical associativity identifications. Thus
+    $Q_{\eta,\mathcal H}x=(\bigotimes_e\eta_e)\otimes x$.
+    These are the pair slots of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 253--267.
+\end{definition}
+
+\begin{theorem}[A common order and endpoint orientation]
+    \label{thm:peps_source_ordering}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.of_perm}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_ofSlots_expands}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_source_expansion}
+    Let $R$ be a reference source list with distinct unordered pairs,
+    and let $S$ be a normalized source list with precisely the same
+    distinct unordered pairs. There are normalized sources in the pair
+    order and endpoint orientations of $R$ whose preparation can be
+    transformed into the preparation of $S$ by allowed operations
+    containing no sources, for every spectator memory. Permuting whole
+    source blocks also gives such a transformation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_expansion,thm:peps_source_expansion_operations}
+    Induct on the reference list. Select the actual source on its first
+    unordered pair and move this source block to the front. If its
+    endpoint order is reversed, apply the tensor-factor exchange
+    $U\otimes V\to V\otimes U$, which preserves the vector norm.
+    Remove the matched pair and continue. Equal pair sets and
+    distinctness ensure that every source is used exactly once.
+\end{proof}
+
+\begin{definition}[Orthogonal sums of branch spaces]
+    \label{def:peps_common_halfspaces}
+    \lean{TNLean.PEPS.PairEffect.PairSource.commonSpace}
+    \lean{TNLean.PEPS.PairEffect.PairSource.commonInclusion}
+    \lean{TNLean.PEPS.PairEffect.PairSource.commonProjection}
+    \leanok
+    Let $\Xi$ be a finite set and let $U_\xi$ be complex inner product
+    spaces. Their common space is the orthogonal sum
+    $\widehat U=\bigoplus_{\xi\in\Xi}U_\xi$.
+    Denote its coordinate inclusion by
+    $j_\xi:U_\xi\to\widehat U$ and its coordinate projection by
+    $\pi_\xi:\widehat U\to U_\xi$.
+    The norm is given by
+    $\|(u_\xi)_{\xi\in\Xi}\|^2=\sum_{\xi\in\Xi}\|u_\xi\|^2$.
+    This is the common-space construction in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 253--267.
+\end{definition}
+
+\begin{theorem}[Embedding and recovering a pair source]
+    \label{thm:peps_common_pair_source}
+    \lean{TNLean.PEPS.PairEffect.PairSource.commonProjection_commonInclusion}
+    \lean{TNLean.PEPS.PairEffect.PairSource.norm_commonProjection_le}
+    \lean{TNLean.PEPS.PairEffect.PairSource.commonVector}
+    \lean{TNLean.PEPS.PairEffect.PairSource.norm_commonVector}
+    \lean{TNLean.PEPS.PairEffect.PairSource.mapL_commonProjection_commonVector}
+    \leanok
+    \uses{def:peps_common_halfspaces}
+    Each $j_\xi$ is isometric, $\|\pi_\xi\|\le1$, and
+    $\pi_\xi j_\xi=\Id$. For a second family $V_\xi$, use inclusions
+    $k_\xi$ and projections $\rho_\xi$ on its orthogonal sum.
+    If $\eta_\xi\in U_\xi\otimes V_\xi$, set
+    $\widehat\eta_\xi=(j_\xi\otimes k_\xi)\eta_\xi$.
+    Then
+    \begin{align}
+        \|\widehat\eta_\xi\|                     & =\|\eta_\xi\|, \\
+        (\pi_\xi\otimes\rho_\xi)\widehat\eta_\xi & =\eta_\xi.
+        \label{eq:peps_common_pair_recovery}
+    \end{align}
+    In particular, normalized sources remain normalized in the common
+    spaces.
+\end{theorem}
+
+\begin{proof}\leanok
+    A coordinate inclusion has exactly one nonzero coordinate, so it
+    preserves norms. Every coordinate norm is bounded by the norm of
+    the orthogonal sum, proving the projection bound. Tensor products
+    of linear isometries preserve norms. The recovery identity follows
+    first on elementary tensors from $\pi_\xi j_\xi=\Id$ and
+    $\rho_\xi k_\xi=\Id$, then by linearity.
+\end{proof}
+
+\begin{theorem}[Local maps on a prepared pair]
+    \label{thm:peps_map_source_pair}
+    \lean{TNLean.PEPS.PairEffect.Word.mapPair}
+    \lean{TNLean.PEPS.PairEffect.Word.mapPair_spec}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_mapPair_tmul}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_mapPair_source}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_source_inventory}
+    Let $A:U\to U'$ and $B:V\to V'$ be continuous linear maps at the
+    respective parties of a pair source. Applying these maps locally,
+    with identities on a spectator memory, sends
+    $u\otimes(v\otimes x)$ to $Au\otimes(Bv\otimes x)$ and satisfies
+    \begin{align}
+        (A\otimes B\otimes\Id)P_{\eta,\mathcal H}
+         & =P_{(A\otimes B)\eta,\mathcal H}.
+        \label{eq:peps_map_source_pair}
+    \end{align}
+    When $A$ and $B$ are contractions, these two local operations form
+    an allowed composition containing no sources.
+\end{theorem}
+
+\begin{proof}\leanok
+    Act first at the first party and then at the second party, keeping
+    the remaining registers untouched. Equation~(\ref{eq:peps_map_source_pair})
+    follows on elementary tensors, hence on every source vector by linearity.
+    Tensoring each local contraction with an identity preserves its
+    contraction bound.
+\end{proof}
+
+\begin{theorem}[Local contractions with a prepared tail]
+    \label{thm:peps_source_cons_mapL}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL}
+    \leanok
+    \uses{def:peps_source_inventory,def:peps_source_expansion}
+    Let $p\ne q$ be parties, $A:U\to U'$ and $B:V\to V'$ be
+    contractions, $\eta\in U\otimes V$, and $T$ be a finite source list.
+    For every spectator memory $\mathcal H$, there is an allowed
+    composition $D$ containing no sources such that
+    $D P_{S,\mathcal H}=P_{S',\mathcal H}$, where $S$ and $S'$ are
+    obtained by adjoining $s$ and $s'$, respectively, before $T$.
+    The source $s$ has
+    endpoint spaces $U,V$ and vector $\eta$, and $s'$ has the same
+    parties, endpoint spaces $U',V'$ and vector $(A\otimes B)\eta$.
+    Neither the pair vector nor the tail is required to be normalized.
+    This is an auxiliary consequence of the local contraction step in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 253--267.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_map_source_pair,def:peps_source_inventory}
+    Apply $A$ and $B$ only to the two registers of the first pair, with
+    identities on the prepared tail and the spectator memory.
+    By~(\ref{eq:peps_map_source_pair}),
+    $D P_{s,\mathcal H_T\otimes\mathcal H}
+        =P_{s',\mathcal H_T\otimes\mathcal H}$.
+    Composing on the right with $P_{T,\mathcal H}$ gives the asserted
+    identity. The two local maps are contractions and create no source.
+\end{proof}
+
+\begin{theorem}[Common spaces for normalized source lists]
+    \label{thm:peps_common_source_lists}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.common_ofSlots_expands}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_common_expansions}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_recovery}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_expands}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_common_halfspaces,def:peps_source_expansion}
+    Let $(S_\xi)_{\xi\in\Xi}$ be a finite family of normalized source
+    lists, each with the same distinct unordered pair set as a fixed
+    reference list. There are common halfspaces in the reference pair
+    order and normalized vectors $\widehat\eta_{\xi,e}$ such that,
+    for every spectator memory $\mathcal H$, an allowed composition
+    $D_\xi$ containing no sources satisfies
+    \begin{align}
+        D_\xi Q_{\widehat\eta_\xi,\mathcal H}
+         & =P_{S_\xi,\mathcal H}.
+        \label{eq:peps_common_list_recovery}
+    \end{align}
+    The domain of $D_\xi$ is the fixed source register layout together
+    with $\mathcal H$; it does not depend on the vectors.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_source_cons_mapL,
+        thm:peps_source_expansion_operations}
+    Put every list in the reference order using
+    Theorem~\ref{thm:peps_source_ordering}. At each half of each pair,
+    form the orthogonal sum of its branch spaces and embed the branch
+    vector. Apply the coordinate projections to each pair in turn.
+    Equation~(\ref{eq:peps_common_pair_recovery}) and
+    Theorem~\ref{thm:peps_source_cons_mapL} recover its original source
+    vector.
+    Compose these operations with the exchanges recovering the original
+    source order. All local maps remain contractions.
+\end{proof}
+
+\begin{theorem}[Local factorization in common private spaces]
+    \label{thm:peps_common_party_maps}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_common_source_preparation}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_common_prepared_tensorPartyMaps}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_party_registers}
+    Let $P$ be the prescribed finite set of gate parties, with a fixed
+    ordering, and let $(F_\xi)_{\xi\in\Xi}$ be a finite family of
+    allowed compositions with the same input and output register
+    layouts. There is one common source slot for every unordered pair
+    of distinct parties, with fixed halfspaces, normalized vectors
+    $\widehat\eta_{\xi,e}$, and local contractions $B_{\xi,p}$ such that
+    \begin{align}
+        U_{\rm out}F_\xi
+         & =\left(\bigotimes_{p\in P}B_{\xi,p}\right)
+        U_{\rm in}Q_{\widehat\eta_\xi,\mathcal H_{\rm in}}.
+        \label{eq:peps_common_party_maps}
+    \end{align}
+    Here $U_{\rm in}$ groups the common source registers and the original
+    input registers by party, and $U_{\rm out}$ groups the original
+    output registers in the same party order. Both identifications and
+    the domain and codomain of each party's local maps are independent
+    of $\xi$. Equivalently, preparation in the common source layout can
+    be followed by an allowed composition containing no sources to
+    recover $F_\xi$ exactly.
+
+    These are the common private spaces in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 253--267.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_complete_pair_sources,thm:peps_complete_prepared_party_maps,
+        thm:peps_common_source_lists,thm:peps_party_factorization}
+    Choose a reference ordering of all unordered pairs by completing
+    the empty source list. Complete the actual sources of each $F_\xi$
+    by Theorem~\ref{thm:peps_complete_prepared_party_maps}, and then apply
+    Theorem~\ref{thm:peps_common_source_lists}. Compose the resulting
+    recovery maps with the remaining operations of $F_\xi$ and collect
+    the local maps by party. This gives (\ref{eq:peps_common_party_maps}).
+    The reference list is chosen independently of $\xi$, so the
+    construction also applies when $\Xi$ is empty.
+\end{proof}
+
+\begin{theorem}[The weighted gate in common private spaces]
+    \label{thm:peps_common_source_gate}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_common_source_gate}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_party_registers}
+    Let $F=\sum_{\xi\in\Xi}c_\xi F_\xi$, where $\Xi$ is finite,
+    each $c_\xi\in\C$, and the $F_\xi$ are allowed compositions with
+    the same input and output register layouts on a prescribed finite
+    set of parties $P$. There are fixed halfspaces for all unordered
+    pairs of distinct parties, normalized pair sources
+    $\widehat\eta_{\xi,e}$, and local contractions $B_{\xi,p}$ such that
+    \begin{align}
+        U_{\rm out}F
+         & =\sum_{\xi\in\Xi}c_\xi
+        \left(\bigotimes_{p\in P}B_{\xi,p}\right)
+        U_{\rm in}Q_{\widehat\eta_\xi,\mathcal H_{\rm in}}.
+        \label{eq:peps_common_source_gate}
+    \end{align}
+    The coefficients are those of the original sum. The input and
+    output identifications and all private spaces are common to every
+    summand. This is the common-space form of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--267.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_common_party_maps}
+    Apply Theorem~\ref{thm:peps_common_party_maps} to the family
+    $(F_\xi)_{\xi\in\Xi}$. Multiply each identity
+    (\ref{eq:peps_common_party_maps}) by $c_\xi$ and sum over $\Xi$.
+\end{proof}
+
+
+\begin{theorem}[Finite coordinates for a finite family of source vectors]
+    \label{thm:peps_finite_pair_coordinates}
+    \lean{TNLean.PEPS.PairEffect.PairSource.exists_finite_coordinates}
+    \leanok
+    Let $U,V$ be complex inner product spaces, let $\Xi$ be finite, and
+    let $\eta_\xi\in U\otimes V$ for each $\xi\in\Xi$, where the tensor
+    product is algebraic. There exist $a,b\in\N$, linear isometries
+    $f:\C^a\to U$ and $g:\C^b\to V$, and vectors
+    $\eta^0_\xi\in\C^a\otimes\C^b$ such that
+    $(f\otimes g)\eta^0_\xi=\eta_\xi$ and
+    $\|\eta^0_\xi\|=\|\eta_\xi\|$ for every $\xi$.
+    The integers $a,b$ may be zero. This gives finite coordinates for
+    the source vectors used in the Schmidt decompositions of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 279--299.
+\end{theorem}
+
+\begin{proof}\leanok
+    A finite set of algebraic tensors is contained in $U_0\otimes V_0$
+    for some finite-dimensional subspaces $U_0\subseteq U$ and
+    $V_0\subseteq V$: express each tensor as a finite sum of elementary
+    tensors and span the finitely many factors on each side.
+    Choose orthonormal coordinates on $U_0,V_0$ and compose their
+    coordinate isometries with the subspace inclusions. The induced
+    tensor map is isometric, so the coordinate vectors have exactly
+    the original norms.
+\end{proof}
+
+\begin{theorem}[Source preparations in finite coordinates]
+    \label{thm:peps_finite_source_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots_mapIsometry_expands}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_finite_coordinate_expansions}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_source_expansion}
+    Fix a finite source list, common halfspaces $U_e,V_e$, and a finite
+    family of vectors $\eta_{\xi,e}\in U_e\otimes V_e$.
+    There are dimensions $a_e,b_e$, isometries
+    $f_e:\C^{a_e}\to U_e$ and $g_e:\C^{b_e}\to V_e$, and coordinate
+    vectors $\eta^0_{\xi,e}$ such that
+    $(f_e\otimes g_e)\eta^0_{\xi,e}=\eta_{\xi,e}$ and
+    $\|\eta^0_{\xi,e}\|=\|\eta_{\xi,e}\|$.
+    For every $\xi$ and every spectator memory $\mathcal H$, an allowed
+    composition $D_\xi$ containing no sources satisfies
+    $D_\xi Q_{\eta^0_\xi,\mathcal H}=Q_{\eta_\xi,\mathcal H}$. More generally, any prescribed isometric inclusions of the
+    two halves of each source induce such a recovery of the included
+    sources.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_finite_pair_coordinates,thm:peps_source_cons_mapL,
+        thm:peps_source_expansion_operations}
+    Apply Theorem~\ref{thm:peps_finite_pair_coordinates} at each pair
+    slot. Apply $f_e$ and $g_e$ locally to the two halves of that slot,
+    then proceed through the source list.
+    Theorem~\ref{thm:peps_source_cons_mapL} recovers the corresponding
+    source vector at each step. The inclusions are isometries, hence
+    contractions, and create no further sources.
+\end{proof}
+
+\begin{theorem}[The source-gate expansion in finite coordinates]
+    \label{thm:peps_finite_source_gate}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_source_preparation}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_prepared_tensorPartyMaps}
+    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_source_gate}
+    \leanok
+    \uses{def:peps_source_slots,def:peps_party_registers}
+    Let $F=\sum_{\xi\in\Xi}c_\xi F_\xi$, where $\Xi$ is finite,
+    $c_\xi\in\C$, and each $F_\xi$ is an allowed composition between
+    fixed register layouts on a prescribed finite set of parties $P$.
+    There are common dimensions $a_e,b_e$ for every unordered pair of
+    distinct parties, normalized sources
+    $\eta^0_{\xi,e}\in\C^{a_e}\otimes\C^{b_e}$, and local
+    contractions $B_{\xi,p}$ such that
+    \begin{align}
+        U_{\rm out}F_\xi
+         & =\left(\bigotimes_{p\in P}B_{\xi,p}\right)
+        U_{\rm in}Q_{\eta^0_\xi,\mathcal H_{\rm in}}, \\
+        U_{\rm out}F
+         & =\sum_{\xi\in\Xi}c_\xi
+        \left(\bigotimes_{p\in P}B_{\xi,p}\right)
+        U_{\rm in}Q_{\eta^0_\xi,\mathcal H_{\rm in}}.
+        \label{eq:peps_finite_source_gate}
+    \end{align}
+    Here $U_{\rm in}$ groups the common finite source registers and
+    original input registers by party, while $U_{\rm out}$ groups the
+    unchanged output registers in the same order. Each branch is also
+    the exact composition of its coordinate source preparation with
+    allowed operations containing no sources.
+
+    This is an exact finite-coordinate form of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--299. No bound on the private
+    dimensions $a_e,b_e$ is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_common_party_maps,thm:peps_common_source_lists,
+        thm:peps_finite_source_coordinates,thm:peps_party_factorization}
+    Theorem~\ref{thm:peps_common_party_maps} prepares every branch's
+    sources in common private spaces, followed by allowed operations
+    containing no sources. Apply
+    Theorem~\ref{thm:peps_finite_source_coordinates} to the finitely many
+    common vectors at each slot. Compose the coordinate inclusions with
+    the remaining operations of each branch. All these operations are local
+    contractions. Collect them by party, giving one identity
+    (\ref{eq:peps_common_party_maps}) for each branch. Multiply each by
+    $c_\xi$ and sum over $\Xi$ to obtain (\ref{eq:peps_finite_source_gate}).
+\end{proof}

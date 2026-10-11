@@ -289,9 +289,8 @@ theorem isReductionResidualNilpotencyBound_mulTensor_kronId {X : MPOTensor d D�
       (mulTensor A P).toMPSTensor (kronId V D₃) (kronId W D₃) =
         (mulTensor (residualTensor X A V W) P).toMPSTensor := by
     funext ij
-    simp only [MPSTensor.reductionResidual, toMPSTensor, mulTensor_apply, kronId,
-      Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
+    simp only [MPSTensor.reductionResidual, toMPSTensor, mulTensor_apply, kronId_mul_submatrix_sum,
+      submatrix_sum_mul_kronId, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
@@ -318,9 +317,8 @@ theorem isReductionResidualNilpotencyBound_mulTensor_idKron {X : MPOTensor d D�
       (mulTensor P A).toMPSTensor (idKron D₃ V) (idKron D₃ W) =
         (mulTensor P (residualTensor X A V W)).toMPSTensor := by
     funext ij
-    simp only [MPSTensor.reductionResidual, toMPSTensor, mulTensor_apply, idKron,
-      Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, residualTensor, kronecker_sub', Finset.sum_sub_distrib]
+    simp only [MPSTensor.reductionResidual, toMPSTensor, mulTensor_apply, idKron_mul_submatrix_sum,
+      submatrix_sum_mul_idKron, residualTensor, kronecker_sub', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
@@ -382,9 +380,8 @@ theorem isReductionResidualNilpotencyBound_actTensor_idKron (T : MPOTensor d D�
   have hres : MPSTensor.reductionResidual (actTensor T B) (actTensor T A) (idKron D₃ V)
       (idKron D₃ W) = actTensor T (MPSTensor.reductionResidual B A V W) := by
     funext i
-    simp only [MPSTensor.reductionResidual, actTensor_apply, idKron,
-      Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, kronecker_sub', Finset.sum_sub_distrib]
+    simp only [MPSTensor.reductionResidual, actTensor_apply, idKron_mul_submatrix_sum,
+      submatrix_sum_mul_idKron, kronecker_sub', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
@@ -409,9 +406,8 @@ theorem isReductionResidualNilpotencyBound_actTensor_kronId {X : MPOTensor d D�
   have hres : MPSTensor.reductionResidual (actTensor X B) (actTensor Y B) (kronId V D₃)
       (kronId W D₃) = actTensor (residualTensor X Y V W) B := by
     funext i
-    simp only [MPSTensor.reductionResidual, actTensor_apply, kronId,
-      Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
+    simp only [MPSTensor.reductionResidual, actTensor_apply, kronId_mul_submatrix_sum,
+      submatrix_sum_mul_kronId, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
     rfl
   intro w hw
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w

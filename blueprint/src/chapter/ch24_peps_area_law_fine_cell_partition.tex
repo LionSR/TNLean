@@ -1,0 +1,51 @@
+\section{Unique fine cells outside the dummy region}
+\label{sec:area_law_fine_cell_partition}
+
+The half-open fine cells refine the actual layer partition. Retain the
+common origin, finite endpoint set $Z$, integer width $C_0$ and fine
+exponents $\ell_k$; see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 154--181 and 200--207.
+% These statements assign half-open fine cells. They do not assign the
+% final primary and belt regions or prove the full two-family proposition.
+
+\begin{theorem}[Unique fine cell outside the initial neighborhood]
+    \label{thm:area_law_unique_fine_cell}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Suppose that $Z$ is nonempty and $C_0\ge2$. For every lower index
+    $k_0$ and every $x\notin N_{k_0}$, there is a unique pair $(k,z)$
+    such that $k\ge k_0$, $z\in F_{k,\ell_k}$ and
+    $x\in C_{\ell_k,z}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unique_layer,thm:area_law_fine_layer_count,
+        thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,
+        thm:area_law_dyadic_indices}
+    The point belongs to a unique layer $D_k$ with $k\ge k_0$.
+    Since $\ell_k\le k$, the exact union of its fine cells supplies
+    $z\in F_{k,\ell_k}$ with $x\in C_{\ell_k,z}$. Any other admissible
+    fine cell belongs to its actual layer, whose index must therefore
+    equal $k$. The unique cell-index criterion at exponent $\ell_k$
+    then forces its index to equal $z$.
+\end{proof}
+
+\begin{theorem}[Exact cover by the dummy region and fine cells]
+    \label{thm:area_law_dummy_fine_cells_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    For nonempty $Z$, integer $C_0\ge2$ and every lower index $k_0$,
+    \begin{align}
+        \mathbb R^2=N_{k_0}\cup\bigcup_{k\ge k_0}
+        \bigcup_{z\in F_{k,\ell_k}}C_{\ell_k,z}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_unique_fine_cell}
+    Every point either belongs to $N_{k_0}$ or belongs to the fine
+    cell of its unique admissible pair $(k,z)$.
+\end{proof}

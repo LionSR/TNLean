@@ -1,0 +1,67 @@
+\section{Dummy-neighborhood corners on fine-cell sides}
+\label{sec:area_law_dummy_corners}
+
+Retain the common origin, finite endpoint set and integer width $C_0$,
+and fix a lower layer $k_0$. Let $P_{k_0}$ be the indices of the coarse
+cells contributing to $N_{k_0}$. Their corners need not be boundary
+vertices of the union. The following assertions concern each contributing
+cell separately; see \cite[Section~11]{OpenAI2026AreaLaw}.
+
+% Source: 10-geometry.tex, lines 160--191, 200--207 and 299--310.
+% Constancy of the opposing dummy region and its label remains separate.
+
+\begin{theorem}[A dummy-cell corner on a whole fine side]
+    \label{thm:area_law_dummy_corner_side}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_side}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_cell_corner,
+        def:area_law_dyadic_cell_side,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Suppose that $C_0\ge2$, $k\ge k_0$, $z\in F_{k,\ell_k}$ and
+    $w\in P_{k_0}$. For $\varepsilon\in\{0,1\}^2$, put
+    $x=o+2^{k_0}(w+\varepsilon)$. If $x\in S_{\ell_k,z,s}$, then
+    $x=a_{\ell_k,z,s}$ or $x=b_{\ell_k,z,s}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dummy_contact_index,thm:area_law_fine_cell_containment,
+        thm:area_law_fine_belt_scales,thm:area_law_cell_fan_mark_vertices,
+        thm:area_law_belt_marks_closed_cell,thm:area_law_dyadic_closures,
+        thm:area_law_dyadic_cell_distance,
+        def:area_law_affine_mesh,thm:area_law_affine_mesh_point_separation}
+    The corner belongs to $\overline{N_{k_0}}$. The whole side lies in
+    the convex square $\overline{Q_{k,z}}\subseteq\overline{D_k}$,
+    so dummy-contact localization gives $k=k_0$. Put $q=2^{\ell_{k_0}}$.
+    Since $\ell_{k_0}\le k_0$, the corner and both side endpoints belong
+    to $o+q\mathbb Z^2$. If $x$ differed from both endpoints $a,b$,
+    mesh separation would give
+    \begin{align}
+        2q\le\|a-x\|_\infty+\|x-b\|_\infty
+        =\|a-b\|_\infty\le q.
+    \end{align}
+    The equality follows from $x\in[a,b]$, and the last inequality
+    is the cell's sup-diameter bound. This contradicts $q>0$.
+\end{proof}
+
+\begin{theorem}[A dummy-cell corner on an elementary fine side]
+    \label{thm:area_law_dummy_corner_elementary_side}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_elementarySide}
+    \leanok
+    \uses{def:area_law_dyadic_layers,def:area_law_cell_corner,
+        def:area_law_cell_fan,def:area_law_fine_layer_indices,
+        def:area_law_fine_belt_scales}
+    Suppose that $C_0\ge2$, $k\ge k_0$, $z\in F_{k,\ell_k}$ and
+    $w\in P_{k_0}$. Choose any optional midpoint subdivision of
+    $\overline{Q_{k,z}}$ and one of its elementary segments $[u,v]$.
+    For $\varepsilon\in\{0,1\}^2$, if the corner
+    $x=o+2^{k_0}(w+\varepsilon)$ of the contributing dummy cell belongs
+    to $[u,v]$, then $x=u$ or $x=v$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_dummy_corner_side,thm:area_law_elementary_side_geometry}
+    The elementary segment belongs to its whole side $[a,b]$, so
+    $x=a$ or $x=b$. For an undivided side this is the desired conclusion.
+    On $[a,(a+b)/2]$, the endpoint $b$ cannot occur unless $a=b$;
+    on $[(a+b)/2,b]$, the endpoint $a$ cannot occur unless $a=b$.
+    If the endpoints coincide, the conclusion holds directly. Thus
+    every possible case gives one of the elementary endpoints.
+\end{proof}

@@ -12,6 +12,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorOrderTwo
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.Character

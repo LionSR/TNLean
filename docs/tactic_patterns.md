@@ -24,6 +24,313 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
+
+- **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate
+  `fun δ N₀ x => ∀ N, N₀ ≤ N → ∀ v ∈ V x N, δ * ‖v‖ ≤ ‖H x N v‖`, then the two monotonicity
+  bullets (shrinking `δ` by `mul_le_mul_of_nonneg_right`, enlarging `N₀` by `le_trans`)
+  before the local bound.
+- **Seen:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` itself and three
+  parent-Hamiltonian gap theorems that inlined it:
+  `exists_uniform_parentHamiltonianES_gap_of_strict_openWindows`
+  (`CompactParentGap.lean`),
+  `exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective`
+  (`CompactNormalParentGap.lean`) and
+  `exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact`
+  (`CompactBlockParentGap.lean`), all under `TNLean/MPS/ParentHamiltonian/`.
+- **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
+  `TNLean/Algebra/CompactGapBounds.lean`; pass `H := fun x N => …` and
+  `V := fun x N => (LinearMap.ker …)ᗮ` and prove only the local bound.
+- **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
+  `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
+  `CompactKernelGap.lean` has no tail, so both keep the direct call to
+  `exists_uniform_pos_nat_bounds`.
+
+### Remainder-absorbing block lengths — promoted (2026-10-10)
+
+- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
+  of length `q + N % q`, and prove the sum is `N` by separating the last
+  summand with `Fin.sum_univ_castSucc`, summing the constants, and applying
+  `Nat.div_add_mod`; then prove `q ≤ ℓ k ≤ 2 q` by `split_ifs <;> omega`.
+- **Seen:** nine occurrences, one each in `LogDepthPreparation`,
+  `LogLogDepthEveryLength`, `SupportedLogLogPreparation`, `UnequalTreeMERA`,
+  `OverlappingMeasurementPreparation`, `RectangularPreparation`,
+  `VaryingReferencePreparation`, `CoherentGroundspaceConversion` and
+  `ZeroSubleadingPreparation` under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSPreparation.exists_remainderBlocks` in
+  `TNLean/MPS/Preparation/RemainderBlocks.lean`: for `0 < q ≤ N` it supplies
+  `m`, `ℓ : Fin (m + 1) → ℕ`, `N / q = m + 1`, `∑ k, ℓ k = N` and both
+  bounds. Each call site is one `obtain`. Use `remainderBlockLengths` instead
+  when the block family must be indexed by `Fin (N / q)` with a definitional
+  formula.
+- **Notes:** the lemma adds 22 lines and the call sites lose 113, for a net
+  delta of −91 Lean lines.
+
+### Order-two family with a bond-two generator — promoted (2026-10-10)
+
+- **Pattern:** a `ℤ₂`-indexed family `1 ↦ E`, `g ↦ A` (bond dimensions one and two) written
+  out with `Fin 2` label matches for tensors and fusion tensors, together with the cast and
+  associator lemmas that reduce the two fusion trees of three generators to `V ⊗ 1` and
+  `1 ⊗ V` and make `ω(g,1,g) = 1`.
+- **Seen:** `Examples/CZX/CZXAnomalyClass.lean` (`czxFamily`),
+  `Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` (`pairFamily`, two uses), and
+  `Examples/KleinSymmetryAnomaly.lean` (the restriction to `{e, a}`).
+- **Abstraction:** `MPOTensor.GroupFamily.orderTwoFamily`,
+  `MPOTensor.GroupFamily.FusionData.orderTwo`, and
+  `MPOTensor.GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator` in
+  `TNLean/MPS/Symmetry/MPOSymmetry/AssociatorOrderTwo.lean`. State the generator as
+  `orderTwoGen`: a bare `Multiplicative.ofAdd 1` may elaborate through a different instance
+  path for `ZMod 2` and then fail to match in `rw`.
+- **Notes:** `Z2Z2AnomalyClass` and `KleinSymmetryAnomaly` use it; `czxFamily` keeps its
+  printed labels and can switch when next edited. The step "restrict along `f`, transport the
+  cyclic invariant, read off the associator scalar" is
+  `FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo`, used by three callers.
+
+### Boundary on one Kronecker factor of a letter sum — promoted (2026-10-10)
+
+- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
+  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv`, distribute with
+  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
+  boundary onto one factor with `← Matrix.mul_kronecker_mul` and
+  `Matrix.one_mul`/`Matrix.mul_one`.
+- **Seen:** fifteen occurrences across four files: `MPSTensor.IsReduction.mulTensor_kronId`,
+  `mulTensor_idKron`, `kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn`,
+  `idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn` and
+  `MPOTensor.mulTensor_mul_kronId_of_intertwine`
+  (`TNLean/MPS/Core/ReductionComposition.lean`); `MPSTensor.IsReduction.actTensor_idKron`,
+  `actTensor_kronId`, `MPOTensor.actTensor_mul_kronId_of_intertwine`,
+  `MPSTensor.IsDressedProportional.actTensor_idKron` and `actTensor_kronId`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`); and the four `hres` steps of
+  `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId`, `_mulTensor_idKron`,
+  `_actTensor_kronId` and `_actTensor_idKron`
+  (`TNLean/MPS/Core/ReductionResidualComposition.lean`), the last four added by #8244.
+- **Abstraction:** `MPOTensor.kronId_mul_submatrix_sum`, `submatrix_sum_mul_kronId`,
+  `idKron_mul_submatrix_sum` and `submatrix_sum_mul_idKron` in
+  `TNLean/MPS/Core/ReductionComposition.lean`: a boundary `X ⊗ 1` or `1 ⊗ X` on either side
+  of `(∑ j, A j ⊗ B j)` in the `finProdFinEquiv` bond order acts on one factor of every
+  summand. Each call site rewrites with one or two of them and closes by
+  `simp only [h.evalWord]` (or the intertwining or proportionality hypothesis).
+- **Notes:** `kronId_mul`, `idKron_mul` and `kronId_mul_idKron` multiply two boundaries
+  without a letter sum and keep their direct proofs. The four lemmas add 44 lines and
+  the call sites lose 52, for a net delta of −8 lines.
+
+### Chosen nonzero dressed-proportionality scalar — promoted (2026-10-10)
+
+- **Pattern:**
+  ```lean
+  open Classical in
+  ... if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+  with the spec lemma closing by
+  `simp only [_, hex, ↓reduceDIte, Units.val_mk0]; exact hex.choose_spec.2`.
+- **Seen:** four occurrences across three files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`), and
+  `BlockActionData.lSymbol` (`TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`).
+- **Abstraction:** `MPSTensor.dressedScalar B X Y : Units ℂ` and
+  `MPSTensor.isDressedProportional_dressedScalar` in
+  `TNLean/MPS/Core/ReductionComposition.lean`. The four definitions are
+  `dressedScalar` of their boundaries, and each spec lemma ends with
+  `exact MPSTensor.isDressedProportional_dressedScalar hex`. The one external proof that
+  unfolded the `dite` of `omega`, `MPOTensor.GroupCocycle.fusionData_omega`
+  (`TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`), uses the same lemma.
+- **Notes:** statements of `omega`, `relativeScalar`, both `lSymbol`s and their spec
+  lemmas are unchanged. The shared definition and lemma add 18 lines; the four call
+  sites lose 13, for a net delta of +5 lines, and four `open Classical in` blocks with
+  their `dite` unfoldings are gone.
+
+### Empty final tensor memory — promoted (2026-10-09)
+
+- **Pattern:** identify the tensor product with an empty final memory with
+  scalar multiplication on the preceding memory.
+- **Seen:** `WordAppendTail.lean` and `UnitMemoryCoordinates.lean` contained
+  the same induction on the register list and its tensor vectors.
+- **Abstraction:** `Layout.memCongr_append_nil_appendIso_symm_tmul` in
+  `UnitMemoryCoordinates.lean`.
+- **Refactor:** the spectator-register construction imports and uses this
+  public theorem; its duplicate private proof is removed.
+- **Notes:** the statement includes arbitrary complex scalars and arbitrary
+  register lists, including the empty list. No additional hypothesis is needed.
+
+### Tensor memory identifications under equality — promoted (2026-10-09)
+
+- **Pattern:** identify equal tail register lists before adjoining a fixed head,
+  or identify equal selected and complementary lists before applying the head
+  associativity/exchange maps; addition respects the same identification.
+- **Seen:** the head congruence proof occurred in `LayoutOwnerMap.lean`,
+  `WordAppendTail.lean`, and `UnitMemoryCoordinates.lean`; the partition
+  congruences occurred in `PartyPartition.lean` and `PartyPartitionAppend.lean`.
+- **Abstraction:** `Layout.memCongr_cons_tmul`, `Layout.selectedHead_heq`,
+  `Layout.complementaryHead_heq`, and `Layout.add_heq` in `PartyPartition.lean`.
+- **Refactor:** remove the duplicate private proofs and use the shared
+  declarations. The more general private Hilbert-space congruences in
+  `PartitionOwnerNaturality.lean` retain their cross-owner applications.
+- **Notes:** no additional hypothesis or compatibility alias. The public
+  lemmas and callers pass the full native build; the strict imported-lemma
+  audit reports only `propext`, `Classical.choice`, and `Quot.sound`.
+
+### Local contractions on the first prepared pair — promoted (2026-10-09)
+
+- **Pattern:** use `Word.mapPair_spec` to obtain an allowed source-free word,
+  use `Word.eval_mapPair_source` to transform the first pair vector, and compose
+  the identity on the right with the unchanged tail preparation.
+- **Seen:** former private proofs `pair_cons_mapIsometry_expands` in
+  `TNLean/PEPS/Approximation/FiniteSourcePreparation.lean` and
+  `common_pair_cons_expands` in
+  `TNLean/PEPS/Approximation/CommonSourcePreparation.lean`.
+- **Abstraction:** the theorem
+  `TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL` in
+  [SourcePairMaps.lean](../TNLean/PEPS/Approximation/SourcePairMaps.lean) takes the two
+  continuous linear maps and their operator-norm bounds. Issue #8973 requests
+  the common lemma; the two private copies are removed, rather than retained
+  as aliases. Both existing family theorem statements remain unchanged.
+- **Refactor:** `SourceInventory.common_ofSlots_expands` and
+  `SourceInventory.ofSlots_mapIsometry_expands` specialize the shared lemma.
+- **Notes:** the lemma retains the same tail for every spectator layout, and requires no
+  source normalization, finite dimension or nonzero space. No tactic or new
+  simp attribute is introduced.
+
+### Single-qubit plus-state positivity — promoted (2026-10-08)
+
+- **Pattern:** Identify the all-halves two-by-two density matrix with one half
+  of the outer product of the vector `![1, 1]`, then apply
+  `Matrix.posSemidef_vecMulVec_self_star` and nonnegative scalar multiplication.
+- **Seen:** Three copies in `TNLeanTest/RegularizedPatchStationarity.lean`,
+  `RegularizedPatchNoncommuting.lean`, and `RegularizedPatchZeroWeight.lean`.
+- **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
+  `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
+  The three regressions use the shared density and positivity result directly.
+- **Notes:** The former private `density`/`density_psd`,
+  `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
+  pairs are removed. The singularity, noncommutation, first-variation, and
+  zero-weight assertions are unchanged after unfolding the shared density.
+  The four fixture files shrink by 14 lines. No new tactic or compatibility
+  alias is introduced.
+
+### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
+
+- **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
+  its boundary dart, cut the walk at the first endpoint of the dart, and show that the
+  dart is an edge of the edge boundary no farther from the start than the walk is long.
+- **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
+- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
+  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+  region and the shortened walk; the three call sites use it.
+- **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
+  analogue for an arbitrary graph in the extended graph distance.
+
+### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
+
+- **Pattern:** repeat the region of a fan triangle after deleting the actual
+  successor color-change radials and intersecting with the open ball of
+  radius equal to the cell's half-side.
+- **Seen:** three descriptions across `FanInactiveSeams.lean` (the statement
+  and its local proof expression) and `FanRunConnectedness.lean`.
+- **Abstraction:** `cellFanCutPiece` in
+  `TNLean/PEPS/AreaLaw/Geometry/FanInactiveSeams.lean` names this common set.
+- **Refactor:** the inactive-radial statement and proof refer directly to the
+  definition; the connected-run proof uses it for its family of pieces and
+  unfolds it only in the final union identity.
+- **Notes:** the fan has all side midpoints, the colors lie in `Fin 2`, and
+  the radius and deleted radials are derived from the same actual cell and
+  coloring. No added hypothesis or more general construction is introduced.
+
+### Rectangular sandwich of a matrix product operator word — promoted (2026-10-08)
+
+- **Pattern:** replace every letter `U i j` of a nonempty word by `A * U i j * B` with
+  `B * A = 1` and telescope, so that the word evaluation is `A * evalWord U is js * B`.
+- **Seen:** `evalWord_padBond` (an isometry and its adjoint) and `evalWord_virtualSandwich`
+  (a bond similarity) in `TNLean/MPS/MPU/`, beside the Kraus form
+  `Kraus.evalWord_compress_of_left_absorb`.
+- **Abstraction:** `MPOTensor.evalWord_sandwich` in `TNLean/MPS/MPU/WordSandwich.lean`, for
+  rectangular `A` and `B`.
+- **Refactor:** `evalWord_padBond` and `evalWord_virtualSandwich` are one-line instances.
+
+### Rank from a factorization and an identity minor — promoted (2026-10-08)
+
+- **Pattern:** prove `rank M = k` from `M = P * Q` through `k` (upper bound) and a `k × k`
+  submatrix equal to the identity (lower bound).
+- **Seen:** four cut-rank proofs in `TNLean/MPS/MPU/Examples/ControlledZ.lean` and
+  `leftRank_oddRingTensor` in `TNLean/MPS/MPU/Examples/OddRing.lean`.
+- **Abstraction:** `Matrix.rank_eq_card_of_eq_mul_of_submatrix_eq_one` in
+  `TNLean/Algebra/MatrixRankOfFactor.lean`.
+- **Refactor:** all five call sites use the lemma; the private helpers are deleted.
+
+### Functional calculus under a unitary conjugation — promoted (2026-10-08)
+
+- **Pattern:** `f (x * A * xᴴ) = x * f A * xᴴ` for a unitary `x` and Hermitian `A`, and the same
+  for `PosSemidef.supportInvSqrt`.
+- **Seen:** general `Matrix` lemmas that had been placed in `TNLean/MPS/MPU/SourceFactorChoice.lean`.
+- **Abstraction:** `Matrix.IsHermitian.cfc_eq_of_eq_unitary_conj`,
+  `Matrix.PosSemidef.supportInvSqrt_eq_of_eq_unitary_conj` and
+  `Matrix.conjTranspose_mul_unitary` in `TNLean/Algebra/MatrixUnitaryConjCFC.lean`.
+- **Refactor:** the MPU module imports the algebra module.
+
+### Connectivity from two run-support memberships — promoted (2026-10-08)
+
+- **Pattern:** Convert membership of two fan slots in one run's support into
+  equality of their connected-component identifiers before applying colour
+  constancy.
+- **Seen:** Three transfers in `BeltRunInterfaces.lean` and one in
+  `DummyRunInterfaces.lean`.
+- **Abstraction:** Mathlib already provides
+  `SimpleGraph.ConnectedComponent.reachable_of_mem_supp` and
+  `SimpleGraph.ConnectedComponent.eq`. Their composition replaces all four
+  manual pairs of support-membership equalities. No additional theorem or
+  tactic is needed.
+- **Notes:** The two existing belt-interface statements are unchanged. Both
+  receive fresh whole-file verification with the dummy-interface contribution.
+
+### Boundary geometry of an elementary side — promoted (2026-10-07)
+
+- **Pattern:** Derive nondegeneracy and the constant square-boundary coordinate
+  of an elementary side, allowing arbitrary midpoint subdivisions.
+- **Seen:** The two opposing-region existence cases in
+  `ElementarySideOpponents.lean` and the opposing-region uniqueness proof in
+  `ElementarySideOpponentUniqueness.lean`.
+- **Abstraction:** `cellFan_elementary_geometry` promotes the existing private
+  statement and proof unchanged in `ElementarySideOpponents.lean`. The two
+  existing callers and the new uniqueness proof use this common theorem.
+- **Notes:** No compatibility alias or additional hypothesis is introduced.
+  The existing existence statement is unchanged; its complete source file
+  receives fresh verification with the two new declarations.
+
+### Four orientations of fine-cell endpoints — promoted (2026-10-07)
+
+- **Pattern:** Identify the ordered whole-side endpoints from the cell center
+  and side vectors, then recognize the two endpoints as binary cell corners.
+- **Seen:** The coordinate calculation in `CellContacts`, the full-mesh
+  witnesses in `DummyCorners`, and the corner witnesses in `ActualSideMatching`.
+- **Abstraction:** `cellFan_unsplit_endpoints_coordinates` and
+  `cellFan_unsplit_endpoints_are_corners` in `SideEndpoints.lean`. The existing
+  coordinate statement and proof move unchanged to their shared owner; the
+  corner witnesses follow from that formula.
+- **Refactor:** All three callers use the shared lemmas. The promotion removes
+  38 net lines from `CellContacts`, 30 from `DummyCorners`, and the 25-line
+  private corner table from `ActualSideMatching`; the shared owner has 88
+  lines. The five older public statements stay unchanged.
+- **Notes:** A scoped pattern scan of the five completed proof modules finds
+  the remaining whole-side and half-side rectangle conversions only within
+  `CellContacts`, below the threshold across two files. No new tactic or
+  compatibility alias is introduced.
+
+### Actual fine-cell containment in a layer — promoted (2026-10-07)
+
+- **Pattern:** Rewrite the exact union over actual fine-layer indices and insert
+  the indexed cell as one summand.
+- **Seen:** Three copies in `NonbeltPrimaries.lean`,
+  `FineMarkSeparation.lean` and `SideSubdivision.lean`.
+- **Abstraction:**
+  `TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices`
+  in `LayerPartition.lean`. It requires only the aligned exponents and actual
+  index membership, including empty layers and arbitrary origins and radii.
+- **Refactor:** All three callers use the lemma. The closure callers apply
+  `closure_mono` to the same containment conclusion. No theorem statement changes.
+
 ### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
 
 - **Pattern:** Rewrite the quasi-local MPS expectation of an interval
@@ -1181,7 +1488,24 @@ three-plaquette output measurement, and the routed reunion measurement.
   unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
   claimed that every call site had been refactored, which was wrong for the nine sites listed
   above; those were refactored on 2026-09-19, after which the claim holds.  A site loses
-  between three and nine lines.
+  between three and nine lines.  A second spelling of the same argument, rewriting the
+  goal with `(Matrix.stdBasis ℂ _ _).span_eq` and `Submodule.span_le`, survived in four
+  `TNLean/MPS/MPDO/` files (`RescalingStableExplicitVerticalBNT`,
+  `RescalingStableLengthDependentRFPCanonicalForm`, `TwistedDimerHorizontalCF`,
+  `TwistedDimerVerticalCF`); those were refactored on 2026-10-10.
+
+### cancelling a nonzero scalar in a submodule membership — rejected (Mathlib)
+- **Pattern:**
+  ```lean
+  have h' := Submodule.smul_mem _ c⁻¹ hmem
+  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h'
+  ```
+- **Seen:** eight occurrences across seven files (2026-10-10): `Examples/AKLT.lean` (twice),
+  `Examples/MultiBlock/OneSlotGauge.lean`, `FundamentalTheorem/Reduction/RingEmbedding.lean`,
+  and the four `TNLean/MPS/MPDO/` injectivity proofs listed in the previous entry.
+- **Abstraction:** none needed: Mathlib's `Submodule.smul_mem_iff (p) (hc : c ≠ 0)` states
+  `c • x ∈ p ↔ x ∈ p`; write `(Submodule.smul_mem_iff _ hc).mp hmem`.  All eight sites
+  were rewritten that way on 2026-10-10.
 
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
@@ -3481,7 +3805,107 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
+### reordering words of a party layout — promoted
+
+- **Pattern:** a word of exchanges of tensor factors, built by recursion or
+  composition, gets a lemma that it is allowed, uses any given parties and has
+  no pair source, followed by three one-line projections.
+- **Helper:** the predicate `PairEffect.Word.IsReordering` with the simp lemmas
+  `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
+  `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
+  `IsReordering.isAllowed`, `IsReordering.usesOnly` and
+  `IsReordering.sourceCount_eq`, in
+  `TNLean/PEPS/Approximation/SiteRegisters.lean`.
+- **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
+  `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
+  `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
+  by `simp [w]`; a word with local maps passes the projections to `simp` as
+  conditional rewrites.
+- **Notes:** when a recursive word's type differs from the type of its
+  unfolding only up to definitions such as `siteRegs`, `simp` cannot match
+  `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
+
 ## Candidates
+
+### Unique radial through a noncentral fan point — candidate (2026-10-09)
+
+- **Pattern:** turn membership in two center-to-endpoint segments into a common
+  directed ray, then apply `cellFanEnd_sameRay_iff` to identify their slots.
+- **Seen:** two uses across `CellFanRadialIncidence.lean` and
+  `FanInactiveSeams.lean`, in `TNLean/PEPS/AreaLaw/Geometry/`.
+- **Abstraction:** a common noncentral radial-incidence lemma if a third use
+  appears; the shared endpoint-ray theorem already contains the geometry.
+- **Notes:** noncentrality is essential when composing the directed-ray
+  relations. The center remains in every triangle when no radial is removed.
+
+
+### Operator norm in orthonormal coordinates — candidate (2026-10-07)
+
+- **Pattern:** Identify matrix multiplication in orthonormal coordinates with
+  the underlying continuous linear map, then use preservation of norms by the
+  coordinate isometries to transfer an operator-norm bound.
+- **Seen:** Two occurrences:
+  `PEPS/Approximation/PreparedMatrixNorm.lean`,
+  `Word.norm_preparedMatrix_le_one`, and
+  `PEPS/Approximation/SourceBlockMatrix.lean`,
+  the private `Word.norm_toMatrix_eval_le_one`.
+- **Abstraction:** If another independent use arises, first check Mathlib for
+  the corresponding orthonormal-coordinate norm identity, then supply a general
+  lemma if needed. No further copy is currently required: the proper-frame
+  bound uses the complete free-source matrix bound through a fixed map word.
+- **Notes:** The predecessor proof and its exact-source verification remain
+  unchanged. The focused scan of the five new modules and `PreparedMatrixNorm`
+  found these two occurrences and no pattern occurring three times. This entry
+  remains below the promotion threshold.
+
+### sitewise Kronecker power in configuration coordinates — candidate
+- **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
+  identity, conjugate-transpose and unitarity lemmas.
+- **Seen:** two copies (2026-10-06): `siteProduct` (index `Fin ℓ × Fin r`) in
+  `TNLean/MPS/MPU/FundamentalTheoremGates.lean` and the private `chainPower` (index `Fin d`) in
+  `TNLean/MPS/MPU/Examples/ShiftStrictEquivalence.lean`.
+- **Abstraction:** one definition over an arbitrary fintype; a third copy promotes it.
+
+### simplicity of a tensor with diagonal rank-one double-layer letters — candidate
+- **Pattern:** `isMPUSimple_of_rankOne_diagonal` (`TNLean/MPS/MPU/SimpleRankOne.lean`,
+  2026-10-06) proves simplicity from three scalar pairings; the shift's own simplicity proof
+  (`rightShiftTensor_isMPUSimple`) has this form and could be replaced by it.
+
+### Nonnegative barycentric coordinates — candidate (2026-10-08)
+
+- **Pattern:** Obtain nonnegativity of every barycentric coordinate from
+  membership in the convex hull of an affine basis.
+- **Seen:** Four local coordinate arguments in
+  `PEPS/AreaLaw/Geometry/FanRadialConvexity.lean`.
+- **Current reuse:** All four use Mathlib's
+  `AffineBasis.convexHull_eq_nonneg_coord` directly. They lie in one file,
+  so the two-file promotion threshold has not been reached.
+- **Promotion trigger:** If this extraction recurs in another module, prefer
+  a lemma giving the coordinate inequalities over a new tactic.
+
+### Endpoint witness for a closed dyadic neighborhood — candidate (2026-10-07)
+
+- **Pattern:** Choose one cell in the finite closed neighborhood union, then
+  an endpoint in its occupied neighboring cell, and apply the closed-cell
+  distance bound.
+- **Seen:** The private neighborhood witness in `DistanceLayers.lean` and
+  the public `dyadicNeighborhood_exists_dist_le` in `DummyContacts.lean`.
+- **Current reuse:** New consumers use the public theorem. The earlier verified
+  module is preserved; this is the second occurrence, below the promotion
+  threshold.
+- **Promotion trigger:** If a third occurrence is needed, use the public
+  theorem and replace the earlier private copy in one separately verified
+  contribution.
+
+### Entropy bounds from boundary counts — candidate (2026-10-07)
+
+- **Pattern:** Cast a cardinal comparison to the reals, multiply by the
+  nonnegative entropy constant, and compose with the assumed entropy bound.
+- **Seen:** Two occurrences in `PEPS/AreaLaw/VertexBoundaryCorollaries.lean`,
+  for the inner boundary and the set of both endpoints.
+- **Abstraction:** Both proofs already use Mathlib's cast and multiplication
+  lemmas. A third occurrence in another module should extract the common
+  inequality argument into a lemma, with the comparison factor explicit.
 
 ### Simultaneous weighted sector coordinates — candidate (2026-10-02)
 
@@ -3643,21 +4067,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   if a third use in another module needs the same argument.
 - **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
   and the existing realization identities; no tactic is needed at this count.
-
-### Remainder-absorbing block lengths — candidate
-- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
-  of length `q + N % q`, and prove the sum is `N` by separating the last
-  summand, summing the constants, and applying `Nat.div_add_mod`.
-- **Seen:** two production occurrences in
-  `TNLean/MPS/Preparation/LogDepthPreparation.lean:152` and
-  `TNLean/MPS/Preparation/ZeroSubleadingPreparation.lean:120` (2026-10-03).
-- **Abstraction:** at a third occurrence, a partition lemma for arbitrary
-  `N,q,m` with `N / q = m + 1` can supply the sum and the lower/upper bounds
-  from `Nat.mod_lt`, using the existing `Fin.sum_univ_castSucc` and
-  `Finset.sum_const`.
-- **Notes:** Mathlib already supplies the finite-sum and division identities;
-  no general partition lemma was found. The two production occurrences are
-  below the rule-of-three threshold.
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
@@ -4066,44 +4475,6 @@ currently one occurrence, so no general declaration is warranted.
   the `simpa` coercion from the indexed supremum.
 - **Status:** promoted; all three call sites now read
   `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
-
-### carrying a boundary through one Kronecker factor of a letter sum — candidate
-- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
-  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
-  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
-  boundary onto one factor with `← Matrix.mul_kronecker_mul` (twice) and
-  `Matrix.one_mul`/`Matrix.mul_one`.
-- **Seen:** six occurrences across three files: `MPSTensor.IsReduction.mulTensor_kronId` and
-  `mulTensor_idKron` (`TNLean/MPS/Core/ReductionComposition.lean`),
-  `MPOTensor.mulTensor_mul_kronId_of_intertwine` (`TNLean/MPS/MPDO/OperatorProduct.lean`),
-  and `MPSTensor.IsReduction.actTensor_idKron`, `actTensor_kronId` and
-  `MPOTensor.actTensor_mul_kronId_of_intertwine`
-  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
-- **Abstraction:** a lemma stating
-  `(X ⊗ 1) * (∑ j, A j ⊗ B j) * (Y ⊗ 1) = ∑ j, (X * A j * Y) ⊗ B j` and its `1 ⊗ X`
-  mirror, in the `finProdFinEquiv` bond order; the intertwiner lemmas are the cases
-  `Y = 1` and `X = 1`.
-- **Notes:** past the rule of three. Promotion rewrites the three call sites in
-  `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
-  separate refactor rather than folded into the action-tensor PR.
-
-### classical choice of a nonzero proportionality scalar — candidate
-- **Pattern:**
-  ```lean
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
-  then Units.mk0 hz.choose hz.choose_spec.1 else 1
-  ```
-- **Seen:** three occurrences across two files: `FusionData.omega` (through
-  `IsAssociator`) and `FusionData.relativeScalar`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
-- **Abstraction:** a definition
-  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
-  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
-  and `lSymbol` then specialize it.
-- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
-  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
-  is left to a separate refactor.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
@@ -5576,6 +5947,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
 
+### Cyclic matrix traces in physical density contractions — rejected (2026-10-05)
+
+- **Pattern:** Normalize matrix associativity around a cyclic trace permutation.
+- **Seen:** The left marginal and unitary-gauge proofs in
+  `Core/StationaryPhysicalDensity`, and the virtual-Gram purity and overlap
+  proofs in `Core/StationaryPhysicalOverlap`.
+- **Abstraction:** Reuse Mathlib's `Matrix.trace_mul_comm` with its rectangular
+  intermediate dimensions, followed by `simp only [Matrix.mul_assoc]`.
+- **Notes:** The common mathematical step is already abstracted upstream.
+  A local four-factor trace wrapper would add a parallel API without removing
+  an independent proof argument. No additional tactic or helper was added.
+
 ### Finite periodic quotient error — candidate (2026-10-06)
 
 - **Pattern:** Bound a normalized periodic expectation by rewriting
@@ -5624,6 +6007,78 @@ spectral split → block extraction → MPV calculation → strict bounds
   all in `WordRestriction.lean`. These express the defining equations of the
   equality transport; there is no repeated proof argument across files.
 
+### Congruence after identifying layout memories — reuse (2026-10-07)
+
+- **Pattern:** After identifying two equal register layouts, apply the same
+  dependent construction to heterogeneously equal vectors.
+- **Seen:** The focused scan found `cases h; cases hxy; rfl` in
+  `SourcePreparation.eval_source_heq`, `Word.eval_castInput_of_heq`, and the
+  new `SourcePreparationCoordinates.assocL_tmul_heq` under
+  `TNLean/PEPS/Approximation` (three occurrences across two files).
+- **Decision:** Reuse core `congrArg`, `eq_of_heq`, and `heq_of_eq` in the new
+  associator helper after identifying the layouts. These are defining
+  equations of three distinct dependent constructions, not repeated tensor
+  calculations. A new generic congruence lemma would restate the existing
+  equality lemmas, so no additional theorem or tactic is promoted. Previously
+  audited source-preparation proofs are unchanged.
+- **Relation to the tensor-map candidate:** The two existing private
+  `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
+  with four changing spaces. The new helper instead compares an associator
+  applied to a fixed pair vector and a changing spectator vector; obtaining
+  a tensor-map identity first would require additional equalities without
+  simplifying the proof. The common mathematical operation is ordinary
+  congruence after the memory types have been identified.
+
+
+### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
+
+- **Pattern:** Identify the vector-independent slot layout with an actual source
+  inventory, then express preparation of a nonempty list as preparation of the
+  tail followed by its head source.
+- **Seen:** `prepareSlots_cons_heq` in `SourceSlotMaps.lean` and
+  `SelectiveSourcePreparation.lean` under `PEPS/Approximation` (two occurrences).
+- **Abstraction:** Before a third consumer, export the cons identity from a
+  shared preparation module. Tensor calculations already reuse
+  `eval_frameList_prepare`; the remaining argument identifies equal layouts.
+- **Notes:** Short equality transports follow the existing congruence decision
+  above. No additional tactic is needed.
+
+### Grouped operators and spectator memories — candidate (2026-10-07)
+
+- **Pattern:** Evaluate an operator on a block tensored with an untouched memory,
+  and transport both layouts through the canonical owner-grouping isometries.
+- **Seen:** `localMap_owner_naturality` in `WordOwnerMap.lean` and
+  `eval_groupedBlockMap` in `GroupedBlockMap.lean` under `PEPS/Approximation`.
+- **Abstraction:** Both calculations use `Layout.mapOwnerIso_append_tmul` and
+  `clm_ext_tmul`. At a third occurrence, move the block-operator identity to a
+  lower-level lemma, then derive the local and aggregate cases from it.
+- **Notes:** The aggregate case permits several original owners on the block;
+  it retains the full operator after those owners are grouped together.
+
+### Weighted ket–bra matrix sums — candidate (2026-10-08)
+
+- **Pattern:** Distribute a matrix product through two finite weighted sums,
+  conjugate the bra coefficients, and exchange the two summations.
+- **Seen:** `sum_density_expansion` in `SourceGateDensity.lean` and
+  `density_eval_eq_sum_partialWord` in `PartialSourceDensity.lean` under
+  `PEPS/Approximation` (two occurrences).
+- **Abstraction:** Before a third consumer, expose the rectangular matrix
+  identity as a shared lemma. Its two coefficient families and output index
+  types should remain independent.
+- **Scan:** The full repository scan was run. A focused scan of the eight
+  chronological-expansion modules with minimum count two found no repeated
+  tactic blocks at the default window lengths.
+
+### Exterior ownership of a placed block — candidate (2026-10-08)
+
+- **Pattern:** If no participant of a placed gate is affected, every register
+  in its transported layout has the exterior owner.
+- **Seen:** `exterior_layout` in `DistributedSourceComposition.lean` and
+  the corresponding local assertion in `PartialSourceEvaluation.lean` under
+  `PEPS/Approximation` (two occurrences).
+- **Abstraction:** A third consumer should use one public layout-membership
+  lemma. The existing `affectedOwner_eq_none` already supplies the pointwise
+  fact; no new tactic is needed.
 ### Complementary-slice reconstruction — candidate (2026-10-07)
 
 - **Pattern:** Choose one inside vector for each outside configuration and
@@ -5639,6 +6094,189 @@ spectral split → block extraction → MPV calculation → strict bounds
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
 
+### Dyadic refinement cardinality bounds — candidate (2026-10-07)
+
+- **Pattern:** Rewrite an exact refined-cell cardinality as the coarse count
+  times the number of descendants, multiply a coarse-cell bound by that
+  nonnegative factor, and rearrange the scalar factors.
+- **Seen:** `card_fineLayerIndices_le` and
+  `card_fineLayerIndices_boundary_le` in
+  `PEPS/AreaLaw/Geometry/DyadicRefinement.lean` (two occurrences).
+- **Abstraction:** `card_fineLayerIndices` already contains the exact
+  subdivision formula. The two inequalities use the existing coarse bounds
+  and `Nat.mul_le_mul_left`; no further helper is needed at present.
+- **Notes:** Both occurrences lie in one file, below the promotion threshold.
+  The proof-session scan reports no exact repeated block in the three new
+  fine-belt modules at its default thresholds.
+
+
+### Normalizing the three nonvertical allowed slopes — candidate (2026-10-07)
+
+- **Pattern:** After specializing an integer line slope to zero, one or minus one,
+  unfold the coordinate equality and close the scalar equation with
+  `dsimp at hs; norm_num; linarith`.
+- **Seen:** Three occurrences in `Geometry/MeshGeometry.lean`, in the horizontal
+  and two diagonal cases of `affineMesh_line_dist_ge`.
+- **Abstraction:** The shared line-distance argument already uses
+  `nonvertical_mesh_line_dist_ge`. Consider consolidating the remaining slope
+  normalization if it recurs in another file; the current occurrences are in
+  one file and do not meet the two-file promotion condition.
+- **Notes:** The October 7 Geometry scan detected these three short blocks.
+
+### Rectangle corners and elementary midpoints — candidate (2026-10-07)
+
+- **Pattern:** Express the four corners of a rectangle and the two coordinates
+  of the midpoint of an elementary side to compare open and closed rectangles.
+- **Seen:** The private `rectangleCorner` and `midpoint_coordinates` helpers in
+  `ElementarySideOpponents.lean` and `ElementarySideOpponentUniqueness.lean`.
+- **Abstraction:** Two occurrences across two files, below the promotion
+  threshold. Reuse a shared geometric statement if a third proof needs these
+  calculations; do not copy the coordinate table again.
+- **Notes:** The existence proof extends midpoint containment to an entire
+  side, while uniqueness compares three rectangles. Their common elementary
+  boundary geometry has already been promoted separately.
+
+### Cell-side parametrization — promoted (2026-10-08)
+
+- **Pattern:** Parametrize the four sides of an axis-parallel square by the
+  match `(1, w)`, `(-w, 1)`, `(-1, -w)`, `(w, -1)` scaled about its center.
+- **Seen:** A private `sideVector` in `Geometry/CellFans.lean`, a second private
+  copy in `Geometry/ActualSideMatching.lean`, and the same match written out
+  three times in the statement of `side_interpolation` in
+  `Geometry/SideSubdivisionMask.lean`.
+- **Abstraction:** `cellFanSideVector` in `Geometry/CellFans.lean` is now public.
+  The side-matching module uses it in place of its private copy, and
+  `side_interpolation` states the whole-side interpolation in terms of it.
+- **Notes:** The tangent and normal coordinates in `ActualSideMatching.lean`
+  remain private to that module; no second consumer needs them.
+
+### Marked-endpoint segment containment — candidate (2026-10-07)
+
+- **Pattern:** Put two marked endpoints in a closed dyadic square and use
+  `Convex.segment_subset` to contain their segment in that square.
+- **Seen:** The private whole-side containment in `SideSubdivision.lean` and
+  `segment_contact_of_marks` in `ElementarySideReciprocity.lean`.
+- **Abstraction:** Two computations across two files, below the promotion
+  threshold. The reciprocal module shares its one private helper across
+  three uses, adding nontrivial contact when the endpoints are distinct.
+- **Notes:** Mathlib supplies the interval and product convexity statements.
+  Future fan-base containment can instead follow directly from the actual
+  triangle's convex hull and the existing fan-cover theorem. Do not copy the
+  marked-endpoint calculation into a third file.
+
+### First and last elementary endpoints — promoted (2026-10-08)
+
+- **Pattern:** Identify the first and last half-slot endpoints by specializing
+  the indexed affine parameters of a whole side.
+- **Seen:** `first_half_endpoints` and `last_half_endpoints` in
+  `Geometry/FanRunContacts.lean`, and the two successor endpoint cases in
+  `Geometry/CellFanCycle.lean`.
+- **Abstraction:** `cellFan_elementary_endpoints_lineMap` in
+  `Geometry/SideSubdivisionMask.lean` exposes the existing full parameter
+  statement and proof unchanged. Both old private endpoint proofs and the
+  new successor proof specialize this pair. Their signatures and existing
+  callers are unchanged; no second scalar calculation is copied.
+- **Notes:** The related midpoint reachability step in `FanRuns.lean` has
+  a different conclusion and remains unchanged. The successor proof also
+  uses the existing whole-side coordinates at consecutive corners.
+
+### Infinitude of a nondegenerate real segment — candidate (2026-10-08)
+
+- **Pattern:** Express a real segment as the affine image of $[0,1]$;
+  distinct endpoints make the affine map injective and preserve infinitude.
+- **Seen:** The private `segment_infinite` in `BeltRunInterfaces.lean` and
+  the local infinitude argument in `DummyRunInterfaces.lean`.
+- **Abstraction:** Two instances in two files are below the promotion
+  threshold. A third consumer should first search Mathlib for a direct
+  infinitude lemma, then share the minimal geometric consequence if needed.
+- **Notes:** The interface proofs require an actual nondegenerate segment;
+  two isolated points of a disconnected intersection are insufficient.
+
+
+### Excluding integer-translated scalar equalities — candidate (2026-10-08)
+
+- **Pattern:** Subtract the integer translation from a coordinate equality,
+  convert the resulting integer expression to a real expression, and apply
+  the established nonintegrality assertion.
+- **Seen:** Four branches of
+  `dyadicOrigin_supporting_lines_avoid_lattice` in `Geometry/DyadicOrigin.lean`.
+- **Abstraction:** These branches occur in one file and do not meet the
+  two-file promotion condition. They share the existing four-part
+  nonintegrality theorem; no additional exported theorem is needed here.
+- **Notes:** The four equations concern the two coordinates, their sum and
+  their difference. They establish line avoidance; classifying actual edges
+  remains a separate geometric argument.
+
+### Single-cell specializations of the quarter mesh — promoted (2026-10-08)
+
+- **Pattern:** Pass from marks in one cell to the quarter mesh, either pointwise
+  or as a set inclusion, including the unit-spacing specialization.
+- **Seen:** The private helpers `cellMark_mem_quarter_mesh` in
+  `FineMarkSeparation.lean`, `mark_mem_unitMesh` in
+  `InitialRegionBoundaries.lean`, and `cellMarks_subset_quarter_mesh` in
+  `NearMarkGeometry.lean`.
+- **Abstraction:** All three already use the public
+  `beltMarks_subset_affineMesh` in `MeshGeometry.lean`. The new set-level
+  application uses Mathlib's `Finset.singleton_biUnion` to specialize the
+  finite-family theorem. The coordinate argument remains in its existing
+  shared owner.
+- **Notes:** These are short pointwise or set-level applications of the same
+  theorem. No coordinate table is copied, and no further export or tactic is
+  needed. The existing pointwise applications remain unchanged.
+
+### Square-frontier whole-side extraction — promoted (2026-10-08)
+
+- **Pattern:** Pass from a boundary point of a half-open dyadic square to
+  one of its four closed whole sides.
+- **Seen:** The dummy-contact proof in `DummyRunInterfaces.lean` and the
+  actual nearby-frontier proof in `InitialStarFrontiers.lean`.
+- **Abstraction:** `exists_dyadicCellSide_of_mem_frontier` in `CellSides.lean`
+  shares the original product-frontier proof unchanged. The consumers use
+  the actual side endpoints and the slopes already carried by the triangles.
+- **Notes:** The proposed third marked-endpoint containment calculation was
+  removed from the nearby-frontier proof. Its radial point belongs to the
+  closed defining cell by the actual fan cover and closure monotonicity;
+  the existing segment-containment candidates remain at two old instances.
+
+- **Promoted: actual fan interiors and base distance.**
+  `cellFanPolygon_interior_nonempty_and_closure_eq` in
+  `PEPS/AreaLaw/Geometry/FanRegularity.lean` shares the existing determinant
+  proof of nonempty triangle interior and its closure equality. Both old
+  initial-regularity callers use it. The existing base-distance proof in
+  CellFans is public as `norm_sub_cellFanCenter_of_mem_base`, so concentric
+  restriction uses the same actual base without another coordinate argument.
+  The three existing callers are renamed; both complete proofs are unchanged.
+
+### Radial membership from triangle contact — promoted (2026-10-08)
+
+- **Pattern:** Transport membership in two intersecting fan triangles through
+  their contact equality, with an explicit radial-segment type.
+- **Seen:** The two contact orientations in
+  `initialRegion_frontier_near_mark_iff_active_radial` in
+  `PEPS/AreaLaw/Geometry/InitialActiveRays.lean`, and the unequal-slot branch in
+  `Geometry/CellFanRadialIncidence.lean`, followed by both orientations in
+  `Geometry/FanRunDisjointness.lean`.
+- **Abstraction:** The public `cellFanPolygons_nontrivial_inter_cases` in
+  `FanRunContacts.lean` supplies the full geometric intersection classification.
+  Each consumer obtains typed radial membership by ordinary equality transport.
+- **Notes:** All five occurrences share the classification theorem.
+  No additional helper or tactic is needed for equality substitution, and no
+  coordinate calculation is copied.
+
+### Vertex segments in a fan triangle — promoted (2026-10-08)
+
+- **Pattern:** Contain a segment from the fan center to a perimeter vertex in
+  the triangle's convex hull.
+- **Seen:** Three applications in `Geometry/CellFanRadialIncidence.lean` and
+  two in `Geometry/InitialSectorColors.lean`.
+- **Abstraction:** All five applications directly use Mathlib's
+  `segment_subset_convexHull`. The scalar field and the three-vertex set are
+  specified when inference requires them; start and end membership witnesses
+  select the required segment.
+- **Notes:** The mathematical containment is already shared. A further wrapper
+  would add fan parameters without removing a geometric calculation, so the
+  direct applications remain unchanged.
+
 ### Ordered regularized regional filters — candidate (2026-10-07)
 
 - **Pattern:** Use a coordinate isometry to transport a regional matrix action to
@@ -5651,3 +6289,99 @@ spectral split → block extraction → MPV calculation → strict bounds
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
+
+### Coordinate exponential and canonical partial trace — candidate (2026-10-07)
+
+- **Pattern:** replace one indexed factor in a reverse product by a linear
+  insertion, use exact unitary covariance before differentiation, and apply
+  Fermat's theorem to the squared norm of the actual output. Separately,
+  transport the actual regional lift through the existing configuration
+  equivalence and pair its pure state by the existing partial trace.
+- **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
+  `RegularizedPatchStationarity`, and `RegularizedPatchMarginal`.
+- **Abstraction:** the coordinate module factors the insertion linear map once;
+  the marginal module exposes one full-region/global configuration isometry and
+  one arbitrary-complex expectation theorem. Existing real-power covariance,
+  exponential derivative, and finite-product reduced-state results are reused.
+- **Notes:** these are distinct proofs, not three copies of one tactic block.
+  No custom tactic or new optimizer/state structure is justified. Keep the
+  actual product order and complex inner-product orientation explicit; neither
+  trace-duality nor descending commutation is inferred by this pattern.
+  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
+  thresholds.
+
+
+### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
+
+- **Pattern:** apply `Real.sSup_le` with the nonnegativity of the target supremum,
+  unpack a regional-entropy witness, and include its region in the target collection.
+- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`,
+  `boxEntropy_mono` and `boxEntropy_antitone`.
+- **Abstraction:** both proofs already use `Real.sSup_le`. A further helper is deferred
+  until the same inclusion argument occurs in another module.
+- **Notes:** the nonnegativity argument also covers an empty collection; an additional
+  nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
+
+- **Pattern:** Project a physical region injectively to its ambient lattice subset,
+  then use the ambient layer cardinality bound in the entropy dimension estimate.
+- **Seen:** Two occurrences, in Geometry/TemplateEntropy.lean and
+  WeakRectanglePartialRowEntropy.lean under TNLean/PEPS/AreaLaw/.
+- **Abstraction:** A general cardinality lemma for filtering a physical region by
+  an ambient finite set could replace the image-subset and cardinality chain.
+- **Notes:** Both arguments retain the original vector and physical region.
+  The existing disjoint-region entropy increment theorem is reused directly.
+  The two cardinality chains differ only in their ambient geometric bounds.
+
+### Owners of fixed pair-source registers — candidate (2026-10-09)
+
+- **Pattern:** From membership in a fixed source-register layout, use
+  `List.mem_flatMap` to identify the pair, `List.mem_ofFn` to identify its
+  slot index, and `PairSource.layout` to choose its left or right owner.
+- **Seen:** `SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id` in
+  `PEPS/Approximation/EndpointWordRestriction.lean` and
+  `SourceCircuit.restrict_allResidualSourceLayout_isNone` in
+  `PEPS/Approximation/ActualSourceEmptyOwner.lean` (the latter is proposed
+  separately in #8999). These are two mathematical uses across two files,
+  rather than copies of one source proposal.
+- **Abstraction:** At a third occurrence, prefer an ordinary lemma stating
+  that every owner in `SourceInventory.slotLayout R U V` is the left or
+  right owner of some slot `R.get i`. The assigned register spaces are
+  irrelevant to that conclusion. A selector-exclusion corollary can then
+  reuse that owner description.
+- **Notes:** The rule of three is not yet met, so no new helper or tactic is
+  added. The endpoint word's separate participating-party support proof
+  remains necessary: a general local operation on empty registers may still
+  name a participating party. The corpus scanner was run; unrelated reported
+  patterns are outside this change.
+
+### Prescribed slopes of actual fan edges — promoted (2026-10-09)
+
+- **Pattern:** Extract the base and final radial slopes from the actual
+  fan-triangle constructor.
+- **Seen:** Three actual-fan specializations across
+  `PEPS/AreaLaw/Geometry/InitialRegionBoundaries.lean` and
+  `PEPS/AreaLaw/Geometry/InitialStarFrontiers.lean`. The radial exclusion in
+  the nonemptiness argument needs the same constructor field.
+- **Abstraction:** `cellFanPolygon_base_and_radial_isAllowedSlope` in
+  `Geometry/CellFanSlopes.lean` gives both directions for arbitrary optional
+  midpoint subdivisions. The constructor extraction is proved once; its
+  existing complete proof is transferred unchanged.
+- **Notes:** The two old extraction proofs and the private single-radial
+  wrapper are removed. Existing callers select the required component of
+  the shared theorem. No new tactic or geometric hypothesis is introduced.
+
+### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
+
+- **Pattern:** Prove equality of unordered coordinate pairs by choosing the
+  direct branch of `Sym2.eq_iff`, reducing both pairs with `Prod.ext`, and
+  discharging their integer-coordinate equalities with `omega`.
+- **Seen:** Four three-line occurrences in the four nearest-neighbour cases of
+  `mem_rectangleBoundaryEdges` in `PEPS/AreaLaw/Geometry/ClosedSquare.lean`
+  (scanner run 2026-10-07).
+- **Abstraction:** Keep the local case proofs until the pattern has a consumer
+  in a second file; prefer an endpoint-equality lemma if that reuse appears.
+- **Notes:** The current occurrences are all in one proof, below the
+  multiple-file promotion threshold. Crossing membership itself is already
+  expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
