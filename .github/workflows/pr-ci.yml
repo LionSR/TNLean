@@ -89,39 +89,17 @@ on:
       - 'docs/audits/data/cpsv16-label-classifications.tsv'
       - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_pic.py'
-      - 'scripts/test_tenkz_dual_rectangle.py'
+      - 'scripts/test_tenkz_*.py'
+      - 'scripts/test_*_diagram.py'
+      - 'scripts/check_*_blueprint.py'
+      - 'scripts/run_diagram_tests.py'
+      - 'scripts/test_run_diagram_tests.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
-      - 'scripts/test_tenkz_peps_torus.py'
-      - 'scripts/test_tenkz_canonical_pairs.py'
-      - 'scripts/test_tenkz_peps_groundstate.py'
-      - 'scripts/test_tenkz_peps_parent_spanning.py'
-      - 'scripts/test_tenkz_patch_stationarity.py'
-      - 'scripts/test_tenkz_region_coordinates.py'
-      - 'scripts/test_tenkz_area_law_scan_buffer.py'
-      - 'scripts/test_tenkz_peps_dyadic_geometry.py'
-      - 'scripts/test_tenkz_peps_native_semiregular.py'
-      - 'scripts/test_tenkz_peps_four_cut.py'
-      - 'scripts/test_tenkz_peps_three_block.py'
-      - 'scripts/test_tenkz_peps_parent_seams.py'
-      - 'scripts/test_tenkz_peps_regular_reblocking.py'
-      - 'scripts/test_tenkz_quantum_double_local_terms.py'
-      - 'scripts/test_tenkz_quantum_double_source_construction.py'
-      - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-      - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
-      - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
-      - 'scripts/test_sector_encoder_diagram.py'
-      - 'scripts/test_nested_patch_geometry_diagram.py'
-      - 'scripts/test_tenkz_ordered_mixing.py'
-      - 'scripts/test_tenkz_sector_weight.py'
-      - 'scripts/test_tenkz_string_endpoints.py'
-      - 'scripts/test_tenkz_stationary_density.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -204,39 +182,17 @@ on:
       - 'docs/audits/data/cpsv16-label-classifications.tsv'
       - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_pic.py'
-      - 'scripts/test_tenkz_dual_rectangle.py'
+      - 'scripts/test_tenkz_*.py'
+      - 'scripts/test_*_diagram.py'
+      - 'scripts/check_*_blueprint.py'
+      - 'scripts/run_diagram_tests.py'
+      - 'scripts/test_run_diagram_tests.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
-      - 'scripts/test_tenkz_peps_torus.py'
-      - 'scripts/test_tenkz_canonical_pairs.py'
-      - 'scripts/test_tenkz_peps_groundstate.py'
-      - 'scripts/test_tenkz_peps_parent_spanning.py'
-      - 'scripts/test_tenkz_patch_stationarity.py'
-      - 'scripts/test_tenkz_region_coordinates.py'
-      - 'scripts/test_tenkz_area_law_scan_buffer.py'
-      - 'scripts/test_tenkz_peps_dyadic_geometry.py'
-      - 'scripts/test_tenkz_peps_native_semiregular.py'
-      - 'scripts/test_tenkz_peps_four_cut.py'
-      - 'scripts/test_tenkz_peps_three_block.py'
-      - 'scripts/test_tenkz_peps_parent_seams.py'
-      - 'scripts/test_tenkz_peps_regular_reblocking.py'
-      - 'scripts/test_tenkz_quantum_double_local_terms.py'
-      - 'scripts/test_tenkz_quantum_double_source_construction.py'
-      - 'scripts/check_peps_three_block_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-      - 'scripts/check_peps_four_cut_blueprint.py'
       - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
-      - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
-      - 'scripts/test_sector_encoder_diagram.py'
-      - 'scripts/test_nested_patch_geometry_diagram.py'
-      - 'scripts/test_tenkz_ordered_mixing.py'
-      - 'scripts/test_tenkz_sector_weight.py'
-      - 'scripts/test_tenkz_string_endpoints.py'
-      - 'scripts/test_tenkz_stationary_density.py'
   workflow_dispatch:
 
 concurrency:
@@ -362,39 +318,17 @@ jobs:
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
               - 'scripts/tenkz_blueprint_sweep.py'
-              - 'scripts/test_tenkz_blueprint_sweep.py'
-              - 'scripts/test_tenkz_pic.py'
-              - 'scripts/test_tenkz_dual_rectangle.py'
+              - 'scripts/test_tenkz_*.py'
+              - 'scripts/test_*_diagram.py'
+              - 'scripts/check_*_blueprint.py'
+              - 'scripts/run_diagram_tests.py'
+              - 'scripts/test_run_diagram_tests.py'
               - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
-              - 'scripts/test_tenkz_peps_torus.py'
-              - 'scripts/test_tenkz_canonical_pairs.py'
-              - 'scripts/test_tenkz_peps_groundstate.py'
-              - 'scripts/test_tenkz_peps_parent_spanning.py'
-              - 'scripts/test_tenkz_patch_stationarity.py'
-              - 'scripts/test_tenkz_region_coordinates.py'
-              - 'scripts/test_tenkz_area_law_scan_buffer.py'
-              - 'scripts/test_tenkz_peps_dyadic_geometry.py'
-              - 'scripts/test_tenkz_peps_native_semiregular.py'
-              - 'scripts/test_tenkz_peps_four_cut.py'
-              - 'scripts/test_tenkz_peps_three_block.py'
-              - 'scripts/test_tenkz_peps_parent_seams.py'
-              - 'scripts/test_tenkz_peps_regular_reblocking.py'
-              - 'scripts/test_tenkz_quantum_double_local_terms.py'
-              - 'scripts/test_tenkz_quantum_double_source_construction.py'
-              - 'scripts/check_peps_three_block_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_three_block_blueprint_inventory.json'
-              - 'scripts/check_peps_four_cut_blueprint.py'
               - 'docs/audits/2026-10-05_scp10_four_cut_blueprint_inventory.json'
-              - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_supported_polar_tree.py'
-              - 'scripts/test_sector_encoder_diagram.py'
-              - 'scripts/test_nested_patch_geometry_diagram.py'
-              - 'scripts/test_tenkz_ordered_mixing.py'
-              - 'scripts/test_tenkz_sector_weight.py'
-              - 'scripts/test_tenkz_string_endpoints.py'
-              - 'scripts/test_tenkz_stationary_density.py'
             # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
             # `leanblueprint pdf` (blueprint/src/latexmkrc) and
             # scripts/build_blueprint_ch01_12.sh, with the bibliography from
@@ -1657,112 +1591,26 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_blueprint_pdf_capacity.py
 
-      # Compile-and-cache smoke test of the tenkz picture pipeline
-      # (blueprint/src/Packages/tenkz_pic.py): renders the spec benchmark
-      # units standalone and checks ink, caching, and per-figure
-      # invalidation.
-      - name: Smoke-test tenkz picture pipeline
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_pic.py
+      # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test and
+      # every scripts/check_*_blueprint.py inventory check. New diagram tests
+      # need no workflow edit. Runner: scripts/run_diagram_tests.py.
+      - name: Test diagram test runner
+        run: python3 scripts/test_run_diagram_tests.py
 
-      - name: Test finite rectangular dual geometry
+      - name: Test blueprint diagrams
         if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_dual_rectangle.py
+        run: python3 scripts/run_diagram_tests.py --output-dir "$RUNNER_TEMP/diagram-tests"
 
-      - name: Test quantum-double local-term diagrams and nonabelian formulas
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 scripts/test_tenkz_quantum_double_local_terms.py
-          python3 scripts/test_tenkz_quantum_double_source_construction.py
-
-      - name: Test source-linked PEPS torus geometry
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_peps_torus.py
-
-      - name: Check PEPS ground-state diagram boundaries
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_peps_groundstate.py
-
-      - name: Check regular parent and intersection diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_peps_parent_spanning.py
-
-      - name: Check ordered coordinate insertion diagram
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_patch_stationarity.py
-
-      - name: Check regional basis-relabelling diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: >
-          python3 scripts/test_tenkz_region_coordinates.py
-          --output-dir "$RUNNER_TEMP/region-coordinate-diagrams"
-
-      - name: Check dyadic protocol geometry diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: >
-          python3 scripts/test_tenkz_peps_dyadic_geometry.py
-          --output-dir "$RUNNER_TEMP/dyadic-geometry-diagrams"
-
-      - name: Preserve regional coordinate diagrams for review
+      - name: Preserve rendered diagrams for review
         if: success() && env.TEX_CHANGED == 'true'
         uses: actions/upload-artifact@v7
         with:
-          name: region-coordinate-diagrams-${{ github.sha }}
+          name: diagram-tests-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/region-coordinate-diagrams/tenkz-*.svg
-            ${{ runner.temp }}/region-coordinate-diagrams/cache/tenkz-*.tnlog
+            ${{ runner.temp }}/diagram-tests/**/tenkz-*.svg
+            ${{ runner.temp }}/diagram-tests/**/cache/tenkz-*.tnlog
           if-no-files-found: error
           retention-days: 3
-
-      - name: Check area-law scanner and buffer diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_area_law_scan_buffer.py
-
-      - name: Check native semi-regular parent diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_peps_native_semiregular.py
-
-      - name: Check source four-cut diagrams and declaration coverage
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 scripts/test_tenkz_peps_four_cut.py
-          python3 scripts/check_peps_four_cut_blueprint.py
-          python3 scripts/test_tenkz_peps_three_block.py
-          python3 scripts/test_tenkz_peps_parent_seams.py
-          python3 scripts/test_tenkz_peps_regular_reblocking.py
-          python3 scripts/check_peps_three_block_blueprint.py
-
-      - name: Test tenkz coefficient-index routing
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_index_routing.py
-
-      - name: Test ordered mixing contraction diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_ordered_mixing.py
-
-      - name: Test the GHZ sector-probability contraction
-        if: env.TEX_CHANGED == 'true'
-        timeout-minutes: 2
-        run: python3 scripts/test_tenkz_sector_weight.py
-
-      - name: Test finite physical string endpoint contractions
-        if: env.TEX_CHANGED == 'true'
-        timeout-minutes: 2
-        run: python3 scripts/test_tenkz_string_endpoints.py
-
-      - name: Test stationary physical density contractions
-        if: env.TEX_CHANGED == 'true'
-        timeout-minutes: 2
-        run: python3 scripts/test_tenkz_stationary_density.py
-
-      - name: Check compatible-seed diagram conventions
-        run: python3 scripts/test_compatible_seed_diagram.py
-
-      - name: Check coherent sector-encoder diagrams
-        run: python3 scripts/test_sector_encoder_diagram.py
-
-      - name: Check nested-patch geometry diagram
-        run: python3 scripts/test_nested_patch_geometry_diagram.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
@@ -1819,14 +1667,6 @@ jobs:
       - name: Prune unused tenkz pictures
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/prune_tenkz_render_cache.py
-
-      - name: Test canonical fixed-point diagrams
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_canonical_pairs.py
-
-      - name: Test tenkz blueprint sweep unit selection
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_tenkz_blueprint_sweep.py
 
       # Every blueprint picture compiled standalone during the web build and
       # left its event stream in the render cache; the sweep audits all of

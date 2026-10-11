@@ -15,6 +15,7 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
   - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml)
+  - [Blueprint Diagram Tests](#blueprint-diagram-tests-pr-ciyml-blueprint-job)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
@@ -190,6 +191,21 @@ Archive modules are built explicitly before their timings are checked. A
 genuine Archive compilation error fails the `build` job and follows the normal
 Lean proof-error auto-fix path; a timing-only breach still fails only the
 separate `compile-time` job.
+
+---
+
+### Blueprint Diagram Tests (`pr-ci.yml`, `blueprint` job)
+
+When blueprint sources change, `scripts/run_diagram_tests.py` runs every
+`scripts/test_tenkz_*.py` and `scripts/test_*_diagram.py` test and every
+`scripts/check_*_blueprint.py` declaration-inventory check, reports all
+failures, and fails the step if any test fails. Tests that declare an
+`--output-dir` option render into `$RUNNER_TEMP/diagram-tests/<test>`, uploaded
+as the `diagram-tests-<sha>` artifact for review. The path filters use the same
+glob patterns. A new diagram test therefore needs no workflow edit: do not add a
+step or a path entry for it. `test_tenkz_equation_web.py` and
+`test_tenkz_inline_web.py` keep their own steps, because they need the built
+site or the inline-layout job.
 
 ---
 
