@@ -25,6 +25,8 @@ theorem positiveDepthPrefix_subset_truncationSet {V I : Type*}
     (S : CollarScan V I) {j : ℤ} {L : ℕ} (hj : j ≤ (L : ℤ)) :
     positiveDepthPrefix S.A S.depth j ⊆ S.truncationSet L := by
   classical
-  done
+  intro x hx
+  obtain ⟨hxA, _, hxj⟩ := Finset.mem_filter.mp hx
+  exact Finset.mem_filter.mpr ⟨hxA, le_trans hxj hj⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
