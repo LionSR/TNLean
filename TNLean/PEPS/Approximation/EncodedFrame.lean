@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
 import TNLean.PEPS.Approximation.HoleEncoder
+import TNLean.PEPS.Approximation.MatrixAction
 
 /-!
 # Encoded frames
@@ -91,45 +92,30 @@ section Euclidean
 
 variable {m n : Type*} [Fintype m] [Fintype n]
 
-/-- The action of a matrix on a Euclidean vector. -/
-abbrev act (A : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) : EuclideanSpace ℂ m :=
-  WithLp.toLp 2 (A *ᵥ ψ)
-
-omit [Fintype m] in
-theorem act_mul {l : Type*} [Fintype l] (A : Matrix m n ℂ) (B : Matrix n l ℂ)
-    (ψ : EuclideanSpace ℂ l) : act (A * B) ψ = act A (act B ψ) := by
-  simp [act, Matrix.mulVec_mulVec]
-
-omit [Fintype m] in
 theorem act_sub (A B : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
     act (A - B) ψ = act A ψ - act B ψ := by
-  simp [act, Matrix.sub_mulVec]
+  simp [act_apply, Matrix.sub_mulVec]
 
-omit [Fintype m] in
 theorem act_add (A B : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
     act (A + B) ψ = act A ψ + act B ψ := by
-  simp [act, Matrix.add_mulVec]
+  simp [act_apply, Matrix.add_mulVec]
 
-omit [Fintype m] in
 theorem act_smul (a : ℂ) (A : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
     act (a • A) ψ = a • act A ψ := by
   ext i
-  simp [act, Matrix.smul_mulVec]
+  simp [act_apply, Matrix.smul_mulVec]
 
-omit [Fintype m] in
 theorem act_sum {κ : Type*} [Fintype κ] (A : κ → Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
     act (∑ k, A k) ψ = ∑ k, act (A k) ψ := by
   ext i
-  simp [act, Matrix.sum_mulVec]
+  simp [act_apply, Matrix.sum_mulVec]
 
-omit [Fintype m] in
 theorem act_sub_right (A : Matrix m n ℂ) (x y : EuclideanSpace ℂ n) :
     act A (x - y) = act A x - act A y := by
-  simp [act, Matrix.mulVec_sub]
+  simp [act_apply, Matrix.mulVec_sub]
 
-omit [Fintype m] in
 theorem act_one [DecidableEq n] (ψ : EuclideanSpace ℂ n) : act (1 : Matrix n n ℂ) ψ = ψ := by
-  simp [act]
+  simp [act_apply]
 
 theorem norm_act_le [DecidableEq n] (A : Matrix m n ℂ) (ψ : EuclideanSpace ℂ n) :
     ‖act A ψ‖ ≤ ‖A‖ * ‖ψ‖ :=
@@ -474,14 +460,14 @@ def encoder [NeZero q] : Matrix (p.Tag × (ι → Fin q)) (ι → Fin q) ℂ := 
 
 /-- **`eq:encoder-contraction`.** `K_{c,h}ᴴ K_{c,h} = P_{c,h}`.
 
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 61–63. -/
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 62–64. -/
 theorem encoder_conjTranspose_mul_self [NeZero q] : p.encoderᴴ * p.encoder = p.proj := by
   rw [encoder, stack_conjTranspose_mul_stack, proj]
   exact Finset.sum_congr rfl fun s _ => p.branch_conjTranspose_mul_self s
 
 /-- **`eq:encoder-contraction`.** `‖K_{c,h}‖ ≤ 1`.
 
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 61–63. -/
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 62–64. -/
 theorem norm_encoder_le_one [NeZero q] : ‖p.encoder‖ ≤ 1 :=
   l2_opNorm_le_one_of_conjTranspose_mul_self_le_one
     (by rw [encoder_conjTranspose_mul_self]; exact p.norm_proj_le_one)

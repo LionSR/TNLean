@@ -175,13 +175,11 @@ theorem fundamentalTheorem_normalPEPS
   -- The closed state pins the product of the scalars to one.
   obtain ⟨v₀⟩ := hconn.nonempty
   have hRA0 : RegionBlockedTensorInjective (G := G) A
-      (h.oneSiteSeparation.withoutSite v₀) := by
-    have hi := (h.oneSiteSeparation.withoutSite_injective v₀).1
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (h.oneSiteSeparation.withoutSite v₀) :=
+    (h.oneSiteSeparation.withoutSite_injective v₀).1
   have hCA0 : RegionBlockedTensorInjective (G := G) A
-      (Finset.univ \ h.oneSiteSeparation.withoutSite v₀) := by
-    have hi := (h.oneSiteSeparation.withoutSite_complement_injective v₀).1
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ h.oneSiteSeparation.withoutSite v₀) :=
+    (h.oneSiteSeparation.withoutSite_complement_injective v₀).1
   have hprod : (∏ v, c v) = 1 :=
     prod_perVertexScalar_eq_one_of_regionInjective A B
       (h.oneSiteSeparation.withoutSite v₀) hRA0 hCA0 hposA hAB Z hbond c hcPV
