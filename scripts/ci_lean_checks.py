@@ -37,9 +37,11 @@ import concurrent.futures
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
+import threading
 from pathlib import Path
 
 LEAN_FLAGS = [
@@ -264,6 +266,42 @@ def run_batch(paths: list[str], overlay: Path | None, jobs: int, timeout: int) -
     return failed
 
 
+def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
+    """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
+    since the root build compiles the same modules, so when it exceeds `budget`
+    seconds (for example behind a cold dependency cache) it is stopped with a
+    warning instead of failing the job."""
+    proc = subprocess.Popen(["lake", "--fail-fast", "build", *modules],
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+                            start_new_session=True)
+    assert proc.stdout is not None
+
+    def pump(stream, log) -> None:
+        for line in stream:
+            sys.stdout.write(line)
+            log.write(line)
+
+    with open(log_path or os.devnull, "a") as log:
+        reader = threading.Thread(target=pump, args=(proc.stdout, log))
+        reader.start()
+        try:
+            code = proc.wait(timeout=budget or None)
+        except subprocess.TimeoutExpired:
+            os.killpg(proc.pid, signal.SIGTERM)
+            try:
+                proc.wait(timeout=30)
+            except subprocess.TimeoutExpired:
+                os.killpg(proc.pid, signal.SIGKILL)
+                proc.wait()
+            code = None
+        reader.join()
+    if code is None:
+        print(f"::warning::Early build stopped after {budget}s; "
+              "the root build compiles the remaining modules.", flush=True)
+        return 0
+    return code
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("command", choices=["early", "strict", "list"])
@@ -274,6 +312,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--timeout", type=int, default=240,
                         help="seconds allowed for each file")
     parser.add_argument("--log", type=Path, help="append early-build output here")
+    parser.add_argument("--budget", type=int, default=0,
+                        help="early: stop after this many seconds and leave the rest "
+                             "to the root build (0 means no limit)")
     args = parser.parse_args(argv)
 
     os.chdir(args.root)
@@ -293,14 +334,7 @@ def main(argv: list[str] | None = None) -> int:
             print("No changed production modules to build early.")
             return 0
         print("Building changed modules early:", *early, sep="\n  ", flush=True)
-        proc = subprocess.Popen(["lake", "--fail-fast", "build", *early],
-                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-        assert proc.stdout is not None
-        with open(args.log or os.devnull, "a") as log:
-            for line in proc.stdout:
-                sys.stdout.write(line)
-                log.write(line)
-        return proc.wait()
+        return early_build(early, args.log, args.budget)
 
     print(f"Strict checks: {len(sources)} changed source file(s), {len(tests)} test file(s).",
           flush=True)
