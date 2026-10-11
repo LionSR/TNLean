@@ -7,13 +7,35 @@ $pdflatex = 'xelatex -synctex=1';
 # no format rebuild is needed. Keep an explicit caller override intact.
 $ENV{'pool_size'} //= 12500000;
 # The accumulated TikZ/Tenkz boxes likewise outgrow the default main memory at
-# the final shipout of the full volume. Like the pool above this is runtime
-# capacity read from the environment; no format rebuild is needed. The
-# extra_mem_* knobs grow the engine's node memory at run time, which is where
-# the shipout box allocation overflowed.
-$ENV{'main_memory'} //= 12000000;
-$ENV{'extra_mem_top'} //= 8000000;
-$ENV{'extra_mem_bot'} //= 8000000;
+# the final shipout of the full volume. Unlike the string pool above, XeTeX
+# fixes the size of its main memory (the node array) when the format is dumped:
+# at run time the eTeX-extended engine ignores main_memory and extra_mem_*, so
+# the capacity message keeps reporting the 5000000-word default no matter what
+# the environment holds. The only lever is to bake a larger node array into the
+# format. Regenerate the xelatex format once (fmtutil runs the ini dump that
+# reads main_memory from the environment) and let the following compiles load
+# it. Best-effort: if regeneration fails the stock format stays in place and
+# the build behaves exactly as before, never worse.
+$ENV{'main_memory'} = 20000000;
+{
+  my $marker = ($ENV{'HOME'} // '.') . '/.tnlean_xelatex_bigmem';
+  unless (-e $marker) {
+    # Prefer rewriting the shared system format (the one the subsequent compiles
+    # load): passwordless sudo on the CI runner makes this the reliable path,
+    # and `sudo -n` fails fast rather than blocking for a password elsewhere.
+    # Fall back to a writable system tree, then to a user-local format.
+    my $ok =
+      (system('sudo', '-n', 'fmtutil-sys', '--byfmt', 'xelatex') == 0)
+      || (system('fmtutil-sys', '--byfmt', 'xelatex') == 0)
+      || (system('fmtutil', '--user', '--byfmt', 'xelatex') == 0);
+    if ($ok) {
+      if (open(my $fh, '>', $marker)) { close($fh); }
+    } else {
+      warn "latexmkrc: could not regenerate the xelatex format with a larger "
+        . "main_memory; the stock 5000000-word format will be used\n";
+    }
+  }
+}
 @default_files = ('print.tex');
 use Cwd qw(abs_path);
 use File::Spec;

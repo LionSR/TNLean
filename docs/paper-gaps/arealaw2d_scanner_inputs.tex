@@ -110,9 +110,41 @@ The bounded incidence event contains the terminal metric split event of
 \path{06-transport.tex}, lines~336--352. It is not an arbitrary entropy cut
 such as $U=P_0\setminus X$, and it is not yet an identification of the
 arbitrary split predicates stored in the scanner data package with concrete
-transported-state measures. The ancestry estimate for bad histories,
-the remaining geometric conclusions, and the transported-state estimates
-remain outside this finite-history construction.
+transported-state measures.
+
+The finite ancestry probability argument is now derived from the same actual
+history process. Every bad endpoint has a strictly time-ordered selected-charge
+path. The physical cut clearance keeps its predecessors in $A$, including for
+the far side. If its length is $s$ and the tested pair time is $k$, then
+$D<4r_0s$ and every path time lies in the last $4n(r_0s+1)+1$ pair indices.
+Independent selected-coordinate probabilities, exact binomial time counting,
+and the lattice diamond count give the finite tail. Union over actual prefix
+times, both sides, all bands, and compact endpoints, and averaging the initial
+offsets, give
+\begin{align}
+    2K(|T|+nL)(N+1)
+    \sum_{\substack{0\le s\le N \\D<4r_0s}}\rho^s,
+    \qquad
+    \rho=\frac{9e\,nr_0\mu(1+2(2r_0)(2r_0+1))}{2\lceil C_1nD\rceil}.
+    \label{eq:arealaw2d_scanner_inputs_bad_tail}
+\end{align}
+The compact endpoint bound is proved from the actual ambient layers, so
+no exterior-domain volume enters. Label paths suffice for the spatial count;
+predecessor witnesses need not be counted because they do not enter a selected
+coordinate event. The ratio in~(\ref{eq:arealaw2d_scanner_inputs_bad_tail})
+is sharper than the source's loose predecessor-inclusive estimate.\footnote{The all-time finite statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}.}
+
+The rounded source scales now give arbitrary inverse-power decay of this
+actual all-prefix probability, uniformly in the finite domain, target, label
+family, and scanner. The threshold is chosen from the fixed exponents and
+constants alone. In particular, the actual bad-history probability is at most
+$n^{-200}$ for sufficiently large $n$.\footnote{The result is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_bad_history_probability_le}.}
+This closes the classical asymptotic probability estimate. The remaining
+geometric conclusions and transported-state estimates remain separate;
+identifying quantum entropy costs and constructing the entire scanner data
+package are not consequences of a probability bound alone.
 
 \section{Elimination}
 
