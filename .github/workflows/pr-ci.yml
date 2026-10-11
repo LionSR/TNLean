@@ -1607,7 +1607,7 @@ jobs:
         with:
           name: diagram-tests-${{ github.sha }}
           path: ${{ runner.temp }}/diagram-tests
-          if-no-files-found: ignore
+          if-no-files-found: error
           retention-days: 3
 
       - name: Lint LaTeX (chktex)
