@@ -55,6 +55,7 @@ private theorem forwardAdjacent_not_reverse {L : ℕ} {v w : Vertex L}
 private theorem squareInteractionSupport_injective (L : ℕ) :
     Function.Injective (squareInteractionSupport (L := L)) := by
   intro i j hij
+  unfold squareInteractionSupport at hij
   cases i with
   | inl v =>
     cases j with
