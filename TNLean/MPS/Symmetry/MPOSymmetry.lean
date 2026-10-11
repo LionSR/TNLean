@@ -79,8 +79,11 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointIntersection
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOActionSymbols
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOFusionMaps
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOFusionSymbols
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPONormality
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOWeights
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenGapContinuity
@@ -96,6 +99,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRightOpenTransport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSectors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSwap
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointTripleMaps
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointUniformPathGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointZeroSectorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep

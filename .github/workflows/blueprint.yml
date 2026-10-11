@@ -44,6 +44,8 @@ on:
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_tenkz_mixed_fusion.py'
       - 'scripts/test_nested_patch_geometry_diagram.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/test_blueprint_graph_precompute.py'
@@ -116,6 +118,8 @@ jobs:
           python3 scripts/test_sector_encoder_diagram.py
           python3 scripts/test_tenkz_mixed_fusion.py
           python3 scripts/test_nested_patch_geometry_diagram.py
+          python3 scripts/test_tenkz_mixed_normality.py
+          python3 scripts/test_tenkz_mixed_symbols.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check
@@ -266,6 +270,8 @@ jobs:
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
           python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
           python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_normality.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_symbols.py --web-root blueprint/web --browser
 
       # Drop pictures no page references any more, so neither the published
       # site nor the saved cache carries figures that were edited away.

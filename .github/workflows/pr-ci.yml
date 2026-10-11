@@ -124,6 +124,8 @@ on:
       - 'scripts/test_tenkz_string_endpoints.py'
       - 'scripts/test_tenkz_mixed_fusion.py'
       - 'scripts/test_tenkz_stationary_density.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -241,6 +243,8 @@ on:
       - 'scripts/test_tenkz_string_endpoints.py'
       - 'scripts/test_tenkz_mixed_fusion.py'
       - 'scripts/test_tenkz_stationary_density.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
   workflow_dispatch:
 
 concurrency:
@@ -401,6 +405,8 @@ jobs:
               - 'scripts/test_tenkz_string_endpoints.py'
               - 'scripts/test_tenkz_mixed_fusion.py'
               - 'scripts/test_tenkz_stationary_density.py'
+              - 'scripts/test_tenkz_mixed_normality.py'
+              - 'scripts/test_tenkz_mixed_symbols.py'
             # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
             # `leanblueprint pdf` (blueprint/src/latexmkrc) and
             # scripts/build_blueprint_ch01_12.sh, with the bibliography from
@@ -1191,7 +1197,8 @@ jobs:
               BoundaryDecompositionComparison BoundaryActionLMatrix \
               TriangularPadding CompleteZipperFusionMixedOrientation TriangularBoundary \
               BoundaryFusionComparison BoundarySourceMixedPentagon MixedEndpointMPOAction \
-              BoundaryActionCrossTransport MixedEndpointMPOFusionMaps MixedEndpointMPOFusion; do
+              BoundaryActionCrossTransport MixedEndpointMPOFusionMaps MixedEndpointMPOFusion \
+              MixedEndpointMPONormality MixedEndpointMPOActionSymbols MixedEndpointMPOFusionSymbols; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -1748,6 +1755,14 @@ jobs:
         timeout-minutes: 2
         run: python3 scripts/test_tenkz_stationary_density.py
 
+      - name: Test mixed MPO normality diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_normality.py
+
+      - name: Test actual mixed MPO symbol diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_mixed_symbols.py
+
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
 
@@ -1837,6 +1852,8 @@ jobs:
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
           python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
           python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_normality.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_symbols.py --web-root blueprint/web --browser
 
       - name: Add and test blueprint search
         if: env.TEX_CHANGED == 'true'
