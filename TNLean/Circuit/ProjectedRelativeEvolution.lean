@@ -57,6 +57,10 @@ theorem exists_supported_projected_relative_evolution (q : ℕ) [NeZero q]
         ‖Matrix.hermitianUnitaryPath H' t * Matrix.hermitianUnitaryPath H (-t) - U t‖ ≤
           ε * |t| := by
   classical
+  obtain ⟨U, hU0, hU, hunit, huniq, hcompare⟩ :=
+    MatrixEvolution.exists_unique_projected_unitary_solution_compare
+      (siteExpectationLM q K) (fun _ hA ↦ isHermitian_siteExpectation K hA)
+      (norm_siteExpectation_le K) hH' hH
   done
 
 end QuantumCircuit
