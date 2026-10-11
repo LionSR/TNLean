@@ -34,3 +34,4 @@ import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
 import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
+import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption

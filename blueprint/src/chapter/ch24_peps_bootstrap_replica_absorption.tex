@@ -84,3 +84,62 @@ their physical derivation remains separate.
     $C(1+C_E)n^{-\nu/4}<1$, and enlarge it to at least one.
     Positivity of $n$ gives $\tau_n>0$ and the asserted inequalities.
 \end{proof}
+
+
+\begin{theorem}[Typical-entropy substitution after the rough comparisons]
+    \label{thm:area_law_rough_typical_entropy_absorption}
+    \lean{TNLean.PEPS.AreaLaw.Scan.regionalEntropy_le_of_rough_typical_comparisons}
+    Fix a unit state $\Omega_t$ on a finite subset of the square lattice,
+    a region $X$, and a spectral set $E$ for its reduced density on $X$.
+    Write $S=S_{\Omega_t}(X)$. Suppose that the selected mass $z$ is
+    positive and that every selected eigenvalue $p_i$ satisfies
+    \begin{align}
+        e^{-S-w}\le p_i\le e^{-S+w}.
+    \end{align}
+    Let $d_*=|E|$, let $\psi$ be the normalized selected Schmidt vector,
+    with the selected Schmidt indices enumerated in its auxiliary register,
+    and let $S'$ be the
+    entropy of that register. Put $\eta=w-\log z$.
+    Fix $C\ge0$, $0<\tau<1/2$, $a>0$, $E_{\rm def}\ge0$ and real
+    budgets $B_{\rm sh},B_{\rm exc}$ such that
+    \begin{align}
+        2C(\tau+E_{\rm def}/\tau)\le1.
+    \end{align}
+    Suppose that $r_u(k),r_l(k),r_e(k)$ tend to zero and that the same
+    real sequences $F,d$ satisfy, for all sufficiently large $k$,
+    \begin{align}
+        d(k)&\le E_{\rm def}+r_e(k),\\
+        F(k)&\le2\log d_*-\log z+4B_{\rm sh}/z+4B_{\rm exc}+r_u(k),\\
+        4S'-2C\bigl(\tau\log d_*+h(\tau)/a\bigr)
+            -C\frac{d(k)}{\tau}\max\{0,2S'\}-r_l(k)&\le F(k).
+    \end{align}
+    Then
+    \begin{align}
+        S\le7\eta-\log z+4B_{\rm sh}/z+4B_{\rm exc}+2Ch(\tau)/a.
+    \end{align}
+    This is a conditional consequence of the rough comparisons at
+    $sW=1$, before the shell and mismatch budgets are estimated in
+    \cite[Proposition~9.5]{OpenAI2026AreaLaw}. It retains the same
+    physical state and selected spectrum; the physical derivation of
+    the comparisons is a separate result.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_bootstrap_replica_absorption,thm:area_law_selected_schmidt_entropy_bounds}
+    The selected auxiliary density has nonnegative entropy, so
+    $\max\{0,2S'\}=2S'$. Apply the fixed-scale replica absorption
+    theorem to $S'$, with coefficient $2C$ and budgets
+    \begin{align}
+        B_u&=2\log d_*-2S'-\log z+4B_{\rm sh}/z+4B_{\rm exc},\\
+        B_l&=2C\tau(\log d_*-S')+2Ch(\tau)/a.
+    \end{align}
+    This gives
+    \begin{align}
+        (3+2C\tau)S'\le(2+2C\tau)\log d_*+R,\qquad
+        R=-\log z+4B_{\rm sh}/z+4B_{\rm exc}+2Ch(\tau)/a.
+    \end{align}
+    Only now use the selected-spectrum bounds
+    $|S'-S|\le\eta$ and $|\log d_*-S|\le\eta$.
+    They imply $\eta\ge0$ and
+    $S\le R+(5+4C\tau)\eta$. The smallness condition and
+    $E_{\rm def}\ge0$ give $2C\tau\le1$, hence the displayed bound.
+\end{proof}
