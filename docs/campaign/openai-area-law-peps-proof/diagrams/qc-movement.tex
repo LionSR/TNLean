@@ -1,0 +1,12 @@
+% Area law, eq:conditional-movement (04-conditional.tex, lines 129-133),
+% read left to right: rho_U^{-a/2}, tau^{a/2}, rho_P^{-a/2}, sigma^{a/2} on theta.
+\[
+  \Biggl\|\;
+  \begin{quantikz}
+    \lstick[4]{$\theta$} & & & \gate{\widehat\rho_P^{-a/2}} & \gate[2]{\sigma^{a/2}} & \rstick{$P$} \\
+    & & \gate[2]{\tau^{a/2}} & & & \rstick{$x$} \\
+    & \gate{\widehat\rho_U^{-a/2}} & & & & \rstick{$U$} \\
+    & & & & & \rstick{$F$}
+  \end{quantikz}
+  \;\Biggr\|\;\le\;e^{-\frac a2\eta+Ca^{5/4}\ell^2}
+\]

@@ -47,6 +47,184 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** this names an existing assignment and introduces no new
   geometric premise, identifier family or quotient of separated runs.
 
+### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
+
+- **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate
+  `fun δ N₀ x => ∀ N, N₀ ≤ N → ∀ v ∈ V x N, δ * ‖v‖ ≤ ‖H x N v‖`, then the two monotonicity
+  bullets (shrinking `δ` by `mul_le_mul_of_nonneg_right`, enlarging `N₀` by `le_trans`)
+  before the local bound.
+- **Seen:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` itself and three
+  parent-Hamiltonian gap theorems that inlined it:
+  `exists_uniform_parentHamiltonianES_gap_of_strict_openWindows`
+  (`CompactParentGap.lean`),
+  `exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective`
+  (`CompactNormalParentGap.lean`) and
+  `exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact`
+  (`CompactBlockParentGap.lean`), all under `TNLean/MPS/ParentHamiltonian/`.
+- **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
+  `TNLean/Algebra/CompactGapBounds.lean`; pass `H := fun x N => …` and
+  `V := fun x N => (LinearMap.ker …)ᗮ` and prove only the local bound.
+- **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
+  `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
+  `CompactKernelGap.lean` has no tail, so both keep the direct call to
+  `exists_uniform_pos_nat_bounds`.
+
+### Remainder-absorbing block lengths — promoted (2026-10-10)
+
+- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
+  of length `q + N % q`, and prove the sum is `N` by separating the last
+  summand with `Fin.sum_univ_castSucc`, summing the constants, and applying
+  `Nat.div_add_mod`; then prove `q ≤ ℓ k ≤ 2 q` by `split_ifs <;> omega`.
+- **Seen:** nine occurrences, one each in `LogDepthPreparation`,
+  `LogLogDepthEveryLength`, `SupportedLogLogPreparation`, `UnequalTreeMERA`,
+  `OverlappingMeasurementPreparation`, `RectangularPreparation`,
+  `VaryingReferencePreparation`, `CoherentGroundspaceConversion` and
+  `ZeroSubleadingPreparation` under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSPreparation.exists_remainderBlocks` in
+  `TNLean/MPS/Preparation/RemainderBlocks.lean`: for `0 < q ≤ N` it supplies
+  `m`, `ℓ : Fin (m + 1) → ℕ`, `N / q = m + 1`, `∑ k, ℓ k = N` and both
+  bounds. Each call site is one `obtain`. Use `remainderBlockLengths` instead
+  when the block family must be indexed by `Fin (N / q)` with a definitional
+  formula.
+- **Notes:** the lemma adds 22 lines and the call sites lose 113, for a net
+  delta of −91 Lean lines.
+
+### Order-two family with a bond-two generator — promoted (2026-10-10)
+
+- **Pattern:** a `ℤ₂`-indexed family `1 ↦ E`, `g ↦ A` (bond dimensions one and two) written
+  out with `Fin 2` label matches for tensors and fusion tensors, together with the cast and
+  associator lemmas that reduce the two fusion trees of three generators to `V ⊗ 1` and
+  `1 ⊗ V` and make `ω(g,1,g) = 1`.
+- **Seen:** `Examples/CZX/CZXAnomalyClass.lean` (`czxFamily`),
+  `Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` (`pairFamily`, two uses), and
+  `Examples/KleinSymmetryAnomaly.lean` (the restriction to `{e, a}`).
+- **Abstraction:** `MPOTensor.GroupFamily.orderTwoFamily`,
+  `MPOTensor.GroupFamily.FusionData.orderTwo`, and
+  `MPOTensor.GroupFamily.FusionData.cyclicInvariant_orderTwo_of_isAssociator` in
+  `TNLean/MPS/Symmetry/MPOSymmetry/AssociatorOrderTwo.lean`. State the generator as
+  `orderTwoGen`: a bare `Multiplicative.ofAdd 1` may elaborate through a different instance
+  path for `ZMod 2` and then fail to match in `rw`.
+- **Notes:** `Z2Z2AnomalyClass` and `KleinSymmetryAnomaly` use it; `czxFamily` keeps its
+  printed labels and can switch when next edited. The step "restrict along `f`, transport the
+  cyclic invariant, read off the associator scalar" is
+  `FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo`, used by three callers.
+
+### Boundary on one Kronecker factor of a letter sum — promoted (2026-10-10)
+
+- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
+  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv`, distribute with
+  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
+  boundary onto one factor with `← Matrix.mul_kronecker_mul` and
+  `Matrix.one_mul`/`Matrix.mul_one`.
+- **Seen:** fifteen occurrences across four files: `MPSTensor.IsReduction.mulTensor_kronId`,
+  `mulTensor_idKron`, `kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn`,
+  `idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn` and
+  `MPOTensor.mulTensor_mul_kronId_of_intertwine`
+  (`TNLean/MPS/Core/ReductionComposition.lean`); `MPSTensor.IsReduction.actTensor_idKron`,
+  `actTensor_kronId`, `MPOTensor.actTensor_mul_kronId_of_intertwine`,
+  `MPSTensor.IsDressedProportional.actTensor_idKron` and `actTensor_kronId`
+  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`); and the four `hres` steps of
+  `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId`, `_mulTensor_idKron`,
+  `_actTensor_kronId` and `_actTensor_idKron`
+  (`TNLean/MPS/Core/ReductionResidualComposition.lean`), the last four added by #8244.
+- **Abstraction:** `MPOTensor.kronId_mul_submatrix_sum`, `submatrix_sum_mul_kronId`,
+  `idKron_mul_submatrix_sum` and `submatrix_sum_mul_idKron` in
+  `TNLean/MPS/Core/ReductionComposition.lean`: a boundary `X ⊗ 1` or `1 ⊗ X` on either side
+  of `(∑ j, A j ⊗ B j)` in the `finProdFinEquiv` bond order acts on one factor of every
+  summand. Each call site rewrites with one or two of them and closes by
+  `simp only [h.evalWord]` (or the intertwining or proportionality hypothesis).
+- **Notes:** `kronId_mul`, `idKron_mul` and `kronId_mul_idKron` multiply two boundaries
+  without a letter sum and keep their direct proofs. The four lemmas add 44 lines and
+  the call sites lose 52, for a net delta of −8 lines.
+
+### Chosen nonzero dressed-proportionality scalar — promoted (2026-10-10)
+
+- **Pattern:**
+  ```lean
+  open Classical in
+  ... if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+  with the spec lemma closing by
+  `simp only [_, hex, ↓reduceDIte, Units.val_mk0]; exact hex.choose_spec.2`.
+- **Seen:** four occurrences across three files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`), and
+  `BlockActionData.lSymbol` (`TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`).
+- **Abstraction:** `MPSTensor.dressedScalar B X Y : Units ℂ` and
+  `MPSTensor.isDressedProportional_dressedScalar` in
+  `TNLean/MPS/Core/ReductionComposition.lean`. The four definitions are
+  `dressedScalar` of their boundaries, and each spec lemma ends with
+  `exact MPSTensor.isDressedProportional_dressedScalar hex`. The one external proof that
+  unfolded the `dite` of `omega`, `MPOTensor.GroupCocycle.fusionData_omega`
+  (`TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`), uses the same lemma.
+- **Notes:** statements of `omega`, `relativeScalar`, both `lSymbol`s and their spec
+  lemmas are unchanged. The shared definition and lemma add 18 lines; the four call
+  sites lose 13, for a net delta of +5 lines, and four `open Classical in` blocks with
+  their `dite` unfoldings are gone.
+
+### Empty final tensor memory — promoted (2026-10-09)
+
+- **Pattern:** identify the tensor product with an empty final memory with
+  scalar multiplication on the preceding memory.
+- **Seen:** `WordAppendTail.lean` and `UnitMemoryCoordinates.lean` contained
+  the same induction on the register list and its tensor vectors.
+- **Abstraction:** `Layout.memCongr_append_nil_appendIso_symm_tmul` in
+  `UnitMemoryCoordinates.lean`.
+- **Refactor:** the spectator-register construction imports and uses this
+  public theorem; its duplicate private proof is removed.
+- **Notes:** the statement includes arbitrary complex scalars and arbitrary
+  register lists, including the empty list. No additional hypothesis is needed.
+
+### Tensor memory identifications under equality — promoted (2026-10-09)
+
+- **Pattern:** identify equal tail register lists before adjoining a fixed head,
+  or identify equal selected and complementary lists before applying the head
+  associativity/exchange maps; addition respects the same identification.
+- **Seen:** the head congruence proof occurred in `LayoutOwnerMap.lean`,
+  `WordAppendTail.lean`, and `UnitMemoryCoordinates.lean`; the partition
+  congruences occurred in `PartyPartition.lean` and `PartyPartitionAppend.lean`.
+- **Abstraction:** `Layout.memCongr_cons_tmul`, `Layout.selectedHead_heq`,
+  `Layout.complementaryHead_heq`, and `Layout.add_heq` in `PartyPartition.lean`.
+- **Refactor:** remove the duplicate private proofs and use the shared
+  declarations. The more general private Hilbert-space congruences in
+  `PartitionOwnerNaturality.lean` retain their cross-owner applications.
+- **Notes:** no additional hypothesis or compatibility alias. The public
+  lemmas and callers pass the full native build; the strict imported-lemma
+  audit reports only `propext`, `Classical.choice`, and `Quot.sound`.
+
+### Single-qubit plus-state positivity — promoted (2026-10-08)
+
+- **Pattern:** Identify the all-halves two-by-two density matrix with one half
+  of the outer product of the vector `![1, 1]`, then apply
+  `Matrix.posSemidef_vecMulVec_self_star` and nonnegative scalar multiplication.
+- **Seen:** Three copies in `TNLeanTest/RegularizedPatchStationarity.lean`,
+  `RegularizedPatchNoncommuting.lean`, and `RegularizedPatchZeroWeight.lean`.
+- **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
+  `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
+  The three regressions use the shared density and positivity result directly.
+- **Notes:** The former private `density`/`density_psd`,
+  `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
+  pairs are removed. The singularity, noncommutation, first-variation, and
+  zero-weight assertions are unchanged after unfolding the shared density.
+  The four fixture files shrink by 14 lines. No new tactic or compatibility
+  alias is introduced.
+
+### Crossing edge on a walk that leaves a region — promoted (2026-10-09)
+
+- **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
+  its boundary dart, cut the walk at the first endpoint of the dart, and show that the
+  dart is an edge of the edge boundary no farther from the start than the walk is long.
+- **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
+- **Abstraction:** the lemma `TNLean.PEPS.AreaLaw.exists_edgeBoundary_of_walk` in
+  `TNLean/PEPS/AreaLaw/FiniteDomain.lean` returns the boundary edge, its endpoint in the
+  region and the shortened walk; the three call sites use it.
+- **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
+  analogue for an arbitrary graph in the extended graph distance.
+
 ### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
 
 - **Pattern:** repeat the region of a fan triangle after deleting the actual
@@ -1312,7 +1490,24 @@ three-plaquette output measurement, and the routed reunion measurement.
   unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
   claimed that every call site had been refactored, which was wrong for the nine sites listed
   above; those were refactored on 2026-09-19, after which the claim holds.  A site loses
-  between three and nine lines.
+  between three and nine lines.  A second spelling of the same argument, rewriting the
+  goal with `(Matrix.stdBasis ℂ _ _).span_eq` and `Submodule.span_le`, survived in four
+  `TNLean/MPS/MPDO/` files (`RescalingStableExplicitVerticalBNT`,
+  `RescalingStableLengthDependentRFPCanonicalForm`, `TwistedDimerHorizontalCF`,
+  `TwistedDimerVerticalCF`); those were refactored on 2026-10-10.
+
+### cancelling a nonzero scalar in a submodule membership — rejected (Mathlib)
+- **Pattern:**
+  ```lean
+  have h' := Submodule.smul_mem _ c⁻¹ hmem
+  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h'
+  ```
+- **Seen:** eight occurrences across seven files (2026-10-10): `Examples/AKLT.lean` (twice),
+  `Examples/MultiBlock/OneSlotGauge.lean`, `FundamentalTheorem/Reduction/RingEmbedding.lean`,
+  and the four `TNLean/MPS/MPDO/` injectivity proofs listed in the previous entry.
+- **Abstraction:** none needed: Mathlib's `Submodule.smul_mem_iff (p) (hc : c ≠ 0)` states
+  `c • x ∈ p ↔ x ∈ p`; write `(Submodule.smul_mem_iff _ hc).mp hmem`.  All eight sites
+  were rewritten that way on 2026-10-10.
 
 ### simplicity with the recorded canonical fixed pair — promoted
 - **Pattern:** specialize supplied-witness `simple2` to the canonical transfer
@@ -3612,6 +3807,26 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
+### reordering words of a party layout — promoted
+
+- **Pattern:** a word of exchanges of tensor factors, built by recursion or
+  composition, gets a lemma that it is allowed, uses any given parties and has
+  no pair source, followed by three one-line projections.
+- **Helper:** the predicate `PairEffect.Word.IsReordering` with the simp lemmas
+  `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
+  `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
+  `IsReordering.isAllowed`, `IsReordering.usesOnly` and
+  `IsReordering.sourceCount_eq`, in
+  `TNLean/PEPS/Approximation/SiteRegisters.lean`.
+- **Call sites:** `SiteRegisters.lean`, `RegisterReordering.lean`,
+  `FrameRegisters.lean`, `TwoSheetRegisters.lean` and
+  `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
+  by `simp [w]`; a word with local maps passes the projections to `simp` as
+  conditional rewrites.
+- **Notes:** when a recursive word's type differs from the type of its
+  unfolding only up to definitions such as `siteRegs`, `simp` cannot match
+  `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
+
 ## Candidates
 
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)
@@ -3854,21 +4069,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   if a third use in another module needs the same argument.
 - **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
   and the existing realization identities; no tactic is needed at this count.
-
-### Remainder-absorbing block lengths — candidate
-- **Pattern:** write `N / q = m + 1`, take `m` blocks of length `q` and one
-  of length `q + N % q`, and prove the sum is `N` by separating the last
-  summand, summing the constants, and applying `Nat.div_add_mod`.
-- **Seen:** two production occurrences in
-  `TNLean/MPS/Preparation/LogDepthPreparation.lean:152` and
-  `TNLean/MPS/Preparation/ZeroSubleadingPreparation.lean:120` (2026-10-03).
-- **Abstraction:** at a third occurrence, a partition lemma for arbitrary
-  `N,q,m` with `N / q = m + 1` can supply the sum and the lower/upper bounds
-  from `Nat.mod_lt`, using the existing `Fin.sum_univ_castSucc` and
-  `Finset.sum_const`.
-- **Notes:** Mathlib already supplies the finite-sum and division identities;
-  no general partition lemma was found. The two production occurrences are
-  below the rule-of-three threshold.
 
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
@@ -4277,44 +4477,6 @@ currently one occurrence, so no general declaration is warranted.
   the `simpa` coercion from the indexed supremum.
 - **Status:** promoted; all three call sites now read
   `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
-
-### carrying a boundary through one Kronecker factor of a letter sum — candidate
-- **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
-  `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
-  `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
-  boundary onto one factor with `← Matrix.mul_kronecker_mul` (twice) and
-  `Matrix.one_mul`/`Matrix.mul_one`.
-- **Seen:** six occurrences across three files: `MPSTensor.IsReduction.mulTensor_kronId` and
-  `mulTensor_idKron` (`TNLean/MPS/Core/ReductionComposition.lean`),
-  `MPOTensor.mulTensor_mul_kronId_of_intertwine` (`TNLean/MPS/MPDO/OperatorProduct.lean`),
-  and `MPSTensor.IsReduction.actTensor_idKron`, `actTensor_kronId` and
-  `MPOTensor.actTensor_mul_kronId_of_intertwine`
-  (`TNLean/MPS/MPDO/ActionTensorReduction.lean`).
-- **Abstraction:** a lemma stating
-  `(X ⊗ 1) * (∑ j, A j ⊗ B j) * (Y ⊗ 1) = ∑ j, (X * A j * Y) ⊗ B j` and its `1 ⊗ X`
-  mirror, in the `finProdFinEquiv` bond order; the intertwiner lemmas are the cases
-  `Y = 1` and `X = 1`.
-- **Notes:** past the rule of three. Promotion rewrites the three call sites in
-  `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
-  separate refactor rather than folded into the action-tensor PR.
-
-### classical choice of a nonzero proportionality scalar — candidate
-- **Pattern:**
-  ```lean
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
-  then Units.mk0 hz.choose hz.choose_spec.1 else 1
-  ```
-- **Seen:** three occurrences across two files: `FusionData.omega` (through
-  `IsAssociator`) and `FusionData.relativeScalar`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
-  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
-- **Abstraction:** a definition
-  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
-  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
-  and `lSymbol` then specialize it.
-- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
-  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
-  is left to a separate refactor.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
@@ -5787,6 +5949,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
 
+### Cyclic matrix traces in physical density contractions — rejected (2026-10-05)
+
+- **Pattern:** Normalize matrix associativity around a cyclic trace permutation.
+- **Seen:** The left marginal and unitary-gauge proofs in
+  `Core/StationaryPhysicalDensity`, and the virtual-Gram purity and overlap
+  proofs in `Core/StationaryPhysicalOverlap`.
+- **Abstraction:** Reuse Mathlib's `Matrix.trace_mul_comm` with its rectangular
+  intermediate dimensions, followed by `simp only [Matrix.mul_assoc]`.
+- **Notes:** The common mathematical step is already abstracted upstream.
+  A local four-factor trace wrapper would add a parallel API without removing
+  an independent proof argument. No additional tactic or helper was added.
+
 ### Finite periodic quotient error — candidate (2026-10-06)
 
 - **Pattern:** Bound a normalized periodic expectation by rewriting
@@ -6118,6 +6292,72 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
 
+### Coordinate exponential and canonical partial trace — candidate (2026-10-07)
+
+- **Pattern:** replace one indexed factor in a reverse product by a linear
+  insertion, use exact unitary covariance before differentiation, and apply
+  Fermat's theorem to the squared norm of the actual output. Separately,
+  transport the actual regional lift through the existing configuration
+  equivalence and pair its pure state by the existing partial trace.
+- **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
+  `RegularizedPatchStationarity`, and `RegularizedPatchMarginal`.
+- **Abstraction:** the coordinate module factors the insertion linear map once;
+  the marginal module exposes one full-region/global configuration isometry and
+  one arbitrary-complex expectation theorem. Existing real-power covariance,
+  exponential derivative, and finite-product reduced-state results are reused.
+- **Notes:** these are distinct proofs, not three copies of one tactic block.
+  No custom tactic or new optimizer/state structure is justified. Keep the
+  actual product order and complex inner-product orientation explicit; neither
+  trace-duality nor descending commutation is inferred by this pattern.
+  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
+  thresholds.
+
+
+### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
+
+- **Pattern:** apply `Real.sSup_le` with the nonnegativity of the target supremum,
+  unpack a regional-entropy witness, and include its region in the target collection.
+- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`,
+  `boxEntropy_mono` and `boxEntropy_antitone`.
+- **Abstraction:** both proofs already use `Real.sSup_le`. A further helper is deferred
+  until the same inclusion argument occurs in another module.
+- **Notes:** the nonnegativity argument also covers an empty collection; an additional
+  nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
+
+- **Pattern:** Project a physical region injectively to its ambient lattice subset,
+  then use the ambient layer cardinality bound in the entropy dimension estimate.
+- **Seen:** Two occurrences, in Geometry/TemplateEntropy.lean and
+  WeakRectanglePartialRowEntropy.lean under TNLean/PEPS/AreaLaw/.
+- **Abstraction:** A general cardinality lemma for filtering a physical region by
+  an ambient finite set could replace the image-subset and cardinality chain.
+- **Notes:** Both arguments retain the original vector and physical region.
+  The existing disjoint-region entropy increment theorem is reused directly.
+  The two cardinality chains differ only in their ambient geometric bounds.
+
+### Owners of fixed pair-source registers — candidate (2026-10-09)
+
+- **Pattern:** From membership in a fixed source-register layout, use
+  `List.mem_flatMap` to identify the pair, `List.mem_ofFn` to identify its
+  slot index, and `PairSource.layout` to choose its left or right owner.
+- **Seen:** `SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id` in
+  `PEPS/Approximation/EndpointWordRestriction.lean` and
+  `SourceCircuit.restrict_allResidualSourceLayout_isNone` in
+  `PEPS/Approximation/ActualSourceEmptyOwner.lean` (the latter is proposed
+  separately in #8999). These are two mathematical uses across two files,
+  rather than copies of one source proposal.
+- **Abstraction:** At a third occurrence, prefer an ordinary lemma stating
+  that every owner in `SourceInventory.slotLayout R U V` is the left or
+  right owner of some slot `R.get i`. The assigned register spaces are
+  irrelevant to that conclusion. A selector-exclusion corollary can then
+  reuse that owner description.
+- **Notes:** The rule of three is not yet met, so no new helper or tactic is
+  added. The endpoint word's separate participating-party support proof
+  remains necessary: a general local operation on empty registers may still
+  name a participating party. The corpus scanner was run; unrelated reported
+  patterns are outside this change.
+
 ### Prescribed slopes of actual fan edges — promoted (2026-10-09)
 
 - **Pattern:** Extract the base and final radial slopes from the actual
@@ -6133,3 +6373,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The two old extraction proofs and the private single-radial
   wrapper are removed. Existing callers select the required component of
   the shared theorem. No new tactic or geometric hypothesis is introduced.
+
+### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
+
+- **Pattern:** Prove equality of unordered coordinate pairs by choosing the
+  direct branch of `Sym2.eq_iff`, reducing both pairs with `Prod.ext`, and
+  discharging their integer-coordinate equalities with `omega`.
+- **Seen:** Four three-line occurrences in the four nearest-neighbour cases of
+  `mem_rectangleBoundaryEdges` in `PEPS/AreaLaw/Geometry/ClosedSquare.lean`
+  (scanner run 2026-10-07).
+- **Abstraction:** Keep the local case proofs until the pattern has a consumer
+  in a second file; prefer an endpoint-equality lemma if that reuse appears.
+- **Notes:** The current occurrences are all in one proof, below the
+  multiple-file promotion threshold. Crossing membership itself is already
+  expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.

@@ -3,14 +3,13 @@
 The statements below formalize Lemmas~6.5 and~6.6 of
 \cite{OpenAI2026PolynomialPEPS}, September 24, 2026, \texttt{05-frames.tex},
 lines 347--570, for the canonical maps constructed in their proofs, with the
-information bounds kept as hypotheses. Their reading as bounded changes, that
-is, as allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
-(Section~\ref{sec:peps_pair_effects}), is formalized only on registers in
-which the raw registers of a region held by one party are grouped into one
-register. The source has one raw register per site; identifying the grouped
-registers with the registers of a frame, and writing the renaming of the
-two-sheet exchange as a composition of reorderings of tensor factors, are
-recorded in \cite{gap:polypeps_ownership_change_monomials}.
+information bounds kept as hypotheses, together with their reading as bounded
+changes: allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(Section~\ref{sec:peps_pair_effects}) on the registers of the frames, one per
+site and per tag (Definition~\ref{def:peps_frame_registers}). The monomials are
+first constructed on registers in which the raw registers of a region held by
+one party are grouped into one register, and then placed on the registers of
+the frames by reorderings of tensor factors and grouping unitaries.
 
 We keep the setting of Section~\ref{sec:peps_encoded_frames}. For a set
 $S\subseteq\Lambda$ write $\mathcal H_S=\bigotimes_{x\in S}\C^q$. For a vector
@@ -25,6 +24,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{lem:peps_frame_split_forms}
     \lean{TNLean.PEPS.EncodedFrame.sheetSplit,
         TNLean.PEPS.EncodedFrame.threeSplit,
+        TNLean.PEPS.EncodedFrame.threeSplit_fst,
+        TNLean.PEPS.EncodedFrame.threeSplit_snd,
         TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_sheetSplit,
         TNLean.PEPS.EncodedFrame.rectKronecker_submatrix_threeSplit,
         TNLean.PEPS.EncodedFrame.exists_kronecker_one_of_mem_supportedOperators,
@@ -35,7 +36,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal
         H_{\Lambda\setminus S}$, and, for disjoint $T$ and $E$ with
     $U=\Lambda\setminus(T\cup E)$, with $\mathcal H_T\otimes\mathcal H_E\otimes
-        \mathcal H_U$. An operator acting on the sites of $S$ is $A'\otimes\id$, an
+        \mathcal H_U$. The latter identification reads a configuration $c$ as
+    $((c|_T,c|_E),c|_U)$. An operator acting on the sites of $S$ is
+    $A'\otimes\id$, an
     operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
     acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
     of $E$ is $\id_T\otimes A'\otimes\id_U$.
@@ -254,10 +257,46 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     along the composition.
 \end{definition}
 
+\begin{theorem}[Composition without additional pair effects]
+    \label{thm:peps_monomial_composition_counts}
+    \lean{TNLean.PEPS.PairEffect.PartyChain.precomp_props,
+        TNLean.PEPS.PairEffect.PartyChain.postcomp_props,
+        TNLean.PEPS.PairEffect.PartyChain.precomp,
+        TNLean.PEPS.PairEffect.PartyChain.postcomp,
+        TNLean.PEPS.PairEffect.PartyChain.eval_precomp,
+        TNLean.PEPS.PairEffect.PartyChain.eval_postcomp}
+    \leanok
+    \uses{def:peps_monomial_parties}
+    Let $M$ be an allowed monomial using only parties in $S$. Let $W_0$ and
+    $W_1$ be allowed compositions containing no pair effects, also using only
+    parties in $S$, whose output and input registers respectively match the
+    input and output registers of $M$. Let $M_0$ be the monomial formed by
+    preceding $M$ by $W_0$, and $M_1$ the monomial formed by following $M$
+    by $W_1$. Both are allowed and use only parties in $S$. If $F_N$ denotes
+    the operator of a monomial $N$, then $F_{M_0}=F_M\circ F_{W_0}$ and
+    $F_{M_1}=F_{W_1}\circ F_M$. Writing $s(N)$ and $e(N)$ for its numbers
+    of pair sources and pair effects, the counts satisfy
+    \begin{align}
+        s(M_0) & =s(W_0)+s(M),\notag \\
+        s(M_1) & =s(M)+s(W_1),\notag \\
+        e(M_0) & =e(M_1)=e(M).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    For the preceding composition, combine $W_0$ with the first segment
+    containing no pair effects. For the following composition, induct along the
+    effects of $M$ and combine its final segment with $W_1$. The local
+    contraction and normalized-source conditions are preserved by
+    composition, the source counts add, and every original effect is kept
+    exactly once. The operators compose in the stated order.
+\end{proof}
+
 \begin{lemma}[Matrices on registers of one party]
     \label{lem:peps_front_registers}
     \lean{TNLean.PEPS.PairEffect.matL,
         TNLean.PEPS.PairEffect.matL_apply,
+        TNLean.PEPS.EncodedFrame.act_eq_matL,
         TNLean.PEPS.PairEffect.ofLp_matL,
         TNLean.PEPS.PairEffect.norm_matL,
         TNLean.PEPS.PairEffect.matL_add,
@@ -282,7 +321,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\C^\gamma$) defines a local map of a party $p$ on registers of $p$ of these
     dimensions, of norm at most $\lVert A\rVert$. Placed in front of an
     arbitrary list of further registers, its operator is $A\otimes\id$ in
-    these identifications.
+    these identifications. For any finite row and column index sets, the
+    action of a matrix and its associated continuous linear operator agree:
+    both send $\psi$ to the vector with coordinate
+    $\sum_i A_{ji}\psi_i$ at $j$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -386,11 +428,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $K^\dagger K\otimes\id$; for $Q_\circ\neq P_\circ$ it is a private
     contraction at $P_\circ$, one pair source between $Q_\circ$ and $P_\circ$,
     and a private contraction at $P_\circ$. The death is the same with no pair
-    source and at most one normalized pair effect. This is a restricted form of
-    the bounded-change assertion of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}:
-    the source has one raw register per site, and these grouped registers are
-    not identified with the registers of the frame
-    \cite{gap:polypeps_ownership_change_monomials}.
+    source and at most one normalized pair effect. These grouped monomials are
+    the middle steps of the bounded changes on the registers of the frame in
+    Theorem~\ref{thm:peps_frame_birth_bounded}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -403,26 +443,322 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\mathcal H_T\otimes\mathcal H_U$, and $B=\id_E\otimes K^\dagger K$.
 \end{proof}
 
-\begin{theorem}[Homogeneous birth and death: bounded change]
-    \label{thm:peps_frame_birth_bounded}
-    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
-        thm:peps_frame_birth_bounded_grouped}
-    The birth is a bounded change involving only $P_\circ$ and $Q_\circ$: a
-    private contraction at $P_\circ$, one normalized pair source between
-    $Q_\circ$ and $P_\circ$, and a private contraction at $P_\circ$; the death
-    uses one normalized pair effect instead. This is the remaining assertion
-    of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}.
+\begin{lemma}[Reordering registers]
+    \label{lem:peps_register_reorderings}
+    \lean{TNLean.PEPS.EncodedFrame.relabelHead,
+        TNLean.PEPS.EncodedFrame.relabelSites,
+        TNLean.PEPS.EncodedFrame.eval_relabelSites,
+        TNLean.PEPS.EncodedFrame.partSites,
+        TNLean.PEPS.EncodedFrame.partSites_eq,
+        TNLean.PEPS.EncodedFrame.partWord,
+        TNLean.PEPS.EncodedFrame.unpartWord,
+        TNLean.PEPS.EncodedFrame.eval_partWord,
+        TNLean.PEPS.EncodedFrame.eval_unpartWord,
+        TNLean.PEPS.PairEffect.Word.eval_frameList_appendIso_symm,
+        TNLean.PEPS.PairEffect.Word.appendNil,
+        TNLean.PEPS.PairEffect.Word.dropNil,
+        TNLean.PEPS.PairEffect.Word.eval_appendNil,
+        TNLean.PEPS.PairEffect.Word.eval_dropNil,
+        TNLean.PEPS.PairEffect.Word.assocWord,
+        TNLean.PEPS.PairEffect.Word.unassocWord,
+        TNLean.PEPS.PairEffect.Word.eval_assocWord_appendIso_symm,
+        TNLean.PEPS.PairEffect.Word.eval_unassocWord_appendIso_symm,
+        TNLean.PEPS.PairEffect.Word.swapPairs,
+        TNLean.PEPS.PairEffect.Word.eval_swapPairs,
+        TNLean.PEPS.EncodedFrame.partWordApp,
+        TNLean.PEPS.EncodedFrame.unpartWordApp,
+        TNLean.PEPS.EncodedFrame.eval_partWordApp,
+        TNLean.PEPS.EncodedFrame.eval_unpartWordApp,
+        TNLean.PEPS.EncodedFrame.relabelSitesApp,
+        TNLean.PEPS.EncodedFrame.eval_relabelSitesApp,
+        TNLean.PEPS.EncodedFrame.tagSplit,
+        TNLean.PEPS.EncodedFrame.tagMerge,
+        TNLean.PEPS.EncodedFrame.eval_tagSplit,
+        TNLean.PEPS.EncodedFrame.eval_tagMerge,
+        TNLean.PEPS.EncodedFrame.exists_tagWord_of_perm,
+        TNLean.PEPS.PairEffect.Word.isAllowed_frameList_iff,
+        TNLean.PEPS.PairEffect.Word.usesOnly_frameList_iff,
+        TNLean.PEPS.PairEffect.Word.sourceCount_frameList,
+        TNLean.PEPS.EncodedFrame.eval_relabelHead,
+        TNLean.PEPS.EncodedFrame.mem_partSites_fst,
+        TNLean.PEPS.EncodedFrame.mem_partSites_snd,
+        TNLean.PEPS.EncodedFrame.nodup_partSites_fst,
+        TNLean.PEPS.EncodedFrame.nodup_partSites_snd,
+        TNLean.PEPS.EncodedFrame.partStepApp,
+        TNLean.PEPS.EncodedFrame.unpartStepApp,
+        TNLean.PEPS.EncodedFrame.eval_partStepApp,
+        TNLean.PEPS.EncodedFrame.eval_unpartStepApp,
+        TNLean.PEPS.PairEffect.Word.IsReordering,
+        TNLean.PEPS.PairEffect.Word.IsReordering.isAllowed,
+        TNLean.PEPS.PairEffect.Word.IsReordering.usesOnly,
+        TNLean.PEPS.PairEffect.Word.IsReordering.sourceCount_eq,
+        TNLean.PEPS.PairEffect.Word.IsReordering.comp,
+        TNLean.PEPS.PairEffect.Word.IsReordering.frameList,
+        TNLean.PEPS.PairEffect.Word.isReordering_id,
+        TNLean.PEPS.PairEffect.Word.isReordering_swap,
+        TNLean.PEPS.PairEffect.Word.isReordering_comp_iff,
+        TNLean.PEPS.PairEffect.Word.isReordering_frame_iff,
+        TNLean.PEPS.PairEffect.Word.isReordering_frameList_iff,
+        TNLean.PEPS.PairEffect.Word.isReordering_moveHead,
+        TNLean.PEPS.PairEffect.Word.isReordering_exchangeBlocks,
+        TNLean.PEPS.PairEffect.Word.isReordering_appendNil,
+        TNLean.PEPS.PairEffect.Word.isReordering_dropNil,
+        TNLean.PEPS.PairEffect.Word.isReordering_assocWord,
+        TNLean.PEPS.PairEffect.Word.isReordering_unassocWord,
+        TNLean.PEPS.PairEffect.Word.isReordering_swapPairs,
+        TNLean.PEPS.EncodedFrame.isReordering_relabelHead,
+        TNLean.PEPS.EncodedFrame.isReordering_partStepApp,
+        TNLean.PEPS.EncodedFrame.isReordering_unpartStepApp,
+        TNLean.PEPS.EncodedFrame.isReordering_partWordApp,
+        TNLean.PEPS.EncodedFrame.isReordering_unpartWordApp,
+        TNLean.PEPS.EncodedFrame.isReordering_relabelSitesApp,
+        TNLean.PEPS.EncodedFrame.isReordering_relabelSites,
+        TNLean.PEPS.EncodedFrame.isReordering_partWord,
+        TNLean.PEPS.EncodedFrame.isReordering_unpartWord,
+        TNLean.PEPS.EncodedFrame.isReordering_tagSplit,
+        TNLean.PEPS.EncodedFrame.isReordering_tagMerge}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
+        def:peps_monomial_parties}
+    For a list of sites $\ell$ and a condition $f$, let $\ell_+$ and
+    $\ell_-$ retain the sites satisfying $f$ and not satisfying $f$,
+    respectively, in their original order. Thus $x\in\ell_+$ exactly when
+    $x\in\ell$ and $f(x)$, and $x\in\ell_-$ exactly when $x\in\ell$ and
+    $\neg f(x)$. If $\ell$ has no repeated site, neither part has one.
+    The following compositions of exchanges of adjacent tensor factors are
+    allowed monomials that use no party and no pair resource, and each sends
+    product basis vectors to the indicated product basis vectors: moving the
+    raw registers of the sites satisfying a condition in front of the others,
+    keeping the order within both parts, and back; reassociating and
+    interchanging blocks of registers; splitting the tag registers of a
+    concatenated list of holes into those of the two parts, and merging them.
+    These reorderings may be performed before arbitrary untouched registers.
+    One step of the site partition starts with a register $x$ followed by
+    the already separated lists $A,B$: it leaves $x$ first in $A$ if selected,
+    and otherwise moves it past $A$ to the front of $B$. The inverse step
+    reverses this move.
+    Adjoining or removing an empty trailing list is an identity and uses no
+    party or pair resource. Naming a register with an equal owner label moves
+    nothing. If a second list of holes is a reordering of the first, with
+    pairwise disjoint outer
+    footprints, there are a relabelling of the tags that preserves the raw
+    part of the encoding and such a composition sending $\ket\tau$ to the
+    relabelled $\ket\tau$ (the canonical identification of tag orderings,
+    \texttt{05-frames.tex}, lines 84--85).
+
+    More generally, adjoining untouched registers before any composition
+    containing no pair effects preserves whether it is allowed, whether it
+    uses only the parties of a given set, and its number of pair sources.
+    Its operator is the identity on the added registers tensored with the
+    original operator, under the prescribed tensor identifications.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_register_exchange}
+    Each composition is built by induction on the lists. For the partition
+    step, let $A,B$ be two site lists and $C$ an arbitrary untouched register
+    list. In concatenations below, site lists and sites denote their raw
+    register lists and individual raw registers. Write $J_{A,C}$ for the
+    isometry separating concatenated
+    lists, and let $(A,C)$ denote their concatenation. For the product basis
+    vectors $u=\ket{c(x)}$, $a=\ket c_A$, $b=\ket c_B$ and any $y$ in the
+    memory of $C$, put $t=J_{B,C}^{-1}(b\otimes y)$ and
+    $z=J_{A,(B,C)}^{-1}(a\otimes t)$. The selected and unselected steps satisfy
+    \begin{align}
+        \Pi_+(u\otimes z) & =u\otimes z,\notag                         \\
+        \Pi_-(u\otimes z) & =J_{A,(x,B,C)}^{-1}(a\otimes(u\otimes t)).
+        \label{eq:peps_register_partition_step}
+    \end{align}
+    The inverse steps read (\ref{eq:peps_register_partition_step}) from right
+    to left. They are the identity and the move of $x$ back past $A$,
+    respectively. This proves the partition identities by induction; the
+    two lists are obtained by retaining sites with the indicated condition,
+    which gives the membership and non-repetition assertions. For a
+    reordering of the holes, induct on the reordering: an exchange of two
+    adjacent holes is an exchange of their tag registers, and the raw parts of
+    the encodings of the two holes commute by disjointness of supports.
+    Adjoining untouched registers changes none of the original operations,
+    so induction on the added list preserves each of the stated properties.
+\end{proof}
+
+\begin{theorem}[Coordinates of ordered region registers]
+    \label{thm:peps_region_register_coordinates}
+    \lean{TNLean.PEPS.EncodedFrame.mem_listT,
+        TNLean.PEPS.EncodedFrame.mem_listR,
+        TNLean.PEPS.EncodedFrame.mem_listU,
+        TNLean.PEPS.EncodedFrame.mem_listE,
+        TNLean.PEPS.EncodedFrame.listT,
+        TNLean.PEPS.EncodedFrame.listR,
+        TNLean.PEPS.EncodedFrame.listU,
+        TNLean.PEPS.EncodedFrame.listE,
+        TNLean.PEPS.EncodedFrame.nodup_listT,
+        TNLean.PEPS.EncodedFrame.nodup_listU,
+        TNLean.PEPS.EncodedFrame.equivT,
+        TNLean.PEPS.EncodedFrame.equivU,
+        TNLean.PEPS.EncodedFrame.groupIso_listT_siteVec,
+        TNLean.PEPS.EncodedFrame.groupIso_listU_siteVec}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates}
+    Let $\ell$ be any list of sites, $T,E\subseteq\Lambda$, and
+    $U=\Lambda\setminus(T\cup E)$. Retain the sites of $T$ in $\ell_T$ and
+    the remaining sites in $\ell_R$; then retain the sites of $U$ in $\ell_R$
+    to obtain $\ell_U$, with the remaining sites forming $\ell_E$.
+    All these lists keep their original order.
+    If $\ell$ contains every site of $\Lambda$, then
+    \begin{align}
+        x\in\ell_T & \iff x\in T,\notag    \\
+        x\in\ell_R & \iff x\notin T,\notag \\
+        x\in\ell_U & \iff x\in U.
+    \end{align}
+    If also $T\cap E=\varnothing$, then $x\in\ell_E$ if and only if $x\in E$.
+    If $\ell$ has no repetitions, neither $\ell_T$ nor $\ell_U$ has any;
+    this assertion does not require $\ell$ to contain every site.
+
+    When $\ell$ contains every site exactly once, taking the site at a
+    position gives bijections from the positions of $\ell_T$ to $T$ and of
+    $\ell_U$ to $U$. For every configuration $c$ and any assignment of
+    owners to the sites, the corresponding grouping isometries $G_T,G_U$
+    satisfy
+    \begin{align}
+        G_T\ket c_{\ell_T} & =\ket{c|_T},\notag \\
+        G_U\ket c_{\ell_U} & =\ket{c|_U}
+        \label{eq:peps_region_grouping_basis}
+    \end{align}
 \end{theorem}
 
-\begin{proof}
-    Theorem~\ref{thm:peps_frame_birth_bounded_grouped} gives the monomial on
-    registers in which the raw registers of $T$, and those of $U$, are grouped
-    into one register each. Each group has a single owner before and a single
-    owner after the change, so grouping is a private unitary at that owner.
-    Placing the monomial on the registers of the frame, one per site and per
-    tag, and identifying their tensor product with the canonical coordinates in
-    which $\id\otimes B$ acts, is not formalized; see
-    \cite{gap:polypeps_ownership_change_monomials}.
+\begin{proof}\leanok
+    \uses{lem:peps_register_reorderings,lem:peps_frame_registers_coordinates}
+    Filtering gives the membership assertions and preserves the absence of
+    repetitions. Outside $T$, membership in $T\cup E$ is membership in $E$;
+    disjointness ensures that all sites of $E$ remain. Completeness and
+    non-repetition make the position maps bijective. The canonical coordinate
+    identification sends a product basis vector to the configuration read
+    along that position map, giving (\ref{eq:peps_region_grouping_basis}).
+\end{proof}
+
+\begin{theorem}[Reconstructing a configuration from its restrictions]
+    \label{thm:peps_region_configuration}
+    \lean{TNLean.PEPS.EncodedFrame.merge_restrict_T,
+        TNLean.PEPS.EncodedFrame.merge_restrict_U,
+        TNLean.PEPS.EncodedFrame.merge_of_mem_E,
+        TNLean.PEPS.EncodedFrame.merge_eq_iff,
+        TNLean.PEPS.EncodedFrame.merge,
+        TNLean.PEPS.EncodedFrame.merge_self_of_mem_union}
+    \leanok
+    \uses{lem:peps_frame_split_forms}
+    Let $T,E\subseteq\Lambda$ be disjoint and
+    $U=\Lambda\setminus(T\cup E)$. For $a\in[q]^T$, $b\in[q]^U$, and
+    $c\in[q]^\Lambda$, define $m(a,b;c)$ by the inverse of the three-part
+    coordinate identification applied to $((a,c|_E),b)$. Its restrictions are
+    \begin{align}
+        m(a,b;c)|_T & =a,\notag    \\
+        m(a,b;c)|_E & =c|_E,\notag \\
+        m(a,b;c)|_U & =b.
+        \label{eq:peps_region_reconstruction}
+    \end{align}
+    For every configuration $c'$, these restrictions characterize it:
+    $c'=m(a,b;c)$ if and only if
+    $(c'|_T,c'|_U)=(a,b)$ and $c'|_E=c|_E$.
+    In particular, $c^u=m(c|_T,u;c)$ equals $c$ on $T\cup E$ and equals
+    $u$ on $U$, for any $u\in[q]^U$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The inverse coordinate map assigns the prescribed value on each of the
+    three disjoint regions, proving (\ref{eq:peps_region_reconstruction}).
+    Every site belongs to exactly one region, so equality of the restrictions
+    is equivalent to equality of the configurations. Taking $a=c|_T$ gives
+    the last assertion.
+\end{proof}
+
+\begin{lemma}[Grouped monomials on the registers of a frame]
+    \label{lem:peps_grouped_monomial_placement}
+    \lean{TNLean.PEPS.EncodedFrame.groupWord,
+        TNLean.PEPS.EncodedFrame.ungroupWord,
+        TNLean.PEPS.EncodedFrame.eval_groupWord,
+        TNLean.PEPS.EncodedFrame.eval_ungroupWord,
+        TNLean.PEPS.EncodedFrame.groupWord_props,
+        TNLean.PEPS.EncodedFrame.ungroupWord_props,
+        TNLean.PEPS.EncodedFrame.relabelRest,
+        TNLean.PEPS.EncodedFrame.isReordering_relabelRest,
+        TNLean.PEPS.EncodedFrame.eval_place,
+        TNLean.PEPS.EncodedFrame.sheetPlace,
+        TNLean.PEPS.EncodedFrame.sum_single_merge,
+        TNLean.PEPS.EncodedFrame.layoutIso_place}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
+        lem:peps_register_reorderings,lem:peps_front_registers}
+    Let $T,E\subseteq\Lambda$ be disjoint and $U=\Lambda\setminus(T\cup E)$,
+    let the raw registers of $T$ be held by one party and those of $U$ by
+    one party, before a change of raw owners that keeps the owners on $E$,
+    and similarly after it. Moving the raw registers of $T$ and of $U$ in
+    front by exchanges of tensor factors and grouping each block into one
+    register by a unitary at its owner is an allowed monomial using only
+    these owners and no pair resource; ungrouping has the same properties.
+    Naming the untouched raw registers of $E$ by their equal owner labels
+    also uses no party or pair resource. If a map acts on the two grouped
+    registers, followed by the tag registers and the raw registers of $E$,
+    as $M\otimes\id$, then
+    grouping at the owners before, applying it, and ungrouping at the owners
+    after acts on the registers of the frame, in canonical coordinates, as
+    $\id_{\rm tags}\otimes(\id_E\otimes M)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration}
+    By (\ref{eq:peps_region_grouping_basis}), on the product basis vector of
+    a configuration $c$, grouping gives
+    $\ket{c|_T}\otimes\ket{c|_U}$ in front of the remaining registers; the map
+    gives $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket a\otimes\ket b$; ungrouping
+    turns each term into the basis vector of the configuration equal to $a$
+    on $T$, to $c$ on $E$ and to $b$ on $U$, namely $m(a,b;c)$ by
+    (\ref{eq:peps_region_reconstruction}). These are the columns of
+    $\id_{\rm tags}\otimes(\id_E\otimes M)$, and both sides are linear.
+\end{proof}
+
+\begin{theorem}[Homogeneous birth and death: bounded change]
+    \label{thm:peps_frame_birth_bounded}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
+        TNLean.PEPS.EncodedFrame.Frame.death_bounded}
+    \leanok
+    \uses{thm:peps_frame_birth,def:peps_frame_registers,
+        lem:peps_frame_registers_coordinates,def:peps_monomial_parties}
+    In an encoded frame $\mathcal F$, let $T$ be a set of raw sites owned by
+    $P_\circ$ and disjoint from every outer hole footprint, let $E$ and $U$ be
+    as in the birth partition, let $\lVert\Omega\rVert=1$, and suppose
+    $I_\Omega(T:E)\le L^{-60}$. Then the birth is a bounded change involving
+    only $P_\circ$ and $Q_\circ$, with reference-vector error at most
+    $L^{-30}$: there are splitting data and an allowed monomial from the
+    registers of $\mathcal F$ to those of the frame in which $T$ is owned by
+    $Q_\circ$, using only $P_\circ$ and $Q_\circ$ and at most one normalized
+    pair source, whose operator in canonical coordinates is
+    $\id_{\rm tags}\otimes B$ for the canonical map $B$, and which maps the
+    reference vector of $\mathcal F$ within $L^{-30}$ of the reference vector
+    of the new frame. The reversed death obeys the same
+    bound when these conditions hold in the frame after the death, with one
+    normalized pair effect instead and no pair source. This is
+    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex},
+    lines 396--410.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
+        thm:peps_frame_birth_bounded_grouped,lem:peps_grouped_monomial_placement,
+        thm:peps_monomial_composition_counts}
+    Take the splitting data of Theorem~\ref{thm:peps_frame_birth}. The
+    registers of $T$ and $U$ are held by $P_\circ$ before the birth, and those
+    of $T$ by $Q_\circ$ and those of $U$ by $P_\circ$ after it; the owners on
+    $E$ are unchanged. Compose the grouping at $P_\circ$, the birth or death
+    monomial on grouped registers, and the ungrouping at the owners after the
+    change. By Lemma~\ref{lem:peps_grouped_monomial_placement} its operator is
+    $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm
+            tags}\otimes B$, and the reference error is that of
+    Theorem~\ref{thm:peps_frame_birth}, read through the unitary
+    identification of the registers. For $Q_\circ\neq P_\circ$ the monomial
+    so built consists of a private contraction at $P_\circ$, one normalized
+    pair source between $Q_\circ$ and $P_\circ$ (one pair effect for the
+    death), and a private contraction at $P_\circ$, together with reorderings
+    and grouping unitaries.
 \end{proof}
 
 \subsection{Exchanging assignments between two sheets}
@@ -726,9 +1062,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     registers of $P_\circ$, each grouping the raw registers of $U$ on one sheet,
     followed by an arbitrary list of further registers, $W\otimes\id$ is the
     operator of one allowed private contraction at $P_\circ$
-    (\texttt{05-frames.tex}, lines 503--515). These grouped registers are not
-    identified with the registers of the two frames
-    \cite{gap:polypeps_ownership_change_monomials}.
+    (\texttt{05-frames.tex}, lines 503--515).
 \end{lemma}
 
 \begin{proof}\leanok
@@ -738,23 +1072,173 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     factor of $W$ is a contraction.
 \end{proof}
 
-\begin{theorem}[Two-sheet exchange: bounded change]
-    \label{thm:peps_frame_exchange_bounded}
-    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
-        lem:peps_frame_exchange_owners,
-        lem:peps_frame_exchange_correction_monomial}
-    The exchange is implemented by private contractions and a register
-    renaming, using $P_\circ$ and the owners of the renamed registers and
-    tags; when these form a bounded list it is a bounded change in the sense
-    of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. This is the remaining
-    assertion of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}.
+\begin{lemma}[Registers of two frames]
+    \label{lem:peps_two_frame_registers}
+    \lean{TNLean.PEPS.EncodedFrame.twoLayoutIso,
+        TNLean.PEPS.EncodedFrame.twoLayoutIso_symm_single,
+        TNLean.PEPS.EncodedFrame.twoLayoutIso_basis,
+        TNLean.PEPS.EncodedFrame.twoLayoutIso_eq_act_of_basis,
+        TNLean.PEPS.EncodedFrame.act_toMatrix_symm_single}
+    \leanok
+    \uses{lem:peps_frame_registers_coordinates}
+    The registers of two frames, those of the first followed by those of the
+    second, are identified with the product of the canonical coordinates of
+    the two frames, product basis vectors going to standard basis vectors. Two
+    operators on these registers agree as soon as they agree on product basis
+    vectors.
+\end{lemma}
+
+\begin{proof}\leanok
+    Combine the identifications of the two frames, and expand a vector in the
+    standard basis.
+\end{proof}
+
+\begin{lemma}[The renaming as reorderings]
+    \label{lem:peps_exchange_renaming_word}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.sitesY,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.sitesN,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.eval_renameWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.twoLayoutIso_renameWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isReordering_renameWord}
+    \leanok
+    \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,
+        lem:peps_two_frame_registers}
+    The renaming $\mathcal R$ is the operator of a composition of exchanges
+    of tensor factors from the registers of the two frames to the registers
+    of the two exchanged frames, using no party and no pair resource. It
+    splits the tags of each frame into those of the holes outside and inside
+    $Y$, moves the raw registers of the sites of $Y$ next to the inside tags,
+    exchanges these blocks between the sheets, and merges back; every
+    register keeps its party (\texttt{05-frames.tex}, lines 485--490).
+\end{lemma}
+
+\begin{proof}\leanok
+    Follow a product basis vector through the reorderings. Inside $Y$ the
+    configurations and the inside tags of the two sheets change places, and
+    the owners of the moved raw registers are the new owners at those sites,
+    so the result is the basis vector of the renamed configuration.
+\end{proof}
+
+\begin{theorem}[Coordinates on two copies of a region]
+    \label{thm:peps_two_region_coordinates}
+    \lean{TNLean.PEPS.EncodedFrame.pairUIso_siteVec,
+        TNLean.PEPS.EncodedFrame.pairUIso_symm_single,
+        TNLean.PEPS.EncodedFrame.mem_of_mem_sitesR,
+        TNLean.PEPS.EncodedFrame.sitesU,
+        TNLean.PEPS.EncodedFrame.sitesR,
+        TNLean.PEPS.EncodedFrame.pairUIso}
+    \leanok
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
+        thm:peps_region_configuration}
+    Let $T,E\subseteq\Lambda$ and $U=\Lambda\setminus(T\cup E)$, with two
+    arbitrary assignments of raw owners. Retain the sites of $U$ in the
+    fixed site order; every site in the complementary list belongs to
+    $T\cup E$. Let $\ket c_{U,j}$ be the product basis vector on these raw
+    registers on sheet $j$, and let $\iota_U$ be the inverse of the canonical
+    isometry separating their two consecutive lists. Grouping both lists
+    gives an isometry $Q_U$ to $\C^{[q]^U\times[q]^U}$ satisfying
+    \begin{align}
+        Q_U\iota_U(\ket{c_1}_{U,1}\otimes\ket{c_2}_{U,2})
+         & =\ket{c_1|_U,c_2|_U}.
+        \label{eq:peps_two_region_basis}
+    \end{align}
+    If $T\cap E=\varnothing$, take any configurations $c_1,c_2$ and
+    $u_1,u_2\in[q]^U$, and set $c_j^{u_j}=m(c_j|_T,u_j;c_j)$. Then
+    \begin{align}
+        Q_U^{-1}\ket{u_1,u_2}
+         & =\iota_U(\ket{c_1^{u_1}}_{U,1}\otimes\ket{c_2^{u_2}}_{U,2}).
+        \label{eq:peps_two_region_inverse}
+    \end{align}
 \end{theorem}
 
-\begin{proof}
-    The corrections are one private contraction at $P_\circ$ by
-    Lemma~\ref{lem:peps_frame_exchange_correction_monomial}, and the renaming
-    keeps every register at its party. Writing the renaming as a composition
-    of reorderings of tensor factors, and placing the corrections on the
-    registers of the frames, needs one register per site and per tag; see
-    \cite{gap:polypeps_ownership_change_monomials}.
+\begin{proof}\leanok
+    \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration,
+        lem:peps_frame_registers_coordinates}
+    Group the two lists by their position bijections and identify the tensor
+    product of their coordinate spaces with the space indexed by pairs of
+    configurations. This proves (\ref{eq:peps_two_region_basis}). The
+    complementary list contains only sites outside $U$. For the inverse,
+    $c_j^{u_j}|_U=u_j$ by (\ref{eq:peps_region_reconstruction}); substitute
+    into (\ref{eq:peps_two_region_basis}) and apply $Q_U^{-1}$.
+\end{proof}
+
+\begin{lemma}[The corrections on the registers of two frames]
+    \label{lem:peps_exchange_correction_word}
+    \lean{TNLean.PEPS.EncodedFrame.correctionLayoutWord,
+        TNLean.PEPS.EncodedFrame.eval_correctionLayoutWord,
+        TNLean.PEPS.EncodedFrame.twoSheetPlace,
+        TNLean.PEPS.EncodedFrame.sum_single_merge₂,
+        TNLean.PEPS.EncodedFrame.twoLayoutIso_correctionLayoutWord,
+        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props}
+    \leanok
+    \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
+        lem:peps_frame_exchange_correction_monomial}
+    Let $T,E\subseteq\Lambda$ be disjoint and let the raw registers of
+    $U=\Lambda\setminus(T\cup E)$ be held by $P_\circ$ on both frames. Moving
+    the raw registers of $U$ of both sheets to the front, applying a
+    contraction $W$ of the two copies of $\mathcal H_U$ as one private
+    contraction at $P_\circ$, and moving them back is an allowed monomial
+    using only $P_\circ$ and no pair resource, whose operator in canonical
+    coordinates is the identity on the tags and on the two copies of
+    $T\cup E$, tensored with $W$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_two_region_coordinates,thm:peps_region_configuration}
+    By (\ref{eq:peps_two_region_basis}) and
+    (\ref{eq:peps_two_region_inverse}), on a product basis vector the
+    moved registers carry the two configurations on $U$, the contraction
+    gives the column of $W$, and moving back gives the basis vectors with
+    these configurations replaced. The reconstructed configurations agree
+    with the originals on $T\cup E$, so the remaining raw registers and
+    all tags are unchanged.
+\end{proof}
+
+\begin{theorem}[Two-sheet exchange: bounded change]
+    \label{thm:peps_frame_exchange_bounded}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_bounded,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded,
+        TNLean.PEPS.EncodedFrame.exists_tagReorderWord}
+    \leanok
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
+        def:peps_frame_registers,def:peps_monomial_parties}
+    Consider two encoded frames and a region $Y$ such that every hole's
+    outer square lies on one side of $\partial Y$, a party $P_\circ$ with
+    $Z$, $T$, $E$, $U$ as in the exchange partition, and
+    $\lVert\Omega\rVert=1$ with $I_\Omega(T:E)\le L^{-60}$. The exchange is
+    implemented by private contractions and register renaming, with
+    reference-vector error at most $4L^{-30}$: there are splitting data and
+    an allowed monomial from the registers of the two frames to those of the
+    two exchanged frames, consisting of exchanges of tensor factors and
+    private contractions at $P_\circ$, so using only $P_\circ$ and no pair
+    resource, whose operator in canonical coordinates is the implemented map
+    $C=D_UF_A\mathcal R$ (composed with the relabelling $G$ of the tags when
+    the holes are listed in any order), and which maps the product of the two
+    reference vectors within $4L^{-30}$ of the product of the new ones. In
+    particular the exchange is a bounded change in the sense of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. This is
+    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS}, \texttt{05-frames.tex},
+    lines 460--479; the source allows also the owners of the renamed registers
+    and tags, which exchanges of tensor factors do not involve.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
+        lem:peps_exchange_renaming_word,lem:peps_exchange_correction_word,
+        lem:peps_frame_exchange_correction_monomial,
+        lem:peps_frame_exchange_owners,lem:peps_register_reorderings}
+    Compose the renaming as reorderings with the corrections on the
+    registers of the exchanged frames, whose raw registers of $U$ are held by
+    $P_\circ$ on both sheets. The operators compose to
+    $D_UF_A\mathcal R$, since $D_UF_A$ is the identity on the tags and on the
+    two copies of $T\cup E$ tensored with one contraction of the two copies
+    of $\mathcal H_U$. For holes in any order, precede by the canonical
+    identification of tag orderings as reorderings, whose operator is $G$;
+    these exchanges of tag registers move the tag of each hole to the
+    position of that hole in the new list, and $G$ is the corresponding
+    relabelling of the tags, which preserves the raw part of each encoding.
+    The reference error is that of Theorems~\ref{thm:peps_frame_exchange}
+    and~\ref{thm:peps_frame_exchange_any_order}, read through the unitary
+    identification of the registers.
 \end{proof}
