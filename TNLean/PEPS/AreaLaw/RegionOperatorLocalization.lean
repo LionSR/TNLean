@@ -120,7 +120,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       ‖A‖ * 2 := by
     refine (norm_sub_le _ _).trans ?_
     refine (add_le_add le_rfl (norm_siteExpectation_le _ _)).trans ?_
-    done
+    simpa only [hτnorm, mul_two] using (le_refl (‖A‖ + ‖A‖))
   rw [mul_min_of_nonneg _ _ (norm_nonneg A)]
   exact le_min hTwo hExp
 
