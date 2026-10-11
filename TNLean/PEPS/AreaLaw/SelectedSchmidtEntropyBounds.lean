@@ -87,6 +87,6 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
       (Matrix.PosSemidef.normalizedSpectralRestriction_posSemidef
         (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight E
         (by simpa only [← hρ] using hz)).isHermitian).symm
-  done
+  simpa only [η, regionalEntropy, sub_eq_add_neg, ← hEntropy] using! hbounds
 
 end TNLean.PEPS.AreaLaw
