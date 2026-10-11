@@ -102,13 +102,13 @@ theorem twoLayoutIso_eq_act_of_basis (l₁ l₂ : List (Hole pos q Party)) (own�
     twoLayoutIso l₁' l₂' own₁' own₂' (f z) = act A (twoLayoutIso l₁ l₂ own₁ own₂ z) := by
   obtain ⟨y, rfl⟩ : ∃ y, z = (twoLayoutIso l₁ l₂ own₁ own₂).symm y :=
     ⟨twoLayoutIso l₁ l₂ own₁ own₂ z, by simp⟩
-  rw [LinearIsometryEquiv.apply_symm_apply, act_eq_matL]
+  rw [LinearIsometryEquiv.apply_symm_apply]
   conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
   conv_rhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
   simp only [map_sum, map_smul]
   refine Finset.sum_congr rfl fun i _ => ?_
   obtain ⟨⟨τ₁, c₁⟩, ⟨τ₂, c₂⟩⟩ := i
-  rw [EuclideanSpace.basisFun_apply, twoLayoutIso_symm_single, hf, act_eq_matL]
+  rw [EuclideanSpace.basisFun_apply, twoLayoutIso_symm_single, hf]
 
 end TwoLayout
 
@@ -182,7 +182,7 @@ def correctionLayoutWord (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : 
   .comp (Word.frameList U₁ (Word.exchangeBlocks k₁ U₂ (R₁ ++ (k₂ ++ R₂)))) <|
   .comp (Word.unassocWord U₁ U₂ rest) <|
   .comp (Word.localMap P (ℓ₁ := U₁ ++ U₂) (ℓ₂ := U₁ ++ U₂) hU hU
-    (isoL (pairUIso own₁ own₂).symm ∘L matL W ∘L isoL (pairUIso own₁ own₂)) rest) <|
+    (isoL (pairUIso own₁ own₂).symm ∘L act W ∘L isoL (pairUIso own₁ own₂)) rest) <|
   .comp (Word.assocWord U₁ U₂ rest) <|
   .comp (Word.frameList U₁ (Word.exchangeBlocks U₂ k₁ (R₁ ++ (k₂ ++ R₂)))) <|
   .comp (Word.frameList U₁ (Word.frameList k₁ (Word.exchangeBlocks U₂ R₁ (k₂ ++ R₂)))) <|
@@ -229,16 +229,16 @@ theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos
   simp only [Word.eval_assocWord_appendIso_symm, Word.eval_frameList_appendIso_symm,
     eval_partWordApp, eval_partWord, Word.eval_exchangeBlocks_appendIso_symm,
     Word.eval_unassocWord_appendIso_symm, eval_localMap]
-  have hloc : (isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L matL W ∘L
+  have hloc : (isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L act W ∘L
       isoL (pairUIso own₁ own₂)) ((appendIso _ _).symm
         (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂)) =
       ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
         (appendIso _ _).symm (siteVec own₁ (sitesU T E) (merge h ((fun x : T => c₁ x), u.1) c₁) ⊗ₜ
           siteVec own₂ (sitesU T E) (merge h ((fun x : T => c₂ x), u.2) c₂)) := by
     simp only [ContinuousLinearMap.comp_apply, isoL_apply]
-    rw [pairUIso_siteVec, ← (EuclideanSpace.basisFun _ ℂ).sum_repr (matL W _), map_sum]
+    rw [pairUIso_siteVec, ← (EuclideanSpace.basisFun _ ℂ).sum_repr (act W _), map_sum]
     refine Finset.sum_congr rfl fun u _ => ?_
-    rw [LinearIsometryEquiv.map_smul, EuclideanSpace.basisFun_repr, matL_single_apply,
+    rw [LinearIsometryEquiv.map_smul, EuclideanSpace.basisFun_repr, act_single_apply,
       EuclideanSpace.basisFun_apply, pairUIso_symm_single h]
   rw [hloc]
   set κ : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q) → ℂ :=
@@ -284,8 +284,8 @@ theorem sum_single_merge₂ (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Par
       act (liftTags (l₁ := l₁) (l₂ := l₂) (twoSheetPlace h W))
         (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)) := by
   ext ⟨⟨τ₁', c₁'⟩, ⟨τ₂', c₂'⟩⟩
-  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, WithLp.ofLp_sum, WithLp.ofLp_smul,
-    Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, liftTags,
+  simp only [act_apply_apply, PiLp.ofLp_single, Matrix.mulVec_single_one, WithLp.ofLp_sum,
+    WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, liftTags,
     Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
     Equiv.prodProdProdComm_apply, Equiv.prodCongr_apply, Prod.map]
   set u₀ : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q) :=
@@ -343,9 +343,9 @@ theorem correctionLayoutWord_props (l₁ l₂ : List (Hole pos q Party))
     (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).IsAllowed ∧
       (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).UsesOnly {P} ∧
       (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).sourceCount = 0 := by
-  have hloc : ‖isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L matL W ∘L
+  have hloc : ‖isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L act W ∘L
       isoL (pairUIso own₁ own₂)‖ ≤ 1 :=
-    (norm_comp_isoL_le _ _ _).trans ((norm_matL W).le.trans hW)
+    (norm_comp_isoL_le _ _ _).trans ((norm_act W).le.trans hW)
   simp only [correctionLayoutWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,
     Word.isAllowed_frameList_iff, Word.usesOnly_frameList_iff, Word.sourceCount_frameList,
     Word.IsReordering.isAllowed, Word.IsReordering.usesOnly, Word.IsReordering.sourceCount_eq,

@@ -172,33 +172,33 @@ applying `Vᴴ` to `b ⊗ k`. -/
 def sourceThenAdjoint (V : Matrix (BT × BE) U ℂ) (k : EuclideanSpace ℂ BE) :
     EuclideanSpace ℂ T ⊗[ℂ] EuclideanSpace ℂ BT →L[ℂ] EuclideanSpace ℂ (T × U) :=
   isoL (pairIso T U) ∘L
-    (matL Vᴴ ∘L isoL (pairIso BT BE) ∘L appendRight k).lTensor (EuclideanSpace ℂ T)
+    (act Vᴴ ∘L isoL (pairIso BT BE) ∘L appendRight k).lTensor (EuclideanSpace ℂ T)
 
-omit [DecidableEq T] [DecidableEq U] in
+omit [DecidableEq T] [DecidableEq U] [DecidableEq BT] [DecidableEq BE] in
 /-- Preparing the pair vector `s` next to `k` and applying `Vᴴ` gives `Kᴴ k` with
 `K = ⟨s| (1_T ⊗ V)`. -/
 theorem sourceThenAdjoint_pairVec (V : Matrix (BT × BE) U ℂ) (k : EuclideanSpace ℂ BE)
     (η : EuclideanSpace ℂ (T × BT)) :
-    sourceThenAdjoint V k (pairVec η) = matL (birthKernel V η.ofLp)ᴴ k := by
+    sourceThenAdjoint V k (pairVec η) = act (birthKernel V η.ofLp)ᴴ k := by
   suffices h : ∀ x : EuclideanSpace ℂ T ⊗[ℂ] EuclideanSpace ℂ BT,
-      sourceThenAdjoint V k x = matL (birthKernel V (pairIso T BT x).ofLp)ᴴ k by
+      sourceThenAdjoint V k x = act (birthKernel V (pairIso T BT x).ofLp)ᴴ k by
     rw [h, pairVec, LinearIsometryEquiv.apply_symm_apply]
   intro x
   induction x using TensorProduct.inductionOn with
   | tmul a b =>
       have h : sourceThenAdjoint V k (a ⊗ₜ b) =
-          pairIso T U (a ⊗ₜ matL Vᴴ (pairIso BT BE (b ⊗ₜ k))) :=
+          pairIso T U (a ⊗ₜ act Vᴴ (pairIso BT BE (b ⊗ₜ k))) :=
         rfl
       rw [h]
       ext ⟨t, u⟩
-      simp only [pairIso_tmul_apply, matL_apply, mulVec, dotProduct, conjTranspose_apply,
+      simp only [pairIso_tmul_apply, act_apply_apply, mulVec, dotProduct, conjTranspose_apply,
         birthKernel, of_apply, star_sum, star_mul, star_star, Fintype.sum_prod_type,
         Finset.mul_sum, Finset.sum_mul]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => ?_
       ring
   | add x y hx hy =>
-      rw [map_add, hx, hy, ← _root_.add_apply, ← matL_add, ← conjTranspose_add]
+      rw [map_add, hx, hy, ← act_add, ← conjTranspose_add]
       congr 3
       ext b tu
       simp only [birthKernel, of_apply, Matrix.add_apply, map_add, WithLp.ofLp_add, Pi.add_apply,
@@ -235,7 +235,7 @@ Polynomial-PEPS manuscript, proof of Lemma 6.5, `05-frames.tex`, lines 413–426
 theorem pairHeadIso_birthWord_eval {P Q : Party} (hQP : Q ≠ P) (V : Matrix (BT × BE) U ℂ)
     (s : T × BT → ℂ) (ℓ : Layout Party) (z : Mem (⟨P, euc T⟩ :: ⟨P, euc U⟩ :: ℓ)) :
     pairHeadIso ℓ ((birthWord hQP V s ℓ).eval z) =
-      (matL ((birthKernel V s)ᴴ * birthKernel V s)).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
+      (act ((birthKernel V s)ᴴ * birthKernel V s)).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
   obtain ⟨y, rfl⟩ : ∃ y : EuclideanSpace ℂ (T × U) ⊗[ℂ] Mem ℓ, z = (pairHeadIso ℓ).symm y :=
     ⟨pairHeadIso ℓ z, by simp⟩
   rw [LinearIsometryEquiv.apply_symm_apply]
@@ -246,7 +246,7 @@ theorem pairHeadIso_birthWord_eval {P Q : Party} (hQP : Q ≠ P) (V : Matrix (BT
         rw [LinearIsometryEquiv.symm_apply_eq, pairHeadIso_appendIso_symm]
       rw [hz, birthWord, Word.eval_comp, ContinuousLinearMap.comp_apply, Word.eval_comp,
         ContinuousLinearMap.comp_apply, eval_localMap₂₁, pairHeadIso_frame_localMap_source,
-        sourceThenAdjoint_pairVec, rTensor_tmul, matL_mul]
+        sourceThenAdjoint_pairVec, rTensor_tmul, act_mul]
   | add a b ha hb => simp only [map_add, ha, hb]
 
 /-- The contraction `b ⊗ e ↦ ⟨η, t ⊗ b⟩ e` of `B_T ⊗ B_E` against the pair bra `⟨η|` next to
@@ -276,23 +276,23 @@ theorem effectNext_apply (η : EuclideanSpace ℂ (T × BT)) (t : EuclideanSpace
       rw [PiLp.add_apply]
       ring
 
-omit [DecidableEq BT] [DecidableEq BE] in
+omit [DecidableEq T] [DecidableEq U] [DecidableEq BT] [DecidableEq BE] in
 /-- The death word on `T ⊗ U`: applying `V` and the pair effect `⟨η|` at `t ⊗ u` gives
 `K (t ⊗ u)` with `K = ⟨η| (1_T ⊗ V)`. -/
-theorem effectNext_matL (V : Matrix (BT × BE) U ℂ) (η : EuclideanSpace ℂ (T × BT))
+theorem effectNext_act (V : Matrix (BT × BE) U ℂ) (η : EuclideanSpace ℂ (T × BT))
     (t : EuclideanSpace ℂ T) (u : EuclideanSpace ℂ U) :
-    effectNext η t ((pairIso BT BE).symm (matL V u)) =
-      matL (birthKernel V η.ofLp) (pairIso T U (t ⊗ₜ u)) := by
+    effectNext η t ((pairIso BT BE).symm (act V u)) =
+      act (birthKernel V η.ofLp) (pairIso T U (t ⊗ₜ u)) := by
   ext be
-  rw [effectNext_apply, LinearIsometryEquiv.apply_symm_apply, matL_apply]
-  simp only [matL_apply, mulVec, dotProduct, birthKernel, of_apply, pairIso_tmul_apply,
+  rw [effectNext_apply, LinearIsometryEquiv.apply_symm_apply, act_apply_apply]
+  simp only [act_apply_apply, mulVec, dotProduct, birthKernel, of_apply, pairIso_tmul_apply,
     Fintype.sum_prod_type, Finset.mul_sum, Finset.sum_mul]
   refine Finset.sum_congr rfl fun t' _ => ?_
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun u' _ => Finset.sum_congr rfl fun bt _ => ?_
   ring
 
-omit [DecidableEq BT] in
+omit [DecidableEq T] [DecidableEq BT] in
 /-- **The death monomial has the canonical operator.** On the registers of `T ∪ U`, identified
 with `ℂ^{T × U}` before and after, the death acts as `Kᴴ K ⊗ 1` with `K = ⟨s| (1_T ⊗ V)`, the
 same canonical map as the birth, with the reverse input and output ownership.
@@ -301,7 +301,7 @@ Polynomial-PEPS manuscript, proof of Lemma 6.5, `05-frames.tex`, lines 439–446
 theorem pairHeadIso_deathChain_eval {P Q : Party} (hQP : Q ≠ P) (V : Matrix (BT × BE) U ℂ)
     (s : T × BT → ℂ) (ℓ : Layout Party) (z : Mem (⟨Q, euc T⟩ :: ⟨P, euc U⟩ :: ℓ)) :
     pairHeadIso ℓ ((deathChain hQP V s ℓ).toEffectChain.eval z) =
-      (matL ((birthKernel V s)ᴴ * birthKernel V s)).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
+      (act ((birthKernel V s)ᴴ * birthKernel V s)).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
   induction z using tmul₃_induction with
   | tmul t u w =>
       have hstep : ∀ y : EuclideanSpace ℂ BT ⊗[ℂ] EuclideanSpace ℂ BE,
@@ -310,7 +310,7 @@ theorem pairHeadIso_deathChain_eval {P Q : Party} (hQP : Q ≠ P) (V : Matrix (B
             (effectMap (WithLp.toLp 2 s) (Mem (⟨P, euc BE⟩ :: ℓ))
               (pairHeadIso (⟨P, euc BE⟩ :: ℓ) (t ⊗ₜ (appendIso [⟨P, euc BT⟩, ⟨P, euc BE⟩] ℓ).symm
                 ((twoIso P P BT BE).symm (pairIso BT BE y) ⊗ₜ w))))) =
-            matL (birthKernel V s)ᴴ (effectNext (WithLp.toLp 2 s) t y) ⊗ₜ w := by
+            act (birthKernel V s)ᴴ (effectNext (WithLp.toLp 2 s) t y) ⊗ₜ w := by
         intro y
         induction y using TensorProduct.inductionOn with
         | tmul b e =>
@@ -333,8 +333,8 @@ theorem pairHeadIso_deathChain_eval {P Q : Party} (hQP : Q ≠ P) (V : Matrix (B
               (pairHeadIso (⟨P, euc BE⟩ :: ℓ) (t ⊗ₜ (Word.localMap (ℓ₁ := [⟨P, euc U⟩])
                 (ℓ₂ := [⟨P, euc BT⟩, ⟨P, euc BE⟩]) P owner_of_mem_one owner_of_mem_two
                 (matLocal₁₂ P V) ℓ).eval (u ⊗ₜ w))))) = _
-      rw [hV, ← LinearIsometryEquiv.apply_symm_apply (pairIso BT BE) (matL V u), hstep,
-        effectNext_matL, pairHeadIso_tmul, rTensor_tmul, matL_mul]
+      rw [hV, ← LinearIsometryEquiv.apply_symm_apply (pairIso BT BE) (act V u), hstep,
+        effectNext_act, pairHeadIso_tmul, rTensor_tmul, act_mul]
   | add a b ha hb => simp only [map_add, ha, hb]
 
 omit [DecidableEq BT] [DecidableEq BE] in
@@ -342,7 +342,7 @@ omit [DecidableEq BT] [DecidableEq BE] in
 theorem pairHeadIso_birthPrivateWord_eval (P : Party) (V : Matrix (BT × BE) U ℂ) (s : T × BT → ℂ)
     (ℓ : Layout Party) (z : Mem (⟨P, euc T⟩ :: ⟨P, euc U⟩ :: ℓ)) :
     pairHeadIso ℓ ((birthPrivateWord P V s ℓ).eval z) =
-      (matL ((birthKernel V s)ᴴ * birthKernel V s)).rTensor (Mem ℓ) (pairHeadIso ℓ z) :=
+      (act ((birthKernel V s)ᴴ * birthKernel V s)).rTensor (Mem ℓ) (pairHeadIso ℓ z) :=
   pairHeadIso_eval_localMap₂₂ P _ ℓ _ _ z
 
 /-! #### Parties and pair resources -/
@@ -431,7 +431,7 @@ theorem exists_birthWord {T E : Finset ι} (P Q : Party) (σ : SplittingData q T
         (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ),
       w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
       ∀ z, pairHeadIso ℓ (w.eval z) =
-        (matL ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
+        (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
           (pairHeadIso ℓ z) := by
   by_cases hQP : Q = P
   · subst hQP
@@ -449,7 +449,7 @@ theorem exists_deathChain {T E : Finset ι} (P Q : Party) (σ : SplittingData q 
         (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ),
       M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
       ∀ z, pairHeadIso ℓ (M.toEffectChain.eval z) =
-        (matL ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
+        (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
           (pairHeadIso ℓ z) := by
   by_cases hQP : Q = P
   · subst hQP
@@ -500,7 +500,7 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
             (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ),
           w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
           ∀ z, pairHeadIso ℓ (w.eval z) =
-            (matL ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
+            (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
               (pairHeadIso ℓ z) := by
   obtain ⟨σ, hσ, -, -, hK, herr⟩ := F.birth (Q := Q) hTP hTH hΩ hI
   refine ⟨σ, hσ, sheetBirthOp_eq_submatrix _ σ, hK, herr, fun x hx => ?_, fun x hx => ?_,
@@ -552,7 +552,7 @@ theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
           M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧
           M.toEffectChain.effectCount ≤ 1 ∧
           ∀ z, pairHeadIso ℓ (M.toEffectChain.eval z) =
-            (matL ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
+            (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
               (pairHeadIso ℓ z) := by
   obtain ⟨σ, hσ, hB, hK, herr, hown, hT, -⟩ := F.birth_monomial (Q := Q) hTP hTH hΩ hI
   exact ⟨σ, hσ, hB, hK, herr, hown, hT, fun ℓ => exists_deathChain P Q σ ℓ⟩
@@ -718,7 +718,7 @@ theorem exchange_correction_monomial (σ : SplittingData q (X.tSet P) (X.eSet P)
               ⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ :: ℓ),
           w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
           ∀ z, pairHeadIso ℓ (w.eval z) =
-            (matL (correctionMatrix σ (X.aSet P))).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
+            (act (correctionMatrix σ (X.aSet P))).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
   refine ⟨sheetBufferCorrection_mul_sheetSwapOp_eq _ σ (X.aSet_subset_compl P), fun x hx => ?_,
     fun ℓ => ⟨correctionWord P (correctionMatrix σ (X.aSet P)) ℓ,
       (norm_matLocal₂₂_le _ _).trans (norm_correctionMatrix_le_one σ _), Set.mem_singleton P, rfl,

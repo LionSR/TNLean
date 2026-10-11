@@ -333,7 +333,7 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
       Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
         (ℓ₀ ++ siteRegs q own (listE S T E))))
     (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
-    (hf : ∀ z, pairHeadIso _ (f z) = (matL M).rTensor _ (pairHeadIso _ z))
+    (hf : ∀ z, pairHeadIso _ (f z) = (act M).rTensor _ (pairHeadIso _ z))
     (t : Mem ℓ₀) (c : ι → Fin q) :
     (ungroupWord own' hS hall ℓ₀ hA' hB').eval
         ((relabelRest own own' hall h hE ℓ₀ _ _).eval
@@ -359,10 +359,10 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
     refine Eq.trans ?_ (Finset.sum_congr rfl fun ab _ => by
       rw [LinearIsometryEquiv.map_smul, pairHeadIso_tmul, pairIso_single_tmul_single])
     conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr
-      (matL M (EuclideanSpace.single ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) 1))]
+      (act M (EuclideanSpace.single ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) 1))]
     rw [TensorProduct.sum_tmul]
     refine Finset.sum_congr rfl fun ab _ => ?_
-    rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply, matL_single_apply,
+    rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply, act_single_apply,
       TensorProduct.smul_tmul']
   rw [hz, map_sum, map_sum]
   refine Finset.sum_congr rfl fun ab _ => ?_
@@ -401,7 +401,8 @@ theorem sum_single_merge {κ : Type} [Fintype κ] [DecidableEq κ] (h : Disjoint
         (EuclideanSpace.single (τ, merge h ab c) (1 : ℂ) : EuclideanSpace ℂ (κ × (ι → Fin q))) =
       act ((1 : Matrix κ κ ℂ) ⊗ₖ sheetPlace h M) (EuclideanSpace.single (τ, c) (1 : ℂ)) := by
   ext ⟨τ', c'⟩
-  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, WithLp.ofLp_sum, WithLp.ofLp_smul,
+  simp only [act_apply_apply, PiLp.ofLp_single, Matrix.mulVec_single_one, WithLp.ofLp_sum,
+    WithLp.ofLp_smul,
     Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, sheetPlace_apply]
   have key : ∀ ab, (Pi.single (τ, merge h ab c) (1 : ℂ) : κ × (ι → Fin q) → ℂ) (τ', c') =
@@ -421,18 +422,14 @@ end Placement
 
 /-! ### Matrix actions on Euclidean registers -/
 
-/-- The two matrix actions `act` and `matL` on Euclidean vectors agree. -/
-theorem act_eq_matL {m n : Type} [Fintype m] [Fintype n] [DecidableEq n] (A : Matrix m n ℂ)
-    (ψ : EuclideanSpace ℂ n) : act A ψ = matL A ψ :=
-  rfl
-
 /-- The permutation matrix of a bijection `e` sends the basis vector `|i⟩` to `|e i⟩`. -/
-theorem act_toMatrix_symm_single {α β : Type} [Fintype α] [DecidableEq α] [DecidableEq β]
-    (e : α ≃ β) (i : α) :
+theorem act_toMatrix_symm_single {α β : Type} [Fintype α] [DecidableEq α] [Fintype β]
+    [DecidableEq β] (e : α ≃ β) (i : α) :
     act (e.symm.toPEquiv.toMatrix : Matrix β α ℂ) (EuclideanSpace.single i (1 : ℂ)) =
       EuclideanSpace.single (e i) (1 : ℂ) := by
   ext j
-  simp only [PiLp.ofLp_single, Matrix.mulVec_single_one, Matrix.col_apply, PEquiv.toMatrix_apply,
+  simp only [act_apply_apply, PiLp.ofLp_single, Matrix.mulVec_single_one, Matrix.col_apply,
+    PEquiv.toMatrix_apply,
     Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq, PiLp.single_apply,
     Equiv.symm_apply_eq]
 
@@ -522,14 +519,14 @@ theorem layoutIso_place {T E : Finset ι} (l : List (Hole pos q Party)) (own own
       Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
         (tagRegs l ++ siteRegs q own (listE (sites ι) T E))))
     (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
-    (hf : ∀ z, pairHeadIso _ (f z) = (matL M).rTensor _ (pairHeadIso _ z))
+    (hf : ∀ z, pairHeadIso _ (f z) = (act M).rTensor _ (pairHeadIso _ z))
     (z : Mem (layoutRegs q l own)) :
     layoutIso l own' ((ungroupWord own' nodup_sites mem_sites (tagRegs l) hA' hB').eval
         ((relabelRest own own' mem_sites h hE (tagRegs l) _ _).eval
           (f ((groupWord own nodup_sites mem_sites (tagRegs l) hA hB).eval z)))) =
       act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ sheetPlace h M) (layoutIso l own z) := by
   obtain ⟨y, rfl⟩ : ∃ y, z = (layoutIso l own).symm y := ⟨layoutIso l own z, by simp⟩
-  rw [LinearIsometryEquiv.apply_symm_apply, act_eq_matL]
+  rw [LinearIsometryEquiv.apply_symm_apply]
   have hy : (layoutIso l own).symm y =
       ∑ i, y i • layoutVec l own i.1 i.2 := by
     conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
@@ -542,7 +539,7 @@ theorem layoutIso_place {T E : Finset ι} (l : List (Hole pos q Party)) (own own
   simp only [map_sum, map_smul]
   refine Finset.sum_congr rfl fun i _ => ?_
   obtain ⟨τ, c⟩ := i
-  rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply, ← act_eq_matL,
+  rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply,
     ← sum_single_merge, layoutVec,
     eval_place own own' nodup_sites mem_sites h (tagRegs l) hA hB hA' hB' hE f M hf, map_sum]
   congr 1
