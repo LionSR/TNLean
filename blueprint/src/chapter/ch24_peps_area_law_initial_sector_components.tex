@@ -185,3 +185,27 @@ These are the local initial regions used in
     Hence $x\in X_{\lambda(R)}^0\setminus\partial X_{\lambda(R)}^0
         =\operatorname{int}(X_{\lambda(R)}^0)=U_{\lambda(R)}$.
 \end{proof}
+% Proposed local auxiliary to geometry:initial-stars, lines 333--370,
+% especially 361--370, and prop:two-families, lines 299--323;
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Insert after thm:area_law_initial_run_open_region in
+% ch24_peps_area_law_initial_sector_components.tex.
+% Intended Lean declaration after validation:
+% TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_closedHalf_component
+
+\begin{theorem}[A unique initial region on each closed-half component]
+    \label{thm:area_law_initial_closed_half_unique_region}
+    \uses{thm:area_law_initial_closed_half_components,
+        thm:area_law_initial_run_open_region,
+        thm:area_law_initial_open_disjoint}
+    Retain all the choices and hypotheses fixed in this section.
+    For every connected component $Q$ of
+    $\Omega_{1/2}=\overline B_\infty(v,r/2)\setminus L$,
+    there is a unique initial identifier $i\in\mathcal I$ such that
+    \begin{align}
+        Q & \subseteq U_i.
+    \end{align}
+    Distinct components may carry the same identifier, and the change set
+    may be empty. This is a local auxiliary to the initial-star assertion
+    of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
