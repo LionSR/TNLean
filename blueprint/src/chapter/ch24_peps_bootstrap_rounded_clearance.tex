@@ -48,6 +48,7 @@ numerical estimates supply a sufficient clearance budget.
 \begin{theorem}[Uniform clearance for the fixed bootstrap collar]
     \label{thm:area_law_bootstrap_collar_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_collar_clearance}
+    \leanok
     \uses{def:area_law_bootstrap_parameters}
     Fix real numbers $C_2>0$ and $0<e_0<1$, and let
     $\ell=(1-e_0)/200000$, as in the fixed bootstrap parameters.
@@ -62,6 +63,7 @@ numerical estimates supply a sufficient clearance budget.
     The same threshold is chosen before the safety parameter $D_0$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_bootstrap_margins,thm:area_law_rounded_collar_half,
         thm:area_law_collar_scalar_clearance}
     The fixed parameter bounds give $0<\ell<1$, so $0<1-\ell<1$.

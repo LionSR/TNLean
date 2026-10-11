@@ -9,6 +9,7 @@ these estimates do not establish the physical improvement in Proposition~9.5.
 \begin{theorem}[Uniform rounded-shell coefficient]
     \label{thm:area_law_uniform_rounded_shell_coefficient}
     \lean{TNLean.PEPS.AreaLaw.Scan.rounded_shell_coefficient_uniform_le}
+    \leanok
     Let $b,e,e_0,\eta,C_2\in\mathbb R$ satisfy $0<b\le e\le e_0$,
     $\eta\ge0$, and $C_2\ge0$. Then
     \begin{align}
@@ -17,6 +18,7 @@ these estimates do not establish the physical improvement in Proposition~9.5.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     The denominator $2^b-1$ is positive and is at most $2^e-1$.
     Therefore the first factor decreases when $b$ is replaced by $e$.
     Since $C_2+1\ge1$ and $\eta e\le\eta e_0$, the second factor
@@ -27,6 +29,7 @@ these estimates do not establish the physical improvement in Proposition~9.5.
 \begin{theorem}[Conditional entropy of rounded shells with uniform coefficients]
     \label{thm:area_law_uniform_rounded_shell_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_rounded_shell_le_uniform_rpow}
+    \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy,
         def:area_law_bootstrap_parameters}
     Fix $C_2>0$ and $e_0\in(0,1)$, and set
@@ -55,6 +58,7 @@ these estimates do not establish the physical improvement in Proposition~9.5.
     is needed for this conditional statement.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
         thm:area_law_rounded_collar_power,
         thm:area_law_uniform_rounded_shell_coefficient,
