@@ -1,3 +1,7 @@
 .github/workflows/*.lock.yml linguist-generated=true merge=ours
 Papers/**/*.eps binary
 Papers/quant-ph_0405174/qca.tex binary
+
+# Append-only ledgers: concurrent PRs add entries at the same place; keep both sides on local merges.
+docs/tactic_patterns.md merge=union
+docs/glossary.md merge=union
