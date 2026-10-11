@@ -906,6 +906,29 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     summands leaves precisely the displayed crossing-edge sum.
 \end{proof}
 
+\begin{theorem}[Norm of a swapped doubled interaction]
+    \label{thm:peps_sheet_swap_doubled_term_norm}
+    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. For an
+    arbitrary operator $A$ on $\mathcal H_\Lambda$, write $T(A)=A\otimes I+I\otimes A$.
+    Then
+    \begin{align*}
+        \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
+    \end{align*}
+    This is the single-interaction estimate for the boundary perturbation in
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two identity-factor estimates give
+    $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
+    Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
+    gives $\|F_RT(A)F_R^\dagger\|\leq\|T(A)\|$. The triangle inequality
+    proves the assertion.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,

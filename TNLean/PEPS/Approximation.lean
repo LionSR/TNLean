@@ -120,6 +120,7 @@ import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SheetSwapDoubledCancellation
+import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.Approximation.SheetSwapInteractionSupport
 import TNLean.PEPS.Approximation.SheetSwapSupported
 import TNLean.PEPS.Approximation.SiteChainMonomials
