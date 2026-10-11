@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
+import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 
 /-!
 # Physical prefix approximation of actual scan histories
@@ -38,15 +39,6 @@ private theorem physical_row_bound {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty
     (show d.toNat ≤ L by have := Finset.mem_Icc.mp hd; omega)
   simpa only [← hdepth, hc] using hb
 
-omit [Fintype I] [LinearOrder I] in
-private theorem physical_ball_variation {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) (i : I) (x : Site Λ)
-    (hx : x ∈ S.ball i) : |S.depth x - S.depth (S.anchor i)| ≤ S.r₀ := by
-  have hg : (domainGraph Λ).edist (S.anchor i) x ≤ (S.r₀ : ℕ∞) := by
-    simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hx
-  simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hg
-
 /-- Actual completed lattice histories have deterministic nested-prefix
 comparisons with at most `3nD` changed sites. Full near sets and the entropy
 regions with the fixed target removed obey the same bound. -/
@@ -77,7 +69,7 @@ theorem state_prefix_approximation_domainGraph
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have hs := S.state_prefix_sandwich h g hn hk hr hDpos hD
     (fun x hx ↦ physical_row_bound hT S hdepth hrows _ (S.state_depth_bounds h g hL x hx))
-    (physical_ball_variation hT S hgraph hdepth)
+    (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth)
   apply prefix_sandwich_card_bounds S.A S.depth (S.state h g)
     (S.front g (h.1 g) k false) (S.front g (h.1 g) k true) S.n S.D S.r₀ hr hDpos hs
   · intro d hd
@@ -121,7 +113,7 @@ theorem oldChargeState_prefix_approximation_domainGraph
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have hs := S.oldChargeState_prefix_sandwich h g hn hk hr hDpos hD
     (fun x hx ↦ physical_row_bound hT S hdepth hrows _ (S.oldChargeState_depth_bounds h g hL x hx))
-    (physical_ball_variation hT S hgraph hdepth)
+    (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth)
   apply prefix_sandwich_card_bounds S.A S.depth (S.oldChargeState h g)
     (S.front g (h.1 g) (k + 1) false) (S.front g (h.1 g) (k + 1) true) S.n S.D S.r₀ hr hDpos hs
   · intro d hd

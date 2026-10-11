@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.DesignatedDilution
 import TNLean.PEPS.AreaLaw.Scan.BandNesting
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
+import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 
 /-!
 # Designated supports cannot meet both receiving sides
@@ -88,17 +89,6 @@ private theorem front_sum_lt_neg_lead {k : ℕ} (g r : ℕ)
   omega
 
 omit [Fintype I] [LinearOrder I] in
-private theorem ball_depth_variation_domainGraph
-    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
-    (i : I) (x : Site Λ) (hx : x ∈ S.ball i) :
-    |S.depth x - S.depth (S.anchor i)| ≤ S.r₀ := by
-  have hd : (domainGraph Λ).edist (S.anchor i) x ≤ (S.r₀ : ℕ∞) := by
-    simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hx
-  simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hd
-
-omit [Fintype I] [LinearOrder I] in
 private theorem designatedSupport_not_near_far_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
@@ -138,8 +128,8 @@ private theorem designatedSupport_not_near_far_domainGraph
     simpa only [ball, hgraph] using hb
   have hxl := hlead false x hxcompact.1 hxσ
   have hyl := hlead true y (hball hyD) hyσ
-  have hxv := abs_le.mp (ball_depth_variation_domainGraph hT S hgraph hdepth i x hxD)
-  have hyv := abs_le.mp (ball_depth_variation_domainGraph hT S hgraph hdepth i y hyD)
+  have hxv := abs_le.mp (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth i x hxD)
+  have hyv := abs_le.mp (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth i y hyD)
   have hsep := S.front_sum_lt_neg_lead g r hn hk hr hDpos hD
   simp only [orientedDepth, Bool.false_eq_true, ↓reduceIte] at hxl hyl
   omega
@@ -164,7 +154,7 @@ theorem state_designatedSupport_not_near_far_domainGraph
   apply designatedSupport_not_near_far_domainGraph hT S hgraph hdepth g (h.1 g)
     (S.state h g) hn hk hr hDpos hD (S.state_near_subset_truncationSet h g hL) _ hclear i
   apply S.bandState_assigned_lead
-  exact ball_depth_variation_domainGraph hT S hgraph hdepth
+  exact abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth
 
 /-- A designated support cannot meet both physical receiving sides immediately
 before an actual charge, including histories with an unusually long charge lead. -/
@@ -186,7 +176,7 @@ theorem old_designatedSupport_not_near_far_domainGraph
     (S.oldChargeState h g) hn hk hr hDpos hD
     (S.oldChargeState_near_subset_truncationSet h g hL) _ hclear i
   apply S.oldChargeState_assigned_lead
-  exact ball_depth_variation_domainGraph hT S hgraph hdepth
+  exact abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

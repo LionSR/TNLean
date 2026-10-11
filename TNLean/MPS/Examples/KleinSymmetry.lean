@@ -18,8 +18,8 @@ is the decorated CZX operator. Explicit MPO tensors generate both operators.
 The two invariant subspaces in line 1886 are the spans of the constant-spin
 vectors and of the uniform vector together with its image under `U_a`.
 The uniform vector is left unnormalized, which does not change its span.
-This file proves the operator and subspace statements, not the full-group
-three-cocycle identification.
+This file proves the operator and subspace statements; the anomaly class of the
+representation is identified in `TNLean.MPS.Examples.KleinSymmetryAnomaly`.
 
 The generic construction `MPOTensor.GroupCocycle.kleinEquiv` realizes the type-II
 cocycle `ScalarThreeCochain.kleinCocycle` on four-level sites. The operators here act on

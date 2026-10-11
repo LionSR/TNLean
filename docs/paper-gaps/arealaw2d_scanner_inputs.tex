@@ -313,7 +313,13 @@ conditions are
     (I-|\widetilde\Omega\rangle\langle\widetilde\Omega|),
     \label{eq:arealaw2d_scanner_inputs_marginal_gap}
 \end{align}
-where $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$.
+where $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. Here $\Delta$ is the
+spectral gap of the original Hamiltonian, $J$ bounds the operator norms of its
+terms, and $f_{1,\Delta/2}$ is the time kernel of the quasi-local spectral
+filter of \cite[Lemma~4.2]{OpenAI2026AreaLaw} with exponent $1$ and frequency
+cutoff $\Delta/2$; $\|f_{1,\Delta/2}\|_1=\int_{\mathbb R}|f_{1,\Delta/2}(t)|\,dt$
+is its $L^1$ norm, and $\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$ is the normalization
+of the positive constraints in \cite[Section~4]{OpenAI2026AreaLaw}.
 The resulting tail parameter is $2/g$, and the entropy center is the
 entropy of the actual marginal of this same $\widetilde\Omega$ for every cut.
 The exact budget preserves every original label, including repeated
