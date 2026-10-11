@@ -380,9 +380,8 @@ theorem staircasePair_insert_eq_open
         (staircaseWindow_last_subset_endPair (by omega) (by omega) s) (C (L + K - 1)) := by
   -- The shared injective completed corner `Q`, as blocked-tensor injectivity.
   have hQ : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseCompletedCorner s L K) := by
-    have hi := h.horizontalStaircaseCompletedCorner_injective s
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseCompletedCorner s L K) :=
+    h.horizontalStaircaseCompletedCorner_injective s
   -- The patch chaining: the two end windows' patch-extended inserts agree.
   have hpatch := staircasePatch_insert_eq h hUB hpos hL hK hxw hyh s C common hagree
   -- The corner-completion nestings.
