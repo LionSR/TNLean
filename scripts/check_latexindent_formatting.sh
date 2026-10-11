@@ -22,6 +22,7 @@ if [[ "${1:-}" == "--one" ]]; then
   scripts/latexindent -w -s -l blueprint/latexindent.yaml "$candidate" > /dev/null
   if ! cmp -s -- "$f" "$candidate"; then
     echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'scripts/latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
+    diff -u -- "$f" "$candidate" || true
     exit 1
   fi
   exit 0
