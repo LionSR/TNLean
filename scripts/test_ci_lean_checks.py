@@ -155,6 +155,11 @@ class SelectTest(unittest.TestCase):
         self.assertEqual((early, sources), (["TNLean.Core"], ["TNLean/Core.lean"]))
         self.assertEqual(len(tests), 5)
 
+    def test_lakefile_lean_runs_every_test(self) -> None:
+        self.change("lakefile.lean", "import Lake\n")
+        _, _, tests = self.select(self.base)
+        self.assertEqual(len(tests), 5)
+
     def test_no_base_runs_every_test(self) -> None:
         _, _, tests = self.select(None)
         self.assertEqual(len(tests), 5)

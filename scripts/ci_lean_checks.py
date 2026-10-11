@@ -54,6 +54,7 @@ LEAN_FLAGS = [
 # A change to any of these can affect every test, so check all of them.
 FULL_RUN_PATHS = (
     "lake-manifest.json",
+    "lakefile.lean",
     "lakefile.toml",
     "lean-toolchain",
     "scripts/ci_lean_checks.py",
