@@ -260,6 +260,6 @@ theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
   · rw [h.toAreaLawHamiltonian_operator hJ]
     have hg := hΩ.2.2.submatrix e.symm
     simpa only [Matrix.submatrix_sub, Matrix.submatrix_smul,
-      Matrix.submatrix_one_equiv, Matrix.reindex_apply] using hg
+      Matrix.submatrix_one_equiv, Matrix.reindex_apply] using! hg
 
 end TNLean.PEPS.Approximation
