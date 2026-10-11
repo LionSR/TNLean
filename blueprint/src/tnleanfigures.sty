@@ -1,0 +1,48 @@
+% tnleanfigures.sty -- load the TNLean blueprint's shared diagrams in any
+% LaTeX document.  The blueprint keeps every reusable picture in
+% blueprint/src/figures/<name>.tex; a chapter writes the literal
+% \input{figures/<name>} and an external note writes \tnfigure{<name>}.
+% This package supplies exactly what a figure file may assume, and nothing
+% that a host document is likely to define differently:
+%   * the tenkz picture language (pinned tenkz.sty when TEXINPUTS reaches
+%     the companion checkout, else the installed tikz-tensor-networks.sty,
+%     which carries the same v0.8.0 code);
+%   * macros/diagrams.tex (tikz-cd and its channel style), the same file the
+%     print preamble and the standalone web picture units read;
+%   * the presentational row environment tenkzequation (centered display);
+%   * the few blueprint label macros a figure body uses, declared with
+%     \providecommand so a host's own definitions win.
+% Requires blueprint/src on TEXINPUTS (non-recursively), so that
+% figures/<name> and macros/diagrams resolve.  Do not load the blueprint's
+% macros/common.tex in a host document: it clashes on \theorem and \Tr.
+%
+% Label parametrization.  A figure whose fixed letters would mislead a
+% host may route a label through a macro \tnl<Tag><Role> (letters only;
+% <Tag> is unique per figure file and listed in its header line
+% "% Label macros: ...").  The figure declares the default as the first
+% lines of every tenkz body that uses it, e.g.
+%   \providecommand{\tnlFvInsert}{D_j}
+% because the web build compiles each tenkz/tikzcd body on its own and sees
+% nothing outside it.  For a reused blueprint figure the default is the
+% chapter's original literal, so the blueprint renders unchanged.  A host
+% overrides with \newcommand before the first figure (its definition wins
+% over the \providecommand), or locally in a group with \renewcommand.
+% This package needs no support code for the rule.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tnleanfigures}[2026/10/10 Shared TNLean tensor-network figures]
+\RequirePackage{amsmath,amssymb}
+\IfFileExists{tenkz.sty}
+  {\RequirePackage{tenkz}}
+  {\RequirePackage{tikz-tensor-networks}}
+\input{macros/diagrams}
+\ProvideDocumentEnvironment{tenkzequation}{}{\begin{center}}{\end{center}}
+% Label macros used inside figure bodies; the blueprint defines the same
+% meanings in macros/common.tex, which is loaded first there.
+% scripts/test_shared_figures.py checks that these stay in sync.
+\providecommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}
+\providecommand{\C}{\mathbb{C}}
+\providecommand{\spn}{\operatorname{span}}
+% \tnfigure{name}: typeset blueprint/src/figures/name.tex.
+\newcommand{\tnfigure}[1]{\input{figures/#1}}
+\endinput
