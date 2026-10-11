@@ -30,6 +30,8 @@ The Heisenberg evolution of the circuit layer is the conjugation by the unitary 
 * `QuantumCircuit.siteExpectation_eq_self_of_forall_commute`,
   `QuantumCircuit.mem_supportedOperators_of_forall_commute`.
 * `QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators`.
+* `QuantumCircuit.sqrt_mem_supportedOperators`: the square root of a positive matrix acting
+  on `K` acts on `K`.
 
 ## References
 
@@ -135,5 +137,15 @@ theorem siteExpectation_abs_of_mem_supportedOperators [NeZero q] (K : Finset ι)
     siteExpectation q K (CFC.abs X) = CFC.abs X :=
   siteExpectation_eq_self_of_forall_commute K fun _ hB =>
     (commute_of_mem_supportedOperators disjoint_compl_right hK hB).cfcAbs_of_isHermitian hX
+
+/-- The square root of a positive matrix acting on `K` acts on `K`. Source: area law,
+`03-quasilocal.tex`, lines 386–388 ("commutes with both local square roots"). -/
+theorem sqrt_mem_supportedOperators [NeZero q] (K : Finset ι)
+    {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k)
+    (hk : k ∈ supportedOperators q (K : Set ι)) :
+    CFC.sqrt k ∈ supportedOperators q (K : Set ι) :=
+  mem_supportedOperators_of_forall_commute K fun Y hY => by
+    rw [CFC.sqrt_eq_real_sqrt _ hk₀, cfcₙ_eq_cfc]
+    exact (commute_of_mem_supportedOperators disjoint_compl_right hk hY).cfc_real _
 
 end QuantumCircuit

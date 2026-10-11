@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.TwistedDimerFlagSectors
 import TNLean.MPS.MPDO.VerticalSectorCoordinates
 
@@ -274,18 +275,9 @@ sector span the full matrix algebra $M_4(\mathbb C)$.
 
 Project example; not from CPSV16. -/
 theorem flagFamily_isInjective (f : Fin 2) : Kraus.IsInjective (flagFamily f) := by
-  unfold Kraus.IsInjective
-  apply le_antisymm le_top
-  rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
-  apply Submodule.span_le.mpr
-  rintro M ⟨⟨p, q⟩, rfl⟩
-  rw [Matrix.stdBasis_eq_single]
+  refine Submodule.eq_top_of_forall_single_mem _ fun p q => ?_
   obtain ⟨v, c, hc, hv⟩ := exists_flagFamily_eq_smul_single f p q
-  have hmem : flagFamily f v ∈ Submodule.span ℂ (Set.range (flagFamily f)) :=
-    Submodule.subset_span ⟨v, rfl⟩
-  rw [hv] at hmem
-  have hscaled := Submodule.smul_mem (Submodule.span ℂ (Set.range (flagFamily f))) c⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at hscaled
+  exact (Submodule.smul_mem_iff _ hc).mp (hv ▸ Submodule.subset_span ⟨v, rfl⟩)
 
 /-- Each flag sector is normal. -/
 theorem flagFamily_isNormal (f : Fin 2) : Kraus.IsNormal (flagFamily f) :=

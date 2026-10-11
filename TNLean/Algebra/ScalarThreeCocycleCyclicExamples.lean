@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.RingTheory.RootsOfUnity.Complex
+import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.ScalarThreeCocycle
 
 /-!
@@ -174,18 +175,11 @@ def kleinCocycle : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2)) :=
     (-1) ^ ((Multiplicative.toAdd a).1 * (Multiplicative.toAdd b).2 *
       (Multiplicative.toAdd c).2).val
 
-/-- The sign character takes addition modulo two to multiplication. -/
-theorem neg_one_pow_val_add (x y : ZMod 2) :
-    ((-1 : ℂˣ) ^ x.val) * (-1) ^ y.val = (-1) ^ (x + y).val := by
-  apply Units.ext
-  push_cast
-  rw [← pow_add, ZMod.val_add, ← neg_one_pow_eq_pow_mod_two]
-
 /-- Project result: **`(−1)^{a₁ b₂ c₂}` is a three-cocycle**: its exponent is an additive
 three-cocycle with values in `ℤ₂`. -/
 theorem kleinCocycle_isCocycle : IsCocycle kleinCocycle := by
   intro g h k l
-  simp only [kleinCocycle, neg_one_pow_val_add, toAdd_mul, Prod.fst_add, Prod.snd_add]
+  simp only [kleinCocycle, ← ZMod.neg_one_pow_val_add, toAdd_mul, Prod.fst_add, Prod.snd_add]
   congr 2
   ring
 
