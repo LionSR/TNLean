@@ -91,7 +91,8 @@ theorem linearIndependent_of_extraction {K M : Type*} [Field K] [AddCommGroup M]
   have hout (C : PairConjugacyClass G) : pairConjugacyClass G C.out = C := Quotient.out_eq C
   refine LinearIndependent.of_pairwise_dual_eq_zero_one F
     (fun C => (E C.out (F C))⁻¹ • E C.out) (fun C C' hCC' => ?_) (fun C => ?_)
-  · rw [LinearMap.smul_apply, ← hout C', hzero _ _ (by rwa [hout, hout]), smul_zero]
+  · dsimp only
+    rw [LinearMap.smul_apply, ← hout C', hzero _ _ (by rwa [hout, hout]), smul_zero]
   · rw [LinearMap.smul_apply, smul_eq_mul, inv_mul_cancel₀]
     simpa only [hout] using hself C.out
 
