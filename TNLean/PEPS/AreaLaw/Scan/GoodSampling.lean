@@ -34,6 +34,19 @@ variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 
 namespace CollarScan
 
+omit [Fintype I] [LinearOrder I] in
+/-- Within a charge ball in the induced physical graph, ambient depth differs
+from its value at the anchor by at most the charge radius. -/
+theorem abs_depth_sub_anchor_le_domainGraph_of_mem_ball
+    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (i : I) (y : Site Λ) (hy : y ∈ S.ball i) :
+    |S.depth y - S.depth (S.anchor i)| ≤ S.r₀ := by
+  have hball : (domainGraph Λ).edist (S.anchor i) y ≤ (S.r₀ : ℕ∞) := by
+    simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hy
+  simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hball
+
 variable (S : CollarScan V I)
 
 /-- Goodness is the actual assigned-site lead bound. Doubling gives exactly the
@@ -192,10 +205,7 @@ theorem good_split_sampling_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Non
     (fun x hx ↦ by
       simpa only [depthRow, Finset.length_toList] using
         hrow (S.depth x) (S.oldChargeState_depth_bounds h g hL x hx))
-    (fun x hx ↦ by
-      have hxgraph : (domainGraph Λ).edist (S.anchor i) x ≤ (S.r₀ : ℕ∞) := by
-        simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hx
-      simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hxgraph)
+    (S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i)
     hsplit
   obtain ⟨slot, hs, hu⟩ := S.existsUnique_selected_of_bounds h g side i hn hm hk
     (by omega) hD hDpos hL hC hrow hmult hanchor
