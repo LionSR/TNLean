@@ -58,8 +58,8 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
           Real.exp (-regionalEntropy Λ q Ωt X + w))
     {C τ a Edef Bsh Bexc : ℝ}
     {F d rᵤ rₗ rₑ : ℕ → ℝ}
-    (hC : 0 ≤ C) (hτ : 0 < τ) (hτhalf : τ < 1 / 2)
-    (ha : 0 < a) (hEdef : 0 ≤ Edef)
+    (hC : 0 ≤ C) (hτ : 0 < τ) (_hτhalf : τ < 1 / 2)
+    (_ha : 0 < a) (hEdef : 0 ≤ Edef)
     (hsmall : 2 * C * (τ + Edef / τ) ≤ 1)
     (hrᵤ : Tendsto rᵤ atTop (𝓝 0))
     (hrₗ : Tendsto rₗ atTop (𝓝 0))
