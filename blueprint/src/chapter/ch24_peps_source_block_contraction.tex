@@ -230,6 +230,7 @@ This gives the contractions used in
     \label{thm:peps_party_product_conjugation}
     \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
         TNLean.PEPS.PairEffect.partyProductMatrix_conjugate}
+    \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite, let $I_p$ be finite input alphabets, and let
     $O_p$ be output alphabets. For matrices
@@ -237,7 +238,7 @@ This gives the contractions used in
     $X_p\in\C^{I_p\times I_p}$, one has
     \begin{align}
         \left(\bigotimes_p B_p\right)^\dagger
-         & =\bigotimes_p B_p^\dagger, \\
+         & =\bigotimes_p B_p^\dagger,         \\
         \left(\bigotimes_p A_p\right)
         \left(\bigotimes_p X_p\right)
         \left(\bigotimes_p B_p\right)^\dagger
@@ -248,7 +249,7 @@ This gives the contractions used in
     their prescribed product $\bigotimes_p X_p$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
     Complex conjugation preserves finite products, giving the adjoint
     identity entrywise. Apply coordinatewise matrix multiplication
@@ -259,6 +260,7 @@ This gives the contractions used in
     \label{thm:peps_party_product_partial_trace}
     \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
         TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite, with physical alphabets $H_p$ and finite private
     alphabets $D_p$. For arbitrary matrices
@@ -276,13 +278,13 @@ This gives the contractions used in
     These identities include empty index sets.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_party_product_conjugation}
     The $(a,b)$ entry of the partial trace is
     \begin{align*}
         \sum_{(z_p)_p}\prod_p M_p((a_p,z_p),(b_p,z_p))
          & =\prod_p\sum_{z_p\in D_p}
-             M_p((a_p,z_p),(b_p,z_p)),
+        M_p((a_p,z_p),(b_p,z_p)),
     \end{align*}
     by finite distributivity. For the mixed product, first apply
     (\ref{eq:peps_party_product_conjugation}) and then this identity.
@@ -291,6 +293,7 @@ This gives the contractions used in
 \begin{theorem}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
     \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite and choose $p_0\in P$. For any family of
     rectangular matrices $M_p$ and any $\mu\in\C$, put
@@ -303,7 +306,7 @@ This gives the contractions used in
     The scalar is absorbed once, including when it vanishes.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_dependent_physical_product}
     At each matrix entry, factor the product of the $c_p$ from the
     product of the entries of $M_p$. The former product equals $\mu$
