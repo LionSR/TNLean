@@ -16,11 +16,6 @@ complementary square roots therefore suppress the component orthogonal to
 that ground vector in squared-norm expectation, with any finite spectator.
 The expectation uses the concrete fixed-time Poisson-word probability law.
 
-## Proof status
-
-The proof has compiled in the full project build. Strict verification and
-the exact-name axiom audit remain pending.
-
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,

@@ -2,13 +2,13 @@
 % eq:amplification-excited-decay, revision
 % openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % The expectation is on the common fixed-time Poisson-word law.
-% The formal proof is unfinished; neither statement nor proof is marked complete.
 
 \section{Excited-state decay for the exact constraints}
 
 \begin{theorem}[Physical excited-component decay]
     \label{thm:al_lattice_excited_decay}
     \lean{TNLean.PEPS.AreaLaw.latticeConstraintWord_excitedProjection_decay}
+    \leanok
     \uses{def:area_law_ground_entropy,thm:al_lattice_positive_replacement}
     Let $\Lambda$ be a finite induced lattice domain with local dimension
     $q\ge1$, and let $H$ be a range-$R$ interaction of strength $J\ge0$.
@@ -35,7 +35,7 @@
     This is the fixed-time excited-state estimate in
     \cite[Section~10]{OpenAI2026AreaLaw}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The exact positive replacement gives $k_i\Omega=0$, $k_i\le I$
     and $\sum_i k_i\ge g(I-P_\Omega)$. Each $G_i$ fixes $\Omega$
     and preserves its orthogonal complement. On that complement its
