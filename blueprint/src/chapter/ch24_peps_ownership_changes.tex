@@ -890,6 +890,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Support of a swapped doubled interaction]
     \label{thm:peps_sheet_swap_conjugate_support}
     \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
+    \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $V$ be a finite site set, let $q\geq0$ be an integer, and let
     $R,S\subseteq V$. Suppose that $A$ is supported on $S$.
@@ -901,7 +902,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     interaction-support assertion used for the boundary perturbation in
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_sheet_swap_interaction_restriction,
         thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
     Set $B=R\cap S$. The restriction identity gives
