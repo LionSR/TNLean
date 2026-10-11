@@ -628,7 +628,9 @@ jobs:
         run: |
           set -eo pipefail
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          git fetch --no-tags origin "$BASE_SHA"
+          if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
+          fi
           python3 scripts/ci_lean_checks.py early --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings

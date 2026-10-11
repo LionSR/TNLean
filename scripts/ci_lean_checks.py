@@ -23,10 +23,11 @@ Commands
             file to a fresh overlay directory placed first on ``LEAN_PATH``, so
             a test may import another test (for example ``TNLeanTest.Support``).
 
-Pushes use the previous head as the base. Without a base revision (manual
-dispatch, an unfetchable base), or when a dependency pin, the toolchain, this
-script or the workflow changes, ``strict`` checks every test file and ``early``
-does nothing; the full build covers it.
+Pushes use the previous head as the base. When a dependency pin, the
+toolchain, this script or the workflow changes, ``strict`` checks every test
+file, and the changed production files are still built early and checked.
+Without a base revision (manual dispatch, an unfetchable base) ``strict``
+checks every test file and ``early`` does nothing; the full build covers it.
 """
 
 from __future__ import annotations
