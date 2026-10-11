@@ -83,8 +83,10 @@ private theorem familyPhysicalListBasis_owner_column_heq
   induction ps with
   | nil =>
       change @HEq ℂ _ ℂ _
-      rw [familyPhysicalListBasis_nil_apply, familyPhysicalListBasis_nil_apply]
-      rfl
+      exact (heq_of_eq (familyPhysicalListBasis_nil_apply
+        (fun p ↦ δ (f p)) (fun j ↦ y (f (([] : List P).get j))))).trans
+        (heq_of_eq (familyPhysicalListBasis_nil_apply
+          δ (fun j ↦ y (([] : List Q).get j)))).symm
   | cons p ps ih =>
       rw [List.map_cons, familyPhysicalListBasis_cons_apply, familyPhysicalListBasis_cons_apply]
       exact tmul_heq (familyPhysicalListBasis_owner_mem_eq f δ ps) _ ih
