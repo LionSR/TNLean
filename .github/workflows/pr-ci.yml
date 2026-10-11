@@ -1025,6 +1025,48 @@ jobs:
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
+      - name: Check doubled-interaction cancellation early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapDoubledCancellation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check supported sheet-swap exchange early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapSupported:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check doubled-interaction cancellation and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapDoubledCancellation.lean \
+              TNLeanTest/SheetSwapDoubledCancellationAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true \
+              -DwarningAsError=true "$source"
+          done
+
+      - name: Check supported sheet-swap exchange and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapSupported.lean \
+              TNLeanTest/SheetSwapSupportedAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Test GHZ sector-probability obstruction
         timeout-minutes: 2
         run: >
