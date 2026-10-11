@@ -8,21 +8,24 @@ import Mathlib
 /-!
 # Data of the collar scan (Proposition 9.2)
 
-This module fixes the scales of the collar scan and packages, for one replica count, the
-finite data on which the scanner estimate (Proposition 9.2, `prop:scanner`) operates.
+This module fixes the scales of the collar scan and packages, for one fixed physical system
+and all replica counts, the finite data on which the scanner estimate
+(Proposition 9.2, `prop:scanner`) operates.
 
 The scan itself (offsets, fill and charge rounds, histories) and its probabilistic geometry are
 the content of Lemma 9.1 (`scanner:histories`); the transported states and their entropy and
 energy estimates are Proposition 7.4 (`prop:transport`); the norm comparisons are
 Proposition 8.1 (`prop:comparators`). Following the source, Proposition 9.2 *uses* those
-results. Here their conclusions are recorded as explicit fields of `ScanRound` and `ScanData`;
-each field cites the source line it transcribes. No field asserts anything beyond the cited
-statement.
+results. Here their conclusions are recorded as explicit fields of `ScanRound` and `ScanData`.
+The fields cite the source passages they represent. The coefficient-one trace-distance
+bound is stronger than the source's asymptotic bound, as recorded below.
 
 **Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
 Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for one scan as fields instead of deriving them
-from the scan geometry and the transported states, so every result stated over `ScanData` is
-Proposition 9.2 restricted to those conclusions. Documented in
+from the scan geometry and the transported states. It also requires a coefficient-one
+trace-distance bound where the source states `O(n^(-500))` (lines 400–403). Results over
+`ScanData` retain these restrictions; a physical construction must account for the fixed
+coefficient without replacing the truncated ground vector. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Abstraction of the transported states
@@ -129,7 +132,10 @@ structure ScanConstants where
   Ce : ℝ
   /-- The local Hilbert dimension `q`. -/
   q : ℕ
-  /-- The spectral gap `g` of the original Hamiltonian. -/
+  /-- The gap `g` of the positive-constraint Hamiltonian before truncation
+  (`03-quasilocal.tex`, Proposition 4.5; `08-scanner.tex`, lines 49–59).
+  For a physical Hamiltonian of gap `Δ`, the lattice construction uses
+  `g = Δ / SpectralFilter.positiveNormalization 1 (Δ / 2) J`. -/
   g : ℝ
   one_le_C : 1 ≤ C
   Cl_nonneg : 0 ≤ Cl
@@ -279,9 +285,12 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   SQt : ℕ → ℝ
   entropy_input_X : SX ≤ κ.Ce * (n : ℝ) ^ (1 + X.e)
   entropy_input_Q : ∀ j ≤ X.L n, SQ j ≤ κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)
-  /-- Half the trace distance between `Ω` and `\widetilde Ω` (line 401). -/
+  /-- Trace distance between `Ω` and `\widetilde Ω`, with the convention of one half
+  the trace norm of the difference of their density matrices (lines 400–403). -/
   traceDist : ℝ
   traceDist_nonneg : 0 ≤ traceDist
+  /-- Coefficient-one bound, stronger than the source's `O(n^(-500))` statement.
+  The fixed-coefficient issue is recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. -/
   traceDist_le : traceDist ≤ (n : ℝ) ^ (-500 : ℝ)
   /-- Lemma 2.1 on the target, whose Hilbert space has `log`-dimension at most `C n² log q`. -/
   continuity_X : |SXt - SX| ≤ κ.C * √traceDist * (1 + κ.C * n ^ 2 * Real.log κ.q)

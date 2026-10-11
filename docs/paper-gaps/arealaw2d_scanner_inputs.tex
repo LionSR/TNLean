@@ -49,9 +49,10 @@ parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
 accounting of the defect energy at the selected point, and the three
 comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
-one displayed conclusion of an input and cites its source line; no field
-asserts more than the cited statement. The constants depend only on the fixed
-exponents and on the constants of the inputs, as in the source.
+a conclusion of an input and cites its source passage, except that the
+trace-distance field imposes a coefficient-one bound where the source states
+an asymptotic bound. The constants depend only on the fixed exponents and on
+the constants of the inputs, as in the source.
 
 Two harmless differences in the bookkeeping are recorded. The continuity
 input bounds the change of the shell entropies by
@@ -60,6 +61,48 @@ $n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
 marginal parameter is bounded with logarithmic power $12$, coming from the
 crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
 source writes an unspecified power $C$.
+
+\section{The fixed coefficient in the trace-distance estimate}
+
+The source states that the trace distance is $O(n^{-500})$
+(\path{08-scanner.tex}, lines~400--403). The data package instead requires
+$t\le n^{-500}$. Here trace distance means one half of the trace norm of
+the difference of the density matrices; it is not half of that distance.
+
+For the same truncated ground vector, the perturbation estimate of
+Proposition~4.5 gives
+\[
+    t\le\sqrt{2\varepsilon/g},\qquad
+    \varepsilon\le n^{-1000},\qquad g>0,
+\]
+so that $t\le\sqrt{2/g}\,n^{-500}$. When $\sqrt{2/g}>1$, increasing
+$n$ does not turn this estimate into $t\le n^{-500}$. Thus the available
+perturbation estimate alone does not discharge the coefficient-one field.
+
+Here $g$ is the gap of the positive-constraint Hamiltonian before truncation.
+If the physical Hamiltonian has gap $\Delta$ and the positive constraints
+are divided by their fixed normalization $c_s$, then $g=\Delta/c_s$.
+Both the coefficient above and the truncated-gap lower bound $g/2$ use
+this same normalized gap, rather than $\Delta$.
+
+The coefficient does not obstruct the entropy transfer. For fixed
+$C_t,C_Y\ge0$, the bounds $t\le C_tn^{-500}$ and $|Y|\le C_Yn^2$ give,
+by Lemma~2.1, an entropy error at most
+\[
+    4\sqrt{C_t}\,(1+C_Y\log q)\,n^{-248}
+\]
+for $n\ge1$ and $q\ge1$. A threshold depending on this fixed coefficient
+makes the error at most $n^{-247}$, as used in the formal budget lemmas.
+The extra power of $n$ is essential to this absorption.
+
+The repair is to retain a fixed coefficient in the trace-distance field and
+extend the continuity arithmetic accordingly, or to prove a stronger
+perturbation estimate for the same already selected ground vector. The
+constant and scale threshold must precede the domain and scan choices.
+Choosing a second truncated vector, or rescaling the distance while still
+calling it the physical trace distance, does not supply the missing field.
+This obligation belongs to the physical construction in issue~\#8755; the
+conditional scanner estimate remains a theorem under its stated fields.
 
 \section{Finite history construction now available}
 
