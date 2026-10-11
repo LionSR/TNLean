@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
+import TNLean.PEPS.Approximation.PhysicalReadout
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 
@@ -24,17 +24,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-contraction; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-affectedphysicaldimension-01
-TNLean.PEPS.PairEffect.Layout.affectedOutputIso
-Provenance-ID: 8769-source-resource-affectedphysicaldimension-02
-TNLean.PEPS.PairEffect.Layout.restrictMapOwnerIso
-Provenance-ID: 8769-source-resource-affectedphysicaldimension-03
-TNLean.PEPS.PairEffect.Layout.restrict_mapOwner
-Provenance-ID: 8769-source-resource-affectedphysicaldimension-04
-TNLean.PEPS.PairEffect.affectedFamilyPhysicalBasis
-Provenance-ID: 8769-source-resource-affectedphysicaldimension-05
-TNLean.PEPS.PairEffect.finrank_affectedFamilyPhysicalLayout
 -/
 
 

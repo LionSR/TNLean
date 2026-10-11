@@ -58,6 +58,14 @@ def memCongr {a b : Layout P} (h : a = b) : Mem a ≃ₗᵢ[ℂ] Mem b :=
 @[simp] theorem memCongr_rfl (a : Layout P) :
     memCongr (rfl : a = a) = LinearIsometryEquiv.refl ℂ (Mem a) := rfl
 
+/-- Appending a head register commutes with the equality identification of the tail.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267. -/
+theorem memCongr_cons_tmul (r : Reg P) {a b : Layout P} (h : a = b)
+    (x : r.space) (y : Mem a) :
+    memCongr (congrArg (r :: ·) h) (x ⊗ₜ y) = x ⊗ₜ memCongr h y := by
+  cases h
+  rfl
+
 /-- The canonical partition of a layout memory into the selected registers and their
 complement. The empty memory is identified with `ℂ ⊗ ℂ` by the left unit isometry.
 Polynomial-PEPS manuscript, Theorem 5.2, `04-compression.tex`, lines 233–251. -/

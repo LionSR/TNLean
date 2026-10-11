@@ -29,11 +29,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-one-choice.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-gaussianphysicalsource-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le
-
 -/
 
 
@@ -41,6 +36,12 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped InnerProductSpace TensorProduct Matrix ComplexConjugate
 namespace TNLean.PEPS.PairEffect.SourceCircuit
+
+/-- Both independent Schmidt endpoint indices at every selected original source position. -/
+abbrev CorrectedSchmidtCoordinates {P : Type} {a b : Layout P}
+    (w : SourceCircuit a b) (S : Finset (sourceLocations w)) :=
+  ∀ e : S, Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2) ×
+    Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2)
 
 open Classical in
 /-- Actual global Gaussian source-entry products give the separated physical
