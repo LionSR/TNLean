@@ -51,6 +51,7 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     F * K * Fᴴ - K ∈ supportedOperators (q * q) (Z : Set (SquareLatticeVertex L L)) ∧
       ‖F * K * Fᴴ - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
   classical
+  intro p K F boundary Z
   done
 
 end TNLean.PEPS.Approximation
