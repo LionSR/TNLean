@@ -46,6 +46,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
           ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
   obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
     exists_quasilocal_lieb_robinson q hq R J
+  refine ⟨2 * C, v, c, by positivity, hv, hc, ?_⟩
   done
 
 end TNLean.PEPS.AreaLaw
