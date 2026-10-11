@@ -35,6 +35,19 @@ namespace TNLean.PEPS.AreaLaw
 
 variable {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
 
+omit [Fintype ι] in
+/-- Retaining an arbitrary predicate of labels cannot increase any anchor
+fiber. Distinct labels at the same anchor stay distinct. Source: area law,
+`09-amplification.tex`, lines 139–160, where the same multiplicity bound is
+used after retaining a subset of the events. -/
+theorem card_anchor_fiber_subtype_le (a : κ → ι) (P : κ → Prop)
+    [DecidablePred P] (x : ι) :
+    (Finset.univ.filter fun i : {i // P i} => a i = x).card ≤
+      (Finset.univ.filter fun i : κ => a i = x).card := by
+  classical
+  exact Finset.card_le_card_of_injOn Subtype.val
+    (fun i hi => by simpa using hi) (fun _ _ _ _ h => Subtype.ext h)
+
 /-- The finite kernel in the actual event-family oscillation estimate. The
 cardinality counts labels, including repeated anchors. Source: area law,
 `09-amplification.tex`, lines 139–146. -/
@@ -44,6 +57,15 @@ noncomputable def graphChannelEventKernel (G : SimpleGraph ι) (a : κ → ι)
   exact D * ∑ l ∈ Finset.range (N + 1), Real.exp (-(b * (l : ℝ) ^ α)) *
     ((Finset.univ.filter fun i : κ =>
       y ∈ graphBall G (a i) l ∧ z ∈ graphBall G (a i) l).card : ℝ)
+
+/-- A nonnegative prefactor gives a nonnegative graph-ball incidence kernel,
+without restrictions on the decay parameters or cutoff. -/
+theorem graphChannelEventKernel_nonneg (G : SimpleGraph ι) (a : κ → ι)
+    {D : ℝ} (hD : 0 ≤ D) (b α : ℝ) (N : ℕ) (y z : ι) :
+    0 ≤ graphChannelEventKernel G a D b α N y z := by
+  classical
+  unfold graphChannelEventKernel
+  exact mul_nonneg hD (Finset.sum_nonneg fun l _ => by positivity)
 
 omit [DecidableEq ι] in
 private theorem edist_le_two_mul_of_mem_graphBall {G : SimpleGraph ι} {x y z : ι}

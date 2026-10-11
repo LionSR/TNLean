@@ -1,0 +1,7 @@
+% alt: The birth circuit: V splits the buffer U, the bra s closes T and B_T, a fresh pair source s re-emits them with T held by the new party, and V-dagger recombines.
+% PEPS manuscript, lem:birth (05-frames.tex, eq:birth-map), read left to right.
+B=\begin{quantikz}[row sep=0.12cm, column sep=0.22cm]
+  \lstick{$T$} & & & \gate[2]{\langle s|} & \gate[2]{|s\rangle}\setwiretype{n} & \setwiretype{q} & & & \\
+  \setwiretype{n} & & \gate[2]{V} & \setwiretype{q} & \setwiretype{n} & \setwiretype{q} & \gate[2]{V^{\dagger}} & \setwiretype{n} & \\
+  \lstick{$U$} & & & & & & & &
+\end{quantikz}

@@ -95,8 +95,8 @@ theorem rStar_eq : rStar = monomial 1 fun x ↦ (-1) ^ (rStarExponent x).val := 
     mul_one]
   congr 1
   funext x
-  rw [rStarExponent, neg_one_pow_val_add, neg_one_pow_val_add, neg_one_pow_val_add,
-    neg_one_pow_val_add, neg_one_pow_val_add]
+  rw [rStarExponent, ZMod.neg_one_pow_val_add, ZMod.neg_one_pow_val_add, ZMod.neg_one_pow_val_add,
+    ZMod.neg_one_pow_val_add, ZMod.neg_one_pow_val_add]
 
 /-- The phase polynomial vanishes at $0011$. -/
 theorem rStarExponent_zero_zero_one_one : rStarExponent ![0, 0, 1, 1] = 0 := by decide
@@ -133,7 +133,7 @@ theorem tildeLambdaStar_eq :
   rw [tildeLambdaStar, tildeLambda_eq, rStar_eq, monomial_mul_monomial, mul_one]
   congr 1
   funext x
-  rw [Equiv.Perm.coe_one, id_eq, neg_one_pow_val_add]
+  rw [Equiv.Perm.coe_one, id_eq, ZMod.neg_one_pow_val_add]
   ring
 
 theorem tildeLambdaStar_mem_unitaryGroup :
@@ -281,15 +281,15 @@ theorem gaussOperator_circuitTupleStar_gen :
     rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
       rcases MPSTensor.zmod2_cases b with rfl | rfl
     · simp [gen_inv, matterBarFlip_symm, fExponent_barFlip, phaseExponentStar_zero_zero,
-        iPow_add, iPow_two_mul_cast, neg_one_pow_val_add,
+        iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add,
         show ((1 : ZMod 2)).val = 1 from rfl]
       ring
     · simp [gen_inv, gen_mul_gen, matterBarFlip_symm, eExponent_barFlip,
-        phaseExponentStar_zero_one, iPow_add, iPow_two_mul_cast, neg_one_pow_val_add,
+        phaseExponentStar_zero_one, iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add,
         show ((1 : ZMod 2)).val = 1 from rfl]
     · simp [gen_inv, gen_mul_gen, phaseExponentStar_one_zero, iPow_two_mul_cast]
     · simp [gen_inv, gen_mul_gen, phaseExponentStar_one_one, iPow_add, iPow_two_mul_cast,
-        neg_one_pow_val_add]
+        ZMod.neg_one_pow_val_add]
       ring
 
 /-! ### Bond phases, involution, and neighboring holonomy -/
