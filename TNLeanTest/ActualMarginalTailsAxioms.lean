@@ -34,3 +34,8 @@ depends on axioms: [propext, Classical.choice, Quot.sound] -/
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.surprisalTail_truncated_reducedState_le
+
+/-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds
